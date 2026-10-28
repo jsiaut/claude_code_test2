@@ -1,0 +1,192 @@
+# Méthodologie (plan d'analyse pré-enregistré)
+
+Rédigé le 2026-10-28, **avant** les mesures inter-langages. Seules les mesures de mise au point
+de la référence C l'ont précédé. Toute modification ultérieure sera datée et justifiée dans
+la section « Journal des écarts » en fin de document.
+
+## 1. Construit mesuré
+
+*Mechanical sympathy* (Jackie Stewart, puis Martin Thompson pour le logiciel)
+désigne le fait d'écrire du logiciel qui travaille *avec* le matériel et non contre lui.
+Thompson et Fowler 2026 (C. Sanders, « Principles of Mechanical Sympathy ») retiennent :
+accès mémoire prévisibles, conscience des lignes de cache et du faux partage,
+principe de l'écrivain unique, regroupement naturel (*natural batching*).
+Sens large demandé : on y ajoute les principes du **Data-Oriented Design**
+(Acton 2014, Fabian 2018, Kelley 2021 : SoA, données compactes, indices plutôt que
+pointeurs, pas d'allocations cachées, traitement par lots), du **HPC** (roofline,
+vectorisation SIMD, bande passante, tableaux multidimensionnels contigus,
+parallélisme de données) et des **SGBD OLAP** (stockage colonnaire, exécution
+vectorisée ou compilée, sélection sans branchement, tables de hachage plates,
+parallélisme par morceaux).
+
+**Définition opérationnelle.** Un langage incarne la mechanical sympathy dans la mesure où :
+1. il **donne le contrôle** des aspects matériels de l'exécution : disposition des
+   données, allocation, SIMD, modèle mémoire et parallélisme, génération de code ;
+2. ce contrôle **atteint effectivement les limites matérielles** quand on l'exerce ;
+3. le **code par défaut** va déjà dans le sens du matériel, et le modèle de coût est
+   **transparent et prévisible** : pas de coût caché, pas de pause, pas d'indirection
+   imposée.
+
+## 2. Trois piliers
+
+| Pilier | Ce qu'il mesure | Source des données |
+|---|---|---|
+| **C — Contrôle** | ce que le langage permet d'exprimer | matrice de capacités, vérifiée par des sondes compilées/exécutées et par la doc officielle |
+| **E — Efficacité plafond** | ce que le meilleur code du langage atteint | noyaux K1, K3–K10, variantes optimisées |
+| **D — Défaut et transparence** | ce que le code naturel donne ; prévisibilité ; visibilité du matériel | variantes `natural`, empreinte mémoire, latence de queue K8, courbe K2 |
+
+Pondération principale : **C 35 %, E 40 %, D 25 %**.
+Une analyse de sensibilité (section 7) montre que le classement ne dépend pas de ce choix.
+
+## 3. Pilier C : matrice de capacités
+
+Chaque capacité vaut 1 (présente, documentée et vérifiée), 0,5 (partielle :
+expérimentale, non standard mais livrée avec la chaîne officielle, ou seulement via
+une extension du compilateur) ou 0 (absente, ou seulement via une bibliothèque
+tierce ou une FFI).
+Pondération des catégories, avec des capacités équipondérées à l'intérieur :
+
+* **A. Disposition des données (25 %)** : A1 agrégats valeurs stockés en ligne dans les
+  tableaux ; A2 contrôle de l'ordre et de la taille des champs, disposition C,
+  `offsetof` ; A3 disposition au bit près (packed, bitfields) ; A4 alignement
+  explicite ≥ 64 o ; A5 unions et réinterprétation de bits ; A6 support SoA natif
+  (langage ou bibliothèque standard) ; A7 tableaux de taille fixe en ligne dans les
+  agrégats ; A8 types numériques étroits (u8, i16, f32…) comme types de stockage.
+* **B. Gestion mémoire (20 %)** : B1 pas de GC traçant imposé ; B2 allocateurs
+  personnalisés et arènes de premier ordre ; B3 allocation sur la pile ou en ligne
+  d'agrégats et de tableaux ; B4 absence d'allocations cachées ; B5 accès à de la
+  mémoire brute hors tas (pointeurs).
+* **C. SIMD et vectorisation (20 %)** : C1 types vectoriels portables ;
+  C2 intrinsèques spécifiques à la cible ; C3 vectorisation automatique des boucles
+  simples (vérifiée sur le désassemblage de K4/K9 `natural`) ; C4 contrôle de la
+  réassociation flottante ; C5 constructions de parallélisme de données.
+* **D. Concurrence et modèle mémoire (15 %)** : D1 threads parallèles en mémoire
+  partagée ; D2 atomiques avec ordres mémoire explicites ; D3 aide « ligne de cache »
+  (constante ou type de bourrage) ; D4 affinité CPU dans la bibliothèque standard ;
+  D5 barrières et indication d'attente active (`pause`).
+* **E. Contrôle de la génération de code (10 %)** : E1 compilation native avec code
+  machine inspectable ; E2 assembleur en ligne ; E3 indications de branchement ;
+  E4 préchargement explicite ; E5 garanties de non-aliasing ; E6 contrôle local des
+  vérifications de bornes ; E7 calcul à la compilation et génériques sans coût
+  (monomorphisation).
+* **F. Spécifique HPC/OLAP (10 %)** : F1 tableaux multidimensionnels contigus à
+  disposition définie ; F2 constructions de localité et de distribution (PGAS,
+  NUMA) ; F3 entiers de largeur fixe signés et non signés à arithmétique modulaire ;
+  F4 fichiers projetés en mémoire et réinterprétation sans copie.
+
+## 4. Pilier E : efficacité plafond
+
+Pour chaque mesure *m*, on prend le meilleur temps du langage L sur les variantes
+autorisées, noté `t(L,m)` : médiane inter-processus des médianes intra-processus. On
+prend aussi le meilleur temps observé tous langages confondus, noté `t*(m)`. Le score
+est `s(L,m) = t*(m) / t(L,m)`, dans ]0, 1].
+
+| Noyau | Mesures (variantes autorisées) |
+|---|---|
+| K1 | énergie : min(`aos`, `soa`) |
+| K3 | min(`sw_padded`, `rmw_padded`) |
+| K4 | min(`natural_unsorted`, `branchless_unsorted`) |
+| K5 | min(`natural`, `tuned`) |
+| K6 | q6 mono, q1 mono, q6 `mt`, q1 `mt` (moyenne géométrique des 4) |
+| K7 | min(`natural`, `tuned`) |
+| K8 | min(`natural`, `tuned`) (débit total) |
+| K9 | mono min(`natural`, `tuned`), et `mt` (moyenne géométrique des 2) |
+| K10 | min(`natural`, `tuned`) |
+
+`E(L) = 100 × moyenne géométrique des 9 scores de noyau`. La moyenne géométrique est
+la bonne moyenne pour des ratios normalisés (Fleming & Wallace 1986). Un noyau
+impossible à paralléliser dans le langage (par exemple, pas de threads) est quand même
+exécuté avec le mécanisme disponible (séquentiel, coroutines) et mesuré tel quel.
+
+## 5. Pilier D : défaut, transparence, prévisibilité
+
+* **D1 Efficacité du code naturel (50 %)** : comme E, mais avec les seules variantes
+  `natural` (K1 `natural`, K4 `natural_unsorted`, K5, K6 q6/q1, K7, K8, K9, K10),
+  normalisées par `t*(m)` du pilier E. On mesure ainsi la distance entre le code par
+  défaut et l'optimum matériel observé. Moyenne géométrique.
+* **D2 Coût de structure (15 %)** : moyenne géométrique de
+  (a) `64 / octets_par_particule` (empreinte K1 `footprint`, plafonnée à 1) et
+  (b) `t(natural) / t(natural_shuffled)` en K1 (plafonné à 1 : sensibilité à
+  l'indirection).
+* **D3 Prévisibilité (15 %)** : K8 `natural`, moyenne géométrique de
+  `min_L(p99.9/p50) / (p99.9/p50)` et `min_L(max/p50) / (max/p50)`.
+* **D4 Visibilité de la hiérarchie mémoire (20 %)** : K2, moyenne géométrique de
+  `t_C(S)/t_L(S)` pour S = 16 Kio (L1), 256 Kio (L2) et 8 Mio, plafonnée à 1. Un
+  langage à surcoût par itération écrase la courbe L1/L2/L3 : le programmeur ne
+  « voit » plus la machine.
+
+`D(L) = 100 × (0,5·D1 + 0,15·D2 + 0,15·D3 + 0,2·D4)`.
+
+## 6. Protocole de mesure
+
+* **Machine** : VM KVM/Firecracker, Xeon Cascade Lake 2,8 GHz, 4 vCPU, 16 Go, AVX-512.
+  Le PMU n'est pas exposé : pas de compteurs matériels. Ils sont remplacés par
+  (i) des micro-expériences maison (`tools/hwprobe.c`), (ii) l'inspection du code
+  machine généré, (iii) une simulation de cache et de branches
+  (Valgrind/cachegrind et DynamoRIO si disponibles), (iv) rusage (RSS, temps CPU,
+  défauts de page, changements de contexte).
+* **Chaînes de compilation** : dernières versions stables au 2026-10-28, installées
+  depuis les sources ou binaires officiels, avec sommes SHA-256 ou signatures GPG
+  vérifiées (`env/toolchains.md`).
+  Option d'optimisation : la plus élevée documentée pour la machine cible
+  (`-O3 -march=native` ou équivalent). Les JIT ciblent l'hôte automatiquement. Les
+  variantes `natural` utilisent le mode « release » standard du langage, sans
+  désactiver ses vérifications par défaut.
+* **Exécution** : machine au repos (aucune compilation en arrière-plan), noyaux
+  exécutés séquentiellement. P = 3 processus indépendants par (langage, noyau,
+  variante), avec WARMUP = 1 répétition non mesurée (3 pour les langages à JIT), puis
+  R = 3 à 10 répétitions (adaptatif : environ 3 s par processus). On ne fixe pas
+  l'affinité CPU, pour laisser les threads auxiliaires des runtimes (JIT, GC) utiliser
+  les autres cœurs, comme en production. En contrepartie, le temps CPU total est
+  enregistré.
+* **Bruit** : le *steal time* de l'hyperviseur est relevé pour chaque processus.
+  Une exécution avec un steal > 2 % du temps mural est refaite. Un contrôle de
+  fréquence (`hwprobe freq`) est lancé avant et après chaque campagne.
+* **Validation** : chaque résultat est comparé aux sommes de contrôle attendues
+  (`results/expected.json`). Elles sont établies par la référence C et
+  contre-vérifiées par l'implémentation Python, indépendante. Une mesure dont le
+  résultat est faux est exclue et signalée.
+* **Statistiques** : estimateur = médiane. Intervalle de confiance à 95 % par
+  bootstrap hiérarchique (rééchantillonnage des processus, puis des répétitions),
+  selon Kalibera & Jones (ISMM 2013). On signale tout coefficient de variation > 5 %.
+
+## 7. Score final et robustesse
+
+`MS(L) = 0,35·C(L) + 0,40·E(L) + 0,25·D(L)` (sur 100).
+
+Robustesse :
+1. Classements séparés par pilier.
+2. **Monte-Carlo sur les poids** : 10 000 tirages de (w_C, w_E, w_D) selon une loi de
+   Dirichlet(1,1,1). On publie le rang médian et l'intervalle de rang [5 %, 95 %].
+3. **Bootstrap des mesures** : propagation de l'incertitude des temps aux scores E et D.
+4. Les écarts de rang non robustes (intervalles qui se chevauchent) sont présentés comme
+   des égalités.
+
+## 8. Règles d'implémentation
+
+* Même algorithme, mêmes données, même résultat dans tous les langages (voir `SPEC.md`).
+* `natural` : idiome documenté du langage (doc officielle ou tutoriel officiel),
+  conteneur et type par défaut. Le choix est justifié dans `docs/NATURAL.md`.
+* `tuned` : langage et bibliothèque standard uniquement, sans FFI vers du code natif écrit
+  à côté, sans assembleur en ligne et sans paquet tiers.
+* Implémentations alternatives mesurées à titre indicatif seulement : LuaJIT (dialecte
+  5.1 + FFI) et Bun (JavaScriptCore). Le classement « Lua » et « JavaScript » se fait
+  avec l'implémentation de référence de la version courante du langage (PUC-Lua 5.5,
+  Node/V8).
+
+## 9. Menaces à la validité (à compléter avec les résultats)
+
+* Une seule machine, virtualisée, sans PMU, avec un L3 partagé avec d'autres locataires
+  (bruit possible).
+* Ma propre compétence varie d'un langage à l'autre. Mitigations : même algorithme,
+  inspection systématique du code machine des noyaux, documentation officielle.
+* Le choix des noyaux est fait *a priori* à partir de la littérature, chacun étant
+  rattaché à un principe.
+* Biais de mesure connus (Mytkowicz et al., ASPLOS 2009 : alignement, environnement) :
+  ils sont atténués par plusieurs processus et signalés comme limite.
+* Préchauffage des JIT (Barrett et al., OOPSLA 2017) : on vérifie la stabilité entre
+  la première et la dernière répétition.
+
+## Journal des écarts
+
+(vide à la date de rédaction)

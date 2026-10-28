@@ -1,0 +1,20 @@
+# binaires et artefacts de compilation
+bench/*/ms
+bench/*/ms_*
+bench/*/target/
+bench/*/zig-out/
+bench/*/.zig-cache/
+bench/*/bin/
+bench/*/obj/
+bench/*/dist-newstyle/
+bench/*/*.o
+bench/*/*.hi
+bench/*/*.cmx
+bench/*/*.cmi
+bench/*/*.cmo
+bench/*/*.ali
+bench/*/*.class
+bench/*/__pycache__/
+bench/*/nimcache/
+probes/*/bin/
+*.tmp
