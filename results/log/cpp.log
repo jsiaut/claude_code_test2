@@ -1,9 +1,0 @@
-cpp        k1   natural              energy     p0 n=10 med=0.038016s ok={True} rc=0 
-cpp        k1   aos                  energy     p0 n=10 med=0.042903s ok={True} rc=0 
-cpp        k1   soa                  energy     p0 n=10 med=0.007565s ok={True} rc=0 
-cpp        k1   natural_shuffled     energy     p0 n=10 med=0.045147s ok={True} rc=0 
-cpp        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
-cpp        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
-cpp        k8   natural                         p0 n=3 med=1.024096s ok={True} rc=0 
-cpp        k8   tuned                           p0 n=10 med=0.174243s ok={True} rc=0 
-cpp        k8   tuned_alloc                     p0 n=10 med=0.302540s ok={True} rc=0 

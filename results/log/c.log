@@ -1,8 +1,0 @@
-c          k8   natural                         p0 n=3 med=0.930907s ok={True} rc=0 
-c          k8   tuned                           p0 n=10 med=0.247173s ok={True} rc=0 
-c          k6   natural              q6         p0 n=10 med=0.059718s ok={True} rc=0 
-c          k6   natural              q1         p0 n=10 med=0.082108s ok={True} rc=0 
-c          k6   tuned                q6         p0 n=10 med=0.021698s ok={True} rc=0 
-c          k6   tuned                q1         p0 n=10 med=0.038638s ok={True} rc=0 
-c          k6   mt                   q6         p0 n=10 med=0.012295s ok={True} rc=0 
-c          k6   mt                   q1         p0 n=10 med=0.012471s ok={True} rc=0 

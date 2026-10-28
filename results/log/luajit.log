@@ -1,5 +1,0 @@
-luajit     k5   natural                         p0 n=10 med=0.170197s ok={True} rc=0 
-luajit     k5   tuned                           p0 n=10 med=0.087603s ok={True} rc=0 
-luajit     k9   natural                         p0 n=10 med=0.064730s ok={True} rc=0 
-luajit     k9   tuned                           p0 n=10 med=0.040968s ok={True} rc=0 
-luajit     k9   mt                              p0 n=10 med=0.044545s ok={True} rc=0 

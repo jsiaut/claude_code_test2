@@ -1,9 +1,0 @@
-c3         k9   natural                         p0 n=10 med=0.037446s ok={True} rc=0 
-c3         k9   tuned                           p0 n=10 med=0.037144s ok={True} rc=0 
-c3         k9   mt                              p0 n=10 med=0.018075s ok={True} rc=0 
-c3         k2   tuned                16384      p0 n=10 med=0.008929s ok={True} rc=0 
-c3         k2   tuned                65536      p0 n=10 med=0.018862s ok={True} rc=0 
-c3         k2   tuned                262144     p0 n=10 med=0.018371s ok={True} rc=0 
-c3         k2   tuned                524288     p0 n=10 med=0.032155s ok={True} rc=0 
-c3         k2   tuned                2097152    p0 n=5 med=0.123177s ok={True} rc=0 
-c3         k2   tuned                8388608    p0 n=4 med=0.629950s ok={True} rc=0 
