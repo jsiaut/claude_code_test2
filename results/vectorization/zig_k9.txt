@@ -1,0 +1,24 @@
+65.8% des échantillons : ms+0x10822f2 boucle=0x10822e0-0x1082360 {'n': 21, 'packed': 0, 'wide': 0, 'scalar_fp': 12, 'vectorized': False, 'width': '-'}
+    10822e0: vmovsd xmm1,QWORD PTR [rdi+rcx*8-0x4008]
+    10822e9: vaddsd xmm1,xmm1,QWORD PTR [rdi+rcx*8+0x3ff8]
+    10822f2: vaddsd xmm1,xmm1,QWORD PTR [rdi+rcx*8-0x10]
+    10822f8: vaddsd xmm1,xmm1,QWORD PTR [rdi+rcx*8]
+    10822fd: vmulsd xmm1,xmm1,xmm0
+    1082301: vmovsd QWORD PTR [rsi+rcx*8],xmm1
+    1082306: vmovsd xmm1,QWORD PTR [rdi+rcx*8-0x4000]
+    108230f: vaddsd xmm1,xmm1,QWORD PTR [rdi+rcx*8+0x4000]
+    1082318: vaddsd xmm1,xmm1,QWORD PTR [rdi+rcx*8-0x8]
+    108231e: vaddsd xmm1,xmm1,QWORD PTR [rdi+rcx*8+0x8]
+    1082324: vmulsd xmm1,xmm1,xmm0
+    1082328: vmovsd QWORD PTR [rsi+rcx*8+0x8],xmm1
+    108232e: vmovsd xmm1,QWORD PTR [rdi+rcx*8-0x3ff8]
+    1082337: vaddsd xmm1,xmm1,QWORD PTR [rdi+rcx*8+0x4008]
+    1082340: vaddsd xmm1,xmm1,QWORD PTR [rdi+rcx*8]
+    1082345: vaddsd xmm1,xmm1,QWORD PTR [rdi+rcx*8+0x10]
+    108234b: vmulsd xmm1,xmm1,xmm0
+    108234f: vmovsd QWORD PTR [rsi+rcx*8+0x10],xmm1
+    1082355: add    rcx,0x3
+    1082359: cmp    rcx,0xfff
+    1082360: jne    10822e0 <ms.k9Natural+0x30>
+13.2% des échantillons : ms+0x10815bd boucle=0x10815a0-0x1081634 {'n': 29, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+5.2% des échantillons : ms+0x108177a boucle=0x1081720-0x10817ba {'n': 19, 'packed': 0, 'wide': 0, 'scalar_fp': 16, 'vectorized': False, 'width': '-'}

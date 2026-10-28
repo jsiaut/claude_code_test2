@@ -1,0 +1,30 @@
+csharp     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+csharp     k10  tuned                           p0 n=10 med=0.074437s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=10 med=0.021741s ok={True} rc=0 
+csharp     k10  tuned                           p0 n=10 med=0.056362s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=10 med=0.026926s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=10 med=0.027069s ok={True} rc=0 
+csharp     k10  tuned                           p0 n=10 med=0.044484s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=10 med=0.005021s ok={True} rc=0 
+csharp     k10  tuned                           p0 n=10 med=0.039372s ok={True} rc=0 
+csharp     k10  tuned                           p0 n=10 med=0.057913s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=10 med=0.025506s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=10 med=0.028143s ok={True} rc=0 
+csharp     k10  tuned                           p0 n=10 med=0.065790s ok={True} rc=0 
+csharp     k10  tuned                           p0 n=10 med=0.044299s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=10 med=0.027633s ok={True} rc=0 
+csharp     k10  tuned                           p0 n=10 med=0.102632s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=10 med=0.005188s ok={True} rc=0 
+csharp     k10  tuned                           p0 n=10 med=0.077363s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=10 med=0.027686s ok={True} rc=0 

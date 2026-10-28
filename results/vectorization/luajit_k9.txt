@@ -1,0 +1,23 @@
+44.5% des échantillons : JIT 0x55fc6459f4dc boucle=0x55fc6459f480-0x55fc6459f4e3 {'n': 20, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+    55fc6459f480: mov    DWORD PTR [rsp+0x8],ebp
+    55fc6459f484: cmp    DWORD PTR [rdi+rbp*8+0x4],0xfff90000
+    55fc6459f48c: jae    0x55fc64590068
+    55fc6459f492: movsd  xmm7,QWORD PTR [rdi+rbp*8]
+    55fc6459f497: cmp    DWORD PTR [rsi+rbp*8+0x4],0xfff90000
+    55fc6459f49f: jae    0x55fc64590068
+    55fc6459f4a5: addsd  xmm7,QWORD PTR [rsi+rbp*8]
+    55fc6459f4aa: lea    ebx,[rbp-0x1]
+    55fc6459f4ad: cmp    DWORD PTR [rdx+rbx*8+0x4],0xfff90000
+    55fc6459f4b5: jae    0x55fc64590068
+    55fc6459f4bb: addsd  xmm7,QWORD PTR [rdx+rbx*8]
+    55fc6459f4c0: mov    ebx,ebp
+    55fc6459f4c2: add    ebp,0x1
+    55fc6459f4c5: cmp    DWORD PTR [rdx+rbp*8+0x4],0xfff90000
+    55fc6459f4cd: jae    0x55fc64590068
+    55fc6459f4d3: addsd  xmm7,QWORD PTR [rdx+rbp*8]
+    55fc6459f4d8: mulsd  xmm7,xmm0
+    55fc6459f4dc: movsd  QWORD PTR [rcx+rbx*8],xmm7
+    55fc6459f4e1: cmp    ebp,eax
+    55fc6459f4e3: jle    0x55fc6459f480
+7.5% des échantillons : luajit-2.1.1792588164+0x2dd99 boucle=0x2dd88-0x2dda6 {'n': 10, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+5.6% des échantillons : JIT 0x55fc6459f163 boucle=0x55fc6459f150-0x55fc6459f168 {'n': 6, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}

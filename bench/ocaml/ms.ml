@@ -64,12 +64,24 @@ let[@inline never] k1_soa (vx : f32) (vy : f32) (vz : f32) (m : f32) =
   done;
   !a0 +. !a1 +. !a2 +. !a3
 
+(* Empreinte K1 (D2a) : octets vivants du tas après GC complet, et RSS courant (pages de 4 Kio) *)
+let live_now () = Gc.full_major (); (Gc.stat ()).Gc.live_words * (Sys.word_size / 8)
+let rss_now () =
+  try
+    let ic = open_in "/proc/self/statm" in
+    let l = input_line ic in
+    close_in ic;
+    int_of_string (List.nth (String.split_on_char ' ' l) 1) * 4096
+  with _ -> 0
+
 let run_k1 v reps =
   if v = "footprint0" then result "k1" v "energy" 0 0. "0"
   else begin
     let raw = map float32 "k1_particles.f32" in
     let f6 x = Printf.sprintf "%.6f" x in
     match v with
+    | "footprint_raw" -> (let s = ref 0. in for i = 0 to Bigarray.Array1.dim raw - 1 do s := !s +. raw.{i} done;
+                          result "k1" v "energy" 0 0. (if !s = 0. then "0" else "0"))
     | "aos" -> bench "k1" v "energy" reps (fun () -> f6 (k1_aos raw))
     | "soa" ->
         let col k = let c = Array1.create float32 c_layout n1 in for i = 0 to n1 - 1 do Array1.unsafe_set c i (Array1.unsafe_get raw ((16 * i) + k)) done; c in
@@ -77,10 +89,16 @@ let run_k1 v reps =
         bench "k1" v "energy" reps (fun () -> f6 (k1_soa vx vy vz m))
     | _ ->
         let g i k = Array1.get raw ((16 * i) + k) in
+        let m1, r1 = if v = "footprint" then (live_now (), rss_now ()) else (0, 0) in (* P1 : tampon brut chargé *)
         let ps = Array.init n1 (fun i ->
           { x = g i 0; y = g i 1; z = g i 2; vx = g i 3; vy = g i 4; vz = g i 5; ax = g i 6; ay = g i 7; az = g i 8;
             mass = g i 9; charge = g i 10; radius = g i 11; temp = g i 12; pressure = g i 13; energy = g i 14; density = g i 15 }) in
-        if v = "footprint" then (Gc.compact (); result "k1" v "energy" 0 0. (f6 (k1_natural ps)))
+        if v = "footprint" then begin
+          let m2 = live_now () in (* P2 : collection construite, tampon brut encore vivant *)
+          let r2 = rss_now () in
+          Printf.printf "META;mem;live;%d;%d\nMETA;rss;%d;%d\nMETA;raw0;%g\n%!" m1 m2 r1 r2 (Array1.get raw 0);
+          result "k1" v "energy" 0 0. (f6 (k1_natural ps))
+        end
         else begin
           let ps =
             if v = "natural_shuffled" then begin

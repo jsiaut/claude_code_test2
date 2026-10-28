@@ -1,0 +1,4 @@
+CAP;A2;1;c_offsetof(S, "c")=8
+CAP;A4;0.5;allocate(alignment=64) -> adresse mod 64 = 0
+CAP;A5;0.5;(1.0: real(32)).transmute(uint(32)) = 1065353216
+CAP;D5;0.5;atomicFence

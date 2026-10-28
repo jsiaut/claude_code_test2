@@ -1,0 +1,90 @@
+luajit     k5   natural                         p0 n=10 med=0.170197s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=10 med=0.087603s ok={True} rc=0 
+luajit     k9   natural                         p0 n=10 med=0.064730s ok={True} rc=0 
+luajit     k9   tuned                           p0 n=10 med=0.040968s ok={True} rc=0 
+luajit     k9   mt                              p0 n=10 med=0.044545s ok={True} rc=0 
+luajit     k1   natural              energy     p0 n=10 med=0.237514s ok={True} rc=0 
+luajit     k1   aos                  energy     p0 n=10 med=0.038481s ok={True} rc=0 
+luajit     k1   soa                  energy     p0 n=10 med=0.010893s ok={True} rc=0 
+luajit     k1   natural_shuffled     energy     p0 n=3 med=0.849629s ok={True} rc=0 
+luajit     k7   natural                         p0 n=2 med=11.538249s ok={True} rc=0 
+luajit     k7   tuned                           p0 n=3 med=1.873486s ok={True} rc=0 
+luajit     k4   natural_unsorted                p0 n=10 med=0.135481s ok={True} rc=0 
+luajit     k4   natural_sorted                  p0 n=10 med=0.056095s ok={True} rc=0 
+luajit     k4   branchless_unsorted             p0 n=10 med=0.021439s ok={True} rc=0 
+luajit     k10  natural                         p0 n=10 med=0.187327s ok={True} rc=0 
+luajit     k10  tuned                           p0 n=10 med=0.023391s ok={True} rc=0 
+luajit     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     k6   natural              q6         p0 n=10 med=0.246512s ok={True} rc=0 
+luajit     k6   natural              q1         p0 n=10 med=0.109090s ok={True} rc=0 
+luajit     k6   tuned                q6         p0 n=10 med=0.074401s ok={True} rc=0 
+luajit     k6   tuned                q1         p0 n=10 med=0.115585s ok={True} rc=0 
+luajit     k6   mt                   q6         p0 n=10 med=0.075330s ok={True} rc=0 
+luajit     k6   mt                   q1         p0 n=10 med=0.117415s ok={True} rc=0 
+luajit     k2   tuned                16384      p0 n=10 med=0.022596s ok={True} rc=0 
+luajit     k2   tuned                65536      p0 n=10 med=0.034470s ok={True} rc=0 
+luajit     k2   tuned                262144     p0 n=10 med=0.037167s ok={True} rc=0 
+luajit     k2   tuned                524288     p0 n=10 med=0.040052s ok={True} rc=0 
+luajit     k2   tuned                2097152    p0 n=10 med=0.212090s ok={True} rc=0 
+luajit     k2   tuned                8388608    p0 n=4 med=0.660200s ok={True} rc=0 
+luajit     k2   tuned                16777216   p0 n=4 med=0.702065s ok={True} rc=0 
+luajit     k2   tuned                33554432   p0 n=3 med=0.769172s ok={True} rc=0 
+luajit     k2   tuned                67108864   p0 n=3 med=1.070597s ok={True} rc=0 
+luajit     k2   tuned                268435456  p0 n=3 med=1.425773s ok={True} rc=0 
+luajit     k8   natural                         p0 n=2 med=5.547478s ok={True} rc=0 
+luajit     k8   tuned                           p0 n=3 med=3.587934s ok={True} rc=0 
+luajit     k3   rmw_packed                      p0 n=10 med=0.041779s ok={True} rc=0 
+luajit     k3   rmw_padded                      p0 n=10 med=0.042522s ok={True} rc=0 
+luajit     k3   sw_packed                       p0 n=10 med=0.042831s ok={True} rc=0 
+luajit     k3   sw_padded                       p0 n=10 med=0.042327s ok={True} rc=0 
+luajit     k10  natural                         p1 n=10 med=0.211567s ok={True} rc=0 
+luajit     k10  tuned                           p1 n=10 med=0.021510s ok={True} rc=0 
+luajit     k7   natural                         p1 n=2 med=11.709777s ok={True} rc=0 
+luajit     k7   tuned                           p1 n=3 med=1.961766s ok={True} rc=0 
+luajit     k3   rmw_packed                      p1 n=10 med=0.044580s ok={True} rc=0 
+luajit     k3   rmw_padded                      p1 n=10 med=0.041241s ok={True} rc=0 
+luajit     k3   sw_packed                       p1 n=10 med=0.046840s ok={True} rc=0 
+luajit     k3   sw_padded                       p1 n=10 med=0.085522s ok={True} rc=0 
+luajit     k8   natural                         p1 n=2 med=7.224160s ok={True} rc=0 
+luajit     k8   tuned                           p1 n=3 med=4.060806s ok={True} rc=0 
+luajit     k9   natural                         p1 n=10 med=0.058373s ok={True} rc=0 
+luajit     k9   tuned                           p1 n=10 med=0.046934s ok={True} rc=0 
+luajit     k9   mt                              p1 n=10 med=0.038493s ok={True} rc=0 
+luajit     k5   natural                         p1 n=10 med=0.179429s ok={True} rc=0 
+luajit     k5   tuned                           p1 n=10 med=0.151849s ok={True} rc=0 
+luajit     k1   natural              energy     p1 n=10 med=0.251060s ok={True} rc=0 
+luajit     k1   aos                  energy     p1 n=10 med=0.044933s ok={True} rc=0 
+luajit     k1   soa                  energy     p1 n=10 med=0.010255s ok={True} rc=0 
+luajit     k1   natural_shuffled     energy     p1 n=3 med=0.811179s ok={True} rc=0 
+luajit     k6   natural              q6         p1 n=10 med=0.307573s ok={True} rc=0 
+luajit     k6   natural              q1         p1 n=10 med=0.106749s ok={True} rc=0 
+luajit     k6   tuned                q6         p1 n=10 med=0.069707s ok={True} rc=0 
+luajit     k6   tuned                q1         p1 n=10 med=0.121722s ok={True} rc=0 
+luajit     k6   mt                   q6         p1 n=10 med=0.069088s ok={True} rc=0 
+luajit     k6   mt                   q1         p1 n=10 med=0.120878s ok={True} rc=0 
+luajit     k2   tuned                16384      p1 n=10 med=0.030739s ok={True} rc=0 
+luajit     k2   tuned                65536      p1 n=10 med=0.034214s ok={True} rc=0 
+luajit     k2   tuned                262144     p1 n=10 med=0.034734s ok={True} rc=0 
+luajit     k2   tuned                524288     p1 n=10 med=0.045346s ok={True} rc=0 
+luajit     k2   tuned                2097152    p1 n=10 med=0.160561s ok={True} rc=0 
+luajit     k2   tuned                8388608    p1 n=4 med=0.659658s ok={True} rc=0 
+luajit     k2   tuned                16777216   p1 n=4 med=0.682298s ok={True} rc=0 
+luajit     k2   tuned                33554432   p1 n=3 med=0.902023s ok={True} rc=0 
+luajit     k2   tuned                67108864   p1 n=3 med=0.868934s ok={True} rc=0 
+luajit     k2   tuned                268435456  p1 n=3 med=1.445225s ok={True} rc=0 
+luajit     k4   natural_unsorted                p1 n=10 med=0.144415s ok={True} rc=0 
+luajit     k4   natural_sorted                  p1 n=10 med=0.061746s ok={True} rc=0 
+luajit     k4   branchless_unsorted             p1 n=10 med=0.021347s ok={True} rc=0 
+luajit     k3   rmw_packed                      p2 n=10 med=0.046564s ok={True} rc=0 
+luajit     k3   rmw_padded                      p2 n=10 med=0.041322s ok={True} rc=0 
+luajit     k3   sw_packed                       p2 n=10 med=0.059721s ok={True} rc=0 
+luajit     k3   sw_padded                       p2 n=10 med=0.042540s ok={True} rc=0 
+luajit     k8   tuned                           p2 n=3 med=3.623594s ok={True} rc=0 
+luajit     k1   natural              energy     p2 n=10 med=0.242399s ok={True} rc=0 
+luajit     k1   aos                  energy     p2 n=10 med=0.049210s ok={True} rc=0 
+luajit     k1   soa                  energy     p2 n=10 med=0.010277s ok={True} rc=0 
+luajit     k1   natural_shuffled     energy     p2 n=3 med=0.935500s ok={True} rc=0 
+luajit     k9   natural                         p2 n=10 med=0.057006s ok={True} rc=0 
+luajit     k9   tuned                           p2 n=10 med=0.042664s ok={True} rc=0 
+luajit     k9   mt                              p2 n=10 med=0.040709s ok={True} rc=0 

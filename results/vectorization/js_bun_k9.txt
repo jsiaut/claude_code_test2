@@ -1,0 +1,29 @@
+15.4% des échantillons : JIT 0x7f9faf1e2d2d boucle=0x7f9faf1e2d29-0x7f9faf1e2da0 {'n': 26, 'packed': 0, 'wide': 0, 'scalar_fp': 2, 'vectorized': False, 'width': '-'}
+    7f9faf1e2d29: vaddsd xmm0,xmm1,xmm0
+    7f9faf1e2d2d: vmulsd xmm0,xmm2,xmm0
+    7f9faf1e2d31: vmovq  r11,xmm0
+    7f9faf1e2d36: sub    r11,r12
+    7f9faf1e2d39: test   rbx,r9
+    7f9faf1e2d3c: jne    0x7f9faf1e4061
+    7f9faf1e2d42: cmp    DWORD PTR [r9],0xb12710
+    7f9faf1e2d49: jne    0x7f9faf1e3063
+    7f9faf1e2d4f: mov    rax,QWORD PTR [r9+0x8]
+    7f9faf1e2d53: cmp    esi,DWORD PTR [rax-0x8]
+    7f9faf1e2d56: jae    0x7f9faf1e4066
+    7f9faf1e2d5c: mov    QWORD PTR [rax+rsi*8],r11
+    7f9faf1e2d60: cmp    r10d,0x7ff
+    7f9faf1e2d67: jge    0x7f9faf1e2da5
+    7f9faf1e2d6d: mov    esi,r10d
+    7f9faf1e2d70: jmp    0x7f9faf1e16a6
+    7f9faf1e2d75: test   r12,r13
+    7f9faf1e2d78: je     0x7f9faf1e3057
+    7f9faf1e2d7e: lea    rax,[r13+r12*1+0x0]
+    7f9faf1e2d83: vmovq  xmm1,rax
+    7f9faf1e2d88: jmp    0x7f9faf1e2cf5
+    7f9faf1e2d8d: test   r12,r13
+    7f9faf1e2d90: je     0x7f9faf1e304b
+    7f9faf1e2d96: lea    rax,[r13+r12*1+0x0]
+    7f9faf1e2d9b: vmovq  xmm1,rax
+    7f9faf1e2da0: jmp    0x7f9faf1e2d29
+6.9% des échantillons : JIT 0x7f9faf1e2c10 boucle=0x7f9faf1e16a6-0x7f9faf1e2d70 {'n': 121, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+6.1% des échantillons : JIT 0x7f9faf1cb6f3 boucle=0x7f9faf1cb600-0x7f9faf1cb857 {'n': 127, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}

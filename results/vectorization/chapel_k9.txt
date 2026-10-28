@@ -1,0 +1,18 @@
+45.5% des échantillons : ms_nat+0xa52b8 boucle=0xa52a0-0xa52ea {'n': 15, 'packed': 8, 'wide': 8, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    a52a0: vmovupd ymm2,YMMWORD PTR [rdi+rcx*8-0x20]
+    a52a6: vmovupd ymm3,YMMWORD PTR [rdi+rcx*8]
+    a52ab: vaddpd ymm2,ymm2,YMMWORD PTR [r15+rcx*8-0x20]
+    a52b2: vaddpd ymm3,ymm3,YMMWORD PTR [r15+rcx*8]
+    a52b8: vaddpd ymm2,ymm2,YMMWORD PTR [rdx+rcx*8-0x30]
+    a52be: vaddpd ymm3,ymm3,YMMWORD PTR [rdx+rcx*8-0x10]
+    a52c4: vaddpd ymm2,ymm2,YMMWORD PTR [rdx+rcx*8-0x20]
+    a52ca: vaddpd ymm3,ymm3,YMMWORD PTR [rdx+rcx*8]
+    a52cf: vmulpd ymm2,ymm2,ymm1
+    a52d3: vmulpd ymm3,ymm3,ymm1
+    a52d7: vmovupd YMMWORD PTR [rbp+rcx*8-0x20],ymm2
+    a52dd: vmovupd YMMWORD PTR [rbp+rcx*8+0x0],ymm3
+    a52e3: add    rcx,0x8
+    a52e7: cmp    rax,rcx
+    a52ea: jne    a52a0 <k9Natural_chpl+0x1a0>
+18.9% des échantillons : ms_nat+0x12b9ce boucle=0x12b9c0-0x12b9da {'n': 10, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+15.3% des échantillons : libc.so.6+0x198f2d boucle=0x198f07-0x198f62 {'n': 23, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

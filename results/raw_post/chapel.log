@@ -1,0 +1,30 @@
+chapel     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+chapel     k10  tuned                           p0 n=10 med=0.062124s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=10 med=0.005409s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=10 med=0.006314s ok={True} rc=0 
+chapel     k10  tuned                           p0 n=10 med=0.008260s ok={True} rc=0 
+chapel     k10  tuned                           p0 n=10 med=0.052883s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=10 med=0.005414s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=10 med=0.005410s ok={True} rc=0 
+chapel     k10  tuned                           p0 n=10 med=0.009972s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=10 med=0.005414s ok={True} rc=0 
+chapel     k10  tuned                           p0 n=10 med=0.044357s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=10 med=0.009400s ok={True} rc=0 
+chapel     k10  tuned                           p0 n=10 med=0.015667s ok={True} rc=0 
+chapel     k10  tuned                           p0 n=10 med=0.013657s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=10 med=0.005356s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=10 med=0.005887s ok={True} rc=0 
+chapel     k10  tuned                           p0 n=10 med=0.020363s ok={True} rc=0 
+chapel     k10  tuned                           p0 n=10 med=0.042652s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=10 med=0.005698s ok={True} rc=0 

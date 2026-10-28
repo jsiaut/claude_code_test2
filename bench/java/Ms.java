@@ -77,9 +77,24 @@ public class Ms {
         }
         return a0.add(a1).reduceLanes(VectorOperators.ADD);
     }
+    // Empreinte K1 (D2a) : octets vivants du tas après GC complet, et RSS courant (pages de 4 Kio)
+    static long liveNow() {
+        Runtime rt = Runtime.getRuntime();
+        System.gc();
+        System.gc();
+        return rt.totalMemory() - rt.freeMemory();
+    }
+    static long rssNow() {
+        try {
+            return Long.parseLong(java.nio.file.Files.readString(java.nio.file.Path.of("/proc/self/statm")).trim().split("\\s+")[1]) * 4096;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
     static void runK1(String v, int reps) {
         if (v.equals("footprint0")) { result("k1", v, "energy", 0, 0, "0"); return; }
         float[] raw = loadF32("k1_particles.f32");
+        if (v.equals("footprint_raw")) { result("k1", v, "energy", 0, 0, "0"); return; }
         if (v.equals("aos")) { bench("k1", v, "energy", reps, () -> String.format("%.6f", k1AoS(raw))); return; }
         if (v.equals("soa")) {
             float[][] c = new float[16][N1];
@@ -87,6 +102,8 @@ public class Ms {
             bench("k1", v, "energy", reps, () -> String.format("%.6f", k1SoA(c[3], c[4], c[5], c[9])));
             return;
         }
+        long m1 = 0, r1 = 0;
+        if (v.equals("footprint")) { m1 = liveNow(); r1 = rssNow(); } // P1 : tampon brut chargé
         List<Particle> ps = new ArrayList<>();
         for (int i = 0; i < N1; i++) {
             int o = 16 * i;
@@ -94,9 +111,10 @@ public class Ms {
                     raw[o + 8], raw[o + 9], raw[o + 10], raw[o + 11], raw[o + 12], raw[o + 13], raw[o + 14], raw[o + 15]));
         }
         if (v.equals("footprint")) {
-            System.gc();
-            Runtime rt = Runtime.getRuntime();
-            System.out.println("META;live_bytes_after_gc;" + (rt.totalMemory() - rt.freeMemory()));
+            long m2 = liveNow(), r2 = rssNow(); // P2 : collection construite, tampon brut encore vivant
+            System.out.println("META;mem;live;" + m1 + ";" + m2);
+            System.out.println("META;rss;" + r1 + ";" + r2);
+            System.out.println("META;raw0;" + raw[0]);
             result("k1", v, "energy", 0, 0, String.format("%.6f", k1Natural(ps)));
             return;
         }

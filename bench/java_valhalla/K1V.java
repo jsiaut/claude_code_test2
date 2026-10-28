@@ -1,6 +1,9 @@
 // Annexe (hors classement) : K1 avec les classes valeur de Valhalla (JEP 401, build EA du JDK 27,
 // --enable-preview). Question : un tableau d'objets valeur de 64 octets est-il aplati en mémoire ?
 // Usage : java --enable-preview K1V <list|array> <reps> [shuffled|footprint]
+// shuffled : comme bench/java, la collection est construite dans l'ordre puis permutée (s[j] = ps[perm[j]]).
+// Si les valeurs sont aplaties, la permutation copie les valeurs et le parcours reste séquentiel ; sinon
+// elle copie des références et le parcours saute en mémoire.
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.Files;
@@ -39,10 +42,21 @@ public class K1V {
         Particle[] arr = useArray ? new Particle[N1] : null;
         List<Particle> lst = useArray ? null : new ArrayList<>();
         for (int i = 0; i < N1; i++) {
-            int o = 16 * (perm != null ? perm[i] : i);
+            int o = 16 * i;
             Particle p = new Particle(raw[o], raw[o + 1], raw[o + 2], raw[o + 3], raw[o + 4], raw[o + 5], raw[o + 6], raw[o + 7],
                     raw[o + 8], raw[o + 9], raw[o + 10], raw[o + 11], raw[o + 12], raw[o + 13], raw[o + 14], raw[o + 15]);
             if (useArray) arr[i] = p; else lst.add(p);
+        }
+        if (perm != null) {  // permutation après construction, comme natural_shuffled
+            if (useArray) {
+                Particle[] s = new Particle[N1];
+                for (int j = 0; j < N1; j++) s[j] = arr[perm[j]];
+                arr = s;
+            } else {
+                List<Particle> s = new ArrayList<>(N1);
+                for (int j = 0; j < N1; j++) s.add(lst.get(perm[j]));
+                lst = s;
+            }
         }
         raw = null;
         System.gc();

@@ -1,0 +1,36 @@
+90.5% des échantillons : ms+0x5405 boucle=0x5400-0x54a9 {'n': 35, 'packed': 24, 'wide': 16, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    5400: vmovd  xmm5,DWORD PTR [rdi+rax*1]
+    5405: vmovd  xmm6,DWORD PTR [rdi+rax*1+0x4]
+    540b: vmovd  xmm7,DWORD PTR [rdi+rax*1+0x8]
+    5411: vmovd  xmm8,DWORD PTR [rdi+rax*1+0xc]
+    5417: vpminsb xmm5,xmm5,xmm0
+    541c: vpminsb xmm6,xmm6,xmm0
+    5421: vpminsb xmm7,xmm7,xmm0
+    5426: vpminsb xmm8,xmm8,xmm0
+    542b: vpmovzxbq ymm5,xmm5
+    5430: vpaddq ymm1,ymm1,ymm5
+    5434: vpmovzxbq ymm5,xmm6
+    5439: vpaddq ymm2,ymm2,ymm5
+    543d: vpmovzxbq ymm5,xmm7
+    5442: vpaddq ymm3,ymm3,ymm5
+    5446: vpmovzxbq ymm5,xmm8
+    544b: vpaddq ymm4,ymm4,ymm5
+    544f: vmovd  xmm5,DWORD PTR [rdi+rax*1+0x10]
+    5455: vmovd  xmm6,DWORD PTR [rdi+rax*1+0x14]
+    545b: vmovd  xmm7,DWORD PTR [rdi+rax*1+0x18]
+    5461: vmovd  xmm8,DWORD PTR [rdi+rax*1+0x1c]
+    5467: vpminsb xmm5,xmm5,xmm0
+    546c: vpminsb xmm6,xmm6,xmm0
+    5471: vpminsb xmm7,xmm7,xmm0
+    5476: vpminsb xmm8,xmm8,xmm0
+    547b: vpmovzxbq ymm5,xmm5
+    5480: vpaddq ymm1,ymm1,ymm5
+    5484: vpmovzxbq ymm5,xmm6
+    5489: vpaddq ymm2,ymm2,ymm5
+    548d: vpmovzxbq ymm5,xmm7
+    5492: vpaddq ymm3,ymm3,ymm5
+    5496: vpmovzxbq ymm5,xmm8
+    549b: vpaddq ymm4,ymm4,ymm5
+    549f: add    rax,0x20
+    54a3: cmp    rax,0x1000000
+    54a9: jne    5400 <k4_natural+0x20>

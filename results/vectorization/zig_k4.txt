@@ -1,0 +1,52 @@
+91.0% des échantillons : ms+0x108e403 boucle=0x108e350-0x108e40a {'n': 51, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    108e350: movzx  r8d,BYTE PTR [rdi+rdx*1]
+    108e355: movzx  r9d,BYTE PTR [rdi+rdx*1+0x1]
+    108e35b: mov    r10d,r8d
+    108e35e: sar    r10b,0x7
+    108e362: and    r10b,r8b
+    108e365: movzx  r8d,r10b
+    108e369: add    r8,rax
+    108e36c: mov    eax,r9d
+    108e36f: sar    al,0x7
+    108e372: and    al,r9b
+    108e375: movzx  r9d,al
+    108e379: movzx  eax,BYTE PTR [rdi+rdx*1+0x2]
+    108e37e: mov    r10d,eax
+    108e381: sar    r10b,0x7
+    108e385: and    r10b,al
+    108e388: movzx  eax,r10b
+    108e38c: add    rax,r9
+    108e38f: add    rax,r8
+    108e392: movzx  r8d,BYTE PTR [rdi+rdx*1+0x3]
+    108e398: mov    r9d,r8d
+    108e39b: sar    r9b,0x7
+    108e39f: and    r9b,r8b
+    108e3a2: movzx  r8d,r9b
+    108e3a6: movzx  r9d,BYTE PTR [rdi+rdx*1+0x4]
+    108e3ac: mov    r10d,r9d
+    108e3af: sar    r10b,0x7
+    108e3b3: and    r10b,r9b
+    108e3b6: movzx  r9d,r10b
+    108e3ba: add    r9,r8
+    108e3bd: movzx  r8d,BYTE PTR [rdi+rdx*1+0x5]
+    108e3c3: mov    r10d,r8d
+    108e3c6: sar    r10b,0x7
+    108e3ca: and    r10b,r8b
+    108e3cd: movzx  r8d,r10b
+    108e3d1: add    r8,r9
+    108e3d4: add    r8,rax
+    108e3d7: movzx  eax,BYTE PTR [rdi+rdx*1+0x6]
+    108e3dc: mov    r9d,eax
+    108e3df: sar    r9b,0x7
+    108e3e3: and    r9b,al
+    108e3e6: movzx  r9d,r9b
+    108e3ea: movzx  eax,BYTE PTR [rdi+rdx*1+0x7]
+    108e3ef: mov    r10d,eax
+    108e3f2: sar    r10b,0x7
+    108e3f6: and    r10b,al
+    108e3f9: movzx  eax,r10b
+    108e3fd: add    rax,r9
+    108e400: add    rax,r8
+    108e403: add    rdx,0x8
+    108e407: cmp    rsi,rdx
+    108e40a: jne    108e350 <ms.k4Branchless+0x30>

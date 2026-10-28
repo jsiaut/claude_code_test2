@@ -1,0 +1,30 @@
+rust       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       k10  tuned                           p0 n=10 med=0.042280s ok={True} rc=0 
+rust       k5   tuned                           p0 n=10 med=0.004950s ok={True} rc=0 
+rust       k5   tuned                           p0 n=10 med=0.004782s ok={True} rc=0 
+rust       k10  tuned                           p0 n=10 med=0.094892s ok={True} rc=0 
+rust       k5   tuned                           p0 n=10 med=0.006673s ok={True} rc=0 
+rust       k10  tuned                           p0 n=10 med=0.055127s ok={True} rc=0 
+rust       k10  tuned                           p0 n=10 med=0.038165s ok={True} rc=0 
+rust       k5   tuned                           p0 n=10 med=0.008333s ok={True} rc=0 
+rust       k10  tuned                           p0 n=10 med=0.016778s ok={True} rc=0 
+rust       k5   tuned                           p0 n=10 med=0.008473s ok={True} rc=0 
+rust       k5   tuned                           p0 n=10 med=0.004764s ok={True} rc=0 
+rust       k10  tuned                           p0 n=10 med=0.062890s ok={True} rc=0 
+rust       k10  tuned                           p0 n=10 med=0.065073s ok={True} rc=0 
+rust       k5   tuned                           p0 n=10 med=0.005338s ok={True} rc=0 
+rust       k10  tuned                           p0 n=10 med=0.098758s ok={True} rc=0 
+rust       k5   tuned                           p0 n=10 med=0.007108s ok={True} rc=0 
+rust       k5   tuned                           p0 n=10 med=0.006928s ok={True} rc=0 
+rust       k10  tuned                           p0 n=10 med=0.060404s ok={True} rc=0 

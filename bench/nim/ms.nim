@@ -80,13 +80,30 @@ proc k1SoA(vx, vy, vz, m: ptr UncheckedArray[float32], n: int): float {.noinline
   result = mm512_reduce_add_pd(mm512_add_pd(a0, a1))
 {.pop.}
 
+proc rssNow(): int =
+  ## Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)
+  ## (readFile se fie à la taille du fichier, nulle sous /proc : on lit une ligne)
+  try:
+    let f = open("/proc/self/statm")
+    defer: f.close()
+    f.readLine().splitWhitespace()[1].parseInt * 4096
+  except CatchableError: 0
+
 proc runK1(v: string, reps: int) =
   if v == "footprint0":
     result("k1", v, "energy", 0, 0, "0"); return
   let raw = load[float32]("k1_particles.f32")
+  if v == "footprint_raw":
+    result("k1", v, "energy", 0, 0, "0"); return
+  let m1 = if v == "footprint": rssNow() else: 0  # P1 : tampon brut chargé
+  let o1 = getOccupiedMem()
   var ps = newSeq[Particle](N1)
   for i in 0 ..< N1: copyMem(ps[i].addr, raw.p[16 * i].addr, sizeof(Particle))
   if v == "footprint":
+    let m2 = rssNow()  # P2 : collection construite, tampon brut encore vivant
+    # l'allocateur de Nim garde le tampon transitoire du chargement et le réutilise : le RSS ne voit pas
+    # la collection ; on compte donc les octets occupés selon l'allocateur (getOccupiedMem)
+    echo &"META;mem;live;{o1};{getOccupiedMem()}\nMETA;rss;{m1};{m2}\nMETA;raw0;{raw.p[0]}"
     cfree(raw.p); result("k1", v, "energy", 0, 0, &"{k1Natural(ps):.6f}"); return
   if v == "soa":
     var c: array[16, ptr UncheckedArray[float32]]

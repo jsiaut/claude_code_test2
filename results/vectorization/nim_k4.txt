@@ -1,0 +1,22 @@
+86.5% des échantillons : ms+0x14892 boucle=0x14880-0x148d7 {'n': 19, 'packed': 12, 'wide': 8, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    14880: vmovd  xmm5,DWORD PTR [rsi+rax*1+0x8]
+    14886: vmovd  xmm6,DWORD PTR [rsi+rax*1+0xc]
+    1488c: vmovd  xmm7,DWORD PTR [rsi+rax*1+0x10]
+    14892: vmovd  xmm8,DWORD PTR [rsi+rax*1+0x14]
+    14898: vpminsb xmm5,xmm5,xmm1
+    1489d: vpminsb xmm6,xmm6,xmm1
+    148a2: vpminsb xmm7,xmm7,xmm1
+    148a7: vpminsb xmm8,xmm8,xmm1
+    148ac: vpmovzxbq ymm5,xmm5
+    148b1: vpaddq ymm0,ymm0,ymm5
+    148b5: vpmovzxbq ymm5,xmm6
+    148ba: vpaddq ymm2,ymm2,ymm5
+    148be: vpmovzxbq ymm5,xmm7
+    148c3: vpaddq ymm3,ymm3,ymm5
+    148c7: vpmovzxbq ymm5,xmm8
+    148cc: vpaddq ymm4,ymm4,ymm5
+    148d0: add    rax,0x10
+    148d4: cmp    rcx,rax
+    148d7: jne    14880 <k4Natural__ms_u1642+0x50>
+2.9% des échantillons : libc.so.6+0x19973a boucle=0x199730-0x199747 {'n': 8, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+2.0% des échantillons : libc.so.6+0x198f89 boucle=0x198dc6-0x198fb6 {'n': 101, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

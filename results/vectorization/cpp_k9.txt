@@ -1,0 +1,12 @@
+59.3% des échantillons : ms+0x40a836 boucle=0x40a830-0x40a85b {'n': 9, 'packed': 4, 'wide': 4, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    40a830: vmovupd ymm0,YMMWORD PTR [rdi+rax*1+0x8]
+    40a836: vaddpd ymm0,ymm0,YMMWORD PTR [rsi+rax*1+0x8]
+    40a83c: vaddpd ymm0,ymm0,YMMWORD PTR [rdx+rax*1]
+    40a841: vaddpd ymm0,ymm0,YMMWORD PTR [rdx+rax*1+0x10]
+    40a847: vmulpd ymm0,ymm0,ymm1
+    40a84b: vmovupd YMMWORD PTR [rcx+rax*1+0x8],ymm0
+    40a851: add    rax,0x20
+    40a855: cmp    rax,0x3fe0
+    40a85b: jne    40a830 <_ZL10k9_naturalRKSt6vectorIS_IdSaIdEESaIS1_EERS3_.isra.0+0x60>
+11.0% des échantillons : ms+0x4072d3 boucle=0x4072cf-0x4072e9 {'n': 7, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+9.6% des échantillons : libc.so.6+0x198f2d boucle=0x198f07-0x198f62 {'n': 23, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

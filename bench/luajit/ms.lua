@@ -57,9 +57,19 @@ local function k1_soa(vx, vy, vz, m)
   for i = 0, N1 - 1 do local x, y, z = vx[i], vy[i], vz[i]; e = e + 0.5 * m[i] * (x * x + y * y + z * z) end
   return e
 end
+-- Empreinte K1 (D2a) : octets alloués par LuaJIT après un GC complet, et RSS courant (pages de 4 Kio)
+local function live_now() collectgarbage("collect"); collectgarbage("collect"); return math.floor(collectgarbage("count") * 1024) end
+local function rss_now()
+  local f = io.open("/proc/self/statm", "r")
+  if not f then return 0 end
+  local _, res = f:read("*n", "*n")
+  f:close()
+  return math.floor(res * 4096)
+end
 local function run_k1(v, reps)
   if v == "footprint0" then return result("k1", v, "energy", 0, 0, "0") end
   local raw = cload("k1_particles.f32", "float")
+  if v == "footprint_raw" then return result("k1", v, "energy", 0, 0, "0") end
   local f6 = function(x) return string.format("%.6f", x) end
   if v == "aos" then
     -- un pointeur obtenu par ffi.cast ne garde pas l'objet d'origine vivant : sans la référence
@@ -72,6 +82,8 @@ local function run_k1(v, reps)
     local vx, vy, vz, m = col(3), col(4), col(5), col(9)
     return bench("k1", v, "energy", reps, function() return f6(k1_soa(vx, vy, vz, m)) end)
   end
+  local m1, r1 = 0, 0
+  if v == "footprint" then m1, r1 = live_now(), rss_now() end -- P1 : tampon brut chargé
   local ps = {}
   for i = 1, N1 do
     local o = 16 * (i - 1)
@@ -79,8 +91,12 @@ local function run_k1(v, reps)
       az = raw[o + 8], mass = raw[o + 9], charge = raw[o + 10], radius = raw[o + 11], temp = raw[o + 12], pressure = raw[o + 13],
       energy = raw[o + 14], density = raw[o + 15] }
   end
+  if v == "footprint" then
+    local m2, r2 = live_now(), rss_now() -- P2 : collection construite, tampon brut encore vivant
+    print(string.format("META;mem;live;%d;%d\nMETA;rss;%d;%d\nMETA;raw0;%s", m1, m2, r1, r2, tostring(raw[0])))
+    return result("k1", v, "energy", 0, 0, f6(k1_natural(ps)))
+  end
   raw = nil; collectgarbage()
-  if v == "footprint" then return result("k1", v, "energy", 0, 0, f6(k1_natural(ps))) end
   if v == "natural_shuffled" then
     local perm = cload("k1_perm.u32", "uint32_t")
     local s = {}

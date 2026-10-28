@@ -81,9 +81,19 @@ local function k1_soa(vx, vy, vz, m)
   end
   return a0 + a1
 end
+-- Empreinte K1 (D2a) : octets alloués par Lua après un GC complet, et RSS courant (pages de 4 Kio)
+local function live_now() collectgarbage("collect"); collectgarbage("collect"); return math.floor(collectgarbage("count") * 1024) end
+local function rss_now()
+  local f = io.open("/proc/self/statm", "r")
+  if not f then return 0 end
+  local _, res = f:read("n", "n")
+  f:close()
+  return math.floor(res * 4096)
+end
 local function run_k1(v, reps)
   if v == "footprint0" then return result("k1", v, "energy", 0, 0, "0") end
   local raw = load("k1_particles.f32", "<f", 4)
+  if v == "footprint_raw" then return result("k1", v, "energy", 0, 0, "0") end
   local f6 = function(x) return string.format("%.6f", x) end
   if v == "aos" then return bench("k1", v, "energy", reps, function() return f6(k1_aos(raw)) end) end
   if v == "soa" then
@@ -92,6 +102,8 @@ local function run_k1(v, reps)
     raw = nil; collectgarbage()
     return bench("k1", v, "energy", reps, function() return f6(k1_soa(vx, vy, vz, m)) end)
   end
+  local m1, r1 = 0, 0
+  if v == "footprint" then m1, r1 = live_now(), rss_now() end -- P1 : tampon brut chargé
   local ps = {}
   for i = 1, N1 do
     local o = 16 * (i - 1)
@@ -99,11 +111,12 @@ local function run_k1(v, reps)
       az = raw[o + 9], mass = raw[o + 10], charge = raw[o + 11], radius = raw[o + 12], temp = raw[o + 13], pressure = raw[o + 14],
       energy = raw[o + 15], density = raw[o + 16] }
   end
-  raw = nil; collectgarbage()
   if v == "footprint" then
-    print("META;live_bytes_after_gc;" .. math.floor(collectgarbage("count") * 1024))
+    local m2, r2 = live_now(), rss_now() -- P2 : collection construite, tampon brut encore vivant
+    print(string.format("META;mem;live;%d;%d\nMETA;rss;%d;%d\nMETA;raw0;%s", m1, m2, r1, r2, tostring(raw[1])))
     return result("k1", v, "energy", 0, 0, f6(k1_natural(ps)))
   end
+  raw = nil; collectgarbage()
   if v == "natural_shuffled" then
     local perm = load("k1_perm.u32", "<I4", 4)
     local s = {}

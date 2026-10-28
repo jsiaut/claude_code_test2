@@ -1,0 +1,8 @@
+CAP;A2;1;offset_of!(S, c)=8 (repr(C))
+CAP;A3;0.5;repr(packed) size_of::<P>()=5
+CAP;A4;1;repr(align(64)) align_of::<L>()=64
+CAP;A5;1;union 0x3f800000 to_bits 0x3f800000
+CAP;C4;1;f32::algebraic_add stable : 64
+CAP;E2;1;asm! stable : 2
+CAP;E3;1;std::hint::cold_path stable
+CAP;E4;1;_mm_prefetch (std::arch)

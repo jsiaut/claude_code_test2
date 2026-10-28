@@ -1,0 +1,9 @@
+90.9% des échantillons : ms+0x4aba0f boucle=0x4aba0b-0x4aba23 {'n': 8, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    4aba0b: movzx  esi,BYTE PTR [rax+rdx*1]
+    4aba0f: lea    rdi,[rcx+rsi*1]
+    4aba13: cmp    sil,0x80
+    4aba17: cmovae rcx,rdi
+    4aba1b: inc    rdx
+    4aba1e: xchg   ax,ax
+    4aba20: cmp    rbx,rdx
+    4aba23: jg     4aba0b <main.k4Natural+0xb>

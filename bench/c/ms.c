@@ -96,14 +96,28 @@ __attribute__((noinline)) static double k1_soa(const float *restrict vx, const f
     return _mm512_reduce_add_pd(_mm512_add_pd(_mm512_add_pd(a0, a1), _mm512_add_pd(a2, a3)));
 }
 
+// Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)
+static long rss_now(void) {
+    long size = 0, res = 0;
+    FILE *f = fopen("/proc/self/statm", "r");
+    if (f) {
+        if (fscanf(f, "%ld %ld", &size, &res) != 2) res = 0;
+        fclose(f);
+    }
+    return res * 4096;
+}
+
 static void run_k1(const char *variant, int reps) {
     size_t bytes;
-    if (!strcmp(variant, "footprint0")) { result("k1", variant, "energy", 0, 0, "0"); return; }
+    if (!strcmp(variant, "footprint0") || !strcmp(variant, "footprint_raw")) { result("k1", variant, "energy", 0, 0, "0"); return; }
+    long m1 = !strcmp(variant, "footprint") ? rss_now() : 0; // P1 : avant la lecture (la collection naturelle est le tableau lu)
     Particle *src = load("k1_particles.f32", &bytes);
     char chk[64], par[] = "energy";
     int W = warmup_count();
     if (!strcmp(variant, "footprint")) {
-        // la collection naturelle en C est déjà ce tableau de structs
+        // la collection naturelle en C est déjà ce tableau de structs ; P2 : après la lecture
+        long m2 = rss_now();
+        printf("META;mem;rss;%ld;%ld\nMETA;rss;%ld;%ld\n", m1, m2, m1, m2);
         snprintf(chk, sizeof chk, "%.6f", k1_natural(src, N1));
         result("k1", variant, par, 0, 0, chk);
         return;

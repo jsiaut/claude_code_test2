@@ -1,0 +1,40 @@
+67.1% des échantillons : ms+0x4adc1d boucle=0x4adba2-0x4adc43 {'n': 37, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+    4adba2: movsd  QWORD PTR [r12+r10*8],xmm0
+    4adba8: mov    r10,r13
+    4adbab: cmp    r10,0x7ff
+    4adbb2: jge    4adb75 <main.k9Natural+0x15>
+    4adbb4: cmp    rbx,r8
+    4adbb7: jbe    4adc74 <main.k9Natural+0x114>
+    4adbbd: mov    r11,QWORD PTR [rax+rdx*8-0x10]
+    4adbc2: mov    r12,QWORD PTR [rax+rdx*8-0x18]
+    4adbc7: cmp    r10,r11
+    4adbca: jae    4adc6f <main.k9Natural+0x10f>
+    4adbd0: movsd  xmm0,QWORD PTR [r12+r10*8]
+    4adbd6: cmp    rbx,r9
+    4adbd9: jbe    4adc6a <main.k9Natural+0x10a>
+    4adbdf: mov    r11,QWORD PTR [rax+rdx*8+0x20]
+    4adbe4: mov    r12,QWORD PTR [rax+rdx*8+0x18]
+    4adbe9: cmp    r10,r11
+    4adbec: jae    4adc65 <main.k9Natural+0x105>
+    4adbee: mov    r11,QWORD PTR [rax+rdx*8+0x8]
+    4adbf3: lea    r13,[r10-0x1]
+    4adbf7: addsd  xmm0,QWORD PTR [r12+r10*8]
+    4adbfd: mov    r12,QWORD PTR [rax+rdx*8]
+    4adc01: cmp    r11,r13
+    4adc04: jbe    4adc5c <main.k9Natural+0xfc>
+    4adc06: lea    r13,[r10+0x1]
+    4adc0a: addsd  xmm0,QWORD PTR [r12+r10*8-0x8]
+    4adc11: cmp    r11,r13
+    4adc14: jbe    4adc57 <main.k9Natural+0xf7>
+    4adc16: addsd  xmm0,QWORD PTR [r12+r10*8+0x8]
+    4adc1d: movsd  xmm1,QWORD PTR [rip+0xe723]        # 4bc348 <$f64.3fd0000000000000>
+    4adc25: mulsd  xmm0,xmm1
+    4adc29: cmp    rsi,rcx
+    4adc2c: jbe    4adc52 <main.k9Natural+0xf2>
+    4adc2e: mov    r11,QWORD PTR [rdi+rdx*8+0x8]
+    4adc33: mov    r12,QWORD PTR [rdi+rdx*8]
+    4adc37: nop    WORD PTR [rax+rax*1+0x0]
+    4adc40: cmp    r10,r11
+    4adc43: jb     4adba2 <main.k9Natural+0x42>
+8.6% des échantillons : ms+0x4ae487 boucle=0x4ae3ea-0x4ae48a {'n': 30, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}
+8.3% des échantillons : ms+0x47f828 boucle=0x47f746-0x47f82b {'n': 48, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

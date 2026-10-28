@@ -1,0 +1,26 @@
+91.8% des échantillons : JIT 0x7fd33e0054ce boucle=0x7fd33e005480-0x7fd33e0054e0 {'n': 25, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    7fd33e005480: mov    r8,rcx
+    7fd33e005483: cmp    r8d,r9d
+    7fd33e005486: jge    0x7fd33e0054e7
+    7fd33e00548c: movsxd rcx,r8d
+    7fd33e00548f: cmp    rcx,r9
+    7fd33e005492: jae    0x7fd33e0055d3
+    7fd33e005498: lea    r12,[r11+rdi*1]
+    7fd33e00549c: movzx  ecx,BYTE PTR [r12+rcx*1]
+    7fd33e0054a1: cmp    cl,0x80
+    7fd33e0054a4: jb     0x7fd33e0054ce
+    7fd33e0054aa: test   r15b,0x1
+    7fd33e0054ae: jne    0x7fd33e0055d7
+    7fd33e0054b4: mov    r12,r15
+    7fd33e0054b7: sar    r12,0x20
+    7fd33e0054bb: mov    r12d,r12d
+    7fd33e0054be: add    ecx,r12d
+    7fd33e0054c1: jo     0x7fd33e0055db
+    7fd33e0054c7: shl    rcx,0x20
+    7fd33e0054cb: mov    r15,rcx
+    7fd33e0054ce: mov    rcx,r8
+    7fd33e0054d1: add    ecx,0x1
+    7fd33e0054d4: jo     0x7fd33e0055df
+    7fd33e0054da: cmp    BYTE PTR [r13-0x4f],0x0
+    7fd33e0054df: nop
+    7fd33e0054e0: je     0x7fd33e005480

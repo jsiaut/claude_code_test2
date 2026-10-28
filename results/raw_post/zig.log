@@ -1,0 +1,30 @@
+zig        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+zig        k10  tuned                           p0 n=10 med=0.041372s ok={True} rc=0 
+zig        k5   tuned                           p0 n=10 med=0.006552s ok={True} rc=0 
+zig        k5   tuned                           p0 n=10 med=0.005414s ok={True} rc=0 
+zig        k10  tuned                           p0 n=10 med=0.036725s ok={True} rc=0 
+zig        k10  tuned                           p0 n=10 med=0.058889s ok={True} rc=0 
+zig        k5   tuned                           p0 n=10 med=0.008430s ok={True} rc=0 
+zig        k5   tuned                           p0 n=10 med=0.005412s ok={True} rc=0 
+zig        k10  tuned                           p0 n=10 med=0.092400s ok={True} rc=0 
+zig        k5   tuned                           p0 n=10 med=0.005951s ok={True} rc=0 
+zig        k10  tuned                           p0 n=10 med=0.116589s ok={True} rc=0 
+zig        k10  tuned                           p0 n=10 med=0.035415s ok={True} rc=0 
+zig        k5   tuned                           p0 n=10 med=0.005489s ok={True} rc=0 
+zig        k5   tuned                           p0 n=10 med=0.005510s ok={True} rc=0 
+zig        k10  tuned                           p0 n=10 med=0.063970s ok={True} rc=0 
+zig        k5   tuned                           p0 n=10 med=0.005756s ok={True} rc=0 
+zig        k10  tuned                           p0 n=10 med=0.087832s ok={True} rc=0 
+zig        k5   tuned                           p0 n=10 med=0.008497s ok={True} rc=0 
+zig        k10  tuned                           p0 n=10 med=0.047932s ok={True} rc=0 

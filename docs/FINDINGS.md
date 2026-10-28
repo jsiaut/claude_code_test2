@@ -94,8 +94,9 @@ fusionner les passes répétées (355 To/s).
 * **Rust** : `std::hint::cold_path` est stable depuis 1.95 ; les méthodes `f32::algebraic_*`
   (réassociation autorisée opération par opération) sont stables depuis 1.98 (août 2026).
   `likely`/`unlikely` et `std::simd` restent réservés à nightly.
-* **Java 27** : les en-têtes d'objets compacts sont actifs par défaut. Les classes valeur
-  (JEP 401) ne sont pas dans le JDK 27 ; elles sont annoncées en préversion pour le JDK 28.
+* **Java 27** : les en-têtes d'objets compacts sont actifs par défaut (`UseCompactObjectHeaders =
+  true`, vérifié par `-XX:+PrintFlagsFinal`). Les classes valeur (JEP 401) ne sont pas dans le
+  JDK 27 ; la page de JEP 401 les indique « Integrated », en préversion, pour le JDK 28.
 * **C++26 / GCC 16** : `std::simd` (`<simd>`, `std::simd::vec`) est disponible ;
   `std::hardware_destructive_interference_size` vaut 64.
 * **Mojo 1.2** : la bibliothèque `std` n'expose ni `parallelize` ni API publique de threads CPU ;
@@ -107,3 +108,55 @@ fusionner les passes répétées (355 To/s).
 * **Zig 0.17** : `@fence` a été retiré du langage ; `std.atomic.cache_line` et
   `std.atomic.spinLoopHint` existent.
 * **Node 26 / Bun 1.4** : `Atomics.pause` est disponible.
+
+## Faits établis après le redémarrage de la VM (mesures indépendantes de la vitesse, et outils)
+
+* **Empreinte par pic RSS : un piège de mesure.** La plupart des chargements lisent le fichier
+  dans un tampon, puis le copient dans un tampon aligné : le pic RSS (512 Mio) est atteint pendant
+  le chargement, et la collection construite ensuite (256 Mio) ne le dépasse pas. Huit langages
+  « mesuraient » 0 octet par particule. Corrigé par une mesure en deux points dans le processus
+  (`tools/patch_footprint_mem.py`).
+* **`/proc/self/statm` annonce une taille nulle** : la lecture « fichier entier » de Zig
+  (`readFileAlloc`), Nim (`readFile`) et D (`readText`) rend une chaîne vide. Il faut lire en flux.
+* **Les allocateurs gardent la mémoire libérée.** Nim (allocateur TLSF) réutilise le tampon de
+  chargement libéré, et arrondit une demande de 256 Mio à sa classe de taille (264 Mio) ; le runtime
+  de Mojo (zones réservées de 1 Gio, libération par `madvise`) réutilise environ 24 Mo du tampon
+  libéré (vu avec `strace`) ; les tas de Java et de C# réutilisent eux aussi la mémoire libérée (RSS
+  de 37 et 26 o par particule pour 78 et 88 o vivants). Seule la comptabilité du runtime, après un
+  GC complet, donne la taille réelle d'une collection dans ces langages.
+* **Taille d'une particule de 64 o selon le langage** (octets vivants par élément de la
+  collection naturelle) : 64 pour les tableaux de valeurs (C, C++, Rust, Zig, Odin, C3, D, Nim,
+  Mojo, Chapel, Fortran, Ada, Go, Julia) ; Java 78 (en-tête compact de 8 o + 4 o de référence +
+  marge de capacité de l'`ArrayList`) ; C# 88 (en-tête de 16 o + référence de 8 o) ; Haskell 96
+  (constructeur à champs `Float` stricts empaquetés, 72 o, plus une cellule de liste de 24 o) ;
+  OCaml 144 (un enregistrement de flottants est stocké à plat, mais chaque `float` y occupe 8 o :
+  pas de flottant 32 bits non boxé) ; Bun 170 (JavaScriptCore range les nombres dans les mots de
+  64 bits de l'objet) ; Node 416 (V8, avec la compression de pointeurs, range chaque propriété
+  flottante dans un objet `HeapNumber` séparé) ; LuaJIT 428 et Lua 449 (table à 16 champs nommés) ;
+  Python 750 (dont 608 o demandés selon `tracemalloc`, le reste en arrondis de pymalloc).
+* **Valhalla (JEP 401, build EA `27-jep401ea3`)** : un tableau de `value record` de 16 `float` n'est
+  pas aplati (85,8 o par élément ; parcours permuté 4,1 fois plus lent, comme pour des objets
+  ordinaires). La JVM n'aplatit un tableau que si la valeur et son marqueur de nullité tiennent
+  dans un accès atomique de 64 bits : un `value record` d'un `float` est aplati
+  (`NULLABLE_ATOMIC_FLAT`, 8 o par élément, `-XX:+PrintFlatArrayLayout`), un de deux `float` ne
+  l'est plus (36 o). Le texte de JEP 401 l'annonce (« this limits the size of mutable fields that
+  store flattened references to no more than 64 bits »). JEP 401 est intégré au JDK 28, en
+  préversion (`bench/java_valhalla/`).
+* **Bun applique `BUN_OPTIONS`** (vérifié par `process.execArgv`). L'outil qui lance les commandes
+  exporte `BUN_OPTIONS=--smol` ; effet mesuré sur l'annexe Bun : K1 natural 97 contre 98 ms, K8
+  natural 837 contre 811 ms, pic RSS de l'empreinte −1 %. Négligeable.
+* **K10 `tuned` est bistable** pour toutes les implémentations natives : file pleine (le
+  consommateur lit par rafales, 6 à 10 ms pour 4 M messages) ou file presque vide (une ligne de
+  cache échangée par message, jusqu'à 200 ms). Le régime change d'une répétition à l'autre dans le
+  même processus.
+* **K5 `tuned` : états de performance par processus.** Deux processus du même binaire diffèrent de
+  30 à 60 % (Zig : 5,6 ms dans l'un, 8,2 ms dans l'autre), mais chaque processus est stable : un
+  état de l'environnement de la VM (hôte partagé), pas du code.
+* **objdump affiche comme données le code de GHC** : les tables d'info sont des symboles de type
+  objet placés dans `.text`. Il faut désassembler les octets bruts.
+* **Vectorisation du code naturel (mesurée sur la boucle chaude)** : Zig ne vectorise ni K4
+  (code sans branchement scalaire, déroulé par 8) ni K9 (scalaire déroulé par 3 ; les deux
+  tableaux, passés par pointeur, peuvent s'aliaser) ; Rust, D, Nim et Ada ne vectorisent pas le
+  stencil naturel, à cause des vérifications de bornes de leurs tableaux de tableaux ; gfortran ne
+  vectorise pas K4 (somme d'octets dans un accumulateur 64 bits) alors que flang le fait ; le JIT de
+  .NET n'a pas de vectoriseur automatique ; C2 (Java) vectorise K9 en 128 bits mais pas K4.

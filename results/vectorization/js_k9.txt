@@ -1,0 +1,63 @@
+12.0% des échantillons : JIT 0x7f3f2600ac83 boucle=0x7f3f2600aa2d-0x7f3f2600acc5 {'n': 114, 'packed': 0, 'wide': 0, 'scalar_fp': 5, 'vectorized': False, 'width': '-'}
+    7f3f2600aa83: cmp    edx,edi
+    7f3f2600aa85: jae    0x7f3f2600b969
+    7f3f2600aa8b: mov    r8,QWORD PTR [r8+rdx*8+0xf]
+    7f3f2600aa90: nop    WORD PTR [rax+rax*1+0x0]
+    7f3f2600aa99: nop    DWORD PTR [rax+0x0]
+    7f3f2600aaa0: test   al,0x1
+    7f3f2600aaa2: je     0x7f3f2600b96d
+    7f3f2600aaa8: mov    rdi,QWORD PTR [rax-0x1]
+    7f3f2600aaac: xor    r11d,r11d
+    7f3f2600aaaf: cmp    rdi,r14
+    7f3f2600aab2: sete   r11b
+    7f3f2600aab6: cmp    r9,rdi
+    7f3f2600aab9: sete   r9b
+    7f3f2600aabd: movzx  r9d,r9b
+    7f3f2600aac1: or     r9d,r11d
+    7f3f2600aac4: test   r9d,r9d
+    7f3f2600aac7: je     0x7f3f2600b971
+    7f3f2600aacd: mov    r9,QWORD PTR [rax+0xf]
+    7f3f2600aad1: mov    r11,QWORD PTR [rax+0x17]
+    7f3f2600aad5: sar    r11,0x20
+    7f3f2600aad9: lea    edi,[rdx-0x1]
+    7f3f2600aadc: nop    DWORD PTR [rax+0x0]
+    7f3f2600aae0: cmp    edi,r11d
+    7f3f2600aae3: jae    0x7f3f2600b975
+    7f3f2600aae9: mov    rdi,QWORD PTR [r9+rdi*8+0xf]
+    7f3f2600aaee: cmp    QWORD PTR [r13+0x238],rdi
+    7f3f2600aaf5: jne    0x7f3f2600ab02
+    7f3f2600aafb: mov    rdi,QWORD PTR [r13+0x230]
+    7f3f2600ab02: test   dil,0x1
+    7f3f2600ab06: je     0x7f3f2600b939
+    7f3f2600ab0c: movabs r12,0x101e6aeb5b31
+    7f3f2600ab16: nop    WORD PTR [rax+rax*1+0x0]
+    7f3f2600ab1f: nop
+    7f3f2600ab20: cmp    QWORD PTR [rdi-0x1],r12
+    7f3f2600ab24: jne    0x7f3f2600b97d
+    7f3f2600ab2a: mov    r15,QWORD PTR [rdi+0xf]
+    7f3f2600ab2e: mov    rdi,QWORD PTR [rdi+0x17]
+    7f3f2600ab32: sar    rdi,0x20
+    7f3f2600ab36: cmp    esi,edi
+    7f3f2600ab38: jae    0x7f3f2600b981
+    7f3f2600ab3e: vmovsd xmm0,QWORD PTR [r15+rsi*8+0xf]
+    7f3f2600ab45: cmp    ecx,r11d
+    7f3f2600ab48: jae    0x7f3f2600b985
+    7f3f2600ab4e: mov    r15,QWORD PTR [r9+rcx*8+0xf]
+    7f3f2600ab53: nop    WORD PTR [rax+rax*1+0x0]
+    7f3f2600ab5c: nop    DWORD PTR [rax+0x0]
+    7f3f2600ab60: cmp    QWORD PTR [r13+0x238],r15
+    7f3f2600ab67: jne    0x7f3f2600ab74
+    7f3f2600ab6d: mov    r15,QWORD PTR [r13+0x230]
+    7f3f2600ab74: nop    WORD PTR [rax+rax*1+0x0]
+    7f3f2600ab7d: nop    DWORD PTR [rax]
+    7f3f2600ab80: test   r15b,0x1
+    7f3f2600ab84: je     0x7f3f2600b989
+    7f3f2600ab8a: cmp    QWORD PTR [r15-0x1],r12
+    7f3f2600ab8e: jne    0x7f3f2600b98d
+    7f3f2600ab94: mov    rdi,QWORD PTR [r15+0xf]
+    7f3f2600ab98: mov    r15,QWORD PTR [r15+0x17]
+    7f3f2600ab9c: sar    r15,0x20
+    7f3f2600aba0: cmp    esi,r15d
+    7f3f2600aba3: jae    0x7f3f2600b991
+5.1% des échantillons : libc.so.6+0x198f89 boucle=0x198dc6-0x198fb6 {'n': 101, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+4.4% des échantillons : libc.so.6+0x198f2d boucle=0x198f07-0x198f62 {'n': 23, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

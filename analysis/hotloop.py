@@ -8,13 +8,14 @@ un mnémonique empaqueté).
 
 Usage : hotloop.py prefixe   (lit prefixe.ips et éventuellement prefixe.jit)
 """
-import re, subprocess, sys
+import os, re, subprocess, sys
 
 PACKED = re.compile(r"\bv?p(add|sub|mul|cmp|and|or|xor|max|min|blend|shuf|movzx|movsx|maddw|sad|test|sll|srl|sra|ermd|ermq|unpck|alignr|broadcast|gather)"
                     r"|\bv?(add|sub|mul|div|max|min|sqrt|fmadd\d*|fmsub\d*|fnmadd\d*|cmp|blendv?|and|or|xor|cvt\w*|perm\w*|shuf|unpck\w*|broadcast\w*|gather\w*|mov[au]|movdq[au])p[sd]\b"
                     r"|\bvmovdq[au](8|16|32|64)?\b|\bvpcompress|\bvpexpand|\bkmov|\bvextract|\bvinsert")
 SCALAR_ONLY = re.compile(r"\b(v?(add|sub|mul|div|fmadd\d*)s[sd])\b")
-JUMP = re.compile(r"^\s*([0-9a-f]+):\s+(j[a-z]+)\s+([0-9a-f]+)")
+# cible imprimée « 7f12… <sym> » (fichier ELF) ou « 0x7f12… » (octets bruts) : le préfixe 0x est facultatif
+JUMP = re.compile(r"^\s*([0-9a-f]+):\s+(j[a-z]+)\s+(?:0x)?([0-9a-f]+)")
 INSN = re.compile(r"^\s*([0-9a-f]+):\s+(\S.*)$")
 
 
@@ -82,38 +83,76 @@ def classify(body):
             "vectorized": len(vec) >= 2, "width": "zmm" if any("zmm" in t for t in vec) else "ymm" if wide else "xmm" if vec else "-"}
 
 
-def main(prefix):
-    lines = [l.split() for l in open(prefix + ".ips") if not l.startswith("#")]
+def parse_ips(prefix):
+    """Lignes « n pct ip chemin décalage » ; le chemin peut contenir des espaces (« /memfd:x (deleted) »)."""
+    rows = []
+    for l in open(prefix + ".ips"):
+        if l.startswith("#"):
+            continue
+        f = l.split()
+        rows.append((int(f[0]), float(f[1].rstrip("%")), int(f[2], 16), " ".join(f[3:-1]), int(f[-1], 16)))
+    return rows
+
+
+def is_jit(path):
+    return path in ("", "?") or path.startswith("//anon") or path.startswith("/memfd:") or not path.startswith("/")
+
+
+def main(prefix, cover=0.9, maxips=80):
+    """Regroupe les échantillons par boucle (la plus petite boucle qui contient chaque IP chaude), jusqu'à
+    couvrir 90 % des échantillons, puis classe la boucle qui en reçoit le plus. La première ligne imprimée
+    résume cette boucle ; suivent les trois boucles les plus chaudes, pour vérification."""
+    rows = parse_ips(prefix)
     jit = {}
     try:
         cur = None
         for l in open(prefix + ".jit"):
             if l.startswith("REGION"):
-                f = l.split()
-                cur = int(f[1], 16)
+                cur = int(l.split()[1], 16)
             elif cur is not None:
                 jit[cur] = l.strip()
     except FileNotFoundError:
         pass
-    total = sum(int(f[0]) for f in lines)
-    for f in lines[:3]:
-        n, pct, ip, path, off = int(f[0]), f[1], int(f[2], 16), f[3], int(f[4], 16)
-        if path.startswith("/") and not path.startswith("/memfd"):
+    total = sum(r[0] for r in rows) or 1
+    loops, acc = {}, 0
+    for n, pct, ip, path, off in rows[:maxips]:
+        if acc >= cover * total:
+            break
+        acc += n
+        if not is_jit(path):
             va = off2vaddr(path, off)
             body, span = loop_around(disasm_file(path, va), va)
-            where = f"{path}+0x{va:x}"
+            if not span:
+                # objdump affiche comme données le code placé sous un symbole de type objet (tables d'info
+                # de GHC, code dans .text) : on désassemble alors les octets bruts du fichier
+                with open(path, "rb") as fh:
+                    fh.seek(max(0, off - 1536))
+                    raw = fh.read(2048)
+                body, span = loop_around(disasm_bytes(raw.hex(), va - min(off, 1536)), va)
+            key, where = (path, span or va), f"{os.path.basename(path)}+0x{va:x}"
         else:
-            base = next((b for b in jit if b <= ip < b + 512), None)
+            base = next((b for b in jit if b <= ip < b + len(jit[b]) // 2), None)
             if base is None:
-                print(f"{pct} 0x{ip:x} {path} : pas de copie du code")
-                continue
-            body, span = loop_around(disasm_bytes(jit[base], base), ip)
-            where = f"JIT 0x{ip:x}"
-        c = classify(body)
-        print(f"{pct} {where} boucle={'0x%x-0x%x' % span if span else '?'} {c}")
-        for a, t in body[:60]:
-            print(f"    {a:x}: {t}")
-        break
+                key, body, span, where = ("JIT sans copie", ip), [], None, f"JIT 0x{ip:x} (code non copié)"
+            else:
+                body, span = loop_around(disasm_bytes(jit[base], base), ip)
+                key, where = ("JIT", span or ip), f"JIT 0x{ip:x}"
+        e = loops.setdefault(key, {"n": 0, "body": body, "span": span, "where": where})
+        e["n"] += n
+    ranked = sorted(loops.values(), key=lambda e: -e["n"])
+    # boucle du programme : code JIT ou exécutable principal (compilé, ou interpréteur), et non une
+    # bibliothèque partagée du runtime (libc, libjvm, libjulia, OpenBLAS…) qui tourne à côté du noyau
+    own = [e for e in ranked if ".so" not in e["where"].split("+")[0]]
+    if own and own[0] is not ranked[0]:
+        ranked.remove(own[0])
+        ranked.insert(0, own[0])
+    for i, e in enumerate(ranked[:3]):
+        c = classify(e["body"])
+        span = "0x%x-0x%x" % e["span"] if e["span"] else "?"
+        print(f"{100 * e['n'] / total:.1f}% des échantillons : {e['where']} boucle={span} {c}")
+        if i == 0:
+            for a, t in e["body"][:60]:
+                print(f"    {a:x}: {t}")
     return total
 
 

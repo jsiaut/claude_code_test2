@@ -1,0 +1,37 @@
+90.7% des échantillons : JIT 0x7f738a8daacc boucle=0x7f738a8daa89-0x7f738a8dab34 {'n': 36, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    7f738a8daa89: cmp    esi,r8d
+    7f738a8daa8c: jae    0x7f738a8dabc4
+    7f738a8daa92: movzx  r9d,BYTE PTR [rdi+rsi*1]
+    7f738a8daa97: cmp    r9d,0x80
+    7f738a8daa9e: jl     0x7f738a8daaad
+    7f738a8daaa4: add    edx,r9d
+    7f738a8daaa7: jo     0x7f738a8dabc9
+    7f738a8daaad: lea    r9d,[rsi+0x1]
+    7f738a8daab1: cmp    r8d,r9d
+    7f738a8daab4: jle    0x7f738a8dab3a
+    7f738a8daaba: movzx  r10d,BYTE PTR [rdi+r9*1]
+    7f738a8daabf: cmp    r10d,0x80
+    7f738a8daac6: jl     0x7f738a8daad5
+    7f738a8daacc: add    edx,r10d
+    7f738a8daacf: jo     0x7f738a8dabd6
+    7f738a8daad5: lea    r9d,[rsi+0x2]
+    7f738a8daad9: cmp    r8d,r9d
+    7f738a8daadc: jle    0x7f738a8dab3a
+    7f738a8daae2: movzx  r10d,BYTE PTR [rdi+r9*1]
+    7f738a8daae7: cmp    r10d,0x80
+    7f738a8daaee: jl     0x7f738a8daafd
+    7f738a8daaf4: add    edx,r10d
+    7f738a8daaf7: jo     0x7f738a8dabe3
+    7f738a8daafd: lea    r9d,[rsi+0x3]
+    7f738a8dab01: cmp    r8d,r9d
+    7f738a8dab04: jle    0x7f738a8dab3a
+    7f738a8dab0a: cmp    r8d,r9d
+    7f738a8dab0d: jbe    0x7f738a8dabf0
+    7f738a8dab13: movzx  r10d,BYTE PTR [rdi+r9*1]
+    7f738a8dab18: cmp    r10d,0x80
+    7f738a8dab1f: jl     0x7f738a8dab2e
+    7f738a8dab25: add    edx,r10d
+    7f738a8dab28: jo     0x7f738a8dabf5
+    7f738a8dab2e: add    esi,0x4
+    7f738a8dab31: cmp    r8d,esi
+    7f738a8dab34: jg     0x7f738a8daa89

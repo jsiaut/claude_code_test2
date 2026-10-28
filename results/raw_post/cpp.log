@@ -1,0 +1,30 @@
+cpp        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+cpp        k10  tuned                           p0 n=10 med=0.081616s ok={True} rc=0 
+cpp        k5   tuned                           p0 n=10 med=0.006483s ok={True} rc=0 
+cpp        k10  tuned                           p0 n=10 med=0.023270s ok={True} rc=0 
+cpp        k5   tuned                           p0 n=10 med=0.007013s ok={True} rc=0 
+cpp        k10  tuned                           p0 n=10 med=0.050352s ok={True} rc=0 
+cpp        k5   tuned                           p0 n=10 med=0.004394s ok={True} rc=0 
+cpp        k10  tuned                           p0 n=10 med=0.020201s ok={True} rc=0 
+cpp        k5   tuned                           p0 n=10 med=0.004522s ok={True} rc=0 
+cpp        k10  tuned                           p0 n=10 med=0.042111s ok={True} rc=0 
+cpp        k5   tuned                           p0 n=10 med=0.006731s ok={True} rc=0 
+cpp        k10  tuned                           p0 n=10 med=0.033964s ok={True} rc=0 
+cpp        k5   tuned                           p0 n=10 med=0.007112s ok={True} rc=0 
+cpp        k10  tuned                           p0 n=10 med=0.037013s ok={True} rc=0 
+cpp        k5   tuned                           p0 n=10 med=0.004690s ok={True} rc=0 
+cpp        k10  tuned                           p0 n=10 med=0.030879s ok={True} rc=0 
+cpp        k5   tuned                           p0 n=10 med=0.004453s ok={True} rc=0 
+cpp        k10  tuned                           p0 n=10 med=0.043939s ok={True} rc=0 
+cpp        k5   tuned                           p0 n=10 med=0.004812s ok={True} rc=0 

@@ -1,0 +1,10 @@
+CAP;A2;1;@offsetOf(S, "c")=8
+CAP;A3;1;packed struct u3/u5/u8 : @bitSizeOf=16
+CAP;A4;1;align(64) : @alignOf(L)=64
+CAP;A5;1;extern union 0x3f800000 @bitCast 0x3f800000
+CAP;C4;1;@setFloatMode(.optimized) par portée : 2016
+CAP;E3;1;@branchHint(.likely) : 2
+CAP;E4;1;@prefetch
+CAP;D3;1;std.atomic.cache_line=128
+CAP;D5;0.5;spinLoopHint ; pas de @fence
+CAP;F4;0.5;std.posix.mmap (POSIX seulement) + bytesAsSlice : 0.4390046

@@ -1,0 +1,95 @@
+mojo       k3   rmw_packed                      p0 n=3 med=2.191860s ok={True} rc=0 
+mojo       k3   rmw_padded                      p0 n=10 med=0.215525s ok={True} rc=0 
+mojo       k3   sw_packed                       p0 n=10 med=0.132084s ok={True} rc=0 
+mojo       k3   sw_padded                       p0 n=10 med=0.062895s ok={True} rc=0 
+mojo       k10  natural                         p0 n=3 med=2.371746s ok={True} rc=0 
+mojo       k10  tuned                           p0 n=10 med=0.082424s ok={True} rc=0 
+mojo       k8   natural                         p0 n=3 med=2.176104s ok={True} rc=0 
+mojo       k8   tuned                           p0 n=10 med=0.211361s ok={True} rc=0 
+mojo       k9   natural                         p0 n=10 med=0.286327s ok={True} rc=0 
+mojo       k9   tuned                           p0 n=10 med=0.038137s ok={True} rc=0 
+mojo       k9   mt                              p0 n=10 med=0.015487s ok={True} rc=0 
+mojo       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       k4   natural_unsorted                p0 n=10 med=0.016021s ok={True} rc=0 
+mojo       k4   natural_sorted                  p0 n=10 med=0.011651s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p0 n=10 med=0.018663s ok={True} rc=0 
+mojo       k1   natural              energy     p0 n=10 med=0.036779s ok={True} rc=0 
+mojo       k1   aos                  energy     p0 n=10 med=0.038934s ok={True} rc=0 
+mojo       k1   soa                  energy     p0 n=10 med=0.007910s ok={True} rc=0 
+mojo       k1   natural_shuffled     energy     p0 n=10 med=0.038615s ok={True} rc=0 
+mojo       k5   natural                         p0 n=10 med=0.173527s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=10 med=0.005457s ok={True} rc=0 
+mojo       k6   natural              q6         p0 n=10 med=0.056374s ok={True} rc=0 
+mojo       k6   natural              q1         p0 n=10 med=0.260387s ok={True} rc=0 
+mojo       k6   tuned                q6         p0 n=10 med=0.020735s ok={True} rc=0 
+mojo       k6   tuned                q1         p0 n=10 med=0.052209s ok={True} rc=0 
+mojo       k6   mt                   q6         p0 n=10 med=0.008446s ok={True} rc=0 
+mojo       k6   mt                   q1         p0 n=10 med=0.015472s ok={True} rc=0 
+mojo       k2   tuned                16384      p0 n=10 med=0.007773s ok={True} rc=0 
+mojo       k2   tuned                65536      p0 n=10 med=0.019616s ok={True} rc=0 
+mojo       k2   tuned                262144     p0 n=10 med=0.020109s ok={True} rc=0 
+mojo       k2   tuned                524288     p0 n=10 med=0.026206s ok={True} rc=0 
+mojo       k2   tuned                2097152    p0 n=10 med=0.108067s ok={True} rc=0 
+mojo       k2   tuned                8388608    p0 n=4 med=0.671082s ok={True} rc=0 
+mojo       k2   tuned                16777216   p0 n=4 med=0.678579s ok={True} rc=0 
+mojo       k2   tuned                33554432   p0 n=4 med=0.907720s ok={True} rc=0 
+mojo       k2   tuned                67108864   p0 n=3 med=1.000945s ok={True} rc=0 
+mojo       k2   tuned                268435456  p0 n=3 med=1.528187s ok={True} rc=0 
+mojo       k7   natural                         p0 n=2 med=5.183286s ok={True} rc=0 
+mojo       k7   tuned                           p0 n=6 med=0.527105s ok={True} rc=0 
+mojo       k5   natural                         p1 n=10 med=0.192053s ok={True} rc=0 
+mojo       k5   tuned                           p1 n=10 med=0.009309s ok={True} rc=0 
+mojo       k8   natural                         p1 n=3 med=1.696511s ok={True} rc=0 
+mojo       k8   tuned                           p1 n=10 med=0.294008s ok={True} rc=0 
+mojo       k6   natural              q6         p1 n=10 med=0.057610s ok={True} rc=0 
+mojo       k6   natural              q1         p1 n=10 med=0.204966s ok={True} rc=0 
+mojo       k6   tuned                q6         p1 n=10 med=0.018955s ok={True} rc=0 
+mojo       k6   tuned                q1         p1 n=10 med=0.037263s ok={True} rc=0 
+mojo       k6   mt                   q6         p1 n=10 med=0.009053s ok={True} rc=0 
+mojo       k6   mt                   q1         p1 n=10 med=0.017603s ok={True} rc=0 
+mojo       k1   natural              energy     p1 n=10 med=0.044437s ok={True} rc=0 
+mojo       k1   aos                  energy     p1 n=10 med=0.038310s ok={True} rc=0 
+mojo       k1   soa                  energy     p1 n=10 med=0.007447s ok={True} rc=0 
+mojo       k1   natural_shuffled     energy     p1 n=10 med=0.038161s ok={True} rc=0 
+mojo       k3   rmw_packed                      p1 n=3 med=2.461083s ok={True} rc=0 
+mojo       k3   rmw_padded                      p1 n=10 med=0.201034s ok={True} rc=0 
+mojo       k3   sw_packed                       p1 n=10 med=0.119963s ok={True} rc=0 
+mojo       k3   sw_padded                       p1 n=10 med=0.066435s ok={True} rc=0 
+mojo       k4   natural_unsorted                p1 n=10 med=0.011013s ok={True} rc=0 
+mojo       k4   natural_sorted                  p1 n=10 med=0.012584s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p1 n=10 med=0.010888s ok={True} rc=0 
+mojo       k9   natural                         p1 n=10 med=0.268961s ok={True} rc=0 
+mojo       k9   tuned                           p1 n=10 med=0.038316s ok={True} rc=0 
+mojo       k9   mt                              p1 n=10 med=0.015410s ok={True} rc=0 
+mojo       k10  natural                         p1 n=3 med=1.370932s ok={True} rc=0 
+mojo       k10  tuned                           p1 n=10 med=0.082494s ok={True} rc=0 
+mojo       k2   tuned                16384      p1 n=10 med=0.008662s ok={True} rc=0 
+mojo       k2   tuned                65536      p1 n=10 med=0.020283s ok={True} rc=0 
+mojo       k2   tuned                262144     p1 n=10 med=0.023661s ok={True} rc=0 
+mojo       k2   tuned                524288     p1 n=10 med=0.027984s ok={True} rc=0 
+mojo       k2   tuned                2097152    p1 n=10 med=0.247633s ok={True} rc=0 
+mojo       k2   tuned                8388608    p1 n=4 med=0.678276s ok={True} rc=0 
+mojo       k2   tuned                16777216   p1 n=4 med=0.723127s ok={True} rc=0 
+mojo       k2   tuned                33554432   p1 n=4 med=0.775407s ok={True} rc=0 
+mojo       k2   tuned                67108864   p1 n=3 med=0.943306s ok={True} rc=0 
+mojo       k2   tuned                268435456  p1 n=3 med=1.546328s ok={True} rc=0 
+mojo       k7   natural                         p1 n=2 med=4.930561s ok={True} rc=0 
+mojo       k7   tuned                           p1 n=6 med=0.437033s ok={True} rc=0 
+mojo       k4   natural_unsorted                p2 n=10 med=0.010891s ok={True} rc=0 
+mojo       k4   natural_sorted                  p2 n=10 med=0.011417s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p2 n=10 med=0.011132s ok={True} rc=0 
+mojo       k7   tuned                           p2 n=6 med=0.503550s ok={True} rc=0 
+mojo       k9   natural                         p2 n=10 med=0.252959s ok={True} rc=0 
+mojo       k9   tuned                           p2 n=10 med=0.038438s ok={True} rc=0 
+mojo       k9   mt                              p2 n=10 med=0.014928s ok={True} rc=0 
+mojo       k8   natural                         p2 n=3 med=1.550627s ok={True} rc=0 
+mojo       k8   tuned                           p2 n=10 med=0.198531s ok={True} rc=0 
+mojo       k5   natural                         p2 n=10 med=0.168913s ok={True} rc=0 
+mojo       k5   tuned                           p2 n=10 med=0.005238s ok={True} rc=0 
+mojo       k10  natural                         p2 n=3 med=1.991309s ok={True} rc=0 
+mojo       k10  tuned                           p2 n=10 med=0.032978s ok={True} rc=0 
+mojo       k3   rmw_packed                      p2 n=3 med=2.224046s ok={True} rc=0 
+mojo       k3   rmw_padded                      p2 n=10 med=0.237180s ok={True} rc=0 
+mojo       k3   sw_packed                       p2 n=10 med=0.128012s ok={True} rc=0 
+mojo       k3   sw_padded                       p2 n=10 med=0.063451s ok={True} rc=0 

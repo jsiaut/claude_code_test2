@@ -1,0 +1,6 @@
+CAP;A2;1;S.c.offsetof=8
+CAP;A3;1;align(1) P.sizeof=5 ; bitfields BF.sizeof=1
+CAP;A4;1;align(64) L.alignof=64
+CAP;A5;1;union 0x3f800000
+CAP;F4;1;std.mmfile + cast : 0.439005
+CAP;D5;1;core.atomic.pause + atomicFence

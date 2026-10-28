@@ -1,0 +1,11 @@
+v1 [LVFlat$V1; : 8.3 octets par element
+v2 [LVFlat$V2; : 36.3 octets par element
+v3 [LVFlat$V3; : 36.3 octets par element
+v4 [LVFlat$V4; : 36.3 octets par element
+Flat Type Array: [LVFlat$V1; {0x000000002a040700}
+ - element klass: 'VFlat$V1'
+ - layout kind: NULLABLE_ATOMIC_FLAT
+ - array properties: NULLABLE ATOMIC 
+ - element size 8 aligned layout size 8
+openjdk version "27-jep401ea3" 2026-09-15
+OpenJDK Runtime Environment (build 27-jep401ea3+1-1)

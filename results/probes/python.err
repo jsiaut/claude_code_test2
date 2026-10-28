@@ -1,0 +1,2 @@
+/home/user/claude_code_test2/probes/python/probe.py:4: DeprecationWarning: Due to '_pack_', the 'P' Structure will use memory layout compatible with MSVC (Windows). If this is intended, set _layout_ to 'ms'. The implicit default is deprecated and slated to become an error in Python 3.19.
+  class P(ctypes.Structure):

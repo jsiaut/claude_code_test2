@@ -1,0 +1,30 @@
+ocaml      fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+ocaml      k10  tuned                           p0 n=9 med=0.228837s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=10 med=0.136517s ok={True} rc=0 
+ocaml      k10  tuned                           p0 n=9 med=0.273075s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=10 med=0.125665s ok={True} rc=0 
+ocaml      k10  tuned                           p0 n=9 med=0.247581s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=10 med=0.130957s ok={True} rc=0 
+ocaml      k10  tuned                           p0 n=9 med=0.266502s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=10 med=0.125092s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=10 med=0.146218s ok={True} rc=0 
+ocaml      k10  tuned                           p0 n=9 med=0.184637s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=10 med=0.133390s ok={True} rc=0 
+ocaml      k10  tuned                           p0 n=9 med=0.269760s ok={True} rc=0 
+ocaml      k10  tuned                           p0 n=9 med=0.228755s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=10 med=0.159399s ok={True} rc=0 
+ocaml      k10  tuned                           p0 n=9 med=0.203154s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=10 med=0.125256s ok={True} rc=0 
+ocaml      k10  tuned                           p0 n=9 med=0.176982s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=10 med=0.134694s ok={True} rc=0 

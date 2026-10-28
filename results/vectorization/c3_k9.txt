@@ -1,0 +1,30 @@
+59.6% des échantillons : ms+0xe7d0 boucle=0xe780-0xe83d {'n': 27, 'packed': 16, 'wide': 16, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    e780: vmovupd ymm2,YMMWORD PTR [rax+r14*8-0x4008]
+    e78a: vmovupd ymm3,YMMWORD PTR [rax+r14*8-0x3fe8]
+    e794: vmovupd ymm4,YMMWORD PTR [rax+r14*8-0x3fc8]
+    e79e: vmovupd ymm5,YMMWORD PTR [rax+r14*8-0x3fa8]
+    e7a8: vaddpd ymm2,ymm2,YMMWORD PTR [rax+r14*8+0x3ff8]
+    e7b2: vaddpd ymm3,ymm3,YMMWORD PTR [rax+r14*8+0x4018]
+    e7bc: vaddpd ymm4,ymm4,YMMWORD PTR [rax+r14*8+0x4038]
+    e7c6: vaddpd ymm5,ymm5,YMMWORD PTR [rax+r14*8+0x4058]
+    e7d0: vaddpd ymm2,ymm2,YMMWORD PTR [rax+r14*8-0x10]
+    e7d7: vaddpd ymm3,ymm3,YMMWORD PTR [rax+r14*8+0x10]
+    e7de: vaddpd ymm4,ymm4,YMMWORD PTR [rax+r14*8+0x30]
+    e7e5: vaddpd ymm5,ymm5,YMMWORD PTR [rax+r14*8+0x50]
+    e7ec: vaddpd ymm2,ymm2,YMMWORD PTR [rax+r14*8]
+    e7f2: vaddpd ymm3,ymm3,YMMWORD PTR [rax+r14*8+0x20]
+    e7f9: vaddpd ymm4,ymm4,YMMWORD PTR [rax+r14*8+0x40]
+    e800: vaddpd ymm5,ymm5,YMMWORD PTR [rax+r14*8+0x60]
+    e807: vmulpd ymm2,ymm2,ymm0
+    e80b: vmulpd ymm3,ymm3,ymm0
+    e80f: vmulpd ymm4,ymm4,ymm0
+    e813: vmulpd ymm5,ymm5,ymm0
+    e817: vmovupd YMMWORD PTR [r10+r14*8],ymm2
+    e81d: vmovupd YMMWORD PTR [r10+r14*8+0x20],ymm3
+    e824: vmovupd YMMWORD PTR [r10+r14*8+0x40],ymm4
+    e82b: vmovupd YMMWORD PTR [r10+r14*8+0x60],ymm5
+    e832: add    r14,0x10
+    e836: cmp    r14,0xff1
+    e83d: jne    e780 <ms.k9_natural+0xb0>
+17.5% des échantillons : ms+0xf008 boucle=0xefa0-0xf038 {'n': 30, 'packed': 15, 'wide': 15, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+10.3% des échantillons : ms+0xf9ce boucle=0xf980-0xf9ea {'n': 19, 'packed': 0, 'wide': 0, 'scalar_fp': 8, 'vectorized': False, 'width': '-'}

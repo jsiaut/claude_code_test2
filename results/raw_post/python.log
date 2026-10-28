@@ -1,0 +1,30 @@
+python     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     k5   tuned                           p0 n=3 med=4.364606s ok={True} rc=0 
+python     k10  tuned                           p0 n=3 med=2.737932s ok={True} rc=0 
+python     k10  tuned                           p0 n=3 med=2.731199s ok={True} rc=0 
+python     k5   tuned                           p0 n=3 med=4.695447s ok={True} rc=0 
+python     k10  tuned                           p0 n=3 med=2.713960s ok={True} rc=0 
+python     k5   tuned                           p0 n=3 med=4.225399s ok={True} rc=0 
+python     k5   tuned                           p0 n=3 med=4.343861s ok={True} rc=0 
+python     k10  tuned                           p0 n=3 med=2.747193s ok={True} rc=0 
+python     k10  tuned                           p0 n=3 med=2.721407s ok={True} rc=0 
+python     k5   tuned                           p0 n=3 med=5.188739s ok={True} rc=0 
+python     k10  tuned                           p0 n=3 med=2.712043s ok={True} rc=0 
+python     k5   tuned                           p0 n=3 med=4.409458s ok={True} rc=0 
+python     k5   tuned                           p0 n=3 med=4.554325s ok={True} rc=0 
+python     k10  tuned                           p0 n=3 med=2.732449s ok={True} rc=0 
+python     k10  tuned                           p0 n=3 med=2.736327s ok={True} rc=0 
+python     k5   tuned                           p0 n=3 med=4.449142s ok={True} rc=0 
+python     k10  tuned                           p0 n=3 med=2.710665s ok={True} rc=0 
+python     k5   tuned                           p0 n=3 med=4.263139s ok={True} rc=0 

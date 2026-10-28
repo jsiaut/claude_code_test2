@@ -91,14 +91,31 @@ noinline fn k1SoA(vx: []const f32, vy: []const f32, vz: []const f32, m: []const 
     }
     return @reduce(.Add, a0 + a1);
 }
+/// Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)
+fn rssNow() i64 {
+    var buf: [256]u8 = undefined; // /proc annonce une taille nulle : lecture en flux dans un tampon
+    const s = Io.Dir.cwd().readFile(io, "/proc/self/statm", &buf) catch return 0;
+    var it = std.mem.tokenizeScalar(u8, s, ' ');
+    _ = it.next();
+    const res = std.fmt.parseInt(i64, it.next() orelse return 0, 10) catch return 0;
+    return res * 4096;
+}
 fn runK1(v: []const u8, reps: i32) void {
     if (std.mem.eql(u8, v, "footprint0")) return result("k1", v, "energy", 0, 0, "0");
     const raw = load(f32, "k1_particles.f32");
+    if (std.mem.eql(u8, v, "footprint_raw")) return result("k1", v, "energy", 0, 0, "0");
+    const fp = std.mem.eql(u8, v, "footprint");
+    const m1: i64 = if (fp) rssNow() else 0; // P1 : tampon brut chargé
     var ps: std.ArrayList(Particle) = .empty;
     ps.ensureTotalCapacity(gpa, N1) catch @panic("oom");
     for (0..N1) |i| ps.appendAssumeCapacity(Particle.from(raw[16 * i ..][0..16]));
+    if (fp) { // P2 : collection construite, tampon brut encore vivant
+        const m2 = rssNow();
+        out.print("META;mem;rss;{d};{d}\nMETA;rss;{d};{d}\nMETA;raw0;{d}\n", .{ m1, m2, m1, m2, raw[0] }) catch {};
+        gpa.free(std.mem.sliceAsBytes(raw));
+        return result("k1", v, "energy", 0, 0, fmt("{d:.6}", .{k1Natural(ps.items)}));
+    }
     gpa.free(std.mem.sliceAsBytes(raw));
-    if (std.mem.eql(u8, v, "footprint")) return result("k1", v, "energy", 0, 0, fmt("{d:.6}", .{k1Natural(ps.items)}));
     if (std.mem.eql(u8, v, "soa")) {
         var soa: std.MultiArrayList(Particle) = .empty;
         soa.ensureTotalCapacity(gpa, N1) catch @panic("oom");

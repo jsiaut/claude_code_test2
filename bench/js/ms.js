@@ -55,14 +55,23 @@ function k1SoA(vx, vy, vz, m) {
   }
   return a0 + a1 + a2 + a3;
 }
+// Empreinte K1 (D2a) : octets vivants (tas JS + mémoire externe) après GC complet, et RSS courant
+function liveNow() {
+  if (typeof Bun !== 'undefined') Bun.gc(true); else if (global.gc) global.gc();
+  const m = process.memoryUsage();
+  return m.heapUsed + m.external;
+}
+function rssNow() { return process.memoryUsage().rss; }
 function runK1(v, reps) {
   if (v === 'footprint0') { result('k1', v, 'energy', 0, 0, '0'); return; }
   const raw = load('k1_particles.f32', Float32Array);
+  if (v === 'footprint_raw') { result('k1', v, 'energy', 0, 0, '0'); return; }
   if (v === 'aos') { bench('k1', v, 'energy', reps, () => fix(k1AoS(raw), 6)); return; }
   if (v === 'soa') {
     const c = []; for (let k = 0; k < 16; k++) { const a = new Float32Array(N1); for (let i = 0; i < N1; i++) a[i] = raw[16 * i + k]; c.push(a); }
     bench('k1', v, 'energy', reps, () => fix(k1SoA(c[3], c[4], c[5], c[9]), 6)); return;
   }
+  const [m1, r1] = v === 'footprint' ? [liveNow(), rssNow()] : [0, 0]; // P1 : tampon brut chargé
   let ps = [];
   for (let i = 0; i < N1; i++) {
     const o = 16 * i;
@@ -70,8 +79,8 @@ function runK1(v, reps) {
       mass: raw[o + 9], charge: raw[o + 10], radius: raw[o + 11], temp: raw[o + 12], pressure: raw[o + 13], energy: raw[o + 14], density: raw[o + 15] });
   }
   if (v === 'footprint') {
-    if (global.gc) global.gc();
-    console.log(`META;live_bytes_after_gc;${process.memoryUsage().heapUsed}`);
+    const m2 = liveNow(), r2 = rssNow(); // P2 : collection construite, tampon brut encore vivant
+    console.log(`META;mem;live;${m1};${m2}\nMETA;rss;${r1};${r2}\nMETA;raw0;${raw[0]}`);
     result('k1', v, 'energy', 0, 0, fix(k1Natural(ps), 6)); return;
   }
   if (v === 'natural_shuffled') {

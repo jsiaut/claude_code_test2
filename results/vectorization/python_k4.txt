@@ -1,0 +1,63 @@
+21.2% des échantillons : python3.15+0x590373 boucle=0x443af5-0x5903ce {'n': 393, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    58fd73: iret
+    58fd74: jmp    QWORD PTR [rax*8+0xa7f540]
+    58fd7b: endbr64
+    58fd7f: mov    QWORD PTR [rbx+0x38],r12
+    58fd83: mov    rdx,QWORD PTR [r14+0x18]
+    58fd87: add    r12,0x4
+    58fd8b: mov    rax,QWORD PTR [rbx]
+    58fd8e: and    rax,0xfffffffffffffffe
+    58fd92: cmp    QWORD PTR [rax+0xa8],rdx
+    58fd99: jne    593b07 <_PyEval_EvalFrameDefault@@Base+0x3ef7>
+    58fd9f: movzx  eax,WORD PTR [r12]
+    58fda4: movzx  ecx,ah
+    58fda7: movzx  eax,al
+    58fdaa: mov    r15d,ecx
+    58fdad: jmp    QWORD PTR [rax*8+0xa7f540]
+    58fdb4: endbr64
+    58fdb8: mov    eax,r15d
+    58fdbb: mov    edx,r15d
+    58fdbe: mov    QWORD PTR [rbx+0x38],r12
+    58fdc2: add    r12,0x2
+    58fdc6: and    eax,0xf
+    58fdc9: sar    edx,0x4
+    58fdcc: add    r10,0x10
+    58fdd0: mov    rax,QWORD PTR [rbx+rax*8+0x50]
+    58fdd5: mov    rdx,QWORD PTR [rbx+rdx*8+0x50]
+    58fdda: or     rax,0x1
+    58fdde: or     rdx,0x1
+    58fde2: mov    QWORD PTR [r10-0x8],rax
+    58fde6: movzx  eax,WORD PTR [r12]
+    58fdeb: mov    QWORD PTR [r10-0x10],rdx
+    58fdef: movzx  ecx,ah
+    58fdf2: movzx  eax,al
+    58fdf5: mov    r15d,ecx
+    58fdf8: jmp    QWORD PTR [rax*8+0xa7f540]
+    58fdff: endbr64
+    58fe03: mov    r15,QWORD PTR [r10-0x8]
+    58fe07: mov    QWORD PTR [rbx+0x38],r12
+    58fe0b: mov    rax,r15
+    58fe0e: and    eax,0x3
+    58fe11: cmp    rax,0x1
+    58fe15: jne    58fe2e <_PyEval_EvalFrameDefault@@Base+0x21e>
+    58fe17: cmp    r15,0x1
+    58fe1b: je     58fe2e <_PyEval_EvalFrameDefault@@Base+0x21e>
+    58fe1d: mov    rdx,r15
+    58fe20: and    rdx,0xfffffffffffffffe
+    58fe24: mov    eax,DWORD PTR [rdx]
+    58fe26: test   eax,eax
+    58fe28: jns    5993c2 <_PyEval_EvalFrameDefault@@Base+0x97b2>
+    58fe2e: mov    r13,QWORD PTR [rbx+0x8]
+    58fe32: lea    rax,[r10-0x8]
+    58fe36: mov    rsi,rbx
+    58fe39: mov    rdi,r14
+    58fe3c: mov    QWORD PTR [rbx+0x40],rax
+    58fe40: add    DWORD PTR [r14+0x34],0x1
+    58fe45: mov    rbx,r13
+    58fe48: mov    QWORD PTR [r14+0x48],r13
+    58fe4c: call   5aeea0 <_PyEval_FrameClearAndPop@@Base>
+    58fe51: movzx  ecx,WORD PTR [r13+0x48]
+    58fe56: mov    rdx,QWORD PTR [r13+0x38]
+    58fe5a: mov    rax,QWORD PTR [r13+0x40]
+11.4% des échantillons : python3.15+0x58ffe0 boucle=0x443644-0x5900cf {'n': 421, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+10.7% des échantillons : python3.15+0x5961ba boucle=0x5948b1-0x596273 {'n': 409, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

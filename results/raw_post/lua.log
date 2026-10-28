@@ -1,0 +1,30 @@
+lua        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=3.018492s ok={True} rc=0 
+lua        k10  tuned                           p0 n=9 med=0.290067s ok={True} rc=0 
+lua        k10  tuned                           p0 n=9 med=0.290877s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=2.903546s ok={True} rc=0 
+lua        k10  tuned                           p0 n=9 med=0.293634s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=2.760684s ok={True} rc=0 
+lua        k10  tuned                           p0 n=9 med=0.294146s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=2.991689s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=2.942872s ok={True} rc=0 
+lua        k10  tuned                           p0 n=9 med=0.317953s ok={True} rc=0 
+lua        k10  tuned                           p0 n=9 med=0.314353s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=2.931093s ok={True} rc=0 
+lua        k10  tuned                           p0 n=9 med=0.288642s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=2.923570s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=2.953288s ok={True} rc=0 
+lua        k10  tuned                           p0 n=9 med=0.307431s ok={True} rc=0 
+lua        k10  tuned                           p0 n=9 med=0.289884s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=2.826848s ok={True} rc=0 

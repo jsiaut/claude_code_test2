@@ -109,9 +109,21 @@ static_assert(sizeof(Particle) == 64);
     }
     return ss::reduce((a0 + a1) + (a2 + a3));
 }
+// Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)
+static long rss_now() {
+    long size = 0, res = 0;
+    if (std::FILE *f = std::fopen("/proc/self/statm", "r")) {
+        if (std::fscanf(f, "%ld %ld", &size, &res) != 2) res = 0;
+        std::fclose(f);
+    }
+    return res * 4096;
+}
+
 static void run_k1(std::string_view v, int reps) {
     if (v == "footprint0") return result("k1", v, "energy", 0, 0, "0");
     auto raw = load<Particle>("k1_particles.f32");
+    if (v == "footprint_raw") return result("k1", v, "energy", 0, 0, "0");
+    const long m1 = v == "footprint" ? rss_now() : 0; // P1 : tampon brut chargé
     const int W = warmup_count();
     if (v == "soa") {
         std::array<avec<float>, 16> f;
@@ -139,8 +151,12 @@ static void run_k1(std::string_view v, int reps) {
     }
     // natural : std::vector<Particle> (valeurs contiguës : le parcours reste séquentiel même mélangé)
     std::vector<Particle> ps(raw.begin(), raw.end());
+    if (v == "footprint") { // P2 : collection construite, tampon brut encore vivant
+        const long m2 = rss_now();
+        std::printf("META;mem;rss;%ld;%ld\nMETA;rss;%ld;%ld\nMETA;raw0;%g\n", m1, m2, m1, m2, (double)raw[0].x);
+        return result("k1", v, "energy", 0, 0, fmt("%.6f", k1_natural(ps)));
+    }
     raw = {};
-    if (v == "footprint") return result("k1", v, "energy", 0, 0, fmt("%.6f", k1_natural(ps)));
     if (v == "natural_shuffled") {
         auto perm = load<uint32_t>("k1_perm.u32");
         std::vector<Particle> s;

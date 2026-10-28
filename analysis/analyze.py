@@ -187,6 +187,67 @@ BOUNDS = {
 }
 
 
+def bridge_k3(data):
+    """Remesure de K3 pour Haskell après le redémarrage de la VM, avec C comme pont (règle fixée avant
+    les données, docs/METHODOLOGY.md, journal). Les `sw_*` d'après redémarrage remplacent les mesures
+    invalides seulement si les 6 mesures de pont n'ont pas bougé."""
+    post = defaultdict(dict)
+    for f in glob.glob(os.path.join(ROOT, "results", "raw_post", "*.jsonl")):
+        for line in open(f):
+            r = json.loads(line)
+            reps = r.get("reps", [])
+            if r.get("tag") != "post_k3" or not reps or r.get("returncode") != 0 or any(x["ok"] is not True for x in reps):
+                continue
+            post[r["lang"]].setdefault((r["kernel"], r["variant"], r["param"]), []).append([x["sec"] for x in reps])
+    ratios = {}
+    for l, v in [("c", v) for v in ("rmw_packed", "rmw_padded", "sw_packed", "sw_padded")] + \
+                [("haskell", "rmw_packed"), ("haskell", "rmw_padded")]:
+        k = ("k3", v, "")
+        if k in post.get(l, {}) and k in data.get(l, {}):
+            ratios[f"{l}:{v}"] = point(post[l][k]) / point(data[l][k])
+    g = geo(list(ratios.values()))
+    ok = len(ratios) == 6 and 0.90 <= g <= 1.10 and all(0.80 <= x <= 1.25 for x in ratios.values())
+    replaced = []
+    if ok:
+        for v in ("sw_packed", "sw_padded"):
+            k = ("k3", v, "")
+            if k in post.get("haskell", {}):
+                data["haskell"][k] = post["haskell"][k]
+                replaced.append(v)
+    return {"ratios": ratios, "geo": g, "accepted": ok, "replaced": replaced,
+            "post_haskell": {v: point(p) for (_, v, _), p in post.get("haskell", {}).items()}}
+
+
+NOISY = [("k5", "tuned", ""), ("k10", "tuned", "")]
+
+
+def replace_noisy(data):
+    """K5 tuned et K10 tuned : remplacées, pour toutes les implémentations, par la remesure à 9 processus
+    faite sur une seule machine (règle du journal, 2026-10-28 18:28). MS_NOISY=old garde les données
+    d'avant (analyse de sensibilité)."""
+    if os.environ.get("MS_NOISY", "post") == "old":
+        return {}
+    post = defaultdict(dict)
+    for f in glob.glob(os.path.join(ROOT, "results", "raw_post", "*.jsonl")):
+        for line in open(f):
+            r = json.loads(line)
+            reps = r.get("reps", [])
+            key = (r["kernel"], r["variant"], r["param"])
+            if r.get("tag") != "post_noisy" or key not in NOISY or not reps or r.get("returncode") != 0 \
+                    or any(x["ok"] is not True for x in reps):
+                continue
+            post[r["lang"]].setdefault(key, []).append([x["sec"] for x in reps])
+    n = {}
+    for lang in list(data):
+        for key in NOISY:
+            if key in data[lang] or key in post.get(lang, {}):
+                data[lang].pop(key, None)
+                if key in post.get(lang, {}):
+                    data[lang][key] = post[lang][key]
+                    n[f"{lang}:{key[0]}"] = len(post[lang][key])
+    return n
+
+
 def sanity(data):
     flags = []
     for lang, d in data.items():
@@ -198,14 +259,33 @@ def sanity(data):
     return flags
 
 
-def main():
+def final_data():
+    """Données retenues : results/raw, moins les mesures sous la borne physique, plus la remesure K3
+    de Haskell si le pont est validé."""
     data, lat, rss, invalid = load()
     # une mesure plus rapide que la physique ne le permet a sauté du calcul : invalide, comme une
     # somme de contrôle fausse (le résultat peut être juste sans que le travail ait été fait)
     sus = sanity(data)
     for lang, key, t, bound in sus:
         del data[lang][key]
+    # non-conformité établie par inspection et consignée dans le journal : la FFI de LuaJIT ignore
+    # `volatile`, le compteur de K3 reste en registre (annexe, non classée)
+    for v in ("rmw_packed", "rmw_padded", "sw_packed", "sw_padded"):
+        if data.get("luajit", {}).pop(("k3", v, ""), None) is not None:
+            invalid.append(("luajit", ("k3", v, ""), "non conforme", "volatile ignoré par la FFI (journal)"))
+    bridge = bridge_k3(data)
+    bridge["noisy_procs"] = replace_noisy(data)
+    sus2 = sanity(data)  # les mesures reprises passent le même contrôle
+    for lang, key, t, bound in sus2:
+        del data[lang][key]
+    sus += sus2
+    for lang, key, t, bound in sus:
         invalid.append((lang, key, "sous la borne physique", f"{t:.2e} s < {bound:.2e} s"))
+    return data, lat, rss, invalid, sus, bridge
+
+
+def main():
+    data, lat, rss, invalid, sus, bridge = final_data()
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json"))) if os.path.exists(
         os.path.join(ROOT, "results", "vectorization.json")) else {}
     fpf = os.path.join(ROOT, "results", "footprint.json")
@@ -294,8 +374,9 @@ def main():
     for name in ("C", "E", "D"):
         for i, l in enumerate(sorted(ranked, key=lambda l: -res[l][name])):
             res[l]["rank_" + name] = i + 1
-    out = {"results": res, "tstar": tstar, "invalid": invalid, "k8_ref": k8r, "k2_ref": k2r}
-    json.dump(out, open(os.path.join(ROOT, "results", "summary.json"), "w"), indent=1, default=str)
+    out = {"results": res, "tstar": tstar, "invalid": invalid, "k8_ref": k8r, "k2_ref": k2r, "bridge_k3": bridge}
+    suffix = "" if os.environ.get("MS_NOISY", "post") != "old" else "_noisy_old"
+    json.dump(out, open(os.path.join(ROOT, "results", f"summary{suffix}.json"), "w"), indent=1, default=str)
     # tableau
     print("| Rang | Langage | MS | C (rang) | E [IC95] (rang) | D [IC95] (rang) | rang, poids de Dirichlet [5-95 %] | rang, cellules 0,5 tirées [5-95 %] | rang, un noyau retiré [min-max] |")
     print("|---|---|---|---|---|---|---|---|---|")
@@ -311,6 +392,9 @@ def main():
     if invalid:
         print("mesures invalides :", len(invalid), invalid[:10])
     print("contrôle de vraisemblance (temps < 0,9 x borne physique, exclus) :", sus if sus else "aucune anomalie")
+    print("pont K3 (après / avant redémarrage) :", {k: round(v, 3) for k, v in bridge["ratios"].items()},
+          f"moyenne géométrique {bridge['geo']:.3f}" if bridge["geo"] else "", "-> retenu" if bridge["accepted"] else "-> refusé",
+          bridge["replaced"])
 
 
 if __name__ == "__main__":

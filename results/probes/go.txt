@@ -1,0 +1,4 @@
+CAP;A2;1;unsafe.Offsetof(S.C)=8
+CAP;A5;0.5;math.Float32bits(1)=0x3f800000
+CAP;F4;0.5;syscall.Mmap + unsafe.Slice : 0.4390046 <nil>
+CAP;D4;0.5;syscall brut sched_setaffinity errno=0

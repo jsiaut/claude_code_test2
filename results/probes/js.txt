@@ -1,0 +1,2 @@
+CAP;D5;0.5;Atomics.pause existe (function) ; pas de barrière explicite
+CAP;A5;0.5;vues typées sur un même ArrayBuffer : 0x3f800000

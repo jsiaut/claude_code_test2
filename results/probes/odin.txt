@@ -1,0 +1,5 @@
+CAP;A2;1;offset_of(S, c)=8
+CAP;A3;1;#packed size_of(P)=5 ; bit_field size_of(BF)=2
+CAP;A5;1;#raw_union 0x3f800000 transmute 0x3f800000
+CAP;E3;1;intrinsics.expect : 2
+CAP;E4;1;prefetch_read_data ; D5 cpu_relax

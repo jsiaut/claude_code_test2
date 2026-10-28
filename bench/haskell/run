@@ -1,2 +1,6 @@
 #!/bin/sh
-exec "$(dirname "$0")/ms" "$@" +RTS -N4 -RTS
+# -T (statistiques du RTS) seulement pour l'empreinte K1, qui lit les octets vivants du tas
+case "$2" in
+  footprint*) exec "$(dirname "$0")/ms" "$@" +RTS -N4 -T -RTS ;;
+  *) exec "$(dirname "$0")/ms" "$@" +RTS -N4 -RTS ;;
+esac

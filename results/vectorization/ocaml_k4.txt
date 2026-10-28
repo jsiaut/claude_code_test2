@@ -1,0 +1,18 @@
+92.8% des échantillons : ms+0xd7084 boucle=0xd705f-0xd7093 {'n': 17, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    d705f: mov    rdx,rbx
+    d7062: sar    rdx,1
+    d7065: mov    rcx,rsi
+    d7068: add    rcx,rdx
+    d706b: movzx  rdx,BYTE PTR [rcx]
+    d706f: shl    rdx,1
+    d7072: inc    rdx
+    d7075: cmp    rdx,0x101
+    d707c: jl     d7084 <camlMs.k4_natural_1438+0x54>
+    d707e: add    rax,rdx
+    d7081: dec    rax
+    d7084: mov    rdx,rbx
+    d7087: add    rbx,0x2
+    d708b: cmp    rdx,rdi
+    d708e: je     d7097 <camlMs.k4_natural_1438+0x67>
+    d7090: cmp    r15,QWORD PTR [r14]
+    d7093: ja     d705f <camlMs.k4_natural_1438+0x2f>

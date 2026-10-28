@@ -1,0 +1,18 @@
+js_bun     k1   natural              energy     p0 n=10 med=0.097533s ok={True} rc=0 
+js_bun     k8   natural                         p0 n=3 med=0.814109s ok={True} rc=0 
+js_bun     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js_bun     k1   natural              energy     p0 n=10 med=0.100492s ok={True} rc=0 
+js_bun     k8   natural                         p0 n=3 med=0.820423s ok={True} rc=0 
+js_bun     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js_bun     k1   natural              energy     p0 n=10 med=0.107051s ok={True} rc=0 
+js_bun     k8   natural                         p0 n=3 med=0.836804s ok={True} rc=0 
+js_bun     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js_bun     k1   natural              energy     p0 n=10 med=0.083978s ok={True} rc=0 
+js_bun     k8   natural                         p0 n=3 med=0.807723s ok={True} rc=0 
+js_bun     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js_bun     k1   natural              energy     p0 n=10 med=0.093913s ok={True} rc=0 
+js_bun     k8   natural                         p0 n=3 med=0.866582s ok={True} rc=0 
+js_bun     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js_bun     k1   natural              energy     p0 n=10 med=0.098742s ok={True} rc=0 
+js_bun     k8   natural                         p0 n=3 med=0.810754s ok={True} rc=0 
+js_bun     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 

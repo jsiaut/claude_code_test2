@@ -1,0 +1,12 @@
+64.4% des échantillons : ms+0x4032c5 boucle=0x4032c0-0x4032e8 {'n': 9, 'packed': 4, 'wide': 4, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    4032c0: vmovupd ymm0,YMMWORD PTR [rdi+rax*1]
+    4032c5: vaddpd ymm0,ymm0,YMMWORD PTR [r8+rax*1]
+    4032cb: vaddpd ymm0,ymm0,YMMWORD PTR [rdx+rax*1]
+    4032d0: vaddpd ymm0,ymm0,YMMWORD PTR [rsi+rax*1]
+    4032d5: vmulpd ymm0,ymm0,ymm1
+    4032d9: vmovupd YMMWORD PTR [rcx+rax*1],ymm0
+    4032de: add    rax,0x20
+    4032e2: cmp    rax,0x3fe0
+    4032e8: jne    4032c0 <k9_natural+0x60>
+12.3% des échantillons : ms+0x40223c boucle=0x402238-0x402252 {'n': 7, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+7.8% des échantillons : ms+0x40212f boucle=0x4020f8-0x402137 {'n': 15, 'packed': 8, 'wide': 8, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}

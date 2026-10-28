@@ -1,0 +1,1 @@
+/home/user/claude_code_test2/probes/nim/probe.nim(1, 55) Warning: imported and not used: 'typedthreads' [UnusedImport]

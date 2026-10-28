@@ -1,0 +1,5 @@
+Program linked to executable './bin/probe'.
+CAP;A2;1;$reflect(Sx.c).offset=8
+CAP;A3;1;@packed P.sizeof=5 ; bitstruct BF.sizeof=2
+CAP;A5;1;union 0x3f800000 bitcast 0x3f800000
+CAP;E3;1;@likely : 2

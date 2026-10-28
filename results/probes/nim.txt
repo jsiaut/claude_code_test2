@@ -1,0 +1,7 @@
+CAP;A2;1;offsetOf(S, c)=8
+CAP;A3;1;packed sizeof(P)=5 ; bitsize sizeof(BF)=4
+CAP;A4;1;align(64) alignof(L)=64
+CAP;A5;1;union 0x3F800000
+CAP;F4;1;std/memfiles : 0.4390046
+CAP;D5;1;cpuRelax + fence
+CAP;E3;1;likely/unlikely

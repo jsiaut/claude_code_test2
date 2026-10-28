@@ -1,0 +1,5 @@
+CAP;D2;1;VarHandle setRelease/getAcquire/setOpaque : 1 ; D5 fullFence + onSpinWait
+CAP;F4;1;FileChannel.map -> MemorySegment : 0.4390046
+CAP;A1;0.5;FFM sequenceLayout(1024, structLayout(...)) : 65536 octets ; A7 sequenceLayout dans structLayout
+CAP;A3;0.5;FFM disposition non alignée : 5 octets
+CAP;A4;0.5;Arena.allocate(256, 64) adresse mod 64 = 0

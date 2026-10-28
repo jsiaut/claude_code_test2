@@ -1,0 +1,61 @@
+66.0% des échantillons : ms+0xd9811 boucle=0xd9754-0xd9848 {'n': 58, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+    d9754: mov    rdx,rsi
+    d9757: add    rdx,0x2
+    d975b: mov    rdi,QWORD PTR [rax-0x8]
+    d975f: shr    rdi,0x9
+    d9763: cmp    rdi,rcx
+    d9766: jbe    d9885 <camlMs.k9_natural_3388+0x155>
+    d976c: mov    r8,QWORD PTR [rax+rcx*4-0x4]
+    d9771: mov    r9,QWORD PTR [r8-0x8]
+    d9775: shr    r9,0x9
+    d9779: cmp    r9,rdx
+    d977c: jbe    d9885 <camlMs.k9_natural_3388+0x155>
+    d9782: movsd  xmm0,QWORD PTR [r8+rdx*4-0x4]
+    d9789: mov    r12,rsi
+    d978c: add    r12,0xfffffffffffffffe
+    d9790: cmp    r9,r12
+    d9793: jbe    d9885 <camlMs.k9_natural_3388+0x155>
+    d9799: movsd  xmm1,QWORD PTR [r8+r12*4-0x4]
+    d97a0: mov    r8,rcx
+    d97a3: add    r8,0x2
+    d97a7: cmp    rdi,r8
+    d97aa: jbe    d9885 <camlMs.k9_natural_3388+0x155>
+    d97b0: mov    r8,QWORD PTR [rax+r8*4-0x4]
+    d97b5: mov    r9,QWORD PTR [r8-0x8]
+    d97b9: shr    r9,0x9
+    d97bd: cmp    r9,rsi
+    d97c0: jbe    d9885 <camlMs.k9_natural_3388+0x155>
+    d97c6: movsd  xmm2,QWORD PTR [r8+rsi*4-0x4]
+    d97cd: mov    r8,rcx
+    d97d0: add    r8,0xfffffffffffffffe
+    d97d4: cmp    rdi,r8
+    d97d7: jbe    d9885 <camlMs.k9_natural_3388+0x155>
+    d97dd: mov    rdi,QWORD PTR [rax+r8*4-0x4]
+    d97e2: mov    r8,QWORD PTR [rdi-0x8]
+    d97e6: shr    r8,0x9
+    d97ea: cmp    r8,rsi
+    d97ed: jbe    d9885 <camlMs.k9_natural_3388+0x155>
+    d97f3: movsd  xmm3,QWORD PTR [rdi+rsi*4-0x4]
+    d97f9: addsd  xmm3,xmm2
+    d97fd: addsd  xmm3,xmm1
+    d9801: addsd  xmm3,xmm0
+    d9805: movsd  xmm0,QWORD PTR [rip+0x92a03]        # 16c210 <caml_absf_mask+0x1d0>
+    d980d: mulsd  xmm0,xmm3
+    d9811: mov    rdi,QWORD PTR [rbx-0x8]
+    d9815: shr    rdi,0x9
+    d9819: cmp    rdi,rcx
+    d981c: jbe    d9885 <camlMs.k9_natural_3388+0x155>
+    d981e: mov    rdi,QWORD PTR [rbx+rcx*4-0x4]
+    d9823: mov    r8,QWORD PTR [rdi-0x8]
+    d9827: shr    r8,0x9
+    d982b: cmp    r8,rsi
+    d982e: jbe    d9885 <camlMs.k9_natural_3388+0x155>
+    d9830: movsd  QWORD PTR [rdi+rsi*4-0x4],xmm0
+    d9836: mov    rdi,rsi
+    d9839: mov    rsi,rdx
+    d983c: cmp    rdi,0xffd
+    d9843: je     d9850 <camlMs.k9_natural_3388+0x120>
+    d9845: cmp    r15,QWORD PTR [r14]
+    d9848: ja     d9754 <camlMs.k9_natural_3388+0x24>
+9.5% des échantillons : ms+0xd9c7d boucle=0xd9c39-0xd9ca4 {'n': 25, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}
+5.7% des échantillons : libc.so.6+0x198f89 boucle=0x198dc6-0x198fb6 {'n': 101, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

@@ -1,0 +1,60 @@
+24.6% des échantillons : JIT 0x7f4accc74964 boucle=0x7f4accc74896-0x7f4accc74970 {'n': 57, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+    7f4accc74896: mov    esi,edi
+    7f4accc74898: sub    esi,DWORD PTR [rcx+0x18]
+    7f4accc7489b: cmp    esi,DWORD PTR [rcx+0x10]
+    7f4accc7489e: jae    0x7f4accc74990
+    7f4accc748a4: mov    r8d,DWORD PTR [rcx+0x14]
+    7f4accc748a8: imul   esi,r8d
+    7f4accc748ac: mov    r9d,edx
+    7f4accc748af: sub    r9d,DWORD PTR [rcx+0x1c]
+    7f4accc748b3: cmp    r9d,r8d
+    7f4accc748b6: jae    0x7f4accc74990
+    7f4accc748bc: add    esi,r9d
+    7f4accc748bf: mov    r8d,DWORD PTR [rax+0x18]
+    7f4accc748c3: lea    r9d,[rdi-0x1]
+    7f4accc748c7: sub    r9d,r8d
+    7f4accc748ca: mov    r10d,DWORD PTR [rax+0x10]
+    7f4accc748ce: cmp    r9d,r10d
+    7f4accc748d1: jae    0x7f4accc74990
+    7f4accc748d7: mov    r11d,DWORD PTR [rax+0x14]
+    7f4accc748db: imul   r9d,r11d
+    7f4accc748df: mov    ebx,DWORD PTR [rax+0x1c]
+    7f4accc748e2: mov    r15d,edx
+    7f4accc748e5: sub    r15d,ebx
+    7f4accc748e8: cmp    r15d,r11d
+    7f4accc748eb: jae    0x7f4accc74990
+    7f4accc748f1: add    r9d,r15d
+    7f4accc748f4: vmovsd xmm0,QWORD PTR [rax+r9*8+0x20]
+    7f4accc748fb: lea    r9d,[rdi+0x1]
+    7f4accc748ff: sub    r9d,r8d
+    7f4accc74902: cmp    r9d,r10d
+    7f4accc74905: jae    0x7f4accc74990
+    7f4accc7490b: imul   r9d,r11d
+    7f4accc7490f: add    r9d,r15d
+    7f4accc74912: vaddsd xmm0,xmm0,QWORD PTR [rax+r9*8+0x20]
+    7f4accc74919: mov    r9d,edi
+    7f4accc7491c: sub    r9d,r8d
+    7f4accc7491f: cmp    r9d,r10d
+    7f4accc74922: jae    0x7f4accc74990
+    7f4accc74924: mov    r8d,r9d
+    7f4accc74927: imul   r8d,r11d
+    7f4accc7492b: lea    r10d,[rdx-0x1]
+    7f4accc7492f: sub    r10d,ebx
+    7f4accc74932: cmp    r10d,r11d
+    7f4accc74935: jae    0x7f4accc74990
+    7f4accc74937: add    r8d,r10d
+    7f4accc7493a: vaddsd xmm0,xmm0,QWORD PTR [rax+r8*8+0x20]
+    7f4accc74941: imul   r9d,r11d
+    7f4accc74945: inc    edx
+    7f4accc74947: mov    r8d,edx
+    7f4accc7494a: sub    r8d,ebx
+    7f4accc7494d: cmp    r8d,r11d
+    7f4accc74950: jae    0x7f4accc74990
+    7f4accc74952: add    r8d,r9d
+    7f4accc74955: vaddsd xmm0,xmm0,QWORD PTR [rax+r8*8+0x20]
+    7f4accc7495c: vmulsd xmm0,xmm0,QWORD PTR [rip+0x34]        # 0x7f4accc74998
+    7f4accc74964: vmovsd QWORD PTR [rcx+rsi*8+0x20],xmm0
+    7f4accc7496a: cmp    edx,0x7ff
+    7f4accc74970: jl     0x7f4accc74896
+20.2% des échantillons : JIT 0x7f4accc768c1 boucle=0x7f4accc767fd-0x7f4accc768d1 {'n': 58, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+19.1% des échantillons : JIT 0x7f4accc76104 boucle=0x7f4accc76036-0x7f4accc76110 {'n': 57, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}

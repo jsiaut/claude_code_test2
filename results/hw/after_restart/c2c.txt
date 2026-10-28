@@ -1,0 +1,13 @@
+TSC: 2.8002 GHz
+c2c: cpu0 <-> cpu1 : aller-retour 241.3 ns (un transfert ~ 120.7 ns)
+c2c: cpu0 <-> cpu2 : aller-retour 252.2 ns (un transfert ~ 126.1 ns)
+c2c: cpu0 <-> cpu3 : aller-retour 246.8 ns (un transfert ~ 123.4 ns)
+c2c: cpu1 <-> cpu0 : aller-retour 238.7 ns (un transfert ~ 119.4 ns)
+c2c: cpu1 <-> cpu2 : aller-retour 272.5 ns (un transfert ~ 136.3 ns)
+c2c: cpu1 <-> cpu3 : aller-retour 391.0 ns (un transfert ~ 195.5 ns)
+c2c: cpu2 <-> cpu0 : aller-retour 434.4 ns (un transfert ~ 217.2 ns)
+c2c: cpu2 <-> cpu1 : aller-retour 237.8 ns (un transfert ~ 118.9 ns)
+c2c: cpu2 <-> cpu3 : aller-retour 405.7 ns (un transfert ~ 202.9 ns)
+c2c: cpu3 <-> cpu0 : aller-retour 287.0 ns (un transfert ~ 143.5 ns)
+c2c: cpu3 <-> cpu1 : aller-retour 399.3 ns (un transfert ~ 199.6 ns)
+c2c: cpu3 <-> cpu2 : aller-retour 231.4 ns (un transfert ~ 115.7 ns)

@@ -1,0 +1,3 @@
+CAP;A5;0.5;castFloatToWord32 1.0 = 0x3f800000
+CAP;A4;0.5;allocaBytesAligned 64 -> adresse mod 64 = 0
+CAP;E4;1;prefetchAddr3# (GHC.Exts)

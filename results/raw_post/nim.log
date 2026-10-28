@@ -1,0 +1,30 @@
+nim        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+nim        k10  tuned                           p0 n=10 med=0.028022s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.008492s ok={True} rc=0 
+nim        k10  tuned                           p0 n=10 med=0.040249s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.006176s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.005963s ok={True} rc=0 
+nim        k10  tuned                           p0 n=10 med=0.079598s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.006057s ok={True} rc=0 
+nim        k10  tuned                           p0 n=10 med=0.039142s ok={True} rc=0 
+nim        k10  tuned                           p0 n=10 med=0.085951s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.005862s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.008513s ok={True} rc=0 
+nim        k10  tuned                           p0 n=10 med=0.048775s ok={True} rc=0 
+nim        k10  tuned                           p0 n=10 med=0.080983s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.006231s ok={True} rc=0 
+nim        k10  tuned                           p0 n=10 med=0.024913s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.006038s ok={True} rc=0 
+nim        k10  tuned                           p0 n=10 med=0.025831s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.006906s ok={True} rc=0 

@@ -24,6 +24,8 @@ import GHC.ForeignPtr (mallocPlainForeignPtrAlignedBytes, unsafeWithForeignPtr)
 import GHC.IO (IO (..))
 import GHC.Word (Word32 (..), Word64 (..))
 import System.Environment
+import System.Mem (performMajorGC)
+import GHC.Stats (getRTSStats, gc, gcdetails_live_bytes)
 import Text.Printf (printf)
 
 -- ------------------------------------------------------------------ harnais
@@ -103,12 +105,26 @@ k1SoA (Ptr vx) (Ptr vy) (Ptr vz) (Ptr m) (I# n) = IO $ \s -> (# s, go 0# 0.0## #
               s16 = ((f e8 +## f e9) +## (f e10 +## f e11)) +## ((f e12 +## f e13) +## (f e14 +## f e15))
            in go (i +# 16#) (acc +## (s8 +## s16))
 
+-- Empreinte K1 (D2a) : octets vivants du tas après un GC majeur (RTS lancé avec -T), et RSS courant
+liveNow :: IO Int
+liveNow = do
+  performMajorGC
+  s <- getRTSStats
+  return (fromIntegral (gcdetails_live_bytes (gc s)))
+
+rssNow :: IO Int
+rssNow = do
+  s <- readFile "/proc/self/statm"
+  let r = read (words s !! 1) :: Int
+  r `seq` return (r * 4096)
+
 runK1 :: String -> Int -> Int -> IO ()
 runK1 v warm reps
   | v == "footprint0" = result "k1" v "energy" 0 0 "0"
   | otherwise = do
       raw <- loadBuf "k1_particles.f32" :: IO (Buf Float)
       case v of
+        "footprint_raw" -> result "k1" v "energy" 0 0 "0"
         "aos" -> withBuf raw $ \p -> bench "k1" v "energy" warm reps (printf "%.6f" <$> k1AoS p n1)
         "soa" -> do
           cols <- forM [0 .. 15] $ \k -> do
@@ -119,6 +135,7 @@ runK1 v warm reps
           unsafeWithForeignPtr (c 3) $ \a -> unsafeWithForeignPtr (c 4) $ \b -> unsafeWithForeignPtr (c 5) $ \cc -> unsafeWithForeignPtr (c 9) $ \m ->
             bench "k1" v "energy" warm reps (printf "%.6f" <$> k1SoA a b cc m n1)
         _ -> do
+          (m1, r1) <- if v == "footprint" then (,) <$> liveNow <*> rssNow else return (0, 0)  -- P1 : tampon brut chargé
           ps0 <- withBuf raw $ \p -> forM [0 .. n1 - 1] $ \i -> do
             f <- forM [0 .. 15] $ \k -> peekElemOff p (16 * i + k)
             let [a, b, c, d, e, f', g, h, ii, j, k, l, m, nn, o, q] = f
@@ -130,7 +147,12 @@ runK1 v warm reps
               withBuf perm $ \pp -> forM [0 .. n1 - 1] $ \i -> do j <- peekElemOff pp i; return $! arr ! fromIntegral j
             else return ps0
           if v == "footprint"
-            then result "k1" v "energy" 0 0 (printf "%.6f" (k1Natural ps))
+            then do
+              m2 <- liveNow  -- P2 : collection construite, tampon brut encore vivant
+              r2 <- rssNow
+              raw0 <- withBuf raw $ \p -> peekElemOff p 0
+              putStrLn ("META;mem;live;" ++ show m1 ++ ";" ++ show m2 ++ "\nMETA;rss;" ++ show r1 ++ ";" ++ show r2 ++ "\nMETA;raw0;" ++ show raw0)
+              result "k1" v "energy" 0 0 (printf "%.6f" (k1Natural ps))
             else do
               ref <- newIORef ps
               bench "k1" v "energy" warm reps (readIORef ref >>= \x -> return $! printf "%.6f" (k1Natural x))

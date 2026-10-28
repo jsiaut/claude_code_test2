@@ -3,7 +3,7 @@
 import json, os, statistics, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from analyze import load, point, RANKED, ANNEX  # noqa: E402
+from analyze import final_data, point, RANKED, ANNEX  # noqa: E402
 
 ORDER = RANKED + list(ANNEX)
 COLS = {
@@ -30,7 +30,7 @@ def cv(procs):
 
 
 def main():
-    data, lat, rss, invalid = load()
+    data, lat, rss, invalid, *_ = final_data()
     for title, keys in COLS.items():
         print(f"\n### {title}\n")
         print("| Langage | " + " | ".join(LABEL(k) for k in keys) + " |")

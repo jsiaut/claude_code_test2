@@ -1,0 +1,27 @@
+# Sortie de analysis/footprint.py, première méthode (pic RSS), INVALIDE : le pic du chargement masque
+# la collection (0 octet par particule pour 8 langages). Conservée pour la trace ; voir docs/METHODOLOGY.md.
+ada                61.2 o/particule  runtime    13.7 Mio  tampon    -0.2 Mio  écart entre processus   0.0 o
+c                  61.0 o/particule  runtime    13.6 Mio  tampon     0.1 Mio  écart entre processus   0.0 o
+c3                  0.0 o/particule  runtime    13.5 Mio  tampon   499.9 Mio  écart entre processus   0.0 o
+c_gcc              61.0 o/particule  runtime    13.7 Mio  tampon    -0.0 Mio  écart entre processus   0.0 o
+chapel             64.0 o/particule  runtime    13.7 Mio  tampon   248.9 Mio  écart entre processus   0.0 o
+cpp                64.0 o/particule  runtime    13.6 Mio  tampon   245.9 Mio  écart entre processus   0.0 o
+csharp             60.6 o/particule  runtime    24.9 Mio  tampon   512.5 Mio  écart entre processus   1.0 o
+d                  -0.0 o/particule  runtime    13.6 Mio  tampon   501.9 Mio  écart entre processus   0.1 o
+fortran            61.4 o/particule  runtime    13.6 Mio  tampon    -0.0 Mio  écart entre processus   0.0 o
+fortran_flang     179.5 o/particule  runtime    13.7 Mio  tampon     0.0 Mio  écart entre processus   0.0 o
+go                 64.1 o/particule  runtime    13.6 Mio  tampon   244.8 Mio  écart entre processus   0.0 o
+haskell           183.2 o/particule  runtime    13.7 Mio  tampon   502.9 Mio  écart entre processus   0.2 o
+java               56.0 o/particule  runtime    56.5 Mio  tampon   522.4 Mio  écart entre processus   2.2 o
+js                446.8 o/particule  runtime    41.7 Mio  tampon   256.6 Mio  écart entre processus   6.0 o
+js_bun            186.1 o/particule  runtime    18.7 Mio  tampon   257.1 Mio  écart entre processus   2.0 o
+julia              -0.3 o/particule  runtime   322.1 Mio  tampon   495.4 Mio  écart entre processus   1.8 o
+lua               243.8 o/particule  runtime    13.7 Mio  tampon  1492.5 Mio  écart entre processus   2.2 o
+luajit            440.1 o/particule  runtime    13.7 Mio  tampon   756.7 Mio  écart entre processus   0.0 o
+mojo               -0.0 o/particule  runtime    13.6 Mio  tampon   650.5 Mio  écart entre processus   0.0 o
+nim                -0.1 o/particule  runtime    13.6 Mio  tampon   500.5 Mio  écart entre processus   0.0 o
+ocaml             145.0 o/particule  runtime    13.6 Mio  tampon   246.5 Mio  écart entre processus   0.0 o
+odin                0.0 o/particule  runtime    13.7 Mio  tampon   500.2 Mio  écart entre processus   0.0 o
+python            685.7 o/particule  runtime    13.7 Mio  tampon   509.9 Mio  écart entre processus   0.1 o
+rust                0.0 o/particule  runtime    13.7 Mio  tampon   500.5 Mio  écart entre processus   0.0 o
+zig                 0.0 o/particule  runtime    13.6 Mio  tampon   499.2 Mio  écart entre processus   0.0 o

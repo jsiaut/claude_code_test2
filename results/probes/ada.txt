@@ -1,0 +1,4 @@
+CAP;A2;1;S.C'Position = 8
+CAP;A3;1;clause de représentation au bit près : BF'Size = 8
+CAP;A5;1;Unchecked_Conversion 0x 1065353216 ; Unchecked_Union UU'Size = 32
+CAP;D4;1;aspect CPU => 1 sur une tâche ; CPU disponibles = 4

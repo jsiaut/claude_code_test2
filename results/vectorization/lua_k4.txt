@@ -1,0 +1,63 @@
+5.9% des échantillons : lua+0x251c0 boucle=0x25110-0x251f1 {'n': 70, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    25110: endbr64
+    25114: push   r12
+    25116: push   rbp
+    25117: mov    ebp,esi
+    25119: push   rbx
+    2511a: mov    rbx,rdi
+    2511d: sub    rsp,0x10
+    25121: mov    rax,QWORD PTR fs:0x28
+    2512a: mov    QWORD PTR [rsp+0x8],rax
+    2512f: xor    eax,eax
+    25131: lea    rdx,[rsp+0x4]
+    25136: call   a260 <lua_tointegerx>
+    2513b: mov    r12,rax
+    2513e: mov    eax,DWORD PTR [rsp+0x4]
+    25142: test   eax,eax
+    25144: je     25168 <luaL_checkinteger+0x58>
+    25146: mov    rax,QWORD PTR [rsp+0x8]
+    2514b: sub    rax,QWORD PTR fs:0x28
+    25154: jne    251ac <luaL_checkinteger+0x9c>
+    25156: add    rsp,0x10
+    2515a: mov    rax,r12
+    2515d: pop    rbx
+    2515e: pop    rbp
+    2515f: pop    r12
+    25161: ret
+    25162: nop    WORD PTR [rax+rax*1+0x0]
+    25168: mov    esi,ebp
+    2516a: mov    rdi,rbx
+    2516d: call   9b20 <lua_isnumber>
+    25172: test   eax,eax
+    25174: je     25190 <luaL_checkinteger+0x80>
+    25176: lea    rdx,[rip+0x15b7b]        # 3acf8 <_IO_stdin_used+0x1cf8>
+    2517d: mov    esi,ebp
+    2517f: mov    rdi,rbx
+    25182: call   24810 <luaL_argerror>
+    25187: jmp    25146 <luaL_checkinteger+0x36>
+    25189: nop    DWORD PTR [rax+0x0]
+    25190: mov    rdi,rbx
+    25193: mov    esi,0x3
+    25198: call   99c0 <lua_typename>
+    2519d: mov    esi,ebp
+    2519f: mov    rdi,rbx
+    251a2: mov    rdx,rax
+    251a5: call   24970 <luaL_typeerror>
+    251aa: jmp    25146 <luaL_checkinteger+0x36>
+    251ac: call   7750 <__stack_chk_fail@plt>
+    251b1: data16 cs nop WORD PTR [rax+rax*1+0x0]
+    251bc: nop    DWORD PTR [rax+0x0]
+    251c0: endbr64
+    251c4: push   r12
+    251c6: mov    r12,rdx
+    251c9: push   rbp
+    251ca: mov    ebp,esi
+    251cc: push   rbx
+    251cd: mov    rbx,rdi
+    251d0: call   9900 <lua_type>
+    251d5: test   eax,eax
+    251d7: jg     251e8 <luaL_optinteger+0x28>
+    251d9: mov    rax,r12
+    251dc: pop    rbx
+4.6% des échantillons : lua+0x1ff21 boucle=0x1fd6d-0x1ffbb {'n': 155, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+3.1% des échantillons : lua+0x20730 boucle=0x1ff10-0x2077a {'n': 407, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

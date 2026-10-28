@@ -162,13 +162,36 @@ procedure Ms is
       return E;
    end K1_Soa;
 
+   --  Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)
+   function Rss_Now return Long_Long_Integer is
+      F    : File_Type;
+      Line : String (1 .. 256);
+      Last : Natural;
+      P, Q : Natural;
+   begin
+      Open (F, In_File, "/proc/self/statm");
+      Get_Line (F, Line, Last);
+      Close (F);
+      P := Index (Line (1 .. Last), " ");
+      Q := Index (Line (P + 1 .. Last), " ");
+      return Long_Long_Integer'Value (Line (P + 1 .. Q - 1)) * 4096;
+   exception
+      when others => return 0;
+   end Rss_Now;
+
+   function Img (X : Long_Long_Integer) return String is (Trim (Long_Long_Integer'Image (X), Left));
+
    procedure Run_K1 (V : String; Reps : Integer) is
       Ps : Particle_Acc;
+      M1 : Long_Long_Integer := 0;
       T0, T1, E : Long_Float;
    begin
-      if V = "footprint0" then
+      if V = "footprint0" or else V = "footprint_raw" then
          Result ("k1", V, "energy", 0, 0.0, "0");
          return;
+      end if;
+      if V = "footprint" then
+         M1 := Rss_Now;  --  P1 : avant la lecture (la collection naturelle est le tableau lu)
       end if;
       Ps := Load_P ("k1_particles.f32");
       if V = "soa" then
@@ -201,6 +224,12 @@ procedure Ms is
          return;
       end if;
       if V = "footprint" then
+         declare
+            M2 : constant Long_Long_Integer := Rss_Now;  --  P2 : après la lecture
+         begin
+            Put_Line ("META;mem;rss;" & Img (M1) & ";" & Img (M2));
+            Put_Line ("META;rss;" & Img (M1) & ";" & Img (M2));
+         end;
          Result ("k1", V, "energy", 0, 0.0, Fix (K1_Natural (Ps.all), 6));
          return;
       end if;

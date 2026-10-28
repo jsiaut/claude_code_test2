@@ -1,0 +1,92 @@
+julia      k8   natural                         p0 n=3 med=0.986104s ok={True} rc=0 
+julia      k8   tuned                           p0 n=8 med=0.317879s ok={True} rc=0 
+julia      k10  natural                         p0 n=3 med=1.128687s ok={True} rc=0 
+julia      k10  tuned                           p0 n=6 med=0.582304s ok={True} rc=0 
+julia      k4   natural_unsorted                p0 n=10 med=0.003023s ok={True} rc=0 
+julia      k4   natural_sorted                  p0 n=10 med=0.003041s ok={True} rc=0 
+julia      k4   branchless_unsorted             p0 n=10 med=0.003900s ok={True} rc=0 
+julia      k2   tuned                16384      p0 n=10 med=0.007027s ok={True} rc=0 
+julia      k2   tuned                65536      p0 n=10 med=0.019080s ok={True} rc=0 
+julia      k2   tuned                262144     p0 n=10 med=0.019088s ok={True} rc=0 
+julia      k2   tuned                524288     p0 n=10 med=0.028900s ok={True} rc=0 
+julia      k2   tuned                2097152    p0 n=10 med=0.115510s ok={True} rc=0 
+julia      k2   tuned                8388608    p0 n=5 med=0.641069s ok={True} rc=0 
+julia      k2   tuned                16777216   p0 n=4 med=0.689666s ok={True} rc=0 
+julia      k2   tuned                33554432   p0 n=4 med=0.748380s ok={True} rc=0 
+julia      k2   tuned                67108864   p0 n=3 med=0.812805s ok={True} rc=0 
+julia      k2   tuned                268435456  p0 n=3 med=1.329933s ok={True} rc=0 
+julia      k3   rmw_packed                      p0 n=3 med=2.196646s ok={True} rc=0 
+julia      k3   rmw_padded                      p0 n=10 med=0.204423s ok={True} rc=0 
+julia      k3   sw_packed                       p0 n=10 med=0.127724s ok={True} rc=0 
+julia      k3   sw_padded                       p0 n=10 med=0.062842s ok={True} rc=0 
+julia      k6   natural              q6         p0 n=10 med=0.079225s ok={True} rc=0 
+julia      k6   natural              q1         p0 n=10 med=0.150064s ok={True} rc=0 
+julia      k6   tuned                q6         p0 n=10 med=0.021188s ok={True} rc=0 
+julia      k6   tuned                q1         p0 n=10 med=0.090109s ok={True} rc=0 
+julia      k6   mt                   q6         p0 n=10 med=0.008373s ok={True} rc=0 
+julia      k6   mt                   q1         p0 n=10 med=0.032001s ok={True} rc=0 
+julia      k5   natural                         p0 n=10 med=0.178647s ok={True} rc=0 
+julia      k5   tuned                           p0 n=10 med=0.008033s ok={True} rc=0 
+julia      k1   natural              energy     p0 n=10 med=0.040689s ok={True} rc=0 
+julia      k1   aos                  energy     p0 n=10 med=0.067996s ok={True} rc=0 
+julia      k1   soa                  energy     p0 n=10 med=0.008707s ok={True} rc=0 
+julia      k1   natural_shuffled     energy     p0 n=10 med=0.037280s ok={True} rc=0 
+julia      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      k9   natural                         p0 n=10 med=0.038301s ok={True} rc=0 
+julia      k9   tuned                           p0 n=10 med=0.038565s ok={True} rc=0 
+julia      k9   mt                              p0 n=10 med=0.016211s ok={True} rc=0 
+julia      k7   natural                         p0 n=3 med=3.454245s ok={True} rc=0 
+julia      k7   tuned                           p0 n=3 med=0.720688s ok={True} rc=0 
+julia      k5   natural                         p1 n=10 med=0.166189s ok={True} rc=0 
+julia      k5   tuned                           p1 n=10 med=0.007961s ok={True} rc=0 
+julia      k6   natural              q6         p1 n=10 med=0.068607s ok={True} rc=0 
+julia      k6   natural              q1         p1 n=10 med=0.119177s ok={True} rc=0 
+julia      k6   tuned                q6         p1 n=10 med=0.019735s ok={True} rc=0 
+julia      k6   tuned                q1         p1 n=10 med=0.096384s ok={True} rc=0 
+julia      k6   mt                   q6         p1 n=10 med=0.009437s ok={True} rc=0 
+julia      k6   mt                   q1         p1 n=10 med=0.038103s ok={True} rc=0 
+julia      k7   natural                         p1 n=3 med=3.089860s ok={True} rc=0 
+julia      k7   tuned                           p1 n=3 med=0.741615s ok={True} rc=0 
+julia      k4   natural_unsorted                p1 n=10 med=0.003008s ok={True} rc=0 
+julia      k4   natural_sorted                  p1 n=10 med=0.004788s ok={True} rc=0 
+julia      k4   branchless_unsorted             p1 n=10 med=0.003015s ok={True} rc=0 
+julia      k2   tuned                16384      p1 n=10 med=0.006584s ok={True} rc=0 
+julia      k2   tuned                65536      p1 n=10 med=0.018339s ok={True} rc=0 
+julia      k2   tuned                262144     p1 n=10 med=0.018619s ok={True} rc=0 
+julia      k2   tuned                524288     p1 n=10 med=0.028178s ok={True} rc=0 
+julia      k2   tuned                2097152    p1 n=10 med=0.110356s ok={True} rc=0 
+julia      k2   tuned                8388608    p1 n=5 med=0.640585s ok={True} rc=0 
+julia      k2   tuned                16777216   p1 n=4 med=0.685653s ok={True} rc=0 
+julia      k2   tuned                33554432   p1 n=4 med=0.722584s ok={True} rc=0 
+julia      k2   tuned                67108864   p1 n=3 med=0.781863s ok={True} rc=0 
+julia      k2   tuned                268435456  p1 n=3 med=1.471606s ok={True} rc=0 
+julia      k1   natural              energy     p1 n=10 med=0.038231s ok={True} rc=0 
+julia      k1   aos                  energy     p1 n=10 med=0.060019s ok={True} rc=0 
+julia      k1   soa                  energy     p1 n=10 med=0.007577s ok={True} rc=0 
+julia      k1   natural_shuffled     energy     p1 n=10 med=0.038131s ok={True} rc=0 
+julia      k8   natural                         p1 n=3 med=0.901792s ok={True} rc=0 
+julia      k8   tuned                           p1 n=8 med=0.345463s ok={True} rc=0 
+julia      k9   natural                         p1 n=10 med=0.038788s ok={True} rc=0 
+julia      k9   tuned                           p1 n=10 med=0.038152s ok={True} rc=0 
+julia      k9   mt                              p1 n=10 med=0.016643s ok={True} rc=0 
+julia      k3   rmw_packed                      p1 n=3 med=2.254062s ok={True} rc=0 
+julia      k3   rmw_padded                      p1 n=10 med=0.236319s ok={True} rc=0 
+julia      k3   sw_packed                       p1 n=10 med=0.131588s ok={True} rc=0 
+julia      k3   sw_padded                       p1 n=10 med=0.066203s ok={True} rc=0 
+julia      k10  natural                         p1 n=3 med=1.054043s ok={True} rc=0 
+julia      k10  tuned                           p1 n=6 med=0.522135s ok={True} rc=0 
+julia      k6   natural              q6         p2 n=10 med=0.082423s ok={True} rc=0 
+julia      k6   natural              q1         p2 n=10 med=0.132420s ok={True} rc=0 
+julia      k6   tuned                q6         p2 n=10 med=0.024466s ok={True} rc=0 
+julia      k6   tuned                q1         p2 n=10 med=0.115877s ok={True} rc=0 
+julia      k6   mt                   q6         p2 n=10 med=0.010742s ok={True} rc=0 
+julia      k6   mt                   q1         p2 n=10 med=0.039140s ok={True} rc=0 
+julia      k1   natural              energy     p2 n=10 med=0.042716s ok={True} rc=0 
+julia      k1   aos                  energy     p2 n=10 med=0.059956s ok={True} rc=0 
+julia      k1   soa                  energy     p2 n=10 med=0.007990s ok={True} rc=0 
+julia      k1   natural_shuffled     energy     p2 n=10 med=0.040085s ok={True} rc=0 
+julia      k8   natural                         p2 n=3 med=1.097683s ok={True} rc=0 
+julia      k8   tuned                           p2 n=8 med=0.386477s ok={True} rc=0 
+julia      k5   natural                         p2 n=10 med=0.184736s ok={True} rc=0 
+julia      k5   tuned                           p2 n=10 med=0.007639s ok={True} rc=0 

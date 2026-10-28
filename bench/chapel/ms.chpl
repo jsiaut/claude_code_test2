@@ -47,9 +47,21 @@ proc k1Soa(const ref vx: [] real(32), const ref vy: [] real(32), const ref vz: [
   for i in vx.domain do e += (0.5: real(32) * m[i] * (vx[i] * vx[i] + vy[i] * vy[i] + vz[i] * vz[i])): real;
   return e;
 }
+// Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)
+proc rssNow(): int {
+  try {
+    var r = openReader("/proc/self/statm");
+    var size, res: int;
+    r.read(size, res);
+    r.close();
+    return res * 4096;
+  } catch { return 0; }
+}
 proc runK1(v: string, reps: int) {
   if v == "footprint0" { result("k1", v, "energy", 0, 0.0, "0"); return; }
   const raw = loadArr("k1_particles.f32", real(32));
+  if v == "footprint_raw" { result("k1", v, "energy", 0, 0.0, "0"); return; }
+  const m1 = if v == "footprint" then rssNow() else 0;  // P1 : tampon brut chargé
   var sw: stopwatch;
   if v == "soa" {
     var cols: [0..<16] [0..<N1] real(32);
@@ -68,7 +80,13 @@ proc runK1(v: string, reps: int) {
     ps[i] = new Particle(raw[o], raw[o+1], raw[o+2], raw[o+3], raw[o+4], raw[o+5], raw[o+6], raw[o+7], raw[o+8],
                          raw[o+9], raw[o+10], raw[o+11], raw[o+12], raw[o+13], raw[o+14], raw[o+15]);
   }
-  if v == "footprint" { result("k1", v, "energy", 0, 0.0, "%.6dr".format(k1Natural(ps))); return; }
+  if v == "footprint" {
+    const m2 = rssNow();  // P2 : collection construite, tampon brut encore vivant
+    writeln("META;mem;rss;", m1, ";", m2);
+    writeln("META;rss;", m1, ";", m2);
+    writeln("META;raw0;", raw[0]);
+    result("k1", v, "energy", 0, 0.0, "%.6dr".format(k1Natural(ps))); return;
+  }
   if v == "natural_shuffled" {
     const perm = loadArr("k1_perm.u32", uint(32));
     const s = [j in 0..<N1] ps[perm[j]: int];

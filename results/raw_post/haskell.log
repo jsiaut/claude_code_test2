@@ -1,0 +1,42 @@
+haskell    fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    k3   rmw_packed                      p0 n=3 med=2.400528s ok={True} rc=0 
+haskell    k3   rmw_padded                      p0 n=10 med=0.271116s ok={True} rc=0 
+haskell    k3   sw_packed                       p0 n=10 med=4.274221s ok={True} rc=0 
+haskell    k3   sw_padded                       p0 n=10 med=0.318091s ok={True} rc=0 
+haskell    k3   rmw_packed                      p0 n=3 med=2.542816s ok={True} rc=0 
+haskell    k3   rmw_padded                      p0 n=10 med=0.270754s ok={True} rc=0 
+haskell    k3   sw_packed                       p0 n=10 med=4.092947s ok={True} rc=0 
+haskell    k3   sw_padded                       p0 n=10 med=0.341974s ok={True} rc=0 
+haskell    k3   rmw_packed                      p0 n=3 med=2.393489s ok={True} rc=0 
+haskell    k3   rmw_padded                      p0 n=10 med=0.263682s ok={True} rc=0 
+haskell    k3   sw_packed                       p0 n=10 med=4.171258s ok={True} rc=0 
+haskell    k3   sw_padded                       p0 n=10 med=0.338915s ok={True} rc=0 
+haskell    fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    k5   tuned                           p0 n=10 med=0.010968s ok={True} rc=0 
+haskell    k10  tuned                           p0 n=10 med=0.151374s ok={True} rc=0 
+haskell    k10  tuned                           p0 n=10 med=0.110150s ok={True} rc=0 
+haskell    k5   tuned                           p0 n=10 med=0.010240s ok={True} rc=0 
+haskell    k10  tuned                           p0 n=10 med=0.075404s ok={True} rc=0 
+haskell    k5   tuned                           p0 n=10 med=0.007906s ok={True} rc=0 
+haskell    k10  tuned                           p0 n=10 med=0.099903s ok={True} rc=0 
+haskell    k5   tuned                           p0 n=10 med=0.010489s ok={True} rc=0 
+haskell    k5   tuned                           p0 n=10 med=0.006860s ok={True} rc=0 
+haskell    k10  tuned                           p0 n=10 med=0.133115s ok={True} rc=0 
+haskell    k5   tuned                           p0 n=10 med=0.007570s ok={True} rc=0 
+haskell    k10  tuned                           p0 n=10 med=0.113187s ok={True} rc=0 
+haskell    k5   tuned                           p0 n=10 med=0.012558s ok={True} rc=0 
+haskell    k10  tuned                           p0 n=10 med=0.115203s ok={True} rc=0 
+haskell    k10  tuned                           p0 n=10 med=0.094867s ok={True} rc=0 
+haskell    k5   tuned                           p0 n=10 med=0.008729s ok={True} rc=0 
+haskell    k5   tuned                           p0 n=10 med=0.006779s ok={True} rc=0 
+haskell    k10  tuned                           p0 n=10 med=0.074003s ok={True} rc=0 

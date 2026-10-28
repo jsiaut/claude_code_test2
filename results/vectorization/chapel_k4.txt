@@ -1,0 +1,21 @@
+78.2% des échantillons : ms_nat+0xae177 boucle=0xae170-0xae1ca {'n': 19, 'packed': 12, 'wide': 8, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    ae170: vmovd  xmm4,DWORD PTR [r8+r9*1-0xc]
+    ae177: vmovd  xmm5,DWORD PTR [r8+r9*1-0x8]
+    ae17e: vmovd  xmm6,DWORD PTR [r8+r9*1-0x4]
+    ae185: vmovd  xmm7,DWORD PTR [r8+r9*1]
+    ae18b: vpminsb xmm4,xmm4,xmm8
+    ae190: vpminsb xmm5,xmm5,xmm8
+    ae195: vpminsb xmm6,xmm6,xmm8
+    ae19a: vpminsb xmm7,xmm7,xmm8
+    ae19f: vpmovzxbq ymm4,xmm4
+    ae1a4: vpaddq ymm0,ymm0,ymm4
+    ae1a8: vpmovzxbq ymm4,xmm5
+    ae1ad: vpaddq ymm1,ymm1,ymm4
+    ae1b1: vpmovzxbq ymm4,xmm6
+    ae1b6: vpaddq ymm2,ymm2,ymm4
+    ae1ba: vpmovzxbq ymm4,xmm7
+    ae1bf: vpaddq ymm3,ymm3,ymm4
+    ae1c3: add    r9,0x10
+    ae1c7: cmp    rdi,r9
+    ae1ca: jne    ae170 <chpl_user_main+0x4140>
+12.7% des échantillons : ms_nat+0x12b9ce boucle=0x12b9c0-0x12b9da {'n': 10, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

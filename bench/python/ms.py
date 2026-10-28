@@ -66,11 +66,20 @@ def k1_soa(vx, vy, vz, m):
     return 0.5 * (math.sumprod(map(mul, m, vx), vx) + math.sumprod(map(mul, m, vy), vy) + math.sumprod(map(mul, m, vz), vz))
 
 
+def rss_now():
+    """Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)."""
+    with open("/proc/self/statm") as f:
+        return int(f.read().split()[1]) * 4096
+
+
 def run_k1(v, reps):
     if v == "footprint0":
         result("k1", v, "energy", 0, 0, "0")
         return
     raw = load("k1_particles.f32", "f")
+    if v == "footprint_raw":
+        result("k1", v, "energy", 0, 0, "0")
+        return
     if v == "aos":
         bench("k1", v, "energy", reps, lambda: f"{k1_aos(raw):.6f}")
         return
@@ -78,11 +87,14 @@ def run_k1(v, reps):
         cols = [raw[k::16] for k in range(16)]
         bench("k1", v, "energy", reps, lambda: f"{k1_soa(cols[3], cols[4], cols[5], cols[9]):.6f}")
         return
+    m1 = rss_now() if v == "footprint" else 0  # P1 : tampon brut chargé
     ps = [Particle(*raw[16 * i:16 * i + 16]) for i in range(N1)]
-    del raw
     if v == "footprint":
+        m2 = rss_now()  # P2 : collection construite, tampon brut encore vivant
+        print(f"META;mem;rss;{m1};{m2}\nMETA;rss;{m1};{m2}\nMETA;raw0;{raw[0]}", flush=True)
         result("k1", v, "energy", 0, 0, f"{k1_natural(ps):.6f}")
         return
+    del raw
     if v == "natural_shuffled":
         perm = load("k1_perm.u32", "I")
         ps = [ps[j] for j in perm]

@@ -38,12 +38,18 @@ end
     end
     e
 end
+# Empreinte K1 (D2a) : octets vivants du tas après GC complet, et RSS courant (pages de 4 Kio)
+live_now() = (GC.gc(true); Int(Base.gc_live_bytes()))
+rss_now() = parse(Int, split(read("/proc/self/statm", String))[2]) * 4096
 function run_k1(v, reps)
     v == "footprint0" && return result("k1", v, "energy", 0, 0, "0")
     raw = load(Float32, "k1_particles.f32")
+    v == "footprint_raw" && return result("k1", v, "energy", 0, 0, "0")
+    m1, r1 = v == "footprint" ? (live_now(), rss_now()) : (0, 0)  # P1 : tampon brut chargé
     ps = copy(reinterpret(Particle, raw))
     if v == "footprint"
-        raw = nothing; GC.gc()
+        m2, r2 = live_now(), rss_now()  # P2 : collection construite, tampon brut encore vivant
+        println("META;mem;live;$m1;$m2\nMETA;rss;$r1;$r2\nMETA;raw0;$(raw[1])")
         return result("k1", v, "energy", 0, 0, fmt6(k1_natural(ps)))
     end
     if v == "soa"

@@ -1,0 +1,30 @@
+luajit     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=10 med=0.085790s ok={True} rc=0 
+luajit     k10  tuned                           p0 n=10 med=0.021321s ok={True} rc=0 
+luajit     k10  tuned                           p0 n=10 med=0.027798s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=10 med=0.084806s ok={True} rc=0 
+luajit     k10  tuned                           p0 n=10 med=0.028809s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=10 med=0.085252s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=10 med=0.089995s ok={True} rc=0 
+luajit     k10  tuned                           p0 n=10 med=0.022188s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=10 med=0.083200s ok={True} rc=0 
+luajit     k10  tuned                           p0 n=10 med=0.027227s ok={True} rc=0 
+luajit     k10  tuned                           p0 n=10 med=0.021350s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=10 med=0.085719s ok={True} rc=0 
+luajit     k10  tuned                           p0 n=10 med=0.021347s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=10 med=0.088049s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=10 med=0.090363s ok={True} rc=0 
+luajit     k10  tuned                           p0 n=10 med=0.021918s ok={True} rc=0 
+luajit     k10  tuned                           p0 n=10 med=0.024923s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=10 med=0.092434s ok={True} rc=0 

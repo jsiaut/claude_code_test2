@@ -1,0 +1,6 @@
+/home/user/claude_code_test2/probes/csharp/Program.cs(9,40): warning CS0649: Field 'In.N' is never assigned to, and will always have its default value 0 [/home/user/claude_code_test2/probes/csharp/probe.csproj]
+/home/user/claude_code_test2/probes/csharp/Program.cs(9,26): warning CS0649: Field 'In.V' is never assigned to, and will always have its default value [/home/user/claude_code_test2/probes/csharp/probe.csproj]
+CAP;A2;1;Marshal.OffsetOf(S, C)=8
+CAP;A5;1;FieldOffset recouvrants 0x3f800000
+CAP;A7;1;[InlineArray(16)] sizeof(In)=68
+CAP;F4;1;MemoryMappedFile + pointeur : 0.4390046

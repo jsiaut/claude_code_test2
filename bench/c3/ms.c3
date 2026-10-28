@@ -2,6 +2,7 @@
 module ms;
 import std::io, std::io::file, std::time, std::thread, std::thread::channel, std::collections::map;
 import std::atomic, std::math, std::os::env, std::sort, std::core::mem;
+import libc;
 
 // ------------------------------------------------------------------ harnais
 int g_warmup = 1;
@@ -79,12 +80,31 @@ fn double k1_soa(float* vx, float* vy, float* vz, float* m, usz n) @noinline
 	}
 	return (a0 + a1).sum();
 }
+// Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)
+fn long rss_now()
+{
+	CFile f = libc::fopen("/proc/self/statm", "r");
+	if (!f) return 0;
+	long size, res;
+	if (libc::fscanf(f, "%ld %ld", &size, &res) != 2) res = 0;
+	libc::fclose(f);
+	return res * 4096;
+}
 fn void run_k1(String v, int reps)
 {
 	if (v == "footprint0") { result("k1", v, "energy", 0, 0, "0"); return; }
 	float[] raw = load(float, "k1_particles.f32");
+	if (v == "footprint_raw") { result("k1", v, "energy", 0, 0, "0"); return; }
+	long m1 = v == "footprint" ? rss_now() : 0; // P1 : tampon brut chargé
 	Particle[] ps = mem::new_array(Particle, N1);
 	for (usz i = 0; i < N1; i++) ps[i] = *(Particle*)&raw[16 * i];
+	if (v == "footprint")
+	{
+		long m2 = rss_now(); // P2 : collection construite, tampon brut encore vivant
+		io::printfn("META;mem;rss;%d;%d", m1, m2);
+		io::printfn("META;rss;%d;%d", m1, m2);
+		io::printfn("META;raw0;%s", raw[0]);
+	}
 	if (v == "footprint") { free(raw.ptr); result("k1", v, "energy", 0, 0, string::tformat("%.6f", k1_natural(ps))); return; }
 	if (v == "soa")
 	{

@@ -3,7 +3,7 @@ from std.atomic import Atomic, Ordering
 from std.memory import bitcast
 
 def main():
-    var a = Atomic[DType.int64](0)
+    var a = Atomic[Int64](0)
     _ = a.fetch_add[ordering=Ordering.RELAXED](1)
     print("CAP;D2;1;Atomic.fetch_add[ordering=RELAXED]")
     var x: Float32 = 1.0

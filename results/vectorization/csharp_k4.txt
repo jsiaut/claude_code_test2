@@ -1,0 +1,11 @@
+28.1% des échantillons : JIT 0x7f0d5d2829e5 boucle=0x7f0d5d2829e5-0x7f0d5d2829fb {'n': 8, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    7f0d5d2829e5: inc    edx
+    7f0d5d2829e7: cmp    edi,edx
+    7f0d5d2829e9: jle    0x7f0d5d2829ff
+    7f0d5d2829eb: cmp    edx,edi
+    7f0d5d2829ed: jae    0x7f0d5d282a05
+    7f0d5d2829ef: rex movzx esi,BYTE PTR [rcx+rdx*1+0x10]
+    7f0d5d2829f5: cmp    esi,0x80
+    7f0d5d2829fb: jl     0x7f0d5d2829e5
+25.8% des échantillons : JIT 0x7f0d5d285de5 boucle=0x7f0d5d285de5-0x7f0d5d285dfb {'n': 8, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+19.0% des échantillons : JIT 0x7f0d5d2829fd boucle=0x7f0d5d2829e0-0x7f0d5d2829fd {'n': 11, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

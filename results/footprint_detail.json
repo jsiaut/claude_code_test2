@@ -1,0 +1,352 @@
+{
+ "ada": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.0,
+  "kind": "rss",
+  "measured": 64.0,
+  "note": "",
+  "per_process": [
+   64.001,
+   64.001,
+   64.001
+  ],
+  "rss_bytes_per_particle": 64.0,
+  "rss_p1_mib": 2.3
+ },
+ "c": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.02,
+  "kind": "rss",
+  "measured": 64.02,
+  "note": "",
+  "per_process": [
+   64.019,
+   64.019,
+   64.019
+  ],
+  "rss_bytes_per_particle": 64.02,
+  "rss_p1_mib": 1.6
+ },
+ "c3": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.03,
+  "kind": "rss",
+  "measured": 64.03,
+  "note": "",
+  "per_process": [
+   64.03,
+   64.03,
+   64.03
+  ],
+  "rss_bytes_per_particle": 64.03,
+  "rss_p1_mib": 257.7
+ },
+ "c_gcc": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.02,
+  "kind": "rss",
+  "measured": 64.02,
+  "note": "",
+  "per_process": [
+   64.019,
+   64.018,
+   64.018
+  ],
+  "rss_bytes_per_particle": 64.02,
+  "rss_p1_mib": 1.6
+ },
+ "chapel": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.02,
+  "kind": "rss",
+  "measured": 64.02,
+  "note": "",
+  "per_process": [
+   64.016,
+   64.016,
+   64.016
+  ],
+  "rss_bytes_per_particle": 64.02,
+  "rss_p1_mib": 262.5
+ },
+ "cpp": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.02,
+  "kind": "rss",
+  "measured": 64.02,
+  "note": "",
+  "per_process": [
+   64.017,
+   64.017,
+   64.017
+  ],
+  "rss_bytes_per_particle": 64.02,
+  "rss_p1_mib": 259.5
+ },
+ "csharp": {
+  "D2a": 0.727,
+  "bytes_per_particle": 88.0,
+  "kind": "live",
+  "measured": 88.0,
+  "note": "",
+  "per_process": [
+   88.0,
+   88.0,
+   88.0
+  ],
+  "rss_bytes_per_particle": 25.86,
+  "rss_p1_mib": 537.7
+ },
+ "d": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.0,
+  "kind": "live",
+  "measured": 64.0,
+  "note": "",
+  "per_process": [
+   64.001,
+   64.001,
+   64.001
+  ],
+  "rss_bytes_per_particle": 0.0,
+  "rss_p1_mib": 515.5
+ },
+ "fortran": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.0,
+  "kind": "rss",
+  "measured": 64.0,
+  "note": "",
+  "per_process": [
+   64.002,
+   64.002,
+   64.002
+  ],
+  "rss_bytes_per_particle": 64.0,
+  "rss_p1_mib": 2.9
+ },
+ "fortran_flang": {
+  "D2a": 0.999,
+  "bytes_per_particle": 64.03,
+  "kind": "rss",
+  "measured": 64.03,
+  "note": "",
+  "per_process": [
+   64.031,
+   64.049,
+   64.032
+  ],
+  "rss_bytes_per_particle": 64.03,
+  "rss_p1_mib": 2.8
+ },
+ "go": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.0,
+  "kind": "live",
+  "measured": 64.0,
+  "note": "",
+  "per_process": [
+   64.0,
+   64.0,
+   64.0
+  ],
+  "rss_bytes_per_particle": 64.13,
+  "rss_p1_mib": 259.2
+ },
+ "haskell": {
+  "D2a": 0.667,
+  "bytes_per_particle": 96.0,
+  "kind": "live",
+  "measured": 96.0,
+  "note": "",
+  "per_process": [
+   95.998,
+   95.998,
+   95.999
+  ],
+  "rss_bytes_per_particle": 224.96,
+  "rss_p1_mib": 517.0
+ },
+ "java": {
+  "D2a": 0.82,
+  "bytes_per_particle": 78.01,
+  "kind": "live",
+  "measured": 78.01,
+  "note": "",
+  "per_process": [
+   78.019,
+   78.008,
+   78.009
+  ],
+  "rss_bytes_per_particle": 36.8,
+  "rss_p1_mib": 577.7
+ },
+ "js": {
+  "D2a": 0.154,
+  "bytes_per_particle": 416.4,
+  "kind": "live",
+  "measured": 416.4,
+  "note": "",
+  "per_process": [
+   416.4,
+   416.4,
+   416.4
+  ],
+  "rss_bytes_per_particle": 433.13,
+  "rss_p1_mib": 298.1
+ },
+ "js_bun": {
+  "D2a": 0.377,
+  "bytes_per_particle": 169.58,
+  "kind": "live",
+  "measured": 169.58,
+  "note": "",
+  "per_process": [
+   169.582,
+   169.582,
+   169.582
+  ],
+  "rss_bytes_per_particle": 177.26,
+  "rss_p1_mib": 276.5
+ },
+ "julia": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.0,
+  "kind": "live",
+  "measured": 64.0,
+  "note": "",
+  "per_process": [
+   64.001,
+   64.001,
+   64.001
+  ],
+  "rss_bytes_per_particle": 63.86,
+  "rss_p1_mib": 560.3
+ },
+ "lua": {
+  "D2a": 0.143,
+  "bytes_per_particle": 449.0,
+  "kind": "live",
+  "measured": 449.0,
+  "note": "",
+  "per_process": [
+   449.0,
+   449.0,
+   449.0
+  ],
+  "rss_bytes_per_particle": 442.14,
+  "rss_p1_mib": 701.8
+ },
+ "luajit": {
+  "D2a": 0.15,
+  "bytes_per_particle": 428.0,
+  "kind": "live",
+  "measured": 428.0,
+  "note": "",
+  "per_process": [
+   428.002,
+   428.002,
+   428.002
+  ],
+  "rss_bytes_per_particle": 444.11,
+  "rss_p1_mib": 386.7
+ },
+ "mojo": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.0,
+  "kind": "rss",
+  "measured": 58.0,
+  "note": "l'allocateur du runtime Mojo (r\u00e9servations de 1 Gio, lib\u00e9ration par madvise) r\u00e9utilise environ 24 Mo du tampon de chargement lib\u00e9r\u00e9 pour la liste : le RSS ne voit que 58 o",
+  "per_process": [
+   58.0,
+   58.0,
+   58.0
+  ],
+  "rss_bytes_per_particle": 58.0,
+  "rss_p1_mib": 292.2
+ },
+ "nim": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.0,
+  "kind": "live",
+  "measured": 66.0,
+  "note": "l'allocateur de Nim arrondit la demande de 256 Mio \u00e0 sa classe de taille (264 Mio, 8 Mio jamais touch\u00e9s) : getOccupiedMem compte 66 o, la m\u00e9moire physique est de 64 o",
+  "per_process": [
+   66.0,
+   66.0,
+   66.0
+  ],
+  "rss_bytes_per_particle": 0.02,
+  "rss_p1_mib": 513.9
+ },
+ "ocaml": {
+  "D2a": 0.444,
+  "bytes_per_particle": 144.0,
+  "kind": "live",
+  "measured": 144.0,
+  "note": "",
+  "per_process": [
+   144.0,
+   144.0,
+   144.0
+  ],
+  "rss_bytes_per_particle": 209.07,
+  "rss_p1_mib": 3.7
+ },
+ "odin": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.0,
+  "kind": "rss",
+  "measured": 64.0,
+  "note": "",
+  "per_process": [
+   64.001,
+   64.001,
+   64.001
+  ],
+  "rss_bytes_per_particle": 64.0,
+  "rss_p1_mib": 257.9
+ },
+ "python": {
+  "D2a": 0.085,
+  "bytes_per_particle": 749.65,
+  "kind": "rss",
+  "measured": 749.65,
+  "note": "",
+  "per_process": [
+   749.736,
+   749.632,
+   749.651
+  ],
+  "rss_bytes_per_particle": 749.65,
+  "rss_p1_mib": 267.7
+ },
+ "rust": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.01,
+  "kind": "rss",
+  "measured": 64.01,
+  "note": "",
+  "per_process": [
+   64.001,
+   64.015,
+   64.017
+  ],
+  "rss_bytes_per_particle": 64.01,
+  "rss_p1_mib": 258.1
+ },
+ "zig": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.0,
+  "kind": "rss",
+  "measured": 64.0,
+  "note": "",
+  "per_process": [
+   64.0,
+   64.0,
+   64.0
+  ],
+  "rss_bytes_per_particle": 64.0,
+  "rss_p1_mib": 256.8
+ }
+}

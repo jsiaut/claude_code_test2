@@ -1,0 +1,94 @@
+haskell    k1   natural              energy     p0 n=10 med=0.071858s ok={True} rc=0 
+haskell    k1   aos                  energy     p0 n=10 med=0.041502s ok={True} rc=0 
+haskell    k1   soa                  energy     p0 n=10 med=0.009390s ok={True} rc=0 
+haskell    k1   natural_shuffled     energy     p0 n=10 med=0.066592s ok={True} rc=0 
+haskell    k9   natural                         p0 n=8 med=0.370724s ok={True} rc=0 
+haskell    k9   tuned                           p0 n=10 med=0.041915s ok={True} rc=0 
+haskell    k9   mt                              p0 n=10 med=0.021919s ok={True} rc=0 
+haskell    k7   natural                         p0 n=2 med=92.050740s ok={True} rc=0 
+haskell    k7   tuned                           p0 n=4 med=0.769074s ok={True} rc=0 
+haskell    k2   tuned                16384      p0 n=10 med=0.007978s ok={True} rc=0 
+haskell    k2   tuned                65536      p0 n=10 med=0.019494s ok={True} rc=0 
+haskell    k2   tuned                262144     p0 n=10 med=0.019868s ok={True} rc=0 
+haskell    k2   tuned                524288     p0 n=10 med=0.028208s ok={True} rc=0 
+haskell    k2   tuned                2097152    p0 n=10 med=0.118367s ok={True} rc=0 
+haskell    k2   tuned                8388608    p0 n=5 med=0.568371s ok={True} rc=0 
+haskell    k2   tuned                16777216   p0 n=4 med=0.657068s ok={True} rc=0 
+haskell    k2   tuned                33554432   p0 n=4 med=0.766015s ok={True} rc=0 
+haskell    k2   tuned                67108864   p0 n=3 med=0.990856s ok={True} rc=0 
+haskell    k2   tuned                268435456  p0 n=3 med=1.568405s ok={True} rc=0 
+haskell    k5   natural                         p0 n=4 med=0.611235s ok={True} rc=0 
+haskell    k5   tuned                           p0 n=10 med=0.009324s ok={True} rc=0 
+haskell    k3   rmw_packed                      p0 n=3 med=2.435244s ok={True} rc=0 
+haskell    k3   rmw_padded                      p0 n=10 med=0.277137s ok={True} rc=0 
+haskell    k3   sw_packed                       p0 n=10 med=0.000112s ok={True} rc=0 
+haskell    k3   sw_padded                       p0 n=10 med=0.000105s ok={True} rc=0 
+haskell    fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+haskell    k10  natural                         p0 n=3 med=1.001884s ok={True} rc=0 
+haskell    k10  tuned                           p0 n=10 med=0.107295s ok={True} rc=0 
+haskell    k8   natural                         p0 n=3 med=2.644689s ok={True} rc=0 
+haskell    k8   tuned                           p0 n=3 med=1.143333s ok={True} rc=0 
+haskell    k6   natural              q6         p0 n=10 med=0.089006s ok={True} rc=0 
+haskell    k6   natural              q1         p0 n=10 med=0.104620s ok={True} rc=0 
+haskell    k6   tuned                q6         p0 n=10 med=0.068009s ok={True} rc=0 
+haskell    k6   tuned                q1         p0 n=10 med=0.072209s ok={True} rc=0 
+haskell    k6   mt                   q6         p0 n=10 med=0.016514s ok={True} rc=0 
+haskell    k6   mt                   q1         p0 n=10 med=0.031600s ok={True} rc=0 
+haskell    k4   natural_unsorted                p0 n=10 med=0.072138s ok={True} rc=0 
+haskell    k4   natural_sorted                  p0 n=10 med=0.009137s ok={True} rc=0 
+haskell    k4   branchless_unsorted             p0 n=10 med=0.013192s ok={True} rc=0 
+haskell    k8   natural                         p1 n=3 med=2.078917s ok={True} rc=0 
+haskell    k8   tuned                           p1 n=3 med=1.183384s ok={True} rc=0 
+haskell    k2   tuned                16384      p1 n=10 med=0.007907s ok={True} rc=0 
+haskell    k2   tuned                65536      p1 n=10 med=0.019331s ok={True} rc=0 
+haskell    k2   tuned                262144     p1 n=10 med=0.020189s ok={True} rc=0 
+haskell    k2   tuned                524288     p1 n=10 med=0.029779s ok={True} rc=0 
+haskell    k2   tuned                2097152    p1 n=10 med=0.115149s ok={True} rc=0 
+haskell    k2   tuned                8388608    p1 n=5 med=0.600555s ok={True} rc=0 
+haskell    k2   tuned                16777216   p1 n=4 med=0.678438s ok={True} rc=0 
+haskell    k2   tuned                33554432   p1 n=4 med=0.977170s ok={True} rc=0 
+haskell    k2   tuned                67108864   p1 n=3 med=0.953354s ok={True} rc=0 
+haskell    k2   tuned                268435456  p1 n=3 med=1.512301s ok={True} rc=0 
+haskell    k7   natural                         p1 n=2 med=86.479002s ok={True} rc=0 
+haskell    k7   tuned                           p1 n=4 med=0.738592s ok={True} rc=0 
+haskell    k6   natural              q6         p1 n=10 med=0.064879s ok={True} rc=0 
+haskell    k6   natural              q1         p1 n=10 med=0.107872s ok={True} rc=0 
+haskell    k6   tuned                q6         p1 n=10 med=0.073586s ok={True} rc=0 
+haskell    k6   tuned                q1         p1 n=10 med=0.068935s ok={True} rc=0 
+haskell    k6   mt                   q6         p1 n=10 med=0.020374s ok={True} rc=0 
+haskell    k6   mt                   q1         p1 n=10 med=0.033116s ok={True} rc=0 
+haskell    k3   rmw_packed                      p1 n=3 med=2.469782s ok={True} rc=0 
+haskell    k3   rmw_padded                      p1 n=10 med=0.295481s ok={True} rc=0 
+haskell    k3   sw_packed                       p1 n=10 med=0.000150s ok={True} rc=0 
+haskell    k3   sw_padded                       p1 n=10 med=0.000105s ok={True} rc=0 
+haskell    k1   natural              energy     p1 n=10 med=0.071028s ok={True} rc=0 
+haskell    k1   aos                  energy     p1 n=10 med=0.041388s ok={True} rc=0 
+haskell    k1   soa                  energy     p1 n=10 med=0.010519s ok={True} rc=0 
+haskell    k1   natural_shuffled     energy     p1 n=10 med=0.074426s ok={True} rc=0 
+haskell    k4   natural_unsorted                p1 n=10 med=0.072881s ok={True} rc=0 
+haskell    k4   natural_sorted                  p1 n=10 med=0.008984s ok={True} rc=0 
+haskell    k4   branchless_unsorted             p1 n=10 med=0.010788s ok={True} rc=0 
+haskell    k9   natural                         p1 n=8 med=0.416155s ok={True} rc=0 
+haskell    k9   tuned                           p1 n=10 med=0.039525s ok={True} rc=0 
+haskell    k9   mt                              p1 n=10 med=0.019041s ok={True} rc=0 
+haskell    k5   natural                         p1 n=4 med=0.647284s ok={True} rc=0 
+haskell    k5   tuned                           p1 n=10 med=0.011354s ok={True} rc=0 
+haskell    k10  natural                         p1 n=3 med=1.330088s ok={True} rc=0 
+haskell    k10  tuned                           p1 n=10 med=0.102842s ok={True} rc=0 
+haskell    k4   natural_unsorted                p2 n=10 med=0.075835s ok={True} rc=0 
+haskell    k4   natural_sorted                  p2 n=10 med=0.008738s ok={True} rc=0 
+haskell    k4   branchless_unsorted             p2 n=10 med=0.011008s ok={True} rc=0 
+haskell    k5   natural                         p2 n=4 med=0.684898s ok={True} rc=0 
+haskell    k5   tuned                           p2 n=10 med=0.008331s ok={True} rc=0 
+haskell    k8   natural                         p2 n=3 med=2.604160s ok={True} rc=0 
+haskell    k8   tuned                           p2 n=3 med=1.243307s ok={True} rc=0 
+haskell    k1   natural              energy     p2 n=10 med=0.070582s ok={True} rc=0 
+haskell    k1   aos                  energy     p2 n=10 med=0.037655s ok={True} rc=0 
+haskell    k1   soa                  energy     p2 n=10 med=0.008685s ok={True} rc=0 
+haskell    k1   natural_shuffled     energy     p2 n=10 med=0.060007s ok={True} rc=0 
+haskell    k9   natural                         p2 n=8 med=0.462700s ok={True} rc=0 
+haskell    k9   tuned                           p2 n=10 med=0.040421s ok={True} rc=0 
+haskell    k9   mt                              p2 n=10 med=0.019609s ok={True} rc=0 
+haskell    k10  natural                         p2 n=3 med=0.881232s ok={True} rc=0 
+haskell    k10  tuned                           p2 n=10 med=0.094393s ok={True} rc=0 

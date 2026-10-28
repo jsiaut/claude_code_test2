@@ -1,0 +1,10 @@
+97.9% des échantillons : ms+0x40848b boucle=0x408488-0x4084a0 {'n': 9, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    408488: movzx  eax,BYTE PTR [rsi]
+    40848b: mov    rdi,rax
+    40848e: add    rax,rdx
+    408491: test   dil,dil
+    408494: cmovs  rdx,rax
+    408498: inc    ecx
+    40849a: add    rsi,r13
+    40849d: cmp    ecx,r12d
+    4084a0: jne    408488 <__k25m_MOD_run_k4+0x368>

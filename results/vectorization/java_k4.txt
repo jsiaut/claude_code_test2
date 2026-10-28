@@ -1,0 +1,54 @@
+85.0% des échantillons : JIT 0x7f8a03ce13d7 boucle=0x7f8a03ce1380-0x7f8a03ce144c {'n': 52, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    7f8a03ce1380: add    r8d,0x8
+    7f8a03ce1384: cmp    r8d,r9d
+    7f8a03ce1387: jge    0x7f8a03ce1451
+    7f8a03ce138d: movsxd rbp,r8d
+    7f8a03ce1390: movzx  edx,BYTE PTR [rsi+rbp*1+0xc]
+    7f8a03ce1395: cmp    edx,0x80
+    7f8a03ce139b: jl     0x7f8a03ce13a6
+    7f8a03ce139d: movsxd rbx,edx
+    7f8a03ce13a0: add    rbx,rax
+    7f8a03ce13a3: mov    rax,rbx
+    7f8a03ce13a6: movzx  ebx,BYTE PTR [rsi+rbp*1+0xd]
+    7f8a03ce13ab: cmp    ebx,0x80
+    7f8a03ce13b1: jl     0x7f8a03ce13bc
+    7f8a03ce13b3: movsxd rbx,ebx
+    7f8a03ce13b6: add    rbx,rax
+    7f8a03ce13b9: mov    rax,rbx
+    7f8a03ce13bc: movzx  edx,BYTE PTR [rsi+rbp*1+0xe]
+    7f8a03ce13c1: cmp    edx,0x80
+    7f8a03ce13c7: jl     0x7f8a03ce13d2
+    7f8a03ce13c9: movsxd rbx,edx
+    7f8a03ce13cc: add    rbx,rax
+    7f8a03ce13cf: mov    rax,rbx
+    7f8a03ce13d2: movzx  ebx,BYTE PTR [rsi+rbp*1+0xf]
+    7f8a03ce13d7: cmp    ebx,0x80
+    7f8a03ce13dd: jl     0x7f8a03ce13e8
+    7f8a03ce13df: movsxd rbx,ebx
+    7f8a03ce13e2: add    rbx,rax
+    7f8a03ce13e5: mov    rax,rbx
+    7f8a03ce13e8: movzx  edx,BYTE PTR [rsi+rbp*1+0x10]
+    7f8a03ce13ed: cmp    edx,0x80
+    7f8a03ce13f3: jl     0x7f8a03ce13fe
+    7f8a03ce13f5: movsxd rbx,edx
+    7f8a03ce13f8: add    rbx,rax
+    7f8a03ce13fb: mov    rax,rbx
+    7f8a03ce13fe: movzx  ebx,BYTE PTR [rsi+rbp*1+0x11]
+    7f8a03ce1403: cmp    ebx,0x80
+    7f8a03ce1409: jl     0x7f8a03ce1414
+    7f8a03ce140b: movsxd rbx,ebx
+    7f8a03ce140e: add    rbx,rax
+    7f8a03ce1411: mov    rax,rbx
+    7f8a03ce1414: movzx  edx,BYTE PTR [rsi+rbp*1+0x12]
+    7f8a03ce1419: nop    DWORD PTR [rax+0x0]
+    7f8a03ce1420: cmp    edx,0x80
+    7f8a03ce1426: jl     0x7f8a03ce1431
+    7f8a03ce1428: movsxd rbx,edx
+    7f8a03ce142b: add    rbx,rax
+    7f8a03ce142e: mov    rax,rbx
+    7f8a03ce1431: movzx  ebx,BYTE PTR [rsi+rbp*1+0x13]
+    7f8a03ce1436: data16 nop WORD PTR [rax+rax*1+0x0]
+    7f8a03ce1440: cmp    ebx,0x80
+    7f8a03ce1446: jge    0x7f8a03ce1377
+    7f8a03ce144c: jmp    0x7f8a03ce1380
+5.3% des échantillons : JIT 0x7f8a03ce1377 boucle=0x7f8a03ce1377-0x7f8a03ce1446 {'n': 54, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

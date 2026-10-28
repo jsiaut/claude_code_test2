@@ -1,0 +1,42 @@
+c          fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          k3   rmw_packed                      p0 n=3 med=2.443939s ok={True} rc=0 
+c          k3   rmw_padded                      p0 n=10 med=0.213177s ok={True} rc=0 
+c          k3   sw_packed                       p0 n=10 med=0.133768s ok={True} rc=0 
+c          k3   sw_padded                       p0 n=10 med=0.059478s ok={True} rc=0 
+c          k3   rmw_packed                      p0 n=3 med=2.328930s ok={True} rc=0 
+c          k3   rmw_padded                      p0 n=10 med=0.207842s ok={True} rc=0 
+c          k3   sw_packed                       p0 n=10 med=0.137692s ok={True} rc=0 
+c          k3   sw_padded                       p0 n=10 med=0.059171s ok={True} rc=0 
+c          k3   rmw_packed                      p0 n=3 med=2.685952s ok={True} rc=0 
+c          k3   rmw_padded                      p0 n=10 med=0.197699s ok={True} rc=0 
+c          k3   sw_packed                       p0 n=10 med=0.128076s ok={True} rc=0 
+c          k3   sw_padded                       p0 n=10 med=0.060791s ok={True} rc=0 
+c          fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+c          k5   tuned                           p0 n=10 med=0.004934s ok={True} rc=0 
+c          k10  tuned                           p0 n=10 med=0.086456s ok={True} rc=0 
+c          k10  tuned                           p0 n=10 med=0.077988s ok={True} rc=0 
+c          k5   tuned                           p0 n=10 med=0.008366s ok={True} rc=0 
+c          k5   tuned                           p0 n=10 med=0.004839s ok={True} rc=0 
+c          k10  tuned                           p0 n=10 med=0.081055s ok={True} rc=0 
+c          k10  tuned                           p0 n=10 med=0.092774s ok={True} rc=0 
+c          k5   tuned                           p0 n=10 med=0.004883s ok={True} rc=0 
+c          k10  tuned                           p0 n=10 med=0.028836s ok={True} rc=0 
+c          k5   tuned                           p0 n=10 med=0.004791s ok={True} rc=0 
+c          k5   tuned                           p0 n=10 med=0.008709s ok={True} rc=0 
+c          k10  tuned                           p0 n=10 med=0.104360s ok={True} rc=0 
+c          k5   tuned                           p0 n=10 med=0.008194s ok={True} rc=0 
+c          k10  tuned                           p0 n=10 med=0.116562s ok={True} rc=0 
+c          k10  tuned                           p0 n=10 med=0.071491s ok={True} rc=0 
+c          k5   tuned                           p0 n=10 med=0.004780s ok={True} rc=0 
+c          k10  tuned                           p0 n=10 med=0.072336s ok={True} rc=0 
+c          k5   tuned                           p0 n=10 med=0.004670s ok={True} rc=0 

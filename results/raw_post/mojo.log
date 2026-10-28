@@ -1,0 +1,30 @@
+mojo       fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+mojo       k10  tuned                           p0 n=10 med=0.039344s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=10 med=0.005315s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=10 med=0.008610s ok={True} rc=0 
+mojo       k10  tuned                           p0 n=10 med=0.063017s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=10 med=0.005064s ok={True} rc=0 
+mojo       k10  tuned                           p0 n=10 med=0.039351s ok={True} rc=0 
+mojo       k10  tuned                           p0 n=10 med=0.040899s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=10 med=0.005324s ok={True} rc=0 
+mojo       k10  tuned                           p0 n=10 med=0.077882s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=10 med=0.005662s ok={True} rc=0 
+mojo       k10  tuned                           p0 n=10 med=0.080179s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=10 med=0.005287s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=10 med=0.008487s ok={True} rc=0 
+mojo       k10  tuned                           p0 n=10 med=0.077967s ok={True} rc=0 
+mojo       k10  tuned                           p0 n=10 med=0.068807s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=10 med=0.005235s ok={True} rc=0 
+mojo       k10  tuned                           p0 n=10 med=0.080388s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=10 med=0.006671s ok={True} rc=0 

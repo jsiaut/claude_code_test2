@@ -1,4 +1,4 @@
-import std/memfiles, std/atomics, std/sysatomics, std/typedthreads
+import std/memfiles, std/atomics, std/sysatomics, std/typedthreads, std/strutils
 type
   S = object
     a: uint8

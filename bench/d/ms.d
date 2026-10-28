@@ -14,6 +14,7 @@ import std.conv : to;
 import std.format : format;
 import std.process : environment;
 import std.stdio : writefln, writeln, stdout;
+import std.array : split;
 static import std.file;
 
 alias float16 = __vector(float[16]);
@@ -77,11 +78,29 @@ double k1SoA(const(float)* vx, const(float)* vy, const(float)* vz, const(float)*
     foreach (x; s.array) r += x;
     return r;
 }
+// Empreinte K1 (D2a) : octets vivants du tas du GC après une collecte complète, et RSS courant
+long liveNow() {
+    GC.collect();
+    return cast(long) GC.stats().usedSize;
+}
+long rssNow() {
+    import std.stdio : File; // readText se fie à la taille du fichier, nulle sous /proc : on lit une ligne
+    try return File("/proc/self/statm").readln().split()[1].to!long * 4096;
+    catch (Exception) return 0;
+}
+
 void runK1(string v, int reps) {
     if (v == "footprint0") { result("k1", v, "energy", 0, 0, "0"); return; }
     auto raw = load!float("k1_particles.f32");
+    if (v == "footprint_raw") { result("k1", v, "energy", 0, 0, "0"); return; }
+    long m1, r1;
+    if (v == "footprint") { m1 = liveNow(); r1 = rssNow(); } // P1 : tampon brut chargé
     auto ps = new Particle[N1]; // tableau dynamique géré par le GC (valeurs contiguës)
     foreach (i; 0 .. N1) ps[i] = *cast(Particle*)&raw[16 * i];
+    if (v == "footprint") { // P2 : collection construite, tampon brut encore vivant
+        const m2 = liveNow(), r2 = rssNow();
+        writefln("META;mem;live;%d;%d\nMETA;rss;%d;%d\nMETA;raw0;%s", m1, m2, r1, r2, raw[0]);
+    }
     if (v == "footprint") { free(raw.ptr); result("k1", v, "energy", 0, 0, format("%.6f", k1Natural(ps))); return; }
     if (v == "soa") {
         float*[16] c;

@@ -113,14 +113,30 @@ unsafe fn k1_soa(vx: &[f32], vy: &[f32], vz: &[f32], m: &[f32]) -> f64 {
     }
     _mm512_reduce_add_pd(_mm512_add_pd(a0, a1))
 }
+/// Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)
+fn rss_now() -> i64 {
+    std::fs::read_to_string("/proc/self/statm")
+        .ok()
+        .and_then(|s| s.split_whitespace().nth(1).and_then(|x| x.parse::<i64>().ok()))
+        .unwrap_or(0)
+        * 4096
+}
+
 fn run_k1(v: &str, reps: i32) {
     if v == "footprint0" {
         result("k1", v, "energy", 0, 0.0, "0");
         return;
     }
     let raw = load_f32("k1_particles.f32");
+    if v == "footprint_raw" {
+        result("k1", v, "energy", 0, 0.0, "0");
+        return;
+    }
+    let m1 = if v == "footprint" { rss_now() } else { 0 }; // P1 : tampon brut chargé
     let mut ps: Vec<Particle> = raw.chunks_exact(16).map(Particle::from).collect();
     if v == "footprint" {
+        let m2 = rss_now(); // P2 : collection construite, tampon brut encore vivant
+        println!("META;mem;rss;{m1};{m2}\nMETA;rss;{m1};{m2}\nMETA;raw0;{}", raw[0]);
         drop(raw);
         result("k1", v, "energy", 0, 0.0, &format!("{:.6}", k1_natural(&ps)));
         return;

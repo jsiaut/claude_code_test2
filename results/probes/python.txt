@@ -1,0 +1,4 @@
+CAP;A2;0.5;ctypes S.c.offset=8
+CAP;A3;0.5;ctypes _pack_=1 et champ de 3 bits : sizeof(P)=9
+CAP;F4;1;mmap + memoryview.cast('f') sans copie : 0.4390046000480652
+CAP;D4;0.5;os.sched_setaffinity -> {0}

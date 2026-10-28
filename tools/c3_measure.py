@@ -25,8 +25,9 @@ def main():
         for k, v, p in KERNELS:
             prefix = os.path.join(outdir, f"{lang}_{k}")
             env = dict(os.environ, WARMUP="3" if lang in JIT else "1")
-            reps = "6" if k == "k4" else "3"
-            cmd = ["/opt/sampler", "-f", "2000", "-o", prefix, "--", os.path.join(ROOT, "bench", lang, "run"), k, v, reps] + ([p] if p else [])
+            # assez de répétitions pour que le noyau domine le chargement des données (profil > 0,3 s)
+            reps = "60" if k == "k4" else "20"
+            cmd = ["/opt/sampler", "-f", "4000", "-o", prefix, "--", os.path.join(ROOT, "bench", lang, "run"), k, v, reps] + ([p] if p else [])
             subprocess.run(cmd, cwd=os.path.join(ROOT, "bench", lang), env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             import io, contextlib
             buf = io.StringIO()

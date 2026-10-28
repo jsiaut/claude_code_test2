@@ -84,6 +84,13 @@ static void drain(struct perf_event_mmap_page *mp) {
     __atomic_store_n(&mp->data_tail, tail, __ATOMIC_RELEASE);
 }
 
+// code JIT : adresse sans projection connue, projection anonyme (« //anon ») ou mémoire partagée
+// anonyme (« /memfd:... », double projection du JIT de .NET)
+static int is_jit(const Map *m) {
+    return !m || !m->name[0] || !strncmp(m->name, "//anon", 6) || !strncmp(m->name, "/memfd:", 7) ||
+           (m->name[0] != '/' && m->name[0] != '[');
+}
+
 static int cmp(const void *a, const void *b) {
     const Ent *x = a, *y = b;
     return (y->n > x->n) - (y->n < x->n);
@@ -149,21 +156,20 @@ int main(int argc, char **argv) {
         for (int c = 0; c < ncpu; c++) drain(mps[c]);
         if (w == child) break;
         clock_gettime(CLOCK_MONOTONIC, &now);
-        if (now.tv_sec - last.tv_sec >= 1) {  // chaque seconde : copie des 8 régions anonymes les plus chaudes
+        if ((now.tv_sec - last.tv_sec) * 1000000000L + (now.tv_nsec - last.tv_nsec) >= 100000000L) {
+            // toutes les 100 ms : copie des 16 régions de code JIT les plus chaudes (1 Kio autour de l'IP)
             last = now;
             FILE *jf = NULL;
-            Ent top[8] = {0};
+            Ent top[16] = {0};
             for (int k = 0; k < MAXIP; k++) {
                 if (!tab[k].n) continue;
-                const Map *m = find_map(tab[k].ip);
-                if (m && m->name[0] && m->name[0] != '/' && m->name[0] != '[') { /* //anon : JIT */ }
-                else if (m) continue;
-                for (int t = 0; t < 8; t++)
-                    if (tab[k].n > top[t].n) { memmove(&top[t + 1], &top[t], (7 - t) * sizeof(Ent)); top[t] = tab[k]; break; }
+                if (!is_jit(find_map(tab[k].ip))) continue;
+                for (int t = 0; t < 16; t++)
+                    if (tab[k].n > top[t].n) { memmove(&top[t + 1], &top[t], (15 - t) * sizeof(Ent)); top[t] = tab[k]; break; }
             }
-            for (int t = 0; t < 8 && top[t].n; t++) {
-                unsigned char code[512];
-                uint64_t base = top[t].ip - 256;
+            for (int t = 0; t < 16 && top[t].n; t++) {
+                unsigned char code[1024];
+                uint64_t base = top[t].ip - 512;
                 struct iovec lv = {code, sizeof code}, rv = {(void *)base, sizeof code};
                 if (process_vm_readv(child, &lv, 1, &rv, 1, 0) == (ssize_t)sizeof code) {
                     if (!jf) jf = fopen(path, "w");

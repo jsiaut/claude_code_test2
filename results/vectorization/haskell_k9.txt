@@ -1,0 +1,63 @@
+32.2% des échantillons : ms+0x239937 boucle=0x239000-0x23994b {'n': 393, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+    239337: push   rax
+    239338: mov    rbp,rax
+    23933b: jmp    0x239000
+    239340: mov    QWORD PTR [rbp+0x50],0x239460
+    239348: inc    r8
+    23934b: inc    rdi
+    23934e: mov    rsi,QWORD PTR [rbp+0x30]
+    239352: mov    rbp,rax
+    239355: jmp    0x238f98
+    23935a: add    rbp,0x20
+    23935e: mov    QWORD PTR [r13+0x388],0x20
+    239369: mov    QWORD PTR [rbp+0x0],0x2394f0
+    239371: mov    r12,rax
+    239374: jmp    0x365a58
+    239379: mov    QWORD PTR [rax],0x2393a0
+    239380: mov    rbp,rax
+    239383: mov    rbx,r8
+    239386: jmp    0x365e90
+    23938b: nop    DWORD PTR [rax+rax*1+0x0]
+    239390: add    eax,0x7
+    239395: add    BYTE PTR [rax],al
+    239397: add    BYTE PTR [rsi],bl
+    239399: add    BYTE PTR [rax],al
+    23939b: add    BYTE PTR [rax+0x57],ch
+    23939e: adc    al,0x0
+    2393a0: mov    QWORD PTR [rbp+0x28],rbx
+    2393a4: cmp    QWORD PTR [r13+0x358],0x0
+    2393ac: je     0x239414
+    2393ae: mov    rcx,QWORD PTR [rbp+0x18]
+    2393b2: cmp    rcx,0x7ff
+    2393b9: jne    0x2393d3
+    2393bb: lea    rax,[rip+0x157a9e]        # 0x390e60
+    2393c2: inc    rax
+    2393c5: mov    QWORD PTR [rbp+0x28],rax
+    2393c9: mov    rax,QWORD PTR [rbp+0x30]
+    2393cd: add    rbp,0x30
+    2393d1: jmp    rax
+    2393d3: mov    QWORD PTR [rbp+0x28],0x239460
+    2393db: lea    rdx,[rbx+0x1]
+    2393df: inc    rcx
+    2393e2: mov    rsi,QWORD PTR [rbp+0x8]
+    2393e6: mov    rdi,QWORD PTR [rbp+0x10]
+    2393ea: lea    rax,[rbp-0x40]
+    2393ee: cmp    rax,r15
+    2393f1: jb     0x239421
+    2393f3: mov    QWORD PTR [rbp+0x0],rsi
+    2393f7: mov    QWORD PTR [rbp+0x8],rdi
+    2393fb: mov    QWORD PTR [rbp+0x10],rcx
+    2393ff: mov    QWORD PTR [rbp+0x18],0x0
+    239407: mov    QWORD PTR [rbp+0x20],rdx
+    23940b: add    rbp,0xfffffffffffffff8
+    23940f: jmp    0x239000
+    239414: mov    QWORD PTR [rbp+0x0],0x2393a0
+    23941c: jmp    0x365e90
+    239421: lea    rax,[rbp+0x8]
+    239425: mov    QWORD PTR [rbp+0x8],rdi
+    239429: mov    QWORD PTR [rbp+0x10],rsi
+    23942d: mov    QWORD PTR [rbp+0x18],rcx
+    239431: mov    QWORD PTR [rbp+0x20],rdx
+    239435: mov    rcx,QWORD PTR [r13-0x8]
+7.6% des échantillons : ms+0x23983e boucle=0x239809-0x239863 {'n': 24, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+7.4% des échantillons : ms+0x239fe4 boucle=0x239fe0-0x239ff8 {'n': 6, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

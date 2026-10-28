@@ -19,12 +19,7 @@ bench/*/nimcache/
 probes/*/bin/
 *.tmp
 __pycache__/
-# fichiers de la campagne en cours d'écriture : ajoutés au dépôt à la fin de la campagne
-results/raw/
-results/log/
-results/campaign.log
-results/campaign.out
-results/calib.json
-results/summary.json
-results/charts/
-results/hw/freq_pass*
+probes/*/obj/
+probes/*/*.cmi
+probes/*/*.cmx
+probes/*/*.o

@@ -1,0 +1,30 @@
+js         fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js         k10  tuned                           p0 n=9 med=0.265834s ok={True} rc=0 
+js         k5   tuned                           p0 n=10 med=0.221762s ok={True} rc=0 
+js         k5   tuned                           p0 n=10 med=0.199758s ok={True} rc=0 
+js         k10  tuned                           p0 n=9 med=0.211519s ok={True} rc=0 
+js         k10  tuned                           p0 n=9 med=0.221821s ok={True} rc=0 
+js         k5   tuned                           p0 n=10 med=0.197606s ok={True} rc=0 
+js         k5   tuned                           p0 n=10 med=0.198772s ok={True} rc=0 
+js         k10  tuned                           p0 n=9 med=0.247946s ok={True} rc=0 
+js         k10  tuned                           p0 n=9 med=0.223810s ok={True} rc=0 
+js         k5   tuned                           p0 n=10 med=0.232906s ok={True} rc=0 
+js         k10  tuned                           p0 n=9 med=0.236779s ok={True} rc=0 
+js         k5   tuned                           p0 n=10 med=0.231816s ok={True} rc=0 
+js         k10  tuned                           p0 n=9 med=0.314299s ok={True} rc=0 
+js         k5   tuned                           p0 n=10 med=0.207621s ok={True} rc=0 
+js         k10  tuned                           p0 n=9 med=0.257173s ok={True} rc=0 
+js         k5   tuned                           p0 n=10 med=0.219169s ok={True} rc=0 
+js         k10  tuned                           p0 n=9 med=0.303768s ok={True} rc=0 
+js         k5   tuned                           p0 n=10 med=0.212154s ok={True} rc=0 

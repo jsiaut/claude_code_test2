@@ -1,0 +1,4 @@
+CAP;A2;1;fieldoffset(S, 3)=8
+CAP;A5;1;reinterpret(UInt32, 1f0)=0x3f800000
+CAP;F4;1;Mmap.mmap -> Vector{Float32} : 0.4390046
+CAP;D5;0.5;Threads.atomic_fence ; pas de pause publique

@@ -1,0 +1,35 @@
+python_ft  k10  natural                         p0 n=2 med=28.522494s ok={True} rc=0 
+python_ft  k10  tuned                           p0 n=3 med=2.870996s ok={True} rc=0 
+python_ft  k3   rmw_packed                      p0 n=2 med=75.643804s ok={True} rc=0 
+python_ft  k3   rmw_padded                      p0 n=2 med=62.460013s ok={True} rc=0 
+python_ft  k3   sw_packed                       p0 n=2 med=73.701426s ok={True} rc=0 
+python_ft  k3   sw_padded                       p0 n=2 med=66.496139s ok={True} rc=0 
+python_ft  k6   natural              q6         p0 n=3 med=2.915768s ok={True} rc=0 
+python_ft  k6   natural              q1         p0 n=2 med=14.900124s ok={True} rc=0 
+python_ft  k6   tuned                q6         p0 n=3 med=2.285259s ok={True} rc=0 
+python_ft  k6   tuned                q1         p0 n=2 med=11.206750s ok={True} rc=0 
+python_ft  k6   mt                   q6         p0 n=4 med=0.737816s ok={True} rc=0 
+python_ft  k6   mt                   q1         p0 n=3 med=3.855857s ok={True} rc=0 
+python_ft  k9   natural                         p0 n=3 med=4.101114s ok={True} rc=0 
+python_ft  k9   tuned                           p0 n=3 med=4.795014s ok={True} rc=0 
+python_ft  k9   mt                              p0 n=3 med=2.093757s ok={True} rc=0 
+python_ft  k3   rmw_packed                      p1 n=2 med=69.314928s ok={True} rc=0 
+python_ft  k3   rmw_padded                      p1 n=2 med=69.682102s ok={True} rc=0 
+python_ft  k3   sw_packed                       p1 n=2 med=74.899760s ok={True} rc=0 
+python_ft  k3   sw_padded                       p1 n=2 med=59.485400s ok={True} rc=0 
+python_ft  k6   natural              q6         p1 n=3 med=2.330684s ok={True} rc=0 
+python_ft  k6   natural              q1         p1 n=2 med=13.228623s ok={True} rc=0 
+python_ft  k6   tuned                q6         p1 n=3 med=2.431760s ok={True} rc=0 
+python_ft  k6   tuned                q1         p1 n=2 med=10.226598s ok={True} rc=0 
+python_ft  k6   mt                   q6         p1 n=4 med=0.729456s ok={True} rc=0 
+python_ft  k6   mt                   q1         p1 n=3 med=3.515237s ok={True} rc=0 
+python_ft  k9   natural                         p1 n=3 med=3.750421s ok={True} rc=0 
+python_ft  k9   tuned                           p1 n=3 med=3.364203s ok={True} rc=0 
+python_ft  k9   mt                              p1 n=3 med=1.930749s ok={True} rc=0 
+python_ft  k10  natural                         p1 n=2 med=27.638633s ok={True} rc=0 
+python_ft  k10  tuned                           p1 n=3 med=3.006239s ok={True} rc=0 
+python_ft  k6   natural              q6         p2 n=3 med=2.502369s ok={True} rc=0 
+python_ft  k6   tuned                q6         p2 n=3 med=2.474897s ok={True} rc=0 
+python_ft  k6   mt                   q6         p2 n=4 med=0.761837s ok={True} rc=0 
+python_ft  k6   mt                   q1         p2 n=3 med=3.537571s ok={True} rc=0 
+python_ft  k10  tuned                           p2 n=3 med=2.471955s ok={True} rc=0 

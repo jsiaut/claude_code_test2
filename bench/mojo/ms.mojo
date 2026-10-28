@@ -95,16 +95,31 @@ def k1_soa(vx: Col[DType.float32], vy: Col[DType.float32], vz: Col[DType.float32
         a1 += e.slice[8, offset=8]().cast[DType.float64]()
     return (a0 + a1).reduce_add()
 
+def rss_now() raises -> Int:
+    """Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)."""
+    with open("/proc/self/statm", "r") as f:
+        var parts = f.read().split(" ")
+        return atol(parts[1]) * 4096
+
+
 def run_k1(v: String, reps: Int, warmup: Int) raises:
     if v == "footprint0":
         result("k1", v, "energy", 0, 0, "0")
         return
     var raw = load[DType.float32]("k1_particles.f32")
+    if v == "footprint_raw":
+        result("k1", v, "energy", 0, 0, "0")
+        return
+    var m1 = rss_now() if v == "footprint" else 0  # P1 : tampon brut chargé
     var ps = List[Particle](capacity=N1)
     for i in range(N1):
         var f = raw.p + 16 * i
         ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
     if v == "footprint":
+        var m2 = rss_now()  # P2 : collection construite, tampon brut encore vivant
+        print("META;mem;rss;" + String(m1) + ";" + String(m2))
+        print("META;rss;" + String(m1) + ";" + String(m2))
+        print("META;raw0;" + String(raw.p[0]))
         raw.p.free()
         result("k1", v, "energy", 0, 0, String(k1_natural(ps)))
         return

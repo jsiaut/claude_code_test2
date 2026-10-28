@@ -1,0 +1,20 @@
+90.8% des échantillons : ms+0x9c66 boucle=0x9c60-0x9cba {'n': 19, 'packed': 12, 'wide': 8, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    9c60: vmovd  xmm4,DWORD PTR [r15+rax*1]
+    9c66: vmovd  xmm5,DWORD PTR [r15+rax*1+0x4]
+    9c6d: vmovd  xmm6,DWORD PTR [r15+rax*1+0x8]
+    9c74: vmovd  xmm7,DWORD PTR [r15+rax*1+0xc]
+    9c7b: vpminsb xmm4,xmm4,xmm8
+    9c80: vpminsb xmm5,xmm5,xmm8
+    9c85: vpminsb xmm6,xmm6,xmm8
+    9c8a: vpminsb xmm7,xmm7,xmm8
+    9c8f: vpmovzxbq ymm4,xmm4
+    9c94: vpaddq ymm0,ymm0,ymm4
+    9c98: vpmovzxbq ymm4,xmm5
+    9c9d: vpaddq ymm1,ymm1,ymm4
+    9ca1: vpmovzxbq ymm4,xmm6
+    9ca6: vpaddq ymm2,ymm2,ymm4
+    9caa: vpmovzxbq ymm4,xmm7
+    9caf: vpaddq ymm3,ymm3,ymm4
+    9cb3: add    rax,0x10
+    9cb7: cmp    rdx,rax
+    9cba: jne    9c60 <_QMk25mPrun_k4+0x9e0>

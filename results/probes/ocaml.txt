@@ -1,0 +1,4 @@
+CAP;D3;1;Atomic.make_contended ; D5 Domain.cpu_relax : 1
+CAP;A5;0.5;Int32.bits_of_float 1.0 = 0x3f800000
+CAP;F1;1;Bigarray.Array2 c_layout : 3
+CAP;F4;1;Unix.map_file -> Bigarray float32 : 0.439005

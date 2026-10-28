@@ -1,0 +1,10 @@
+90.7% des échantillons : ms+0x3d58 boucle=0x3d40-0x3d5b {'n': 9, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    3d40: movzx  esi,BYTE PTR [rdi+rcx*1]
+    3d44: inc    rcx
+    3d47: mov    r8d,esi
+    3d4a: sar    r8b,0x7
+    3d4e: and    r8b,sil
+    3d51: movzx  esi,r8b
+    3d55: add    rax,rsi
+    3d58: cmp    rdx,rcx
+    3d5b: jne    3d40 <ms::k4_natural(::List[::SIMD[DType.uint8, 1]])+0x10>

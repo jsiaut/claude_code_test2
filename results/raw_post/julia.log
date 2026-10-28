@@ -1,0 +1,30 @@
+julia      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+julia      k5   tuned                           p0 n=10 med=0.007063s ok={True} rc=0 
+julia      k10  tuned                           p0 n=6 med=0.505061s ok={True} rc=0 
+julia      k10  tuned                           p0 n=6 med=0.660699s ok={True} rc=0 
+julia      k5   tuned                           p0 n=10 med=0.007940s ok={True} rc=0 
+julia      k10  tuned                           p0 n=6 med=0.457346s ok={True} rc=0 
+julia      k5   tuned                           p0 n=10 med=0.006884s ok={True} rc=0 
+julia      k5   tuned                           p0 n=10 med=0.007020s ok={True} rc=0 
+julia      k10  tuned                           p0 n=6 med=0.487170s ok={True} rc=0 
+julia      k5   tuned                           p0 n=10 med=0.006812s ok={True} rc=0 
+julia      k10  tuned                           p0 n=6 med=0.532674s ok={True} rc=0 
+julia      k10  tuned                           p0 n=6 med=0.415620s ok={True} rc=0 
+julia      k5   tuned                           p0 n=10 med=0.008979s ok={True} rc=0 
+julia      k5   tuned                           p0 n=10 med=0.006997s ok={True} rc=0 
+julia      k10  tuned                           p0 n=6 med=0.460386s ok={True} rc=0 
+julia      k5   tuned                           p0 n=10 med=0.006868s ok={True} rc=0 
+julia      k10  tuned                           p0 n=6 med=0.392120s ok={True} rc=0 
+julia      k5   tuned                           p0 n=10 med=0.006917s ok={True} rc=0 
+julia      k10  tuned                           p0 n=6 med=0.449627s ok={True} rc=0 

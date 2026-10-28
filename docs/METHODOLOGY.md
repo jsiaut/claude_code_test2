@@ -236,3 +236,98 @@ Robustesse :
   d'ordre aléatoire (`tools/complement.py`). La règle est la même pour tous les langages. Motivation :
   K10 dépend de la paire de vCPU choisie par l'ordonnanceur (transferts de 120 à 210 ns), et le même
   binaire C variait de 11 à 147 ms d'une répétition à l'autre pendant la mise au point.
+* 2026-10-28, 16:11 : **redémarrage de la VM pendant la passe 2** (après le bloc 146 sur 279). Après le
+  redémarrage, le processeur est le même modèle, mais la hiérarchie mémoire mesurée a changé
+  (`results/hw/after_restart/`). La latence à 4 Mio passe de 142 ns (DRAM) à 26 ns (cache). La bande
+  passante DRAM augmente de 30 à 100 % et la latence DRAM baisse de 20 à 30 %. La fréquence et les
+  latences L1/L2 sont identiques. Il s'agit très probablement d'un autre hôte physique. Pour ne pas
+  mêler deux machines dans un même classement, **seules les mesures antérieures au redémarrage sont
+  retenues** : passes 0 et 1 complètes, plus 146 blocs de la passe 2. Les mesures de C qui servent de
+  référence n'avaient pas dérivé entre les passes avant le redémarrage (K2, K1 soa, K7, K3). Les
+  mesures concernées ont donc P = 2 au lieu de 3, et le bootstrap en rend compte. La passe
+  complémentaire prévue pour les mesures instables est **annulée**, pour la même raison.
+  Ne dépendent pas de la vitesse de la machine et ont été faites après le redémarrage : sondes de
+  capacités, mesure de vectorisation (C3, analyse du code machine) et empreinte K1 (octets). La
+  remesure de K3 pour Haskell est faite après le redémarrage, en même temps qu'une remesure de K3
+  pour C qui sert de pont ; elle n'est retenue que si C donne les mêmes temps qu'avant.
+* 2026-10-28, vers 17:30 (pendant la mesure d'empreinte), **avant** la remesure de K3 (lancée à 17:33) : **règle d'acceptation du pont**, fixée avant de
+  voir les données. Mesures de pont : les 4 variantes K3 de C, et `rmw_packed`/`rmw_padded` de
+  Haskell (code que la correction ne touche pas). Pour chacune, ratio = médiane après redémarrage /
+  médiane avant. Les valeurs Haskell `sw_*` d'après redémarrage sont retenues **telles quelles**
+  (sans mise à l'échelle) si la moyenne géométrique des 6 ratios est dans [0,90 ; 1,10] et si aucun
+  ratio ne sort de [0,80 ; 1,25]. Sinon, K3 de Haskell reste évalué sur `rmw_padded` seul, sa seule
+  variante valide d'avant le redémarrage ; c'est la définition de E (meilleure variante admissible
+  présente), au risque de sous-estimer Haskell.
+* Idem : **variables d'environnement héritées**. L'outil qui lance les commandes exporte
+  `BUN_OPTIONS=--smol` (mode mémoire réduite de Bun : ramasse-miettes plus fréquent),
+  `JAVA_TOOL_OPTIONS` (propriétés réseau seulement, et désactivé par `bench/java/run`),
+  `NODE_OPTIONS=--use-openssl-ca` (certificats TLS, sans effet sur le calcul) et
+  `PYTHONUNBUFFERED=1` (quelques lignes de sortie par processus). Seul `--smol` peut changer une
+  mesure : l'annexe Bun (`js_bun`, non classée) a donc été mesurée en mode `--smol` pendant toute la
+  campagne. Son effet est quantifié après coup, sur la machine d'après redémarrage (section annexes).
+* 2026-10-28, 17:40-18:06 : **empreinte K1 (D2a), deuxième écart : méthode en deux points**. La
+  mesure par pic RSS (`pic(footprint) - pic(footprint_raw)`) donnait 0 octet par particule pour Rust,
+  Zig, Odin, C3, D, Nim, Mojo et Julia, ce qui est physiquement impossible. Cause : leur chargement
+  crée un tampon transitoire de 256 Mio (fichier lu, puis copié dans un tampon aligné). Le pic RSS
+  est donc atteint pendant le chargement et masque la collection construite ensuite. La variante
+  `footprint` lit désormais la mémoire M **dans le processus**, en deux points : P1 (tampon brut
+  chargé ; pour C, Fortran et Ada, qui lisent le fichier directement dans la collection, avant la
+  lecture) et P2 (collection construite, tampon brut toujours vivant). M = octets vivants comptés par
+  le runtime après un GC complet pour les langages à ramasse-miettes traçant (Java, C#, Go,
+  JavaScript, Julia, Haskell, OCaml, D, Lua), car leur tas garde la mémoire libérée et la réutilise ;
+  RSS courant (`/proc/self/statm`) pour les autres. Le RSS est relevé partout comme contrôle.
+  Résultat = (M(P2) - M(P1)) / 4 194 304, médiane de 3 processus (`tools/patch_footprint_mem.py`,
+  `analysis/footprint.py`). Trois défauts trouvés en route et corrigés : la lecture « fichier
+  entier » de Zig, Nim et D rend une chaîne vide sous `/proc` (taille annoncée nulle). Deux
+  allocateurs faussent la mesure, avec un mécanisme vérifié : Nim (sa classe de taille arrondit
+  256 Mio à 264 Mio, jamais touchés au-delà de 256 ; `getOccupiedMem` compte 66 o) et Mojo (son
+  allocateur, qui réserve des zones de 1 Gio et libère par `madvise`, réutilise environ 24 Mo du
+  tampon de chargement : le RSS ne voit que 58 o, alors que la liste a une capacité de 4 194 304
+  éléments de 64 o). Pour ces deux collections de valeurs contiguës, on retient la taille de
+  structure, 64 o, que mesurent les 11 autres implémentations du même type (64,00 à 64,03 o). Les
+  mesures brutes restent publiées (`results/footprint_detail.json`). Les mesures par pic RSS restent
+  dans `results/raw_post/` (étiquette `post_fp`), pour la trace.
+* 2026-10-28, 18:06-18:25 : **mesure de la vectorisation (C3), corrections de l'outil avant usage**.
+  Premier passage : la boucle analysée était celle de l'IP la plus fréquente, souvent hors du noyau
+  (libc, OpenBLAS) car le chargement des données dominait des profils trop courts (70 échantillons
+  pour C). Corrections, appliquées à tous les langages : 60 répétitions pour K4 et 20 pour K9
+  (profil de plus de 0,3 s), échantillonnage à 4 kHz ; les échantillons sont regroupés par boucle
+  (la plus petite boucle qui contient chaque IP chaude, jusqu'à 90 % des échantillons) ; la boucle
+  retenue est la plus chaude du code du programme (exécutable ou code JIT), et non d'une bibliothèque
+  partagée du runtime. Trois défauts de `tools/sampler.c` et `analysis/hotloop.py` sont corrigés :
+  les projections anonymes (`//anon`) et le code JIT de .NET (`/memfd:`) étaient exclus de la copie
+  du code ; la copie n'avait lieu qu'une fois par seconde ; la cible d'un saut écrite « 0x… » était
+  lue comme 0. Enfin, objdump affiche comme données le code placé sous un symbole de type objet
+  (tables d'info de GHC) : on désassemble alors les octets bruts. Les 50 boucles retenues et leur
+  code machine sont dans `results/vectorization/*.txt`.
+* Idem : **sondes de capacités**. Les 21 sondes ont été exécutées (154 lignes). Cinq ne compilaient
+  plus avec les versions actuelles (C23 `alignas` sur une struct, noms de types tout en majuscules
+  interdits en C3, `Atomic[T]` de Mojo 1.2, `**` retiré de Zig 0.17, import Nim) ; elles sont
+  corrigées sans changer ce qu'elles testent. Six notes écrites dans les sondes divergeaient de la
+  matrice ; tranchées par la règle de la section 3, elles donnent toutes raison à la matrice (C C5 :
+  OpenMP livré avec clang et gcc mais hors norme, 0,5, désormais exécuté par la sonde ; C++ C4 :
+  `std::reduce` et `std::simd::reduce` autorisent la réassociation dans la norme, 1 ; C++ C5 :
+  `par_unseq` s'exécute en série dans libstdc++ sans TBB, 0,5 ; C++ D4 : libc, 0,5 comme C ; C++ E2 :
+  `asm` est dans la norme C++, 1 ; Zig F4 : `mmap` POSIX seulement, 0,5 comme Go). Après correction
+  des annotations : 0 divergence (`analysis/check_probes.py`, `results/probes/summary.md`).
+* 2026-10-28, 18:28, **avant** de nouvelles données : **remesure des deux mesures instables pour tous
+  les langages**. Critère objectif, calculé sur les données retenues : mesure du pilier E dont le
+  coefficient de variation entre processus, médian sur les 21 langages classés, dépasse 10 %. Deux
+  mesures le remplissent : K5 `tuned` (CV médian 15 %) et K10 `tuned` (15 %). Les autres vont de 2 à
+  10 %. Diagnostic : pour K5, chaque processus est stable mais deux processus du même binaire
+  diffèrent de 30 à 60 % (Zig 5,6 contre 8,2 ms) — un état de l'environnement de la VM qui dure le
+  temps d'un processus ; pour K10, l'anneau SPSC est bistable (file pleine, lecture par rafales :
+  6 à 10 ms ; file presque vide, une ligne échangée par message : jusqu'à 200 ms), quel que soit le
+  langage. Avec 2 ou 3 processus, la médiane de ces deux mesures est un tirage au sort. C'est le
+  problème que visait la passe complémentaire (annulée au redémarrage pour ne pas mêler deux
+  machines). Application à l'échelle de la mesure entière : K5 `tuned` et K10 `tuned` sont
+  remesurés pour **toutes** les implémentations sur la machine d'après redémarrage, 9 processus
+  chacune, en 9 passes d'ordre aléatoire (graine fixe), avec les répétitions figées par
+  `results/calib.json`. Ces données remplacent celles d'avant pour ces deux mesures. Aucune mesure
+  n'est donc tirée de deux machines. Le classement avec les données d'avant est publié à côté, comme
+  analyse de sensibilité.
+* Idem : **simulation de cache non faite** (moyen (iii) de la section 6). Valgrind 3.22 ne décode
+  pas l'AVX-512 (SIGILL vérifié sur une FMA zmm) et les binaires classés sont compilés pour la
+  machine (`-march=native`). Recompiler sans AVX-512 aurait mesuré d'autres binaires que ceux du
+  classement. La simulation est remplacée par les micro-expériences de `tools/hwprobe.c`, l'analyse
+  du code machine des boucles chaudes (`tools/sampler.c`, `analysis/hotloop.py`) et le rusage.

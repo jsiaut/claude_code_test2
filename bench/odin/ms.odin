@@ -78,11 +78,30 @@ k1_soa :: proc(ps: #soa[]Particle) -> f64 #no_bounds_check {
 	}
 	return simd.reduce_add_pairs(a0 + a1)
 }
+// Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)
+rss_now :: proc() -> int {
+	data, err := os.read_entire_file("/proc/self/statm", context.temp_allocator)
+	if err != nil {return 0}
+	s := string(data)
+	i := 0
+	for i < len(s) && s[i] != ' ' do i += 1
+	j := i + 1
+	for j < len(s) && s[j] != ' ' do j += 1
+	if j > len(s) {return 0}
+	res, _ := strconv.parse_int(s[i + 1:j])
+	return res * 4096
+}
 run_k1 :: proc(v: string, reps: int) {
 	if v == "footprint0" {result("k1", v, "energy", 0, 0, "0"); return}
 	raw := load(f32, "k1_particles.f32")
+	if v == "footprint_raw" {result("k1", v, "energy", 0, 0, "0"); return}
+	m1 := v == "footprint" ? rss_now() : 0 // P1 : tampon brut chargé
 	ps := make([dynamic]Particle, 0, N1)
 	for i in 0 ..< N1 do append(&ps, (cast(^Particle)&raw[16 * i])^)
+	if v == "footprint" { // P2 : collection construite, tampon brut encore vivant
+		m2 := rss_now()
+		fmt.printf("META;mem;rss;%d;%d\nMETA;rss;%d;%d\nMETA;raw0;%v\n", m1, m2, m1, m2, raw[0])
+	}
 	delete(slice.reinterpret([]byte, raw))
 	switch v {
 	case "footprint":

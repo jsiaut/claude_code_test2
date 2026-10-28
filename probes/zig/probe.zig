@@ -22,14 +22,14 @@ pub fn main() !void {
         x += 1;
     }
     std.debug.print("CAP;E3;1;@branchHint(.likely) : {d}\n", .{x});
-    const arr = [_]u8{0} ** 64;
+    const arr: [64]u8 = @splat(0);
     @prefetch(&arr, .{ .rw = .read, .locality = 3, .cache = .data });
     std.debug.print("CAP;E4;1;@prefetch\n", .{});
     std.debug.print("CAP;D3;1;std.atomic.cache_line={d}\n", .{std.atomic.cache_line});
     std.atomic.spinLoopHint();
     std.debug.print("CAP;D5;0.5;spinLoopHint ; pas de @fence\n", .{});
     const fd = try std.posix.openat(std.posix.AT.FDCWD, "/opt/msdata/k5_a.f32", .{}, 0);
-    const m = try std.posix.mmap(null, 8192, std.posix.PROT.READ, .{ .TYPE = .PRIVATE }, fd, 0);
+    const m = try std.posix.mmap(null, 8192, .{ .READ = true }, .{ .TYPE = .PRIVATE }, fd, 0);
     const fl = std.mem.bytesAsSlice(f32, m);
-    std.debug.print("CAP;F4;1;std.posix.mmap + bytesAsSlice : {d}\n", .{fl[0]});
+    std.debug.print("CAP;F4;0.5;std.posix.mmap (POSIX seulement) + bytesAsSlice : {d}\n", .{fl[0]});
 }

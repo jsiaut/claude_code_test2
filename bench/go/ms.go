@@ -8,6 +8,7 @@ import (
 	"simd/archsimd"
 	"slices"
 	"strconv"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -113,12 +114,41 @@ func k1SoA(vx, vy, vz, m []float32) float64 {
 	return s
 }
 
+// Empreinte K1 (D2a) : octets vivants du tas après un GC complet, et RSS courant (pages de 4 Kio)
+func liveNow() uint64 {
+	runtime.GC()
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	return m.HeapAlloc
+}
+
+func rssNow() uint64 {
+	b, err := os.ReadFile("/proc/self/statm")
+	if err != nil {
+		return 0
+	}
+	f := strings.Fields(string(b))
+	if len(f) < 2 {
+		return 0
+	}
+	n, _ := strconv.ParseUint(f[1], 10, 64)
+	return n * 4096
+}
+
 func runK1(v string, reps int) {
 	if v == "footprint0" {
 		result("k1", v, "energy", 0, 0, "0")
 		return
 	}
 	raw := loadAs[float32]("k1_particles.f32")
+	if v == "footprint_raw" {
+		result("k1", v, "energy", 0, 0, "0")
+		return
+	}
+	var m1, r1 uint64
+	if v == "footprint" { // P1 : tampon brut chargé
+		m1, r1 = liveNow(), rssNow()
+	}
 	ps := make([]Particle, N1)
 	for i := range ps {
 		f := raw[16*i : 16*i+16]
@@ -126,6 +156,8 @@ func runK1(v string, reps int) {
 	}
 	switch v {
 	case "footprint":
+		m2, r2 := liveNow(), rssNow() // P2 : collection construite, tampon brut encore vivant
+		fmt.Printf("META;mem;live;%d;%d\nMETA;rss;%d;%d\nMETA;raw0;%v\n", m1, m2, r1, r2, raw[0])
 		raw = nil
 		runtime.GC()
 		result("k1", v, "energy", 0, 0, fmt.Sprintf("%.6f", k1Natural(ps)))

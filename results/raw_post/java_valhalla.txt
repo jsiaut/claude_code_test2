@@ -1,0 +1,96 @@
+# pass 0 args array 5
+META;live_bytes_after_gc;360006288;octets_par_particule;85.83218765258789
+RESULT;k1;valhalla_array;energy;0;0.058939247;1049202.376981
+RESULT;k1;valhalla_array;energy;1;0.043612728;1049202.376981
+RESULT;k1;valhalla_array;energy;2;0.043374892;1049202.376981
+RESULT;k1;valhalla_array;energy;3;0.043689766;1049202.376981
+RESULT;k1;valhalla_array;energy;4;0.043609006;1049202.376981
+
+# pass 0 args array 5 shuffled
+META;live_bytes_after_gc;380979464;octets_par_particule;90.83258247375488
+RESULT;k1;valhalla_array_shuffled;energy;0;0.046811978;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;1;0.048745771;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;2;0.047442477;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;3;0.047176961;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;4;0.045683493;1049202.376981
+
+# pass 0 args list 5
+META;live_bytes_after_gc;364359536;octets_par_particule;86.87008285522461
+RESULT;k1;valhalla_list;energy;0;0.043389240;1049202.376981
+RESULT;k1;valhalla_list;energy;1;0.043624103;1049202.376981
+RESULT;k1;valhalla_list;energy;2;0.044124999;1049202.376981
+RESULT;k1;valhalla_list;energy;3;0.044053048;1049202.376981
+RESULT;k1;valhalla_list;energy;4;0.046313849;1049202.376981
+
+# pass 0 args list 5 shuffled
+META;live_bytes_after_gc;385177144;octets_par_particule;91.83338737487793
+RESULT;k1;valhalla_list_shuffled;energy;0;0.045315508;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;1;0.045588279;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;2;0.045324146;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;3;0.064698830;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;4;0.053291848;1049202.376981
+
+# pass 1 args array 5
+META;live_bytes_after_gc;360053448;octets_par_particule;85.84343147277832
+RESULT;k1;valhalla_array;energy;0;0.048886255;1049202.376981
+RESULT;k1;valhalla_array;energy;1;0.049151052;1049202.376981
+RESULT;k1;valhalla_array;energy;2;0.045641131;1049202.376981
+RESULT;k1;valhalla_array;energy;3;0.045667689;1049202.376981
+RESULT;k1;valhalla_array;energy;4;0.050449837;1049202.376981
+
+# pass 1 args array 5 shuffled
+META;live_bytes_after_gc;381010720;octets_par_particule;90.84003448486328
+RESULT;k1;valhalla_array_shuffled;energy;0;0.044484119;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;1;0.044814607;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;2;0.044507853;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;3;0.044009307;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;4;0.043631835;1049202.376981
+
+# pass 1 args list 5
+META;live_bytes_after_gc;364533776;octets_par_particule;86.91162490844727
+RESULT;k1;valhalla_list;energy;0;0.045251124;1049202.376981
+RESULT;k1;valhalla_list;energy;1;0.062727704;1049202.376981
+RESULT;k1;valhalla_list;energy;2;0.052126763;1049202.376981
+RESULT;k1;valhalla_list;energy;3;0.051718658;1049202.376981
+RESULT;k1;valhalla_list;energy;4;0.051064246;1049202.376981
+
+# pass 1 args list 5 shuffled
+META;live_bytes_after_gc;385514728;octets_par_particule;91.91387367248535
+RESULT;k1;valhalla_list_shuffled;energy;0;0.050311183;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;1;0.045962353;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;2;0.046228482;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;3;0.045345827;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;4;0.045026347;1049202.376981
+
+# pass 2 args array 5
+META;live_bytes_after_gc;360021176;octets_par_particule;85.83573722839355
+RESULT;k1;valhalla_array;energy;0;0.048869625;1049202.376981
+RESULT;k1;valhalla_array;energy;1;0.045533265;1049202.376981
+RESULT;k1;valhalla_array;energy;2;0.045461960;1049202.376981
+RESULT;k1;valhalla_array;energy;3;0.046842452;1049202.376981
+RESULT;k1;valhalla_array;energy;4;0.046076730;1049202.376981
+
+# pass 2 args array 5 shuffled
+META;live_bytes_after_gc;380995792;octets_par_particule;90.83647537231445
+RESULT;k1;valhalla_array_shuffled;energy;0;0.043946334;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;1;0.046249768;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;2;0.044159007;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;3;0.043799320;1049202.376981
+RESULT;k1;valhalla_array_shuffled;energy;4;0.044179440;1049202.376981
+
+# pass 2 args list 5
+META;live_bytes_after_gc;364510016;octets_par_particule;86.90596008300781
+RESULT;k1;valhalla_list;energy;0;0.043975133;1049202.376981
+RESULT;k1;valhalla_list;energy;1;0.045046938;1049202.376981
+RESULT;k1;valhalla_list;energy;2;0.045639372;1049202.376981
+RESULT;k1;valhalla_list;energy;3;0.045293249;1049202.376981
+RESULT;k1;valhalla_list;energy;4;0.045898998;1049202.376981
+
+# pass 2 args list 5 shuffled
+META;live_bytes_after_gc;385144256;octets_par_particule;91.82554626464844
+RESULT;k1;valhalla_list_shuffled;energy;0;0.048887844;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;1;0.046972053;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;2;0.069015428;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;3;0.047909102;1049202.376981
+RESULT;k1;valhalla_list_shuffled;energy;4;0.054459735;1049202.376981
+

@@ -1,0 +1,47 @@
+76.9% des échantillons : ms+0x41e623 boucle=0x41e590-0x41e642 {'n': 44, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+    41e590: cmp    DWORD PTR [rbp-0x19580],edx
+    41e596: jl     41e5b0 <_ada_ms+0x3730>
+    41e598: mov    esi,0x39c
+    41e59d: mov    edi,0x472480
+    41e5a2: call   42c1f4 <__gnat_rcheck_CE_Index_Check>
+    41e5a7: nop    WORD PTR [rax+rax*1+0x0]
+    41e5b0: cmp    QWORD PTR [rbp-0x19560],rax
+    41e5b7: jne    41e5d0 <_ada_ms+0x3750>
+    41e5b9: mov    esi,0x39c
+    41e5be: mov    edi,0x472480
+    41e5c3: call   42c1f4 <__gnat_rcheck_CE_Index_Check>
+    41e5c8: nop    DWORD PTR [rax+rax*1+0x0]
+    41e5d0: mov    rdi,rdx
+    41e5d3: sub    rdi,rsi
+    41e5d6: add    rdi,r9
+    41e5d9: vmovsd xmm0,QWORD PTR [rcx+rdi*8]
+    41e5de: mov    rdi,rdx
+    41e5e1: sub    rdi,rsi
+    41e5e4: add    rdi,r10
+    41e5e7: vmovsd xmm1,QWORD PTR [rcx+rdi*8]
+    41e5ec: mov    rdi,rax
+    41e5ef: vaddsd xmm0,xmm0,xmm1
+    41e5f3: sub    rdi,rsi
+    41e5f6: lea    rdi,[rdi+r8*1-0x2]
+    41e5fb: vmovsd xmm1,QWORD PTR [rcx+rdi*8]
+    41e600: mov    rdi,rax
+    41e603: vaddsd xmm0,xmm0,xmm1
+    41e607: sub    rdi,rsi
+    41e60a: add    rdi,r8
+    41e60d: vmovsd xmm1,QWORD PTR [rcx+rdi*8]
+    41e612: vaddsd xmm0,xmm0,xmm1
+    41e616: mov    rdi,rdx
+    41e619: sub    rdi,r14
+    41e61c: add    rdi,r11
+    41e61f: vmulsd xmm0,xmm0,xmm3
+    41e623: vmovsd QWORD PTR [r12+rdi*8],xmm0
+    41e629: cmp    rax,0x7ff
+    41e62f: je     41e67f <_ada_ms+0x37ff>
+    41e631: cmp    r15d,eax
+    41e634: jl     41e670 <_ada_ms+0x37f0>
+    41e636: inc    rdx
+    41e639: inc    rax
+    41e63c: cmp    DWORD PTR [rbp-0x19570],edx
+    41e642: jge    41e590 <_ada_ms+0x3710>
+6.5% des échantillons : ms+0x41e2e4 boucle=0x41e2d8-0x41e2e7 {'n': 5, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}
+4.0% des échantillons : ms+0x41cee7 boucle=0x41ced0-0x41cf1d {'n': 20, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}

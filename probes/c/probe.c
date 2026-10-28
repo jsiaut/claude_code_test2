@@ -18,7 +18,7 @@
 struct S { uint8_t a; uint32_t b; double c; };               // ordre déclaré, remplissage C
 struct __attribute__((packed)) P { uint8_t a; uint32_t b; }; // extension (gcc/clang)
 struct BF { unsigned x : 3, y : 5; };                         // champs de bits (standard)
-struct alignas(64) L { int v; };                               // alignement explicite
+struct L { alignas(64) int v; };                               // alignement explicite (C23 : sur un membre)
 union U { float f; uint32_t u; };
 struct In { float v[16]; int n; };                             // tableau fixe en ligne
 static int cmp(const void *a, const void *b) { return 0; (void)a; (void)b; }
@@ -50,7 +50,10 @@ int main(void) {
     printf("CAP;C2;1;intrinsèques AVX-512 <immintrin.h> : %g\n", _mm512_reduce_add_ps(z));
     printf("CAP;C3;1;auto-vectorisation clang/gcc -O3 (vérifiée sur K4/K9 natural)\n");
     printf("CAP;C4;0.5;réassociation : options -ffast-math/-fassociative-math, #pragma clang fp reassociate (extension) ; pas de contrôle standard\n");
-    printf("CAP;C5;0;pas de construction de parallélisme de données dans le langage (OpenMP hors standard C)\n");
+    double s5 = 0;
+#pragma omp parallel for simd reduction(+ : s5)
+    for (int i = 0; i < 1000; i++) s5 += i;
+    printf("CAP;C5;0.5;OpenMP, livré avec clang et gcc mais hors norme ISO C : parallel for simd reduction = %g\n", s5);
     pthread_t th;
     printf("CAP;D1;1;threads <threads.h>/pthreads\n");
     _Atomic int at = 0;

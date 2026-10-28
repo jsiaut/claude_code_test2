@@ -1,0 +1,92 @@
+python     k4   natural_unsorted                p0 n=4 med=0.735447s ok={True} rc=0 
+python     k4   natural_sorted                  p0 n=6 med=0.576539s ok={True} rc=0 
+python     k4   branchless_unsorted             p0 n=3 med=1.098604s ok={True} rc=0 
+python     k7   natural                         p0 n=2 med=28.088150s ok={True} rc=0 
+python     k7   tuned                           p0 n=2 med=29.905544s ok={True} rc=0 
+python     k9   natural                         p0 n=3 med=1.968745s ok={True} rc=0 
+python     k9   tuned                           p0 n=3 med=2.280674s ok={True} rc=0 
+python     k9   mt                              p0 n=3 med=2.527748s ok={True} rc=0 
+python     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+python     k8   natural                         p0 n=2 med=25.157747s ok={True} rc=0 
+python     k8   tuned                           p0 n=2 med=17.271867s ok={True} rc=0 
+python     k3   rmw_packed                      p0 n=2 med=33.278143s ok={True} rc=0 
+python     k3   rmw_padded                      p0 n=2 med=34.292770s ok={True} rc=0 
+python     k3   sw_packed                       p0 n=2 med=17.740681s ok={True} rc=0 
+python     k3   sw_padded                       p0 n=2 med=16.974553s ok={True} rc=0 
+python     k2   tuned                16384      p0 n=10 med=0.195206s ok={True} rc=0 
+python     k2   tuned                65536      p0 n=10 med=0.202670s ok={True} rc=0 
+python     k2   tuned                262144     p0 n=10 med=0.191569s ok={True} rc=0 
+python     k2   tuned                524288     p0 n=10 med=0.215312s ok={True} rc=0 
+python     k2   tuned                2097152    p0 n=4 med=0.247493s ok={True} rc=0 
+python     k2   tuned                8388608    p0 n=3 med=0.819586s ok={True} rc=0 
+python     k2   tuned                16777216   p0 n=3 med=0.747950s ok={True} rc=0 
+python     k2   tuned                33554432   p0 n=3 med=1.127912s ok={True} rc=0 
+python     k2   tuned                67108864   p0 n=3 med=1.270572s ok={True} rc=0 
+python     k2   tuned                268435456  p0 n=3 med=1.557492s ok={True} rc=0 
+python     k5   natural                         p0 n=2 med=11.327703s ok={True} rc=0 
+python     k5   tuned                           p0 n=3 med=4.699108s ok={True} rc=0 
+python     k6   natural              q6         p0 n=3 med=1.988426s ok={True} rc=0 
+python     k6   natural              q1         p0 n=2 med=11.519148s ok={True} rc=0 
+python     k6   tuned                q6         p0 n=3 med=1.957121s ok={True} rc=0 
+python     k6   tuned                q1         p0 n=2 med=7.749952s ok={True} rc=0 
+python     k6   mt                   q6         p0 n=3 med=2.322720s ok={True} rc=0 
+python     k6   mt                   q1         p0 n=2 med=9.430664s ok={True} rc=0 
+python     k1   natural              energy     p0 n=3 med=0.924152s ok={True} rc=0 
+python     k1   aos                  energy     p0 n=3 med=1.094363s ok={True} rc=0 
+python     k1   soa                  energy     p0 n=3 med=0.937984s ok={True} rc=0 
+python     k1   natural_shuffled     energy     p0 n=2 med=5.298436s ok={True} rc=0 
+python     k10  natural                         p0 n=2 med=8.071416s ok={True} rc=0 
+python     k10  tuned                           p0 n=3 med=2.731574s ok={True} rc=0 
+python     k8   natural                         p1 n=2 med=27.383444s ok={True} rc=0 
+python     k8   tuned                           p1 n=2 med=17.545055s ok={True} rc=0 
+python     k7   natural                         p1 n=2 med=30.643494s ok={True} rc=0 
+python     k7   tuned                           p1 n=2 med=29.084130s ok={True} rc=0 
+python     k1   natural              energy     p1 n=3 med=1.012922s ok={True} rc=0 
+python     k1   aos                  energy     p1 n=3 med=1.484994s ok={True} rc=0 
+python     k1   soa                  energy     p1 n=3 med=1.030367s ok={True} rc=0 
+python     k1   natural_shuffled     energy     p1 n=2 med=5.133174s ok={True} rc=0 
+python     k4   natural_unsorted                p1 n=4 med=0.671409s ok={True} rc=0 
+python     k4   natural_sorted                  p1 n=6 med=0.571719s ok={True} rc=0 
+python     k4   branchless_unsorted             p1 n=3 med=0.926868s ok={True} rc=0 
+python     k2   tuned                16384      p1 n=10 med=0.216229s ok={True} rc=0 
+python     k2   tuned                65536      p1 n=10 med=0.208345s ok={True} rc=0 
+python     k2   tuned                262144     p1 n=10 med=0.206005s ok={True} rc=0 
+python     k2   tuned                524288     p1 n=10 med=0.216205s ok={True} rc=0 
+python     k2   tuned                2097152    p1 n=4 med=0.733492s ok={True} rc=0 
+python     k2   tuned                8388608    p1 n=3 med=0.750708s ok={True} rc=0 
+python     k2   tuned                16777216   p1 n=3 med=0.918982s ok={True} rc=0 
+python     k2   tuned                33554432   p1 n=3 med=0.822208s ok={True} rc=0 
+python     k2   tuned                67108864   p1 n=3 med=1.178180s ok={True} rc=0 
+python     k2   tuned                268435456  p1 n=3 med=1.759056s ok={True} rc=0 
+python     k10  natural                         p1 n=2 med=8.361660s ok={True} rc=0 
+python     k10  tuned                           p1 n=3 med=2.730185s ok={True} rc=0 
+python     k5   natural                         p1 n=2 med=11.454495s ok={True} rc=0 
+python     k5   tuned                           p1 n=3 med=4.379262s ok={True} rc=0 
+python     k3   rmw_packed                      p1 n=2 med=34.860652s ok={True} rc=0 
+python     k3   rmw_padded                      p1 n=2 med=33.208229s ok={True} rc=0 
+python     k3   sw_packed                       p1 n=2 med=18.865429s ok={True} rc=0 
+python     k3   sw_padded                       p1 n=2 med=18.695808s ok={True} rc=0 
+python     k9   natural                         p1 n=3 med=2.049939s ok={True} rc=0 
+python     k9   tuned                           p1 n=3 med=2.345079s ok={True} rc=0 
+python     k9   mt                              p1 n=3 med=2.754870s ok={True} rc=0 
+python     k6   natural              q6         p1 n=3 med=1.758511s ok={True} rc=0 
+python     k6   natural              q1         p1 n=2 med=10.377257s ok={True} rc=0 
+python     k6   tuned                q6         p1 n=3 med=1.950020s ok={True} rc=0 
+python     k6   tuned                q1         p1 n=2 med=8.711709s ok={True} rc=0 
+python     k6   mt                   q6         p1 n=3 med=2.376073s ok={True} rc=0 
+python     k6   mt                   q1         p1 n=2 med=9.017970s ok={True} rc=0 
+python     k10  tuned                           p2 n=3 med=2.710375s ok={True} rc=0 
+python     k9   natural                         p2 n=3 med=1.978360s ok={True} rc=0 
+python     k9   tuned                           p2 n=3 med=2.161268s ok={True} rc=0 
+python     k9   mt                              p2 n=3 med=2.547050s ok={True} rc=0 
+python     k1   natural              energy     p2 n=3 med=0.910477s ok={True} rc=0 
+python     k1   aos                  energy     p2 n=3 med=1.074637s ok={True} rc=0 
+python     k1   soa                  energy     p2 n=3 med=0.924415s ok={True} rc=0 
+python     k4   natural_unsorted                p2 n=4 med=0.644035s ok={True} rc=0 
+python     k4   natural_sorted                  p2 n=6 med=0.543276s ok={True} rc=0 
+python     k4   branchless_unsorted             p2 n=3 med=0.995088s ok={True} rc=0 
+python     k5   tuned                           p2 n=3 med=4.526534s ok={True} rc=0 
+python     k6   natural              q6         p2 n=3 med=1.763624s ok={True} rc=0 
+python     k6   tuned                q6         p2 n=3 med=1.792892s ok={True} rc=0 
+python     k6   mt                   q6         p2 n=3 med=2.378008s ok={True} rc=0 

@@ -1,0 +1,12 @@
+5.7% des échantillons : JIT 0x7f6780208369 boucle=0x7f6780208350-0x7f678020837a {'n': 9, 'packed': 4, 'wide': 4, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    7f6780208350: vmovupd ymm2,YMMWORD PTR [r11+rax*8-0x10]
+    7f6780208357: vaddpd ymm2,ymm2,YMMWORD PTR [r11+rax*8]
+    7f678020835d: vaddpd ymm2,ymm2,YMMWORD PTR [rcx+rax*8+0x10]
+    7f6780208363: vaddpd ymm2,ymm2,YMMWORD PTR [r10+rax*8]
+    7f6780208369: vmulpd ymm2,ymm2,ymm1
+    7f678020836d: vmovupd YMMWORD PTR [r14+rax*8],ymm2
+    7f6780208373: add    rax,0x4
+    7f6780208377: cmp    rdi,rax
+    7f678020837a: jne    0x7f6780208350
+8.1% des échantillons : libjulia-internal.so.1.13.3+0x92a7d boucle=0x92a18-0x92b8e {'n': 106, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+3.7% des échantillons : libjulia-internal.so.1.13.3+0x49d05 boucle=0x49d05-0x49ed4 {'n': 114, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

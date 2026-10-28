@@ -1,0 +1,37 @@
+28.5% des échantillons : JIT 0x7f2947ceb000 boucle=0x7f2947ceafa0-0x7f2947ceb067 {'n': 34, 'packed': 16, 'wide': 0, 'scalar_fp': 0, 'vectorized': True, 'width': 'xmm'}
+    7f2947ceafa0: mov    r10d,r11d
+    7f2947ceafa3: vmovups xmm1,XMMWORD PTR [rdi+r10*8+0x8]
+    7f2947ceafaa: vmovups xmm3,XMMWORD PTR [r8+r10*8+0x10]
+    7f2947ceafb1: vmovups xmm4,XMMWORD PTR [r8+r10*8+0x20]
+    7f2947ceafb8: vaddpd xmm4,xmm4,XMMWORD PTR [rcx+r10*8+0x20]
+    7f2947ceafbf: vaddpd xmm4,xmm4,XMMWORD PTR [rdi+r10*8+0x18]
+    7f2947ceafc6: vaddpd xmm4,xmm4,XMMWORD PTR [rdi+r10*8+0x28]
+    7f2947ceafcd: vmovups xmm5,XMMWORD PTR [rcx+r10*8+0x10]
+    7f2947ceafd4: vmulpd xmm4,xmm6,xmm4
+    7f2947ceafd8: vmovdqu XMMWORD PTR [rdx+r10*8+0x20],xmm4
+    7f2947ceafdf: vaddpd xmm3,xmm5,xmm3
+    7f2947ceafe3: vaddpd xmm1,xmm3,xmm1
+    7f2947ceafe7: vaddpd xmm1,xmm1,XMMWORD PTR [rdi+r10*8+0x18]
+    7f2947ceafee: vmulpd xmm1,xmm6,xmm1
+    7f2947ceaff2: vmovdqu XMMWORD PTR [rdx+r10*8+0x10],xmm1
+    7f2947ceaff9: vmovups xmm1,XMMWORD PTR [r8+r10*8+0x40]
+    7f2947ceb000: vaddpd xmm1,xmm1,XMMWORD PTR [rcx+r10*8+0x40]
+    7f2947ceb007: vaddpd xmm1,xmm1,XMMWORD PTR [rdi+r10*8+0x38]
+    7f2947ceb00e: vaddpd xmm1,xmm1,XMMWORD PTR [rdi+r10*8+0x48]
+    7f2947ceb015: vmovups xmm3,XMMWORD PTR [r8+r10*8+0x30]
+    7f2947ceb01c: vmovups xmm4,XMMWORD PTR [rdi+r10*8+0x28]
+    7f2947ceb023: vmovups xmm5,XMMWORD PTR [rcx+r10*8+0x30]
+    7f2947ceb02a: vmulpd xmm1,xmm6,xmm1
+    7f2947ceb02e: vmovdqu XMMWORD PTR [rdx+r10*8+0x40],xmm1
+    7f2947ceb035: vaddpd xmm1,xmm5,xmm3
+    7f2947ceb039: vaddpd xmm1,xmm4,xmm1
+    7f2947ceb03d: vaddpd xmm1,xmm1,XMMWORD PTR [rdi+r10*8+0x38]
+    7f2947ceb044: vmulpd xmm1,xmm6,xmm1
+    7f2947ceb048: vmovdqu XMMWORD PTR [rdx+r10*8+0x30],xmm1
+    7f2947ceb04f: lea    r11d,[r10+0x8]
+    7f2947ceb053: nop    WORD PTR [rax+rax*1+0x0]
+    7f2947ceb05c: data16 data16 xchg ax,ax
+    7f2947ceb060: cmp    r11d,0x7f8
+    7f2947ceb067: jl     0x7f2947ceafa0
+15.4% des échantillons : libc.so.6+0x19973a boucle=0x199730-0x199747 {'n': 8, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+11.5% des échantillons : JIT 0x7f2947cead13 boucle=0x7f2947ceacb0-0x7f2947cead58 {'n': 41, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}

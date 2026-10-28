@@ -1,0 +1,104 @@
+js_bun     fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js_bun     fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+js_bun     k7   natural                         p0 n=2 med=11.223842s ok={True} rc=0 
+js_bun     k7   tuned                           p0 n=3 med=1.306806s ok={True} rc=0 
+js_bun     k3   rmw_packed                      p0 n=3 med=2.409477s ok={True} rc=0 
+js_bun     k3   rmw_padded                      p0 n=10 med=0.282033s ok={True} rc=0 
+js_bun     k3   sw_packed                       p0 n=3 med=5.060248s ok={True} rc=0 
+js_bun     k3   sw_padded                       p0 n=6 med=0.458588s ok={True} rc=0 
+js_bun     k6   natural              q6         p0 n=10 med=0.180602s ok={True} rc=0 
+js_bun     k6   natural              q1         p0 n=8 med=0.247153s ok={True} rc=0 
+js_bun     k6   tuned                q6         p0 n=10 med=0.120646s ok={True} rc=0 
+js_bun     k6   tuned                q1         p0 n=10 med=0.257788s ok={True} rc=0 
+js_bun     k6   mt                   q6         p0 n=10 med=0.046474s ok={True} rc=0 
+js_bun     k6   mt                   q1         p0 n=10 med=0.076558s ok={True} rc=0 
+js_bun     k4   natural_unsorted                p0 n=10 med=0.087750s ok={True} rc=0 
+js_bun     k4   natural_sorted                  p0 n=10 med=0.020179s ok={True} rc=0 
+js_bun     k4   branchless_unsorted             p0 n=10 med=0.111377s ok={True} rc=0 
+js_bun     k2   tuned                16384      p0 n=10 med=0.006631s ok={True} rc=0 
+js_bun     k2   tuned                65536      p0 n=10 med=0.018668s ok={True} rc=0 
+js_bun     k2   tuned                262144     p0 n=10 med=0.018589s ok={True} rc=0 
+js_bun     k2   tuned                524288     p0 n=10 med=0.025536s ok={True} rc=0 
+js_bun     k2   tuned                2097152    p0 n=10 med=0.109515s ok={True} rc=0 
+js_bun     k2   tuned                8388608    p0 n=4 med=0.628778s ok={True} rc=0 
+js_bun     k2   tuned                16777216   p0 n=4 med=0.685459s ok={True} rc=0 
+js_bun     k2   tuned                33554432   p0 n=3 med=0.733583s ok={True} rc=0 
+js_bun     k2   tuned                67108864   p0 n=3 med=0.987028s ok={True} rc=0 
+js_bun     k2   tuned                268435456  p0 n=3 med=1.489132s ok={True} rc=0 
+js_bun     k1   natural              energy     p0 n=10 med=0.103575s ok={True} rc=0 
+js_bun     k1   aos                  energy     p0 n=10 med=0.042985s ok={True} rc=0 
+js_bun     k1   soa                  energy     p0 n=10 med=0.013188s ok={True} rc=0 
+js_bun     k1   natural_shuffled     energy     p0 n=5 med=0.620461s ok={True} rc=0 
+js_bun     k9   natural                         p0 n=10 med=0.286536s ok={True} rc=0 
+js_bun     k9   tuned                           p0 n=10 med=0.087963s ok={True} rc=0 
+js_bun     k9   mt                              p0 n=10 med=0.031389s ok={True} rc=0 
+js_bun     k10  natural                         p0 n=2 med=7.711227s ok={True} rc=0 
+js_bun     k10  tuned                           p0 n=7 med=0.127134s ok={True} rc=0 
+js_bun     k5   natural                         p0 n=10 med=0.363789s ok={True} rc=0 
+js_bun     k5   tuned                           p0 n=10 med=0.238368s ok={True} rc=0 
+js_bun     k8   natural                         p0 n=3 med=1.137016s ok={True} rc=0 
+js_bun     k8   tuned                           p0 n=4 med=0.585531s ok={True} rc=0 
+js_bun     k6   natural              q6         p1 n=10 med=0.146274s ok={True} rc=0 
+js_bun     k6   natural              q1         p1 n=8 med=0.263485s ok={True} rc=0 
+js_bun     k6   tuned                q6         p1 n=10 med=0.131111s ok={True} rc=0 
+js_bun     k6   tuned                q1         p1 n=10 med=0.262127s ok={True} rc=0 
+js_bun     k6   mt                   q6         p1 n=10 med=0.045943s ok={True} rc=0 
+js_bun     k6   mt                   q1         p1 n=10 med=0.098795s ok={True} rc=0 
+js_bun     k9   natural                         p1 n=10 med=0.254441s ok={True} rc=0 
+js_bun     k9   tuned                           p1 n=10 med=0.071647s ok={True} rc=0 
+js_bun     k9   mt                              p1 n=10 med=0.032105s ok={True} rc=0 
+js_bun     k8   natural                         p1 n=3 med=0.880235s ok={True} rc=0 
+js_bun     k8   tuned                           p1 n=4 med=0.497358s ok={True} rc=0 
+js_bun     k1   natural              energy     p1 n=10 med=0.104841s ok={True} rc=0 
+js_bun     k1   aos                  energy     p1 n=10 med=0.044268s ok={True} rc=0 
+js_bun     k1   soa                  energy     p1 n=10 med=0.014120s ok={True} rc=0 
+js_bun     k1   natural_shuffled     energy     p1 n=5 med=0.589037s ok={True} rc=0 
+js_bun     k3   rmw_packed                      p1 n=3 med=2.574813s ok={True} rc=0 
+js_bun     k3   rmw_padded                      p1 n=10 med=0.296464s ok={True} rc=0 
+js_bun     k3   sw_packed                       p1 n=3 med=4.415318s ok={True} rc=0 
+js_bun     k3   sw_padded                       p1 n=6 med=0.521254s ok={True} rc=0 
+js_bun     k7   natural                         p1 n=2 med=11.575421s ok={True} rc=0 
+js_bun     k7   tuned                           p1 n=3 med=1.434519s ok={True} rc=0 
+js_bun     k5   natural                         p1 n=10 med=0.340243s ok={True} rc=0 
+js_bun     k5   tuned                           p1 n=10 med=0.138905s ok={True} rc=0 
+js_bun     k2   tuned                16384      p1 n=10 med=0.006609s ok={True} rc=0 
+js_bun     k2   tuned                65536      p1 n=10 med=0.021957s ok={True} rc=0 
+js_bun     k2   tuned                262144     p1 n=10 med=0.019291s ok={True} rc=0 
+js_bun     k2   tuned                524288     p1 n=10 med=0.026296s ok={True} rc=0 
+js_bun     k2   tuned                2097152    p1 n=10 med=0.108319s ok={True} rc=0 
+js_bun     k2   tuned                8388608    p1 n=4 med=0.656581s ok={True} rc=0 
+js_bun     k2   tuned                16777216   p1 n=4 med=0.700788s ok={True} rc=0 
+js_bun     k2   tuned                33554432   p1 n=3 med=0.945230s ok={True} rc=0 
+js_bun     k2   tuned                67108864   p1 n=3 med=0.977553s ok={True} rc=0 
+js_bun     k2   tuned                268435456  p1 n=3 med=1.531602s ok={True} rc=0 
+js_bun     k4   natural_unsorted                p1 n=10 med=0.096900s ok={True} rc=0 
+js_bun     k4   natural_sorted                  p1 n=10 med=0.022426s ok={True} rc=0 
+js_bun     k4   branchless_unsorted             p1 n=10 med=0.120106s ok={True} rc=0 
+js_bun     k10  natural                         p1 n=2 med=7.394725s ok={True} rc=0 
+js_bun     k10  tuned                           p1 n=7 med=0.178265s ok={True} rc=0 
+js_bun     k6   natural              q6         p2 n=10 med=0.141053s ok={True} rc=0 
+js_bun     k6   natural              q1         p2 n=8 med=0.273062s ok={True} rc=0 
+js_bun     k6   tuned                q6         p2 n=10 med=0.121153s ok={True} rc=0 
+js_bun     k6   tuned                q1         p2 n=10 med=0.230462s ok={True} rc=0 
+js_bun     k6   mt                   q6         p2 n=10 med=0.051245s ok={True} rc=0 
+js_bun     k6   mt                   q1         p2 n=10 med=0.087996s ok={True} rc=0 
+js_bun     k10  tuned                           p2 n=7 med=0.204589s ok={True} rc=0 
+js_bun     k9   natural                         p2 n=10 med=0.304310s ok={True} rc=0 
+js_bun     k9   tuned                           p2 n=10 med=0.093512s ok={True} rc=0 
+js_bun     k9   mt                              p2 n=10 med=0.037279s ok={True} rc=0 
+js_bun     k3   rmw_packed                      p2 n=3 med=2.339302s ok={True} rc=0 
+js_bun     k3   rmw_padded                      p2 n=10 med=0.312317s ok={True} rc=0 
+js_bun     k3   sw_packed                       p2 n=3 med=4.285737s ok={True} rc=0 
+js_bun     k3   sw_padded                       p2 n=6 med=0.540007s ok={True} rc=0 
+js_bun     k2   tuned                16384      p2 n=10 med=0.006563s ok={True} rc=0 
+js_bun     k2   tuned                65536      p2 n=10 med=0.018260s ok={True} rc=0 
+js_bun     k2   tuned                262144     p2 n=10 med=0.018633s ok={True} rc=0 
+js_bun     k2   tuned                524288     p2 n=10 med=0.025467s ok={True} rc=0 
+js_bun     k2   tuned                2097152    p2 n=10 med=0.112701s ok={True} rc=0 
+js_bun     k2   tuned                8388608    p2 n=4 med=0.673384s ok={True} rc=0 
+js_bun     k2   tuned                16777216   p2 n=4 med=0.715728s ok={True} rc=0 
+js_bun     k2   tuned                33554432   p2 n=3 med=0.794943s ok={True} rc=0 
+js_bun     k2   tuned                67108864   p2 n=3 med=0.979424s ok={True} rc=0 
+js_bun     k2   tuned                268435456  p2 n=3 med=1.613082s ok={True} rc=0 
+js_bun     k8   natural                         p2 n=3 med=0.860616s ok={True} rc=0 
+js_bun     k8   tuned                           p2 n=4 med=0.509251s ok={True} rc=0 

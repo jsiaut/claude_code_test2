@@ -1,0 +1,63 @@
+24.1% des échantillons : lua+0x22802 boucle=0x2247c-0x2289f {'n': 261, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    2247c: mov    rdi,r13
+    2247f: mov    DWORD PTR [rsp+0x18],r8d
+    22484: call   130e0 <luaC_barrierback_>
+    22489: mov    r8d,DWORD PTR [rsp+0x18]
+    2248e: mov    r11,QWORD PTR [rsp+0x20]
+    22493: test   r8d,r8d
+    22496: je     1fcb0 <luaV_execute+0xc0>
+    2249c: jmp    1fd65 <luaV_execute+0x175>
+    224a1: nop    DWORD PTR [rax+0x0]
+    224a8: shr    r14d,0x18
+    224ac: mov    rsi,QWORD PTR [r15]
+    224af: mov    eax,0x2
+    224b4: shl    r14,0x4
+    224b8: add    r14,rbp
+    224bb: cmp    BYTE PTR [r9+0x8],0x45
+    224c0: jne    2096d <luaV_execute+0xd7d>
+    224c6: mov    rdi,QWORD PTR [r9]
+    224c9: mov    rdx,r14
+    224cc: mov    QWORD PTR [rsp+0x20],r11
+    224d1: mov    QWORD PTR [rsp+0x18],r9
+    224d6: mov    DWORD PTR [rsp+0x28],r8d
+    224db: call   1bee0 <luaH_psetshortstr>
+    224e0: mov    r9,QWORD PTR [rsp+0x18]
+    224e5: mov    r11,QWORD PTR [rsp+0x20]
+    224ea: test   eax,eax
+    224ec: jne    2096d <luaV_execute+0xd7d>
+    224f2: test   BYTE PTR [r14+0x8],0x40
+    224f7: mov    r8d,DWORD PTR [rsp+0x28]
+    224fc: je     1fd58 <luaV_execute+0x168>
+    22502: mov    rsi,QWORD PTR [r9]
+    22505: test   BYTE PTR [rsi+0x9],0x20
+    22509: je     1fd58 <luaV_execute+0x168>
+    2250f: mov    rax,QWORD PTR [r14]
+    22512: test   BYTE PTR [rax+0x9],0x18
+    22516: je     1fd58 <luaV_execute+0x168>
+    2251c: jmp    2247c <luaV_execute+0x288c>
+    22521: nop    DWORD PTR [rax+0x0]
+    22528: and    r14d,0x8000
+    2252f: je     22bed <luaV_execute+0x2ffd>
+    22535: lea    r15,[r11+0x4]
+    22539: mov    eax,DWORD PTR [r11]
+    2253c: shr    eax,0x7
+    2253f: shl    eax,0xa
+    22542: add    edx,eax
+    22544: mov    eax,edx
+    22546: or     eax,ecx
+    22548: mov    DWORD PTR [rsp+0x38],eax
+    2254c: lea    r14,[rsi+0x10]
+    22550: mov    rdi,r13
+    22553: mov    DWORD PTR [rsp+0x30],r8d
+    22558: mov    QWORD PTR [r13+0x10],r14
+    2255c: mov    DWORD PTR [rsp+0x28],ecx
+    22560: mov    DWORD PTR [rsp+0x20],edx
+    22564: mov    QWORD PTR [rsp+0x18],rsi
+    22569: call   1ba30 <luaH_new>
+    2256e: mov    edx,DWORD PTR [rsp+0x38]
+    22572: mov    rsi,QWORD PTR [rsp+0x18]
+    22577: mov    ecx,DWORD PTR [rsp+0x28]
+    2257b: mov    r8d,DWORD PTR [rsp+0x30]
+    22580: test   edx,edx
+8.1% des échantillons : lua+0x21258 boucle=0x209f9-0x2129e {'n': 410, 'packed': 0, 'wide': 0, 'scalar_fp': 2, 'vectorized': False, 'width': '-'}
+4.9% des échantillons : lua+0x1fcba boucle=0x1fcb0-0x1fd5f {'n': 45, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

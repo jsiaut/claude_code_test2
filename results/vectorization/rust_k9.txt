@@ -1,0 +1,32 @@
+66.7% des échantillons : ms+0x26ce2 boucle=0x26c70-0x26cf2 {'n': 29, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+    26c70: lea    r10,[rax+0x1]
+    26c74: mov    r11,QWORD PTR [r15-0x8]
+    26c78: cmp    r10,r11
+    26c7b: jae    26d9f <_RNvCs6uk5lmJK0Fk_2ms10k9_natural+0x18f>
+    26c81: mov    r11,QWORD PTR [r12+0x10]
+    26c86: cmp    r10,r11
+    26c89: jae    26d28 <_RNvCs6uk5lmJK0Fk_2ms10k9_natural+0x118>
+    26c8f: mov    r11,QWORD PTR [r15+0x10]
+    26c93: cmp    rax,r11
+    26c96: jae    26d6c <_RNvCs6uk5lmJK0Fk_2ms10k9_natural+0x15c>
+    26c9c: lea    rbx,[rax+0x2]
+    26ca0: cmp    rbx,r11
+    26ca3: jae    26de0 <_RNvCs6uk5lmJK0Fk_2ms10k9_natural+0x1d0>
+    26ca9: mov    r9,QWORD PTR [r13+0x10]
+    26cad: cmp    r10,r9
+    26cb0: jae    26d12 <_RNvCs6uk5lmJK0Fk_2ms10k9_natural+0x102>
+    26cb2: mov    r9,QWORD PTR [r15-0x10]
+    26cb6: vmovsd xmm1,QWORD PTR [r9+rax*8+0x8]
+    26cbd: mov    r9,QWORD PTR [r15+0x8]
+    26cc1: mov    r10,QWORD PTR [r12+0x8]
+    26cc6: vaddsd xmm1,xmm1,QWORD PTR [r10+rax*8+0x8]
+    26ccd: vaddsd xmm1,xmm1,QWORD PTR [r9+rax*8]
+    26cd3: vaddsd xmm1,xmm1,QWORD PTR [r9+rax*8+0x10]
+    26cda: mov    r9,QWORD PTR [r13+0x8]
+    26cde: vmulsd xmm1,xmm1,xmm0
+    26ce2: vmovsd QWORD PTR [r9+rax*8+0x8],xmm1
+    26ce9: inc    rax
+    26cec: cmp    rax,0x7fe
+    26cf2: jne    26c70 <_RNvCs6uk5lmJK0Fk_2ms10k9_natural+0x60>
+19.3% des échantillons : libc.so.6+0x198f2d boucle=0x198f07-0x198f62 {'n': 23, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+3.2% des échantillons : ms+0x318fd boucle=0x318e0-0x31916 {'n': 11, 'packed': 0, 'wide': 0, 'scalar_fp': 8, 'vectorized': False, 'width': '-'}

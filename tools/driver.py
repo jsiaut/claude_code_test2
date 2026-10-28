@@ -29,7 +29,7 @@ PLAN = {
     "k8": [("natural", ""), ("tuned", "")],
     "k9": [("natural", ""), ("tuned", ""), ("mt", "")],
     "k10": [("natural", ""), ("tuned", "")],
-    "fp": [("footprint", "energy"), ("footprint0", "energy")],
+    "fp": [("footprint", "energy"), ("footprint_raw", "energy"), ("footprint0", "energy")],
 }
 TOL = {"k1": 1e-6, "k5": 1e-3, "k9": 1e-9}
 CLK_TCK = os.sysconf("SC_CLK_TCK")

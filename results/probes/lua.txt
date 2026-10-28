@@ -1,0 +1,2 @@
+CAP;A5;0.5;string.pack/unpack : 0x3f800000
+CAP;F3;0.5;entiers 64 bits enveloppants : true ; math.ult true

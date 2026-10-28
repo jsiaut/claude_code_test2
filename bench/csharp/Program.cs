@@ -88,10 +88,22 @@ static unsafe class Ms
         }
         return Vector512.Sum(a0 + a1);
     }
+    // Empreinte K1 (D2a) : octets vivants du tas après GC complet, et RSS courant (pages de 4 Kio)
+    static long LiveNow()
+    {
+        GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect();
+        return GC.GetTotalMemory(true);
+    }
+    static long RssNow()
+    {
+        try { return long.Parse(System.IO.File.ReadAllText("/proc/self/statm").Split(' ')[1]) * 4096; }
+        catch { return 0; }
+    }
     static void RunK1(string v, int reps)
     {
         if (v == "footprint0") { Result("k1", v, "energy", 0, 0, "0"); return; }
         float[] raw = Load<float>("k1_particles.f32");
+        if (v == "footprint_raw") { Result("k1", v, "energy", 0, 0, "0"); return; }
         if (v == "aos")
         {
             PS[] ps = MemoryMarshal.Cast<float, PS>(raw).ToArray();
@@ -109,20 +121,24 @@ static unsafe class Ms
             Bench("k1", v, "energy", reps, () => K1SoA(c[3], c[4], c[5], c[9], N1).ToString("F6", Inv));
             return;
         }
+        long m1 = 0, r1 = 0;
+        if (v == "footprint") { m1 = LiveNow(); r1 = RssNow(); } // P1 : tampon brut chargé
         var list = new List<Particle>();
         for (int i = 0; i < N1; i++)
         {
             int o = 16 * i;
             list.Add(new Particle { X = raw[o], Y = raw[o + 1], Z = raw[o + 2], Vx = raw[o + 3], Vy = raw[o + 4], Vz = raw[o + 5], Ax = raw[o + 6], Ay = raw[o + 7], Az = raw[o + 8], Mass = raw[o + 9], Charge = raw[o + 10], Radius = raw[o + 11], Temp = raw[o + 12], Pressure = raw[o + 13], Energy = raw[o + 14], Density = raw[o + 15] });
         }
-        raw = null!;
         if (v == "footprint")
         {
-            GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect();
-            Console.WriteLine($"META;live_bytes_after_gc;{GC.GetTotalMemory(true)}");
+            long m2 = LiveNow(), r2 = RssNow(); // P2 : collection construite, tampon brut encore vivant
+            Console.WriteLine($"META;mem;live;{m1};{m2}");
+            Console.WriteLine($"META;rss;{r1};{r2}");
+            Console.WriteLine($"META;raw0;{raw[0].ToString(Inv)}");
             Result("k1", v, "energy", 0, 0, K1Natural(list).ToString("F6", Inv));
             return;
         }
+        raw = null!;
         if (v == "natural_shuffled")
         {
             uint[] perm = Load<uint>("k1_perm.u32");

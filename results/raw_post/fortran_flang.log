@@ -1,0 +1,30 @@
+fortran_flang fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint_raw        energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=10 med=0.008585s ok={True} rc=0 
+fortran_flang k10  tuned                           p0 n=5 med=0.184718s ok={True} rc=0 
+fortran_flang k10  tuned                           p0 n=5 med=0.138727s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=10 med=0.008620s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=10 med=0.008713s ok={True} rc=0 
+fortran_flang k10  tuned                           p0 n=5 med=0.237287s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=10 med=0.009186s ok={True} rc=0 
+fortran_flang k10  tuned                           p0 n=5 med=0.234123s ok={True} rc=0 
+fortran_flang k10  tuned                           p0 n=5 med=0.257306s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=10 med=0.014585s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=10 med=0.008703s ok={True} rc=0 
+fortran_flang k10  tuned                           p0 n=5 med=0.077993s ok={True} rc=0 
+fortran_flang k10  tuned                           p0 n=5 med=0.333681s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=10 med=0.012367s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=10 med=0.008752s ok={True} rc=0 
+fortran_flang k10  tuned                           p0 n=5 med=0.154515s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=10 med=0.012335s ok={True} rc=0 
+fortran_flang k10  tuned                           p0 n=5 med=0.239594s ok={True} rc=0 

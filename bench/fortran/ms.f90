@@ -38,6 +38,17 @@ contains
     write (b, '(i0)') i
     s = trim(b)
   end function
+  ! Empreinte K1 (D2a) : RSS courant en octets (/proc/self/statm, 2e champ ; pages de 4 Kio)
+  integer(int64) function rss_now()
+    integer(int64) :: sz, res
+    integer :: u, ios
+    rss_now = 0
+    open (newunit=u, file='/proc/self/statm', action='read', iostat=ios)
+    if (ios /= 0) return
+    read (u, *, iostat=ios) sz, res
+    close (u)
+    if (ios == 0) rss_now = res * 4096_int64
+  end function
   subroutine result(k, v, p, rep, sec, chk)
     character(*), intent(in) :: k, v, p, chk
     integer, intent(in) :: rep
@@ -126,7 +137,8 @@ contains
     integer :: r, k, u
     real(real64) :: t0, t1, e
     character(64) :: s
-    if (v == "footprint0") then
+    integer(int64) :: m1, m2
+    if (v == "footprint0" .or. v == "footprint_raw") then
       call result("k1", v, "energy", 0, 0d0, "0")
       return
     end if
@@ -147,11 +159,16 @@ contains
       end do
       return
     end if
+    m1 = 0
+    if (v == "footprint") m1 = rss_now()  ! P1 : avant la lecture (la collection naturelle est le tableau lu)
     allocate (ps(N1))
     open (newunit=u, file=path("k1_particles.f32"), access='stream', form='unformatted', status='old', action='read')
     read (u) ps
     close (u)
     if (v == "footprint") then
+      m2 = rss_now()  ! P2 : après la lecture
+      write (output_unit, '(a)') 'META;mem;rss;' // itoa(m1) // ';' // itoa(m2)
+      write (output_unit, '(a)') 'META;rss;' // itoa(m1) // ';' // itoa(m2)
       write (s, '(f0.6)') k1_natural(ps)
       call result("k1", v, "energy", 0, 0d0, trim(s))
       return

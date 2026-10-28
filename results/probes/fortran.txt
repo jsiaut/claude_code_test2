@@ -1,0 +1,3 @@
+CAP;A5;1;TRANSFER(1.0) = 0x3F800000
+CAP;B5;1;c_loc + c_f_pointer :  2.0
+CAP;C5;1;do concurrent :   72.0

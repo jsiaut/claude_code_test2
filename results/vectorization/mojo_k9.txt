@@ -1,0 +1,63 @@
+83.6% des échantillons : ms+0x7567 boucle=0x74b0-0x7626 {'n': 68, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+    74b0: lea    rax,[r11-0x1]
+    74b4: mov    r10,QWORD PTR [r12+0x10]
+    74b9: mov    QWORD PTR [rsp+0x10],0x6
+    74c2: mov    QWORD PTR [rsp+0x8],r14
+    74c7: mov    QWORD PTR [rsp+0x18],rsi
+    74cc: mov    QWORD PTR [rsp+0x28],0x27
+    74d5: mov    QWORD PTR [rsp+0x20],rcx
+    74da: mov    QWORD PTR [rsp+0x30],rsi
+    74df: cmp    rax,r10
+    74e2: jae    7889 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::List[::SIMD[DType.float64, 1]]])+0x489>
+    74e8: mov    r10,QWORD PTR [r12]
+    74ec: mov    rbx,QWORD PTR [r15+0x10]
+    74f0: mov    QWORD PTR [rsp+0x10],0x6
+    74f9: mov    QWORD PTR [rsp+0x8],r14
+    74fe: mov    QWORD PTR [rsp+0x18],rsi
+    7503: mov    QWORD PTR [rsp+0x28],0x27
+    750c: mov    QWORD PTR [rsp+0x20],rcx
+    7511: mov    QWORD PTR [rsp+0x30],rsi
+    7516: cmp    rax,rbx
+    7519: jae    7663 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::List[::SIMD[DType.float64, 1]]])+0x263>
+    751f: mov    r8,QWORD PTR [r15]
+    7522: mov    rbx,QWORD PTR [rbp+0x10]
+    7526: mov    QWORD PTR [rsp+0x10],0x6
+    752f: mov    QWORD PTR [rsp+0x8],r14
+    7534: mov    QWORD PTR [rsp+0x18],rsi
+    7539: mov    QWORD PTR [rsp+0x28],0x27
+    7542: mov    QWORD PTR [rsp+0x20],rcx
+    7547: mov    QWORD PTR [rsp+0x30],rsi
+    754c: cmp    rax,rbx
+    754f: jae    7686 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::List[::SIMD[DType.float64, 1]]])+0x286>
+    7555: mov    rax,QWORD PTR [rbp+0x0]
+    7559: vmovsd xmm1,QWORD PTR [r8+r11*8-0x8]
+    7560: vaddsd xmm1,xmm1,QWORD PTR [rax+r11*8-0x8]
+    7567: mov    QWORD PTR [rsp+0x10],0x6
+    7570: mov    QWORD PTR [rsp+0x8],r14
+    7575: mov    QWORD PTR [rsp+0x18],rsi
+    757a: mov    QWORD PTR [rsp+0x28],0x27
+    7583: mov    QWORD PTR [rsp+0x20],rcx
+    7588: mov    QWORD PTR [rsp+0x30],rsi
+    758d: cmp    r9,rdx
+    7590: jae    76b6 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::List[::SIMD[DType.float64, 1]]])+0x2b6>
+    7596: lea    rbx,[r11-0x2]
+    759a: mov    rax,QWORD PTR [r13+0x10]
+    759e: mov    QWORD PTR [rsp+0x10],0x6
+    75a7: mov    QWORD PTR [rsp+0x8],r14
+    75ac: mov    QWORD PTR [rsp+0x18],rsi
+    75b1: mov    QWORD PTR [rsp+0x28],0x27
+    75ba: mov    QWORD PTR [rsp+0x20],rcx
+    75bf: mov    QWORD PTR [rsp+0x30],rsi
+    75c4: cmp    rbx,rax
+    75c7: jae    76e8 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::List[::SIMD[DType.float64, 1]]])+0x2e8>
+    75cd: mov    r8,QWORD PTR [r13+0x0]
+    75d1: vmovsd xmm2,QWORD PTR [r8+r11*8-0x10]
+    75d8: mov    QWORD PTR [rsp+0x10],0x6
+    75e1: mov    QWORD PTR [rsp+0x8],r14
+    75e6: mov    QWORD PTR [rsp+0x18],rsi
+    75eb: mov    QWORD PTR [rsp+0x28],0x27
+    75f4: mov    QWORD PTR [rsp+0x20],rcx
+    75f9: mov    QWORD PTR [rsp+0x30],rsi
+    75fe: cmp    r11,rax
+2.8% des échantillons : ms+0x1e1a6 boucle=0x1e1a0-0x1e1b2 {'n': 5, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+2.5% des échantillons : ms+0x1e325 boucle=0x1e320-0x1e32b {'n': 4, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}

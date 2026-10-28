@@ -3,7 +3,7 @@
 import json, math, os, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from analyze import load, point, RANKED  # noqa: E402
+from analyze import final_data, point, RANKED  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SIZES = ["16384", "65536", "262144", "524288", "2097152", "8388608", "16777216", "33554432", "67108864", "268435456"]
@@ -66,7 +66,7 @@ def bars_svg(summary, path):
 
 def main():
     os.makedirs(os.path.join(ROOT, "results", "charts"), exist_ok=True)
-    data, *_ = load()
+    data, *_ = final_data()
     k2_svg(data, os.path.join(ROOT, "results", "charts", "k2.svg"))
     sp = os.path.join(ROOT, "results", "summary.json")
     if os.path.exists(sp):
