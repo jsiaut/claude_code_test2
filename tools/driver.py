@@ -31,7 +31,7 @@ PLAN = {
     "k10": [("natural", ""), ("tuned", "")],
     "fp": [("footprint", "energy"), ("footprint0", "energy")],
 }
-TOL = {"k1": 1e-6, "k5": 1e-3, "k9": 1e-12}
+TOL = {"k1": 1e-6, "k5": 1e-3, "k9": 1e-9}
 
 
 def steal_ticks():
@@ -103,8 +103,16 @@ def main():
     os.makedirs(outdir, exist_ok=True)
     out = open(a.out or os.path.join(outdir, f"{a.lang}.jsonl"), "a")
     vfilter = set(a.variants.split(",")) if a.variants else None
+    # variantes facultatives propres à un langage : fichier bench/<lang>/extra_variants ("k8 tuned_alloc")
+    extra = {}
+    ef = os.path.join(ROOT, "bench", a.lang, "extra_variants")
+    if os.path.exists(ef):
+        for line in open(ef):
+            f = line.split()
+            if len(f) >= 2:
+                extra.setdefault(f[0], []).append((f[1], f[2] if len(f) > 2 else ""))
     for kernel in a.kernels.split(","):
-        for variant, param in PLAN[kernel]:
+        for variant, param in PLAN[kernel] + extra.get(kernel, []):
             if vfilter and variant not in vfilter:
                 continue
             procs = 1 if a.quick or kernel == "fp" else a.procs
@@ -113,6 +121,8 @@ def main():
                 cal = run_one(a.lang, kernel, variant, param, 1, a.warmup, a.timeout)
                 t = cal["reps"][0]["sec"] if cal.get("reps") else 10.0
                 reps = max(3, min(10, int(3.0 / max(t, 1e-6))))
+                if t > 5.0:  # mesures très longues (langages interprétés) : 2 processus x 2 répétitions
+                    reps, procs = 2, min(procs, 2)
             for p in range(procs):
                 rec = run_one(a.lang, kernel, variant, param, reps, a.warmup, a.timeout)
                 rec["proc"] = p

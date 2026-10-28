@@ -173,7 +173,7 @@ Principe : latence L1/L2/L3/DRAM et coût d'une dépendance de données.
   (ordre d'évaluation imposé, sans contraction FMA, résultats identiques au bit
   près). Le bord est recopié. On échange `in` et `out`. IT = 4 itérations par
   répétition, toujours repartant de la grille initiale (réinitialisation hors chrono).
-* Checksum = Σ de la grille finale (f64), tolérance relative 1e-12.
+* Checksum = Σ de la grille finale (f64), tolérance relative 1e-9.
 * Variantes : `natural` (le tableau 2D idiomatique du langage), `tuned` (tableau plat
   contigu, toutes techniques, mono-thread), `mt` (tuned, 4 threads). Chaque
   itération fait une passe complète de la grille. Le blocage temporel (fusion

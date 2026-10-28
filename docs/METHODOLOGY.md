@@ -189,4 +189,8 @@ Robustesse :
 
 ## Journal des écarts
 
-(vide à la date de rédaction)
+* 2026-10-28, avant les mesures inter-langages : tolérance du checksum K9 portée de 1e-12 à
+  1e-9 (relative). L'ordre de sommation du *checksum* (pas celui du stencil) diffère
+  légitimement selon les langages : `sum()` de Python est compensée depuis 3.12, et
+  certains langages somment par colonnes. Une erreur dans le stencil produit un écart de
+  plusieurs ordres de grandeur supérieur.

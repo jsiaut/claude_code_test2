@@ -1,0 +1,4 @@
+#!/bin/sh
+cd "$(dirname "$0")"
+unset JAVA_TOOL_OPTIONS
+exec /opt/jdk27/bin/java --add-modules jdk.incubator.vector -cp classes Ms "$@"
