@@ -1,0 +1,4 @@
+TSC: 2.8002 GHz
+bp: aléatoire 12.69 cycles/elt, trié 2.20 cycles/elt -> pénalité ~21.0 cycles/mauvaise prédiction (s=1606827406,1606827406)
+bp: aléatoire 12.95 cycles/elt, trié 2.29 cycles/elt -> pénalité ~21.3 cycles/mauvaise prédiction (s=1606827406,1606827406)
+bp: aléatoire 14.69 cycles/elt, trié 3.31 cycles/elt -> pénalité ~22.8 cycles/mauvaise prédiction (s=1606827406,1606827406)

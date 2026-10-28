@@ -1,0 +1,3 @@
+#!/bin/sh
+# Annexe : même source que bench/js, exécutée par Bun (moteur JavaScriptCore)
+exec /root/.bun/bin/bun "$(dirname "$0")/../js/ms.js" "$@"

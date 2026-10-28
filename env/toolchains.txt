@@ -1,0 +1,28 @@
+clang          Ubuntu clang version 23.1.5 (++20261023090852+395ba2c4d274-1~exp1~20261023090919.90)
+gcc            gcc-16 (GCC) 16.2.0
+g++            g++-16 (GCC) 16.2.0
+gfortran       GNU Fortran (GCC) 16.2.0
+flang          Ubuntu flang version 23.1.5 (++20261023090852+395ba2c4d274-1~exp1~20261023090919.90)
+gnat           GNATMAKE 16.2.0
+rustc          rustc 1.99.1 (58cf8f9c3 2026-10-13)
+zig            0.17.0
+odin           /opt/src/odin/odin version dev-2026-10:84bc3fc
+c3c            C3 Compiler Version:       0.8.5_1
+ldc2           LDC - the LLVM D compiler (1.43.0):
+nim            Nim Compiler Version 2.2.12 [Linux: amd64]
+julia          julia version 1.13.3
+chpl           chpl version 2.10.0
+mojo           Mojo 1.2.0 (2016d0cd)
+go             go version go1.27.3 linux/amd64
+java           openjdk version "27.0.1.0.3" 2026-10-25
+dotnet         10.0.403
+node           v26.12.1
+bun            1.4.4
+python3.15     Python 3.15.2
+python3.15t    Python 3.15.2
+ghc            The Glorious Glasgow Haskell Compilation System, version 9.14.1
+ocamlopt       5.5.2
+lua            Lua 5.5.1  Copyright (C) 1994-2026 Lua.org, PUC-Rio
+luajit         LuaJIT 2.1.1792588164 -- Copyright (C) 2005-2026 Mike Pall. https://luajit.org/
+kernel         Linux 6.18.44-fc-v180 #1 SMP PREEMPT_DYNAMIC @0 x86_64
+cpu            model name	: Intel(R) Xeon(R) Processor @ 2.80GHz

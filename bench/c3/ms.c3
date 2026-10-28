@@ -198,7 +198,18 @@ fn ulong k4_branchless(char[] v) @noinline
 fn void run_k4(String v, int reps)
 {
 	char[] d = load_bytes("k4_bytes.u8");
-	if (v == "natural_sorted") sort::quicksort(d);
+	if (v == "natural_sorted")
+	{
+		// tri par comptage hors chrono. sort::quicksort de la bibliothèque standard a pris ~260 s
+		// sur ces 16 M octets (256 valeurs distinctes) : partition dégénérée face aux doublons.
+		usz[256] cnt;
+		foreach (b : d) cnt[b]++;
+		usz k = 0;
+		for (int b = 0; b < 256; b++)
+		{
+			for (usz c = 0; c < cnt[b]; c++) d[k++] = (char)b;
+		}
+	}
 	bool bl = v == "branchless_unsorted";
 	for (int r = -g_warmup; r < reps; r++)
 	{

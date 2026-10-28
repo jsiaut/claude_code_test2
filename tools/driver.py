@@ -32,6 +32,8 @@ PLAN = {
     "fp": [("footprint", "energy"), ("footprint0", "energy")],
 }
 TOL = {"k1": 1e-6, "k5": 1e-3, "k9": 1e-9}
+CLK_TCK = os.sysconf("SC_CLK_TCK")
+NCPU = os.cpu_count()
 
 
 def steal_ticks():
@@ -98,7 +100,12 @@ def main():
     ap.add_argument("--timeout", type=int, default=900)
     ap.add_argument("--out", default="")
     ap.add_argument("--quick", action="store_true", help="1 processus, 1 répétition (validation)")
+    ap.add_argument("--pass", dest="pass_", type=int, default=-1,
+                    help="campagne : n'exécute que le processus d'indice PASS (les passes sont lancées à des moments "
+                         "différents, dans un ordre aléatoire) ; le nombre de répétitions est figé par results/calib.json")
     a = ap.parse_args()
+    calib_path = os.path.join(ROOT, "results", "calib.json")
+    calib = json.load(open(calib_path)) if os.path.exists(calib_path) else {}
     outdir = os.path.join(ROOT, "results", "raw")
     os.makedirs(outdir, exist_ok=True)
     out = open(a.out or os.path.join(outdir, f"{a.lang}.jsonl"), "a")
@@ -117,14 +124,30 @@ def main():
                 continue
             procs = 1 if a.quick or kernel == "fp" else a.procs
             reps = 1 if a.quick or kernel == "fp" else a.reps
-            if reps == 0:  # calibration : 1 répétition pour estimer la durée
+            key = f"{a.lang}|{kernel}|{variant}|{param}"
+            if reps == 0 and key in calib:  # répétitions figées par la première passe
+                reps, procs = calib[key]["reps"], min(procs, calib[key]["procs"])
+            elif reps == 0:  # calibration : 1 répétition pour estimer la durée
                 cal = run_one(a.lang, kernel, variant, param, 1, a.warmup, a.timeout)
                 t = cal["reps"][0]["sec"] if cal.get("reps") else 10.0
                 reps = max(3, min(10, int(3.0 / max(t, 1e-6))))
                 if t > 5.0:  # mesures très longues (langages interprétés) : 2 processus x 2 répétitions
                     reps, procs = 2, min(procs, 2)
-            for p in range(procs):
-                rec = run_one(a.lang, kernel, variant, param, reps, a.warmup, a.timeout)
+                calib = json.load(open(calib_path)) if os.path.exists(calib_path) else {}
+                calib[key] = {"reps": reps, "procs": procs, "t_cal": t}
+                with open(calib_path + ".tmp", "w") as cf:
+                    json.dump(calib, cf, indent=0, sort_keys=True)
+                os.replace(calib_path + ".tmp", calib_path)
+            passes = range(procs) if a.pass_ < 0 else ([a.pass_] if a.pass_ < procs else [])
+            for p in passes:
+                # steal de l'hyperviseur > 2 % du temps CPU disponible : mesure refaite (2 fois au plus)
+                for attempt in range(3):
+                    rec = run_one(a.lang, kernel, variant, param, reps, a.warmup, a.timeout)
+                    steal_frac = rec["steal_ticks"] / max(1e-9, rec["wall"] * CLK_TCK * NCPU)
+                    rec["steal_frac"] = steal_frac
+                    rec["attempt"] = attempt
+                    if steal_frac <= 0.02 or a.quick:
+                        break
                 rec["proc"] = p
                 rec["ts"] = time.strftime("%Y-%m-%dT%H:%M:%S")
                 out.write(json.dumps(rec) + "\n")

@@ -49,9 +49,15 @@ static void *amalloc(size_t n, int huge) {
 // ---------- freq : 1e9 additions dépendantes (latence add = 1 cycle) ----------
 static void t_freq(void) {
     for (int k = 0; k < 3; k++) {
+        // 20 additions dépendantes par itération : le coût de la boucle (branchement pris)
+        // devient négligeable et la chaîne impose exactement 1 cycle cœur par addition.
         uint64_t x = 0, n = 1000000000ull;
         double t0 = now(); uint64_t c0 = rdtsc_s();
-        for (uint64_t i = 0; i < n; i++) __asm__ volatile("add $1, %0" : "+r"(x));
+        for (uint64_t i = 0; i < n / 20; i++)
+            __asm__ volatile("add $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\t"
+                             "add $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\t"
+                             "add $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\t"
+                             "add $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0" : "+r"(x));
         uint64_t c1 = rdtsc_s(); double t1 = now();
         printf("freq: %.3f GHz effectifs (TSC %.3f GHz, ratio cycles/TSC=%.3f) x=%llu\n",
                n / (t1 - t0) / 1e9, tsc_ghz, (double)n / (c1 - c0), (unsigned long long)x);
@@ -108,7 +114,8 @@ static void t_bw(void) {
         uint64_t x = 0; double best = 1e30;
         for (int r = 0; r < 5; r++) {
             uint64_t c0 = rdtsc_s();
-            for (size_t k = 0; k < reps; k++) x += sum_u32(a, n);
+            // barrière : sans elle, le compilateur calcule la somme une fois et la multiplie par reps
+            for (size_t k = 0; k < reps; k++) { __asm__ volatile("" : "+r"(a) : : "memory"); x += sum_u32(a, n); }
             uint64_t c1 = rdtsc_s();
             double sec = (c1 - c0) / tsc_ghz / 1e9;
             if (sec < best) best = sec;
