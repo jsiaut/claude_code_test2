@@ -1,0 +1,10 @@
+rust       k3   rmw_packed                      p0 n=3 med=2.562643s ok={True} rc=0 
+rust       k3   rmw_padded                      p0 n=10 med=0.224071s ok={True} rc=0 
+rust       k3   sw_packed                       p0 n=10 med=0.144167s ok={True} rc=0 
+rust       k3   sw_padded                       p0 n=10 med=0.060239s ok={True} rc=0 
+rust       k1   natural              energy     p0 n=10 med=0.040060s ok={True} rc=0 
+rust       k1   aos                  energy     p0 n=10 med=0.044178s ok={True} rc=0 
+rust       k1   soa                  energy     p0 n=10 med=0.007713s ok={True} rc=0 
+rust       k1   natural_shuffled     energy     p0 n=10 med=0.042582s ok={True} rc=0 
+rust       fp   footprint            energy     p0 n=1 med=0.000000s ok={True} rc=0 
+rust       fp   footprint0           energy     p0 n=1 med=0.000000s ok={True} rc=0 

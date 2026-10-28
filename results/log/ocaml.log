@@ -1,0 +1,14 @@
+ocaml      k1   natural              energy     p0 n=10 med=0.112406s ok={True} rc=0 
+ocaml      k1   aos                  energy     p0 n=9 med=0.307695s ok={True} rc=0 
+ocaml      k1   soa                  energy     p0 n=10 med=0.016916s ok={True} rc=0 
+ocaml      k1   natural_shuffled     energy     p0 n=3 med=0.750949s ok={True} rc=0 
+ocaml      k5   natural                         p0 n=7 med=0.424983s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=10 med=0.140122s ok={True} rc=0 
+ocaml      k6   natural              q6         p0 n=10 med=0.194929s ok={True} rc=0 
+ocaml      k6   natural              q1         p0 n=10 med=0.232344s ok={True} rc=0 
+ocaml      k6   tuned                q6         p0 n=10 med=0.254751s ok={True} rc=0 
+ocaml      k6   tuned                q1         p0 n=10 med=0.208281s ok={True} rc=0 
+ocaml      k6   mt                   q6         p0 n=10 med=0.084319s ok={True} rc=0 
+ocaml      k6   mt                   q1         p0 n=10 med=0.080613s ok={True} rc=0 
+ocaml      k7   natural                         p0 n=2 med=13.338373s ok={True} rc=0 
+ocaml      k7   tuned                           p0 n=3 med=1.630253s ok={True} rc=0 

@@ -1,0 +1,5 @@
+python     k4   natural_unsorted                p0 n=4 med=0.735447s ok={True} rc=0 
+python     k4   natural_sorted                  p0 n=6 med=0.576539s ok={True} rc=0 
+python     k4   branchless_unsorted             p0 n=3 med=1.098604s ok={True} rc=0 
+python     k7   natural                         p0 n=2 med=28.088150s ok={True} rc=0 
+python     k7   tuned                           p0 n=2 med=29.905544s ok={True} rc=0 

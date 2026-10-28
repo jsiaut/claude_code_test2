@@ -1,0 +1,9 @@
+haskell    k1   natural              energy     p0 n=10 med=0.071858s ok={True} rc=0 
+haskell    k1   aos                  energy     p0 n=10 med=0.041502s ok={True} rc=0 
+haskell    k1   soa                  energy     p0 n=10 med=0.009390s ok={True} rc=0 
+haskell    k1   natural_shuffled     energy     p0 n=10 med=0.066592s ok={True} rc=0 
+haskell    k9   natural                         p0 n=8 med=0.370724s ok={True} rc=0 
+haskell    k9   tuned                           p0 n=10 med=0.041915s ok={True} rc=0 
+haskell    k9   mt                              p0 n=10 med=0.021919s ok={True} rc=0 
+haskell    k7   natural                         p0 n=2 med=92.050740s ok={True} rc=0 
+haskell    k7   tuned                           p0 n=4 med=0.769074s ok={True} rc=0 

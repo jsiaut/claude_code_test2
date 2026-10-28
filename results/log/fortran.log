@@ -1,0 +1,13 @@
+fortran    k8   natural                         p0 n=3 med=0.881223s ok={True} rc=0 
+fortran    k8   tuned                           p0 n=10 med=0.200836s ok={True} rc=0 
+fortran    k6   natural              q6         p0 n=10 med=0.074561s ok={True} rc=0 
+fortran    k6   natural              q1         p0 n=10 med=0.094885s ok={True} rc=0 
+fortran    k6   tuned                q6         p0 n=10 med=0.020808s ok={True} rc=0 
+fortran    k6   tuned                q1         p0 n=10 med=0.048130s ok={True} rc=0 
+fortran    k6   mt                   q6         p0 n=10 med=0.006004s ok={True} rc=0 
+fortran    k6   mt                   q1         p0 n=10 med=0.022106s ok={True} rc=0 
+fortran    k5   natural                         p0 n=10 med=0.171939s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=10 med=0.007264s ok={True} rc=0 
+fortran    k4   natural_unsorted                p0 n=10 med=0.013846s ok={True} rc=0 
+fortran    k4   natural_sorted                  p0 n=10 med=0.011338s ok={True} rc=0 
+fortran    k4   branchless_unsorted             p0 n=10 med=0.016293s ok={True} rc=0 

@@ -1,0 +1,22 @@
+nim        k9   natural                         p0 n=10 med=0.072333s ok={True} rc=0 
+nim        k9   tuned                           p0 n=10 med=0.037596s ok={True} rc=0 
+nim        k9   mt                              p0 n=10 med=0.018255s ok={True} rc=0 
+nim        k6   natural              q6         p0 n=10 med=0.066957s ok={True} rc=0 
+nim        k6   natural              q1         p0 n=10 med=0.102556s ok={True} rc=0 
+nim        k6   tuned                q6         p0 n=10 med=0.023068s ok={True} rc=0 
+nim        k6   tuned                q1         p0 n=10 med=0.099623s ok={True} rc=0 
+nim        k6   mt                   q6         p0 n=10 med=0.009458s ok={True} rc=0 
+nim        k6   mt                   q1         p0 n=10 med=0.038203s ok={True} rc=0 
+nim        k4   natural_unsorted                p0 n=10 med=0.004089s ok={True} rc=0 
+nim        k4   natural_sorted                  p0 n=10 med=0.003677s ok={True} rc=0 
+nim        k4   branchless_unsorted             p0 n=10 med=0.003784s ok={True} rc=0 
+nim        k2   tuned                16384      p0 n=10 med=0.006657s ok={True} rc=0 
+nim        k2   tuned                65536      p0 n=10 med=0.018570s ok={True} rc=0 
+nim        k2   tuned                262144     p0 n=10 med=0.021276s ok={True} rc=0 
+nim        k2   tuned                524288     p0 n=10 med=0.026937s ok={True} rc=0 
+nim        k2   tuned                2097152    p0 n=10 med=0.117129s ok={True} rc=0 
+nim        k2   tuned                8388608    p0 n=4 med=0.618759s ok={True} rc=0 
+nim        k2   tuned                16777216   p0 n=4 med=0.655172s ok={True} rc=0 
+nim        k2   tuned                33554432   p0 n=3 med=0.759533s ok={True} rc=0 
+nim        k2   tuned                67108864   p0 n=3 med=0.762869s ok={True} rc=0 
+nim        k2   tuned                268435456  p0 n=3 med=1.486647s ok={True} rc=0 

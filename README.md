@@ -28,14 +28,14 @@ Vous avez demandé le **sens large**, qui ajoute trois corpus convergents :
   A. Kelley, [*A Practical Guide to Applying Data-Oriented Design*](https://vimeo.com/649009599) (2021).
   Ses principes : la donnée et sa transformation d'abord, structures de tableaux (SoA), données
   compactes, indices plutôt que pointeurs, arènes, aucune allocation cachée, traitement par lots.
-* **Calcul haute performance** : modèle *roofline* (Williams, Waterman et Patterson, CACM 2009),
+* **Calcul haute performance** : modèle *roofline* ([Williams, Waterman et Patterson, CACM 2009](https://doi.org/10.1145/1498765.1498785)),
   bande passante mémoire ([STREAM](https://www.cs.virginia.edu/stream/)), vectorisation SIMD,
   tableaux multidimensionnels contigus, parallélisme de données, latence de la hiérarchie mémoire
   (U. Drepper, [*What Every Programmer Should Know About Memory*](https://people.freebsd.org/~lstewart/articles/cpumemory.pdf)).
 * **SGBD analytiques (OLAP)** : stockage colonnaire, exécution vectorisée
   ([MonetDB/X100](https://www.cidrdb.org/cidr2005/papers/P19.pdf), CIDR 2005), sélection sans
   branchement, tables de hachage plates à adressage ouvert, parallélisme par morceaux (*morsels*,
-  Leis et al., SIGMOD 2014).
+  [Leis et al., SIGMOD 2014](https://doi.org/10.1145/2588555.2610507)).
 
 **Définition opérationnelle retenue** (pré-enregistrée, `docs/METHODOLOGY.md`). Un langage incarne
 la mechanical sympathy dans la mesure où :
@@ -92,8 +92,8 @@ spécification des noyaux, qui sert de contrat commun aux 21 langages, est dans 
 * Le pilote enregistre en plus le pic RSS, les temps CPU utilisateur et système, les défauts de
   page et les changements de contexte (`tools/driver.py`).
 * Statistiques : médiane des médianes ; IC à 95 % par bootstrap hiérarchique (processus puis
-  répétitions, Kalibera et Jones, ISMM 2013) ; moyennes géométriques de ratios normalisés (Fleming
-  et Wallace, 1986) ; 10 000 tirages de Dirichlet sur les poids pour les intervalles de rang.
+  répétitions, [Kalibera et Jones, ISMM 2013](https://doi.org/10.1145/2464157.2464160)) ; moyennes géométriques de ratios normalisés ([Fleming
+  et Wallace, CACM 1986](https://doi.org/10.1145/5666.5673)) ; 10 000 tirages de Dirichlet sur les poids pour les intervalles de rang.
 
 ## 3. L'environnement : ce qui existe, ce qui manque, ce que j'ai construit
 
@@ -201,9 +201,9 @@ Le script d'analyse signale tout temps inférieur à 90 % de sa borne : ce serai
   par une source ou une sonde (`analysis/capabilities.py`). L'analyse où chaque 0,5 est tiré au
   hasard à 0 ou 1 borne l'effet de ces jugements.
 * **Pondération des piliers.** Elle est mise à l'épreuve par 10 000 tirages de Dirichlet (section 6).
-* **Biais de mesure connus.** Alignement du code et environnement (Mytkowicz et al., ASPLOS 2009) :
-  atténués par les processus multiples, pas éliminés. Échauffement des JIT (Barrett et al., OOPSLA
-  2017) : trois répétitions d'échauffement, puis vérification de la stabilité des répétitions
+* **Biais de mesure connus.** Alignement du code et environnement ([Mytkowicz et al., ASPLOS 2009](https://doi.org/10.1145/1508244.1508275)) :
+  atténués par les processus multiples, pas éliminés. Échauffement des JIT ([Barrett et al., OOPSLA
+  2017](https://doi.org/10.1145/3133876)) : trois répétitions d'échauffement, puis vérification de la stabilité des répétitions
   (coefficient de variation signalé au-delà de 5 %).
 * **« Natural » est une interprétation.** Le code idiomatique d'un langage se discute. Les choix
   sont documentés et justifiés dans `docs/NATURAL.md`.

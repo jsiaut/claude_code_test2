@@ -1,0 +1,584 @@
+{
+ "results": {
+  "c": {
+   "C": 72.26785714285714,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": null,
+    "k8": 0.8251185492767085,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": 0.8496420635677,
+    "D4": null
+   }
+  },
+  "cpp": {
+   "C": 80.69642857142858,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": 1.0,
+    "k3": null,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": null,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": 0.8406936427355581,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "csharp": {
+   "C": 65.75,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": null,
+    "k5": 0.33925318076035654,
+    "k6": null,
+    "k7": null,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "java": {
+   "C": 34.77678571428571,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": 0.9789167615614186,
+    "k4": null,
+    "k5": 1.0,
+    "k6": null,
+    "k7": null,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "zig": {
+   "C": 83.25,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": 0.9859803857778277,
+    "k4": null,
+    "k5": null,
+    "k6": 0.9311429690674462,
+    "k7": null,
+    "k8": 0.8418555855086812,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": 0.4949651009765234,
+    "D4": null
+   }
+  },
+  "odin": {
+   "C": 77.78571428571429,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {},
+   "D_parts": {}
+  },
+  "julia": {
+   "C": 61.36607142857143,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": null,
+    "k8": 0.6362907231472211,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": 0.05474114331719279,
+    "D4": null
+   }
+  },
+  "ada": {
+   "C": 68.26785714285714,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": 0.9944081538864733,
+    "k4": 0.5842416634765364,
+    "k5": null,
+    "k6": null,
+    "k7": 0.997852090571743,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "fortran": {
+   "C": 51.625,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": null,
+    "k5": null,
+    "k6": 0.8131404857671487,
+    "k7": null,
+    "k8": 1.0,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": 0.7561082382520682,
+    "D4": null
+   }
+  },
+  "js": {
+   "C": 11.589285714285715,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": 0.06512959188440028,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": null,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "python": {
+   "C": 20.125,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": 0.004317176323238495,
+    "k5": null,
+    "k6": null,
+    "k7": 0.017614303626572705,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "haskell": {
+   "C": 31.8125,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": 0.8111385041721448,
+    "k3": null,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": null,
+    "k8": null,
+    "k9": 0.8613054293730373,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": 1.0,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "c3": {
+   "C": 70.375,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": null,
+    "k8": null,
+    "k9": 1.0,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "d": {
+   "C": 72.48214285714286,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": 1.0,
+    "k5": null,
+    "k6": 0.5226846424965701,
+    "k7": null,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "rust": {
+   "C": 71.0625,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": 0.9767653956650796,
+    "k3": 1.0,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": null,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "chapel": {
+   "C": 55.125,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": 0.9773150204558737,
+    "k3": null,
+    "k4": 0.9216806220095695,
+    "k5": null,
+    "k6": null,
+    "k7": 1.0,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": 0.9903058368530862,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "nim": {
+   "C": 71.41071428571429,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": 0.8216469488016194,
+    "k5": null,
+    "k6": 0.5137781815667887,
+    "k7": null,
+    "k8": null,
+    "k9": 0.9767761855008515,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "mojo": {
+   "C": 58.66071428571428,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": 0.9584993343577007,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": null,
+    "k8": 0.9496472843544758,
+    "k9": null,
+    "k10": 1.0
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": 0.9136795090376845,
+    "D4": null
+   }
+  },
+  "go": {
+   "C": 44.19642857142856,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": null,
+    "k5": null,
+    "k6": 0.5876461846572419,
+    "k7": 0.7112246310843596,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "ocaml": {
+   "C": 24.732142857142858,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": 0.44544035159590534,
+    "k3": null,
+    "k4": null,
+    "k5": 0.06174013167794764,
+    "k6": 0.12071429441461935,
+    "k7": null,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": 0.14699389683304573,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "lua": {
+   "C": 2.8125,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": 0.04900286221714189,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "c_gcc": {
+   "C": 72.26785714285714,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": 0.9537174436619785,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": null,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "fortran_flang": {
+   "C": 51.625,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": 0.963423552701626,
+    "k3": 1.0502980790804508,
+    "k4": null,
+    "k5": null,
+    "k6": null,
+    "k7": null,
+    "k8": null,
+    "k9": null,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": 1.0,
+    "D3": null,
+    "D4": null
+   }
+  },
+  "luajit": {
+   "C": 2.8125,
+   "E": null,
+   "D": null,
+   "MS": null,
+   "E_kernels": {
+    "k1": null,
+    "k3": null,
+    "k4": null,
+    "k5": 0.09817188022075511,
+    "k6": null,
+    "k7": null,
+    "k8": null,
+    "k9": 0.5992040967597754,
+    "k10": null
+   },
+   "D_parts": {
+    "D1": null,
+    "D2": null,
+    "D3": null,
+    "D4": null
+   }
+  }
+ },
+ "tstar": {
+  "k1": [
+   0.0075248369999999995
+  ],
+  "k3": [
+   0.0601669945
+  ],
+  "k4": [
+   0.0030821
+  ],
+  "k5": [
+   0.008520632
+  ],
+  "k6": [
+   0.017756087,
+   0.034536893,
+   0.0059791005,
+   0.015201247000000001
+  ],
+  "k7": [
+   0.481765
+  ],
+  "k8": [
+   0.200039833
+  ],
+  "k9": [
+   0.036435206,
+   0.017862436000000002
+  ],
+  "k10": [
+   0.045007225500000005
+  ]
+ },
+ "invalid": [],
+ "k8_ref": [
+  3.4931498829039813,
+  21.72120369588092
+ ],
+ "k2_ref": {
+  "16384": null,
+  "262144": null,
+  "8388608": null
+ }
+}
