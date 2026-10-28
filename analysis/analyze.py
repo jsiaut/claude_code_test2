@@ -181,6 +181,9 @@ BOUNDS = {
     ("k9", "tuned", ""): 4 * 2 * 8 * 2048 * 2048 / BW1, ("k9", "natural", ""): 4 * 2 * 8 * 2048 * 2048 / BW1,
     ("k9", "mt", ""): 4 * 2 * 8 * 2048 * 2048 / BW4, ("k4", "natural_unsorted", ""): 16777216 / BW1,
     ("k4", "branchless_unsorted", ""): 16777216 / BW1,
+    # K3 : 2^25 incréments dépendants par thread, au mieux 1 par cycle à 3,3 GHz (même en registre)
+    ("k3", "sw_padded", ""): 2 ** 25 / 3.3e9, ("k3", "sw_packed", ""): 2 ** 25 / 3.3e9,
+    ("k3", "rmw_padded", ""): 2 ** 25 / 3.3e9, ("k3", "rmw_packed", ""): 2 ** 25 / 3.3e9,
 }
 
 
@@ -197,6 +200,12 @@ def sanity(data):
 
 def main():
     data, lat, rss, invalid = load()
+    # une mesure plus rapide que la physique ne le permet a sauté du calcul : invalide, comme une
+    # somme de contrôle fausse (le résultat peut être juste sans que le travail ait été fait)
+    sus = sanity(data)
+    for lang, key, t, bound in sus:
+        del data[lang][key]
+        invalid.append((lang, key, "sous la borne physique", f"{t:.2e} s < {bound:.2e} s"))
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json"))) if os.path.exists(
         os.path.join(ROOT, "results", "vectorization.json")) else {}
     fpf = os.path.join(ROOT, "results", "footprint.json")
@@ -301,8 +310,7 @@ def main():
         print("incomplets :", {l: {k: v for k, v in res.get(l, {}).items() if k in ("C", "E", "D")} for l in missing})
     if invalid:
         print("mesures invalides :", len(invalid), invalid[:10])
-    sus = sanity(data)
-    print("contrôle de vraisemblance (temps < 0,9 x borne physique) :", sus if sus else "aucune anomalie")
+    print("contrôle de vraisemblance (temps < 0,9 x borne physique, exclus) :", sus if sus else "aucune anomalie")
 
 
 if __name__ == "__main__":

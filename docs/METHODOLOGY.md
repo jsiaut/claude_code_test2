@@ -222,3 +222,17 @@ Robustesse :
 * Idem, corrections hors section chronométrée : C3 trie les octets de K4 `natural_sorted` par
   comptage (le tri de la bibliothèque standard prenait 260 s) ; la référence C reçoit une barrière
   `KEEP` dans K5 (requise par gcc, sans effet sur le code de clang).
+* 2026-10-28, pendant la campagne (après la passe 0) : **mesures sous la borne physique**. Haskell K3
+  `sw_*` mesurait 0,1 ms pour 4 × 2²⁵ incréments, avec un résultat juste : LLVM avait fusionné les
+  incréments, faits par des accès mémoire ordinaires. Ma version violait la spécification (accès
+  « garanti visible et non élidable »). Elle est corrigée (`atomicReadIntArray#`/`atomicWriteIntArray#`)
+  et K3 sera remesuré pour Haskell après la campagne, avec 3 processus à la suite, pour ne pas changer
+  de binaire en cours de campagne. Pour l'avenir, l'analyse traite comme invalide toute mesure
+  inférieure à 90 % de sa borne physique (`analysis/analyze.py`, `BOUNDS`, K3 compris). LuaJIT
+  (annexe, non classé) garde le compteur en registre (`volatile` ignoré) ; son K3 est déclaré non
+  conforme.
+* Idem : **passe complémentaire pour les mesures instables**. Toute mesure dont le coefficient de
+  variation entre ses processus dépasse 10 % reçoit 6 processus supplémentaires, exécutés en 6 tours
+  d'ordre aléatoire (`tools/complement.py`). La règle est la même pour tous les langages. Motivation :
+  K10 dépend de la paire de vCPU choisie par l'ordonnanceur (transferts de 120 à 210 ns), et le même
+  binaire C variait de 11 à 147 ms d'une répétition à l'autre pendant la mise au point.

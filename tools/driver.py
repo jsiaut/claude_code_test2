@@ -100,6 +100,8 @@ def main():
     ap.add_argument("--timeout", type=int, default=900)
     ap.add_argument("--out", default="")
     ap.add_argument("--quick", action="store_true", help="1 processus, 1 répétition (validation)")
+    ap.add_argument("--params", default="", help="ne garder que ces paramètres (ex. q1, 16384)")
+    ap.add_argument("--tag", default="", help="étiquette enregistrée dans chaque mesure (ex. complement)")
     ap.add_argument("--pass", dest="pass_", type=int, default=-1,
                     help="campagne : n'exécute que le processus d'indice PASS (les passes sont lancées à des moments "
                          "différents, dans un ordre aléatoire) ; le nombre de répétitions est figé par results/calib.json")
@@ -121,6 +123,8 @@ def main():
     for kernel in a.kernels.split(","):
         for variant, param in PLAN[kernel] + extra.get(kernel, []):
             if vfilter and variant not in vfilter:
+                continue
+            if a.params and param not in a.params.split(","):
                 continue
             procs = 1 if a.quick or kernel == "fp" else a.procs
             reps = 1 if a.quick or kernel == "fp" else a.reps
@@ -150,6 +154,8 @@ def main():
                         break
                 rec["proc"] = p
                 rec["ts"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+                if a.tag:
+                    rec["tag"] = a.tag
                 out.write(json.dumps(rec) + "\n")
                 out.flush()
                 secs = [r["sec"] for r in rec.get("reps", [])]

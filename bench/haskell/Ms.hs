@@ -179,12 +179,14 @@ runK3 :: String -> Int -> Int -> IO ()
 runK3 v warm reps = do
   let rmw = take 3 v == "rmw"
       stride = if drop (length v - 6) v == "padded" then 16 else 1
-  putStrLn $ "META;k3_mechanism;" ++ if rmw then "fetchAddIntArray# (lock xadd)" else "readIntArray#/writeIntArray# ordinaires (écrivain unique)"
+  putStrLn $ "META;k3_mechanism;" ++ if rmw then "fetchAddIntArray# (lock xadd)" else "atomicReadIntArray#/atomicWriteIntArray# (seuls accès garantis non élidables ; seq_cst)"
   a <- newAligned (128 * 8)
   let idx t = 16 + t * stride
       worker t
         | rmw = let go 0 = return (); go k = fetchAddI a (idx t) 1 >> go (k - 1 :: Int) in go iter3
-        | otherwise = let go 0 = return (); go k = do { x <- readI a (idx t); writeI a (idx t) (x + 1); go (k - 1 :: Int) } in go iter3
+        -- accès ordinaires : LLVM fusionne les 2^25 incréments en une addition (mesuré : 0,1 ms) ;
+        -- la spécification exige l'accès le plus faible garanti visible et non élidable
+        | otherwise = let go 0 = return (); go k = do { x <- atomicReadI a (idx t); atomicWriteI a (idx t) (x + 1); go (k - 1 :: Int) } in go iter3
   bench "k3" v "4x2^25" warm reps $ do
     forM_ [0 .. 3] $ \t -> writeI a (idx t) 0
     parallelIO [worker t | t <- [0 .. 3]]
