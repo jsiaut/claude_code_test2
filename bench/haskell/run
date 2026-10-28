@@ -1,0 +1,2 @@
+#!/bin/sh
+exec "$(dirname "$0")/ms" "$@" +RTS -N4 -RTS
