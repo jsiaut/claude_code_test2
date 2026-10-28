@@ -18,3 +18,4 @@ bench/*/__pycache__/
 bench/*/nimcache/
 probes/*/bin/
 *.tmp
+__pycache__/

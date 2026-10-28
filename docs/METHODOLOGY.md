@@ -194,3 +194,31 @@ Robustesse :
   légitimement selon les langages : `sum()` de Python est compensée depuis 3.12, et
   certains langages somment par colonnes. Une erreur dans le stencil produit un écart de
   plusieurs ordres de grandeur supérieur.
+
+* 2026-10-28, avant la campagne finale : **ordre d'exécution randomisé**. Au lieu de lancer les P = 3
+  processus d'une même mesure à la suite, la campagne fait 3 passes. Chaque passe exécute un
+  processus par mesure, dans un ordre de blocs (langage, noyau) tiré au hasard avec une graine fixe
+  (`tools/campaign.py`). La dérive temporelle de la VM est ainsi répartie entre les langages au lieu
+  d'être confondue avec l'un d'eux. Le nombre de répétitions est fixé par la passe 0
+  (`results/calib.json`).
+* Idem : la règle du *steal* (> 2 %) est appliquée en rapportant les ticks de vol de `/proc/stat`
+  à la capacité totale (temps mural × 4 vCPU). Une mesure fautive est refaite deux fois au plus.
+* Idem : **options globales**. Chapel compile le programme d'un seul bloc, avec des options
+  globales. Il est donc construit en trois binaires : `natural` (options par défaut), `tuned`
+  (vecteurs 512 bits autorisés) et `fm` (`--no-ieee-float`, réservé aux réductions flottantes que la
+  spécification autorise à réassocier : K1 aos/soa et K5 tuned). Le stencil K9 garde ainsi son
+  ordre d'évaluation imposé. Pour Fortran, les noyaux tuned sont compilés à part avec
+  `-mprefer-vector-width=512`.
+* Idem : l'annexe CPython sans GIL (`python_ft`) se limite aux noyaux multi-threads (K3, K6, K9, K10).
+  Son code mono-thread est celui de `python`.
+* Idem : **empreinte K1 (D2a)**. Dans la plupart des implémentations, la collection naturelle est
+  construite à partir d'un tampon brut lu dans le fichier (64 o/particule), qui coexiste avec elle
+  au moment du pic RSS. Le calcul prévu, `pic(footprint) - pic(footprint0)`, compterait donc ce
+  tampon. Le calcul devient `pic(footprint) - pic(footprint_raw)`, où la nouvelle variante
+  `footprint_raw` charge le tampon exactement comme le chemin naturel puis s'arrête. Les
+  implémentations qui lisent le fichier directement dans la collection (C, Fortran, Ada) ont un
+  `footprint_raw` vide. Limite connue : les déchets transitoires créés pendant la construction
+  restent comptés pour les langages à GC.
+* Idem, corrections hors section chronométrée : C3 trie les octets de K4 `natural_sorted` par
+  comptage (le tri de la bibliothèque standard prenait 260 s) ; la référence C reçoit une barrière
+  `KEEP` dans K5 (requise par gcc, sans effet sur le code de clang).
