@@ -48,6 +48,8 @@ static void result(const char *k, const char *v, const char *p, int rep, double 
     fflush(stdout);
 }
 #define BARRIER(p) __asm__ volatile("" : : "r"(p) : "memory")
+// rend une valeur observable : sans cela, gcc élimine les appels « pure » dont le résultat est écrasé
+#define KEEP(x) __asm__ volatile("" : : "g"(x) : "memory")
 
 // ------------------------------------------------------------------ K1
 enum { N1 = 1 << 22 };
@@ -251,6 +253,7 @@ static void run_k5(const char *variant, int reps) {
         for (int it = 0; it < INNER5; it++) {
             BARRIER(a);
             d = tuned ? k5_tuned(a, b, N5) : k5_natural(a, b, N5);
+            KEEP(d);
         }
         double t1 = now();
         snprintf(chk, sizeof chk, "%.4f", d);
