@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="642" viewBox="0 0 760 642" role="img" aria-label="Rangs v2 et leurs incertitudes">
+<style>
+  svg { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781; --grid: #e1e0d9; --axis: #c3c2b7;
+        --s1: #2a78d6; --band: #b7d3f6; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    svg { --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781; --grid: #2c2c2a; --axis: #383835;
+          --s1: #3987e5; --band: #184f95; }
+  }
+  .bg { fill: var(--surface); } .t1 { fill: var(--ink); font-size: 15px; font-weight: 600; }
+  .t2 { fill: var(--ink2); font-size: 12px; } .lab { fill: var(--ink); font-size: 12px; }
+  .tick { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .grid { stroke: var(--grid); stroke-width: 1; } .axis { stroke: var(--axis); stroke-width: 1; }
+  .band { fill: var(--band); } .ua { stroke: var(--ink2); stroke-width: 2; stroke-linecap: round; }
+  .dot { fill: var(--s1); stroke: var(--surface); stroke-width: 2; }
+  .dot2 { fill: var(--muted); stroke: var(--surface); stroke-width: 2; }
+  .sep { stroke: var(--axis); stroke-width: 1; }
+</style>
+<rect class="bg" width="760" height="642"/>
+<text class="t1" x="16" y="26">Rang de chaque langage, et ce que l'incertitude permet de dire</text>
+<text class="t2" x="16" y="46">Point : configuration principale v2. Bande : ensemble simultané à 95 % (mesures seules). Trait : 5–95 % de l'analyse globale.</text>
+<rect class="band" x="16" y="60" width="26" height="12" rx="2"/><text class="t2" x="48" y="70">mesures seules</text>
+<line class="ua" x1="166" x2="192" y1="66" y2="66"/><text class="t2" x="198" y="70">analyse globale (méthode, poids, jugements)</text>
+<circle class="dot" cx="502" cy="66" r="5"/><text class="t2" x="514" y="70">rang v2</text>
+<line class="grid" x1="130.0" x2="130.0" y1="86" y2="596"/>
+<text class="tick" x="130.0" y="614" text-anchor="middle">1</text>
+<line class="grid" x1="250.0" x2="250.0" y1="86" y2="596"/>
+<text class="tick" x="250.0" y="614" text-anchor="middle">5</text>
+<line class="grid" x1="400.0" x2="400.0" y1="86" y2="596"/>
+<text class="tick" x="400.0" y="614" text-anchor="middle">10</text>
+<line class="grid" x1="550.0" x2="550.0" y1="86" y2="596"/>
+<text class="tick" x="550.0" y="614" text-anchor="middle">15</text>
+<line class="grid" x1="700.0" x2="700.0" y1="86" y2="596"/>
+<text class="tick" x="700.0" y="614" text-anchor="middle">20</text>
+<line class="grid" x1="730.0" x2="730.0" y1="86" y2="596"/>
+<text class="tick" x="730.0" y="614" text-anchor="middle">21</text>
+<text class="t2" x="430" y="634" text-anchor="middle">rang (1 = le plus de mechanical sympathy mesurée)</text>
+<g><title>C : rang 1, ensemble simultané 1–2, analyse globale 1–4, groupe 1</title>
+<text class="lab" x="118" y="108.0" text-anchor="end">C</text>
+<rect class="band" x="124.0" y="97.0" width="42.0" height="14" rx="4"/>
+<line class="ua" x1="130.0" x2="220.0" y1="104.0" y2="104.0"/>
+<circle class="dot" cx="130.0" cy="104.0" r="5"/></g>
+<g><title>C++ : rang 2, ensemble simultané 1–3, analyse globale 1–6, groupe 1</title>
+<text class="lab" x="118" y="132.0" text-anchor="end">C++</text>
+<rect class="band" x="124.0" y="121.0" width="72.0" height="14" rx="4"/>
+<line class="ua" x1="130.0" x2="280.0" y1="128.0" y2="128.0"/>
+<circle class="dot" cx="160.0" cy="128.0" r="5"/></g>
+<g><title>Odin : rang 3, ensemble simultané 2–9, analyse globale 1–6, groupe 1</title>
+<text class="lab" x="118" y="156.0" text-anchor="end">Odin</text>
+<rect class="band" x="154.0" y="145.0" width="222.0" height="14" rx="4"/>
+<line class="ua" x1="130.0" x2="280.0" y1="152.0" y2="152.0"/>
+<circle class="dot" cx="190.0" cy="152.0" r="5"/></g>
+<g><title>Zig : rang 4, ensemble simultané 3–9, analyse globale 2–10, groupe 1</title>
+<text class="lab" x="118" y="180.0" text-anchor="end">Zig</text>
+<rect class="band" x="184.0" y="169.0" width="192.0" height="14" rx="4"/>
+<line class="ua" x1="160.0" x2="400.0" y1="176.0" y2="176.0"/>
+<circle class="dot" cx="220.0" cy="176.0" r="5"/></g>
+<g><title>C3 : rang 5, ensemble simultané 3–9, analyse globale 2–9, groupe 1</title>
+<text class="lab" x="118" y="204.0" text-anchor="end">C3</text>
+<rect class="band" x="184.0" y="193.0" width="192.0" height="14" rx="4"/>
+<line class="ua" x1="160.0" x2="370.0" y1="200.0" y2="200.0"/>
+<circle class="dot" cx="250.0" cy="200.0" r="5"/></g>
+<g><title>D : rang 6, ensemble simultané 3–9, analyse globale 4–12, groupe 1</title>
+<text class="lab" x="118" y="228.0" text-anchor="end">D</text>
+<rect class="band" x="184.0" y="217.0" width="192.0" height="14" rx="4"/>
+<line class="ua" x1="220.0" x2="460.0" y1="224.0" y2="224.0"/>
+<circle class="dot" cx="280.0" cy="224.0" r="5"/></g>
+<g><title>Nim : rang 7, ensemble simultané 3–9, analyse globale 2–9, groupe 1</title>
+<text class="lab" x="118" y="252.0" text-anchor="end">Nim</text>
+<rect class="band" x="184.0" y="241.0" width="192.0" height="14" rx="4"/>
+<line class="ua" x1="160.0" x2="370.0" y1="248.0" y2="248.0"/>
+<circle class="dot" cx="310.0" cy="248.0" r="5"/></g>
+<g><title>Rust : rang 8, ensemble simultané 3–9, analyse globale 4–10, groupe 1</title>
+<text class="lab" x="118" y="276.0" text-anchor="end">Rust</text>
+<rect class="band" x="184.0" y="265.0" width="192.0" height="14" rx="4"/>
+<line class="ua" x1="220.0" x2="400.0" y1="272.0" y2="272.0"/>
+<circle class="dot" cx="340.0" cy="272.0" r="5"/></g>
+<g><title>Ada : rang 9, ensemble simultané 3–10, analyse globale 4–12, groupe 1</title>
+<text class="lab" x="118" y="300.0" text-anchor="end">Ada</text>
+<rect class="band" x="184.0" y="289.0" width="222.0" height="14" rx="4"/>
+<line class="ua" x1="220.0" x2="460.0" y1="296.0" y2="296.0"/>
+<circle class="dot" cx="370.0" cy="296.0" r="5"/></g>
+<g><title>Chapel : rang 10, ensemble simultané 9–12, analyse globale 5–13, groupe 1</title>
+<text class="lab" x="118" y="324.0" text-anchor="end">Chapel</text>
+<rect class="band" x="364.0" y="313.0" width="102.0" height="14" rx="4"/>
+<line class="ua" x1="250.0" x2="490.0" y1="320.0" y2="320.0"/>
+<circle class="dot" cx="400.0" cy="320.0" r="5"/></g>
+<g><title>Julia : rang 11, ensemble simultané 10–13, analyse globale 7–13, groupe 1</title>
+<text class="lab" x="118" y="348.0" text-anchor="end">Julia</text>
+<rect class="band" x="394.0" y="337.0" width="102.0" height="14" rx="4"/>
+<line class="ua" x1="310.0" x2="490.0" y1="344.0" y2="344.0"/>
+<circle class="dot" cx="430.0" cy="344.0" r="5"/></g>
+<g><title>Fortran : rang 12, ensemble simultané 10–13, analyse globale 9–14, groupe 1</title>
+<text class="lab" x="118" y="372.0" text-anchor="end">Fortran</text>
+<rect class="band" x="394.0" y="361.0" width="102.0" height="14" rx="4"/>
+<line class="ua" x1="370.0" x2="520.0" y1="368.0" y2="368.0"/>
+<circle class="dot" cx="460.0" cy="368.0" r="5"/></g>
+<g><title>Mojo : rang 13, ensemble simultané 11–13, analyse globale 10–13, groupe 1</title>
+<text class="lab" x="118" y="396.0" text-anchor="end">Mojo</text>
+<rect class="band" x="424.0" y="385.0" width="72.0" height="14" rx="4"/>
+<line class="ua" x1="400.0" x2="490.0" y1="392.0" y2="392.0"/>
+<circle class="dot" cx="490.0" cy="392.0" r="5"/></g>
+<line class="sep" x1="16" x2="730" y1="404.0" y2="404.0"/>
+<g><title>C# : rang 14, ensemble simultané 14–14, analyse globale 12–16, groupe 2</title>
+<text class="lab" x="118" y="420.0" text-anchor="end">C#</text>
+<rect class="band" x="514.0" y="409.0" width="12.0" height="14" rx="4"/>
+<line class="ua" x1="460.0" x2="580.0" y1="416.0" y2="416.0"/>
+<circle class="dot" cx="520.0" cy="416.0" r="5"/></g>
+<g><title>Java : rang 15, ensemble simultané 15–15, analyse globale 14–16, groupe 2</title>
+<text class="lab" x="118" y="444.0" text-anchor="end">Java</text>
+<rect class="band" x="544.0" y="433.0" width="12.0" height="14" rx="4"/>
+<line class="ua" x1="520.0" x2="580.0" y1="440.0" y2="440.0"/>
+<circle class="dot" cx="550.0" cy="440.0" r="5"/></g>
+<g><title>Go : rang 16, ensemble simultané 16–16, analyse globale 14–16, groupe 2</title>
+<text class="lab" x="118" y="468.0" text-anchor="end">Go</text>
+<rect class="band" x="574.0" y="457.0" width="12.0" height="14" rx="4"/>
+<line class="ua" x1="520.0" x2="580.0" y1="464.0" y2="464.0"/>
+<circle class="dot" cx="580.0" cy="464.0" r="5"/></g>
+<line class="sep" x1="16" x2="730" y1="476.0" y2="476.0"/>
+<g><title>Haskell : rang 17, ensemble simultané 17–17, analyse globale 17–17, groupe 3</title>
+<text class="lab" x="118" y="492.0" text-anchor="end">Haskell</text>
+<rect class="band" x="604.0" y="481.0" width="12.0" height="14" rx="4"/>
+<line class="ua" x1="610.0" x2="610.0" y1="488.0" y2="488.0"/>
+<circle class="dot" cx="610.0" cy="488.0" r="5"/></g>
+<line class="sep" x1="16" x2="730" y1="500.0" y2="500.0"/>
+<g><title>OCaml : rang 18, ensemble simultané 18–18, analyse globale 18–18, groupe 4</title>
+<text class="lab" x="118" y="516.0" text-anchor="end">OCaml</text>
+<rect class="band" x="634.0" y="505.0" width="12.0" height="14" rx="4"/>
+<line class="ua" x1="640.0" x2="640.0" y1="512.0" y2="512.0"/>
+<circle class="dot" cx="640.0" cy="512.0" r="5"/></g>
+<line class="sep" x1="16" x2="730" y1="524.0" y2="524.0"/>
+<g><title>JavaScript : rang 19, ensemble simultané 19–19, analyse globale 19–20, groupe 5</title>
+<text class="lab" x="118" y="540.0" text-anchor="end">JavaScript</text>
+<rect class="band" x="664.0" y="529.0" width="12.0" height="14" rx="4"/>
+<line class="ua" x1="670.0" x2="700.0" y1="536.0" y2="536.0"/>
+<circle class="dot" cx="670.0" cy="536.0" r="5"/></g>
+<line class="sep" x1="16" x2="730" y1="548.0" y2="548.0"/>
+<g><title>Python : rang 20, ensemble simultané 20–20, analyse globale 19–21, groupe 6</title>
+<text class="lab" x="118" y="564.0" text-anchor="end">Python</text>
+<rect class="band" x="694.0" y="553.0" width="12.0" height="14" rx="4"/>
+<line class="ua" x1="670.0" x2="730.0" y1="560.0" y2="560.0"/>
+<circle class="dot" cx="700.0" cy="560.0" r="5"/></g>
+<g><title>Lua : rang 21, ensemble simultané 21–21, analyse globale 20–21, groupe 6</title>
+<text class="lab" x="118" y="588.0" text-anchor="end">Lua</text>
+<rect class="band" x="724.0" y="577.0" width="12.0" height="14" rx="4"/>
+<line class="ua" x1="700.0" x2="730.0" y1="584.0" y2="584.0"/>
+<circle class="dot" cx="730.0" cy="584.0" r="5"/></g>
+</svg>
