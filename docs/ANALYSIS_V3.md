@@ -122,3 +122,22 @@ Pour chaque mesure présente sur les deux machines, la variance du logarithme du
 | Régimes « base » (x86-64-v3) et « peak » (PGO, LTO, BOLT, options du runtime) | Les variantes optimisées en AVX-512 explicite ne compilent pas en x86-64-v3 sans réécriture ; reporté |
 | Relecture experte, deux implémentations par noyau, entrées réservées | Hors de portée d'un auteur seul, et les tailles sont fixées dans 21 implémentations |
 | Nouveaux noyaux : parallélisme mémoire, décompression, JSON, tri et jointure, E/S groupées, thread par cœur, démarrage | 21 implémentations par noyau ; reportés |
+
+## 8. Ajouts hors plan, après le premier calcul
+
+Ajoutés le 29 octobre vers 16:17, après avoir vu le premier calcul complet. Ils ne consomment pas l'aléa des calculs
+du plan, dont les résultats restent identiques ; chacun est marqué « hors plan » dans `results/report_v3.md`.
+* **Position dans l'intervalle par composante** (E, D, D1 à D4), pour localiser l'asymétrie qui reste sur MS.
+* **Étages par quantité mesurée** : la règle de la section 3, appliquée au plafond E seul puis au code naturel D1
+  seul, avec les précédences tirées des 20 000 tirages de l'analyse globale (qui font varier, pour E,
+  l'estimateur, la normalisation, les poids des noyaux et le tirage bootstrap).
+* **Rangs compatibles avec les paires établies** : le critère des étages appliqué paire par paire. Un langage a
+  pour rangs possibles de 1 + le nombre de langages établis devant lui à 21 − le nombre de langages établis
+  derrière lui.
+* **Cascade Lake seul** : K5 d'avant (machines 1 et 2, même modèle) à la place de K5 de la machine 3, en estimation
+  ponctuelle. Le K5 `tuned` de C# y est celui mesuré pendant la recompilation du JIT.
+* **Intervalle de D1** publié à côté de celui de E.
+* **Disposition du code** : test par permutation des graines (2 000 permutations) pour chaque mesure, et mêmes
+  résultats sans les huit tâches pendant lesquelles un de mes calculs tournait (`docs/METHODOLOGY.md`, journal).
+* **Décomposition de la variance limitée aux 13 premiers**, et **bruit de la machine 3 multiplié par 1,5 et 2**
+  dans le test de réplication : ajoutés dans le code avant son premier calcul, mais absents du plan.

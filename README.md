@@ -533,7 +533,8 @@ temps sont des médianes de processus. Les bornes physiques sont celles de la se
   * Avec des accumulateurs vectoriels, les groupes 1 et 2 atteignent 4,75 à 7 ms (`std::simd` de
     C++ : 4,75 ms ; Odin 4,8 ; C 4,8).
   * La Vector API de Java (8,5 ms), `simd/archsimd` de Go (expérimental, 12 ms) et
-    `Vector512` de C# (17 ms) restent derrière.
+    `Vector512` de C# (17 ms, mesurés pendant la recompilation du JIT ; 4,3 ms une fois le JIT stabilisé,
+    remesure v2) restent derrière.
   * OCaml (132 ms) et JavaScript (209 ms) n'ont pas de SIMD.
   * Remesuré avec 9 processus (section 7).
 * **K6, requêtes analytiques en colonnes (TPC-H Q6 et Q1, 16 M lignes).**
@@ -1099,10 +1100,12 @@ La synthèse v2 est en tête du document.*
   * La classe naturelle coûte 88 o par particule (en-tête de 16 o, référence de 8 o), et le
     parcours permuté est 4,7 fois plus lent (259 contre 55 ms).
   * Le JIT n'a pas de vectoriseur automatique : aucune boucle naturelle vectorisée. Son propre
-    désassemblage le confirme : en optimisation complète, une somme d'entiers, une addition de
-    tableaux et une somme conditionnelle restent scalaires (`probes/csharp_jitvec`).
+    désassemblage le confirme : en optimisation complète comme au niveau 1 avec PGO dynamique, une
+    somme d'entiers, une addition de tableaux et une somme conditionnelle restent scalaires
+    (`probes/csharp_jitvec`, `probes/csharp_jitvec_tiered`).
   * La somme conditionnelle mal prédite prend 83 ms.
-  * Même en SIMD explicite, K5 plafonne à 17 ms, 3,6 fois C++.
+  * En SIMD explicite, K5 mesurait 17 ms en v1, pendant la recompilation du JIT. Remesuré avec échauffement
+    (v2, machine 3), il descend à 4,3 ms, à égalité avec C compte tenu de la variance entre processus.
 
 **15. Java** — MS 46,7 · C 41,5 (16e) · E 60,5 (13e) · D 32,1 (16e) · rang 13–16 · **v2** : MS 47,1, ensemble simultané 15–15, rang global 14–16
 
@@ -1408,6 +1411,36 @@ python3 analysis/analyze_v2.py             # analyse v2 -> results/summary_v2.js
 
 ```bash
 python3 analysis/charts_v2.py              # graphiques -> results/charts/v2_*.svg
+```
+
+Analyse v3 (plan : `docs/ANALYSIS_V3.md`) :
+
+```bash
+python3 tools/layout_v3.py build           # 8 dispositions du code pour C (clang), C (gcc) et Rust (lld 23)
+```
+
+```bash
+python3 tools/layout_v3.py run             # expérience de disposition -> results/raw_v3
+```
+
+```bash
+python3 analysis/analyze_v3.py             # analyse v3 -> results/summary_v3.json, results/report_v3.md
+```
+
+```bash
+python3 analysis/charts_v3.py              # graphique -> results/charts/v3_profiles.svg
+```
+
+```bash
+python3 analysis/verify_audit2.py          # chiffres du second audit, recalculés -> results/verify_audit2.txt
+```
+
+```bash
+sh probes/k5_reduction/run.sh              # code machine et temps de la réduction naturelle de K5
+```
+
+```bash
+sh probes/csharp_jitvec_tiered/run.sh      # JIT de .NET, réglages par défaut : code de chaque niveau
 ```
 
 Arborescence : `bench/<langage>/` (implémentation, `build.sh`, `run`), `tools/` (pilote, campagne,

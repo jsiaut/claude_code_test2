@@ -378,3 +378,30 @@ Robustesse :
   * latences : addition flottante 2 cycles, FMA 4 ;
   * K3 : l'alignement du code fait passer la même boucle d'un à sept cycles par incrément ;
   * K3 relancé trois fois pour C, Rust, C/gcc et Odin, gardé à part.
+* 2026-10-29, 15:43 : **second audit reçu** (archivé dans `docs/AUDIT2_2026-10-29.md`). Au même moment, le
+  conteneur redémarre (démarrage à 15:43:00) sur un hôte du même modèle que la machine 3 (Xeon de modèle 207,
+  2,1 GHz). Sondes de vérification faites sur cet hôte, avant le plan : `probes/k5_reduction` (mécanisme de K5
+  naturel) et `probes/csharp_jitvec_tiered` (JIT de .NET avec ses réglages par défaut).
+* 2026-10-29, 15:54 : **plan de l'analyse v3 poussé** (`docs/ANALYSIS_V3.md`, commit `ae9e1a1`), avant tout
+  calcul v3 et avant l'expérience de disposition. Il est écrit après lecture de l'audit et des résultats v1 et v2.
+  J'y avais d'abord écrit « vers 16:30 » pour l'heure du plan : erreur, corrigée dans le plan.
+* 2026-10-29, 15:56 : **expérience de disposition lancée** (`tools/layout_v3.py run`, 48 tâches, ordre tiré au
+  hasard avec une graine fixe). Juste avant, la compilation avait révélé que GCC et rustc appelaient le lld 18 du
+  système, qui ignore `--randomize-section-padding` : les deux passent désormais par un répertoire `-B` qui
+  pointe sur lld 23 (commit `cfb2b79`). Les binaires de C (clang) étaient déjà liés par lld 23.
+* 2026-10-29, 16:01 : **code de l'analyse v3 poussé** (commit `d0b959b`), avant son premier calcul sur les
+  données. Ce premier calcul (16:01–16:04) a échoué à sa dernière étape : `layout_analysis()` lisait des
+  processus de l'expérience de disposition encore en cours d'écriture, sans graine (`KeyError: 'layout_seed'`).
+  Correction : ces processus sont ignorés. Le second calcul (16:04–16:07) a abouti. Les deux ont tourné en
+  priorité basse (`nice -n 19`) pendant l'expérience de disposition, sur une machine à 4 cœurs : ils ont pu
+  perturber les tâches 4 à 9. De même, `analysis/verify_audit2.py` (16:14:50–16:15:25) a recouvert les tâches
+  17 et 18. Ces huit tâches sont publiées, et l'analyse donne aussi les résultats sans elles (hors plan). Je n'ai
+  plus rien lancé de plus de quelques secondes avant la fin de l'expérience.
+* 2026-10-29, 16:17 : **ajouts hors plan à l'analyse v3**, après avoir vu son premier calcul, tous marqués comme
+  tels dans `results/report_v3.md` :
+  * position dans l'intervalle par composante de D, pour localiser l'asymétrie qui reste sur MS ;
+  * étages par quantité mesurée (E seul, D1 seul), avec la règle du plan et les mêmes tirages ;
+  * Cascade Lake seul (K5 d'avant) ;
+  * pour la disposition, un test par permutation des graines et une sensibilité sans les tâches perturbées.
+
+  Ils ne consomment pas l'aléa des calculs prévus par le plan, dont les résultats restent identiques.

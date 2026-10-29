@@ -195,6 +195,9 @@ fusionner les passes répétées (355 To/s).
   (`DOTNET_TieredCompilation=0`), son propre désassemblage (`DOTNET_JitDisasm`) montre une somme
   d'entiers, une addition de tableaux de `float` et une somme conditionnelle scalaires (`add eax,
   [rdi]`, `vaddss`), alors qu'il déclare cibler « *X64 + VEX + EVEX* » (`probes/csharp_jitvec`).
+  Avec les réglages par défaut, compilation par niveaux et PGO dynamique actives, le code de niveau 1
+  (« *optimized using Dynamic PGO* ») reste lui aussi scalaire (`probes/csharp_jitvec_tiered`, sonde ajoutée
+  après le second audit).
 * **K8 `tuned` : le compilateur pèse plus que le style.** Trois codages C du même algorithme (A :
   compteurs passés par pointeur, comme `bench/c/ms.c` ; B : état passé par valeur ; C : arène
   globale, comme Ada), médiane de deux exécutions : clang 23 de 186 à 289 ms, GCC 16 de 84 à
@@ -208,8 +211,14 @@ fusionner les passes répétées (355 To/s).
 * **K5 sur la machine 3 : la FMA rallonge la réduction stricte.**
   * clang (C), flang, Chapel et Mojo fusionnent `s += a[i] * b[i]` en une FMA scalaire : `vfmadd231ss` dans la
     boucle, vérifié au désassemblage. Leur produit scalaire naturel prend 160 à 166 ms.
-  * GCC en mode ISO (`-std=c23`) garde une multiplication vectorielle et une chaîne d'additions scalaires
-    (désassemblage).
+  * GCC vectorise la réduction en ordre strict : multiplications en vecteur (`vmulps`), puis une chaîne
+    d'additions scalaires (`vaddss`) dans l'ordre des indices. Même boucle en C (`-std=c23` ou `-std=gnu23`), en
+    C++ et en Fortran, et avec `--param avoid-fma-max-bits=0` : ni le mode ISO ni le réglage anti-chaînes de FMA
+    n'y sont pour rien (`probes/k5_reduction`, `results/probes/k5_reduction.txt`). *Correction du 29 octobre :
+    j'avais attribué ce code au mode ISO, et le second audit au réglage `avoid_fma256_chains` ; les deux
+    explications sont fausses.*
+  * clang laisse la boucle scalaire et la contracte en FMA (158,6 ms). Avec `-ffp-contract=off`, 82,2 ms ; avec
+    `-mllvm -force-ordered-reductions`, qui vectorise la réduction ordonnée comme GCC, 80,3 ms.
   * Les autres langages compilés restent entre 77 et 87 ms, ce qui exclut une chaîne de FMA dans leur boucle.
   * Sur Cascade Lake (machine 1), la plupart des langages compilés étaient entre 164 et 184 ms, avec ou sans FMA.
 * **Le témoin d'environnement ne prédit pas le temps des processus.** Sur les 450 processus de K5, corrélation

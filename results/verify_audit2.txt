@@ -1,0 +1,55 @@
+## § 4.3.1 : position du score MS dans son intervalle à 95 % (v2)
+moyenne 0.78 ; minimum 0.59 (lua) ; C 0.96 ; au-dessus de 0,5 : 21 sur 21
+
+## § 4.3.4 : accord entre la machine 1 (rang v2) et la machine 3
+21 premiers : Spearman 0.93, paires inversées 21 sur 210
+13 premiers : Spearman 0.70, paires inversées 21 sur 78
+9 premiers : Spearman 0.22, paires inversées 17 sur 36
+inversions hors des 13 premiers : 0
+haut du classement, machine 3 : C 3, C++ 1, Odin 7, Zig 9, C3 6, D 5, Nim 4, Rust 2, Ada 8
+
+## § 4.3.5 : part de la variance de MS expliquée par chaque pilier, 13 premiers (R², v2)
+C : 0.78
+E : 0.52
+D : 0.27
+
+## § 4.6 : déplacement maximal par choix pris isolément ; K10 réintégré
+D3 relatif à p50 : déplacement maximal 1, 4 des 13 premiers bougent, premier : C
+D4 rapporté à C : déplacement maximal 0, 0 des 13 premiers bougent, premier : C
+pilier C v1 (avec C3) : déplacement maximal 3, 6 des 13 premiers bougent, premier : C
+minimum des processus : déplacement maximal 2, 3 des 13 premiers bougent, premier : C
+bornes physiques : déplacement maximal 1, 2 des 13 premiers bougent, premier : C
+agrégation géométrique : déplacement maximal 2, 5 des 13 premiers bougent, premier : C
+D1 rapporté au meilleur naturel : déplacement maximal 2, 3 des 13 premiers bougent, premier : C
+sans régime établi : déplacement maximal 0, 0 des 13 premiers bougent, premier : C
+K5 d'avant (machines 1 et 2) : déplacement maximal 1, 4 des 13 premiers bougent, premier : C
+avec K10 : déplacement maximal 3, 11 des 13 premiers bougent, premier : C++
+
+## § 4.2.3 : coupures de régime établi (v2)
+289 coupures : 154 accélérations, 135 ralentissements ; K5 : 146
+  aot : 203 coupures, 88 ralentissements
+  interp : 4 coupures, 1 ralentissements
+  jit : 82 coupures, 46 ralentissements
+
+## § 4.3.1 : biais de la frontière (bootstrap hiérarchique, 1 000 tirages, sans coupure de régime établi)
+k1:0 (2–3 processus) : t* 7.24 ms (Nim), médiane bootstrap 7.11 ms, P(t*_b < t*) 0.90, P(le tenant garde 1) 0.21
+k3:0 (2–3 processus) : t* 58.13 ms (Chapel), médiane bootstrap 57.78 ms, P(t*_b < t*) 0.77, P(le tenant garde 1) 0.52
+k4:0 (2–3 processus) : t* 2.85 ms (C), médiane bootstrap 2.83 ms, P(t*_b < t*) 0.57, P(le tenant garde 1) 0.72
+k5:0 (9–9 processus) : t* 3.88 ms (C), médiane bootstrap 3.67 ms, P(t*_b < t*) 0.84, P(le tenant garde 1) 0.31
+k6:0 (2–3 processus) : t* 17.72 ms (Zig), médiane bootstrap 17.72 ms, P(t*_b < t*) 0.53, P(le tenant garde 1) 0.81
+k6:1 (2–3 processus) : t* 32.09 ms (C), médiane bootstrap 30.85 ms, P(t*_b < t*) 0.64, P(le tenant garde 1) 0.59
+k6:2 (2–3 processus) : t* 5.98 ms (Fortran), médiane bootstrap 5.98 ms, P(t*_b < t*) 0.44, P(le tenant garde 1) 0.60
+k6:3 (2–3 processus) : t* 12.42 ms (C3), médiane bootstrap 12.39 ms, P(t*_b < t*) 0.52, P(le tenant garde 1) 0.78
+k7:0 (2–3 processus) : t* 435.94 ms (C), médiane bootstrap 435.94 ms, P(t*_b < t*) 0.39, P(le tenant garde 1) 0.62
+k8:0 (2–3 processus) : t* 107.68 ms (Ada), médiane bootstrap 107.61 ms, P(t*_b < t*) 0.51, P(le tenant garde 1) 1.00
+k9:0 (2–3 processus) : t* 36.15 ms (Rust), médiane bootstrap 35.36 ms, P(t*_b < t*) 0.99, P(le tenant garde 1) 0.12
+k9:1 (2–3 processus) : t* 10.78 ms (Chapel), médiane bootstrap 10.94 ms, P(t*_b < t*) 0.27, P(le tenant garde 1) 0.89
+
+## § 4.1.2 et § 4.2.2 : K5 sur la machine 3, médiane et extrêmes des médianes de processus (9 processus)
+natural : C++ 76.58 (69.16–86.71) ; Odin 80.04 (67.44–86.06) ; C3 82.29 (70.79–86.58) ; Zig 82.46 (68.54–86.29) ; C (gcc) 82.53 (66.02–84.64) ; Julia 83.08 (71.42–87.13) ; Go 83.58 (77.60–97.88) ; D 84.02 (80.85–88.57) ; Nim 84.29 (66.56–90.87) ; Rust 84.96 (74.07–86.96) ; LuaJIT 86.13 (81.42–102.19) ; Ada 86.40 (72.18–97.26) ; Fortran 86.53 (74.36–90.53) ; C# 87.06 (82.47–90.25) ; Java 143.51 (131.95–150.07) ; JavaScript 147.80 (136.18–186.22) ; JS (Bun) 151.40 (136.92–193.93) ; C 160.38 (138.41–168.88) ; Chapel 163.64 (145.02–166.22) ; Mojo 165.60 (145.07–172.01) ; Fortran (flang) 165.71 (148.41–171.88) ; OCaml 232.45 (202.83–259.11) ; Haskell 349.14 (334.98–362.92) ; Lua 1782.30 (1596.53–1961.83) ; Python 7833.46 (7031.17–8248.26)
+tuned : C (gcc) 3.74 (2.81–5.03) ; C 3.88 (2.81–5.36) ; Rust 3.98 (3.72–5.43) ; Odin 4.03 (2.80–6.00) ; C++ 4.05 (2.71–5.26) ; C3 4.16 (2.93–6.52) ; D 4.24 (2.98–6.50) ; C# 4.32 (3.05–6.06) ; Zig 4.52 (3.84–6.17) ; Chapel 4.57 (3.32–6.08) ; Ada 4.86 (4.42–5.80) ; Nim 4.95 (3.23–6.72) ; Mojo 5.22 (4.11–6.29) ; Fortran 5.40 (4.01–7.14) ; Julia 5.71 (5.29–8.20) ; Haskell 5.83 (5.57–7.32) ; Fortran (flang) 6.71 (6.10–9.43) ; Java 6.93 (5.81–8.28) ; Go 19.15 (14.63–27.98) ; OCaml 67.29 (65.76–103.78) ; LuaJIT 67.58 (64.77–83.43) ; JS (Bun) 108.47 (97.06–122.44) ; JavaScript 150.69 (116.48–183.54) ; Lua 1854.62 (1552.45–2267.23) ; Python 2960.47 (2652.87–3995.41)
+
+K5 natural sur la machine 1 (données v1, 2 ou 3 processus) : C (gcc) 163.4 ; C++ 164.3 ; C3 165.5 ; Zig 165.7 ; Rust 166.8 ; C# 168.2 ; Ada 168.6 ; C 169.2 ; D 169.6 ; Fortran (flang) 170.5 ; Fortran 172.3 ; Mojo 172.8 ; LuaJIT 174.1 ; Chapel 175.7 ; Odin 177.2 ; Julia 178.6 ; Java 179.4 ; Nim 183.6 ; JavaScript 212.2 ; Go 259.6 ; JS (Bun) 348.8 ; OCaml 385.1 ; Haskell 639.0 ; Lua 2859.2 ; Python 11171.6
+
+## § 4.3.4 : corrélation de rang entre machines, mesure par mesure (21 langages classés, moyenne des logarithmes des médianes de processus)
+35 mesures, médiane 0.70 ; les plus basses : k2:tuned:524288 -0.05 ; k2:tuned:67108864 0.06 ; k2:tuned:33554432 0.08 ; k2:tuned:16777216 0.12 ; k2:tuned:8388608 0.18 ; k3:rmw_packed: 0.28 ; k1:aos:energy 0.41 ; k2:tuned:268435456 0.42
