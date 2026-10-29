@@ -1,9 +1,0 @@
-python     k5   tuned                           p0 n=3 med=3.134951s ok={True} rc=0 
-python     k5   natural                         p0 n=2 med=8.595707s ok={True} rc=0 
-python     k5   natural                         p0 n=2 med=7.881566s ok={True} rc=0 
-python     k5   tuned                           p0 n=3 med=3.300209s ok={True} rc=0 
-python     k5   tuned                           p0 n=3 med=2.652870s ok={True} rc=0 
-python     k5   natural                         p0 n=2 med=7.541837s ok={True} rc=0 
-python     k5   tuned                           p0 n=3 med=2.775738s ok={True} rc=0 
-python     k5   natural                         p0 n=2 med=8.603111s ok={True} rc=0 
-python     k5   tuned                           p0 n=3 med=2.950664s ok={True} rc=0 

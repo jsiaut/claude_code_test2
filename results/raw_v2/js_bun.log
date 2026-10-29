@@ -1,9 +1,0 @@
-js_bun     k5   tuned                           p0 n=20 med=0.110473s ok={True} rc=0 
-js_bun     k5   natural                         p0 n=20 med=0.175104s ok={True} rc=0 
-js_bun     k5   natural                         p0 n=20 med=0.177600s ok={True} rc=0 
-js_bun     k5   tuned                           p0 n=20 med=0.102467s ok={True} rc=0 
-js_bun     k5   tuned                           p0 n=20 med=0.102045s ok={True} rc=0 
-js_bun     k5   natural                         p0 n=20 med=0.138995s ok={True} rc=0 
-js_bun     k5   natural                         p0 n=20 med=0.143191s ok={True} rc=0 
-js_bun     k5   tuned                           p0 n=20 med=0.122453s ok={True} rc=0 
-js_bun     k5   tuned                           p0 n=20 med=0.097391s ok={True} rc=0 

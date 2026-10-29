@@ -1,9 +1,0 @@
-nim        k5   tuned                           p0 n=20 med=0.006845s ok={True} rc=0 
-nim        k5   natural                         p0 n=20 med=0.086059s ok={True} rc=0 
-nim        k5   natural                         p0 n=20 med=0.077259s ok={True} rc=0 
-nim        k5   tuned                           p0 n=20 med=0.005964s ok={True} rc=0 
-nim        k5   natural                         p0 n=20 med=0.084134s ok={True} rc=0 
-nim        k5   tuned                           p0 n=20 med=0.003237s ok={True} rc=0 
-nim        k5   tuned                           p0 n=20 med=0.005567s ok={True} rc=0 
-nim        k5   natural                         p0 n=20 med=0.089605s ok={True} rc=0 
-nim        k5   tuned                           p0 n=20 med=0.005006s ok={True} rc=0 
