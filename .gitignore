@@ -25,3 +25,6 @@ probes/*/*.cmx
 probes/*/*.o
 
 bench/*/layout/
+# Expérience de disposition en cours (29 octobre) : fichiers écrits en continu, retirés du suivi jusqu'à la fin
+results/raw_v3/
+results/campaign.log

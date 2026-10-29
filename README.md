@@ -1360,6 +1360,16 @@ l'ordre à l'intérieur des groupes 1 et 2. On peut dire que C++, C et Odin inca
   * L'ordre à l'intérieur du premier groupe dépend surtout du pilier C, le plus subjectif (R² de 0,78 parmi
     les 13 premiers, contre 0,52 pour E et 0,27 pour D).
   * Le plan v2 a été écrit après lecture des analyses de sensibilité de l'audit : il n'est pas aveugle.
+* **Analyse v3 (29 octobre) : ce qu'elle établit comme menaces, et ce qu'elle ajoute.**
+  * L'ordre fin du premier groupe dépend de la machine, au-delà du bruit de mesure (test fixé d'avance,
+    p < 0,001). Les intervalles de confiance ne décrivent que le bruit sur une machine.
+  * Sur la machine 3, K3 dépend du placement du code par l'éditeur de liens, d'un facteur 5 à 7 pour le code de
+    LLVM. Aucun autre noyau n'a été randomisé de la sorte, et la disposition n'est tirée au hasard que dans
+    l'expérience de la v3, pour trois implémentations.
+  * Les intervalles de la v3 empruntent la variance entre processus aux autres cellules du même noyau et de la
+    même classe d'implémentation : ils supposent ces résidus échangeables.
+  * Plusieurs diagnostics de la v3 sont hors plan, ajoutés après avoir vu le premier calcul ; ils sont marqués
+    comme tels (`docs/ANALYSIS_V3.md`, section 8). Le plan v3 lui-même a été écrit après lecture du second audit.
 
 ## 8. Reproduire
 
