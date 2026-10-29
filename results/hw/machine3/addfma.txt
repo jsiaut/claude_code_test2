@@ -1,0 +1,5 @@
+fréquence 3.05 GHz ; vaddss 2.07 cycles ; vfmadd231ss 5.78 cycles (x=2)
+fréquence 2.90 GHz ; vaddss 1.99 cycles ; vfmadd231ss 3.74 cycles (x=2)
+fréquence 3.18 GHz ; vaddss 1.99 cycles ; vfmadd231ss 3.88 cycles (x=2)
+fréquence 3.27 GHz ; vaddss 2.03 cycles ; vfmadd231ss 3.51 cycles (x=2)
+fréquence 3.85 GHz ; vaddss 2.01 cycles ; vfmadd231ss 4.00 cycles (x=2)

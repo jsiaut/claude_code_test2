@@ -1,0 +1,50 @@
+décalage  0 octets :   63.6 ms
+décalage  4 octets :   60.3 ms
+décalage  8 octets :   12.4 ms
+décalage 12 octets :   45.6 ms
+décalage 16 octets :   61.1 ms
+décalage 20 octets :   75.5 ms
+décalage 24 octets :   74.1 ms
+décalage 28 octets :   63.9 ms
+décalage 32 octets :   70.0 ms
+décalage 36 octets :    8.3 ms
+décalage 40 octets :    8.7 ms
+décalage 44 octets :    8.3 ms
+décalage 48 octets :    8.3 ms
+décalage 52 octets :   60.4 ms
+décalage 56 octets :   59.9 ms
+décalage 60 octets :   70.9 ms
+--- deuxième exécution
+décalage  0 octets :   65.1 ms
+décalage  4 octets :   56.4 ms
+décalage  8 octets :   10.7 ms
+décalage 12 octets :   47.2 ms
+décalage 16 octets :   71.0 ms
+décalage 20 octets :   63.6 ms
+décalage 24 octets :   57.8 ms
+décalage 28 octets :   56.4 ms
+décalage 32 octets :   58.3 ms
+décalage 36 octets :    9.5 ms
+décalage 40 octets :    9.4 ms
+décalage 44 octets :   10.4 ms
+décalage 48 octets :   11.6 ms
+décalage 52 octets :   74.3 ms
+décalage 56 octets :   74.2 ms
+décalage 60 octets :   68.8 ms
+--- boucle de GCC (mov, inc, mov), tools/k3_align_mov.c
+mov/inc/mov, décalage  0 octets :    9.0 ms
+mov/inc/mov, décalage  4 octets :    9.1 ms
+mov/inc/mov, décalage  8 octets :   11.3 ms
+mov/inc/mov, décalage 12 octets :   11.5 ms
+mov/inc/mov, décalage 16 octets :   11.7 ms
+mov/inc/mov, décalage 20 octets :   11.5 ms
+mov/inc/mov, décalage 24 octets :   11.5 ms
+mov/inc/mov, décalage 28 octets :   13.5 ms
+mov/inc/mov, décalage 32 octets :   13.4 ms
+mov/inc/mov, décalage 36 octets :   13.8 ms
+mov/inc/mov, décalage 40 octets :   14.5 ms
+mov/inc/mov, décalage 44 octets :   13.8 ms
+mov/inc/mov, décalage 48 octets :   11.0 ms
+mov/inc/mov, décalage 52 octets :    8.9 ms
+mov/inc/mov, décalage 56 octets :   10.5 ms
+mov/inc/mov, décalage 60 octets :   10.5 ms

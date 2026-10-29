@@ -175,7 +175,19 @@ fusionner les passes répétées (355 To/s).
   reposait sur elle, affichait 14 à 18 GHz. Une chaîne `add reg, reg` ou `imul` donne 3,1 à
   3,9 GHz. Un micro-benchmark écrit pour une génération de cœur ne mesure plus la même chose sur
   la suivante.
-<!-- FADD -->
+* **Latences de la machine 3 : addition flottante 2 cycles, FMA 4.** Chaîne dépendante de `vaddss` contre
+  `vfmadd231ss`, fréquence mesurée par une chaîne d'`imul` : 2,0 cycles contre 3,9 à 4,0 en médiane
+  (`tools/addfma.c`, `results/hw/machine3/addfma.txt`). Sur Cascade Lake, les deux valent 4 cycles. C'est ce qui
+  sépare les deux familles du K5 naturel (fait suivant).
+* **K3 sur la machine 3 : l'alignement du code décide d'un facteur 7.** La même boucle de 16 `incq` en mémoire,
+  celle que clang, rustc et Odin produisent pour l'écrivain unique, prend environ 10 ms pour 2²⁵ incréments, soit
+  un cycle chacun, à certains décalages dans sa ligne de 64 octets : 8, et 36 à 48. Elle prend 56 à 77 ms, soit
+  sept cycles, aux autres décalages (`tools/k3_align.c`, `results/hw/machine3/k3_align.txt`). Dans la réplication,
+  la boucle de Rust (décalage 48) tourne en 13 ms, celles de C/clang (16) et d'Odin (32) en 76 et 79 ms, octet
+  pour octet identiques. Le code de GCC (`mov`, `inc`, `mov`, sans déroulage) prend 11 à 19 ms aux 16 mêmes décalages (`tools/k3_align_mov.c`). Le
+  mécanisme probable est un raccourci matériel de la dépendance écriture-lecture, qui ne s'applique que selon le
+  placement du code ; sans compteurs matériels, je ne peux pas le confirmer. Sur Cascade Lake, tous les langages
+  étaient entre 58 et 70 ms. C'est le biais de mesure de Mytkowicz et al. (ASPLOS 2009) à l'échelle d'un facteur 7.
 * **Le témoin d'environnement varie autant que les épisodes qu'il devrait signaler.** Douze
   lancements consécutifs, avant toute mesure : débit FMA de 112 à 226 Gflop/s, latence à 2 Mio de
   36 à 64 ns. Il reste descriptif (règle fixée dans `docs/ANALYSIS_V2.md`).

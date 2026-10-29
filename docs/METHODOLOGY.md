@@ -371,3 +371,10 @@ Robustesse :
 * 2026-10-29, 13:01 : **premier calcul de l'analyse v2**, après le K5 et avant la fin de la réplication,
   en priorité basse (`nice -n 19`) pour ne pas perturber les mesures en cours. La partie « réplication »
   n'y est pas encore calculée. Le calcul final reprend le même code et les mêmes graines.
+* 2026-10-29, 14:18 : **réplication terminée** (203 blocs, 868 processus, tous valides). Calcul final de
+  l'analyse v2 : même code et mêmes graines que le premier calcul, mêmes résultats pour la configuration
+  principale, et partie « réplication » ajoutée. Diagnostics faits ensuite, hors plan, sur la machine au
+  repos (`docs/ANALYSIS_V2.md`, section 10) :
+  * latences : addition flottante 2 cycles, FMA 4 ;
+  * K3 : l'alignement du code fait passer la même boucle d'un à sept cycles par incrément ;
+  * K3 relancé trois fois pour C, Rust, C/gcc et Odin, gardé à part.

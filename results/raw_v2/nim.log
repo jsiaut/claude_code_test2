@@ -1,0 +1,53 @@
+nim        k5   tuned                           p0 n=20 med=0.006845s ok={True} rc=0 
+nim        k5   natural                         p0 n=20 med=0.086059s ok={True} rc=0 
+nim        k5   natural                         p0 n=20 med=0.077259s ok={True} rc=0 
+nim        k5   tuned                           p0 n=20 med=0.005964s ok={True} rc=0 
+nim        k5   natural                         p0 n=20 med=0.084134s ok={True} rc=0 
+nim        k5   tuned                           p0 n=20 med=0.003237s ok={True} rc=0 
+nim        k5   tuned                           p0 n=20 med=0.005567s ok={True} rc=0 
+nim        k5   natural                         p0 n=20 med=0.089605s ok={True} rc=0 
+nim        k5   tuned                           p0 n=20 med=0.005006s ok={True} rc=0 
+nim        k5   natural                         p0 n=20 med=0.066978s ok={True} rc=0 
+nim        k5   tuned                           p0 n=20 med=0.004131s ok={True} rc=0 
+nim        k5   natural                         p0 n=20 med=0.079921s ok={True} rc=0 
+nim        k5   natural                         p0 n=20 med=0.084359s ok={True} rc=0 
+nim        k5   tuned                           p0 n=20 med=0.004041s ok={True} rc=0 
+nim        k5   natural                         p0 n=20 med=0.084984s ok={True} rc=0 
+nim        k5   tuned                           p0 n=20 med=0.004217s ok={True} rc=0 
+nim        k5   tuned                           p0 n=20 med=0.005373s ok={True} rc=0 
+nim        k5   natural                         p0 n=20 med=0.091699s ok={True} rc=0 
+nim        k1   natural              energy     p0 n=10 med=0.031205s ok={True} rc=0 
+nim        k1   natural              energy     p0 n=10 med=0.033720s ok={True} rc=0 
+nim        k1   aos                  energy     p0 n=10 med=0.035466s ok={True} rc=0 
+nim        k1   soa                  energy     p0 n=10 med=0.002792s ok={True} rc=0 
+nim        k1   natural_shuffled     energy     p0 n=10 med=0.025285s ok={True} rc=0 
+nim        k8   natural                         p0 n=3 med=0.566656s ok={True} rc=0 
+nim        k8   tuned                           p0 n=8 med=0.284763s ok={True} rc=0 
+nim        k9   natural                         p0 n=10 med=0.041091s ok={True} rc=0 
+nim        k9   tuned                           p0 n=10 med=0.018614s ok={True} rc=0 
+nim        k9   mt                              p0 n=10 med=0.009453s ok={True} rc=0 
+nim        k7   natural                         p0 n=3 med=0.783159s ok={True} rc=0 
+nim        k7   tuned                           p0 n=5 med=0.184347s ok={True} rc=0 
+nim        k3   rmw_packed                      p0 n=3 med=4.150405s ok={True} rc=0 
+nim        k3   rmw_padded                      p0 n=10 med=0.220604s ok={True} rc=0 
+nim        k3   sw_packed                       p0 n=10 med=0.015223s ok={True} rc=0 
+nim        k3   sw_padded                       p0 n=10 med=0.012881s ok={True} rc=0 
+nim        k2   tuned                16384      p0 n=10 med=0.006893s ok={True} rc=0 
+nim        k2   tuned                65536      p0 n=10 med=0.021181s ok={True} rc=0 
+nim        k2   tuned                262144     p0 n=10 med=0.023317s ok={True} rc=0 
+nim        k2   tuned                524288     p0 n=10 med=0.025017s ok={True} rc=0 
+nim        k2   tuned                2097152    p0 n=10 med=0.196639s ok={True} rc=0 
+nim        k2   tuned                8388608    p0 n=4 med=0.268759s ok={True} rc=0 
+nim        k2   tuned                16777216   p0 n=4 med=0.600969s ok={True} rc=0 
+nim        k2   tuned                33554432   p0 n=3 med=0.790653s ok={True} rc=0 
+nim        k2   tuned                67108864   p0 n=3 med=0.744202s ok={True} rc=0 
+nim        k2   tuned                268435456  p0 n=3 med=1.011233s ok={True} rc=0 
+nim        k4   natural_unsorted                p0 n=10 med=0.001673s ok={True} rc=0 
+nim        k4   natural_sorted                  p0 n=10 med=0.001756s ok={True} rc=0 
+nim        k4   branchless_unsorted             p0 n=10 med=0.002347s ok={True} rc=0 
+nim        k6   natural              q6         p0 n=10 med=0.045073s ok={True} rc=0 
+nim        k6   natural              q1         p0 n=10 med=0.056273s ok={True} rc=0 
+nim        k6   tuned                q6         p0 n=10 med=0.017363s ok={True} rc=0 
+nim        k6   tuned                q1         p0 n=10 med=0.089240s ok={True} rc=0 
+nim        k6   mt                   q6         p0 n=10 med=0.004528s ok={True} rc=0 
+nim        k6   mt                   q1         p0 n=10 med=0.031880s ok={True} rc=0 

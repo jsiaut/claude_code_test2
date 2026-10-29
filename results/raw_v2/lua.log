@@ -1,0 +1,53 @@
+lua        k5   tuned                           p0 n=3 med=1.854622s ok={True} rc=0 
+lua        k5   natural                         p0 n=3 med=1.645828s ok={True} rc=0 
+lua        k5   natural                         p0 n=3 med=1.843639s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=1.929092s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=1.796766s ok={True} rc=0 
+lua        k5   natural                         p0 n=3 med=1.629030s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=1.746065s ok={True} rc=0 
+lua        k5   natural                         p0 n=3 med=1.782302s ok={True} rc=0 
+lua        k5   natural                         p0 n=3 med=1.639120s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=1.781811s ok={True} rc=0 
+lua        k5   natural                         p0 n=3 med=1.816124s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=1.861869s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=1.552445s ok={True} rc=0 
+lua        k5   natural                         p0 n=3 med=1.596529s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=2.267233s ok={True} rc=0 
+lua        k5   natural                         p0 n=3 med=1.961834s ok={True} rc=0 
+lua        k5   natural                         p0 n=3 med=1.801884s ok={True} rc=0 
+lua        k5   tuned                           p0 n=3 med=1.858871s ok={True} rc=0 
+lua        k1   natural              energy     p0 n=4 med=0.469062s ok={True} rc=0 
+lua        k4   natural_unsorted                p0 n=3 med=0.663286s ok={True} rc=0 
+lua        k4   natural_sorted                  p0 n=3 med=0.530752s ok={True} rc=0 
+lua        k4   branchless_unsorted             p0 n=3 med=0.551127s ok={True} rc=0 
+lua        k9   natural                         p0 n=3 med=0.504622s ok={True} rc=0 
+lua        k9   tuned                           p0 n=3 med=0.592088s ok={True} rc=0 
+lua        k9   mt                              p0 n=3 med=0.680356s ok={True} rc=0 
+lua        k3   rmw_packed                      p0 n=3 med=2.039289s ok={True} rc=0 
+lua        k3   rmw_padded                      p0 n=3 med=2.430761s ok={True} rc=0 
+lua        k3   sw_packed                       p0 n=3 med=1.828674s ok={True} rc=0 
+lua        k3   sw_padded                       p0 n=3 med=2.507613s ok={True} rc=0 
+lua        k6   natural              q6         p0 n=5 med=0.468378s ok={True} rc=0 
+lua        k6   natural              q1         p0 n=3 med=1.895469s ok={True} rc=0 
+lua        k6   tuned                q6         p0 n=3 med=1.036362s ok={True} rc=0 
+lua        k6   tuned                q1         p0 n=3 med=1.388079s ok={True} rc=0 
+lua        k6   mt                   q6         p0 n=3 med=1.145406s ok={True} rc=0 
+lua        k6   mt                   q1         p0 n=3 med=1.362588s ok={True} rc=0 
+lua        k1   natural              energy     p0 n=4 med=0.437174s ok={True} rc=0 
+lua        k1   aos                  energy     p0 n=7 med=0.278609s ok={True} rc=0 
+lua        k1   soa                  energy     p0 n=10 med=0.190428s ok={True} rc=0 
+lua        k1   natural_shuffled     energy     p0 n=3 med=1.604895s ok={True} rc=0 
+lua        k2   tuned                16384      p0 n=10 med=0.027063s ok={True} rc=0 
+lua        k2   tuned                65536      p0 n=10 med=0.029779s ok={True} rc=0 
+lua        k2   tuned                262144     p0 n=10 med=0.036662s ok={True} rc=0 
+lua        k2   tuned                524288     p0 n=10 med=0.041792s ok={True} rc=0 
+lua        k2   tuned                2097152    p0 n=4 med=0.283841s ok={True} rc=0 
+lua        k2   tuned                8388608    p0 n=4 med=0.322741s ok={True} rc=0 
+lua        k2   tuned                16777216   p0 n=3 med=0.891613s ok={True} rc=0 
+lua        k2   tuned                33554432   p0 n=3 med=0.931929s ok={True} rc=0 
+lua        k2   tuned                67108864   p0 n=3 med=1.076706s ok={True} rc=0 
+lua        k2   tuned                268435456  p0 n=3 med=1.234841s ok={True} rc=0 
+lua        k7   natural                         p0 n=2 med=6.536886s ok={True} rc=0 
+lua        k7   tuned                           p0 n=2 med=4.973309s ok={True} rc=0 
+lua        k8   natural                         p0 n=2 med=6.972351s ok={True} rc=0 
+lua        k8   tuned                           p0 n=2 med=3.837188s ok={True} rc=0 

@@ -1,0 +1,53 @@
+mojo       k5   natural                         p0 n=20 med=0.172409s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.005768s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.164233s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.006334s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.006292s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.146141s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.005995s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.165964s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.005281s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.145596s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.168143s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.004107s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.170031s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.004421s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.172015s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.005632s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.156685s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.004282s ok={True} rc=0 
+mojo       k1   natural              energy     p0 n=10 med=0.028701s ok={True} rc=0 
+mojo       k6   natural              q6         p0 n=10 med=0.040367s ok={True} rc=0 
+mojo       k6   natural              q1         p0 n=10 med=0.173976s ok={True} rc=0 
+mojo       k6   tuned                q6         p0 n=10 med=0.013139s ok={True} rc=0 
+mojo       k6   tuned                q1         p0 n=10 med=0.036582s ok={True} rc=0 
+mojo       k6   mt                   q6         p0 n=10 med=0.004206s ok={True} rc=0 
+mojo       k6   mt                   q1         p0 n=10 med=0.011864s ok={True} rc=0 
+mojo       k9   natural                         p0 n=10 med=0.171962s ok={True} rc=0 
+mojo       k9   tuned                           p0 n=10 med=0.016083s ok={True} rc=0 
+mojo       k9   mt                              p0 n=10 med=0.008573s ok={True} rc=0 
+mojo       k8   natural                         p0 n=3 med=0.941080s ok={True} rc=0 
+mojo       k8   tuned                           p0 n=10 med=0.201430s ok={True} rc=0 
+mojo       k4   natural_unsorted                p0 n=10 med=0.010404s ok={True} rc=0 
+mojo       k4   natural_sorted                  p0 n=10 med=0.010966s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p0 n=10 med=0.008978s ok={True} rc=0 
+mojo       k7   natural                         p0 n=2 med=1.701176s ok={True} rc=0 
+mojo       k7   tuned                           p0 n=6 med=0.225740s ok={True} rc=0 
+mojo       k2   tuned                16384      p0 n=10 med=0.006626s ok={True} rc=0 
+mojo       k2   tuned                65536      p0 n=10 med=0.022445s ok={True} rc=0 
+mojo       k2   tuned                262144     p0 n=10 med=0.022567s ok={True} rc=0 
+mojo       k2   tuned                524288     p0 n=10 med=0.027174s ok={True} rc=0 
+mojo       k2   tuned                2097152    p0 n=10 med=0.173071s ok={True} rc=0 
+mojo       k2   tuned                8388608    p0 n=4 med=0.267798s ok={True} rc=0 
+mojo       k2   tuned                16777216   p0 n=4 med=0.336321s ok={True} rc=0 
+mojo       k2   tuned                33554432   p0 n=4 med=0.668135s ok={True} rc=0 
+mojo       k2   tuned                67108864   p0 n=3 med=0.822791s ok={True} rc=0 
+mojo       k2   tuned                268435456  p0 n=3 med=1.027891s ok={True} rc=0 
+mojo       k3   rmw_packed                      p0 n=3 med=4.938209s ok={True} rc=0 
+mojo       k3   rmw_padded                      p0 n=10 med=0.238839s ok={True} rc=0 
+mojo       k3   sw_packed                       p0 n=10 med=0.024425s ok={True} rc=0 
+mojo       k3   sw_padded                       p0 n=10 med=0.017921s ok={True} rc=0 
+mojo       k1   natural              energy     p0 n=10 med=0.030310s ok={True} rc=0 
+mojo       k1   aos                  energy     p0 n=10 med=0.027743s ok={True} rc=0 
+mojo       k1   soa                  energy     p0 n=10 med=0.002532s ok={True} rc=0 
+mojo       k1   natural_shuffled     energy     p0 n=10 med=0.029989s ok={True} rc=0 

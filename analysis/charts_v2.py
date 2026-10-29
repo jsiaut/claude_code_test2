@@ -86,7 +86,9 @@ def place_labels(pts, W, H, box):
         return not any(b[0] < o[2] and b[2] > o[0] and b[1] < o[3] and b[3] > o[1] for o in occupied + placed)
     for name, x, y, w in sorted(pts, key=lambda p: (p[2], p[1])):
         cands = [(x + 9, y + 4, "start"), (x - 9, y + 4, "end"), (x, y - 10, "middle"), (x, y + 18, "middle"),
-                 (x + 8, y - 8, "start"), (x - 8, y - 8, "end"), (x + 8, y + 16, "start"), (x - 8, y + 16, "end")]
+                 (x + 8, y - 8, "start"), (x - 8, y - 8, "end"), (x + 8, y + 16, "start"), (x - 8, y + 16, "end"),
+                 (x, y - 22, "middle"), (x, y + 30, "middle"), (x + 8, y - 20, "start"), (x - 8, y - 20, "end"),
+                 (x + 8, y + 28, "start"), (x - 8, y + 28, "end")]
         for k in range(len(cands)):
             tx, ty, anchor = cands[k]
             x0 = tx if anchor == "start" else (tx - w if anchor == "end" else tx - w / 2)
@@ -103,33 +105,41 @@ def place_labels(pts, W, H, box):
 
 def map_svg(o, path):
     R = o["results"]
-    W, H, L, Rm, T, Bm = 760, 560, 64, 30, 92, 56
+    W, H, L, Rm, T, Bm = 760, 600, 64, 30, 108, 56
+    dmax = max(100 * R[l]["D_parts"]["D1"] for l in RANKED)
+    ytop = 5 * int(dmax * 1.15 / 5 + 1)
     X = lambda e: L + e / 100 * (W - L - Rm)
-    Y = lambda d: T + (1 - d / 100) * (H - T - Bm)
+    Y = lambda d: T + (1 - d / ytop) * (H - T - Bm)
     pareto = set(o["pareto"])
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" '
            f'aria-label="Carte plafond contre code par défaut">', STYLE, f'<rect class="bg" width="{W}" height="{H}"/>',
            '<text class="t1" x="16" y="26">Plafond (E) et code par défaut (D1)</text>',
-           '<text class="t2" x="16" y="46">E : meilleur code écrit pour la machine. D1 : code naturel, rapporté au '
-           'meilleur temps de chaque mesure. Configuration principale v2.</text>']
-    out.append('<circle class="dot" cx="22" cy="66" r="5"/><text class="t2" x="34" y="70">front de Pareto sur '
+           '<text class="t2" x="16" y="46">E : meilleur code écrit pour la machine, rapporté au meilleur temps de chaque '
+           'mesure.</text>',
+           '<text class="t2" x="16" y="63">D1 : code naturel, rapporté au même meilleur temps. Configuration principale v2.'
+           '</text>']
+    out.append('<circle class="dot" cx="22" cy="84" r="5"/><text class="t2" x="34" y="88">front de Pareto sur '
                '(contrôle C, plafond E, défaut D)</text>')
-    out.append('<circle class="dot2" cx="352" cy="66" r="5"/><text class="t2" x="364" y="70">autres langages</text>')
+    out.append('<circle class="dot2" cx="352" cy="84" r="5"/><text class="t2" x="364" y="88">autres langages</text>')
     for v in range(0, 101, 20):
         out.append(f'<line class="grid" x1="{X(v):.1f}" x2="{X(v):.1f}" y1="{T}" y2="{H - Bm}"/>')
         out.append(f'<text class="tick" x="{X(v):.1f}" y="{H - Bm + 16}" text-anchor="middle">{v}</text>')
+    for v in range(0, ytop + 1, 5):
         out.append(f'<line class="grid" x1="{L}" x2="{W - Rm}" y1="{Y(v):.1f}" y2="{Y(v):.1f}"/>')
         out.append(f'<text class="tick" x="{L - 8}" y="{Y(v) + 4:.1f}" text-anchor="end">{v}</text>')
     out.append(f'<line class="axis" x1="{L}" x2="{W - Rm}" y1="{H - Bm}" y2="{H - Bm}"/>')
     out.append(f'<text class="t2" x="{(L + W - Rm) / 2:.0f}" y="{H - 14}" text-anchor="middle">E, plafond (0–100)</text>')
     out.append(f'<text class="t2" transform="translate(18 {(T + H - Bm) / 2:.0f}) rotate(-90)" text-anchor="middle">'
-               f'D1, code par défaut (0–100)</text>')
+               f'D1, code par défaut (sur 100)</text>')
     pts = [(l, X(R[l]["E"]), Y(100 * R[l]["D_parts"]["D1"]), 7.0 * len(NAMES[l])) for l in RANKED]
     labels = place_labels(pts, W, H, (L, T, W - Rm, H - Bm))
     for l, x, y, _ in pts:
         tip = f'{NAMES[l]} : E {R[l]["E"]:.1f}, D1 {100 * R[l]["D_parts"]["D1"]:.1f}, C {R[l]["C"]:.1f}, rang {R[l]["rank"]}'
         tx, ty, anchor = labels[l]
-        out.append(f'<g><title>{esc(tip)}</title><circle class="{"dot" if l in pareto else "dot2"}" cx="{x:.1f}" '
+        lead = ""
+        if abs(ty - 4 - y) > 14:
+            lead = f'<line class="axis" x1="{x:.1f}" y1="{y:.1f}" x2="{tx:.1f}" y2="{ty - (4 if ty > y else 12):.1f}"/>'
+        out.append(f'<g><title>{esc(tip)}</title>{lead}<circle class="{"dot" if l in pareto else "dot2"}" cx="{x:.1f}" '
                    f'cy="{y:.1f}" r="5"/><text class="lab" x="{tx:.1f}" y="{ty:.1f}" text-anchor="{anchor}">'
                    f'{esc(NAMES[l])}</text></g>')
     out.append("</svg>")

@@ -141,11 +141,26 @@ standard et mes implémentations.
 * Sur la machine 3, quatre compilateurs fusionnent `s += a[i] * b[i]` en une FMA scalaire : clang pour C, flang,
   Chapel et Mojo (code machine vérifié). Ils doublent ainsi le temps du produit scalaire naturel.
   * Avec FMA : 160 à 166 ms ; sans FMA, dans les autres langages compilés : 77 à 87 ms.
-  * Sur ce cœur, l'addition flottante a une latence plus courte que la FMA, et c'est la chaîne d'additions qui
-    limite la boucle.<!-- FADD -->
+  * L'ordre strict impose une chaîne de dépendances. Sur ce cœur, chaque maillon coûte 2 cycles avec une addition
+    et 4 avec une FMA (mesuré : `tools/addfma.c`).
   * Sur Cascade Lake (machine 1), les deux opérations ont la même latence : le choix ne changeait rien.
 
-<!-- M3 -->*Réplication sur une autre microarchitecture : en cours, résultats à la fin des mesures.*<!-- /M3 -->
+**Réplication sur une autre microarchitecture.** J'ai refait toutes les mesures notées sur la machine 3 (Emerald
+Rapids), avec un seul processus par mesure (K5 garde ses 9 processus).
+* Le classement recalculé avec ces seules données suit le classement v2 : corrélation de Spearman 0,93. Les huit
+  derniers rangs sont identiques, et aucun langage ne sort de son groupe.
+* L'ordre à l'intérieur du premier groupe change : C++ 1er, Rust 2e, C 3e, Nim 4e, Odin 7e, Zig 9e. Le plus
+  grand déplacement est celui de Rust (6 rangs).
+* Une bonne part de ce mouvement vient de K3, l'écrivain unique. Sur ce cœur, la même boucle d'incréments en
+  mémoire prend 1 ou 7 cycles par incrément selon son seul alignement dans le code. Je l'ai vérifié à 16 décalages
+  (`tools/k3_align.c`).
+  * Les boucles de Rust, de C (clang) et d'Odin sont octet pour octet les mêmes. Celle de Rust tombe sur un bon
+    alignement (13 ms), celles de C et d'Odin sur un mauvais (76 et 79 ms).
+  * C'est donc le placement du code (compilateur et éditeur de liens) qui décide, pas le langage.
+  * Sur Cascade Lake, ce mécanisme n'existait pas : 58 à 70 ms pour tous.
+* Mesure par mesure, la corrélation de rang entre les deux machines est forte là où les langages diffèrent
+  vraiment (K4, K6, K8, K9 : 0,77 à 0,97). Elle est faible là où les langages compilés sont tous à la borne
+  matérielle (K1 `aos` et `soa` : 0,32 et 0,56 ; K2 : 0 à 0,56) : leur ordre y tient au bruit.
 
 **Ce que la v2 ne règle pas.**
 * Une seule machine par noyau, partagée et sans compteurs matériels.

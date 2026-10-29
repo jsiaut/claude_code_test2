@@ -155,4 +155,12 @@ Détail : `results/report_v2.md` ; synthèse en tête du README.
     processus. Sans le décile le plus lent, aucun rang ne change.
   * Sous la politique `madvise`, seuls CPython (34 Mio) et Go (2 Mio) obtiennent des pages géantes : elles
     n'expliquent pas les écarts entre langages.
-<!-- M3_AUDIT -->
+* **Réplication sur une autre microarchitecture** (machine 3, un processus par mesure, K10 exclu).
+  * Le classement suit celui de la v2 : Spearman 0,93, huit derniers rangs identiques, aucun langage hors de son
+    groupe.
+  * L'ordre interne du premier groupe change : C++, Rust, C, Nim en tête ; Odin 7e.
+  * Une bonne part du mouvement vient de K3. Sur ce cœur, la même boucle d'incréments en mémoire prend 1 ou 7
+    cycles selon son alignement dans le code (`tools/k3_align.c`). C'est un biais de mesure du type de celui de
+    Mytkowicz et al., à l'échelle d'un facteur 7.
+  * Cela rejoint la recommandation 15 de l'audit : un rang qui change d'une machine à l'autre n'est pas une
+    propriété du langage. Ici, la composition des groupes tient ; l'ordre interne du premier groupe, non.

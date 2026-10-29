@@ -1,0 +1,53 @@
+fortran_flang k5   tuned                           p0 n=20 med=0.008214s ok={True} rc=0 
+fortran_flang k5   natural                         p0 n=20 med=0.167976s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=20 med=0.006749s ok={True} rc=0 
+fortran_flang k5   natural                         p0 n=20 med=0.163630s ok={True} rc=0 
+fortran_flang k5   natural                         p0 n=20 med=0.151710s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=20 med=0.009453s ok={True} rc=0 
+fortran_flang k5   natural                         p0 n=20 med=0.171998s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=20 med=0.007406s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=20 med=0.006248s ok={True} rc=0 
+fortran_flang k5   natural                         p0 n=20 med=0.166875s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=20 med=0.006490s ok={True} rc=0 
+fortran_flang k5   natural                         p0 n=20 med=0.167904s ok={True} rc=0 
+fortran_flang k5   natural                         p0 n=20 med=0.171887s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=20 med=0.007587s ok={True} rc=0 
+fortran_flang k5   natural                         p0 n=20 med=0.165073s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=20 med=0.006106s ok={True} rc=0 
+fortran_flang k5   tuned                           p0 n=20 med=0.006247s ok={True} rc=0 
+fortran_flang k5   natural                         p0 n=20 med=0.165869s ok={True} rc=0 
+fortran_flang k1   natural              energy     p0 n=10 med=0.033128s ok={True} rc=0 
+fortran_flang k7   natural                         p0 n=2 med=1.199902s ok={True} rc=0 
+fortran_flang k7   tuned                           p0 n=4 med=0.269241s ok={True} rc=0 
+fortran_flang k2   tuned                16384      p0 n=10 med=0.008280s ok={True} rc=0 
+fortran_flang k2   tuned                65536      p0 n=10 med=0.024544s ok={True} rc=0 
+fortran_flang k2   tuned                262144     p0 n=10 med=0.023896s ok={True} rc=0 
+fortran_flang k2   tuned                524288     p0 n=10 med=0.027177s ok={True} rc=0 
+fortran_flang k2   tuned                2097152    p0 n=10 med=0.204304s ok={True} rc=0 
+fortran_flang k2   tuned                8388608    p0 n=4 med=0.260723s ok={True} rc=0 
+fortran_flang k2   tuned                16777216   p0 n=4 med=0.308321s ok={True} rc=0 
+fortran_flang k2   tuned                33554432   p0 n=3 med=0.520083s ok={True} rc=0 
+fortran_flang k2   tuned                67108864   p0 n=3 med=0.761389s ok={True} rc=0 
+fortran_flang k2   tuned                268435456  p0 n=3 med=0.905993s ok={True} rc=0 
+fortran_flang k3   rmw_packed                      p0 n=3 med=3.659034s ok={True} rc=0 
+fortran_flang k3   rmw_padded                      p0 n=10 med=0.221067s ok={True} rc=0 
+fortran_flang k3   sw_packed                       p0 n=10 med=0.091980s ok={True} rc=0 
+fortran_flang k3   sw_padded                       p0 n=10 med=0.078946s ok={True} rc=0 
+fortran_flang k8   natural                         p0 n=3 med=2.262908s ok={True} rc=0 
+fortran_flang k8   tuned                           p0 n=9 med=0.239400s ok={True} rc=0 
+fortran_flang k9   natural                         p0 n=10 med=0.017862s ok={True} rc=0 
+fortran_flang k9   tuned                           p0 n=10 med=0.015758s ok={True} rc=0 
+fortran_flang k9   mt                              p0 n=10 med=0.004797s ok={True} rc=0 
+fortran_flang k4   natural_unsorted                p0 n=10 med=0.001817s ok={True} rc=0 
+fortran_flang k4   natural_sorted                  p0 n=10 med=0.001874s ok={True} rc=0 
+fortran_flang k4   branchless_unsorted             p0 n=10 med=0.003804s ok={True} rc=0 
+fortran_flang k6   natural              q6         p0 n=10 med=0.018805s ok={True} rc=0 
+fortran_flang k6   natural              q1         p0 n=10 med=0.051404s ok={True} rc=0 
+fortran_flang k6   tuned                q6         p0 n=10 med=0.019902s ok={True} rc=0 
+fortran_flang k6   tuned                q1         p0 n=10 med=0.063175s ok={True} rc=0 
+fortran_flang k6   mt                   q6         p0 n=10 med=0.002995s ok={True} rc=0 
+fortran_flang k6   mt                   q1         p0 n=10 med=0.018627s ok={True} rc=0 
+fortran_flang k1   natural              energy     p0 n=10 med=0.039661s ok={True} rc=0 
+fortran_flang k1   aos                  energy     p0 n=10 med=0.035221s ok={True} rc=0 
+fortran_flang k1   soa                  energy     p0 n=10 med=0.003002s ok={True} rc=0 
+fortran_flang k1   natural_shuffled     energy     p0 n=10 med=0.033493s ok={True} rc=0 

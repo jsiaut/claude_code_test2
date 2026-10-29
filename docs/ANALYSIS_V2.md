@@ -249,3 +249,19 @@ conservés. Les précisions suivantes complètent le plan sans le modifier.
 * Section 2, point 2 : « la politique est `madvise` sur les trois machines » est inexact. Je l'ai relevée sur la
   machine 1, le 28 octobre à 08:02 et à 11:14, juste avant la campagne, mais seulement dans ma session de travail,
   pas dans le dépôt. Je l'ai relevée aussi sur la machine 3. Elle ne l'a pas été sur la machine 2.
+
+## 10. Calculs faits après les données, hors plan
+
+Ces calculs ne changent aucun score. Ils sont descriptifs et marqués comme tels.
+* **Poids effectifs parmi les 13 premiers**, sur le modèle de l'audit (le plan les prévoyait sur les 21 langages).
+* **K10 en statistique descriptive** : part des répétitions sous 15 et sous 20 ms.
+* **Latences de l'addition flottante et de la FMA sur la machine 3** (`tools/addfma.c`), pour expliquer les deux
+  familles du K5 naturel.
+* **K3 sur la machine 3.** La réplication y montrait deux familles stables (13 à 19 ms contre 75 à 82 ms).
+  * Trois processus de plus pour C, Rust, C/gcc et Odin (`results/raw_v2/diag/k3_rerun.jsonl`, étiquette
+    `diag_k3`, non lue par l'analyse) : les deux familles se reproduisent à l'identique.
+  * La même boucle placée à 16 décalages (`tools/k3_align.c`, `tools/k3_align_mov.c`) montre que l'alignement du
+    code décide.
+  * À un placement donné, les trois formes d'incrément tournent toutes à environ un cycle (`tools/memdep.c`). Ce
+    n'est donc pas la forme de l'instruction qui compte.
+* **Diagnostic du K5 naturel** : désassemblage des boucles (FMA scalaire ou non).

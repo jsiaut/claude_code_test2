@@ -1,0 +1,53 @@
+chapel     k5   natural                         p0 n=20 med=0.165731s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.004652s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.154984s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.003317s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.005367s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.149580s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.164861s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.004693s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.146574s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.004283s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.166118s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.004520s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.164529s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.005401s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.166355s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.006080s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.146974s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.004513s ok={True} rc=0 
+chapel     k1   natural              energy     p0 n=10 med=0.026312s ok={True} rc=0 
+chapel     k9   natural                         p0 n=10 med=0.014963s ok={True} rc=0 
+chapel     k9   tuned                           p0 n=10 med=0.014268s ok={True} rc=0 
+chapel     k9   mt                              p0 n=10 med=0.003410s ok={True} rc=0 
+chapel     k3   rmw_packed                      p0 n=3 med=5.828711s ok={True} rc=0 
+chapel     k3   rmw_padded                      p0 n=10 med=0.229529s ok={True} rc=0 
+chapel     k3   sw_packed                       p0 n=10 med=0.119998s ok={True} rc=0 
+chapel     k3   sw_padded                       p0 n=10 med=0.077636s ok={True} rc=0 
+chapel     k6   natural              q6         p0 n=10 med=0.056442s ok={True} rc=0 
+chapel     k6   natural              q1         p0 n=10 med=0.088433s ok={True} rc=0 
+chapel     k6   tuned                q6         p0 n=10 med=0.014204s ok={True} rc=0 
+chapel     k6   tuned                q1         p0 n=10 med=0.036810s ok={True} rc=0 
+chapel     k6   mt                   q6         p0 n=10 med=0.003200s ok={True} rc=0 
+chapel     k6   mt                   q1         p0 n=10 med=0.012365s ok={True} rc=0 
+chapel     k8   natural                         p0 n=3 med=1.178496s ok={True} rc=0 
+chapel     k8   tuned                           p0 n=10 med=0.264538s ok={True} rc=0 
+chapel     k1   natural              energy     p0 n=10 med=0.032983s ok={True} rc=0 
+chapel     k1   aos                  energy     p0 n=10 med=0.027935s ok={True} rc=0 
+chapel     k1   soa                  energy     p0 n=10 med=0.003049s ok={True} rc=0 
+chapel     k1   natural_shuffled     energy     p0 n=10 med=0.034993s ok={True} rc=0 
+chapel     k2   tuned                16384      p0 n=10 med=0.006881s ok={True} rc=0 
+chapel     k2   tuned                65536      p0 n=10 med=0.021702s ok={True} rc=0 
+chapel     k2   tuned                262144     p0 n=10 med=0.022002s ok={True} rc=0 
+chapel     k2   tuned                524288     p0 n=10 med=0.026856s ok={True} rc=0 
+chapel     k2   tuned                2097152    p0 n=10 med=0.199272s ok={True} rc=0 
+chapel     k2   tuned                8388608    p0 n=4 med=0.287624s ok={True} rc=0 
+chapel     k2   tuned                16777216   p0 n=4 med=0.675023s ok={True} rc=0 
+chapel     k2   tuned                33554432   p0 n=3 med=0.757667s ok={True} rc=0 
+chapel     k2   tuned                67108864   p0 n=3 med=0.855959s ok={True} rc=0 
+chapel     k2   tuned                268435456  p0 n=3 med=1.141150s ok={True} rc=0 
+chapel     k4   natural_unsorted                p0 n=10 med=0.003833s ok={True} rc=0 
+chapel     k4   natural_sorted                  p0 n=10 med=0.003971s ok={True} rc=0 
+chapel     k4   branchless_unsorted             p0 n=10 med=0.002351s ok={True} rc=0 
+chapel     k7   natural                         p0 n=3 med=1.504109s ok={True} rc=0 
+chapel     k7   tuned                           p0 n=7 med=0.203097s ok={True} rc=0 

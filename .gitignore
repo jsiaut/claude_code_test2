@@ -24,6 +24,3 @@ probes/*/*.cmi
 probes/*/*.cmx
 probes/*/*.o
 
-# mesures v2 en cours : suivis de nouveau à la fin
-results/raw_v2/
-results/campaign.log

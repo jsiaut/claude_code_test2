@@ -1,0 +1,53 @@
+ocaml      k5   tuned                           p0 n=20 med=0.067590s ok={True} rc=0 
+ocaml      k5   natural                         p0 n=20 med=0.229594s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=20 med=0.070856s ok={True} rc=0 
+ocaml      k5   natural                         p0 n=20 med=0.205002s ok={True} rc=0 
+ocaml      k5   natural                         p0 n=20 med=0.245053s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=20 med=0.072953s ok={True} rc=0 
+ocaml      k5   natural                         p0 n=20 med=0.244267s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=20 med=0.065895s ok={True} rc=0 
+ocaml      k5   natural                         p0 n=20 med=0.205500s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=20 med=0.066832s ok={True} rc=0 
+ocaml      k5   natural                         p0 n=20 med=0.209573s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=20 med=0.066016s ok={True} rc=0 
+ocaml      k5   natural                         p0 n=20 med=0.257417s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=20 med=0.067509s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=20 med=0.106042s ok={True} rc=0 
+ocaml      k5   natural                         p0 n=20 med=0.242977s ok={True} rc=0 
+ocaml      k5   natural                         p0 n=20 med=0.263142s ok={True} rc=0 
+ocaml      k5   tuned                           p0 n=20 med=0.074454s ok={True} rc=0 
+ocaml      k1   natural              energy     p0 n=10 med=0.093556s ok={True} rc=0 
+ocaml      k8   natural                         p0 n=8 med=0.224848s ok={True} rc=0 
+ocaml      k8   tuned                           p0 n=9 med=0.221276s ok={True} rc=0 
+ocaml      k7   natural                         p0 n=2 med=6.416852s ok={True} rc=0 
+ocaml      k7   tuned                           p0 n=3 med=0.493871s ok={True} rc=0 
+ocaml      k1   natural              energy     p0 n=10 med=0.080780s ok={True} rc=0 
+ocaml      k1   aos                  energy     p0 n=9 med=0.260534s ok={True} rc=0 
+ocaml      k1   soa                  energy     p0 n=10 med=0.006511s ok={True} rc=0 
+ocaml      k1   natural_shuffled     energy     p0 n=3 med=0.227110s ok={True} rc=0 
+ocaml      k2   tuned                16384      p0 n=10 med=0.009199s ok={True} rc=0 
+ocaml      k2   tuned                65536      p0 n=10 med=0.021509s ok={True} rc=0 
+ocaml      k2   tuned                262144     p0 n=10 med=0.028465s ok={True} rc=0 
+ocaml      k2   tuned                524288     p0 n=10 med=0.023672s ok={True} rc=0 
+ocaml      k2   tuned                2097152    p0 n=10 med=0.200782s ok={True} rc=0 
+ocaml      k2   tuned                8388608    p0 n=5 med=0.284836s ok={True} rc=0 
+ocaml      k2   tuned                16777216   p0 n=4 med=0.393470s ok={True} rc=0 
+ocaml      k2   tuned                33554432   p0 n=4 med=0.736282s ok={True} rc=0 
+ocaml      k2   tuned                67108864   p0 n=3 med=0.739980s ok={True} rc=0 
+ocaml      k2   tuned                268435456  p0 n=3 med=0.791854s ok={True} rc=0 
+ocaml      k4   natural_unsorted                p0 n=10 med=0.092983s ok={True} rc=0 
+ocaml      k4   natural_sorted                  p0 n=10 med=0.018071s ok={True} rc=0 
+ocaml      k4   branchless_unsorted             p0 n=10 med=0.020423s ok={True} rc=0 
+ocaml      k9   natural                         p0 n=10 med=0.083934s ok={True} rc=0 
+ocaml      k9   tuned                           p0 n=10 med=0.049820s ok={True} rc=0 
+ocaml      k9   mt                              p0 n=10 med=0.029117s ok={True} rc=0 
+ocaml      k6   natural              q6         p0 n=10 med=0.160050s ok={True} rc=0 
+ocaml      k6   natural              q1         p0 n=10 med=0.105992s ok={True} rc=0 
+ocaml      k6   tuned                q6         p0 n=10 med=0.224741s ok={True} rc=0 
+ocaml      k6   tuned                q1         p0 n=10 med=0.092459s ok={True} rc=0 
+ocaml      k6   mt                   q6         p0 n=10 med=0.057310s ok={True} rc=0 
+ocaml      k6   mt                   q1         p0 n=10 med=0.046001s ok={True} rc=0 
+ocaml      k3   rmw_packed                      p0 n=5 med=0.575430s ok={True} rc=0 
+ocaml      k3   rmw_padded                      p0 n=8 med=0.320641s ok={True} rc=0 
+ocaml      k3   sw_packed                       p0 n=4 med=0.890235s ok={True} rc=0 
+ocaml      k3   sw_padded                       p0 n=7 med=0.402727s ok={True} rc=0 

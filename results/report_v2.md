@@ -154,12 +154,132 @@ Plage du témoin (min, médiane, max) : gflops 82,0 / 178,0 / 249,6, ghz 1,2 / 3
 
 Sans les processus du décile le plus lent du témoin (45 processus) : aucun rang ne change.
 
+## Réplication sur la machine 3 (un processus par mesure)
+
+Classement v2 recalculé avec les seules données de la machine 3 : corrélation de Spearman 0,93 avec le classement v2 (n = 21), plus grand déplacement 6 rangs. Aucun langage ne sort de son groupe.
+
+| Langage | Rang v2 | Rang machine 3 | MS machine 3 |
+|---|---|---|---|
+| C | 1 | 3 | 68,5 |
+| C++ | 2 | 1 | 70,7 |
+| Odin | 3 | 7 | 61,5 |
+| Zig | 4 | 9 | 60,8 |
+| C3 | 5 | 6 | 64,9 |
+| D | 6 | 5 | 65,9 |
+| Nim | 7 | 4 | 66,6 |
+| Rust | 8 | 2 | 68,7 |
+| Ada | 9 | 8 | 61,2 |
+| Chapel | 10 | 12 | 53,5 |
+| Julia | 11 | 11 | 53,9 |
+| Fortran | 12 | 13 | 49,9 |
+| Mojo | 13 | 10 | 55,6 |
+| C# | 14 | 14 | 48,9 |
+| Java | 15 | 15 | 41,8 |
+| Go | 16 | 16 | 38,0 |
+| Haskell | 17 | 17 | 29,3 |
+| OCaml | 18 | 18 | 22,1 |
+| JavaScript | 19 | 19 | 13,1 |
+| Python | 20 | 20 | 10,1 |
+| Lua | 21 | 21 | 4,4 |
+
+| Mesure | Spearman (machine 1 contre 3) | n | rapport des temps (1 / 3) |
+|---|---|---|---|
+| k1:aos:energy | 0,32 | 25 | 1,24 |
+| k1:natural:energy | 0,72 | 25 | 1,20 |
+| k1:natural_shuffled:energy | 0,77 | 25 | 1,52 |
+| k1:soa:energy | 0,56 | 25 | 2,61 |
+| k2:tuned:16384 | 0,56 | 25 | 1,06 |
+| k2:tuned:16777216 | 0,07 | 25 | 1,88 |
+| k2:tuned:2097152 | 0,20 | 25 | 0,58 |
+| k2:tuned:262144 | 0,45 | 25 | 0,91 |
+| k2:tuned:268435456 | 0,42 | 25 | 1,50 |
+| k2:tuned:33554432 | -0,00 | 25 | 1,13 |
+| k2:tuned:524288 | 0,06 | 25 | 1,16 |
+| k2:tuned:65536 | 0,44 | 25 | 0,90 |
+| k2:tuned:67108864 | 0,05 | 25 | 1,21 |
+| k2:tuned:8388608 | 0,20 | 25 | 2,38 |
+| k3:rmw_packed: | 0,31 | 25 | 0,58 |
+| k3:rmw_padded: | 0,78 | 25 | 0,94 |
+| k3:sw_packed: | 0,59 | 25 | 1,31 |
+| k3:sw_padded: | 0,75 | 25 | 1,07 |
+| k4:branchless_unsorted: | 0,94 | 25 | 1,35 |
+| k4:natural_sorted: | 0,91 | 25 | 1,25 |
+| k4:natural_unsorted: | 0,94 | 25 | 1,19 |
+| k6:mt:q1 | 0,93 | 26 | 1,61 |
+| k6:mt:q6 | 0,90 | 26 | 1,78 |
+| k6:natural:q1 | 0,77 | 26 | 1,55 |
+| k6:natural:q6 | 0,87 | 26 | 1,29 |
+| k6:tuned:q1 | 0,97 | 26 | 1,32 |
+| k6:tuned:q6 | 0,70 | 26 | 1,21 |
+| k7:natural: | 0,75 | 25 | 2,99 |
+| k7:tuned: | 0,83 | 25 | 2,38 |
+| k8:natural: | 0,93 | 25 | 1,57 |
+| k8:tuned: | 0,93 | 25 | 1,21 |
+| k8:tuned_alloc: | 1,00 | 5 | 1,36 |
+| k9:mt: | 0,90 | 26 | 1,81 |
+| k9:natural: | 0,94 | 26 | 1,90 |
+| k9:tuned: | 0,77 | 26 | 2,18 |
+
+## K10, hors score (statistique descriptive)
+
+Anneau SPSC `tuned` (90 répétitions, 9 processus, machine 2) : part des répétitions dans le régime rapide. File standard `natural` (machine 1) : médiane.
+
+| Implémentation | Sous 15 ms | Sous 20 ms | Minimum (ms) | Médiane (ms) | File standard, médiane (ms) |
+|---|---|---|---|---|---|
+| Java | 62 % | 63 % | 5,3 | 12,3 | 815,4 |
+| Chapel | 54 % | 61 % | 5,3 | 13,7 | 3296,8 |
+| Odin | 43 % | 59 % | 8,0 | 16,3 | 1671,4 |
+| Fortran | 29 % | 53 % | 6,6 | 18,0 | 887,8 |
+| D | 26 % | 38 % | 6,5 | 25,8 | 2723,3 |
+| C++ | 26 % | 36 % | 8,8 | 30,7 | 1097,5 |
+| C (gcc) | 23 % | 30 % | 8,0 | 47,2 | 885,3 |
+| Ada | 23 % | 27 % | 6,6 | 36,1 | 4546,0 |
+| Nim | 16 % | 26 % | 6,3 | 41,2 | 1216,8 |
+| Rust | 17 % | 21 % | 10,8 | 50,4 | 86,6 |
+| Zig | 11 % | 19 % | 8,4 | 54,0 | 784,1 |
+| Mojo | 2 % | 12 % | 9,1 | 62,1 | 1991,3 |
+| C | 7 % | 9 % | 11,7 | 76,4 | 835,9 |
+| C# | 0 % | 8 % | 18,5 | 53,7 | 2904,6 |
+| C3 | 1 % | 7 % | 14,2 | 72,3 | 970,9 |
+| Fortran (flang) | 0 % | 0 % | 50,0 | 189,8 | 3683,1 |
+| Go | 0 % | 0 % | 75,1 | 341,3 | 571,0 |
+| Haskell | 0 % | 0 % | 48,1 | 102,7 | 1001,9 |
+| JavaScript | 0 % | 0 % | 142,7 | 232,9 | 10469,4 |
+| JS (Bun) | 0 % | 0 % | 91,9 | 156,9 | 7407,3 |
+| Julia | 0 % | 0 % | 361,3 | 451,6 | 1091,4 |
+| Lua | 0 % | 0 % | 285,4 | 297,0 | 597,6 |
+| LuaJIT | 0 % | 0 % | 20,8 | 22,1 | 197,2 |
+| OCaml | 0 % | 0 % | 69,7 | 228,8 | 1962,5 |
+| Python | 0 % | 0 % | 2699,8 | 2726,7 | 7988,5 |
+| Python (sans GIL) | 0 % | 0 % | 2479,9 | 2908,0 | 27742,9 |
+
 ## Pages géantes (K1 natural, machine 3, politique madvise)
 
 | Implémentation | AnonHugePages max (Mio) | pic RSS (Mio) |
 |---|---|---|
+| Python | 34 | 3267 |
+| Go | 2 | 517 |
+| Ada | 0 | 258 |
+| C | 0 | 258 |
+| C3 | 0 | 514 |
+| C (gcc) | 0 | 258 |
+| Chapel | 0 | 519 |
+| C++ | 0 | 516 |
+| C# | 0 | 927 |
+| D | 0 | 515 |
 | Fortran | 0 | 259 |
+| Fortran (flang) | 0 | 732 |
+| Haskell | 0 | 1248 |
+| Java | 0 | 798 |
+| JavaScript | 0 | 2105 |
 | JS (Bun) | 0 | 1032 |
+| Julia | 0 | 819 |
 | Lua | 0 | 2473 |
+| LuaJIT | 0 | 2275 |
 | Mojo | 0 | 664 |
+| Nim | 0 | 514 |
+| OCaml | 0 | 840 |
+| Odin | 0 | 514 |
+| Rust | 0 | 514 |
+| Zig | 0 | 513 |
 
