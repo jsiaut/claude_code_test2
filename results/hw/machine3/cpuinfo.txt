@@ -1,0 +1,7 @@
+cpu family	: 6
+microcode	: 0x1
+model		: 207
+model name	: Intel(R) Xeon(R) Processor @ 2.10GHz
+stepping	: 2
+vendor_id	: GenuineIntel
+boot: 2026-10-29 11:53:43

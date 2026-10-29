@@ -1,0 +1,138 @@
+; Assembly listing for method P:SumInt(int[]):int (FullOpts)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       mov      ecx, dword ptr [rdi+0x08]
+       test     ecx, ecx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x000D
+       add      rdi, 16
+       align    [0 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0011
+       add      eax, dword ptr [rdi]
+       add      rdi, 4
+       dec      ecx
+       jne      SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x001B
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 29
+
+; Assembly listing for method P:AddF(float[],float[],float[]) (FullOpts)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       mov      ecx, dword ptr [rdx+0x08]
+       test     ecx, ecx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x000D
+       test     rdi, rdi
+       je       SHORT G_M000_IG06
+       test     rsi, rsi
+       je       SHORT G_M000_IG06
+       cmp      dword ptr [rdi+0x08], ecx
+       jl       SHORT G_M000_IG06
+       cmp      dword ptr [rsi+0x08], ecx
+       jl       SHORT G_M000_IG06
+       mov      eax, 16
+       align    [0 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0026
+       vmovss   xmm0, dword ptr [rdi+rax]
+       vaddss   xmm0, xmm0, dword ptr [rsi+rax]
+       vmovss   dword ptr [rdx+rax], xmm0
+       add      rax, 4
+       dec      ecx
+       jne      SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x003D
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x003F
+       cmp      eax, dword ptr [rdi+0x08]
+       jae      SHORT G_M000_IG07
+       mov      r8d, eax
+       vmovss   xmm0, dword ptr [rdi+4*r8+0x10]
+       cmp      eax, dword ptr [rsi+0x08]
+       jae      SHORT G_M000_IG07
+       mov      r8d, eax
+       vaddss   xmm0, xmm0, dword ptr [rsi+4*r8+0x10]
+       mov      r8d, eax
+       vmovss   dword ptr [rdx+4*r8+0x10], xmm0
+       inc      eax
+       cmp      ecx, eax
+       jg       SHORT G_M000_IG06
+       jmp      SHORT G_M000_IG05
+ 
+G_M000_IG07:                ;; offset=0x006F
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 117
+
+; Assembly listing for method P:CondSum(byte[]):long (FullOpts)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG06
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       cmp      esi, 128
+       jl       SHORT G_M000_IG05
+ 
+G_M000_IG04:                ;; offset=0x001E
+       mov      esi, esi
+       add      rax, rsi
+ 
+G_M000_IG05:                ;; offset=0x0023
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG06:                ;; offset=0x0029
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 43
+

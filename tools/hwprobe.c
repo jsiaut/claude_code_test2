@@ -1,6 +1,7 @@
 // hwprobe.c — caractérisation matérielle sans PMU (la VM n'expose pas de compteurs
 // matériels : "no PMU driver, software events only"). Toutes les mesures sont des
-// micro-expériences chronométrées par TSC (constant_tsc, nonstop_tsc, 2.8 GHz).
+// micro-expériences chronométrées par TSC (constant_tsc, nonstop_tsc ; 2,8 GHz sur les machines 1 et 2,
+// 2,1 GHz sur la machine 3). Les colonnes « cycles » de lat et peak supposent 2,8 GHz : sur la machine 3, lire les ns.
 //
 // Sous-commandes :
 //   freq    : fréquence effective (chaîne de 1e9 additions dépendantes = 1 cycle/add)
@@ -51,13 +52,15 @@ static void t_freq(void) {
     for (int k = 0; k < 3; k++) {
         // 20 additions dépendantes par itération : le coût de la boucle (branchement pris)
         // devient négligeable et la chaîne impose exactement 1 cycle cœur par addition.
-        uint64_t x = 0, n = 1000000000ull;
+        // Additions registre-registre : depuis Golden Cove (machine 3), le renommage replie les chaînes
+        // d'additions d'un immédiat (add $1), qui ne mesurent plus la fréquence (11 à 22 additions par ns).
+        uint64_t x = 0, one = 1, n = 1000000000ull;
         double t0 = now(); uint64_t c0 = rdtsc_s();
         for (uint64_t i = 0; i < n / 20; i++)
-            __asm__ volatile("add $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\t"
-                             "add $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\t"
-                             "add $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\t"
-                             "add $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0\n\tadd $1, %0" : "+r"(x));
+            __asm__ volatile("add %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\t"
+                             "add %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\t"
+                             "add %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\t"
+                             "add %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0" : "+r"(x) : "r"(one));
         uint64_t c1 = rdtsc_s(); double t1 = now();
         printf("freq: %.3f GHz effectifs (TSC %.3f GHz, ratio cycles/TSC=%.3f) x=%llu\n",
                n / (t1 - t0) / 1e9, tsc_ghz, (double)n / (c1 - c0), (unsigned long long)x);
@@ -314,6 +317,70 @@ static void t_tlb(void) {
         }
 }
 
+// ---------- witness : témoin d'environnement court (~0,3 s avec l'étalonnage), lancé avant chaque processus mesuré ----------
+// Médiane de 5 essais pour le calcul : débit FMA AVX-512 et fréquence effective (chaîne d'additions dépendantes).
+// Puis latence d'un saut dépendant sur 2 Mio (frontière du L2 sur la machine 3) et sur 32 Mio (L3 partagé avec les
+// autres locataires), et bande passante en lecture sur 64 Mio. Une ligne : witness;GFLOP/s;GHz;ns 2 Mio;ns 32 Mio;Go/s
+static int cmpd(const void *a, const void *b) { double x = *(const double *)a, y = *(const double *)b; return (x > y) - (x < y); }
+static double chase_ns(size_t S, size_t H) {
+    size_t nodes = S / 64;
+    uint64_t *a = amalloc(S, 0);
+    uint32_t *p = malloc(nodes * 4);
+    for (size_t i = 0; i < nodes; i++) p[i] = i;
+    for (size_t i = nodes - 1; i > 0; i--) { size_t j = xr() % i; uint32_t t = p[i]; p[i] = p[j]; p[j] = t; }
+    for (size_t k = 0; k < nodes; k++) a[8 * p[k]] = (uint64_t)(uintptr_t)&a[8 * p[(k + 1) % nodes]];
+    free(p);
+    uint64_t *q = a;
+    for (size_t i = 0; i < nodes; i++) q = (uint64_t *)*q;
+    uint64_t c0 = rdtsc_s();
+    for (size_t i = 0; i < H; i++) q = (uint64_t *)*q;
+    uint64_t c1 = rdtsc_s();
+    __asm__ volatile("" : : "r"(q));
+    munmap(a, S);
+    return (c1 - c0) / tsc_ghz / H;
+}
+static void t_witness(void) {
+    double g[5], f[5];
+    __m512 acc[12]; for (int k = 0; k < 12; k++) acc[k] = _mm512_set1_ps(k);
+    __m512 m = _mm512_set1_ps(1.0000001f), ad = _mm512_set1_ps(1e-7f);
+    for (int t = 0; t < 5; t++) {
+        const long N = 500000;
+        uint64_t c0 = rdtsc_s();
+        for (long i = 0; i < N; i++) {
+            for (int k = 0; k < 12; k++) acc[k] = _mm512_fmadd_ps(acc[k], m, ad);
+            __asm__ volatile("" : "+v"(acc[0]), "+v"(acc[1]), "+v"(acc[2]), "+v"(acc[3]), "+v"(acc[4]), "+v"(acc[5]),
+                             "+v"(acc[6]), "+v"(acc[7]), "+v"(acc[8]), "+v"(acc[9]), "+v"(acc[10]), "+v"(acc[11]));
+        }
+        uint64_t c1 = rdtsc_s();
+        g[t] = N * 12.0 * 32 / ((c1 - c0) / tsc_ghz);
+        const long A = 4000000;  // additions registre-registre (voir t_freq)
+        long x = 0, one = 1;
+        c0 = rdtsc_s();
+        for (long i = 0; i < A / 20; i++)
+            __asm__ volatile("add %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\t"
+                             "add %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\t"
+                             "add %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\t"
+                             "add %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0\n\tadd %1, %0" : "+r"(x) : "r"(one));
+        c1 = rdtsc_s();
+        f[t] = A / ((c1 - c0) / tsc_ghz);
+    }
+    float fs = 0; for (int k = 0; k < 12; k++) fs += _mm512_reduce_add_ps(acc[k]);
+    qsort(g, 5, sizeof g[0], cmpd);
+    qsort(f, 5, sizeof f[0], cmpd);
+    double l2 = chase_ns(2 << 20, 200000), l32 = chase_ns(32 << 20, 200000);
+    size_t B = 64 << 20;
+    uint32_t *b = amalloc(B, 0);
+    for (size_t i = 0; i < B / 4; i++) b[i] = (uint32_t)i;
+    uint64_t x = sum_u32(b, B / 4);
+    uint64_t c0 = rdtsc_s();
+    __asm__ volatile("" : "+r"(b) : : "memory");
+    x += sum_u32(b, B / 4);
+    uint64_t c1 = rdtsc_s();
+    double bw = (double)B / ((c1 - c0) / tsc_ghz);
+    munmap(b, B);
+    printf("witness;%.1f;%.2f;%.2f;%.2f;%.2f;%g;%llu\n", g[2], f[2], l2, l32, bw, fs, (unsigned long long)x);
+}
+
 int main(int argc, char **argv) {
     calib();
     printf("TSC: %.4f GHz\n", tsc_ghz);
@@ -329,6 +396,7 @@ int main(int argc, char **argv) {
         else if (!strcmp(c, "c2c")) t_c2c();
         else if (!strcmp(c, "bp")) t_bp();
         else if (!strcmp(c, "tlb")) t_tlb();
+        else if (!strcmp(c, "witness")) t_witness();
         else fprintf(stderr, "inconnu: %s\n", c);
         fflush(stdout);
     }

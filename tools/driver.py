@@ -56,8 +56,33 @@ def check(kernel, param, chk):
     return chk.strip() == exp
 
 
-def run_one(lang, kernel, variant, param, reps, warmup, timeout):
+def witness():
+    """Témoin d'environnement (tools/hwprobe.c, mode witness) : débit FMA, fréquence effective, latences à 2 et
+    32 Mio, bande passante en lecture sur 64 Mio."""
+    try:
+        out = subprocess.run(["/opt/hwprobe", "witness"], capture_output=True, text=True, timeout=30).stdout
+        f = [l for l in out.splitlines() if l.startswith("witness;")][-1].split(";")
+        return {"gflops": float(f[1]), "ghz": float(f[2]), "lat2M_ns": float(f[3]), "lat32M_ns": float(f[4]),
+                "bw_GBps": float(f[5])}
+    except Exception as e:  # noqa: BLE001
+        return {"error": str(e)}
+
+
+def thp_sampler(pid, box, stop):
+    """Relève toutes les 100 ms le maximum de AnonHugePages du processus (/proc/<pid>/smaps_rollup)."""
+    while not stop.is_set():
+        try:
+            for line in open(f"/proc/{pid}/smaps_rollup"):
+                if line.startswith("AnonHugePages:"):
+                    box[0] = max(box[0], int(line.split()[1]))
+        except OSError:
+            pass
+        stop.wait(0.1)
+
+
+def run_one(lang, kernel, variant, param, reps, warmup, timeout, wit=False, thp=False):
     runner = os.path.join(ROOT, "bench", lang, "run")
+    wv = witness() if wit else None
     k = "k1" if kernel == "fp" else kernel
     cmd = [runner, k, variant, str(reps)] + ([param] if param else [])
     env = dict(os.environ, WARMUP=str(warmup), MS_DATA=os.environ.get("MS_DATA", "/opt/msdata"))
@@ -66,7 +91,12 @@ def run_one(lang, kernel, variant, param, reps, warmup, timeout):
         proc = subprocess.Popen(cmd, stdout=fo, stderr=fe, env=env, cwd=os.path.join(ROOT, "bench", lang))
         timer = threading.Timer(timeout, proc.kill)
         timer.start()
+        box, stop = [0], threading.Event()
+        if thp:
+            th = threading.Thread(target=thp_sampler, args=(proc.pid, box, stop), daemon=True)
+            th.start()
         _, status, ru = os.wait4(proc.pid, 0)
+        stop.set()
         timer.cancel()
         proc.returncode = os.waitstatus_to_exitcode(status)
         fo.seek(0); out = fo.read()
@@ -77,6 +107,10 @@ def run_one(lang, kernel, variant, param, reps, warmup, timeout):
            "returncode": proc.returncode, "wall": wall, "steal_ticks": s1 - s0, "stderr": err.decode(errors="replace")[-2000:],
            "maxrss_kb": ru.ru_maxrss, "utime": ru.ru_utime, "stime": ru.ru_stime, "minflt": ru.ru_minflt,
            "nvcsw": ru.ru_nvcsw, "nivcsw": ru.ru_nivcsw}
+    if wv is not None:
+        rec["witness"] = wv
+    if thp:
+        rec["anon_huge_kb_max"] = box[0]
     for line in out.decode(errors="replace").splitlines():
         f = line.strip().split(";")
         if f[0] == "RESULT" and len(f) >= 7:
@@ -102,6 +136,8 @@ def main():
     ap.add_argument("--quick", action="store_true", help="1 processus, 1 répétition (validation)")
     ap.add_argument("--params", default="", help="ne garder que ces paramètres (ex. q1, 16384)")
     ap.add_argument("--tag", default="", help="étiquette enregistrée dans chaque mesure (ex. complement)")
+    ap.add_argument("--witness", action="store_true", help="témoin d'environnement (hwprobe witness) avant chaque processus")
+    ap.add_argument("--thp", action="store_true", help="relevé de AnonHugePages pendant chaque processus")
     ap.add_argument("--pass", dest="pass_", type=int, default=-1,
                     help="campagne : n'exécute que le processus d'indice PASS (les passes sont lancées à des moments "
                          "différents, dans un ordre aléatoire) ; le nombre de répétitions est figé par results/calib.json")
@@ -146,7 +182,7 @@ def main():
             for p in passes:
                 # steal de l'hyperviseur > 2 % du temps CPU disponible : mesure refaite (2 fois au plus)
                 for attempt in range(3):
-                    rec = run_one(a.lang, kernel, variant, param, reps, a.warmup, a.timeout)
+                    rec = run_one(a.lang, kernel, variant, param, reps, a.warmup, a.timeout, a.witness, a.thp)
                     steal_frac = rec["steal_ticks"] / max(1e-9, rec["wall"] * CLK_TCK * NCPU)
                     rec["steal_frac"] = steal_frac
                     rec["attempt"] = attempt
