@@ -1,6 +1,7 @@
 # Analyse v3 : réponse au second audit (29 octobre 2026)
 
-*Plan fixé le 29 octobre 2026, vers 16:30. Il est poussé sur GitHub **avant** tout calcul de l'analyse v3 et
+*Plan fixé le 29 octobre 2026 et poussé à 15:54 (commit `ae9e1a1`) ; l'heure écrite d'abord ici, « vers 16:30 »,
+était fausse. Il est poussé sur GitHub **avant** tout calcul de l'analyse v3 et
 **avant** l'expérience de disposition du code de la section 6. Il n'est pas aveugle : je l'écris après avoir lu le
 second audit (archivé dans `docs/AUDIT2_2026-10-29.md`) et après avoir vu les résultats v1 et v2. Les analyses v1 et
 v2 restent publiées telles quelles.*
