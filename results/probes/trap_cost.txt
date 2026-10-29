@@ -1,0 +1,6 @@
+malloc + free, sans sonde : 10.1 ns par paire malloc+free
+malloc + free, uprobes sur les deux : 59199.7 ns par paire malloc+free
+{"rc": 0, "counts": {"task_clock_ns": 11840649266, "context_switches": 16, "cpu_migrations": 0, "page_faults": 65, "major_faults": 0, "syscalls": 34, "uprobe_malloc": 200001, "uprobe_free": 200000}}
+écriture, sans point d'arrêt : 0.2 ns par écriture
+écriture, point d'arrêt matériel : 29676.9 ns par écriture
+{"rc": 0, "counts": {"task_clock_ns": 5936312472, "context_switches": 9, "cpu_migrations": 0, "page_faults": 64, "major_faults": 0, "syscalls": 35, "writes_target": 200008}}

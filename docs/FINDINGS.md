@@ -242,3 +242,30 @@ fusionner les passes répétées (355 To/s).
   Sans le décile le plus lent du témoin (45 processus), aucun rang ne change. Le témoin a pourtant beaucoup
   varié : débit FMA de 82 à 250 Gflop/s, fréquence effective de 1,2 à 4,1 GHz, latence à 32 Mio de 91 à
   618 ns. Un instantané de 0,4 s avant le processus ne dit rien de l'état de l'hôte pendant celui-ci.
+
+## Compteurs du noyau, sans PMU (29 octobre au soir) — `docs/INSTRUMENTS_V3.md`, `results/report_instruments_v3.md`
+
+* **Ce qui existe sans PMU, vérifié** : compteurs logiciels (temps CPU, changements de contexte, migrations,
+  défauts de page), tracepoints d'appels système, uprobes, points d'arrêt matériels, PSI. Le binaire `perf` est
+  absent : `tools/pecount.c` ouvre ces compteurs par `perf_event_open`, hérités par tous les threads. Une uprobe
+  ouverte par la PMU `uprobe` fait échouer les `fork` du processus compté ; l'outil la définit donc dans
+  `uprobe_events`.
+* **Coût d'une trappe dans cette microVM** : environ 30 µs par passage dans une uprobe ou un point d'arrêt matériel
+  (une paire `malloc` + `free` passe de 10 ns à 59 µs ; une écriture de 0,2 ns à 30 µs), pour des comptes exacts
+  (`probes/trap_cost`). Appel système minimal : environ 100 ns ; défaut de page mineur : 1,4 à 1,7 µs, et 19 µs au
+  premier contact de la VM avec une mémoire (défaut côté hôte) (`results/hw/machine3/syspf.txt`).
+* **Horloges** : Odin (`time.tick_now`, `clock_gettime` sans vDSO), Lua et LuaJIT (`os.clock`, temps CPU) font un
+  appel système à chaque lecture d'horloge ; 32 770 par répétition de K8, deux par requête chronométrée.
+* **Mémoire rendue puis retouchée** : sur K7 naturel, Rust, Zig, Odin et Fortran (flang) rendent la mémoire de leur
+  table au système à chaque répétition, puis subissent 10 000 à 29 000 défauts de page en la reprenant (1 à 5 % du
+  temps) ; C, C++, C3, Nim et gfortran la réutilisent.
+* **Threads** : sur K3, la plupart des implémentations créent leurs 4 threads à chaque répétition ; flang (OpenMP),
+  C# et Bun attendent en `sched_yield` (des centaines à des milliers par répétition) ; Python sérialise ses 4
+  threads (24 000 `futex` par répétition, rapport CPU / temps écoulé de 1,09).
+* **Runtimes** : des centaines à des dizaines de milliers d'appels système par répétition (Haskell 60 000 `futex`
+  sur K8 naturel ; Node 26 000 `futex` et 24 000 `malloc` sur K1 naturel). En régime établi, le code compilé n'en
+  fait qu'un ou deux (l'écriture du résultat).
+* **Le contrôle du bruit dans l'invité ne réduit pas le bruit** : épingler sur un CPU, passer en `SCHED_FIFO` et
+  déplacer les interruptions laisse l'écart-type entre processus inchangé (rapport 1,00 [0,64–1,33] sur cinq
+  mesures natives), et ni la PSI, ni le temps volé, ni les changements de contexte, ni les migrations ne prédisent
+  la lenteur d'un processus (|ρ| ≤ 0,23).

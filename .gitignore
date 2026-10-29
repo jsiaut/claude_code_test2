@@ -25,8 +25,3 @@ probes/*/*.cmx
 probes/*/*.o
 
 bench/*/layout/
-# Compteurs du noyau en cours (29 octobre) : fichiers écrits en continu, retirés du suivi jusqu'à la fin
-results/raw_v3/instruments_count.jsonl
-results/raw_v3/instruments_alloc.jsonl
-results/raw_v3/noise_pilot.jsonl
-results/campaign.log

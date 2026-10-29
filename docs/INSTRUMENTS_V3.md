@@ -99,3 +99,47 @@ celui d'un défaut de page mineur (premier accès à une page anonyme).
   vérification ponctuelle (par exemple, compter les écritures sur le compteur de K3), pas une mesure de débit. Le
   désassemblage a déjà établi le nombre d'écritures des boucles de K3.
 * **Nouvelle campagne sous contrôles** : elle dépend du résultat du pilote.
+
+## 7. Résultats (ajoutés après les mesures)
+
+Détail : `results/report_instruments_v3.md`, données dans `results/raw_v3/instruments_*.jsonl` et
+`results/raw_v3/noise_pilot.jsonl`. Mesures du 29 octobre, 17:26 à 19:56.
+
+* **Pilote du bruit, selon la règle fixée d'avance : les contrôles ne réduisent pas le bruit.** Rapport moyen des
+  écarts-types B / A : 1,00 [0,64–1,33] ; C / A : 1,03 [0,73–1,37]. Aucune des cinq mesures n'a un rapport
+  significativement sous 1. Aucun indicateur ne prédit la lenteur d'un processus : ρ = −0,03 pour la PSI CPU, 0,05
+  pour le temps volé, 0,12 pour les changements de contexte, 0,23 pour les migrations (n = 60) ; la PSI mémoire
+  n'a pas varié. Avec 12 processus par case, une réduction de plus d'un tiers est exclue, une réduction modeste ne
+  l'est pas. Le bruit entre processus vient vraisemblablement d'en dehors de l'invité, qui ne peut ni le
+  contrôler ni le voir.
+* **Passe de comptage** (348 exécutions, toutes valides) :
+  * en régime établi, le code des langages compilés ne fait qu'un ou deux appels système par répétition (l'écriture
+    du résultat) et aucun défaut de page sur K1, K6 et K8 ;
+  * Odin, Lua et LuaJIT font un appel système à chaque lecture d'horloge : `clock_gettime` sans vDSO pour Odin
+    (vérifié par strace : 32 770 appels pour une répétition de K8 naturel), le temps CPU pour Lua, que le vDSO ne
+    sert pas ; soit deux appels par requête chronométrée de K8 ;
+  * sur K7 naturel, Rust, Zig, Odin et Fortran (flang) rendent la mémoire de leur table au système à chaque
+    répétition puis la retouchent : 10 000 à 29 000 défauts de page par répétition, environ 1 à 5 % du temps à
+    1,5 µs le défaut ; C, C++, C3, Nim et Fortran (gfortran) la réutilisent (0 ou 1 défaut) ;
+  * sur K3, les implémentations créent leurs 4 threads à chaque répétition (4 `clone3`), sauf Zig (pile en `mmap`),
+    Fortran (pool OpenMP) et Go ; flang, C# et Bun font des centaines à des milliers de `sched_yield` par
+    répétition (attente active) ; Python, 24 000 `futex` et 9 300 changements de contexte par répétition, avec un
+    rapport CPU / temps écoulé de 1,09 sur 4 threads : le verrou global sérialise ;
+  * les runtimes à ramasse-miettes ou à threads de fond font des centaines à des dizaines de milliers d'appels
+    système par répétition : Haskell 60 000 `futex` sur K8 naturel, Node 26 000 `futex` et 24 000 `malloc` sur K1
+    naturel, 2 700 `mprotect` sur K7, D 22 800 `futex` sur K8 `tuned`. Une partie de cette activité suit le temps
+    plutôt que le nombre de répétitions : la méthode des deux points donne alors des valeurs négatives, signalées
+    comme telles.
+* **Allocations par uprobe** (248 exécutions, 28 au-delà de 120 s : surtout K7 naturel, Julia et Lua). Sur K8
+  `tuned`, censé n'allouer rien en régime permanent : 0 ou 1 appel à l'allocateur de la libc par répétition en C,
+  C++, Zig, Odin, C3, D, Nim, Ada, Mojo, OCaml et LuaJIT ; 69 en Fortran, 114 en C#, 158 en Java, 389 en Haskell,
+  839 en Node (allocations natives du runtime). Sur K9 naturel, C++ et Rust allouent 4 100 blocs par répétition,
+  mais hors chronomètre : la grille, un vecteur de lignes, est recréée avant chaque mesure (`bench/cpp/ms.cpp`).
+* **Coût des instruments à trappe dans cette microVM** (`probes/trap_cost`, `results/probes/trap_cost.txt`) :
+  une paire `malloc` + `free` passe de 10 ns à 59 µs avec une uprobe sur chacune, soit environ 30 µs par passage ;
+  une écriture passe de 0,2 ns à 30 µs avec un point d'arrêt matériel. Les comptes sont exacts (200 001 et
+  200 008), mais ces instruments ne conviennent qu'aux événements rares.
+* **Limite de la méthode des deux points** : sans marqueurs dans le code, un compte par répétition inclut le
+  travail hors chronomètre. Sur K9, la grille est réinitialisée hors chronomètre à chaque répétition : ses défauts
+  de page (16 384 par répétition en Zig, Odin, C3, gfortran et flang, qui la remappent) ne pèsent pas sur le temps
+  mesuré.

@@ -432,4 +432,13 @@ Robustesse :
 * 2026-10-29, 17:26 : **plan des compteurs poussé** (`docs/INSTRUMENTS_V3.md`, commit `ff9c188`), puis lancement
   de la passe de comptage, du comptage des allocations et du pilote de contrôle du bruit, l'un après l'autre. Code
   d'analyse poussé à 17:29 (commit `f50bdd3`), avant son premier calcul sur les données.
+* 2026-10-29, 19:56 : **mesures des compteurs terminées**. Passe de comptage : 348 exécutions (17:26–17:57), toutes
+  valides. Allocations par uprobe : 248 exécutions (17:57–19:53), dont 28 arrêtées à 120 s (trop d'appels pour une
+  uprobe). Pilote du bruit : 180 processus (19:53–19:56) ; 23 des 29 interruptions ont pu être déplacées vers les
+  CPU 0 à 2, et toutes ont été remises sur 0 à 3 ensuite (vérifié). Selon la règle fixée d'avance, les contrôles ne
+  réduisent pas le bruit, et aucun indicateur ne prédit la lenteur d'un processus. Après coup : coût d'une trappe
+  mesuré (`probes/trap_cost`, environ 30 µs par passage), et appel système d'Odin identifié par strace
+  (`clock_gettime`). Pendant ces mesures, je n'ai lancé que l'analyse de la passe de comptage déjà terminée (moins
+  d'une minute, pendant les allocations, qui ne sont pas chronométrées) et ce strace d'une répétition d'Odin, avant
+  le pilote. Les fichiers de mesure étaient retirés du suivi Git pendant les mesures ; ils y reviennent complets.
 

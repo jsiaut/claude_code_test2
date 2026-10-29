@@ -115,6 +115,17 @@ chaîne il vaut.
    même au niveau 1 avec PGO dynamique (`probes/csharp_jitvec_tiered`).
 7. **Le compilateur pèse autant que le langage sur certains noyaux.** Sur K8 (arène), le même code C est 2,2 à
    2,7 fois plus rapide compilé par GCC que par clang ; le style de codage fait 20 à 30 % (machine 3).
+8. **Ce que comptent les compteurs du noyau** (ajoutés le 29 au soir, sans PMU : appels système, défauts de page,
+   changements de contexte, uprobes ; [`docs/INSTRUMENTS_V3.md`](docs/INSTRUMENTS_V3.md)). En régime établi, le
+   code des langages compilés ne fait qu'un ou deux appels système par répétition, et aucun défaut de page sur K1,
+   K6 et K8. Exceptions mesurées :
+   * Odin, Lua et LuaJIT font un appel système à chaque lecture d'horloge (32 770 par répétition de K8) ;
+   * sur K7 naturel, Rust, Zig, Odin et flang rendent la mémoire de leur table au système à chaque répétition,
+     puis paient 10 000 à 29 000 défauts de page en la reprenant (1 à 5 % du temps) ; C, C++, C3, Nim et gfortran
+     la réutilisent ;
+   * les runtimes à ramasse-miettes ou à threads de fond font des centaines à des dizaines de milliers d'appels
+     système par répétition (Haskell 60 000 `futex` sur K8 naturel, Node 26 000 sur K1 naturel), et Python
+     sérialise ses 4 threads de K3 (rapport CPU / temps écoulé de 1,09).
 
 ### 4. Le score composite, en analyse de sensibilité
 
@@ -143,6 +154,11 @@ JavaScript 14,7 ; Python 10,0 ; Lua 4,0. C'est un résumé sous un jeu de poids,
   de la significativité sur 108 tests : K6 Q1 en 4 threads et K2 à 256 Kio en C compilé par GCC (× 1,7 et × 1,3
   entre dispositions extrêmes), et K4 naturel en C compilé par clang (× 1,9), dont l'effet s'affaiblit sans les
   tâches que mes propres calculs ont perturbées.
+* **Contrôler le bruit dans la VM ne le réduit pas** (pilote fixé d'avance). Épingler le processus sur un CPU, le
+  passer en `SCHED_FIFO` et déplacer les interruptions laisse l'écart-type entre processus inchangé : rapport
+  1,00 [0,64–1,33] sur cinq mesures natives. Ni la PSI, ni le temps volé, ni les changements de contexte, ni les
+  migrations ne prédisent la lenteur d'un processus (|ρ| ≤ 0,23). Le bruit vient vraisemblablement de l'hôte,
+  hors de portée de l'invité.
 * **Les intervalles** : avec des références fixes, le plafond E est centré dans son intervalle (position moyenne
   0,46, contre 0,72 en v2), comme le code naturel D1 (0,50). Le composite MS reste un peu décentré (0,43) à cause
   de D3, la queue de latence, dont le rééchantillonnage reste asymétrique, et de D2, plafonné à 1. Ces intervalles
@@ -152,7 +168,8 @@ JavaScript 14,7 ; Python 10,0 ; Lua 4,0. C'est un résumé sous un jeu de poids,
 ### 6. Ce que la v3 ne règle pas
 
 * Deux machines Intel seulement, partagées et sans compteurs matériels : pas d'AMD ni d'ARM, et les mécanismes
-  restent des inférences, sauf là où une sonde ne change qu'une seule chose.
+  restent des inférences, sauf là où une sonde ne change qu'une seule chose. Les compteurs du noyau (appels
+  système, défauts de page, uprobes) ne sont utilisés que depuis le 29 au soir, sur sept mesures.
 * Deux ou trois processus par mesure hors K5 : les intervalles empruntent la variance des autres cellules du même
   noyau, sous une hypothèse d'échangeabilité.
 * Des implémentations écrites par un seul auteur, un agent, en deux heures environ, sans relecture experte ni
@@ -544,6 +561,9 @@ spécification des noyaux, qui sert de contrat commun aux 21 langages, est dans 
   CPU family 6 model 85 no PMU driver, software events only* »). La source `msr` n'expose que `tsc`
   et `smi` (ni APERF ni MPERF), et `/dev/cpu/*/msr` est absent. `perf` n'est pas installé.
   `perf_event_paranoid` vaut 2, ce qui autorise les événements logiciels sur ses propres processus.
+  *Ajout du 29 octobre au soir* : le noyau expose bien des compteurs logiciels, des tracepoints d'appels système,
+  des uprobes et des points d'arrêt matériels, que je n'ai utilisés qu'après coup (`tools/pecount.c`,
+  [`docs/INSTRUMENTS_V3.md`](docs/INSTRUMENTS_V3.md)).
 * **Outils présents** : gdb, strace, objdump/llvm-objdump, readelf, Valgrind 3.22, horloge TSC
   invariante (`constant_tsc`, `nonstop_tsc`). Valgrind 3.22 **ne décode pas l'AVX-512** (SIGILL
   vérifié sur une FMA zmm). Il est donc inutilisable sur les binaires `-march=native`.
@@ -1619,6 +1639,32 @@ sh probes/k5_reduction/run.sh              # code machine et temps de la réduct
 
 ```bash
 sh probes/csharp_jitvec_tiered/run.sh      # JIT de .NET, réglages par défaut : code de chaque niveau
+```
+
+Compteurs du noyau (plan : `docs/INSTRUMENTS_V3.md`) :
+
+```bash
+cc -O2 -o /opt/pecount tools/pecount.c     # compteurs perf_event_open sans le binaire perf
+```
+
+```bash
+python3 tools/instruments_v3.py count      # appels système, défauts de page, threads -> results/raw_v3
+```
+
+```bash
+python3 tools/instruments_v3.py alloc      # allocations de la libc par uprobe
+```
+
+```bash
+python3 tools/instruments_v3.py noise      # pilote : épinglage, SCHED_FIFO, interruptions, environnement
+```
+
+```bash
+python3 analysis/instruments_v3.py         # -> results/report_instruments_v3.md
+```
+
+```bash
+sh probes/trap_cost/run.sh                 # coût d'une uprobe et d'un point d'arrêt matériel
 ```
 
 Arborescence : `bench/<langage>/` (implémentation, `build.sh`, `run`), `tools/` (pilote, campagne,
