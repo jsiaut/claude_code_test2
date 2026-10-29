@@ -16,14 +16,18 @@ KERNELS = ["k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8", "k9"]
 GCC = "/opt/gcc-16/bin/gcc-16"
 
 
+LLD_DIR = os.path.join(ROOT, "bench", "c", "layout", "lld23")  # ld.lld -> lld 23 : l'option n'existe pas dans le lld 18 du système
+
+
 def build_cmd(impl, seed, out):
-    lay = ["-ffunction-sections", "-fuse-ld=lld", f"-Wl,--randomize-section-padding={seed}"]
+    lay = ["-ffunction-sections", f"-B{LLD_DIR}", "-fuse-ld=lld", f"-Wl,--randomize-section-padding={seed}"]
     if impl == "c":
         return ["clang-23", "-std=c23", "-O3", "-march=native", "-Wall", "-Wextra", "-pthread"] + lay + ["-o", out, "bench/c/ms.c"]
     if impl == "c_gcc":
         return [GCC, "-std=c23", "-O3", "-march=native", "-pthread"] + lay + ["-o", out, "bench/c/ms.c"]
     return ["rustc", "--edition", "2024", "-C", "opt-level=3", "-C", "target-cpu=native", "-C", "codegen-units=1",
-            "-C", "link-arg=-fuse-ld=lld", "-C", f"link-arg=-Wl,--randomize-section-padding={seed}", "-o", out, "bench/rust/ms.rs"]
+            "-C", f"link-arg=-B{LLD_DIR}", "-C", "link-arg=-fuse-ld=lld", "-C", f"link-arg=-Wl,--randomize-section-padding={seed}",
+            "-o", out, "bench/rust/ms.rs"]
 
 
 def binary(impl, seed):
@@ -31,6 +35,10 @@ def binary(impl, seed):
 
 
 def build():
+    os.makedirs(LLD_DIR, exist_ok=True)
+    link = os.path.join(LLD_DIR, "ld.lld")
+    if not os.path.exists(link):
+        os.symlink("/usr/bin/ld.lld-23", link)
     for impl in IMPLS:
         os.makedirs(os.path.join(ROOT, "bench", impl, "layout"), exist_ok=True)
         for s in SEEDS:
