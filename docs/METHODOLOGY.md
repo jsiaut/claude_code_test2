@@ -417,3 +417,19 @@ Robustesse :
   du bruit de Monte-Carlo : bornes d'IC à 0,2 point près, ensembles simultanés de Julia et d'Ada élargis d'un rang,
   p du test de réplication sur les 9 premiers de 0 à 0,0005. Les chiffres publiés sont ceux du calcul corrigé. Le
   graphique v3 a été rendu par Chromium après la fin de l'expérience.
+* 2026-10-29, vers 17:05 : **inventaire des compteurs du noyau**, après une question de l'utilisateur, qui me
+  soumettait la description d'un banc de mesure voisin. Sans PMU matérielle, le noyau expose pourtant des compteurs
+  logiciels, des tracepoints d'appels système, des uprobes et des points d'arrêt matériels ; PSI est actif ;
+  épinglage et `SCHED_FIFO` sont possibles. Je ne m'en servais pas, à part le temps volé (mesure refaite au-delà
+  de 2 %) et les comptes de `wait4`, relevés mais jamais analysés. Vérification sur un programme de test : 1 000
+  `getppid`, 1 000 `malloc` et 1 000 écritures comptés exactement. Deux pièges en construisant `tools/pecount.c` :
+  une uprobe ouverte par la PMU `uprobe` fait échouer les `fork` du processus compté (d'où des uprobes définies
+  dans tracefs), et `fopen(…, "a")` échoue sur tracefs (d'où `open` et `write` directs). Un essai d'uprobe sur
+  `malloc` et `free` pendant K8 naturel en C (33,5 millions d'allocations par répétition) a dépassé 5 minutes et a
+  été arrêté : K8 naturel est exclu du comptage des allocations. Coûts mesurés : appel système minimal environ
+  100 ns, défaut de page mineur 1,4 à 1,7 µs, et 19 µs au premier passage sur une mémoire que la VM n'avait jamais
+  touchée (défaut côté hôte) (`results/hw/machine3/syspf.txt`).
+* 2026-10-29, 17:26 : **plan des compteurs poussé** (`docs/INSTRUMENTS_V3.md`, commit `ff9c188`), puis lancement
+  de la passe de comptage, du comptage des allocations et du pilote de contrôle du bruit, l'un après l'autre. Code
+  d'analyse poussé à 17:29 (commit `f50bdd3`), avant son premier calcul sur les données.
+
