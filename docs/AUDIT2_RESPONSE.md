@@ -108,4 +108,42 @@ quelles.*
 
 ## 7. Résultats de la v3
 
-⟨à compléter après le calcul final⟩
+Sorties complètes : [`results/report_v3.md`](../results/report_v3.md) et `results/summary_v3.json`. Le README en
+donne la lecture.
+
+**Étages (règle du plan).**
+1. Ada, C, C#, C++, C3, Chapel, D, Fortran, Go, Java, Julia, Mojo, Nim, Odin, Rust, Zig
+2. Haskell
+3. OCaml
+4. JavaScript, Lua, Python
+
+L'audit proposait quatre étages un peu différents (§ 5) : il séparait C#, Java et Go des 13 premiers, et mettait
+Haskell avec OCaml. La règle fixée d'avance ne retient pas la première frontière. Dans les tirages de l'analyse
+globale où le pilier de contrôle pèse lourd, C# (contrôle 68,8) passe devant Fortran, Chapel ou Mojo, et Java et
+Go chevauchent C#. Elle sépare en revanche Haskell d'OCaml. ⟨étages hors plan⟩
+
+**Réplication : bruit ou interaction ?** 2 000 simulations sans interaction, avec le bruit mesuré entre processus.
+
+| Statistique | Observée | Sans interaction : médiane [5–95 %] | p |
+|---|---|---|---|
+| Spearman, 21 langages | 0,95 | 0,99 [0,98–1,00] | < 0,001 |
+| Spearman, 13 premiers | 0,78 | 0,97 [0,93–0,99] | < 0,001 |
+| Spearman, 9 premiers | 0,43 | 0,93 [0,80–0,98] | < 0,001 |
+| Paires inversées parmi les 13 premiers | 17 | 3 [1–7] | < 0,001 |
+
+Aucune simulation n'atteint le désaccord observé, ni avec le bruit de la machine 3 multiplié par 1,5 ou 2 (hors
+plan). L'estimateur v3 rapproche un peu les deux machines (17 paires inversées au lieu de 21 en v2), sans changer la
+conclusion. ⟨K3⟩
+
+**Décomposition de la variance** (part de chaque source, mesures présentes sur les deux machines). Sur les 21
+langages, le langage domine partout (82 à 99 %), sauf K2 à 8 Mio, où le bruit entre processus fait 89 %. Restreinte
+aux 13 premiers (hors plan), elle change de visage :
+* l'interaction langage × machine domine K3 `sw_padded` (97 %) et pèse sur K1 AoS (52 %), K7 naturel (41 %) et K1
+  permuté (38 %) ;
+* le bruit entre processus domine les mesures limitées par la bande passante : K1 SoA (100 %), K2 à 256 Kio et
+  8 Mio (98 et 100 %), K6 Q6 `tuned` et naturel (90 et 80 %) ;
+* le langage domine K4 (91 à 92 %), K8 (92 à 94 %), K6 Q1 (76 à 90 %) et K9 naturel (95 %).
+
+**Disposition du code.** ⟨résultats de l'expérience⟩
+
+**Diagnostic des intervalles.** ⟨positions par composante⟩
