@@ -1,0 +1,10 @@
+ada        k5   natural                         p0 n=20 med=0.090368s ok={True} rc=0 
+ada        k5   tuned                           p0 n=20 med=0.004417s ok={True} rc=0 
+ada        k5   tuned                           p0 n=20 med=0.004865s ok={True} rc=0 
+ada        k5   natural                         p0 n=20 med=0.088087s ok={True} rc=0 
+ada        k5   natural                         p0 n=20 med=0.072409s ok={True} rc=0 
+ada        k5   tuned                           p0 n=20 med=0.005808s ok={True} rc=0 
+ada        k5   tuned                           p0 n=20 med=0.005309s ok={True} rc=0 
+ada        k5   natural                         p0 n=20 med=0.089555s ok={True} rc=0 
+ada        k5   natural                         p0 n=20 med=0.084012s ok={True} rc=0 
+ada        k5   tuned                           p0 n=20 med=0.005732s ok={True} rc=0 

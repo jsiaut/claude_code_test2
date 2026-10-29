@@ -1,0 +1,10 @@
+csharp     k5   tuned                           p0 n=20 med=0.004399s ok={True} rc=0 
+csharp     k5   natural                         p0 n=20 med=0.083829s ok={True} rc=0 
+csharp     k5   natural                         p0 n=20 med=0.089695s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=20 med=0.004331s ok={True} rc=0 
+csharp     k5   natural                         p0 n=20 med=0.083910s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=20 med=0.004760s ok={True} rc=0 
+csharp     k5   natural                         p0 n=20 med=0.090964s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=20 med=0.004115s ok={True} rc=0 
+csharp     k5   natural                         p0 n=20 med=0.087444s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=20 med=0.004720s ok={True} rc=0 

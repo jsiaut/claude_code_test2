@@ -1,0 +1,9 @@
+chapel     k5   natural                         p0 n=20 med=0.165731s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.004652s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.154984s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.003317s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.005367s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.149580s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.164861s ok={True} rc=0 
+chapel     k5   tuned                           p0 n=20 med=0.004693s ok={True} rc=0 
+chapel     k5   natural                         p0 n=20 med=0.146574s ok={True} rc=0 

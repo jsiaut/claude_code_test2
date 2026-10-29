@@ -1,0 +1,10 @@
+c_gcc      k5   natural                         p0 n=20 med=0.085519s ok={True} rc=0 
+c_gcc      k5   tuned                           p0 n=20 med=0.003774s ok={True} rc=0 
+c_gcc      k5   natural                         p0 n=20 med=0.082879s ok={True} rc=0 
+c_gcc      k5   tuned                           p0 n=20 med=0.005041s ok={True} rc=0 
+c_gcc      k5   tuned                           p0 n=20 med=0.003748s ok={True} rc=0 
+c_gcc      k5   natural                         p0 n=20 med=0.079522s ok={True} rc=0 
+c_gcc      k5   natural                         p0 n=20 med=0.084371s ok={True} rc=0 
+c_gcc      k5   tuned                           p0 n=20 med=0.002882s ok={True} rc=0 
+c_gcc      k5   natural                         p0 n=20 med=0.066057s ok={True} rc=0 
+c_gcc      k5   tuned                           p0 n=20 med=0.003683s ok={True} rc=0 

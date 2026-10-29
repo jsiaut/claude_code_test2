@@ -1,0 +1,9 @@
+luajit     k5   tuned                           p0 n=20 med=0.064798s ok={True} rc=0 
+luajit     k5   natural                         p0 n=20 med=0.102202s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=20 med=0.067765s ok={True} rc=0 
+luajit     k5   natural                         p0 n=20 med=0.084066s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=20 med=0.066724s ok={True} rc=0 
+luajit     k5   natural                         p0 n=20 med=0.091223s ok={True} rc=0 
+luajit     k5   natural                         p0 n=20 med=0.101001s ok={True} rc=0 
+luajit     k5   tuned                           p0 n=20 med=0.069757s ok={True} rc=0 
+luajit     k5   natural                         p0 n=20 med=0.084404s ok={True} rc=0 

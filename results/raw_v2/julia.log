@@ -1,0 +1,10 @@
+julia      k5   tuned                           p0 n=20 med=0.007882s ok={True} rc=0 
+julia      k5   natural                         p0 n=20 med=0.087005s ok={True} rc=0 
+julia      k5   natural                         p0 n=20 med=0.082905s ok={True} rc=0 
+julia      k5   tuned                           p0 n=20 med=0.005513s ok={True} rc=0 
+julia      k5   tuned                           p0 n=20 med=0.005645s ok={True} rc=0 
+julia      k5   natural                         p0 n=20 med=0.083876s ok={True} rc=0 
+julia      k5   tuned                           p0 n=20 med=0.005724s ok={True} rc=0 
+julia      k5   natural                         p0 n=20 med=0.071483s ok={True} rc=0 
+julia      k5   tuned                           p0 n=20 med=0.008187s ok={True} rc=0 
+julia      k5   natural                         p0 n=20 med=0.087672s ok={True} rc=0 

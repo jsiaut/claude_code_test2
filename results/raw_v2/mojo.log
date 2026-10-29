@@ -1,0 +1,8 @@
+mojo       k5   natural                         p0 n=20 med=0.172409s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.005768s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.164233s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.006334s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.006292s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.146141s ok={True} rc=0 
+mojo       k5   tuned                           p0 n=20 med=0.005995s ok={True} rc=0 
+mojo       k5   natural                         p0 n=20 med=0.165964s ok={True} rc=0 

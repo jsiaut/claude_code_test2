@@ -1,6 +1,11 @@
-# Quels langages incarnent le mieux la *mechanical sympathy* ? Une étude mesurée (28 octobre 2026)
+# Quels langages incarnent le mieux la *mechanical sympathy* ? Une étude mesurée (28 octobre 2026, révisée le 29 octobre)
 
-**Réponse courte.** J'ai mesuré moi-même les 21 langages sur une même VM, avec dix noyaux qui
+*Révision en cours (29 octobre) : la réponse v2, qui tient compte de l'audit externe (`docs/AUDIT_RESPONSE.md`), sera publiée ici à la fin des mesures. Plan : `docs/ANALYSIS_V2.md`.*
+
+<details>
+<summary><b>Réponse v1 du 28 octobre (analyse pré-enregistrée), conservée telle quelle</b> : ses défauts sont discutés dans <code>docs/AUDIT_RESPONSE.md</code></summary>
+
+**Réponse courte (v1).** J'ai mesuré moi-même les 21 langages sur une même VM, avec dix noyaux qui
 testent chacun un principe de la *mechanical sympathy* (un redémarrage de la VM en cours de route
 est traité en section 7). Chaque implémentation doit rendre le même résultat : au bit près pour
 les entiers, à 10⁻⁶–10⁻³ près pour les flottants. Tout temps inférieur à la borne physique de la
@@ -93,6 +98,8 @@ Cinq faits mesurés expliquent l'essentiel des écarts :
 - **Modèle mémoire** (K3). Go et Haskell n'ont que des écritures atomiques séquentiellement
   cohérentes (`XCHG`). L'écrivain unique y est six fois plus lent (358 et 337 ms, contre 58 à
   70 ms).
+
+</details>
 
 ---
 

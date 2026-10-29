@@ -1,0 +1,9 @@
+js         k5   natural                         p0 n=20 med=0.191099s ok={True} rc=0 
+js         k5   tuned                           p0 n=20 med=0.153852s ok={True} rc=0 
+js         k5   tuned                           p0 n=20 med=0.187714s ok={True} rc=0 
+js         k5   natural                         p0 n=20 med=0.137489s ok={True} rc=0 
+js         k5   tuned                           p0 n=20 med=0.159631s ok={True} rc=0 
+js         k5   natural                         p0 n=20 med=0.153993s ok={True} rc=0 
+js         k5   tuned                           p0 n=20 med=0.133329s ok={True} rc=0 
+js         k5   natural                         p0 n=20 med=0.151225s ok={True} rc=0 
+js         k5   natural                         p0 n=20 med=0.138143s ok={True} rc=0 

@@ -1,0 +1,9 @@
+odin       k5   tuned                           p0 n=20 med=0.006008s ok={True} rc=0 
+odin       k5   natural                         p0 n=20 med=0.084381s ok={True} rc=0 
+odin       k5   natural                         p0 n=20 med=0.087072s ok={True} rc=0 
+odin       k5   tuned                           p0 n=20 med=0.005387s ok={True} rc=0 
+odin       k5   natural                         p0 n=20 med=0.067461s ok={True} rc=0 
+odin       k5   tuned                           p0 n=20 med=0.004047s ok={True} rc=0 
+odin       k5   natural                         p0 n=20 med=0.070621s ok={True} rc=0 
+odin       k5   tuned                           p0 n=20 med=0.002798s ok={True} rc=0 
+odin       k5   tuned                           p0 n=20 med=0.003413s ok={True} rc=0 

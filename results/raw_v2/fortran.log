@@ -1,0 +1,9 @@
+fortran    k5   natural                         p0 n=20 med=0.089119s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=20 med=0.005472s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=20 med=0.007301s ok={True} rc=0 
+fortran    k5   natural                         p0 n=20 med=0.085639s ok={True} rc=0 
+fortran    k5   natural                         p0 n=20 med=0.090578s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=20 med=0.005388s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=20 med=0.006134s ok={True} rc=0 
+fortran    k5   natural                         p0 n=20 med=0.092808s ok={True} rc=0 
+fortran    k5   natural                         p0 n=20 med=0.085247s ok={True} rc=0 
