@@ -14,6 +14,8 @@
 //   c2c     : latence de transfert de ligne entre paires de CPU (ping-pong)
 //   bp      : pénalité de mauvaise prédiction de branchement
 //   tlb     : accès aléatoires à 1 ligne par page 4 Ko, avec/sans THP
+//   sys     : coût d'un appel système minimal (getppid par syscall(), sans vDSO)
+//   pf      : coût d'un défaut de page mineur (premier accès à une page anonyme de 4 Kio, sans THP)
 #define _GNU_SOURCE
 #include <immintrin.h>
 #include <pthread.h>
@@ -24,6 +26,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <sys/syscall.h>
+#include <unistd.h>
 #include <time.h>
 #include <x86intrin.h>
 
@@ -291,6 +295,33 @@ static void t_bp(void) {
     }
 }
 
+// ---------- sys : appel système minimal ----------
+static void t_sys(void) {
+    const int n = 1000000;
+    for (int r = 0; r < 5; r++) {
+        uint64_t c0 = rdtsc_s();
+        long s = 0;
+        for (int i = 0; i < n; i++) s += syscall(SYS_getppid);
+        uint64_t c1 = rdtsc_s();
+        printf("sys: getppid %.1f ns par appel (s=%ld)\n", (c1 - c0) / tsc_ghz / n, s);
+    }
+}
+
+// ---------- pf : défaut de page mineur ----------
+static void t_pf(void) {
+    const size_t pages = 65536, n = pages * 4096;  // 256 Mio
+    for (int r = 0; r < 5; r++) {
+        char *p = mmap(NULL, n, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        if (p == MAP_FAILED) { perror("mmap"); exit(1); }
+        madvise(p, n, MADV_NOHUGEPAGE);
+        uint64_t c0 = rdtsc_s();
+        for (size_t i = 0; i < pages; i++) p[i * 4096] = 1;
+        uint64_t c1 = rdtsc_s();
+        printf("pf: %.0f ns par défaut de page mineur (page de 4 Kio, mise à zéro comprise)\n", (c1 - c0) / tsc_ghz / pages);
+        munmap(p, n);
+    }
+}
+
 // ---------- tlb ----------
 static void t_tlb(void) {
     size_t pages_list[] = {16, 64, 256, 1024, 1536, 2048, 4096, 16384, 65536, 262144};
@@ -397,6 +428,8 @@ int main(int argc, char **argv) {
         else if (!strcmp(c, "bp")) t_bp();
         else if (!strcmp(c, "tlb")) t_tlb();
         else if (!strcmp(c, "witness")) t_witness();
+        else if (!strcmp(c, "sys")) t_sys();
+        else if (!strcmp(c, "pf")) t_pf();
         else fprintf(stderr, "inconnu: %s\n", c);
         fflush(stdout);
     }
