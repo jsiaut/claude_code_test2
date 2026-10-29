@@ -33,9 +33,9 @@ def profiles_svg(o, path):
            f'aria-label="Plafond et code naturel par langage, sur deux machines">', STYLE,
            f'<rect class="bg" width="{W}" height="{H}"/>',
            '<text class="t1" x="16" y="26">Plafond et code naturel, par langage et par machine</text>',
-           '<text class="t2" x="16" y="46">E : meilleur code écrit pour la machine. D1 : code naturel. Les deux sont '
-           'rapportés au meilleur</text>',
-           '<text class="t2" x="16" y="62">langage de chaque mesure. Étages : règle du plan v3, sans ordre à '
+           '<text class="t2" x="16" y="46">E : meilleur code écrit pour la machine ; D1 : code naturel. Chacun est '
+           'rapporté au meilleur langage de chaque</text>',
+           '<text class="t2" x="16" y="62">mesure, sur chaque machine. Étages : règle du plan v3, sans ordre à '
            "l'intérieur d'un étage. K5 vient de la machine 3.</text>"]
     out.append('<line class="ua" x1="16" x2="42" y1="84" y2="84"/><circle class="dot" cx="29" cy="84" r="5"/>'
                '<text class="t2" x="50" y="88">machine 1 (Cascade Lake) et son IC à 95 %</text>')

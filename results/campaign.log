@@ -1,0 +1,986 @@
+2026-10-28T11:18:17 passe 0 : 279 blocs
+2026-10-28T11:18:27 passe 0 bloc 1/279 c k8 10s
+2026-10-28T11:18:47 passe 0 bloc 2/279 ocaml k1 20s
+2026-10-28T11:19:42 passe 0 bloc 3/279 fortran_flang k1 55s
+2026-10-28T11:20:01 passe 0 bloc 4/279 fortran_flang k3 19s
+2026-10-28T11:20:23 passe 0 bloc 5/279 mojo k3 21s
+2026-10-28T11:20:26 passe 0 bloc 6/279 csharp k5 4s
+2026-10-28T11:20:50 passe 0 bloc 7/279 python k4 23s
+2026-10-28T11:20:59 passe 0 bloc 8/279 go k6 9s
+2026-10-28T11:21:00 passe 0 bloc 9/279 ada k4 1s
+2026-10-28T11:21:06 passe 0 bloc 10/279 chapel k1 7s
+2026-10-28T11:21:09 passe 0 bloc 11/279 d k4 3s
+2026-10-28T11:21:32 passe 0 bloc 12/279 ada k3 23s
+2026-10-28T11:21:37 passe 0 bloc 13/279 luajit k5 5s
+2026-10-28T11:21:37 passe 0 bloc 14/279 c_gcc fp 0s
+2026-10-28T11:21:51 passe 0 bloc 15/279 mojo k10 14s
+2026-10-28T11:22:07 passe 0 bloc 16/279 zig k8 16s
+2026-10-28T11:22:39 passe 0 bloc 17/279 haskell k1 32s
+2026-10-28T11:22:40 passe 0 bloc 18/279 zig fp 1s
+2026-10-28T11:22:44 passe 0 bloc 19/279 nim k9 4s
+2026-10-28T11:23:06 passe 0 bloc 20/279 c_gcc k3 22s
+2026-10-28T11:23:14 passe 0 bloc 21/279 zig k6 8s
+2026-10-28T11:23:48 passe 0 bloc 22/279 chapel k2 34s
+2026-10-28T11:24:25 passe 0 bloc 23/279 go k7 37s
+2026-10-28T11:24:35 passe 0 bloc 24/279 d k6 10s
+2026-10-28T11:24:45 passe 0 bloc 25/279 nim k6 10s
+2026-10-28T11:24:53 passe 0 bloc 26/279 luajit k9 9s
+2026-10-28T11:25:14 passe 0 bloc 27/279 zig k3 21s
+2026-10-28T11:25:23 passe 0 bloc 28/279 haskell k9 9s
+2026-10-28T11:25:24 passe 0 bloc 29/279 chapel k4 1s
+2026-10-28T11:25:30 passe 0 bloc 30/279 ocaml k5 6s
+2026-10-28T11:25:40 passe 0 bloc 31/279 cpp k1 10s
+2026-10-28T11:25:56 passe 0 bloc 32/279 mojo k8 16s
+2026-10-28T11:26:04 passe 0 bloc 33/279 nim k4 8s
+2026-10-28T11:26:09 passe 0 bloc 34/279 java k5 5s
+2026-10-28T11:26:23 passe 0 bloc 35/279 ocaml k6 14s
+2026-10-28T11:26:52 passe 0 bloc 36/279 java k3 28s
+2026-10-28T11:27:55 passe 0 bloc 37/279 lua k2 63s
+2026-10-28T11:27:57 passe 0 bloc 38/279 js_bun fp 2s
+2026-10-28T11:28:18 passe 0 bloc 39/279 rust k3 21s
+2026-10-28T11:28:51 passe 0 bloc 40/279 julia k8 34s
+2026-10-28T11:29:00 passe 0 bloc 41/279 fortran k8 9s
+2026-10-28T11:29:04 passe 0 bloc 42/279 c3 k9 4s
+2026-10-28T11:29:37 passe 0 bloc 43/279 nim k2 33s
+2026-10-28T11:34:24 passe 0 bloc 44/279 python k7 287s
+2026-10-28T11:34:25 passe 0 bloc 45/279 cpp fp 1s
+2026-10-28T11:37:47 passe 0 bloc 46/279 js k3 201s
+2026-10-28T11:37:53 passe 0 bloc 47/279 fortran k6 7s
+2026-10-28T11:40:07 passe 0 bloc 48/279 lua k7 133s
+2026-10-28T11:41:12 passe 0 bloc 49/279 ada k7 65s
+2026-10-28T11:41:37 passe 0 bloc 50/279 chapel k7 26s
+2026-10-28T11:41:50 passe 0 bloc 51/279 rust k1 12s
+2026-10-28T11:41:52 passe 0 bloc 52/279 fortran k5 2s
+2026-10-28T11:41:59 passe 0 bloc 53/279 ada k1 7s
+2026-10-28T11:42:08 passe 0 bloc 54/279 ada k6 9s
+2026-10-28T11:42:14 passe 0 bloc 55/279 c k6 6s
+2026-10-28T11:42:14 passe 0 bloc 56/279 fortran_flang k4 1s
+2026-10-28T11:42:15 passe 0 bloc 57/279 fortran k4 1s
+2026-10-28T11:42:29 passe 0 bloc 58/279 cpp k8 14s
+2026-10-28T11:42:30 passe 0 bloc 59/279 rust fp 1s
+2026-10-28T11:43:46 passe 0 bloc 60/279 ocaml k7 76s
+2026-10-28T11:51:07 passe 0 bloc 61/279 haskell k7 441s
+2026-10-28T11:51:29 passe 0 bloc 62/279 d k8 23s
+2026-10-28T11:52:03 passe 0 bloc 63/279 c3 k2 33s
+2026-10-28T11:52:10 passe 0 bloc 64/279 fortran_flang fp 8s
+2026-10-28T11:52:44 passe 0 bloc 65/279 cpp k2 33s
+2026-10-28T11:53:43 passe 0 bloc 66/279 python k9 60s
+2026-10-28T11:53:44 passe 0 bloc 67/279 c3 k4 0s
+2026-10-28T11:54:18 passe 0 bloc 68/279 haskell k2 34s
+2026-10-28T11:55:08 passe 0 bloc 69/279 luajit k1 50s
+2026-10-28T11:55:11 passe 0 bloc 70/279 chapel k9 3s
+2026-10-28T11:55:14 passe 0 bloc 71/279 c k9 2s
+2026-10-28T11:55:34 passe 0 bloc 72/279 odin k7 20s
+2026-10-28T11:55:42 passe 0 bloc 73/279 go k10 8s
+2026-10-28T11:57:38 passe 0 bloc 74/279 js_bun k7 117s
+2026-10-28T11:57:39 passe 0 bloc 75/279 odin fp 1s
+2026-10-28T11:57:58 passe 0 bloc 76/279 odin k4 18s
+2026-10-28T11:58:41 passe 0 bloc 77/279 c3 k7 43s
+2026-10-28T11:59:58 passe 0 bloc 78/279 lua k3 77s
+2026-10-28T12:00:06 passe 0 bloc 79/279 c_gcc k8 8s
+2026-10-28T12:02:11 passe 0 bloc 80/279 luajit k7 125s
+2026-10-28T12:02:26 passe 0 bloc 81/279 zig k7 16s
+2026-10-28T12:02:31 passe 0 bloc 82/279 luajit k4 4s
+2026-10-28T12:03:01 passe 0 bloc 83/279 fortran_flang k8 30s
+2026-10-28T12:03:27 passe 0 bloc 84/279 ada k10 26s
+2026-10-28T12:03:35 passe 0 bloc 85/279 ocaml k8 8s
+2026-10-28T12:03:59 passe 0 bloc 86/279 c k3 24s
+2026-10-28T12:04:09 passe 0 bloc 87/279 odin k10 10s
+2026-10-28T12:04:25 passe 0 bloc 88/279 chapel k8 17s
+2026-10-28T12:04:28 passe 0 bloc 89/279 c_gcc k9 2s
+2026-10-28T12:04:40 passe 0 bloc 90/279 java k8 13s
+2026-10-28T12:06:04 passe 0 bloc 91/279 js_bun k3 84s
+2026-10-28T12:08:38 passe 0 bloc 92/279 js k7 154s
+2026-10-28T12:08:39 passe 0 bloc 93/279 rust k4 1s
+2026-10-28T12:08:43 passe 0 bloc 94/279 fortran k9 4s
+2026-10-28T12:09:03 passe 0 bloc 95/279 js_bun k6 20s
+2026-10-28T12:09:25 passe 0 bloc 96/279 csharp k1 22s
+2026-10-28T12:09:27 passe 0 bloc 97/279 ocaml fp 2s
+2026-10-28T12:09:31 passe 0 bloc 98/279 rust k9 4s
+2026-10-28T12:09:55 passe 0 bloc 99/279 odin k8 24s
+2026-10-28T12:10:01 passe 0 bloc 100/279 c_gcc k10 6s
+2026-10-28T12:10:13 passe 0 bloc 101/279 d k1 12s
+2026-10-28T12:10:16 passe 0 bloc 102/279 fortran_flang k9 3s
+2026-10-28T12:10:39 passe 0 bloc 103/279 python fp 23s
+2026-10-28T12:10:52 passe 0 bloc 104/279 c3 k1 13s
+2026-10-28T12:11:13 passe 0 bloc 105/279 lua k4 21s
+2026-10-28T12:13:48 passe 0 bloc 106/279 lua k6 155s
+2026-10-28T12:13:53 passe 0 bloc 107/279 haskell k5 5s
+2026-10-28T12:14:29 passe 0 bloc 108/279 rust k2 36s
+2026-10-28T12:18:19 passe 0 bloc 109/279 python k8 230s
+2026-10-28T12:18:57 passe 0 bloc 110/279 julia k10 38s
+2026-10-28T12:19:26 passe 0 bloc 111/279 lua k9 29s
+2026-10-28T12:19:28 passe 0 bloc 112/279 fortran_flang k5 3s
+2026-10-28T12:19:34 passe 0 bloc 113/279 c_gcc k6 6s
+2026-10-28T12:19:44 passe 0 bloc 114/279 mojo k9 10s
+2026-10-28T12:22:25 passe 0 bloc 115/279 python_ft k10 161s
+2026-10-28T12:22:25 passe 0 bloc 116/279 c fp 0s
+2026-10-28T12:22:32 passe 0 bloc 117/279 ocaml k9 7s
+2026-10-28T12:22:32 passe 0 bloc 118/279 ada fp 0s
+2026-10-28T12:22:53 passe 0 bloc 119/279 d k3 21s
+2026-10-28T12:31:18 passe 0 bloc 120/279 python k3 505s
+2026-10-28T12:31:20 passe 0 bloc 121/279 d k5 2s
+2026-10-28T12:31:48 passe 0 bloc 122/279 julia k4 28s
+2026-10-28T12:32:04 passe 0 bloc 123/279 ocaml k10 16s
+2026-10-28T12:32:04 passe 0 bloc 124/279 c_gcc k4 1s
+2026-10-28T12:32:55 passe 0 bloc 125/279 python k2 50s
+2026-10-28T12:33:18 passe 0 bloc 126/279 odin k3 23s
+2026-10-28T12:33:22 passe 0 bloc 127/279 luajit k10 4s
+2026-10-28T12:33:40 passe 0 bloc 128/279 haskell k3 18s
+2026-10-28T12:33:42 passe 0 bloc 129/279 csharp fp 2s
+2026-10-28T12:36:02 passe 0 bloc 130/279 julia k2 140s
+2026-10-28T12:36:32 passe 0 bloc 131/279 csharp k10 30s
+2026-10-28T12:36:38 passe 0 bloc 132/279 c3 k10 6s
+2026-10-28T12:36:42 passe 0 bloc 133/279 js_bun k4 4s
+2026-10-28T12:36:45 passe 0 bloc 134/279 c k5 2s
+2026-10-28T12:37:04 passe 0 bloc 135/279 ocaml k3 19s
+2026-10-28T12:37:05 passe 0 bloc 136/279 chapel fp 1s
+2026-10-28T12:38:10 passe 0 bloc 137/279 julia k3 65s
+2026-10-28T12:38:17 passe 0 bloc 138/279 cpp k10 7s
+2026-10-28T12:38:22 passe 0 bloc 139/279 zig k10 5s
+2026-10-28T12:38:52 passe 0 bloc 140/279 java k6 30s
+2026-10-28T12:39:38 passe 0 bloc 141/279 go k3 46s
+2026-10-28T12:40:13 passe 0 bloc 142/279 csharp k3 34s
+2026-10-28T12:40:29 passe 0 bloc 143/279 d k10 16s
+2026-10-28T12:41:03 passe 0 bloc 144/279 c k2 35s
+2026-10-28T12:41:04 passe 0 bloc 145/279 nim fp 1s
+2026-10-28T12:41:09 passe 0 bloc 146/279 haskell fp 5s
+2026-10-28T12:41:30 passe 0 bloc 147/279 chapel k10 21s
+2026-10-28T12:41:32 passe 0 bloc 148/279 ada k5 2s
+2026-10-28T12:41:42 passe 0 bloc 149/279 nim k8 10s
+2026-10-28T12:41:45 passe 0 bloc 150/279 chapel k5 2s
+2026-10-28T12:41:57 passe 0 bloc 151/279 odin k1 12s
+2026-10-28T12:42:50 passe 0 bloc 152/279 js_bun k2 53s
+2026-10-28T12:43:45 passe 0 bloc 153/279 js k1 55s
+2026-10-28T12:43:46 passe 0 bloc 154/279 c3 fp 1s
+2026-10-28T12:44:07 passe 0 bloc 155/279 java k1 21s
+2026-10-28T12:44:09 passe 0 bloc 156/279 mojo fp 2s
+2026-10-28T12:44:45 passe 0 bloc 157/279 d k7 37s
+2026-10-28T12:46:12 passe 0 bloc 158/279 python k5 86s
+2026-10-28T12:46:44 passe 0 bloc 159/279 c_gcc k2 33s
+2026-10-28T12:46:55 passe 0 bloc 160/279 lua k10 10s
+2026-10-28T12:48:03 passe 0 bloc 161/279 julia k6 68s
+2026-10-28T12:48:23 passe 0 bloc 162/279 js_bun k1 20s
+2026-10-28T12:48:43 passe 0 bloc 163/279 nim k3 20s
+2026-10-28T12:48:48 passe 0 bloc 164/279 zig k9 4s
+2026-10-28T12:51:10 passe 0 bloc 165/279 lua k1 143s
+2026-10-28T12:51:11 passe 0 bloc 166/279 d fp 1s
+2026-10-28T12:51:14 passe 0 bloc 167/279 zig k5 2s
+2026-10-28T12:51:20 passe 0 bloc 168/279 cpp k6 7s
+2026-10-28T12:51:23 passe 0 bloc 169/279 c3 k5 3s
+2026-10-28T12:51:38 passe 0 bloc 170/279 csharp k6 15s
+2026-10-28T12:51:40 passe 0 bloc 171/279 cpp k5 2s
+2026-10-28T12:51:47 passe 0 bloc 172/279 c k10 7s
+2026-10-28T12:51:52 passe 0 bloc 173/279 d k9 5s
+2026-10-28T12:51:55 passe 0 bloc 174/279 ocaml k4 2s
+2026-10-28T12:52:03 passe 0 bloc 175/279 csharp k9 8s
+2026-10-28T12:55:09 passe 0 bloc 176/279 python k6 186s
+2026-10-28T12:55:14 passe 0 bloc 177/279 js k4 4s
+2026-10-28T12:55:20 passe 0 bloc 178/279 luajit fp 6s
+2026-10-28T12:56:51 passe 0 bloc 179/279 lua k8 90s
+2026-10-28T12:57:26 passe 0 bloc 180/279 go k2 36s
+2026-10-28T12:57:35 passe 0 bloc 181/279 fortran_flang k6 8s
+2026-10-28T12:57:43 passe 0 bloc 182/279 rust k6 8s
+2026-10-28T12:58:09 passe 0 bloc 183/279 fortran k2 26s
+2026-10-28T12:58:47 passe 0 bloc 184/279 odin k2 39s
+2026-10-28T12:58:50 passe 0 bloc 185/279 rust k5 3s
+2026-10-28T12:59:12 passe 0 bloc 186/279 julia k5 22s
+2026-10-28T12:59:31 passe 0 bloc 187/279 c3 k8 19s
+2026-10-28T12:59:38 passe 0 bloc 188/279 fortran k10 7s
+2026-10-28T12:59:45 passe 0 bloc 189/279 chapel k6 7s
+2026-10-28T12:59:47 passe 0 bloc 190/279 mojo k4 3s
+2026-10-28T13:00:21 passe 0 bloc 191/279 fortran_flang k2 34s
+2026-10-28T13:00:55 passe 0 bloc 192/279 d k2 34s
+2026-10-28T13:01:11 passe 0 bloc 193/279 mojo k1 16s
+2026-10-28T13:01:23 passe 0 bloc 194/279 ada k8 12s
+2026-10-28T13:01:44 passe 0 bloc 195/279 luajit k6 21s
+2026-10-28T13:01:53 passe 0 bloc 196/279 nim k10 8s
+2026-10-28T13:02:01 passe 0 bloc 197/279 js k5 8s
+2026-10-28T13:02:55 passe 0 bloc 198/279 julia k1 54s
+2026-10-28T13:03:52 passe 0 bloc 199/279 csharp k7 57s
+2026-10-28T13:04:05 passe 0 bloc 200/279 js_bun k9 13s
+2026-10-28T13:04:19 passe 0 bloc 201/279 go k8 14s
+2026-10-28T13:04:47 passe 0 bloc 202/279 ocaml k2 28s
+2026-10-28T13:05:09 passe 0 bloc 203/279 fortran k3 22s
+2026-10-28T13:06:19 passe 0 bloc 204/279 js_bun k10 70s
+2026-10-28T13:06:23 passe 0 bloc 205/279 zig k4 4s
+2026-10-28T13:06:34 passe 0 bloc 206/279 julia fp 11s
+2026-10-28T13:07:08 passe 0 bloc 207/279 c k7 34s
+2026-10-28T13:07:10 passe 0 bloc 208/279 go k4 2s
+2026-10-28T13:07:39 passe 0 bloc 209/279 rust k7 29s
+2026-10-28T13:08:04 passe 0 bloc 210/279 cpp k3 25s
+2026-10-28T13:09:04 passe 0 bloc 211/279 java k2 60s
+2026-10-28T13:09:06 passe 0 bloc 212/279 rust k10 3s
+2026-10-28T13:09:23 passe 0 bloc 213/279 lua fp 17s
+2026-10-28T13:09:31 passe 0 bloc 214/279 haskell k10 8s
+2026-10-28T13:09:56 passe 0 bloc 215/279 haskell k8 25s
+2026-10-28T13:10:17 passe 0 bloc 216/279 fortran_flang k10 20s
+2026-10-28T13:10:26 passe 0 bloc 217/279 js_bun k5 9s
+2026-10-28T13:10:43 passe 0 bloc 218/279 csharp k8 17s
+2026-10-28T13:10:46 passe 0 bloc 219/279 mojo k5 3s
+2026-10-28T13:10:54 passe 0 bloc 220/279 c_gcc k1 8s
+2026-10-28T13:11:08 passe 0 bloc 221/279 mojo k6 14s
+2026-10-28T13:12:06 passe 0 bloc 222/279 luajit k2 58s
+2026-10-28T13:12:40 passe 0 bloc 223/279 lua k5 33s
+2026-10-28T13:12:44 passe 0 bloc 224/279 csharp k4 5s
+2026-10-28T13:12:48 passe 0 bloc 225/279 ada k9 4s
+2026-10-28T13:12:50 passe 0 bloc 226/279 odin k5 3s
+2026-10-28T13:12:58 passe 0 bloc 227/279 java k9 8s
+2026-10-28T13:13:02 passe 0 bloc 228/279 go k5 4s
+2026-10-28T13:13:43 passe 0 bloc 229/279 fortran k7 41s
+2026-10-28T13:13:54 passe 0 bloc 230/279 nim k1 11s
+2026-10-28T13:14:29 passe 0 bloc 231/279 ada k2 35s
+2026-10-28T13:14:57 passe 0 bloc 232/279 js k8 29s
+2026-10-28T13:15:08 passe 0 bloc 233/279 rust k8 11s
+2026-10-28T13:15:10 passe 0 bloc 234/279 fortran fp 2s
+2026-10-28T13:16:16 passe 0 bloc 235/279 julia k9 65s
+2026-10-28T13:16:26 passe 0 bloc 236/279 odin k6 10s
+2026-10-28T13:16:28 passe 0 bloc 237/279 java fp 2s
+2026-10-28T13:16:38 passe 0 bloc 238/279 haskell k6 11s
+2026-10-28T13:16:43 passe 0 bloc 239/279 odin k9 4s
+2026-10-28T13:16:49 passe 0 bloc 240/279 go k9 6s
+2026-10-28T13:17:24 passe 0 bloc 241/279 zig k2 36s
+2026-10-28T13:17:44 passe 0 bloc 242/279 nim k7 20s
+2026-10-28T13:40:10 passe 0 bloc 243/279 python_ft k3 1346s
+2026-10-28T13:40:48 passe 0 bloc 244/279 mojo k2 38s
+2026-10-28T13:40:57 passe 0 bloc 245/279 go k1 10s
+2026-10-28T13:41:02 passe 0 bloc 246/279 java k4 4s
+2026-10-28T13:41:33 passe 0 bloc 247/279 mojo k7 31s
+2026-10-28T13:42:33 passe 0 bloc 248/279 fortran_flang k7 60s
+2026-10-28T13:44:09 passe 0 bloc 249/279 java k7 96s
+2026-10-28T13:44:25 passe 0 bloc 250/279 fortran k1 16s
+2026-10-28T13:44:33 passe 0 bloc 251/279 c3 k6 8s
+2026-10-28T13:46:00 passe 0 bloc 252/279 luajit k8 88s
+2026-10-28T13:46:21 passe 0 bloc 253/279 chapel k3 20s
+2026-10-28T13:46:23 passe 0 bloc 254/279 cpp k4 2s
+2026-10-28T13:46:25 passe 0 bloc 255/279 haskell k4 2s
+2026-10-28T13:47:28 passe 0 bloc 256/279 js k2 63s
+2026-10-28T13:47:39 passe 0 bloc 257/279 java k10 11s
+2026-10-28T13:50:45 passe 0 bloc 258/279 python_ft k6 187s
+2026-10-28T13:51:01 passe 0 bloc 259/279 js k9 16s
+2026-10-28T13:51:12 passe 0 bloc 260/279 zig k1 10s
+2026-10-28T13:51:46 passe 0 bloc 261/279 c_gcc k7 34s
+2026-10-28T13:51:55 passe 0 bloc 262/279 js fp 9s
+2026-10-28T13:52:22 passe 0 bloc 263/279 js k6 27s
+2026-10-28T13:52:25 passe 0 bloc 264/279 nim k5 3s
+2026-10-28T13:52:26 passe 0 bloc 265/279 go fp 1s
+2026-10-28T13:52:45 passe 0 bloc 266/279 js_bun k8 19s
+2026-10-28T13:54:20 passe 0 bloc 267/279 python_ft k9 95s
+2026-10-28T13:54:26 passe 0 bloc 268/279 c k1 6s
+2026-10-28T13:55:26 passe 0 bloc 269/279 cpp k7 60s
+2026-10-28T13:57:59 passe 0 bloc 270/279 python k1 153s
+2026-10-28T13:58:56 passe 0 bloc 271/279 python k10 57s
+2026-10-28T13:58:58 passe 0 bloc 272/279 c_gcc k5 2s
+2026-10-28T13:58:58 passe 0 bloc 273/279 c k4 1s
+2026-10-28T13:59:20 passe 0 bloc 274/279 c3 k3 22s
+2026-10-28T14:00:20 passe 0 bloc 275/279 julia k7 60s
+2026-10-28T14:00:24 passe 0 bloc 276/279 luajit k3 4s
+2026-10-28T14:00:29 passe 0 bloc 277/279 cpp k9 5s
+2026-10-28T14:02:19 passe 0 bloc 278/279 js k10 111s
+2026-10-28T14:03:19 passe 0 bloc 279/279 csharp k2 60s
+2026-10-28T14:03:22 passe 1 : 279 blocs
+2026-10-28T14:03:55 passe 1 bloc 1/279 csharp k7 33s
+2026-10-28T14:04:21 passe 1 bloc 2/279 lua k5 26s
+2026-10-28T14:04:25 passe 1 bloc 3/279 zig k9 4s
+2026-10-28T14:04:36 passe 1 bloc 4/279 csharp k8 12s
+2026-10-28T14:04:40 passe 1 bloc 5/279 java k5 3s
+2026-10-28T14:04:46 passe 1 bloc 6/279 nim k1 6s
+2026-10-28T14:04:53 passe 1 bloc 7/279 d k6 7s
+2026-10-28T14:05:00 passe 1 bloc 8/279 java k10 7s
+2026-10-28T14:05:02 passe 1 bloc 9/279 mojo k5 2s
+2026-10-28T14:05:09 passe 1 bloc 10/279 go k6 7s
+2026-10-28T14:05:09 passe 1 bloc 11/279 odin fp 0s
+2026-10-28T14:05:36 passe 1 bloc 12/279 zig k2 26s
+2026-10-28T14:05:45 passe 1 bloc 13/279 csharp k6 10s
+2026-10-28T14:05:45 passe 1 bloc 14/279 go fp 0s
+2026-10-28T14:05:56 passe 1 bloc 15/279 cpp k8 11s
+2026-10-28T14:06:01 passe 1 bloc 16/279 c3 k10 5s
+2026-10-28T14:06:28 passe 1 bloc 17/279 cpp k2 26s
+2026-10-28T14:06:28 passe 1 bloc 18/279 fortran_flang fp 0s
+2026-10-28T14:06:28 passe 1 bloc 19/279 mojo fp 0s
+2026-10-28T14:06:41 passe 1 bloc 20/279 ocaml k6 13s
+2026-10-28T14:06:50 passe 1 bloc 21/279 odin k10 8s
+2026-10-28T14:06:55 passe 1 bloc 22/279 fortran k6 5s
+2026-10-28T14:07:05 passe 1 bloc 23/279 ocaml k10 10s
+2026-10-28T14:07:05 passe 1 bloc 24/279 fortran_flang k4 1s
+2026-10-28T14:07:11 passe 1 bloc 25/279 java k9 6s
+2026-10-28T14:07:21 passe 1 bloc 26/279 mojo k8 10s
+2026-10-28T14:07:23 passe 1 bloc 27/279 chapel k9 2s
+2026-10-28T14:07:25 passe 1 bloc 28/279 c k9 2s
+2026-10-28T14:09:49 passe 1 bloc 29/279 python k8 144s
+2026-10-28T14:10:28 passe 1 bloc 30/279 lua k2 39s
+2026-10-28T14:10:47 passe 1 bloc 31/279 rust k3 20s
+2026-10-28T14:11:00 passe 1 bloc 32/279 c3 k8 13s
+2026-10-28T14:11:01 passe 1 bloc 33/279 c3 fp 0s
+2026-10-28T14:11:05 passe 1 bloc 34/279 zig k6 5s
+2026-10-28T14:11:06 passe 1 bloc 35/279 ada k4 0s
+2026-10-28T14:11:13 passe 1 bloc 36/279 c k8 7s
+2026-10-28T14:11:15 passe 1 bloc 37/279 c k5 2s
+2026-10-28T14:11:26 passe 1 bloc 38/279 go k8 11s
+2026-10-28T14:11:48 passe 1 bloc 39/279 fortran_flang k8 22s
+2026-10-28T14:12:02 passe 1 bloc 40/279 fortran k3 14s
+2026-10-28T14:25:36 passe 1 bloc 41/279 python_ft k3 814s
+2026-10-28T14:25:44 passe 1 bloc 42/279 mojo k6 8s
+2026-10-28T14:25:47 passe 1 bloc 43/279 luajit k10 3s
+2026-10-28T14:25:48 passe 1 bloc 44/279 chapel k4 0s
+2026-10-28T14:25:55 passe 1 bloc 45/279 nim k8 7s
+2026-10-28T14:26:13 passe 1 bloc 46/279 chapel k7 18s
+2026-10-28T14:26:17 passe 1 bloc 47/279 nim k9 3s
+2026-10-28T14:26:19 passe 1 bloc 48/279 rust k5 2s
+2026-10-28T14:26:37 passe 1 bloc 49/279 fortran_flang k10 18s
+2026-10-28T14:26:52 passe 1 bloc 50/279 fortran_flang k3 15s
+2026-10-28T14:26:56 passe 1 bloc 51/279 ada k1 4s
+2026-10-28T14:27:01 passe 1 bloc 52/279 fortran k10 5s
+2026-10-28T14:27:08 passe 1 bloc 53/279 odin k1 6s
+2026-10-28T14:27:13 passe 1 bloc 54/279 cpp k1 5s
+2026-10-28T14:27:15 passe 1 bloc 55/279 c_gcc k9 2s
+2026-10-28T14:28:05 passe 1 bloc 56/279 lua k8 50s
+2026-10-28T14:28:19 passe 1 bloc 57/279 haskell k8 14s
+2026-10-28T14:28:19 passe 1 bloc 58/279 luajit fp 0s
+2026-10-28T14:28:19 passe 1 bloc 59/279 julia fp 0s
+2026-10-28T14:28:19 passe 1 bloc 60/279 fortran fp 0s
+2026-10-28T14:28:33 passe 1 bloc 61/279 js_bun k6 14s
+2026-10-28T14:28:42 passe 1 bloc 62/279 mojo k1 8s
+2026-10-28T14:29:06 passe 1 bloc 63/279 haskell k2 25s
+2026-10-28T14:29:11 passe 1 bloc 64/279 chapel k1 4s
+2026-10-28T14:29:36 passe 1 bloc 65/279 d k2 25s
+2026-10-28T14:29:38 passe 1 bloc 66/279 cpp k5 2s
+2026-10-28T14:31:07 passe 1 bloc 67/279 js k7 89s
+2026-10-28T14:31:07 passe 1 bloc 68/279 cpp fp 0s
+2026-10-28T14:31:40 passe 1 bloc 69/279 js k2 33s
+2026-10-28T14:32:52 passe 1 bloc 70/279 luajit k7 72s
+2026-10-28T14:32:53 passe 1 bloc 71/279 d k4 1s
+2026-10-28T14:33:15 passe 1 bloc 72/279 java k3 22s
+2026-10-28T14:33:30 passe 1 bloc 73/279 c_gcc k3 14s
+2026-10-28T14:33:52 passe 1 bloc 74/279 csharp k3 22s
+2026-10-28T14:34:03 passe 1 bloc 75/279 chapel k8 11s
+2026-10-28T14:34:05 passe 1 bloc 76/279 fortran_flang k5 2s
+2026-10-28T14:34:07 passe 1 bloc 77/279 d k5 2s
+2026-10-28T14:34:11 passe 1 bloc 78/279 c k6 4s
+2026-10-28T14:34:15 passe 1 bloc 79/279 odin k9 4s
+2026-10-28T14:34:17 passe 1 bloc 80/279 nim k5 2s
+2026-10-28T14:34:19 passe 1 bloc 81/279 chapel k5 2s
+2026-10-28T14:34:23 passe 1 bloc 82/279 cpp k9 4s
+2026-10-28T14:34:32 passe 1 bloc 83/279 odin k4 9s
+2026-10-28T14:34:32 passe 1 bloc 84/279 c_gcc fp 0s
+2026-10-28T14:34:51 passe 1 bloc 85/279 c k7 19s
+2026-10-28T14:36:42 passe 1 bloc 86/279 python_ft k6 111s
+2026-10-28T14:36:50 passe 1 bloc 87/279 js_bun k9 8s
+2026-10-28T14:36:57 passe 1 bloc 88/279 ada k6 6s
+2026-10-28T14:37:12 passe 1 bloc 89/279 cpp k3 15s
+2026-10-28T14:37:26 passe 1 bloc 90/279 mojo k3 14s
+2026-10-28T14:37:32 passe 1 bloc 91/279 go k10 6s
+2026-10-28T14:37:43 passe 1 bloc 92/279 julia k5 11s
+2026-10-28T14:38:00 passe 1 bloc 93/279 ada k3 18s
+2026-10-28T14:38:05 passe 1 bloc 94/279 ocaml k5 5s
+2026-10-28T14:38:07 passe 1 bloc 95/279 cpp k4 2s
+2026-10-28T14:38:44 passe 1 bloc 96/279 julia k6 37s
+2026-10-28T14:39:06 passe 1 bloc 97/279 chapel k2 23s
+2026-10-28T14:39:23 passe 1 bloc 98/279 odin k3 17s
+2026-10-28T14:39:28 passe 1 bloc 99/279 cpp k10 5s
+2026-10-28T14:39:33 passe 1 bloc 100/279 chapel k6 5s
+2026-10-28T14:39:34 passe 1 bloc 101/279 c3 k4 1s
+2026-10-28T14:39:37 passe 1 bloc 102/279 ada k9 4s
+2026-10-28T14:39:39 passe 1 bloc 103/279 c3 k5 2s
+2026-10-28T14:39:43 passe 1 bloc 104/279 go k5 3s
+2026-10-28T14:39:47 passe 1 bloc 105/279 c_gcc k10 4s
+2026-10-28T14:39:50 passe 1 bloc 106/279 c3 k9 4s
+2026-10-28T14:39:57 passe 1 bloc 107/279 c3 k1 7s
+2026-10-28T14:40:01 passe 1 bloc 108/279 d k9 4s
+2026-10-28T14:40:56 passe 1 bloc 109/279 python_ft k9 56s
+2026-10-28T14:41:18 passe 1 bloc 110/279 nim k2 22s
+2026-10-28T14:41:20 passe 1 bloc 111/279 odin k5 2s
+2026-10-28T14:41:29 passe 1 bloc 112/279 js_bun k8 10s
+2026-10-28T14:41:31 passe 1 bloc 113/279 go k4 1s
+2026-10-28T14:41:38 passe 1 bloc 114/279 lua k10 7s
+2026-10-28T14:41:38 passe 1 bloc 115/279 js fp 0s
+2026-10-28T14:42:20 passe 1 bloc 116/279 ocaml k7 42s
+2026-10-28T14:42:30 passe 1 bloc 117/279 nim k7 11s
+2026-10-28T14:42:35 passe 1 bloc 118/279 fortran_flang k6 5s
+2026-10-28T14:43:26 passe 1 bloc 119/279 java k7 51s
+2026-10-28T14:43:27 passe 1 bloc 120/279 fortran k4 1s
+2026-10-28T14:43:40 passe 1 bloc 121/279 js k9 12s
+2026-10-28T14:44:13 passe 1 bloc 122/279 js k1 33s
+2026-10-28T14:44:22 passe 1 bloc 123/279 java k8 9s
+2026-10-28T14:44:23 passe 1 bloc 124/279 mojo k4 1s
+2026-10-28T14:44:35 passe 1 bloc 125/279 js_bun k1 12s
+2026-10-28T14:44:43 passe 1 bloc 126/279 nim k6 8s
+2026-10-28T14:44:43 passe 1 bloc 127/279 lua fp 0s
+2026-10-28T14:44:43 passe 1 bloc 128/279 rust k4 0s
+2026-10-28T14:44:58 passe 1 bloc 129/279 odin k8 15s
+2026-10-28T14:44:58 passe 1 bloc 130/279 chapel fp 0s
+2026-10-28T14:49:20 passe 1 bloc 131/279 haskell k7 261s
+2026-10-28T14:49:40 passe 1 bloc 132/279 c k2 21s
+2026-10-28T14:49:44 passe 1 bloc 133/279 c k1 4s
+2026-10-28T14:49:52 passe 1 bloc 134/279 fortran k1 8s
+2026-10-28T14:49:58 passe 1 bloc 135/279 csharp k9 6s
+2026-10-28T14:50:17 passe 1 bloc 136/279 ocaml k2 19s
+2026-10-28T14:50:49 passe 1 bloc 137/279 julia k7 32s
+2026-10-28T14:50:52 passe 1 bloc 138/279 js k4 3s
+2026-10-28T14:50:54 passe 1 bloc 139/279 java k4 2s
+2026-10-28T14:50:56 passe 1 bloc 140/279 zig k5 2s
+2026-10-28T14:51:16 passe 1 bloc 141/279 c_gcc k7 20s
+2026-10-28T14:51:21 passe 1 bloc 142/279 cpp k6 5s
+2026-10-28T14:54:18 passe 1 bloc 143/279 python k7 177s
+2026-10-28T14:54:18 passe 1 bloc 144/279 nim fp 0s
+2026-10-28T14:54:23 passe 1 bloc 145/279 mojo k9 5s
+2026-10-28T14:54:29 passe 1 bloc 146/279 go k9 6s
+2026-10-28T14:54:41 passe 1 bloc 147/279 csharp k1 12s
+2026-10-28T14:54:41 passe 1 bloc 148/279 d fp 0s
+2026-10-28T14:55:03 passe 1 bloc 149/279 d k7 22s
+2026-10-28T14:55:05 passe 1 bloc 150/279 fortran_flang k9 2s
+2026-10-28T14:56:19 passe 1 bloc 151/279 lua k1 73s
+2026-10-28T14:56:47 passe 1 bloc 152/279 fortran_flang k1 29s
+2026-10-28T14:57:02 passe 1 bloc 153/279 zig k3 15s
+2026-10-28T14:57:39 passe 1 bloc 154/279 cpp k7 37s
+2026-10-28T14:57:57 passe 1 bloc 155/279 fortran k2 17s
+2026-10-28T14:58:00 passe 1 bloc 156/279 fortran k9 3s
+2026-10-28T14:59:36 passe 1 bloc 157/279 python_ft k10 97s
+2026-10-28T14:59:41 passe 1 bloc 158/279 c k10 5s
+2026-10-28T15:00:21 passe 1 bloc 159/279 ada k7 40s
+2026-10-28T15:00:27 passe 1 bloc 160/279 haskell k6 7s
+2026-10-28T15:00:43 passe 1 bloc 161/279 odin k7 15s
+2026-10-28T15:00:43 passe 1 bloc 162/279 js_bun fp 0s
+2026-10-28T15:00:46 passe 1 bloc 163/279 luajit k3 3s
+2026-10-28T15:01:02 passe 1 bloc 164/279 js k6 16s
+2026-10-28T15:01:18 passe 1 bloc 165/279 c3 k3 16s
+2026-10-28T15:01:24 passe 1 bloc 166/279 odin k6 6s
+2026-10-28T15:01:37 passe 1 bloc 167/279 haskell k3 13s
+2026-10-28T15:02:11 passe 1 bloc 168/279 fortran_flang k7 34s
+2026-10-28T15:02:26 passe 1 bloc 169/279 julia k4 14s
+2026-10-28T15:02:45 passe 1 bloc 170/279 java k6 19s
+2026-10-28T15:03:06 passe 1 bloc 171/279 ada k10 21s
+2026-10-28T15:03:06 passe 1 bloc 172/279 ada fp 0s
+2026-10-28T15:04:05 passe 1 bloc 173/279 luajit k8 59s
+2026-10-28T15:04:12 passe 1 bloc 174/279 c_gcc k8 7s
+2026-10-28T15:04:39 passe 1 bloc 175/279 rust k2 27s
+2026-10-28T15:05:04 passe 1 bloc 176/279 odin k2 25s
+2026-10-28T15:06:26 passe 1 bloc 177/279 python k1 82s
+2026-10-28T15:06:38 passe 1 bloc 178/279 chapel k10 13s
+2026-10-28T15:06:57 passe 1 bloc 179/279 c k3 19s
+2026-10-28T15:07:22 passe 1 bloc 180/279 go k2 24s
+2026-10-28T15:08:14 passe 1 bloc 181/279 js_bun k3 52s
+2026-10-28T15:08:20 passe 1 bloc 182/279 luajit k9 6s
+2026-10-28T15:08:35 passe 1 bloc 183/279 python k4 14s
+2026-10-28T15:08:43 passe 1 bloc 184/279 mojo k10 8s
+2026-10-28T15:08:44 passe 1 bloc 185/279 rust k10 2s
+2026-10-28T15:10:05 passe 1 bloc 186/279 julia k2 81s
+2026-10-28T15:10:42 passe 1 bloc 187/279 go k3 37s
+2026-10-28T15:10:59 passe 1 bloc 188/279 d k8 17s
+2026-10-28T15:11:36 passe 1 bloc 189/279 python k2 37s
+2026-10-28T15:11:36 passe 1 bloc 190/279 python fp 0s
+2026-10-28T15:11:57 passe 1 bloc 191/279 lua k9 21s
+2026-10-28T15:12:24 passe 1 bloc 192/279 julia k1 27s
+2026-10-28T15:12:26 passe 1 bloc 193/279 ada k5 2s
+2026-10-28T15:12:33 passe 1 bloc 194/279 fortran k8 6s
+2026-10-28T15:13:05 passe 1 bloc 195/279 csharp k2 32s
+2026-10-28T15:13:11 passe 1 bloc 196/279 c3 k6 6s
+2026-10-28T15:13:15 passe 1 bloc 197/279 nim k4 4s
+2026-10-28T15:13:40 passe 1 bloc 198/279 fortran k7 25s
+2026-10-28T15:13:54 passe 1 bloc 199/279 ocaml k1 14s
+2026-10-28T15:13:58 passe 1 bloc 200/279 luajit k5 4s
+2026-10-28T15:14:25 passe 1 bloc 201/279 mojo k2 26s
+2026-10-28T15:14:51 passe 1 bloc 202/279 fortran_flang k2 26s
+2026-10-28T15:14:51 passe 1 bloc 203/279 rust fp 0s
+2026-10-28T15:15:11 passe 1 bloc 204/279 go k7 20s
+2026-10-28T15:15:39 passe 1 bloc 205/279 luajit k1 28s
+2026-10-28T15:15:39 passe 1 bloc 206/279 csharp fp 0s
+2026-10-28T15:15:48 passe 1 bloc 207/279 ada k8 8s
+2026-10-28T15:16:23 passe 1 bloc 208/279 python k10 35s
+2026-10-28T15:16:44 passe 1 bloc 209/279 c_gcc k2 21s
+2026-10-28T15:16:46 passe 1 bloc 210/279 ocaml k4 2s
+2026-10-28T15:17:06 passe 1 bloc 211/279 julia k8 20s
+2026-10-28T15:17:15 passe 1 bloc 212/279 rust k8 9s
+2026-10-28T15:17:19 passe 1 bloc 213/279 rust k9 4s
+2026-10-28T15:18:22 passe 1 bloc 214/279 js_bun k7 63s
+2026-10-28T15:18:22 passe 1 bloc 215/279 haskell fp 0s
+2026-10-28T15:18:22 passe 1 bloc 216/279 c fp 0s
+2026-10-28T15:19:24 passe 1 bloc 217/279 lua k3 62s
+2026-10-28T15:19:39 passe 1 bloc 218/279 d k10 14s
+2026-10-28T15:19:54 passe 1 bloc 219/279 ocaml k3 16s
+2026-10-28T15:20:09 passe 1 bloc 220/279 luajit k6 15s
+2026-10-28T15:20:09 passe 1 bloc 221/279 c k4 0s
+2026-10-28T15:20:15 passe 1 bloc 222/279 go k1 5s
+2026-10-28T15:20:35 passe 1 bloc 223/279 mojo k7 20s
+2026-10-28T15:20:39 passe 1 bloc 224/279 c_gcc k1 5s
+2026-10-28T15:20:47 passe 1 bloc 225/279 js k5 8s
+2026-10-28T15:21:05 passe 1 bloc 226/279 haskell k1 18s
+2026-10-28T15:21:10 passe 1 bloc 227/279 rust k6 5s
+2026-10-28T15:22:42 passe 1 bloc 228/279 lua k6 92s
+2026-10-28T15:23:36 passe 1 bloc 229/279 python k5 54s
+2026-10-28T15:23:43 passe 1 bloc 230/279 rust k1 7s
+2026-10-28T15:23:43 passe 1 bloc 231/279 ocaml fp 0s
+2026-10-28T15:24:39 passe 1 bloc 232/279 js k10 56s
+2026-10-28T15:24:53 passe 1 bloc 233/279 lua k4 15s
+2026-10-28T15:25:00 passe 1 bloc 234/279 js_bun k5 6s
+2026-10-28T15:25:37 passe 1 bloc 235/279 java k2 37s
+2026-10-28T15:25:50 passe 1 bloc 236/279 java k1 13s
+2026-10-28T15:26:08 passe 1 bloc 237/279 js k8 18s
+2026-10-28T15:26:49 passe 1 bloc 238/279 julia k9 41s
+2026-10-28T15:26:50 passe 1 bloc 239/279 haskell k4 1s
+2026-10-28T15:26:54 passe 1 bloc 240/279 c_gcc k6 4s
+2026-10-28T15:27:11 passe 1 bloc 241/279 chapel k3 17s
+2026-10-28T15:27:11 passe 1 bloc 242/279 zig fp 0s
+2026-10-28T15:27:14 passe 1 bloc 243/279 csharp k5 3s
+2026-10-28T15:27:35 passe 1 bloc 244/279 ada k2 21s
+2026-10-28T15:27:37 passe 1 bloc 245/279 zig k4 2s
+2026-10-28T15:27:40 passe 1 bloc 246/279 csharp k4 3s
+2026-10-28T15:28:14 passe 1 bloc 247/279 js_bun k2 34s
+2026-10-28T15:28:34 passe 1 bloc 248/279 csharp k10 20s
+2026-10-28T15:28:42 passe 1 bloc 249/279 haskell k9 8s
+2026-10-28T15:28:45 passe 1 bloc 250/279 js_bun k4 3s
+2026-10-28T15:29:21 passe 1 bloc 251/279 luajit k2 36s
+2026-10-28T15:29:32 passe 1 bloc 252/279 zig k8 12s
+2026-10-28T15:31:22 passe 1 bloc 253/279 js k3 109s
+2026-10-28T15:36:36 passe 1 bloc 254/279 python k3 314s
+2026-10-28T15:36:47 passe 1 bloc 255/279 zig k7 11s
+2026-10-28T15:36:53 passe 1 bloc 256/279 d k1 7s
+2026-10-28T15:37:14 passe 1 bloc 257/279 rust k7 21s
+2026-10-28T15:37:14 passe 1 bloc 258/279 java fp 0s
+2026-10-28T15:37:18 passe 1 bloc 259/279 haskell k5 3s
+2026-10-28T15:37:22 passe 1 bloc 260/279 zig k10 4s
+2026-10-28T15:37:28 passe 1 bloc 261/279 nim k10 6s
+2026-10-28T15:37:35 passe 1 bloc 262/279 haskell k10 7s
+2026-10-28T15:38:15 passe 1 bloc 263/279 julia k3 41s
+2026-10-28T15:38:19 passe 1 bloc 264/279 luajit k4 3s
+2026-10-28T15:39:01 passe 1 bloc 265/279 python k9 43s
+2026-10-28T15:39:08 passe 1 bloc 266/279 ocaml k8 6s
+2026-10-28T15:39:29 passe 1 bloc 267/279 julia k10 22s
+2026-10-28T15:39:53 passe 1 bloc 268/279 c3 k2 24s
+2026-10-28T15:40:20 passe 1 bloc 269/279 c3 k7 27s
+2026-10-28T15:40:26 passe 1 bloc 270/279 zig k1 6s
+2026-10-28T15:40:32 passe 1 bloc 271/279 ocaml k9 6s
+2026-10-28T15:40:32 passe 1 bloc 272/279 c_gcc k4 0s
+2026-10-28T15:40:34 passe 1 bloc 273/279 fortran k5 2s
+2026-10-28T15:40:49 passe 1 bloc 274/279 d k3 15s
+2026-10-28T15:40:51 passe 1 bloc 275/279 c_gcc k5 2s
+2026-10-28T15:41:07 passe 1 bloc 276/279 nim k3 16s
+2026-10-28T15:42:58 passe 1 bloc 277/279 python k6 111s
+2026-10-28T15:44:13 passe 1 bloc 278/279 lua k7 75s
+2026-10-28T15:44:53 passe 1 bloc 279/279 js_bun k10 40s
+2026-10-28T15:44:55 passe 2 : 279 blocs
+2026-10-28T15:45:02 passe 2 bloc 1/279 rust k1 7s
+2026-10-28T15:45:17 passe 2 bloc 2/279 fortran k2 15s
+2026-10-28T15:45:32 passe 2 bloc 3/279 cpp k3 15s
+2026-10-28T15:45:44 passe 2 bloc 4/279 js k9 12s
+2026-10-28T15:45:45 passe 2 bloc 5/279 mojo k4 1s
+2026-10-28T15:46:00 passe 2 bloc 6/279 chapel k10 14s
+2026-10-28T15:46:06 passe 2 bloc 7/279 c_gcc k8 6s
+2026-10-28T15:46:06 passe 2 bloc 8/279 zig fp 0s
+2026-10-28T15:46:06 passe 2 bloc 9/279 python k7 0s
+2026-10-28T15:46:11 passe 2 bloc 10/279 c3 k10 5s
+2026-10-28T15:46:20 passe 2 bloc 11/279 java k8 9s
+2026-10-28T15:46:36 passe 2 bloc 12/279 java k3 16s
+2026-10-28T15:47:08 passe 2 bloc 13/279 fortran_flang k1 31s
+2026-10-28T15:47:08 passe 2 bloc 14/279 js_bun fp 0s
+2026-10-28T15:47:46 passe 2 bloc 15/279 julia k6 39s
+2026-10-28T15:47:55 passe 2 bloc 16/279 c k8 8s
+2026-10-28T15:48:28 passe 2 bloc 17/279 js k1 33s
+2026-10-28T15:48:30 passe 2 bloc 18/279 ocaml k4 2s
+2026-10-28T15:48:44 passe 2 bloc 19/279 odin k3 14s
+2026-10-28T15:48:48 passe 2 bloc 20/279 mojo k7 4s
+2026-10-28T15:48:52 passe 2 bloc 21/279 ada k7 4s
+2026-10-28T15:48:53 passe 2 bloc 22/279 go k4 1s
+2026-10-28T15:49:09 passe 2 bloc 23/279 chapel k3 16s
+2026-10-28T15:49:16 passe 2 bloc 24/279 c3 k1 7s
+2026-10-28T15:49:30 passe 2 bloc 25/279 js_bun k6 14s
+2026-10-28T15:49:32 passe 2 bloc 26/279 cpp k5 2s
+2026-10-28T15:49:41 passe 2 bloc 27/279 odin k4 9s
+2026-10-28T15:49:47 passe 2 bloc 28/279 odin k1 6s
+2026-10-28T15:49:50 passe 2 bloc 29/279 fortran_flang k9 3s
+2026-10-28T15:50:07 passe 2 bloc 30/279 ada k3 17s
+2026-10-28T15:50:15 passe 2 bloc 31/279 odin k10 8s
+2026-10-28T15:50:22 passe 2 bloc 32/279 nim k6 7s
+2026-10-28T15:50:27 passe 2 bloc 33/279 go k9 5s
+2026-10-28T15:50:30 passe 2 bloc 34/279 go k7 3s
+2026-10-28T15:50:37 passe 2 bloc 35/279 nim k1 7s
+2026-10-28T15:50:43 passe 2 bloc 36/279 js k5 6s
+2026-10-28T15:50:44 passe 2 bloc 37/279 haskell k4 1s
+2026-10-28T15:51:25 passe 2 bloc 38/279 python_ft k6 41s
+2026-10-28T15:51:29 passe 2 bloc 39/279 haskell k5 3s
+2026-10-28T15:51:42 passe 2 bloc 40/279 c3 k8 13s
+2026-10-28T15:51:53 passe 2 bloc 41/279 ocaml k6 12s
+2026-10-28T15:52:09 passe 2 bloc 42/279 c k3 15s
+2026-10-28T15:52:12 passe 2 bloc 43/279 js k4 3s
+2026-10-28T15:52:14 passe 2 bloc 44/279 js_bun k10 2s
+2026-10-28T15:52:14 passe 2 bloc 45/279 js fp 0s
+2026-10-28T15:52:16 passe 2 bloc 46/279 zig k5 2s
+2026-10-28T15:52:29 passe 2 bloc 47/279 fortran_flang k3 13s
+2026-10-28T15:52:40 passe 2 bloc 48/279 python k10 11s
+2026-10-28T15:52:43 passe 2 bloc 49/279 c k1 4s
+2026-10-28T15:52:49 passe 2 bloc 50/279 ocaml k7 6s
+2026-10-28T15:52:49 passe 2 bloc 51/279 d fp 0s
+2026-10-28T15:52:53 passe 2 bloc 52/279 zig k9 3s
+2026-10-28T15:53:16 passe 2 bloc 53/279 zig k2 23s
+2026-10-28T15:53:21 passe 2 bloc 54/279 mojo k9 5s
+2026-10-28T15:53:23 passe 2 bloc 55/279 rust k10 2s
+2026-10-28T15:53:31 passe 2 bloc 56/279 mojo k8 9s
+2026-10-28T15:53:46 passe 2 bloc 57/279 js k3 15s
+2026-10-28T15:53:47 passe 2 bloc 58/279 fortran k4 1s
+2026-10-28T15:54:11 passe 2 bloc 59/279 go k2 24s
+2026-10-28T15:54:11 passe 2 bloc 60/279 java fp 0s
+2026-10-28T15:54:11 passe 2 bloc 61/279 mojo fp 0s
+2026-10-28T15:54:27 passe 2 bloc 62/279 fortran_flang k10 16s
+2026-10-28T15:54:39 passe 2 bloc 63/279 nim k7 13s
+2026-10-28T15:55:59 passe 2 bloc 64/279 lua k1 79s
+2026-10-28T15:56:02 passe 2 bloc 65/279 go k5 3s
+2026-10-28T15:56:27 passe 2 bloc 66/279 julia k1 26s
+2026-10-28T15:56:29 passe 2 bloc 67/279 c3 k5 2s
+2026-10-28T15:56:31 passe 2 bloc 68/279 mojo k5 2s
+2026-10-28T15:56:35 passe 2 bloc 69/279 fortran k10 3s
+2026-10-28T15:56:38 passe 2 bloc 70/279 c_gcc k9 3s
+2026-10-28T15:56:38 passe 2 bloc 71/279 ada fp 0s
+2026-10-28T15:56:49 passe 2 bloc 72/279 csharp k8 11s
+2026-10-28T15:57:05 passe 2 bloc 73/279 haskell k8 16s
+2026-10-28T15:57:05 passe 2 bloc 74/279 ocaml fp 0s
+2026-10-28T15:57:16 passe 2 bloc 75/279 js_bun k9 11s
+2026-10-28T15:57:41 passe 2 bloc 76/279 fortran_flang k2 24s
+2026-10-28T15:57:49 passe 2 bloc 77/279 fortran k1 8s
+2026-10-28T15:57:54 passe 2 bloc 78/279 rust k6 5s
+2026-10-28T15:58:26 passe 2 bloc 79/279 go k3 32s
+2026-10-28T15:58:30 passe 2 bloc 80/279 c_gcc k6 4s
+2026-10-28T15:58:34 passe 2 bloc 81/279 cpp k6 4s
+2026-10-28T15:58:44 passe 2 bloc 82/279 python_ft k10 10s
+2026-10-28T15:58:48 passe 2 bloc 83/279 ada k9 4s
+2026-10-28T15:58:59 passe 2 bloc 84/279 chapel k8 11s
+2026-10-28T15:59:17 passe 2 bloc 85/279 haskell k1 18s
+2026-10-28T15:59:33 passe 2 bloc 86/279 js k6 16s
+2026-10-28T15:59:33 passe 2 bloc 87/279 rust fp 0s
+2026-10-28T16:00:13 passe 2 bloc 88/279 python k9 39s
+2026-10-28T16:00:49 passe 2 bloc 89/279 java k2 37s
+2026-10-28T16:01:44 passe 2 bloc 90/279 lua k3 55s
+2026-10-28T16:01:53 passe 2 bloc 91/279 csharp k6 9s
+2026-10-28T16:02:44 passe 2 bloc 92/279 js_bun k3 50s
+2026-10-28T16:03:05 passe 2 bloc 93/279 julia k8 22s
+2026-10-28T16:03:34 passe 2 bloc 94/279 ada k2 29s
+2026-10-28T16:03:41 passe 2 bloc 95/279 ocaml k9 6s
+2026-10-28T16:03:50 passe 2 bloc 96/279 mojo k10 9s
+2026-10-28T16:03:56 passe 2 bloc 97/279 d k1 7s
+2026-10-28T16:03:59 passe 2 bloc 98/279 odin k5 2s
+2026-10-28T16:03:59 passe 2 bloc 99/279 chapel k4 1s
+2026-10-28T16:04:02 passe 2 bloc 100/279 luajit k3 3s
+2026-10-28T16:04:14 passe 2 bloc 101/279 julia k5 12s
+2026-10-28T16:04:14 passe 2 bloc 102/279 c3 k4 0s
+2026-10-28T16:04:49 passe 2 bloc 103/279 python k1 35s
+2026-10-28T16:05:24 passe 2 bloc 104/279 js_bun k2 35s
+2026-10-28T16:05:39 passe 2 bloc 105/279 mojo k3 15s
+2026-10-28T16:05:43 passe 2 bloc 106/279 d k7 4s
+2026-10-28T16:05:43 passe 2 bloc 107/279 haskell fp 0s
+2026-10-28T16:05:44 passe 2 bloc 108/279 cpp k4 1s
+2026-10-28T16:05:46 passe 2 bloc 109/279 c k9 2s
+2026-10-28T16:06:01 passe 2 bloc 110/279 python k4 15s
+2026-10-28T16:06:01 passe 2 bloc 111/279 nim fp 0s
+2026-10-28T16:06:01 passe 2 bloc 112/279 fortran fp 0s
+2026-10-28T16:06:21 passe 2 bloc 113/279 python k5 19s
+2026-10-28T16:06:27 passe 2 bloc 114/279 go k10 6s
+2026-10-28T16:06:52 passe 2 bloc 115/279 csharp k10 25s
+2026-10-28T16:06:55 passe 2 bloc 116/279 java k5 3s
+2026-10-28T16:07:07 passe 2 bloc 117/279 d k10 12s
+2026-10-28T16:07:14 passe 2 bloc 118/279 nim k8 7s
+2026-10-28T16:07:18 passe 2 bloc 119/279 c k6 4s
+2026-10-28T16:07:20 passe 2 bloc 120/279 c k5 2s
+2026-10-28T16:07:20 passe 2 bloc 121/279 go fp 0s
+2026-10-28T16:07:23 passe 2 bloc 122/279 c k7 3s
+2026-10-28T16:07:46 passe 2 bloc 123/279 luajit k8 22s
+2026-10-28T16:07:48 passe 2 bloc 124/279 rust k5 2s
+2026-10-28T16:07:55 passe 2 bloc 125/279 ocaml k8 7s
+2026-10-28T16:07:55 passe 2 bloc 126/279 python_ft k3 0s
+2026-10-28T16:08:01 passe 2 bloc 127/279 java k9 6s
+2026-10-28T16:08:09 passe 2 bloc 128/279 haskell k9 8s
+2026-10-28T16:08:34 passe 2 bloc 129/279 python k6 25s
+2026-10-28T16:08:34 passe 2 bloc 130/279 csharp fp 0s
+2026-10-28T16:08:38 passe 2 bloc 131/279 c3 k9 4s
+2026-10-28T16:08:52 passe 2 bloc 132/279 rust k3 14s
+2026-10-28T16:08:57 passe 2 bloc 133/279 haskell k10 6s
+2026-10-28T16:09:02 passe 2 bloc 134/279 c k10 5s
+2026-10-28T16:09:31 passe 2 bloc 135/279 luajit k1 29s
+2026-10-28T16:09:41 passe 2 bloc 136/279 js_bun k8 9s
+2026-10-28T16:09:48 passe 2 bloc 137/279 lua k10 7s
+2026-10-28T16:09:54 passe 2 bloc 138/279 csharp k9 6s
+2026-10-28T16:10:11 passe 2 bloc 139/279 nim k3 17s
+2026-10-28T16:10:37 passe 2 bloc 140/279 d k2 26s
+2026-10-28T16:10:43 passe 2 bloc 141/279 luajit k9 6s
+2026-10-28T16:10:55 passe 2 bloc 142/279 ocaml k1 12s
+2026-10-28T16:10:56 passe 2 bloc 143/279 fortran_flang k4 0s
+2026-10-28T16:11:00 passe 2 bloc 144/279 fortran k6 4s
+2026-10-28T16:11:07 passe 2 bloc 145/279 d k6 7s
+2026-10-28T16:11:13 passe 2 bloc 146/279 zig k1 6s
+2026-10-28T17:15:02 campagne interrompue : redémarrage de la VM après le bloc 146/279 de la passe 2 (16:11). Données retenues : passes 0, 1 et blocs 1-146 de la passe 2.
+2026-10-28T17:25:19 post-redémarrage : empreinte K1, 225 processus
+2026-10-28T17:33:21 post-redémarrage : empreinte K1 terminée
+2026-10-28T17:33:25 post-redémarrage : K3 haskell + pont C
+2026-10-28T17:37:24 post-redémarrage : K3 terminé
+2026-10-28T17:37:24 post-redémarrage : annexes (Bun --smol, Valhalla)
+2026-10-28T17:39:20 post-redémarrage : annexes terminées
+2026-10-28T17:54:59 post-redémarrage : empreinte K1 en deux points, 75 processus
+2026-10-28T18:00:02 post-redémarrage : empreinte K1 en deux points terminée
+2026-10-28T18:32:47 remesure K5/K10 tuned : passe 1/9 terminée
+2026-10-28T18:34:34 remesure K5/K10 tuned : passe 2/9 terminée
+2026-10-28T18:36:17 remesure K5/K10 tuned : passe 3/9 terminée
+2026-10-28T18:38:05 remesure K5/K10 tuned : passe 4/9 terminée
+2026-10-28T18:39:58 remesure K5/K10 tuned : passe 5/9 terminée
+2026-10-28T18:41:46 remesure K5/K10 tuned : passe 6/9 terminée
+2026-10-28T18:43:36 remesure K5/K10 tuned : passe 7/9 terminée
+2026-10-28T18:45:20 remesure K5/K10 tuned : passe 8/9 terminée
+2026-10-28T18:47:05 remesure K5/K10 tuned : passe 9/9 terminée
+2026-10-29T12:35:21 v2 : K5 natural et tuned, passe 1/9 terminée
+2026-10-29T12:38:25 v2 : K5 natural et tuned, passe 2/9 terminée
+2026-10-29T12:41:28 v2 : K5 natural et tuned, passe 3/9 terminée
+2026-10-29T12:44:38 v2 : K5 natural et tuned, passe 4/9 terminée
+2026-10-29T12:47:33 v2 : K5 natural et tuned, passe 5/9 terminée
+2026-10-29T12:50:34 v2 : K5 natural et tuned, passe 6/9 terminée
+2026-10-29T12:53:41 v2 : K5 natural et tuned, passe 7/9 terminée
+2026-10-29T12:56:45 v2 : K5 natural et tuned, passe 8/9 terminée
+2026-10-29T12:59:53 v2 : K5 natural et tuned, passe 9/9 terminée
+2026-10-29T13:02:42 v2 : relevé des pages géantes (K1 natural) terminé
+2026-10-29T13:02:46 v2 : réplication, bloc 1/203 chapel k9 3s
+2026-10-29T13:02:57 v2 : réplication, bloc 2/203 odin k4 12s
+2026-10-29T13:03:01 v2 : réplication, bloc 3/203 luajit k3 4s
+2026-10-29T13:03:26 v2 : réplication, bloc 4/203 fortran k2 25s
+2026-10-29T13:03:36 v2 : réplication, bloc 5/203 js_bun k1 10s
+2026-10-29T13:04:02 v2 : réplication, bloc 6/203 c k6 25s
+2026-10-29T13:04:07 v2 : réplication, bloc 7/203 nim k1 5s
+2026-10-29T13:04:10 v2 : réplication, bloc 8/203 zig k4 3s
+2026-10-29T13:05:52 v2 : réplication, bloc 9/203 haskell k3 102s
+2026-10-29T13:06:01 v2 : réplication, bloc 10/203 js k9 9s
+2026-10-29T13:06:06 v2 : réplication, bloc 11/203 zig k1 5s
+2026-10-29T13:06:16 v2 : réplication, bloc 12/203 lua k4 9s
+2026-10-29T13:06:31 v2 : réplication, bloc 13/203 d k7 15s
+2026-10-29T13:06:51 v2 : réplication, bloc 14/203 julia k1 21s
+2026-10-29T13:06:57 v2 : réplication, bloc 15/203 ocaml k8 6s
+2026-10-29T13:07:05 v2 : réplication, bloc 16/203 mojo k6 8s
+2026-10-29T13:07:32 v2 : réplication, bloc 17/203 python k2 27s
+2026-10-29T13:07:36 v2 : réplication, bloc 18/203 c k1 4s
+2026-10-29T13:10:19 v2 : réplication, bloc 19/203 haskell k7 163s
+2026-10-29T13:10:29 v2 : réplication, bloc 20/203 zig k8 10s
+2026-10-29T13:10:35 v2 : réplication, bloc 21/203 rust k6 6s
+2026-10-29T13:10:52 v2 : réplication, bloc 22/203 go k8 17s
+2026-10-29T13:10:55 v2 : réplication, bloc 23/203 c_gcc k4 3s
+2026-10-29T13:11:25 v2 : réplication, bloc 24/203 chapel k3 30s
+2026-10-29T13:11:27 v2 : réplication, bloc 25/203 go k4 3s
+2026-10-29T13:11:49 v2 : réplication, bloc 26/203 rust k2 21s
+2026-10-29T13:12:04 v2 : réplication, bloc 27/203 java k7 16s
+2026-10-29T13:12:27 v2 : réplication, bloc 28/203 js k1 23s
+2026-10-29T13:12:31 v2 : réplication, bloc 29/203 c3 k9 4s
+2026-10-29T13:12:44 v2 : réplication, bloc 30/203 lua k9 13s
+2026-10-29T13:12:51 v2 : réplication, bloc 31/203 chapel k6 7s
+2026-10-29T13:12:58 v2 : réplication, bloc 32/203 fortran_flang k7 7s
+2026-10-29T13:13:22 v2 : réplication, bloc 33/203 luajit k1 24s
+2026-10-29T13:13:43 v2 : réplication, bloc 34/203 fortran_flang k2 21s
+2026-10-29T13:14:05 v2 : réplication, bloc 35/203 cpp k2 22s
+2026-10-29T13:14:11 v2 : réplication, bloc 36/203 zig k6 6s
+2026-10-29T13:14:48 v2 : réplication, bloc 37/203 lua k3 37s
+2026-10-29T13:14:54 v2 : réplication, bloc 38/203 nim k8 6s
+2026-10-29T13:15:16 v2 : réplication, bloc 39/203 ocaml k7 22s
+2026-10-29T13:15:37 v2 : réplication, bloc 40/203 ada k2 22s
+2026-10-29T13:16:01 v2 : réplication, bloc 41/203 fortran_flang k3 23s
+2026-10-29T13:16:24 v2 : réplication, bloc 42/203 c3 k3 23s
+2026-10-29T13:17:24 v2 : réplication, bloc 43/203 lua k6 61s
+2026-10-29T13:17:36 v2 : réplication, bloc 44/203 julia k4 12s
+2026-10-29T13:17:39 v2 : réplication, bloc 45/203 zig k9 3s
+2026-10-29T13:18:07 v2 : réplication, bloc 46/203 c k3 28s
+2026-10-29T13:18:39 v2 : réplication, bloc 47/203 julia k6 31s
+2026-10-29T13:18:43 v2 : réplication, bloc 48/203 js k4 4s
+2026-10-29T13:19:04 v2 : réplication, bloc 49/203 zig k2 21s
+2026-10-29T13:19:15 v2 : réplication, bloc 50/203 csharp k7 11s
+2026-10-29T13:19:18 v2 : réplication, bloc 51/203 rust k9 3s
+2026-10-29T13:19:22 v2 : réplication, bloc 52/203 java k4 3s
+2026-10-29T13:19:29 v2 : réplication, bloc 53/203 c3 k7 7s
+2026-10-29T13:19:33 v2 : réplication, bloc 54/203 c_gcc k7 4s
+2026-10-29T13:19:55 v2 : réplication, bloc 55/203 c k2 22s
+2026-10-29T13:20:01 v2 : réplication, bloc 56/203 fortran k6 5s
+2026-10-29T13:20:03 v2 : réplication, bloc 57/203 ada k4 2s
+2026-10-29T13:20:07 v2 : réplication, bloc 58/203 mojo k9 4s
+2026-10-29T13:20:16 v2 : réplication, bloc 59/203 ocaml k1 9s
+2026-10-29T13:31:49 v2 : réplication, bloc 60/203 python_ft k3 694s
+2026-10-29T13:31:52 v2 : réplication, bloc 61/203 d k9 3s
+2026-10-29T13:32:14 v2 : réplication, bloc 62/203 go k2 21s
+2026-10-29T13:32:22 v2 : réplication, bloc 63/203 rust k7 8s
+2026-10-29T13:32:28 v2 : réplication, bloc 64/203 c3 k6 6s
+2026-10-29T13:33:28 v2 : réplication, bloc 65/203 python k6 61s
+2026-10-29T13:33:55 v2 : réplication, bloc 66/203 ada k7 26s
+2026-10-29T13:34:35 v2 : réplication, bloc 67/203 csharp k3 40s
+2026-10-29T13:34:57 v2 : réplication, bloc 68/203 rust k3 22s
+2026-10-29T13:37:29 v2 : réplication, bloc 69/203 js k3 152s
+2026-10-29T13:37:32 v2 : réplication, bloc 70/203 nim k9 3s
+2026-10-29T13:37:46 v2 : réplication, bloc 71/203 fortran_flang k8 14s
+2026-10-29T13:37:53 v2 : réplication, bloc 72/203 odin k7 8s
+2026-10-29T13:37:56 v2 : réplication, bloc 73/203 d k4 2s
+2026-10-29T13:38:01 v2 : réplication, bloc 74/203 d k1 6s
+2026-10-29T13:38:03 v2 : réplication, bloc 75/203 cpp k4 2s
+2026-10-29T13:38:10 v2 : réplication, bloc 76/203 rust k8 7s
+2026-10-29T13:38:19 v2 : réplication, bloc 77/203 haskell k9 9s
+2026-10-29T13:38:27 v2 : réplication, bloc 78/203 csharp k6 8s
+2026-10-29T13:38:35 v2 : réplication, bloc 79/203 js_bun k9 8s
+2026-10-29T13:38:40 v2 : réplication, bloc 80/203 cpp k1 5s
+2026-10-29T13:39:01 v2 : réplication, bloc 81/203 ocaml k2 21s
+2026-10-29T13:39:48 v2 : réplication, bloc 82/203 julia k3 47s
+2026-10-29T13:39:54 v2 : réplication, bloc 83/203 nim k7 6s
+2026-10-29T13:39:57 v2 : réplication, bloc 84/203 fortran k9 3s
+2026-10-29T13:40:18 v2 : réplication, bloc 85/203 zig k3 22s
+2026-10-29T13:40:31 v2 : réplication, bloc 86/203 luajit k6 12s
+2026-10-29T13:41:13 v2 : réplication, bloc 87/203 js k7 43s
+2026-10-29T13:41:17 v2 : réplication, bloc 88/203 c k9 3s
+2026-10-29T13:41:21 v2 : réplication, bloc 89/203 rust k4 4s
+2026-10-29T13:41:48 v2 : réplication, bloc 90/203 d k3 27s
+2026-10-29T13:42:08 v2 : réplication, bloc 91/203 js_bun k7 21s
+2026-10-29T13:42:14 v2 : réplication, bloc 92/203 rust k1 6s
+2026-10-29T13:42:26 v2 : réplication, bloc 93/203 python k4 11s
+2026-10-29T13:42:33 v2 : réplication, bloc 94/203 go k6 8s
+2026-10-29T13:42:42 v2 : réplication, bloc 95/203 ada k6 9s
+2026-10-29T13:42:45 v2 : réplication, bloc 96/203 ocaml k4 3s
+2026-10-29T13:42:54 v2 : réplication, bloc 97/203 chapel k8 9s
+2026-10-29T13:43:52 v2 : réplication, bloc 98/203 go k1 58s
+2026-10-29T13:44:14 v2 : réplication, bloc 99/203 nim k3 22s
+2026-10-29T13:44:36 v2 : réplication, bloc 100/203 c_gcc k3 22s
+2026-10-29T13:44:43 v2 : réplication, bloc 101/203 d k6 7s
+2026-10-29T13:45:06 v2 : réplication, bloc 102/203 ada k3 23s
+2026-10-29T13:45:55 v2 : réplication, bloc 103/203 go k3 49s
+2026-10-29T13:46:11 v2 : réplication, bloc 104/203 julia k8 16s
+2026-10-29T13:46:19 v2 : réplication, bloc 105/203 java k8 8s
+2026-10-29T13:46:25 v2 : réplication, bloc 106/203 zig k7 6s
+2026-10-29T13:46:53 v2 : réplication, bloc 107/203 fortran k3 27s
+2026-10-29T13:47:00 v2 : réplication, bloc 108/203 haskell k6 7s
+2026-10-29T13:47:52 v2 : réplication, bloc 109/203 lua k1 52s
+2026-10-29T13:48:22 v2 : réplication, bloc 110/203 odin k3 30s
+2026-10-29T13:48:51 v2 : réplication, bloc 111/203 java k3 29s
+2026-10-29T13:48:53 v2 : réplication, bloc 112/203 fortran_flang k9 3s
+2026-10-29T13:49:22 v2 : réplication, bloc 113/203 js k2 29s
+2026-10-29T13:49:30 v2 : réplication, bloc 114/203 ada k8 7s
+2026-10-29T13:49:43 v2 : réplication, bloc 115/203 js k8 13s
+2026-10-29T13:49:48 v2 : réplication, bloc 116/203 fortran k7 5s
+2026-10-29T13:50:09 v2 : réplication, bloc 117/203 c_gcc k2 21s
+2026-10-29T13:50:16 v2 : réplication, bloc 118/203 go k7 7s
+2026-10-29T13:50:18 v2 : réplication, bloc 119/203 c k4 2s
+2026-10-29T13:50:21 v2 : réplication, bloc 120/203 fortran_flang k4 3s
+2026-10-29T13:50:50 v2 : réplication, bloc 121/203 csharp k2 28s
+2026-10-29T13:50:56 v2 : réplication, bloc 122/203 cpp k6 6s
+2026-10-29T13:51:04 v2 : réplication, bloc 123/203 csharp k8 8s
+2026-10-29T13:51:11 v2 : réplication, bloc 124/203 mojo k8 7s
+2026-10-29T13:51:24 v2 : réplication, bloc 125/203 d k8 13s
+2026-10-29T13:51:28 v2 : réplication, bloc 126/203 chapel k1 4s
+2026-10-29T13:51:34 v2 : réplication, bloc 127/203 c3 k1 6s
+2026-10-29T13:51:37 v2 : réplication, bloc 128/203 mojo k4 3s
+2026-10-29T13:51:44 v2 : réplication, bloc 129/203 c k8 6s
+2026-10-29T13:52:07 v2 : réplication, bloc 130/203 chapel k2 24s
+2026-10-29T13:52:12 v2 : réplication, bloc 131/203 ocaml k9 5s
+2026-10-29T13:52:18 v2 : réplication, bloc 132/203 go k9 5s
+2026-10-29T13:52:22 v2 : réplication, bloc 133/203 luajit k4 4s
+2026-10-29T13:52:36 v2 : réplication, bloc 134/203 js_bun k6 14s
+2026-10-29T13:53:09 v2 : réplication, bloc 135/203 lua k2 32s
+2026-10-29T13:53:39 v2 : réplication, bloc 136/203 cpp k3 30s
+2026-10-29T13:53:43 v2 : réplication, bloc 137/203 ada k1 4s
+2026-10-29T13:53:48 v2 : réplication, bloc 138/203 c_gcc k8 5s
+2026-10-29T13:53:54 v2 : réplication, bloc 139/203 luajit k9 6s
+2026-10-29T13:53:56 v2 : réplication, bloc 140/203 chapel k4 2s
+2026-10-29T13:54:03 v2 : réplication, bloc 141/203 fortran k1 7s
+2026-10-29T13:54:07 v2 : réplication, bloc 142/203 c_gcc k1 5s
+2026-10-29T13:54:09 v2 : réplication, bloc 143/203 fortran k4 2s
+2026-10-29T13:54:14 v2 : réplication, bloc 144/203 csharp k9 5s
+2026-10-29T13:54:19 v2 : réplication, bloc 145/203 java k9 5s
+2026-10-29T13:54:22 v2 : réplication, bloc 146/203 odin k9 3s
+2026-10-29T13:54:31 v2 : réplication, bloc 147/203 chapel k7 9s
+2026-10-29T13:54:39 v2 : réplication, bloc 148/203 fortran_flang k6 8s
+2026-10-29T13:54:56 v2 : réplication, bloc 149/203 luajit k7 17s
+2026-10-29T13:55:24 v2 : réplication, bloc 150/203 julia k9 27s
+2026-10-29T13:55:32 v2 : réplication, bloc 151/203 mojo k7 8s
+2026-10-29T13:55:44 v2 : réplication, bloc 152/203 haskell k1 12s
+2026-10-29T13:56:18 v2 : réplication, bloc 153/203 java k2 34s
+2026-10-29T13:57:33 v2 : réplication, bloc 154/203 python k1 75s
+2026-10-29T13:57:40 v2 : réplication, bloc 155/203 c_gcc k6 7s
+2026-10-29T13:57:47 v2 : réplication, bloc 156/203 fortran k8 6s
+2026-10-29T13:58:11 v2 : réplication, bloc 157/203 nim k2 24s
+2026-10-29T13:58:14 v2 : réplication, bloc 158/203 csharp k4 4s
+2026-10-29T13:58:20 v2 : réplication, bloc 159/203 odin k1 6s
+2026-10-29T13:59:57 v2 : réplication, bloc 160/203 js_bun k3 97s
+2026-10-29T14:00:36 v2 : réplication, bloc 161/203 luajit k8 39s
+2026-10-29T14:00:57 v2 : réplication, bloc 162/203 c3 k2 21s
+2026-10-29T14:01:25 v2 : réplication, bloc 163/203 js_bun k2 28s
+2026-10-29T14:02:06 v2 : réplication, bloc 164/203 lua k7 41s
+2026-10-29T14:02:23 v2 : réplication, bloc 165/203 java k6 16s
+2026-10-29T14:02:26 v2 : réplication, bloc 166/203 js_bun k4 4s
+2026-10-29T14:02:31 v2 : réplication, bloc 167/203 nim k4 4s
+2026-10-29T14:02:54 v2 : réplication, bloc 168/203 haskell k2 24s
+2026-10-29T14:04:14 v2 : réplication, bloc 169/203 python k8 79s
+2026-10-29T14:04:26 v2 : réplication, bloc 170/203 ocaml k6 12s
+2026-10-29T14:04:36 v2 : réplication, bloc 171/203 c3 k8 10s
+2026-10-29T14:04:57 v2 : réplication, bloc 172/203 mojo k2 22s
+2026-10-29T14:05:29 v2 : réplication, bloc 173/203 luajit k2 31s
+2026-10-29T14:05:47 v2 : réplication, bloc 174/203 fortran_flang k1 18s
+2026-10-29T14:06:04 v2 : réplication, bloc 175/203 js k6 17s
+2026-10-29T14:06:14 v2 : réplication, bloc 176/203 java k1 10s
+2026-10-29T14:08:47 v2 : réplication, bloc 177/203 python k3 153s
+2026-10-29T14:08:56 v2 : réplication, bloc 178/203 cpp k8 8s
+2026-10-29T14:09:24 v2 : réplication, bloc 179/203 python k9 28s
+2026-10-29T14:09:32 v2 : réplication, bloc 180/203 js_bun k8 8s
+2026-10-29T14:09:43 v2 : réplication, bloc 181/203 haskell k8 11s
+2026-10-29T14:09:50 v2 : réplication, bloc 182/203 nim k6 7s
+2026-10-29T14:09:52 v2 : réplication, bloc 183/203 c3 k4 2s
+2026-10-29T14:09:59 v2 : réplication, bloc 184/203 odin k6 7s
+2026-10-29T14:10:03 v2 : réplication, bloc 185/203 c k7 4s
+2026-10-29T14:10:30 v2 : réplication, bloc 186/203 mojo k3 27s
+2026-10-29T14:10:36 v2 : réplication, bloc 187/203 cpp k7 7s
+2026-10-29T14:10:55 v2 : réplication, bloc 188/203 julia k7 18s
+2026-10-29T14:11:30 v2 : réplication, bloc 189/203 lua k8 35s
+2026-10-29T14:11:33 v2 : réplication, bloc 190/203 ada k9 3s
+2026-10-29T14:13:49 v2 : réplication, bloc 191/203 python k7 136s
+2026-10-29T14:13:51 v2 : réplication, bloc 192/203 c_gcc k9 2s
+2026-10-29T14:13:57 v2 : réplication, bloc 193/203 mojo k1 7s
+2026-10-29T14:14:16 v2 : réplication, bloc 194/203 ocaml k3 19s
+2026-10-29T14:14:50 v2 : réplication, bloc 195/203 python_ft k9 33s
+2026-10-29T14:14:58 v2 : réplication, bloc 196/203 csharp k1 9s
+2026-10-29T14:15:58 v2 : réplication, bloc 197/203 julia k2 60s
+2026-10-29T14:17:00 v2 : réplication, bloc 198/203 python_ft k6 62s
+2026-10-29T14:17:03 v2 : réplication, bloc 199/203 cpp k9 3s
+2026-10-29T14:17:06 v2 : réplication, bloc 200/203 haskell k4 2s
+2026-10-29T14:17:28 v2 : réplication, bloc 201/203 d k2 22s
+2026-10-29T14:17:48 v2 : réplication, bloc 202/203 odin k2 20s
+2026-10-29T14:17:59 v2 : réplication, bloc 203/203 odin k8 12s
+2026-10-29T15:58:39 v3 : disposition, 1/48 c_gcc graine 2 126s
+2026-10-29T15:59:47 v3 : disposition, 2/48 rust graine 2 68s
+2026-10-29T16:00:45 v3 : disposition, 3/48 c graine 6 57s
+2026-10-29T16:01:55 v3 : disposition, 4/48 rust graine 1 70s
+2026-10-29T16:02:49 v3 : disposition, 5/48 c graine 2 54s
+2026-10-29T16:03:43 v3 : disposition, 6/48 c graine 8 54s
+2026-10-29T16:04:43 v3 : disposition, 7/48 c graine 5 60s
+2026-10-29T16:05:56 v3 : disposition, 8/48 rust graine 2 74s
+2026-10-29T16:06:54 v3 : disposition, 9/48 c graine 3 58s
+2026-10-29T16:08:09 v3 : disposition, 10/48 rust graine 8 74s
+2026-10-29T16:09:03 v3 : disposition, 11/48 c_gcc graine 2 54s
+2026-10-29T16:10:01 v3 : disposition, 12/48 c graine 7 58s
+2026-10-29T16:11:08 v3 : disposition, 13/48 rust graine 6 68s
+2026-10-29T16:12:18 v3 : disposition, 14/48 rust graine 4 69s
+2026-10-29T16:13:24 v3 : disposition, 15/48 rust graine 5 67s
+2026-10-29T16:14:17 v3 : disposition, 16/48 c_gcc graine 1 53s
+2026-10-29T16:15:12 v3 : disposition, 17/48 c_gcc graine 6 55s
+2026-10-29T16:16:17 v3 : disposition, 18/48 rust graine 7 65s
+2026-10-29T16:17:14 v3 : disposition, 19/48 c graine 4 57s
+2026-10-29T16:18:07 v3 : disposition, 20/48 c graine 2 53s
+2026-10-29T16:18:59 v3 : disposition, 21/48 c graine 1 52s
+2026-10-29T16:19:54 v3 : disposition, 22/48 c_gcc graine 7 55s
+2026-10-29T16:20:43 v3 : disposition, 23/48 c graine 3 50s
+2026-10-29T16:21:47 v3 : disposition, 24/48 rust graine 8 64s
+2026-10-29T16:22:53 v3 : disposition, 25/48 rust graine 7 66s
+2026-10-29T16:23:46 v3 : disposition, 26/48 c_gcc graine 8 54s
+2026-10-29T16:24:59 v3 : disposition, 27/48 rust graine 1 72s
+2026-10-29T16:25:47 v3 : disposition, 28/48 c_gcc graine 8 48s
+2026-10-29T16:26:44 v3 : disposition, 29/48 c_gcc graine 3 58s
+2026-10-29T16:27:40 v3 : disposition, 30/48 c graine 6 56s
+2026-10-29T16:28:31 v3 : disposition, 31/48 c graine 8 51s
+2026-10-29T16:29:21 v3 : disposition, 32/48 c_gcc graine 5 50s
+2026-10-29T16:30:16 v3 : disposition, 33/48 c_gcc graine 5 54s
+2026-10-29T16:31:18 v3 : disposition, 34/48 rust graine 3 63s
+2026-10-29T16:32:14 v3 : disposition, 35/48 c_gcc graine 6 55s
+2026-10-29T16:33:20 v3 : disposition, 36/48 rust graine 5 67s
+2026-10-29T16:34:11 v3 : disposition, 37/48 c_gcc graine 4 51s
+2026-10-29T16:35:07 v3 : disposition, 38/48 c_gcc graine 4 56s
+2026-10-29T16:35:59 v3 : disposition, 39/48 c_gcc graine 3 52s
+2026-10-29T16:37:11 v3 : disposition, 40/48 rust graine 6 72s
+2026-10-29T16:38:02 v3 : disposition, 41/48 c_gcc graine 7 51s
+2026-10-29T16:38:56 v3 : disposition, 42/48 c graine 4 54s
+2026-10-29T16:39:50 v3 : disposition, 43/48 c graine 7 54s
+2026-10-29T16:40:42 v3 : disposition, 44/48 c graine 5 52s
+2026-10-29T16:41:51 v3 : disposition, 45/48 rust graine 3 70s
+2026-10-29T16:42:46 v3 : disposition, 46/48 c graine 1 55s
+2026-10-29T16:43:36 v3 : disposition, 47/48 c_gcc graine 1 50s
+2026-10-29T16:44:37 v3 : disposition, 48/48 rust graine 4 61s

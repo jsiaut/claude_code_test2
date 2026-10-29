@@ -141,3 +141,12 @@ du plan, dont les résultats restent identiques ; chacun est marqué « hors pla
   résultats sans les huit tâches pendant lesquelles un de mes calculs tournait (`docs/METHODOLOGY.md`, journal).
 * **Décomposition de la variance limitée aux 13 premiers**, et **bruit de la machine 3 multiplié par 1,5 et 2**
   dans le test de réplication : ajoutés dans le code avant son premier calcul, mais absents du plan.
+
+## 9. Erratum d'implémentation
+
+Le code de l'analyse (commit `d0b959b`) parcourait un ensemble Python pour remplir les réservoirs de résidus et la
+vérité simulée du test de réplication. L'ordre d'itération d'un ensemble change d'un processus à l'autre ; les
+tirages n'étaient donc pas reproductibles au bit près, contrairement à ce que visait la graine fixe. Corrigé le
+29 octobre vers 16:50 (clés triées) ; deux calculs avec des graines de hachage différentes donnent des sorties
+identiques. Avant la correction, les écarts entre calculs restaient au niveau du bruit de Monte-Carlo, avec les
+mêmes étages et le même ordre (`docs/METHODOLOGY.md`, journal).

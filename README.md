@@ -1,6 +1,172 @@
-# Quels langages incarnent le mieux la *mechanical sympathy* ? Une étude mesurée (28 octobre 2026, révisée le 29 octobre)
+# Quels langages incarnent le mieux la *mechanical sympathy* ? Une étude mesurée (28 octobre 2026, révisée deux fois le 29 octobre)
 
-**Réponse courte (v2, 29 octobre).** J'ai mesuré moi-même 21 langages sur des VM Intel, avec neuf noyaux
+**Réponse courte (v3, 29 octobre).** J'ai mesuré moi-même 21 langages sur des VM Intel, avec neuf noyaux notés.
+Chacun teste un principe de la *mechanical sympathy* : disposition des données, SIMD, hiérarchie mémoire,
+concurrence, allocation, requêtes analytiques. Chaque implémentation doit rendre le même résultat, et tout temps
+inférieur à la borne physique de la machine est rejeté. Deux audits externes ont relu l'étude ; je les ai vérifiés
+point par point ([réponse au premier](docs/AUDIT_RESPONSE.md), [réponse au second](docs/AUDIT2_RESPONSE.md)). Le
+plan de cette version, [`docs/ANALYSIS_V3.md`](docs/ANALYSIS_V3.md), a été poussé avant tout calcul.
+
+**Pourquoi la réponse n'est plus un rang de 1 à 21.** J'ai refait les mesures sur une seconde micro-architecture,
+un Emerald Rapids au lieu d'un Cascade Lake. Parmi les 13 premiers langages, 17 paires sur 78 s'y inversent. Un test
+fixé d'avance montre que le bruit de mesure ne peut pas produire un tel désaccord (p ≤ 0,001) : l'ordre fin dépend
+de la machine. Une bonne part vient d'un seul noyau, K3, où le placement du code par l'éditeur de liens décide du
+temps sur le cœur le plus récent. La réponse a donc trois parties : des étages, trois quantités par langage, et des
+énoncés de mécanisme. Le score composite des versions précédentes n'est plus qu'une analyse de sensibilité.
+
+### 1. Quatre étages
+
+Une frontière n'est retenue que si elle tient sur les deux machines et dans au moins 95 % des 20 000 tirages de
+l'analyse globale, qui fait varier la méthode, les poids et les jugements. Il n'y a pas d'ordre à l'intérieur d'un
+étage.
+
+1. **Ada, C, C#, C++, C3, Chapel, D, Fortran, Go, Java, Julia, Mojo, Nim, Odin, Rust, Zig**
+2. **Haskell**
+3. **OCaml**
+4. **JavaScript, Lua, Python**
+
+Le premier étage est large, mais ce n'est pas une égalité. La règle ne coupe que là où toutes les paires de part et
+d'autre sont séparées. Or ces 16 langages forment une chaîne : chacun chevauche son voisin, selon la machine ou le
+poids donné au contrôle. Les deux bouts de la chaîne sont loin l'un de l'autre : plafond de 85 pour C, de 39 pour
+Go. Sur le plafond mesuré seul (hors plan), la même règle détache Go du premier étage, avec Haskell, et ordonne
+tout le bas : OCaml, puis JavaScript, Lua et Python. Le tableau suivant donne aussi les rangs que les mesures
+laissent possibles à chaque langage.
+
+### 2. Trois quantités par langage
+
+* **Plafond E** : le meilleur code que j'ai écrit pour la machine, rapporté au meilleur langage de chaque mesure
+  (0–100). Machine 1 avec son intervalle de confiance à 95 %, puis machine 3. K5 vient de la machine 3 dans les
+  deux colonnes.
+* **Code naturel D1** : le code qu'on écrit sans penser à la machine, rapporté au même meilleur temps (sur 100).
+  **Écart à son meilleur code** : le code naturel d'un langage rapporté à son propre meilleur code.
+* **Contrôle C** : l'inventaire des leviers qu'offre la chaîne livrée, selon les règles v2 et v1. C'est un
+  jugement, pas une mesure.
+* **Rangs possibles** (hors plan) : de 1 + le nombre de langages établis devant lui à 21 − le nombre de langages
+  établis derrière lui, une paire étant établie avec le critère des étages ; pour le composite, puis pour le
+  plafond seul.
+
+| Étage | Langage | Plafond E [IC 95 %] | E, machine 3 | Code naturel D1 [IC 95 %] | D1, machine 3 | Écart à son meilleur code | Contrôle C (v2 / v1) | Rangs possibles : composite ; plafond |
+|---|---|---|---|---|---|---|---|---|
+| 1 | **C** | 85,4 [82,5–88,6] | 59,8 | 19,1 [18,3–20,0] | 20,8 | 24 % | 88,7 / 76,3 | 1–5 ; 1–8 |
+| 1 | **C3** | 82,6 [80,4–85,8] | 70,4 | 19,0 [18,2–19,8] | 18,3 | 24 % | 73,1 / 74,4 | 1–9 ; 1–7 |
+| 1 | **Chapel** | 80,3 [78,0–83,4] | 59,2 | 18,5 [17,6–19,3] | 14,7 | 25 % | 56,6 / 59,1 | 4–13 ; 1–9 |
+| 1 | **Rust** | 79,7 [76,9–82,7] | 71,8 | 19,5 [18,6–20,4] | 17,7 | 25 % | 73,6 / 73,1 | 2–12 ; 1–8 |
+| 1 | **C++** | 78,8 [76,5–82,0] | 65,6 | 18,2 [17,3–19,0] | 18,9 | 24 % | 92,4 / 84,7 | 1–8 ; 1–10 |
+| 1 | **Odin** | 78,7 [76,1–81,7] | 54,9 | 21,9 [20,8–22,8] | 17,6 | 28 % | 82,5 / 81,8 | 1–9 ; 2–12 |
+| 1 | **D** | 74,8 [72,3–77,7] | 65,8 | 17,1 [16,2–17,9] | 17,0 | 25 % | 84,1 / 74,5 | 3–13 ; 2–12 |
+| 1 | **Ada** | 73,9 [71,0–76,8] | 61,8 | 14,1 [13,4–14,7] | 10,9 | 19 % | 76,2 / 70,3 | 3–12 ; 1–13 |
+| 1 | **Nim** | 73,0 [70,7–75,7] | 68,2 | 21,9 [21,0–22,9] | 20,0 | 33 % | 78,6 / 73,4 | 2–10 ; 3–12 |
+| 1 | **Zig** | 70,8 [68,4–73,6] | 50,1 | 22,0 [21,0–23,0] | 15,9 | 31 % | 87,2 / 82,0 | 1–10 ; 6–13 |
+| 1 | **Mojo** | 68,0 [66,0–70,4] | 58,1 | 10,7 [10,3–11,2] | 9,0 | 17 % | 62,7 / 58,7 | 9–14 ; 6–13 |
+| 1 | **Fortran** | 67,3 [65,1–69,8] | 45,0 | 18,0 [17,2–18,8] | 18,0 | 29 % | 60,1 / 53,6 | 7–14 ; 6–14 |
+| 1 | **Julia** | 66,7 [64,5–69,3] | 47,2 | 22,4 [21,5–23,4] | 19,1 | 36 % | 68,3 / 65,4 | 7–13 ; 8–15 |
+| 1 | **Java** | 57,7 [55,5–59,9] | 47,7 | 12,4 [11,9–12,9] | 9,7 | 24 % | 41,5 / 41,5 | 14–16 ; 12–15 |
+| 1 | **C#** | 56,3 [54,2–58,3] | 40,8 | 9,8 [9,4–10,2] | 8,3 | 18 % | 68,8 / 65,8 | 12–16 ; 13–15 |
+| 1 | **Go** | 38,6 [37,3–40,0] | 27,5 | 12,4 [11,9–13,0] | 6,3 | 32 % | 48,7 / 44,9 | 14–16 ; 16–17 |
+| 2 | **Haskell** | 37,1 [35,8–38,4] | 26,2 | 4,3 [4,1–4,4] | 2,8 | 13 % | 34,4 / 33,4 | 17 ; 16–17 |
+| 3 | **OCaml** | 19,9 [19,3–20,6] | 14,3 | 7,5 [7,2–7,8] | 5,8 | 40 % | 24,7 / 24,7 | 18 ; 18 |
+| 4 | **JavaScript** | 12,4 [12,0–12,8] | 8,3 | 5,0 [4,8–5,2] | 3,6 | 40 % | 11,6 / 11,6 | 19–20 ; 19 |
+| 4 | **Lua** | 1,2 [1,2–1,2] | 0,9 | 1,1 [1,1–1,2] | 0,9 | 77 % | 2,8 / 2,8 | 20–21 ; 20 |
+| 4 | **Python** | 0,5 [0,5–0,5] | 0,4 | 0,5 [0,5–0,5] | 0,4 | 82 % | 24,4 / 22,4 | 19–21 ; 21 |
+
+![Plafond et code naturel par langage, sur les deux machines](results/charts/v3_profiles.svg)
+
+**Lecture.**
+* Au plafond, sur la machine 1, C, C3, Chapel, Rust, C++ et Odin sont entre 79 et 85, avec des intervalles qui se
+  chevauchent. Sur la machine 3, Rust, C3, Nim, D et C++ mènent : leur boucle de K3 y est tombée sur une bonne
+  disposition, celles de C, Odin, Zig et Chapel sur une mauvaise (énoncé 2 ci-dessous).
+* Java et C# plafonnent vers 56–58 et Go à 39 : objets en références, pas de vectoriseur dans le JIT de .NET, pas
+  de SIMD stable en Go.
+* Même dans le premier étage, le code naturel ne tourne qu'à 10 à 22 % de la vitesse du meilleur code mesuré : la
+  *mechanical sympathy* se gagne en écrivant pour la machine, dans tous les langages. Julia, Zig, Odin et Nim ont
+  le meilleur code naturel. Haskell, Mojo, C# et Ada ont le code naturel le plus éloigné de leur propre meilleur
+  code (13 à 19 %).
+* Le contrôle, jugé, sépare surtout C++ (92), C (89), Zig (87), D (84) et Odin (82) de Chapel (57) et Java (42).
+  Il pèse lourd dans le composite, ce qui explique une partie de l'écart entre composite et plafond.
+
+### 3. Ce qui est établi, avec ses conditions
+
+Ce sont les résultats les plus solides de l'étude : chacun isole une cause, et dit sur quelle machine et avec quelle
+chaîne il vaut.
+1. **Le plafond mesuré se réplique d'une machine à l'autre, sauf sur K3** (diagnostic hors plan). Pour les 13
+   premiers langages, la corrélation de rang du plafond E entre Cascade Lake et Emerald Rapids vaut 0,61 avec K3,
+   et 0,97 sans K3. Les paires inversées passent de 22 à 5 sur 78. Retirer le noyau le plus discordant améliore
+   l'accord par construction ; ce qui rend le diagnostic probant, c'est l'ampleur du changement, et l'expérience de
+   l'énoncé 2, qui en établit la cause indépendamment.
+2. **Sur le cœur Raptor Cove (machine 3), l'écrivain unique est une loterie de placement pour le code de LLVM.**
+   J'ai lié le même source avec huit dispositions tirées au hasard par l'éditeur de liens (bourrage aléatoire entre
+   sections, lld 23), deux processus chacune. Compilé par clang, C fait 12 à 23 ms dans 3 dispositions sur 8, et
+   74 à 117 ms dans les 5 autres ; Rust fait 12 à 23 ms dans 4 dispositions, 74 à 90 ms dans les 4 autres. Les deux
+   processus d'une même disposition tombent toujours du même côté. Le code de GCC reste entre 11 et 24 ms dans les
+   huit dispositions. Dans la réplication, la boucle de Rust était tombée du bon côté (13 ms), celles de C et
+   d'Odin du mauvais (76 et 79 ms). Sur Cascade Lake, tous les langages étaient entre 58 et 70 ms.
+3. **K5 naturel : la FMA rallonge la réduction en ordre strict, sur Raptor Cove seulement.** clang (pour C),
+   flang, Chapel et Mojo fusionnent `s += a[i] * b[i]` en une FMA scalaire : 160 à 166 ms. GCC vectorise les
+   multiplications et garde la chaîne d'additions dans l'ordre : 77 à 87 ms, comme les langages qui ne fusionnent
+   pas. Sur ce cœur, une addition coûte 2 cycles et une FMA 4 (`tools/addfma.c`, `probes/k5_reduction`). Sur
+   Cascade Lake, où les deux coûtent 4 cycles, ces mêmes implémentations sont toutes entre 163 et 176 ms.
+4. **Go et Haskell n'ont que des écritures atomiques séquentiellement cohérentes** (`XCHG`). L'écrivain unique
+   y prend 358 et 337 ms, contre 58 à 70 ms pour les autres langages du premier étage (Cascade Lake).
+5. **Une particule de 64 octets** occupe 64 octets dans 14 langages, 78 en Java, 88 en C#, 96 en Haskell, 144 en
+   OCaml, 416 en JavaScript, 449 en Lua et 750 en Python. Parcourir une collection de références dans un ordre
+   permuté coûte 4,7 fois plus en C# (259 contre 55 ms, Cascade Lake).
+6. **Vectorisation automatique, mesurée sur le code exécuté** : aucune des deux boucles naturelles mesurées n'est
+   vectorisée en C#, Go, Mojo, Zig, Haskell, OCaml, JavaScript, Lua et Python. Le JIT de .NET ne vectorise rien,
+   même au niveau 1 avec PGO dynamique (`probes/csharp_jitvec_tiered`).
+7. **Le compilateur pèse autant que le langage sur certains noyaux.** Sur K8 (arène), le même code C est 2,2 à
+   2,7 fois plus rapide compilé par GCC que par clang ; le style de codage fait 20 à 30 % (machine 3).
+
+### 4. Le score composite, en analyse de sensibilité
+
+Avec les références fixes de la v3, le composite MS (35 % contrôle, 40 % plafond, 25 % code par défaut) range les
+langages ainsi : C 79,1 ; C++ 77,1 ; Odin 72,6 ; Zig 71,5 ; C3 71,1 ; Nim 70,5 ; D 70,0 ; Rust 69,4 ; Ada 68,0 ;
+Chapel 64,1 ; Julia 62,3 ; Fortran 60,9 ; Mojo 60,0 ; C# 54,8 ; Java 47,4 ; Go 43,1 ; Haskell 35,4 ; OCaml 24,7 ;
+JavaScript 14,7 ; Python 10,0 ; Lua 4,0. C'est un résumé sous un jeu de poids, pas un ordre établi.
+* Parmi les 13 premiers, le pilier de contrôle, jugé, explique 80 % de la variance du score (R²).
+* Sur la machine 3, le même calcul donne C++ 1er, C 2e, Rust 3e.
+* Le détail, dont l'analyse globale et les ensembles de rangs simultanés, est dans
+  [`results/report_v3.md`](results/report_v3.md).
+
+### 5. Réplication, variance, disposition du code
+
+* **Bruit ou interaction ?** J'ai simulé 2 000 fois les deux machines sans interaction entre langage et machine,
+  avec le bruit mesuré entre processus. Observé : 17 paires inversées parmi les 13 premiers ; sans interaction :
+  4 en médiane (5–95 % : 1 à 7). Sur les quatre statistiques du test, au plus une simulation sur 2 000 atteint le
+  désaccord observé (p ≤ 0,001) ; avec un bruit de la machine 3 doublé, p ≤ 0,004.
+* **D'où vient la variance.** Sur les 21 langages, le langage explique de 82 à 99 % de la variance de chaque mesure
+  commune aux deux machines, sauf K2 à 8 Mio, dominé par le bruit entre processus. Parmi les 13 premiers (hors
+  plan), l'interaction entre langage et machine domine K3 (97 %) et pèse sur K1 AoS, K7 naturel et K1 permuté
+  (38 à 52 %). Le bruit domine les mesures limitées par la bande passante, et le langage domine K4, K8, K6 Q1 et K9.
+* **Disposition du code.** Sur les 36 mesures de K1 à K9, changer de disposition ne fait pas plus que le bruit entre
+  processus (rapport F médian de 0,8 à 1,2 selon l'implémentation), sauf pour l'écrivain unique de K3 avec le code
+  de LLVM : facteur 6 à 7 entre dispositions extrêmes. Trois autres mesures montrent un effet modeste, à la limite
+  de la significativité sur 108 tests : K6 Q1 en 4 threads et K2 à 256 Kio en C compilé par GCC (× 1,7 et × 1,3
+  entre dispositions extrêmes), et K4 naturel en C compilé par clang (× 1,9), dont l'effet s'affaiblit sans les
+  tâches que mes propres calculs ont perturbées.
+* **Les intervalles** : avec des références fixes, le plafond E est centré dans son intervalle (position moyenne
+  0,46, contre 0,72 en v2), comme le code naturel D1 (0,50). Le composite MS reste un peu décentré (0,43) à cause
+  de D3, la queue de latence, dont le rééchantillonnage reste asymétrique, et de D2, plafonné à 1. Ces intervalles
+  ne valent que pour la machine 1 : la réplication montre que la machine pèse davantage que le bruit qu'ils
+  décrivent.
+
+### 6. Ce que la v3 ne règle pas
+
+* Deux machines Intel seulement, partagées et sans compteurs matériels : pas d'AMD ni d'ARM, et les mécanismes
+  restent des inférences, sauf là où une sonde ne change qu'une seule chose.
+* Deux ou trois processus par mesure hors K5 : les intervalles empruntent la variance des autres cellules du même
+  noyau, sous une hypothèse d'échangeabilité.
+* Des implémentations écrites par un seul auteur, un agent, en deux heures environ, sans relecture experte ni
+  entrées réservées ; une seule taille d'entrée par noyau, sauf K2.
+* Bibliothèque standard seule, `-march=native`, ni PGO ni LTO : ce sont des choix de construit, pas ceux de tous
+  les praticiens.
+* Aucun noyau d'E/S, de décompression, d'analyse syntaxique, de tri ou de jointure.
+
+Le détail est dans la section 7 et dans [`docs/AUDIT2_RESPONSE.md`](docs/AUDIT2_RESPONSE.md), section 6.
+
+<details>
+<summary><b>Réponse v2 du 29 octobre (avant le second audit), conservée telle quelle</b> : ses défauts sont discutés dans <code>docs/AUDIT2_RESPONSE.md</code></summary>
+
+**Réponse courte (v2).** J'ai mesuré moi-même 21 langages sur des VM Intel, avec neuf noyaux
 notés qui testent chacun un principe de la *mechanical sympathy*. Chaque implémentation doit rendre le même
 résultat, au bit près pour les entiers ; tout temps inférieur à la borne physique de la machine est rejeté. Le
 score combine trois piliers : le **contrôle** offert (C, 35 %), l'**efficacité plafond** mesurée (E, 40 %) et la
@@ -170,6 +336,8 @@ Rapids), avec un seul processus par mesure (K5 garde ses 9 processus).
 * K10 et la queue de latence en boucle fermée.
 
 Les limites et ce qui reste à faire sont listés dans la section 7 et dans `docs/AUDIT_RESPONSE.md`.
+
+</details>
 
 <details>
 <summary><b>Réponse v1 du 28 octobre (analyse pré-enregistrée), conservée telle quelle</b> : ses défauts sont discutés dans <code>docs/AUDIT_RESPONSE.md</code></summary>
@@ -1363,8 +1531,8 @@ l'ordre à l'intérieur des groupes 1 et 2. On peut dire que C++, C et Odin inca
 * **Analyse v3 (29 octobre) : ce qu'elle établit comme menaces, et ce qu'elle ajoute.**
   * L'ordre fin du premier groupe dépend de la machine, au-delà du bruit de mesure (test fixé d'avance,
     p < 0,001). Les intervalles de confiance ne décrivent que le bruit sur une machine.
-  * Sur la machine 3, K3 dépend du placement du code par l'éditeur de liens, d'un facteur 5 à 7 pour le code de
-    LLVM. Aucun autre noyau n'a été randomisé de la sorte, et la disposition n'est tirée au hasard que dans
+  * Sur la machine 3, K3 dépend du placement du code par l'éditeur de liens : facteur 6 à 7 entre dispositions
+    extrêmes pour le code de LLVM. Aucun autre noyau n'a été randomisé de la sorte, et la disposition n'est tirée au hasard que dans
     l'expérience de la v3, pour trois implémentations.
   * Les intervalles de la v3 empruntent la variance entre processus aux autres cellules du même noyau et de la
     même classe d'implémentation : ils supposent ces résidus échangeables.

@@ -12,8 +12,10 @@ quelles.*
 
 * **L'audit a raison sur l'essentiel : l'ordre fin du premier groupe n'est pas une propriété des langages.** La v3
   va plus loin, avec un test fixé d'avance. Le désaccord entre les deux machines dépasse ce que le bruit de mesure
-  peut produire : p < 0,001 pour les quatre statistiques, même en doublant le bruit supposé de la machine 3. C'est
-  une interaction entre langage et machine, pas seulement du bruit.
+  peut produire : p ≤ 0,001 pour les quatre statistiques, et p ≤ 0,004 en doublant le bruit supposé de la
+  machine 3. C'est une interaction entre langage et machine, pas seulement du bruit. Une grande part en vient d'un
+  seul noyau, K3, que l'expérience de disposition explique : sur le cœur de la machine 3, le temps de l'écrivain
+  unique compilé par LLVM dépend du placement du code par l'éditeur de liens.
 * **Je retrouve tous ses chiffres**, à l'arrondi ou à l'erreur de Monte-Carlo près (section 2). Deux écarts
   mineurs tiennent à des choix de calcul et ne changent rien.
 * **Une de ses explications est fausse, et la mienne aussi.** Ni le réglage `avoid_fma256_chains` de GCC (son
@@ -69,13 +71,13 @@ quelles.*
 | Critique | Ce que fait la v3 | Ce qui en sort |
 |---|---|---|
 | L'ordre du premier groupe n'est pas établi (4.3.4, 4.6) | Des étages, selon une règle fixée d'avance (plan, section 3) : une frontière n'est retenue que si aucune paire de part et d'autre n'est inversée sur la machine 3 et si chaque paire est ordonnée dans le même sens dans au moins 95 % des tirages de l'analyse globale. Pas d'ordre dans un étage | Quatre étages ; 16 langages dans le premier (section 7) |
-| Bruit ou différence de machine ? (4.3.4) | Test fixé d'avance : simulation de la machine 1 et de la machine 3 sans interaction, avec le bruit mesuré entre processus, 2 000 fois | Le désaccord observé est hors de la distribution nulle : p < 0,001 pour les quatre statistiques, y compris avec un bruit de la machine 3 multiplié par 1,5 ou 2 |
-| Frontière recalculée à chaque tirage : biais (4.3.1) | Références fixes, calculées une fois sur les estimations ponctuelles | Position moyenne de E dans son intervalle : 0,46 (C 0,50), contre 0,72 (C 0,94) en v2. MS reste un peu décentré, 0,43 en moyenne : ⟨cause⟩ |
-| Deux ou trois processus ne permettent pas d'estimer la variance entre processus (4.3.2) | Bootstrap à résidus regroupés : la variance entre processus vient de toutes les cellules d'un même noyau et d'une même classe (AOT, JIT, interprète) | Intervalles plus étroits qu'en v2 (largeur médiane de E : 4,8 points contre 6,4), parce que la frontière n'ajoute plus son bruit. Ils supposent des résidus échangeables dans un réservoir, et ne valent que pour la machine 1 : le test de réplication montre que la machine compte davantage |
+| Bruit ou différence de machine ? (4.3.4) | Test fixé d'avance : simulation de la machine 1 et de la machine 3 sans interaction, avec le bruit mesuré entre processus, 2 000 fois | Le désaccord observé est hors de la distribution nulle : p ≤ 0,001 pour les quatre statistiques ; p ≤ 0,004 avec un bruit de la machine 3 doublé |
+| Frontière recalculée à chaque tirage : biais (4.3.1) | Références fixes, calculées une fois sur les estimations ponctuelles | Position moyenne de E dans son intervalle : 0,46 (C 0,48), contre 0,72 (C 0,94) en v2. MS reste un peu décentré, 0,43 en moyenne, à cause de D3 (latences, 0,38) et de D2 (plafonné à 1) ; le code naturel D1 est centré (0,50) |
+| Deux ou trois processus ne permettent pas d'estimer la variance entre processus (4.3.2) | Bootstrap à résidus regroupés : la variance entre processus vient de toutes les cellules d'un même noyau et d'une même classe (AOT, JIT, interprète) | Intervalles plus étroits qu'en v2 (largeur médiane de E : 4,7 points contre 6,4), parce que la frontière n'ajoute plus son bruit. Ils supposent des résidus échangeables dans un réservoir, et ne valent que pour la machine 1 : le test de réplication montre que la machine compte davantage |
 | Ensembles de Mogstad sans garantie (4.3.3) | Recalculés sur ce bootstrap, publiés au second rang | Même condition de validité que le bootstrap |
 | Coupure du « régime établi » (4.2.3) | Supprimée. Chaque processus est classé (plat, accélération, ralentissement), comme chez Barrett et al. | La coupure ne déplaçait déjà aucun rang en v2 (décomposition v2). En v3, l'estimateur de la v2 appliqué aux mêmes données sans coupure ne fait qu'échanger Nim et D. Processus AOT : 1 548 plats, 115 accélérations, 88 ralentissements ; JIT : 519, 36, 46 ; interprètes : 218, 3, 1 |
 | Décomposition de la variance (6, P0 3) | Pour chaque mesure présente sur les deux machines : part du langage, de l'interaction langage × machine et du processus | Sur les 21 langages, le langage domine (82 à 99 %) sauf K2 à 8 Mio (89 % de bruit entre processus). Dans les 13 premiers (hors plan), l'interaction domine sur K3 `sw_padded` (97 %) et pèse sur K1 AoS (52 %), K7 naturel (41 %), K1 permuté (38 %) ; le bruit domine sur les mesures limitées par la bande passante |
-| Disposition du code non contrôlée (4.2.4) | Expérience : C (clang), C (gcc) et Rust, huit dispositions chacune (`--randomize-section-padding` de lld), deux processus par disposition, K1 à K9 | ⟨résultats⟩ |
+| Disposition du code non contrôlée (4.2.4) | Expérience : C (clang), C (gcc) et Rust, huit dispositions chacune (`--randomize-section-padding` de lld), deux processus par disposition, K1 à K9 | L'écrivain unique de K3 compilé par LLVM passe de 12–23 ms à 74–117 ms selon la disposition ; le code de GCC reste rapide dans les huit. Ailleurs, la disposition ne fait pas plus que le bruit entre processus (F médian de 0,8 à 1,2), sauf trois mesures à effet modeste (section 7) |
 | Score composite, pilier C décisif (4.3.5, 4.3.6, P0 1) | Trois quantités publiées séparément : plafond E (avec la part de la borne physique), code naturel D1 (et l'écart du langage à son propre meilleur code), contrôle C sous les règles v1 et v2. Le composite n'est plus qu'une sensibilité | Section 7 |
 | Le score mêle deux micro-architectures (4.2.6) | E et D1 publiés aussi pour la machine 3 seule ; Cascade Lake seul en sensibilité (hors plan) | Section 7 |
 
@@ -92,6 +94,12 @@ quelles.*
 7. **Une phrase périmée du README** : « même en SIMD explicite, K5 plafonne à 17 ms » (section 5 du README),
    alors que la remesure v2 donne 4,3 ms une fois le JIT stabilisé. Corrigée.
 8. **L'heure du plan v3** : j'avais écrit « vers 16:30 » ; il a été poussé à 15:54. Corrigé dans le plan.
+9. **Une analyse v3 qui n'était pas reproductible au bit près.** Le code parcourait un ensemble Python, dont l'ordre
+   change d'un processus à l'autre : l'ordre des résidus dans les réservoirs du bootstrap, donc les tirages, en
+   dépendaient. Les deux premiers calculs complets différaient au niveau du bruit de Monte-Carlo (bornes d'IC à
+   0,2 point près, deux ensembles simultanés élargis d'un rang ; mêmes étages, même ordre). Corrigé : deux calculs
+   avec des graines de hachage différentes donnent des sorties identiques. Les chiffres publiés sont ceux du
+   calcul corrigé.
 
 ## 6. Ce que je ne fais pas, et pourquoi
 
@@ -118,22 +126,36 @@ donne la lecture.
 4. JavaScript, Lua, Python
 
 L'audit proposait quatre étages un peu différents (§ 5) : il séparait C#, Java et Go des 13 premiers, et mettait
-Haskell avec OCaml. La règle fixée d'avance ne retient pas la première frontière. Dans les tirages de l'analyse
-globale où le pilier de contrôle pèse lourd, C# (contrôle 68,8) passe devant Fortran, Chapel ou Mojo, et Java et
-Go chevauchent C#. Elle sépare en revanche Haskell d'OCaml. ⟨étages hors plan⟩
+Haskell avec OCaml. La règle fixée d'avance ne retient pas la première frontière : C# a plus de contrôle (68,8) que
+Mojo (62,7) et Fortran (60,1), mais un plafond et un code naturel plus bas ; selon les poids tirés, il passe devant
+eux dans 9 % des tirages de l'analyse globale. Et C# ne précède Java que dans 84 % des tirages, Java Go dans 68 %. La règle sépare en revanche Go de Haskell (98 %) et Haskell d'OCaml
+(98 %). Avec la même règle sur une seule quantité mesurée (hors plan) :
+* plafond E : {Ada, C, C#, C++, C3, Chapel, D, Fortran, Java, Julia, Mojo, Nim, Odin, Rust, Zig} > {Go, Haskell} >
+  OCaml > JavaScript > Lua > Python ;
+* code naturel D1 : {C, C++, C3, Chapel, D, Fortran, Julia, Nim, Odin, Rust, Zig} > Ada > {C#, Go, Java, Mojo} >
+  OCaml > JavaScript > Haskell > Lua > Python.
+
+Les rangs que les paires établies laissent possibles à chaque langage sont dans le README (tableau de la section 2)
+et dans `results/report_v3.md`.
 
 **Réplication : bruit ou interaction ?** 2 000 simulations sans interaction, avec le bruit mesuré entre processus.
 
 | Statistique | Observée | Sans interaction : médiane [5–95 %] | p |
 |---|---|---|---|
-| Spearman, 21 langages | 0,95 | 0,99 [0,98–1,00] | < 0,001 |
-| Spearman, 13 premiers | 0,78 | 0,97 [0,93–0,99] | < 0,001 |
-| Spearman, 9 premiers | 0,43 | 0,93 [0,80–0,98] | < 0,001 |
-| Paires inversées parmi les 13 premiers | 17 | 3 [1–7] | < 0,001 |
+| Spearman, 21 langages | 0,95 | 0,99 [0,98–1,00] | < 0,0005 (aucune sur 2 000) |
+| Spearman, 13 premiers | 0,78 | 0,97 [0,93–0,99] | < 0,0005 |
+| Spearman, 9 premiers | 0,43 | 0,93 [0,82–0,98] | 0,0005 (une sur 2 000) |
+| Paires inversées parmi les 13 premiers | 17 | 4 [1–7] | < 0,0005 |
 
-Aucune simulation n'atteint le désaccord observé, ni avec le bruit de la machine 3 multiplié par 1,5 ou 2 (hors
-plan). L'estimateur v3 rapproche un peu les deux machines (17 paires inversées au lieu de 21 en v2), sans changer la
-conclusion. ⟨K3⟩
+Hors plan, avec le bruit de la machine 3 multiplié par 1,5, aucune des 500 simulations n'atteint le désaccord
+observé ; multiplié par 2, une ou deux sur 500 (p ≤ 0,004). L'estimateur v3 rapproche un peu les deux machines
+(17 paires inversées au lieu de 21 en v2), sans changer la conclusion.
+
+Une grande part du désaccord vient de K3. Sans ce noyau (hors plan), la corrélation de rang du plafond E entre les
+machines passe de 0,61 à 0,97 sur les 13 premiers, de −0,07 à 0,95 sur les 9 premiers, et les paires inversées de
+22 à 5 sur 78. Pour le composite, de 0,78 à 0,85, et de 17 à 12 paires : le reste tient à D, puisque C est le même
+sur les deux machines et que E, sans K3, s'y réplique presque parfaitement. Retirer le noyau le plus discordant
+améliore l'accord par construction ; c'est l'expérience de disposition qui en établit la cause.
 
 **Décomposition de la variance** (part de chaque source, mesures présentes sur les deux machines). Sur les 21
 langages, le langage domine partout (82 à 99 %), sauf K2 à 8 Mio, où le bruit entre processus fait 89 %. Restreinte
@@ -144,6 +166,24 @@ aux 13 premiers (hors plan), elle change de visage :
   8 Mio (98 et 100 %), K6 Q6 `tuned` et naturel (90 et 80 %) ;
 * le langage domine K4 (91 à 92 %), K8 (92 à 94 %), K6 Q1 (76 à 90 %) et K9 naturel (95 %).
 
-**Disposition du code.** ⟨résultats de l'expérience⟩
+**Disposition du code** (C compilé par clang et par GCC, Rust ; huit dispositions, deux processus chacune, K1 à
+K9, sur un hôte du modèle de la machine 3).
+* **K3, écrivain unique** : pour C compilé par clang, 3 dispositions sur 8 donnent 12 à 23 ms et les 5 autres 74 à
+  117 ms ; pour Rust, 4 et 4 (12 à 23 ms, 74 à 90 ms). Les deux processus d'une même disposition tombent toujours
+  du même côté : c'est le binaire qui décide, pas l'état de l'hôte. Le code de GCC reste entre 11 et 24 ms dans les
+  huit dispositions. Rapport entre les moyennes extrêmes : 6,1 (C, clang) et 6,9 (Rust) ; test par permutation
+  des graines, p = 0,006 et 0,0015 (hors plan ; avec deux processus par disposition, le test ne peut guère
+  descendre plus bas).
+* **Ailleurs**, changer de disposition ne fait pas plus que le bruit entre processus : rapport F médian de 0,97
+  (C, clang), 1,15 (C, GCC) et 0,82 (Rust). Sur 108 couples (implémentation, mesure), 7 ont p < 0,01, dont 4 pour
+  K3 (`sw_padded` et `sw_packed`). Les 3 autres ont un effet modeste : K6 Q1 en 4 threads et K2 à 256 Kio en C
+  compilé par GCC (× 1,7 et × 1,3 entre dispositions extrêmes), K4 naturel en C compilé par clang (× 1,9). Celui
+  de K4 s'affaiblit sans les tâches perturbées par mes calculs (F de 5,8 à 2,7).
+* **Conséquence** : dans la réplication, Rust, Nim, Ada, C3, Mojo, D et C++ ont tiré une bonne disposition pour
+  K3 (13 à 19 ms), C, C#, Chapel, Odin, Fortran, Zig, Java et Julia une mauvaise (76 à 82 ms). L'ordre fin du haut
+  du classement sur la machine 3 en dépend.
 
-**Diagnostic des intervalles.** ⟨positions par composante⟩
+**Diagnostic des intervalles** (position de l'estimation dans son intervalle à 95 %, idéalement 0,5). E : 0,46 en
+moyenne (C 0,48) ; D1 : 0,50 ; MS : 0,43 (C 0,24). L'asymétrie de MS vient de D3, la queue de latence (0,38 ; C
+0,13), dont le bootstrap hiérarchique reste asymétrique avec deux ou trois processus, et de D2, plafonné à 1
+(0,81). Pour C, elle décale l'intervalle de MS d'environ 1,5 point vers le haut.

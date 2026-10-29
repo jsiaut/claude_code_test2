@@ -57,7 +57,7 @@ def build_pools(data, langs, keys):
     """Réservoirs de résidus par (noyau, classe), fusionnés avec le noyau s'ils ont moins de 20 résidus."""
     pools, kpool = defaultdict(list), defaultdict(list)
     for l in langs:
-        for key in keys:
+        for key in sorted(keys):  # ordre fixe : l'ordre d'un ensemble change d'un processus à l'autre
             procs = data.get(l, {}).get(key)
             if not procs or len(procs) < 2:
                 continue
@@ -338,7 +338,7 @@ def main():
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
     langs = [l for l in RANKED + list(ANNEX) if l in data]
-    keys = needed_keys()
+    keys = sorted(needed_keys())  # liste triée : les tirages ne dépendent plus du hachage des chaînes
     pools = build_pools(data, langs, keys)
 
     # ---------------- configuration principale : références fixes, résidus regroupés

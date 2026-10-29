@@ -188,6 +188,22 @@ fusionner les passes répétées (355 To/s).
   mécanisme probable est un raccourci matériel de la dépendance écriture-lecture, qui ne s'applique que selon le
   placement du code ; sans compteurs matériels, je ne peux pas le confirmer. Sur Cascade Lake, tous les langages
   étaient entre 58 et 70 ms. C'est le biais de mesure de Mytkowicz et al. (ASPLOS 2009) à l'échelle d'un facteur 7.
+* **Disposition du code, expérience de la v3** (`tools/layout_v3.py`, `results/raw_v3`, plan
+  `docs/ANALYSIS_V3.md`, section 6). Même source, huit dispositions tirées par lld 23 (`--randomize-section-padding`,
+  sections par fonction), deux processus par disposition, K1 à K9, sur un hôte du modèle de la machine 3.
+  * K3, écrivain unique : C compilé par clang fait 12 à 23 ms dans 3 dispositions sur 8 et 74 à 117 ms dans les 5
+    autres ; Rust 12 à 23 ms dans 4 dispositions et 74 à 90 ms dans les 4 autres. Les deux processus d'une même
+    disposition tombent toujours du même côté. Le code de GCC reste entre 11 et 24 ms dans les huit dispositions.
+  * Ailleurs, la disposition ne fait pas plus que le bruit entre processus (rapport F médian de 0,8 à 1,2), sauf
+    trois effets modestes : K6 Q1 en 4 threads et K2 à 256 Kio en C compilé par GCC (× 1,7 et × 1,3 entre
+    dispositions extrêmes), K4 naturel en C compilé par clang (× 1,9, effet qui s'affaiblit sans les tâches
+    perturbées par mes calculs).
+* **Sans K3, le plafond se réplique entre les deux micro-architectures** (diagnostic hors plan,
+  `results/report_v3.md`). Pour les 13 premiers langages, la corrélation de rang du plafond E entre Cascade Lake et
+  Emerald Rapids passe de 0,61 à 0,97 quand on retire K3, et les paires inversées de 22 à 5 sur 78. Dans la
+  réplication, la boucle de K3 était tombée sur une bonne disposition pour Rust, Nim, Ada, C3, Mojo, D et C++ (13 à
+  19 ms), sur une mauvaise pour C, C#, Chapel, Odin, Fortran, Zig, Java et Julia (76 à 82 ms) ; sur Cascade Lake,
+  tous étaient entre 58 et 70 ms.
 * **Le témoin d'environnement varie autant que les épisodes qu'il devrait signaler.** Douze
   lancements consécutifs, avant toute mesure : débit FMA de 112 à 226 Gflop/s, latence à 2 Mio de
   36 à 64 ns. Il reste descriptif (règle fixée dans `docs/ANALYSIS_V2.md`).

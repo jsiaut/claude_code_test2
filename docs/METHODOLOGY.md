@@ -405,3 +405,15 @@ Robustesse :
   * pour la disposition, un test par permutation des graines et une sensibilité sans les tâches perturbées.
 
   Ils ne consomment pas l'aléa des calculs prévus par le plan, dont les résultats restent identiques.
+* 2026-10-29, 16:44 : **expérience de disposition terminée** : 48 tâches, 1 728 processus, tous valides, tous
+  avec leur graine. Pendant qu'elle tournait, j'ai retiré du suivi Git les fichiers qu'elle écrivait, comme pour
+  les mesures v2 ; ils reviennent complets avec le calcul final.
+* 2026-10-29, 16:45 : **calcul final de l'analyse v3, et une erreur de reproductibilité.** Comparé au calcul de
+  16:04, il donnait les mêmes étages et le même ordre, mais des intervalles un peu différents (jusqu'à 0,2 point).
+  Cause : le code parcourait un ensemble Python, dont l'ordre d'itération change d'un processus à l'autre (hachage
+  aléatoire des chaînes) ; l'ordre des résidus dans les réservoirs du bootstrap, donc les tirages, en dépendaient.
+  Correction : clés triées. Deux calculs avec `PYTHONHASHSEED=1` et `PYTHONHASHSEED=2` donnent désormais des
+  sorties identiques, octet pour octet. Par rapport aux calculs d'avant la correction, les écarts restent au niveau
+  du bruit de Monte-Carlo : bornes d'IC à 0,2 point près, ensembles simultanés de Julia et d'Ada élargis d'un rang,
+  p du test de réplication sur les 9 premiers de 0 à 0,0005. Les chiffres publiés sont ceux du calcul corrigé. Le
+  graphique v3 a été rendu par Chromium après la fin de l'expérience.
