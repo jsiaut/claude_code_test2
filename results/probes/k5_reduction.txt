@@ -1,0 +1,8 @@
+gcc -std=c23 : FMA 0 ; boucle : vmulps vaddss vaddss ; 78.3 ms (s=6.76559e+06)
+gcc -std=gnu23 : FMA 3 ; boucle : vmulps vaddss vaddss ; 73.3 ms (s=6.76559e+06)
+gcc -std=gnu23 --param avoid-fma-max-bits=0 : FMA 3 ; boucle : vmulps vaddss vaddss ; 73.4 ms (s=6.76559e+06)
+clang -std=c23 : FMA 9 ; boucle : vfmadd231ss vfmadd231ss vfmadd132ss ; 158.6 ms (s=6.76559e+06)
+clang -std=c23 -ffp-contract=off : FMA 0 ; boucle : vmulss vaddss vmulss ; 82.2 ms (s=6.76559e+06)
+clang -std=c23 -mllvm -force-ordered-reductions : FMA 1 ; boucle : vmulps vmulps vmulps ; 80.3 ms (s=6.76559e+06)
+g++ -std=c++26 : FMA 3 ; boucle : vmulps vaddss vaddss 
+gfortran : FMA 3 ; boucle : vmulps vaddss vaddss 

@@ -1,0 +1,633 @@
+; Assembly listing for method P:SumInt(int[]):int (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 64
+       lea      rbp, [rsp+0x40]
+       xor      eax, eax
+       mov      dword ptr [rbp-0x34], eax
+       mov      dword ptr [rbp-0x38], eax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x0016
+       mov      dword ptr [rbp-0x40], 0x3E8
+       xor      eax, eax
+       mov      dword ptr [rbp-0x34], eax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x38], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x0029
+       mov      rdi, 0x7FEDB9358D38
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x30]
+       mov      ecx, dword ptr [rbp-0x38]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+4*rdx+0x10]
+       mov      eax, dword ptr [rax]
+       add      eax, dword ptr [rbp-0x34]
+       mov      dword ptr [rbp-0x34], eax
+       mov      eax, dword ptr [rbp-0x38]
+       inc      eax
+       mov      dword ptr [rbp-0x38], eax
+ 
+G_M000_IG04:                ;; offset=0x005B
+       mov      eax, dword ptr [rbp-0x40]
+       dec      eax
+       mov      dword ptr [rbp-0x40], eax
+       cmp      dword ptr [rbp-0x40], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0069
+       lea      rdi, [rbp-0x40]
+       mov      esi, 16
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x0077
+       mov      rax, gword ptr [rbp-0x30]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x38]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7FEDB9358D3C
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      eax, dword ptr [rbp-0x34]
+ 
+G_M000_IG07:                ;; offset=0x0095
+       add      rsp, 64
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x009B
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 161
+
+; Assembly listing for method P:AddF(float[],float[],float[]) (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       mov      gword ptr [rbp-0x30], rdi
+       mov      gword ptr [rbp-0x38], rsi
+       mov      gword ptr [rbp-0x40], rdx
+ 
+G_M000_IG02:                ;; offset=0x001B
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x0029
+       mov      rdi, 0x7FEDB9358D70
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x30]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+4*rdx+0x10]
+       vmovss   xmm0, dword ptr [rax]
+       mov      rax, gword ptr [rbp-0x38]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+4*rdx+0x10]
+       vaddss   xmm0, xmm0, dword ptr [rax]
+       vmovss   dword ptr [rbp-0x48], xmm0
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+4*rdx+0x10]
+       vmovss   xmm0, dword ptr [rbp-0x48]
+       vmovss   dword ptr [rax], xmm0
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0093
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x00A1
+       lea      rdi, [rbp-0x50]
+       mov      esi, 18
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x00AF
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       G_M000_IG03
+       mov      rdi, 0x7FEDB9358D74
+       call     CORINFO_HELP_COUNTPROFILE32
+       nop      
+ 
+G_M000_IG07:                ;; offset=0x00CF
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00D5
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 219
+
+; Assembly listing for method P:CondSum(byte[]):long (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      G_M000_IG09
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       cmp      dword ptr [rbp-0x48], 128
+       jl       SHORT G_M000_IG04
+       mov      rdi, 0x7FEDB9358DA8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      eax, dword ptr [rbp-0x48]
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+ 
+G_M000_IG04:                ;; offset=0x007A
+       mov      rdi, 0x7FEDB9358DAC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG05:                ;; offset=0x0091
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG07
+ 
+G_M000_IG06:                ;; offset=0x009F
+       lea      rdi, [rbp-0x50]
+       mov      esi, 30
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG07:                ;; offset=0x00AD
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7FEDB9358DB0
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG08:                ;; offset=0x00CC
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG09:                ;; offset=0x00D2
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 216
+
+; Assembly listing for method P:CondSum(byte[]):long (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      G_M000_IG09
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       cmp      dword ptr [rbp-0x48], 128
+       jl       SHORT G_M000_IG04
+       mov      rdi, 0x7FEDB9358DA8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      eax, dword ptr [rbp-0x48]
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+ 
+G_M000_IG04:                ;; offset=0x007A
+       mov      rdi, 0x7FEDB9358DAC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG05:                ;; offset=0x0091
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG07
+ 
+G_M000_IG06:                ;; offset=0x009F
+       lea      rdi, [rbp-0x50]
+       mov      esi, 30
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG07:                ;; offset=0x00AD
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7FEDB9358DB0
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG08:                ;; offset=0x00CC
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG09:                ;; offset=0x00D2
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 216
+
+; Assembly listing for method P:SumInt(int[]):int (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 64
+       lea      rbp, [rsp+0x40]
+       xor      eax, eax
+       mov      dword ptr [rbp-0x34], eax
+       mov      dword ptr [rbp-0x38], eax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x0016
+       mov      dword ptr [rbp-0x40], 0x3E8
+       xor      eax, eax
+       mov      dword ptr [rbp-0x34], eax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x38], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x0029
+       mov      rdi, 0x7FEDB9358D38
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x30]
+       mov      ecx, dword ptr [rbp-0x38]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+4*rdx+0x10]
+       mov      eax, dword ptr [rax]
+       add      eax, dword ptr [rbp-0x34]
+       mov      dword ptr [rbp-0x34], eax
+       mov      eax, dword ptr [rbp-0x38]
+       inc      eax
+       mov      dword ptr [rbp-0x38], eax
+ 
+G_M000_IG04:                ;; offset=0x005B
+       mov      eax, dword ptr [rbp-0x40]
+       dec      eax
+       mov      dword ptr [rbp-0x40], eax
+       cmp      dword ptr [rbp-0x40], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0069
+       lea      rdi, [rbp-0x40]
+       mov      esi, 16
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x0077
+       mov      rax, gword ptr [rbp-0x30]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x38]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7FEDB9358D3C
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      eax, dword ptr [rbp-0x34]
+ 
+G_M000_IG07:                ;; offset=0x0095
+       add      rsp, 64
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x009B
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 161
+
+; Assembly listing for method P:AddF(float[],float[],float[]) (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       mov      gword ptr [rbp-0x30], rdi
+       mov      gword ptr [rbp-0x38], rsi
+       mov      gword ptr [rbp-0x40], rdx
+ 
+G_M000_IG02:                ;; offset=0x001B
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x0029
+       mov      rdi, 0x7FEDB9358D70
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x30]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+4*rdx+0x10]
+       vmovss   xmm0, dword ptr [rax]
+       mov      rax, gword ptr [rbp-0x38]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+4*rdx+0x10]
+       vaddss   xmm0, xmm0, dword ptr [rax]
+       vmovss   dword ptr [rbp-0x48], xmm0
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+4*rdx+0x10]
+       vmovss   xmm0, dword ptr [rbp-0x48]
+       vmovss   dword ptr [rax], xmm0
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0093
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x00A1
+       lea      rdi, [rbp-0x50]
+       mov      esi, 18
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x00AF
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       G_M000_IG03
+       mov      rdi, 0x7FEDB9358D74
+       call     CORINFO_HELP_COUNTPROFILE32
+       nop      
+ 
+G_M000_IG07:                ;; offset=0x00CF
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00D5
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 219
+
+; Assembly listing for method P:CondSum(byte[]):long (Tier1)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1 code
+; optimized code
+; optimized using Dynamic PGO
+; rbp based frame
+; fully interruptible
+; with Dynamic PGO: fgCalledCount is 36480
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG05
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       cmp      esi, 128
+       jge      SHORT G_M000_IG06
+ 
+G_M000_IG04:                ;; offset=0x001E
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG05:                ;; offset=0x0024
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0026
+       mov      esi, esi
+       add      rax, rsi
+       jmp      SHORT G_M000_IG04
+ 
+; Total bytes of code 45
+
+; Assembly listing for method P:SumInt(int[]):int (Tier1)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1 code
+; optimized code
+; optimized using Dynamic PGO
+; rbp based frame
+; fully interruptible
+; with Dynamic PGO: fgCalledCount is 36464
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       mov      ecx, dword ptr [rdi+0x08]
+       test     ecx, ecx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x000D
+       add      rdi, 16
+       align    [0 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0011
+       add      eax, dword ptr [rdi]
+       add      rdi, 4
+       dec      ecx
+       jne      SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x001B
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 29
+
+; Assembly listing for method P:AddF(float[],float[],float[]) (Tier1)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1 code
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 36168
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       mov      ecx, dword ptr [rdx+0x08]
+       test     ecx, ecx
+       jle      SHORT G_M000_IG09
+ 
+G_M000_IG03:                ;; offset=0x000D
+       test     rdi, rdi
+       je       SHORT G_M000_IG10
+ 
+G_M000_IG04:                ;; offset=0x0012
+       test     rsi, rsi
+       je       SHORT G_M000_IG10
+ 
+G_M000_IG05:                ;; offset=0x0017
+       mov      r8d, dword ptr [rdi+0x08]
+       cmp      r8d, ecx
+       jl       SHORT G_M000_IG10
+ 
+G_M000_IG06:                ;; offset=0x0020
+       cmp      dword ptr [rsi+0x08], ecx
+       jl       SHORT G_M000_IG10
+ 
+G_M000_IG07:                ;; offset=0x0025
+       mov      r8d, 16
+       align    [5 bytes for IG08]
+ 
+G_M000_IG08:                ;; offset=0x0030
+       vmovss   xmm0, dword ptr [rdi+r8]
+       vaddss   xmm0, xmm0, dword ptr [rsi+r8]
+       vmovss   dword ptr [rdx+r8], xmm0
+       add      r8, 4
+       dec      ecx
+       jne      SHORT G_M000_IG08
+ 
+G_M000_IG09:                ;; offset=0x004A
+       pop      rbp
+       ret      
+ 
+G_M000_IG10:                ;; offset=0x004C
+       mov      r8d, dword ptr [rdi+0x08]
+       align    [0 bytes for IG11]
+ 
+G_M000_IG11:                ;; offset=0x0050
+       cmp      eax, r8d
+       jae      SHORT G_M000_IG12
+       mov      r9d, eax
+       vmovss   xmm0, dword ptr [rdi+4*r9+0x10]
+       cmp      eax, dword ptr [rsi+0x08]
+       jae      SHORT G_M000_IG12
+       vaddss   xmm0, xmm0, dword ptr [rsi+4*r9+0x10]
+       vmovss   dword ptr [rdx+4*r9+0x10], xmm0
+       inc      eax
+       cmp      ecx, eax
+       jg       SHORT G_M000_IG11
+       jmp      SHORT G_M000_IG09
+ 
+G_M000_IG12:                ;; offset=0x007A
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 128
+

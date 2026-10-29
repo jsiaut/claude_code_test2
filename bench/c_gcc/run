@@ -1,2 +1,3 @@
 #!/bin/sh
-exec "$(dirname "$0")/ms" "$@"
+# MS_BIN : binaire de remplacement (expérience de disposition du code, docs/ANALYSIS_V3.md, section 6)
+exec "${MS_BIN:-$(dirname "$0")/ms}" "$@"
