@@ -1,0 +1,3 @@
+flang-23: warning: argument unused during compilation: '-mprefer-vector-width=512' [-Wunused-command-line-argument]
+warning: OpenMP support for version 50 in flang is still incomplete [-Wexperimental-option]
+warning: OpenMP support for version 50 in flang is still incomplete [-Wexperimental-option]

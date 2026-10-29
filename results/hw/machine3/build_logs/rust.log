@@ -1,0 +1,10 @@
+warning: constant `N1` is never used
+  --> ms.rs:64:7
+   |
+64 | const N1: usize = 1 << 22;
+   |       ^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+

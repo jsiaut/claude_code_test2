@@ -1,0 +1,85 @@
+ 304:         int[<16>] sd = ld32(&c.sd[i]);
+ 305:         int[<16>] d = ld8(&c.d[i]);
+ 306:         int[<16>] q = ld8(&c.q[i]);
+ 307:         bool[<16>] m = $$veccompge(sd, (int[<16>])8766) & $$veccomplt(sd, (int[<16>])9131) & $$veccompge(d, (i ...
+                             ^~~~~~~~~~~
+/home/user/claude_code_test2/bench/c3/ms.c3:307:18: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 304:         int[<16>] sd = ld32(&c.sd[i]);
+ 305:         int[<16>] d = ld8(&c.d[i]);
+ 306:         int[<16>] q = ld8(&c.q[i]);
+ 307:         bool[<16>] m = $$veccompge(sd, (int[<16>])8766) & $$veccomplt(sd, (int[<16>])9131) & $$veccompge(d, (i ...
+                                                                ^~~~~~~~~~~
+/home/user/claude_code_test2/bench/c3/ms.c3:307:53: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 304:         int[<16>] sd = ld32(&c.sd[i]);
+ 305:         int[<16>] d = ld8(&c.d[i]);
+ 306:         int[<16>] q = ld8(&c.q[i]);
+ 307:         bool[<16>] m = $$veccompge(sd, (int[<16>])8766) & $$veccomplt(sd, (int[<16>])9131) & $$veccompge(d, (i ...
+                                                                                                   ^~~~~~~~~~~
+/home/user/claude_code_test2/bench/c3/ms.c3:307:88: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 305:         int[<16>] d = ld8(&c.d[i]);
+ 306:         int[<16>] q = ld8(&c.q[i]);
+ 307:         bool[<16>] m = $$veccompge(sd, (int[<16>])8766) & $$veccomplt(sd, (int[<16>])9131) & $$veccompge(d, (i ...
+ 308:                      & $$veccomple(d, (int[<16>])7) & $$veccomplt(q, (int[<16>])24);
+                             ^^^^^^^^^^^
+/home/user/claude_code_test2/bench/c3/ms.c3:308:18: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 305:         int[<16>] d = ld8(&c.d[i]);
+ 306:         int[<16>] q = ld8(&c.q[i]);
+ 307:         bool[<16>] m = $$veccompge(sd, (int[<16>])8766) & $$veccomplt(sd, (int[<16>])9131) & $$veccompge(d, (i ...
+ 308:                      & $$veccomple(d, (int[<16>])7) & $$veccomplt(q, (int[<16>])24);
+                                                            ^^^^^^^^^^^
+/home/user/claude_code_test2/bench/c3/ms.c3:308:49: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 339:         usz end = i + 4096 <= hi ? i + 4096 : hi - (hi - i) % 16;
+ 340:         for (; i < end; i += 16)
+ 341:         {
+ 342:             bool[<16>] pass = $$veccomple(ld32(&c.sd[i]), (int[<16>])10471);
+                                    ^^^^^^^^^^^
+/home/user/claude_code_test2/bench/c3/ms.c3:342:22: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 351:             long[<16>] zl;
+ 352:             $for var $g = 0; $g < 6; $g++:
+ 353:             {
+ 354:                 bool[<16>] m = pass & $$veccompeq(vg, (int[<16>])$g);
+                                            ^^^^^^^^^^^
+/home/user/claude_code_test2/bench/c3/ms.c3:354:27: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 351:             long[<16>] zl;
+ 352:             $for var $g = 0; $g < 6; $g++:
+ 353:             {
+ 354:                 bool[<16>] m = pass & $$veccompeq(vg, (int[<16>])$g);
+                                            ^^^^^^^^^^^
+/home/user/claude_code_test2/bench/c3/ms.c3:354:27: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 351:             long[<16>] zl;
+ 352:             $for var $g = 0; $g < 6; $g++:
+ 353:             {
+ 354:                 bool[<16>] m = pass & $$veccompeq(vg, (int[<16>])$g);
+                                            ^^^^^^^^^^^
+/home/user/claude_code_test2/bench/c3/ms.c3:354:27: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 351:             long[<16>] zl;
+ 352:             $for var $g = 0; $g < 6; $g++:
+ 353:             {
+ 354:                 bool[<16>] m = pass & $$veccompeq(vg, (int[<16>])$g);
+                                            ^^^^^^^^^^^
+/home/user/claude_code_test2/bench/c3/ms.c3:354:27: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 351:             long[<16>] zl;
+ 352:             $for var $g = 0; $g < 6; $g++:
+ 353:             {
+ 354:                 bool[<16>] m = pass & $$veccompeq(vg, (int[<16>])$g);
+                                            ^^^^^^^^^^^
+/home/user/claude_code_test2/bench/c3/ms.c3:354:27: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+ 351:             long[<16>] zl;
+ 352:             $for var $g = 0; $g < 6; $g++:
+ 353:             {
+ 354:                 bool[<16>] m = pass & $$veccompeq(vg, (int[<16>])$g);
+                                            ^^^^^^^^^^^
+/home/user/claude_code_test2/bench/c3/ms.c3:354:27: warning: Builtins are intended for internal use inside of the standard library, please access this function through the standard library macro instead.
+
+Program linked to executable './ms'.

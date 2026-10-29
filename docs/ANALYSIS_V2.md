@@ -199,3 +199,47 @@ Ces ensembles couvrent tout le classement à la fois, à 95 %, pour l'incertitud
 | Pré-enregistrement chez un tiers et analyse en aveugle | Impossible a posteriori pour v1 ; ce plan est poussé avant ses données |
 
 Ces limites figurent aussi dans le README, section 7.
+
+## 8. Précisions d'implémentation (fixées avant le premier calcul sur les données v2)
+
+Le code (`analysis/analyze_v2.py`, `analysis/charts_v2.py`) est poussé avant d'être exécuté sur les données de la
+machine 3. Je l'ai mis au point sur des données brouillées : K5 de v1 à la place de la remesure, réplication
+simulée, étiquettes des langages permutées au hasard. Les résultats de ces essais n'ont aucun sens et ne sont pas
+conservés. Les précisions suivantes complètent le plan sans le modifier.
+
+1. **Régime établi** : appliqué à tous les processus de toutes les mesures (machines 1 et 3). Pour K8 `natural`, les
+   latences d'un processus sont coupées au même endroit que ses temps.
+2. **Bootstrap hiérarchique** : processus tirés avec remise ; pour chaque processus tiré, médiane d'un tirage avec
+   remise de ses répétitions (prise dans une réserve de B tirages indépendants du même processus : même loi). D3 :
+   processus, puis répétitions, puis médianes sur toutes les répétitions retenues (l'estimation ponctuelle prend,
+   comme v1, les médianes sur toutes les répétitions).
+3. **Analyse globale** : chaque tirage prend au hasard l'un des 2 000 tirages bootstrap. Le bruit de jugement touche
+   toutes les cellules sauf C3 mesurée ; une cellule à 0,5 passe à 0 ou à 1 avec la même probabilité. Les
+   implémentations annexes reçoivent le pilier C de leur langage (comme v1) et ne sont pas classées.
+4. **Groupes.** L'égalité de la section 6 n'est pas transitive. Une frontière de groupe sépare les positions i et
+   i + 1 de l'ordre principal seulement si aucun langage au-dessus n'est à égalité avec un langage au-dessous. Je
+   publie aussi les groupes obtenus avec les seuls ensembles simultanés (incertitude de mesure seule) : on voit
+   ainsi ce qui vient de la mesure et ce qui vient des choix de méthode.
+5. **Contrôle de vraisemblance** des données de la machine 3, même règle que v1 (temps < 0,9 × borne : calcul
+   sauté, mesure exclue).
+   * K5 : débit FMA le plus haut mesuré sur la machine 3 (232 Gflop/s).
+   * Réplication : bornes généreuses (50 Go/s sur 1 thread, 200 Go/s sur 4, 3,9 GHz pour K3), qui ne signalent
+     qu'un travail sauté, pas un cache plus grand.
+6. **Profils** (0–100) : moyenne arithmétique de composantes comprises entre 0 et 1.
+   * disposition : K1 (score E du noyau), D2 ;
+   * SIMD : K5, K4, C3 mesurée ;
+   * hiérarchie mémoire : D4, K9 sur 1 thread ;
+   * concurrence : K3, K6 sur 4 threads (Q6 et Q1), K9 sur 4 threads ;
+   * allocation et prévisibilité : K8, D3 ;
+   * analytique : K6 sur 1 thread (Q6 et Q1), K7 ;
+   * capacités : moyenne de chaque catégorie A à F (règle v2).
+
+   Pour K6 et K9, le rapport t\*/t de chaque mesure ; pour les autres noyaux, leur score E.
+7. **Poids effectifs** : R² de chaque pilier avec MS sur les 21 langages, et sa part dans la somme des trois.
+8. **Bimodalité** : signalée quand la plus grande médiane de processus d'une mesure dépasse la plus petite de 25 %,
+   après le régime établi.
+9. **Décomposition** : la configuration principale, puis chaque choix ramené à sa version v1, un à la fois (dont le
+   K5 d'avant et K10 réintégré).
+10. **Corrélations de rang** : Spearman, avec rangs moyens pour les ex aequo.
+11. **Réplication** : un langage change de groupe si son rang sur la machine 3 sort des rangs qu'occupe son groupe
+    v2.

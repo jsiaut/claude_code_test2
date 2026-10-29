@@ -1,0 +1,183 @@
+/home/user/claude_code_test2/bench/mojo/ms.mojo:79:26: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+            var q = base + (i + k)
+                    ~~~~~^~~~~~~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:116:23: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var f = raw.p + 16 * i
+                ~~~~~~^~~~~~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:29: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                           ~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:35: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                 ~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:41: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                       ~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:47: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                             ~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:53: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                   ~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:59: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                         ~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:65: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                               ~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:71: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                                     ~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:77: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                                           ~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:83: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                                                 ~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:89: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                                                       ~^~~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:96: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                                                              ~^~~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:103: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                                                                     ~^~~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:110: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                                                                            ~^~~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:117: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                                                                                   ~^~~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:117:124: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        ps.append(Particle(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14], f[15]))
+                                                                                                                          ~^~~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:122:42: warning: positional `__getitem__` is deprecated, use `unsafe_offset=` instead
+        print("META;raw0;" + String(raw.p[0]))
+                                    ~~~~~^~~
+<unknown>:0: note: '__getitem__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:123:14: warning: 'free' is deprecated, use 'unsafe_free' instead
+        raw.p.free()
+        ~~~~~^~~~~
+              unsafe_free
+<unknown>:0: note: 'free' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:192:45: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var t_0 = create_task(k3_worker(mem + 16, rmw))
+                                        ~~~~^~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:193:45: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var t_1 = create_task(k3_worker(mem + 16 + stride, rmw))
+                                        ~~~~^~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:193:50: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var t_1 = create_task(k3_worker(mem + 16 + stride, rmw))
+                                        ~~~~~~~~~^~~~~~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:194:45: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var t_2 = create_task(k3_worker(mem + 16 + 2 * stride, rmw))
+                                        ~~~~^~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:194:50: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var t_2 = create_task(k3_worker(mem + 16 + 2 * stride, rmw))
+                                        ~~~~~~~~~^~~~~~~~~~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:195:45: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var t_3 = create_task(k3_worker(mem + 16 + 3 * stride, rmw))
+                                        ~~~~^~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:195:50: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var t_3 = create_task(k3_worker(mem + 16 + 3 * stride, rmw))
+                                        ~~~~~~~~~^~~~~~~~~~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:447:82: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+                    prefetch[PrefetchOptions().for_write().high_locality()]((tab + Int(h[b])).unsafe_bitcast[UInt8]())
+                                                                             ~~~~^~~~~~~~~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:462:16: warning: 'free' is deprecated, use 'unsafe_free' instead
+            tab.free()
+            ~~~^~~~~
+                unsafe_free
+<unknown>:0: note: 'free' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:501:6: warning: 'free' is deprecated, use 'unsafe_free' instead
+    n.free()
+    ~^~~~~
+      unsafe_free
+<unknown>:0: note: 'free' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:572:20: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var up = a + (i - 1) * M9
+                 ~~^~~~~~~~~~~~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:573:21: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var mid = a + i * M9
+                  ~~^~~~~~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:574:20: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var dn = a + (i + 1) * M9
+                 ~~^~~~~~~~~~~~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:575:19: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        var o = b + i * M9
+                ~~^~~~~~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:633:14: warning: 'free' is deprecated, use 'unsafe_free' instead
+            a.free()
+            ~^~~~~
+              unsafe_free
+<unknown>:0: note: 'free' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:634:14: warning: 'free' is deprecated, use 'unsafe_free' instead
+            b.free()
+            ~^~~~~
+              unsafe_free
+<unknown>:0: note: 'free' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:678:69: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+            rc = Atomic[UInt64].load[ordering=Ordering.ACQUIRE](ctl + 32)
+                                                                ~~~~^~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:681:61: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        Atomic[UInt64].store[ordering=Ordering.RELEASE](ctl + 16, w)
+                                                        ~~~~^~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:690:69: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+            wc = Atomic[UInt64].load[ordering=Ordering.ACQUIRE](ctl + 16)
+                                                                ~~~~^~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:693:61: warning: '__add__' is deprecated, use 'unsafe_offset' instead
+        Atomic[UInt64].store[ordering=Ordering.RELEASE](ctl + 32, rd)
+                                                        ~~~~^~~~
+<unknown>:0: note: '__add__' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:708:14: warning: 'free' is deprecated, use 'unsafe_free' instead
+            q.free()
+            ~^~~~~
+              unsafe_free
+<unknown>:0: note: 'free' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:718:16: warning: 'free' is deprecated, use 'unsafe_free' instead
+            ctl.free()
+            ~~~^~~~~
+                unsafe_free
+<unknown>:0: note: 'free' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:719:16: warning: 'free' is deprecated, use 'unsafe_free' instead
+            buf.free()
+            ~~~^~~~~
+                unsafe_free
+<unknown>:0: note: 'free' declared here
+/home/user/claude_code_test2/bench/mojo/ms.mojo:382:24: warning: assignment to 's' was never used; assign to '_' instead?
+        var s: Int64 = 0
+                       ^

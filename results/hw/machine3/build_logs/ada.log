@@ -1,0 +1,4 @@
+ms.adb:101:13: warning: intrinsic binding type mismatch on parameter 4 [enabled by default]
+ms.adb:101:13: warning: profile of "Fmadd" doesn't match the builtin it binds [enabled by default]
+ms.adb:103:13: warning: intrinsic binding type mismatch on parameter 4 [enabled by default]
+ms.adb:103:13: warning: profile of "Vadd" doesn't match the builtin it binds [enabled by default]

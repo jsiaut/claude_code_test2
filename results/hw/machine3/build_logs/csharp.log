@@ -1,0 +1,3 @@
+/home/user/claude_code_test2/bench/csharp/Program.cs(388,32): warning CA2014: Potential stack overflow. Move the stackalloc out of the loop. (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2014) [/home/user/claude_code_test2/bench/csharp/ms.csproj]
+/home/user/claude_code_test2/bench/csharp/Program.cs(388,32): warning CA2014: Potential stack overflow. Move the stackalloc out of the loop. (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2014) [/home/user/claude_code_test2/bench/csharp/ms.csproj]
+    1 Warning(s)
