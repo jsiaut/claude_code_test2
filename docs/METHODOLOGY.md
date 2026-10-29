@@ -331,3 +331,36 @@ Robustesse :
   machine (`-march=native`). Recompiler sans AVX-512 aurait mesuré d'autres binaires que ceux du
   classement. La simulation est remplacée par les micro-expériences de `tools/hwprobe.c`, l'analyse
   du code machine des boucles chaudes (`tools/sampler.c`, `analysis/hotloop.py`) et le rusage.
+* 2026-10-29 : **audit externe reçu** (`docs/AUDIT_2026-10-29.md`). Ses chiffres tirés des données se
+  retrouvent tous ; réponse point par point : `docs/AUDIT_RESPONSE.md`. Il relève, entre autres, trois
+  écarts au protocole que je n'avais pas consignés :
+  * **Horloges hors du contrat** (section 7 de la spécification : temps mural, horloge monotone). Lua et
+    LuaJIT mesurent le temps CPU du processus (`os.clock()`), OCaml et Chapel une horloge murale non
+    monotone (`Unix.gettimeofday`, `Time.stopwatch`). Effet : pour les processus à un thread de la
+    campagne, temps CPU / temps mural = 0,988 en médiane pour Lua (0,965 au pire), 0,986 pour C. L'écart
+    est de l'ordre du pour cent, très loin des écarts qui séparent Lua des autres langages ; une horloge
+    non monotone ne fausse une mesure que si l'heure système est réglée pendant celle-ci. Mesures gardées.
+  * **Une phrase de la section 2 affirmait un résultat avant les données** (« une analyse de sensibilité
+    montre que le classement ne dépend pas de ce choix »). Elle est démentie : l'ordre change à l'intérieur
+    des groupes 1 et 2. Je laisse le texte d'origine, que cette note corrige.
+  * **« Aucune mesure n'est tirée de deux machines »** (entrée de 18:28) : vrai variante par variante, faux
+    au niveau du score. Pour K5 et K10, la mesure de E prend le minimum de `natural` (machine 1) et de
+    `tuned` (machine 2), et la frontière t\* mêle les deux hôtes.
+* 2026-10-29 : **analyse v2 décidée** en réponse à l'audit, plan dans `docs/ANALYSIS_V2.md`, poussé sur
+  GitHub avant toute nouvelle mesure ; code d'analyse poussé avant son premier calcul. L'analyse v1 reste
+  le résultat pré-enregistré, publié tel quel.
+* 2026-10-29, 11:53 : **le conteneur redémarre sur un autre hôte** (machine 3) : Xeon de modèle 207
+  (Emerald Rapids), TSC à 2,1 GHz, L2 de 2 Mio, L3 de 260 Mio, au lieu des Cascade Lake à 2,8 GHz des
+  machines 1 et 2. Caractérisation : `results/hw/machine3/`. Deux défauts d'outil trouvés en la
+  caractérisant, corrigés avant toute mesure : la sonde `freq` (chaîne d'`add $1`) donnait 14 à 18 GHz,
+  parce que ce cœur replie les additions d'immédiats au renommage (additions registre-registre
+  désormais) ; la première version du témoin construisait mal sa chasse de pointeurs. Les binaires
+  compilés à l'avance sont recompilés sur la machine 3 par leurs scripts inchangés (empreintes avant et
+  après : `results/hw/machine3/binaries.txt`). Nim réutilisait son cache d'objets compilés pour la
+  machine 2 : cache supprimé, Nim recompilé. Le désassemblage du JIT de .NET et l'expérience des styles
+  de K8 ont été faits sur la machine 3.
+* 2026-10-29, 12:23 : **lancement des mesures v2** (`tools/measure_v2.py` : K5 complet, pages géantes,
+  réplication). Une première exécution, arrêtée après trois processus pour la détacher du terminal, a été
+  effacée sans être lue. Vers 12:37, pendant la passe 2 de K5, une capture d'écran de graphique (Chromium,
+  environ 30 s) a tourné en même temps que les mesures : perturbation de mon fait, enregistrée par le
+  témoin des processus concernés. Je n'ai plus rien lancé de lourd pendant les mesures.

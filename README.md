@@ -177,6 +177,8 @@ spécification des noyaux, qui sert de contrat commun aux 21 langages, est dans 
 
 * 3 processus indépendants par mesure, chacun avec une ou trois répétitions d'échauffement (trois
   pour les JIT), puis 3 à 10 répétitions chronométrées dans le programme, sur l'horloge monotone.
+  Trois écarts, relevés par l'audit : Lua et LuaJIT mesurent du temps CPU (`os.clock()`), OCaml et
+  Chapel une horloge murale non monotone. Effet mesuré de l'ordre du pour cent (section 7).
 * Les 3 processus sont pris lors de **3 passes** successives. Dans chaque passe, l'ordre des blocs
   (langage, noyau) est **tiré au hasard** (graine fixe). La dérive temporelle d'une VM partagée se
   répartit ainsi entre tous les langages au lieu de pénaliser l'un d'eux. Un redémarrage de la VM a
@@ -387,9 +389,11 @@ temps sont des médianes de processus. Les bornes physiques sont celles de la se
   * une arène (variante tuned) descend à 108 ms (pool de stockage Ada), 181 ms (`pmr` en C++) et
     243 ms (C).
 
-  La latence par requête est la plus régulière en C3, C++ et C (p99,9/p50 ≈ 4). Elle l'est le
-  moins en Julia (70) et en Lua (80). Les pauses maximales vont de 1,3 ms (C++) à 127 ms (D),
-  170 ms (Node) et 1,08 s (Python).
+  Rapportée à sa propre médiane, la queue de latence est la plus courte en C3, C++ et C
+  (p99,9/p50 ≈ 4), la plus longue en Julia (70) et en Lua (80). En valeur absolue, les meilleures
+  queues sont celles de Java (p99,9 = 134 µs) et d'OCaml (191 µs), devant C (218 µs) : un rapport
+  à la médiane récompense un langage lent partout (l'audit l'a relevé ; la v2 note D3 en absolu).
+  Les pauses maximales vont de 1,3 ms (C++) à 127 ms (D), 170 ms (Node) et 1,08 s (Python).
 * **K9, stencil 2D (HPC).**
   * Un tableau 2D contigu, ou un tableau de tableaux sans vérification coûteuse, donne 36 à
     40 ms en un thread (C, C++, Odin, Julia, Fortran, C3, Chapel, Zig, Java), pour une borne de
@@ -405,12 +409,17 @@ temps sont des médianes de processus. Les bornes physiques sont celles de la se
   * L'anneau sans verrou (tuned) est **bistable**. Si la file se remplit, le consommateur lit par
     rafales : 6 à 10 ms pour 4 M messages. Si elle reste presque vide, chaque message échange une
     ligne de cache : jusqu'à 200 ms.
-  * La part de répétitions dans le régime rapide dépend de l'implémentation (sur 90 répétitions) :
-    Java 62 %, Chapel 54 %, Odin 43 %, C++ 26 %, C 7 %, C3 1 %. La médiane va de 12,7 ms (Java)
-    à 80 ms (C) dans ces langages ; elle est plus haute en Haskell (101 ms), OCaml (229 ms), Go
-    (332 ms) et Julia (448 ms).
-  * C'est l'effet de *natural batching* décrit par Thompson : un consommateur un peu en retard
-    laisse la file se remplir, et l'ensemble va plus vite. Remesuré avec 9 processus.
+  * La part de répétitions sous 15 ms dépend de l'implémentation (sur 90 répétitions) : Java
+    62 %, Chapel 54 %, Odin 43 %, C++ 26 %, C 7 %, C3 1 % (sous 20 ms : 63, 61, 59, 36, 9 et 7 %).
+    La médiane va de 12,7 ms (Java) à 80 ms (C) dans ces langages ; elle est plus haute en
+    Haskell (101 ms), OCaml (229 ms), Go (332 ms) et Julia (448 ms).
+  * **Correction (audit).** J'y voyais l'effet de *natural batching* décrit par Thompson. C'est
+    faux : le *smart batching* est une conception délibérée, qui envoie dès que des données sont
+    disponibles pour amortir une opération coûteuse. Ici, le régime rapide est émergent et non
+    contrôlé. Le même source change de régime selon le compilateur (C : 9 % des répétitions sous
+    20 ms avec clang, 30 % avec gcc ; Fortran : 53 % avec gfortran, 0 % avec flang). La médiane
+    de K10 estime donc la probabilité d'un régime, pas une propriété du langage. K10 sort du score
+    dans l'analyse v2 et n'est plus publié que comme statistique descriptive.
   * Le classement sans K10 est en section 6.
 
 ### 4.4 Profil d'efficacité (pilier E, par noyau)
@@ -694,8 +703,10 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 * **Ce qui le retient : ses conteneurs standard vont contre le matériel.**
   * `std::unordered_map` (nœuds chaînés) met 10,6 s sur K7 : deux fois C, 22 fois la table plate.
   * La file standard (mutex et deux variables de condition) prend 1,1 s sur K10.
-  * `hardware_destructive_interference_size` vaut 64, alors que le préchargeur de lignes
-    adjacentes d'Intel impose 128.
+  * `hardware_destructive_interference_size` vaut 64. Le préchargeur spatial d'Intel complète
+    les paires de lignes alignées sur 128 octets, d'où le choix prudent de 128 ailleurs (crossbeam,
+    Zig). Mais ma sonde ne voit pas de pénalité à 64 octets sur cette machine : la question reste
+    ouverte (« impose 128 », que j'écrivais, était trop fort).
   * `par_unseq` s'exécute en série dans libstdc++ sans TBB, une bibliothèque tierce.
 * **Rang.** Médiane des rangs sous poids aléatoires : 1.
 
@@ -746,7 +757,8 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
   * `@Vector`, `comptime` ;
   * allocateurs passés explicitement, aucune allocation cachée ;
   * `packed struct` au bit près, `@prefetch`, `@branchHint` ;
-  * `std.atomic.cache_line` = 128, la bonne valeur sur Intel.
+  * `std.atomic.cache_line` = 128, hypothèse prudente face au préchargeur spatial d'Intel (ma
+    sonde ne départage pas 64 et 128).
 * **Mesuré.** Meilleure table de hachage naturelle (K7 1,7 s, adressage ouvert) et collection
   contiguë.
 * **Faiblesses.** Son efficacité plafond n'est que 11e.
@@ -905,7 +917,9 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 * **Mais son code par défaut va contre le matériel.**
   * La classe naturelle coûte 88 o par particule (en-tête de 16 o, référence de 8 o), et le
     parcours permuté est 4,7 fois plus lent (259 contre 55 ms).
-  * Le JIT n'a pas de vectoriseur automatique : aucune boucle naturelle vectorisée.
+  * Le JIT n'a pas de vectoriseur automatique : aucune boucle naturelle vectorisée. Son propre
+    désassemblage le confirme : en optimisation complète, une somme d'entiers, une addition de
+    tableaux et une somme conditionnelle restent scalaires (`probes/csharp_jitvec`).
   * La somme conditionnelle mal prédite prend 83 ms.
   * Même en SIMD explicite, K5 plafonne à 17 ms, 3,6 fois C++.
 
@@ -1132,7 +1146,10 @@ l'ordre à l'intérieur des groupes 1 et 2. On peut dire que C++, C et Odin inca
   implémentation de référence.
 * **Redémarrage de la VM pendant la campagne** (16:11, passe 2). Après le redémarrage, le processeur
   est le même modèle mais la hiérarchie mémoire diffère (autre hôte, très probablement). Règle
-  appliquée : **aucune mesure n'est tirée de deux machines**. Le classement repose sur les passes
+  appliquée : aucune variante n'est mesurée sur deux machines. **Correction (audit)** : au niveau
+  du score, K5 et K10 mêlaient bien deux machines, car leur mesure de E prend le minimum de
+  `natural` (machine 1) et de `tuned` (machine 2). La v2 remesure K5 sur une seule machine et sort
+  K10 du score. Le classement repose sur les passes
   d'avant le redémarrage (P = 2 ou 3 processus par mesure), sauf trois exceptions décidées avant de
   voir les nouvelles données et consignées dans le journal : (1) K3 `sw_*` de Haskell, dont la
   mesure d'avant était invalide, reprise après validation par un pont (C et Haskell `rmw`, ratios

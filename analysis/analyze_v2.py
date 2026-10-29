@@ -783,6 +783,72 @@ def report(o):
     L.append(f"\nFront de Pareto sur (C, E, D) : {', '.join(NAMES[l] for l in o['pareto'])}.\n")
     L.append("Poids effectifs (R² de chaque pilier avec MS, puis part) : "
              + ", ".join(f"{k} {fr(v['R2'], 2)} ({fr(100 * v['part'], 0)} %)" for k, v in o["effective_weights"].items()) + ".\n")
+    # langage et implémentation
+    L.append("## Langage et implémentation\n")
+    L.append("| Couple | C | E | D | MS | K4 | K5 | K8 |")
+    L.append("|---|---|---|---|---|---|---|---|")
+    for pair, d in o["couples"].items():
+        for x, v in d.items():
+            if v:
+                ek = v["E_kernels"]
+                L.append(f"| {NAMES[x]} | {fr(v['C'])} | {fr(v['E'])} | {fr(v['D'])} | {fr(v['MS'])} | "
+                         f"{fr(ek.get('k4'), 2)} | {fr(ek.get('k5'), 2)} | {fr(ek.get('k8'), 2)} |")
+    L.append("\nK4 et K8 (score E du noyau) par backend :\n")
+    for g, d in o["backend"].items():
+        L.append(f"* {g} : " + ", ".join(f"{NAMES[l]} {fr(v['k4'], 2)} / {fr(v['k8'], 2)}" for l, v in d.items()))
+    # régime établi, bimodalité
+    cuts = o["steady_cuts"]
+    byk = defaultdict(int)
+    for c in cuts:
+        byk[c["key"][0]] += 1
+    L.append(f"\n## Régime établi et bimodalité\n\nProcessus coupés par la détection de rupture : {len(cuts)} "
+             f"(par noyau : {', '.join(f'{k} {v}' for k, v in sorted(byk.items()))}). Mesures dont les médianes de "
+             f"processus s'écartent de plus de 25 % : {len(o['bimodal'])}.\n")
+    k5c = [c for c in cuts if c["key"][0] == "k5"]
+    if k5c:
+        L.append("Coupures sur K5 : " + "; ".join(f"{NAMES.get(c['lang'], c['lang'])} {c['key'][1]} processus {c['proc']} "
+                                                  f"({fr(1e3 * c['before'], 2)} → {fr(1e3 * c['after'], 2)} ms après {c['cut']} répétitions)"
+                                                  for c in k5c) + ".\n")
+    # témoin
+    w = o["witness"]
+    if w.get("pooled"):
+        L.append("## Témoin d'environnement (K5, machine 3)\n")
+        L.append("Corrélation de rang entre le témoin et le temps du processus (rapporté à la médiane de sa mesure), "
+                 "sur tous les processus : " + ", ".join(f"{k} {fr(v['rho'], 2)} (n = {v['n']})" for k, v in w["pooled"].items()) + ".\n")
+        if w.get("witness_range"):
+            L.append("Plage du témoin (min, médiane, max) : " + ", ".join(
+                f"{k} {fr(a, 1)} / {fr(b, 1)} / {fr(c, 1)}" for k, (a, b, c) in w["witness_range"].items()) + ".\n")
+        if w.get("sensitivity"):
+            s = w["sensitivity"]
+            ch = s["rank_changes"]
+            L.append(f"Sans les processus du décile le plus lent du témoin ({s['dropped']} processus) : "
+                     + ("aucun rang ne change." if not ch else ", ".join(f"{NAMES[l]} {a} → {b}" for l, (a, b) in ch.items()) + ".") + "\n")
+    # réplication
+    r = o["replication"]
+    if r.get("per_key"):
+        L.append("## Réplication sur la machine 3 (un processus par mesure)\n")
+        L.append(f"Classement v2 recalculé avec les seules données de la machine 3 : corrélation de Spearman "
+                 f"{fr(r['rho_ranking'], 2)} avec le classement v2 (n = {r['n']}), plus grand déplacement {r['max_shift']} rangs. "
+                 + ("Langages qui sortent de leur groupe : " + ", ".join(
+                     f"{NAMES[l]} (rang {v['rank_m3']}, groupe v2 aux rangs {v['group_span_v2'][0]}–{v['group_span_v2'][1]})"
+                     for l, v in r["group_changes"].items()) + "." if r["group_changes"] else "Aucun langage ne sort de son groupe.") + "\n")
+        L.append("| Langage | Rang v2 | Rang machine 3 | MS machine 3 |")
+        L.append("|---|---|---|---|")
+        for l in sorted(RANKED, key=lambda l: R[l]["rank"]):
+            L.append(f"| {NAMES[l]} | {R[l]['rank']} | {r['ranking_m3'].get(l, '—')} | {fr(r['MS_m3'].get(l))} |")
+        L.append("\n| Mesure | Spearman (machine 1 contre 3) | n | rapport des temps (1 / 3) |")
+        L.append("|---|---|---|---|")
+        for k, v in sorted(r["per_key"].items()):
+            L.append(f"| {k} | {fr(v['rho'], 2)} | {v['n']} | {fr(v['speed_ratio_median'], 2)} |")
+        L.append("")
+    # pages géantes
+    if o["thp"]:
+        L.append("## Pages géantes (K1 natural, machine 3, politique madvise)\n")
+        L.append("| Implémentation | AnonHugePages max (Mio) | pic RSS (Mio) |")
+        L.append("|---|---|---|")
+        for l, v in sorted(o["thp"].items(), key=lambda kv: -(kv[1]["anon_huge_kb_max"] or 0)):
+            L.append(f"| {NAMES.get(l, l)} | {fr((v['anon_huge_kb_max'] or 0) / 1024, 0)} | {fr((v['maxrss_kb'] or 0) / 1024, 0)} |")
+        L.append("")
     open(os.path.join(ROOT, "results", "report_v2.md"), "w").write("\n".join(L) + "\n")
     print("\n".join(L))
 
