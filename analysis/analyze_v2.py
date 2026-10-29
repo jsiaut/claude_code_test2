@@ -607,14 +607,15 @@ def main():
     # ---------------- réplication sur la machine 3
     repl = replication(data, langs, footprint, C_main, k5_steady, rng, res, groups, order)
 
-    # ---------------- pages géantes
+    # ---------------- pages géantes ; K10, statistique descriptive hors score
     thp = thp_table()
+    k10 = k10_descriptive()
 
     out = {"config": MAIN, "B": B, "U": U, "results": res, "groups": [[RANKED[j] for j in g] for g in groups],
            "groups_meas": [[RANKED[j] for j in g] for g in groups_meas],
            "mogstad_crit": crit, "precedence": {RANKED[j]: {RANKED[k]: float(prec[j, k]) for k in range(NR)} for j in range(NR)},
            "profiles": prof, "pareto": pareto, "effective_weights": eff, "steady_cuts": cuts, "bimodal": bimodal,
-           "decomposition": decomp, "couples": couples, "backend": backend, "witness": witness, "replication": repl, "thp": thp,
+           "decomposition": decomp, "couples": couples, "backend": backend, "witness": witness, "k10": k10, "replication": repl, "thp": thp,
            "k5_invalid": k5inv, "k5_below_bound": k5_sus, "invalid_v1": invalid, "bridge_k3": bridge,
            "tstar": {f"{k}:{i}": float(v) for (k, i), v in S0["tstar"].items()},
            "k5_processes": {l: {f"{k[1]}": len(v) for k, v in d.items()} for l, d in k5.items()}}
@@ -715,6 +716,34 @@ def replication(data, langs, footprint, C_main, k5_steady, rng, res, groups, ord
             "rho_ranking": rho, "n": n, "max_shift": max(abs(res[l]["rank"] - r3[l]) for l in complete) if complete else None,
             "group_changes": changes, "invalid": m3inv, "below_bound": m3_sus,
             "incomplete": [l for l in RANKED if l not in complete]}
+
+
+def k10_descriptive():
+    """K10 hors score : part des répétitions dans le régime rapide (sous 15 et 20 ms), minimum et médiane, pour
+    l'anneau `tuned` remesuré avec 9 processus (machine 2) ; médiane de la file standard `natural` (machine 1)."""
+    out = defaultdict(dict)
+    for f in sorted(glob.glob(os.path.join(ROOT, "results", "raw_post", "*.jsonl"))):
+        for line in open(f):
+            r = json.loads(line)
+            if r.get("tag") == "post_noisy" and r["kernel"] == "k10" and r["variant"] == "tuned" and r.get("returncode") == 0 \
+                    and r.get("reps") and all(x["ok"] is True for x in r["reps"]):
+                out[r["lang"]].setdefault("tuned", []).extend(x["sec"] for x in r["reps"])
+    for f in sorted(glob.glob(os.path.join(ROOT, "results", "raw", "*.jsonl"))):
+        for line in open(f):
+            r = json.loads(line)
+            if r["kernel"] == "k10" and r["variant"] == "natural" and r.get("returncode") == 0 \
+                    and r.get("reps") and all(x["ok"] is True for x in r["reps"]):
+                out[r["lang"]].setdefault("natural", []).append(float(np.median([x["sec"] for x in r["reps"]])))
+    res = {}
+    for l, d in out.items():
+        tu = np.array(d.get("tuned", []))
+        res[l] = {"tuned_n": int(len(tu)),
+                  "tuned_below_15ms": float((tu < 0.015).mean()) if len(tu) else None,
+                  "tuned_below_20ms": float((tu < 0.020).mean()) if len(tu) else None,
+                  "tuned_min_ms": float(1e3 * tu.min()) if len(tu) else None,
+                  "tuned_median_ms": float(1e3 * np.median(tu)) if len(tu) else None,
+                  "natural_median_ms": float(1e3 * np.median(d["natural"])) if d.get("natural") else None}
+    return res
 
 
 def thp_table():
@@ -840,6 +869,18 @@ def report(o):
         L.append("|---|---|---|---|")
         for k, v in sorted(r["per_key"].items()):
             L.append(f"| {k} | {fr(v['rho'], 2)} | {v['n']} | {fr(v['speed_ratio_median'], 2)} |")
+        L.append("")
+    # K10 hors score
+    if o.get("k10"):
+        L.append("## K10, hors score (statistique descriptive)\n")
+        L.append("Anneau SPSC `tuned` (90 répétitions, 9 processus, machine 2) : part des répétitions dans le régime rapide. "
+                 "File standard `natural` (machine 1) : médiane.\n")
+        L.append("| Implémentation | Sous 15 ms | Sous 20 ms | Minimum (ms) | Médiane (ms) | File standard, médiane (ms) |")
+        L.append("|---|---|---|---|---|---|")
+        for l, v in sorted(o["k10"].items(), key=lambda kv: -(kv[1]["tuned_below_20ms"] or 0)):
+            L.append(f"| {NAMES.get(l, l)} | {fr(100 * v['tuned_below_15ms'], 0) if v['tuned_below_15ms'] is not None else '—'} % | "
+                     f"{fr(100 * v['tuned_below_20ms'], 0) if v['tuned_below_20ms'] is not None else '—'} % | "
+                     f"{fr(v['tuned_min_ms'])} | {fr(v['tuned_median_ms'])} | {fr(v['natural_median_ms'])} |")
         L.append("")
     # pages géantes
     if o["thp"]:

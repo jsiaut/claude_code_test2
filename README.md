@@ -1,6 +1,160 @@
 # Quels langages incarnent le mieux la *mechanical sympathy* ? Une étude mesurée (28 octobre 2026, révisée le 29 octobre)
 
-*Révision en cours (29 octobre) : la réponse v2, qui tient compte de l'audit externe (`docs/AUDIT_RESPONSE.md`), sera publiée ici à la fin des mesures. Plan : `docs/ANALYSIS_V2.md`.*
+**Réponse courte (v2, 29 octobre).** J'ai mesuré moi-même 21 langages sur des VM Intel, avec neuf noyaux
+notés qui testent chacun un principe de la *mechanical sympathy*. Chaque implémentation doit rendre le même
+résultat, au bit près pour les entiers ; tout temps inférieur à la borne physique de la machine est rejeté. Le
+score combine trois piliers : le **contrôle** offert (C, 35 %), l'**efficacité plafond** mesurée (E, 40 %) et la
+qualité du **code par défaut** (D, 25 %). Cette version tient compte d'un audit externe, archivé dans
+[`docs/AUDIT_2026-10-29.md`](docs/AUDIT_2026-10-29.md) et vérifié point par point dans
+[`docs/AUDIT_RESPONSE.md`](docs/AUDIT_RESPONSE.md). Changements principaux :
+* K10 sort du score : sa médiane mesurait la probabilité d'un régime, pas une propriété de langage ;
+* la queue de latence est notée en valeur absolue ;
+* une même règle de notation des capacités s'applique à tous les langages ;
+* les phases d'échauffement sont détectées et écartées ;
+* K5 est remesuré avec 9 processus sur une seule machine ;
+* une analyse d'incertitude globale (20 000 tirages) et des ensembles de confiance simultanés remplacent les
+  intervalles marginaux.
+
+Le plan ([`docs/ANALYSIS_V2.md`](docs/ANALYSIS_V2.md)) a été poussé sur GitHub avant les nouvelles mesures.
+
+**La réponse.**
+* **C et C++ incarnent le mieux la *mechanical sympathy* mesurée ici, sans qu'on puisse les départager.**
+  * Ce sont les deux seuls langages qui peuvent être premiers : ensembles de confiance simultanés à 95 % de
+    C 1–2 et de C++ 1–3.
+  * L'un des deux est premier dans 87 % des tirages de l'analyse globale (C 57 %, C++ 30 %), mais C ne précède
+    C++ que dans 64 % des tirages.
+  * Ce sont aussi les deux seuls langages du front de Pareto sur (C, E, D) : aucun autre n'est au moins aussi bon
+    qu'eux sur les trois piliers à la fois.
+* **Odin vient ensuite.** Seul C le devance de façon significative à la mesure. Odin est dans les trois premiers
+  dans 54 % des tirages, mais premier dans 7 % seulement. Sa première place en v1 tenait à K10 et à l'ancienne
+  règle des capacités.
+* **Un peloton de six langages qu'on ne sait pas ordonner** : Zig, C3, D, Nim, Rust et Ada (ensembles 3–9 ou
+  3–10). Puis **Chapel**, troisième plafond de l'étude mais pauvre en contrôle bas niveau, et **Julia, Fortran,
+  Mojo** (10–13).
+* **Puis trois étages nets** :
+  * C#, Java, Go : ramasse-miettes imposé, compilation optimisante ;
+  * Haskell, puis OCaml : langages fonctionnels ;
+  * JavaScript, Python, Lua : moteurs dynamiques.
+
+  Les rangs 14 à 21 sont déterminés exactement par les mesures (ensembles réduits à un rang).
+
+La règle de groupement fixée d'avance est stricte : deux langages sont à égalité si leurs ensembles simultanés
+se recouvrent, ou si aucun ne précède l'autre dans 90 % des tirages. Avec elle, les 13 premiers forment un seul
+groupe, car les ensembles se chevauchent de proche en proche de C (1–2) à Mojo (11–13). Les énoncés plus fins
+ci-dessus sont des probabilités, pas un ordre établi.
+
+| Groupe | Langage | MS [IC 95 %] | Ensemble simultané | Rang, analyse globale [5–95 %] | P(3 premiers) | En une ligne (faits mesurés) |
+|---|---|---|---|---|---|---|
+| 1 | **C** | 79,6 [75,6–79,8] | 1–2 | 1 [1–4] | 92 % | frontière sur K4 et K5 ; meilleur code par défaut (D 1er) ; leviers livrés avec clang et gcc |
+| 1 | **C++** | 77,4 [74,0–77,9] | 1–3 | 2 [1–6] | 80 % | le plus de contrôle (C 1er : `std::simd`, `pmr`) ; conteneurs standard à contre-courant |
+| 1 | **Odin** | 72,2 [69,5–73,1] | 2–9 | 3 [1–6] | 54 % | DOD dans le langage (`#soa`, `#simd`) ; allocation et queue de latence faibles (K8, D3) |
+| 1 | **Zig** | 70,8 [68,5–71,5] | 3–9 | 5 [2–10] | 23 % | contrôle au 3e rang ; aucune boucle naturelle vectorisée |
+| 1 | **C3** | 70,8 [68,0–71,2] | 3–9 | 5 [2–9] | 23 % | C avec vecteurs natifs, 2e plafond (E 82,4) ; ni contrôle de la réassociation ni parallélisme de données |
+| 1 | **D** | 69,9 [67,4–70,6] | 3–9 | 8 [4–12] | 4 % | contrôle de C avec LDC ; ramasse-miettes par défaut (pause de 127 ms) |
+| 1 | **Nim** | 69,8 [67,2–71,3] | 3–9 | 6 [2–9] | 17 % | 2e code par défaut (D 54,8) ; hérite des leviers de C |
+| 1 | **Rust** | 69,6 [66,7–70,2] | 3–9 | 7 [4–10] | 2 % | 4e plafond (E 80,2) ; bornes vérifiées, SipHash, SIMD portable en *nightly* |
+| 1 | **Ada** | 68,2 [65,6–69,1] | 3–10 | 9 [4–12] | 4 % | meilleure arène (K8 au niveau de la frontière) ; meilleur profil « allocation et prévisibilité » |
+| 1 | **Chapel** | 64,2 [61,5–64,5] | 9–12 | 10 [5–13] | 2 % | 3e plafond (parallélisme natif) ; peu de contrôle bas niveau (C 14e) |
+| 1 | **Julia** | 62,4 [60,2–63,0] | 10–13 | 11 [7–13] | 0 % | génère du bon code ; ramasse-miettes et runtime (queue de latence 0,09) |
+| 1 | **Fortran** | 60,6 [57,4–61,2] | 10–13 | 12 [9–14] | 0 % | stencil et parallélisme ; pas de SIMD explicite ni de contrôle fin |
+| 1 | **Mojo** | 60,3 [58,2–61,5] | 11–13 | 12 [10–13] | 0 % | SIMD de premier ordre en optimisé ; boucles naturelles scalaires |
+| 2 | **C#** | 54,0 [51,7–54,9] | 14 | 14 [12–16] | 0 % | SIMD explicite proche de C une fois le JIT stabilisé (K5 4,3 ms contre 3,9) ; objets en références |
+| 2 | **Java** | 47,1 [44,8–47,8] | 15 | 15 [14–16] | 0 % | meilleure queue de latence absolue (p99,9 134 µs) ; pas de types valeur dans le JDK 27 |
+| 2 | **Go** | 43,3 [41,9–43,6] | 16 | 16 [14–16] | 0 % | structs par valeur ; ni SIMD stable, ni vectoriseur, ni ordres mémoire faibles |
+| 3 | **Haskell** | 35,5 [34,3–35,8] | 17 | 17 [17–17] | 0 % | peut descendre bas (primops SIMD) ; tout le défaut va à contre-courant |
+| 4 | **OCaml** | 25,0 [22,8–25,2] | 18 | 18 [18–18] | 0 % | domaines, bonne queue de latence ; flottants boxés, aucun SIMD |
+| 5 | **JavaScript** | 14,7 [13,8–15,1] | 19 | 19 [19–20] | 0 % | tableaux typés ; objets en références (416 o par particule) |
+| 6 | **Python** | 10,0 [9,9–10,0] | 20 | 20 [19–21] | 0 % | environ 200 fois plus lent que la frontière ; hiérarchie mémoire invisible |
+| 6 | **Lua** | 4,0 [3,7–4,1] | 21 | 21 [20–21] | 0 % | tables seulement : ni types étroits, ni structures en ligne, ni threads |
+
+L'ordre des lignes est celui de la configuration principale. Le groupe applique la règle du plan.
+L'IC est l'intervalle de confiance à 95 % de l'incertitude de mesure seule. L'analyse globale fait varier ensemble :
+* l'estimateur, les normalisations et les références ;
+* l'agrégation et la règle des capacités ;
+* le jugement porté sur chaque capacité ;
+* tous les poids, internes compris.
+
+Détail : [`results/report_v2.md`](results/report_v2.md).
+
+![Rangs v2 et incertitudes](results/charts/v2_ranks.svg)
+
+**Profils par principe** (0–100 ; disposition : K1 et D2 ; SIMD : K5, K4 et vectorisation mesurée ; hiérarchie :
+D4 et K9 ; concurrence : K3, K6 et K9 en 4 threads ; allocation : K8 et D3 ; analytique : K6 et K7) :
+
+| Langage | Disposition | SIMD | Hiérarchie | Concurrence | Allocation et prévisibilité | Analytique |
+|---|---|---|---|---|---|---|
+| C | 97 | 100 | 96 | 87 | 61 | 95 |
+| C++ | 96 | 82 | 95 | 84 | 68 | 91 |
+| Odin | 97 | 97 | 97 | 71 | 33 | 75 |
+| Zig | 97 | 34 | 96 | 81 | 43 | 94 |
+| C3 | 100 | 93 | 92 | 83 | 48 | 92 |
+| D | 100 | 76 | 95 | 63 | 21 | 73 |
+| Nim | 100 | 69 | 98 | 66 | 49 | 66 |
+| Rust | 100 | 78 | 96 | 74 | 34 | 85 |
+| Ada | 97 | 62 | 85 | 52 | 77 | 76 |
+| Chapel | 97 | 92 | 94 | 87 | 38 | 79 |
+| Julia | 96 | 88 | 95 | 65 | 20 | 60 |
+| Fortran | 99 | 48 | 93 | 81 | 63 | 75 |
+| Mojo | 98 | 32 | 89 | 78 | 48 | 83 |
+| C# | 65 | 35 | 86 | 62 | 34 | 67 |
+| Java | 61 | 48 | 90 | 63 | 56 | 46 |
+| Go | 97 | 15 | 62 | 52 | 24 | 62 |
+| Haskell | 83 | 28 | 91 | 37 | 9 | 46 |
+| OCaml | 47 | 4 | 67 | 17 | 52 | 19 |
+| JavaScript | 27 | 4 | 62 | 14 | 9 | 13 |
+| Python | 7 | 0 | 7 | 0 | 1 | 1 |
+| Lua | 9 | 0 | 20 | 1 | 2 | 3 |
+
+Les profils disent ce qu'un score unique cache.
+* Aucun langage n'est en tête partout. C est premier ou presque sur cinq principes sur six ; sa faiblesse relative
+  est l'allocation.
+* Ada a le meilleur profil « allocation et prévisibilité » (77), devant C++ (68).
+* Zig et Mojo s'effondrent sur le SIMD (34 et 32), Odin et D sur l'allocation (33 et 21).
+* Go garde la disposition (structs par valeur, 97) mais perd le SIMD (15).
+
+![Plafond et code par défaut](results/charts/v2_map.svg)
+
+**Ce qui change par rapport à la v1, et pourquoi.**
+* **Odin passe de 1er à 3e.** Il était premier de 0,36 point, grâce à K10 (régime rapide dans 59 % des
+  répétitions, contre 9 % pour C).
+* **C et C++ remontent**, pour deux raisons :
+  * la règle unique des capacités compte désormais ce que livre leur chaîne (OpenMP, `vector_size`,
+    `__builtin_prefetch`, `mmap`…), d'où un pilier C de 76,3 à 88,7 pour C et de 84,7 à 92,4 pour C++ ;
+  * la sortie de K10 lève le pire noyau de C (0,16 en v1).
+* **Chapel passe de 6e à 10e**, D de 8e à 6e, Julia de 13e à 11e. Le bas du classement ne bouge pas.
+* **Aucun choix pris isolément ne déplace un langage de plus de trois rangs** (tableau de décomposition dans
+  `results/report_v2.md`). C est premier dans dix variantes sur onze ; C++ l'est dans la onzième (avec K10).
+  C'est la **combinaison** des choix de la v1 qui mettait Odin en tête.
+* **La détection de l'échauffement ne change aucun rang.** La remesure de K5, avec 10 répétitions
+  d'échauffement pour les JIT, corrige C# : son K5 optimisé descend à 4,3 ms, contre 3,9 ms pour C. La v1 le
+  mesurait à 17 ms, pendant la recompilation du JIT, sur la machine 2.
+
+**Langage ou implémentation ?** Le score mesure un langage avec son compilateur de référence, sa bibliothèque
+standard et mes implémentations.
+* À source égale, C compilé par gcc obtient 78,5 au lieu de 79,6 avec clang, et Fortran 60,2 avec flang au lieu de
+  60,6 avec gfortran. L'écart de Fortran, 5,8 points en v1, venait surtout de K10.
+* Le backend pèse sur certains noyaux.
+  * Sur K8 (allocation, meilleure variante), les implémentations compilées par GCC (C, C++, Fortran, Ada)
+    obtiennent 0,56 à 1,00 ; celles compilées par LLVM obtiennent 0,31 à 0,55, Haskell mis à part.
+  * Une expérience à algorithme égal le confirme : le compilateur fait un facteur 2,2 à 2,7, le style de codage
+    20 à 30 % (`docs/AUDIT_RESPONSE.md`).
+* Sur la machine 3, quatre compilateurs fusionnent `s += a[i] * b[i]` en une FMA scalaire : clang pour C, flang,
+  Chapel et Mojo (code machine vérifié). Ils doublent ainsi le temps du produit scalaire naturel.
+  * Avec FMA : 160 à 166 ms ; sans FMA, dans les autres langages compilés : 77 à 87 ms.
+  * Sur ce cœur, l'addition flottante a une latence plus courte que la FMA, et c'est la chaîne d'additions qui
+    limite la boucle.<!-- FADD -->
+  * Sur Cascade Lake (machine 1), les deux opérations ont la même latence : le choix ne changeait rien.
+
+<!-- M3 -->*Réplication sur une autre microarchitecture : en cours, résultats à la fin des mesures.*<!-- /M3 -->
+
+**Ce que la v2 ne règle pas.**
+* Une seule machine par noyau, partagée et sans compteurs matériels.
+* Deux ou trois processus par mesure hors K5.
+* Des implémentations d'un seul auteur, d'effort inégal.
+* Aucun noyau d'E/S ni de *smart batching*.
+* K10 et la queue de latence en boucle fermée.
+
+Les limites et ce qui reste à faire sont listés dans la section 7 et dans `docs/AUDIT_RESPONSE.md`.
 
 <details>
 <summary><b>Réponse v1 du 28 octobre (analyse pré-enregistrée), conservée telle quelle</b> : ses défauts sont discutés dans <code>docs/AUDIT_RESPONSE.md</code></summary>
@@ -670,9 +824,14 @@ Le code machine de chaque boucle retenue est dans `results/vectorization/`.
 Pour chaque langage : score, piliers (rang entre parenthèses), intervalle de rang à 90 %, puis ce qui
 le place là. Les chiffres viennent de `results/facts.md`, généré par `analysis/facts.py`.
 
+*Cette section est celle de la v1 (28 octobre) : groupes, rangs et scores de l'en-tête de chaque langage sont
+ceux de la v1. Les faits mesurés qui suivent restent valables, corrections de l'audit comprises. La fin de chaque
+en-tête donne le résultat v2 : score, ensemble de confiance simultané à 95 % et rang de l'analyse globale (5–95 %).
+La synthèse v2 est en tête du document.*
+
 #### Groupe 1 — à égalité statistique
 
-**1. Odin** — MS 72,3 · C 81,8 (3e) · E 77,7 (2e) · D 50,4 (7e) · rang 1–4
+**1. Odin** — MS 72,3 · C 81,8 (3e) · E 77,7 (2e) · D 50,4 (7e) · rang 1–4 · **v2** : MS 72,2, ensemble simultané 2–9, rang global 1–6
 
 * **Conception.** C'est le langage dont la conception colle le plus au Data-Oriented Design :
   * `#soa` transpose une structure en colonnes dans le langage même ;
@@ -694,7 +853,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 * **Rang.** Premier avec les poids de référence, il n'est pas séparable de C++ et de C : sans
   K10, il passe troisième.
 
-**2. C++** — MS 71,9 · C 84,7 (1er) · E 72,4 (3e) · D 53,3 (2e) · rang 1–4
+**2. C++** — MS 71,9 · C 84,7 (1er) · E 72,4 (3e) · D 53,3 (2e) · rang 1–4 · **v2** : MS 77,4, ensemble simultané 1–3, rang global 1–6
 
 * **Contrôle.** C'est la matrice de capacités la plus complète :
   * disposition et alignement ;
@@ -717,7 +876,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
   * `par_unseq` s'exécute en série dans libstdc++ sans TBB, une bibliothèque tierce.
 * **Rang.** Médiane des rangs sous poids aléatoires : 1.
 
-**3. C** — MS 69,3 · C 76,3 (4e) · E 71,6 (4e) · D 55,8 (1er) · rang 1–4
+**3. C** — MS 69,3 · C 76,3 (4e) · E 71,6 (4e) · D 55,8 (1er) · rang 1–4 · **v2** : MS 79,6, ensemble simultané 1–2, rang global 1–4
 
 * **Défaut.** Meilleur pilier D : le code naturel est déjà celui que le matériel préfère.
   * Tableau de structures contigu, permutation sans effet.
@@ -737,7 +896,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 
 #### Groupe 2 — trois points d'écart, un trou précis chacun
 
-**4. C3** — MS 66,8 · C 74,4 (6e) · E 68,9 (7e) · D 52,9 (3e) · rang 4–8
+**4. C3** — MS 66,8 · C 74,4 (6e) · E 68,9 (7e) · D 52,9 (3e) · rang 4–8 · **v2** : MS 70,8, ensemble simultané 3–9, rang global 2–9
 
 * **Contrôle.** C3 garde la sémantique de C et ajoute ce qui lui manque :
   * vecteurs natifs ;
@@ -757,7 +916,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 * **Piège.** `sort::quicksort` de la bibliothèque standard dégénère sur des données très
   dupliquées : 260 s pour trier 16 Mo.
 
-**5. Zig** — MS 66,7 · C 82,0 (2e) · E 64,3 (11e) · D 49,2 (8e) · rang 3–10
+**5. Zig** — MS 66,7 · C 82,0 (2e) · E 64,3 (11e) · D 49,2 (8e) · rang 3–10 · **v2** : MS 70,8, ensemble simultané 3–9, rang global 2–10
 
 * **Contrôle.** Deuxième matrice de capacités, la plus orientée DOD :
   * `std.MultiArrayList` (SoA dans la bibliothèque standard) ;
@@ -778,7 +937,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 * **En une phrase.** Zig donne tout ce qu'il faut pour écrire du code sympathique au matériel, mais
   son compilateur ne le fait pas à votre place.
 
-**6. Chapel** — MS 65,5 · C 59,1 (12e) · E 79,4 (1er) · D 52,2 (4e) · rang 1–11
+**6. Chapel** — MS 65,5 · C 59,1 (12e) · E 79,4 (1er) · D 52,2 (4e) · rang 1–11 · **v2** : MS 64,2, ensemble simultané 9–12, rang global 5–13
 
 * **Points forts.** Meilleure efficacité plafond de l'étude.
   * Parallélisme de données natif (`forall`, `reduce`).
@@ -802,7 +961,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 * **Rang.** Son intervalle de rang est le plus large : premier si l'on pondère l'efficacité,
   au-delà de 10 si l'on pondère le contrôle.
 
-**7. Nim** — MS 64,6 · C 73,4 (7e) · E 65,2 (10e) · D 51,2 (5e) · rang 5–10
+**7. Nim** — MS 64,6 · C 73,4 (7e) · E 65,2 (10e) · D 51,2 (5e) · rang 5–10 · **v2** : MS 69,8, ensemble simultané 3–9, rang global 2–9
 
 * **Contrôle.** Nim compile vers C et hérite de sa disposition et de ses compilateurs.
   * Pragmas : `{.packed.}`, `{.bitsize.}`, `{.align.}`, `{.noalias.}`, `likely`, `pinToCpu`.
@@ -819,7 +978,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
     même algorithme en C prend 32 ms. Son score K6 (0,50) reflète probablement ma version plus
     qu'une limite du langage.
 
-**8. D** — MS 64,4 · C 74,5 (5e) · E 70,8 (5e) · D 40,2 (14e) · rang 5–12
+**8. D** — MS 64,4 · C 74,5 (5e) · E 70,8 (5e) · D 40,2 (14e) · rang 5–12 · **v2** : MS 69,9, ensemble simultané 3–9, rang global 4–12
 
 * **Contrôle et efficacité.** D offre le contrôle de C avec templates, exécution à la compilation
   (CTFE), `core.simd`, `std.parallelism`, `std.mmfile` et atomiques à ordres explicites :
@@ -833,7 +992,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
   * Les leviers les plus fins (`@fastmath`, `@restrict`, prefetch, `expect`) sont propres au
     compilateur LDC.
 
-**9. Rust** — MS 64,4 · C 73,1 (8e) · E 67,2 (8e) · D 47,8 (10e) · rang 5–9
+**9. Rust** — MS 64,4 · C 73,1 (8e) · E 67,2 (8e) · D 47,8 (10e) · rang 5–9 · **v2** : MS 69,6, ensemble simultané 3–9, rang global 4–10
 
 * **Contrôle.** Fin et sûr :
   * `repr(C)`, `repr(align)` ;
@@ -854,7 +1013,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
   * Le SIMD portable et les allocateurs par collection restent réservés à nightly.
   * Latence d'allocation irrégulière (p99,9/p50 = 9,9).
 
-**10. Ada** — MS 63,7 · C 70,3 (9e) · E 69,0 (6e) · D 46,1 (11e) · rang 6–10
+**10. Ada** — MS 63,7 · C 70,3 (9e) · E 69,0 (6e) · D 46,1 (11e) · rang 6–10 · **v2** : MS 68,2, ensemble simultané 3–10, rang global 4–12
 
 * **Points forts.**
   * Le contrôle de disposition le plus précis de l'étude : clauses de représentation au bit près.
@@ -870,7 +1029,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 
 #### Groupe 3 — efficaces sur leur terrain
 
-**11. Fortran** — MS 58,1 · C 53,6 (14e) · E 66,5 (9e) · D 50,9 (6e) · rang 8–14
+**11. Fortran** — MS 58,1 · C 53,6 (14e) · E 66,5 (9e) · D 50,9 (6e) · rang 8–14 · **v2** : MS 60,6, ensemble simultané 10–13, rang global 9–14
 
 * **Points forts.** C'est le langage natif du HPC :
   * tableaux multidimensionnels contigus, syntaxe tableau ;
@@ -885,7 +1044,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
   * il ne vectorise pas la somme conditionnelle d'octets de K4 (11 ms, contre 3,9 ms avec flang) ;
   * il termine la réduction OpenMP SIMD par 64 additions scalaires (K5 7,8 ms, contre 4,8 en C).
 
-**12. Mojo** — MS 56,9 · C 58,7 (13e) · E 61,0 (12e) · D 48,1 (9e) · rang 11–13
+**12. Mojo** — MS 56,9 · C 58,7 (13e) · E 61,0 (12e) · D 48,1 (9e) · rang 11–13 · **v2** : MS 60,3, ensemble simultané 11–13, rang global 10–13
 
 * **Points forts.** Mojo place le SIMD au cœur du langage :
   * `SIMD[DType, N]`, paramètres de compilation, `UnsafePointer` ;
@@ -898,7 +1057,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
   * La bibliothèque standard n'expose ni threads CPU publics (`parallelize` est dans MAX), ni
     `mmap`, ni tableau multidimensionnel.
 
-**13. Julia** — MS 52,6 · C 65,4 (11e) · E 47,3 (14e) · D 43,1 (13e) · rang 10–14
+**13. Julia** — MS 52,6 · C 65,4 (11e) · E 47,3 (14e) · D 43,1 (13e) · rang 10–14 · **v2** : MS 62,4, ensemble simultané 10–13, rang global 7–13
 
 * **Points forts.**
   * Structs immuables stockés en ligne (64 o).
@@ -914,7 +1073,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 
 #### Groupe 4 — ramasse-miettes imposé et au moins un défaut majeur
 
-**14. C#** — MS 48,6 · C 65,8 (10e) · E 44,3 (15e) · D 31,6 (17e) · rang 12–16
+**14. C#** — MS 48,6 · C 65,8 (10e) · E 44,3 (15e) · D 31,6 (17e) · rang 12–16 · **v2** : MS 54,0, ensemble simultané 14–14, rang global 12–16
 
 * **Contrôle.** La boîte à outils la plus riche des langages à GC :
   * `struct`, `Span`, `stackalloc` ;
@@ -930,7 +1089,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
   * La somme conditionnelle mal prédite prend 83 ms.
   * Même en SIMD explicite, K5 plafonne à 17 ms, 3,6 fois C++.
 
-**15. Java** — MS 46,7 · C 41,5 (16e) · E 60,5 (13e) · D 32,1 (16e) · rang 13–16
+**15. Java** — MS 46,7 · C 41,5 (16e) · E 60,5 (13e) · D 32,1 (16e) · rang 13–16 · **v2** : MS 47,1, ensemble simultané 15–15, rang global 14–16
 
 * **Points forts.**
   * Excellent modèle mémoire (`VarHandle` : opaque, acquire, release ; `Thread.onSpinWait`).
@@ -949,7 +1108,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 * **K10.** Son premier rang (12,7 ms) vient surtout du régime de l'anneau : 62 % de ses
   répétitions tombent dans le régime rapide.
 
-**16. Go** — MS 39,6 · C 44,9 (15e) · E 32,3 (17e) · D 43,7 (12e) · rang 14–16
+**16. Go** — MS 39,6 · C 44,9 (15e) · E 32,3 (17e) · D 43,7 (12e) · rang 14–16 · **v2** : MS 43,3, ensemble simultané 16–16, rang global 14–16
 
 * **Points forts.** Structures stockées par valeur dans les slices (64 o, permutation sans effet),
   et un GC « Green Tea » pensé pour la localité.
@@ -963,7 +1122,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 
 #### Groupe 5 — à contre-courant par défaut
 
-**17. Haskell** — MS 33,6 · C 33,4 (17e) · E 32,6 (16e) · D 35,7 (15e) · rang 17
+**17. Haskell** — MS 33,6 · C 33,4 (17e) · E 32,6 (16e) · D 35,7 (15e) · rang 17 · **v2** : MS 35,5, ensemble simultané 17–17, rang global 17–17
 
 * **Ce qu'il permet.** Haskell peut descendre bas : `UArray`, `Storable`, primops non boxées,
   primops SIMD via LLVM (K5 tuned 8,2 ms).
@@ -979,7 +1138,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 * **Une curiosité mesurée.** Le parcours permuté de K1 n'est pas plus lent (66 contre 71 ms).
   Explication probable : le GC copieur réordonne les objets dans l'ordre du nouveau parcours.
 
-**18. OCaml** — MS 21,8 · C 24,7 (18e) · E 16,8 (18e) · D 25,5 (18e) · rang 18
+**18. OCaml** — MS 21,8 · C 24,7 (18e) · E 16,8 (18e) · D 25,5 (18e) · rang 18 · **v2** : MS 25,0, ensemble simultané 18–18, rang global 18–18
 
 * **Ce qu'il apporte.** OCaml 5 : domaines, `Atomic.make_contended` (bourrage de ligne de cache,
   rare), `Bigarray`, `Unix.map_file`.
@@ -992,7 +1151,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
 
 #### Groupe 6 — la machine disparaît derrière le moteur
 
-**19. JavaScript** — MS 14,1 · C 11,6 (20e) · E 11,1 (19e) · D 22,3 (19e) · rang 19–20
+**19. JavaScript** — MS 14,1 · C 11,6 (20e) · E 11,1 (19e) · D 22,3 (19e) · rang 19–20 · **v2** : MS 14,7, ensemble simultané 19–19, rang global 19–20
 
 * **Ce qu'il permet.** Tableaux typés, `SharedArrayBuffer` et `Atomics` (séquentiellement
   cohérents). V8 compile bien les boucles sur tableaux typés : K1 aos 50 ms.
@@ -1004,7 +1163,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
   * Workers isolés : la file par messages prend 10,5 s.
   * Pauses de GC jusqu'à 170 ms.
 
-**20. Python** — MS 9,8 · C 22,4 (19e) · E 0,5 (21e) · D 7,0 (21e) · rang 19–21
+**20. Python** — MS 9,8 · C 22,4 (19e) · E 0,5 (21e) · D 7,0 (21e) · rang 19–21 · **v2** : MS 10,0, ensemble simultané 20–20, rang global 19–21
 
 * **Ce qu'il permet.** Un stockage compact par `array`, `memoryview` et `mmap`, et une
   disposition par `ctypes` : son pilier C (22,4) dépasse celui de JavaScript.
@@ -1016,7 +1175,7 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
   * Le GC cyclique arrête le programme jusqu'à 1,08 s sur K8.
   * Le GIL sérialise les threads ; la version sans GIL est plus lente encore sur ces noyaux.
 
-**21. Lua** — MS 4,5 · C 2,8 (21e) · E 1,3 (20e) · D 11,8 (20e) · rang 20–21
+**21. Lua** — MS 4,5 · C 2,8 (21e) · E 1,3 (20e) · D 11,8 (20e) · rang 20–21 · **v2** : MS 4,0, ensemble simultané 21–21, rang global 20–21
 
 * **Ce qu'il offre.** Des tables seulement : ni types numériques étroits, ni structures en ligne,
   ni threads, ni SIMD.
@@ -1028,6 +1187,11 @@ le place là. Les chiffres viennent de `results/facts.md`, généré par `analys
   avec deux pièges vérifiés : `volatile` ignoré, et un objet libéré sous un pointeur `ffi.cast`.
 
 ## 6. Robustesse du classement
+
+*Section de la v1. L'audit a montré que ces épreuves, faites une par une et sur les seuls poids des piliers,
+sous-estimaient l'incertitude. La v2 les remplace par une analyse d'incertitude globale (20 000 tirages qui font
+varier ensemble toutes les sources) et par des ensembles de confiance simultanés pour les rangs : synthèse en tête
+du document, détail dans `results/report_v2.md`.*
 
 Le classement résiste-t-il à mes propres choix ? Six épreuves : les quatre premières sont prévues au
 protocole, les deux dernières sont ajoutées pour les écarts consignés dans le journal.
@@ -1168,6 +1332,16 @@ l'ordre à l'intérieur des groupes 1 et 2. On peut dire que C++, C et Odin inca
   donnait 0 octet par particule à 8 langages (le pic du chargement masquait la collection) ; le
   profileur excluait le code JIT anonyme. Les deux ont été corrigés avant d'utiliser leurs
   résultats, et les mesures fausses restent publiées pour la trace (`results/raw_post/`, journal).
+* **Analyse v2 (29 octobre) : ce qu'elle ajoute comme menaces.**
+  * K5 est mesuré sur une troisième machine (Emerald Rapids), les autres noyaux sur la première
+    (Cascade Lake). Chaque noyau reste homogène, mais E mêle deux machines d'un noyau à l'autre. Sur la
+    machine 3, la FMA rallonge la réduction stricte du K5 naturel : D1 y pénalise clang, flang, Chapel et
+    Mojo, ce qui n'arrivait pas sur la machine 1.
+  * La règle de groupement, fixée d'avance, est conservatrice : avec elle, les 13 premiers forment un seul
+    groupe. Les probabilités publiées à côté décrivent l'ordre probable, pas un ordre établi.
+  * L'ordre à l'intérieur du premier groupe dépend surtout du pilier C, le plus subjectif (R² de 0,78 parmi
+    les 13 premiers, contre 0,52 pour E et 0,27 pour D).
+  * Le plan v2 a été écrit après lecture des analyses de sensibilité de l'audit : il n'est pas aveugle.
 
 ## 8. Reproduire
 
@@ -1205,6 +1379,20 @@ python3 analysis/check_probes.py           # sondes exécutées contre la matric
 
 ```bash
 python3 analysis/report.py                 # tableaux du rapport -> results/report_tables.md
+```
+
+Analyse v2 (plan : `docs/ANALYSIS_V2.md`) :
+
+```bash
+python3 tools/measure_v2.py k5 thp m3      # K5 complet, pages géantes, réplication -> results/raw_v2
+```
+
+```bash
+python3 analysis/analyze_v2.py             # analyse v2 -> results/summary_v2.json, results/report_v2.md
+```
+
+```bash
+python3 analysis/charts_v2.py              # graphiques -> results/charts/v2_*.svg
 ```
 
 Arborescence : `bench/<langage>/` (implémentation, `build.sh`, `run`), `tools/` (pilote, campagne,

@@ -160,3 +160,48 @@ fusionner les passes répétées (355 To/s).
   stencil naturel, à cause des vérifications de bornes de leurs tableaux de tableaux ; gfortran ne
   vectorise pas K4 (somme d'octets dans un accumulateur 64 bits) alors que flang le fait ; le JIT de
   .NET n'a pas de vectoriseur automatique ; C2 (Java) vectorise K9 en 128 bits mais pas K4.
+
+## Machine 3 (Xeon Emerald Rapids, depuis le 29 octobre) — `results/hw/machine3/`
+
+* **Caractérisation.** TSC à 2,1 GHz ; fréquence effective scalaire de 3,1 à 3,5 GHz ; débit FMA
+  AVX-512 f32 de 164, 182 et 232 Gflop/s sur trois mesures à quelques minutes d'écart. Latences :
+  L1 1,2 à 1,6 ns ; L2 5 à 5,6 ns jusqu'à 1 Mio, 40 ns à 2 Mio ; L3 56 à 71 ns de 4 à 16 Mio ; puis
+  100 à 275 ns. Lecture sur un thread : 138 à 143 Go/s dans le L2, 22 à 28 Go/s de 4 à 64 Mio,
+  11,9 Go/s sur 1 Gio. Transfert d'une ligne entre deux vCPU : 99 à 200 ns selon la paire. Le L3
+  (260 Mio, partagé) loge une partie des tableaux de 64 à 256 Mio que la machine 1 servait depuis
+  la DRAM.
+* **Le cœur replie les additions d'immédiats au renommage.** Une chaîne dépendante de
+  `add $1, reg` s'exécute à 11 à 22 additions par ns : la sonde de fréquence de la machine 1, qui
+  reposait sur elle, affichait 14 à 18 GHz. Une chaîne `add reg, reg` ou `imul` donne 3,1 à
+  3,9 GHz. Un micro-benchmark écrit pour une génération de cœur ne mesure plus la même chose sur
+  la suivante.
+<!-- FADD -->
+* **Le témoin d'environnement varie autant que les épisodes qu'il devrait signaler.** Douze
+  lancements consécutifs, avant toute mesure : débit FMA de 112 à 226 Gflop/s, latence à 2 Mio de
+  36 à 64 ns. Il reste descriptif (règle fixée dans `docs/ANALYSIS_V2.md`).
+* **Le JIT de .NET ne vectorise pas les boucles.** En optimisation complète
+  (`DOTNET_TieredCompilation=0`), son propre désassemblage (`DOTNET_JitDisasm`) montre une somme
+  d'entiers, une addition de tableaux de `float` et une somme conditionnelle scalaires (`add eax,
+  [rdi]`, `vaddss`), alors qu'il déclare cibler « *X64 + VEX + EVEX* » (`probes/csharp_jitvec`).
+* **K8 `tuned` : le compilateur pèse plus que le style.** Trois codages C du même algorithme (A :
+  compteurs passés par pointeur, comme `bench/c/ms.c` ; B : état passé par valeur ; C : arène
+  globale, comme Ada), médiane de deux exécutions : clang 23 de 186 à 289 ms, GCC 16 de 84 à
+  116 ms. Facteur 2,2 à 2,7 entre compilateurs, 20 à 30 % entre styles.
+* **Pages géantes : presque aucun runtime ne marque son tas.** La politique est `madvise` sur les machines 1
+  et 3 : le noyau n'en donne qu'aux régions que le programme marque. K1 `natural`, un processus par
+  implémentation, relevé de `AnonHugePages` toutes les 100 ms : CPython en obtient 34 Mio (sur 3,3 Gio), Go
+  2 Mio (sur 517 Mio), toutes les autres implémentations 0. JVM, .NET, V8, Bun et Julia compris. Les écarts de
+  K1 entre langages ne viennent donc pas des pages géantes ; les demander reste un levier que le programme doit
+  actionner lui-même (`madvise`, capacité absente de la matrice).
+* **K5 sur la machine 3 : la FMA rallonge la réduction stricte.**
+  * clang (C), flang, Chapel et Mojo fusionnent `s += a[i] * b[i]` en une FMA scalaire : `vfmadd231ss` dans la
+    boucle, vérifié au désassemblage. Leur produit scalaire naturel prend 160 à 166 ms.
+  * GCC en mode ISO (`-std=c23`) garde une multiplication vectorielle et une chaîne d'additions scalaires
+    (désassemblage).
+  * Les autres langages compilés restent entre 77 et 87 ms, ce qui exclut une chaîne de FMA dans leur boucle.
+  * Sur Cascade Lake (machine 1), la plupart des langages compilés étaient entre 164 et 184 ms, avec ou sans FMA.
+* **Le témoin d'environnement ne prédit pas le temps des processus.** Sur les 450 processus de K5, corrélation
+  de rang entre le témoin et le temps (rapporté à la médiane de sa mesure) : de −0,11 à 0,08 selon la grandeur.
+  Sans le décile le plus lent du témoin (45 processus), aucun rang ne change. Le témoin a pourtant beaucoup
+  varié : débit FMA de 82 à 250 Gflop/s, fréquence effective de 1,2 à 4,1 GHz, latence à 32 Mio de 91 à
+  618 ns. Un instantané de 0,4 s avant le processus ne dit rien de l'état de l'hôte pendant celui-ci.

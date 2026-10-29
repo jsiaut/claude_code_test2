@@ -243,3 +243,9 @@ conservés. Les précisions suivantes complètent le plan sans le modifier.
 10. **Corrélations de rang** : Spearman, avec rangs moyens pour les ex aequo.
 11. **Réplication** : un langage change de groupe si son rang sur la machine 3 sort des rangs qu'occupe son groupe
     v2.
+
+## 9. Erratum (29 octobre, après les mesures)
+
+* Section 2, point 2 : « la politique est `madvise` sur les trois machines » est inexact. Je l'ai relevée sur la
+  machine 1, le 28 octobre à 08:02 et à 11:14, juste avant la campagne, mais seulement dans ma session de travail,
+  pas dans le dépôt. Je l'ai relevée aussi sur la machine 3. Elle ne l'a pas été sur la machine 2.

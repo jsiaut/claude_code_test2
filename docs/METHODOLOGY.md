@@ -364,3 +364,10 @@ Robustesse :
   effacée sans être lue. Vers 12:37, pendant la passe 2 de K5, une capture d'écran de graphique (Chromium,
   environ 30 s) a tourné en même temps que les mesures : perturbation de mon fait, enregistrée par le
   témoin des processus concernés. Je n'ai plus rien lancé de lourd pendant les mesures.
+* 2026-10-29, 13:00 : **K5 remesuré** (machine 3) : 50 mesures, 9 processus valides chacune, aucun
+  invalide, un témoin par processus. Relevé des pages géantes terminé à 13:02 : seuls CPython (34 Mio) et
+  Go (2 Mio) en obtiennent pendant K1 `natural`. Le plan disait la politique `madvise` « sur les trois
+  machines » : elle n'a été relevée que sur les machines 1 et 3 (erratum dans `docs/ANALYSIS_V2.md`).
+* 2026-10-29, 13:01 : **premier calcul de l'analyse v2**, après le K5 et avant la fin de la réplication,
+  en priorité basse (`nice -n 19`) pour ne pas perturber les mesures en cours. La partie « réplication »
+  n'y est pas encore calculée. Le calcul final reprend le même code et les mêmes graines.

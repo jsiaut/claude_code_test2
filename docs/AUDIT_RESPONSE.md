@@ -50,7 +50,7 @@ Script de vérification : les mêmes fichiers bruts que l'analyse v1 (`results/r
 |---|---|---|---|
 | 7 | JEP 401 « *Submitted*, sans version cible » | En-tête de la page (lue le 29 octobre) : *Status* Integrated, *Release* 28, *Updated* 2026/08/07. Phrase sur l'aplatissement : « *this limits the size of mutable fields that store flattened references to no more than 64 bits* » | **erroné** pour le statut, exact pour la limite. Mon README et `docs/FINDINGS.md` disaient déjà « intégré au JDK 28 » ; le JDK de référence de l'étude reste le 27, sans classes valeur |
 | 7 | C# : « pas de vectoriseur » non vérifié | Sonde `probes/csharp_jitvec` : .NET 10.0.403, JIT en optimisation complète (`TieredCompilation=0`), désassemblage par `DOTNET_JitDisasm`. Une somme d'entiers, une addition de tableaux de `float` et une somme conditionnelle restent scalaires (`add eax, [rdi]`, `vaddss`), alors que le JIT déclare « *X64 + VEX + EVEX* ». Sortie : `results/probes/csharp_jitvec_disasm.txt` | **confirmé** par le compilateur lui-même |
-| 7 | « `hardware_destructive_interference_size` vaut 64 alors que le préchargeur d'Intel impose 128 » | La sonde de faux partage ne voit pas de pénalité à 64 octets par rapport à 128 sur cette machine ; « impose » n'est pas établi | **audit fondé** : formulation corrigée (section 5) |
+| 7 | « `hardware_destructive_interference_size` vaut 64 alors que le préchargeur d'Intel impose 128 » | La sonde de faux partage ne voit pas de pénalité à 64 octets par rapport à 128 sur la machine 1 (`results/hw/fs.txt`) ; « impose » n'est pas établi | **audit fondé** : formulation corrigée (section 5) |
 | 5.1 | K8 `tuned` : à algorithme égal, le style de codage fait un facteur 2,8 | J'ai repris trois codages du même algorithme (A comme `bench/c/ms.c`, B état passé par valeur, C arène globale comme Ada), deux exécutions, machine 3. clang 23 : A 242 / 239 ms, B 289 / 224, C 217 / 186. GCC 16 : A 105 / 115, B 84 / 91, C 116 / 99 | **nuancé** : avec ces compilateurs, le backend fait un facteur 2,2 à 2,7, le style 20 à 30 %. Le score K8 de C mesure surtout clang. La v2 présente les couples (langage, compilateur) et regroupe K8 et K4 par backend |
 | 3.5 a | Borne de K5 trop optimiste (deux FMA par cycle, alors que les chargements limitent à une) | Exact : deux chargements de 64 octets par FMA, deux chargements par cycle | **audit fondé** : borne corrigée dans l'alternative « bornes physiques » de la v2 |
 | 3.5 a | Borne de K3 lâche (un incrément par cycle) | 58 ms pour 2²⁵ incréments font environ 5,5 cycles : écriture puis relecture à chaque incrément | **audit fondé** : borne v2 à 5 cycles par incrément |
@@ -92,7 +92,7 @@ Le détail est dans `docs/ANALYSIS_V2.md`. Rien n'y a été choisi pour son effe
    de K5 et de K10 prenait le minimum de `natural` (machine 1) et de `tuned` (machine 2), et la frontière t\* mêlait
    donc deux hôtes. Corrigé dans le README ; la v2 remesure K5 sur une seule machine et sort K10 du score.
 3. **64 ou 128 octets.** « Le préchargeur d'Intel impose 128 » et « 128, la bonne valeur sur Intel » (Zig) étaient trop
-   forts : ma propre sonde ne voit aucune pénalité à 64 octets par rapport à 128 sur cette machine. Le README dit
+   forts : ma propre sonde ne voit aucune pénalité à 64 octets par rapport à 128 sur la machine 1. Le README dit
    maintenant que la question reste ouverte et que l'étude ne la tranche pas.
 4. **Horloges.** Le README annonçait des répétitions « sur l'horloge monotone ». Trois implémentations s'en écartent :
    Lua et LuaJIT mesurent du temps CPU (`os.clock()`), OCaml et Chapel une horloge murale non monotone
@@ -123,4 +123,36 @@ Le détail est dans `docs/ANALYSIS_V2.md`. Rien n'y a été choisi pour son effe
 
 ## 7. Résultats de la v2
 
-@@V2_RESULTS@@
+Détail : `results/report_v2.md` ; synthèse en tête du README.
+
+* **Le haut du classement s'ordonne en partie.** L'audit concluait à « un trio de tête probable mais non
+  ordonné ». Avec ses recommandations appliquées, C et C++ sont les deux seuls langages qui peuvent être premiers.
+  * Ensembles de confiance simultanés à 95 % : C 1–2, C++ 1–3.
+  * L'un des deux est premier dans 87 % des 20 000 tirages de l'analyse globale (C 57 %, C++ 30 %).
+  * Ils devancent Odin dans 84 % et 72 % des tirages ; C ne devance C++ que dans 64 %.
+  * Odin est troisième (ensemble 2–9, premier dans 7 % des tirages).
+* **La règle de groupement fixée d'avance fait un seul groupe des 13 premiers.** Leurs ensembles simultanés se
+  chevauchent de proche en proche, de C (1–2) à Mojo (11–13). Les rangs 14 à 21 sont déterminés exactement par la
+  mesure : C#, Java, Go, Haskell, OCaml, JavaScript, Python, Lua.
+* **Ce que l'audit prévoyait se vérifie en partie.**
+  * Chapel recule (6e → 10e) ; Rust remonte d'un rang (9e → 8e), moins que prévu.
+  * Ada gagne un rang (10e → 9e) : la nouvelle règle des capacités le remonte, la queue de latence absolue le
+    retient.
+  * Aucun choix pris isolément ne déplace un langage de plus de trois rangs : c'est la combinaison des choix de la
+    v1 qui mettait Odin en tête.
+* **C# en régime établi** : 4,3 ms sur K5 optimisé, contre 3,9 ms pour C ; la v1 le mesurait à 17 ms, pendant la
+  recompilation du JIT.
+* **Poids effectifs.** Sur les 21 langages, les trois piliers expliquent chacun l'essentiel de MS (R² de 0,93,
+  0,97 et 0,86), tant ils sont corrélés. Parmi les 13 premiers, où se joue l'ordre fin, c'est le **pilier C**
+  (jugements sur les capacités) qui fait l'essentiel des écarts.
+  * R² : 0,78 pour C, 0,52 pour E, 0,27 pour D.
+  * Poids × écart-type : 3,8 points pour C, 2,5 pour E, 0,9 pour D.
+
+  La remarque de l'audit sur D (section 3.3) reste donc vraie en v2, et l'ordre à l'intérieur du premier groupe
+  dépend surtout du pilier le plus subjectif. Le bruit de jugement de l'analyse globale en tient compte.
+* **Témoin et pages géantes.**
+  * Le témoin d'environnement ne prédit pas le temps des processus : corrélation de rang de −0,11 à 0,08 sur 450
+    processus. Sans le décile le plus lent, aucun rang ne change.
+  * Sous la politique `madvise`, seuls CPython (34 Mio) et Go (2 Mio) obtiennent des pages géantes : elles
+    n'expliquent pas les écarts entre langages.
+<!-- M3_AUDIT -->
