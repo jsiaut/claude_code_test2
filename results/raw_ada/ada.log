@@ -106,3 +106,35 @@ ada        k6   mt                   q6         p0 n=10 med=0.015004s ok={True} 
 ada        k1   natural_shuffled     energy     p0 n=10 med=0.030749s ok={True} rc=0 
 ada        k8   natural                         p0 n=3 med=0.874822s ok={True} rc=0 
 ada        k2   tuned                8388608    p0 n=4 med=0.623152s ok={True} rc=0 
+ada        k7   natural                         p0 n=2 med=8.343567s ok={True} rc=0 
+ada        k2   tuned                262144     p0 n=10 med=0.023847s ok={True} rc=0 
+ada        k6   tuned                q1         p0 n=10 med=0.067931s ok={True} rc=0 
+ada        k8   tuned_alloc                     p0 n=10 med=0.192667s ok={True} rc=0 
+ada        k9   tuned                           p0 n=10 med=0.042702s ok={True} rc=0 
+ada        k8   natural                         p0 n=3 med=0.990337s ok={True} rc=0 
+ada        k3   sw_padded                       p0 n=10 med=0.079947s ok={True} rc=0 
+ada        k6   tuned                q6         p0 n=10 med=0.017262s ok={True} rc=0 
+ada        k6   mt                   q6         p0 n=10 med=0.015235s ok={True} rc=0 
+ada        k2   tuned                16384      p0 n=10 med=0.010514s ok={True} rc=0 
+ada        k4   branchless_unsorted             p0 n=10 med=0.004286s ok={True} rc=0 
+ada        k8   tuned                           p0 n=10 med=0.143200s ok={True} rc=0 
+ada        k1   natural              energy     p0 n=10 med=0.033430s ok={True} rc=0 
+ada        k7   tuned                           p0 n=5 med=0.430731s ok={True} rc=0 
+ada        k9   mt                              p0 n=10 med=0.022696s ok={True} rc=0 
+ada        k5   tuned                           p0 n=10 med=0.008074s ok={True} rc=0 
+ada        k2   tuned                8388608    p0 n=4 med=0.671484s ok={True} rc=0 
+ada        k3   rmw_padded                      p0 n=10 med=0.311912s ok={True} rc=0 
+ada        k5   natural                         p0 n=10 med=0.169706s ok={True} rc=0 
+ada        k6   mt                   q1         p0 n=10 med=0.025117s ok={True} rc=0 
+ada        k1   aos                  energy     p0 n=10 med=0.036369s ok={True} rc=0 
+ada        k6   natural              q1         p0 n=10 med=0.093080s ok={True} rc=0 
+ada        k1   soa                  energy     p0 n=10 med=0.006085s ok={True} rc=0 
+ada        k4   natural_unsorted                p0 n=10 med=0.006487s ok={True} rc=0 
+ada        k6   natural              q6         p0 n=10 med=0.068754s ok={True} rc=0 
+ada        k9   natural                         p0 n=10 med=0.050791s ok={True} rc=0 
+ada        k1   natural_shuffled     energy     p0 n=10 med=0.035141s ok={True} rc=0 
+ada        k2   tuned                16384      p0 n=10 med=0.009271s ok={True} rc=0 
+ada        k3   rmw_padded                      p0 n=10 med=0.298666s ok={True} rc=0 
+ada        k9   tuned                           p0 n=10 med=0.048103s ok={True} rc=0 
+ada        k6   mt                   q1         p0 n=10 med=0.021194s ok={True} rc=0 
+ada        k6   tuned                q6         p0 n=10 med=0.015029s ok={True} rc=0 
