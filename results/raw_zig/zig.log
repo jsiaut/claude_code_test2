@@ -80,3 +80,32 @@ zig        k3   sw_padded                       p0 n=10 med=0.081270s ok={True} 
 zig        k6   tuned                q1         p0 n=10 med=0.030102s ok={True} rc=0 
 zig        k6   mt                   q1         p0 n=10 med=0.009898s ok={True} rc=0 
 zig        k1   natural              energy     p0 n=10 med=0.042648s ok={True} rc=0 
+zig        k2   tuned                8388608    p0 n=4 med=0.649478s ok={True} rc=0 
+zig        k5   natural                         p0 n=10 med=0.171433s ok={True} rc=0 
+zig        k2   tuned                262144     p0 n=10 med=0.018933s ok={True} rc=0 
+zig        k4   branchless_unsorted             p0 n=10 med=0.007585s ok={True} rc=0 
+zig        k7   tuned                           p0 n=6 med=0.472484s ok={True} rc=0 
+zig        k1   soa                  energy     p0 n=10 med=0.006123s ok={True} rc=0 
+zig        k5   tuned                           p0 n=10 med=0.005879s ok={True} rc=0 
+zig        k3   rmw_padded                      p0 n=10 med=0.245556s ok={True} rc=0 
+zig        k6   tuned                q1         p0 n=10 med=0.031181s ok={True} rc=0 
+zig        k2   tuned                16384      p0 n=10 med=0.006559s ok={True} rc=0 
+zig        k9   mt                              p0 n=10 med=0.018248s ok={True} rc=0 
+zig        k6   tuned                q6         p0 n=10 med=0.019955s ok={True} rc=0 
+zig        k9   tuned                           p0 n=10 med=0.034000s ok={True} rc=0 
+zig        k8   natural                         p0 n=3 med=1.566136s ok={True} rc=0 
+zig        k6   natural              q6         p0 n=10 med=0.052901s ok={True} rc=0 
+zig        k4   natural_unsorted                p0 n=10 med=0.012452s ok={True} rc=0 
+zig        k9   natural                         p0 n=10 med=0.046177s ok={True} rc=0 
+zig        k8   tuned                           p0 n=10 med=0.237211s ok={True} rc=0 
+zig        k6   mt                   q1         p0 n=10 med=0.012043s ok={True} rc=0 
+zig        k6   mt                   q6         p0 n=10 med=0.007087s ok={True} rc=0 
+zig        k8   tuned_alloc                     p0 n=3 med=0.840357s ok={True} rc=0 
+zig        k7   natural                         p0 n=3 med=1.637985s ok={True} rc=0 
+zig        k1   natural_shuffled     energy     p0 n=10 med=0.039524s ok={True} rc=0 
+zig        k1   aos                  energy     p0 n=10 med=0.035834s ok={True} rc=0 
+zig        k6   natural              q1         p0 n=10 med=0.118294s ok={True} rc=0 
+zig        k3   sw_padded                       p0 n=10 med=0.082995s ok={True} rc=0 
+zig        k1   aos                  energy     p0 n=10 med=0.032491s ok={True} rc=0 
+zig        k6   natural              q6         p0 n=10 med=0.059266s ok={True} rc=0 
+zig        k6   mt                   q1         p0 n=10 med=0.011625s ok={True} rc=0 
