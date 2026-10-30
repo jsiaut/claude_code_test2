@@ -31,5 +31,6 @@ pub fn main() !void {
     const fd = try std.posix.openat(std.posix.AT.FDCWD, "/opt/msdata/k5_a.f32", .{}, 0);
     const m = try std.posix.mmap(null, 8192, .{ .READ = true }, .{ .TYPE = .PRIVATE }, fd, 0);
     const fl = std.mem.bytesAsSlice(f32, m);
-    std.debug.print("CAP;F4;0.5;std.posix.mmap (POSIX seulement) + bytesAsSlice : {d}\n", .{fl[0]});
+    // F4 est notée par probe_f4.zig (std.Io.File.MemoryMap, portable) depuis la correction du 30/10 (docs/ZIG.md)
+    std.debug.print("INFO;F4;std.posix.mmap (liaison POSIX) + bytesAsSlice : {d}\n", .{fl[0]});
 }

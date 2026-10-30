@@ -1,0 +1,53 @@
+zig_master k4   branchless_unsorted             p0 n=10 med=0.003363s ok={True} rc=0 
+zig_master k5   natural                         p0 n=10 med=0.164992s ok={True} rc=0 
+zig_master k6   tuned                q1         p0 n=10 med=0.021729s ok={True} rc=0 
+zig_master k6   natural              q1         p0 n=10 med=0.092511s ok={True} rc=0 
+zig_master k6   natural              q6         p0 n=10 med=0.060871s ok={True} rc=0 
+zig_master k6   mt                   q6         p0 n=10 med=0.007756s ok={True} rc=0 
+zig_master k9   natural                         p0 n=10 med=0.031863s ok={True} rc=0 
+zig_master k2   tuned                8388608    p0 n=4 med=0.677878s ok={True} rc=0 
+zig_master k8   tuned                           p0 n=10 med=0.242317s ok={True} rc=0 
+zig_master k2   tuned                262144     p0 n=10 med=0.019470s ok={True} rc=0 
+zig_master k7   tuned                           p0 n=6 med=0.438305s ok={True} rc=0 
+zig_master k6   tuned                q6         p0 n=10 med=0.013564s ok={True} rc=0 
+zig_master k3   sw_padded                       p0 n=10 med=0.085512s ok={True} rc=0 
+zig_master k8   natural                         p0 n=3 med=0.856830s ok={True} rc=0 
+zig_master k9   tuned                           p0 n=10 med=0.031834s ok={True} rc=0 
+zig_master k3   rmw_padded                      p0 n=10 med=0.245129s ok={True} rc=0 
+zig_master k1   natural_shuffled     energy     p0 n=10 med=0.036167s ok={True} rc=0 
+zig_master k6   mt                   q1         p0 n=10 med=0.012078s ok={True} rc=0 
+zig_master k7   natural                         p0 n=3 med=1.399538s ok={True} rc=0 
+zig_master k2   tuned                16384      p0 n=10 med=0.007016s ok={True} rc=0 
+zig_master k5   tuned                           p0 n=10 med=0.005252s ok={True} rc=0 
+zig_master k1   natural              energy     p0 n=10 med=0.042016s ok={True} rc=0 
+zig_master k4   natural_unsorted                p0 n=10 med=0.003132s ok={True} rc=0 
+zig_master k1   soa                  energy     p0 n=10 med=0.005696s ok={True} rc=0 
+zig_master k1   aos                  energy     p0 n=10 med=0.032372s ok={True} rc=0 
+zig_master k8   tuned_alloc                     p0 n=3 med=0.806110s ok={True} rc=0 
+zig_master k9   mt                              p0 n=10 med=0.019319s ok={True} rc=0 
+zig_master k5   natural                         p0 n=10 med=0.168495s ok={True} rc=0 
+zig_master k8   tuned_alloc                     p0 n=3 med=1.073147s ok={True} rc=0 
+zig_master k2   tuned                16384      p0 n=10 med=0.007420s ok={True} rc=0 
+zig_master k6   tuned                q6         p0 n=10 med=0.015602s ok={True} rc=0 
+zig_master k9   mt                              p0 n=10 med=0.021563s ok={True} rc=0 
+zig_master k1   natural              energy     p0 n=10 med=0.038037s ok={True} rc=0 
+zig_master k6   mt                   q1         p0 n=10 med=0.013327s ok={True} rc=0 
+zig_master k9   tuned                           p0 n=10 med=0.030485s ok={True} rc=0 
+zig_master k7   tuned                           p0 n=6 med=0.426719s ok={True} rc=0 
+zig_master k4   branchless_unsorted             p0 n=10 med=0.004988s ok={True} rc=0 
+zig_master k6   tuned                q1         p0 n=10 med=0.023808s ok={True} rc=0 
+zig_master k5   tuned                           p0 n=10 med=0.007182s ok={True} rc=0 
+zig_master k1   natural_shuffled     energy     p0 n=10 med=0.035468s ok={True} rc=0 
+zig_master k2   tuned                262144     p0 n=10 med=0.028889s ok={True} rc=0 
+zig_master k1   soa                  energy     p0 n=10 med=0.006480s ok={True} rc=0 
+zig_master k6   natural              q1         p0 n=10 med=0.094038s ok={True} rc=0 
+zig_master k3   sw_padded                       p0 n=10 med=0.093007s ok={True} rc=0 
+zig_master k6   natural              q6         p0 n=10 med=0.070959s ok={True} rc=0 
+zig_master k3   rmw_padded                      p0 n=10 med=0.257967s ok={True} rc=0 
+zig_master k7   natural                         p0 n=3 med=1.425837s ok={True} rc=0 
+zig_master k8   tuned                           p0 n=10 med=0.272581s ok={True} rc=0 
+zig_master k4   natural_unsorted                p0 n=10 med=0.003076s ok={True} rc=0 
+zig_master k9   natural                         p0 n=10 med=0.032072s ok={True} rc=0 
+zig_master k6   mt                   q6         p0 n=10 med=0.006623s ok={True} rc=0 
+zig_master k8   natural                         p0 n=3 med=1.076951s ok={True} rc=0 
+zig_master k2   tuned                8388608    p0 n=4 med=0.657686s ok={True} rc=0 

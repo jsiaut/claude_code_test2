@@ -106,7 +106,9 @@ fusionner les passes répétées (355 To/s).
   GNAT les déclare « Feature unimplemented » (`gnat_rm.info`). L'aspect `CPU` des tâches et
   `Dispatching_Domains` sont disponibles.
 * **Zig 0.17** : `@fence` a été retiré du langage ; `std.atomic.cache_line` et
-  `std.atomic.spinLoopHint` existent.
+  `std.atomic.spinLoopHint` existent. Le vectoriseur de boucles de LLVM est désactivé dans le
+  compilateur (0.16 et 0.17, réactivé dans master) ; `std.Io.File.MemoryMap` projette un fichier
+  de façon portable (depuis 0.16). Ajouté le 30/10 (`docs/ZIG.md`).
 * **Node 26 / Bun 1.4** : `Atomics.pause` est disponible.
 
 ## Faits établis après le redémarrage de la VM (mesures indépendantes de la vitesse, et outils)
@@ -154,9 +156,13 @@ fusionner les passes répétées (355 To/s).
   état de l'environnement de la VM (hôte partagé), pas du code.
 * **objdump affiche comme données le code de GHC** : les tables d'info sont des symboles de type
   objet placés dans `.text`. Il faut désassembler les octets bruts.
-* **Vectorisation du code naturel (mesurée sur la boucle chaude)** : Zig ne vectorise ni K4
-  (code sans branchement scalaire, déroulé par 8) ni K9 (scalaire déroulé par 3 ; les deux
-  tableaux, passés par pointeur, peuvent s'aliaser) ; Rust, D, Nim et Ada ne vectorisent pas le
+* **Vectorisation du code naturel (mesurée sur la boucle chaude)** : Zig 0.17 ne vectorise ni K4
+  (code sans branchement scalaire, déroulé par 8) ni K9 (scalaire déroulé par 3), parce que
+  l'équipe Zig a désactivé le vectoriseur de boucles de LLVM en 0.16 et 0.17, pour contourner un
+  bug de LLVM qui compilait mal le compilateur lui-même (`src/zig_llvm.cpp`, ligne 288 ; notes de
+  version). Zig 0.15.2 et master (0.18-dev, LLVM 23) vectorisent les deux boucles, K9 après un test
+  de recouvrement des deux tableaux à l'exécution. *Corrigé le 30/10* : j'attribuais K9 à l'aliasing
+  possible des deux tableaux ; c'était faux (`docs/ZIG.md`). Rust, D, Nim et Ada ne vectorisent pas le
   stencil naturel, à cause des vérifications de bornes de leurs tableaux de tableaux ; gfortran ne
   vectorise pas K4 (somme d'octets dans un accumulateur 64 bits) alors que flang le fait ; le JIT de
   .NET n'a pas de vectoriseur automatique ; C2 (Java) vectorise K9 en 128 bits mais pas K4.
@@ -306,3 +312,20 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   renomme la variable que la clause `reduction` nomme.
 * **D et Nim ont des indications de branchement standard** : `core.builtins.likely` et `unlikely` (druntime),
   `likely` et `unlikely` exportés par `system`.
+
+## Remarque sur Zig (30 octobre, machine 5, Cascade Lake) — `docs/ZIG.md`, `results/zig_check/`
+
+* **Zig 0.16 et 0.17 désactivent le vectoriseur de boucles de LLVM** : `pipeline_opts.LoopVectorization = false`
+  (`src/zig_llvm.cpp`, ligne 288 des sources de 0.17.0), pour contourner un bug de LLVM qui compilait mal le
+  compilateur Zig lui-même (notes de version de 0.16.0 et de 0.17.0). Master (0.18.0-dev.753, LLVM 23) le
+  réactive. Le vectoriseur SLP et l'entrelacement restent actifs, d'où des boucles scalaires déroulées.
+* **Mêmes noyaux, même pilote, quatre versions de Zig** (K4 et K9 naturels, temps minimum de 3 processus) :
+  0.15.2 vectorise les deux boucles (K4 1,8 à 3,2 ms, K9 25 à 26 ms) ; 0.16.0 et 0.17.0 aucune (6,8 à 9,9 ms ;
+  29 à 33 ms) ; master les deux (2,3 à 3,1 ms ; 25 à 26 ms), comme C compilé par le clang de Zig 0.17 (même
+  LLVM 22.1.8) ou par clang 23. L'IR non optimisé de Zig 0.17, passé au pipeline `-O3` de ce clang, est vectorisé.
+* **Lancer un thread coûte trois à quatre fois plus en Zig qu'en C** : `std.Thread.spawn` puis `join`, 148 à
+  217 µs en moyenne par thread (Zig 0.17 sans libc), 125 à 171 µs lié à la glibc, contre 46 à 123 µs pour
+  `pthread_create` en C ; `Io.Group.concurrent` (pool d'`Io.Threaded`) coûte 28 à 30 µs par tâche.
+* **`std.Io.File.MemoryMap`** (depuis 0.16) projette un fichier de façon portable (`mmap` partagé sous Linux,
+  visible dans `/proc/self/maps`) ; `std.mem.bytesAsSlice` le réinterprète sans copie. F4 de Zig vaut donc 1 en
+  règle v1, et non 0,5.

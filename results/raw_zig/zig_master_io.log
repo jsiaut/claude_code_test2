@@ -1,0 +1,9 @@
+zig_master_io k3   sw_padded                       p0 n=10 med=0.093628s ok={True} rc=0 
+zig_master_io k3   rmw_padded                      p0 n=10 med=0.249079s ok={True} rc=0 
+zig_master_io k6   mt                   q6         p0 n=10 med=0.007360s ok={True} rc=0 
+zig_master_io k6   mt                   q1         p0 n=10 med=0.008584s ok={True} rc=0 
+zig_master_io k9   mt                              p0 n=10 med=0.016830s ok={True} rc=0 
+zig_master_io k3   rmw_padded                      p0 n=10 med=0.234689s ok={True} rc=0 
+zig_master_io k3   sw_padded                       p0 n=10 med=0.080324s ok={True} rc=0 
+zig_master_io k6   mt                   q1         p0 n=10 med=0.009542s ok={True} rc=0 
+zig_master_io k9   mt                              p0 n=10 med=0.017284s ok={True} rc=0 
