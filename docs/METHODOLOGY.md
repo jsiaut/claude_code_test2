@@ -508,3 +508,10 @@ Robustesse :
   l'analyse : `docs/ZIG.md`, poussé avant les mesures. Chaînes ajoutées : Zig 0.15.2, 0.16.0 et
   0.18.0-dev.753+1420479be (archives de ziglang.org, SHA-256 et signatures minisign vérifiées), sources de 0.17.0 et
   de master. Erreur de fait trouvée : F4 de Zig en règle v1 (0,5 au lieu de 1).
+* 2026-10-30, 13:55-14:10 : **mesures de la remarque sur Zig** (`tools/measure_zig.py`, machine 5) : 69 cellules ×
+  7 processus, aucune somme de contrôle fausse ; 31 processus refaits pour vol de temps au-dessus de 2 % (règle
+  inchangée : le troisième essai est gardé, une fois au-dessus du seuil). Rien d'autre ne tournait ; pendant les
+  mesures, seuls des fichiers ont été écrits et poussés. Après les mesures : vectorisation mesurée de la boucle
+  chaude de Zig master (`tools/c3_measure.py zig_master` : K4 et K9 vectorisées, C3 = 1), sondes de Zig et de C
+  relancées. La sonde C déclarait encore D3 = 0 après l'erratum du juge à l'aveugle (la matrice dit 0,5) : alignée,
+  0 divergence entre sondes et matrice.

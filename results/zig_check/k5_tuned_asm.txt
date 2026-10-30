@@ -1,0 +1,51 @@
+# K5 tuned : boucle chaude de Zig 0.17 (@Vector(16, f32), @mulAdd) et de C (intrinsèques AVX-512), binaires de la campagne
+# Les deux : 4 accumulateurs zmm indépendants, boucle déroulée par 2 (8 vfmadd 512 bits par tour), chargements alignés.
+# C ajoute 4 copies registre à registre (vmovaps zmm8, zmm3...), éliminées au renommage.
+
+## Zig 0.17 (bench/zig/ms, ms.k5Tuned)
+ 108d126:	cs nop WORD PTR [rax+rax*1+0x0]
+ 108d130:	vmovaps zmm4,ZMMWORD PTR [rdi+rax*4]
+ 108d137:	vmovaps zmm5,ZMMWORD PTR [rdi+rax*4+0x40]
+ 108d13f:	vmovaps zmm6,ZMMWORD PTR [rdi+rax*4+0x80]
+ 108d147:	vmovaps zmm7,ZMMWORD PTR [rdi+rax*4+0xc0]
+ 108d14f:	vfmadd132ps zmm4,zmm3,ZMMWORD PTR [rdx+rax*4]
+ 108d156:	vfmadd132ps zmm5,zmm2,ZMMWORD PTR [rdx+rax*4+0x40]
+ 108d15e:	vfmadd132ps zmm6,zmm1,ZMMWORD PTR [rdx+rax*4+0x80]
+ 108d166:	vfmadd132ps zmm7,zmm0,ZMMWORD PTR [rdx+rax*4+0xc0]
+ 108d16e:	vmovaps zmm3,ZMMWORD PTR [rdi+rax*4+0x100]
+ 108d176:	vfmadd132ps zmm3,zmm4,ZMMWORD PTR [rdx+rax*4+0x100]
+ 108d17e:	vmovaps zmm2,ZMMWORD PTR [rdi+rax*4+0x140]
+ 108d186:	vfmadd132ps zmm2,zmm5,ZMMWORD PTR [rdx+rax*4+0x140]
+ 108d18e:	vmovaps zmm1,ZMMWORD PTR [rdi+rax*4+0x180]
+ 108d196:	vfmadd132ps zmm1,zmm6,ZMMWORD PTR [rdx+rax*4+0x180]
+ 108d19e:	vmovaps zmm0,ZMMWORD PTR [rdi+rax*4+0x1c0]
+ 108d1a6:	vfmadd132ps zmm0,zmm7,ZMMWORD PTR [rdx+rax*4+0x1c0]
+ 108d1ae:	sub    rax,0xffffffffffffff80
+ 108d1b2:	add    rcx,0xfffffffffffffffe
+ 108d1b6:	jne    108d130 <ms.k5Tuned+0x40>
+ 108d1bc:	test   sil,0x1
+
+## C (bench/c/ms, k5_tuned)
+    5500:	vmovaps zmm4,ZMMWORD PTR [rdi+rax*4+0x100]
+    5508:	vmovaps zmm5,ZMMWORD PTR [rdi+rax*4+0x140]
+    5510:	vmovaps zmm6,ZMMWORD PTR [rdi+rax*4+0x180]
+    5518:	vmovaps zmm7,ZMMWORD PTR [rdi+rax*4+0x1c0]
+    5520:	vmovaps zmm8,zmm3
+    5526:	vfmadd231ps zmm8,zmm4,ZMMWORD PTR [rsi+rax*4+0x100]
+    552e:	vmovaps zmm4,zmm2
+    5534:	vfmadd231ps zmm4,zmm5,ZMMWORD PTR [rsi+rax*4+0x140]
+    553c:	vmovaps zmm5,zmm1
+    5542:	vfmadd231ps zmm5,zmm6,ZMMWORD PTR [rsi+rax*4+0x180]
+    554a:	vmovaps zmm6,zmm0
+    5550:	vfmadd231ps zmm6,zmm7,ZMMWORD PTR [rsi+rax*4+0x1c0]
+    5558:	vmovaps zmm3,ZMMWORD PTR [rdi+rax*4+0x200]
+    5560:	vfmadd132ps zmm3,zmm8,ZMMWORD PTR [rsi+rax*4+0x200]
+    5568:	vmovaps zmm2,ZMMWORD PTR [rdi+rax*4+0x240]
+    5570:	vfmadd132ps zmm2,zmm4,ZMMWORD PTR [rsi+rax*4+0x240]
+    5578:	vmovaps zmm1,ZMMWORD PTR [rdi+rax*4+0x280]
+    5580:	vfmadd132ps zmm1,zmm5,ZMMWORD PTR [rsi+rax*4+0x280]
+    5588:	vmovaps zmm0,ZMMWORD PTR [rdi+rax*4+0x2c0]
+    5590:	vfmadd132ps zmm0,zmm6,ZMMWORD PTR [rsi+rax*4+0x2c0]
+    5598:	sub    rax,0xffffffffffffff80
+    559c:	cmp    rax,0x7c0
+    55a2:	jb     5500 <k5_tuned+0x20>
