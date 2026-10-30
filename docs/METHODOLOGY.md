@@ -469,3 +469,15 @@ Robustesse :
   C, Nim et Ada sont compilées avec `-mprefer-vector-width=512` (choix de la largeur, permis par la section 4.1) ;
   Go, qui ne vectorise pas, reçoit 8 accumulateurs scalaires au lieu de tableaux de 64 voies ; la version standard de
   K5 en Nim coupe localement les vérifications par les pragmas standard que le fichier emploie déjà ailleurs.
+* 2026-10-30, 10:37-10:56 : **mesures de la confrontation** (`tools/measure_conf.py`) : 96 cellules × 7 processus,
+  aucune somme de contrôle fausse ; le pilote a refait une centaine de processus pour vol de temps au-dessus de 2 %,
+  surtout des mesures à 4 threads (règle inchangée : le troisième essai est gardé). Rien d'autre ne tournait.
+  Pendant les mesures, seuls des fichiers ont été écrits et poussés (aucun calcul).
+* 2026-10-30, après les mesures : **analyse de la confrontation** (`analysis/confrontation.py`, poussé avant son
+  premier calcul). Le scénario A rejoue exactement l'analyse v3 publiée (rangs espérés identiques). Verdicts et
+  chiffres : `docs/CONFRONTATION.md`, section « Résultats ». **Contrôle hors plan**, décidé après avoir vu les
+  rapports appariés : les données de K5 viennent de la machine 3 (Emerald Rapids) et leur rapport a été mesuré sur
+  Cascade Lake ; le transfert n'est sûr que pour C et Fortran, dont la boucle chaude ne change pas (FMA 512 bits,
+  quatre accumulateurs, vérifié au désassemblage) ; Nim et D perdent la FMA, Go, Java et Chapel passent au scalaire.
+  Le scénario D recalculé avec les rapports de K5 forcés à 1 (`analysis/confrontation_posthoc.py`) donne les mêmes
+  verdicts (Spearman 0,87, C 5e).

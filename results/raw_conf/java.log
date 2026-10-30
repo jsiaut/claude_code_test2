@@ -1,0 +1,42 @@
+java       k5   tuned                           p0 n=10 med=0.011395s ok={True} rc=0 
+java       k6   mt                   q1         p0 n=10 med=0.024506s ok={True} rc=0 
+java       k6   mt                   q6         p0 n=10 med=0.007600s ok={True} rc=0 
+java       k6   tuned                q6         p0 n=10 med=0.016388s ok={True} rc=0 
+java       k6   tuned                q1         p0 n=10 med=0.071010s ok={True} rc=0 
+java       k1   soa                  energy     p0 n=10 med=0.005703s ok={True} rc=0 
+java       k6   tuned                q6         p0 n=10 med=0.014588s ok={True} rc=0 
+java       k6   tuned                q1         p0 n=10 med=0.067116s ok={True} rc=0 
+java       k1   soa                  energy     p0 n=10 med=0.005880s ok={True} rc=0 
+java       k6   mt                   q1         p0 n=10 med=0.023181s ok={True} rc=0 
+java       k6   mt                   q6         p0 n=10 med=0.005832s ok={True} rc=0 
+java       k5   tuned                           p0 n=10 med=0.011708s ok={True} rc=0 
+java       k6   mt                   q1         p0 n=10 med=0.021591s ok={True} rc=0 
+java       k6   mt                   q6         p0 n=10 med=0.006651s ok={True} rc=0 
+java       k6   tuned                q6         p0 n=10 med=0.015443s ok={True} rc=0 
+java       k6   tuned                q1         p0 n=10 med=0.079473s ok={True} rc=0 
+java       k1   soa                  energy     p0 n=10 med=0.005923s ok={True} rc=0 
+java       k5   tuned                           p0 n=10 med=0.012124s ok={True} rc=0 
+java       k1   soa                  energy     p0 n=10 med=0.006263s ok={True} rc=0 
+java       k5   tuned                           p0 n=10 med=0.011804s ok={True} rc=0 
+java       k6   mt                   q6         p0 n=10 med=0.006482s ok={True} rc=0 
+java       k6   tuned                q6         p0 n=10 med=0.016203s ok={True} rc=0 
+java       k6   tuned                q1         p0 n=10 med=0.068667s ok={True} rc=0 
+java       k6   mt                   q1         p0 n=10 med=0.025813s ok={True} rc=0 
+java       k6   mt                   q1         p0 n=10 med=0.023716s ok={True} rc=0 
+java       k5   tuned                           p0 n=10 med=0.010924s ok={True} rc=0 
+java       k6   tuned                q1         p0 n=10 med=0.067353s ok={True} rc=0 
+java       k6   mt                   q6         p0 n=10 med=0.006220s ok={True} rc=0 
+java       k1   soa                  energy     p0 n=10 med=0.005647s ok={True} rc=0 
+java       k6   tuned                q6         p0 n=10 med=0.017796s ok={True} rc=0 
+java       k6   tuned                q1         p0 n=10 med=0.074515s ok={True} rc=0 
+java       k6   mt                   q1         p0 n=10 med=0.020901s ok={True} rc=0 
+java       k6   tuned                q6         p0 n=10 med=0.015057s ok={True} rc=0 
+java       k1   soa                  energy     p0 n=10 med=0.005398s ok={True} rc=0 
+java       k5   tuned                           p0 n=10 med=0.013488s ok={True} rc=0 
+java       k6   mt                   q6         p0 n=10 med=0.007686s ok={True} rc=0 
+java       k5   tuned                           p0 n=10 med=0.011896s ok={True} rc=0 
+java       k6   mt                   q1         p0 n=10 med=0.024260s ok={True} rc=0 
+java       k6   tuned                q1         p0 n=10 med=0.061004s ok={True} rc=0 
+java       k6   tuned                q6         p0 n=10 med=0.016289s ok={True} rc=0 
+java       k6   mt                   q6         p0 n=10 med=0.006660s ok={True} rc=0 
+java       k1   soa                  energy     p0 n=10 med=0.006437s ok={True} rc=0 

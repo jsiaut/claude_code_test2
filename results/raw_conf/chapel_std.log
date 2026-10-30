@@ -1,0 +1,28 @@
+chapel_std k5   tuned                           p0 n=10 med=0.171427s ok={True} rc=0 
+chapel_std k7   tuned                           p0 n=7 med=0.421267s ok={True} rc=0 
+chapel_std k1   soa                  energy     p0 n=10 med=0.012046s ok={True} rc=0 
+chapel_std k1   aos                  energy     p0 n=10 med=0.031044s ok={True} rc=0 
+chapel_std k1   aos                  energy     p0 n=10 med=0.032556s ok={True} rc=0 
+chapel_std k1   soa                  energy     p0 n=10 med=0.007156s ok={True} rc=0 
+chapel_std k7   tuned                           p0 n=7 med=0.392950s ok={True} rc=0 
+chapel_std k5   tuned                           p0 n=10 med=0.168707s ok={True} rc=0 
+chapel_std k5   tuned                           p0 n=10 med=0.166049s ok={True} rc=0 
+chapel_std k1   soa                  energy     p0 n=10 med=0.007918s ok={True} rc=0 
+chapel_std k1   aos                  energy     p0 n=10 med=0.033913s ok={True} rc=0 
+chapel_std k7   tuned                           p0 n=7 med=0.546397s ok={True} rc=0 
+chapel_std k1   aos                  energy     p0 n=10 med=0.035912s ok={True} rc=0 
+chapel_std k5   tuned                           p0 n=10 med=0.168596s ok={True} rc=0 
+chapel_std k1   soa                  energy     p0 n=10 med=0.007221s ok={True} rc=0 
+chapel_std k7   tuned                           p0 n=7 med=0.497576s ok={True} rc=0 
+chapel_std k7   tuned                           p0 n=7 med=0.484544s ok={True} rc=0 
+chapel_std k5   tuned                           p0 n=10 med=0.169858s ok={True} rc=0 
+chapel_std k1   soa                  energy     p0 n=10 med=0.011014s ok={True} rc=0 
+chapel_std k1   aos                  energy     p0 n=10 med=0.035727s ok={True} rc=0 
+chapel_std k5   tuned                           p0 n=10 med=0.168327s ok={True} rc=0 
+chapel_std k7   tuned                           p0 n=7 med=0.452065s ok={True} rc=0 
+chapel_std k1   soa                  energy     p0 n=10 med=0.010317s ok={True} rc=0 
+chapel_std k1   aos                  energy     p0 n=10 med=0.031436s ok={True} rc=0 
+chapel_std k1   soa                  energy     p0 n=10 med=0.010279s ok={True} rc=0 
+chapel_std k5   tuned                           p0 n=10 med=0.177014s ok={True} rc=0 
+chapel_std k7   tuned                           p0 n=7 med=0.466160s ok={True} rc=0 
+chapel_std k1   aos                  energy     p0 n=10 med=0.034247s ok={True} rc=0 

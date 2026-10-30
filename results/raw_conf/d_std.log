@@ -1,0 +1,35 @@
+d_std      k5   tuned                           p0 n=10 med=0.008417s ok={True} rc=0 
+d_std      k1   soa                  energy     p0 n=10 med=0.005533s ok={True} rc=0 
+d_std      k7   tuned                           p0 n=6 med=0.416725s ok={True} rc=0 
+d_std      k9   tuned                           p0 n=10 med=0.027468s ok={True} rc=0 
+d_std      k9   mt                              p0 n=10 med=0.013273s ok={True} rc=0 
+d_std      k9   mt                              p0 n=10 med=0.014057s ok={True} rc=0 
+d_std      k5   tuned                           p0 n=10 med=0.009353s ok={True} rc=0 
+d_std      k1   soa                  energy     p0 n=10 med=0.005214s ok={True} rc=0 
+d_std      k9   tuned                           p0 n=10 med=0.026928s ok={True} rc=0 
+d_std      k7   tuned                           p0 n=6 med=0.404846s ok={True} rc=0 
+d_std      k9   mt                              p0 n=10 med=0.014685s ok={True} rc=0 
+d_std      k9   tuned                           p0 n=10 med=0.026804s ok={True} rc=0 
+d_std      k1   soa                  energy     p0 n=10 med=0.005807s ok={True} rc=0 
+d_std      k5   tuned                           p0 n=10 med=0.007782s ok={True} rc=0 
+d_std      k7   tuned                           p0 n=6 med=0.442021s ok={True} rc=0 
+d_std      k9   mt                              p0 n=10 med=0.013760s ok={True} rc=0 
+d_std      k7   tuned                           p0 n=6 med=0.355903s ok={True} rc=0 
+d_std      k1   soa                  energy     p0 n=10 med=0.005836s ok={True} rc=0 
+d_std      k9   tuned                           p0 n=10 med=0.026722s ok={True} rc=0 
+d_std      k5   tuned                           p0 n=10 med=0.009217s ok={True} rc=0 
+d_std      k9   tuned                           p0 n=10 med=0.025951s ok={True} rc=0 
+d_std      k1   soa                  energy     p0 n=10 med=0.005712s ok={True} rc=0 
+d_std      k5   tuned                           p0 n=10 med=0.009511s ok={True} rc=0 
+d_std      k7   tuned                           p0 n=6 med=0.383188s ok={True} rc=0 
+d_std      k9   mt                              p0 n=10 med=0.014390s ok={True} rc=0 
+d_std      k9   mt                              p0 n=10 med=0.012512s ok={True} rc=0 
+d_std      k5   tuned                           p0 n=10 med=0.006703s ok={True} rc=0 
+d_std      k9   tuned                           p0 n=10 med=0.026489s ok={True} rc=0 
+d_std      k7   tuned                           p0 n=6 med=0.359400s ok={True} rc=0 
+d_std      k1   soa                  energy     p0 n=10 med=0.005892s ok={True} rc=0 
+d_std      k7   tuned                           p0 n=6 med=0.368434s ok={True} rc=0 
+d_std      k9   tuned                           p0 n=10 med=0.025203s ok={True} rc=0 
+d_std      k9   mt                              p0 n=10 med=0.013641s ok={True} rc=0 
+d_std      k1   soa                  energy     p0 n=10 med=0.005334s ok={True} rc=0 
+d_std      k5   tuned                           p0 n=10 med=0.009291s ok={True} rc=0 

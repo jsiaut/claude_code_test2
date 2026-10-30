@@ -1762,3 +1762,12 @@
 2026-10-29T19:55:35 v3 : pilote du bruit, 179/180 c k5:tuned: B 0.1s
 2026-10-29T19:55:36 v3 : pilote du bruit, 180/180 rust k2:tuned:8388608 B 1.6s
 2026-10-29T19:55:36 v3 : pilote du bruit, affinité des interruptions restaurée
+2026-10-30T10:37:20 confrontation : début, 96 cellules, 7 passes
+2026-10-30T10:40:11 confrontation : passe 1/7 terminée
+2026-10-30T10:42:56 confrontation : passe 2/7 terminée
+2026-10-30T10:45:28 confrontation : passe 3/7 terminée
+2026-10-30T10:48:08 confrontation : passe 4/7 terminée
+2026-10-30T10:50:50 confrontation : passe 5/7 terminée
+2026-10-30T10:53:23 confrontation : passe 6/7 terminée
+2026-10-30T10:55:50 confrontation : passe 7/7 terminée
+2026-10-30T10:55:50 confrontation : fin

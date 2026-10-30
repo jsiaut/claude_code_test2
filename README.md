@@ -257,6 +257,23 @@ du langage.
   runtimes par défaut.
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
 
+## Une autre étude, un autre ordre : pourquoi
+
+Le « Banc de sympathie mécanique », une étude voisine faite sur le même processeur que ma machine 3, classe C 11e sur 18 langages
+communs, là où je le classe 1er. Corrélation de rang entre les deux ordres : 0,77. Je l'ai confrontée à la mienne
+par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION.md)) :
+
+* **Leur règle du « standard »** (une extension du compilateur, POSIX pour C, une option globale ou un module
+  expérimental ne valent que le niveau 1 sur 4) appliquée à mon pilier contrôle classe C 11e, comme eux.
+* **La même règle appliquée au code mesuré change peu la performance de C** : réécrit en C standard (sommes
+  partielles au lieu des intrinsèques, `threads.h`, sans préchargement), il garde 94 % de son plafond. Elle coûte
+  beaucoup à Chapel (sans `--no-ieee-float`, produit scalaire 23 fois plus lent), à Java (sans la Vector API en
+  incubation), à Go (sans le SIMD expérimental), et à Fortran et Mojo, qui n'ont pas de threads standard.
+* **Les deux règles à la fois** : C passe 5e, la corrélation monte à 0,87. Le reste de l'écart tient à la question
+  posée : leur score ne compte pas la vitesse. Mêler à peu près moitié de leur score au mien reproduit leur ordre.
+* **Sur les faits, les deux grilles, notées indépendamment, s'accordent** (0,83 à 0,88). Leurs désaccords portent
+  presque tous sur ce que recouvre chaque principe.
+
 ## Pour aller plus loin
 
 * [`docs/FINDINGS.md`](docs/FINDINGS.md) : tous les faits vérifiés (machines, compilateurs, runtimes).
@@ -267,6 +284,8 @@ du langage.
 * Les audits et mes réponses : [`docs/AUDIT_2026-10-29.md`](docs/AUDIT_2026-10-29.md) et
   [`docs/AUDIT_RESPONSE.md`](docs/AUDIT_RESPONSE.md), [`docs/AUDIT2_2026-10-29.md`](docs/AUDIT2_2026-10-29.md) et
   [`docs/AUDIT2_RESPONSE.md`](docs/AUDIT2_RESPONSE.md).
+* La confrontation avec le « Banc de sympathie mécanique » : [`docs/CONFRONTATION.md`](docs/CONFRONTATION.md)
+  et [`results/report_confrontation.md`](results/report_confrontation.md).
 * Les données brutes de chaque processus : `results/raw*`.
 
 ## Reproduire

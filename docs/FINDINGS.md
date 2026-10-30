@@ -269,3 +269,25 @@ fusionner les passes répétées (355 To/s).
   déplacer les interruptions laisse l'écart-type entre processus inchangé (rapport 1,00 [0,64–1,33] sur cinq
   mesures natives), et ni la PSI, ni le temps volé, ni les changements de contexte, ni les migrations ne prédisent
   la lenteur d'un processus (|ρ| ≤ 0,23).
+
+## Code standard seul (30 octobre, machine 4, Cascade Lake) — `docs/CONFRONTATION.md`
+
+Rapports appariés réécriture standard / original, 7 processus de chaque côté, mêmes conditions.
+
+* **C standard vaut presque C avec extensions.** Des sommes partielles explicites donnent la même boucle chaude que
+  les intrinsèques AVX-512 (FMA 512 bits, quatre accumulateurs ; avec `-mprefer-vector-width=512`) : K5 1,05, K1 SoA
+  0,97. `threads.h` vaut les threads POSIX (0,89 à 1,01). Ce qui coûte : Q1 sans intrinsèques (1,89) et K7 sans
+  `__builtin_prefetch` (1,22).
+* **Nim et D perdent la FMA sans moyen non standard.** Le C généré par Nim sépare la multiplication et l'addition,
+  et seule une option globale (`--passC:-ffast-math`) les refusionne ; D sans `@llvmFastMathFlag` (ldc) fait de même.
+  K5 : 1,37 et 1,20.
+* **Chapel tient sa vitesse de `--no-ieee-float`, une option globale** : sans elle, la réduction de K5 n'est plus
+  réassociable et devient une chaîne scalaire de FMA, 23 fois plus lente ; K1 SoA 1,69.
+* **Go sans `GOEXPERIMENT=simd` ne vectorise rien** (K5 ×9, Q6 ×2,5) ; **Java sans la Vector API en incubation**
+  non plus sur les réductions (K5 ×4,9, Q6 et Q1 ×7,8 et ×8,7).
+* **`pragma Loop_Optimize (Vector)` de GNAT ralentit Q1** : sans lui, 0,77 (un et quatre threads).
+* **C3** : les builtins `$$veccomp*`, que le compilateur réserve à la bibliothèque standard (avertissement à la
+  compilation), ont des équivalents publics (`comp_*` de `std::math::vector`) qui donnent le même code machine.
+* **Les binaires recompilés à l'identique** : recompilés sur ce nouvel hôte par leurs scripts inchangés, les
+  binaires de C, C++, Nim, D, Ada, Fortran, Go, C3 et Chapel sont identiques octet pour octet à ceux de la campagne
+  (compilés sur Cascade Lake le 28 octobre).

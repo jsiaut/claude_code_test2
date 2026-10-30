@@ -194,3 +194,129 @@ par une sonde quand c'est possible, et le verdict publié.
   des cellules diffèrent de moins de 0,5 ; la notation, et non les faits, explique l'écart du pilier C si la
   corrélation d'ensemble augmente de (i) à (ii).
 * Test 3 n'a pas de seuil : les valeurs de w sont publiées telles quelles.
+
+## Résultats (30 octobre 2026, après les mesures)
+
+Calcul : `analysis/confrontation.py`, poussé avant son premier calcul ; tableaux complets dans
+`results/report_confrontation.md`, données dans `results/confrontation.json` et `results/raw_conf/`. Contrôle : le
+scénario A rejoue exactement l'analyse publiée (mêmes rangs espérés, à 10⁻¹⁴ près). Mesures : 96 cellules × 7
+processus, aucune somme de contrôle fausse. Les écarts au plan sont consignés dans `docs/METHODOLOGY.md` (30 octobre).
+
+### Verdicts selon les critères de la section 8
+
+| Critère | Résultat | Verdict |
+|---|---|---|
+| Rang de C dans le scénario D (leur rang : 11e) | 5e sur 18 | H2 explique l'écart sur C **en partie** |
+| Spearman entre le scénario D et leur ordre (0,77 au départ) | 0,87 | H2 explique l'écart d'ensemble **en partie** |
+| Langages dont E_R / E < 0,95 | Fortran 0,44, Mojo 0,44, Chapel 0,61, Java 0,66, Go 0,74, C 0,944 | la restriction touche leur performance mesurée |
+| Accord d'ensemble des deux grilles, (i) puis (ii) | 0,83 puis 0,88 | la notation, plus que les faits, explique une part de l'écart du pilier C |
+| Cellules des correspondances à une capacité à moins de 0,5 | 58 % (seuil : 80 %) | critère **non rempli** ; les désaccords sont examinés plus bas |
+| Test 3 | C perd la tête dès w = 0,15 ; Spearman ≥ 0,95 dès w = 0,45 | sans seuil |
+
+| Langage | Leur rang | A (publié) | B (C_R) | C (E_R) | D (C_R et E_R) |
+|---|---|---|---|---|---|
+| C | 11 | 1 | 5 | 1 | 5 |
+| C++ | 3–4 | 2 | 2 | 2 | 2 |
+| Odin | 2 | 3 | 1 | 3 | 1 |
+| C3 | 5 | 4 | 4 | 4 | 4 |
+| Zig | 1 | 5 | 3 | 5 | 3 |
+| Nim | 10 | 6 | 7 | 6 | 7 |
+| Rust | 6 | 7 | 6 | 7 | 6 |
+| D | 3–4 | 8 | 8 | 8 | 8 |
+| Ada | 7 | 9 | 9 | 9 | 9 |
+| Chapel | 9 | 10 | 10 | 11 | 11 |
+| Julia | 13 | 11 | 11 | 10 | 10 |
+| Fortran | 14 | 12 | 13 | 13 | 14 |
+| Mojo | 15 | 13 | 12 | 14 | 13 |
+| C# | 8 | 14 | 14 | 12 | 12 |
+| Java | 12 | 15 | 15 | 15 | 15 |
+| Go | 17 | 16 | 16 | 16 | 16 |
+| JavaScript | 18 | 17 | 17 | 17 | 17 |
+| Python | 16 | 18 | 18 | 18 | 18 |
+
+Spearman avec leur ordre : A 0,77, B 0,85, C 0,79, D 0,87. Part de C dans la somme des carrés des écarts : 44 %,
+25 %, 48 %, 29 %.
+
+### Test 1 : leur règle dans mon pilier C
+
+Les 59 cellules reclassées coûtent surtout aux langages normalisés et à ceux qui passent par le compilateur C : C
+88,7 → 63,3, C++ 92,4 → 76,8, Ada 76,2 → 64,7, Nim 78,6 → 68,8, D 84,1 → 74,6, Fortran 60,1 → 47,1. Zig, Odin et C#
+ne bougent pas : tout ce que livre leur chaîne compte comme standard. **Sous leur règle, mon pilier C classe C 11e
+sur 18, exactement son rang chez eux** (2e avec ma règle). Dans le scénario B, C passe de 1er à 5e et Odin prend la
+tête.
+
+### Test 2 : mon plafond sous leur restriction de code
+
+Rapport apparié = temps de la réécriture standard / temps de l'original, mêmes conditions, 7 processus de chaque côté.
+
+| Langage | Ce qui change dans les mesures qui fixent le plafond | E publié → E_R |
+|---|---|---|
+| C | K1 SoA et K5 en sommes partielles : 0,97 et 1,05 ; `threads.h` au lieu des threads POSIX : 0,89 à 1,01 ; Q1 sans intrinsèques : 1,89 (1,71 en multi-thread) ; K7 sans préchargement : 1,22 | 85,4 → 80,7 |
+| C++ | K7 sans préchargement : 1,10 ; K9 sans `__restrict` : 1,01 à 1,03 | 78,8 → 77,7 |
+| Nim | K5 sans intrinsèques : 1,37 (le C généré n'a plus de FMA) ; K7 : 1,21 | 73,0 → 70,3 |
+| D | K5 sans `@llvmFastMathFlag` : 1,20 (plus de FMA) ; préchargement par `core.simd` : 0,95 | 74,8 → 73,5 |
+| Ada | K5 : 1,17 ; K7 sans préchargement : 1,31 ; Q1 sans `Loop_Optimize` : 0,77, plus rapide | 73,9 → 71,1 |
+| Fortran | sommes partielles au lieu de `!$omp simd` : 0,98 et 0,99 ; Q6 et Q1 : 1,09 et 1,15 ; pas de threads standard : replis et pénalité de K3 | 67,3 → 29,3 |
+| Chapel | sans `--no-ieee-float` : K5 ×23, K1 SoA ×1,69 ; K7 sans `Prefetch` : 1,27 | 80,3 → 49,3 |
+| Java | sans la Vector API : K5 ×4,9, Q6 et Q1 ×7,8 et ×8,7 | 57,7 → 37,9 |
+| Go | sans `GOEXPERIMENT` : K5 ×9, Q6 ×2,5, K1 SoA ×1,5 | 38,6 → 28,6 |
+| Mojo | pas d'API publique de threads : replis et pénalité de K3 | 68,0 → 29,9 |
+| C3 | macros publiques au lieu des builtins : même code machine | inchangé |
+
+Rust, Zig, Odin, Julia, C#, JavaScript et Python n'ont rien de non standard dans les variantes qui fixent leur
+plafond. Le C standard garde 94,5 % de son plafond et reste 1er dans le scénario C. La frontière bouge sur quatre
+mesures : K5 passe à C++ (`std::simd`), Q1 à C3, K7 à D (préchargement standard de `core.simd`), K1 à Nim.
+
+Robustesse : K3 retiré du plafond de Mojo et de Fortran (sensibilité prévue) : D donne 0,86 et C 6e. Rapports de K5
+forcés à 1 (contrôle hors plan, `analysis/confrontation_posthoc.py`, parce que les données de K5 viennent d'Emerald
+Rapids et que le transfert du rapport n'est sûr que pour C et Fortran, dont la boucle chaude ne change pas) : 0,87 et
+C 5e.
+
+### Test 3 : leur S comme quatrième pilier
+
+| w | 0 | 0,15 | 0,30 | 0,45 | 0,60 | 0,80 | 1 |
+|---|---|---|---|---|---|---|---|
+| Spearman avec leur ordre | 0,78 | 0,82 | 0,87 | 0,95 | 0,96 | 0,99 | 1 |
+| P(C premier) | 0,87 | 0,36 | 0,03 | 0 | 0 | 0 | 0 |
+| Rang de C | 1 | 2 | 4 | 7 | 8 | 11 | 11 |
+
+Avec 15 % de leur score, C n'est plus premier ; avec à peu près moitié, l'ordre est le leur (0,95). C n'atteint
+leur rang qu'à partir de w = 0,80.
+
+### Test 4 : deux notations indépendantes
+
+Accord d'ensemble sur les 11 principes communs : 0,83 avec mes notes, 0,88 sous leur règle. Par principe, l'accord
+monte surtout pour les threads (0,30 → 0,76), la hiérarchie mémoire (0,57 → 0,82), le SIMD (0,60 → 0,71) et le
+layout (0,66 → 0,77) ; il baisse pour la transparence (0,54 → 0,39).
+
+Le critère par cellule n'est pas rempli (58 % au lieu de 80 %). Examen des 30 désaccords des correspondances à une
+capacité :
+
+* 27 sont des différences de portée, sur le même fait. P3 (16 cellules) : les deux grilles ne voient une SoA native
+  que chez Zig et Odin (accord de rang 1,00) ; leur niveau 2 récompense une SoA écrite à la main, ma capacité A6 ne
+  compte que la construction native. P4 (7) : même absence de constante de ligne de cache ; leur niveau 2 compte
+  l'alignement, que ma matrice note en A4. P9 pour C#, Julia et Fortran : leur principe inclut la sélection sans
+  branchement (`ifelse`, `MERGE`). P10 pour Python : leur principe inclut `mmap` et `madvise`.
+* 1 tient à l'interprétation de la règle : le préchargement de Julia par `Base.llvmcall`, que je compte comme
+  standard (fonction publique de Base).
+* 2 portent sur un fait, vérifié de mon côté : D (`core.builtins.likely`, druntime) et Nim (`likely` et `unlikely`
+  exportés par `system`) ont des indications de branchement standard ; leur niveau 2 vient peut-être d'un critère
+  plus large.
+
+Les désaccords des principes à plusieurs capacités sont de même nature : P2 pour Julia et Go (leur layout est un
+contrôle explicite), P12 pour Zig, Odin, C3 et Python (ils comptent les API de threads, je compte aussi les boucles
+parallèles et la localité NUMA), P5 pour D (ils pénalisent l'absence de chapitre « modèle mémoire » dans la
+spécification, je note l'API).
+
+### Ce qui explique l'écart
+
+1. **La frontière du « standard » explique une grande part de l'écart, presque entièrement par le pilier
+   capacités.** Sous leur règle, mon pilier classe C 11e, comme eux, alors que le C standard garde 94,5 % de sa
+   performance mesurée.
+2. **Le reste tient au construit.** Ils ne comptent pas la vitesse ; je la compte pour 65 %. Mêler à peu près
+   moitié de leur score au mien reproduit leur ordre.
+3. **Sur les faits, les deux notations indépendantes s'accordent** (0,83 à 0,88). Leurs désaccords portent presque
+   tous sur ce que recouvre chaque principe.
+4. **Ce que la restriction change à la performance mesurée** : quelques pour cent au plus pour C, C++, D, Ada et
+   Nim ; rien pour Rust, Zig, Odin et C3 ; beaucoup pour Chapel, Java et Go, dont la vitesse tient à une option ou à
+   un module expérimental, et pour Fortran et Mojo, faute de threads standard.

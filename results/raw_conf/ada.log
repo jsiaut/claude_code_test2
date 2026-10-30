@@ -1,0 +1,56 @@
+ada        k9   mt                              p0 n=10 med=0.022731s ok={True} rc=0 
+ada        k6   tuned                q1         p0 n=10 med=0.070963s ok={True} rc=0 
+ada        k7   tuned                           p0 n=5 med=0.382674s ok={True} rc=0 
+ada        k6   tuned                q6         p0 n=10 med=0.015966s ok={True} rc=0 
+ada        k6   mt                   q6         p0 n=10 med=0.016271s ok={True} rc=0 
+ada        k9   tuned                           p0 n=10 med=0.037822s ok={True} rc=0 
+ada        k5   tuned                           p0 n=10 med=0.007757s ok={True} rc=0 
+ada        k6   mt                   q1         p0 n=10 med=0.019745s ok={True} rc=0 
+ada        k5   tuned                           p0 n=10 med=0.006379s ok={True} rc=0 
+ada        k6   mt                   q6         p0 n=10 med=0.017762s ok={True} rc=0 
+ada        k6   mt                   q1         p0 n=10 med=0.021009s ok={True} rc=0 
+ada        k9   tuned                           p0 n=10 med=0.040545s ok={True} rc=0 
+ada        k9   mt                              p0 n=10 med=0.021165s ok={True} rc=0 
+ada        k7   tuned                           p0 n=5 med=0.321698s ok={True} rc=0 
+ada        k6   tuned                q6         p0 n=10 med=0.016891s ok={True} rc=0 
+ada        k6   tuned                q1         p0 n=10 med=0.044850s ok={True} rc=0 
+ada        k5   tuned                           p0 n=10 med=0.008506s ok={True} rc=0 
+ada        k6   tuned                q1         p0 n=10 med=0.047903s ok={True} rc=0 
+ada        k6   tuned                q6         p0 n=10 med=0.015137s ok={True} rc=0 
+ada        k7   tuned                           p0 n=5 med=0.473890s ok={True} rc=0 
+ada        k9   mt                              p0 n=10 med=0.022646s ok={True} rc=0 
+ada        k6   mt                   q6         p0 n=10 med=0.016794s ok={True} rc=0 
+ada        k9   tuned                           p0 n=10 med=0.047987s ok={True} rc=0 
+ada        k6   mt                   q1         p0 n=10 med=0.022368s ok={True} rc=0 
+ada        k7   tuned                           p0 n=5 med=0.385849s ok={True} rc=0 
+ada        k6   mt                   q6         p0 n=10 med=0.018863s ok={True} rc=0 
+ada        k6   tuned                q6         p0 n=10 med=0.016460s ok={True} rc=0 
+ada        k5   tuned                           p0 n=10 med=0.007162s ok={True} rc=0 
+ada        k6   mt                   q1         p0 n=10 med=0.020221s ok={True} rc=0 
+ada        k9   mt                              p0 n=10 med=0.021681s ok={True} rc=0 
+ada        k6   tuned                q1         p0 n=10 med=0.046423s ok={True} rc=0 
+ada        k9   tuned                           p0 n=10 med=0.044058s ok={True} rc=0 
+ada        k6   tuned                q1         p0 n=10 med=0.045275s ok={True} rc=0 
+ada        k9   tuned                           p0 n=10 med=0.032595s ok={True} rc=0 
+ada        k5   tuned                           p0 n=10 med=0.007197s ok={True} rc=0 
+ada        k6   mt                   q1         p0 n=10 med=0.018165s ok={True} rc=0 
+ada        k7   tuned                           p0 n=5 med=0.339603s ok={True} rc=0 
+ada        k6   mt                   q6         p0 n=10 med=0.014435s ok={True} rc=0 
+ada        k9   mt                              p0 n=10 med=0.018395s ok={True} rc=0 
+ada        k6   tuned                q6         p0 n=10 med=0.016279s ok={True} rc=0 
+ada        k9   mt                              p0 n=10 med=0.018940s ok={True} rc=0 
+ada        k9   tuned                           p0 n=10 med=0.029571s ok={True} rc=0 
+ada        k5   tuned                           p0 n=10 med=0.006378s ok={True} rc=0 
+ada        k6   tuned                q6         p0 n=10 med=0.015836s ok={True} rc=0 
+ada        k6   tuned                q1         p0 n=10 med=0.060035s ok={True} rc=0 
+ada        k6   mt                   q1         p0 n=10 med=0.021033s ok={True} rc=0 
+ada        k7   tuned                           p0 n=5 med=0.421228s ok={True} rc=0 
+ada        k6   mt                   q6         p0 n=10 med=0.016906s ok={True} rc=0 
+ada        k9   mt                              p0 n=10 med=0.017595s ok={True} rc=0 
+ada        k6   tuned                q6         p0 n=10 med=0.015786s ok={True} rc=0 
+ada        k9   tuned                           p0 n=10 med=0.029322s ok={True} rc=0 
+ada        k7   tuned                           p0 n=5 med=0.364299s ok={True} rc=0 
+ada        k5   tuned                           p0 n=10 med=0.006274s ok={True} rc=0 
+ada        k6   tuned                q1         p0 n=10 med=0.042565s ok={True} rc=0 
+ada        k6   mt                   q6         p0 n=10 med=0.014657s ok={True} rc=0 
+ada        k6   mt                   q1         p0 n=10 med=0.021382s ok={True} rc=0 

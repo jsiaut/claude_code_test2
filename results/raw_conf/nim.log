@@ -1,0 +1,35 @@
+nim        k5   tuned                           p0 n=10 med=0.008391s ok={True} rc=0 
+nim        k9   mt                              p0 n=10 med=0.013553s ok={True} rc=0 
+nim        k9   tuned                           p0 n=10 med=0.029118s ok={True} rc=0 
+nim        k1   soa                  energy     p0 n=10 med=0.005688s ok={True} rc=0 
+nim        k7   tuned                           p0 n=5 med=0.424173s ok={True} rc=0 
+nim        k9   mt                              p0 n=10 med=0.012685s ok={True} rc=0 
+nim        k1   soa                  energy     p0 n=10 med=0.005618s ok={True} rc=0 
+nim        k7   tuned                           p0 n=5 med=0.401086s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.007322s ok={True} rc=0 
+nim        k9   tuned                           p0 n=10 med=0.025302s ok={True} rc=0 
+nim        k9   mt                              p0 n=10 med=0.013418s ok={True} rc=0 
+nim        k7   tuned                           p0 n=5 med=0.387277s ok={True} rc=0 
+nim        k9   tuned                           p0 n=10 med=0.028878s ok={True} rc=0 
+nim        k1   soa                  energy     p0 n=10 med=0.006356s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.006099s ok={True} rc=0 
+nim        k9   tuned                           p0 n=10 med=0.028616s ok={True} rc=0 
+nim        k7   tuned                           p0 n=5 med=0.348616s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.007334s ok={True} rc=0 
+nim        k1   soa                  energy     p0 n=10 med=0.006157s ok={True} rc=0 
+nim        k9   mt                              p0 n=10 med=0.013320s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.006188s ok={True} rc=0 
+nim        k9   mt                              p0 n=10 med=0.012214s ok={True} rc=0 
+nim        k9   tuned                           p0 n=10 med=0.027794s ok={True} rc=0 
+nim        k1   soa                  energy     p0 n=10 med=0.005945s ok={True} rc=0 
+nim        k7   tuned                           p0 n=5 med=0.445885s ok={True} rc=0 
+nim        k7   tuned                           p0 n=5 med=0.326675s ok={True} rc=0 
+nim        k9   mt                              p0 n=10 med=0.014150s ok={True} rc=0 
+nim        k1   soa                  energy     p0 n=10 med=0.005988s ok={True} rc=0 
+nim        k9   tuned                           p0 n=10 med=0.026803s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.006140s ok={True} rc=0 
+nim        k9   tuned                           p0 n=10 med=0.029648s ok={True} rc=0 
+nim        k5   tuned                           p0 n=10 med=0.005939s ok={True} rc=0 
+nim        k9   mt                              p0 n=10 med=0.013039s ok={True} rc=0 
+nim        k1   soa                  energy     p0 n=10 med=0.005828s ok={True} rc=0 
+nim        k7   tuned                           p0 n=5 med=0.369410s ok={True} rc=0 

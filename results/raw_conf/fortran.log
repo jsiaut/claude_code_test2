@@ -1,0 +1,28 @@
+fortran    k1   soa                  energy     p0 n=10 med=0.005724s ok={True} rc=0 
+fortran    k6   tuned                q6         p0 n=10 med=0.013376s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=10 med=0.007789s ok={True} rc=0 
+fortran    k6   tuned                q1         p0 n=10 med=0.038682s ok={True} rc=0 
+fortran    k6   tuned                q1         p0 n=10 med=0.038787s ok={True} rc=0 
+fortran    k6   tuned                q6         p0 n=10 med=0.014047s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=10 med=0.008742s ok={True} rc=0 
+fortran    k1   soa                  energy     p0 n=10 med=0.005800s ok={True} rc=0 
+fortran    k6   tuned                q1         p0 n=10 med=0.032870s ok={True} rc=0 
+fortran    k6   tuned                q6         p0 n=10 med=0.015372s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=10 med=0.009376s ok={True} rc=0 
+fortran    k1   soa                  energy     p0 n=10 med=0.005509s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=10 med=0.009254s ok={True} rc=0 
+fortran    k6   tuned                q1         p0 n=10 med=0.040925s ok={True} rc=0 
+fortran    k1   soa                  energy     p0 n=10 med=0.005993s ok={True} rc=0 
+fortran    k6   tuned                q6         p0 n=10 med=0.014968s ok={True} rc=0 
+fortran    k6   tuned                q6         p0 n=10 med=0.013892s ok={True} rc=0 
+fortran    k1   soa                  energy     p0 n=10 med=0.005950s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=10 med=0.009689s ok={True} rc=0 
+fortran    k6   tuned                q1         p0 n=10 med=0.037858s ok={True} rc=0 
+fortran    k6   tuned                q6         p0 n=10 med=0.015961s ok={True} rc=0 
+fortran    k1   soa                  energy     p0 n=10 med=0.005568s ok={True} rc=0 
+fortran    k6   tuned                q1         p0 n=10 med=0.034444s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=10 med=0.008263s ok={True} rc=0 
+fortran    k6   tuned                q1         p0 n=10 med=0.038973s ok={True} rc=0 
+fortran    k6   tuned                q6         p0 n=10 med=0.014363s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=10 med=0.010361s ok={True} rc=0 
+fortran    k1   soa                  energy     p0 n=10 med=0.005365s ok={True} rc=0 
