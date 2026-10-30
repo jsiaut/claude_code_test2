@@ -30,3 +30,7 @@ c_gcc      k9   tuned                           p0 n=10 med=0.029114s ok={True} 
 c_gcc      k9   mt                              p0 n=10 med=0.009929s ok={True} rc=0 
 c_gcc      k9   tuned                           p0 n=10 med=0.027394s ok={True} rc=0 
 c_gcc      k6   mt                   q6         p0 n=10 med=0.005017s ok={True} rc=0 
+c_gcc      k6   tuned                q6         p0 n=10 med=0.017232s ok={True} rc=0 
+c_gcc      k9   mt                              p0 n=10 med=0.009975s ok={True} rc=0 
+c_gcc      k6   tuned                q1         p0 n=10 med=0.030370s ok={True} rc=0 
+c_gcc      k6   mt                   q1         p0 n=10 med=0.009790s ok={True} rc=0 
