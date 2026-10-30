@@ -1,0 +1,20 @@
+91.7% des échantillons : ms+0x108e0c5 boucle=0x108e0c0-0x108e116 {'n': 19, 'packed': 12, 'wide': 8, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    108e0c0: vmovd  xmm5,DWORD PTR [rdi+rax*1]
+    108e0c5: vmovd  xmm6,DWORD PTR [rdi+rax*1+0x4]
+    108e0cb: vmovd  xmm7,DWORD PTR [rdi+rax*1+0x8]
+    108e0d1: vmovd  xmm8,DWORD PTR [rdi+rax*1+0xc]
+    108e0d7: vpminsb xmm5,xmm5,xmm1
+    108e0dc: vpminsb xmm6,xmm6,xmm1
+    108e0e1: vpminsb xmm7,xmm7,xmm1
+    108e0e6: vpminsb xmm8,xmm8,xmm1
+    108e0eb: vpmovzxbq ymm5,xmm5
+    108e0f0: vpaddq ymm0,ymm0,ymm5
+    108e0f4: vpmovzxbq ymm5,xmm6
+    108e0f9: vpaddq ymm2,ymm2,ymm5
+    108e0fd: vpmovzxbq ymm5,xmm7
+    108e102: vpaddq ymm3,ymm3,ymm5
+    108e106: vpmovzxbq ymm5,xmm8
+    108e10b: vpaddq ymm4,ymm4,ymm5
+    108e10f: add    rax,0x10
+    108e113: cmp    rcx,rax
+    108e116: jne    108e0c0 <ms.k4Branchless+0x50>

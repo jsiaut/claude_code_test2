@@ -16,7 +16,7 @@
 | c | B2 | 0.5 | 0.5 |  | malloc/free seulement ; arènes à écrire soi-même (pas d'interface d'allocateur standard) |
 | c | B3 | 1 | 1 |  | tableau sur la pile (1024 o) et VLA |
 | c | B4 | 1 | 1 |  | aucune allocation implicite du langage |
-| c | B5 | 1 | 1 |  | pointeurs bruts, mmap anonyme 0x7efdbfa3f000 |
+| c | B5 | 1 | 1 |  | pointeurs bruts, mmap anonyme 0x7f3a61090000 |
 | c | C1 | 0.5 | 0.5 |  | types vectoriels portables par extension (vector_size) : 3 ; pas dans le standard C |
 | c | C2 | 1 | 1 |  | intrinsèques AVX-512 <immintrin.h> : 32 |
 | c | C3 | 1 | mesuré |  | auto-vectorisation clang/gcc -O3 (vérifiée sur K4/K9 natural) |
@@ -24,7 +24,7 @@
 | c | C5 | 0.5 | 0.5 |  | OpenMP, livré avec clang et gcc mais hors norme ISO C : parallel for simd reduction = 499500 |
 | c | D1 | 1 | 1 |  | threads <threads.h>/pthreads |
 | c | D2 | 1 | 1 |  | <stdatomic.h> memory_order_relaxed/acquire/release/seq_cst : 1 |
-| c | D3 | 0 | 0 |  | pas de constante de taille de ligne standard (C++ seulement) |
+| c | D3 | 0.5 | 0.5 |  | __GCC_DESTRUCTIVE_SIZE=64 (macro prédéfinie par clang et gcc), sysconf(_SC_LEVEL1_DCACHE_LINESIZE)=64 (glibc)  |
 | c | D4 | 0.5 | 0.5 |  | affinité via POSIX/Linux sched_setaffinity (pas dans le standard C) rc=0 |
 | c | D5 | 0.5 | 0.5 |  | atomic_thread_fence standard ; pause via intrinsèque _mm_pause |
 | c | E1 | 1 | 1 |  | compilation native, objdump/-S |
@@ -153,4 +153,4 @@
 | zig | E4 | 1 | 1 |  | @prefetch |
 | zig | D3 | 1 | 1 |  | std.atomic.cache_line=128 |
 | zig | D5 | 0.5 | 0.5 |  | spinLoopHint ; pas de @fence |
-| zig | F4 | 0.5 | 0.5 |  | std.posix.mmap (POSIX seulement) + bytesAsSlice : 0.4390046 |
+| zig | F4 | 1 | 1 |  | std.Io.File.MemoryMap + bytesAsSlice : 0.4390046, projection dans /proc/self/maps : true |

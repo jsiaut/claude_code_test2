@@ -23,5 +23,6 @@
  "odin": 1.0,
  "python": 0.0,
  "rust": 0.5,
- "zig": 0.0
+ "zig": 0.0,
+ "zig_master": 1.0
 }

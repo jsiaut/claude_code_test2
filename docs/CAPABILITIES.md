@@ -44,7 +44,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | F1 tableaux multidimensionnels contigus | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ● | ○ | ● | ● | ● | ○ | ◐ | ○ |
 | F2 localité / distribution (PGAS, NUMA) | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | F3 entiers fixes signés et non signés modulaires | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ |
-| F4 fichiers projetés + réinterprétation sans copie | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ● | ● | ◐ | ○ | ○ | ○ | ◐ | ● | ● | ● | ○ | ● | ○ | ● | ○ |
+| F4 fichiers projetés + réinterprétation sans copie | ◐ | ◐ | ○ | ● | ◐ | ◐ | ● | ● | ◐ | ○ | ○ | ○ | ◐ | ● | ● | ● | ○ | ● | ○ | ● | ○ |
 
 ## Justifications
 
@@ -82,7 +82,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 * **C** : C1 = 1 (@Vector (bench)) ; C2 = 0.5 (pas d'intrinsèques x86 ; asm en ligne) ; C3 = 0.0 (mesuré) ; C4 = 1 (@setFloatMode(.optimized) par portée (sonde)) ; C5 = 0 (aucun)
 * **D** : D1 = 1 (std.Thread) ; D2 = 1 (@atomicLoad/.monotonic/.acquire...) ; D3 = 1 (std.atomic.cache_line (src)) ; D4 = 0.5 (std.os.linux.sched_setaffinity (src, Linux)) ; D5 = 0.5 (std.atomic.spinLoopHint ; @fence retiré du langage (src))
 * **E** : E1 = 1 (natif) ; E2 = 1 (asm volatile) ; E3 = 1 (@branchHint (sonde)) ; E4 = 1 (@prefetch (sonde)) ; E5 = 1 (noalias) ; E6 = 1 (@setRuntimeSafety par portée) ; E7 = 1 (comptime)
-* **F** : F1 = 0.5 ([M][N]T de taille connue à la compilation seulement) ; F2 = 0 (aucun) ; F3 = 1 (+%, *% et types non signés) ; F4 = 0.5 (std.posix.mmap (POSIX seulement) + bytesAsSlice (sonde))
+* **F** : F1 = 0.5 ([M][N]T de taille connue à la compilation seulement) ; F2 = 0 (aucun) ; F3 = 1 (+%, *% et types non signés) ; F4 = 1 (std.Io.File.MemoryMap (portable, depuis 0.16) + bytesAsSlice (sonde probe_f4) ; corrigé le 30/10, remarque sur Zig)
 
 ### Odin
 

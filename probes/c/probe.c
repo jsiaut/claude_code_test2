@@ -59,7 +59,9 @@ int main(void) {
     _Atomic int at = 0;
     atomic_fetch_add_explicit(&at, 1, memory_order_relaxed);
     printf("CAP;D2;1;<stdatomic.h> memory_order_relaxed/acquire/release/seq_cst : %d\n", atomic_load(&at));
-    printf("CAP;D3;0;pas de constante de taille de ligne standard (C++ seulement)\n");
+    // corrigé le 30/10 (erratum du juge à l'aveugle) : macro prédéfinie et sysconf, hors norme ISO
+    printf("CAP;D3;0.5;__GCC_DESTRUCTIVE_SIZE=%d (macro prédéfinie par clang et gcc), sysconf(_SC_LEVEL1_DCACHE_LINESIZE)=%ld (glibc) ; pas de constante ISO\n",
+           __GCC_DESTRUCTIVE_SIZE, sysconf(_SC_LEVEL1_DCACHE_LINESIZE));
     cpu_set_t cs; CPU_ZERO(&cs); CPU_SET(0, &cs);
     int aff = sched_setaffinity(0, sizeof cs, &cs);
     printf("CAP;D4;0.5;affinité via POSIX/Linux sched_setaffinity (pas dans le standard C) rc=%d\n", aff);

@@ -28,3 +28,8 @@ zig_master_io k9   mt                              p0 n=10 med=0.015671s ok={Tru
 zig_master_io k6   mt                   q6         p0 n=10 med=0.007713s ok={True} rc=0 
 zig_master_io k3   rmw_padded                      p0 n=10 med=0.265041s ok={True} rc=0 
 zig_master_io k3   sw_padded                       p0 n=10 med=0.084289s ok={True} rc=0 
+zig_master_io k6   mt                   q1         p0 n=10 med=0.008124s ok={True} rc=0 
+zig_master_io k3   rmw_padded                      p0 n=10 med=0.251523s ok={True} rc=0 
+zig_master_io k9   mt                              p0 n=10 med=0.015088s ok={True} rc=0 
+zig_master_io k6   mt                   q6         p0 n=10 med=0.007938s ok={True} rc=0 
+zig_master_io k3   sw_padded                       p0 n=10 med=0.079360s ok={True} rc=0 

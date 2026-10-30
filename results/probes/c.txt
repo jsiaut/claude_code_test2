@@ -10,7 +10,7 @@ CAP;B1;1;pas de ramasse-miettes
 CAP;B2;0.5;malloc/free seulement ; arènes à écrire soi-même (pas d'interface d'allocateur standard)
 CAP;B3;1;tableau sur la pile (1024 o) et VLA
 CAP;B4;1;aucune allocation implicite du langage
-CAP;B5;1;pointeurs bruts, mmap anonyme 0x7efdbfa3f000
+CAP;B5;1;pointeurs bruts, mmap anonyme 0x7f3a61090000
 CAP;C1;0.5;types vectoriels portables par extension (vector_size) : 3 ; pas dans le standard C
 CAP;C2;1;intrinsèques AVX-512 <immintrin.h> : 32
 CAP;C3;1;auto-vectorisation clang/gcc -O3 (vérifiée sur K4/K9 natural)
@@ -18,7 +18,7 @@ CAP;C4;0.5;réassociation : options -ffast-math/-fassociative-math, #pragma clan
 CAP;C5;0.5;OpenMP, livré avec clang et gcc mais hors norme ISO C : parallel for simd reduction = 499500
 CAP;D1;1;threads <threads.h>/pthreads
 CAP;D2;1;<stdatomic.h> memory_order_relaxed/acquire/release/seq_cst : 1
-CAP;D3;0;pas de constante de taille de ligne standard (C++ seulement)
+CAP;D3;0.5;__GCC_DESTRUCTIVE_SIZE=64 (macro prédéfinie par clang et gcc), sysconf(_SC_LEVEL1_DCACHE_LINESIZE)=64 (glibc) ; pas de constante ISO
 CAP;D4;0.5;affinité via POSIX/Linux sched_setaffinity (pas dans le standard C) rc=0
 CAP;D5;0.5;atomic_thread_fence standard ; pause via intrinsèque _mm_pause
 CAP;E1;1;compilation native, objdump/-S

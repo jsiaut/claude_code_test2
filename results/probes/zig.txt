@@ -7,4 +7,5 @@ CAP;E3;1;@branchHint(.likely) : 2
 CAP;E4;1;@prefetch
 CAP;D3;1;std.atomic.cache_line=128
 CAP;D5;0.5;spinLoopHint ; pas de @fence
-CAP;F4;0.5;std.posix.mmap (POSIX seulement) + bytesAsSlice : 0.4390046
+INFO;F4;std.posix.mmap (liaison POSIX) + bytesAsSlice : 0.4390046
+CAP;F4;1;std.Io.File.MemoryMap + bytesAsSlice : 0.4390046, projection dans /proc/self/maps : true
