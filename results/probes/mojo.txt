@@ -1,3 +1,8 @@
 CAP;D2;1;Atomic.fetch_add[ordering=RELAXED]
-CAP;A5;0.5;bitcast[DType.uint32] = 1065353216
+CAP;A5;1;bitcast[DType.uint32] = 1065353216 ; unions : probe_errata.mojo
 CAP;E3;1;likely
+CAP;A4;1;@align(64) : align_of = 64 , somme des adresses mod 64 (64 sur la pile, 50 sur le tas) = 0
+CAP;A5;1;UnsafeUnion[Float32, UInt32] : size_of = 4 , bits de 1.0f = 1065353216
+CAP;C4;0.5;fma[FastMathFlag.REASSOC] = 7.0 (seule opération qui prend le drapeau)
+CAP;D5;1;fence() et SpinWaiter.wait() exécutés (pause dans le runtime à partir du 4e appel)
+CAP;E5;1;Pointer.unsafe_as_noalias() : 7

@@ -1,0 +1,9 @@
+cache size	: 33792 KB
+cpu MHz		: 2799.998
+microcode	: 0x1
+model		: 85
+model name	: Intel(R) Xeon(R) Processor @ 2.80GHz
+stepping	: 7
+4
+               total        used        free      shared  buff/cache   available
+Mem:              15           0          15           0           0          15

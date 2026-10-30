@@ -1,0 +1,154 @@
+# Code machine et IR des sondes (mojo build --emit asm / --emit llvm)
+## E5 : boucle a[i] += b[0] (b[0] relu à chaque tour dans les deux versions)
+"probes::add_plain(::Pointer[True, MutUntrackedOrigin, ::SIMD[DType.int64, 1], ::Origin[True, MutUntrackedOrigin](), AddressSpace.GENERIC],::Pointer[True, MutUntrackedOrigin, ::SIMD[DType.int64, 1], ::Origin[True, MutUntrackedOrigin](), AddressSpace.GENERIC],::SIMD[DType.int, 1])":
+	testq	%rdx, %rdx
+	jle	.LBB2_3
+	xorl	%eax, %eax
+.LBB2_2:
+	movq	(%rsi), %rcx
+	addq	%rcx, (%rdi,%rax,8)
+	incq	%rax
+	cmpq	%rax, %rdx
+	jne	.LBB2_2
+.LBB2_3:
+	retq
+.Lfunc_end2:
+"probes::add_noalias(::Pointer[True, MutUntrackedOrigin, ::SIMD[DType.int64, 1], ::Origin[True, MutUntrackedOrigin](), AddressSpace.GENERIC],::Pointer[True, MutUntrackedOrigin, ::SIMD[DType.int64, 1], ::Origin[True, MutUntrackedOrigin](), AddressSpace.GENERIC],::SIMD[DType.int, 1])":
+	testq	%rdx, %rdx
+	jle	.LBB3_3
+	xorl	%eax, %eax
+.LBB3_2:
+	movq	(%rsi), %rcx
+	addq	%rcx, (%rdi,%rax,8)
+	incq	%rax
+	cmpq	%rax, %rdx
+	jne	.LBB3_2
+.LBB3_3:
+	retq
+.Lfunc_end3:
+## E5 : a[0] = 1 ; b[0] = 2 ; return a[0] (la version noalias rend la constante)
+"noalias2::fwd_plain(::Pointer[True, MutUntrackedOrigin, ::SIMD[DType.int64, 1], ::Origin[True, MutUntrackedOrigin](), AddressSpace.GENERIC],::Pointer[True, MutUntrackedOrigin, ::SIMD[DType.int64, 1], ::Origin[True, MutUntrackedOrigin](), AddressSpace.GENERIC])":
+	movq	$1, (%rdi)
+	movq	$2, (%rsi)
+	movq	(%rdi), %rax
+	retq
+.Lfunc_end0:
+"noalias2::fwd_noalias(::Pointer[True, MutUntrackedOrigin, ::SIMD[DType.int64, 1], ::Origin[True, MutUntrackedOrigin](), AddressSpace.GENERIC],::Pointer[True, MutUntrackedOrigin, ::SIMD[DType.int64, 1], ::Origin[True, MutUntrackedOrigin](), AddressSpace.GENERIC])":
+	movq	$1, (%rdi)
+	movq	$2, (%rsi)
+	movl	$1, %eax
+	retq
+.Lfunc_end1:
+## D5 : llvm_intrinsic["llvm.x86.sse2.pause"] et fence()
+"probes::spin_hint()":
+	pause
+	retq
+.Lfunc_end4:
+"probes::full_fence()":
+	lock		orl	$0, -64(%rsp)
+	retq
+.Lfunc_end5:
+## D5 : SpinWaiter.wait() dans le runtime (libKGENCompilerRTShared.so)
+0000000000042ad0 <KGEN_CompilerRT_AsyncRT_SpinWaiter_Wait@@Base>:
+   42ad0:	push   %rbp
+   42ad1:	mov    %rsp,%rbp
+   42ad4:	mov    (%rdi),%rax
+   42ad7:	inc    %rax
+   42ada:	mov    %rax,(%rdi)
+   42add:	cmp    $0x4,%rax
+   42ae1:	jae    42ae5 <KGEN_CompilerRT_AsyncRT_SpinWaiter_Wait@@Base+0x15>
+   42ae3:	pop    %rbp
+   42ae4:	ret
+   42ae5:	cmp    $0x3f,%rax
+   42ae9:	ja     42aef <KGEN_CompilerRT_AsyncRT_SpinWaiter_Wait@@Base+0x1f>
+   42aeb:	pause
+   42aed:	pop    %rbp
+   42aee:	ret
+   42aef:	pop    %rbp
+   42af0:	jmp    e5780 <_ZNSt6vectorImSaImEE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPmS1_EEEEvS6_T_S7_St20forward_iterator_tag@@Base+0x310>
+## C4 : IR (non optimisé) de fma_reassoc
+119:  %17 = call reassoc float @llvm.fma.f32(float %15, float %16, float %7)
+9227:declare float @llvm.fma.f32(float, float, float) #6
+## Chaîne de passes de Mojo 1.2.0 (Mojo/lib/Compiler/ObjectCompiler/LLVMPassesPipeline.cpp, tag mojo/v1.2.0)
+217:  fpm.addPass(VectorCombinePass(/*TryEarlyFoldsOnly=*/true));
+345:  FPM.addPass(SLPVectorizerPass());
+347:  FPM.addPass(VectorCombinePass());
+occurrences de LoopVectorizePass : 0
+## K9 naturel, binaire de la campagne (bench/mojo/ms) : début de la boucle chaude
+    74e2:	jae    7889 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::Li
+    74e8:	mov    (%r12),%r10
+    74ec:	mov    0x10(%r15),%rbx
+    74f0:	movq   $0x6,0x10(%rsp)
+    74f9:	mov    %r14,0x8(%rsp)
+    74fe:	mov    %rsi,0x18(%rsp)
+    7503:	movq   $0x27,0x28(%rsp)
+    750c:	mov    %rcx,0x20(%rsp)
+    7511:	mov    %rsi,0x30(%rsp)
+    7516:	cmp    %rbx,%rax
+    7519:	jae    7663 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::Li
+    751f:	mov    (%r15),%r8
+    7522:	mov    0x10(%rbp),%rbx
+    7526:	movq   $0x6,0x10(%rsp)
+    752f:	mov    %r14,0x8(%rsp)
+    7534:	mov    %rsi,0x18(%rsp)
+    7539:	movq   $0x27,0x28(%rsp)
+    7542:	mov    %rcx,0x20(%rsp)
+    7547:	mov    %rsi,0x30(%rsp)
+    754c:	cmp    %rbx,%rax
+    754f:	jae    7686 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::Li
+    7555:	mov    0x0(%rbp),%rax
+    7559:	vmovsd -0x8(%r8,%r11,8),%xmm1
+    7560:	vaddsd -0x8(%rax,%r11,8),%xmm1,%xmm1
+    7567:	movq   $0x6,0x10(%rsp)
+    7570:	mov    %r14,0x8(%rsp)
+    7575:	mov    %rsi,0x18(%rsp)
+    757a:	movq   $0x27,0x28(%rsp)
+    7583:	mov    %rcx,0x20(%rsp)
+    7588:	mov    %rsi,0x30(%rsp)
+    758d:	cmp    %rdx,%r9
+    7590:	jae    76b6 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::Li
+    7596:	lea    -0x2(%r11),%rbx
+    759a:	mov    0x10(%r13),%rax
+    759e:	movq   $0x6,0x10(%rsp)
+    75a7:	mov    %r14,0x8(%rsp)
+    75ac:	mov    %rsi,0x18(%rsp)
+    75b1:	movq   $0x27,0x28(%rsp)
+    75ba:	mov    %rcx,0x20(%rsp)
+    75bf:	mov    %rsi,0x30(%rsp)
+    75c4:	cmp    %rax,%rbx
+    75c7:	jae    76e8 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::Li
+    75cd:	mov    0x0(%r13),%r8
+    75d1:	vmovsd -0x10(%r8,%r11,8),%xmm2
+    75d8:	movq   $0x6,0x10(%rsp)
+    75e1:	mov    %r14,0x8(%rsp)
+    75e6:	mov    %rsi,0x18(%rsp)
+    75eb:	movq   $0x27,0x28(%rsp)
+    75f4:	mov    %rcx,0x20(%rsp)
+    75f9:	mov    %rsi,0x30(%rsp)
+    75fe:	cmp    %rax,%r11
+    7601:	jae    7716 <ms::k9_natural(::List[::List[::SIMD[DType.float64, 1]]],::List[::Li
+    7607:	vaddsd %xmm2,%xmm1,%xmm1
+    760b:	vaddsd (%r8,%r11,8),%xmm1,%xmm1
+    7611:	vmulsd %xmm0,%xmm1,%xmm1
+    7615:	vmovsd %xmm1,-0x8(%r10,%r11,8)
+    761c:	inc    %r11
+## K4 en SIMD explicite (bench/mojo_exp/ms) : boucle
+    3dc0:	mov    %rcx,%rax
+    3dc3:	vpminsb (%rdi,%rcx,1),%zmm4,%zmm5
+    3dca:	vpmovzxbd %xmm5,%zmm6
+    3dd0:	vpaddd %zmm6,%zmm0,%zmm0
+    3dd6:	vextracti128 $0x1,%ymm5,%xmm6
+    3ddc:	vpmovzxbd %xmm6,%zmm6
+    3de2:	vpaddd %zmm6,%zmm2,%zmm2
+    3de8:	vextracti64x4 $0x1,%zmm5,%ymm5
+    3def:	vpmovzxbd %xmm5,%zmm6
+    3df5:	vpaddd %zmm6,%zmm1,%zmm1
+    3dfb:	vextracti128 $0x1,%ymm5,%xmm5
+    3e01:	vpmovzxbd %xmm5,%zmm5
+    3e07:	vpaddd %zmm5,%zmm3,%zmm3
+    3e0d:	add    $0x40,%rcx
+    3e11:	sub    $0xffffffffffffff80,%rax
+    3e15:	cmp    %rdx,%rax
+    3e18:	jle    3dc0 <ms::k4_simd(::List[::SIMD[DType.uint8, 1]])+0x30>
+    3e1a:	vextracti64x4 $0x1,%zmm2,%ymm4
+    3e21:	vpmovzxdq %ymm4,%zmm4

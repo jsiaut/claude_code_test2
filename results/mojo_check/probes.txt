@@ -1,0 +1,19 @@
+# Sondes de la remarque sur Mojo (Mojo 1.2.0 (2016d0cd))
+A4 align_of[Line] = 64 size_of[Line] = 64
+A4 pile : somme des adresses mod 64 sur 128 objets = 0
+A4 tas : unsafe_alloc mod 64 (50 allocations) = 0 ; List[Line] mod 64 = 0
+A5 size_of[UnsafeUnion[Float32, UInt32]] = 4 ; bits de 1.0f = 1065353216
+C4 fma[REASSOC] = 60.0
+E5 a[15] = 21
+D5 pause et fence exécutés
+## E5, transfert d'une écriture à une lecture (noalias2.mojo) : fwd_plain, fwd_noalias
+1 1
+## B4 : allocations comptées par malloc_count.so (LD_PRELOAD), N = 0 puis 1000
+none N=0 : ALLOCS 386
+none N=1000 : ALLOCS 386
+lit N=0 : ALLOCS 386
+lit N=1000 : ALLOCS 392
+fmt N=0 : ALLOCS 386
+fmt N=1000 : ALLOCS 392
+task N=0 : ALLOCS 386
+task N=1000 : ALLOCS 1913

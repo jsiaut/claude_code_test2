@@ -567,3 +567,13 @@ Robustesse :
   Julia perdent une place, le plafond de Zig passe de la 10e à la 11e place, et la part des écarts de score entre
   les 13 premiers qu'explique le contrôle passe de 81 à 78 %. Les scénarios de Zig sont recalculés sur ces données
   (S1 : rang espéré 2,71 au lieu de 2,69, même verdict).
+* 2026-10-30, 17:39 : **le conteneur redémarre sur un nouvel hôte** (machine 6) : Cascade Lake du même modèle que les
+  machines 1, 2, 4 et 5 (modèle 85, révision 7, 4 vCPU, 16 Go), latence à 4 Mio 43 ns, débit DRAM 10 Go/s
+  (`results/hw/machine6/`). Le binaire de Mojo du banc était celui compilé pour la machine 3 ; recompilé par son
+  script inchangé, il est identique octet pour octet au binaire de la campagne compilé sur la machine 2.
+* 2026-10-30, début de soirée : **remarque sur Mojo** transmise par l'utilisateur (cases A4, A5, C4, E5, D5 et B4 ;
+  K4 dans le plafond ; diagnostic du stencil naturel). Vérifications préalables (sources de Mojo 1.2.0 au tag
+  `mojo/v1.2.0`, notes de version, sondes compilées par Mojo 1.2.0, code machine, compteur d'allocations), errata de
+  la matrice (A4, A5, C4, D5, E5 ; B4 gardé) et plan : `docs/MOJO.md`, poussé avant les mesures avec le code
+  d'analyse (`analysis/mojo_check.py`). `confrontation.scenario` prend désormais, en option, la liste des mesures du
+  plafond (pour le scénario sans K4) ; par défaut, le calcul publié est inchangé.

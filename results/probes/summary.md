@@ -121,8 +121,13 @@
 | lua | A5 | 0.5 | 0.5 |  | string.pack/unpack : 0x3f800000 |
 | lua | F3 | 0.5 | 0.5 |  | entiers 64 bits enveloppants : true ; math.ult true |
 | mojo | D2 | 1 | 1 |  | Atomic.fetch_add[ordering=RELAXED] |
-| mojo | A5 | 0.5 | 0.5 |  | bitcast[DType.uint32] = 1065353216 |
+| mojo | A5 | 1 | 1 |  | bitcast[DType.uint32] = 1065353216 ; unions : probe_errata.mojo |
 | mojo | E3 | 1 | 1 |  | likely |
+| mojo | A4 | 1 | 1 |  | @align(64) : align_of = 64 , somme des adresses mod 64 (64 sur la pile, 50 sur le tas) = 0 |
+| mojo | A5 | 1 | 1 |  | UnsafeUnion[Float32, UInt32] : size_of = 4 , bits de 1.0f = 1065353216 |
+| mojo | C4 | 0.5 | 0.5 |  | fma[FastMathFlag.REASSOC] = 7.0 (seule opération qui prend le drapeau) |
+| mojo | D5 | 1 | 1 |  | fence() et SpinWaiter.wait() exécutés (pause dans le runtime à partir du 4e appel) |
+| mojo | E5 | 1 | 1 |  | Pointer.unsafe_as_noalias() : 7 |
 | nim | A2 | 1 | 1 |  | offsetOf(S, c)=8 |
 | nim | A3 | 1 | 1 |  | packed sizeof(P)=5 ; bitsize sizeof(BF)=4 |
 | nim | A4 | 1 | 1 |  | align(64) alignof(L)=64 |

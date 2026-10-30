@@ -117,12 +117,13 @@ def noisy_r(base, prng, noise=0.10):
 
 
 # ------------------------------------------------------------------ scénarios
-def scenario(data, lat, langs, footprint, c3, crule):
-    """Rejoue l'analyse v3 (même graine, mêmes tirages) sur data, avec la règle crule : 'main' (v2/v1) ou 'R'."""
+def scenario(data, lat, langs, footprint, c3, crule, e_meas=None):
+    """Rejoue l'analyse v3 (même graine, mêmes tirages) sur data, avec la règle crule : 'main' (v2/v1) ou 'R'.
+    e_meas : mesures du plafond E (par défaut celles de la v3 ; docs/MOJO.md, scénario sans K4)."""
     rng = np.random.default_rng(v3.SEED)
     keys = sorted(needed_keys())
     pools = build_pools(data, langs, keys)
-    A = Arrays3(data, lat, langs, B, rng, pools)
+    A = Arrays3(data, lat, langs, B, rng, pools, e_meas=e_meas or E_V2)
     refs = {e: references(A, e) for e in ("mean", "min")}
     catw0 = {cat: w for cat, (w, _) in CATEGORIES.items()}
     base_r = c_cells_r(c3)
@@ -133,7 +134,7 @@ def scenario(data, lat, langs, footprint, c3, crule):
         ms_boot[b - 1] = scores3(A, b, MAIN, C0, footprint, refs)["MS"]
     opts = {"est": ["mean", "min"], "enorm": ["frontier", "bounds"], "d3": ["abs", "rel"], "d4": ["best", "c"],
             "d1ref": ["tstar", "best_natural"], "agg": ["arith", "geo"], "crule": ["v2", "v1"]}
-    kernels, cat_names = list(E_V2), list(CATEGORIES)
+    kernels, cat_names = list(A.e_meas), list(CATEGORIES)
     rk = A.ranked
     NR = len(RANKED)
     prec = np.zeros((NR, NR))
