@@ -123,4 +123,70 @@ clés de `c`, comparé au même rapport dans les données principales (affirmati
 
 ## 4. Résultats
 
-*À venir.*
+Mesures du 30/10, 13:55 à 14:10 (machine 5) : 69 cellules × 7 processus, aucune somme de contrôle fausse, rien
+d'autre ne tournait. Rapports, témoin et scénarios : `results/report_zig.md` et `results/zig_check.json`.
+
+### 4.1 Ce que change Zig master, à source identique
+
+La boucle chaude de Zig master est vectorisée sur K4 et K9 (`tools/c3_measure.py`, registres ymm) : C3 = 1, contre 0
+pour 0.17. Rapports appariés master / 0.17 (moyenne géométrique de 7 processus chacun, IC à 95 %) :
+
+* **Les deux boucles naturelles** : K4 0,42 (`natural_unsorted`, 0,35–0,49) et 0,43 (`branchless_unsorted`) ; K9
+  naturel 0,76 (0,66–0,85). Zig master fait alors jeu égal avec C sur K4 (environ 3,4 ms contre 3,5) et le devance
+  sur K9 naturel (31 ms contre 32).
+* **Le reste bouge peu, et pas toujours dans le bon sens** : K7 `tuned` 0,90, K6 Q1 naturel 0,87, K5 `tuned` 0,95 ;
+  mais K9 `mt` 1,12 (1,05–1,19), K6 `mt` Q6 1,17, K8 `tuned_alloc` 1,12, K1 naturel 1,08. Un changement de LLVM
+  (22 à 23) ne touche pas que le vectoriseur.
+
+### 4.2 Effet sur le classement (analyse globale rejouée, 20 000 variantes)
+
+| Scénario | Score de Zig | Plafond E | Code naturel D1 | Rang espéré | Rang dans 90 % des variantes | Part des variantes où Zig est 1er |
+|---|---|---|---|---|---|---|
+| **A'** : Zig 0.17, classement publié (F4 corrigée) | 71,5 | 70,8 (10e) | 22,0 | 5,39 (5e) | 2–10 | 2 % |
+| **S1** : Zig 0.18-dev | 74,8 | 78,5 (4e) | 25,0 (1er) | 2,62 (2e) | 1–5 | 24 % |
+| S1-K5 : S1 sans transfert pour K5 | 74,6 | 78,0 | 25,0 | 2,71 (2e) | 1–5 | — |
+| S2 : 0.18-dev et `Io.Group` | 75,4 | 79,8 | 25,0 | 2,45 (2e) | 1–5 | — |
+| S3 : 0.17 et `Io.Group` | 71,4 | 70,5 | 22,0 | 5,48 (5e) | 2–10 | — |
+
+* **A'** : la correction de F4 ne change aucun rang ni aucun score de référence (la règle v2 donnait déjà 1) ;
+  elle ne joue que dans les variantes en règle v1. Ordre : C, C++, Odin, C3, Zig, Nim, Rust, D, Ada, Chapel…
+* **S1** : C (rang espéré 1,89 ; 79,4 points), **Zig (2,62 ; 74,8)**, C++ (3,04 ; 76,4), Odin, C3, Nim, Rust, D,
+  Ada, Chapel. Zig reste 3e au score de référence, derrière C++, mais passe devant lui dans 53 % des variantes, devant
+  Odin dans 85 %, devant C3 dans 87 %. Les scores des autres baissent un peu (C 80,1 à 79,4) : Zig master devient la
+  référence de plusieurs mesures (K1, K7 `tuned`, K9 naturel), ce qui relève le meilleur temps auquel tous sont
+  comparés.
+* **Ce qui fait la différence** : sur K4, Zig passe de 33 à 79 % du meilleur temps ; sur K5, de 82 à 86 % ; sur K7,
+  à 100 %. Le code naturel D1 devient le meilleur de l'étude (25,0, devant Julia).
+
+### 4.3 Verdicts sur la remarque
+
+* **(a), (b) : exacts.** Le vectoriseur est désactivé par l'équipe Zig (sources et notes de version) ; à source
+  identique, master vectorise K4 et K9, et K9 n'est pas bloqué par l'aliasing (test de recouvrement à l'exécution).
+  Mon explication de K9 par l'aliasing était fausse ; celle du README (« sans le faire à votre place ») aussi : ce
+  n'est pas le langage. Le second juge à l'aveugle l'avait déjà vu (`results/blind_notes.md`, Zig C4 : « le
+  pipeline de zig 0.17.0 n'auto-vectorise aucune boucle […] alors que `opt-23 -O3` vectorise le même IR ») ; je ne
+  l'avais pas suivi, parce que sa note portait sur une capacité et pas sur les mesures.
+* **(c) : confirmé, et un peu au-delà.** L'estimation ponctuelle de la remarque (76 points, 3e) est proche du score
+  mesuré par S1 (74,8, 3e au score) ; sur les 20 000 variantes, Zig 0.18-dev est 2e en rang espéré.
+* **(d) : exact pour le code, pas tranché pour le temps.** La boucle chaude de K5 `tuned` est la même en Zig et en C
+  (quatre accumulateurs zmm, huit FMA 512 bits par tour ; `results/zig_check/k5_tuned_asm.txt`). Sur la machine 5,
+  Zig/C = 1,06, contre 1,22 dans les données principales (machine 3). L'écart des données principales tient sans doute
+  aux états de performance par processus déjà documentés ; il reste dans les données, comme pour tous les langages,
+  et l'analyse globale le traite par son bootstrap des processus.
+* **(e) : exact sur le coût, mais `Io.Group` ne paie pas partout.** `std.Thread.spawn` coûte 3 à 4 fois un
+  `pthread_create`. Avec `Io.Group`, K9 `mt` gagne 10 % (0,90 ; 0,86–0,94), K6 `mt` Q1 4 %, mais K6 `mt` Q6 perd
+  30 % (1,30 ; 1,20–1,41), et K3 ne bouge pas. Sur K9 `mt`, Zig reste 1,34 fois plus lent que C avec `Io.Group` : les
+  threads n'expliquent qu'une partie de l'écart, comme le disait la remarque. S3 ne change rien au classement.
+* **(f) : exact.** Sur K8, les meilleurs temps viennent des langages compilés par GCC (Ada 108 ms, C par gcc 160,
+  C++ par g++ 181, Fortran 193) ; Zig (255 ms) devance C compilé par clang (266) et Rust (270).
+* **(g) : exact**, déjà établi par l'étude (K3 sur la machine 3, `docs/FINDINGS.md`).
+* **(h) : exact, avec une conséquence que la remarque n'avait pas vue.** La note v1 de F4 était fausse (0,5 au lieu
+  de 1) ; elle entre dans la moitié des variantes. Corrigée, elle ne change aucun rang.
+
+### 4.4 Ce qui change dans l'étude
+
+* Le classement principal reste celui de Zig 0.17.0 (décision 1), avec la correction de F4 (A').
+* README et FINDINGS : l'explication de la vectorisation de Zig est corrigée, et le résultat de S1 est donné sur la
+  ligne de Zig, dans son paragraphe et dans les limites (décisions 2 et 4).
+* Le coût de création des threads de Zig est publié comme un fait ; les implémentations `mt` ne changent pas
+  (décision 3).

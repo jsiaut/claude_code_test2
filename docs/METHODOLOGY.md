@@ -515,3 +515,13 @@ Robustesse :
   chaude de Zig master (`tools/c3_measure.py zig_master` : K4 et K9 vectorisées, C3 = 1), sondes de Zig et de C
   relancées. La sonde C déclarait encore D3 = 0 après l'erratum du juge à l'aveugle (la matrice dit 0,5) : alignée,
   0 divergence entre sondes et matrice.
+* 2026-10-30, après les mesures : **analyse de la remarque sur Zig** (`analysis/zig_check.py`, poussé avant son
+  premier calcul). Le scénario A' rejoue exactement l'analyse v3 publiée, correction de F4 comprise (rangs espérés
+  identiques à `results/summary_v3.json` recalculé). Zig 0.18-dev (S1) : 74,8 points, 2e en rang espéré ; Zig 0.17
+  reste 5e dans le classement publié, comme le plan l'avait fixé. **Analyse v3 recalculée** avec F4 corrigée
+  (`analysis/analyze_v3.py`, `analysis/readme_figures.py`, `analysis/charts_v3.py`) : ordre et scores de référence
+  inchangés ; C3 devance Zig dans 54 % des variantes (56 % avant), Zig devance Nim dans 62 % (60 %), C++ est premier
+  dans 25 % des variantes (26 %). `analysis/confrontation.py` relève désormais le rang de chaque tirage (rang dans
+  90 % des variantes), sans rien changer à ses autres sorties. Le second juge à l'aveugle avait noté que Zig 0.17
+  ne vectorise aucune boucle (`results/blind_notes.md`) ; je ne l'avais pas suivi. Résultats : `docs/ZIG.md`,
+  section 4.

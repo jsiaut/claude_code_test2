@@ -14,8 +14,8 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | 1 | **C** | 80,1 | 1–4 | 70 % | Plafond le plus haut et meilleur code par défaut ; une partie des leviers passe par des extensions de compilateur |
 | 2 | **C++** | 77,1 | 1–6 | 72 % | Le plus de contrôle (`std::simd`, `pmr`, atomiques) ; conteneurs standard à contre-courant du cache |
 | 3 | **Odin** | 72,3 | 1–7 | 65 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, allocateurs explicites) ; table et allocateur généralistes lents |
-| 4 | **C3** | 71,1 | 2–8 | 56 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels |
-| 5 | **Zig** | 71,5 | 2–10 | 60 % | Tous les leviers du DOD, mais aucune boucle naturelle vectorisée |
+| 4 | **C3** | 71,1 | 2–8 | 54 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels |
+| 5 | **Zig** | 71,5 | 2–10 | 62 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (2e avec la version de développement) |
 | 6 | **Nim** | 69,6 | 3–9 | 57 % | Les leviers de C par sa compilation vers C ; vérifications de bornes qui bloquent la vectorisation |
 | 7 | **Rust** | 69,4 | 4–10 | 65 % | 4e plafond, contrôle fin et sûr ; défauts coûteux (bornes, SipHash, SIMD portable encore instable) |
 | 8 | **D** | 71,1 | 3–12 | 61 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
@@ -37,12 +37,13 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   25 % de code par défaut mesuré (le code qu'on écrit sans y penser) et 35 % de contrôle (les leviers qu'offrent le
   langage et sa chaîne de compilation).
 * **Ordre** : le rang moyen sur 20 000 variantes de l'analyse, qui tirent au hasard les poids, les normalisations,
-  le jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf pour C3 et Zig, que 56 % des
+  le jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf pour C3 et Zig, que 54 % des
   variantes inversent, et pour D, que 65 % des variantes placent derrière Nim comme derrière Rust.
 * **Rang plausible** : le rang dans 90 % des variantes. **Devance le suivant** : la part des variantes où le
   langage passe devant celui de la ligne suivante.
-* **Erratum du 30 octobre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de contrôle
-  (aides de ligne de cache de C, de D et d'Odin, AVX-512 d'Odin, réductions parallèles de Nim). Corrigées, elles
+* **Errata du 30 octobre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de contrôle
+  (aides de ligne de cache de C, de D et d'Odin, AVX-512 d'Odin, réductions parallèles de Nim), et une remarque sur
+  Zig une sixième (projection de fichiers de Zig, sous-notée dans une des deux règles de notation). Corrigées, elles
   changent un peu les scores de C, d'Odin, de Nim et de D, mais aucun rang.
 
 ![Classement final](results/charts/classement.svg)
@@ -51,10 +52,15 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 * **Les grandes marches sont établies.** Les 13 premiers devancent C# dans au moins 91 % des variantes, et sur les
   deux machines. Go devance Haskell, Haskell OCaml, OCaml JavaScript, dans 98 à 100 % des variantes.
 * **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Deux voisins s'y devancent dans
-  56 à 74 % des variantes. C ou C++ est premier dans 87 % des variantes (C 62 %, C++ 26 %).
+  54 à 74 % des variantes. C ou C++ est premier dans 87 % des variantes (C 62 %, C++ 25 %).
 * **L'ordre fin dépend aussi de la machine.** Sur un Emerald Rapids, le même calcul donne C++ 1er, C 2e, Rust 3e.
   L'écart vient surtout de l'écrivain unique (K3), dont le temps dépend, sur ce processeur, du placement du code
   par l'éditeur de liens (voir plus bas).
+* **La version du compilateur peut déplacer un langage.** Zig 0.16 et 0.17 désactivent le vectoriseur de boucles
+  de LLVM, pour contourner un bug de LLVM qui compilait mal le compilateur Zig lui-même ; la version de développement
+  (0.18-dev) le réactive. Avec elle, et sans changer une ligne de code, Zig passe de 71,5 à 74,8 points et du 5e au
+  2e rang espéré (1er dans 24 % des variantes). Le classement garde la règle fixée d'avance, la dernière version
+  stable ([`docs/ZIG.md`](docs/ZIG.md)).
 * **Le contrôle pèse lourd, et il est jugé.** Il explique 81 % des écarts de score entre les 13 premiers. Sur les
   seules mesures (le plafond), la tête serait C, C3, Chapel, Rust, C++, Odin.
 
@@ -92,9 +98,12 @@ d'horloge, qui fait un appel système à chaque fois.
 Il lui manque le SoA, les intrinsèques officiels et le contrôle de la réassociation flottante.
 
 **5. Zig.** Tous les leviers du DOD : `std.MultiArrayList` (SoA dans la bibliothèque standard), `@Vector`, `comptime`,
-allocateurs passés explicitement, aucune allocation cachée. Mais son compilateur ne vectorise aucune des deux
-boucles naturelles mesurées, et son plafond n'est que 10e (71). Zig donne tout pour écrire du code sympathique au
-matériel, sans le faire à votre place.
+allocateurs passés explicitement, aucune allocation cachée. Son plafond n'est que 10e (71), parce que Zig 0.17 ne
+vectorise aucune des deux boucles naturelles mesurées. Ce n'est pas le langage : l'équipe Zig a désactivé le
+vectoriseur de boucles de LLVM en 0.16 et 0.17, pour contourner un bug de LLVM. La version de développement
+(0.18-dev), qui le réactive, vectorise les deux boucles sans changer une ligne de code ; Zig a alors le 4e plafond
+(78,5), le meilleur code naturel de l'étude, et passe 2e en rang espéré, entre C et C++. Ses threads coûtent aussi
+trois fois plus cher à lancer que ceux de la glibc (environ 160 µs contre 50 par thread).
 
 **6. Nim.** Il compile vers C et en hérite la disposition et les compilateurs ; comptage de références déterministe
 (ORC) ; l'un des meilleurs codes naturels de l'étude. Mais les vérifications de bornes gardées en `-d:release`
@@ -189,7 +198,8 @@ Les résultats les plus solides de l'étude : chacun isole une cause, avec ses c
    contre 77 à 166 ms pour la boucle naturelle en ordre strict (Emerald Rapids). Java (Vector API, 6,9 ms) et Go
    (expérimental, 19 ms) suivent de loin ; OCaml et JavaScript n'en ont pas.
 3. **La vectorisation automatique se vérifie sur le code exécuté.** Aucune des deux boucles naturelles testées n'est
-   vectorisée en C#, Go, Mojo, Zig, Haskell, OCaml, JavaScript, Lua et Python. Les vérifications de bornes
+   vectorisée en C#, Go, Mojo, Zig 0.17 (vectoriseur de boucles désactivé par l'équipe Zig, réactivé dans la version
+   de développement), Haskell, OCaml, JavaScript, Lua et Python. Les vérifications de bornes
    l'empêchent sur le stencil naturel en Rust, Nim, D et Ada (56 à 73 ms, contre 36 ms).
 4. **Le compilateur pèse autant que le langage.** Sur le même code C, GCC est 2,2 à 2,7 fois plus rapide que clang
    sur l'arène de K8. Sur Emerald Rapids, clang, flang, Chapel et Mojo fusionnent la réduction naturelle de K5 en FMA
@@ -259,6 +269,9 @@ du langage.
 * Des règles de construit : bibliothèque standard seule, compilation pour le CPU hôte, ni PGO ni LTO, réglages des
   runtimes par défaut.
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
+* Une seule version de compilateur par langage, la dernière stable au 28 octobre. Un réglage temporaire d'une chaîne
+  peut coûter des rangs : Zig 0.17, dont le vectoriseur de boucles est désactivé, perd trois places en rang espéré
+  par rapport à sa version de développement. Je n'ai mesuré deux versions que pour Zig.
 
 ## Une autre étude, un autre ordre : pourquoi
 
@@ -293,6 +306,8 @@ par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION
   [`docs/AUDIT2_RESPONSE.md`](docs/AUDIT2_RESPONSE.md).
 * La confrontation avec le « Banc de sympathie mécanique » : [`docs/CONFRONTATION.md`](docs/CONFRONTATION.md)
   et [`results/report_confrontation.md`](results/report_confrontation.md).
+* La remarque sur Zig (vectoriseur désactivé, quatre versions comparées, rang avec la version de développement) :
+  [`docs/ZIG.md`](docs/ZIG.md) et [`results/report_zig.md`](results/report_zig.md).
 * Les données brutes de chaque processus : `results/raw*`.
 
 ## Reproduire
