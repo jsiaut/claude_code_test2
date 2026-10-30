@@ -73,8 +73,11 @@ fusionner les passes répétées (355 To/s).
   l'attribut `contiguous` produisent un code générique à pas variable (Q1 : 338 contre 44 ms).
 * **flang 23** ignore `-mprefer-vector-width` (avertissement « argument unused »).
 * **Ada (GNAT 16)** : les vérifications actives par défaut coûtent un facteur 3 sur le stencil 2D
-  (K9 : 129 contre 41 ms une fois supprimées localement). Un objet `Atomic` est écrit par un
-  `xchg` séquentiellement cohérent. L'Ada standard n'offre pas d'ordre relâché.
+  écrit avec des bornes littérales sur un tableau non contraint (K9 : 129 contre 41 ms une fois
+  supprimées localement) ; sur un type contraint, GNAT prouve les indices et vectorise vérifications
+  actives (ajouté le 30/10, `docs/ADA.md`). Un objet `Atomic` est écrit par un `xchg`
+  séquentiellement cohérent : l'Ada standard n'offre pas d'ordre relâché, GNAT si
+  (`pragma Disable_Atomic_Synchronization` donne un simple `mov` ; `System.Atomic_Primitives`).
 * **Chapel 2.10** : (1) `chpl` ne transmet pas `-mprefer-vector-width` au code Chapel ; il faut
   passer `-Xclang -target-feature -Xclang -prefer-256-bit` (212 contre 1 493 instructions zmm) ;
   (2) les tuples ne sont vectorisés qu'en `<2 x float>` (IR LLVM optimisée) ; (3) sans
@@ -163,7 +166,8 @@ fusionner les passes répétées (355 To/s).
   version). Zig 0.15.2 et master (0.18-dev, LLVM 23) vectorisent les deux boucles, K9 après un test
   de recouvrement des deux tableaux à l'exécution. *Corrigé le 30/10* : j'attribuais K9 à l'aliasing
   possible des deux tableaux ; c'était faux (`docs/ZIG.md`). Rust, D, Nim et Ada ne vectorisent pas le
-  stencil naturel, à cause des vérifications de bornes de leurs tableaux de tableaux ; gfortran ne
+  stencil naturel, à cause des vérifications de bornes de leurs tableaux de tableaux (Ada : tableau
+  2D non contraint et bornes littérales ; sur un type contraint, GNAT vectorise, `docs/ADA.md`) ; gfortran ne
   vectorise pas K4 (somme d'octets dans un accumulateur 64 bits) alors que flang le fait ; le JIT de
   .NET n'a pas de vectoriseur automatique ; C2 (Java) vectorise K9 en 128 bits mais pas K4.
 
