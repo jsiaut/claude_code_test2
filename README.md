@@ -12,19 +12,19 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | Rang | Langage | Score | Rang plausible | Devance le suivant | Ce qui le place là |
 |---|---|---|---|---|---|
 | 1 | **C** | 80,1 | 1–4 | 70 % | Plafond le plus haut et meilleur code par défaut ; une partie des leviers passe par des extensions de compilateur |
-| 2 | **C++** | 77,0 | 1–6 | 72 % | Le plus de contrôle (`std::simd`, `pmr`, atomiques) ; conteneurs standard à contre-courant du cache |
-| 3 | **Odin** | 72,3 | 1–7 | 65 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, allocateurs explicites) ; table et allocateur généralistes lents |
+| 2 | **C++** | 77,0 | 1–7 | 72 % | Le plus de contrôle (`std::simd`, `pmr`, atomiques) ; conteneurs standard à contre-courant du cache |
+| 3 | **Odin** | 72,3 | 1–8 | 65 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, allocateurs explicites) ; table et allocateur généralistes lents |
 | 4 | **C3** | 71,0 | 2–9 | 54 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels |
-| 5 | **Zig** | 71,5 | 2–10 | 62 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (2e avec la version de développement) |
-| 6 | **Nim** | 69,5 | 3–9 | 54 % | Les leviers de C par sa compilation vers C ; vérifications de bornes qui bloquent la vectorisation |
+| 5 | **Zig** | 71,5 | 2–11 | 62 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (2e avec la version de développement) |
+| 6 | **Nim** | 69,5 | 3–10 | 54 % | Les leviers de C par sa compilation vers C ; vérifications de bornes qui bloquent la vectorisation |
 | 7 | **Ada** | 71,6 | 2–11 | 52 % | Disposition au bit près, 7e plafond ; vérifications coûteuses sur le code naturel |
 | 8 | **Rust** | 69,4 | 4–10 | 65 % | 4e plafond, contrôle fin et sûr ; défauts coûteux (bornes, SipHash, SIMD portable encore instable) |
 | 9 | **D** | 71,0 | 3–12 | 64 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
-| 10 | **Chapel** | 64,1 | 5–13 | 74 % | 3e plafond grâce au parallélisme natif ; peu de contrôle bas niveau |
-| 11 | **Julia** | 62,2 | 8–13 | 64 % | Le meilleur code naturel ; ramasse-miettes et runtime |
-| 12 | **Fortran** | 60,8 | 9–14 | 62 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
+| 10 | **Fortran** | 66,3 | 5–12 | 56 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
+| 11 | **Chapel** | 64,1 | 5–13 | 74 % | 3e plafond grâce au parallélisme natif ; peu de contrôle bas niveau |
+| 12 | **Julia** | 62,2 | 8–13 | 69 % | Le meilleur code naturel ; ramasse-miettes et runtime |
 | 13 | **Mojo** | 60,0 | 10–14 | 91 % | Le SIMD au cœur du langage ; boucles naturelles scalaires |
-| 14 | **C#** | 54,8 | 12–16 | 84 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
+| 14 | **C#** | 54,8 | 13–16 | 84 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
 | 15 | **Java** | 47,4 | 14–16 | 68 % | Meilleur allocateur de petits objets ; pas de types valeur |
 | 16 | **Go** | 43,1 | 14–16 | 98 % | Structures par valeur ; ni vectoriseur, ni SIMD stable, atomiques séquentiellement cohérentes |
 | 17 | **Haskell** | 35,4 | 17 | 98 % | Peut descendre bas, mais tout le code par défaut est paresseux et boxé |
@@ -45,10 +45,13 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 * **Errata du 30 octobre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de contrôle
   (aides de ligne de cache de C, de D et d'Odin, AVX-512 d'Odin, réductions parallèles de Nim), une remarque sur Zig
   une sixième (projection de fichiers), une remarque sur Ada trois autres (non-aliasing et types vectoriels
-  sous-notés, allocation cachée sur-notée). Aucune ne change de rang à elle seule. La remarque sur Ada a aussi trouvé
-  une erreur de mon implémentation : un piège de GNAT (`-fnon-call-exceptions`) laissait scalaires ses noyaux
-  optimisés une fois inlinés. Corrigée et remesurée, elle fait passer Ada de la 9e à la 7e place
-  ([`docs/ADA.md`](docs/ADA.md)).
+  sous-notés, allocation cachée sur-notée), une remarque sur Fortran trois encore (disposition compacte, alignement
+  et allocateurs sous-notés). Seules celles de Fortran changent un rang à elles seules (de la 12e à la 11e place). Les
+  remarques sur Ada et sur Fortran ont aussi trouvé deux erreurs de mon banc, corrigées et remesurées. Un piège de
+  GNAT (`-fnon-call-exceptions`) laissait scalaires les noyaux optimisés d'Ada une fois inlinés : Ada passe de la 9e
+  à la 7e place ([`docs/ADA.md`](docs/ADA.md)). Les noyaux de Fortran n'étaient pas isolés de la boucle de mesure
+  comme ceux de C, et gfortran y laissait K4 scalaire : Fortran passe de la 12e à la 10e place
+  ([`docs/FORTRAN.md`](docs/FORTRAN.md) ; 9e avec le calcul prévu par le plan, dont je me suis écarté sur une clé).
 
 ![Classement final](results/charts/classement.svg)
 
@@ -65,7 +68,7 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   (0.18-dev) le réactive. Avec elle, et sans changer une ligne de code, Zig passe de 71,5 à 74,8 points et du 5e au
   2e rang espéré (1er dans 24 % des variantes). Le classement garde la règle fixée d'avance, la dernière version
   stable ([`docs/ZIG.md`](docs/ZIG.md)).
-* **Le contrôle pèse lourd, et il est jugé.** Il explique 81 % des écarts de score entre les 13 premiers. Sur les
+* **Le contrôle pèse lourd, et il est jugé.** Il explique 78 % des écarts de score entre les 13 premiers. Sur les
   seules mesures (le plafond), la tête serait C, C3, Chapel, Rust, C++, Odin.
 
 ## Pourquoi cet ordre, langage par langage
@@ -102,7 +105,7 @@ d'horloge, qui fait un appel système à chaque fois.
 Il lui manque le SoA, les intrinsèques officiels et le contrôle de la réassociation flottante.
 
 **5. Zig.** Tous les leviers du DOD : `std.MultiArrayList` (SoA dans la bibliothèque standard), `@Vector`, `comptime`,
-allocateurs passés explicitement, aucune allocation cachée. Son plafond n'est que 10e (71), parce que Zig 0.17 ne
+allocateurs passés explicitement, aucune allocation cachée. Son plafond n'est que 11e (71), parce que Zig 0.17 ne
 vectorise aucune des deux boucles naturelles mesurées. Ce n'est pas le langage : l'équipe Zig a désactivé le
 vectoriseur de boucles de LLVM en 0.16 et 0.17, pour contourner un bug de LLVM. La version de développement
 (0.18-dev), qui le réactive, vectorise les deux boucles sans changer une ligne de code ; Zig a alors le 4e plafond
@@ -132,20 +135,23 @@ Ce qui le fait reculer : son ramasse-miettes par défaut, qui donne la pire paus
 
 ### Forts sur leur terrain, avec moins de contrôle ou un runtime
 
-**10. Chapel.** 3e plafond (80) grâce au parallélisme de données natif (`forall`, `reduce`) et aux tableaux
+**10. Fortran.** Le langage natif du HPC : tableaux multidimensionnels contigus, syntaxe tableau, `do concurrent`,
+absence d'aliasing par règle du langage, OpenMP ; stencil excellent. Mais ni types SIMD, ni intrinsèques, ni
+génériques : tout dépend du vectoriseur. Sur K4, gfortran fait jeu égal avec GCC sur C (5,0 ms, contre 2,8 ms pour
+clang) ; sur K5 et K8, ses versions optimisées restent 1,2 à 1,4 fois plus lentes que celles du C de GCC. Mon banc
+laissait gfortran inliner ses noyaux dans la boucle de mesure, où K4 restait scalaire (13 ms) : corrigé, Fortran
+passe de la 12e à la 10e place ([`docs/FORTRAN.md`](docs/FORTRAN.md)). Le classement mesure gfortran 16.2 ; flang,
+en annexe, vectorisait déjà K4 dans le banc d'origine, et ifx n'est pas mesuré.
+
+**11. Chapel.** 3e plafond (80) grâce au parallélisme de données natif (`forall`, `reduce`) et aux tableaux
 multidimensionnels : meilleur temps de K3, stencil parallèle parmi les meilleurs. Peu de contrôle bas niveau
 (57) : pas de types SIMD, options de compilation globales, et des threads ouvriers qui consomment 23 % de CPU en
 plus sur les noyaux à un thread.
 
-**11. Julia.** Structures immuables stockées en ligne, fonctions spécialisées par types et JIT LLVM : les deux
-boucles naturelles sont vectorisées, et son code naturel est le meilleur de l'étude. Ce qui la place 11e, c'est
+**12. Julia.** Structures immuables stockées en ligne, fonctions spécialisées par types et JIT LLVM : les deux
+boucles naturelles sont vectorisées, et son code naturel est le meilleur de l'étude. Ce qui la place 12e, c'est
 son runtime : sur K8, le ramasse-miettes porte la latence p99,9 à 70 fois la médiane, et les tâches coopératives
 bloquent une attente active sans `yield()`.
-
-**12. Fortran.** Le langage natif du HPC : tableaux multidimensionnels contigus, syntaxe tableau, `do concurrent`,
-absence d'aliasing par règle du langage, OpenMP ; stencil excellent. Mais ni types SIMD, ni intrinsèques, ni
-alignement standard, ni génériques : tout dépend du vectoriseur, et gfortran ne vectorise pas la somme
-conditionnelle de K4 (11 ms, contre 3,9 ms avec flang).
 
 **13. Mojo.** Le SIMD est au cœur du langage (`SIMD[DType, N]`, paramètres de compilation), et le SIMD explicite est
 efficace. Mais aucune de ses deux boucles naturelles n'est vectorisée (stencil naturel en 262 ms, le plus lent des
@@ -208,7 +214,9 @@ Les résultats les plus solides de l'étude : chacun isole une cause, avec ses c
    vectorisée en C#, Go, Mojo, Zig 0.17 (vectoriseur de boucles désactivé par l'équipe Zig, réactivé dans la version
    de développement), Haskell, OCaml, JavaScript, Lua et Python. Les vérifications de bornes
    l'empêchent sur le stencil naturel en Rust, Nim, D et Ada (55 à 80 ms, contre 36 ms) ; en Ada, sur un type
-   contraint, GNAT élimine les vérifications et vectorise.
+   contraint, GNAT élimine les vérifications et vectorise. Le contexte d'appel compte aussi : inlinés dans la boucle
+   de mesure, les deux noyaux de K4 de Fortran restaient scalaires, alors que leurs copies hors ligne, vectorisées,
+   n'étaient jamais appelées (corrigé).
 4. **Le compilateur pèse autant que le langage.** Sur le même code C, GCC est 2,2 à 2,7 fois plus rapide que clang
    sur l'arène de K8. Sur Emerald Rapids, clang, flang, Chapel et Mojo fusionnent la réduction naturelle de K5 en FMA
    scalaire, deux fois plus lente qu'une addition sur ce cœur ; GCC l'évite. Sur Cascade Lake, l'écart disparaît.
@@ -272,15 +280,20 @@ du langage.
 
 * Deux processeurs Intel, virtualisés et partagés ; ni AMD, ni ARM, ni compteurs matériels.
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Les deux langages relus après coup par des connaisseurs y ont gagné : Ada deux places, par la correction
-  d'un piège de GNAT ; Zig trois, mais par une version de compilateur que la règle exclut.
+  l'autre. Les trois langages relus après coup par des connaisseurs y ont gagné : Ada et Fortran deux places chacun,
+  par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de mesure) ;
+  Zig trois, mais par une version de compilateur que la règle exclut.
+* Ces corrections ont été mesurées après coup sur une autre machine Cascade Lake, puis reportées sur les données
+  principales par des rapports appariés ; pour une clé de Fortran, par un témoin mesuré sur le même hôte, au prix
+  d'un écart au plan ([`docs/FORTRAN.md`](docs/FORTRAN.md), 4.2).
 * Des microbenchmarks : ni E/S, ni décompression, ni tri ou jointure ; une seule taille d'entrée par noyau, sauf K2.
 * Des règles de construit : bibliothèque standard seule, compilation pour le CPU hôte, ni PGO ni LTO, réglages des
   runtimes par défaut.
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
 * Une seule version de compilateur par langage, la dernière stable au 28 octobre. Un réglage temporaire d'une chaîne
   peut coûter des rangs : Zig 0.17, dont le vectoriseur de boucles est désactivé, perd trois places en rang espéré
-  par rapport à sa version de développement. Je n'ai mesuré deux versions que pour Zig.
+  par rapport à sa version de développement. Je n'ai mesuré deux versions que pour Zig. Et un seul compilateur par
+  langage : Fortran est classé avec gfortran ; flang n'est mesuré qu'en annexe, ifx pas du tout.
 
 ## Une autre étude, un autre ordre : pourquoi
 
@@ -317,6 +330,8 @@ par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION
   et [`results/report_confrontation.md`](results/report_confrontation.md).
 * La remarque sur Ada (piège de GNAT, errata, implémentation corrigée et remesurée) : [`docs/ADA.md`](docs/ADA.md)
   et [`results/report_ada.md`](results/report_ada.md).
+* La remarque sur Fortran (noyaux inlinés, errata, banc corrigé et remesuré, écart au plan) :
+  [`docs/FORTRAN.md`](docs/FORTRAN.md) et [`results/report_fortran.md`](results/report_fortran.md).
 * La remarque sur Zig (vectoriseur désactivé, quatre versions comparées, rang avec la version de développement) :
   [`docs/ZIG.md`](docs/ZIG.md) et [`results/report_zig.md`](results/report_zig.md).
 * Les données brutes de chaque processus : `results/raw*`.
@@ -341,6 +356,26 @@ python3 tools/layout_v3.py build           # huit dispositions du code (lld 23)
 
 ```bash
 python3 tools/layout_v3.py run             # expérience de disposition -> results/raw_v3
+```
+
+```bash
+python3 tools/measure_ada.py               # remarque sur Ada : mesures appariées -> results/raw_ada
+```
+
+```bash
+python3 tools/measure_fortran.py           # remarque sur Fortran : mesures appariées -> results/raw_fortran
+```
+
+```bash
+python3 analysis/ada_check.py              # rapports d'Ada -> results/transfers.json (réécrit)
+```
+
+```bash
+python3 analysis/fortran_check.py          # rapports de Fortran, ajoutés -> results/transfers.json
+```
+
+```bash
+python3 analysis/transfer_check.py         # pont par le témoin du même hôte -> results/transfers.json
 ```
 
 ```bash

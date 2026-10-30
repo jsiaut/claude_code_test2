@@ -100,4 +100,92 @@ nouvelle ; de même pour les options réservées aux noyaux `tuned` appliquées 
 
 ## 4. Résultats
 
-*À venir.*
+406 processus (58 cellules, 7 passes, échauffement de 2), le 30 octobre de 16 h 36 à 16 h 47 sur la machine 5 ;
+aucune somme de contrôle fausse ; 16 processus refaits pour vol de temps au-dessus de 2 % (aucun gardé
+au-dessus du seuil). Rapports, témoins et scénarios : `results/report_fortran.md` et
+`results/fortran_check.json` ; données : `results/raw_fortran/`.
+
+### 4.1 Ce que change l'isolement des noyaux (`fortran_fix` / `fortran`, même hôte)
+
+| Clé | Fortran | Fortran corrigé | Rapport (IC 95 %) | C par GCC, même hôte |
+|---|---|---|---|---|
+| K4 sans branchement | 20,5 ms | 4,6 ms | 0,224 (0,197–0,264) | 4,8 ms |
+| K4 naturel | 13,8 ms | 6,6 ms | 0,478 (0,409–0,552) | 6,1 ms |
+| K2 chasse de pointeurs, 16 Kio | 8,1 ms | 6,6 ms | 0,819 (0,792–0,841) | — |
+| K2, 256 Kio | 21,5 ms | 19,1 ms | 0,887 (0,814–0,962) | — |
+| K2, en mémoire | 611 ms | 602 ms | 0,986 (0,909–1,058) | — |
+| K1 ×2, K5, K6 ×2 et K9 naturels | | | de 0,99 à 1,12 | |
+| 15 témoins, dont le code ne change pas | | | de 0,92 à 1,16 | |
+
+* **(1) est confirmé.** Isolé, K4 est vectorisé et fait jeu égal avec C compilé par GCC sur le même hôte (0,96 et
+  1,08 fois son temps ; la remarque : 4,4 et 6,6 ms contre 4,3 et 6,6). Inliné dans la boucle de mesure, il prenait
+  le chemin scalaire.
+* **K2 en cache gagnait aussi à être isolé** : 0,82 et 0,89, presque exactement ce qu'avait donné la même correction
+  pour Ada (0,83 et 0,89, `docs/ADA.md`) ; rien en mémoire, où la latence domine.
+* **Les autres clés changées restent dans l'enveloppe des témoins.** Entre les deux binaires, des noyaux dont le
+  source ne change pas bougent de 0,92 (K9 `mt`) à 1,16 (K6 `mt` Q1) : K6 naturel Q1 (1,12) et K1 désordonné
+  (1,05) ne se distinguent pas d'un effet de disposition. Le plan les transfère quand même, tels quels.
+
+### 4.2 Écart au plan : K4 sans branchement passe par le témoin
+
+Le plan transfère aux données principales le rapport mesuré sur la machine 5. Pour K4 sans branchement, cela donne
+13,1 × 0,224 = 2,9 ms, soit 0,56 fois le C de GCC dans les mêmes données (5,2 ms), presque le temps de clang
+(2,8 ms). Or, sur la machine 5, Fortran corrigé fait jeu égal avec GCC (0,96). Le transfert suppose que l'hôte agit
+de la même façon sur les deux versions du noyau ; ce n'est pas le cas ici : la boucle scalaire inlinée varie beaucoup
+d'un hôte et d'un processus à l'autre (médianes par processus de 14,0 à 26,6 ms sur la machine 5, de 12,0 à 15,0 ms
+dans les données principales), alors que la boucle vectorisée suit celle de GCC, qui sort du même moteur.
+
+J'ai donc ajouté une règle **après avoir vu ces chiffres** (c'est un écart au plan) : pour chaque clé transférée qui a
+un témoin mesuré sur le même hôte (6 clés d'Ada, 2 de Fortran), je calcule aussi le pont par le témoin : temps du C de
+GCC dans les données principales × (corrigé / C de GCC, machine 5). Quand le transfert s'en écarte de plus de 25 %,
+plus que l'effet de disposition le plus fort mesuré sur une clé témoin (K9 naturel d'Ada, 1,25, `docs/ADA.md`), le
+pont remplace le transfert (`analysis/transfer_check.py`, `results/transfer_check.json`).
+
+| Clé | Transfert (plan) | Pont par le témoin | Écart | Retenu |
+|---|---|---|---|---|
+| Fortran, K4 sans branchement | 2,93 ms | 5,01 ms | −41,6 % | pont (rapport 0,384) |
+| Fortran, K4 naturel | 5,56 ms | 6,54 ms | −14,9 % | transfert |
+| Ada, 6 clés (K6 `tuned` et `mt`, K9 `tuned` et `mt`) | | | de −19,1 à +6,0 % | transfert |
+
+Seule une clé change. Le classement publié retient le pont, parce que le transfert y contredit une mesure faite sur le
+même hôte ; le scénario du plan reste publié à côté. Le pont suppose à son tour que Fortran corrigé et le C de GCC
+réagissent de la même façon au changement d'hôte : vraisemblable (même moteur, même boucle vectorisée), mais pas
+démontré. K4 naturel garde le transfert, plus favorable à Fortran que le pont, parce que l'écart reste sous le seuil.
+
+### 4.3 Classement
+
+| Scénario | Score | Plafond E | Rang espéré | Place | Rang 90 % |
+|---|---|---|---|---|---|
+| Publié avant la remarque | 60,8 | 67,2 | 11,62 | 12 | 9–14 |
+| F-E : errata de la grille (A3, A4, B2) | 62,6 | 67,2 | 11,13 | 11 | 8–13 |
+| S1 du plan : F-E, 11 rapports transférés (K5 forcé à 1), C3 de `fortran_fix` | 68,4 | 79,9 | 8,24 | 9 | 3–12 |
+| **S1 retenu, publié** : S1 avec le pont pour K4 sans branchement | **66,3** | 74,7 | 9,40 | **10** | 5–12 |
+| S1-K5 (plan, avec K5) | 68,4 | 79,9 | 8,24 | 9 | 3–12 |
+| S1-26 (plan, les 26 rapports) | 67,8 | 78,4 | 8,54 | 10 | 4–12 |
+| S2 du plan (sensibilité : formes de la remarque pour K5 et K8 `tuned`) | 70,0 | 84,0 | 7,28 | 8 | 2–11 |
+| S2 sur S1 retenu (sensibilité) | 67,8 | 78,5 | 8,54 | 10 | 3–12 |
+
+* **Publié** : Fortran passe de la 12e à la 10e place, derrière D (qui le devance dans 64 % des variantes) et devant
+  Chapel (56 %). Les errata de la grille comptent pour 1,8 point, la correction du banc pour 3,7 (5,8 avec le
+  transfert du plan). C3 (vectorisation mesurée des boucles chaudes) passe de 0,5 à 1 ; elle ne compte que dans les
+  variantes en règle v1, la règle v2 la retire du contrôle.
+* **Les formes de la remarque pour K5 et K8** (S2, hors classement publié) ajouteraient 1,5 point (67,8), sans changer
+  la place : D garde 54 % des variantes devant Fortran.
+* **La remarque estimait** 63,9 points avec K4 seul, 66,5 avec K5, K8, B2 et A3, 67,0 avec A4 et 69,2 avec K4 en 512
+  bits. Mes calculs donnent 66,3 points sans K5, K8 ni 512 bits (publié), 67,8 avec K5 et K8.
+
+### 4.4 Verdicts
+
+* **(1) K4** : exact ; erreur de mon banc, corrigée dans le classement publié. Le 512 bits n'est pas adopté (3.4).
+* **(2) K8** : la disposition en tableau de nœuds gagne 31 % (0,688 ; 0,590–0,813), à 135 ms contre 146 pour le C de
+  GCC sur le même hôte (la remarque : 122 ms, au niveau de GCC). L'effet est réel, mais c'est une disposition
+  nouvelle : sensibilité seulement (règle 3.1).
+* **(3) K5** : non confirmé sur la machine 5 : 0,98 (0,84–1,18), 8,0 contre 8,2 ms (C de GCC : 6,5 ms). Les 64
+  additions scalaires finales existent, mais leur coût ne sort pas du bruit de K5 `tuned` sur cet hôte.
+* **(4) Grille** : A3, A4 et B2 corrigés, F2 inchangé avec une justification à jour (2 et 3.2). B2 reçoit 0,5 et non
+  1 : un allocateur à traits d'OpenMP n'est pas un allocateur programmable, et sa limite de réserve n'a pas été
+  respectée dans ma sonde.
+* **Ce que la remarque tient pour justifié** (ni types vectoriels, ni intrinsèques, ni assembleur, ni indications de
+  branchement, ni préchargement, ni constante de ligne de cache, ni projection de fichiers) : inchangé.
+* **Compilateur** : le classement mesure Fortran compilé par gfortran 16.2. flang, en annexe, vectorisait déjà K4 dans
+  le banc d'origine ; ifx n'est pas mesuré.

@@ -550,3 +550,20 @@ Robustesse :
   mesure, formes de K5 et K8, cases A3, A4, B2 et F2). Vérifications préalables (binaire de la campagne, sondes
   gfortran 16.2), règle commune aux trois remarques et plan : `docs/FORTRAN.md`, poussé avant les mesures avec le
   code d'analyse (`analysis/fortran_check.py`) et les errata de la grille.
+* 2026-10-30, 16:36-16:47 : **mesures de la remarque sur Fortran** (`tools/measure_fortran.py`, machine 5) : 58
+  cellules × 7 processus (406), aucune somme de contrôle fausse ; 16 processus refaits pour vol de temps au-dessus de
+  2 %, aucun gardé au-dessus du seuil. Rien d'autre ne tournait. Après les mesures : C3 de `fortran_fix` (1, contre
+  0,5 pour le binaire de la campagne) et sondes Fortran des errata.
+* 2026-10-30, après les mesures : **analyse de la remarque sur Fortran** (`analysis/fortran_check.py`, poussé avant
+  les mesures). Le scénario S1 du plan donne 68,4 points et la 9e place. **Écart au plan, décidé après avoir vu les
+  données** : le témoin du même hôte (C compilé par GCC) contredit le transfert de K4 sans branchement, qui mettait
+  Fortran à 0,56 fois GCC dans les données principales, alors qu'ils font jeu égal sur la machine 5 (la boucle
+  scalaire inlinée de la campagne dépend de l'hôte). Règle ajoutée, appliquée aux 8 clés transférées qui ont un
+  témoin (6 d'Ada, 2 de Fortran) : quand le transfert s'écarte de plus de 25 % du pont par le témoin, le pont le
+  remplace (`analysis/transfer_check.py`). Une seule clé change (K4 sans branchement de Fortran : rapport 0,384 au
+  lieu de 0,224). Classement publié : Fortran 66,3 points, 10e (rang espéré 9,40) ; le scénario du plan est publié
+  à côté (`docs/FORTRAN.md`, 4.2 et 4.3). L'analyse v3 recalculée redonne exactement le scénario retenu (scores
+  et rangs plausibles identiques pour les 21 langages). Les scores des autres langages ne changent pas ; Chapel et
+  Julia perdent une place, le plafond de Zig passe de la 10e à la 11e place, et la part des écarts de score entre
+  les 13 premiers qu'explique le contrôle passe de 81 à 78 %. Les scénarios de Zig sont recalculés sur ces données
+  (S1 : rang espéré 2,71 au lieu de 2,69, même verdict).

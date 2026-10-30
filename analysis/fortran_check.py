@@ -158,6 +158,8 @@ def report(o):
     L = ["# Remarque sur Fortran : rapports appariés et scénarios\n",
          "Plan : `docs/FORTRAN.md`. Mesures : `results/raw_fortran/` (machine 5, 7 processus par cellule). Code :",
          "`analysis/fortran_check.py`. Processus rejetés : " + (str(len(o["bad"])) if o["bad"] else "aucun") + ".\n",
+         "Classement publié : S1, sauf K4 sans branchement, reporté par le témoin du même hôte (écart au plan, décidé",
+         "après ce calcul : `docs/FORTRAN.md`, 4.2 ; `analysis/transfer_check.py`, `results/transfer_check.json`).\n",
          f"Contrôle de Fortran avec les errata (A3, A4, B2) : {f(o['C_fortran']['v2'])} en règle v2, "
          f"{f(o['C_fortran']['v1'])} en règle v1. C3 (vectorisation mesurée) : {f(o['C3']['campagne'], 1)} avec le banc "
          f"de la campagne, {f(o['C3']['fix'], 1)} avec le banc corrigé.\n",

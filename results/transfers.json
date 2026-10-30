@@ -1,5 +1,5 @@
 {
- "source": "docs/ADA.md (d\u00e9cision 2) ; rapports appari\u00e9s de results/raw_ada, machine 5 ; results/ada_check.json",
+ "source": "docs/ADA.md (d\u00e9cision 2) ; rapports appari\u00e9s de results/raw_ada, machine 5 ; results/ada_check.json ; Fortran : docs/FORTRAN.md (3.4), results/raw_fortran, results/fortran_check.json ; ponts par le t\u00e9moin : results/transfer_check.json",
  "ratios": {
   "ada": {
    "k1|aos|energy": 0.948697189225563,
@@ -13,6 +13,18 @@
    "k6|mt|q1": 1.0070588352991128,
    "k9|tuned|": 0.7548161296222257,
    "k9|mt|": 0.846311339648959
+  },
+  "fortran": {
+   "k1|natural|energy": 1.0027478466062836,
+   "k1|natural_shuffled|energy": 1.0540880063981386,
+   "k2|tuned|16384": 0.8186966608319405,
+   "k2|tuned|262144": 0.8870388766556555,
+   "k2|tuned|8388608": 0.9855107965501531,
+   "k4|branchless_unsorted|": 0.3838911598209305,
+   "k4|natural_unsorted|": 0.4783658300222646,
+   "k6|natural|q1": 1.1182582005508572,
+   "k6|natural|q6": 1.024752212673458,
+   "k9|natural|": 0.9924083237963867
   }
  }
 }

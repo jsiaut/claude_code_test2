@@ -67,8 +67,9 @@ fusionner les passes répétées (355 To/s).
   générique. K1 soa passe de 204 à 10,6 ms, K5 de 1,87 à 0,14 s, K9 de 304 à 61 ms une fois les
   types annotés.
 * **gfortran 16** : (1) la réduction `!$omp simd reduction` termine par 64 additions scalaires
-  (`vaddss`) au lieu d'un arbre vectoriel : K5 7,1 ms contre 4,7 ms en C ; (2) la vectorisation de
-  boucles mêlant entiers 8 et 32 bits choisit des registres de 128 bits (Q1 « une passe par
+  (`vaddss`) au lieu d'un arbre vectoriel : K5 7,1 ms contre 4,7 ms en C (mais quatre accumulateurs de 16
+  valeurs à la place ne changent rien de mesurable sur la machine 5 : rapport 0,98, `docs/FORTRAN.md`) ; (2) la
+  vectorisation de boucles mêlant entiers 8 et 32 bits choisit des registres de 128 bits (Q1 « une passe par
   groupe » : 216 ms contre 60 ms pour la version naturelle) ; (3) des arguments `(:)` sans
   l'attribut `contiguous` produisent un code générique à pas variable (Q1 : 338 contre 44 ms).
 * **flang 23** ignore `-mprefer-vector-width` (avertissement « argument unused »).
@@ -357,3 +358,22 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   `movsxd`) ; la borne fixe (extension `-gnatX` de GNAT) supprimerait la soustraction.
 * **K8** : le meilleur temps d'Ada (108 ms) est l'arène de nœuds indexés, que GCC compile bien ; le pool de stockage
   prend 187 ms.
+
+## Remarque sur Fortran (30 octobre, machine 5, Cascade Lake) — `docs/FORTRAN.md`, `results/fortran_check/`
+
+* **Inliné dans la boucle de mesure, K4 restait scalaire** : dans le binaire de la campagne, `run_k4` ne contient ni
+  appel ni instruction vectorielle, alors que les copies hors ligne de `k4_natural` et `k4_branchless`, vectorisées,
+  ne sont jamais appelées. Avec `!GCC$ ATTRIBUTES NOINLINE` : K4 sans branchement 20,5 → 4,6 ms (C par GCC sur le
+  même hôte : 4,8), K4 naturel 13,8 → 6,6 ms (6,1) ; K2 en cache 0,82 et 0,89, comme Ada avec la même correction.
+* **Un rapport transféré d'un hôte à l'autre peut tromper** quand l'une des deux versions dépend de l'hôte : la
+  boucle scalaire inlinée de K4 fait de 12,0 à 15,0 ms par processus dans les données principales, de 14,0 à 26,6 ms
+  sur la machine 5. Transféré, le rapport mettait Fortran à 0,56 fois le C de GCC, alors que le même hôte les donne à
+  égalité ; le témoin du même hôte sert de pont (`docs/FORTRAN.md`, 4.2).
+* **`-fpack-derived`** fait passer un type dérivé (entier 8 bits, 32 bits, 8 bits) de 12 à 6 octets.
+* **OpenMP dans gfortran 16.2** : `!$omp allocators allocate(align(128): a)` aligne les allouables (50 allocations
+  sur 50, contre 0 sans directive), `!$omp allocate ... align(256)` les variables locales ; un allocateur à traits
+  se branche sur `ALLOCATE`, mais la limite de réserve n'a pas été respectée dans ma sonde.
+* **GCC 16.2 livre `libcaf_shmem`** : cotableaux en mémoire partagée sur un nœud, sans OpenCoarrays (4 images,
+  `co_sum` juste).
+* **K8** : une arène en un tableau de nœuds de 16 octets, au lieu de trois tableaux, donne 0,69 (135 ms, contre 146
+  pour le C de GCC sur le même hôte).
