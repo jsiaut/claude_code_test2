@@ -390,6 +390,10 @@ kappas dépassent 0,6 ; le troisième est entre 0,4 et 0,6.
 | Odin, C2 intrinsèques | 1 | `core:simd/x86` ne couvre l'AVX-512 que par 8 procédures AVX-512F et 6 AVX-512BW | 0,5 ; 0,5 |
 | Nim, C5 parallélisme de données | 1 | une réduction avec l'itérateur `||` ne compile pas en `-d:release` (C généré invalide) | 0,5 ; 0,25 |
 
+**Effet des cinq corrections** (`analysis/blind_corrections.py`, analyse v3 recalculée) : aucun rang ne change dans
+mon classement publié. C passe de 79,1 à 80,1, D de 70,0 à 71,1, Odin de 72,6 à 72,3 et Nim de 70,5 à 69,6. Dans la
+confrontation, le scénario D garde C au 5e rang, avec la même corrélation de 0,87.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

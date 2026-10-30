@@ -490,3 +490,11 @@ Robustesse :
   Odin C2 et Nim C5 (`analysis/capabilities.py`, `analysis/capabilities_v2.py`, `analysis/standard_rule.py`).
   La comparaison pré-enregistrée reste calculée sur la matrice d'avant correction. L'analyse v3, ses graphiques et
   le README sont recalculés avec la matrice corrigée ; l'effet sur le classement est publié avec la correction.
+* Idem : **analyse v3 recalculée avec la matrice corrigée** (`analysis/analyze_v3.py`, graphiques, README). L'ordre
+  final est identique ; les scores de C, d'Odin, de Nim et de D bougent d'au plus 1,1 point. La réplication sur la
+  machine 3 change un peu (Spearman sur les 13 premiers 0,74 au lieu de 0,78). Deux chiffres du README n'avaient
+  pas de script : la part des variantes où C ou C++ est premier et le R² du contrôle parmi les 13 premiers.
+  `analysis/readme_figures.py` les calcule désormais. La même méthode, appliquée à la matrice d'avant correction,
+  redonne les anciens chiffres (C 55 %, C++ 31 % ; R² 0,80). Pour compter les premières places,
+  `analysis/confrontation.py` relève aussi le langage premier de chaque tirage, sans rien changer à ses autres
+  sorties.

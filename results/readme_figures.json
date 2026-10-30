@@ -1,0 +1,32 @@
+{
+ "first": {
+  "c": 0.61865,
+  "cpp": 0.25535,
+  "csharp": 0.0,
+  "java": 0.0,
+  "zig": 0.01605,
+  "odin": 0.05975,
+  "julia": 0.0,
+  "ada": 0.0119,
+  "fortran": 0.00045,
+  "js": 0.0,
+  "python": 0.0,
+  "haskell": 0.0,
+  "c3": 0.0204,
+  "d": 0.001,
+  "rust": 0.00135,
+  "chapel": 0.0007,
+  "nim": 0.0144,
+  "mojo": 0.0,
+  "go": 0.0,
+  "ocaml": 0.0,
+  "lua": 0.0
+ },
+ "r2_control_top13": 0.8076014462461214,
+ "neighbour_range_top13": [
+  0.55995,
+  0.73815
+ ],
+ "min_top13_ahead_of_csharp": 0.91305,
+ "check_exp_rank_max_diff": 3.552713678800501e-15
+}

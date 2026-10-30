@@ -137,6 +137,7 @@ def scenario(data, lat, langs, footprint, c3, crule):
     rk = A.ranked
     NR = len(RANKED)
     prec = np.zeros((NR, NR))
+    first = np.zeros(NR)
     for u in range(U):
         cfg = {k: v[int(rng.integers(len(v)))] for k, v in opts.items()}
         b = int(rng.integers(1, B + 1))
@@ -153,6 +154,7 @@ def scenario(data, lat, langs, footprint, c3, crule):
         S_u = scores3(A, b, cfg, C, footprint, refs, wE=wE, wD=wD, wP=wP)
         r_ = ranks_of(S_u["MS"][rk])
         prec += r_[:, None] < r_[None, :]
+        first[int(np.argmin(r_))] += 1
     prec /= U
     idx = {l: RANKED.index(l) for l in L18}
     exp18 = {a: 1 + sum(prec[idx[b], idx[a]] for b in L18 if b != a) for a in L18}
@@ -167,6 +169,7 @@ def scenario(data, lat, langs, footprint, c3, crule):
             tstar_src[f"{k}#{i}"] = langs[j]
     return {"A": A, "refs": refs, "S0": S0, "C0": C0, "ms_boot": ms_boot, "ms0": ms0, "exp18": exp18,
             "order18": order18, "exp21": exp21, "prec": prec, "tstar_src": tstar_src,
+            "first": {RANKED[j]: float(first[j] / U) for j in range(NR)},
             "E": {l: float(S0["E"][A.idx[l]]) for l in langs}, "D": {l: float(S0["D"][A.idx[l]]) for l in langs},
             "C": {l: float(C0[A.idx[l]]) for l in langs}, "Ek": {l: {k: float(S0["Ek"][k][A.idx[l]]) for k in S0["Ek"]}
                                                                   for l in langs}}

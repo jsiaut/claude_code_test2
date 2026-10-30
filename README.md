@@ -11,14 +11,14 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 
 | Rang | Langage | Score | Rang plausible | Devance le suivant | Ce qui le place là |
 |---|---|---|---|---|---|
-| 1 | **C** | 79,1 | 1–4 | 64 % | Plafond le plus haut et meilleur code par défaut ; une partie des leviers passe par des extensions de compilateur |
-| 2 | **C++** | 77,1 | 1–6 | 71 % | Le plus de contrôle (`std::simd`, `pmr`, atomiques) ; conteneurs standard à contre-courant du cache |
-| 3 | **Odin** | 72,6 | 1–7 | 68 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, allocateurs explicites) ; table et allocateur généralistes lents |
+| 1 | **C** | 80,1 | 1–4 | 70 % | Plafond le plus haut et meilleur code par défaut ; une partie des leviers passe par des extensions de compilateur |
+| 2 | **C++** | 77,1 | 1–6 | 72 % | Le plus de contrôle (`std::simd`, `pmr`, atomiques) ; conteneurs standard à contre-courant du cache |
+| 3 | **Odin** | 72,3 | 1–7 | 65 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, allocateurs explicites) ; table et allocateur généralistes lents |
 | 4 | **C3** | 71,1 | 2–8 | 56 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels |
-| 5 | **Zig** | 71,5 | 2–10 | 56 % | Tous les leviers du DOD, mais aucune boucle naturelle vectorisée |
-| 6 | **Nim** | 70,5 | 2–9 | 61 % | Les leviers de C par sa compilation vers C ; vérifications de bornes qui bloquent la vectorisation |
-| 7 | **Rust** | 69,4 | 4–10 | 74 % | 4e plafond, contrôle fin et sûr ; défauts coûteux (bornes, SipHash, SIMD portable encore instable) |
-| 8 | **D** | 70,0 | 4–12 | 55 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
+| 5 | **Zig** | 71,5 | 2–10 | 60 % | Tous les leviers du DOD, mais aucune boucle naturelle vectorisée |
+| 6 | **Nim** | 69,6 | 3–9 | 57 % | Les leviers de C par sa compilation vers C ; vérifications de bornes qui bloquent la vectorisation |
+| 7 | **Rust** | 69,4 | 4–10 | 65 % | 4e plafond, contrôle fin et sûr ; défauts coûteux (bornes, SipHash, SIMD portable encore instable) |
+| 8 | **D** | 71,1 | 3–12 | 61 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
 | 9 | **Ada** | 68,0 | 3–12 | 58 % | Disposition au bit près et meilleure arène ; vérifications et atomiques coûteuses |
 | 10 | **Chapel** | 64,1 | 5–13 | 74 % | 3e plafond grâce au parallélisme natif ; peu de contrôle bas niveau |
 | 11 | **Julia** | 62,3 | 8–13 | 64 % | Le meilleur code naturel ; ramasse-miettes et runtime |
@@ -37,10 +37,13 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   25 % de code par défaut mesuré (le code qu'on écrit sans y penser) et 35 % de contrôle (les leviers qu'offrent le
   langage et sa chaîne de compilation).
 * **Ordre** : le rang moyen sur 20 000 variantes de l'analyse, qui tirent au hasard les poids, les normalisations,
-  le jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf pour C3 et Zig, puis Rust et D,
-  que la plupart des variantes inversent.
+  le jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf pour C3 et Zig, que 56 % des
+  variantes inversent, et pour D, que 65 % des variantes placent derrière Nim comme derrière Rust.
 * **Rang plausible** : le rang dans 90 % des variantes. **Devance le suivant** : la part des variantes où le
   langage passe devant celui de la ligne suivante.
+* **Erratum du 30 octobre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de contrôle
+  (aides de ligne de cache de C, de D et d'Odin, AVX-512 d'Odin, réductions parallèles de Nim). Corrigées, elles
+  changent un peu les scores de C, d'Odin, de Nim et de D, mais aucun rang.
 
 ![Classement final](results/charts/classement.svg)
 
@@ -48,11 +51,11 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 * **Les grandes marches sont établies.** Les 13 premiers devancent C# dans au moins 91 % des variantes, et sur les
   deux machines. Go devance Haskell, Haskell OCaml, OCaml JavaScript, dans 98 à 100 % des variantes.
 * **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Deux voisins s'y devancent dans
-  55 à 74 % des variantes. C ou C++ est premier dans 86 % des variantes (C 55 %, C++ 31 %).
+  56 à 74 % des variantes. C ou C++ est premier dans 87 % des variantes (C 62 %, C++ 26 %).
 * **L'ordre fin dépend aussi de la machine.** Sur un Emerald Rapids, le même calcul donne C++ 1er, C 2e, Rust 3e.
   L'écart vient surtout de l'écrivain unique (K3), dont le temps dépend, sur ce processeur, du placement du code
   par l'éditeur de liens (voir plus bas).
-* **Le contrôle pèse lourd, et il est jugé.** Il explique 80 % des écarts de score entre les 13 premiers. Sur les
+* **Le contrôle pèse lourd, et il est jugé.** Il explique 81 % des écarts de score entre les 13 premiers. Sur les
   seules mesures (le plafond), la tête serait C, C3, Chapel, Rust, C++, Odin.
 
 ## Pourquoi cet ordre, langage par langage
@@ -273,6 +276,10 @@ par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION
   posée : leur score ne compte pas la vitesse. Mêler à peu près moitié de leur score au mien reproduit leur ordre.
 * **Sur les faits, les deux grilles, notées indépendamment, s'accordent** (0,83 à 0,88). Leurs désaccords portent
   presque tous sur ce que recouvre chaque principe.
+* **Un second juge, à l'aveugle** (un sous-agent sans accès aux deux grilles ni à mes conclusions), retrouve ma
+  grille sous ma règle (kappa pondéré 0,75) comme sous la leur (0,80), et la leur à un niveau près dans 94 % des cas.
+  Sur les mêmes faits, il classe C premier de ses 8 langages sous ma règle, dernier sous la leur : la règle suffit
+  au renversement. Il n'accorde presque jamais leur niveau 4 (« imposé ou par défaut »), celui qui met Zig en tête.
 
 ## Pour aller plus loin
 
