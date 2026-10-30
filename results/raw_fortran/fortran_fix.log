@@ -1,0 +1,4 @@
+fortran_fix k4   natural_unsorted                p0 n=10 med=0.007442s ok={True} rc=0 
+fortran_fix k2   tuned                262144     p0 n=10 med=0.020994s ok={True} rc=0 
+fortran_fix k9   tuned                           p0 n=10 med=0.026260s ok={True} rc=0 
+fortran_fix k7   natural                         p0 n=3 med=0.660182s ok={True} rc=0 

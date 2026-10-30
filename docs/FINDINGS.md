@@ -167,8 +167,10 @@ fusionner les passes répétées (355 To/s).
   de recouvrement des deux tableaux à l'exécution. *Corrigé le 30/10* : j'attribuais K9 à l'aliasing
   possible des deux tableaux ; c'était faux (`docs/ZIG.md`). Rust, D, Nim et Ada ne vectorisent pas le
   stencil naturel, à cause des vérifications de bornes de leurs tableaux de tableaux (Ada : tableau
-  2D non contraint et bornes littérales ; sur un type contraint, GNAT vectorise, `docs/ADA.md`) ; gfortran ne
-  vectorise pas K4 (somme d'octets dans un accumulateur 64 bits) alors que flang le fait ; le JIT de
+  2D non contraint et bornes littérales ; sur un type contraint, GNAT vectorise, `docs/ADA.md`) ; dans le banc
+  d'origine, gfortran ne vectorisait pas K4, parce que le noyau était inliné dans la boucle de mesure
+  (hors ligne, comme le banc C l'impose à ses noyaux, gfortran le vectorise : corrigé le 30/10,
+  `docs/FORTRAN.md`) ; flang le vectorisait déjà dans le banc d'origine ; le JIT de
   .NET n'a pas de vectoriseur automatique ; C2 (Java) vectorise K9 en 128 bits mais pas K4.
 
 ## Machine 3 (Xeon Emerald Rapids, depuis le 29 octobre) — `results/hw/machine3/`

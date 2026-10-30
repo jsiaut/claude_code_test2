@@ -1,0 +1,8 @@
+fortran    k2   tuned                16384      p0 n=10 med=0.008228s ok={True} rc=0 
+fortran    k3   rmw_padded                      p0 n=10 med=0.271252s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=10 med=0.007807s ok={True} rc=0 
+fortran    k6   tuned                q6         p0 n=10 med=0.015270s ok={True} rc=0 
+fortran    k2   tuned                8388608    p0 n=4 med=0.591005s ok={True} rc=0 
+fortran    k6   natural              q6         p0 n=10 med=0.060741s ok={True} rc=0 
+fortran    k1   natural_shuffled     energy     p0 n=10 med=0.034463s ok={True} rc=0 
+fortran    k8   tuned                           p0 n=10 med=0.217835s ok={True} rc=0 
