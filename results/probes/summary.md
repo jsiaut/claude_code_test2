@@ -4,6 +4,9 @@
 | ada | A3 | 1 | 1 |  | clause de représentation au bit près : BF'Size = 8 |
 | ada | A5 | 1 | 1 |  | Unchecked_Conversion 0x 1065353216 ; Unchecked_Union UU'Size = 32 |
 | ada | D4 | 1 | 1 |  | aspect CPU => 1 sur une tâche ; CPU disponibles = 4 |
+| ada | C1 | 0.5 | 0.5 |  | Machine_Attribute vector_type (extension GNAT) : Add =  3.00000E+00 |
+| ada | E5 | 1 | 1 |  | RM 6.2(12) exploitée par GNAT sur paramètres de type contraint : Y (1) =  7.00000E+00 |
+| ada | B4 | 0.5 | 0.5 |  | retour non contraint de 4 Mo par la pile secondaire (tas au-delà du morceau statique) :  5.00000000000000E+05 |
 | c | A1 | 1 | 1 |  | tableau de struct contigu sizeof(arr)=64 (4x16) |
 | c | A2 | 1 | 1 |  | offsetof(S,b)=4 offsetof(S,c)=8 |
 | c | A3 | 1 | 1 |  | bitfields sizeof(BF)=4 ; packed (extension) sizeof(P)=5 |

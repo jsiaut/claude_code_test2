@@ -18,10 +18,10 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | B1 pas de GC traçant imposé | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
 | B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ○ | ○ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ |
 | B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
-| B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ● | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ |
 | **C** (20 %) | | | | | | | | | | | | | | | | | | | | | |
-| C1 types vectoriels portables | ◐ | ● | ◐ | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ● | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
+| C1 types vectoriels portables | ◐ | ● | ◐ | ● | ● | ● | ● | ○ | ◐ | ○ | ○ | ● | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
 | C2 intrinsèques de la cible | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ◐ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | C3 auto-vectorisation (mesurée) | ● | ● | ◐ | ○ | ● | ● | ◐ | ◐ | ◐ | ◐ | ● | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
 | C4 contrôle de la réassociation flottante | ◐ | ● | ● | ● | ○ | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
@@ -37,7 +37,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | E2 assembleur en ligne | ◐ | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ○ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | E3 indications de branchement | ◐ | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
 | E4 préchargement explicite | ◐ | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ◐ | ● | ○ | ● | ○ | ◐ | ● | ○ | ○ | ○ | ○ |
-| E5 garanties de non-aliasing | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ○ | ● | ○ | ◐ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| E5 garanties de non-aliasing | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ● | ○ | ◐ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | E6 contrôle local des vérifications de bornes | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ● | ● | ● | ○ | ◐ | ○ |
 | E7 calcul à la compilation + génériques monomorphisés | ◐ | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ○ | ● | ◐ | ○ | ○ | ○ | ○ |
 | **F** (10 %) | | | | | | | | | | | | | | | | | | | | | |
@@ -123,10 +123,10 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 ### Ada
 
 * **A** : A1 = 1 (tableaux d'enregistrements (bench)) ; A2 = 1 (clauses de représentation, 'Position (sonde)) ; A3 = 1 (clauses au bit près, pragma Pack (sonde)) ; A4 = 1 (aspect Alignment => 64/128 (bench K3/K10)) ; A5 = 1 (Unchecked_Union, Unchecked_Conversion (sonde)) ; A6 = 0 (aucun) ; A7 = 1 (tableaux contraints en ligne) ; A8 = 1 (Interfaces.Unsigned_8, Float)
-* **B** : B1 = 1 (pas de GC) ; B2 = 1 (pools de stockage utilisateur, sous-pools (bench K8 tuned_alloc)) ; B3 = 1 (tout sur la pile par défaut) ; B4 = 1 (pas d'allocation de tas implicite (pile secondaire pour les retours non contraints)) ; B5 = 1 (System.Address, 'Address, Address_To_Access_Conversions)
-* **C** : C1 = 0 (aucun type vectoriel standard) ; C2 = 0.5 (builtins GCC importés + Machine_Attribute vector_type (propre à GNAT) (bench K5)) ; C3 = 0.5 (mesuré) ; C4 = 0.5 (seulement par option globale) ; C5 = 0 (boucles parallèles d'Ada 2022 non implémentées par GNAT (src : gnat_rm))
+* **B** : B1 = 1 (pas de GC) ; B2 = 1 (pools de stockage utilisateur, sous-pools (bench K8 tuned_alloc)) ; B3 = 1 (tout sur la pile par défaut) ; B4 = 0.5 (la pile secondaire (retours non contraints) alloue sur le tas au-delà de son morceau statique (sonde b4, s-secsta.adb) ; restriction No_Implicit_Heap_Allocations pour l'interdire ; corrigé le 30/10, remarque sur Ada) ; B5 = 1 (System.Address, 'Address, Address_To_Access_Conversions)
+* **C** : C1 = 0.5 (pragma Machine_Attribute (T, "vector_type") : types vectoriels GCC, extension de GNAT (sonde c1 : une boucle sur ce type donne un seul vaddps) ; corrigé le 30/10, remarque sur Ada) ; C2 = 0.5 (builtins GCC importés + Machine_Attribute vector_type (propre à GNAT) (bench K5)) ; C3 = 0.5 (mesuré) ; C4 = 0.5 (seulement par option globale) ; C5 = 0 (boucles parallèles d'Ada 2022 non implémentées par GNAT (src : gnat_rm))
 * **D** : D1 = 1 (tâches) ; D2 = 0.5 (Ada standard : seq_cst seulement ; ordres via System.Atomic_Primitives (unité interne GNAT)) ; D3 = 0 (aucune) ; D4 = 1 (aspect CPU des tâches, Dispatching_Domains (src s-mudido)) ; D5 = 0.5 (barrières par atomiques ; pause par builtin importé)
-* **E** : E1 = 1 (natif) ; E2 = 1 (System.Machine_Code.Asm) ; E3 = 0.5 (__builtin_expect importé) ; E4 = 0.5 (__builtin_prefetch importé (bench K7)) ; E5 = 0 (pas de garantie de non-aliasing des paramètres) ; E6 = 1 (pragma Suppress local (bench)) ; E7 = 1 (génériques instanciés + expressions statiques)
+* **E** : E1 = 1 (natif) ; E2 = 1 (System.Machine_Code.Asm) ; E3 = 0.5 (__builtin_expect importé) ; E4 = 0.5 (__builtin_prefetch importé (bench K7)) ; E5 = 1 (RM 6.2(12) : accès croisé entre paramètres = erreur bornée, exploitée par GNAT (tableaux contraints : sans test de recouvrement, sonde e5c) ; pragma Loop_Optimize (Ivdep) ; corrigé le 30/10, remarque sur Ada) ; E6 = 1 (pragma Suppress local (bench)) ; E7 = 1 (génériques instanciés + expressions statiques)
 * **F** : F1 = 1 (tableaux multidimensionnels, Convention Fortran possible) ; F2 = 0 (annexe E (systèmes répartis) non livrée) ; F3 = 1 (types modulaires + entiers signés) ; F4 = 0.5 (System.Mmap (unité interne GNAT) (src))
 
 ### Fortran
