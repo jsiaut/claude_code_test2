@@ -1,0 +1,24 @@
+# Coût du lancement de 4 threads puis de leur attente, ramené à un thread (tools/zig_check : sp.zig, sp.c, grp.zig),
+# machine 5, 30/10/2026. 200 répétitions, les 10 premières écartées ; 5 processus par cas, en alternance.
+# zig = std.Thread.spawn + join (Zig 0.17, sans libc) ; zig -lc = idem lié à la glibc (pthread) ;
+# c = pthread_create + pthread_join (glibc, clang 23) ; zig Io.Group = Io.Group.concurrent + await (pool d'Io.Threaded).
+zig          : par thread : min 120.1 us, moyenne 162.6 us (200)
+zig -lc      : par thread : min 107.5 us, moyenne 171.2 us (200)
+c            : par thread : min 37.6 us, moyenne 46.5 us (200)
+zig Io.Group : par tâche : min 4.7 us, moyenne 29.9 us (200)
+zig          : par thread : min 119.2 us, moyenne 149.3 us (200)
+zig -lc      : par thread : min 82.3 us, moyenne 125.5 us (200)
+c            : par thread : min 31.3 us, moyenne 48.1 us (200)
+zig Io.Group : par tâche : min 8.0 us, moyenne 28.1 us (200)
+zig          : par thread : min 117.7 us, moyenne 216.8 us (200)
+zig -lc      : par thread : min 112.4 us, moyenne 141.3 us (200)
+c            : par thread : min 34.7 us, moyenne 47.4 us (200)
+zig Io.Group : par tâche : min 4.8 us, moyenne 28.7 us (200)
+zig          : par thread : min 113.9 us, moyenne 183.0 us (200)
+zig -lc      : par thread : min 82.0 us, moyenne 135.1 us (200)
+c            : par thread : min 36.9 us, moyenne 76.1 us (200)
+zig Io.Group : par tâche : min 8.1 us, moyenne 28.9 us (200)
+zig          : par thread : min 113.5 us, moyenne 148.0 us (200)
+zig -lc      : par thread : min 75.8 us, moyenne 131.6 us (200)
+c            : par thread : min 28.3 us, moyenne 122.7 us (200)
+zig Io.Group : par tâche : min 13.8 us, moyenne 28.2 us (200)

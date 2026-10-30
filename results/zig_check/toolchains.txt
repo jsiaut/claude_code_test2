@@ -1,0 +1,28 @@
+# Chaînes Zig installées le 30/10/2026 pour vérifier la remarque sur Zig (docs/ZIG.md)
+# Archives de ziglang.org : SHA-256 conformes à https://ziglang.org/download/index.json, signatures minisign
+# vérifiées avec la clé RWSGOq2NVecA2UPNdBUZykf1CCb147pkmdtYxgb3Ti+JO/wCYvhbAb/U (tools/zig_check/minisign_verify.py)
+b6c7f1728f043700d6529bac980800792f824256a9d2f1839b3d62beed0b8abd  zig-0.17.0.tar.xz
+fcee8f86ef70071422710353a1dce53e3b4858ba10a1933284ba9c423ce4bb1e  zig-0.18.0-dev.753+1420479be.tar.xz
+02aa270f183da276e5b5920b1dac44a63f1a49e55050ebde3aecc9eb82f93239  zig-x86_64-linux-0.15.2.tar.xz
+70e49664a74374b48b51e6f3fdfbf437f6395d42509050588bd49abe52ba3d00  zig-x86_64-linux-0.16.0.tar.xz
+331b87438f27d76650c9e8526b8460f513d45bbec8e6616349ea30632f2b37a4  zig-x86_64-linux-0.18.0-dev.753+1420479be.tar.xz
+minisign OK : zig-0.17.0.tar.xz ED timestamp:1790892210	file:zig-0.17.0.tar.xz	hashed
+minisign OK : zig-0.18.0-dev.753+1420479be.tar.xz ED timestamp:1793314948	file:zig-0.18.0-dev.753+1420479be.tar.xz	hashed
+minisign OK : zig-x86_64-linux-0.15.2.tar.xz ED timestamp:1760215991	file:zig-x86_64-linux-0.15.2.tar.xz	hashed
+minisign OK : zig-x86_64-linux-0.16.0.tar.xz ED timestamp:1776173777	file:zig-x86_64-linux-0.16.0.tar.xz	hashed
+minisign OK : zig-x86_64-linux-0.18.0-dev.753+1420479be.tar.xz ED timestamp:1793359507	file:zig-x86_64-linux-0.18.0-dev.753+1420479be.tar.xz	hashed
+
+/opt/zig-0.15.2 : zig 0.15.2, clang version 20.1.2 (https://github.com/ziglang/zig-bootstrap 7ef74e656cf8ddbd6bf891a8475892aa1afa6891)
+/opt/zig-0.16.0 : zig 0.16.0, clang version 21.1.0
+/opt/zig : zig 0.17.0, clang version 22.1.8
+/opt/zig-master : zig 0.18.0-dev.753+1420479be, clang version 23.1.4
+
+# Réglage du pipeline LLVM dans les sources du compilateur (src/zig_llvm.cpp)
+0.17.0 :
+287:    pipeline_opts.SLPVectorization = !options->is_debug;
+288:    pipeline_opts.LoopVectorization = false; // https://github.com/llvm/llvm-project/issues/186922
+289:    pipeline_opts.LoopInterleaving = !options->is_debug;
+0.18.0-dev.753+1420479be :
+287:    pipeline_opts.SLPVectorization = !options->is_debug;
+288:    pipeline_opts.LoopVectorization = !options->is_debug;
+289:    pipeline_opts.LoopInterleaving = !options->is_debug;

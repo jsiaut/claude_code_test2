@@ -1,0 +1,101 @@
+# K4 et K9 naturels avec un pilote C commun (tools/zig_check : drv.c, kern.zig, kern.c), machine 5, 30/10/2026
+# Noyaux copiés de bench/zig/ms.zig et bench/c/ms.c (corps de boucle inchangés). 3 processus x 61 répétitions
+# (+1 d'échauffement), ordre tiré au hasard (graine 20261030 + passe). Temps en ms, minimum par processus.
+# k4n = natural_unsorted, k4b = branchless_unsorted, k9n = natural (4 passes de 2048^2). Sommes de contrôle
+# identiques partout (K4 1605908545, K9 2095103.19921875).
+
+chaîne                                        k4n min          k4b min          k9n min
+Zig 0.15.2 (LLVM 20.1.2)                    2.57-3.24        1.75-2.74      25.11-26.31
+Zig 0.16.0 (LLVM 21.1.0)                    6.88-6.91        6.76-7.12      30.28-32.77
+Zig 0.17.0 (LLVM 22.1.8, étude)             6.77-7.09        6.93-9.87      28.94-30.27
+Zig 0.18.0-dev.753 (LLVM 23.1.4)            2.52-2.78        2.32-3.13      25.11-26.37
+C, clang de Zig 0.17 (22.1.8)               2.39-2.70        2.58-2.76      24.88-25.86
+C, clang 23.1.5 (étude)                     2.70-3.00        2.42-2.74      25.04-26.24
+
+# Instructions du noyau (objdump), dont vectorielles 256/512 bits (registres ymm/zmm)
+# Zig fusionne k4_natural et k4_branchless (même code après optimisation : MergeFunctions)
+Zig 0.15.2 (LLVM 20.1.2)             k4_branchless    88 instructions,  31 opérandes ymm/zmm
+Zig 0.15.2 (LLVM 20.1.2)             k9_natural      103 instructions,  78 opérandes ymm/zmm
+Zig 0.16.0 (LLVM 21.1.0)             k4_branchless    78 instructions,   0 opérandes ymm/zmm
+Zig 0.16.0 (LLVM 21.1.0)             k9_natural       36 instructions,   0 opérandes ymm/zmm
+Zig 0.17.0 (LLVM 22.1.8, étude)      k4_branchless    85 instructions,   0 opérandes ymm/zmm
+Zig 0.17.0 (LLVM 22.1.8, étude)      k9_natural       36 instructions,   0 opérandes ymm/zmm
+Zig 0.18.0-dev.753 (LLVM 23.1.4)     k4_branchless    88 instructions,  31 opérandes ymm/zmm
+Zig 0.18.0-dev.753 (LLVM 23.1.4)     k9_natural      103 instructions,  45 opérandes ymm/zmm
+C, clang de Zig 0.17 (22.1.8)        k4_branchless    88 instructions,  31 opérandes ymm/zmm
+C, clang de Zig 0.17 (22.1.8)        k9_natural      100 instructions,  78 opérandes ymm/zmm
+C, clang 23.1.5 (étude)              k4_branchless    84 instructions,  31 opérandes ymm/zmm
+C, clang 23.1.5 (étude)              k9_natural      127 instructions,  78 opérandes ymm/zmm
+
+# IR non optimisé de Zig 0.17 (--verbose-llvm-ir) passé au pipeline -O3 du clang de Zig 0.17 (LLVM 22.1.8)
+IR de Zig 0.17 -> clang 22.1.8 -O3   k4_branchless    88 instructions,  31 opérandes ymm/zmm
+IR de Zig 0.17 -> clang 22.1.8 -O3   k9_natural      103 instructions,  45 opérandes ymm/zmm
+
+# K9 de Zig master : test de recouvrement des deux tableaux à l'exécution, puis boucle vectorielle (vaddpd ymm)
+   4:	lea    0x4008(%rsi),%rcx
+   b:	lea    0x1ffbff8(%rsi),%rdx
+  12:	lea    0x8(%rdi),%rax
+  16:	lea    0x1fffff8(%rdi),%r8
+  1d:	cmp    %r8,%rcx
+  20:	setb   %r8b
+  24:	cmp    %rdx,%rax
+  27:	setb   %cl
+  2a:	and    %r8b,%cl
+  50:	test   %cl,%cl
+  52:	je     60 <k9_natural+0x60>
+
+# Mesures brutes (passe, chaîne, noyau)
+0 z0152 k4b min 2.629 med 2.957 ms chk 1605908545
+0 c_clang23 k4b min 2.740 med 3.189 ms chk 1605908545
+0 c_zigcc0170 k9n min 25.860 med 29.335 ms chk 2095103.19921875
+0 z0160 k4n min 6.885 med 7.997 ms chk 1605908545
+0 z0160 k9n min 32.774 med 37.351 ms chk 2095103.19921875
+0 z0152 k9n min 26.123 med 30.559 ms chk 2095103.19921875
+0 c_zigcc0170 k4n min 2.698 med 3.008 ms chk 1605908545
+0 c_clang23 k4n min 2.785 med 3.480 ms chk 1605908545
+0 z0160 k4b min 6.762 med 6.980 ms chk 1605908545
+0 zmaster k4n min 2.524 med 3.653 ms chk 1605908545
+0 z0170 k9n min 30.265 med 33.980 ms chk 2095103.19921875
+0 zmaster k9n min 26.372 med 30.377 ms chk 2095103.19921875
+0 z0152 k4n min 3.242 med 3.731 ms chk 1605908545
+0 z0170 k4n min 7.086 med 12.119 ms chk 1605908545
+0 c_zigcc0170 k4b min 2.581 med 3.085 ms chk 1605908545
+0 zmaster k4b min 2.854 med 3.813 ms chk 1605908545
+0 z0170 k4b min 6.948 med 7.604 ms chk 1605908545
+0 c_clang23 k9n min 25.042 med 27.811 ms chk 2095103.19921875
+1 c_clang23 k9n min 26.241 med 28.829 ms chk 2095103.19921875
+1 c_zigcc0170 k4b min 2.759 med 4.105 ms chk 1605908545
+1 c_zigcc0170 k9n min 25.244 med 30.148 ms chk 2095103.19921875
+1 z0170 k4n min 7.083 med 7.689 ms chk 1605908545
+1 z0160 k9n min 31.648 med 38.770 ms chk 2095103.19921875
+1 z0160 k4b min 7.115 med 11.558 ms chk 1605908545
+1 c_clang23 k4n min 2.696 med 3.941 ms chk 1605908545
+1 z0152 k9n min 26.306 med 29.472 ms chk 2095103.19921875
+1 zmaster k4b min 2.322 med 2.993 ms chk 1605908545
+1 c_clang23 k4b min 2.423 med 2.910 ms chk 1605908545
+1 zmaster k9n min 25.594 med 27.951 ms chk 2095103.19921875
+1 z0160 k4n min 6.885 med 7.440 ms chk 1605908545
+1 z0152 k4n min 2.615 med 3.028 ms chk 1605908545
+1 z0170 k9n min 29.477 med 34.601 ms chk 2095103.19921875
+1 z0152 k4b min 1.755 med 2.599 ms chk 1605908545
+1 c_zigcc0170 k4n min 2.393 med 3.193 ms chk 1605908545
+1 z0170 k4b min 6.928 med 13.213 ms chk 1605908545
+1 zmaster k4n min 2.780 med 3.661 ms chk 1605908545
+2 z0170 k9n min 28.940 med 33.441 ms chk 2095103.19921875
+2 z0160 k4b min 7.005 med 9.768 ms chk 1605908545
+2 c_clang23 k4n min 2.995 med 3.650 ms chk 1605908545
+2 c_zigcc0170 k4n min 2.622 med 2.834 ms chk 1605908545
+2 z0152 k4b min 2.738 med 3.135 ms chk 1605908545
+2 c_zigcc0170 k4b min 2.668 med 3.556 ms chk 1605908545
+2 c_zigcc0170 k9n min 24.879 med 27.140 ms chk 2095103.19921875
+2 z0160 k9n min 30.284 med 34.825 ms chk 2095103.19921875
+2 c_clang23 k9n min 25.490 med 28.022 ms chk 2095103.19921875
+2 z0152 k4n min 2.571 med 3.392 ms chk 1605908545
+2 zmaster k4b min 3.131 med 3.402 ms chk 1605908545
+2 z0170 k4b min 9.873 med 11.216 ms chk 1605908545
+2 c_clang23 k4b min 2.456 med 2.805 ms chk 1605908545
+2 zmaster k9n min 25.109 med 28.062 ms chk 2095103.19921875
+2 zmaster k4n min 2.784 med 3.092 ms chk 1605908545
+2 z0160 k4n min 6.912 med 7.324 ms chk 1605908545
+2 z0152 k9n min 25.106 med 28.504 ms chk 2095103.19921875
+2 z0170 k4n min 6.772 med 7.407 ms chk 1605908545

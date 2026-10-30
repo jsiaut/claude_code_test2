@@ -498,3 +498,13 @@ Robustesse :
   redonne les anciens chiffres (C 55 %, C++ 31 % ; R² 0,80). Pour compter les premières places,
   `analysis/confrontation.py` relève aussi le langage premier de chaque tirage, sans rien changer à ses autres
   sorties.
+* 2026-10-30, 13:22 : **le conteneur redémarre sur un nouvel hôte** (machine 5) : Cascade Lake du même modèle que les
+  machines 1, 2 et 4 (modèle 85, révision 7, 4 vCPU, 16 Go), latence à 4 Mio de 138 à 151 ns, débit DRAM de 9,4 à
+  10 Go/s (`results/hw/machine5/`). Le binaire de Zig, compilé pour la machine 3, est recompilé par son script
+  inchangé : identique octet pour octet au binaire de la campagne compilé sur Cascade Lake.
+* 2026-10-30, après-midi : **remarque sur Zig** transmise par l'utilisateur (vectoriseur de boucles désactivé par
+  l'équipe Zig en 0.16 et 0.17). Vérifications préalables (notes de version, sources du compilateur, mesures de K4
+  et K9 avec un pilote commun pour quatre versions de Zig, coût des threads, sonde F4) et plan des mesures et de
+  l'analyse : `docs/ZIG.md`, poussé avant les mesures. Chaînes ajoutées : Zig 0.15.2, 0.16.0 et
+  0.18.0-dev.753+1420479be (archives de ziglang.org, SHA-256 et signatures minisign vérifiées), sources de 0.17.0 et
+  de master. Erreur de fait trouvée : F4 de Zig en règle v1 (0,5 au lieu de 1).

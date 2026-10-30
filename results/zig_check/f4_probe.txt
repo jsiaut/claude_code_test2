@@ -1,0 +1,4 @@
+# Sonde F4 de Zig 0.17 par std.Io.File.MemoryMap (probes/zig/probe_f4.zig), 30/10/2026
+CAP;F4;1;std.Io.File.MemoryMap + bytesAsSlice : 0.4390046, projection dans /proc/self/maps : true
+# strace : appel système fait par MemoryMap.create
+mmap(NULL, 8192, PROT_READ, MAP_SHARED_VALIDATE|MAP_POPULATE, 3, 0) = 0x7f9990f64000
