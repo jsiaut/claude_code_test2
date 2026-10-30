@@ -105,3 +105,30 @@ fortran_fix k6   mt                   q1         p0 n=10 med=0.010398s ok={True}
 fortran_fix k4   natural_unsorted                p0 n=10 med=0.006755s ok={True} rc=0 
 fortran_fix k6   tuned                q1         p0 n=10 med=0.032766s ok={True} rc=0 
 fortran_fix k6   natural              q6         p0 n=10 med=0.056580s ok={True} rc=0 
+fortran_fix k3   rmw_padded                      p0 n=10 med=0.273358s ok={True} rc=0 
+fortran_fix k1   natural              energy     p0 n=10 med=0.031595s ok={True} rc=0 
+fortran_fix k7   tuned                           p0 n=4 med=0.550306s ok={True} rc=0 
+fortran_fix k1   aos                  energy     p0 n=10 med=0.031221s ok={True} rc=0 
+fortran_fix k9   mt                              p0 n=10 med=0.008656s ok={True} rc=0 
+fortran_fix k5   tuned                           p0 n=10 med=0.010006s ok={True} rc=0 
+fortran_fix k7   natural                         p0 n=3 med=1.081006s ok={True} rc=0 
+fortran_fix k6   tuned                q6         p0 n=10 med=0.015888s ok={True} rc=0 
+fortran_fix k2   tuned                8388608    p0 n=4 med=0.609509s ok={True} rc=0 
+fortran_fix k2   tuned                16384      p0 n=10 med=0.006541s ok={True} rc=0 
+fortran_fix k4   branchless_unsorted             p0 n=10 med=0.004859s ok={True} rc=0 
+fortran_fix k1   natural_shuffled     energy     p0 n=10 med=0.035953s ok={True} rc=0 
+fortran_fix k9   natural                         p0 n=10 med=0.031203s ok={True} rc=0 
+fortran_fix k8   tuned                           p0 n=10 med=0.223657s ok={True} rc=0 
+fortran_fix k1   soa                  energy     p0 n=10 med=0.005692s ok={True} rc=0 
+fortran_fix k6   mt                   q1         p0 n=10 med=0.015652s ok={True} rc=0 
+fortran_fix k9   tuned                           p0 n=10 med=0.029660s ok={True} rc=0 
+fortran_fix k3   sw_padded                       p0 n=10 med=0.078987s ok={True} rc=0 
+fortran_fix k6   natural              q1         p0 n=10 med=0.073484s ok={True} rc=0 
+fortran_fix k5   natural                         p0 n=10 med=0.167558s ok={True} rc=0 
+fortran_fix k2   tuned                262144     p0 n=10 med=0.021978s ok={True} rc=0 
+fortran_fix k6   mt                   q6         p0 n=10 med=0.005718s ok={True} rc=0 
+fortran_fix k8   natural                         p0 n=3 med=0.862040s ok={True} rc=0 
+fortran_fix k2   tuned                8388608    p0 n=4 med=0.659592s ok={True} rc=0 
+fortran_fix k9   mt                              p0 n=10 med=0.008037s ok={True} rc=0 
+fortran_fix k8   tuned                           p0 n=10 med=0.219804s ok={True} rc=0 
+fortran_fix k4   natural_unsorted                p0 n=10 med=0.006892s ok={True} rc=0 
