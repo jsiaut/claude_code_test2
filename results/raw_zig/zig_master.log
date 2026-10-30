@@ -51,3 +51,6 @@ zig_master k9   natural                         p0 n=10 med=0.032072s ok={True} 
 zig_master k6   mt                   q6         p0 n=10 med=0.006623s ok={True} rc=0 
 zig_master k8   natural                         p0 n=3 med=1.076951s ok={True} rc=0 
 zig_master k2   tuned                8388608    p0 n=4 med=0.657686s ok={True} rc=0 
+zig_master k1   aos                  energy     p0 n=10 med=0.035254s ok={True} rc=0 
+zig_master k4   natural_unsorted                p0 n=10 med=0.003795s ok={True} rc=0 
+zig_master k6   natural              q1         p0 n=10 med=0.105367s ok={True} rc=0 
