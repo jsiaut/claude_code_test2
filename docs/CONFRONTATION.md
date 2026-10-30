@@ -320,3 +320,36 @@ spécification, je note l'API).
 4. **Ce que la restriction change à la performance mesurée** : quelques pour cent au plus pour C, C++, D, Ada et
    Nim ; rien pour Rust, Zig, Odin et C3 ; beaucoup pour Chapel, Java et Go, dont la vitesse tient à une option ou à
    un module expérimental, et pour Fortran et Mojo, faute de threads standard.
+
+## Addendum : notation à l'aveugle (autorisée par l'utilisateur le 30 octobre, plan écrit avant le lancement)
+
+L'utilisateur autorise, pour cette fois, un sous-agent comme second juge. Limite à garder en tête : c'est une autre
+instance du même modèle, pas une personne indépendante ; elle part des mêmes connaissances générales, mais sans mes
+notes, sans les leurs et sans mes conclusions.
+
+**Aveugle.** Le sous-agent travaille dans un répertoire vide qui lui est réservé. Il lui est interdit de lire le dépôt,
+l'étude fournie par l'utilisateur et mes fichiers de travail. Il peut lire la documentation et les sources livrées
+avec les chaînes installées (`/opt/...`), et compiler de petites sondes pour vérifier un fait.
+
+**Cellules.** 8 langages : C, C++, Rust, Zig, Odin, D, Nim, C# (les cinq langages qui font 83 % du désaccord, plus
+trois repères). Deux grilles :
+
+* 11 de mes capacités (C1, C2, C4, C5, D1, D2, D3, D4, D5, E3, E4), notées deux fois : avec ma règle v2 (1, 0,5, 0)
+  et avec leur règle du standard telle que je l'ai rendue au test 1 (1, 0,5, 0,25, 0). Pour chaque cellule, le juge
+  donne aussi le moyen, sa catégorie (norme ou bibliothèque standard, extension de la chaîne, expérimental, externe,
+  absent) et sa preuve.
+* 6 de leurs principes (P4 faux partage, P5 concurrence, P8 SIMD/ILP, P9 branchements, P10 hiérarchie mémoire,
+  P12 threads/topologie), notés de 0 à 4 avec leur échelle et leur définition du standard, telles qu'ils les
+  publient. Leurs listes d'indicateurs par principe ne sont pas publiées : le juge ne les a pas.
+
+**Comparaisons.** (1) juge, règle v2, contre ma matrice v2 ; (2) juge, leur règle, contre ma table du test 1 ;
+(3) juge, leurs principes, contre leur grille. Mesures : accord exact, kappa de Cohen pondéré (poids linéaires sur
+les classes ordonnées), et pour (3) accord à un niveau près.
+
+**Critères, fixés avant le lancement.**
+
+* L'écart tient aux règles, pas aux juges, si le kappa pondéré atteint 0,6 dans (1) ou (2) **et** dans (3) : un
+  juge indépendant retrouve chaque grille sous sa propre règle.
+* Il tient aussi aux juges (H8) si l'une des comparaisons a un kappa pondéré sous 0,4 : la grille correspondante
+  contient des jugements qu'un autre juge ne reproduit pas. Entre 0,4 et 0,6 : en partie.
+* Chaque cellule où le juge contredit un fait de ma matrice (et non une classe) est vérifiée, et le verdict publié.
