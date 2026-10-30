@@ -1,0 +1,14 @@
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/bin/Release/net10.0/probe
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/bin/Release/net10.0/probe.deps.json
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/bin/Release/net10.0/probe.runtimeconfig.json
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/bin/Release/net10.0/probe.dll
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/bin/Release/net10.0/probe.pdb
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/obj/Release/net10.0/probe.GeneratedMSBuildEditorConfig.editorconfig
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/obj/Release/net10.0/probe.AssemblyInfoInputs.cache
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/obj/Release/net10.0/probe.AssemblyInfo.cs
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/obj/Release/net10.0/probe.csproj.CoreCompileInputs.cache
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/obj/Release/net10.0/probe.dll
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/obj/Release/net10.0/refint/probe.dll
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/obj/Release/net10.0/probe.pdb
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/obj/Release/net10.0/probe.genruntimeconfig.cache
+/tmp/claude-0/-home-user-claude-code-test2/2ce7067e-f4ab-58aa-8116-a129014d90e7/scratchpad/blind/probes/cs2/obj/Release/net10.0/ref/probe.dll

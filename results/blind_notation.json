@@ -1,0 +1,1086 @@
+{
+ "cells": [
+  {
+   "lang": "c",
+   "item": "C1",
+   "means": "__attribute__((vector_size(N))) (GCC et Clang), ext_vector_type (Clang) ; rien dans ISO C23",
+   "category": "extension",
+   "evidence": "probes/c/c_vec.c compile et s'exécute avec clang-23 et gcc-16",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "c",
+   "item": "C2",
+   "means": "<immintrin.h> (_mm512_*), __attribute__((target(...)))",
+   "category": "extension",
+   "evidence": "probes/c/c_intrin.c : _mm512_add_ps et _mm512_dpbusd_epi32 compilent avec les deux compilateurs",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "c",
+   "item": "C4",
+   "means": "#pragma clang fp reassociate(on) (clang-23) ; #pragma omp simd reduction(+:s) avec -fopenmp-simd (gcc-16 et clang-23) ; aucun moyen ISO",
+   "category": "extension",
+   "evidence": "probes/c/c_reassoc_clang.c et c_reassoc_omp.c : vaddps ymm dans la fonction annotée, aucun dans la version simple",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "c",
+   "item": "C5",
+   "means": "OpenMP #pragma omp parallel for reduction (libgomp livré avec gcc-16, libomp avec clang-23) ; rien dans ISO C",
+   "category": "extension",
+   "evidence": "probes/c/c_omp.c : 4 threads, réduction correcte avec les deux compilateurs",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "c",
+   "item": "D1",
+   "means": "<threads.h> : thrd_create/thrd_join (C11/C23, fourni par glibc 2.39)",
+   "category": "standard",
+   "evidence": "probes/c/c_threads.c",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "c",
+   "item": "D2",
+   "means": "<stdatomic.h> : atomic_*_explicit avec memory_order_relaxed/acquire/release/seq_cst",
+   "category": "standard",
+   "evidence": "probes/c/c_threads.c",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "c",
+   "item": "D3",
+   "means": "sysconf(_SC_LEVEL1_DCACHE_LINESIZE) (glibc) ; macro __GCC_DESTRUCTIVE_SIZE prédéfinie en mode C par gcc-16 et clang-23 ; alignas normatif mais sans taille",
+   "category": "extension",
+   "evidence": "probes/c/c_cacheline.c : __GCC_DESTRUCTIVE_SIZE=64, sysconf=64",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "c",
+   "item": "D4",
+   "means": "pthread_setaffinity_np / sched_setaffinity (glibc, extensions GNU)",
+   "category": "extension",
+   "evidence": "probes/c/c_affinity.c : rc=0, thread épinglé sur le CPU 0",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "c",
+   "item": "D5",
+   "means": "atomic_thread_fence (normatif) + _mm_pause / __builtin_ia32_pause (intrinsèque)",
+   "category": "standard_partiel",
+   "evidence": "probes/c/c_threads.c (fences acquire/release + _mm_pause)",
+   "rule_a": 1,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "c",
+   "item": "E3",
+   "means": "__builtin_expect, __attribute__((cold)) ; [[likely]] n'existe pas en C23",
+   "category": "extension",
+   "evidence": "probes/c/c_hints.c ; c_likely_attr.c : attribut likely ignoré par clang-23 et gcc-16",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "c",
+   "item": "E4",
+   "means": "__builtin_prefetch, _mm_prefetch",
+   "category": "extension",
+   "evidence": "probes/c/c_hints.c",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "cpp",
+   "item": "C1",
+   "means": "std::simd (<simd>, C++26) avec -std=c++26 ; extensions vectorielles GCC (vector_size) stables et portables",
+   "category": "standard_partiel",
+   "evidence": "probes/cpp/cpp_simd.cpp fonctionne mais __cpp_lib_simd non défini ; bits/version.h conditionne __glibcxx_simd à __SSE2__ (cpp/t.cpp) ; gcc.info : C++26 « highly experimental »",
+   "rule_a": 1,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "cpp",
+   "item": "C2",
+   "means": "<immintrin.h> (intrinsèques GCC), __attribute__((target))",
+   "category": "extension",
+   "evidence": "même en-tête que C (probes/c/c_intrin.c) ; rien dans la bibliothèque standard",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "cpp",
+   "item": "C4",
+   "means": "std::reduce / std::transform_reduce (regroupement non spécifié) ; execution::unseq ; #pragma omp simd reduction",
+   "category": "standard",
+   "evidence": "probes/cpp/cpp_reduce.cpp et cpp_tr.cpp : vaddps/vfmadd ymm pour reduce et transform_reduce, aucun pour accumulate ; unseq ne vectorise qu'avec -fopenmp-simd",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "cpp",
+   "item": "C5",
+   "means": "std::for_each/std::reduce(std::execution::par) ; OpenMP #pragma omp parallel for (libgomp)",
+   "category": "standard_partiel",
+   "evidence": "probes/cpp/cpp_misc.cpp : for_each(par) sur 1 seul thread ; c++config.h choisit _PSTL_PAR_BACKEND_SERIAL faute de <tbb/tbb.h>",
+   "rule_a": 1,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "cpp",
+   "item": "D1",
+   "means": "std::thread, std::jthread",
+   "category": "standard",
+   "evidence": "probes/cpp/cpp_misc.cpp",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "cpp",
+   "item": "D2",
+   "means": "std::atomic + std::memory_order",
+   "category": "standard",
+   "evidence": "probes/cpp/cpp_misc.cpp",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "cpp",
+   "item": "D3",
+   "means": "std::hardware_destructive_interference_size / hardware_constructive_interference_size (<new>, C++17)",
+   "category": "standard",
+   "evidence": "probes/cpp/cpp_misc.cpp : 64 / 64",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "cpp",
+   "item": "D4",
+   "means": "rien dans C++26 ; pthread_setaffinity_np(t.native_handle(), ...) (glibc)",
+   "category": "extension",
+   "evidence": "API vérifiée par probes/c/c_affinity.c",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "cpp",
+   "item": "D5",
+   "means": "std::atomic_thread_fence (normatif) ; pause seulement via _mm_pause / __builtin_ia32_pause",
+   "category": "standard_partiel",
+   "evidence": "probes/cpp/cpp_misc.cpp ; probes/c/c_threads.c",
+   "rule_a": 1,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "cpp",
+   "item": "E3",
+   "means": "[[likely]] / [[unlikely]] (C++20) ; __builtin_expect",
+   "category": "standard",
+   "evidence": "probes/cpp/cpp_misc.cpp",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "cpp",
+   "item": "E4",
+   "means": "__builtin_prefetch / _mm_prefetch ; aucun prefetch dans la bibliothèque standard",
+   "category": "extension",
+   "evidence": "probes/c/c_hints.c",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "rust",
+   "item": "C1",
+   "means": "std::simd (feature portable_simd) : nightly seulement",
+   "category": "experimental",
+   "evidence": "probes/rust/r_simd.rs : E0658 use of unstable library feature portable_simd",
+   "rule_a": 0.5,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "rust",
+   "item": "C2",
+   "means": "core::arch::x86_64 (AVX-512 inclus, stable) + #[target_feature] + is_x86_feature_detected!",
+   "category": "standard",
+   "evidence": "probes/rust/r_avx512.rs : _mm512_add_ps et _mm512_dpbusd_epi32 compilent en stable",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "rust",
+   "item": "C4",
+   "means": "f32::algebraic_add (et famille algebraic_*), stable en 1.99.1",
+   "category": "standard",
+   "evidence": "probes/rust/r_alg_lib.rs : vaddps ymm avec algebraic_add, vaddss sans",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "rust",
+   "item": "C5",
+   "means": "aucune boucle ni réduction parallèle dans la std (thread::scope = threads bruts) ; rayon (tiers)",
+   "category": "externe",
+   "evidence": "aucune API std ; pas de pool dans std",
+   "rule_a": 0,
+   "rule_b": 0
+  },
+  {
+   "lang": "rust",
+   "item": "D1",
+   "means": "std::thread::spawn / std::thread::scope",
+   "category": "standard",
+   "evidence": "probes/rust/r_fence.rs",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "rust",
+   "item": "D2",
+   "means": "std::sync::atomic::Ordering::{Relaxed, Acquire, Release, AcqRel, SeqCst}",
+   "category": "standard",
+   "evidence": "probes/rust/r_fence.rs",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "rust",
+   "item": "D3",
+   "means": "aucun utilitaire public ; CachePadded privé (std::sync::mpmc::utils) ; #[repr(align(N))] sans constante ; crossbeam (tiers)",
+   "category": "experimental",
+   "evidence": "probes/rust/r_cachepad.rs : E0603 module utils is private ; nom présent dans les métadonnées de libstd",
+   "rule_a": 0.5,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "rust",
+   "item": "D4",
+   "means": "aucune API std ; sched_setaffinity par FFI (extern \"C\" ou crate libc)",
+   "category": "externe",
+   "evidence": "probes/rust/r_aff.rs : pas de Builder::affinity ; la std n'utilise sched_getaffinity qu'en interne",
+   "rule_a": 0,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "rust",
+   "item": "D5",
+   "means": "std::sync::atomic::fence / compiler_fence + std::hint::spin_loop",
+   "category": "standard",
+   "evidence": "probes/rust/r_fence.rs",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "rust",
+   "item": "E3",
+   "means": "std::hint::cold_path (stable) et attribut #[cold] ; likely/unlikely encore nightly",
+   "category": "standard",
+   "evidence": "probes/rust/r_coldpath.rs et r_coldattr.rs compilent ; r_likely.rs : E0658 likely_unlikely",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "rust",
+   "item": "E4",
+   "means": "core::arch::x86_64::_mm_prefetch (stable) ; std::hint::prefetch_read nightly (hint_prefetch)",
+   "category": "standard",
+   "evidence": "probes/rust/r_prefetch.rs compile ; r_hintprefetch.rs : E0658 hint_prefetch",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "zig",
+   "item": "C1",
+   "means": "@Vector(N, T) avec opérateurs, @reduce, @shuffle, @select, std.simd",
+   "category": "standard",
+   "evidence": "probes/zig/zprobe.zig ; langref (Vectors)",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "zig",
+   "item": "C2",
+   "means": "pas de module d'intrinsèques ; assembleur en ligne (le langref déclare les contraintes « still considered unstable ») ; extern fn @\"llvm.x86.*\" accepté mais non documenté ; @cImport supprimé",
+   "category": "experimental",
+   "evidence": "probes/zig/zprobe.zig (vaddps zmm en asm) ; zllvm.zig ; zcimport.zig : invalid builtin function '@cImport' ; langref §Assembly",
+   "rule_a": 0.5,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "zig",
+   "item": "C4",
+   "means": "@setFloatMode(.optimized) par portée (réassociation documentée)",
+   "category": "standard",
+   "evidence": "probes/zig/zred.zig : @reduce arborescent (vaddps ymm) en .optimized, séquentiel (vaddss) en .strict ; langref @setFloatMode",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "zig",
+   "item": "C5",
+   "means": "aucune boucle ni réduction parallèle ; std.Io.Group/async (tâches) seulement ; std.Thread.Pool n'existe plus",
+   "category": "absent",
+   "evidence": "/opt/zig/lib/std/Io.zig (Group) ; pas de std/Thread/Pool.zig",
+   "rule_a": 0,
+   "rule_b": 0
+  },
+  {
+   "lang": "zig",
+   "item": "D1",
+   "means": "std.Thread.spawn / join",
+   "category": "standard",
+   "evidence": "probes/zig/zprobe.zig",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "zig",
+   "item": "D2",
+   "means": "@atomicLoad/@atomicStore/@atomicRmw/@cmpxchg* et std.atomic.Value avec AtomicOrder (.monotonic = relaxed, .acquire, .release, .acq_rel, .seq_cst)",
+   "category": "standard",
+   "evidence": "std/lang.zig (AtomicOrder) ; probes/zig/zprobe.zig",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "zig",
+   "item": "D3",
+   "means": "std.atomic.cache_line (comptime, 128 sur x86-64, documenté contre le faux partage)",
+   "category": "standard",
+   "evidence": "std/atomic.zig l.513-519 ; zprobe.zig affiche 128",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "zig",
+   "item": "D4",
+   "means": "std.os.linux.sched_setaffinity / sched_getaffinity",
+   "category": "standard",
+   "evidence": "std/os/linux.zig l.3081 ; probes/zig/zprobe.zig",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "zig",
+   "item": "D5",
+   "means": "std.atomic.spinLoopHint ; @fence supprimé, aucune barrière explicite (ordres plus forts sur les opérations atomiques)",
+   "category": "standard_partiel",
+   "evidence": "probes/zig/zfence.zig : invalid builtin function '@fence' ; aucune occurrence de fence dans le langref",
+   "rule_a": 0.5,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "zig",
+   "item": "E3",
+   "means": "@branchHint(.likely / .unlikely / .cold / .unpredictable)",
+   "category": "standard",
+   "evidence": "langref @branchHint ; probes/zig/zprobe.zig",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "zig",
+   "item": "E4",
+   "means": "@prefetch(ptr, .{ .rw, .locality, .cache })",
+   "category": "standard",
+   "evidence": "langref @prefetch ; probes/zig/zprobe.zig",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "odin",
+   "item": "C1",
+   "means": "#simd[N]T avec opérateurs, core:simd",
+   "category": "standard",
+   "evidence": "probes/odin/main/main.odin",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "odin",
+   "item": "C2",
+   "means": "core:simd/x86 (SSE à AVX assez complets, mais AVX2 12 procédures, AVX-512F 8, AVX-512BW 6) ; intrinsèques LLVM importées par foreign + @(link_name=\"llvm.x86...\") (mécanisme de core:sys/llvm)",
+   "category": "standard_partiel",
+   "evidence": "probes/odin/x512/x.odin : vpconflictd (import LLVM) et vpsrlvd zmm (core:simd/x86) émis",
+   "rule_a": 1,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "odin",
+   "item": "C4",
+   "means": "@(fast_math={.Allow_Reassoc}) documenté, mais le compilateur livré n'applique jamais reassoc (llvm_backend_opt.cpp:63 teste l'indice 0 comme masque) ; reste simd.reduce_add_pairs/bisect sur vecteurs explicites",
+   "category": "standard_partiel",
+   "evidence": "probes/odin/reassoc et dot : IR « fadd nnan nsz contract » sans reassoc, exemple dot de la doc non vectorisé",
+   "rule_a": 0.5,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "odin",
+   "item": "C5",
+   "means": "aucune boucle parallèle ; core:thread Pool (tâches) seulement",
+   "category": "absent",
+   "evidence": "core/thread/thread_pool.odin",
+   "rule_a": 0,
+   "rule_b": 0
+  },
+  {
+   "lang": "odin",
+   "item": "D1",
+   "means": "core:thread (create_and_start, join)",
+   "category": "standard",
+   "evidence": "probes/odin/main/main.odin",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "odin",
+   "item": "D2",
+   "means": "core:sync atomic_*_explicit avec Atomic_Memory_Order (Relaxed, Consume, Acquire, Release, Acq_Rel, Seq_Cst)",
+   "category": "standard",
+   "evidence": "core/sync/atomic.odin ; main.odin",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "odin",
+   "item": "D3",
+   "means": "base:runtime.MAP_CACHE_LINE_SIZE (64, public mais propre à l'implémentation des map) ; pas de constante générale",
+   "category": "standard_partiel",
+   "evidence": "base/runtime/core.odin l.306-309 ; main.odin affiche 64",
+   "rule_a": 0.5,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "odin",
+   "item": "D4",
+   "means": "core:sys/linux.sched_setaffinity",
+   "category": "standard",
+   "evidence": "core/sys/linux/sys.odin l.2627 ; main.odin (Errno NONE)",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "odin",
+   "item": "D5",
+   "means": "sync.atomic_thread_fence + intrinsics.cpu_relax",
+   "category": "standard",
+   "evidence": "base/intrinsics/intrinsics.odin l.34 et l.103 ; main.odin",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "odin",
+   "item": "E3",
+   "means": "intrinsics.expect + attribut @(cold)",
+   "category": "standard",
+   "evidence": "intrinsics.odin l.81 ; doc attributes ; main.odin",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "odin",
+   "item": "E4",
+   "means": "intrinsics.prefetch_read_data / prefetch_write_data / *_instruction",
+   "category": "standard",
+   "evidence": "intrinsics.odin l.75-78 ; main.odin",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "d",
+   "item": "C1",
+   "means": "core.simd : __vector(T[N]) / float8 etc. avec opérateurs (spec « Vector Extensions »)",
+   "category": "standard",
+   "evidence": "probes/d/dprobe.d",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "d",
+   "item": "C2",
+   "means": "ldc.gccbuiltins_x86 (437 intrinsèques avx512 via pragma(LDC_intrinsic)) et asm de style GCC ; l'assembleur en ligne normatif de D accepte SSE mais pas les opcodes VEX/AVX sous LDC",
+   "category": "standard_partiel",
+   "evidence": "probes/d/dasm1.d et dasm2.d : unknown opcode vaddps ; dasm4.d (addps, mfence) compile ; dprobe.d (__builtin_ia32_vpconflictsi_512)",
+   "rule_a": 1,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "d",
+   "item": "C4",
+   "means": "@fastmath / @llvmFastMathFlag(...) de ldc.attributes, par fonction",
+   "category": "extension",
+   "evidence": "probes/d/dreassoc.d : 7 vaddps ymm avec @fastmath, aucun sans",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "d",
+   "item": "C5",
+   "means": "std.parallelism : foreach (i; parallel(r)), taskPool.reduce",
+   "category": "standard",
+   "evidence": "probes/d/dprobe.d",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "d",
+   "item": "D1",
+   "means": "core.thread.Thread",
+   "category": "standard",
+   "evidence": "probes/d/dprobe.d",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "d",
+   "item": "D2",
+   "means": "core.atomic avec MemoryOrder.raw/acq/rel/acq_rel/seq",
+   "category": "standard",
+   "evidence": "core/atomic.d l.51-82 ; dprobe.d",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "d",
+   "item": "D3",
+   "means": "core.cpuid.dataCaches()[i].lineSize (documenté) ; std.parallelism.cacheLineSize",
+   "category": "standard",
+   "evidence": "core/cpuid.d l.112-124 ; dprobe.d affiche 64",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "d",
+   "item": "D4",
+   "means": "core.sys.linux.sched.sched_setaffinity + CPU_SET",
+   "category": "standard",
+   "evidence": "probes/d/dprobe.d : rc=0",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "d",
+   "item": "D5",
+   "means": "core.atomic.atomicFence!(order) + core.atomic.pause()",
+   "category": "standard",
+   "evidence": "core/atomic.d l.543-555 ; dprobe.d",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "d",
+   "item": "E3",
+   "means": "core.builtins.likely / unlikely / expect (llvm.expect sous LDC) ; @(ldc.attributes.cold)",
+   "category": "standard",
+   "evidence": "core/builtins.d l.62-99 ; dprobe.d",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "d",
+   "item": "E4",
+   "means": "core.simd.prefetch!(writeFetch, locality)(adresse)",
+   "category": "standard",
+   "evidence": "core/simd.d l.98-115 ; dprobe.d",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "nim",
+   "item": "C1",
+   "means": "rien dans la std ; seulement par {.emit.} d'un typedef vector_size GCC et de fonctions C d'appoint importées",
+   "category": "externe",
+   "evidence": "probes/nim/nsimd.nim ; aucune mention de SIMD dans /opt/nim/lib ni /opt/nim/doc",
+   "rule_a": 0,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "nim",
+   "item": "C2",
+   "means": "importc des intrinsèques du compilateur C (header immintrin.h) + passC/codegenDecl pour les options de cible ; aucun module std",
+   "category": "extension",
+   "evidence": "probes/nim/nsimd.nim : _mm512_conflict_epi32 importé, résultat correct",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "nim",
+   "item": "C4",
+   "means": "seulement par options du compilateur C : {.localPassC.} (granularité module) ou passC global ; `||` avec « simd reduction » exige -fopenmp-simd et une variable exportc",
+   "category": "extension",
+   "evidence": "probes/nim/nreassoc2.nim : vaddps ymm avec localPassC ; nreassoc.nim (attribut optimize via codegenDecl) non vectorisé",
+   "rule_a": 0.5,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "nim",
+   "item": "C5",
+   "means": "itérateur `||` de system (#pragma omp parallel for) : exige -fopenmp en passC/passL, des contrôles désactivés et une globale exportc pour reduction ; instruction parallel expérimentale ; std/threadpool déprécié",
+   "category": "standard_partiel",
+   "evidence": "probes/nim/nomp.nim échoue (variable renommée s_1, « invalid branch to/from OpenMP structured block ») ; nomp2.nim OK en -d:danger sur 4 threads",
+   "rule_a": 0.5,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "nim",
+   "item": "D1",
+   "means": "std/typedthreads : createThread / joinThread",
+   "category": "standard",
+   "evidence": "probes/nim/nprobe.nim",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "nim",
+   "item": "D2",
+   "means": "std/atomics : Atomic[T].load/store/... avec MemoryOrder (moRelaxed ... moSequentiallyConsistent)",
+   "category": "standard",
+   "evidence": "probes/nim/nprobe.nim",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "nim",
+   "item": "D3",
+   "means": "aucune constante publique ; const CacheLineSize = 64 privée dans std/threadpool (déprécié) ; {.align(N).} sans taille",
+   "category": "experimental",
+   "evidence": "lib/pure/concurrency/threadpool.nim l.59",
+   "rule_a": 0.5,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "nim",
+   "item": "D4",
+   "means": "pinToCpu (std/typedthreads)",
+   "category": "standard",
+   "evidence": "std/typedthreads.nim l.229 ; probes/nim/nprobe.nim",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "nim",
+   "item": "D5",
+   "means": "fence(order) (std/atomics) + cpuRelax (std/sysatomics réexporté par system, instruction pause)",
+   "category": "standard",
+   "evidence": "std/sysatomics.nim l.356-364 ; probes/nim/nprobe.nim",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "nim",
+   "item": "E3",
+   "means": "likely / unlikely (system)",
+   "category": "standard",
+   "evidence": "system.nim l.2069-2093 ; probes/nim/nprobe.nim",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "nim",
+   "item": "E4",
+   "means": "aucun prefetch dans la std ; importc de __builtin_prefetch",
+   "category": "extension",
+   "evidence": "probes/nim/nsimd.nim",
+   "rule_a": 1,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "csharp",
+   "item": "C1",
+   "means": "System.Numerics.Vector<T>, Vector128/256/512<T> avec opérateurs",
+   "category": "standard",
+   "evidence": "probes/cs/Program.cs",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "csharp",
+   "item": "C2",
+   "means": "System.Runtime.Intrinsics.X86 (Avx512F..., Avx10v1, Avx10v2)",
+   "category": "standard",
+   "evidence": "probes/cs/Program.cs : Avx512F.Add exécuté ; types Avx10v1/Avx10v2 présents",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "csharp",
+   "item": "C4",
+   "means": "aucun contrôle : le JIT ne réassocie jamais les flottants ; réduction vectorielle seulement écrite à la main (Vector256.Sum)",
+   "category": "absent",
+   "evidence": "recherche réflexive dans le framework partagé ; System.Numerics.Tensors absent du framework partagé",
+   "rule_a": 0,
+   "rule_b": 0
+  },
+  {
+   "lang": "csharp",
+   "item": "C5",
+   "means": "Parallel.For/ForEach avec localInit/localFinally, PLINQ (AsParallel().Sum())",
+   "category": "standard",
+   "evidence": "probes/cs/Program.cs : Parallel.For sur 5 threads",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "csharp",
+   "item": "D1",
+   "means": "System.Threading.Thread, ThreadPool, Task",
+   "category": "standard",
+   "evidence": "probes/cs/Program.cs",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "csharp",
+   "item": "D2",
+   "means": "Volatile.Read (acquire) / Volatile.Write (release), Interlocked.* (barrière complète) ; ni relaxed explicite ni paramètre d'ordre",
+   "category": "standard_partiel",
+   "evidence": "probes/cs2/Program.cs : méthodes de Volatile et Interlocked ; aucune API MemoryOrder",
+   "rule_a": 0.5,
+   "rule_b": 0.5
+  },
+  {
+   "lang": "csharp",
+   "item": "D3",
+   "means": "aucune constante publique ; PaddingFor32, PaddedReference, CacheLineSeparated internes à System.Private.CoreLib",
+   "category": "experimental",
+   "evidence": "probes/cs2/Program.cs : types internes (public=False) ; 0 membre public CacheLine",
+   "rule_a": 0.5,
+   "rule_b": 0.25
+  },
+  {
+   "lang": "csharp",
+   "item": "D4",
+   "means": "Process.ProcessorAffinity (Linux et Windows) ; ProcessThread.ProcessorAffinity Windows seulement",
+   "category": "standard",
+   "evidence": "probes/cs/Program.cs : affinité du processus fixée ; thread : PlatformNotSupportedException",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "csharp",
+   "item": "D5",
+   "means": "Interlocked.MemoryBarrier, Volatile.ReadBarrier/WriteBarrier, Thread.SpinWait, X86Base.Pause",
+   "category": "standard",
+   "evidence": "probes/cs/Program.cs ; System.Runtime.xml",
+   "rule_a": 1,
+   "rule_b": 1
+  },
+  {
+   "lang": "csharp",
+   "item": "E3",
+   "means": "aucune indication de branchement (heuristiques du JIT, PGO dynamique)",
+   "category": "absent",
+   "evidence": "recherche réflexive : 0 membre Likely/Unlikely",
+   "rule_a": 0,
+   "rule_b": 0
+  },
+  {
+   "lang": "csharp",
+   "item": "E4",
+   "means": "Sse.Prefetch0/1/2/PrefetchNonTemporal",
+   "category": "standard",
+   "evidence": "probes/cs/Program.cs",
+   "rule_a": 1,
+   "rule_b": 1
+  }
+ ],
+ "principles": [
+  {
+   "lang": "c",
+   "principle": "P4",
+   "level": 2,
+   "justification": "alignas (C11/C23) permet d'aligner et de séparer les données, mais la taille de ligne n'existe que hors norme (__GCC_DESTRUCTIVE_SIZE, sysconf de glibc)."
+  },
+  {
+   "lang": "c",
+   "principle": "P5",
+   "level": 3,
+   "justification": "<threads.h> et <stdatomic.h> avec memory_order explicites sont normatifs et stables ; aucun diagnostic des courses de données par défaut."
+  },
+  {
+   "lang": "c",
+   "principle": "P8",
+   "level": 1,
+   "justification": "ISO C23 n'a aucun SIMD : types vectoriels, intrinsèques et pragmas de réassociation sont des extensions GCC/Clang."
+  },
+  {
+   "lang": "c",
+   "principle": "P9",
+   "level": 1,
+   "justification": "C23 n'a pas [[likely]] ; seulement __builtin_expect et l'attribut cold, qui sont des extensions."
+  },
+  {
+   "lang": "c",
+   "principle": "P10",
+   "level": 2,
+   "justification": "Disposition des structures et alignas sont normatifs, mais prefetch et taille de ligne restent hors norme (__builtin_prefetch, sysconf)."
+  },
+  {
+   "lang": "c",
+   "principle": "P12",
+   "level": 2,
+   "justification": "Threads normatifs (threads.h), mais ni nombre de CPU ni affinité dans ISO C (POSIX/glibc seulement)."
+  },
+  {
+   "lang": "cpp",
+   "principle": "P4",
+   "level": 3,
+   "justification": "std::hardware_destructive_interference_size et alignas sont normatifs et stables depuis C++17."
+  },
+  {
+   "lang": "cpp",
+   "principle": "P5",
+   "level": 3,
+   "justification": "std::thread/jthread, std::atomic et memory_order, latch/barrier : constructions de premier ordre ; pas de diagnostic des courses par défaut avec g++."
+  },
+  {
+   "lang": "cpp",
+   "principle": "P8",
+   "level": 2,
+   "justification": "std::simd est dans C++26 mais GCC 16 déclare C++26 « highly experimental » (pas de __cpp_lib_simd, x86 seulement) ; std::reduce autorise la réassociation ; les intrinsèques sont hors norme."
+  },
+  {
+   "lang": "cpp",
+   "principle": "P9",
+   "level": 3,
+   "justification": "[[likely]] et [[unlikely]] sont normatifs depuis C++20."
+  },
+  {
+   "lang": "cpp",
+   "principle": "P10",
+   "level": 2,
+   "justification": "Disposition, alignas, hardware_constructive_interference_size et allocateurs pmr sont normatifs, mais aucun prefetch standard."
+  },
+  {
+   "lang": "cpp",
+   "principle": "P12",
+   "level": 2,
+   "justification": "std::thread et hardware_concurrency sont normatifs ; l'affinité ne passe que par native_handle et la glibc."
+  },
+  {
+   "lang": "rust",
+   "principle": "P4",
+   "level": 2,
+   "justification": "#[repr(align(N))] est standard, mais aucune constante publique de ligne (CachePadded privé dans la std, crossbeam externe)."
+  },
+  {
+   "lang": "rust",
+   "principle": "P5",
+   "level": 4,
+   "justification": "Threads et atomiques à ordres explicites, et Send/Sync font rejeter les courses de données en code sûr, par défaut."
+  },
+  {
+   "lang": "rust",
+   "principle": "P8",
+   "level": 2,
+   "justification": "core::arch (AVX-512 stable) et les opérations flottantes algébriques sont standard, mais le type portable std::simd reste réservé à nightly."
+  },
+  {
+   "lang": "rust",
+   "principle": "P9",
+   "level": 3,
+   "justification": "std::hint::cold_path et #[cold] sont stables ; likely/unlikely sont encore nightly."
+  },
+  {
+   "lang": "rust",
+   "principle": "P10",
+   "level": 3,
+   "justification": "Contrôle de disposition (repr(C), repr(align)) et _mm_prefetch stable dans core::arch ; le prefetch portable (hint::prefetch_read) est nightly."
+  },
+  {
+   "lang": "rust",
+   "principle": "P12",
+   "level": 2,
+   "justification": "std::thread et available_parallelism existent, mais aucune affinité dans la std (FFI ou crates)."
+  },
+  {
+   "lang": "zig",
+   "principle": "P4",
+   "level": 3,
+   "justification": "std.atomic.cache_line, documenté contre le faux partage, et align() sont de premier ordre."
+  },
+  {
+   "lang": "zig",
+   "principle": "P5",
+   "level": 3,
+   "justification": "std.Thread, atomiques avec AtomicOrder et Io.Mutex sont standard ; @fence a disparu et aucune course n'est diagnostiquée."
+  },
+  {
+   "lang": "zig",
+   "principle": "P8",
+   "level": 3,
+   "justification": "@Vector, @reduce, @shuffle, @select et @setFloatMode sont intégrés au langage ; les intrinsèques cible ne passent que par l'asm, déclarée instable."
+  },
+  {
+   "lang": "zig",
+   "principle": "P9",
+   "level": 3,
+   "justification": "@branchHint(.likely/.unlikely/.cold/.unpredictable) est intégré au langage."
+  },
+  {
+   "lang": "zig",
+   "principle": "P10",
+   "level": 3,
+   "justification": "@prefetch, align, structs extern/packed, std.MultiArrayList (SoA) et allocateurs explicites sont standard."
+  },
+  {
+   "lang": "zig",
+   "principle": "P12",
+   "level": 3,
+   "justification": "std.Thread, Thread.getCpuCount et std.os.linux.sched_setaffinity sont dans la std."
+  },
+  {
+   "lang": "odin",
+   "principle": "P4",
+   "level": 2,
+   "justification": "@(align)/#align existent, mais la seule constante de ligne est runtime.MAP_CACHE_LINE_SIZE, propre aux map."
+  },
+  {
+   "lang": "odin",
+   "principle": "P5",
+   "level": 3,
+   "justification": "core:thread et core:sync (atomiques à ordres explicites, barrières, cpu_relax) sont standard ; aucun diagnostic de course."
+  },
+  {
+   "lang": "odin",
+   "principle": "P8",
+   "level": 3,
+   "justification": "#simd[N]T et core:simd sont de premier ordre ; core:simd/x86 couvre peu AVX2/AVX-512 et @(fast_math) n'applique pas reassoc dans cette version."
+  },
+  {
+   "lang": "odin",
+   "principle": "P9",
+   "level": 3,
+   "justification": "intrinsics.expect et l'attribut @(cold) font partie du langage."
+  },
+  {
+   "lang": "odin",
+   "principle": "P10",
+   "level": 3,
+   "justification": "#soa, @(align), intrinsics.prefetch_* et non_temporal_load/store sont de premier ordre."
+  },
+  {
+   "lang": "odin",
+   "principle": "P12",
+   "level": 3,
+   "justification": "core:thread, os.get_processor_core_count et core:sys/linux.sched_setaffinity sont dans la bibliothèque livrée."
+  },
+  {
+   "lang": "d",
+   "principle": "P4",
+   "level": 3,
+   "justification": "align(N) et la taille de ligne via core.cpuid.dataCaches().lineSize ou std.parallelism.cacheLineSize sont standard (valeur connue à l'exécution)."
+  },
+  {
+   "lang": "d",
+   "principle": "P5",
+   "level": 4,
+   "justification": "TLS par défaut et qualificatif shared diagnostiqué (RMW sur shared rejeté, spawn refuse les alias mutables locaux), plus core.atomic à ordres explicites."
+  },
+  {
+   "lang": "d",
+   "principle": "P8",
+   "level": 3,
+   "justification": "core.simd (__vector) est normatif avec opérateurs ; les intrinsèques cible passent par le module ldc.gccbuiltins_x86 du compilateur."
+  },
+  {
+   "lang": "d",
+   "principle": "P9",
+   "level": 3,
+   "justification": "core.builtins.likely/unlikely/expect sont standard et honorés par LDC."
+  },
+  {
+   "lang": "d",
+   "principle": "P10",
+   "level": 3,
+   "justification": "core.simd.prefetch, align et structs valeur sont standard ; std.experimental.allocator reste expérimental."
+  },
+  {
+   "lang": "d",
+   "principle": "P12",
+   "level": 3,
+   "justification": "core.thread, core.cpuid (cœurs et threads), std.parallelism.totalCPUs et core.sys.linux.sched sont standard."
+  },
+  {
+   "lang": "nim",
+   "principle": "P4",
+   "level": 2,
+   "justification": "{.align(N).} est standard, mais aucune constante publique de ligne (constante privée dans std/threadpool, déprécié)."
+  },
+  {
+   "lang": "nim",
+   "principle": "P5",
+   "level": 4,
+   "justification": "Threads et std/atomics à ordres explicites ; l'effet gcsafe rejette par défaut les procédures de thread qui touchent des globales gérées par le GC, et {.guard.} vérifie les verrous."
+  },
+  {
+   "lang": "nim",
+   "principle": "P8",
+   "level": 1,
+   "justification": "Rien dans la std : le SIMD ne passe que par importc ou emit vers le compilateur C."
+  },
+  {
+   "lang": "nim",
+   "principle": "P9",
+   "level": 3,
+   "justification": "likely/unlikely sont fournis par system."
+  },
+  {
+   "lang": "nim",
+   "principle": "P10",
+   "level": 2,
+   "justification": "Objets valeur, seq contiguës et {.align.} sont standard, mais pas de prefetch hors importc de __builtin_prefetch."
+  },
+  {
+   "lang": "nim",
+   "principle": "P12",
+   "level": 3,
+   "justification": "typedthreads, pinToCpu et cpuinfo.countProcessors sont dans la std."
+  },
+  {
+   "lang": "csharp",
+   "principle": "P4",
+   "level": 2,
+   "justification": "StructLayout(Explicit, Size)/FieldOffset permettent le padding, mais aucune constante publique (les aides de padding de CoreLib sont internes)."
+  },
+  {
+   "lang": "csharp",
+   "principle": "P5",
+   "level": 3,
+   "justification": "Thread/Task/Parallel, lock, Interlocked et Volatile sont de premier ordre, mais sans ordre relaxed explicite ni diagnostic de course."
+  },
+  {
+   "lang": "csharp",
+   "principle": "P8",
+   "level": 3,
+   "justification": "Vector<T>, Vector128/256/512 et intrinsèques X86 (Avx512F, Avx10v2) sont dans la BCL ; aucune réassociation automatique."
+  },
+  {
+   "lang": "csharp",
+   "principle": "P9",
+   "level": 1,
+   "justification": "Aucune indication de branchement dans le langage ; seul le PGO dynamique du runtime, réglage global actif par défaut, agit sur la disposition des branches."
+  },
+  {
+   "lang": "csharp",
+   "principle": "P10",
+   "level": 3,
+   "justification": "Structs, Span, InlineArray, StructLayout et Sse.Prefetch0/1/2 sont standard, même si les types référence dominent par défaut."
+  },
+  {
+   "lang": "csharp",
+   "principle": "P12",
+   "level": 2,
+   "justification": "Environment.ProcessorCount et Process.ProcessorAffinity (processus entier) ; l'affinité par thread est réservée à Windows et il n'y a pas d'API de topologie."
+  }
+ ]
+}

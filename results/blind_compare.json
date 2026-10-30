@@ -1,0 +1,467 @@
+{
+ "missing": [],
+ "c1": {
+  "n": 88,
+  "exact": 0.8863636363636364,
+  "kappa_w": 0.75,
+  "spearman": 0.83866449538826
+ },
+ "c2": {
+  "n": 88,
+  "exact": 0.8181818181818182,
+  "kappa_w": 0.7988571428571428,
+  "spearman": 0.8922735940568693
+ },
+ "c3": {
+  "n": 48,
+  "exact": 0.5625,
+  "kappa_w": 0.4571159283694628,
+  "spearman": 0.645230576858035,
+  "within": 0.9375
+ },
+ "ref_spearman_theirs_vs_mineR": 0.6524766876144638,
+ "verdict": "tient aux r\u00e8gles en partie (kappa entre 0,4 et 0,6)",
+ "per_lang": {
+  "c": {
+   "a": 0.9090909090909091,
+   "b": 0.9090909090909091,
+   "p_within1": 1.0
+  },
+  "cpp": {
+   "a": 1.0,
+   "b": 0.9090909090909091,
+   "p_within1": 1.0
+  },
+  "rust": {
+   "a": 0.9090909090909091,
+   "b": 0.8181818181818182,
+   "p_within1": 1.0
+  },
+  "zig": {
+   "a": 1.0,
+   "b": 0.9090909090909091,
+   "p_within1": 1.0
+  },
+  "odin": {
+   "a": 0.8181818181818182,
+   "b": 0.7272727272727273,
+   "p_within1": 1.0
+  },
+  "d": {
+   "a": 0.9090909090909091,
+   "b": 0.8181818181818182,
+   "p_within1": 0.8333333333333334
+  },
+  "nim": {
+   "a": 0.8181818181818182,
+   "b": 0.7272727272727273,
+   "p_within1": 0.8333333333333334
+  },
+  "csharp": {
+   "a": 0.7272727272727273,
+   "b": 0.7272727272727273,
+   "p_within1": 0.8333333333333334
+  }
+ },
+ "disagree_a": [
+  {
+   "lang": "c",
+   "item": "D3",
+   "blind": 1,
+   "mine": 0,
+   "means": "sysconf(_SC_LEVEL1_DCACHE_LINESIZE) (glibc) ; macro __GCC_DESTRUCTIVE_SIZE pr\u00e9d\u00e9finie en mode C par gcc-16 et clang-23 ; alignas normatif mais sans taille",
+   "category": "extension",
+   "evidence": "probes/c/c_cacheline.c : __GCC_DESTRUCTIVE_SIZE=64, sysconf=64"
+  },
+  {
+   "lang": "rust",
+   "item": "D3",
+   "blind": 0.5,
+   "mine": 0,
+   "means": "aucun utilitaire public ; CachePadded priv\u00e9 (std::sync::mpmc::utils) ; #[repr(align(N))] sans constante ; crossbeam (tiers)",
+   "category": "experimental",
+   "evidence": "probes/rust/r_cachepad.rs : E0603 module utils is private ; nom pr\u00e9sent dans les m\u00e9tadonn\u00e9es de libstd"
+  },
+  {
+   "lang": "odin",
+   "item": "C4",
+   "blind": 0.5,
+   "mine": 0,
+   "means": "@(fast_math={.Allow_Reassoc}) document\u00e9, mais le compilateur livr\u00e9 n'applique jamais reassoc (llvm_backend_opt.cpp:63 teste l'indice 0 comme masque) ; reste simd.reduce_add_pairs/bisect sur vecteurs explicites",
+   "category": "standard_partiel",
+   "evidence": "probes/odin/reassoc et dot : IR \u00ab fadd nnan nsz contract \u00bb sans reassoc, exemple dot de la doc non vectoris\u00e9"
+  },
+  {
+   "lang": "odin",
+   "item": "D3",
+   "blind": 0.5,
+   "mine": 0,
+   "means": "base:runtime.MAP_CACHE_LINE_SIZE (64, public mais propre \u00e0 l'impl\u00e9mentation des map) ; pas de constante g\u00e9n\u00e9rale",
+   "category": "standard_partiel",
+   "evidence": "base/runtime/core.odin l.306-309 ; main.odin affiche 64"
+  },
+  {
+   "lang": "d",
+   "item": "D3",
+   "blind": 1,
+   "mine": 0,
+   "means": "core.cpuid.dataCaches()[i].lineSize (document\u00e9) ; std.parallelism.cacheLineSize",
+   "category": "standard",
+   "evidence": "core/cpuid.d l.112-124 ; dprobe.d affiche 64"
+  },
+  {
+   "lang": "nim",
+   "item": "C5",
+   "blind": 0.5,
+   "mine": 1,
+   "means": "it\u00e9rateur `||` de system (#pragma omp parallel for) : exige -fopenmp en passC/passL, des contr\u00f4les d\u00e9sactiv\u00e9s et une globale exportc pour reduction ; instruction parallel exp\u00e9rimentale ; std/threadpool d\u00e9pr\u00e9ci\u00e9",
+   "category": "standard_partiel",
+   "evidence": "probes/nim/nomp.nim \u00e9choue (variable renomm\u00e9e s_1, \u00ab invalid branch to/from OpenMP structured block \u00bb) ; nomp2.nim OK en -d:danger sur 4 threads"
+  },
+  {
+   "lang": "nim",
+   "item": "D3",
+   "blind": 0.5,
+   "mine": 0,
+   "means": "aucune constante publique ; const CacheLineSize = 64 priv\u00e9e dans std/threadpool (d\u00e9pr\u00e9ci\u00e9) ; {.align(N).} sans taille",
+   "category": "experimental",
+   "evidence": "lib/pure/concurrency/threadpool.nim l.59"
+  },
+  {
+   "lang": "csharp",
+   "item": "D2",
+   "blind": 0.5,
+   "mine": 1,
+   "means": "Volatile.Read (acquire) / Volatile.Write (release), Interlocked.* (barri\u00e8re compl\u00e8te) ; ni relaxed explicite ni param\u00e8tre d'ordre",
+   "category": "standard_partiel",
+   "evidence": "probes/cs2/Program.cs : m\u00e9thodes de Volatile et Interlocked ; aucune API MemoryOrder"
+  },
+  {
+   "lang": "csharp",
+   "item": "D3",
+   "blind": 0.5,
+   "mine": 0,
+   "means": "aucune constante publique ; PaddingFor32, PaddedReference, CacheLineSeparated internes \u00e0 System.Private.CoreLib",
+   "category": "experimental",
+   "evidence": "probes/cs2/Program.cs : types internes (public=False) ; 0 membre public CacheLine"
+  },
+  {
+   "lang": "csharp",
+   "item": "D4",
+   "blind": 1,
+   "mine": 0.5,
+   "means": "Process.ProcessorAffinity (Linux et Windows) ; ProcessThread.ProcessorAffinity Windows seulement",
+   "category": "standard",
+   "evidence": "probes/cs/Program.cs : affinit\u00e9 du processus fix\u00e9e ; thread : PlatformNotSupportedException"
+  }
+ ],
+ "disagree_b": [
+  {
+   "lang": "c",
+   "item": "D3",
+   "blind": 0.25,
+   "mine": 0,
+   "means": "sysconf(_SC_LEVEL1_DCACHE_LINESIZE) (glibc) ; macro __GCC_DESTRUCTIVE_SIZE pr\u00e9d\u00e9finie en mode C par gcc-16 et clang-23 ; alignas normatif mais sans taille",
+   "category": "extension"
+  },
+  {
+   "lang": "cpp",
+   "item": "C1",
+   "blind": 0.5,
+   "mine": 1,
+   "means": "std::simd (<simd>, C++26) avec -std=c++26 ; extensions vectorielles GCC (vector_size) stables et portables",
+   "category": "standard_partiel"
+  },
+  {
+   "lang": "rust",
+   "item": "D3",
+   "blind": 0.25,
+   "mine": 0,
+   "means": "aucun utilitaire public ; CachePadded priv\u00e9 (std::sync::mpmc::utils) ; #[repr(align(N))] sans constante ; crossbeam (tiers)",
+   "category": "experimental"
+  },
+  {
+   "lang": "rust",
+   "item": "D4",
+   "blind": 0.25,
+   "mine": 0,
+   "means": "aucune API std ; sched_setaffinity par FFI (extern \"C\" ou crate libc)",
+   "category": "externe"
+  },
+  {
+   "lang": "zig",
+   "item": "C2",
+   "blind": 0.25,
+   "mine": 0.5,
+   "means": "pas de module d'intrins\u00e8ques ; assembleur en ligne (le langref d\u00e9clare les contraintes \u00ab still considered unstable \u00bb) ; extern fn @\"llvm.x86.*\" accept\u00e9 mais non document\u00e9 ; @cImport supprim\u00e9",
+   "category": "experimental"
+  },
+  {
+   "lang": "odin",
+   "item": "C2",
+   "blind": 0.5,
+   "mine": 1,
+   "means": "core:simd/x86 (SSE \u00e0 AVX assez complets, mais AVX2 12 proc\u00e9dures, AVX-512F 8, AVX-512BW 6) ; intrins\u00e8ques LLVM import\u00e9es par foreign + @(link_name=\"llvm.x86...\") (m\u00e9canisme de core:sys/llvm)",
+   "category": "standard_partiel"
+  },
+  {
+   "lang": "odin",
+   "item": "C4",
+   "blind": 0.5,
+   "mine": 0,
+   "means": "@(fast_math={.Allow_Reassoc}) document\u00e9, mais le compilateur livr\u00e9 n'applique jamais reassoc (llvm_backend_opt.cpp:63 teste l'indice 0 comme masque) ; reste simd.reduce_add_pairs/bisect sur vecteurs explicites",
+   "category": "standard_partiel"
+  },
+  {
+   "lang": "odin",
+   "item": "D3",
+   "blind": 0.5,
+   "mine": 0,
+   "means": "base:runtime.MAP_CACHE_LINE_SIZE (64, public mais propre \u00e0 l'impl\u00e9mentation des map) ; pas de constante g\u00e9n\u00e9rale",
+   "category": "standard_partiel"
+  },
+  {
+   "lang": "d",
+   "item": "C2",
+   "blind": 0.5,
+   "mine": 0.25,
+   "means": "ldc.gccbuiltins_x86 (437 intrins\u00e8ques avx512 via pragma(LDC_intrinsic)) et asm de style GCC ; l'assembleur en ligne normatif de D accepte SSE mais pas les opcodes VEX/AVX sous LDC",
+   "category": "standard_partiel"
+  },
+  {
+   "lang": "d",
+   "item": "D3",
+   "blind": 1,
+   "mine": 0,
+   "means": "core.cpuid.dataCaches()[i].lineSize (document\u00e9) ; std.parallelism.cacheLineSize",
+   "category": "standard"
+  },
+  {
+   "lang": "nim",
+   "item": "C1",
+   "blind": 0.25,
+   "mine": 0,
+   "means": "rien dans la std ; seulement par {.emit.} d'un typedef vector_size GCC et de fonctions C d'appoint import\u00e9es",
+   "category": "externe"
+  },
+  {
+   "lang": "nim",
+   "item": "C5",
+   "blind": 0.5,
+   "mine": 0.25,
+   "means": "it\u00e9rateur `||` de system (#pragma omp parallel for) : exige -fopenmp en passC/passL, des contr\u00f4les d\u00e9sactiv\u00e9s et une globale exportc pour reduction ; instruction parallel exp\u00e9rimentale ; std/threadpool d\u00e9pr\u00e9ci\u00e9",
+   "category": "standard_partiel"
+  },
+  {
+   "lang": "nim",
+   "item": "D3",
+   "blind": 0.25,
+   "mine": 0,
+   "means": "aucune constante publique ; const CacheLineSize = 64 priv\u00e9e dans std/threadpool (d\u00e9pr\u00e9ci\u00e9) ; {.align(N).} sans taille",
+   "category": "experimental"
+  },
+  {
+   "lang": "csharp",
+   "item": "D2",
+   "blind": 0.5,
+   "mine": 1,
+   "means": "Volatile.Read (acquire) / Volatile.Write (release), Interlocked.* (barri\u00e8re compl\u00e8te) ; ni relaxed explicite ni param\u00e8tre d'ordre",
+   "category": "standard_partiel"
+  },
+  {
+   "lang": "csharp",
+   "item": "D3",
+   "blind": 0.25,
+   "mine": 0,
+   "means": "aucune constante publique ; PaddingFor32, PaddedReference, CacheLineSeparated internes \u00e0 System.Private.CoreLib",
+   "category": "experimental"
+  },
+  {
+   "lang": "csharp",
+   "item": "D4",
+   "blind": 1,
+   "mine": 0.5,
+   "means": "Process.ProcessorAffinity (Linux et Windows) ; ProcessThread.ProcessorAffinity Windows seulement",
+   "category": "standard"
+  }
+ ],
+ "disagree_p": [
+  {
+   "lang": "c",
+   "principle": "P10",
+   "blind": 2,
+   "theirs": 1,
+   "justification": "Disposition des structures et alignas sont normatifs, mais prefetch et taille de ligne restent hors norme (__builtin_prefetch, sysconf)."
+  },
+  {
+   "lang": "cpp",
+   "principle": "P4",
+   "blind": 3,
+   "theirs": 4,
+   "justification": "std::hardware_destructive_interference_size et alignas sont normatifs et stables depuis C++17."
+  },
+  {
+   "lang": "cpp",
+   "principle": "P8",
+   "blind": 2,
+   "theirs": 3,
+   "justification": "std::simd est dans C++26 mais GCC 16 d\u00e9clare C++26 \u00ab highly experimental \u00bb (pas de __cpp_lib_simd, x86 seulement) ; std::reduce autorise la r\u00e9association ; les intrins\u00e8ques sont hors norme."
+  },
+  {
+   "lang": "cpp",
+   "principle": "P10",
+   "blind": 2,
+   "theirs": 1,
+   "justification": "Disposition, alignas, hardware_constructive_interference_size et allocateurs pmr sont normatifs, mais aucun prefetch standard."
+  },
+  {
+   "lang": "cpp",
+   "principle": "P12",
+   "blind": 2,
+   "theirs": 3,
+   "justification": "std::thread et hardware_concurrency sont normatifs ; l'affinit\u00e9 ne passe que par native_handle et la glibc."
+  },
+  {
+   "lang": "zig",
+   "principle": "P4",
+   "blind": 3,
+   "theirs": 4,
+   "justification": "std.atomic.cache_line, document\u00e9 contre le faux partage, et align() sont de premier ordre."
+  },
+  {
+   "lang": "zig",
+   "principle": "P5",
+   "blind": 3,
+   "theirs": 2,
+   "justification": "std.Thread, atomiques avec AtomicOrder et Io.Mutex sont standard ; @fence a disparu et aucune course n'est diagnostiqu\u00e9e."
+  },
+  {
+   "lang": "zig",
+   "principle": "P10",
+   "blind": 3,
+   "theirs": 4,
+   "justification": "@prefetch, align, structs extern/packed, std.MultiArrayList (SoA) et allocateurs explicites sont standard."
+  },
+  {
+   "lang": "zig",
+   "principle": "P12",
+   "blind": 3,
+   "theirs": 4,
+   "justification": "std.Thread, Thread.getCpuCount et std.os.linux.sched_setaffinity sont dans la std."
+  },
+  {
+   "lang": "odin",
+   "principle": "P12",
+   "blind": 3,
+   "theirs": 4,
+   "justification": "core:thread, os.get_processor_core_count et core:sys/linux.sched_setaffinity sont dans la biblioth\u00e8que livr\u00e9e."
+  },
+  {
+   "lang": "d",
+   "principle": "P4",
+   "blind": 3,
+   "theirs": 2,
+   "justification": "align(N) et la taille de ligne via core.cpuid.dataCaches().lineSize ou std.parallelism.cacheLineSize sont standard (valeur connue \u00e0 l'ex\u00e9cution)."
+  },
+  {
+   "lang": "d",
+   "principle": "P5",
+   "blind": 4,
+   "theirs": 2,
+   "justification": "TLS par d\u00e9faut et qualificatif shared diagnostiqu\u00e9 (RMW sur shared rejet\u00e9, spawn refuse les alias mutables locaux), plus core.atomic \u00e0 ordres explicites."
+  },
+  {
+   "lang": "d",
+   "principle": "P9",
+   "blind": 3,
+   "theirs": 2,
+   "justification": "core.builtins.likely/unlikely/expect sont standard et honor\u00e9s par LDC."
+  },
+  {
+   "lang": "d",
+   "principle": "P12",
+   "blind": 3,
+   "theirs": 4,
+   "justification": "core.thread, core.cpuid (c\u0153urs et threads), std.parallelism.totalCPUs et core.sys.linux.sched sont standard."
+  },
+  {
+   "lang": "nim",
+   "principle": "P5",
+   "blind": 4,
+   "theirs": 3,
+   "justification": "Threads et std/atomics \u00e0 ordres explicites ; l'effet gcsafe rejette par d\u00e9faut les proc\u00e9dures de thread qui touchent des globales g\u00e9r\u00e9es par le GC, et {.guard.} v\u00e9rifie les verrous."
+  },
+  {
+   "lang": "nim",
+   "principle": "P9",
+   "blind": 3,
+   "theirs": 2,
+   "justification": "likely/unlikely sont fournis par system."
+  },
+  {
+   "lang": "nim",
+   "principle": "P10",
+   "blind": 2,
+   "theirs": 0,
+   "justification": "Objets valeur, seq contigu\u00ebs et {.align.} sont standard, mais pas de prefetch hors importc de __builtin_prefetch."
+  },
+  {
+   "lang": "csharp",
+   "principle": "P4",
+   "blind": 2,
+   "theirs": 0,
+   "justification": "StructLayout(Explicit, Size)/FieldOffset permettent le padding, mais aucune constante publique (les aides de padding de CoreLib sont internes)."
+  },
+  {
+   "lang": "csharp",
+   "principle": "P8",
+   "blind": 3,
+   "theirs": 2,
+   "justification": "Vector<T>, Vector128/256/512 et intrins\u00e8ques X86 (Avx512F, Avx10v2) sont dans la BCL ; aucune r\u00e9association automatique."
+  },
+  {
+   "lang": "csharp",
+   "principle": "P9",
+   "blind": 1,
+   "theirs": 2,
+   "justification": "Aucune indication de branchement dans le langage ; seul le PGO dynamique du runtime, r\u00e9glage global actif par d\u00e9faut, agit sur la disposition des branches."
+  },
+  {
+   "lang": "csharp",
+   "principle": "P12",
+   "blind": 2,
+   "theirs": 3,
+   "justification": "Environment.ProcessorCount et Process.ProcessorAffinity (processus entier) ; l'affinit\u00e9 par thread est r\u00e9serv\u00e9e \u00e0 Windows et il n'y a pas d'API de topologie."
+  }
+ ],
+ "order_blind_a": [
+  "c",
+  "cpp",
+  "d",
+  "zig",
+  "odin",
+  "nim",
+  "rust",
+  "csharp"
+ ],
+ "order_blind_b": [
+  "d",
+  "zig",
+  "odin",
+  "rust",
+  "csharp",
+  "cpp",
+  "nim",
+  "c"
+ ],
+ "order_blind_p": [
+  "d",
+  "zig",
+  "odin",
+  "rust",
+  "cpp",
+  "nim",
+  "csharp",
+  "c"
+ ]
+}
