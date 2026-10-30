@@ -1,0 +1,28 @@
+c          k6   natural              q1         p0 n=10 med=0.062869s ok={True} rc=0 
+c          k4   natural_unsorted                p0 n=10 med=0.003609s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.026023s ok={True} rc=0 
+c          k4   branchless_unsorted             p0 n=10 med=0.002558s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.029233s ok={True} rc=0 
+c          k4   branchless_unsorted             p0 n=10 med=0.003237s ok={True} rc=0 
+c          k6   natural              q1         p0 n=10 med=0.074633s ok={True} rc=0 
+c          k4   natural_unsorted                p0 n=10 med=0.002991s ok={True} rc=0 
+c          k4   natural_unsorted                p0 n=10 med=0.005252s ok={True} rc=0 
+c          k4   branchless_unsorted             p0 n=10 med=0.003690s ok={True} rc=0 
+c          k6   natural              q1         p0 n=10 med=0.081028s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.029672s ok={True} rc=0 
+c          k4   natural_unsorted                p0 n=10 med=0.005334s ok={True} rc=0 
+c          k4   branchless_unsorted             p0 n=10 med=0.003027s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.027535s ok={True} rc=0 
+c          k6   natural              q1         p0 n=10 med=0.063911s ok={True} rc=0 
+c          k4   natural_unsorted                p0 n=10 med=0.002726s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.025603s ok={True} rc=0 
+c          k6   natural              q1         p0 n=10 med=0.060047s ok={True} rc=0 
+c          k4   branchless_unsorted             p0 n=10 med=0.002921s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.028901s ok={True} rc=0 
+c          k6   natural              q1         p0 n=10 med=0.059467s ok={True} rc=0 
+c          k4   natural_unsorted                p0 n=10 med=0.005255s ok={True} rc=0 
+c          k4   branchless_unsorted             p0 n=10 med=0.003168s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.027976s ok={True} rc=0 
+c          k4   branchless_unsorted             p0 n=10 med=0.002860s ok={True} rc=0 
+c          k4   natural_unsorted                p0 n=10 med=0.003385s ok={True} rc=0 
+c          k6   natural              q1         p0 n=10 med=0.064922s ok={True} rc=0 

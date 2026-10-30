@@ -1,0 +1,35 @@
+mojo_noassert k4   branchless_unsorted             p0 n=10 med=0.010906s ok={True} rc=0 
+mojo_noassert k4   natural_unsorted                p0 n=10 med=0.024539s ok={True} rc=0 
+mojo_noassert k9   natural                         p0 n=10 med=0.039204s ok={True} rc=0 
+mojo_noassert k6   natural              q6         p0 n=10 med=0.048884s ok={True} rc=0 
+mojo_noassert k6   natural              q1         p0 n=10 med=0.058642s ok={True} rc=0 
+mojo_noassert k4   natural_unsorted                p0 n=10 med=0.011165s ok={True} rc=0 
+mojo_noassert k6   natural              q1         p0 n=10 med=0.074562s ok={True} rc=0 
+mojo_noassert k6   natural              q6         p0 n=10 med=0.050345s ok={True} rc=0 
+mojo_noassert k4   branchless_unsorted             p0 n=10 med=0.012739s ok={True} rc=0 
+mojo_noassert k9   natural                         p0 n=10 med=0.046972s ok={True} rc=0 
+mojo_noassert k4   branchless_unsorted             p0 n=10 med=0.012471s ok={True} rc=0 
+mojo_noassert k9   natural                         p0 n=10 med=0.041711s ok={True} rc=0 
+mojo_noassert k6   natural              q6         p0 n=10 med=0.055165s ok={True} rc=0 
+mojo_noassert k6   natural              q1         p0 n=10 med=0.075955s ok={True} rc=0 
+mojo_noassert k4   natural_unsorted                p0 n=10 med=0.016256s ok={True} rc=0 
+mojo_noassert k6   natural              q1         p0 n=10 med=0.064841s ok={True} rc=0 
+mojo_noassert k4   natural_unsorted                p0 n=10 med=0.015843s ok={True} rc=0 
+mojo_noassert k9   natural                         p0 n=10 med=0.037808s ok={True} rc=0 
+mojo_noassert k4   branchless_unsorted             p0 n=10 med=0.012245s ok={True} rc=0 
+mojo_noassert k6   natural              q6         p0 n=10 med=0.050093s ok={True} rc=0 
+mojo_noassert k6   natural              q1         p0 n=10 med=0.079372s ok={True} rc=0 
+mojo_noassert k6   natural              q6         p0 n=10 med=0.051843s ok={True} rc=0 
+mojo_noassert k4   natural_unsorted                p0 n=10 med=0.010613s ok={True} rc=0 
+mojo_noassert k9   natural                         p0 n=10 med=0.039947s ok={True} rc=0 
+mojo_noassert k4   branchless_unsorted             p0 n=10 med=0.020492s ok={True} rc=0 
+mojo_noassert k4   branchless_unsorted             p0 n=10 med=0.010597s ok={True} rc=0 
+mojo_noassert k4   natural_unsorted                p0 n=10 med=0.011148s ok={True} rc=0 
+mojo_noassert k9   natural                         p0 n=10 med=0.039000s ok={True} rc=0 
+mojo_noassert k6   natural              q6         p0 n=10 med=0.050913s ok={True} rc=0 
+mojo_noassert k6   natural              q1         p0 n=10 med=0.056936s ok={True} rc=0 
+mojo_noassert k4   branchless_unsorted             p0 n=10 med=0.010509s ok={True} rc=0 
+mojo_noassert k6   natural              q1         p0 n=10 med=0.060467s ok={True} rc=0 
+mojo_noassert k6   natural              q6         p0 n=10 med=0.050138s ok={True} rc=0 
+mojo_noassert k9   natural                         p0 n=10 med=0.044272s ok={True} rc=0 
+mojo_noassert k4   natural_unsorted                p0 n=10 med=0.010923s ok={True} rc=0 

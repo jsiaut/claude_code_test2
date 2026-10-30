@@ -105,7 +105,9 @@ fusionner les passes répétées (355 To/s).
   `std::hardware_destructive_interference_size` vaut 64.
 * **Mojo 1.2** : la bibliothèque `std` n'expose ni `parallelize` ni API publique de threads CPU ;
   elle expose les atomiques à ordres mémoire, `prefetch`, `likely`/`unlikely` et l'assembleur en
-  ligne (`std/sys/intrinsics.mojo`, `std/sys/_assembly.mojo`).
+  ligne (`std/sys/intrinsics.mojo`, `std/sys/_assembly.mojo`). `parallelize` est passé dans le paquet
+  MAX à la 1.0 ; l'API de tâches est privée depuis la 1.1, et `async def` compile avec un avertissement
+  (« expérimental et instable ») (`docs/MOJO.md`).
 * **Ada 2022 / GNAT 16** : les boucles et réductions parallèles sont décrites dans la norme, mais
   GNAT les déclare « Feature unimplemented » (`gnat_rm.info`). L'aspect `CPU` des tâches et
   `Dispatching_Domains` sont disponibles.

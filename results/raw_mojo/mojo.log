@@ -1,0 +1,42 @@
+mojo       k4   natural_sorted                  p0 n=10 med=0.010934s ok={True} rc=0 
+mojo       k4   natural_unsorted                p0 n=10 med=0.010463s ok={True} rc=0 
+mojo       k6   natural              q1         p0 n=10 med=0.137566s ok={True} rc=0 
+mojo       k9   natural                         p0 n=10 med=0.147825s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p0 n=10 med=0.010904s ok={True} rc=0 
+mojo       k6   natural              q6         p0 n=10 med=0.062748s ok={True} rc=0 
+mojo       k6   natural              q1         p0 n=10 med=0.146000s ok={True} rc=0 
+mojo       k9   natural                         p0 n=10 med=0.175096s ok={True} rc=0 
+mojo       k4   natural_unsorted                p0 n=10 med=0.010532s ok={True} rc=0 
+mojo       k4   natural_sorted                  p0 n=10 med=0.010801s ok={True} rc=0 
+mojo       k6   natural              q6         p0 n=10 med=0.052154s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p0 n=10 med=0.010993s ok={True} rc=0 
+mojo       k6   natural              q1         p0 n=10 med=0.150584s ok={True} rc=0 
+mojo       k4   natural_unsorted                p0 n=10 med=0.019538s ok={True} rc=0 
+mojo       k6   natural              q6         p0 n=10 med=0.053995s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p0 n=10 med=0.011014s ok={True} rc=0 
+mojo       k4   natural_sorted                  p0 n=10 med=0.012316s ok={True} rc=0 
+mojo       k9   natural                         p0 n=10 med=0.179889s ok={True} rc=0 
+mojo       k9   natural                         p0 n=10 med=0.148493s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p0 n=10 med=0.011841s ok={True} rc=0 
+mojo       k4   natural_sorted                  p0 n=10 med=0.014628s ok={True} rc=0 
+mojo       k6   natural              q1         p0 n=10 med=0.135688s ok={True} rc=0 
+mojo       k4   natural_unsorted                p0 n=10 med=0.013406s ok={True} rc=0 
+mojo       k6   natural              q6         p0 n=10 med=0.050133s ok={True} rc=0 
+mojo       k6   natural              q1         p0 n=10 med=0.134701s ok={True} rc=0 
+mojo       k4   natural_sorted                  p0 n=10 med=0.010546s ok={True} rc=0 
+mojo       k6   natural              q6         p0 n=10 med=0.053138s ok={True} rc=0 
+mojo       k9   natural                         p0 n=10 med=0.184253s ok={True} rc=0 
+mojo       k4   natural_unsorted                p0 n=10 med=0.010621s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p0 n=10 med=0.011462s ok={True} rc=0 
+mojo       k6   natural              q1         p0 n=10 med=0.136768s ok={True} rc=0 
+mojo       k4   natural_sorted                  p0 n=10 med=0.010533s ok={True} rc=0 
+mojo       k9   natural                         p0 n=10 med=0.175132s ok={True} rc=0 
+mojo       k6   natural              q6         p0 n=10 med=0.050942s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p0 n=10 med=0.020872s ok={True} rc=0 
+mojo       k4   natural_unsorted                p0 n=10 med=0.020381s ok={True} rc=0 
+mojo       k4   natural_sorted                  p0 n=10 med=0.010641s ok={True} rc=0 
+mojo       k4   branchless_unsorted             p0 n=10 med=0.015986s ok={True} rc=0 
+mojo       k6   natural              q1         p0 n=10 med=0.119698s ok={True} rc=0 
+mojo       k9   natural                         p0 n=10 med=0.175068s ok={True} rc=0 
+mojo       k4   natural_unsorted                p0 n=10 med=0.024899s ok={True} rc=0 
+mojo       k6   natural              q6         p0 n=10 med=0.052525s ok={True} rc=0 
