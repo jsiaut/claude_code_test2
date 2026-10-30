@@ -361,8 +361,22 @@ def dirichlet(rng, alpha):
 
 
 # ------------------------------------------------------------------ jeux de données
-def dataset_main():
-    """Données de la configuration principale : v1 sans K5 ni K10, plus K5 de v2_k5."""
+def apply_transfers(data, path=os.path.join(ROOT, "results", "transfers.json")):
+    """Corrections d'implémentation mesurées après coup sur un autre hôte (rapports appariés, docs/ADA.md) : chaque
+    processus de la clé est multiplié par le rapport. Sans fichier, rien ne change."""
+    if not os.path.exists(path):
+        return {}
+    tr = json.load(open(path))
+    for lang, keys in tr["ratios"].items():
+        for k, r in keys.items():
+            key = tuple(k.split("|"))
+            data[lang][key] = [[t * r for t in p] for p in data[lang][key]]
+    return tr
+
+
+def dataset_main(transfers=True):
+    """Données de la configuration principale : v1 sans K5 ni K10, plus K5 de v2_k5 ; puis, si transfers, les
+    corrections transférées de results/transfers.json."""
     data, _lat_flat, _rss, invalid, sus, bridge = final_data()
     for l in data:
         for key in [k for k in data[l] if k[0] in ("k5", "k10")]:
@@ -382,6 +396,8 @@ def dataset_main():
     for l, procs in load_lat_v1().items():
         lat[l][K8N] = [p[3] for p in procs]
         # alignement des latences sur les processus retenus par final_data (mêmes processus, même ordre de fichier)
+    if transfers:
+        apply_transfers(data)
     return data, lat, invalid, sus, bridge, v1_k5, (k5, k5wit, k5inv, k5_sus, k5recs)
 
 

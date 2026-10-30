@@ -61,6 +61,7 @@ V2_OVERRIDES = {
     ("nim", "C5"): (0.5, "itérateur || du module system (OpenMP) : une réduction ne compile pas en -d:release ; erratum du 30/10, juge à l'aveugle"),
     ("nim", "E4"): (1, "importc de __builtin_prefetch"),
     # Ada (GNAT 16)
+    ("ada", "C1"): (1, "Machine_Attribute vector_type : types vectoriels GCC, extension documentée de GNAT (corrigé le 30/10)"),
     ("ada", "C2"): (1, "builtins GCC importés par Convention Intrinsic + Machine_Attribute vector_type (documentés par GNAT)"),
     ("ada", "D2"): (1, "builtins __atomic_* à ordre explicite importables comme intrinsèques"),
     ("ada", "D5"): (1, "__atomic_thread_fence et pause importés comme intrinsèques"),

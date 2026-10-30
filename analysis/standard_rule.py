@@ -52,6 +52,7 @@ R_OVERRIDES = {
     ("nim", "C5"): (0.25, "itérateur || : demande OpenMP au compilateur C (option globale)"),
     ("nim", "E4"): (0.25, "importc de __builtin_prefetch : FFI"),
     # Ada 2022 et ses annexes ; unités GNAT.*, pragmas et builtins GCC hors norme
+    ("ada", "C1"): (0.25, "Machine_Attribute vector_type : propre à GNAT (erratum du 30/10, remarque sur Ada)"),
     ("ada", "C2"): (0.25, "builtins GCC importés (Intrinsic) et type vectoriel GCC : propres à GNAT/GCC"),
     ("ada", "C4"): (0.25, "option globale seulement"),
     ("ada", "D2"): (0.5, "System.Atomic_Operations (Ada 2022) sans ordre explicite ; builtins __atomic_* hors norme"),
