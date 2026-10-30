@@ -8,3 +8,9 @@ c          k9   mt                              p0 n=10 med=0.012168s ok={True} 
 c          k5   tuned                           p0 n=10 med=0.007123s ok={True} rc=0 
 c          k4   branchless_unsorted             p0 n=10 med=0.003380s ok={True} rc=0 
 c          k9   natural                         p0 n=10 med=0.048596s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.010075s ok={True} rc=0 
+c          k5   tuned                           p0 n=10 med=0.006265s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.030406s ok={True} rc=0 
+c          k4   natural_unsorted                p0 n=10 med=0.003389s ok={True} rc=0 
+c          k4   branchless_unsorted             p0 n=10 med=0.003207s ok={True} rc=0 
+c          k4   natural_unsorted                p0 n=10 med=0.003293s ok={True} rc=0 

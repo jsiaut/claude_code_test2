@@ -60,3 +60,23 @@ zig        k8   tuned_alloc                     p0 n=3 med=0.867351s ok={True} r
 zig        k9   tuned                           p0 n=10 med=0.032067s ok={True} rc=0 
 zig        k5   tuned                           p0 n=10 med=0.006948s ok={True} rc=0 
 zig        k6   natural              q1         p0 n=10 med=0.095944s ok={True} rc=0 
+zig        k7   natural                         p0 n=3 med=1.268144s ok={True} rc=0 
+zig        k1   aos                  energy     p0 n=10 med=0.034881s ok={True} rc=0 
+zig        k4   branchless_unsorted             p0 n=10 med=0.016983s ok={True} rc=0 
+zig        k2   tuned                16384      p0 n=10 med=0.006570s ok={True} rc=0 
+zig        k3   rmw_padded                      p0 n=10 med=0.243529s ok={True} rc=0 
+zig        k2   tuned                262144     p0 n=10 med=0.018054s ok={True} rc=0 
+zig        k4   natural_unsorted                p0 n=10 med=0.007325s ok={True} rc=0 
+zig        k9   natural                         p0 n=10 med=0.033660s ok={True} rc=0 
+zig        k6   tuned                q6         p0 n=10 med=0.016370s ok={True} rc=0 
+zig        k6   mt                   q6         p0 n=10 med=0.006355s ok={True} rc=0 
+zig        k5   natural                         p0 n=10 med=0.166705s ok={True} rc=0 
+zig        k1   natural_shuffled     energy     p0 n=10 med=0.039032s ok={True} rc=0 
+zig        k6   natural              q6         p0 n=10 med=0.058076s ok={True} rc=0 
+zig        k1   natural              energy     p0 n=10 med=0.040236s ok={True} rc=0 
+zig        k8   natural                         p0 n=3 med=1.109031s ok={True} rc=0 
+zig        k2   tuned                8388608    p0 n=4 med=0.649473s ok={True} rc=0 
+zig        k3   sw_padded                       p0 n=10 med=0.081270s ok={True} rc=0 
+zig        k6   tuned                q1         p0 n=10 med=0.030102s ok={True} rc=0 
+zig        k6   mt                   q1         p0 n=10 med=0.009898s ok={True} rc=0 
+zig        k1   natural              energy     p0 n=10 med=0.042648s ok={True} rc=0 

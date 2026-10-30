@@ -10,3 +10,6 @@ zig_master_io k9   mt                              p0 n=10 med=0.017284s ok={Tru
 zig_master_io k6   mt                   q6         p0 n=10 med=0.007159s ok={True} rc=0 
 zig_master_io k9   mt                              p0 n=10 med=0.015061s ok={True} rc=0 
 zig_master_io k3   rmw_padded                      p0 n=10 med=0.240501s ok={True} rc=0 
+zig_master_io k3   sw_padded                       p0 n=10 med=0.078661s ok={True} rc=0 
+zig_master_io k6   mt                   q1         p0 n=10 med=0.009786s ok={True} rc=0 
+zig_master_io k6   mt                   q6         p0 n=10 med=0.008259s ok={True} rc=0 
