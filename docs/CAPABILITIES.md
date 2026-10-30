@@ -8,7 +8,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | **A** (25 %) | | | | | | | | | | | | | | | | | | | | | |
 | A1 agrégats valeurs en ligne dans les tableaux | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ |
 | A2 ordre/taille des champs, disposition C, offsetof | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ |
-| A3 disposition au bit près (packed, champs de bits) | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ |
+| A3 disposition au bit près (packed, champs de bits) | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ |
 | A4 alignement explicite >= 64 o | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ◐ | ○ |
 | A5 unions et réinterprétation de bits | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ |
 | A6 SoA natif | ○ | ○ | ○ | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
@@ -16,7 +16,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | A8 types numériques étroits de stockage | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ |
 | **B** (20 %) | | | | | | | | | | | | | | | | | | | | | |
 | B1 pas de GC traçant imposé | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ○ | ○ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ |
+| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ |
 | B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ |
@@ -131,12 +131,12 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 
 ### Fortran
 
-* **A** : A1 = 1 (tableau de type dérivé (bench)) ; A2 = 0.5 (bind(c)/sequence ; pas d'offsetof) ; A3 = 0 (ni packed ni champs de bits) ; A4 = 0.5 (pas d'attribut standard ; sur-allocation + c_loc (bench)) ; A5 = 1 (TRANSFER (réinterprétation arbitraire)) ; A6 = 0 (aucun) ; A7 = 1 (composantes tableaux fixes) ; A8 = 1 (int8/int16/real32)
-* **B** : B1 = 1 (pas de GC) ; B2 = 0 (aucun allocateur personnalisé) ; B3 = 1 (tableaux locaux fixes sur la pile) ; B4 = 0.5 (temporaires de tableaux implicites (copie à l'appel, expressions)) ; B5 = 1 (iso_c_binding : c_ptr, c_f_pointer)
+* **A** : A1 = 1 (tableau de type dérivé (bench)) ; A2 = 0.5 (bind(c)/sequence ; pas d'offsetof) ; A3 = 0.5 (-fpack-derived (option globale de gfortran : type de 12 à 6 octets, sonde a3) ; ni packed par type ni champs de bits ; corrigé le 30/10, remarque sur Fortran) ; A4 = 0.5 (pas d'attribut standard ; sur-allocation + c_loc (bench) ; directives OpenMP (règle v2)) ; A5 = 1 (TRANSFER (réinterprétation arbitraire)) ; A6 = 0 (aucun) ; A7 = 1 (composantes tableaux fixes) ; A8 = 1 (int8/int16/real32)
+* **B** : B1 = 1 (pas de GC) ; B2 = 0.5 (pas d'allocateur programmable ; arènes à la main comme en C (bench K8 tuned) ; allocateurs OpenMP à traits ; corrigé le 30/10, remarque sur Fortran) ; B3 = 1 (tableaux locaux fixes sur la pile) ; B4 = 0.5 (temporaires de tableaux implicites (copie à l'appel, expressions)) ; B5 = 1 (iso_c_binding : c_ptr, c_f_pointer)
 * **C** : C1 = 0 (aucun type vectoriel) ; C2 = 0 (aucun) ; C3 = 0.5 (mesuré) ; C4 = 0.5 (!$omp simd reduction (OpenMP, livré avec gfortran/flang)) ; C5 = 1 (do concurrent, syntaxe tableau (standard) + OpenMP)
 * **D** : D1 = 0.5 (pas de threads dans la norme (coarrays = images) ; OpenMP) ; D2 = 0.5 (OpenMP atomic avec clauses d'ordre ; atomic_define/atomic_ref sur coarrays) ; D3 = 0 (aucune) ; D4 = 0.5 (OMP_PROC_BIND/OMP_PLACES (OpenMP)) ; D5 = 0.5 (!$omp flush ; pas d'indication pause)
 * **E** : E1 = 1 (natif) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 0 (aucun) ; E5 = 1 (les arguments muets ne s'aliasent pas (règle du langage)) ; E6 = 1 (pas de vérification par défaut) ; E7 = 0.5 (pas de génériques (prévus après 2023) ; expressions constantes)
-* **F** : F1 = 1 (tableaux multidimensionnels natifs, ordre colonne) ; F2 = 0.5 (coarrays (multi-images via OpenCoarrays externe)) ; F3 = 0.5 (entiers signés seulement (unsigned = extension gfortran 15)) ; F4 = 0 (pas de mmap)
+* **F** : F1 = 1 (tableaux multidimensionnels natifs, ordre colonne) ; F2 = 0.5 (cotableaux : un nœud par libcaf_shmem livrée avec GCC 16 (sonde f2, 4 images), plusieurs nœuds par OpenCoarrays externe (justification mise à jour le 30/10)) ; F3 = 0.5 (entiers signés seulement (unsigned = extension gfortran 15)) ; F4 = 0 (pas de mmap)
 
 ### Chapel
 

@@ -96,6 +96,10 @@
 | fortran | A5 | 1 | 1 |  | TRANSFER(1.0) = 0x3F800000 |
 | fortran | B5 | 1 | 1 |  | c_loc + c_f_pointer :  2.0 |
 | fortran | C5 | 1 | 1 |  | do concurrent :   72.0 |
+| fortran | A3 | 0.5 | 0.5 |  | -fpack-derived (option globale) : storage_size(t) = 6 octets |
+| fortran | A4 | 0.5 | 0.5 |  | directives OpenMP : allouable mod 128 = 0 ; locale mod 256 = 0 |
+| fortran | B2 | 0.5 | 0.5 |  | arène à la main (tableau de nœuds réutilisé), comme en C : 42 |
+| fortran | F2 | 0.5 | 0.5 |  | cotableaux sur un nœud (libcaf_shmem) : images 4, somme 10 |
 | go | A2 | 1 | 1 |  | unsafe.Offsetof(S.C)=8 |
 | go | A5 | 0.5 | 0.5 |  | math.Float32bits(1)=0x3f800000 |
 | go | F4 | 0.5 | 0.5 |  | syscall.Mmap + unsafe.Slice : 0.4390046 <nil> |

@@ -10,3 +10,5 @@ fortran_exp k5   tuned                           p0 n=10 med=0.008595s ok={True}
 fortran_exp k8   tuned                           p0 n=10 med=0.183311s ok={True} rc=0 
 fortran_exp k8   tuned                           p0 n=10 med=0.141696s ok={True} rc=0 
 fortran_exp k5   tuned                           p0 n=10 med=0.008940s ok={True} rc=0 
+fortran_exp k8   tuned                           p0 n=10 med=0.181905s ok={True} rc=0 
+fortran_exp k5   tuned                           p0 n=10 med=0.006788s ok={True} rc=0 

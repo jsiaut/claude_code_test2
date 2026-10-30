@@ -8,6 +8,7 @@
  "csharp": 0.0,
  "d": 0.5,
  "fortran": 0.5,
+ "fortran_fix": 1.0,
  "fortran_flang": 1.0,
  "go": 0.0,
  "haskell": 0.0,
