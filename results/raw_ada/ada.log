@@ -25,3 +25,6 @@ ada        k5   natural                         p0 n=10 med=0.175883s ok={True} 
 ada        k2   tuned                16384      p0 n=10 med=0.012977s ok={True} rc=0 
 ada        k1   soa                  energy     p0 n=10 med=0.005091s ok={True} rc=0 
 ada        k8   tuned                           p0 n=10 med=0.125290s ok={True} rc=0 
+ada        k1   soa                  energy     p0 n=10 med=0.006121s ok={True} rc=0 
+ada        k8   tuned_alloc                     p0 n=10 med=0.191359s ok={True} rc=0 
+ada        k3   rmw_padded                      p0 n=10 med=0.268575s ok={True} rc=0 

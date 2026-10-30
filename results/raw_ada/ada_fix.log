@@ -29,3 +29,5 @@ ada_fix    k9   tuned                           p0 n=10 med=0.026638s ok={True} 
 ada_fix    k6   natural              q1         p0 n=10 med=0.113746s ok={True} rc=0 
 ada_fix    k3   sw_padded                       p0 n=10 med=0.080282s ok={True} rc=0 
 ada_fix    k9   mt                              p0 n=10 med=0.018766s ok={True} rc=0 
+ada_fix    k3   rmw_padded                      p0 n=10 med=0.291220s ok={True} rc=0 
+ada_fix    k5   natural                         p0 n=10 med=0.168195s ok={True} rc=0 
