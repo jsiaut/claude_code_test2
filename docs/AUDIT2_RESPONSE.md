@@ -6,7 +6,8 @@ cités ici sont les siens. J'ai recalculé chacune de ses affirmations chiffrée
 explications de mécanisme par des sondes. J'y réponds par une analyse v3. Son plan
 ([`docs/ANALYSIS_V3.md`](ANALYSIS_V3.md)) a été poussé avant tout calcul (15:54, commit `ae9e1a1`), et son code
 avant son premier calcul sur les données (commit `d0b959b`). Les analyses v1 et v2 restent publiées telles
-quelles.*
+quelles. Les renvois au README visent sa version du 29 octobre (commit `d12948a`) ; il a été
+réécrit le 30 octobre autour du classement final.*
 
 ## 1. En bref
 
@@ -135,8 +136,7 @@ eux dans 9 % des tirages de l'analyse globale. Et C# ne précède Java que dans 
 * code naturel D1 : {C, C++, C3, Chapel, D, Fortran, Julia, Nim, Odin, Rust, Zig} > Ada > {C#, Go, Java, Mojo} >
   OCaml > JavaScript > Haskell > Lua > Python.
 
-Les rangs que les paires établies laissent possibles à chaque langage sont dans le README (tableau de la section 2)
-et dans `results/report_v3.md`.
+Les rangs que les paires établies laissent possibles à chaque langage sont dans `results/report_v3.md`.
 
 **Réplication : bruit ou interaction ?** 2 000 simulations sans interaction, avec le bruit mesuré entre processus.
 

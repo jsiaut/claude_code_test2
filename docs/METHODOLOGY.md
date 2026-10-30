@@ -441,4 +441,11 @@ Robustesse :
   (`clock_gettime`). Pendant ces mesures, je n'ai lancé que l'analyse de la passe de comptage déjà terminée (moins
   d'une minute, pendant les allocations, qui ne sont pas chronométrées) et ce strace d'une répétition d'Odin, avant
   le pilote. Les fichiers de mesure étaient retirés du suivi Git pendant les mesures ; ils y reviennent complets.
+* 2026-10-30 : **README réécrit autour d'un classement unique**, à la demande de l'utilisateur, qui voulait un vrai
+  classement et un document lisible. L'ordre retenu est le rang moyen sur les 20 000 variantes de l'analyse globale
+  v3 (1 + la somme, sur les autres langages, de la probabilité de passer devant). Ce critère est choisi après coup,
+  en connaissant les résultats ; il suit le score de la configuration de référence, sauf pour deux paires voisines
+  (C3 et Zig, Rust et D), que la plupart des variantes et la réplication sur la machine 3 inversent. Les plages de
+  rang (5–95 %) et les probabilités de devancer le voisin sont publiées à côté. Les versions précédentes du README
+  restent dans l'historique Git.
 

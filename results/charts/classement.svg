@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="624" viewBox="0 0 760 624" role="img" aria-label="Classement final et plage de rang plausible">
+<style>
+  svg { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781; --grid: #e1e0d9; --axis: #c3c2b7;
+        --s1: #2a78d6; --band: #b7d3f6; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    svg { --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781; --grid: #2c2c2a; --axis: #383835;
+          --s1: #3987e5; --band: #184f95; }
+  }
+  .bg { fill: var(--surface); } .t1 { fill: var(--ink); font-size: 15px; font-weight: 600; }
+  .t2 { fill: var(--ink2); font-size: 12px; } .lab { fill: var(--ink); font-size: 12px; }
+  .tick { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .grid { stroke: var(--grid); stroke-width: 1; } .axis { stroke: var(--axis); stroke-width: 1; }
+  .band { fill: var(--band); } .ua { stroke: var(--ink2); stroke-width: 2; stroke-linecap: round; }
+  .dot { fill: var(--s1); stroke: var(--surface); stroke-width: 2; }
+  .dot2 { fill: var(--muted); stroke: var(--surface); stroke-width: 2; }
+  .sep { stroke: var(--axis); stroke-width: 1; }
+</style>
+<rect class="bg" width="760" height="624"/>
+<text class="t1" x="16" y="26">Classement final</text>
+<text class="t2" x="16" y="46">Point : rang moyen sur 20 000 variantes de l'analyse (poids, méthodes, jugements, bruit).</text>
+<text class="t2" x="16" y="62">Trait : rang dans 90 % de ces variantes. À droite : score de la configuration de référence.</text>
+<line class="grid" x1="118.0" x2="118.0" y1="70" y2="578"/>
+<text class="tick" x="118.0" y="596" text-anchor="middle">1</text>
+<line class="grid" x1="232.4" x2="232.4" y1="70" y2="578"/>
+<text class="tick" x="232.4" y="596" text-anchor="middle">5</text>
+<line class="grid" x1="375.4" x2="375.4" y1="70" y2="578"/>
+<text class="tick" x="375.4" y="596" text-anchor="middle">10</text>
+<line class="grid" x1="518.4" x2="518.4" y1="70" y2="578"/>
+<text class="tick" x="518.4" y="596" text-anchor="middle">15</text>
+<line class="grid" x1="690.0" x2="690.0" y1="70" y2="578"/>
+<text class="tick" x="690.0" y="596" text-anchor="middle">21</text>
+<text class="t2" x="404" y="616" text-anchor="middle">rang</text>
+<g><title>1. C : rang moyen 1,8, rang plausible 1–4, score 79,1</title><rect x="16" y="74.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="90.0" text-anchor="end">1. C</text><line class="ua" x1="118.0" x2="203.8" y1="86.0" y2="86.0"/><circle class="dot" cx="140.7" cy="86.0" r="5"/><text class="tick" x="744" y="90.0" text-anchor="end">79,1</text></g>
+<g><title>2. C++ : rang moyen 2,6, rang plausible 1–6, score 77,1</title><rect x="16" y="98.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="114.0" text-anchor="end">2. C++</text><line class="ua" x1="118.0" x2="261.0" y1="110.0" y2="110.0"/><circle class="dot" cx="162.6" cy="110.0" r="5"/><text class="tick" x="744" y="114.0" text-anchor="end">77,1</text></g>
+<g><title>3. Odin : rang moyen 3,6, rang plausible 1–7, score 72,6</title><rect x="16" y="122.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="138.0" text-anchor="end">3. Odin</text><line class="ua" x1="118.0" x2="289.6" y1="134.0" y2="134.0"/><circle class="dot" cx="193.7" cy="134.0" r="5"/><text class="tick" x="744" y="138.0" text-anchor="end">72,6</text></g>
+<g><title>4. C3 : rang moyen 4,8, rang plausible 2–8, score 71,1</title><rect x="16" y="146.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="162.0" text-anchor="end">4. C3</text><line class="ua" x1="146.6" x2="318.2" y1="158.0" y2="158.0"/><circle class="dot" cx="226.2" cy="158.0" r="5"/><text class="tick" x="744" y="162.0" text-anchor="end">71,1</text></g>
+<g><title>5. Zig : rang moyen 5,5, rang plausible 2–10, score 71,5</title><rect x="16" y="170.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="186.0" text-anchor="end">5. Zig</text><line class="ua" x1="146.6" x2="375.4" y1="182.0" y2="182.0"/><circle class="dot" cx="246.7" cy="182.0" r="5"/><text class="tick" x="744" y="186.0" text-anchor="end">71,5</text></g>
+<g><title>6. Nim : rang moyen 5,8, rang plausible 2–9, score 70,5</title><rect x="16" y="194.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="210.0" text-anchor="end">6. Nim</text><line class="ua" x1="146.6" x2="346.8" y1="206.0" y2="206.0"/><circle class="dot" cx="256.7" cy="206.0" r="5"/><text class="tick" x="744" y="210.0" text-anchor="end">70,5</text></g>
+<g><title>7. Rust : rang moyen 6,8, rang plausible 4–10, score 69,4</title><rect x="16" y="218.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="234.0" text-anchor="end">7. Rust</text><line class="ua" x1="203.8" x2="375.4" y1="230.0" y2="230.0"/><circle class="dot" cx="283.4" cy="230.0" r="5"/><text class="tick" x="744" y="234.0" text-anchor="end">69,4</text></g>
+<g><title>8. D : rang moyen 8,3, rang plausible 4–12, score 70,0</title><rect x="16" y="242.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="258.0" text-anchor="end">8. D</text><line class="ua" x1="203.8" x2="432.6" y1="254.0" y2="254.0"/><circle class="dot" cx="327.8" cy="254.0" r="5"/><text class="tick" x="744" y="258.0" text-anchor="end">70,0</text></g>
+<g><title>9. Ada : rang moyen 8,4, rang plausible 3–12, score 68,0</title><rect x="16" y="266.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="282.0" text-anchor="end">9. Ada</text><line class="ua" x1="175.2" x2="432.6" y1="278.0" y2="278.0"/><circle class="dot" cx="329.9" cy="278.0" r="5"/><text class="tick" x="744" y="282.0" text-anchor="end">68,0</text></g>
+<g><title>10. Chapel : rang moyen 9,1, rang plausible 5–13, score 64,1</title><rect x="16" y="290.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="306.0" text-anchor="end">10. Chapel</text><line class="ua" x1="232.4" x2="461.2" y1="302.0" y2="302.0"/><circle class="dot" cx="348.9" cy="302.0" r="5"/><text class="tick" x="744" y="306.0" text-anchor="end">64,1</text></g>
+<g><title>11. Julia : rang moyen 10,9, rang plausible 8–13, score 62,3</title><rect x="16" y="314.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="330.0" text-anchor="end">11. Julia</text><line class="ua" x1="318.2" x2="461.2" y1="326.0" y2="326.0"/><circle class="dot" cx="401.0" cy="326.0" r="5"/><text class="tick" x="744" y="330.0" text-anchor="end">62,3</text></g>
+<g><title>12. Fortran : rang moyen 11,5, rang plausible 8–14, score 60,9</title><rect x="16" y="338.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="354.0" text-anchor="end">12. Fortran</text><line class="ua" x1="318.2" x2="489.8" y1="350.0" y2="350.0"/><circle class="dot" cx="419.3" cy="350.0" r="5"/><text class="tick" x="744" y="354.0" text-anchor="end">60,9</text></g>
+<g><title>13. Mojo : rang moyen 12,1, rang plausible 10–14, score 60,0</title><rect x="16" y="362.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="378.0" text-anchor="end">13. Mojo</text><line class="ua" x1="375.4" x2="489.8" y1="374.0" y2="374.0"/><circle class="dot" cx="436.0" cy="374.0" r="5"/><text class="tick" x="744" y="378.0" text-anchor="end">60,0</text></g>
+<g><title>14. C# : rang moyen 14,0, rang plausible 12–16, score 54,8</title><rect x="16" y="386.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="402.0" text-anchor="end">14. C#</text><line class="ua" x1="432.6" x2="547.0" y1="398.0" y2="398.0"/><circle class="dot" cx="490.2" cy="398.0" r="5"/><text class="tick" x="744" y="402.0" text-anchor="end">54,8</text></g>
+<g><title>15. Java : rang moyen 15,2, rang plausible 14–16, score 47,4</title><rect x="16" y="410.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="426.0" text-anchor="end">15. Java</text><line class="ua" x1="489.8" x2="547.0" y1="422.0" y2="422.0"/><circle class="dot" cx="523.3" cy="422.0" r="5"/><text class="tick" x="744" y="426.0" text-anchor="end">47,4</text></g>
+<g><title>16. Go : rang moyen 15,6, rang plausible 14–16, score 43,1</title><rect x="16" y="434.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="450.0" text-anchor="end">16. Go</text><line class="ua" x1="489.8" x2="547.0" y1="446.0" y2="446.0"/><circle class="dot" cx="535.1" cy="446.0" r="5"/><text class="tick" x="744" y="450.0" text-anchor="end">43,1</text></g>
+<g><title>17. Haskell : rang moyen 17,0, rang plausible 17–17, score 35,4</title><rect x="16" y="458.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="474.0" text-anchor="end">17. Haskell</text><line class="ua" x1="575.6" x2="575.6" y1="470.0" y2="470.0"/><circle class="dot" cx="575.0" cy="470.0" r="5"/><text class="tick" x="744" y="474.0" text-anchor="end">35,4</text></g>
+<g><title>18. OCaml : rang moyen 18,0, rang plausible 18–18, score 24,7</title><rect x="16" y="482.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="498.0" text-anchor="end">18. OCaml</text><line class="ua" x1="604.2" x2="604.2" y1="494.0" y2="494.0"/><circle class="dot" cx="603.7" cy="494.0" r="5"/><text class="tick" x="744" y="498.0" text-anchor="end">24,7</text></g>
+<g><title>19. JavaScript : rang moyen 19,1, rang plausible 19–20, score 14,7</title><rect x="16" y="506.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="522.0" text-anchor="end">19. JavaScript</text><line class="ua" x1="632.8" x2="661.4" y1="518.0" y2="518.0"/><circle class="dot" cx="634.9" cy="518.0" r="5"/><text class="tick" x="744" y="522.0" text-anchor="end">14,7</text></g>
+<g><title>20. Python : rang moyen 20,3, rang plausible 19–21, score 10,0</title><rect x="16" y="530.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="546.0" text-anchor="end">20. Python</text><line class="ua" x1="632.8" x2="690.0" y1="542.0" y2="542.0"/><circle class="dot" cx="669.5" cy="542.0" r="5"/><text class="tick" x="744" y="546.0" text-anchor="end">10,0</text></g>
+<g><title>21. Lua : rang moyen 20,6, rang plausible 20–21, score 4,0</title><rect x="16" y="554.0" width="728" height="24" fill="transparent"/><text class="lab" x="106" y="570.0" text-anchor="end">21. Lua</text><line class="ua" x1="661.4" x2="690.0" y1="566.0" y2="566.0"/><circle class="dot" cx="679.6" cy="566.0" r="5"/><text class="tick" x="744" y="570.0" text-anchor="end">4,0</text></g>
+</svg>

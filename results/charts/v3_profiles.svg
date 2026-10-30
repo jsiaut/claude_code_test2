@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="760" height="679" viewBox="0 0 760 679" role="img" aria-label="Plafond et code naturel par langage, sur deux machines">
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="599" viewBox="0 0 760 599" role="img" aria-label="Plafond et code naturel par langage, sur deux machines">
 <style>
   svg { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781; --grid: #e1e0d9; --axis: #c3c2b7;
         --s1: #2a78d6; --band: #b7d3f6; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -15,104 +15,97 @@
   .dot2 { fill: var(--muted); stroke: var(--surface); stroke-width: 2; }
   .sep { stroke: var(--axis); stroke-width: 1; }
 </style>
-<rect class="bg" width="760" height="679"/>
+<rect class="bg" width="760" height="599"/>
 <text class="t1" x="16" y="26">Plafond et code naturel, par langage et par machine</text>
 <text class="t2" x="16" y="46">E : meilleur code écrit pour la machine ; D1 : code naturel. Chacun est rapporté au meilleur langage de chaque</text>
-<text class="t2" x="16" y="62">mesure, sur chaque machine. Étages : règle du plan v3, sans ordre à l'intérieur d'un étage. K5 vient de la machine 3.</text>
+<text class="t2" x="16" y="62">mesure, sur chaque machine. Lignes dans l'ordre du classement final. K5 vient de la machine 3.</text>
 <line class="ua" x1="16" x2="42" y1="84" y2="84"/><circle class="dot" cx="29" cy="84" r="5"/><text class="t2" x="50" y="88">machine 1 (Cascade Lake) et son IC à 95 %</text>
 <circle class="dot2" cx="330" cy="84" r="4.5"/><text class="t2" x="342" y="88">machine 3 (Emerald Rapids), un processus par mesure</text>
 <text class="lab" x="112.0" y="108" font-weight="600">Plafond E (0–100)</text>
-<line class="grid" x1="112.0" x2="112.0" y1="118" y2="639"/>
-<text class="tick" x="112.0" y="655" text-anchor="middle">0</text>
-<line class="grid" x1="185.8" x2="185.8" y1="118" y2="639"/>
-<text class="tick" x="185.8" y="655" text-anchor="middle">25</text>
-<line class="grid" x1="259.5" x2="259.5" y1="118" y2="639"/>
-<text class="tick" x="259.5" y="655" text-anchor="middle">50</text>
-<line class="grid" x1="333.2" x2="333.2" y1="118" y2="639"/>
-<text class="tick" x="333.2" y="655" text-anchor="middle">75</text>
-<line class="grid" x1="407.0" x2="407.0" y1="118" y2="639"/>
-<text class="tick" x="407.0" y="655" text-anchor="middle">100</text>
-<g><title>C, étage 1 : E 85,4 [82,5–88,6] sur la machine 1, 59,8 sur la machine 3</title><rect x="112.0" y="138.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="355.5" x2="373.3" y1="148.5" y2="148.5"/><circle class="dot2" cx="288.5" cy="148.5" r="4.5"/><circle class="dot" cx="364.0" cy="148.5" r="5"/></g>
-<g><title>C3, étage 1 : E 82,6 [80,4–85,8] sur la machine 1, 70,4 sur la machine 3</title><rect x="112.0" y="159.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="349.3" x2="365.3" y1="169.5" y2="169.5"/><circle class="dot2" cx="319.6" cy="169.5" r="4.5"/><circle class="dot" cx="355.8" cy="169.5" r="5"/></g>
-<g><title>Chapel, étage 1 : E 80,3 [78,0–83,4] sur la machine 1, 59,2 sur la machine 3</title><rect x="112.0" y="180.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="342.1" x2="358.0" y1="190.5" y2="190.5"/><circle class="dot2" cx="286.7" cy="190.5" r="4.5"/><circle class="dot" cx="349.0" cy="190.5" r="5"/></g>
-<g><title>Rust, étage 1 : E 79,7 [76,9–82,7] sur la machine 1, 71,8 sur la machine 3</title><rect x="112.0" y="201.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="339.0" x2="355.9" y1="211.5" y2="211.5"/><circle class="dot2" cx="323.9" cy="211.5" r="4.5"/><circle class="dot" cx="347.1" cy="211.5" r="5"/></g>
-<g><title>C++, étage 1 : E 78,8 [76,5–82,0] sur la machine 1, 65,6 sur la machine 3</title><rect x="112.0" y="222.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="337.6" x2="354.0" y1="232.5" y2="232.5"/><circle class="dot2" cx="305.6" cy="232.5" r="4.5"/><circle class="dot" cx="344.4" cy="232.5" r="5"/></g>
-<g><title>Odin, étage 1 : E 78,7 [76,1–81,7] sur la machine 1, 54,9 sur la machine 3</title><rect x="112.0" y="243.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="336.5" x2="353.0" y1="253.5" y2="253.5"/><circle class="dot2" cx="274.1" cy="253.5" r="4.5"/><circle class="dot" cx="344.1" cy="253.5" r="5"/></g>
-<g><title>D, étage 1 : E 74,8 [72,3–77,7] sur la machine 1, 65,8 sur la machine 3</title><rect x="112.0" y="264.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="325.3" x2="341.2" y1="274.5" y2="274.5"/><circle class="dot2" cx="306.2" cy="274.5" r="4.5"/><circle class="dot" cx="332.7" cy="274.5" r="5"/></g>
-<g><title>Ada, étage 1 : E 73,9 [71,0–76,8] sur la machine 1, 61,8 sur la machine 3</title><rect x="112.0" y="285.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="321.4" x2="338.5" y1="295.5" y2="295.5"/><circle class="dot2" cx="294.4" cy="295.5" r="4.5"/><circle class="dot" cx="330.1" cy="295.5" r="5"/></g>
-<g><title>Nim, étage 1 : E 73,0 [70,7–75,7] sur la machine 1, 68,2 sur la machine 3</title><rect x="112.0" y="306.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="320.6" x2="335.3" y1="316.5" y2="316.5"/><circle class="dot2" cx="313.3" cy="316.5" r="4.5"/><circle class="dot" cx="327.4" cy="316.5" r="5"/></g>
-<g><title>Zig, étage 1 : E 70,8 [68,4–73,6] sur la machine 1, 50,1 sur la machine 3</title><rect x="112.0" y="327.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="313.8" x2="329.1" y1="337.5" y2="337.5"/><circle class="dot2" cx="259.7" cy="337.5" r="4.5"/><circle class="dot" cx="321.0" cy="337.5" r="5"/></g>
-<g><title>Mojo, étage 1 : E 68,0 [66,0–70,4] sur la machine 1, 58,1 sur la machine 3</title><rect x="112.0" y="348.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="306.8" x2="319.8" y1="358.5" y2="358.5"/><circle class="dot2" cx="283.3" cy="358.5" r="4.5"/><circle class="dot" cx="312.5" cy="358.5" r="5"/></g>
-<g><title>Fortran, étage 1 : E 67,3 [65,1–69,8] sur la machine 1, 45,0 sur la machine 3</title><rect x="112.0" y="369.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="304.0" x2="318.0" y1="379.5" y2="379.5"/><circle class="dot2" cx="244.8" cy="379.5" r="4.5"/><circle class="dot" cx="310.6" cy="379.5" r="5"/></g>
-<g><title>Julia, étage 1 : E 66,7 [64,5–69,3] sur la machine 1, 47,2 sur la machine 3</title><rect x="112.0" y="390.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="302.4" x2="316.3" y1="400.5" y2="400.5"/><circle class="dot2" cx="251.2" cy="400.5" r="4.5"/><circle class="dot" cx="308.8" cy="400.5" r="5"/></g>
-<g><title>Java, étage 1 : E 57,7 [55,5–59,9] sur la machine 1, 47,7 sur la machine 3</title><rect x="112.0" y="411.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="275.6" x2="288.6" y1="421.5" y2="421.5"/><circle class="dot2" cx="252.8" cy="421.5" r="4.5"/><circle class="dot" cx="282.1" cy="421.5" r="5"/></g>
-<g><title>C#, étage 1 : E 56,3 [54,2–58,3] sur la machine 1, 40,8 sur la machine 3</title><rect x="112.0" y="432.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="271.9" x2="284.1" y1="442.5" y2="442.5"/><circle class="dot2" cx="232.2" cy="442.5" r="4.5"/><circle class="dot" cx="278.0" cy="442.5" r="5"/></g>
-<g><title>Go, étage 1 : E 38,6 [37,3–40,0] sur la machine 1, 27,5 sur la machine 3</title><rect x="112.0" y="453.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="222.1" x2="230.1" y1="463.5" y2="463.5"/><circle class="dot2" cx="193.2" cy="463.5" r="4.5"/><circle class="dot" cx="225.8" cy="463.5" r="5"/></g>
-<g><title>Haskell, étage 2 : E 37,1 [35,8–38,4] sur la machine 1, 26,2 sur la machine 3</title><rect x="112.0" y="494.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="217.7" x2="225.2" y1="504.5" y2="504.5"/><circle class="dot2" cx="189.3" cy="504.5" r="4.5"/><circle class="dot" cx="221.3" cy="504.5" r="5"/></g>
-<g><title>OCaml, étage 3 : E 19,9 [19,3–20,6] sur la machine 1, 14,3 sur la machine 3</title><rect x="112.0" y="535.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="168.8" x2="172.8" y1="545.5" y2="545.5"/><circle class="dot2" cx="154.2" cy="545.5" r="4.5"/><circle class="dot" cx="170.8" cy="545.5" r="5"/></g>
-<g><title>JavaScript, étage 4 : E 12,4 [12,0–12,8] sur la machine 1, 8,3 sur la machine 3</title><rect x="112.0" y="576.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="147.4" x2="149.9" y1="586.5" y2="586.5"/><circle class="dot2" cx="136.5" cy="586.5" r="4.5"/><circle class="dot" cx="148.5" cy="586.5" r="5"/></g>
-<g><title>Lua, étage 4 : E 1,2 [1,2–1,2] sur la machine 1, 0,9 sur la machine 3</title><rect x="112.0" y="597.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="115.4" x2="115.7" y1="607.5" y2="607.5"/><circle class="dot2" cx="114.6" cy="607.5" r="4.5"/><circle class="dot" cx="115.5" cy="607.5" r="5"/></g>
-<g><title>Python, étage 4 : E 0,5 [0,5–0,5] sur la machine 1, 0,4 sur la machine 3</title><rect x="112.0" y="618.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="113.4" x2="113.5" y1="628.5" y2="628.5"/><circle class="dot2" cx="113.1" cy="628.5" r="4.5"/><circle class="dot" cx="113.5" cy="628.5" r="5"/></g>
+<line class="grid" x1="112.0" x2="112.0" y1="118" y2="559"/>
+<text class="tick" x="112.0" y="575" text-anchor="middle">0</text>
+<line class="grid" x1="185.8" x2="185.8" y1="118" y2="559"/>
+<text class="tick" x="185.8" y="575" text-anchor="middle">25</text>
+<line class="grid" x1="259.5" x2="259.5" y1="118" y2="559"/>
+<text class="tick" x="259.5" y="575" text-anchor="middle">50</text>
+<line class="grid" x1="333.2" x2="333.2" y1="118" y2="559"/>
+<text class="tick" x="333.2" y="575" text-anchor="middle">75</text>
+<line class="grid" x1="407.0" x2="407.0" y1="118" y2="559"/>
+<text class="tick" x="407.0" y="575" text-anchor="middle">100</text>
+<g><title>1. C : E 85,4 [82,5–88,6] sur la machine 1, 59,8 sur la machine 3</title><rect x="112.0" y="118.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="355.5" x2="373.3" y1="128.5" y2="128.5"/><circle class="dot2" cx="288.5" cy="128.5" r="4.5"/><circle class="dot" cx="364.0" cy="128.5" r="5"/></g>
+<g><title>2. C++ : E 78,8 [76,5–82,0] sur la machine 1, 65,6 sur la machine 3</title><rect x="112.0" y="139.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="337.6" x2="354.0" y1="149.5" y2="149.5"/><circle class="dot2" cx="305.6" cy="149.5" r="4.5"/><circle class="dot" cx="344.4" cy="149.5" r="5"/></g>
+<g><title>3. Odin : E 78,7 [76,1–81,7] sur la machine 1, 54,9 sur la machine 3</title><rect x="112.0" y="160.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="336.5" x2="353.0" y1="170.5" y2="170.5"/><circle class="dot2" cx="274.1" cy="170.5" r="4.5"/><circle class="dot" cx="344.1" cy="170.5" r="5"/></g>
+<g><title>4. C3 : E 82,6 [80,4–85,8] sur la machine 1, 70,4 sur la machine 3</title><rect x="112.0" y="181.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="349.3" x2="365.3" y1="191.5" y2="191.5"/><circle class="dot2" cx="319.6" cy="191.5" r="4.5"/><circle class="dot" cx="355.8" cy="191.5" r="5"/></g>
+<g><title>5. Zig : E 70,8 [68,4–73,6] sur la machine 1, 50,1 sur la machine 3</title><rect x="112.0" y="202.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="313.8" x2="329.1" y1="212.5" y2="212.5"/><circle class="dot2" cx="259.7" cy="212.5" r="4.5"/><circle class="dot" cx="321.0" cy="212.5" r="5"/></g>
+<g><title>6. Nim : E 73,0 [70,7–75,7] sur la machine 1, 68,2 sur la machine 3</title><rect x="112.0" y="223.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="320.6" x2="335.3" y1="233.5" y2="233.5"/><circle class="dot2" cx="313.3" cy="233.5" r="4.5"/><circle class="dot" cx="327.4" cy="233.5" r="5"/></g>
+<g><title>7. Rust : E 79,7 [76,9–82,7] sur la machine 1, 71,8 sur la machine 3</title><rect x="112.0" y="244.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="339.0" x2="355.9" y1="254.5" y2="254.5"/><circle class="dot2" cx="323.9" cy="254.5" r="4.5"/><circle class="dot" cx="347.1" cy="254.5" r="5"/></g>
+<g><title>8. D : E 74,8 [72,3–77,7] sur la machine 1, 65,8 sur la machine 3</title><rect x="112.0" y="265.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="325.3" x2="341.2" y1="275.5" y2="275.5"/><circle class="dot2" cx="306.2" cy="275.5" r="4.5"/><circle class="dot" cx="332.7" cy="275.5" r="5"/></g>
+<g><title>9. Ada : E 73,9 [71,0–76,8] sur la machine 1, 61,8 sur la machine 3</title><rect x="112.0" y="286.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="321.4" x2="338.5" y1="296.5" y2="296.5"/><circle class="dot2" cx="294.4" cy="296.5" r="4.5"/><circle class="dot" cx="330.1" cy="296.5" r="5"/></g>
+<g><title>10. Chapel : E 80,3 [78,0–83,4] sur la machine 1, 59,2 sur la machine 3</title><rect x="112.0" y="307.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="342.1" x2="358.0" y1="317.5" y2="317.5"/><circle class="dot2" cx="286.7" cy="317.5" r="4.5"/><circle class="dot" cx="349.0" cy="317.5" r="5"/></g>
+<g><title>11. Julia : E 66,7 [64,5–69,3] sur la machine 1, 47,2 sur la machine 3</title><rect x="112.0" y="328.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="302.4" x2="316.3" y1="338.5" y2="338.5"/><circle class="dot2" cx="251.2" cy="338.5" r="4.5"/><circle class="dot" cx="308.8" cy="338.5" r="5"/></g>
+<g><title>12. Fortran : E 67,3 [65,1–69,8] sur la machine 1, 45,0 sur la machine 3</title><rect x="112.0" y="349.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="304.0" x2="318.0" y1="359.5" y2="359.5"/><circle class="dot2" cx="244.8" cy="359.5" r="4.5"/><circle class="dot" cx="310.6" cy="359.5" r="5"/></g>
+<g><title>13. Mojo : E 68,0 [66,0–70,4] sur la machine 1, 58,1 sur la machine 3</title><rect x="112.0" y="370.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="306.8" x2="319.8" y1="380.5" y2="380.5"/><circle class="dot2" cx="283.3" cy="380.5" r="4.5"/><circle class="dot" cx="312.5" cy="380.5" r="5"/></g>
+<g><title>14. C# : E 56,3 [54,2–58,3] sur la machine 1, 40,8 sur la machine 3</title><rect x="112.0" y="391.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="271.9" x2="284.1" y1="401.5" y2="401.5"/><circle class="dot2" cx="232.2" cy="401.5" r="4.5"/><circle class="dot" cx="278.0" cy="401.5" r="5"/></g>
+<g><title>15. Java : E 57,7 [55,5–59,9] sur la machine 1, 47,7 sur la machine 3</title><rect x="112.0" y="412.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="275.6" x2="288.6" y1="422.5" y2="422.5"/><circle class="dot2" cx="252.8" cy="422.5" r="4.5"/><circle class="dot" cx="282.1" cy="422.5" r="5"/></g>
+<g><title>16. Go : E 38,6 [37,3–40,0] sur la machine 1, 27,5 sur la machine 3</title><rect x="112.0" y="433.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="222.1" x2="230.1" y1="443.5" y2="443.5"/><circle class="dot2" cx="193.2" cy="443.5" r="4.5"/><circle class="dot" cx="225.8" cy="443.5" r="5"/></g>
+<g><title>17. Haskell : E 37,1 [35,8–38,4] sur la machine 1, 26,2 sur la machine 3</title><rect x="112.0" y="454.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="217.7" x2="225.2" y1="464.5" y2="464.5"/><circle class="dot2" cx="189.3" cy="464.5" r="4.5"/><circle class="dot" cx="221.3" cy="464.5" r="5"/></g>
+<g><title>18. OCaml : E 19,9 [19,3–20,6] sur la machine 1, 14,3 sur la machine 3</title><rect x="112.0" y="475.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="168.8" x2="172.8" y1="485.5" y2="485.5"/><circle class="dot2" cx="154.2" cy="485.5" r="4.5"/><circle class="dot" cx="170.8" cy="485.5" r="5"/></g>
+<g><title>19. JavaScript : E 12,4 [12,0–12,8] sur la machine 1, 8,3 sur la machine 3</title><rect x="112.0" y="496.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="147.4" x2="149.9" y1="506.5" y2="506.5"/><circle class="dot2" cx="136.5" cy="506.5" r="4.5"/><circle class="dot" cx="148.5" cy="506.5" r="5"/></g>
+<g><title>20. Python : E 0,5 [0,5–0,5] sur la machine 1, 0,4 sur la machine 3</title><rect x="112.0" y="517.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="113.4" x2="113.5" y1="527.5" y2="527.5"/><circle class="dot2" cx="113.1" cy="527.5" r="4.5"/><circle class="dot" cx="113.5" cy="527.5" r="5"/></g>
+<g><title>21. Lua : E 1,2 [1,2–1,2] sur la machine 1, 0,9 sur la machine 3</title><rect x="112.0" y="538.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="115.4" x2="115.7" y1="548.5" y2="548.5"/><circle class="dot2" cx="114.6" cy="548.5" r="4.5"/><circle class="dot" cx="115.5" cy="548.5" r="5"/></g>
 <text class="lab" x="441.0" y="108" font-weight="600">Code naturel D1 (sur 100)</text>
-<line class="grid" x1="441.0" x2="441.0" y1="118" y2="639"/>
-<text class="tick" x="441.0" y="655" text-anchor="middle">0</text>
-<line class="grid" x1="500.0" x2="500.0" y1="118" y2="639"/>
-<text class="tick" x="500.0" y="655" text-anchor="middle">5</text>
-<line class="grid" x1="559.0" x2="559.0" y1="118" y2="639"/>
-<text class="tick" x="559.0" y="655" text-anchor="middle">10</text>
-<line class="grid" x1="618.0" x2="618.0" y1="118" y2="639"/>
-<text class="tick" x="618.0" y="655" text-anchor="middle">15</text>
-<line class="grid" x1="677.0" x2="677.0" y1="118" y2="639"/>
-<text class="tick" x="677.0" y="655" text-anchor="middle">20</text>
-<line class="grid" x1="736.0" x2="736.0" y1="118" y2="639"/>
-<text class="tick" x="736.0" y="655" text-anchor="middle">25</text>
-<g><title>C, étage 1 : D1 19,1 [18,3–20,0] sur la machine 1, 20,8 sur la machine 3</title><rect x="441.0" y="138.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="656.4" x2="676.5" y1="148.5" y2="148.5"/><circle class="dot2" cx="686.5" cy="148.5" r="4.5"/><circle class="dot" cx="666.7" cy="148.5" r="5"/></g>
-<g><title>C3, étage 1 : D1 19,0 [18,2–19,8] sur la machine 1, 18,3 sur la machine 3</title><rect x="441.0" y="159.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="656.0" x2="674.8" y1="169.5" y2="169.5"/><circle class="dot2" cx="657.2" cy="169.5" r="4.5"/><circle class="dot" cx="665.2" cy="169.5" r="5"/></g>
-<g><title>Chapel, étage 1 : D1 18,5 [17,6–19,3] sur la machine 1, 14,7 sur la machine 3</title><rect x="441.0" y="180.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="649.2" x2="669.2" y1="190.5" y2="190.5"/><circle class="dot2" cx="614.4" cy="190.5" r="4.5"/><circle class="dot" cx="659.5" cy="190.5" r="5"/></g>
-<g><title>Rust, étage 1 : D1 19,5 [18,6–20,4] sur la machine 1, 17,7 sur la machine 3</title><rect x="441.0" y="201.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="660.9" x2="681.7" y1="211.5" y2="211.5"/><circle class="dot2" cx="649.3" cy="211.5" r="4.5"/><circle class="dot" cx="671.5" cy="211.5" r="5"/></g>
-<g><title>C++, étage 1 : D1 18,2 [17,3–19,0] sur la machine 1, 18,9 sur la machine 3</title><rect x="441.0" y="222.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="645.7" x2="665.0" y1="232.5" y2="232.5"/><circle class="dot2" cx="663.9" cy="232.5" r="4.5"/><circle class="dot" cx="655.6" cy="232.5" r="5"/></g>
-<g><title>Odin, étage 1 : D1 21,9 [20,8–22,8] sur la machine 1, 17,6 sur la machine 3</title><rect x="441.0" y="243.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="686.7" x2="710.3" y1="253.5" y2="253.5"/><circle class="dot2" cx="648.2" cy="253.5" r="4.5"/><circle class="dot" cx="699.0" cy="253.5" r="5"/></g>
-<g><title>D, étage 1 : D1 17,1 [16,2–17,9] sur la machine 1, 17,0 sur la machine 3</title><rect x="441.0" y="264.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="632.7" x2="652.3" y1="274.5" y2="274.5"/><circle class="dot2" cx="641.3" cy="274.5" r="4.5"/><circle class="dot" cx="642.4" cy="274.5" r="5"/></g>
-<g><title>Ada, étage 1 : D1 14,1 [13,4–14,7] sur la machine 1, 10,9 sur la machine 3</title><rect x="441.0" y="285.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="598.9" x2="614.5" y1="295.5" y2="295.5"/><circle class="dot2" cx="569.1" cy="295.5" r="4.5"/><circle class="dot" cx="606.8" cy="295.5" r="5"/></g>
-<g><title>Nim, étage 1 : D1 21,9 [21,0–22,9] sur la machine 1, 20,0 sur la machine 3</title><rect x="441.0" y="306.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="688.3" x2="710.7" y1="316.5" y2="316.5"/><circle class="dot2" cx="677.0" cy="316.5" r="4.5"/><circle class="dot" cx="699.8" cy="316.5" r="5"/></g>
-<g><title>Zig, étage 1 : D1 22,0 [21,0–23,0] sur la machine 1, 15,9 sur la machine 3</title><rect x="441.0" y="327.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="688.7" x2="712.8" y1="337.5" y2="337.5"/><circle class="dot2" cx="628.9" cy="337.5" r="4.5"/><circle class="dot" cx="700.6" cy="337.5" r="5"/></g>
-<g><title>Mojo, étage 1 : D1 10,7 [10,3–11,2] sur la machine 1, 9,0 sur la machine 3</title><rect x="441.0" y="348.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="562.1" x2="572.9" y1="358.5" y2="358.5"/><circle class="dot2" cx="547.5" cy="358.5" r="4.5"/><circle class="dot" cx="567.7" cy="358.5" r="5"/></g>
-<g><title>Fortran, étage 1 : D1 18,0 [17,2–18,8] sur la machine 1, 18,0 sur la machine 3</title><rect x="441.0" y="369.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="644.4" x2="663.0" y1="379.5" y2="379.5"/><circle class="dot2" cx="653.2" cy="379.5" r="4.5"/><circle class="dot" cx="653.8" cy="379.5" r="5"/></g>
-<g><title>Julia, étage 1 : D1 22,4 [21,5–23,4] sur la machine 1, 19,1 sur la machine 3</title><rect x="441.0" y="390.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="695.2" x2="716.7" y1="400.5" y2="400.5"/><circle class="dot2" cx="666.9" cy="400.5" r="4.5"/><circle class="dot" cx="705.7" cy="400.5" r="5"/></g>
-<g><title>Java, étage 1 : D1 12,4 [11,9–12,9] sur la machine 1, 9,7 sur la machine 3</title><rect x="441.0" y="411.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="581.3" x2="593.7" y1="421.5" y2="421.5"/><circle class="dot2" cx="555.0" cy="421.5" r="4.5"/><circle class="dot" cx="587.5" cy="421.5" r="5"/></g>
-<g><title>C#, étage 1 : D1 9,8 [9,4–10,2] sur la machine 1, 8,3 sur la machine 3</title><rect x="441.0" y="432.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="551.6" x2="561.2" y1="442.5" y2="442.5"/><circle class="dot2" cx="539.4" cy="442.5" r="4.5"/><circle class="dot" cx="556.6" cy="442.5" r="5"/></g>
-<g><title>Go, étage 1 : D1 12,4 [11,9–13,0] sur la machine 1, 6,3 sur la machine 3</title><rect x="441.0" y="453.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="581.4" x2="594.4" y1="463.5" y2="463.5"/><circle class="dot2" cx="515.1" cy="463.5" r="4.5"/><circle class="dot" cx="587.8" cy="463.5" r="5"/></g>
-<g><title>Haskell, étage 2 : D1 4,3 [4,1–4,4] sur la machine 1, 2,8 sur la machine 3</title><rect x="441.0" y="494.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="489.1" x2="493.4" y1="504.5" y2="504.5"/><circle class="dot2" cx="474.5" cy="504.5" r="4.5"/><circle class="dot" cx="491.2" cy="504.5" r="5"/></g>
-<g><title>OCaml, étage 3 : D1 7,5 [7,2–7,8] sur la machine 1, 5,8 sur la machine 3</title><rect x="441.0" y="535.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="526.2" x2="533.6" y1="545.5" y2="545.5"/><circle class="dot2" cx="508.9" cy="545.5" r="4.5"/><circle class="dot" cx="530.0" cy="545.5" r="5"/></g>
-<g><title>JavaScript, étage 4 : D1 5,0 [4,8–5,2] sur la machine 1, 3,6 sur la machine 3</title><rect x="441.0" y="576.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="497.3" x2="501.8" y1="586.5" y2="586.5"/><circle class="dot2" cx="483.6" cy="586.5" r="4.5"/><circle class="dot" cx="499.6" cy="586.5" r="5"/></g>
-<g><title>Lua, étage 4 : D1 1,1 [1,1–1,2] sur la machine 1, 0,9 sur la machine 3</title><rect x="441.0" y="597.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="453.5" x2="454.6" y1="607.5" y2="607.5"/><circle class="dot2" cx="451.7" cy="607.5" r="4.5"/><circle class="dot" cx="454.0" cy="607.5" r="5"/></g>
-<g><title>Python, étage 4 : D1 0,5 [0,5–0,5] sur la machine 1, 0,4 sur la machine 3</title><rect x="441.0" y="618.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="446.9" x2="447.5" y1="628.5" y2="628.5"/><circle class="dot2" cx="446.0" cy="628.5" r="4.5"/><circle class="dot" cx="447.2" cy="628.5" r="5"/></g>
-<text class="tick" x="16" y="132.0">étage 1</text>
-<text class="lab" x="100" y="152.5" text-anchor="end">C</text>
-<text class="lab" x="100" y="173.5" text-anchor="end">C3</text>
-<text class="lab" x="100" y="194.5" text-anchor="end">Chapel</text>
-<text class="lab" x="100" y="215.5" text-anchor="end">Rust</text>
-<text class="lab" x="100" y="236.5" text-anchor="end">C++</text>
-<text class="lab" x="100" y="257.5" text-anchor="end">Odin</text>
-<text class="lab" x="100" y="278.5" text-anchor="end">D</text>
-<text class="lab" x="100" y="299.5" text-anchor="end">Ada</text>
-<text class="lab" x="100" y="320.5" text-anchor="end">Nim</text>
-<text class="lab" x="100" y="341.5" text-anchor="end">Zig</text>
-<text class="lab" x="100" y="362.5" text-anchor="end">Mojo</text>
-<text class="lab" x="100" y="383.5" text-anchor="end">Fortran</text>
-<text class="lab" x="100" y="404.5" text-anchor="end">Julia</text>
-<text class="lab" x="100" y="425.5" text-anchor="end">Java</text>
-<text class="lab" x="100" y="446.5" text-anchor="end">C#</text>
-<text class="lab" x="100" y="467.5" text-anchor="end">Go</text>
-<line class="sep" x1="16" x2="736" y1="474.0" y2="474.0"/>
-<text class="tick" x="16" y="488.0">étage 2</text>
-<text class="lab" x="100" y="508.5" text-anchor="end">Haskell</text>
-<line class="sep" x1="16" x2="736" y1="515.0" y2="515.0"/>
-<text class="tick" x="16" y="529.0">étage 3</text>
-<text class="lab" x="100" y="549.5" text-anchor="end">OCaml</text>
-<line class="sep" x1="16" x2="736" y1="556.0" y2="556.0"/>
-<text class="tick" x="16" y="570.0">étage 4</text>
-<text class="lab" x="100" y="590.5" text-anchor="end">JavaScript</text>
-<text class="lab" x="100" y="611.5" text-anchor="end">Lua</text>
-<text class="lab" x="100" y="632.5" text-anchor="end">Python</text>
+<line class="grid" x1="441.0" x2="441.0" y1="118" y2="559"/>
+<text class="tick" x="441.0" y="575" text-anchor="middle">0</text>
+<line class="grid" x1="500.0" x2="500.0" y1="118" y2="559"/>
+<text class="tick" x="500.0" y="575" text-anchor="middle">5</text>
+<line class="grid" x1="559.0" x2="559.0" y1="118" y2="559"/>
+<text class="tick" x="559.0" y="575" text-anchor="middle">10</text>
+<line class="grid" x1="618.0" x2="618.0" y1="118" y2="559"/>
+<text class="tick" x="618.0" y="575" text-anchor="middle">15</text>
+<line class="grid" x1="677.0" x2="677.0" y1="118" y2="559"/>
+<text class="tick" x="677.0" y="575" text-anchor="middle">20</text>
+<line class="grid" x1="736.0" x2="736.0" y1="118" y2="559"/>
+<text class="tick" x="736.0" y="575" text-anchor="middle">25</text>
+<g><title>1. C : D1 19,1 [18,3–20,0] sur la machine 1, 20,8 sur la machine 3</title><rect x="441.0" y="118.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="656.4" x2="676.5" y1="128.5" y2="128.5"/><circle class="dot2" cx="686.5" cy="128.5" r="4.5"/><circle class="dot" cx="666.7" cy="128.5" r="5"/></g>
+<g><title>2. C++ : D1 18,2 [17,3–19,0] sur la machine 1, 18,9 sur la machine 3</title><rect x="441.0" y="139.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="645.7" x2="665.0" y1="149.5" y2="149.5"/><circle class="dot2" cx="663.9" cy="149.5" r="4.5"/><circle class="dot" cx="655.6" cy="149.5" r="5"/></g>
+<g><title>3. Odin : D1 21,9 [20,8–22,8] sur la machine 1, 17,6 sur la machine 3</title><rect x="441.0" y="160.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="686.7" x2="710.3" y1="170.5" y2="170.5"/><circle class="dot2" cx="648.2" cy="170.5" r="4.5"/><circle class="dot" cx="699.0" cy="170.5" r="5"/></g>
+<g><title>4. C3 : D1 19,0 [18,2–19,8] sur la machine 1, 18,3 sur la machine 3</title><rect x="441.0" y="181.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="656.0" x2="674.8" y1="191.5" y2="191.5"/><circle class="dot2" cx="657.2" cy="191.5" r="4.5"/><circle class="dot" cx="665.2" cy="191.5" r="5"/></g>
+<g><title>5. Zig : D1 22,0 [21,0–23,0] sur la machine 1, 15,9 sur la machine 3</title><rect x="441.0" y="202.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="688.7" x2="712.8" y1="212.5" y2="212.5"/><circle class="dot2" cx="628.9" cy="212.5" r="4.5"/><circle class="dot" cx="700.6" cy="212.5" r="5"/></g>
+<g><title>6. Nim : D1 21,9 [21,0–22,9] sur la machine 1, 20,0 sur la machine 3</title><rect x="441.0" y="223.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="688.3" x2="710.7" y1="233.5" y2="233.5"/><circle class="dot2" cx="677.0" cy="233.5" r="4.5"/><circle class="dot" cx="699.8" cy="233.5" r="5"/></g>
+<g><title>7. Rust : D1 19,5 [18,6–20,4] sur la machine 1, 17,7 sur la machine 3</title><rect x="441.0" y="244.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="660.9" x2="681.7" y1="254.5" y2="254.5"/><circle class="dot2" cx="649.3" cy="254.5" r="4.5"/><circle class="dot" cx="671.5" cy="254.5" r="5"/></g>
+<g><title>8. D : D1 17,1 [16,2–17,9] sur la machine 1, 17,0 sur la machine 3</title><rect x="441.0" y="265.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="632.7" x2="652.3" y1="275.5" y2="275.5"/><circle class="dot2" cx="641.3" cy="275.5" r="4.5"/><circle class="dot" cx="642.4" cy="275.5" r="5"/></g>
+<g><title>9. Ada : D1 14,1 [13,4–14,7] sur la machine 1, 10,9 sur la machine 3</title><rect x="441.0" y="286.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="598.9" x2="614.5" y1="296.5" y2="296.5"/><circle class="dot2" cx="569.1" cy="296.5" r="4.5"/><circle class="dot" cx="606.8" cy="296.5" r="5"/></g>
+<g><title>10. Chapel : D1 18,5 [17,6–19,3] sur la machine 1, 14,7 sur la machine 3</title><rect x="441.0" y="307.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="649.2" x2="669.2" y1="317.5" y2="317.5"/><circle class="dot2" cx="614.4" cy="317.5" r="4.5"/><circle class="dot" cx="659.5" cy="317.5" r="5"/></g>
+<g><title>11. Julia : D1 22,4 [21,5–23,4] sur la machine 1, 19,1 sur la machine 3</title><rect x="441.0" y="328.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="695.2" x2="716.7" y1="338.5" y2="338.5"/><circle class="dot2" cx="666.9" cy="338.5" r="4.5"/><circle class="dot" cx="705.7" cy="338.5" r="5"/></g>
+<g><title>12. Fortran : D1 18,0 [17,2–18,8] sur la machine 1, 18,0 sur la machine 3</title><rect x="441.0" y="349.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="644.4" x2="663.0" y1="359.5" y2="359.5"/><circle class="dot2" cx="653.2" cy="359.5" r="4.5"/><circle class="dot" cx="653.8" cy="359.5" r="5"/></g>
+<g><title>13. Mojo : D1 10,7 [10,3–11,2] sur la machine 1, 9,0 sur la machine 3</title><rect x="441.0" y="370.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="562.1" x2="572.9" y1="380.5" y2="380.5"/><circle class="dot2" cx="547.5" cy="380.5" r="4.5"/><circle class="dot" cx="567.7" cy="380.5" r="5"/></g>
+<g><title>14. C# : D1 9,8 [9,4–10,2] sur la machine 1, 8,3 sur la machine 3</title><rect x="441.0" y="391.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="551.6" x2="561.2" y1="401.5" y2="401.5"/><circle class="dot2" cx="539.4" cy="401.5" r="4.5"/><circle class="dot" cx="556.6" cy="401.5" r="5"/></g>
+<g><title>15. Java : D1 12,4 [11,9–12,9] sur la machine 1, 9,7 sur la machine 3</title><rect x="441.0" y="412.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="581.3" x2="593.7" y1="422.5" y2="422.5"/><circle class="dot2" cx="555.0" cy="422.5" r="4.5"/><circle class="dot" cx="587.5" cy="422.5" r="5"/></g>
+<g><title>16. Go : D1 12,4 [11,9–13,0] sur la machine 1, 6,3 sur la machine 3</title><rect x="441.0" y="433.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="581.4" x2="594.4" y1="443.5" y2="443.5"/><circle class="dot2" cx="515.1" cy="443.5" r="4.5"/><circle class="dot" cx="587.8" cy="443.5" r="5"/></g>
+<g><title>17. Haskell : D1 4,3 [4,1–4,4] sur la machine 1, 2,8 sur la machine 3</title><rect x="441.0" y="454.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="489.1" x2="493.4" y1="464.5" y2="464.5"/><circle class="dot2" cx="474.5" cy="464.5" r="4.5"/><circle class="dot" cx="491.2" cy="464.5" r="5"/></g>
+<g><title>18. OCaml : D1 7,5 [7,2–7,8] sur la machine 1, 5,8 sur la machine 3</title><rect x="441.0" y="475.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="526.2" x2="533.6" y1="485.5" y2="485.5"/><circle class="dot2" cx="508.9" cy="485.5" r="4.5"/><circle class="dot" cx="530.0" cy="485.5" r="5"/></g>
+<g><title>19. JavaScript : D1 5,0 [4,8–5,2] sur la machine 1, 3,6 sur la machine 3</title><rect x="441.0" y="496.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="497.3" x2="501.8" y1="506.5" y2="506.5"/><circle class="dot2" cx="483.6" cy="506.5" r="4.5"/><circle class="dot" cx="499.6" cy="506.5" r="5"/></g>
+<g><title>20. Python : D1 0,5 [0,5–0,5] sur la machine 1, 0,4 sur la machine 3</title><rect x="441.0" y="517.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="446.9" x2="447.5" y1="527.5" y2="527.5"/><circle class="dot2" cx="446.0" cy="527.5" r="4.5"/><circle class="dot" cx="447.2" cy="527.5" r="5"/></g>
+<g><title>21. Lua : D1 1,1 [1,1–1,2] sur la machine 1, 0,9 sur la machine 3</title><rect x="441.0" y="538.0" width="295.0" height="21" fill="transparent"/><line class="ua" x1="453.5" x2="454.6" y1="548.5" y2="548.5"/><circle class="dot2" cx="451.7" cy="548.5" r="4.5"/><circle class="dot" cx="454.0" cy="548.5" r="5"/></g>
+<text class="lab" x="100" y="132.5" text-anchor="end">1. C</text>
+<text class="lab" x="100" y="153.5" text-anchor="end">2. C++</text>
+<text class="lab" x="100" y="174.5" text-anchor="end">3. Odin</text>
+<text class="lab" x="100" y="195.5" text-anchor="end">4. C3</text>
+<text class="lab" x="100" y="216.5" text-anchor="end">5. Zig</text>
+<text class="lab" x="100" y="237.5" text-anchor="end">6. Nim</text>
+<text class="lab" x="100" y="258.5" text-anchor="end">7. Rust</text>
+<text class="lab" x="100" y="279.5" text-anchor="end">8. D</text>
+<text class="lab" x="100" y="300.5" text-anchor="end">9. Ada</text>
+<text class="lab" x="100" y="321.5" text-anchor="end">10. Chapel</text>
+<text class="lab" x="100" y="342.5" text-anchor="end">11. Julia</text>
+<text class="lab" x="100" y="363.5" text-anchor="end">12. Fortran</text>
+<text class="lab" x="100" y="384.5" text-anchor="end">13. Mojo</text>
+<text class="lab" x="100" y="405.5" text-anchor="end">14. C#</text>
+<text class="lab" x="100" y="426.5" text-anchor="end">15. Java</text>
+<text class="lab" x="100" y="447.5" text-anchor="end">16. Go</text>
+<text class="lab" x="100" y="468.5" text-anchor="end">17. Haskell</text>
+<text class="lab" x="100" y="489.5" text-anchor="end">18. OCaml</text>
+<text class="lab" x="100" y="510.5" text-anchor="end">19. JavaScript</text>
+<text class="lab" x="100" y="531.5" text-anchor="end">20. Python</text>
+<text class="lab" x="100" y="552.5" text-anchor="end">21. Lua</text>
 </svg>
