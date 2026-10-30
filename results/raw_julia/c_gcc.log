@@ -1,0 +1,7 @@
+c_gcc      k8   tuned                           p0 n=10 med=0.185730s ok={True} rc=0 
+c_gcc      k8   tuned                           p0 n=10 med=0.137294s ok={True} rc=0 
+c_gcc      k8   tuned                           p0 n=10 med=0.134757s ok={True} rc=0 
+c_gcc      k8   tuned                           p0 n=10 med=0.138069s ok={True} rc=0 
+c_gcc      k8   tuned                           p0 n=10 med=0.133036s ok={True} rc=0 
+c_gcc      k8   tuned                           p0 n=10 med=0.121298s ok={True} rc=0 
+c_gcc      k8   tuned                           p0 n=10 med=0.134988s ok={True} rc=0 

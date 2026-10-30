@@ -1,0 +1,7 @@
+julia_c512 k5   tuned                           p0 n=10 med=0.006136s ok={True} rc=0 
+julia_c512 k5   tuned                           p0 n=10 med=0.008636s ok={True} rc=0 
+julia_c512 k5   tuned                           p0 n=10 med=0.005302s ok={True} rc=0 
+julia_c512 k5   tuned                           p0 n=10 med=0.005425s ok={True} rc=0 
+julia_c512 k5   tuned                           p0 n=10 med=0.007251s ok={True} rc=0 
+julia_c512 k5   tuned                           p0 n=10 med=0.006109s ok={True} rc=0 
+julia_c512 k5   tuned                           p0 n=10 med=0.006165s ok={True} rc=0 

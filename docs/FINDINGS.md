@@ -43,8 +43,11 @@ fusionner les passes répétées (355 To/s).
   contournée par une variable temporaire (`bench/d/ms.d`).
 * **D et Julia** : les délégués (D) et les fermetures (Julia) capturent les variables de boucle
   par référence. Une variante multi-thread donnait un résultat faux.
-* **Julia** : l'ordonnanceur est coopératif, et une attente active sans `yield()` bloque le
-  programme (processus tué après 12 min).
+* **Julia** : une attente active sans `yield()` ne bloque pas à elle seule. Le blocage observé
+  (processus tué après 12 min) venait d'une variable capturée par une fermeture et affectée hors
+  d'elle (`Core.Box`) : chaque addition allouait, une collecte se déclenchait et attendait un point
+  d'arrêt que le thread en attente active n'atteignait jamais (`jl_gc_wait_for_the_world` sous gdb ;
+  diagnostic corrigé le 30/10, `docs/JULIA.md`).
 * **Zig 0.17** : `@bitCast` vers une `struct` « auto » est refusé, car les champs peuvent être
   réordonnés. Il faut une `extern struct` ou une construction champ par champ.
 * **LuaJIT 2.1** : (1) la FFI ignore `volatile` : le compteur de K3 reste en registre
