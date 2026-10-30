@@ -34,3 +34,11 @@ bench/ada_fix/ms (sept noyaux tuned « with No_Inline ») : 6641069b8900924a…
    144 instructions, 0 opérations flottantes empaquetées, 4 scalaires
    ms.adb:922:11: missed: not vectorized: unsupported outerloop form.
    ms.adb:924:48: missed: not vectorized: no vectype for stmt: _78 = (*a$P_ARRAY_62)[_33]{lb: _11 sz: _31 * 8}[_34]{lb: _14 sz: 8};
+
+## K2 : boucle de chasse inlinée dans _ada_ms (bench/ada/ms, binaire de la campagne) : movsxd + sub + chargement par saut
+     41d550:	movsxd rdx,r15d
+     41d553:	sub    rdx,rcx
+     41d556:	mov    r15d,DWORD PTR [r12+rdx*4]
+     41d55a:	dec    eax
+     41d55c:	jne    41d550 <_ada_ms+0x26d0>
+   (hors ligne, bench/ada_fix/ms : sub + chargement avec extension de signe, voir plus haut ; un cycle de moins par saut)
