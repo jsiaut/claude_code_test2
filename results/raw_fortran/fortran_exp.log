@@ -1,0 +1,2 @@
+fortran_exp k8   tuned                           p0 n=10 med=0.113955s ok={True} rc=0 
+fortran_exp k5   tuned                           p0 n=10 med=0.012285s ok={True} rc=0 

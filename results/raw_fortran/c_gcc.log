@@ -1,2 +1,4 @@
 c_gcc      k5   tuned                           p0 n=10 med=0.007057s ok={True} rc=0 
 c_gcc      k4   branchless_unsorted             p0 n=10 med=0.004719s ok={True} rc=0 
+c_gcc      k8   tuned                           p0 n=10 med=0.144494s ok={True} rc=0 
+c_gcc      k4   natural_unsorted                p0 n=10 med=0.006164s ok={True} rc=0 
