@@ -69,6 +69,7 @@ V2_OVERRIDES = {
     ("ada", "E4"): (1, "__builtin_prefetch importé comme intrinsèque"),
     # Fortran (gfortran 16, OpenMP livré)
     ("fortran", "C4"): (1, "!$omp simd reduction : réassociation locale, OpenMP livré avec gfortran"),
+    ("fortran", "A4"): (1, "!$omp allocate align / !$omp allocators : alignement par OpenMP livré avec gfortran (sonde a4 ; corrigé le 30/10)"),
     ("fortran", "D1"): (1, "threads OpenMP livrés avec gfortran"),
     ("fortran", "D2"): (1, "!$omp atomic avec clauses d'ordre mémoire"),
     ("fortran", "D4"): (1, "proc_bind / OMP_PLACES (OpenMP)"),

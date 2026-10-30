@@ -1,0 +1,11 @@
+# K4 de Fortran : boucle de mesure et noyaux (machine 5, 30/10/2026)
+bench/fortran/ms (campagne) : 8a47ae91b41d46b8… ; bench/fortran_fix/ms : cad9536e1843917a…
+## bench/fortran/ms : K4 inliné dans run_k4, scalaire ; les copies hors ligne, vectorisées, ne sont pas appelées
+   __k25m_MOD_run_k4 : 252 instructions, 0 appels de k4_*, 0 opérations entières empaquetées
+   __k25m_MOD_k4_natural : 140 instructions, 0 appels de k4_*, 30 opérations entières empaquetées
+   __k25m_MOD_k4_branchless : 304 instructions, 0 appels de k4_*, 56 opérations entières empaquetées
+   boucle chaude échantillonnée (results/vectorization/fortran_k4.txt) : 97.9% des échantillons : ms+0x40848b boucle=0x408488-0x4084a0 {'n': 9, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+## bench/fortran_fix/ms : run_k4 appelle les noyaux, vectorisés
+   __k25m_MOD_run_k4 : 199 instructions, 2 appels de k4_*, 0 opérations entières empaquetées
+   __k25m_MOD_k4_natural : 140 instructions, 0 appels de k4_*, 30 opérations entières empaquetées
+   __k25m_MOD_k4_branchless : 304 instructions, 0 appels de k4_*, 56 opérations entières empaquetées

@@ -546,3 +546,7 @@ Robustesse :
   données d'Ada sans correction. Les scénarios de Zig sont recalculés sur ces données (écarts d'au plus 0,2 rang
   espéré, même verdict). Le chiffre du README sur le stencil naturel (« 56 à 73 ms ») était faux : 55 à 80 ms dans
   les données principales, corrigé.
+* 2026-10-30, fin d'après-midi : **remarque sur Fortran** transmise par l'utilisateur (K4 inliné dans la boucle de
+  mesure, formes de K5 et K8, cases A3, A4, B2 et F2). Vérifications préalables (binaire de la campagne, sondes
+  gfortran 16.2), règle commune aux trois remarques et plan : `docs/FORTRAN.md`, poussé avant les mesures avec le
+  code d'analyse (`analysis/fortran_check.py`) et les errata de la grille.

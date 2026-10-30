@@ -63,7 +63,9 @@ R_OVERRIDES = {
     # Fortran 2023 ; OpenMP hors norme
     ("fortran", "C4"): (0.25, "!$omp simd reduction : OpenMP"),
     ("fortran", "C5"): (0.5, "do concurrent (norme) ; exécution parallèle seulement par option du compilateur ou OpenMP"),
-    ("fortran", "D1"): (0.25, "threads seulement par OpenMP ; les cotableaux sont des images (bibliothèque externe)"),
+    ("fortran", "A3"): (0.25, "-fpack-derived : option globale (erratum du 30/10, remarque sur Fortran)"),
+    ("fortran", "A4"): (0.5, "sur-allocation + c_loc (norme) ; alignement par directives OpenMP hors norme"),
+    ("fortran", "D1"): (0.25, "threads seulement par OpenMP ; les cotableaux sont des images (processus ; libcaf_shmem livrée avec GCC 16 pour un nœud)"),
     ("fortran", "D2"): (0.5, "sous-programmes atomiques (Fortran 2008) sans ordre mémoire ; ordres seulement par OpenMP"),
     ("fortran", "D4"): (0.25, "proc_bind, OMP_PLACES : OpenMP"),
     ("fortran", "D5"): (0.25, "!$omp flush : OpenMP"),

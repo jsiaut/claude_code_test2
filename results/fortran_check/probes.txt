@@ -1,0 +1,8 @@
+# Sondes de la remarque sur Fortran (docs/FORTRAN.md), machine 5, 30/10/2026, gfortran 16.2
+A3 sans option : storage_size(t) = 12 octets
+A3 avec -fpack-derived : storage_size(t) = 6 octets
+A4 avec directives OpenMP : allouables mal alignés (128) sur 50 : 0 ; variables locales mal alignées (256) sur 50 : 0
+A4 témoin sans directive, allouables mal alignés (128) sur 50 : 50
+B2 (réserve de 1 Mio, sans repli) : stat dans la réserve : 0 ; stat au-delà de la réserve : 0
+F2 (-fcoarray=lib -lcaf_shmem) : images : 4 ; somme des numéros : 10
+libcaf livrées : libcaf_shmem.a libcaf_shmem.la libcaf_single.a libcaf_single.la 
