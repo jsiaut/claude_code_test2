@@ -12,17 +12,17 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | Rang | Langage | Score | Rang plausible | Devance le suivant | Ce qui le place là |
 |---|---|---|---|---|---|
 | 1 | **C** | 80,1 | 1–4 | 70 % | Plafond le plus haut et meilleur code par défaut ; une partie des leviers passe par des extensions de compilateur |
-| 2 | **C++** | 77,1 | 1–6 | 72 % | Le plus de contrôle (`std::simd`, `pmr`, atomiques) ; conteneurs standard à contre-courant du cache |
+| 2 | **C++** | 77,0 | 1–6 | 72 % | Le plus de contrôle (`std::simd`, `pmr`, atomiques) ; conteneurs standard à contre-courant du cache |
 | 3 | **Odin** | 72,3 | 1–7 | 65 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, allocateurs explicites) ; table et allocateur généralistes lents |
-| 4 | **C3** | 71,1 | 2–8 | 54 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels |
+| 4 | **C3** | 71,0 | 2–9 | 54 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels |
 | 5 | **Zig** | 71,5 | 2–10 | 62 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (2e avec la version de développement) |
-| 6 | **Nim** | 69,6 | 3–9 | 57 % | Les leviers de C par sa compilation vers C ; vérifications de bornes qui bloquent la vectorisation |
-| 7 | **Rust** | 69,4 | 4–10 | 65 % | 4e plafond, contrôle fin et sûr ; défauts coûteux (bornes, SipHash, SIMD portable encore instable) |
-| 8 | **D** | 71,1 | 3–12 | 61 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
-| 9 | **Ada** | 68,0 | 3–12 | 58 % | Disposition au bit près et meilleure arène ; vérifications et atomiques coûteuses |
+| 6 | **Nim** | 69,5 | 3–9 | 54 % | Les leviers de C par sa compilation vers C ; vérifications de bornes qui bloquent la vectorisation |
+| 7 | **Ada** | 71,6 | 2–11 | 52 % | Disposition au bit près, 7e plafond ; vérifications coûteuses sur le code naturel |
+| 8 | **Rust** | 69,4 | 4–10 | 65 % | 4e plafond, contrôle fin et sûr ; défauts coûteux (bornes, SipHash, SIMD portable encore instable) |
+| 9 | **D** | 71,0 | 3–12 | 64 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
 | 10 | **Chapel** | 64,1 | 5–13 | 74 % | 3e plafond grâce au parallélisme natif ; peu de contrôle bas niveau |
-| 11 | **Julia** | 62,3 | 8–13 | 64 % | Le meilleur code naturel ; ramasse-miettes et runtime |
-| 12 | **Fortran** | 60,9 | 8–14 | 62 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
+| 11 | **Julia** | 62,2 | 8–13 | 64 % | Le meilleur code naturel ; ramasse-miettes et runtime |
+| 12 | **Fortran** | 60,8 | 9–14 | 62 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
 | 13 | **Mojo** | 60,0 | 10–14 | 91 % | Le SIMD au cœur du langage ; boucles naturelles scalaires |
 | 14 | **C#** | 54,8 | 12–16 | 84 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
 | 15 | **Java** | 47,4 | 14–16 | 68 % | Meilleur allocateur de petits objets ; pas de types valeur |
@@ -38,13 +38,17 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   langage et sa chaîne de compilation).
 * **Ordre** : le rang moyen sur 20 000 variantes de l'analyse, qui tirent au hasard les poids, les normalisations,
   le jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf pour C3 et Zig, que 54 % des
-  variantes inversent, et pour D, que 65 % des variantes placent derrière Nim comme derrière Rust.
+  variantes inversent, pour Ada, 4e au score mais que Nim, Zig et C3 devancent dans 54 à 68 % des variantes (son
+  code par défaut est lent), et pour D, que 65 % des variantes placent derrière Nim comme derrière Rust.
 * **Rang plausible** : le rang dans 90 % des variantes. **Devance le suivant** : la part des variantes où le
   langage passe devant celui de la ligne suivante.
 * **Errata du 30 octobre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de contrôle
-  (aides de ligne de cache de C, de D et d'Odin, AVX-512 d'Odin, réductions parallèles de Nim), et une remarque sur
-  Zig une sixième (projection de fichiers de Zig, sous-notée dans une des deux règles de notation). Corrigées, elles
-  changent un peu les scores de C, d'Odin, de Nim et de D, mais aucun rang.
+  (aides de ligne de cache de C, de D et d'Odin, AVX-512 d'Odin, réductions parallèles de Nim), une remarque sur Zig
+  une sixième (projection de fichiers), une remarque sur Ada trois autres (non-aliasing et types vectoriels
+  sous-notés, allocation cachée sur-notée). Aucune ne change de rang à elle seule. La remarque sur Ada a aussi trouvé
+  une erreur de mon implémentation : un piège de GNAT (`-fnon-call-exceptions`) laissait scalaires ses noyaux
+  optimisés une fois inlinés. Corrigée et remesurée, elle fait passer Ada de la 9e à la 7e place
+  ([`docs/ADA.md`](docs/ADA.md)).
 
 ![Classement final](results/charts/classement.svg)
 
@@ -52,7 +56,7 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 * **Les grandes marches sont établies.** Les 13 premiers devancent C# dans au moins 91 % des variantes, et sur les
   deux machines. Go devance Haskell, Haskell OCaml, OCaml JavaScript, dans 98 à 100 % des variantes.
 * **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Deux voisins s'y devancent dans
-  54 à 74 % des variantes. C ou C++ est premier dans 87 % des variantes (C 62 %, C++ 25 %).
+  52 à 74 % des variantes. C ou C++ est premier dans 86 % des variantes (C 61 %, C++ 25 %).
 * **L'ordre fin dépend aussi de la machine.** Sur un Emerald Rapids, le même calcul donne C++ 1er, C 2e, Rust 3e.
   L'écart vient surtout de l'écrivain unique (K3), dont le temps dépend, sur ce processeur, du placement du code
   par l'éditeur de liens (voir plus bas).
@@ -109,19 +113,22 @@ trois fois plus cher à lancer que ceux de la glibc (environ 160 µs contre 50 p
 (ORC) ; l'un des meilleurs codes naturels de l'étude. Mais les vérifications de bornes gardées en `-d:release`
 empêchent la vectorisation du stencil naturel (71 contre 36 ms), et sa bibliothèque standard n'a pas de types SIMD.
 
-**7. Rust.** 4e plafond (80) et un contrôle fin et sûr : `repr(C)`, `repr(align)`, `std::arch` avec AVX-512 stable,
+**7. Ada.** Le contrôle de disposition le plus précis de l'étude (clauses de représentation au bit près), des types
+vectoriels GCC (`vector_type`), une règle de non-aliasing des paramètres que GNAT exploite, et le 7e plafond (78).
+Ce qui le retient : ses vérifications, actives par défaut, coûtent sur le code naturel (Q1 naturel 194 ms contre 83
+en C ; stencil naturel scalaire, écrit avec des bornes littérales sur un tableau non contraint), et les boucles
+parallèles d'Ada 2022 restent absentes de GNAT. 4e au score, il n'est que 7e en rang espéré. Un piège de GNAT
+laissait aussi scalaires ses noyaux optimisés une fois inlinés : corrigé ([`docs/ADA.md`](docs/ADA.md)). Son
+meilleur temps sur K8 vient d'une arène que GCC compile bien, pas de ses pools de stockage.
+
+**8. Rust.** 4e plafond (80) et un contrôle fin et sûr : `repr(C)`, `repr(align)`, `std::arch` avec AVX-512 stable,
 flottants `algebraic_*` pour réassocier opération par opération, seule file standard sans verrou. Il perd sur les
 défauts : vérifications de bornes qui bloquent la vectorisation du stencil naturel (73 contre 36 ms), `HashMap` à
 SipHash (9 fois la table plate sur K7), SIMD portable encore réservé à *nightly*. 3e sur Emerald Rapids.
 
-**8. D.** Le contrôle de C avec templates, exécution à la compilation, `core.simd` et atomiques à ordres explicites.
+**9. D.** Le contrôle de C avec templates, exécution à la compilation, `core.simd` et atomiques à ordres explicites.
 Ce qui le fait reculer : son ramasse-miettes par défaut, qui donne la pire pause des langages compilés sur K8
 (127 ms), et un stencil naturel `double[][]` non vectorisé.
-
-**9. Ada.** Le contrôle de disposition le plus précis de l'étude (clauses de représentation au bit près) et le
-meilleur temps de K8, grâce à ses pools de stockage normalisés. Mais ses défauts coûtent : vérifications actives
-qui empêchent la vectorisation, atomiques seulement séquentiellement cohérentes, boucles parallèles d'Ada 2022
-absentes de GNAT.
 
 ### Forts sur leur terrain, avec moins de contrôle ou un runtime
 
@@ -200,7 +207,8 @@ Les résultats les plus solides de l'étude : chacun isole une cause, avec ses c
 3. **La vectorisation automatique se vérifie sur le code exécuté.** Aucune des deux boucles naturelles testées n'est
    vectorisée en C#, Go, Mojo, Zig 0.17 (vectoriseur de boucles désactivé par l'équipe Zig, réactivé dans la version
    de développement), Haskell, OCaml, JavaScript, Lua et Python. Les vérifications de bornes
-   l'empêchent sur le stencil naturel en Rust, Nim, D et Ada (56 à 73 ms, contre 36 ms).
+   l'empêchent sur le stencil naturel en Rust, Nim, D et Ada (55 à 80 ms, contre 36 ms) ; en Ada, sur un type
+   contraint, GNAT élimine les vérifications et vectorise.
 4. **Le compilateur pèse autant que le langage.** Sur le même code C, GCC est 2,2 à 2,7 fois plus rapide que clang
    sur l'arène de K8. Sur Emerald Rapids, clang, flang, Chapel et Mojo fusionnent la réduction naturelle de K5 en FMA
    scalaire, deux fois plus lente qu'une addition sur ce cœur ; GCC l'évite. Sur Cascade Lake, l'écart disparaît.
@@ -264,7 +272,8 @@ du langage.
 
 * Deux processeurs Intel, virtualisés et partagés ; ni AMD, ni ARM, ni compteurs matériels.
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre.
+  l'autre. Les deux langages relus après coup par des connaisseurs y ont gagné : Ada deux places, par la correction
+  d'un piège de GNAT ; Zig trois, mais par une version de compilateur que la règle exclut.
 * Des microbenchmarks : ni E/S, ni décompression, ni tri ou jointure ; une seule taille d'entrée par noyau, sauf K2.
 * Des règles de construit : bibliothèque standard seule, compilation pour le CPU hôte, ni PGO ni LTO, réglages des
   runtimes par défaut.
@@ -306,6 +315,8 @@ par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION
   [`docs/AUDIT2_RESPONSE.md`](docs/AUDIT2_RESPONSE.md).
 * La confrontation avec le « Banc de sympathie mécanique » : [`docs/CONFRONTATION.md`](docs/CONFRONTATION.md)
   et [`results/report_confrontation.md`](results/report_confrontation.md).
+* La remarque sur Ada (piège de GNAT, errata, implémentation corrigée et remesurée) : [`docs/ADA.md`](docs/ADA.md)
+  et [`results/report_ada.md`](results/report_ada.md).
 * La remarque sur Zig (vectoriseur désactivé, quatre versions comparées, rang avec la version de développement) :
   [`docs/ZIG.md`](docs/ZIG.md) et [`results/report_zig.md`](results/report_zig.md).
 * Les données brutes de chaque processus : `results/raw*`.

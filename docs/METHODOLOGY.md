@@ -531,3 +531,18 @@ Robustesse :
   supprimées) et par des sondes compilées par GNAT 16.2 ; plan des mesures et de l'analyse : `docs/ADA.md`, poussé
   avant les mesures. Le binaire d'Ada recompilé sur la machine 5 est identique octet pour octet à celui de la
   campagne.
+* 2026-10-30, 15:14-15:32 : **mesures de la remarque sur Ada** (`tools/measure_ada.py`, machine 5) : 60 cellules ×
+  7 processus, aucune somme de contrôle fausse ; 23 processus refaits pour vol de temps au-dessus de 2 % (un gardé
+  au-dessus du seuil au troisième essai). Rien d'autre ne tournait ; pendant les mesures, seuls des fichiers ont été
+  écrits et poussés. Après les mesures : sonde Ada des errata (C1, E5, B4 ; 0 divergence avec la matrice).
+* 2026-10-30, après les mesures : **analyse de la remarque sur Ada** (`analysis/ada_check.py`, poussé avant son
+  premier calcul). Comme le plan l'avait fixé, les errata et la correction de l'implémentation entrent dans le
+  classement publié : `analysis/analyze_v2.dataset_main` applique désormais les rapports appariés de
+  `results/transfers.json` (12 clés d'Ada, K5 à 1) aux données principales, et l'analyse v3 recalculée redonne
+  exactement le scénario S1 (rangs espérés et scores identiques). Ada passe de 68,0 à 71,6 points et de la 9e à la
+  7e place ; C++, C3, Nim, D, Julia et Fortran perdent 0,1 point de score de référence, parce qu'Ada devient la
+  référence de K1. Trois clés témoins dont le source ne change pas bougent de 18 à 25 % (K8 naturel et `tuned`, K9
+  naturel) : effet de disposition du binaire, publié avec les résultats. La réplication sur la machine 3 garde les
+  données d'Ada sans correction. Les scénarios de Zig sont recalculés sur ces données (écarts d'au plus 0,2 rang
+  espéré, même verdict). Le chiffre du README sur le stencil naturel (« 56 à 73 ms ») était faux : 55 à 80 ms dans
+  les données principales, corrigé.

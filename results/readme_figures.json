@@ -1,32 +1,32 @@
 {
  "first": {
-  "c": 0.6177,
-  "cpp": 0.25335,
+  "c": 0.6111,
+  "cpp": 0.24725,
   "csharp": 0.0,
   "java": 0.0,
-  "zig": 0.02155,
-  "odin": 0.05795,
+  "zig": 0.02135,
+  "odin": 0.0573,
   "julia": 0.0,
-  "ada": 0.01175,
+  "ada": 0.02645,
   "fortran": 0.00045,
   "js": 0.0,
   "python": 0.0,
   "haskell": 0.0,
-  "c3": 0.0202,
+  "c3": 0.0197,
   "d": 0.0009,
-  "rust": 0.00135,
-  "chapel": 0.0007,
-  "nim": 0.0141,
+  "rust": 0.00125,
+  "chapel": 0.0006,
+  "nim": 0.01365,
   "mojo": 0.0,
   "go": 0.0,
   "ocaml": 0.0,
   "lua": 0.0
  },
- "r2_control_top13": 0.8076014462461214,
+ "r2_control_top13": 0.813262932130195,
  "neighbour_range_top13": [
-  0.5411,
-  0.7383
+  0.5187,
+  0.73825
  ],
- "min_top13_ahead_of_csharp": 0.913,
+ "min_top13_ahead_of_csharp": 0.91265,
  "check_exp_rank_max_diff": 3.552713678800501e-15
 }
