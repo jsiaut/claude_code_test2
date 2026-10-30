@@ -22,14 +22,14 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ |
 | **C** (20 %) | | | | | | | | | | | | | | | | | | | | | |
 | C1 types vectoriels portables | ◐ | ● | ◐ | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ● | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
-| C2 intrinsèques de la cible | ● | ● | ● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ◐ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| C2 intrinsèques de la cible | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ◐ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | C3 auto-vectorisation (mesurée) | ● | ● | ◐ | ○ | ● | ● | ◐ | ◐ | ◐ | ◐ | ● | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
 | C4 contrôle de la réassociation flottante | ◐ | ● | ● | ● | ○ | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
 | C5 parallélisme de données | ◐ | ◐ | ○ | ○ | ○ | ○ | ● | ◐ | ○ | ● | ● | ○ | ○ | ● | ● | ● | ◐ | ○ | ○ | ◐ | ○ |
 | **D** (15 %) | | | | | | | | | | | | | | | | | | | | | |
 | D1 threads parallèles en mémoire partagée | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ○ |
 | D2 atomiques à ordres mémoire explicites | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ● | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ○ |
-| D3 aide ligne de cache | ○ | ● | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ● | ○ | ○ | ○ |
+| D3 aide ligne de cache | ◐ | ● | ○ | ● | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ● | ○ | ○ | ○ |
 | D4 affinité CPU | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ | ○ |
 | D5 barrières et indication d'attente active | ◐ | ◐ | ● | ◐ | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ◐ | ○ | ● | ● | ◐ | ○ | ● | ◐ | ○ | ○ |
 | **E** (10 %) | | | | | | | | | | | | | | | | | | | | | |
@@ -53,7 +53,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 * **A** : A1 = 1 (tableaux de struct (sonde)) ; A2 = 1 (offsetof (sonde)) ; A3 = 1 (champs de bits standard ; packed par attribut (sonde)) ; A4 = 1 (alignas, aligned_alloc (sonde)) ; A5 = 1 (union, memcpy (sonde)) ; A6 = 0 (aucun) ; A7 = 1 (float v[16] dans struct (sonde)) ; A8 = 1 (stdint.h)
 * **B** : B1 = 1 (pas de GC) ; B2 = 0.5 (malloc seulement ; arènes à la main (bench K8 tuned)) ; B3 = 1 (tableaux sur la pile, VLA) ; B4 = 1 (aucune allocation implicite) ; B5 = 1 (pointeurs)
 * **C** : C1 = 0.5 (vector_size : extension gcc/clang (sonde)) ; C2 = 1 (immintrin.h (bench K5/K1/K6)) ; C3 = 1.0 (mesuré) ; C4 = 0.5 (-ffast-math, #pragma clang fp reassociate (extensions)) ; C5 = 0.5 (OpenMP (livré avec gcc/clang, hors norme C))
-* **D** : D1 = 1 (threads.h / pthreads) ; D2 = 1 (stdatomic.h memory_order_*) ; D3 = 0 (pas de constante standard) ; D4 = 0.5 (sched_setaffinity (glibc, hors ISO C) (sonde)) ; D5 = 0.5 (atomic_thread_fence ; pause seulement par intrinsèque)
+* **D** : D1 = 1 (threads.h / pthreads) ; D2 = 1 (stdatomic.h memory_order_*) ; D3 = 0.5 (__GCC_DESTRUCTIVE_SIZE prédéfini par clang et gcc ; sysconf (glibc) ; corrigé le 30/10, juge à l'aveugle) ; D4 = 0.5 (sched_setaffinity (glibc, hors ISO C) (sonde)) ; D5 = 0.5 (atomic_thread_fence ; pause seulement par intrinsèque)
 * **E** : E1 = 1 (natif) ; E2 = 0.5 (__asm__ extension gcc/clang (sonde)) ; E3 = 0.5 (__builtin_expect (extension)) ; E4 = 0.5 (__builtin_prefetch / _mm_prefetch) ; E5 = 1 (restrict (C99)) ; E6 = 1 (aucune vérification de bornes) ; E7 = 0.5 (constexpr C23 limité, _Generic, pas de génériques)
 * **F** : F1 = 1 (tableaux 2D C99 (bench K9 natural)) ; F2 = 0 (aucun) ; F3 = 1 (uintN_t modulaires) ; F4 = 0.5 (mmap POSIX (hors ISO C) (sonde))
 
@@ -88,8 +88,8 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 
 * **A** : A1 = 1 ([dynamic]Particle (bench)) ; A2 = 1 (#raw_union/#packed, offset_of (sonde)) ; A3 = 1 (#packed + bit_field (sonde)) ; A4 = 1 (#align(64) (bench K3/K10)) ; A5 = 1 (#raw_union + transmute (sonde)) ; A6 = 1 (#soa intégré (bench K1)) ; A7 = 1 ([16]f32) ; A8 = 1 (u8/i16/f32)
 * **B** : B1 = 1 (pas de GC) ; B2 = 1 (context.allocator, arènes core:mem (bench K8)) ; B3 = 1 (valeurs sur la pile) ; B4 = 1 (allocations explicites via l'allocateur du contexte) ; B5 = 1 (rawptr, [^]T)
-* **C** : C1 = 1 (#simd[16]f32 (bench)) ; C2 = 1 (core:simd/x86 (src)) ; C3 = 1.0 (mesuré) ; C4 = 0 (pas de contrôle local de la réassociation) ; C5 = 0 (core:thread.Pool seulement)
-* **D** : D1 = 1 (core:thread) ; D2 = 1 (intrinsics.atomic_*_explicit avec ordre) ; D3 = 0 (pas de constante de ligne de cache (src)) ; D4 = 0.5 (seulement par appel système brut core:sys/linux) ; D5 = 1 (intrinsics.cpu_relax + atomic_thread_fence (src))
+* **C** : C1 = 1 (#simd[16]f32 (bench)) ; C2 = 0.5 (core:simd/x86 : AVX-512 très partiel (8 procédures AVX-512F, 6 AVX-512BW) ; corrigé le 30/10, juge à l'aveugle) ; C3 = 1.0 (mesuré) ; C4 = 0 (pas de contrôle local de la réassociation) ; C5 = 0 (core:thread.Pool seulement)
+* **D** : D1 = 1 (core:thread) ; D2 = 1 (intrinsics.atomic_*_explicit avec ordre) ; D3 = 0.5 (base:runtime.MAP_CACHE_LINE_SIZE, public mais propre aux tables ; corrigé le 30/10, juge à l'aveugle) ; D4 = 0.5 (seulement par appel système brut core:sys/linux) ; D5 = 1 (intrinsics.cpu_relax + atomic_thread_fence (src))
 * **E** : E1 = 1 (natif) ; E2 = 1 (asm (procédures assembleur)) ; E3 = 1 (intrinsics.expect) ; E4 = 1 (intrinsics.prefetch_read_data (src)) ; E5 = 1 (#no_alias (src)) ; E6 = 1 (#no_bounds_check (bench)) ; E7 = 0.5 (polymorphisme paramétrique monomorphisé ; pas d'exécution à la compilation)
 * **F** : F1 = 0.5 (tableaux fixes et matrix[R,C] petits seulement) ; F2 = 0 (aucun) ; F3 = 1 (non signés, débordement défini) ; F4 = 0.5 (mmap par core:sys/linux ou core:mem/virtual (src))
 
@@ -107,7 +107,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 * **A** : A1 = 1 (Particle[] (bench)) ; A2 = 1 (ordre déclaré, .offsetof (sonde)) ; A3 = 1 (align(1) + std.bitmanip.bitfields (sonde)) ; A4 = 1 (align(64) (sonde)) ; A5 = 1 (union, cast de pointeurs) ; A6 = 0 (aucun en Phobos) ; A7 = 1 (float[16]) ; A8 = 1 (ubyte/short/float)
 * **B** : B1 = 0.5 (GC par défaut (new, tableaux, fermetures) ; @nogc et -betterC l'évitent) ; B2 = 0.5 (std.experimental.allocator (expérimental)) ; B3 = 1 (struct et tableaux statiques sur la pile) ; B4 = 0.5 (fermetures, ~, littéraux de tableaux allouent sur le tas GC (bench : bug de capture)) ; B5 = 1 (pointeurs)
 * **C** : C1 = 1 (core.simd) ; C2 = 0.5 (ldc.gccbuiltins_x86 (propre à LDC)) ; C3 = 0.5 (mesuré) ; C4 = 0.5 (@fastmath de ldc.attributes (propre à LDC)) ; C5 = 1 (std.parallelism (parallel foreach, reduce))
-* **D** : D1 = 1 (core.thread) ; D2 = 1 (core.atomic MemoryOrder raw/acq/rel/seq) ; D3 = 0 (aucune) ; D4 = 0.5 (core.sys.linux.sched_setaffinity (liaison livrée)) ; D5 = 1 (core.atomic.pause + atomicFence (src))
+* **D** : D1 = 1 (core.thread) ; D2 = 1 (core.atomic MemoryOrder raw/acq/rel/seq) ; D3 = 1 (std.parallelism.cacheLineSize, core.cpuid.dataCaches ; corrigé le 30/10, juge à l'aveugle) ; D4 = 0.5 (core.sys.linux.sched_setaffinity (liaison livrée)) ; D5 = 1 (core.atomic.pause + atomicFence (src))
 * **E** : E1 = 1 (natif) ; E2 = 1 (asm (iasm DMD, ldc.llvmasm)) ; E3 = 0.5 (llvm_expect de ldc.intrinsics) ; E4 = 0.5 (llvm_prefetch de ldc.intrinsics) ; E5 = 0.5 (@restrict de ldc.attributes) ; E6 = 1 (arr.ptr[i] ; -boundscheck) ; E7 = 1 (templates + CTFE)
 * **F** : F1 = 0.5 (tableaux statiques de tableaux statiques) ; F2 = 0 (aucun) ; F3 = 1 (débordement défini) ; F4 = 1 (std.mmfile (sonde))
 

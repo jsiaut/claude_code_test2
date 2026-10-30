@@ -19,6 +19,7 @@ R_OVERRIDES = {
     ("c", "C2"): (0.25, "immintrin.h : intrinsèques du compilateur, hors norme"),
     ("c", "C4"): (0.25, "#pragma clang fp reassociate, -ffast-math : extensions"),
     ("c", "C5"): (0.25, "OpenMP : spécification externe et option -fopenmp"),
+    ("c", "D3"): (0.25, "__GCC_DESTRUCTIVE_SIZE et sysconf : extension et glibc, hors norme (erratum du 30/10)"),
     ("c", "D4"): (0.25, "sched_setaffinity : glibc, hors ISO C"),
     ("c", "D5"): (0.5, "atomic_thread_fence (C11) ; pause seulement par intrinsèque"),
     ("c", "E2"): (0.25, "__asm__ : extension (annexe J, hors norme)"),

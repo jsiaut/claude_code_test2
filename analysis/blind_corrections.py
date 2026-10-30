@@ -5,8 +5,9 @@
   ligne (glibc) : 0,5 en règle v1 (hors norme mais livré), 1 en v2, 0,25 sous leur règle ;
 * D, D3 : std.parallelism.cacheLineSize (Phobos) et core.cpuid.dataCaches (druntime) : 1 sous toutes les règles ;
 * Odin, D3 : base:runtime.MAP_CACHE_LINE_SIZE, public mais propre aux tables : 0,5 ;
-* Odin, C2 : core:simd/x86 ne couvre l'AVX-512 que par 8 procédures AVX-512F et 6 AVX-512BW : 0,5.
-Recalcule le classement publié (scénario A) et le scénario D de la confrontation avec ces quatre cellules corrigées.
+* Odin, C2 : core:simd/x86 ne couvre l'AVX-512 que par 8 procédures AVX-512F et 6 AVX-512BW : 0,5 ;
+* Nim, C5 : l'itérateur || de system ne compile pas une réduction en -d:release (vérifié) : 0,5 en v2.
+Recalcule le classement publié (scénario A) et le scénario D de la confrontation avec ces cinq cellules corrigées.
 Sortie : results/blind_corrections.json."""
 import json, os, sys
 
@@ -27,6 +28,7 @@ FIX = {  # (langage, capacité) : (v1, v2, leur règle, raison)
     ("d", "D3"): (1, 1, 1, "std.parallelism.cacheLineSize ; core.cpuid.dataCaches"),
     ("odin", "D3"): (0.5, 0.5, 0.5, "base:runtime.MAP_CACHE_LINE_SIZE, propre aux tables"),
     ("odin", "C2"): (0.5, 0.5, 0.5, "core:simd/x86 : AVX-512 très partiel (8 + 6 procédures)"),
+    ("nim", "C5"): (0.5, 0.5, 0.25, "itérateur || : une réduction ne compile pas en -d:release (vérifié)"),
 }
 
 

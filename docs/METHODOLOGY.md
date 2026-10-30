@@ -481,3 +481,12 @@ Robustesse :
   quatre accumulateurs, vérifié au désassemblage) ; Nim et D perdent la FMA, Go, Java et Chapel passent au scalaire.
   Le scénario D recalculé avec les rapports de K5 forcés à 1 (`analysis/confrontation_posthoc.py`) donne les mêmes
   verdicts (Spearman 0,87, C 5e).
+* 2026-10-30, après la confrontation : **notation à l'aveugle**, autorisée par l'utilisateur pour cette fois (un
+  sous-agent, contre la règle générale de cette étude). Plan et script de comparaison poussés avant le lancement et
+  avant la lecture des notes. Le juge travaillait dans un répertoire vide, avec interdiction de lire le dépôt,
+  l'étude fournie et mes fichiers de travail. Il a écrit hors de son répertoire dans deux caches globaux (Zig,
+  .NET), sans effet sur les résultats. Résultats : `docs/CONFRONTATION.md`, addendum.
+* Idem : **erratum de la matrice de capacités**, trouvé par le juge et vérifié à la main : C D3, D D3, Odin D3,
+  Odin C2 et Nim C5 (`analysis/capabilities.py`, `analysis/capabilities_v2.py`, `analysis/standard_rule.py`).
+  La comparaison pré-enregistrée reste calculée sur la matrice d'avant correction. L'analyse v3, ses graphiques et
+  le README sont recalculés avec la matrice corrigée ; l'effet sur le classement est publié avec la correction.

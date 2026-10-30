@@ -353,3 +353,53 @@ les classes ordonnées), et pour (3) accord à un niveau près.
 * Il tient aussi aux juges (H8) si l'une des comparaisons a un kappa pondéré sous 0,4 : la grille correspondante
   contient des jugements qu'un autre juge ne reproduit pas. Entre 0,4 et 0,6 : en partie.
 * Chaque cellule où le juge contredit un fait de ma matrice (et non une classe) est vérifiée, et le verdict publié.
+
+### Résultats de la notation à l'aveugle
+
+Le second juge (`results/blind_notation.json`, notes `results/blind_notes.md`) a noté les 88 cellules et les
+48 principes. Il a compilé 60 sondes, dont 13 écrites pour échouer et prouver une absence (`results/blind_probes/`).
+Comparaison calculée par `analysis/blind_compare.py`, poussé avant la lecture de ses notes, sur ma matrice d'avant
+correction (`results/report_blind.md`).
+
+| Comparaison | Accord exact | Kappa pondéré | À un niveau près |
+|---|---|---|---|
+| (1) juge, règle v2 / ma matrice | 89 % | 0,75 | — |
+| (2) juge, leur règle / ma table du test 1 | 82 % | 0,80 | — |
+| (3) juge, leurs principes / leur grille | 56 % | 0,46 | 94 % |
+
+**Verdict selon les critères fixés avant le lancement : l'écart tient aux règles en partie.** Les deux premiers
+kappas dépassent 0,6 ; le troisième est entre 0,4 et 0,6.
+
+* **Ma grille se reproduit** sous ma règle comme sous la leur.
+* **La leur se reproduit à un niveau près** (94 %), mais moins exactement. Leurs listes d'indicateurs par principe ne
+  sont pas publiées, et le juge ne les avait pas. Surtout, il n'accorde presque jamais le niveau 4 (« imposé ou par
+  défaut ») : sur les 7 niveaux 4 de leur grille parmi ces cellules, il n'en retrouve qu'un (Rust, concurrence). Les
+  trois niveaux 4 de Zig présents ici (faux partage, hiérarchie mémoire, threads) deviennent des 3. C'est la partie la
+  plus subjective de leur échelle, et c'est elle qui place Zig loin devant.
+* **Le juge reproduit à lui seul le renversement sur C.** En moyenne de ses notes, il classe C premier des 8 langages
+  sous ma règle (C, C++, D, Zig, Odin, Nim, Rust, C#) et dernier sous leur règle (D, Zig, Odin, Rust, C#, C++, Nim,
+  C), comme avec leurs principes. Sur les mêmes faits, la règle suffit à faire passer C de la tête à la queue.
+
+**Erreurs de fait de ma matrice trouvées par le juge, vérifiées à la main :**
+
+| Cellule | Ma note | Fait vérifié | Note corrigée (v2 ; leur règle) |
+|---|---|---|---|
+| C, D3 aide ligne de cache | 0 | `sysconf(_SC_LEVEL1_DCACHE_LINESIZE)` (glibc) ; `__GCC_DESTRUCTIVE_SIZE` = 64 prédéfini en C par clang 23 et gcc 16 | 1 ; 0,25 |
+| D, D3 | 0 | `std.parallelism.cacheLineSize` (Phobos), `core.cpuid.dataCaches` (druntime) | 1 ; 1 |
+| Odin, D3 | 0 | `base:runtime.MAP_CACHE_LINE_SIZE`, public mais réglage des tables | 0,5 ; 0,5 |
+| Odin, C2 intrinsèques | 1 | `core:simd/x86` ne couvre l'AVX-512 que par 8 procédures AVX-512F et 6 AVX-512BW | 0,5 ; 0,5 |
+| Nim, C5 parallélisme de données | 1 | une réduction avec l'itérateur `||` ne compile pas en `-d:release` (C généré invalide) | 0,5 ; 0,25 |
+
+Autres faits relevés par le juge, sans changer ma note :
+
+* L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le
+  drapeau. Son énumération donne des indices de bit, que le code teste comme des masques (vérifié dans
+  `llvm_backend_opt.cpp`). Je garde 0 : la capacité est sans effet ; le juge met 0,5.
+
+Le reste des écarts tient à la notation, pas aux faits :
+
+* types privés de la bibliothèque standard (`CachePadded` de Rust, constantes internes de .NET et de Nim) : le juge
+  les compte comme « unité interne » (0,5), moi comme absents, puisqu'on ne peut pas les importer ;
+* atomiques de C# sans ordre relâché explicite ;
+* affinité de C# au niveau du processus ;
+* `std::simd` de GCC, dont le manuel déclare le C++26 « highly experimental ».

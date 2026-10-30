@@ -291,3 +291,18 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **Les binaires recompilés à l'identique** : recompilés sur ce nouvel hôte par leurs scripts inchangés, les
   binaires de C, C++, Nim, D, Ada, Fortran, Go, C3 et Chapel sont identiques octet pour octet à ceux de la campagne
   (compilés sur Cascade Lake le 28 octobre).
+
+## Faits relevés par le second juge à l'aveugle (30 octobre), vérifiés — `docs/CONFRONTATION.md`, addendum
+
+* **C a une aide de taille de ligne** : `sysconf(_SC_LEVEL1_DCACHE_LINESIZE)` (glibc, 64 ici) et la macro
+  `__GCC_DESTRUCTIVE_SIZE` (64), prédéfinie en mode C par clang 23 comme par gcc 16. Ma matrice l'avait omise.
+* **D a `std.parallelism.cacheLineSize`** (Phobos) et `core.cpuid.dataCaches` (druntime). Omis aussi.
+* **Odin** : `base:runtime.MAP_CACHE_LINE_SIZE` est public, mais c'est un réglage des tables ; `core:simd/x86` ne
+  couvre l'AVX-512 que par 8 procédures AVX-512F et 6 AVX-512BW.
+* **L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est sans effet** dans le compilateur livré : l'énumération
+  donne des indices de bit, que `llvm_backend_opt.cpp` teste comme des masques. Le drapeau `reassoc` n'est donc
+  jamais posé.
+* **Nim** : une réduction écrite avec l'itérateur `||` (OpenMP) ne compile pas en `-d:release` : le C généré
+  renomme la variable que la clause `reduction` nomme.
+* **D et Nim ont des indications de branchement standard** : `core.builtins.likely` et `unlikely` (druntime),
+  `likely` et `unlikely` exportés par `system`.

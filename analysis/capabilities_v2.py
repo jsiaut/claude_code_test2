@@ -58,7 +58,7 @@ V2_OVERRIDES = {
     ("d", "E5"): (1, "@restrict (ldc.attributes)"),
     # Nim (backend clang)
     ("nim", "C2"): (1, "importc des intrinsèques de <immintrin.h> du compilateur C de la chaîne"),
-    ("nim", "C5"): (1, "itérateur || du module system (OpenMP du compilateur C)"),
+    ("nim", "C5"): (0.5, "itérateur || du module system (OpenMP) : une réduction ne compile pas en -d:release ; erratum du 30/10, juge à l'aveugle"),
     ("nim", "E4"): (1, "importc de __builtin_prefetch"),
     # Ada (GNAT 16)
     ("ada", "C2"): (1, "builtins GCC importés par Convention Intrinsic + Machine_Attribute vector_type (documentés par GNAT)"),
@@ -82,6 +82,8 @@ V2_OVERRIDES = {
     ("mojo", "C2"): (1, "llvm_intrinsic de la bibliothèque standard"),
     # Python
     ("python", "D4"): (1, "os.sched_setaffinity de la bibliothèque standard"),
+    # erratum du 30 octobre (notation à l'aveugle) : fait omis
+    ("c", "D3"): (1, "sysconf(_SC_LEVEL1_DCACHE_LINESIZE) de la glibc ; __GCC_DESTRUCTIVE_SIZE prédéfini par clang et gcc"),
 }
 
 # C3 (vectorisation automatique mesurée) sort du pilier C en v2 : double compte avec E et D1.
