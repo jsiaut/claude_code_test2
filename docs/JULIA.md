@@ -120,4 +120,61 @@ cellule en 7 passes, ordre tiré au hasard (graine 20261120 + passe), échauffem
 
 ## 4. Résultats
 
-*À venir.*
+175 processus (25 cellules, 7 passes, échauffement de 2), le 30 octobre de 19 h 34 à 19 h 50 sur la machine 7 ;
+aucune somme de contrôle fausse, aucun processus refait. Temps, rapports et scénarios : `results/report_julia.md` et
+`results/julia_check.json` ; données : `results/raw_julia/`.
+
+### 4.1 Rapports appariés (machine 7, même hôte)
+
+| Clé | Julia | Formes de la remarque | Rapport (IC 95 %) | C par clang |
+|---|---|---|---|---|
+| Q1 tuned | 81,3 ms | 42,7 ms | 0,525 (0,453–0,596) | 29,1 ms |
+| Q1 mt (4 threads) | 29,0 ms | 14,7 ms | 0,506 (0,445–0,580) | 9,2 ms |
+| K7 tuned (préchargement par lots) | 571 ms | 394 ms | 0,690 (0,594–0,821) | 346 ms |
+| K8 tuned (profondeur en `Val`) | 304 ms | 251 ms | 0,827 (0,710–0,929) | 247 ms (GCC : 138 ms) |
+| K10 tuned, hors score (sans capture) | 440 ms | 17,9 ms | 0,041 (0,028–0,063) | — |
+| K5 tuned, `-C native,-prefer-256-bit` | 6,51 ms | 6,33 ms | 0,972 (0,797–1,176) | 6,44 ms |
+| 4 témoins (code inchangé : K5, K9, Q6 tuned, K1 soa) | | | de 0,97 à 1,06 | |
+
+* **Q1** : confirmé (la remarque : 65,9 → 33,3 ms). Julia reste 1,5 fois plus lente que C en une passe masquée.
+* **K7** : le préchargement par lots, que la remarque n'avait pas pu mesurer, gagne 31 %.
+* **K8** : la spécialisation sur la profondeur gagne 17 %, pas 49 % : Julia rejoint le C de clang (251 contre 247 ms),
+  loin de GCC (138 ms).
+* **K5** : sur ce Cascade Lake, le 512 bits n'apporte rien (Julia en 256 bits fait déjà jeu égal avec C, 6,5 ms).
+* **K10** : le correctif de la remarque divise le temps par 24 (440 → 18 ms).
+
+### 4.2 Report sur les données principales et classement
+
+Les quatre rapports de S1 restent sous le seuil de 25 % face au pont par le C de clang (écarts de −18,6 à +10,3 %) :
+ils sont transférés tels quels. Pour K5, le transfert (0,97) s'écarte du pont de 58 % : les données principales de K5
+viennent de la machine 3 (Emerald Rapids), où le C en 512 bits fait 3,94 ms et Julia en 256 bits 6,29 ms ; le pont
+reporte Julia en 512 bits à 3,87 ms, au niveau de C, ce qui rejoint la mesure de la remarque sur Emerald Rapids (5,51
+→ 4,0 ms). S1-K5 retient donc le pont.
+
+| Scénario | Score | Contrôle C | Plafond E | Rang espéré | Place | Rang 90 % |
+|---|---|---|---|---|---|---|
+| Avant (publié avant la remarque, refait par le même code) | 62,2 | 68,3 | 66,6 | 11,63 | 12 | 8–13 |
+| **J-E, publié** : errata B2, D3, D5 (v2) | **64,0** | **73,3** | 66,6 | **11,12** | **12** | 7–13 |
+| S1 (sensibilité) : formes de la remarque pour Q1, K7, K8 | 67,1 | 73,3 | 74,5 | 9,62 | 10 | 5–13 |
+| S1-K5 : S1 et K5 en 512 bits (pont) | 68,9 | 73,3 | 79,0 | 8,35 | 9 | 4–12 |
+
+* **Publié** : les errata rapportent 1,8 point (le contrôle passe de 68,3 à 73,3). Julia reste 12e, à 0,1 point de
+  Chapel, qui la devance dans 63 % des variantes ; elle devance Mojo dans 63 %.
+* **Sensibilité** : avec les formes de la remarque, Julia gagne 3,1 points et passe 10e, devant Fortran (S1) ; avec
+  K5 en 512 bits sur Emerald Rapids, 68,9 points et la 9e place, entre Rust et D (S1-K5). La règle commune (3.1) les
+  tient hors du classement publié : ce sont de meilleures formes, pas des corrections.
+* **La remarque estimait** 64,0 points avec la matrice (exactement mon calcul), 66,2 avec Q1 et K5, 68,8 avec K8 en
+  plus ; mes calculs donnent 67,1 avec Q1, K7 et K8, et 68,9 avec K5 en plus.
+
+### 4.3 Verdicts
+
+* **(1) La décomposition** : exacte. Le README attribuait la 12e place au runtime ; c'est d'abord le plafond. Corrigé.
+* **(2) Les versions tuned** : Q1 confirmé (0,53) ; K7 confirmé (0,69), alors que la remarque ne l'avait pas mesuré ;
+  K8 moitié moins qu'annoncé (0,83) ; K5 sans effet sur Cascade Lake, mais cohérent, par le pont, avec la mesure de
+  la remarque sur Emerald Rapids. Ce sont des optimisations nouvelles : sensibilité, pas classement publié.
+* **(3) La matrice** : B2 et D3 exacts (0,5), D5 accepté en règle v2 (1), comme pour C.
+* **(4) K10** : diagnostic exact, et le mien était faux ; le README et FINDINGS sont corrigés. K10 étant hors score,
+  le classement ne bouge pas.
+* **L'effort d'implémentation** : la remarque a raison de dire que mes versions tuned de Julia étaient moins
+  travaillées que d'autres ; S1-K5 en donne l'ordre de grandeur (4,9 points, trois places). Je n'ai pas mesuré ce
+  qu'une relecture experte rapporterait aux autres langages ; Ada et Fortran y ont gagné deux places chacun.

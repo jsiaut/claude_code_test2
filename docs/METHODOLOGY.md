@@ -600,3 +600,12 @@ Robustesse :
   1.13.3, code natif de K5, cinq variantes de K10 dont une bloquée, observée sous gdb, puis tuée par SIGKILL),
   errata de la matrice (B2 et D3 à 0,5, D5 à 1 en règle v2) et plan : `docs/JULIA.md`, poussé avant les mesures avec
   le code d'analyse (`analysis/julia_check.py`).
+* 2026-10-30, 19:34-19:50 : **mesures de la remarque sur Julia** (`tools/measure_julia.py`, machine 7) : 25 cellules
+  × 7 processus (175), aucune somme de contrôle fausse, aucun processus refait. Rien d'autre ne tournait.
+* 2026-10-30, soir : **résultats de la remarque sur Julia** (`results/report_julia.md`). Les errata (B2 et D3 à 0,5,
+  D5 à 1 en règle v2) entrent dans le classement publié : Julia passe de 62,2 à 64,0 points et reste 12e (rang espéré
+  11,12) ; l'analyse v3 recalculée redonne exactement J-E, et les scores des autres langages ne bougent pas.
+  Sensibilité, hors classement (formes de la remarque) : 67,1 points et la 10e place (S1) ; 68,9 et la 9e avec K5 en
+  512 bits, reporté par le pont du C du même hôte parce que le transfert s'en écartait de 58 % (S1-K5). Le README
+  attribue désormais la place de Julia à son plafond, et le diagnostic de K10 est corrigé (README, FINDINGS). Les
+  scénarios de Zig sont recalculés (A' 5,73 → 5,75 ; S3 5,83 → 5,85 ; S1 inchangé).

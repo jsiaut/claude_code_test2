@@ -168,6 +168,9 @@ seuil). Temps, rapports et scénarios : `results/report_mojo.md` et `results/moj
 | S-K4 : K4 hors du plafond, pour tous les langages | 67,2 | 70,5 | 79,2 | 10,38 | 11 | 7–13 |
 | S-K4-B4 | 66,5 | 68,5 | 79,2 | 10,70 | 12 | 7–13 |
 
+Depuis les errata de Julia (`docs/JULIA.md`), le classement publié donne à Mojo un rang espéré de 11,97, sans changer
+son score, sa place (13e) ni son rang plausible (9–13) ; Julia (64,0 points) repasse devant lui au score.
+
 * **Publié** : l'analyse v3 recalculée redonne exactement M-E (scores et rangs plausibles des 21 langages). Mojo gagne
   2,7 points et dépasse Julia au score (62,7 contre 62,2), mais reste 13e en rang espéré : il ne passe devant elle que
   dans 46 % des variantes (31 % avant), parce que son code naturel est le plus lent des langages compilés à l'avance.

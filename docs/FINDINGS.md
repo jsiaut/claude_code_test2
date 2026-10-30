@@ -406,3 +406,18 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   machines 4 à 6, et 9,9 Go/s sur la machine des données principales.
 * **Le binaire de Mojo du banc était celui de la machine 3** ; recompilé sur Cascade Lake par son script inchangé, il
   redonne octet pour octet le binaire de la campagne (compilation reproductible).
+
+## Remarque sur Julia (30 octobre, machine 7, Cascade Lake) — `docs/JULIA.md`, `results/julia_check/`
+
+* **Julia 1.13.3** : `Threads.PaddedSpinLock` (public depuis la 1.13) occupe seul sa ligne de cache (120 octets) ;
+  `Libc.malloc`, `Libc.free` et `unsafe_wrap` sont publics ; `ccall("llvm.x86.sse2.pause", llvmcall, ...)` émet
+  `pause` ; `llvm.expect` par `llvmcall` ne laisse aucun poids de branchement dans l'IR optimisé.
+* **K5 tuned (`@simd`)** n'émet que des FMA de 256 bits sur Cascade Lake (préférence de LLVM) ;
+  `-C native,-prefer-256-bit` donne des FMA de 512 bits, sans gain mesurable sur la machine 7 (0,97). Des vecteurs
+  `NTuple{16,VecElement{Float32}}` rendus par `llvmcall` sont mis en boîte (environ 10 Ko alloués par appel de K5).
+* **Une variable capturée peut bloquer une attente active** : affectée dans une fermeture et dans la fonction
+  englobante, elle est mise dans une `Core.Box`, et chaque mise à jour alloue ; la collecte ainsi déclenchée attend
+  que tous les threads atteignent un point d'arrêt, ce qu'un thread en attente active sans `yield()` ni
+  `GC.safepoint()` ne fait jamais (`jl_gc_wait_for_the_world`). Sans capture, K10 tuned passe de 440 à 18 ms.
+* **Formes optimisées** (machine 7) : Q1 en une passe masquée 0,53 ; K7 préchargé par lots 0,69 ; K8 avec la
+  profondeur en paramètre de compilation 0,83.
