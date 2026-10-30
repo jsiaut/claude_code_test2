@@ -18,3 +18,8 @@ zig_io     k3   sw_padded                       p0 n=10 med=0.084246s ok={True} 
 zig_io     k6   mt                   q1         p0 n=10 med=0.008284s ok={True} rc=0 
 zig_io     k3   rmw_padded                      p0 n=10 med=0.250069s ok={True} rc=0 
 zig_io     k6   mt                   q6         p0 n=10 med=0.008084s ok={True} rc=0 
+zig_io     k6   mt                   q1         p0 n=10 med=0.011730s ok={True} rc=0 
+zig_io     k6   mt                   q6         p0 n=10 med=0.008069s ok={True} rc=0 
+zig_io     k9   mt                              p0 n=10 med=0.016643s ok={True} rc=0 
+zig_io     k3   rmw_padded                      p0 n=10 med=0.238440s ok={True} rc=0 
+zig_io     k3   sw_padded                       p0 n=10 med=0.081277s ok={True} rc=0 
