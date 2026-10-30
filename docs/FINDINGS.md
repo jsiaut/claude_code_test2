@@ -333,3 +333,25 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **`std.Io.File.MemoryMap`** (depuis 0.16) projette un fichier de façon portable (`mmap` partagé sous Linux,
   visible dans `/proc/self/maps`) ; `std.mem.bytesAsSlice` le réinterprète sans copie. F4 de Zig vaut donc 1 en
   règle v1, et non 0,5.
+
+## Remarque sur Ada (30 octobre, machine 5, Cascade Lake) — `docs/ADA.md`, `results/ada_check/`
+
+* **Sans `-gnatp`, GNAT compile avec `-fnon-call-exceptions`** (`gcc-interface/misc.cc`, GCC 16.2). Inliné dans
+  un appelant qui a des régions d'exceptions (programme principal, corps de tâche), un noyau ne se vectorise plus,
+  même sous `pragma Suppress (All_Checks)` et `pragma Loop_Optimize (Vector)` : c'était le cas du stencil `tuned`
+  et `mt` et de Q6 à 4 threads dans le binaire de la campagne. Hors ligne (`with No_Inline`), même source, mêmes
+  options : K9 `tuned` 0,75 (au niveau de C compilé par GCC), K6 `mt` Q6 0,51, K9 `mt` 0,85.
+* **Un changement d'inlining déplace aussi des noyaux qu'il ne touche pas** : dans le même binaire corrigé, K8
+  naturel 0,82, K8 `tuned` 0,79 et K9 naturel 1,25, à source identique.
+* **GNAT exploite RM 6.2(12)** (accès croisé entre paramètres = erreur bornée) : à -O3, une boucle qui n'écrit
+  que dans des paramètres d'un type tableau contraint est marquée `ivdep` et vectorisée sans test de recouvrement
+  (`trans.cc`) ; pas pour un tableau non contraint (pointeur « gras ») ni pour des valeurs d'accès.
+* **`pragma Machine_Attribute (T, "vector_type")`** fait d'un tableau Ada un type vectoriel GCC : à -O3, une
+  boucle d'addition sur ce type donne un seul `vaddps`, une multiplication-addition un seul `vfmadd132ps`.
+* **`pragma Disable_Atomic_Synchronization`** remplace le `xchg` d'une écriture `Atomic` par un `mov`.
+* **La pile secondaire alloue sur le tas** : une fonction qui rend un tableau non contraint de 4 Mo, sans `new`,
+  appelle `__gnat_malloc` depuis `System.Secondary_Stack.Allocate_Dynamic`.
+* **K2** : la boucle de chasse soustrait la borne inférieure dynamique à chaque saut (inlinée, elle ajoutait un
+  `movsxd`) ; la borne fixe (extension `-gnatX` de GNAT) supprimerait la soustraction.
+* **K8** : le meilleur temps d'Ada (108 ms) est l'arène de nœuds indexés, que GCC compile bien ; le pool de stockage
+  prend 187 ms.

@@ -116,4 +116,70 @@ rejouée (20 000 variantes, même graine).
 
 ## 4. Résultats
 
-*À venir.*
+Mesures du 30/10, 15:14 à 15:32 (machine 5) : 60 cellules × 7 processus, aucune somme de contrôle fausse, rien
+d'autre ne tournait. Rapports, témoin et scénarios : `results/report_ada.md` et `results/ada_check.json`.
+
+### 4.1 Ce que change la correction
+
+Rapports appariés `ada_fix` / `ada` (moyenne géométrique de 7 processus chacun, IC à 95 %) :
+
+* **Le stencil et Q6 à 4 threads, que le piège rendait scalaires** : K9 `tuned` 0,75 (0,67–0,84), qui fait désormais
+  jeu égal avec C compilé par GCC sur le même hôte (27,3 contre 27,1 ms) ; K6 `mt` Q6 0,51 (0,47–0,55) ; K9 `mt` 0,85
+  (0,79–0,91).
+* **K2 en cache** : 0,83 (16 Kio) et 0,89 (256 Kio), 1,01 en mémoire. Inlinée, la boucle de chasse enchaînait
+  `movsxd`, `sub` et le chargement ; hors ligne, `sub` et un chargement qui étend le signe : une instruction de moins
+  par saut, ce qui compte quand le saut coûte 4 à 5 cycles (`results/ada_check/binaries.txt`).
+* **Inchangés** : K6 `tuned` Q6 et Q1, K6 `mt` Q1 (`Q1_Tuned` était déjà hors ligne, `Q6_Tuned` déjà vectorisé
+  dans la procédure de K6) ; K1 `aos` et `soa` 0,95 et 0,94 (intervalles qui contiennent 1) ; K5 `tuned` 1,09
+  (0,93–1,28), dont les builtins vectoriels explicites ne dépendent pas du vectoriseur (forcé à 1, comme prévu).
+* **Témoins, dont le source ne change pas** : la plupart restent entre 0,96 et 1,05, mais trois bougent nettement :
+  K8 naturel 0,82, K8 `tuned` 0,79 et K9 naturel 1,25. Le binaire a changé autour d'eux (inlining dans les
+  procédures appelantes, disposition) : des effets de cet ordre étaient déjà établis sur K3 (`FINDINGS`). Ils
+  n'entrent pas dans le classement, puisque le plan n'y transfère que les 12 clés dont le code change ; ils rappellent
+  qu'un rapport proche de 1 n'est pas distinguable de la disposition.
+* **Ce qui reste** : avec la correction, Ada reste derrière C compilé par GCC sur K6 Q1 (1,78 en `tuned`, 2,32 en
+  `mt`) et sur les versions à 4 threads (K9 `mt` 1,77, K6 `mt` Q6 1,49). Les deux créent leurs threads ou leurs
+  tâches à chaque passe ; je n'ai pas mesuré ce que coûte la création d'une tâche GNAT.
+
+### 4.2 Effet sur le classement (analyse globale rejouée, 20 000 variantes)
+
+| Scénario | Score d'Ada | Plafond E | Contrôle C | Rang espéré | Rang dans 90 % des variantes |
+|---|---|---|---|---|---|
+| Publié avant la remarque | 68,0 | 73,9 (8e) | 76,2 | 8,45 (9e) | 3–12 |
+| A-E : errata de la matrice seuls | 69,5 | 73,9 | 80,6 | 7,97 (9e) | 3–11 |
+| **S1 : errata et correction (classement publié)** | **71,6** | **78,1 (7e)** | 80,6 | **6,78 (7e)** | 2–11 |
+| S1-K5 : avec le transfert de K5 | 71,2 | 77,2 | 80,6 | 6,96 (7e) | 2–11 |
+| S1-27 : les 27 rapports | 70,9 | 76,6 | 80,6 | 6,65 (7e) | 2–11 |
+
+* **S1** : C, C++, Odin, C3, Zig, Nim, **Ada**, Rust, D, Chapel… Ada est 4e au score de référence (71,6, derrière C,
+  C++ et Odin), mais 7e en rang espéré : il devance Rust dans 52 % des variantes, D dans 62 %, et Nim le devance dans
+  54 %. Son code naturel (D1 = 14, parmi les plus bas des langages compilés : vérifications actives) le retient dans
+  les variantes qui pèsent le code par défaut.
+* **Plafond par noyau** : K9 passe de 53 à 67 % du meilleur temps, K6 de 51 à 60 % ; sur K1, Ada devient la
+  référence (K1 `soa`, 7,2 ms).
+
+### 4.3 Verdicts sur la remarque
+
+* **(1) Exact**, et c'était une erreur de mon implémentation : les noyaux `tuned` annonçaient la suppression des
+  vérifications et la vectorisation, et le binaire ne vectorisait pas le stencil ni Q6 à 4 threads. Corrigé.
+* **(2) Exact.** Le stencil naturel du dépôt reste scalaire même hors ligne (bornes littérales sur un tableau non
+  contraint) ; sur un type contraint, GNAT le vectorise vérifications actives. Le code naturel ne change pas
+  (décision 3), le fait est publié.
+* **(3) Exact, avec une limite** : RM 6.2(12) est exploitée par GNAT pour les tableaux contraints, pas pour les
+  tableaux non contraints. E5 passe à 1, comme Fortran.
+* **(4), (5), (6) Exacts.** C1 passe à 0,5 et 1 (comme `vector_size` en C) ; le README ne dit plus que les atomiques
+  d'Ada sont seulement séquentiellement cohérentes, ni que le meilleur temps de K8 vient des pools de stockage.
+* **(7) Exact.** K2 : la soustraction de la borne dynamique est dans la chaîne ; la correction d'inlining enlève déjà
+  une instruction ; la borne fixe (extension `-gnatX`) n'est pas adoptée (décision 4). K4 : niveau de GCC.
+* **B4 : exact**, et c'est la seule correction qui fait baisser Ada (1 → 0,5).
+* **Effet chiffré** : la remarque estimait, en score ponctuel, 72,2 (4e) avec K9 corrigé et 73,8 (3e) avec K6.
+  Mesuré : 71,6, 4e au score ; K6 ne gagne qu'à 4 threads sur Q6. Sur les 20 000 variantes, Ada passe de la 9e à la
+  7e place, et son rang plausible reste large (2–11).
+
+### 4.4 Ce qui change dans l'étude
+
+* Le classement publié est désormais S1 : `analysis/analyze_v2.dataset_main` applique les rapports de
+  `results/transfers.json` (12 clés d'Ada, K5 à 1) aux données principales ; la réplication sur la machine 3 garde
+  les données d'Ada sans correction (rapports mesurés sur Cascade Lake seulement).
+* Matrice : E5, C1, B4 d'Ada (v1, v2 et règle R) ; sondes alignées (0 divergence).
+* README et FINDINGS : attributions corrigées (K8, atomiques, vérifications et vectorisation).

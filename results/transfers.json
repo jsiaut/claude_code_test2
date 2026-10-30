@@ -1,0 +1,18 @@
+{
+ "source": "docs/ADA.md (d\u00e9cision 2) ; rapports appari\u00e9s de results/raw_ada, machine 5 ; results/ada_check.json",
+ "ratios": {
+  "ada": {
+   "k1|aos|energy": 0.948697189225563,
+   "k1|soa|energy": 0.9417314456086283,
+   "k2|tuned|16384": 0.8291427598494728,
+   "k2|tuned|262144": 0.8862170595559383,
+   "k2|tuned|8388608": 1.0080697416843472,
+   "k6|tuned|q6": 1.022482874589685,
+   "k6|tuned|q1": 1.0075552284488183,
+   "k6|mt|q6": 0.5079432709224201,
+   "k6|mt|q1": 1.0070588352991128,
+   "k9|tuned|": 0.7548161296222257,
+   "k9|mt|": 0.846311339648959
+  }
+ }
+}
