@@ -2,3 +2,7 @@ CAP;A2;1;fieldoffset(S, 3)=8
 CAP;A5;1;reinterpret(UInt32, 1f0)=0x3f800000
 CAP;F4;1;Mmap.mmap -> Vector{Float32} : 0.4390046
 CAP;D5;0.5;Threads.atomic_fence ; pas de pause publique
+CAP;B2;0.5;Libc.malloc + unsafe_wrap (publics) : arène à la main, somme = 500500
+CAP;D3;0.5;Threads.PaddedSpinLock public = true, sizeof = 120 (propre aux verrous)
+CAP;D5;0.5;Threads.atomic_fence ; pause par ccall llvmcall : true (règle v2 : 1)
+CAP;E3;0;llvm.expect par llvmcall : poids de branchement dans l'IR optimisé = false

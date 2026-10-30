@@ -592,3 +592,11 @@ Robustesse :
   stencil naturel de Mojo (×4,1), pas tout (×1,48 face au C vectorisé, au-delà du seuil de 1,2 fixé d'avance) : le
   README dit les deux causes ; pour Q1, elles expliquent tout (0,995). Les scénarios de Zig sont recalculés sur ces
   données (seul S3 bouge : 5,82 → 5,83).
+* 2026-10-30, 19:14 : **le conteneur redémarre sur un nouvel hôte** (machine 7) : Cascade Lake du même modèle que
+  les machines 1, 2, 4, 5 et 6 (modèle 85, révision 7, 4 vCPU, 16 Go), latence à 4 Mio 60 ns, débit DRAM 10 Go/s
+  (`results/hw/machine7/`).
+* 2026-10-30, soir : **remarque sur Julia** transmise par l'utilisateur (place due au plafond et non au runtime ;
+  noyaux tuned moins travaillés ; cases B2, D3 et D5 ; diagnostic de K10). Vérifications préalables (sondes Julia
+  1.13.3, code natif de K5, cinq variantes de K10 dont une bloquée, observée sous gdb, puis tuée par SIGKILL),
+  errata de la matrice (B2 et D3 à 0,5, D5 à 1 en règle v2) et plan : `docs/JULIA.md`, poussé avant les mesures avec
+  le code d'analyse (`analysis/julia_check.py`).

@@ -80,6 +80,7 @@ V2_OVERRIDES = {
     ("julia", "C2"): (1, "Base.llvmcall vers les intrinsèques LLVM (documenté)"),
     ("julia", "E2"): (1, "Base.llvmcall avec asm en ligne dans l'IR"),
     ("julia", "E4"): (1, "Base.llvmcall de llvm.prefetch"),
+    ("julia", "D5"): (1, "pause par ccall(\"llvm.x86.sse2.pause\", llvmcall) (sonde ; erratum du 30/10)"),
     # Mojo
     ("mojo", "C2"): (1, "llvm_intrinsic de la bibliothèque standard"),
     # Python

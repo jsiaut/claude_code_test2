@@ -118,6 +118,10 @@
 | julia | A5 | 1 | 1 |  | reinterpret(UInt32, 1f0)=0x3f800000 |
 | julia | F4 | 1 | 1 |  | Mmap.mmap -> Vector{Float32} : 0.4390046 |
 | julia | D5 | 0.5 | 0.5 |  | Threads.atomic_fence ; pas de pause publique |
+| julia | B2 | 0.5 | 0.5 |  | Libc.malloc + unsafe_wrap (publics) : arène à la main, somme = 500500 |
+| julia | D3 | 0.5 | 0.5 |  | Threads.PaddedSpinLock public = true, sizeof = 120 (propre aux verrous) |
+| julia | D5 | 0.5 | 0.5 |  | Threads.atomic_fence ; pause par ccall llvmcall : true (règle v2 : 1) |
+| julia | E3 | 0 | 0 |  | llvm.expect par llvmcall : poids de branchement dans l'IR optimisé = false |
 | lua | A5 | 0.5 | 0.5 |  | string.pack/unpack : 0x3f800000 |
 | lua | F3 | 0.5 | 0.5 |  | entiers 64 bits enveloppants : true ; math.ult true |
 | mojo | D2 | 1 | 1 |  | Atomic.fetch_add[ordering=RELAXED] |

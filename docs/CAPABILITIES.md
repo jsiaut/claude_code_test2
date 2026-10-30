@@ -16,7 +16,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | A8 types numériques étroits de stockage | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ |
 | **B** (20 %) | | | | | | | | | | | | | | | | | | | | | |
 | B1 pas de GC traçant imposé | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ |
+| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ |
@@ -29,7 +29,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | **D** (15 %) | | | | | | | | | | | | | | | | | | | | | |
 | D1 threads parallèles en mémoire partagée | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ○ |
 | D2 atomiques à ordres mémoire explicites | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ● | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ○ |
-| D3 aide ligne de cache | ◐ | ● | ○ | ● | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ● | ○ | ○ | ○ |
+| D3 aide ligne de cache | ◐ | ● | ○ | ● | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ◐ | ○ | ● | ○ | ○ | ○ |
 | D4 affinité CPU | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ | ○ |
 | D5 barrières et indication d'attente active | ◐ | ◐ | ● | ◐ | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ● | ○ | ● | ● | ◐ | ○ | ● | ◐ | ○ | ○ |
 | **E** (10 %) | | | | | | | | | | | | | | | | | | | | | |
@@ -186,9 +186,9 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 ### Julia
 
 * **A** : A1 = 1 (Vector{Particle} isbits en ligne (bench)) ; A2 = 1 (ordre déclaré, fieldoffset (src)) ; A3 = 0 (aucun) ; A4 = 0.5 (tableaux alignés par l'implémentation ; pas d'attribut) ; A5 = 1 (reinterpret pour tout type isbits) ; A6 = 0 (StructArrays est tiers) ; A7 = 1 (NTuple{16,Float32}) ; A8 = 1 (UInt8/Float32)
-* **B** : B1 = 0 (GC imposé) ; B2 = 0 (aucun) ; B3 = 0.5 (structs isbits et tuples sur la pile ; tableaux sur le tas) ; B4 = 0.5 (instabilité de type et fermetures (Core.Box) allouent (bench : capture)) ; B5 = 1 (Ptr, unsafe_load, Libc.malloc)
+* **B** : B1 = 0 (GC imposé) ; B2 = 0.5 (Libc.malloc/free et unsafe_wrap : arènes à la main (sonde ; erratum du 30/10)) ; B3 = 0.5 (structs isbits et tuples sur la pile ; tableaux sur le tas) ; B4 = 0.5 (instabilité de type et fermetures (Core.Box) allouent (bench : capture)) ; B5 = 1 (Ptr, unsafe_load, Libc.malloc)
 * **C** : C1 = 0.5 (VecElement + llvmcall seulement (SIMD.jl tiers)) ; C2 = 0.5 (llvmcall vers intrinsèques LLVM) ; C3 = 1.0 (mesuré) ; C4 = 1 (@simd, @fastmath) ; C5 = 1 (Threads.@threads, @spawn)
-* **D** : D1 = 1 (threads) ; D2 = 1 (@atomic :monotonic/:acquire/:release (src)) ; D3 = 0 (aucune) ; D4 = 0.5 (JULIA_EXCLUSIVE=1 (épinglage global)) ; D5 = 0.5 (Threads.atomic_fence ; pause interne seulement)
+* **D** : D1 = 1 (threads) ; D2 = 1 (@atomic :monotonic/:acquire/:release (src)) ; D3 = 0.5 (Threads.PaddedSpinLock (1.13) : une ligne de cache, propre aux verrous (sonde ; erratum du 30/10)) ; D4 = 0.5 (JULIA_EXCLUSIVE=1 (épinglage global)) ; D5 = 0.5 (Threads.atomic_fence ; pause interne seulement)
 * **E** : E1 = 1 (@code_native) ; E2 = 0.5 (llvmcall (IR LLVM pouvant contenir asm)) ; E3 = 0 (aucun) ; E4 = 0.5 (llvmcall) ; E5 = 0.5 (Base.Experimental.@aliasscope / Const (expérimental) (src)) ; E6 = 1 (@inbounds) ; E7 = 1 (spécialisation par méthode + @generated)
 * **F** : F1 = 1 (Array{T,N} colonne-majeur) ; F2 = 0.5 (Distributed, SharedArrays (processus)) ; F3 = 1 (UInt32 enveloppant) ; F4 = 1 (Mmap.mmap (sonde))
 

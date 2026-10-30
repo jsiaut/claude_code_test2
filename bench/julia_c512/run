@@ -1,0 +1,4 @@
+#!/bin/sh
+# Remarque sur Julia (docs/JULIA.md) : source de la campagne (bench/julia/ms.jl) avec l'option documentée
+# -C native,-prefer-256-bit, qui laisse LLVM vectoriser en 512 bits. Sensibilité seulement (K5 tuned).
+exec /opt/julia/bin/julia -O3 -t 4 -C native,-prefer-256-bit --startup-file=no "$(dirname "$0")/../julia/ms.jl" "$@"
