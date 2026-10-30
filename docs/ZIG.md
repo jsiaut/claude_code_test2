@@ -140,9 +140,9 @@ pour 0.17. Rapports appariés master / 0.17 (moyenne géométrique de 7 processu
 
 ### 4.2 Effet sur le classement (analyse globale rejouée, 20 000 variantes)
 
-Chiffres recalculés après les corrections d'Ada et de Fortran (`docs/ADA.md`, `docs/FORTRAN.md`), qui changent un
-peu les données de tous les scénarios ; les premiers chiffres, publiés plus tôt le même jour, différaient d'au plus
-0,2 rang espéré.
+Chiffres recalculés après les corrections d'Ada, de Fortran et de Mojo (`docs/ADA.md`, `docs/FORTRAN.md`,
+`docs/MOJO.md`), qui changent un peu les données de tous les scénarios ; les premiers chiffres, publiés plus tôt le
+même jour, différaient d'au plus 0,2 rang espéré.
 
 | Scénario | Score de Zig | Plafond E | Code naturel D1 | Rang espéré | Rang dans 90 % des variantes | Part des variantes où Zig est 1er |
 |---|---|---|---|---|---|---|
@@ -150,7 +150,7 @@ peu les données de tous les scénarios ; les premiers chiffres, publiés plus t
 | **S1** : Zig 0.18-dev | 74,8 | 78,5 (4e) | 24,9 (1er) | 2,71 (2e) | 1–6 | 24 % |
 | S1-K5 : S1 sans transfert pour K5 | 74,6 | 77,9 | 24,9 | 2,80 (2e) | 1–6 | — |
 | S2 : 0.18-dev et `Io.Group` | 75,3 | 79,7 | 24,9 | 2,52 (2e) | 1–5 | — |
-| S3 : 0.17 et `Io.Group` | 71,3 | 70,4 | 22,0 | 5,82 (5e) | 2–11 | — |
+| S3 : 0.17 et `Io.Group` | 71,3 | 70,4 | 22,0 | 5,83 (5e) | 2–11 | — |
 
 * **A'** : la correction de F4 ne change aucun rang ni aucun score de référence (la règle v2 donnait déjà 1) ;
   elle ne joue que dans les variantes en règle v1. Ordre : C, C++, Odin, C3, Zig, Nim, Ada, Rust, D, Fortran…

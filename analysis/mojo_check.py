@@ -5,7 +5,7 @@ Scénarios (analyse globale de la v3 rejouée, mêmes tirages, données principa
 * Avant : le classement publié avant la remarque (A4, A5, C4, D5 et E5 de Mojo d'avant les errata).
 * M-E, classement publié : errata A4 = 1, A5 = 1, C4 = 0,5, D5 = 1, E5 = 1 (section 2). Aucune donnée ne change.
 * S-B4 : M-E avec B4 = 0,5, la note que propose la remarque (je garde 1, section 2).
-* S-K4 : M-E sans K4 dans le plafond E, pour tous les langages (K4 naturel reste dans le code par défaut D1).
+* S-K4 : M-E sans K4 dans le plafond E (poids nul), pour tous les langages (K4 naturel reste dans le code par défaut D1).
 * S-K4-B4 : les deux.
 Diagnostics (results/raw_mojo, machine 6, 7 processus par cellule) : rapports -D ASSERT=none / défaut ; K4 en SIMD
 explicite à chaud et caches vidés, face à K4 sans branchement de Mojo et au C de clang du même hôte.
@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import analyze_v2 as v2  # noqa: E402
 import analyze_v3 as v3  # noqa: E402
 import confrontation as cf  # noqa: E402
-from analyze_v2 import RANKED, ANNEX, ROOT, NAMES, E_V2  # noqa: E402
+from analyze_v2 import RANKED, ANNEX, ROOT, NAMES  # noqa: E402
 from analyze_v3 import proc_logs  # noqa: E402
 from fortran_check import ratio  # noqa: E402
 
@@ -68,14 +68,14 @@ def summary(s):
             "prec_next": {a: float(s["prec"][RANKED.index(a), RANKED.index(b)]) for a, b in zip(order, order[1:])}}
 
 
-def run(data, lat, langs, footprint, c3, cells=None, e_meas=None):
+def run(data, lat, langs, footprint, c3, cells=None, e_drop=()):
     """Scénario avec des cases de Mojo remplacées le temps du calcul (matrice partagée, restaurée ensuite)."""
     saved = {}
     try:
         for cap, val in (cells or {}).items():
             saved[cap] = v2.MATRIX[LANG][cap]
             v2.MATRIX[LANG][cap] = (val, saved[cap][1])
-        return summary(cf.scenario(data, lat, langs, footprint, c3, "main", e_meas=e_meas))
+        return summary(cf.scenario(data, lat, langs, footprint, c3, "main", e_drop=e_drop))
     finally:
         for cap, v in saved.items():
             v2.MATRIX[LANG][cap] = v
@@ -103,12 +103,11 @@ def main():
     diag["témoin : sans branchement mojo_exp / mojo"] = ratio(raw["mojo_exp"][K4B], raw["mojo"][K4B], rng)
     main_ms = {l: {":".join(k): gm_ms(data[l][k]) for k in (K4N, K4B, K9N, Q1N, Q6N) if k in data[l]}
                for l in ("mojo", "c", "c_gcc")}
-    no_k4 = {k: v for k, v in E_V2.items() if k != "k4"}
-    plans = {"Avant": (BEFORE, None), "M-E": (None, None), "S-B4": ({"B4": 0.5}, None),
-             "S-K4": (None, no_k4), "S-K4-B4": ({"B4": 0.5}, no_k4)}
+    plans = {"Avant": (BEFORE, ()), "M-E": (None, ()), "S-B4": ({"B4": 0.5}, ()),
+             "S-K4": (None, ("k4",)), "S-K4-B4": ({"B4": 0.5}, ("k4",))}
     out = {"bad": bad, "times_ms": times, "diag": diag, "main_ms": main_ms, "scenarios": {}}
-    for name, (cells, e_meas) in plans.items():
-        z = out["scenarios"][name] = run(data, lat, langs, footprint, c3, cells, e_meas)
+    for name, (cells, e_drop) in plans.items():
+        z = out["scenarios"][name] = run(data, lat, langs, footprint, c3, cells, e_drop)
         print(f"{name} : Mojo {z['ms0'][LANG]:.1f} points, contrôle {z['C'][LANG]:.1f}, rang espéré "
               f"{z['exp21'][LANG]:.2f} ({z['pos']}e), rang 90 % {z['rank90'][LANG]}", flush=True)
     json.dump(out, open(os.path.join(ROOT, "results", "mojo_check.json"), "w"), indent=1, default=float)

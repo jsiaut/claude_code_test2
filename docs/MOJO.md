@@ -130,4 +130,65 @@ cellules, 7 processus par cellule en 7 passes, ordre tiré au hasard (graine 202
 
 ## 4. Résultats
 
-*À venir.*
+126 processus (18 cellules, 7 passes, échauffement de 2), le 30 octobre de 18 h 05 à 18 h 07 sur la machine 6 ;
+aucune somme de contrôle fausse ; 2 processus refaits pour vol de temps au-dessus de 2 % (aucun gardé au-dessus du
+seuil). Temps, rapports et scénarios : `results/report_mojo.md` et `results/mojo_check.json` ; données :
+`results/raw_mojo/`.
+
+### 4.1 Diagnostics (machine 6, même hôte)
+
+| Noyau naturel | Mojo par défaut | Mojo, `-D ASSERT=none` | Rapport (IC 95 %) | C par clang |
+|---|---|---|---|---|
+| K9 (stencil) | 168,8 ms | 41,2 ms | 0,245 (0,229–0,266) | 27,8 ms |
+| Q1 (requête OLAP) | 137,0 ms | 66,7 ms | 0,481 (0,438–0,527) | 66,3 ms |
+| Q6 | 53,5 ms | 51,0 ms | 0,956 (0,892–1,006) | — |
+| K4 | 14,8 ms | 13,7 ms | 0,93 (0,68–1,29) | 3,9 ms |
+
+* **(3) Le stencil naturel paie d'abord les vérifications de bornes** : sans elles, il est 4,1 fois plus rapide. Mais
+  il reste 1,48 fois (1,40–1,58) plus lent que le C naturel de clang, qui est vectorisé : la règle fixée d'avance (au
+  plus 1,2) n'est pas remplie pour K9. Elle l'est pour Q1 (0,995 ; 0,88–1,11), dont la lenteur vient toute des
+  vérifications. Le README dit donc les deux causes pour le stencil, et la seule pour Q1.
+* **(2) K4 en SIMD explicite** : 2,25 ms à chaud (le plus rapide des processus : 1,66 ms), 2,45 ms caches vidés ;
+  0,73 fois (0,63–0,83) K4 sans branchement de clang sur le même hôte (3,05 ms). En SIMD explicite, Mojo bat donc le
+  meilleur C vectorisé automatiquement, mais pas dans la proportion annoncée (1,1 contre 2,8 ms) : sur cet hôte, la
+  passe reste limitée par la mémoire (caches vidés : 1,10 fois le temps à chaud ; 0,98–1,25). Le processus le plus
+  rapide (1,66 ms) passe de peu la borne de K4, qui rejette sous 1,51 ms.
+* **Pas de pénalité de branchement sur K4 naturel**, comme le dit la remarque : le code est sans saut (`sar`, `and`),
+  et le plus rapide des processus fait 10,5 ms avec ou sans tri ; l'écart des moyennes (0,79 ; 0,62–1,02) vient de
+  quelques processus lents.
+* Témoin de disposition : K4 sans branchement, même source dans `mojo_exp` et dans `mojo` : 1,21 (0,95–1,52).
+
+### 4.2 Classement
+
+| Scénario | Score | Contrôle C | Plafond E | Rang espéré | Place | Rang 90 % |
+|---|---|---|---|---|---|---|
+| Avant (publié avant la remarque, refait par le même code) | 60,0 | 62,7 | 67,9 | 12,49 | 13 | 10–14 |
+| **M-E, publié** : errata A4, A5, C4, D5, E5 | **62,7** | **70,5** | 67,9 | **11,87** | **13** | 9–13 |
+| S-B4 : B4 = 0,5 (la note de la remarque) | 62,0 | 68,5 | 67,9 | 12,06 | 13 | 10–13 |
+| S-K4 : K4 hors du plafond, pour tous les langages | 67,2 | 70,5 | 79,2 | 10,38 | 11 | 7–13 |
+| S-K4-B4 | 66,5 | 68,5 | 79,2 | 10,70 | 12 | 7–13 |
+
+* **Publié** : l'analyse v3 recalculée redonne exactement M-E (scores et rangs plausibles des 21 langages). Mojo gagne
+  2,7 points et dépasse Julia au score (62,7 contre 62,2), mais reste 13e en rang espéré : il ne passe devant elle que
+  dans 46 % des variantes (31 % avant), parce que son code naturel est le plus lent des langages compilés à l'avance.
+  Les scores des autres langages ne bougent pas.
+* **Sans K4 dans le plafond**, Mojo passerait 11e (67,2 points), mais il n'est pas seul à bouger : C++ passerait 1er
+  devant C (79,8 contre 79,3 points), Zig 3e, Ada 6e. Le choix de la spécification (deux formes scalaires pour K4)
+  pèse donc sur le haut du classement ; le README le dit. Je ne change pas la méthode après coup (3.1).
+* **La remarque estimait** 62,2 points avec ses quatre errata (j'en retiens cinq : 62,7), 64,5 points (11e) sans K4
+  dans le plafond, et 66,7 (11e) avec les deux ; mes calculs donnent 67,2 (11e) avec les errata et sans K4, et 66,5
+  (12e) avec en plus sa note de B4.
+
+### 4.3 Verdicts
+
+* **(1) Matrice** : A4, A5, C4 et E5 exacts (E5 avec une réserve : la conversion n'aide pas dans ma boucle) ; D5
+  accepté (`SpinWaiter`, comme `SpinWait` de C#) ; B4 non retenu : une erreur levée n'alloue pas, la trace de pile est
+  désactivée par défaut, et seule l'async expérimentale alloue.
+* **(2) K4 dans le plafond** : exact sur le principe. C'est un choix de la spécification, que je garde ; la
+  sensibilité est publiée. En SIMD explicite, K4 est bien plus rapide que le meilleur C (0,73 fois), sans atteindre
+  1,1 ms sur cet hôte. La borne physique de K4 était cohérente avec la machine des données principales (9,86 Go/s à
+  16 Mio), mais fragile ailleurs.
+* **(3) Diagnostic du README** : exact pour l'essentiel (vérifications : ×4,1 sur le stencil, ×2,1 sur Q1), mais il
+  reste sur le stencil un facteur 1,5 face au C vectorisé. Corrigé dans le README.
+* **(4) K5 sur Emerald Rapids** : écart confirmé dans mes données (+32 %), cause non vérifiée.
+* **(5) La bibliothèque standard et MAX** : dit dans les limites du README.

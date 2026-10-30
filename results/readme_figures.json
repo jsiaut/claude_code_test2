@@ -22,11 +22,11 @@
   "ocaml": 0.0,
   "lua": 0.0
  },
- "r2_control_top13": 0.7775646349852133,
+ "r2_control_top13": 0.7315814896829337,
  "neighbour_range_top13": [
   0.51925,
   0.73775
  ],
- "min_top13_ahead_of_csharp": 0.91275,
+ "min_top13_ahead_of_csharp": 0.95655,
  "check_exp_rank_max_diff": 3.552713678800501e-15
 }

@@ -575,5 +575,20 @@ Robustesse :
   K4 dans le plafond ; diagnostic du stencil naturel). Vérifications préalables (sources de Mojo 1.2.0 au tag
   `mojo/v1.2.0`, notes de version, sondes compilées par Mojo 1.2.0, code machine, compteur d'allocations), errata de
   la matrice (A4, A5, C4, D5, E5 ; B4 gardé) et plan : `docs/MOJO.md`, poussé avant les mesures avec le code
-  d'analyse (`analysis/mojo_check.py`). `confrontation.scenario` prend désormais, en option, la liste des mesures du
-  plafond (pour le scénario sans K4) ; par défaut, le calcul publié est inchangé.
+  d'analyse (`analysis/mojo_check.py`). `confrontation.scenario` prend désormais, en option, des noyaux de poids nul
+  dans le plafond (pour le scénario sans K4) ; par défaut, le calcul publié est inchangé.
+* 2026-10-30, 18:05-18:07 : **mesures de la remarque sur Mojo** (`tools/measure_mojo.py`, machine 6) : 18 cellules
+  × 7 processus (126), aucune somme de contrôle fausse ; 2 processus refaits pour vol de temps au-dessus de 2 %,
+  aucun gardé au-dessus du seuil. Rien d'autre ne tournait.
+* 2026-10-30, après les mesures : **analyse de la remarque sur Mojo**. La première version du scénario sans K4
+  retirait K4 de la liste des mesures du plafond ; elle a échoué (`KeyError`), parce que le code par défaut D1 partage
+  la référence de K4 naturel. Corrigée avant tout résultat de ce scénario : K4 garde ses références et reçoit un
+  poids nul dans le plafond (le plan, section 3.4 de `docs/MOJO.md`, ne change pas).
+* 2026-10-30, soir : **résultats de la remarque sur Mojo** (`results/report_mojo.md`). Les errata (A4, A5, D5 et E5
+  à 1, C4 à 0,5) entrent dans le classement publié : Mojo passe de 60,0 à 62,7 points (contrôle 62,7 → 70,5) et reste
+  13e (rang espéré 11,87) ; l'analyse v3 recalculée redonne exactement le scénario M-E, et les scores des autres
+  langages ne bougent pas. Sensibilités : avec B4 à 0,5, 62,0 points ; sans K4 dans le plafond, Mojo 11e, mais aussi
+  C++ 1er devant C et Zig 3e (dit dans le README). Les vérifications de bornes de `List` expliquent l'essentiel du
+  stencil naturel de Mojo (×4,1), pas tout (×1,48 face au C vectorisé, au-delà du seuil de 1,2 fixé d'avance) : le
+  README dit les deux causes ; pour Q1, elles expliquent tout (0,995). Les scénarios de Zig sont recalculés sur ces
+  données (seul S3 bouge : 5,82 → 5,83).

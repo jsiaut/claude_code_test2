@@ -117,24 +117,29 @@ def noisy_r(base, prng, noise=0.10):
 
 
 # ------------------------------------------------------------------ scénarios
-def scenario(data, lat, langs, footprint, c3, crule, e_meas=None):
+def scenario(data, lat, langs, footprint, c3, crule, e_drop=()):
     """Rejoue l'analyse v3 (même graine, mêmes tirages) sur data, avec la règle crule : 'main' (v2/v1) ou 'R'.
-    e_meas : mesures du plafond E (par défaut celles de la v3 ; docs/MOJO.md, scénario sans K4)."""
+    e_drop : noyaux de poids nul dans le plafond E (docs/MOJO.md, scénario sans K4) ; leurs références restent
+    calculées, car le code par défaut D1 les partage. Vide par défaut : le calcul publié est inchangé."""
     rng = np.random.default_rng(v3.SEED)
     keys = sorted(needed_keys())
     pools = build_pools(data, langs, keys)
-    A = Arrays3(data, lat, langs, B, rng, pools, e_meas=e_meas or E_V2)
+    A = Arrays3(data, lat, langs, B, rng, pools)
     refs = {e: references(A, e) for e in ("mean", "min")}
     catw0 = {cat: w for cat, (w, _) in CATEGORIES.items()}
     base_r = c_cells_r(c3)
     C0 = c_vector(c_score(base_r if crule == "R" else c_cells("v2", c3), catw0), langs)
-    S0 = scores3(A, 0, MAIN, C0, footprint, refs)
+    wE0 = None
+    if e_drop:
+        kept = [k for k in A.e_meas if k not in e_drop]
+        wE0 = {k: (1 / len(kept) if k in kept else 0.0) for k in A.e_meas}
+    S0 = scores3(A, 0, MAIN, C0, footprint, refs, wE=wE0)
     ms_boot = np.empty((B, len(langs)))
     for b in range(1, B + 1):
-        ms_boot[b - 1] = scores3(A, b, MAIN, C0, footprint, refs)["MS"]
+        ms_boot[b - 1] = scores3(A, b, MAIN, C0, footprint, refs, wE=wE0)["MS"]
     opts = {"est": ["mean", "min"], "enorm": ["frontier", "bounds"], "d3": ["abs", "rel"], "d4": ["best", "c"],
             "d1ref": ["tstar", "best_natural"], "agg": ["arith", "geo"], "crule": ["v2", "v1"]}
-    kernels, cat_names = list(A.e_meas), list(CATEGORIES)
+    kernels, cat_names = [k for k in A.e_meas if k not in e_drop], list(CATEGORIES)
     rk = A.ranked
     NR = len(RANKED)
     prec = np.zeros((NR, NR))
@@ -146,6 +151,7 @@ def scenario(data, lat, langs, footprint, c3, crule, e_meas=None):
         wp = dirichlet(rng, 20 * np.array([0.35, 0.40, 0.25])) if rng.random() < 0.5 else dirichlet(rng, [1, 1, 1])
         wP = {"C": wp[0], "E": wp[1], "D": wp[2]}
         wE = dict(zip(kernels, dirichlet(rng, 20 * np.full(len(kernels), 1 / len(kernels)))))
+        wE.update({k: 0.0 for k in e_drop})
         wD = dict(zip(("D1", "D2", "D3", "D4"), dirichlet(rng, 20 * np.array([v3.DW[k] for k in ("D1", "D2", "D3", "D4")]))))
         catw = dict(zip(cat_names, dirichlet(rng, 20 * np.array([catw0[c] for c in cat_names]))))
         prng = np.random.default_rng(int(rng.integers(2 ** 63)))

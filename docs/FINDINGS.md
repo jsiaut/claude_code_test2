@@ -379,3 +379,27 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   `co_sum` juste).
 * **K8** : une arène en un tableau de nœuds de 16 octets, au lieu de trois tableaux, donne 0,69 (135 ms, contre 146
   pour le C de GCC sur le même hôte).
+
+## Remarque sur Mojo (30 octobre, machine 6, Cascade Lake) — `docs/MOJO.md`, `results/mojo_check/`
+
+* **Pas de vectoriseur de boucles, par construction** : la chaîne de passes de Mojo 1.2.0
+  (`LLVMPassesPipeline.cpp`, tag `mojo/v1.2.0`) ajoute le vectoriseur SLP et `VectorCombine`, jamais
+  `LoopVectorizePass`.
+* **Leviers de Mojo 1.2 vérifiés par sonde** : `@align(64)` respecté sur la pile et le tas ; `UnsafeUnion` (union
+  non étiquetée) ; `FastMathFlag.REASSOC`, accepté par `SIMD.fma` seulement (`--fp-mode` ne règle que la
+  contraction, `fast` par défaut) ; `fence()` donne `lock or` ; `SpinWaiter.wait()` ne fait rien aux trois premiers
+  appels, exécute `pause` du 4e au 63e, puis cède la main ; `Pointer.unsafe_as_noalias()` est exploité en ligne
+  droite, mais ne sort pas une lecture invariante d'une boucle dans ma sonde.
+* **Allocations** : une erreur levée n'alloue pas (message littéral ou formaté) ; la trace de pile n'est capturée
+  qu'avec `MODULAR_DEBUG=stack-trace-on-error`. Une tâche async coûte 1,5 à 1,8 allocation ; `async def` compile
+  avec un avertissement (« expérimental et instable »).
+* **Vérifications de bornes de `List`** (mode `ASSERT=safe`, par défaut) : dans la boucle chaude du stencil naturel,
+  chaque comparaison est précédée de six écritures sur la pile (la position dans le source). Avec `-D ASSERT=none` :
+  K9 naturel 169 → 41 ms (C par clang : 28 ms), Q1 naturel 137 → 67 ms (C : 66 ms).
+* **K4 en SIMD explicite** (hors spécification) : 2,25 ms à chaud, 2,45 ms caches vidés, contre 3,05 ms pour K4 sans
+  branchement de clang sur le même hôte.
+* **Le L3 ne garde pas toujours 16 Mio** : sur la machine 6, une boucle de type K4 en C traite 16 Mio à 6,7–7,6 Go/s
+  même répétée, mais 4 Mio à 20 Go/s ; le test de débit (`hwprobe bw`) voit pourtant 23 à 29 Go/s à 16 Mio sur les
+  machines 4 à 6, et 9,9 Go/s sur la machine des données principales.
+* **Le binaire de Mojo du banc était celui de la machine 3** ; recompilé sur Cascade Lake par son script inchangé, il
+  redonne octet pour octet le binaire de la campagne (compilation reproductible).

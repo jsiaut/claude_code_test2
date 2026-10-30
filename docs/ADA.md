@@ -151,8 +151,9 @@ Rapports appariés `ada_fix` / `ada` (moyenne géométrique de 7 processus chacu
 | S1-K5 : avec le transfert de K5 | 71,2 | 77,2 | 80,6 | 6,96 (7e) | 2–11 |
 | S1-27 : les 27 rapports | 70,9 | 76,6 | 80,6 | 6,65 (7e) | 2–11 |
 
-Depuis la correction de Fortran (`docs/FORTRAN.md`), qui le fait remonter au 10e rang, le classement publié donne à
-Ada un rang espéré de 6,95, sans changer son score, sa place (7e) ni son rang plausible (2–11).
+Depuis les corrections de Fortran (`docs/FORTRAN.md`), qui le font remonter au 10e rang, et de Mojo (`docs/MOJO.md`),
+le classement publié donne à Ada un rang espéré de 6,96, sans changer son score, sa place (7e) ni son rang plausible
+(2–11).
 
 * **S1** : C, C++, Odin, C3, Zig, Nim, **Ada**, Rust, D, Chapel… Ada est 4e au score de référence (71,6, derrière C,
   C++ et Odin), mais 7e en rang espéré : il devance Rust dans 52 % des variantes, D dans 62 %, et Nim le devance dans

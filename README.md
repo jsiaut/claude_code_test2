@@ -18,12 +18,12 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | 5 | **Zig** | 71,5 | 2–11 | 62 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (2e avec la version de développement) |
 | 6 | **Nim** | 69,5 | 3–10 | 54 % | Les leviers de C par sa compilation vers C ; vérifications de bornes qui bloquent la vectorisation |
 | 7 | **Ada** | 71,6 | 2–11 | 52 % | Disposition au bit près, 7e plafond ; vérifications coûteuses sur le code naturel |
-| 8 | **Rust** | 69,4 | 4–10 | 65 % | 4e plafond, contrôle fin et sûr ; défauts coûteux (bornes, SipHash, SIMD portable encore instable) |
+| 8 | **Rust** | 69,4 | 4–11 | 65 % | 4e plafond, contrôle fin et sûr ; défauts coûteux (bornes, SipHash, SIMD portable encore instable) |
 | 9 | **D** | 71,0 | 3–12 | 64 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
 | 10 | **Fortran** | 66,3 | 5–12 | 56 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
 | 11 | **Chapel** | 64,1 | 5–13 | 74 % | 3e plafond grâce au parallélisme natif ; peu de contrôle bas niveau |
-| 12 | **Julia** | 62,2 | 8–13 | 69 % | Le meilleur code naturel ; ramasse-miettes et runtime |
-| 13 | **Mojo** | 60,0 | 10–14 | 91 % | Le SIMD au cœur du langage ; boucles naturelles scalaires |
+| 12 | **Julia** | 62,2 | 8–13 | 54 % | Le meilleur code naturel ; ramasse-miettes et runtime |
+| 13 | **Mojo** | 62,7 | 9–13 | 98 % | Le SIMD au cœur du langage ; ni vectoriseur de boucles, ni threads publics dans `std` |
 | 14 | **C#** | 54,8 | 13–16 | 84 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
 | 15 | **Java** | 47,4 | 14–16 | 68 % | Meilleur allocateur de petits objets ; pas de types valeur |
 | 16 | **Go** | 43,1 | 14–16 | 98 % | Structures par valeur ; ni vectoriseur, ni SIMD stable, atomiques séquentiellement cohérentes |
@@ -39,14 +39,17 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 * **Ordre** : le rang moyen sur 20 000 variantes de l'analyse, qui tirent au hasard les poids, les normalisations,
   le jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf pour C3 et Zig, que 54 % des
   variantes inversent, pour Ada, 4e au score mais que Nim, Zig et C3 devancent dans 54 à 68 % des variantes (son
-  code par défaut est lent), et pour D, que 65 % des variantes placent derrière Nim comme derrière Rust.
+  code par défaut est lent), pour D, que 65 % des variantes placent derrière Nim comme derrière Rust, et pour Mojo,
+  devant Julia au score (62,7 contre 62,2) mais derrière elle dans 54 % des variantes (son code naturel est le plus
+  lent des langages compilés à l'avance).
 * **Rang plausible** : le rang dans 90 % des variantes. **Devance le suivant** : la part des variantes où le
   langage passe devant celui de la ligne suivante.
 * **Errata du 30 octobre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de contrôle
   (aides de ligne de cache de C, de D et d'Odin, AVX-512 d'Odin, réductions parallèles de Nim), une remarque sur Zig
   une sixième (projection de fichiers), une remarque sur Ada trois autres (non-aliasing et types vectoriels
   sous-notés, allocation cachée sur-notée), une remarque sur Fortran trois encore (disposition compacte, alignement
-  et allocateurs sous-notés). Seules celles de Fortran changent un rang à elles seules (de la 12e à la 11e place). Les
+  et allocateurs sous-notés), une remarque sur Mojo cinq autres (alignement, unions, réassociation, attente active
+  et non-aliasing sous-notés). Seules celles de Fortran changent un rang à elles seules (de la 12e à la 11e place). Les
   remarques sur Ada et sur Fortran ont aussi trouvé deux erreurs de mon banc, corrigées et remesurées. Un piège de
   GNAT (`-fnon-call-exceptions`) laissait scalaires les noyaux optimisés d'Ada une fois inlinés : Ada passe de la 9e
   à la 7e place ([`docs/ADA.md`](docs/ADA.md)). Les noyaux de Fortran n'étaient pas isolés de la boucle de mesure
@@ -56,7 +59,7 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 ![Classement final](results/charts/classement.svg)
 
 **Ce qui est sûr, et ce qui ne l'est pas.**
-* **Les grandes marches sont établies.** Les 13 premiers devancent C# dans au moins 91 % des variantes, et sur les
+* **Les grandes marches sont établies.** Les 13 premiers devancent C# dans au moins 96 % des variantes, et sur les
   deux machines. Go devance Haskell, Haskell OCaml, OCaml JavaScript, dans 98 à 100 % des variantes.
 * **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Deux voisins s'y devancent dans
   52 à 74 % des variantes. C ou C++ est premier dans 86 % des variantes (C 61 %, C++ 25 %).
@@ -68,7 +71,11 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   (0.18-dev) le réactive. Avec elle, et sans changer une ligne de code, Zig passe de 71,5 à 74,8 points et du 5e au
   2e rang espéré (1er dans 24 % des variantes). Le classement garde la règle fixée d'avance, la dernière version
   stable ([`docs/ZIG.md`](docs/ZIG.md)).
-* **Le contrôle pèse lourd, et il est jugé.** Il explique 78 % des écarts de score entre les 13 premiers. Sur les
+* **Le plafond de K4 compte la vectorisation automatique.** La spécification n'admet pour K4 que deux formes
+  scalaires : son plafond mesure ce que le compilateur fait d'une boucle scalaire, comme le code par défaut. Sans K4
+  dans le plafond, C++ passe 1er devant C, Zig 3e et Mojo 11e. Le classement garde la spécification fixée d'avance
+  ([`docs/MOJO.md`](docs/MOJO.md)).
+* **Le contrôle pèse lourd, et il est jugé.** Il explique 73 % des écarts de score entre les 13 premiers. Sur les
   seules mesures (le plafond), la tête serait C, C3, Chapel, Rust, C++, Odin.
 
 ## Pourquoi cet ordre, langage par langage
@@ -154,8 +161,12 @@ son runtime : sur K8, le ramasse-miettes porte la latence p99,9 à 70 fois la m�
 bloquent une attente active sans `yield()`.
 
 **13. Mojo.** Le SIMD est au cœur du langage (`SIMD[DType, N]`, paramètres de compilation), et le SIMD explicite est
-efficace. Mais aucune de ses deux boucles naturelles n'est vectorisée (stencil naturel en 262 ms, le plus lent des
-langages compilés), et sa bibliothèque standard n'expose ni threads publics ni `mmap`.
+efficace : écrit ainsi, K4 bat le meilleur C (2,3 contre 3,1 ms sur la même machine), mais la spécification de K4
+ne l'admet pour aucun langage. Son compilateur n'a pas de vectoriseur de boucles, par choix : aucune de ses deux
+boucles naturelles n'est vectorisée. Son stencil naturel (262 ms, le plus lent des langages compilés) paie d'abord
+les vérifications de bornes de `List`, actives par défaut (4 fois plus rapide sans elles), puis l'absence de
+vectorisation. Sa bibliothèque standard n'expose ni threads publics ni `mmap` : `parallelize` est dans le paquet MAX,
+que la règle de la bibliothèque standard exclut ([`docs/MOJO.md`](docs/MOJO.md)).
 
 ### Ramasse-miettes imposé, objets en références
 
@@ -211,10 +222,12 @@ Les résultats les plus solides de l'étude : chacun isole une cause, avec ses c
    contre 77 à 166 ms pour la boucle naturelle en ordre strict (Emerald Rapids). Java (Vector API, 6,9 ms) et Go
    (expérimental, 19 ms) suivent de loin ; OCaml et JavaScript n'en ont pas.
 3. **La vectorisation automatique se vérifie sur le code exécuté.** Aucune des deux boucles naturelles testées n'est
-   vectorisée en C#, Go, Mojo, Zig 0.17 (vectoriseur de boucles désactivé par l'équipe Zig, réactivé dans la version
-   de développement), Haskell, OCaml, JavaScript, Lua et Python. Les vérifications de bornes
-   l'empêchent sur le stencil naturel en Rust, Nim, D et Ada (55 à 80 ms, contre 36 ms) ; en Ada, sur un type
-   contraint, GNAT élimine les vérifications et vectorise. Le contexte d'appel compte aussi : inlinés dans la boucle
+   vectorisée en C#, Go, Mojo (dont le compilateur n'a pas de vectoriseur de boucles), Zig 0.17 (vectoriseur de
+   boucles désactivé par l'équipe Zig, réactivé dans la version de développement), Haskell, OCaml, JavaScript, Lua et
+   Python. Les vérifications de bornes l'empêchent sur le stencil naturel en Rust, Nim, D et Ada (55 à 80 ms, contre
+   36 ms) ; en Ada, sur un type contraint, GNAT élimine les vérifications et vectorise. En Mojo, elles coûtent plus
+   que l'absence de vectorisation : sans elles, le stencil naturel passe de 169 à 41 ms (C : 28 ms) et Q1 de 137 à
+   67 ms, au niveau de C (même machine). Le contexte d'appel compte aussi : inlinés dans la boucle
    de mesure, les deux noyaux de K4 de Fortran restaient scalaires, alors que leurs copies hors ligne, vectorisées,
    n'étaient jamais appelées (corrigé).
 4. **Le compilateur pèse autant que le langage.** Sur le même code C, GCC est 2,2 à 2,7 fois plus rapide que clang
@@ -280,9 +293,10 @@ du langage.
 
 * Deux processeurs Intel, virtualisés et partagés ; ni AMD, ni ARM, ni compteurs matériels.
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Les trois langages relus après coup par des connaisseurs y ont gagné : Ada et Fortran deux places chacun,
-  par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de mesure) ;
-  Zig trois, mais par une version de compilateur que la règle exclut.
+  l'autre. Les quatre langages relus après coup par des connaisseurs y ont gagné : Ada et Fortran deux places
+  chacun, par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de
+  mesure) ; Mojo 2,7 points mais aucune place, par cinq errata de la matrice ; Zig trois places, mais par une version
+  de compilateur que la règle exclut.
 * Ces corrections ont été mesurées après coup sur une autre machine Cascade Lake, puis reportées sur les données
   principales par des rapports appariés ; pour une clé de Fortran, par un témoin mesuré sur le même hôte, au prix
   d'un écart au plan ([`docs/FORTRAN.md`](docs/FORTRAN.md), 4.2).
@@ -294,6 +308,10 @@ du langage.
   peut coûter des rangs : Zig 0.17, dont le vectoriseur de boucles est désactivé, perd trois places en rang espéré
   par rapport à sa version de développement. Je n'ai mesuré deux versions que pour Zig. Et un seul compilateur par
   langage : Fortran est classé avec gfortran ; flang n'est mesuré qu'en annexe, ifx pas du tout.
+* La règle de la bibliothèque standard pèse plus sur Mojo que sur les autres : depuis juillet 2026, `parallelize`,
+  le GPU et les tenseurs sont dans le paquet MAX. Le classement mesure Mojo et sa `std` sur CPU ; ses noyaux à
+  threads passent par un module privé de `std`.
+* Le plafond de K4 n'admet que des formes scalaires et compte donc la vectorisation automatique (voir plus haut).
 
 ## Une autre étude, un autre ordre : pourquoi
 
@@ -330,6 +348,8 @@ par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION
   et [`results/report_confrontation.md`](results/report_confrontation.md).
 * La remarque sur Ada (piège de GNAT, errata, implémentation corrigée et remesurée) : [`docs/ADA.md`](docs/ADA.md)
   et [`results/report_ada.md`](results/report_ada.md).
+* La remarque sur Mojo (cinq errata de la matrice, K4 dans le plafond, vérifications de bornes) :
+  [`docs/MOJO.md`](docs/MOJO.md) et [`results/report_mojo.md`](results/report_mojo.md).
 * La remarque sur Fortran (noyaux inlinés, errata, banc corrigé et remesuré, écart au plan) :
   [`docs/FORTRAN.md`](docs/FORTRAN.md) et [`results/report_fortran.md`](results/report_fortran.md).
 * La remarque sur Zig (vectoriseur désactivé, quatre versions comparées, rang avec la version de développement) :
