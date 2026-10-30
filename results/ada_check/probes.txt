@@ -1,0 +1,67 @@
+# Vérifications préalables de la remarque sur Ada (docs/ADA.md, section 2), machine 5, 30/10/2026, GNAT 16.2
+
+## Sources de GCC 16.2.0 (archive de ftp.gnu.org, signature vérifiée avec le trousseau GNU : Richard Guenther)
+### gcc/ada/gcc-interface/misc.cc, lignes 421-434
+  flag_exceptions = 1;
+  flag_delete_dead_exceptions = 1;
+  if (Suppress_Checks)
+    {
+      if (!OPTION_SET_P (flag_non_call_exceptions))
+	flag_non_call_exceptions = Machine_Overflows_On_Target && GNAT_Mode;
+    }
+  else
+    {
+      if (!OPTION_SET_P (flag_non_call_exceptions))
+        flag_non_call_exceptions = 1;
+      flag_aggressive_loop_optimizations = 0;
+      warn_aggressive_loop_optimizations = 0;
+    }
+### gcc/ada/gcc-interface/decl.cc, lignes 5855-5859
+      /* We take advantage of 6.2(12) by considering that references built for
+	 parameters whose type isn't by-ref and for which the mechanism hasn't
+	 been forced to by-ref allow only a restricted form of aliasing.  */
+      restricted_aliasing_p
+	= !TYPE_IS_BY_REFERENCE_P (gnu_param_type) && mech != By_Reference;
+### gcc/ada/gcc-interface/trans.cc, lignes 3392-3396
+      /* Third, if loop vectorization is enabled and the iterations of the
+	 loop can easily be proved as independent, mark the loop.  */
+      if (optimize >= 3
+	  && independent_iterations_p (LOOP_STMT_BODY (gnu_loop_stmt)))
+	LOOP_STMT_IVDEP (gnu_loop_stmt) = 1;
+
+## E5 : rapports de vectorisation (-O3 ; vérifications actives, puis -gnatp)
+### e5b : tableaux NON contraints (pointeurs « gras ») : test de recouvrement dans les deux cas
+e5b.adb:4:11: optimized: loop vectorized using 32 byte vectors and unroll factor 8
+e5b.adb:4:11: optimized:  loop versioned for vectorization because of possible aliasing
+e5b.adb:4:11: optimized: epilogue loop vectorized using 16 byte vectors and unroll factor 4
+e5b.adb:4:11: optimized: loop vectorized using 32 byte vectors and unroll factor 8
+e5b.adb:4:11: optimized:  loop versioned for vectorization because of possible aliasing
+e5b.adb:10:11: optimized: loop vectorized using 32 byte vectors and unroll factor 8
+e5b.adb:10:11: optimized:  loop versioned for vectorization because of possible aliasing
+e5b.adb:10:11: optimized: epilogue loop vectorized using 16 byte vectors and unroll factor 4
+e5b.adb:16:11: optimized: loop vectorized using 32 byte vectors and unroll factor 8
+e5b.adb:16:11: optimized:  loop versioned for vectorization because of possible aliasing
+e5b.adb:16:11: optimized: epilogue loop vectorized using 16 byte vectors and unroll factor 4
+e5b.adb:16:11: optimized: loop vectorized using 32 byte vectors and unroll factor 8
+e5b.adb:16:11: optimized:  loop versioned for vectorization because of possible aliasing
+### e5c : tableau contraint (ligne 4), même boucle sur valeurs d'accès (ligne 10), stencil contraint (ligne 17)
+e5c.adb:4:11: optimized: loop vectorized using 32 byte vectors and unroll factor 8
+e5c.adb:10:11: optimized: loop vectorized using 32 byte vectors and unroll factor 8
+e5c.adb:10:11: optimized:  loop versioned for vectorization because of possible aliasing
+e5c.adb:10:11: optimized: epilogue loop vectorized using 16 byte vectors and unroll factor 4
+e5c.adb:17:14: optimized: loop vectorized using 32 byte vectors and unroll factor 4
+e5c.adb:17:14: optimized: epilogue loop vectorized using 16 byte vectors and unroll factor 2
+
+## C1 : type vectoriel GCC déclaré en Ada (pragma Machine_Attribute (V8, "vector_type")), -O3, vérifications actives
+c1__add : vaddps ymm0,ymm0,ymm1;ret;
+c1__fma : vfmadd132ps ymm0,ymm2,ymm1;ret;
+
+## D2 : écriture d'un objet Atomic, sans et avec pragma Disable_Atomic_Synchronization
+d2__store_seq : xchg   QWORD PTR [rip+0x0],rdi        # 7 <d2__store_seq+0x7>;ret;
+d2__store_rel : mov    QWORD PTR [rip+0x0],rdi        # 17 <d2__store_rel+0x7>;ret;
+
+## B4 : fonction qui rend un tableau non contraint de 4 Mo, sans « new » ; appel de __gnat_malloc tracé par gdb
+#0  <__gnat_malloc> (size=size@entry=4000048) at s-memory.adb:63
+#1  0x000000000041d549 in system.secondary_stack.allocate_dynamic.allocate_new_chunk () at s-secsta.adb:189
+#2  system.secondary_stack.allocate_dynamic (stack=0x44edc0 <ada_main.sec_default_sized_stacks>, mem_size=mem_size@entry=4000016) at s-secsta.adb:295
+#3  0x000000000041d833 in system.secondary_stack.ss_allocate (storage_size=4000008, alignment=8) at s-secsta.adb:661

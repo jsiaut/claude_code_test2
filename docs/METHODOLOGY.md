@@ -525,3 +525,9 @@ Robustesse :
   90 % des variantes), sans rien changer à ses autres sorties. Le second juge à l'aveugle avait noté que Zig 0.17
   ne vectorise aucune boucle (`results/blind_notes.md`) ; je ne l'avais pas suivi. Résultats : `docs/ZIG.md`,
   section 4.
+* 2026-10-30, fin d'après-midi : **remarque sur Ada** transmise par l'utilisateur (piège `-fnon-call-exceptions` de
+  GNAT, cases E5, C1 et B4, attributions du README). Vérifications préalables sur les sources de GCC 16.2.0 (archive
+  téléchargée de nouveau, signature vérifiée avec le trousseau GNU : les sources de la compilation avaient été
+  supprimées) et par des sondes compilées par GNAT 16.2 ; plan des mesures et de l'analyse : `docs/ADA.md`, poussé
+  avant les mesures. Le binaire d'Ada recompilé sur la machine 5 est identique octet pour octet à celui de la
+  campagne.

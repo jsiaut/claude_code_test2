@@ -1,0 +1,36 @@
+# Binaires d'Ada : où sont les boucles des noyaux tuned (machine 5, 30/10/2026)
+bench/ada/ms (campagne, recompilé sur la machine 5, identique) : 84327e31cff44c1d…
+bench/ada_fix/ms (sept noyaux tuned « with No_Inline ») : 6641069b8900924a…
+
+## bench/ada/ms : noyaux tuned inlinés ; aucune copie hors ligne sauf Q1_Tuned
+   0000000000407620 t ms__q1_tuned.261
+   _ada_ms (programme principal, où Run_K9 et Run_K2 sont inlinés) : 2552 instructions, 0 opérations flottantes empaquetées, 0 entières empaquetées, 13 flottantes scalaires
+   tâche de K9 mt (K9_Rows inliné) : 150 instructions, 0 opérations flottantes empaquetées, 0 entières empaquetées, 4 flottantes scalaires
+   tâche de K6 mt (Q6_Tuned inliné) : 158 instructions, 0 opérations flottantes empaquetées, 0 entières empaquetées, 0 flottantes scalaires
+
+## bench/ada_fix/ms : les sept noyaux hors ligne
+   ms__k1_aos.215 : 241 instructions, 14 opérations flottantes empaquetées, 0 entières empaquetées, 8 flottantes scalaires
+   ms__k1_soa.211 : 238 instructions, 56 opérations flottantes empaquetées, 0 entières empaquetées, 16 flottantes scalaires
+   ms__k2_chase.227.constprop.0 : 9 instructions, 0 opérations flottantes empaquetées, 0 entières empaquetées, 0 flottantes scalaires
+   ms__k5_tuned.249 : 79 instructions, 7 opérations flottantes empaquetées, 0 entières empaquetées, 15 flottantes scalaires
+   ms__k9_rows.293 : 151 instructions, 8 opérations flottantes empaquetées, 0 entières empaquetées, 4 flottantes scalaires
+   ms__k9_rows.293.constprop.0 : 139 instructions, 8 opérations flottantes empaquetées, 0 entières empaquetées, 4 flottantes scalaires
+   ms__q1_tuned.261 : 325 instructions, 0 opérations flottantes empaquetées, 90 entières empaquetées, 0 flottantes scalaires
+   ms__q6_tuned.262 : 120 instructions, 0 opérations flottantes empaquetées, 51 entières empaquetées, 0 flottantes scalaires
+   ms__q6_tuned.262.constprop.0 : 103 instructions, 0 opérations flottantes empaquetées, 51 entières empaquetées, 0 flottantes scalaires
+
+## K2_Chase (bench/ada_fix/ms) : la borne inférieure dynamique est soustraite à chaque saut
+     409ea0:	movsxd rcx,DWORD PTR [rsi]
+     409ea3:	mov    edx,0x401640
+     409ea8:	xor    eax,eax
+     409eaa:	nop    WORD PTR [rax+rax*1+0x0]
+     409eb0:	sub    rax,rcx
+     409eb3:	movsxd rax,DWORD PTR [rdi+rax*4]
+     409eb7:	dec    edx
+     409eb9:	jne    409eb0 <ms__k2_chase.227.constprop.0+0x10>
+     409ebb:	ret
+
+## K9_Natural hors ligne (essai, vérifications actives, bornes littérales sur Grid non contraint) : reste scalaire
+   144 instructions, 0 opérations flottantes empaquetées, 4 scalaires
+   ms.adb:922:11: missed: not vectorized: unsupported outerloop form.
+   ms.adb:924:48: missed: not vectorized: no vectype for stmt: _78 = (*a$P_ARRAY_62)[_33]{lb: _11 sz: _31 * 8}[_34]{lb: _14 sz: 8};
