@@ -80,3 +80,26 @@ fortran    k8   tuned                           p0 n=10 med=0.183086s ok={True} 
 fortran    k6   mt                   q6         p0 n=10 med=0.004286s ok={True} rc=0 
 fortran    k6   tuned                q1         p0 n=10 med=0.036267s ok={True} rc=0 
 fortran    k6   mt                   q1         p0 n=10 med=0.009983s ok={True} rc=0 
+fortran    k9   tuned                           p0 n=10 med=0.028132s ok={True} rc=0 
+fortran    k2   tuned                16384      p0 n=10 med=0.007950s ok={True} rc=0 
+fortran    k9   mt                              p0 n=10 med=0.011415s ok={True} rc=0 
+fortran    k6   tuned                q6         p0 n=10 med=0.015773s ok={True} rc=0 
+fortran    k9   natural                         p0 n=10 med=0.026629s ok={True} rc=0 
+fortran    k7   natural                         p0 n=3 med=0.886053s ok={True} rc=0 
+fortran    k1   natural              energy     p0 n=10 med=0.036083s ok={True} rc=0 
+fortran    k6   natural              q1         p0 n=10 med=0.049090s ok={True} rc=0 
+fortran    k1   natural_shuffled     energy     p0 n=10 med=0.032154s ok={True} rc=0 
+fortran    k1   aos                  energy     p0 n=10 med=0.034788s ok={True} rc=0 
+fortran    k2   tuned                8388608    p0 n=4 med=0.568738s ok={True} rc=0 
+fortran    k8   natural                         p0 n=3 med=0.902484s ok={True} rc=0 
+fortran    k7   tuned                           p0 n=4 med=0.539935s ok={True} rc=0 
+fortran    k5   natural                         p0 n=10 med=0.168405s ok={True} rc=0 
+fortran    k3   rmw_padded                      p0 n=10 med=0.309108s ok={True} rc=0 
+fortran    k6   natural              q6         p0 n=10 med=0.055216s ok={True} rc=0 
+fortran    k1   soa                  energy     p0 n=10 med=0.005406s ok={True} rc=0 
+fortran    k3   sw_padded                       p0 n=10 med=0.073833s ok={True} rc=0 
+fortran    k5   tuned                           p0 n=10 med=0.007518s ok={True} rc=0 
+fortran    k4   natural_unsorted                p0 n=10 med=0.011444s ok={True} rc=0 
+fortran    k4   branchless_unsorted             p0 n=10 med=0.026553s ok={True} rc=0 
+fortran    k2   tuned                262144     p0 n=10 med=0.019472s ok={True} rc=0 
+fortran    k7   natural                         p0 n=3 med=0.858372s ok={True} rc=0 

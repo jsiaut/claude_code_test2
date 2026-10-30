@@ -11,3 +11,7 @@ c_gcc      k4   branchless_unsorted             p0 n=10 med=0.005226s ok={True} 
 c_gcc      k4   natural_unsorted                p0 n=10 med=0.006134s ok={True} rc=0 
 c_gcc      k8   tuned                           p0 n=10 med=0.129696s ok={True} rc=0 
 c_gcc      k8   tuned                           p0 n=10 med=0.154957s ok={True} rc=0 
+c_gcc      k4   branchless_unsorted             p0 n=10 med=0.004605s ok={True} rc=0 
+c_gcc      k5   tuned                           p0 n=10 med=0.005978s ok={True} rc=0 
+c_gcc      k4   natural_unsorted                p0 n=10 med=0.006236s ok={True} rc=0 
+c_gcc      k4   branchless_unsorted             p0 n=10 med=0.004803s ok={True} rc=0 
