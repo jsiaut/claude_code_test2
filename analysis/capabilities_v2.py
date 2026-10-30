@@ -43,7 +43,7 @@ V2_OVERRIDES = {
     ("cpp", "F4"): (1, "mmap (POSIX, glibc) + std::start_lifetime_as"),
     # Zig
     ("zig", "D4"): (1, "std.os.linux.sched_setaffinity dans la bibliothèque standard"),
-    ("zig", "F4"): (1, "std.posix.mmap dans la bibliothèque standard"),
+    ("zig", "F4"): (1, "std.Io.File.MemoryMap (portable) et std.posix.mmap dans la bibliothèque standard"),
     # Odin
     ("odin", "D4"): (1, "core:sys/linux livré avec le compilateur"),
     ("odin", "F4"): (1, "core:sys/linux et core:mem/virtual livrés"),

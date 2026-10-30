@@ -109,7 +109,7 @@ MATRIX = {
         "E2": (1, "asm volatile"), "E3": (1, "@branchHint (sonde)"), "E4": (1, "@prefetch (sonde)"),
         "E5": (1, "noalias"), "E6": (1, "@setRuntimeSafety par portée"), "E7": (1, "comptime"),
         "F1": (0.5, "[M][N]T de taille connue à la compilation seulement"), "F2": (0, "aucun"),
-        "F3": (1, "+%, *% et types non signés"), "F4": (0.5, "std.posix.mmap (POSIX seulement) + bytesAsSlice (sonde)"),
+        "F3": (1, "+%, *% et types non signés"), "F4": (1, "std.Io.File.MemoryMap (portable, depuis 0.16) + bytesAsSlice (sonde probe_f4) ; corrigé le 30/10, remarque sur Zig"),
     },
     "odin": {
         "A1": (1, "[dynamic]Particle (bench)"), "A2": (1, "#raw_union/#packed, offset_of (sonde)"),
