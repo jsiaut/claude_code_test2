@@ -1,0 +1,4 @@
+#!/bin/sh
+# copie standard : toutes les variantes mesurées passent par ms_tuned (sans --no-ieee-float)
+d="$(dirname "$0")"
+exec "$d/ms_tuned" --warm="${WARMUP:-1}" --dataDir="${MS_DATA:-/opt/msdata}" "$@"

@@ -449,3 +449,23 @@ Robustesse :
   rang (5–95 %) et les probabilités de devancer le voisin sont publiées à côté. Les versions précédentes du README
   restent dans l'historique Git.
 
+* 2026-10-30, 10:15 : **confrontation avec le « Banc de sympathie mécanique »**, à la demande de l'utilisateur
+  (« fais les choses que tu veux tester pour trancher »). Plan pré-enregistré et poussé avant toute mesure :
+  `docs/CONFRONTATION.md`. Le conteneur a redémarré le matin sur un nouvel hôte (machine 4) : Cascade Lake du même
+  modèle que la machine 1 (modèle 85, révision 7, 4 vCPU), mais à la mémoire plus rapide (latence à 4 Mio de 107 ns
+  contre 142, débit DRAM de 9,4 à 11 Go/s contre 6,7 à 7,7 ; `results/hw/machine4/`), plus proche de la machine 2.
+  D'où le plan apparié du plan (section 4.5). Les binaires d'origine recompilés sur cet hôte par leurs scripts
+  inchangés sont identiques octet pour octet à ceux de la campagne compilés sur Cascade Lake (C, C++, Nim, D, Ada,
+  Fortran, Go : mêmes empreintes que `results/hw/machine3/binaries.txt`, section « avant »).
+* 2026-10-30, avant les mesures : **écarts au plan de la confrontation**, trouvés en écrivant les réécritures.
+  (1) L'audit de la section 4.2 avait manqué que `q6_tuned` et `q1_tuned` de Fortran (le plafond de K6 Q6 et Q1)
+  portent aussi des directives `!$omp simd` : ces deux clés sont ajoutées aux mesures. (2) `ms.f90` utilise
+  `omp_lib` dans les noyaux multi-threads, qui ne compile pas sans OpenMP : la copie standard de Fortran compile donc
+  `tuned.f90` (tous les noyaux mesurés de la copie) sans `-fopenmp`, et garde `ms.f90` (harnais, variantes
+  naturelles, noyaux multi-threads non mesurés) compilé comme l'original. Les variantes naturelles de Fortran sont
+  ainsi identiques à celles de la campagne et ne sont pas remesurées. (3) Go : sans `GOEXPERIMENT`, le code machine
+  des six fonctions naturelles comparées est identique (objdump normalisé) ; elles ne sont pas remesurées.
+  (4) Réécritures : le Q1 standard de C compte ses lignes par voie, sans `stdc_count_ones` ; les copies standard de
+  C, Nim et Ada sont compilées avec `-mprefer-vector-width=512` (choix de la largeur, permis par la section 4.1) ;
+  Go, qui ne vectorise pas, reçoit 8 accumulateurs scalaires au lieu de tableaux de 64 voies ; la version standard de
+  K5 en Nim coupe localement les vérifications par les pragmas standard que le fichier emploie déjà ailleurs.
