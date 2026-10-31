@@ -425,8 +425,9 @@ recalculés : ils restent ceux de la confrontation, faite avec la copie d'origin
 ## État au 31 octobre : la confrontation rejouée après les errata
 
 Les résultats ci-dessus datent du 30 octobre. Depuis, ma grille a reçu les errata du juge à l'aveugle et des remarques
-sur Zig, Ada, Fortran, Mojo, Julia et Chapel, et les bancs d'Ada et de Fortran ont été corrigés. Le même code, rejoué
-dans l'état actuel du classement avec la copie standard de Chapel corrigée (`analysis/confrontation_current.py` ;
+sur Zig, Ada, Fortran, Mojo, Julia, Chapel et D, et les bancs d'Ada, de Fortran et de D ont été corrigés. Le même
+code, rejoué dans l'état actuel du classement avec la copie standard de Chapel corrigée
+(`analysis/confrontation_current.py` ;
 sorties `results/confrontation_current.json`, `results/report_confrontation_current.md`,
 `results/blind_compare_current.json`, `results/report_blind_current.md`), donne :
 
@@ -435,8 +436,8 @@ sorties `results/confrontation_current.json`, `results/report_confrontation_curr
 | Spearman entre leur ordre et le mien (scénario A) | 0,77 | 0,76 |
 | Test 1 : rang de C dans mon pilier contrôle sous leur règle | 11e (63,3) | 12e (64,0) ; Mojo passe devant (61,9 → 69,7) |
 | Test 2 : plafond de C sous leur restriction de code | 94,4 % | 94,5 % |
-| Scénario C (E_R) : Spearman, rang de C | 0,79 ; 1er | 0,78 ; 1er |
-| Scénario D (C_R et E_R) : Spearman, rang de C | 0,87 ; 5e | 0,87 ; 5e |
+| Scénario C (E_R) : Spearman, rang de C | 0,79 ; 1er | 0,79 ; 1er |
+| Scénario D (C_R et E_R) : Spearman, rang de C | 0,87 ; 5e | 0,88 ; 5e |
 | Test 3 : seuils de w (P(C premier) < 0,5 ; ordre plus proche du leur ; Spearman ≥ 0,95) | 0,15 ; 0,45 ; 0,45 | 0,20 ; 0,45 ; 0,55 |
 | Test 4 : accord des deux grilles (mes notes v2 ; sous leur règle) | 0,83 ; 0,88 | 0,74 ; 0,81 |
 | Juge à l'aveugle, kappa pondéré contre ma grille (règle v2 ; leur règle) | 0,75 ; 0,80 | 0,85 ; 0,86 |
@@ -448,3 +449,8 @@ sorties `results/confrontation_current.json`, `results/report_confrontation_curr
   P4 pour Julia), deux disparaissent (P4 pour C et Odin).
 * **Le kappa du juge monte** sur la grille corrigée, ce qui est attendu pour les cinq erreurs qu'il a lui-même
   relevées ; le chiffre du test reste celui du 30 octobre.
+* **La correction de D** (Q1 réécrit selon la convention commune ; `docs/DLANG.md`) relève son pilier E (74,7 → 78,8
+  sous ma règle, 73,5 → 77,5 sous la leur) ; son pilier C ne bouge pas, ses errata E3 et E4 ne valant que pour la
+  règle v1. D passe de la 9e à la 8e place dans mon ordre publié et dans le scénario C, de la 8e à la 7e dans le
+  scénario D ; ces deux scénarios se rapprochent un peu de leur ordre (Spearman 0,78 → 0,79 et 0,87 → 0,88) ; les tests
+  1, 2 et 4 et les seuils du test 3 ne bougent pas.

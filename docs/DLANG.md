@@ -142,3 +142,79 @@ Décisions :
    rectangulaires par la spécification de D.
 4. **La version de LLVM entre dans les limites** si S-L22 déplace D ; la chaîne du classement reste celle fixée le 28
    octobre.
+
+## 4. Résultats
+
+539 processus (77 cellules × 7 passes), le 31 octobre de 15 h 00 à 15 h 12 sur la machine 10 ; aucune somme de contrôle
+fausse ; 21 processus refaits pour vol de temps au-dessus de 2 %, un seul gardé au-dessus du seuil (`d_ref`, K4 naturel,
+6,2 %). **Incident** : j'ai compilé et lancé une sonde (`probes/d`, une dizaine de secondes) pendant la première passe,
+de 15:02:36 à 15:02:46 environ. Avant de regarder les résultats, j'ai fixé la règle d'écarter les processus dont la
+durée recoupe cette fenêtre (à une seconde près) : 8 processus de la première passe sont écartés
+(`analysis/d_check.py`). Rapports et scénarios : `results/report_d.md`, `results/d_check.json` ; données :
+`results/raw_d/`.
+
+### 4.1 Mesures appariées (machine 10, même hôte)
+
+| Clé | Forme | Rapport (IC 95 %) | Remarque |
+|---|---|---|---|
+| Q1 tuned | une passe en `core.simd` (`d_fix` / `d_ref`) | 0,438 (0,420–0,467) : 72,6 → 31,8 ms | 84 → 22 ms |
+| Q1 `mt` | idem | 0,458 (0,389–0,526) : 23,7 → 10,9 ms | 42 → 12 ms |
+| 7 témoins (Q1 naturel, Q6, K9, K5, K1 aos…) | code inchangé | 0,96 à 1,05 | |
+| Q6 tuned / `mt`, K4 sans branchement | préférence 512 bits (`d_512` / `d_fix`) | 0,84 / 0,80 / 0,62 | |
+| Q1 tuned, K1 aos | préférence 512 bits | 1,03 / 1,03 (déjà en vecteurs explicites) | +26 % sur sa forme |
+| K9 naturel | `double[M][]` (`d_nat` / `d_ref`) | 0,676 (0,643–0,715) : 36,4 → 24,6 ms | 35,5 → 24,5 ms |
+| 26 clés | LLVM 22.1.8 / 21.1.8 (`d_l22` / `d_ref`) | 1,01 en moyenne ; de 0,77 (K1 naturel) à 1,31 (K1 permuté) | |
+| K8 naturel | `--DRT-gcopt=fork:1` | pause max 82 → 33 ms ; p99,9 0,90 → 1,79 ms ; temps × 1,15 | 10–18 ms |
+
+### 4.2 Report sur les données principales et classement
+
+Q1 tuned : transfert 47,1 ms, pont par le C du même hôte 35,7 ms, écart 32 % : la règle retient le pont (×0,332), comme
+le prévoit le plan ; Q1 `mt` : transfert (×0,458, écart 16 %). Le pont est plausible ici : la forme corrigée reprend
+l'algorithme du C témoin (1,11 fois son temps sur l'hôte), alors que l'ancienne forme, par blocs, ralentit bien plus que
+le C entre l'hôte et les données principales (× 1,48 contre × 1,12) ; je n'en ai pas cherché la cause. Pour K9
+naturel (S-nat), le pont se trompe, comme pour Chapel : le C de ce stencil va 2,6 fois plus vite sur cet Emerald Rapids
+que sur le Cascade Lake des données principales, et le pont prédit un stencil rectangulaire plus lent que l'original
+(×1,15) quand la mesure appariée donne ×0,68. J'ajoute donc, **après avoir vu ces chiffres** (écart au plan), S-nat-T
+et S-tout-T, par transfert seul.
+
+| Scénario | Score de D | Contrôle C | Plafond E | Défaut D | Rang espéré | Place | Rang 90 % |
+|---|---|---|---|---|---|---|---|
+| Avant (publié avant la remarque, refait par le même code) | 71,0 | 87,1 | 74,7 | 42,5 | 8,43 | 9 | 3–12 |
+| D-E : errata E3, E4 (v1) | 71,0 | 87,1 | 74,7 | 42,5 | 8,28 | 9 | 3–12 |
+| D-Q1 / D-Q1-T : Q1 corrigé | 72,6 / 72,4 | 87,1 | 78,8 / 78,1 | 42,5 | 7,45 / 7,62 | 8 / 9 | 3–12 |
+| **D-EQ, publié** (D-EQ-T) | **72,6** (72,4) | 87,1 | **78,8** (78,1) | 42,5 | **7,29** (7,46) | **8** (8) | 3–12 |
+| S-512 : préférence 512 bits | 73,3 | 87,1 | 80,7 | 42,2 | 6,22 | 6 | 2–12 |
+| S-nat (pont) / S-nat-T (transfert) : K9 naturel en `double[M][]` | 72,6 / 72,8 | 87,1 | 78,8 | 42,3 / 43,0 | 7,37 / 7,01 | 8 / 7 | 3–12 |
+| S-tout / S-tout-T | 73,3 / 73,4 | 87,1 | 80,7 | 42,0 / 42,7 | 6,31 / 5,95 | 6 / 5 | 2–12 |
+| S-L22 (information) : LLVM 22.1.8 | 71,3 | 87,1 | 77,2 | 39,5 | 8,24 | 9 | 3–13 |
+
+* **Publié** : D passe de 71,0 à 72,6 points (3e score du classement, derrière C et C++) et de la 9e à la 8e place
+  (rang espéré 7,29). Il devance Ada dans 53 % des variantes, Rust dans 51 %, Nim dans 50 %, et reste derrière Zig dans
+  64 % : D, Ada, Nim et Rust forment un groupe sans ordre établi. Le plafond de K6 passe de 0,515 à 0,784. Les errata
+  E3 et E4 ne changent pas le score ponctuel (règle v2), mais gagnent 0,15 de rang espéré.
+* **S-512** : avec la préférence 512 bits, K4 sans branchement passe sous le meilleur temps de K4 des autres langages
+  (rapport 0,62) : D devient la référence de K4, et les autres langages y perdent ; d'où la 6e place.
+* **S-L22** : le paquet officiel (LLVM 22.1.8) ne fait pas mieux (1,01 en moyenne) ; il ralentit surtout K1 permuté
+  (×1,31), ce qui coûte 1,4 point. La chaîne du classement reste celle du 28 octobre.
+* **La remarque estimait** 72,9 points et la 7e place (6,84) avec Q1 corrigé, la 6e (6,70) avec les errata, et 73,1
+  avec le stencil en `double[M][]` ; mes calculs donnent 72,6 et la 8e place (7,29), et 72,8 et la 7e place (7,01)
+  avec le stencil.
+
+### 4.3 Verdicts
+
+* **(1) Q1** : exact, et c'était une erreur de mon implémentation au sens de la règle commune (écart à la convention de
+  sa classe de langages) : corrigée dans le classement publié. Gain mesuré proche de celui de la remarque (×0,44).
+* **(2) Stencil** : exact. La cause écrite dans le README était fausse pour D (aliasing sans métadonnées TBAA, pas
+  vérifications de bornes) : corrigée. Le code naturel ne change pas ; en `double[M][]`, forme que la spécification
+  de D recommande pour le calcul (`results/d_check/spec_arrays.txt`), D gagnerait une place (S-nat-T, par
+  transfert).
+* **(3) E3 et E4** : exacts, errata en règle v1 ; ils n'étaient faux que dans la v1.
+* **(4) Mineurs** : 512 bits exact (sensibilité, +0,7 point et deux places, en partie parce que D devient la référence
+  de K4) ; LLVM : `build.sh` est juste pour ma chaîne, compilée depuis les sources contre LLVM 21.1.8, et les paquets
+  officiels embarquent bien LLVM 22.1.8 (sans gain mesuré) ; A3 : texte précisé ; D3 : inchangé.
+* **Ce qui est justifié** (GC, K7) : exact. Avec `fork:1`, la pause maximale de K8 tombe à 33 ms ici (la remarque disait
+  10–18 ms), au prix de 15 % de temps ; hors défaut.
+* **Effet** : D passe de la 9e à la 8e place (72,6 points). La remarque estimait 6e–7e ; l'écart vient des errata,
+  qui ne changent pas le score ponctuel (la règle v2 les comptait déjà), et de Q1 : la forme corrigée reste à 1,11 fois
+  le C sur l'hôte, quand la remarque la mesurait plus rapide que lui (22,4 contre 23,2 ms). Le transfert seul donne
+  aussi la 8e place.

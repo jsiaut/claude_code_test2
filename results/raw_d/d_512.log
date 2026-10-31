@@ -1,0 +1,42 @@
+d_512      k6   mt                   q1         p0 n=10 med=0.011963s ok={True} rc=0 
+d_512      k6   tuned                q1         p0 n=10 med=0.032371s ok={True} rc=0 
+d_512      k6   tuned                q6         p0 n=10 med=0.015005s ok={True} rc=0 
+d_512      k6   mt                   q6         p0 n=10 med=0.007000s ok={True} rc=0 
+d_512      k1   aos                  energy     p0 n=10 med=0.033579s ok={True} rc=0 
+d_512      k4   branchless_unsorted             p0 n=10 med=0.001478s ok={True} rc=0 
+d_512      k6   mt                   q6         p0 n=10 med=0.006249s ok={True} rc=0 
+d_512      k6   mt                   q1         p0 n=10 med=0.013515s ok={True} rc=0 
+d_512      k6   tuned                q1         p0 n=10 med=0.034545s ok={True} rc=0 
+d_512      k6   tuned                q6         p0 n=10 med=0.015264s ok={True} rc=0 
+d_512      k1   aos                  energy     p0 n=10 med=0.030302s ok={True} rc=0 
+d_512      k4   branchless_unsorted             p0 n=10 med=0.001228s ok={True} rc=0 
+d_512      k6   mt                   q6         p0 n=10 med=0.006993s ok={True} rc=0 
+d_512      k6   tuned                q1         p0 n=10 med=0.031516s ok={True} rc=0 
+d_512      k6   mt                   q1         p0 n=10 med=0.010797s ok={True} rc=0 
+d_512      k1   aos                  energy     p0 n=10 med=0.033657s ok={True} rc=0 
+d_512      k4   branchless_unsorted             p0 n=10 med=0.001401s ok={True} rc=0 
+d_512      k6   tuned                q6         p0 n=10 med=0.014823s ok={True} rc=0 
+d_512      k6   mt                   q6         p0 n=10 med=0.004057s ok={True} rc=0 
+d_512      k4   branchless_unsorted             p0 n=10 med=0.001341s ok={True} rc=0 
+d_512      k1   aos                  energy     p0 n=10 med=0.033495s ok={True} rc=0 
+d_512      k6   mt                   q1         p0 n=10 med=0.013256s ok={True} rc=0 
+d_512      k6   tuned                q1         p0 n=10 med=0.032334s ok={True} rc=0 
+d_512      k6   tuned                q6         p0 n=10 med=0.014084s ok={True} rc=0 
+d_512      k4   branchless_unsorted             p0 n=10 med=0.001300s ok={True} rc=0 
+d_512      k6   tuned                q6         p0 n=10 med=0.016178s ok={True} rc=0 
+d_512      k6   mt                   q1         p0 n=10 med=0.011069s ok={True} rc=0 
+d_512      k6   tuned                q1         p0 n=10 med=0.032362s ok={True} rc=0 
+d_512      k6   mt                   q6         p0 n=10 med=0.003745s ok={True} rc=0 
+d_512      k1   aos                  energy     p0 n=10 med=0.034310s ok={True} rc=0 
+d_512      k6   mt                   q1         p0 n=10 med=0.009994s ok={True} rc=0 
+d_512      k6   tuned                q6         p0 n=10 med=0.014434s ok={True} rc=0 
+d_512      k4   branchless_unsorted             p0 n=10 med=0.001260s ok={True} rc=0 
+d_512      k6   mt                   q6         p0 n=10 med=0.003828s ok={True} rc=0 
+d_512      k6   tuned                q1         p0 n=10 med=0.032438s ok={True} rc=0 
+d_512      k1   aos                  energy     p0 n=10 med=0.032330s ok={True} rc=0 
+d_512      k6   tuned                q1         p0 n=10 med=0.036246s ok={True} rc=0 
+d_512      k6   mt                   q6         p0 n=10 med=0.004020s ok={True} rc=0 
+d_512      k6   tuned                q6         p0 n=10 med=0.013903s ok={True} rc=0 
+d_512      k4   branchless_unsorted             p0 n=10 med=0.001200s ok={True} rc=0 
+d_512      k1   aos                  energy     p0 n=10 med=0.036961s ok={True} rc=0 
+d_512      k6   mt                   q1         p0 n=10 med=0.011577s ok={True} rc=0 

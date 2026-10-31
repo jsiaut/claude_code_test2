@@ -4,3 +4,6 @@ CAP;A4;1;align(64) L.alignof=64
 CAP;A5;1;union 0x3f800000
 CAP;F4;1;std.mmfile + cast : 0.439005
 CAP;D5;1;core.atomic.pause + atomicFence
+CAP;E3;1;core.builtins.likely/unlikely (druntime) : somme 499500
+CAP;E4;1;core.simd.prefetch!(false, 3) (druntime) : prefetcht0, somme 499500
+CAP;A3;1;champs de bits natifs sans -preview : NativeBF.sizeof=4 a=5 b=17

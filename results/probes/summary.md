@@ -98,6 +98,9 @@
 | d | A5 | 1 | 1 |  | union 0x3f800000 |
 | d | F4 | 1 | 1 |  | std.mmfile + cast : 0.439005 |
 | d | D5 | 1 | 1 |  | core.atomic.pause + atomicFence |
+| d | E3 | 1 | 1 |  | core.builtins.likely/unlikely (druntime) : somme 499500 |
+| d | E4 | 1 | 1 |  | core.simd.prefetch!(false, 3) (druntime) : prefetcht0, somme 499500 |
+| d | A3 | 1 | 1 |  | champs de bits natifs sans -preview : NativeBF.sizeof=4 a=5 b=17 |
 | fortran | A5 | 1 | 1 |  | TRANSFER(1.0) = 0x3F800000 |
 | fortran | B5 | 1 | 1 |  | c_loc + c_f_pointer :  2.0 |
 | fortran | C5 | 1 | 1 |  | do concurrent :   72.0 |

@@ -53,8 +53,8 @@ V2_OVERRIDES = {
     ("d", "C2"): (1, "ldc.gccbuiltins_x86 livré avec LDC"),
     ("d", "C4"): (1, "@fastmath (ldc.attributes), par fonction"),
     ("d", "D4"): (1, "core.sys.linux.sched_setaffinity livré"),
-    ("d", "E3"): (1, "llvm_expect (ldc.intrinsics)"),
-    ("d", "E4"): (1, "llvm_prefetch (ldc.intrinsics)"),
+    ("d", "E3"): (1, "core.builtins.likely/unlikely (druntime) ; llvm_expect (ldc.intrinsics)"),
+    ("d", "E4"): (1, "core.simd.prefetch (druntime) ; llvm_prefetch (ldc.intrinsics)"),
     ("d", "E5"): (1, "@restrict (ldc.attributes)"),
     # Nim (backend clang)
     ("nim", "C2"): (1, "importc des intrinsèques de <immintrin.h> du compilateur C de la chaîne"),

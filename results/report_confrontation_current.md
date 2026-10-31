@@ -66,10 +66,10 @@ Replis et pénalités : mojo k6:mt:q6 : même travail sur un thread (tuned) ; mo
 | Odin | 2,0 | 3 | 1 | 3 | 1 | 81,5 → 81,5 | 78,6 → 78,7 |
 | C3 | 5,0 | 4 | 4 | 4 | 4 | 73,1 → 71,9 | 82,5 → 82,6 |
 | Zig | 1,0 | 5 | 3 | 5 | 3 | 87,2 → 87,2 | 70,7 → 70,8 |
-| Nim | 10,0 | 6 | 7 | 7 | 7 | 76,1 → 68,8 | 72,9 → 70,3 |
-| Ada | 7,0 | 7 | 9 | 8 | 9 | 80,6 → 65,4 | 78,1 → 75,1 |
-| Rust | 6,0 | 8 | 6 | 6 | 6 | 73,6 → 72,3 | 79,6 → 79,7 |
-| D | 3,5 | 9 | 8 | 9 | 8 | 87,1 → 77,6 | 74,7 → 73,5 |
+| Nim | 10,0 | 6 | 7 | 7 | 8 | 76,1 → 68,8 | 72,9 → 70,3 |
+| Ada | 7,0 | 7 | 9 | 9 | 9 | 80,6 → 65,4 | 78,1 → 75,1 |
+| D | 3,5 | 8 | 8 | 8 | 7 | 87,1 → 77,6 | 78,8 → 77,5 |
+| Rust | 6,0 | 9 | 6 | 6 | 6 | 73,6 → 72,3 | 79,6 → 79,7 |
 | Chapel | 9,0 | 10 | 10 | 10 | 11 | 61,8 → 56,9 | 80,2 → 72,1 |
 | Fortran | 14,0 | 11 | 13 | 12 | 14 | 65,3 → 49,9 | 74,7 → 32,6 |
 | Julia | 13,0 | 12 | 11 | 11 | 10 | 73,3 → 72,2 | 66,6 → 66,7 |
@@ -82,36 +82,36 @@ Replis et pénalités : mojo k6:mt:q6 : même travail sur un thread (tuned) ; mo
 
 | Scénario | Spearman | Kendall | Σd² | part de C | rang de C |
 |---|---|---|---|---|---|
-| A | 0,76 | 0,56 | 236,5 | 42 % | 1 |
+| A | 0,76 | 0,58 | 231,5 | 43 % | 1 |
 | B | 0,85 | 0,68 | 143,5 | 25 % | 5 |
-| C | 0,78 | 0,61 | 210,5 | 48 % | 1 |
-| D | 0,87 | 0,69 | 125,5 | 29 % | 5 |
+| C | 0,79 | 0,63 | 203,5 | 49 % | 1 |
+| D | 0,88 | 0,71 | 112,5 | 32 % | 5 |
 
 Sensibilité (K3 retiré du plafond de Mojo et de Fortran, configuration de référence), scénario C : Spearman 0,80, rang de C 1.
 
-Sensibilité (K3 retiré du plafond de Mojo et de Fortran, configuration de référence), scénario D : Spearman 0,87, rang de C 6.
+Sensibilité (K3 retiré du plafond de Mojo et de Fortran, configuration de référence), scénario D : Spearman 0,89, rang de C 7.
 
 ## Test 3 : leur S comme quatrième pilier
 
 | w | Spearman avec leur ordre | avec mon score de référence | P(C premier) | rang de C | 5 premiers |
 |---|---|---|---|---|---|
-| 0,00 | 0,76 | 1,00 | 0,93 | 1,0 | C, C++, Odin, Ada, Zig |
-| 0,05 | 0,80 | 0,99 | 0,88 | 1,0 | C, C++, Odin, Zig, Ada |
-| 0,10 | 0,81 | 0,98 | 0,76 | 1,0 | C, C++, Zig, Odin, D |
+| 0,00 | 0,76 | 1,00 | 0,93 | 1,0 | C, C++, D, Odin, Ada |
+| 0,05 | 0,80 | 0,99 | 0,88 | 1,0 | C, C++, D, Odin, Zig |
+| 0,10 | 0,81 | 0,98 | 0,76 | 1,0 | C, C++, Zig, D, Odin |
 | 0,15 | 0,81 | 0,98 | 0,57 | 1,0 | C, C++, Zig, Odin, D |
 | 0,20 | 0,82 | 0,98 | 0,33 | 2,0 | C++, C, Zig, Odin, D |
-| 0,25 | 0,85 | 0,97 | 0,16 | 3,0 | C++, Zig, C, Odin, D |
+| 0,25 | 0,85 | 0,96 | 0,16 | 3,0 | C++, Zig, C, Odin, D |
 | 0,30 | 0,87 | 0,95 | 0,06 | 4,0 | C++, Zig, Odin, C, D |
-| 0,35 | 0,88 | 0,94 | 0,02 | 4,0 | Zig, C++, Odin, C, D |
+| 0,35 | 0,89 | 0,94 | 0,02 | 5,0 | Zig, C++, Odin, D, C |
 | 0,40 | 0,92 | 0,92 | 0,01 | 6,0 | Zig, C++, Odin, D, C3 |
-| 0,45 | 0,93 | 0,90 | 0,00 | 7,0 | Zig, C++, Odin, D, C3 |
+| 0,45 | 0,93 | 0,91 | 0,00 | 7,0 | Zig, C++, Odin, D, C3 |
 | 0,50 | 0,94 | 0,90 | 0,00 | 7,0 | Zig, C++, Odin, D, C3 |
 | 0,55 | 0,96 | 0,88 | 0,00 | 8,0 | Zig, C++, Odin, D, C3 |
 | 0,60 | 0,96 | 0,88 | 0,00 | 8,0 | Zig, C++, Odin, D, C3 |
 | 0,65 | 0,96 | 0,88 | 0,00 | 8,0 | Zig, Odin, C++, D, C3 |
 | 0,70 | 0,97 | 0,87 | 0,00 | 8,0 | Zig, Odin, C++, D, C3 |
-| 0,75 | 0,97 | 0,84 | 0,00 | 10,0 | Zig, Odin, C++, D, C3 |
-| 0,80 | 0,97 | 0,84 | 0,00 | 10,0 | Zig, Odin, C++, D, C3 |
+| 0,75 | 0,97 | 0,83 | 0,00 | 10,0 | Zig, Odin, C++, D, C3 |
+| 0,80 | 0,97 | 0,83 | 0,00 | 10,0 | Zig, Odin, C++, D, C3 |
 | 0,85 | 0,99 | 0,79 | 0,00 | 11,0 | Zig, Odin, C++, D, C3 |
 | 0,90 | 0,99 | 0,78 | 0,00 | 11,0 | Zig, Odin, C++, D, C3 |
 | 0,95 | 1,00 | 0,77 | 0,00 | 11,0 | Zig, Odin, C++, D, C3 |

@@ -1,0 +1,14 @@
+d_nat      k9   tuned                           p0 n=10 med=0.021566s ok={True} rc=0 
+d_nat      k9   natural                         p0 n=10 med=0.025182s ok={True} rc=0 
+d_nat      k9   tuned                           p0 n=10 med=0.021160s ok={True} rc=0 
+d_nat      k9   natural                         p0 n=10 med=0.028051s ok={True} rc=0 
+d_nat      k9   natural                         p0 n=10 med=0.024908s ok={True} rc=0 
+d_nat      k9   tuned                           p0 n=10 med=0.020013s ok={True} rc=0 
+d_nat      k9   natural                         p0 n=10 med=0.023216s ok={True} rc=0 
+d_nat      k9   tuned                           p0 n=10 med=0.017380s ok={True} rc=0 
+d_nat      k9   natural                         p0 n=10 med=0.022801s ok={True} rc=0 
+d_nat      k9   tuned                           p0 n=10 med=0.020294s ok={True} rc=0 
+d_nat      k9   natural                         p0 n=10 med=0.024521s ok={True} rc=0 
+d_nat      k9   tuned                           p0 n=10 med=0.022903s ok={True} rc=0 
+d_nat      k9   tuned                           p0 n=10 med=0.025500s ok={True} rc=0 
+d_nat      k9   natural                         p0 n=10 med=0.025446s ok={True} rc=0 

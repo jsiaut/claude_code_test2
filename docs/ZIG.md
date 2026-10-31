@@ -140,23 +140,23 @@ pour 0.17. Rapports appariés master / 0.17 (moyenne géométrique de 7 processu
 
 ### 4.2 Effet sur le classement (analyse globale rejouée, 20 000 variantes)
 
-Chiffres recalculés après les corrections d'Ada, de Fortran, de Mojo, de Julia et de Chapel (`docs/ADA.md`,
-`docs/FORTRAN.md`, `docs/MOJO.md`, `docs/JULIA.md`, `docs/CHAPEL.md`), qui changent un peu les données de tous les
-scénarios ; les premiers chiffres, publiés plus tôt le
+Chiffres recalculés après les corrections d'Ada, de Fortran, de Mojo, de Julia, de Chapel et de D (`docs/ADA.md`,
+`docs/FORTRAN.md`, `docs/MOJO.md`, `docs/JULIA.md`, `docs/CHAPEL.md`, `docs/DLANG.md`), qui changent un peu les données
+de tous les scénarios ; les premiers chiffres, publiés plus tôt le
 même jour, différaient d'au plus 0,2 rang espéré.
 
 | Scénario | Score de Zig | Plafond E | Code naturel D1 | Rang espéré | Rang dans 90 % des variantes | Part des variantes où Zig est 1er |
 |---|---|---|---|---|---|---|
-| **A'** : Zig 0.17, classement publié (F4 corrigée) | 71,5 | 70,7 (11e) | 22,0 | 5,80 (5e) | 2–11 | 2 % |
-| **S1** : Zig 0.18-dev | 74,8 | 78,5 (4e) | 24,9 (1er) | 2,72 (2e) | 1–6 | 24 % |
-| S1-K5 : S1 sans transfert pour K5 | 74,6 | 77,9 | 24,9 | 2,81 (2e) | 1–6 | — |
-| S2 : 0.18-dev et `Io.Group` | 75,3 | 79,7 | 24,9 | 2,53 (2e) | 1–5 | — |
-| S3 : 0.17 et `Io.Group` | 71,3 | 70,4 | 22,0 | 5,90 (5e) | 2–11 | — |
+| **A'** : Zig 0.17, classement publié (F4 corrigée) | 71,5 | 70,7 (11e) | 22,0 | 5,93 (5e) | 2–11 | 2 % |
+| **S1** : Zig 0.18-dev | 74,8 | 78,5 (4e) | 24,9 (1er) | 2,75 (2e) | 1–6 | 24 % |
+| S1-K5 : S1 sans transfert pour K5 | 74,6 | 77,9 | 24,9 | 2,84 (2e) | 1–6 | — |
+| S2 : 0.18-dev et `Io.Group` | 75,3 | 79,7 | 24,9 | 2,55 (2e) | 1–5 | — |
+| S3 : 0.17 et `Io.Group` | 71,3 | 70,4 | 22,0 | 6,03 (5e) | 2–11 | — |
 
 * **A'** : la correction de F4 ne change aucun rang ni aucun score de référence (la règle v2 donnait déjà 1) ;
-  elle ne joue que dans les variantes en règle v1. Ordre : C, C++, Odin, C3, Zig, Nim, Ada, Rust, D, Chapel…
-* **S1** : C (rang espéré 1,92 ; 79,4 points), **Zig (2,72 ; 74,8)**, C++ (3,14 ; 76,4), Odin, C3, Nim, Ada, Rust,
-  D, Chapel. Zig reste 3e au score de référence, derrière C++, mais passe devant lui dans 53 % des variantes, devant
+  elle ne joue que dans les variantes en règle v1. Ordre : C, C++, Odin, C3, Zig, Nim, Ada, D, Rust, Chapel…
+* **S1** : C (rang espéré 1,93 ; 79,4 points), **Zig (2,75 ; 74,8)**, C++ (3,18 ; 76,4), Odin, C3, Nim, Ada, D,
+  Rust, Chapel. Zig reste 3e au score de référence, derrière C++, mais passe devant lui dans 53 % des variantes, devant
   Odin dans 85 %, devant C3 dans 86 %. Les scores des autres baissent un peu (C 80,1 à 79,4) : Zig master devient la
   référence de plusieurs mesures (K1, K7 `tuned`, K9 naturel), ce qui relève le meilleur temps auquel tous sont
   comparés.

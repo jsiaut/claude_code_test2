@@ -466,3 +466,28 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **Code naturel** : K1 en `struct` dans `List<T>` : 64 octets par particule, et le parcours permuté ne coûte plus rien
   (0,23 fois le temps de la classe) ; K6 avec les colonnes en paramètres au lieu de champs statiques : Q6 0,47, par la
   fusion des tests de plage (les vérifications de bornes restent).
+
+## Remarque sur D (31 octobre, machine 10, Emerald Rapids) — `docs/DLANG.md`, `results/d_check/`
+
+* **LDC 1.43.0** : ma chaîne est compilée depuis les sources contre LLVM 21.1.8 ; les paquets officiels embarquent LLVM
+  22.1.8. Sur 26 clés, le paquet officiel donne 1,01 en moyenne, de 0,77 (K1 naturel) à 1,31 (K1 permuté).
+* **`-release`** ne garde les vérifications de bornes que dans les fonctions `@safe` ; le code `@system` n'en a aucune.
+* **Pas de métadonnées TBAA dans l'IR de LDC** : dans le stencil sur un tableau de tranches (`double[][]`), les
+  pointeurs de lignes sont relus après chaque écriture et la boucle reste scalaire ; clang 23 vectorise le même stencil
+  en `vector<vector<double>>`, et plus du tout avec `-fno-strict-aliasing`. En `double[M][]` (lignes de taille fixe),
+  la boucle vectorise : K9 naturel 0,68 (36,4 → 24,6 ms).
+* **druntime** : `core.builtins.likely`, `unlikely` et `expect` (`llvm.expect` sous LDC) ; `core.simd.prefetch`
+  (`prefetcht0`) ; champs de bits natifs (`uint a : 3`) sans `-preview` ; les tableaux associatifs
+  (`core.internal.newaa`) allouent chaque entrée par `new Entry!(K, V)` sur le tas du GC.
+* **Deux plantages de LDC 1.43** (erreur interne dans `DtoLVal`) : une affectation `v.array[k] = …` dans une fonction
+  `pragma(inline, true)` ; une expression vectorielle passée à une fonction inline dans un `+=`
+  (`acc[g][4] += sum8(ace[g] + aco[g])`). Des variables nommées les contournent.
+* **Q1 en une passe de `core.simd`** (l'algorithme de la référence C, 16 lignes à la fois ; 199 instructions zmm) :
+  0,44 (72,6 → 31,8 ms) contre six passes masquées par bloc de 4 096 lignes ; à 4 threads, 0,46.
+* **Préférence 512 bits** (`-mattr=-prefer-256-bit`) : Q6 tuned 0,84, Q6 `mt` 0,80, K4 sans branchement 0,62 ; sans
+  effet sur les formes déjà écrites en vecteurs explicites (Q1, K1 aos : 1,03).
+* **Marquage concurrent du GC** (`--DRT-gcopt=fork:1`) : pause maximale de K8 naturel 82 → 33 ms, mais p99,9
+  0,90 → 1,79 ms et temps × 1,15.
+* **Le pont par le C se trompe encore entre architectures** (comme pour Chapel) : le C naturel de K9 va 2,6 fois plus
+  vite sur cet Emerald Rapids que sur le Cascade Lake ; ponter K9 naturel par le C donnait × 1,15, quand la mesure
+  appariée donne × 0,68.

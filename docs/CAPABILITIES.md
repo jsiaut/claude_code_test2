@@ -35,8 +35,8 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | **E** (10 %) | | | | | | | | | | | | | | | | | | | | | |
 | E1 code natif inspectable | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ◐ | ○ | ○ |
 | E2 assembleur en ligne | ◐ | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ○ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
-| E3 indications de branchement | ◐ | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| E4 préchargement explicite | ◐ | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ◐ | ● | ○ | ● | ○ | ◐ | ● | ○ | ○ | ○ | ○ |
+| E3 indications de branchement | ◐ | ● | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| E4 préchargement explicite | ◐ | ◐ | ● | ● | ● | ● | ● | ◐ | ◐ | ○ | ◐ | ● | ○ | ● | ○ | ◐ | ● | ○ | ○ | ○ | ○ |
 | E5 garanties de non-aliasing | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ● | ◐ | ● | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | E6 contrôle local des vérifications de bornes | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ● | ● | ● | ○ | ◐ | ○ |
 | E7 calcul à la compilation + génériques monomorphisés | ◐ | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ○ | ● | ◐ | ○ | ○ | ○ | ○ |
@@ -104,11 +104,11 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 
 ### D
 
-* **A** : A1 = 1 (Particle[] (bench)) ; A2 = 1 (ordre déclaré, .offsetof (sonde)) ; A3 = 1 (align(1) + std.bitmanip.bitfields (sonde)) ; A4 = 1 (align(64) (sonde)) ; A5 = 1 (union, cast de pointeurs) ; A6 = 0 (aucun en Phobos) ; A7 = 1 (float[16]) ; A8 = 1 (ubyte/short/float)
+* **A** : A1 = 1 (Particle[] (bench)) ; A2 = 1 (ordre déclaré, .offsetof (sonde)) ; A3 = 1 (align(1) ; champs de bits natifs (uint a : 3, sans -preview, sonde) et std.bitmanip.bitfields ; texte précisé le 31/10) ; A4 = 1 (align(64) (sonde)) ; A5 = 1 (union, cast de pointeurs) ; A6 = 0 (aucun en Phobos) ; A7 = 1 (float[16]) ; A8 = 1 (ubyte/short/float)
 * **B** : B1 = 0.5 (GC par défaut (new, tableaux, fermetures) ; @nogc et -betterC l'évitent) ; B2 = 0.5 (std.experimental.allocator (expérimental)) ; B3 = 1 (struct et tableaux statiques sur la pile) ; B4 = 0.5 (fermetures, ~, littéraux de tableaux allouent sur le tas GC (bench : bug de capture)) ; B5 = 1 (pointeurs)
 * **C** : C1 = 1 (core.simd) ; C2 = 0.5 (ldc.gccbuiltins_x86 (propre à LDC)) ; C3 = 0.5 (mesuré) ; C4 = 0.5 (@fastmath de ldc.attributes (propre à LDC)) ; C5 = 1 (std.parallelism (parallel foreach, reduce))
 * **D** : D1 = 1 (core.thread) ; D2 = 1 (core.atomic MemoryOrder raw/acq/rel/seq) ; D3 = 1 (std.parallelism.cacheLineSize, core.cpuid.dataCaches ; corrigé le 30/10, juge à l'aveugle) ; D4 = 0.5 (core.sys.linux.sched_setaffinity (liaison livrée)) ; D5 = 1 (core.atomic.pause + atomicFence (src))
-* **E** : E1 = 1 (natif) ; E2 = 1 (asm (iasm DMD, ldc.llvmasm)) ; E3 = 0.5 (llvm_expect de ldc.intrinsics) ; E4 = 0.5 (llvm_prefetch de ldc.intrinsics) ; E5 = 0.5 (@restrict de ldc.attributes) ; E6 = 1 (arr.ptr[i] ; -boundscheck) ; E7 = 1 (templates + CTFE)
+* **E** : E1 = 1 (natif) ; E2 = 1 (asm (iasm DMD, ldc.llvmasm)) ; E3 = 1 (core.builtins.likely, unlikely et expect (druntime ; llvm.expect sous LDC, sonde) ; erratum du 31/10, remarque sur D) ; E4 = 1 (core.simd.prefetch (druntime, DMD et LDC ; prefetcht0, sonde) ; erratum du 31/10, remarque sur D) ; E5 = 0.5 (@restrict de ldc.attributes) ; E6 = 1 (arr.ptr[i] ; -boundscheck) ; E7 = 1 (templates + CTFE)
 * **F** : F1 = 0.5 (tableaux statiques de tableaux statiques) ; F2 = 0 (aucun) ; F3 = 1 (débordement défini) ; F4 = 1 (std.mmfile (sonde))
 
 ### Nim

@@ -649,7 +649,7 @@ Robustesse :
   contre 62,3), et Mojo ne le devance plus que dans 62 à 70 % des variantes. Effet moyen du protocole : 0 à 2,5 %
   (+0,7 à +0,9 point). Aucun écart au plan. Le README précise la phrase sur les 98 % des variantes ; le texte de la
   case E7 de C# est précisé (note inchangée).
-* 2026-10-31, fin d'après-midi : **audit du README** à la demande de l'utilisateur. L'analyse v3, ses figures et
+* 2026-10-31, début d'après-midi : **audit du README** à la demande de l'utilisateur. L'analyse v3, ses figures et
   `results/readme_figures.json`, recalculées, sont identiques au bit près aux fichiers publiés, et le tableau du
   classement leur correspond ligne à ligne. Mais des chiffres du texte dataient d'états antérieurs : Nim, Zig et C3
   devant Ada dans 55 à 69 % des variantes (54 à 68 écrits), D derrière Nim et Rust dans 66 % (65), Mojo 12e et non 11e
@@ -661,10 +661,27 @@ Robustesse :
   (`results/julia_check_current.json`). Aucune donnée ni aucun score publié ne change.
 * 2026-10-31, 14:39 : **machine 10**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207, 4 vCPU ;
   latence à 4 Mio 52 ns, DRAM 13,4 Go/s : `results/hw/machine10/`).
-* 2026-10-31, fin d'après-midi : **plan de la remarque sur D** (`docs/DLANG.md`, sections 1 à 3), poussé avant les
-  mesures. Vérifications faites avant le plan (`results/d_check/`) : chaîne (LDC 1.43.0 compilé depuis les sources
+* 2026-10-31, 15:00 : **plan de la remarque sur D** (`docs/DLANG.md`, sections 1 à 3), poussé avant les mesures
+  (15:00:42). Vérifications faites avant le plan (`results/d_check/`) : chaîne (LDC 1.43.0 compilé depuis les sources
   contre LLVM 21.1.8 ; le paquet officiel, téléchargé dans `/opt/ldc143`, embarque LLVM 22.1.8), désassemblage de Q1 et
   du stencil, IR sans TBAA, contre-épreuve C++, sonde druntime. Décisions fixées d'avance : errata E3 et E4 de D en
   règle v1 ; le Q1 optimisé de D, écrit hors de la convention des langages à types vectoriels portables, est une
   erreur d'implémentation, corrigée dans le classement publié (`bench/d_fix`) ; la préférence 512 bits, le stencil en
   `double[M][]` et LLVM 22.1.8 restent des sensibilités.
+* 2026-10-31, 15:00:48-15:12:32 : **mesures de la remarque sur D** (`tools/measure_d.py`, machine 10) : 77 cellules
+  × 7 processus (539) ; aucune somme de contrôle fausse ; 21 processus refaits pour vol de temps au-dessus de 2 %, un
+  seul gardé au-dessus du seuil (`d_ref`, K4 naturel, 6,2 %). **Incident** : j'ai compilé et lancé une sonde pendant la
+  première passe (de 15:02:36 à 15:02:46 environ). Règle fixée avant de regarder les résultats : écarter les processus
+  dont la durée recoupe cette fenêtre ; 8 sont écartés (`analysis/d_check.py`).
+* 2026-10-31, fin d'après-midi : **résultats de la remarque sur D** (`results/report_d.md`, `results/d_check.json`).
+  Entrent dans le classement publié les errata E3 et E4 de D en règle v1 et la correction de son Q1 optimisé : rapports
+  appariés reportés sur les données principales par le pont pour Q1 tuned (× 0,332 ; le transfert, × 0,438, s'en
+  écarte de 32 %) et par transfert pour Q1 `mt` (× 0,458), dans `results/transfers.json`. D passe de 71,0 à 72,6
+  points et de la 9e à la 8e place (rang espéré 8,43 → 7,29) ; par transfert seul, 72,4 points et la 8e place.
+  Sensibilités : préférence 512 bits 6e ; stencil en `double[M][]` 7e (transfert) ; tout cumulé 5e (transfert) ;
+  LLVM 22.1.8 sans gain (1,01 en moyenne). **Écart au plan** : pour K9 naturel, le pont se trompe entre architectures
+  (× 1,15, contre × 0,68 mesuré) ; j'ai ajouté S-nat-T et S-tout-T, par transfert seul, après avoir vu les chiffres. Le
+  README corrige la cause du stencil de D (aliasing sans TBAA, pas vérifications de bornes) et un chiffre périmé de la
+  même phrase (stencil naturel de Rust, Nim et Ada : 71 à 73 ms, et non 80). Sorties recalculées :
+  classement, figures, scénarios de Zig et de Julia, confrontation (Spearman des scénarios C et D 0,79 et 0,88 ; le
+  reste inchangé).
