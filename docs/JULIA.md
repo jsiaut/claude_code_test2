@@ -158,6 +158,9 @@ reporte Julia en 512 bits à 3,87 ms, au niveau de C, ce qui rejoint la mesure d
 | S1 (sensibilité) : formes de la remarque pour Q1, K7, K8 | 67,1 | 73,3 | 74,5 | 9,62 | 10 | 5–13 |
 | S1-K5 : S1 et K5 en 512 bits (pont) | 68,9 | 73,3 | 79,0 | 8,35 | 9 | 4–12 |
 
+Depuis les errata de Chapel (`docs/CHAPEL.md`), le classement publié donne à Julia un rang espéré de 11,25, sans changer
+son score, sa place (12e) ni son rang plausible (7–13).
+
 * **Publié** : les errata rapportent 1,8 point (le contrôle passe de 68,3 à 73,3). Julia reste 12e, à 0,1 point de
   Chapel, qui la devance dans 63 % des variantes ; elle devance Mojo dans 63 %.
 * **Sensibilité** : avec les formes de la remarque, Julia gagne 3,1 points et passe 10e, devant Fortran (S1) ; avec

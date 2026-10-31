@@ -113,4 +113,80 @@ tiré au hasard (graine 20261130 + passe), échauffement de 2.
 
 ## 4. Résultats
 
-*À venir.*
+189 processus (27 cellules, 7 passes, échauffement de 2), le 31 octobre de 10 h 10 à 10 h 15 sur la machine 8 ;
+aucune somme de contrôle fausse ; 8 processus refaits pour vol de temps au-dessus de 2 % (aucun gardé au-dessus du
+seuil). Temps, rapports et scénarios : `results/report_chapel.md` et `results/chapel_check.json` ; données :
+`results/raw_chapel/`.
+
+### 4.1 Mesures appariées (machine 8, même hôte)
+
+| Clé | Chapel (campagne) | Formes de la remarque | Rapport (IC 95 %) | C par clang |
+|---|---|---|---|---|
+| Q1 tuned (intrinsèques importées) | 37,3 ms | 31,1 ms | 0,835 (0,772–0,904) | 30,5 ms |
+| Q1 mt | 11,3 ms | 9,8 ms | 0,865 (0,721–1,063) | 8,7 ms |
+| K5 tuned (attribut au lieu de `--no-ieee-float`) | 5,05 ms | 5,56 ms | 1,078 (0,930–1,267) | 5,26 ms |
+| K1 aos (attribut) | 25,0 ms | 23,5 ms | 0,960 (0,838–1,125) | 32,4 ms |
+| K1 soa (attribut) | 5,11 ms | 5,10 ms | 0,997 (0,947–1,054) | 5,22 ms |
+| K7 naturel (`ref e = m[k]`) | 1 785 ms | 1 008 ms | 0,565 (0,517–0,617) | 556 ms |
+| 3 témoins (K9 tuned, Q6 tuned, K7 tuned) | | | de 0,90 à 1,06 | |
+
+Copie standard corrigée de la confrontation (`chapel_std2`/`chapel_ref`, sommes partielles sans option ni attribut) :
+K5 tuned 1,772 (1,522–2,064), K1 aos 1,318 (1,191–1,470), K1 soa 1,047 (0,941–1,193).
+
+* **L'attribut de boucle vaut l'option globale** (K5 1,08, K1 0,96 et 1,00) : un seul binaire aurait suffi, et les
+  « options de compilation globales » du README étaient une erreur de fait.
+* **Q1 en intrinsèques importées** : −16 % sur cet hôte, au niveau du C (31,1 contre 30,5 ms) ; la remarque mesurait
+  −50 % sur Cascade Lake (46 → 23 ms).
+* **K7 naturel en une recherche** : −43 %.
+
+### 4.2 Report sur les données principales et classement
+
+Le pont par le C (règle de `analysis/transfer_check.py`) est retenu pour Q1 mt (écart de 29 %), K1 aos (74 %) et K7
+naturel (−80 %). Pour K7 naturel, il donne un non-sens : un rapport de 2,8, quand la nouvelle forme divise le temps par
+1,8 sur l'hôte même. Les données principales de ces clés viennent de Cascade Lake, et l'hôte est un Emerald Rapids au
+L3 immense : la table chaînée du C de K7 naturel y va dix fois plus vite que dans les données principales, Chapel non.
+Le pont suppose que le facteur d'hôte est le même pour les deux, ce qui est faux ici. J'ajoute donc, **après avoir vu
+ces chiffres** (écart au plan), le scénario S1-T, où les rapports sont transférés sans pont ; S1 reste publié tel que le
+plan le prévoyait.
+
+| Scénario | Score | Contrôle C | Plafond E | Rang espéré | Place | Rang 90 % |
+|---|---|---|---|---|---|---|
+| Avant (publié avant la remarque, refait par le même code) | 64,1 | 56,6 | 80,2 | 9,94 | 11 | 5–13 |
+| **C-E, publié** : errata B2, C2, E5 | **65,9** | **61,8** | 80,2 | **9,03** | **10** | 4–13 |
+| S-B3 : B3 = 1 | 66,6 | 63,8 | 80,2 | 8,60 | 10 | 4–12 |
+| S1 (plan) : formes de la remarque, ponts compris | 65,9 | 61,8 | 80,9 | 9,39 | 10 | 5–13 |
+| S1-B3 | 66,6 | 63,8 | 80,9 | 8,99 | 10 | 4–12 |
+| S1-T (écart au plan) : formes de la remarque, transferts seuls | 66,1 | 61,8 | 80,3 | 8,62 | 10 | 4–13 |
+
+* **Publié** : les errata rapportent 1,8 point (le contrôle passe de 56,6 à 61,8). Chapel passe 10e : il reste derrière
+  Fortran au score (65,9 contre 66,3), mais le devance dans 60 % des variantes ; D le devance dans 54 %.
+* **Sensibilité** : les formes de la remarque et B3 = 1 n'y ajoutent qu'entre 0 et 0,7 point ; Chapel reste 10e dans
+  tous les scénarios.
+* **La remarque estimait** 65,9 points avec B2, C2 et E5 (exactement mon calcul), 11e au score : en rang espéré, c'est
+  la 10e place. Elle estimait 66,6 avec B3 à 1 (identique) et 66,7 avec Q1 en intrinsèques.
+
+### 4.3 Confrontation corrigée
+
+Scénario C de la confrontation (règle du standard appliquée aux données), recalculé dans l'état actuel du classement :
+
+| Copie standard de Chapel | K5 tuned / K1 aos / K1 soa | Plafond E | Score | Place sur 18 |
+|---|---|---|---|---|
+| D'origine (recompilée sans `--no-ieee-float`) | ×23,0 / ×0,98 / ×1,69 | 49,3 | 53,5 | 11 |
+| Corrigée (meilleure forme standard par clé) | ×1,77 / ×0,98 / ×1,05 | 72,1 | 62,7 | 10 |
+
+Une variante standard est le meilleur code que la règle admet : pour K1 aos, la boucle d'origine sans option (×0,98)
+bat ma réécriture en sommes partielles (×1,32), et je la garde ; pour K5 et K1 soa, les sommes partielles l'emportent.
+J'ai précisé ce choix clé par clé après avoir vu K1 aos (le plan prévoyait les trois rapports de la copie corrigée) ;
+il ne change pas le résultat, parce que le plafond de K1 se joue sur soa. La règle du standard coûte donc 8 points de
+plafond à Chapel (80,2 → 72,1), pas 31. `docs/CONFRONTATION.md` et le README sont corrigés.
+
+### 4.4 Verdicts
+
+* **(1) La grille** : B2, C2 et E5 exacts (0,5 chacun) ; la justification de C4 était fausse (corrigée, note
+  inchangée) ; B3 : texte corrigé, note gardée (cohérence avec Julia ; 1 en sensibilité).
+* **(2) Q1 en intrinsèques** : confirmé, moins fort sur cet hôte (−16 %) ; sensibilité, comme l'attribut de boucle et
+  K7 naturel en une recherche (−43 %).
+* **(3) La confrontation** : exact, et c'était mon erreur ; corrigée.
+* **Ce qui relève du cadre** (contrôle jugé à 35 %, distribution et GPU non mesurés, code naturel en série) : juste ;
+  le README le dit désormais pour Chapel.
+* **Effet** : Chapel passe de la 11e à la 10e place, comme la remarque l'estimait.

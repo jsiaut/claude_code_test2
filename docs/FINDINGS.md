@@ -421,3 +421,21 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   `GC.safepoint()` ne fait jamais (`jl_gc_wait_for_the_world`). Sans capture, K10 tuned passe de 440 à 18 ms.
 * **Formes optimisées** (machine 7) : Q1 en une passe masquée 0,53 ; K7 préchargé par lots 0,69 ; K8 avec la
   profondeur en paramètre de compilation 0,83.
+
+## Remarque sur Chapel (31 octobre, machine 8, Emerald Rapids) — `docs/CHAPEL.md`, `results/chapel_check/`
+
+* **Chapel 2.10** : le module standard `Allocators` (instable) fournit `bumpPtrMemPool` et `newWithAllocator` ;
+  `extern proc` importe les fonctions inline d'`immintrin.h` (`_mm512_fmadd_ps`), mais ni les macros à immédiat
+  (`_mm512_cmp_ps_mask` : « perhaps it is missing or is a macro? ») ni `_mm_pause` (non lié) ; `c_array`, stable, vit
+  sur la pile (5 ns par appel, contre 64 à 96 ns pour un tableau Chapel local).
+* **L'attribut de boucle `@llvm.metadata(("llvm.loop.vectorize.enable", true))`** (instable) réassocie la réduction
+  d'une seule boucle : produit scalaire de K5 165 → 6 ms ; il vaut l'option globale `--no-ieee-float` (K5 1,08, K1 aos
+  0,96, K1 soa 1,00).
+* **IR** : `foreach` pose `llvm.loop.parallel_accesses` ; avec ou sans `foreach`, le compilateur pose `!noalias` entre
+  deux tableaux distincts.
+* **Formes optimisées** (machine 8) : Q1 en intrinsèques importées 0,84 (au niveau du C) ; K7 naturel en une
+  recherche (`ref e = m[k]`) 0,57 ; sommes partielles dans un `c_array`, sans option : K5 en 9 à 10 ms
+  (32 accumulateurs), contre 165 ms en ordre strict.
+* **Un pont par un témoin peut tromper entre deux architectures** : le C naturel de K7 (table chaînée) va dix fois plus
+  vite sur cet Emerald Rapids que sur le Cascade Lake des données principales, Chapel non ; ponter K7 naturel par le C
+  donnait un rapport de 2,8, quand la nouvelle forme divise le temps par 1,8.

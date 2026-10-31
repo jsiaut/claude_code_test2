@@ -8,9 +8,14 @@ Scénarios (analyse globale de la v3 rejouée, mêmes tirages, données principa
 * S1 (sensibilité) : C-E, plus les rapports chapel_exp/chapel_ref (formes de la remarque) de Q1 tuned et mt, K5 tuned,
   K1 aos et soa, K7 naturel ; pour chaque clé, pont par le C de clang du même hôte quand le transfert s'en écarte de
   plus de 25 % (règle de analysis/transfer_check.py). S1-B3 : S1 avec B3 = 1.
+* S1-T (écart au plan, décidé après avoir vu le pont de K7 naturel) : S1 avec les rapports transférés sans pont. Les
+  données principales de ces clés viennent de Cascade Lake et l'hôte est un Emerald Rapids : le pont suppose que le
+  facteur d'hôte est le même pour Chapel et pour le C de clang, ce qui est faux pour K7 naturel (la table chaînée du C
+  va dix fois plus vite ici) et K1 aos.
 * Confrontation, scénario C (données sous la règle du standard, docs/CONFRONTATION.md) dans l'état actuel du
-  classement : avec les rapports de la copie standard d'origine (machine 4), puis avec ceux de la copie corrigée pour
-  K5 tuned et K1 aos/soa (chapel_std2/chapel_ref, machine 8).
+  classement : avec les rapports de la copie standard d'origine (machine 4), puis, pour K5 tuned et K1 aos/soa, avec
+  la meilleure des deux formes standard (boucle d'origine sans option, ou sommes partielles de chapel_std2, machine 8) :
+  une variante standard est le meilleur code que la règle admet (précision apportée au plan après avoir vu K1 aos).
 Sorties : results/chapel_check.json, results/report_chapel.md."""
 import glob, json, math, os, sys
 from collections import defaultdict
@@ -119,7 +124,8 @@ def main():
                                 "c_main_ms": 1e3 * gm(data["c"][k])}
     before = {c: 0 for c in ERRATA}
     plans = {"Avant": (data, before), "C-E": (data, None), "S-B3": (data, {"B3": 1}), "S1": (scaled(data, keep), None),
-             "S1-B3": (scaled(data, keep), {"B3": 1})}
+             "S1-B3": (scaled(data, keep), {"B3": 1}),
+             "S1-T": (scaled(data, {k: ratios[k]["ratio"] for k in CHANGED}), None)}
     out = {"bad": bad, "times_ms": times, "ratios": {":".join(k): r for k, r in ratios.items()},
            "conf_std": {":".join(k): r for k, r in std.items()}, "transfer": bridges, "scenarios": {}, "conf_C": {}}
     for name, (d, cells) in plans.items():
@@ -131,7 +137,9 @@ def main():
     r_old = cf.paired_ratios(conf, data, np.random.default_rng(v3.SEED + 20))
     r_new = dict(r_old)
     for k in STD_KEYS:
-        r_new[(LANG, k)] = {**std[k], "erratum": "31/10, docs/CHAPEL.md"}
+        old = r_old.get((LANG, k))
+        if old is None or std[k]["ratio"] < old["ratio"]:
+            r_new[(LANG, k)] = {**std[k], "erratum": "31/10, docs/CHAPEL.md"}
     for name, rr in (("origine", r_old), ("corrigé", r_new)):
         dR, _notes, _w = cf.rule_data(data, rr)
         s = cf.scenario(dR, lat, langs, footprint, c3, "main")

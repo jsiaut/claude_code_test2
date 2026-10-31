@@ -15,13 +15,13 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | 2 | **C++** | 77,0 | 1–7 | 72 % | Le plus de contrôle (`std::simd`, `pmr`, atomiques) ; conteneurs standard à contre-courant du cache |
 | 3 | **Odin** | 72,3 | 1–8 | 65 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, allocateurs explicites) ; table et allocateur généralistes lents |
 | 4 | **C3** | 71,0 | 2–9 | 54 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels |
-| 5 | **Zig** | 71,5 | 2–11 | 62 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (2e avec la version de développement) |
+| 5 | **Zig** | 71,5 | 2–11 | 61 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (2e avec la version de développement) |
 | 6 | **Nim** | 69,5 | 3–10 | 55 % | Les leviers de C par sa compilation vers C ; vérifications de bornes qui bloquent la vectorisation |
 | 7 | **Ada** | 71,6 | 2–11 | 52 % | Disposition au bit près, 7e plafond ; vérifications coûteuses sur le code naturel |
 | 8 | **Rust** | 69,4 | 4–11 | 66 % | 4e plafond, contrôle fin et sûr ; défauts coûteux (bornes, SipHash, SIMD portable encore instable) |
-| 9 | **D** | 71,0 | 3–12 | 64 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
-| 10 | **Fortran** | 66,3 | 5–13 | 56 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
-| 11 | **Chapel** | 64,1 | 5–13 | 63 % | 3e plafond grâce au parallélisme natif ; peu de contrôle bas niveau |
+| 9 | **D** | 71,0 | 3–12 | 54 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
+| 10 | **Chapel** | 65,9 | 4–13 | 60 % | 3e plafond grâce au parallélisme natif ; leviers bas niveau rares ou instables |
+| 11 | **Fortran** | 66,3 | 5–13 | 70 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
 | 12 | **Julia** | 64,0 | 7–13 | 63 % | Le meilleur code naturel ; le plafond le plus bas des 13 premiers |
 | 13 | **Mojo** | 62,7 | 9–13 | 98 % | Le SIMD au cœur du langage ; ni vectoriseur de boucles, ni threads publics dans `std` |
 | 14 | **C#** | 54,8 | 13–16 | 84 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
@@ -39,26 +39,29 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 * **Ordre** : le rang moyen sur 20 000 variantes de l'analyse, qui tirent au hasard les poids, les normalisations,
   le jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf pour C3 et Zig, que 54 % des
   variantes inversent, pour Ada, 4e au score mais que Nim, Zig et C3 devancent dans 54 à 68 % des variantes (son
-  code par défaut est lent), et pour D, que 65 % des variantes placent derrière Nim comme derrière Rust.
+  code par défaut est lent), pour D, que 65 % des variantes placent derrière Nim comme derrière Rust, et pour Chapel,
+  derrière Fortran au score (65,9 contre 66,3) mais devant lui dans 60 % des variantes.
 * **Rang plausible** : le rang dans 90 % des variantes. **Devance le suivant** : la part des variantes où le
   langage passe devant celui de la ligne suivante.
-* **Errata du 30 octobre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de contrôle
-  (aides de ligne de cache de C, de D et d'Odin, AVX-512 d'Odin, réductions parallèles de Nim), une remarque sur Zig
-  une sixième (projection de fichiers), une remarque sur Ada trois autres (non-aliasing et types vectoriels
-  sous-notés, allocation cachée sur-notée), une remarque sur Fortran trois encore (disposition compacte, alignement
-  et allocateurs sous-notés), une remarque sur Mojo cinq autres (alignement, unions, réassociation, attente active
-  et non-aliasing sous-notés), une remarque sur Julia trois encore (allocateurs, aide de ligne de cache, indication
-  d'attente active sous-notés). Seules celles de Fortran changent un rang à elles seules (de la 12e à la 11e place). Les
-  remarques sur Ada et sur Fortran ont aussi trouvé deux erreurs de mon banc, corrigées et remesurées. Un piège de
-  GNAT (`-fnon-call-exceptions`) laissait scalaires les noyaux optimisés d'Ada une fois inlinés : Ada passe de la 9e
-  à la 7e place ([`docs/ADA.md`](docs/ADA.md)). Les noyaux de Fortran n'étaient pas isolés de la boucle de mesure
-  comme ceux de C, et gfortran y laissait K4 scalaire : Fortran passe de la 12e à la 10e place
-  ([`docs/FORTRAN.md`](docs/FORTRAN.md) ; 9e avec le calcul prévu par le plan, dont je me suis écarté sur une clé).
+* **Errata des 30 et 31 octobre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de
+  contrôle (aides de ligne de cache de C, de D et d'Odin, AVX-512 d'Odin, réductions parallèles de Nim), une remarque
+  sur Zig une sixième (projection de fichiers), une remarque sur Ada trois autres (non-aliasing et types vectoriels
+  sous-notés, allocation cachée sur-notée), une remarque sur Fortran trois encore (disposition compacte, alignement et
+  allocateurs sous-notés), une remarque sur Mojo cinq autres (alignement, unions, réassociation, attente active et
+  non-aliasing sous-notés), une remarque sur Julia trois encore (allocateurs, aide de ligne de cache, indication
+  d'attente active sous-notés), une remarque sur Chapel trois encore (allocateurs, intrinsèques, non-aliasing
+  sous-notés). Seules celles de Fortran (de la 12e à la 11e place) et de Chapel (de la 11e à la 10e) changent un rang
+  à elles seules. Les remarques sur Ada et sur Fortran ont aussi trouvé deux erreurs de mon banc, corrigées et
+  remesurées. Un piège de GNAT (`-fnon-call-exceptions`) laissait scalaires les noyaux optimisés d'Ada une fois
+  inlinés : Ada passe de la 9e à la 7e place ([`docs/ADA.md`](docs/ADA.md)). Les noyaux de Fortran n'étaient pas
+  isolés de la boucle de mesure comme ceux de C, et gfortran y laissait K4 scalaire : Fortran gagne deux places (11e
+  depuis les errata de Chapel) ([`docs/FORTRAN.md`](docs/FORTRAN.md) ; 9e avec le calcul prévu par le plan, dont je me
+  suis écarté sur une clé).
 
 ![Classement final](results/charts/classement.svg)
 
 **Ce qui est sûr, et ce qui ne l'est pas.**
-* **Les grandes marches sont établies.** Les 13 premiers devancent C# dans au moins 96 % des variantes, et sur les
+* **Les grandes marches sont établies.** Les 13 premiers devancent C# dans au moins 98 % des variantes, et sur les
   deux machines. Go devance Haskell, Haskell OCaml, OCaml JavaScript, dans 98 à 100 % des variantes.
 * **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Deux voisins s'y devancent dans
   52 à 72 % des variantes. C ou C++ est premier dans 86 % des variantes (C 61 %, C++ 25 %).
@@ -74,7 +77,7 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   scalaires : son plafond mesure ce que le compilateur fait d'une boucle scalaire, comme le code par défaut. Sans K4
   dans le plafond, C++ passe 1er devant C, Zig 3e et Mojo 11e. Le classement garde la spécification fixée d'avance
   ([`docs/MOJO.md`](docs/MOJO.md)).
-* **Le contrôle pèse lourd, et il est jugé.** Il explique 70 % des écarts de score entre les 13 premiers. Sur les
+* **Le contrôle pèse lourd, et il est jugé.** Il explique 69 % des écarts de score entre les 13 premiers. Sur les
   seules mesures (le plafond), la tête serait C, C3, Chapel, Rust, C++, Odin.
 
 ## Pourquoi cet ordre, langage par langage
@@ -141,18 +144,20 @@ Ce qui le fait reculer : son ramasse-miettes par défaut, qui donne la pire paus
 
 ### Forts sur leur terrain, avec moins de contrôle ou un runtime
 
-**10. Fortran.** Le langage natif du HPC : tableaux multidimensionnels contigus, syntaxe tableau, `do concurrent`,
+**10. Chapel.** 3e plafond (80) grâce au parallélisme de données natif (`forall`, `reduce`) et aux tableaux
+multidimensionnels : meilleur temps de K3, stencil parallèle parmi les meilleurs. Contrôle bas niveau moyen (62) :
+pas de types SIMD portables ni de champs de bits ; des leviers locaux encore instables (attribut de boucle pour
+réassocier, `Allocators`, `foreach`) et des intrinsèques limitées aux fonctions inline d'`immintrin.h`
+([`docs/CHAPEL.md`](docs/CHAPEL.md)). Ses threads ouvriers consomment 23 % de CPU en plus sur les noyaux à un thread.
+Ce qui le distingue le plus, la distribution sur plusieurs nœuds et le GPU, n'est pas mesuré ici.
+
+**11. Fortran.** Le langage natif du HPC : tableaux multidimensionnels contigus, syntaxe tableau, `do concurrent`,
 absence d'aliasing par règle du langage, OpenMP ; stencil excellent. Mais ni types SIMD, ni intrinsèques, ni
 génériques : tout dépend du vectoriseur. Sur K4, gfortran fait jeu égal avec GCC sur C (5,0 ms, contre 2,8 ms pour
 clang) ; sur K5 et K8, ses versions optimisées restent 1,2 à 1,4 fois plus lentes que celles du C de GCC. Mon banc
 laissait gfortran inliner ses noyaux dans la boucle de mesure, où K4 restait scalaire (13 ms) : corrigé, Fortran
-passe de la 12e à la 10e place ([`docs/FORTRAN.md`](docs/FORTRAN.md)). Le classement mesure gfortran 16.2 ; flang,
-en annexe, vectorisait déjà K4 dans le banc d'origine, et ifx n'est pas mesuré.
-
-**11. Chapel.** 3e plafond (80) grâce au parallélisme de données natif (`forall`, `reduce`) et aux tableaux
-multidimensionnels : meilleur temps de K3, stencil parallèle parmi les meilleurs. Peu de contrôle bas niveau
-(57) : pas de types SIMD, options de compilation globales, et des threads ouvriers qui consomment 23 % de CPU en
-plus sur les noyaux à un thread.
+gagne deux places ([`docs/FORTRAN.md`](docs/FORTRAN.md)). Le classement mesure gfortran 16.2 ; flang, en annexe,
+vectorisait déjà K4 dans le banc d'origine, et ifx n'est pas mesuré.
 
 **12. Julia.** Structures immuables stockées en ligne, fonctions spécialisées par types et JIT LLVM : les deux
 boucles naturelles sont vectorisées, et son code naturel est le meilleur de l'étude. Ce qui la place 12e, c'est
@@ -297,10 +302,10 @@ du langage.
 
 * Deux processeurs Intel, virtualisés et partagés ; ni AMD, ni ARM, ni compteurs matériels.
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Les cinq langages relus après coup par des connaisseurs y ont gagné : Ada et Fortran deux places
-  chacun, par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de
-  mesure) ; Mojo 2,7 points et Julia 1,8 point, mais aucune place, par des errata de la matrice ; Zig trois places,
-  mais par une version de compilateur que la règle exclut. Pour Julia, des versions optimisées mieux travaillées
+  l'autre. Les six langages relus après coup par des connaisseurs y ont gagné : Ada et Fortran deux places chacun,
+  par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de mesure) ;
+  Chapel une place par trois errata de la matrice ; Mojo 2,7 points et Julia 1,8 point, mais aucune place, par des
+  errata de la matrice ; Zig trois places, mais par une version de compilateur que la règle exclut. Pour Julia, des versions optimisées mieux travaillées
   vaudraient trois places de plus : la règle les garde hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine Cascade Lake, puis reportées sur les données
   principales par des rapports appariés ; pour une clé de Fortran, par un témoin mesuré sur le même hôte, au prix
@@ -328,8 +333,10 @@ par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION
   expérimental ne valent que le niveau 1 sur 4) appliquée à mon pilier contrôle classe C 11e, comme eux.
 * **La même règle appliquée au code mesuré change peu la performance de C** : réécrit en C standard (sommes
   partielles au lieu des intrinsèques, `threads.h`, sans préchargement), il garde 94 % de son plafond. Elle coûte
-  beaucoup à Chapel (sans `--no-ieee-float`, produit scalaire 23 fois plus lent), à Java (sans la Vector API en
-  incubation), à Go (sans le SIMD expérimental), et à Fortran et Mojo, qui n'ont pas de threads standard.
+  beaucoup à Java (sans la Vector API en incubation), à Go (sans le SIMD expérimental), et à Fortran et Mojo, qui
+  n'ont pas de threads standard. À Chapel, 8 points de plafond, une fois ses réductions réécrites en sommes
+  partielles comme celles des autres ; j'avais d'abord compté un produit scalaire 23 fois plus lent, faute de cette
+  réécriture ([`docs/CHAPEL.md`](docs/CHAPEL.md)).
 * **Les deux règles à la fois** : C passe 5e, la corrélation monte à 0,87. Le reste de l'écart tient à la question
   posée : leur score ne compte pas la vitesse. Mêler à peu près moitié de leur score au mien reproduit leur ordre.
 * **Sur les faits, les deux grilles, notées indépendamment, s'accordent** (0,83 à 0,88). Leurs désaccords portent
@@ -353,6 +360,8 @@ par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION
   et [`results/report_confrontation.md`](results/report_confrontation.md).
 * La remarque sur Ada (piège de GNAT, errata, implémentation corrigée et remesurée) : [`docs/ADA.md`](docs/ADA.md)
   et [`results/report_ada.md`](results/report_ada.md).
+* La remarque sur Chapel (trois errata, leviers locaux instables, confrontation corrigée) :
+  [`docs/CHAPEL.md`](docs/CHAPEL.md) et [`results/report_chapel.md`](results/report_chapel.md).
 * La remarque sur Julia (plafond, versions optimisées, trois errata, diagnostic de K10) :
   [`docs/JULIA.md`](docs/JULIA.md) et [`results/report_julia.md`](results/report_julia.md).
 * La remarque sur Mojo (cinq errata de la matrice, K4 dans le plafond, vérifications de bornes) :

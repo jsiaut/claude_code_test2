@@ -89,7 +89,7 @@ Celles qui ne sont pas admissibles :
 | Ada | K7 tuned | builtin de préchargement GCC | sans préchargement |
 | Fortran | K1 soa, K5 tuned | `!$omp simd` et `-fopenmp` | sommes partielles explicites ; binaire sans `-fopenmp` |
 | Fortran | K3, K6 mt, K9 mt | OpenMP | aucun thread standard avec gfortran seul (les cotableaux demandent une bibliothèque externe) : section 4.4 |
-| Chapel | K1 aos et soa, K5 tuned | binaire compilé avec `--no-ieee-float` | binaire sans cette option |
+| Chapel | K1 aos et soa, K5 tuned | binaire compilé avec `--no-ieee-float` | binaire sans cette option ; corrigé le 31/10 : sommes partielles explicites, comme Nim, Ada et Fortran (erratum en fin de document) |
 | Chapel | K7 tuned | module « package » `Prefetch` | sans préchargement |
 | Go | K1 soa, K5 tuned, K6 tuned et mt Q6 | `simd/archsimd` (`GOEXPERIMENT=simd`) | boucles Go ; binaire sans `GOEXPERIMENT` |
 | Java | K1 soa, K5 tuned, K6 tuned et mt Q6 et Q1 | `jdk.incubator.vector` | boucles Java |
@@ -257,7 +257,7 @@ Rapport apparié = temps de la réécriture standard / temps de l'original, mêm
 | D | K5 sans `@llvmFastMathFlag` : 1,20 (plus de FMA) ; préchargement par `core.simd` : 0,95 | 74,8 → 73,5 |
 | Ada | K5 : 1,17 ; K7 sans préchargement : 1,31 ; Q1 sans `Loop_Optimize` : 0,77, plus rapide | 73,9 → 71,1 |
 | Fortran | sommes partielles au lieu de `!$omp simd` : 0,98 et 0,99 ; Q6 et Q1 : 1,09 et 1,15 ; pas de threads standard : replis et pénalité de K3 | 67,3 → 29,3 |
-| Chapel | sans `--no-ieee-float` : K5 ×23, K1 SoA ×1,69 ; K7 sans `Prefetch` : 1,27 | 80,3 → 49,3 |
+| Chapel | sans `--no-ieee-float` : K5 ×23, K1 SoA ×1,69 ; K7 sans `Prefetch` : 1,27 (corrigé le 31/10 : K5 ×1,77, K1 SoA ×1,05) | 80,3 → 49,3 (corrigé : 80,2 → 72,1) |
 | Java | sans la Vector API : K5 ×4,9, Q6 et Q1 ×7,8 et ×8,7 | 57,7 → 37,9 |
 | Go | sans `GOEXPERIMENT` : K5 ×9, Q6 ×2,5, K1 SoA ×1,5 | 38,6 → 28,6 |
 | Mojo | pas d'API publique de threads : replis et pénalité de K3 | 68,0 → 29,9 |
@@ -407,3 +407,17 @@ Le reste des écarts tient à la notation, pas aux faits :
 * atomiques de C# sans ordre relâché explicite ;
 * affinité de C# au niveau du processus ;
 * `std::simd` de GCC, dont le manuel déclare le C++26 « highly experimental ».
+
+## Erratum du 31 octobre : la copie standard de Chapel
+
+Une remarque sur Chapel (`docs/CHAPEL.md`) a relevé une inégalité de traitement dans le test 2 : les copies standard de
+Nim, d'Ada et de Fortran avaient été réécrites en sommes partielles explicites, alors que celle de Chapel gardait K5
+tuned et K1 aos/soa tels quels (des réductions simples qui comptent sur `--no-ieee-float`) et était seulement
+recompilée sans l'option. Corrigée (`bench/chapel_std2` : la meilleure forme standard par clé), mesurée sur la
+machine 8 (Emerald Rapids) contre le source de la campagne recompilé sur le même hôte : K5 tuned ×1,77 au lieu de ×23,
+K1 SoA ×1,05 au lieu de ×1,69, K1 aos inchangé (×0,98, la boucle d'origine reste la meilleure forme standard).
+
+Dans l'état actuel du classement (errata et corrections intervenus depuis la confrontation), le scénario C recalculé
+donne à Chapel un plafond de 72,1 au lieu de 49,3, un score de 62,7 au lieu de 53,5, et la 10e place sur 18 au lieu de
+la 11e. Les autres chiffres de ce document (rangs des autres langages, corrélations, tests 3 et 4) n'ont pas été
+recalculés : ils restent ceux de la confrontation, faite avec la copie d'origine.

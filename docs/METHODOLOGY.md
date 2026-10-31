@@ -617,3 +617,14 @@ Robustesse :
   B3 corrigés ; règle du standard à 0,25 pour B2, C2 et E5) et plan : `docs/CHAPEL.md`, poussé avant les mesures
   avec le code d'analyse (`analysis/chapel_check.py`). Le runtime de Chapel n'accepte que la cible `native` : le
   source de la campagne est recompilé pour l'hôte (`bench/chapel_ref`) et sert de référence aux copies.
+* 2026-10-31, 10:10-10:15 : **mesures de la remarque sur Chapel** (`tools/measure_chapel.py`, machine 8) : 27 cellules
+  × 7 processus (189), aucune somme de contrôle fausse ; 8 processus refaits pour vol de temps au-dessus de 2 %,
+  aucun gardé au-dessus du seuil. Rien d'autre ne tournait.
+* 2026-10-31, matin : **résultats de la remarque sur Chapel** (`results/report_chapel.md`). Les errata (B2, C2 et E5 à
+  0,5) entrent dans le classement publié : Chapel passe de 64,1 à 65,9 points et de la 11e à la 10e place (rang espéré
+  9,03), devant Fortran dans 60 % des variantes ; l'analyse v3 recalculée redonne exactement C-E, et les scores des
+  autres langages ne bougent pas. Deux écarts au plan, décidés après avoir vu les données : le scénario S1-T (rapports
+  transférés sans pont), parce que le pont par le C se trompe entre Cascade Lake et Emerald Rapids sur K7 naturel et
+  K1 aos ; et, pour la confrontation, la meilleure forme standard par clé (K1 aos garde la boucle d'origine, sans
+  effet sur le résultat). Confrontation corrigée : sous la règle du standard, le plafond de Chapel passe de 49,3 à
+  72,1 (scénario C, état actuel). Les scénarios de Zig sont recalculés (S1 : 2,72 ; A' : 5,80 ; même verdict).

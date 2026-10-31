@@ -165,9 +165,9 @@ démontré. K4 naturel garde le transfert, plus favorable à Fortran que le pont
 | S2 du plan (sensibilité : formes de la remarque pour K5 et K8 `tuned`) | 70,0 | 84,0 | 7,28 | 8 | 2–11 |
 | S2 sur S1 retenu (sensibilité) | 67,8 | 78,5 | 8,54 | 10 | 3–12 |
 
-Depuis les errata de Mojo et de Julia (`docs/MOJO.md`, `docs/JULIA.md`), le classement publié donne à Fortran un rang
-espéré de 9,62 et un rang plausible de 5–13, sans changer son score, sa place (10e) ni ses voisins (D le devance dans
-64 % des variantes, il devance Chapel dans 56 %).
+Depuis les errata de Mojo, de Julia et de Chapel (`docs/MOJO.md`, `docs/JULIA.md`, `docs/CHAPEL.md`), le classement
+publié place Fortran 11e (rang espéré 9,78, rang plausible 5–13), sans changer son score : Chapel, dont trois cases
+étaient sous-notées, le devance dans 60 % des variantes.
 
 * **Publié** : Fortran passe de la 12e à la 10e place, derrière D (qui le devance dans 64 % des variantes) et devant
   Chapel (56 %). Les errata de la grille comptent pour 1,8 point, la correction du banc pour 3,7 (5,8 avec le
