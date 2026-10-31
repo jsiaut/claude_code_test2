@@ -115,12 +115,18 @@ réécrit le 30 octobre autour du classement final.*
 | Nouveaux noyaux : parallélisme mémoire, décompression, JSON, tri et jointure, E/S groupées, thread par cœur, démarrage, front-end (P1 8) | 21 implémentations par noyau ; reportés. La conclusion « tous les noyaux sont des microbenchmarks » reste vraie |
 | Pré-enregistrement externe (P2 9) | Les plans v2 et v3 sont poussés avant les calculs, mais écrits après avoir vu les données précédentes ; ils le disent |
 
+Note du 31 octobre (remarque sur Rust, `docs/RUST.md`) : la réponse « je ne renote pas » au point 4.4.1 a renvoyait à
+cette section sans y figurer. La raison : la règle v2 note ce que la chaîne livre ; la libc compte pour C et C++, dont
+elle est la bibliothèque d'exécution, et un appel à la libc par FFI compte comme une FFI pour les autres langages.
+C'est un choix de règle, chiffré depuis en sensibilité (S-libc-R et S-libc-FFI) et signalé dans les limites du README.
+
 ## 7. Résultats de la v3
 
 Sorties complètes : [`results/report_v3.md`](../results/report_v3.md) et `results/summary_v3.json`. Le README en
 donne la lecture.
 
-**Étages (règle du plan).**
+**Étages (règle du plan)**, au 29 octobre ; depuis les errata et les corrections, le premier étage compte 13 langages et
+C#, Java et Go forment le deuxième (`results/summary_v3.json`).
 1. Ada, C, C#, C++, C3, Chapel, D, Fortran, Go, Java, Julia, Mojo, Nim, Odin, Rust, Zig
 2. Haskell
 3. OCaml

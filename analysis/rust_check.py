@@ -83,6 +83,17 @@ def load_d3_procs():
     return out, bad
 
 
+def load_d3_times(lang):
+    """Temps de K8 naturel d'une implémentation dans la remesure de D3 (mêmes passes que les paires Rust)."""
+    out = []
+    for line in open(os.path.join(RAW_D3, f"{lang}.jsonl")):
+        r = json.loads(line)
+        reps = r.get("reps", [])
+        if r.get("tag") == v2.D3_TAG and reps and r.get("returncode") in (0, None) and all(x["ok"] is True for x in reps):
+            out.append([x["sec"] for x in reps])
+    return out
+
+
 def gm(procs):
     return math.exp(proc_logs(procs).mean())
 
@@ -185,7 +196,10 @@ def main():
     times = {impl: {kk(k): 1e3 * gm(p) for k, p in dd.items()} for impl, dd in raw.items()}
     r_fix = {k: R("rust_fix", "rust_ref", k) for k in (K7T, K9T, Q6T, K1A)}
     r_nat = {k: R("rust_nat", "rust_ref", k) for k in (K9N, K9T)}
-    r_k8 = {k: R("rust_k8", "rust_ref", k) for k in (K8T, K8N)}
+    r_k8 = {K8T: R("rust_k8", "rust_ref", K8T)}
+    # Écart au plan (cellules) : rust_ref n'a pas mesuré K8 naturel ; le témoin de rust_k8 est comparé au binaire Rust de
+    # la remesure de D3 (bench/rust, mêmes passes, même hôte). Information seulement.
+    r_k8[K8N] = ratio(raw["rust_k8"][K8N], load_d3_times("rust"), rng)
     r_pop = {k: R("rust_clpop", "rust_cl", k) for k in (Q1T, Q1M)}
     r_eq = {k: R("rust_ref", "c", k) for k in WIT}
     main_eq = {kk(k): gm(data[LANG][k]) / gm(data["c"][k]) for k in WIT}

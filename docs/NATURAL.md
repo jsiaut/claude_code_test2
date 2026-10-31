@@ -51,7 +51,8 @@ flang-23), `luajit` (dialecte 5.1 + FFI), `js_bun` (même source JS, JavaScriptC
   documentation ne recommande pas de les retirer en production. La variante tuned les
   supprime localement (`pragma Suppress`).
 * **Rust** : le mode release conserve la vérification des bornes. La variante tuned
-  l'évite par itérateurs ou `get_unchecked`.
+  l'évite le plus souvent par itérateurs ou `get_unchecked` ; l'arène de K8 tuned garde `Vec::push` et des accès
+  vérifiés (relevé par la remarque sur Rust, `docs/RUST.md` ; l'arène écrite comme en C y est une sensibilité).
 * **Chapel** : `--fast` est l'option que recommande la documentation pour mesurer les
   performances, et elle retire les vérifications.
 * **Lua** : le langage standard n'a ni threads ni tableaux typés. Les noyaux

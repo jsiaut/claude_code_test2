@@ -491,3 +491,21 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **Le pont par le C se trompe encore entre architectures** (comme pour Chapel) : le C naturel de K9 va 2,6 fois plus
   vite sur cet Emerald Rapids que sur le Cascade Lake ; ponter K9 naturel par le C donnait × 1,15, quand la mesure
   appariée donne × 0,68.
+
+## Remarque sur Rust (31 octobre, machine 11, Emerald Rapids) — `docs/RUST.md`, `results/rust_check/`
+
+* **Pas de métadonnées TBAA dans l'IR de rustc** (comme LDC) : dans le stencil naturel en `Vec<Vec<f64>>` indexé deux
+  fois, les pointeurs de lignes sont relus après chaque écriture et la boucle reste scalaire, **même sans vérification
+  de bornes** (`get_unchecked`). Les lignes liées une fois en `&[f64]`, `Vec<[f64; M]>` et `Vec<f64>` plat
+  vectorisent, vérifications actives.
+* **Préchargement en écriture en Rust stable** : `_mm_prefetch::<_MM_HINT_ET0>` émet `prefetchw` (cibles native et
+  cascadelake), sans attribut de fonctionnalité ; le K7 optimisé du banc utilisait `_MM_HINT_T0` (`prefetcht0`), alors
+  que la référence C et huit autres implémentations préchargent en écriture.
+* **`u16::count_ones` dans une boucle AVX-512** : pour Cascade Lake (sans `vpopcnt`), le vectoriseur SLP de LLVM 23
+  regroupe 4 des 6 popcounts de Q1 dans une émulation par `vpshufb` : 209 instructions et 15 vidages sur la pile dans la
+  boucle de 16 lignes, contre 174 et 12 avec `_popcnt32(m as i32)`, et 169 et 11 pour le C de clang 23. Sur Emerald
+  Rapids, qui a `vpopcnt`, c'est l'inverse (159 contre 183).
+* **Queues de K8 et vol de temps** (campagne principale) : sur les 24 processus des implémentations qui passent par
+  `malloc`, la corrélation de rang entre le vol de l'hyperviseur et le p99,9 vaut 0,81 ; pour un même binaire (Rust), le
+  p99,9 passe de 327 à 692 µs quand le vol passe de 0,43 à 0,84 % de la capacité des 4 vCPU.
+

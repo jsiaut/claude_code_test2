@@ -138,7 +138,7 @@ def run(data, lat, langs, footprint, c3, cells=None, e_drop=()):
             v2.MATRIX[LANG][cap] = v
 
 
-def main():
+def main(suffix=""):
     data, lat, *_ = v2.dataset_main(transfers=True)
     v2.align_lat(data, lat)
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
@@ -256,15 +256,15 @@ def main():
               f"D {z['D'][LANG]:.1f}, rang espéré {z['exp21'][LANG]:.2f} ({z['pos']}e), rang 90 % {z['rank90'][LANG]}, "
               f"devant : {z['ahead']} (+{z['gap_ahead']:.1f}), min. des 13 premiers devant C# "
               f"{100 * z['min_prec_top13']:.0f} %", flush=True)
-    json.dump(out, open(os.path.join(ROOT, "results", "csharp_check.json"), "w"), indent=1, default=float)
-    report(out)
+    json.dump(out, open(os.path.join(ROOT, "results", f"csharp_check{suffix}.json"), "w"), indent=1, default=float)
+    report(out, suffix)
 
 
 def f(x, d=1):
     return "—" if x is None else f"{x:.{d}f}".replace(".", ",")
 
 
-def report(o):
+def report(o, suffix=""):
     L = ["# Remarque sur C# : rapports appariés et scénarios\n",
          "Plan : `docs/CSHARP.md`. Mesures : `results/raw_csharp/` (machine 9, 7 processus par cellule). Code :",
          "`analysis/csharp_check.py`. Processus rejetés : " + (str(len(o["bad"])) if o["bad"] else "aucun") + ".\n",
@@ -310,8 +310,8 @@ def report(o):
         top = ", ".join(f"{i + 1}. {NAMES.get(l, l)} ({f(z['exp21'][l], 2)}, {f(z['ms0'][l])})"
                         for i, l in enumerate(z["order21"][:16]))
         L.append(f"**{name}** : {top}.\n")
-    open(os.path.join(ROOT, "results", "report_csharp.md"), "w").write("\n".join(L) + "\n")
+    open(os.path.join(ROOT, "results", f"report_csharp{suffix}.md"), "w").write("\n".join(L) + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else "")
