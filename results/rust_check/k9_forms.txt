@@ -1,0 +1,59 @@
+Formes de K9 naturel (tools/rust_check/k9forms.rs), options du banc, cible native (machine 11).
+f_bench : forme du banc (Vec<Vec<f64>>, double indexation) ; f_unchecked : idem avec get_unchecked (aucune vérification) ;
+f_rowslices : lignes liées une fois en &[f64] ; f_fixedrows : Vec<[f64; M9]> ; f_flat : Vec<f64> plat.
+f_bench : 0 instructions vectorielles sur des doubles (ymm/zmm) ; 13 scalaires
+f_unchecked : 0 instructions vectorielles sur des doubles (ymm/zmm) ; 19 scalaires
+f_rowslices : 12 instructions vectorielles sur des doubles (ymm/zmm) ; 8 scalaires
+f_fixedrows : 36 instructions vectorielles sur des doubles (ymm/zmm) ; 32 scalaires
+f_flat : 12 instructions vectorielles sur des doubles (ymm/zmm) ; 8 scalaires
+
+Boucle interne de f_unchecked (sans vérification de bornes) : les pointeurs de lignes sont relus après chaque écriture
+   0:	mov    0x8(%rdi),%rax
+   4:	mov    0x8(%rsi),%rcx
+   8:	mov    $0x1,%edx
+   d:	vmovsd 0x0(%rip),%xmm0        # 15 <_RNvCs1Gjhre8AFYy_7k9forms11f_unchecked+0x15>
+  15:	data16 cs nopw 0x0(%rax,%rax,1)
+  20:	mov    %rdx,%rsi
+  23:	inc    %rdx
+  26:	shl    $0x3,%rsi
+  2a:	lea    (%rsi,%rsi,2),%rsi
+  2e:	lea    -0x18(%rax,%rsi,1),%rdi
+  33:	lea    (%rax,%rsi,1),%r8
+  37:	add    %rcx,%rsi
+  3a:	mov    $0x4,%r9d
+  40:	mov    0x8(%rdi),%r10
+  44:	mov    0x38(%rdi),%r11
+  48:	vmovsd -0x18(%r10,%r9,8),%xmm1
+  4f:	vaddsd -0x18(%r11,%r9,8),%xmm1,%xmm1
+  56:	mov    0x8(%r8),%r10
+  5a:	vaddsd -0x20(%r10,%r9,8),%xmm1,%xmm1
+  61:	vaddsd -0x10(%r10,%r9,8),%xmm1,%xmm1
+  68:	mov    0x8(%rsi),%r10
+  6c:	vmulsd %xmm0,%xmm1,%xmm1
+  70:	vmovsd %xmm1,-0x18(%r10,%r9,8)
+  77:	mov    0x8(%rdi),%r10
+  7b:	mov    0x38(%rdi),%r11
+  7f:	vmovsd -0x10(%r10,%r9,8),%xmm1
+  86:	vaddsd -0x10(%r11,%r9,8),%xmm1,%xmm1
+  8d:	mov    0x8(%r8),%r10
+  91:	vaddsd -0x18(%r10,%r9,8),%xmm1,%xmm1
+  98:	vaddsd -0x8(%r10,%r9,8),%xmm1,%xmm1
+  9f:	mov    0x8(%rsi),%r10
+  a3:	vmulsd %xmm0,%xmm1,%xmm1
+  a7:	vmovsd %xmm1,-0x10(%r10,%r9,8)
+  ae:	mov    0x8(%rdi),%r10
+  b2:	mov    0x38(%rdi),%r11
+  b6:	vmovsd -0x8(%r10,%r9,8),%xmm1
+  bd:	vaddsd -0x8(%r11,%r9,8),%xmm1,%xmm1
+  c4:	mov    0x8(%r8),%r10
+  c8:	vaddsd -0x10(%r10,%r9,8),%xmm1,%xmm1
+  cf:	vaddsd (%r10,%r9,8),%xmm1,%xmm1
+  d5:	mov    0x8(%rsi),%r10
+  d9:	vmulsd %xmm0,%xmm1,%xmm1
+  dd:	vmovsd %xmm1,-0x8(%r10,%r9,8)
+  e4:	add    $0x3,%r9
+  e8:	cmp    $0x802,%r9
+  ef:	jne    40 <_RNvCs1Gjhre8AFYy_7k9forms11f_unchecked+0x40>
+  f5:	cmp    $0x7ff,%rdx
+  fc:	jne    20 <_RNvCs1Gjhre8AFYy_7k9forms11f_unchecked+0x20>
+ 102:	ret

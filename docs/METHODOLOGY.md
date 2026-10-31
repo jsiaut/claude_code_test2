@@ -685,3 +685,13 @@ Robustesse :
   même phrase (stencil naturel de Rust, Nim et Ada : 71 à 73 ms, et non 80). Sorties recalculées :
   classement, figures, scénarios de Zig et de Julia, confrontation (Spearman des scénarios C et D 0,79 et 0,88 ; le
   reste inchangé).
+* 2026-10-31, vers 17:00 : **machine 11**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207,
+  4 vCPU ; 3,18 GHz effectifs, latence à 4 Mio 48 ns, DRAM 13,0 Go/s : `results/hw/machine11/`).
+* 2026-10-31, soirée : **plan de la remarque sur Rust** (`docs/RUST.md`, sections 1 à 3), poussé avant les mesures.
+  Vérifications faites avant le plan (`results/rust_check/`) : chiffres du score et décomposition, latences de K8
+  naturel par processus et vol de temps, code machine des formes de K9 et de Q1 (cibles Cascade Lake et hôte),
+  préchargement de K7 dans chaque implémentation, sonde `_MM_HINT_ET0`. Décisions fixées d'avance : le préchargement
+  en lecture de K7 optimisé, seul écart à la convention des implémentations qui peuvent précharger en écriture, est une
+  erreur d'implémentation, corrigée dans le classement publié (`bench/rust_fix`) ; K8 naturel est remesuré pour les
+  25 implémentations (7 processus) et ses latences remplacent celles de la campagne dans D3 pour toutes, comme K5 en
+  v2 ; `_popcnt32`, l'arène de K8, `Vec<[f64; M]>` pour K9 et la règle de la libc étendue restent des sensibilités.

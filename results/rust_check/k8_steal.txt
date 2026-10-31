@@ -1,0 +1,48 @@
+Campagne principale (machine 1, Cascade Lake), K8 naturel : un processus par ligne (médianes sur ses répétitions)
+langage        proc  vol (% de 4 vCPU)  p50 (µs)  p99,9 (µs)  max (µs)
+ada               0              0.34      52.0       287.8      2335
+ada               1              0.17      51.5       225.9       527
+c                 0              0.13      51.2       179.0      1542
+c                 1              0.25      51.6       209.4       461
+c                 2              0.23      51.5       264.2      1365
+c3                0              0.43      75.5       315.0      2211
+c3                1              0.32      76.0       297.4      2311
+c3                2              0.27      77.0       303.1      2042
+c_gcc             0              0.21      45.3       185.3      1078
+c_gcc             1              0.48      45.4       342.8      2304
+c_gcc             2              0.12      63.3       210.8      1707
+cpp               0              0.38      55.9       303.4      2093
+cpp               1              0.10      56.2       216.5       385
+fortran           0              0.27      48.0       231.3      1324
+fortran           1              0.38      48.1       358.8      1465
+nim               0              0.32      45.0       233.2      1861
+nim               1              0.51      44.9       288.4      2269
+nim               2              0.27      44.9       191.2       833
+odin              0              0.40      97.6       694.8      3346
+odin              1              0.33      95.9       426.2      2565
+rust              0              0.84      54.2       691.6      8096
+rust              1              0.43      54.5       327.2      4192
+zig               0              0.35      54.9       306.0      3045
+zig               1              0.40      56.9       289.0      4260
+
+Médianes sur toutes les répétitions (estimateur de D3, analyze_v2.lat_rows) :
+  rust  6 répétitions : p50 54.3 µs, p99,9 537.8 µs, max 4495 µs
+  c     9 répétitions : p50 51.5 µs, p99,9 217.7 µs, max 1365 µs
+
+rho(vol, p99,9) = 0.81 ; rho(vol, max) = 0.77 ; 24 processus (10 langages qui passent par malloc)
+rho(vol, p99,9) = 0.85 ; rho(vol, max) = 0.77 ; 19 processus (sans Odin ni C3)
+rho(vol, p99,9) = 0.45 ; rho(vol, max) = 0.63 ; 62 processus (tous les processus)
+vols les plus élevés (langages malloc) : rust p0 0.84 %, nim p1 0.51 %, c_gcc p1 0.48 %
+vols les plus élevés (tous) : go p1 1.43 %, haskell p0 1.42 %, haskell p2 1.15 %
+
+Réplication de la machine 3 (Emerald Rapids, results/raw_v2, v2_m3), un processus par langage :
+  ada      vol 0.34 % ; p50 44.4 ; p99,9 183.3 ; max 2195 µs
+  c        vol 0.09 % ; p50 32.0 ; p99,9 158.9 ; max 420 µs
+  c3       vol 0.53 % ; p50 48.1 ; p99,9 302.8 ; max 3077 µs
+  c_gcc    vol 0.32 % ; p50 32.9 ; p99,9 82.9 ; max 300 µs
+  cpp      vol 0.19 % ; p50 33.4 ; p99,9 126.5 ; max 711 µs
+  fortran  vol 0.35 % ; p50 42.8 ; p99,9 193.1 ; max 2143 µs
+  nim      vol 0.51 % ; p50 33.8 ; p99,9 140.4 ; max 865 µs
+  odin     vol 0.63 % ; p50 64.6 ; p99,9 607.3 ; max 3869 µs
+  rust     vol 0.18 % ; p50 35.5 ; p99,9 142.3 ; max 240 µs
+  zig      vol 0.40 % ; p50 43.5 ; p99,9 225.6 ; max 3159 µs

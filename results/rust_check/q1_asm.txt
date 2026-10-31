@@ -1,0 +1,26 @@
+Q1 optimisé : boucles de q1_tuned (tools/rust_check/loops.py). La boucle interne est celle des 16 lignes (la plus courte des deux
+grandes) ; « écritures pile » = vidages de registres. rust_ref : m.count_ones() (banc) ; rust_pop : _popcnt32(m as i32).
+rust_ref_cascadelake.s instructions dans la fonction : 627
+   boucle .LBB107_8: 541 instr., écritures pile 35, accès pile 72, popcnt 2, vpopcnt 0, vpshufb 2
+   boucle .LBB107_10: 209 instr., écritures pile 15, accès pile 32, popcnt 2, vpopcnt 0, vpshufb 2
+   boucle .LBB107_3: 120 instr., écritures pile 0, accès pile 4, popcnt 0, vpopcnt 0, vpshufb 0
+rust_pop_cascadelake.s instructions dans la fonction : 604
+   boucle .LBB107_8: 520 instr., écritures pile 33, accès pile 77, popcnt 6, vpopcnt 0, vpshufb 0
+   boucle .LBB107_10: 174 instr., écritures pile 12, accès pile 30, popcnt 6, vpopcnt 0, vpshufb 0
+   boucle .LBB107_3: 117 instr., écritures pile 0, accès pile 0, popcnt 0, vpopcnt 0, vpshufb 0
+c_cascadelake.s instructions dans la fonction : 601
+   boucle .LBB15_5: 531 instr., écritures pile 36, accès pile 75, popcnt 6, vpopcnt 0, vpshufb 0
+   boucle .LBB15_9: 169 instr., écritures pile 11, accès pile 29, popcnt 6, vpopcnt 0, vpshufb 0
+   boucle .LBB15_6: 146 instr., écritures pile 2, accès pile 3, popcnt 0, vpopcnt 0, vpshufb 0
+rust_ref_native.s instructions dans la fonction : 570
+   boucle .LBB107_8: 476 instr., écritures pile 24, accès pile 54, popcnt 2, vpopcnt 1, vpshufb 0
+   boucle .LBB107_10: 159 instr., écritures pile 9, accès pile 23, popcnt 2, vpopcnt 1, vpshufb 0
+   boucle .LBB107_3: 118 instr., écritures pile 0, accès pile 0, popcnt 0, vpopcnt 0, vpshufb 0
+rust_pop_native.s instructions dans la fonction : 587
+   boucle .LBB107_8: 503 instr., écritures pile 26, accès pile 56, popcnt 2, vpopcnt 1, vpshufb 0
+   boucle .LBB107_10: 183 instr., écritures pile 10, accès pile 23, popcnt 2, vpopcnt 1, vpshufb 0
+   boucle .LBB107_3: 119 instr., écritures pile 0, accès pile 2, popcnt 0, vpopcnt 0, vpshufb 0
+c_native.s instructions dans la fonction : 554
+   boucle .LBB15_5: 483 instr., écritures pile 28, accès pile 59, popcnt 2, vpopcnt 1, vpshufb 0
+   boucle .LBB15_6: 149 instr., écritures pile 2, accès pile 3, popcnt 0, vpopcnt 0, vpshufb 0
+   boucle .LBB15_9: 147 instr., écritures pile 9, accès pile 23, popcnt 2, vpopcnt 1, vpshufb 0

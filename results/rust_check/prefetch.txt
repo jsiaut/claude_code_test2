@@ -1,0 +1,32 @@
+Préchargement de K7 optimisé dans les sources du banc :
+bench/c/ms.c:439:                    __builtin_prefetch(&tab[h[b]], 1, 0);
+bench/cpp/ms.cpp:428:                    __builtin_prefetch(&tab[h[b]], 1, 0);
+bench/rust/ms.rs:428:                    unsafe { _mm_prefetch::<_MM_HINT_T0>(tab.as_ptr().add(h[b] as usize) as *const i8) };
+bench/zig/ms.zig:428:                    @prefetch(&tab[h[b]], .{ .rw = .write, .locality = 3 });
+bench/odin/ms.odin:403:					intrinsics.prefetch_write_data(&tab[h[b]], 3)
+bench/c3/ms.c3:466:					@prefetch(&tab[h[$b]], VERY_NEAR, true);
+bench/nim/ms.nim:44:proc prefetchw(p: pointer) {.importc: "__builtin_prefetch", header: "<stddef.h>", varargs.}
+bench/nim/ms.nim:349:          prefetchw(tab[h[b]].addr, 1, 3)
+bench/d/ms.d:339:                    llvm_prefetch(&tab[h[b]], 1, 3, 1);
+bench/ada/ms.adb:95:   procedure Prefetch (Addr : System.Address; RW, Locality : Integer);
+bench/ada/ms.adb:96:   pragma Import (Intrinsic, Prefetch, "__builtin_prefetch");
+bench/ada/ms.adb:707:                     Prefetch (Tab (H (B))'Address, 1, 0);
+bench/mojo/ms.mojo:447:                    prefetch[PrefetchOptions().for_write().high_locality()]((tab + Int(h[b])).unsafe_bitcast[UInt8]())
+bench/csharp/Program.cs:393:                        for (int b = 0; b < B; b++) { h[b] = (keys[i + b] * 0x9E3779B1u) >> (32 - LOG); Sse.Prefetch0(tp + h[b]); }
+bench/chapel/ms.chpl:326:          prefetch(c_ptrTo(tab[h[b]]));
+
+Sonde tools/rust_check/et0.rs (Rust stable 1.99.1, sans attribut de fonctionnalité) :
+cible native :
+0000000000000000 <_RNvCsl3naM8blVte_3et05pf_t0>:
+   0:	prefetcht0 (%rdi)
+0000000000000000 <_RNvCsl3naM8blVte_3et06pf_et0>:
+   0:	prefetchw (%rdi)
+0000000000000000 <_RNvCsl3naM8blVte_3et06pf_et1>:
+   0:	prefetchw (%rdi)
+cible cascadelake :
+0000000000000000 <_RNvCsl3naM8blVte_3et05pf_t0>:
+   0:	prefetcht0 (%rdi)
+0000000000000000 <_RNvCsl3naM8blVte_3et06pf_et0>:
+   0:	prefetchw (%rdi)
+0000000000000000 <_RNvCsl3naM8blVte_3et06pf_et1>:
+   0:	prefetchw (%rdi)
