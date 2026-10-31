@@ -1,0 +1,4 @@
+#!/bin/sh
+# Remarque sur D (docs/DLANG.md) : binaire de bench/d_ref, ramasse-miettes en marquage concurrent (option druntime
+# --DRT-gcopt=fork:1, hors défaut). Information sur la latence de K8.
+exec "$(dirname "$0")/../d_ref/ms" "$@" --DRT-gcopt=fork:1

@@ -659,3 +659,12 @@ Robustesse :
   Spearman 0,76 (0,77), C 12e dans mon pilier contrôle sous leur règle (11e), accord des grilles 0,74 à 0,81 (0,83 à
   0,88) ; le README donne les deux états. Sensibilités de Julia rejouées dans l'état actuel
   (`results/julia_check_current.json`). Aucune donnée ni aucun score publié ne change.
+* 2026-10-31, 14:39 : **machine 10**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207, 4 vCPU ;
+  latence à 4 Mio 52 ns, DRAM 13,4 Go/s : `results/hw/machine10/`).
+* 2026-10-31, fin d'après-midi : **plan de la remarque sur D** (`docs/DLANG.md`, sections 1 à 3), poussé avant les
+  mesures. Vérifications faites avant le plan (`results/d_check/`) : chaîne (LDC 1.43.0 compilé depuis les sources
+  contre LLVM 21.1.8 ; le paquet officiel, téléchargé dans `/opt/ldc143`, embarque LLVM 22.1.8), désassemblage de Q1 et
+  du stencil, IR sans TBAA, contre-épreuve C++, sonde druntime. Décisions fixées d'avance : errata E3 et E4 de D en
+  règle v1 ; le Q1 optimisé de D, écrit hors de la convention des langages à types vectoriels portables, est une
+  erreur d'implémentation, corrigée dans le classement publié (`bench/d_fix`) ; la préférence 512 bits, le stencil en
+  `double[M][]` et LLVM 22.1.8 restent des sensibilités.

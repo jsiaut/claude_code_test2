@@ -1,0 +1,2 @@
+campagne (bench/d, six passes masquées par bloc) : 92 instructions vectorielles ; ymm 33 ; zmm 0 ; vpmovzxbd 4 ; vpmuldq 2
+copie corrigée (bench/d_fix, une passe en core.simd) : 416 instructions vectorielles ; ymm 95 ; zmm 199 ; vpmovzxbd 5 ; vpmuldq 2

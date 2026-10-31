@@ -1,0 +1,15 @@
+sortie : 499500 4 5 17 3  (somme, BF.sizeof, champs a et b, expect)
+llvm.expect à -O0 : 7 ; llvm.prefetch à -O3 : 7 ; prefetcht0 : 6
+== /opt/ldc/include/d/core/builtins.d
+58:    alias expect = __builtin_expect;
+65:    alias expect = llvm_expect;
+97:pragma(inline, true) bool likely()(bool b)   { return !!expect(b, true);  }
+99:pragma(inline, true) bool unlikely()(bool b) { return !!expect(b, false); }
+== /opt/ldc/include/d/core/simd.d
+110:    void prefetch(bool writeFetch, ubyte locality)(const(void)* address)
+115:        llvm_prefetch(address, writeFetch, locality, dataCache);
+603:    void prefetch(bool writeFetch, ubyte locality)(const(void)* address)
+== /opt/ldc/include/d/core/internal/newaa.d (tableau associatif)
+ * template implementation of associative arrays.
+138:    static if (__traits(compiles, new Entry!(K, V)(key, value)))
+140:        auto entry = new Entry!(K, V)(key, value);

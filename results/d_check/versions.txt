@@ -1,0 +1,22 @@
+== /opt/ldc (chaîne du classement)
+LDC - the LLVM D compiler (1.43.0):
+  based on DMD v2.113.0 and LLVM 21.1.8
+  built with DMD64 D Compiler v2.113.0
+	libLLVM.so.21.1 => /lib/x86_64-linux-gnu/libLLVM.so.21.1 (0x00007fae0da00000)
+== /opt/src/build-ldc.sh
+cmake /opt/src/ldc -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_CONFIG=/usr/bin/llvm-config-21
+== /opt/ldc143 (paquet officiel ldc2-1.43.0-linux-x86_64.tar.xz, SHA-256 35805db60f47fd1a162b2035da84d96beec37e6d1e7b1edf60498a90acfaedce)
+LDC - the LLVM D compiler (1.43.0):
+  based on DMD v2.113.0 and LLVM 22.1.8
+  built with LDC - the LLVM D compiler (1.43.0)
+== CHANGELOG.md, tag v1.43.0 (ad42ba0)
+14:- Support for [LLVM 22](https://releases.llvm.org/22.1.0/docs/ReleaseNotes.html). The prebuilt packages use v22.1.8. (#5097, #5102, #5172)
+45:- Support for [LLVM 21](https://releases.llvm.org/21.1.0/docs/ReleaseNotes.html). The prebuilt packages use v21.1.8. (#4950, #5033)
+68:- Support for [LLVM 20](https://releases.llvm.org/20.1.0/docs/ReleaseNotes.html). The prebuilt packages use v20.1.5. (#4843, #4911, #4935)
+== -release (driver/cl_options.cpp et ldc2 --help)
+546:    release("release", cl::ZeroOrMore, cl::location(global.params.release),
+547-            cl::desc("Compile release version, defaulting to disabled "
+548-                     "asserts/contracts/invariants, and bounds checks in @safe "
+549-                     "functions only"),
+  --release                                    - Compile release version, defaulting to disabled asserts/contracts/invariants, and bounds checks in @safe functions only
+  --relocation-model=<value>                   - Choose relocation model

@@ -1,0 +1,42 @@
+== k9Natural (campagne, double[][]) : boucle interne
+	movl	$1, %eax
+	vmovsd	.LCPI86_0(%rip), %xmm0
+	movq	%rax, %r8
+	movq	-8(%rdi), %r10
+	movq	24(%rdi), %r11
+	vmovsd	8(%r10,%r9), %xmm1
+	vaddsd	8(%r11,%r9), %xmm1, %xmm1
+	movq	(%r8), %r10
+	vaddsd	(%r10,%r9), %xmm1, %xmm1
+	vaddsd	16(%r10,%r9), %xmm1, %xmm1
+	movq	(%rdx), %r10
+	vmulsd	%xmm0, %xmm1, %xmm1
+	vmovsd	%xmm1, 8(%r10,%r9)
+	movq	-8(%rdi), %r10
+	movq	24(%rdi), %r11
+	vmovsd	16(%r10,%r9), %xmm1
+	vaddsd	16(%r11,%r9), %xmm1, %xmm1
+	movq	(%r8), %r10
+	vaddsd	8(%r9,%r10), %xmm1, %xmm1
+	movq	(%rdx), %r11
+	vaddsd	24(%r9,%r10), %xmm1, %xmm1
+	vmulsd	%xmm0, %xmm1, %xmm1
+	vmovsd	%xmm1, 16(%r11,%r9)
+	movq	-8(%rdi), %r10
+	movq	24(%rdi), %r11
+	vmovsd	24(%r10,%r9), %xmm1
+	vaddsd	24(%r11,%r9), %xmm1, %xmm1
+	movq	(%r8), %r10
+	vaddsd	16(%r10,%r9), %xmm1, %xmm1
+	vaddsd	32(%r10,%r9), %xmm1, %xmm1
+	movq	(%rdx), %r10
+	vmulsd	%xmm0, %xmm1, %xmm1
+	vmovsd	%xmm1, 24(%r10,%r9)
+	cmpq	$16368, %r9
+	jne	.LBB86_2
+	cmpq	$2047, %rax
+	jne	.LBB86_1
+== métadonnées !tbaa dans l'IR de LDC (ms.d entier) : 0
+== k9Natural en double[M][] (bench/d_nat) : instructions vectorielles 16
+== C++ vector<vector<double>>, clang++ 23 -O3  : 28 instructions vectorielles, 20 scalaires
+== C++ vector<vector<double>>, clang++ 23 -O3 -fno-strict-aliasing : 0 instructions vectorielles, 12 scalaires
