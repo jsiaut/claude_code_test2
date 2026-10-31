@@ -36,10 +36,10 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 * **Score** (0–100) : 40 % de plafond mesuré (le meilleur code que le langage permet d'écrire pour la machine),
   25 % de code par défaut mesuré (le code qu'on écrit sans y penser) et 35 % de contrôle (les leviers qu'offrent le
   langage et sa chaîne de compilation).
-* **Ordre** : le rang moyen sur 20 000 variantes de l'analyse, qui tirent au hasard les poids, les normalisations,
-  le jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf pour C3 et Zig, que 54 % des
-  variantes inversent, pour Ada, 4e au score mais que Nim, Zig et C3 devancent dans 54 à 68 % des variantes (son
-  code par défaut est lent), pour D, que 65 % des variantes placent derrière Nim comme derrière Rust, et pour Chapel,
+* **Ordre** : le rang moyen sur 20 000 variantes de l'analyse, qui tirent au hasard les poids, les normalisations, le
+  jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf pour C3 et Zig, que 54 % des
+  variantes inversent, pour Ada, 4e au score mais que Nim, Zig et C3 devancent dans 55 à 69 % des variantes (son code
+  par défaut est lent), pour D, que 66 % des variantes placent derrière Nim comme derrière Rust, et pour Chapel,
   derrière Fortran au score (65,9 contre 66,3) mais devant lui dans 60 % des variantes.
 * **Rang plausible** : le rang dans 90 % des variantes. **Devance le suivant** : la part des variantes où le
   langage passe devant celui de la ligne suivante.
@@ -78,7 +78,7 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   stable ([`docs/ZIG.md`](docs/ZIG.md)).
 * **Le plafond de K4 compte la vectorisation automatique.** La spécification n'admet pour K4 que deux formes
   scalaires : son plafond mesure ce que le compilateur fait d'une boucle scalaire, comme le code par défaut. Sans K4
-  dans le plafond, C++ passe 1er devant C, Zig 3e et Mojo 11e. Le classement garde la spécification fixée d'avance
+  dans le plafond, C++ passe 1er devant C, Zig 3e et Mojo 12e. Le classement garde la spécification fixée d'avance
   ([`docs/MOJO.md`](docs/MOJO.md)).
 * **Le contrôle pèse lourd, et il est jugé.** Il explique 69 % des écarts de score entre les 13 premiers. Sur les
   seules mesures (le plafond), la tête serait C, C3, Chapel, Rust, C++, Odin.
@@ -162,15 +162,14 @@ laissait gfortran inliner ses noyaux dans la boucle de mesure, où K4 restait sc
 gagne deux places ([`docs/FORTRAN.md`](docs/FORTRAN.md)). Le classement mesure gfortran 16.2 ; flang, en annexe,
 vectorisait déjà K4 dans le banc d'origine, et ifx n'est pas mesuré.
 
-**12. Julia.** Structures immuables stockées en ligne, fonctions spécialisées par types et JIT LLVM : les deux
-boucles naturelles sont vectorisées, et son code naturel est le meilleur de l'étude. Ce qui la place 12e, c'est
-d'abord son plafond (67, le plus bas des 13 premiers) : ses versions optimisées de K8, Q1, K5 et K7 restent loin des
-meilleures, en partie parce qu'elles sont moins travaillées que celles des autres langages ; réécrites comme le
-propose un relecteur, elles lui vaudraient 3 à 5 points et la 9e ou la 10e place ([`docs/JULIA.md`](docs/JULIA.md)).
-Son runtime pèse moins : sur K8, le ramasse-miettes porte bien la latence p99,9 à 70 fois la médiane, mais son code
-par défaut reste au niveau de celui de Rust. Sur la file de K10 (hors score), le blocage que j'attribuais à
-l'ordonnanceur venait de mon code : une variable capturée faisait allouer, et la collecte attendait le thread en
-attente active.
+**12. Julia.** Structures immuables stockées en ligne, fonctions spécialisées par types et JIT LLVM : les deux boucles
+naturelles sont vectorisées, et son code naturel est le meilleur de l'étude. Ce qui la place 12e, c'est d'abord son
+plafond (67, le plus bas des 13 premiers) : ses versions optimisées de K8, Q1, K5 et K7 restent loin des meilleures,
+en partie parce qu'elles sont moins travaillées que celles des autres langages ; réécrites comme le propose un
+relecteur, elles lui vaudraient 3 à 5 points et la 9e à la 11e place ([`docs/JULIA.md`](docs/JULIA.md)). Son runtime
+pèse moins : sur K8, le ramasse-miettes porte bien la latence p99,9 à 70 fois la médiane, mais son code par défaut
+reste au niveau de celui de Rust. Sur la file de K10 (hors score), le blocage que j'attribuais à l'ordonnanceur venait
+de mon code : une variable capturée faisait allouer, et la collecte attendait le thread en attente active.
 
 **13. Mojo.** Le SIMD est au cœur du langage (`SIMD[DType, N]`, paramètres de compilation), et le SIMD explicite est
 efficace : écrit ainsi, K4 bat le meilleur C (2,3 contre 3,1 ms sur la même machine), mais la spécification de K4
@@ -297,7 +296,7 @@ du langage.
     prévisibilité…), notées 0, ½ ou 1 selon ce que livre la chaîne de référence
     ([`docs/CAPABILITIES.md`](docs/CAPABILITIES.md)) ;
   * **Plafond (40 %)** : pour chaque mesure, le meilleur temps du langage rapporté au meilleur langage, puis la
-    moyenne géométrique sur les 9 noyaux ;
+    moyenne géométrique sur les 8 noyaux qui le mesurent (K2, la hiérarchie mémoire, compte dans le code par défaut) ;
   * **Code par défaut (25 %)** : la variante naturelle rapportée au même meilleur temps (50 %), l'empreinte et la
     pénalité de désordre d'une collection naturelle (15 %), la latence de queue de l'allocation (15 %), la
     visibilité de la hiérarchie mémoire (20 %).
@@ -314,9 +313,9 @@ du langage.
   par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de mesure) ;
   Chapel une place par trois errata de la matrice ; Mojo 2,7 points et Julia 1,8 point, mais aucune place, par des
   errata de la matrice ; Zig trois places, mais par une version de compilateur que la règle exclut ; C# rien, sa
-  remarque ne relevant ni erratum ni erreur du banc. Des versions optimisées mieux travaillées vaudraient trois places
-  de plus à Julia et, cumulées avec un autre choix de code naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour
-  rejoindre Mojo au score : la règle les garde hors du classement, mais l'effort d'implémentation compte.
+  remarque ne relevant ni erratum ni erreur du banc. Des versions optimisées mieux travaillées vaudraient une à trois
+  places de plus à Julia et, cumulées avec un autre choix de code naturel et un JIT stabilisé, 7 à 8 points à C#,
+  assez pour rejoindre Mojo au score : la règle les garde hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine Cascade Lake, puis reportées sur les données
   principales par des rapports appariés ; pour une clé de Fortran, par un témoin mesuré sur le même hôte, au prix
   d'un écart au plan ([`docs/FORTRAN.md`](docs/FORTRAN.md), 4.2).
@@ -325,9 +324,10 @@ du langage.
   runtimes par défaut.
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
 * Une seule version de compilateur par langage, la dernière stable au 28 octobre. Un réglage temporaire d'une chaîne
-  peut coûter des rangs : Zig 0.17, dont le vectoriseur de boucles est désactivé, perd trois places en rang espéré
-  par rapport à sa version de développement. Je n'ai mesuré deux versions que pour Zig. Et un seul compilateur par
-  langage : Fortran est classé avec gfortran ; flang n'est mesuré qu'en annexe, ifx pas du tout.
+  peut coûter des rangs : Zig 0.17, dont le vectoriseur de boucles est désactivé, perd trois places en rang espéré par
+  rapport à sa version de développement. Je n'ai mesuré deux versions que pour Zig et pour C# (.NET 11, en
+  préversion : 0,99 fois les temps de .NET 10 en moyenne, aucune place gagnée). Et un seul compilateur par langage :
+  Fortran est classé avec gfortran ; flang n'est mesuré qu'en annexe, ifx pas du tout.
 * La règle de la bibliothèque standard pèse plus sur Mojo que sur les autres : depuis juillet 2026, `parallelize`,
   le GPU et les tenseurs sont dans le paquet MAX. Le classement mesure Mojo et sa `std` sur CPU ; ses noyaux à
   threads passent par un module privé de `std`.
@@ -339,12 +339,14 @@ du langage.
 
 ## Une autre étude, un autre ordre : pourquoi
 
-Le « Banc de sympathie mécanique », une étude voisine faite sur le même processeur que ma machine 3, classe C 11e sur 18 langages
-communs, là où je le classe 1er. Corrélation de rang entre les deux ordres : 0,77. Je l'ai confrontée à la mienne
-par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION.md)) :
+Le « Banc de sympathie mécanique », une étude voisine faite sur le même processeur que ma machine 3, classe C 11e sur
+18 langages communs, là où je le classe 1er. Corrélation de rang entre les deux ordres : 0,76 (0,77 le 30 octobre,
+avant les errata de ma grille). Je l'ai confrontée à la mienne par quatre tests pré-enregistrés
+([`docs/CONFRONTATION.md`](docs/CONFRONTATION.md)) :
 
 * **Leur règle du « standard »** (une extension du compilateur, POSIX pour C, une option globale ou un module
-  expérimental ne valent que le niveau 1 sur 4) appliquée à mon pilier contrôle classe C 11e, comme eux.
+  expérimental ne valent que le niveau 1 sur 4) appliquée à mon pilier contrôle classe C 12e, à un rang du leur
+  (11e) ; C était 11e le 30 octobre, et les errata de Mojo ont depuis placé Mojo devant lui.
 * **La même règle appliquée au code mesuré change peu la performance de C** : réécrit en C standard (sommes
   partielles au lieu des intrinsèques, `threads.h`, sans préchargement), il garde 94 % de son plafond. Elle coûte
   beaucoup à Java (sans la Vector API en incubation), à Go (sans le SIMD expérimental), et à Fortran et Mojo, qui
@@ -353,12 +355,14 @@ par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION
   réécriture ([`docs/CHAPEL.md`](docs/CHAPEL.md)).
 * **Les deux règles à la fois** : C passe 5e, la corrélation monte à 0,87. Le reste de l'écart tient à la question
   posée : leur score ne compte pas la vitesse. Mêler à peu près moitié de leur score au mien reproduit leur ordre.
-* **Sur les faits, les deux grilles, notées indépendamment, s'accordent** (0,83 à 0,88). Leurs désaccords portent
-  presque tous sur ce que recouvre chaque principe.
-* **Un second juge, à l'aveugle** (un sous-agent sans accès aux deux grilles ni à mes conclusions), retrouve ma
-  grille sous ma règle (kappa pondéré 0,75) comme sous la leur (0,80), et la leur à un niveau près dans 94 % des cas.
-  Sur les mêmes faits, il classe C premier de ses 8 langages sous ma règle, dernier sous la leur : la règle suffit
-  au renversement. Il n'accorde presque jamais leur niveau 4 (« imposé ou par défaut »), celui qui met Zig en tête.
+* **Sur les faits, les deux grilles, notées indépendamment, s'accordent** (0,74 à 0,81 ; 0,83 à 0,88 le 30 octobre :
+  les errata de ma grille, surtout ceux de Mojo et de Julia, l'en ont éloignée). Leurs désaccords portent presque tous
+  sur ce que recouvre chaque principe.
+* **Un second juge, à l'aveugle** (un sous-agent sans accès aux deux grilles ni à mes conclusions), retrouve ma grille
+  du 30 octobre sous ma règle (kappa pondéré 0,75) comme sous la leur (0,80 ; 0,85 et 0,86 sur ma grille corrigée
+  depuis), et la leur à un niveau près dans 94 % des cas. Sur les mêmes faits, il classe C premier de ses 8 langages
+  sous ma règle, dernier sous la leur : la règle suffit au renversement. Il n'accorde presque jamais leur niveau 4
+  (« imposé ou par défaut »), celui qui met Zig en tête.
 
 ## Pour aller plus loin
 
@@ -371,7 +375,8 @@ par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION
   [`docs/AUDIT_RESPONSE.md`](docs/AUDIT_RESPONSE.md), [`docs/AUDIT2_2026-10-29.md`](docs/AUDIT2_2026-10-29.md) et
   [`docs/AUDIT2_RESPONSE.md`](docs/AUDIT2_RESPONSE.md).
 * La confrontation avec le « Banc de sympathie mécanique » : [`docs/CONFRONTATION.md`](docs/CONFRONTATION.md)
-  et [`results/report_confrontation.md`](results/report_confrontation.md).
+  et [`results/report_confrontation.md`](results/report_confrontation.md) ; rejouée dans l'état actuel :
+  [`results/report_confrontation_current.md`](results/report_confrontation_current.md).
 * La remarque sur Ada (piège de GNAT, errata, implémentation corrigée et remesurée) : [`docs/ADA.md`](docs/ADA.md)
   et [`results/report_ada.md`](results/report_ada.md).
 * La remarque sur C# (faits vérifiés, protocole du JIT, formes optimisées et code naturel en sensibilité) :
@@ -432,6 +437,10 @@ python3 analysis/transfer_check.py         # pont par le témoin du même hôte 
 
 ```bash
 python3 analysis/analyze_v3.py             # analyse -> results/summary_v3.json, results/report_v3.md
+```
+
+```bash
+python3 analysis/confrontation_current.py  # confrontation et juge à l'aveugle, état actuel -> results/*_current*
 ```
 
 ```bash

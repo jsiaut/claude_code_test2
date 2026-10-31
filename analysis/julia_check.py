@@ -93,7 +93,8 @@ def run(data, lat, langs, footprint, c3, before=False):
             v2.V2_OVERRIDES[(LANG, "D5")] = saved_o
 
 
-def main():
+def main(suffix=""):
+    """suffix : sorties results/julia_check<suffix>.json et report_julia<suffix>.md (« _current » : état actuel)."""
     m = v2.MATRIX[LANG]
     assert (m["B2"][0], m["D3"][0], m["D5"][0], v2.V2_OVERRIDES[(LANG, "D5")][0]) == (0.5, 0.5, 0.5, 1), "errata absents"
     data, lat, *_ = v2.dataset_main(transfers=True)
@@ -127,15 +128,15 @@ def main():
         z = out["scenarios"][name] = run(d, lat, langs, footprint, c3, before)
         print(f"{name} : Julia {z['ms0'][LANG]:.1f} points, contrôle {z['C'][LANG]:.1f}, plafond {z['E'][LANG]:.1f}, "
               f"rang espéré {z['exp21'][LANG]:.2f} ({z['pos']}e), rang 90 % {z['rank90'][LANG]}", flush=True)
-    json.dump(out, open(os.path.join(ROOT, "results", "julia_check.json"), "w"), indent=1, default=float)
-    report(out)
+    json.dump(out, open(os.path.join(ROOT, "results", f"julia_check{suffix}.json"), "w"), indent=1, default=float)
+    report(out, suffix)
 
 
 def f(x, d=1):
     return "—" if x is None else f"{x:.{d}f}".replace(".", ",")
 
 
-def report(o):
+def report(o, suffix=""):
     L = ["# Remarque sur Julia : rapports appariés et scénarios\n",
          "Plan : `docs/JULIA.md`. Mesures : `results/raw_julia/` (machine 7, 7 processus par cellule). Code :",
          "`analysis/julia_check.py`. Processus rejetés : " + (str(len(o["bad"])) if o["bad"] else "aucun") + ".\n",
@@ -167,8 +168,8 @@ def report(o):
         top = ", ".join(f"{i + 1}. {NAMES.get(l, l)} ({f(z['exp21'][l], 2)}, {f(z['ms0'][l])})"
                         for i, l in enumerate(z["order21"][:14]))
         L.append(f"**{name}** : {top}.\n")
-    open(os.path.join(ROOT, "results", "report_julia.md"), "w").write("\n".join(L) + "\n")
+    open(os.path.join(ROOT, "results", f"report_julia{suffix}.md"), "w").write("\n".join(L) + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else "")

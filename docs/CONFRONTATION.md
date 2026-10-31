@@ -421,3 +421,30 @@ Dans l'état actuel du classement (errata et corrections intervenus depuis la co
 donne à Chapel un plafond de 72,1 au lieu de 49,3, un score de 62,7 au lieu de 53,5, et la 10e place sur 18 au lieu de
 la 11e. Les autres chiffres de ce document (rangs des autres langages, corrélations, tests 3 et 4) n'ont pas été
 recalculés : ils restent ceux de la confrontation, faite avec la copie d'origine.
+
+## État au 31 octobre : la confrontation rejouée après les errata
+
+Les résultats ci-dessus datent du 30 octobre. Depuis, ma grille a reçu les errata du juge à l'aveugle et des remarques
+sur Zig, Ada, Fortran, Mojo, Julia et Chapel, et les bancs d'Ada et de Fortran ont été corrigés. Le même code, rejoué
+dans l'état actuel du classement avec la copie standard de Chapel corrigée (`analysis/confrontation_current.py` ;
+sorties `results/confrontation_current.json`, `results/report_confrontation_current.md`,
+`results/blind_compare_current.json`, `results/report_blind_current.md`), donne :
+
+| Résultat | 30 octobre | 31 octobre |
+|---|---|---|
+| Spearman entre leur ordre et le mien (scénario A) | 0,77 | 0,76 |
+| Test 1 : rang de C dans mon pilier contrôle sous leur règle | 11e (63,3) | 12e (64,0) ; Mojo passe devant (61,9 → 69,7) |
+| Test 2 : plafond de C sous leur restriction de code | 94,4 % | 94,5 % |
+| Scénario C (E_R) : Spearman, rang de C | 0,79 ; 1er | 0,78 ; 1er |
+| Scénario D (C_R et E_R) : Spearman, rang de C | 0,87 ; 5e | 0,87 ; 5e |
+| Test 3 : seuils de w (P(C premier) < 0,5 ; ordre plus proche du leur ; Spearman ≥ 0,95) | 0,15 ; 0,45 ; 0,45 | 0,20 ; 0,45 ; 0,55 |
+| Test 4 : accord des deux grilles (mes notes v2 ; sous leur règle) | 0,83 ; 0,88 | 0,74 ; 0,81 |
+| Juge à l'aveugle, kappa pondéré contre ma grille (règle v2 ; leur règle) | 0,75 ; 0,80 | 0,85 ; 0,86 |
+
+* **Les conclusions tiennent** : la règle du standard reste ce qui renverse l'ordre (C 1er sous ma règle, 5e sous les
+  deux leurs), et le reste de l'écart tient au poids de la vitesse.
+* **L'accord des grilles baisse** : les errata, surtout D5 et E5 pour Mojo, D3 et D5 pour Julia, relèvent dans ma
+  grille des langages que leur grille note bas ; trois désaccords apparaissent (P11 et P5 pour Mojo,
+  P4 pour Julia), deux disparaissent (P4 pour C et Odin).
+* **Le kappa du juge monte** sur la grille corrigée, ce qui est attendu pour les cinq erreurs qu'il a lui-même
+  relevées ; le chiffre du test reste celui du 30 octobre.

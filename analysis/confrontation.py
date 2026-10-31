@@ -307,7 +307,9 @@ def test4(c3):
 
 
 # ------------------------------------------------------------------ principal
-def main():
+def main(suffix="", fix_ratios=None):
+    """suffix : sorties results/confrontation<suffix>.json et report_confrontation<suffix>.md ; fix_ratios : correction
+    des rapports appariés (analysis/confrontation_current.py : copie standard de Chapel corrigée le 31/10)."""
     check()
     data, lat, *_ = v2.dataset_main()
     v2.align_lat(data, lat)
@@ -316,6 +318,8 @@ def main():
     langs = [l for l in RANKED + list(ANNEX) if l in data]
     conf, bad = load_conf()
     ratios = paired_ratios(conf, data, np.random.default_rng(v3.SEED + 20))
+    if fix_ratios:
+        ratios = fix_ratios(ratios)
     dR, notes, k3worst = rule_data(data, ratios)
     banc_rank = avg_ranks(BANC_S)
     sc = {}
@@ -345,15 +349,15 @@ def main():
                                   "exp21": s["exp21"]}
     out["test3"] = test3(sc["A"], banc_rank)
     out["test4"] = test4(c3)
-    json.dump(out, open(os.path.join(ROOT, "results", "confrontation.json"), "w"), indent=1, default=float)
-    report(out)
+    json.dump(out, open(os.path.join(ROOT, "results", f"confrontation{suffix}.json"), "w"), indent=1, default=float)
+    report(out, suffix)
 
 
 def f(x, d=2):
     return "—" if x is None else f"{x:.{d}f}".replace(".", ",")
 
 
-def report(o):
+def report(o, suffix=""):
     S = o["scenarios"]
     L = ["# Confrontation avec le « Banc de sympathie mécanique » : résultats\n",
          "Plan : `docs/CONFRONTATION.md`. Calcul : `analysis/confrontation.py`. Rangs sur les 18 langages communs.\n"]
@@ -365,8 +369,9 @@ def report(o):
         if v is None:
             L.append(f"| {NAMES.get(l, l)} | {key} | — | — | non mesuré | — |")
             continue
-        L.append(f"| {NAMES.get(l, l)} | {key} | {f(v['orig_now_ms'])} | {f(v['std_now_ms'])} | {f(v['ratio'])} "
-                 f"[{f(v['ci'][0])}–{f(v['ci'][1])}] | {f(v['host_vs_main'])} |")
+        L.append(f"| {NAMES.get(l, l)} | {key} | {f(v.get('orig_now_ms', v.get('old_ms')))} | "
+                 f"{f(v.get('std_now_ms', v.get('new_ms')))} | {f(v['ratio'])} "
+                 f"[{f(v['ci'][0])}–{f(v['ci'][1])}] | {f(v.get('host_vs_main'))} |")
     L.append("\nReplis et pénalités : " + " ; ".join(f"{k} : {v}" for k, v in o["rule_notes"].items()) + ".\n")
     if o["bad_conf"]:
         L.append(f"Processus écartés (somme de contrôle ou code de retour) : {len(o['bad_conf'])}.\n")
@@ -412,7 +417,7 @@ def report(o):
         L.append(f"* {d['principle']}, {NAMES[d['lang']]} : eux {d['theirs']}/4, moi {f(d['mine_R'])} "
                  f"({', '.join(f'{c} {f(v)}' for c, v in d['cells'].items())})")
     text = "\n".join(L) + "\n"
-    open(os.path.join(ROOT, "results", "report_confrontation.md"), "w").write(text)
+    open(os.path.join(ROOT, "results", f"report_confrontation{suffix}.md"), "w").write(text)
     print(text)
 
 

@@ -58,7 +58,7 @@ def verdict(k1, k2, k3):
     return "tient aux règles en partie (kappa entre 0,4 et 0,6)"
 
 
-def main():
+def main(suffix=""):
     b = json.load(open(os.path.join(ROOT, "results", "blind_notation.json")))
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     v2, rr = c_cells("v2", c3), c_cells_r(c3)
@@ -95,15 +95,15 @@ def main():
     res["order_blind_a"] = sorted(LANGS, key=lambda l: -np.mean([float(cells[(l, i)]["rule_a"]) for i in ITEMS]))
     res["order_blind_b"] = sorted(LANGS, key=lambda l: -np.mean([float(cells[(l, i)]["rule_b"]) for i in ITEMS]))
     res["order_blind_p"] = sorted(LANGS, key=lambda l: -np.mean([int(pr[(l, p)]["level"]) for p in PRINC]))
-    json.dump(res, open(os.path.join(ROOT, "results", "blind_compare.json"), "w"), indent=1, default=float)
-    report(res)
+    json.dump(res, open(os.path.join(ROOT, "results", f"blind_compare{suffix}.json"), "w"), indent=1, default=float)
+    report(res, suffix)
 
 
 def f(x, d=2):
     return "—" if x is None else f"{x:.{d}f}".replace(".", ",")
 
 
-def report(r):
+def report(r, suffix=""):
     L = ["# Notation à l'aveugle : comparaison du second juge\n",
          "Plan : `docs/CONFRONTATION.md`, addendum. Données du juge : `results/blind_notation.json`, notes "
          "`results/blind_notes.md`.\n",
@@ -135,7 +135,7 @@ def report(r):
     if r["missing"]:
         L.append(f"\nCellules manquantes : {r['missing']}")
     text = "\n".join(L) + "\n"
-    open(os.path.join(ROOT, "results", "report_blind.md"), "w").write(text)
+    open(os.path.join(ROOT, "results", f"report_blind{suffix}.md"), "w").write(text)
     print(text)
 
 

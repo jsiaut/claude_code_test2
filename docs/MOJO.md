@@ -170,7 +170,8 @@ seuil). Temps, rapports et scénarios : `results/report_mojo.md` et `results/moj
 
 Depuis les errata de Julia et de Chapel (`docs/JULIA.md`, `docs/CHAPEL.md`), le classement publié donne à Mojo un rang
 espéré de 12,07, sans changer son score, sa place (13e) ni son rang plausible (9–13) ; Julia (64,0 points) repasse
-devant lui au score.
+devant lui au score. Rejoué dans ce même état le 31 octobre (scénario S-K4 de `analysis/csharp_check.py`), S-K4 donne
+à Mojo 67,2 points et la 12e place (rang espéré 10,60), Chapel passant devant lui ; C++ reste 1er, C 2e, Zig 3e.
 
 * **Publié** : l'analyse v3 recalculée redonne exactement M-E (scores et rangs plausibles des 21 langages). Mojo gagne
   2,7 points et dépasse Julia au score (62,7 contre 62,2), mais reste 13e en rang espéré : il ne passe devant elle que

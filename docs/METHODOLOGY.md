@@ -649,3 +649,13 @@ Robustesse :
   contre 62,3), et Mojo ne le devance plus que dans 62 à 70 % des variantes. Effet moyen du protocole : 0 à 2,5 %
   (+0,7 à +0,9 point). Aucun écart au plan. Le README précise la phrase sur les 98 % des variantes ; le texte de la
   case E7 de C# est précisé (note inchangée).
+* 2026-10-31, fin d'après-midi : **audit du README** à la demande de l'utilisateur. L'analyse v3, ses figures et
+  `results/readme_figures.json`, recalculées, sont identiques au bit près aux fichiers publiés, et le tableau du
+  classement leur correspond ligne à ligne. Mais des chiffres du texte dataient d'états antérieurs : Nim, Zig et C3
+  devant Ada dans 55 à 69 % des variantes (54 à 68 écrits), D derrière Nim et Rust dans 66 % (65), Mojo 12e et non 11e
+  sans K4 dans le plafond (depuis les errata de Chapel), Julia 9e à 11e avec ses formes optimisées (9e ou 10e), un
+  plafond calculé sur 8 noyaux et non 9 (K2 compte dans le code par défaut). La confrontation, datée du 30 octobre,
+  est rejouée dans l'état actuel (`analysis/confrontation_current.py`, avec la copie standard de Chapel corrigée) :
+  Spearman 0,76 (0,77), C 12e dans mon pilier contrôle sous leur règle (11e), accord des grilles 0,74 à 0,81 (0,83 à
+  0,88) ; le README donne les deux états. Sensibilités de Julia rejouées dans l'état actuel
+  (`results/julia_check_current.json`). Aucune donnée ni aucun score publié ne change.
