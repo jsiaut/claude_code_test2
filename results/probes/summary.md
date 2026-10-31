@@ -49,6 +49,11 @@
 | chapel | A4 | 0.5 | 0.5 |  | allocate(alignment=64) -> adresse mod 64 = 0 |
 | chapel | A5 | 0.5 | 0.5 |  | (1.0: real(32)).transmute(uint(32)) = 1065353216 |
 | chapel | D5 | 0.5 | 0.5 |  | atomicFence |
+| chapel | B2 | 0.5 | 0.5 |  | Allocators (instable) : bumpPtrMemPool + newWithAllocator, v = 7 |
+| chapel | C2 | 0.5 | 0.5 |  | _mm512_fmadd_ps importé de immintrin.h : somme = 96.0 (macros à immédiat et builtins : refusés) |
+| chapel | B3 | 0.5 | 0.5 |  | c_array local (pile) : 3.0 ; tableaux Chapel sur le tas |
+| chapel | C4 | 0.5 | 0.5 |  | @llvm.metadata(("llvm.loop.vectorize.enable", true)) par boucle (instable) |
+| chapel | E5 | 0.5 | 0.5 |  | foreach (instable) : llvm.loop.parallel_accesses ; noalias automatique, a[0] = 2.0 |
 | cpp | A1 | 1 | 1 |  | std::vector<S> de valeurs contiguës : &v[1]-&v[0]=16 o |
 | cpp | A2 | 1 | 1 |  | offsetof(S,c)=8 (types à disposition standard) |
 | cpp | A3 | 1 | 1 |  | champs de bits sizeof(BF)=4 ; packed par attribut gnu sizeof(P)=5 |

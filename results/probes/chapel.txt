@@ -2,3 +2,8 @@ CAP;A2;1;c_offsetof(S, "c")=8
 CAP;A4;0.5;allocate(alignment=64) -> adresse mod 64 = 0
 CAP;A5;0.5;(1.0: real(32)).transmute(uint(32)) = 1065353216
 CAP;D5;0.5;atomicFence
+CAP;B2;0.5;Allocators (instable) : bumpPtrMemPool + newWithAllocator, v = 7
+CAP;C2;0.5;_mm512_fmadd_ps importé de immintrin.h : somme = 96.0 (macros à immédiat et builtins : refusés)
+CAP;B3;0.5;c_array local (pile) : 3.0 ; tableaux Chapel sur le tas
+CAP;C4;0.5;@llvm.metadata(("llvm.loop.vectorize.enable", true)) par boucle (instable)
+CAP;E5;0.5;foreach (instable) : llvm.loop.parallel_accesses ; noalias automatique, a[0] = 2.0

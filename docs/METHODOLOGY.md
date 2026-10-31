@@ -609,3 +609,11 @@ Robustesse :
   512 bits, reporté par le pont du C du même hôte parce que le transfert s'en écartait de 58 % (S1-K5). Le README
   attribue désormais la place de Julia à son plafond, et le diagnostic de K10 est corrigé (README, FINDINGS). Les
   scénarios de Zig sont recalculés (A' 5,73 → 5,75 ; S3 5,83 → 5,85 ; S1 inchangé).
+* 2026-10-31, 9:47 : **le conteneur redémarre sur un nouvel hôte** (machine 8) : Emerald Rapids du même modèle que la
+  machine 3 (modèle 207, révision 2, 4 vCPU), latence à 4 Mio 57 ns, débit DRAM 13,9 Go/s (`results/hw/machine8/`).
+* 2026-10-31, matin : **remarque sur Chapel** transmise par l'utilisateur (cases B2, C2, E5, C4 et B3 ; Q1 en
+  intrinsèques ; copie standard de la confrontation ; K7 naturel). Vérifications préalables (sources de Chapel 2.10.0,
+  sondes compilées, IR LLVM, cas d'import qui échouent), errata de la matrice (B2, C2 et E5 à 0,5 ; textes de C4 et
+  B3 corrigés ; règle du standard à 0,25 pour B2, C2 et E5) et plan : `docs/CHAPEL.md`, poussé avant les mesures
+  avec le code d'analyse (`analysis/chapel_check.py`). Le runtime de Chapel n'accepte que la cible `native` : le
+  source de la campagne est recompilé pour l'hôte (`bench/chapel_ref`) et sert de référence aux copies.

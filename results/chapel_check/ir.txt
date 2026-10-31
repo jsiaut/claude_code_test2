@@ -1,0 +1,3 @@
+# IR LLVM de axpy (y[i] += a * x[i]) : métadonnées d'aliasing et de boucle
+## foreach_ir.chpl :  20 !alias.scope; 20 !noalias; 20 llvm.access.group; 1 llvm.loop.parallel_accesses;
+## for_ir.chpl :  20 !alias.scope; 20 !noalias;

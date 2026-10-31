@@ -16,13 +16,13 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | A8 types numériques étroits de stockage | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ |
 | **B** (20 %) | | | | | | | | | | | | | | | | | | | | | |
 | B1 pas de GC traçant imposé | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ |
 | **C** (20 %) | | | | | | | | | | | | | | | | | | | | | |
 | C1 types vectoriels portables | ◐ | ● | ◐ | ● | ● | ● | ● | ○ | ◐ | ○ | ○ | ● | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
-| C2 intrinsèques de la cible | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ◐ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| C2 intrinsèques de la cible | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | C3 auto-vectorisation (mesurée) | ● | ● | ◐ | ○ | ● | ● | ◐ | ◐ | ◐ | ● | ● | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
 | C4 contrôle de la réassociation flottante | ◐ | ● | ● | ● | ○ | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
 | C5 parallélisme de données | ◐ | ◐ | ○ | ○ | ○ | ○ | ● | ◐ | ○ | ● | ● | ○ | ○ | ● | ● | ● | ◐ | ○ | ○ | ◐ | ○ |
@@ -37,7 +37,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | E2 assembleur en ligne | ◐ | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ○ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | E3 indications de branchement | ◐ | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
 | E4 préchargement explicite | ◐ | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ◐ | ● | ○ | ● | ○ | ◐ | ● | ○ | ○ | ○ | ○ |
-| E5 garanties de non-aliasing | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ● | ○ | ● | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| E5 garanties de non-aliasing | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ● | ◐ | ● | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | E6 contrôle local des vérifications de bornes | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ● | ● | ● | ○ | ◐ | ○ |
 | E7 calcul à la compilation + génériques monomorphisés | ◐ | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ○ | ● | ◐ | ○ | ○ | ○ | ○ |
 | **F** (10 %) | | | | | | | | | | | | | | | | | | | | | |
@@ -141,10 +141,10 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 ### Chapel
 
 * **A** : A1 = 1 (tableau de records (bench)) ; A2 = 1 (c_offsetof (src CTypes)) ; A3 = 0 (aucun) ; A4 = 0.5 (allocate(..., alignment=) ; pas d'attribut de type (src)) ; A5 = 0.5 (transmute pour les réels ; unions sûres (src)) ; A6 = 0 (aucun) ; A7 = 1 (tuples homogènes en ligne) ; A8 = 1 (int(8), real(32))
-* **B** : B1 = 1 (pas de GC (owned/shared/unmanaged)) ; B2 = 0 (aucun) ; B3 = 0.5 (records sur la pile ; tableaux toujours sur le tas) ; B4 = 0.5 (tableaux locaux et tâches allouent implicitement) ; B5 = 1 (c_ptr, c_ptrTo (bench K6))
-* **C** : C1 = 0 (aucun ; les tuples ne sont vectorisés que par paires (bench, IR)) ; C2 = 0 (aucun hors blocs extern C) ; C3 = 1.0 (mesuré) ; C4 = 0.5 (--no-ieee-float global seulement (bench)) ; C5 = 1 (forall, reduce, promotion)
+* **B** : B1 = 1 (pas de GC (owned/shared/unmanaged)) ; B2 = 0.5 (module standard Allocators, instable (bumpPtrMemPool, newWithAllocator) (sonde ; erratum du 31/10)) ; B3 = 0.5 (records, tuples et c_array sur la pile ; tableaux Chapel sur le tas (sonde ; texte corrigé le 31/10)) ; B4 = 0.5 (tableaux locaux et tâches allouent implicitement) ; B5 = 1 (c_ptr, c_ptrTo (bench K6))
+* **C** : C1 = 0 (aucun ; les tuples ne sont vectorisés que par paires (bench, IR)) ; C2 = 0.5 (extern proc depuis immintrin.h : fonctions inline seulement, ni macros à immédiat ni builtins (sonde ; erratum du 31/10)) ; C3 = 1.0 (mesuré) ; C4 = 0.5 (attribut de boucle @llvm.metadata (llvm.loop.vectorize.enable), instable ; --no-ieee-float global (sonde ; texte corrigé le 31/10)) ; C5 = 1 (forall, reduce, promotion)
 * **D** : D1 = 1 (tâches sur threads) ; D2 = 1 (memoryOrder.relaxed/acquire/release/seqCst (bench)) ; D3 = 0 (aucune) ; D4 = 0.5 (variables d'environnement de l'exécutif (qthreads)) ; D5 = 0.5 (atomicFence ; pas d'indication pause)
-* **E** : E1 = 1 (natif (LLVM)) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 0.5 (module package Prefetch (bench K7)) ; E5 = 0 (aucun) ; E6 = 1 (accès c_ptr sans vérification ; --no-checks) ; E7 = 1 (génériques instanciés + param)
+* **E** : E1 = 1 (natif (LLVM)) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 0.5 (module package Prefetch (bench K7)) ; E5 = 0.5 (foreach (instable) : llvm.loop.parallel_accesses ; noalias automatique entre tableaux distincts (sonde IR ; erratum du 31/10)) ; E6 = 1 (accès c_ptr sans vérification ; --no-checks) ; E7 = 1 (génériques instanciés + param)
 * **F** : F1 = 1 (tableaux multidimensionnels, domaines) ; F2 = 1 (locales, distributions Block/Cyclic/Stencil (src)) ; F3 = 1 (uint(32) enveloppant) ; F4 = 0 (pas de projection utilisateur (indication useMmap pour la lecture))
 
 ### Mojo

@@ -1,0 +1,19 @@
+# Sondes de la remarque sur Chapel (chpl version 2.10.0, hôte :  Intel(R) Xeon(R) Processor @ 2.10GHz)
+## Avertissements de --warn-unstable (probes.chpl)
+probes.chpl:5: warning: symbol names with leading underscores (__m512) are unstable
+probes.chpl:6: warning: symbol names with leading underscores (_mm512_loadu_ps) are unstable
+probes.chpl:7: warning: symbol names with leading underscores (_mm512_setzero_ps) are unstable
+probes.chpl:8: warning: symbol names with leading underscores (_mm512_fmadd_ps) are unstable
+probes.chpl:9: warning: symbol names with leading underscores (_mm512_reduce_add_ps) are unstable
+probes.chpl:30: warning: 'llvm.metadata' is an unstable attribute
+## Exécution
+B2 : Allocators (bumpPtrMemPool + newWithAllocator) : v = 42
+C2 : _mm512_fmadd_ps importé : 501.519 (strict : 501.519)
+C4 : K5 (2^16 produits de 2048) : strict 155.24 ms ; attribut de boucle 5.93 ms ; intrinsèques 11.867 ms (9.86799e+07)
+B3 : tableau local 95.815 ns par appel ; c_array 5.155 ns par appel (6.40005e+13)
+## intrin_imm.chpl (doit échouer)
+intrin_imm.chpl:6: error: Could not find C function for _mm512_cmp_ps_mask;  perhaps it is missing or is a macro?
+## intrin_pause.chpl (doit échouer)
+root:(.text+0x2c472): undefined reference to `_mm_pause'
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+error: Make Binary - Linking

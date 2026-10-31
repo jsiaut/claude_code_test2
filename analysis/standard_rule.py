@@ -70,7 +70,10 @@ R_OVERRIDES = {
     ("fortran", "D4"): (0.25, "proc_bind, OMP_PLACES : OpenMP"),
     ("fortran", "D5"): (0.25, "!$omp flush : OpenMP"),
     # Chapel : modules standard ; modules « package » et options globales hors norme
-    ("chapel", "C4"): (0.25, "--no-ieee-float : option globale"),
+    ("chapel", "B2"): (0.25, "module Allocators instable (erratum du 31/10)"),
+    ("chapel", "C2"): (0.25, "intrinsèques du compilateur importées par extern (erratum du 31/10)"),
+    ("chapel", "C4"): (0.25, "attribut de boucle instable ou --no-ieee-float, option globale"),
+    ("chapel", "E5"): (0.25, "foreach instable (erratum du 31/10)"),
     ("chapel", "D4"): (0.25, "variables d'environnement de l'exécutif"),
     ("chapel", "E4"): (0.25, "module « package » Prefetch"),
     # Julia

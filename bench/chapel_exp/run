@@ -1,0 +1,8 @@
+#!/bin/sh
+# variantes natural* -> options par défaut ; toutes les autres -> ms_tuned (aucune option --no-ieee-float)
+d="$(dirname "$0")"
+case "$1:$2" in
+  *:natural*|*:footprint*) b=ms_nat ;;
+  *) b=ms_tuned ;;
+esac
+exec "$d/$b" --warm="${WARMUP:-1}" --dataDir="${MS_DATA:-/opt/msdata}" "$@"
