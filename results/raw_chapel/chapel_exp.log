@@ -1,0 +1,63 @@
+chapel_exp k1   soa                  energy     p0 n=10 med=0.004741s ok={True} rc=0 
+chapel_exp k6   tuned                q6         p0 n=10 med=0.016620s ok={True} rc=0 
+chapel_exp k1   aos                  energy     p0 n=10 med=0.031937s ok={True} rc=0 
+chapel_exp k7   tuned                           p0 n=7 med=0.280156s ok={True} rc=0 
+chapel_exp k7   natural                         p0 n=3 med=0.995494s ok={True} rc=0 
+chapel_exp k9   tuned                           p0 n=10 med=0.024567s ok={True} rc=0 
+chapel_exp k6   tuned                q1         p0 n=10 med=0.030857s ok={True} rc=0 
+chapel_exp k5   tuned                           p0 n=10 med=0.005385s ok={True} rc=0 
+chapel_exp k6   mt                   q1         p0 n=10 med=0.008106s ok={True} rc=0 
+chapel_exp k1   aos                  energy     p0 n=10 med=0.020790s ok={True} rc=0 
+chapel_exp k5   tuned                           p0 n=10 med=0.004865s ok={True} rc=0 
+chapel_exp k6   mt                   q1         p0 n=10 med=0.008323s ok={True} rc=0 
+chapel_exp k6   tuned                q1         p0 n=10 med=0.029484s ok={True} rc=0 
+chapel_exp k7   natural                         p0 n=3 med=0.961495s ok={True} rc=0 
+chapel_exp k6   tuned                q6         p0 n=10 med=0.014584s ok={True} rc=0 
+chapel_exp k7   tuned                           p0 n=7 med=0.244353s ok={True} rc=0 
+chapel_exp k9   tuned                           p0 n=10 med=0.021953s ok={True} rc=0 
+chapel_exp k1   soa                  energy     p0 n=10 med=0.004903s ok={True} rc=0 
+chapel_exp k6   tuned                q1         p0 n=10 med=0.030902s ok={True} rc=0 
+chapel_exp k7   tuned                           p0 n=7 med=0.217201s ok={True} rc=0 
+chapel_exp k1   aos                  energy     p0 n=10 med=0.020688s ok={True} rc=0 
+chapel_exp k6   tuned                q6         p0 n=10 med=0.014956s ok={True} rc=0 
+chapel_exp k1   soa                  energy     p0 n=10 med=0.005652s ok={True} rc=0 
+chapel_exp k5   tuned                           p0 n=10 med=0.006297s ok={True} rc=0 
+chapel_exp k9   tuned                           p0 n=10 med=0.022823s ok={True} rc=0 
+chapel_exp k7   natural                         p0 n=3 med=1.016993s ok={True} rc=0 
+chapel_exp k6   mt                   q1         p0 n=10 med=0.010142s ok={True} rc=0 
+chapel_exp k7   natural                         p0 n=3 med=0.974509s ok={True} rc=0 
+chapel_exp k1   soa                  energy     p0 n=10 med=0.004887s ok={True} rc=0 
+chapel_exp k5   tuned                           p0 n=10 med=0.006453s ok={True} rc=0 
+chapel_exp k1   aos                  energy     p0 n=10 med=0.023316s ok={True} rc=0 
+chapel_exp k6   tuned                q6         p0 n=10 med=0.019483s ok={True} rc=0 
+chapel_exp k7   tuned                           p0 n=7 med=0.231722s ok={True} rc=0 
+chapel_exp k9   tuned                           p0 n=10 med=0.021410s ok={True} rc=0 
+chapel_exp k6   mt                   q1         p0 n=10 med=0.008591s ok={True} rc=0 
+chapel_exp k6   tuned                q1         p0 n=10 med=0.030057s ok={True} rc=0 
+chapel_exp k6   tuned                q1         p0 n=10 med=0.029509s ok={True} rc=0 
+chapel_exp k7   natural                         p0 n=3 med=0.975376s ok={True} rc=0 
+chapel_exp k6   mt                   q1         p0 n=10 med=0.015691s ok={True} rc=0 
+chapel_exp k5   tuned                           p0 n=10 med=0.005889s ok={True} rc=0 
+chapel_exp k1   aos                  energy     p0 n=10 med=0.022421s ok={True} rc=0 
+chapel_exp k1   soa                  energy     p0 n=10 med=0.004875s ok={True} rc=0 
+chapel_exp k7   tuned                           p0 n=7 med=0.229801s ok={True} rc=0 
+chapel_exp k9   tuned                           p0 n=10 med=0.022934s ok={True} rc=0 
+chapel_exp k6   tuned                q6         p0 n=10 med=0.017707s ok={True} rc=0 
+chapel_exp k5   tuned                           p0 n=10 med=0.005306s ok={True} rc=0 
+chapel_exp k6   tuned                q6         p0 n=10 med=0.016042s ok={True} rc=0 
+chapel_exp k7   tuned                           p0 n=7 med=0.269634s ok={True} rc=0 
+chapel_exp k6   mt                   q1         p0 n=10 med=0.010050s ok={True} rc=0 
+chapel_exp k9   tuned                           p0 n=10 med=0.026681s ok={True} rc=0 
+chapel_exp k1   soa                  energy     p0 n=10 med=0.005231s ok={True} rc=0 
+chapel_exp k6   tuned                q1         p0 n=10 med=0.030313s ok={True} rc=0 
+chapel_exp k7   natural                         p0 n=3 med=1.114937s ok={True} rc=0 
+chapel_exp k1   aos                  energy     p0 n=10 med=0.024598s ok={True} rc=0 
+chapel_exp k1   aos                  energy     p0 n=10 med=0.022609s ok={True} rc=0 
+chapel_exp k9   tuned                           p0 n=10 med=0.025901s ok={True} rc=0 
+chapel_exp k5   tuned                           p0 n=10 med=0.004932s ok={True} rc=0 
+chapel_exp k6   mt                   q1         p0 n=10 med=0.009311s ok={True} rc=0 
+chapel_exp k7   natural                         p0 n=3 med=1.027081s ok={True} rc=0 
+chapel_exp k6   tuned                q1         p0 n=10 med=0.036913s ok={True} rc=0 
+chapel_exp k1   soa                  energy     p0 n=10 med=0.005453s ok={True} rc=0 
+chapel_exp k7   tuned                           p0 n=7 med=0.230510s ok={True} rc=0 
+chapel_exp k6   tuned                q6         p0 n=10 med=0.015712s ok={True} rc=0 
