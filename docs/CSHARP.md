@@ -262,3 +262,9 @@ architectures, le rapport hôte de C# et celui du C diffèrent, ce que `docs/CHA
   Mojo au score (62,0 à 62,6 contre 62,3) et Mojo ne le devance plus que dans 62 à 70 % des variantes, au lieu de 98 % ;
   C# reste 14e en rang espéré. Les autres langages ont aussi leur marge (Julia : `docs/JULIA.md`).
 * **Effet sur le classement publié** : aucun, conformément au plan (3.2) ; le README est précisé (décision 2).
+
+Depuis la remesure des queues de latence de K8 pour tous les langages (31 octobre, `docs/RUST.md`), C# a 56,0 points et
+reste 14e ; sa queue sur K8 était l'une des plus pénalisées par le vol de temps (p99,9 777 → 180 µs). Rejoués dans cet
+état (`analysis/csharp_check.py _current`, sorties `results/csharp_check_current.json` et
+`results/report_csharp_current.md`), S-max lui donne 63,8 points et la 13e place, devant Mojo (62,3), qu'il devance
+dans 54 % des variantes ; S-max-T 63,2 points et la 14e place, Mojo le devançant dans 54 %.

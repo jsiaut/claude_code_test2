@@ -142,24 +142,25 @@ pour 0.17. Rapports appariés master / 0.17 (moyenne géométrique de 7 processu
 
 Chiffres recalculés après les corrections d'Ada, de Fortran, de Mojo, de Julia, de Chapel et de D (`docs/ADA.md`,
 `docs/FORTRAN.md`, `docs/MOJO.md`, `docs/JULIA.md`, `docs/CHAPEL.md`, `docs/DLANG.md`), qui changent un peu les données
-de tous les scénarios ; les premiers chiffres, publiés plus tôt le
+de tous les scénarios, puis après la remesure des queues de latence de K8 (remarque sur Rust, `docs/RUST.md`), qui
+relève Zig : sa latence d'allocation est la plus régulière de l'étude ; les premiers chiffres, publiés plus tôt le
 même jour, différaient d'au plus 0,2 rang espéré.
 
 | Scénario | Score de Zig | Plafond E | Code naturel D1 | Rang espéré | Rang dans 90 % des variantes | Part des variantes où Zig est 1er |
 |---|---|---|---|---|---|---|
-| **A'** : Zig 0.17, classement publié (F4 corrigée) | 71,5 | 70,7 (11e) | 22,0 | 5,93 (5e) | 2–11 | 2 % |
-| **S1** : Zig 0.18-dev | 74,8 | 78,5 (4e) | 24,9 (1er) | 2,75 (2e) | 1–6 | 24 % |
-| S1-K5 : S1 sans transfert pour K5 | 74,6 | 77,9 | 24,9 | 2,84 (2e) | 1–6 | — |
-| S2 : 0.18-dev et `Io.Group` | 75,3 | 79,7 | 24,9 | 2,55 (2e) | 1–5 | — |
-| S3 : 0.17 et `Io.Group` | 71,3 | 70,4 | 22,0 | 6,03 (5e) | 2–11 | — |
+| **A'** : Zig 0.17, classement publié (F4 corrigée) | 72,7 | 70,7 (11e) | 22,0 | 4,69 (4e) | 1–10 | 11 % |
+| **S1** : Zig 0.18-dev | 76,0 | 78,5 (4e) | 24,9 (1er) | 1,94 (1er) | 1–4 | 48 % |
+| S1-K5 : S1 sans transfert pour K5 | 75,8 | 77,9 | 24,9 | 2,02 (1er) | 1–4 | — |
+| S2 : 0.18-dev et `Io.Group` | 76,5 | 79,7 | 24,9 | 1,80 (1er) | 1–4 | — |
+| S3 : 0.17 et `Io.Group` | 72,5 | 70,4 | 22,0 | 4,79 (4e) | 1–10 | — |
 
 * **A'** : la correction de F4 ne change aucun rang ni aucun score de référence (la règle v2 donnait déjà 1) ;
-  elle ne joue que dans les variantes en règle v1. Ordre : C, C++, Odin, C3, Zig, Nim, Ada, D, Rust, Chapel…
-* **S1** : C (rang espéré 1,93 ; 79,4 points), **Zig (2,75 ; 74,8)**, C++ (3,18 ; 76,4), Odin, C3, Nim, Ada, D,
-  Rust, Chapel. Zig reste 3e au score de référence, derrière C++, mais passe devant lui dans 53 % des variantes, devant
-  Odin dans 85 %, devant C3 dans 86 %. Les scores des autres baissent un peu (C 80,1 à 79,4) : Zig master devient la
-  référence de plusieurs mesures (K1, K7 `tuned`, K9 naturel), ce qui relève le meilleur temps auquel tous sont
-  comparés.
+  elle ne joue que dans les variantes en règle v1. Ordre : C, C++, Odin, Zig, C3, Rust, Nim, D, Ada, Chapel…
+* **S1** : **Zig (rang espéré 1,94 ; 76,0 points)**, C (2,25 ; 79,3), C++ (3,98 ; 75,9), Odin, C3, Rust, Nim, D, Ada,
+  Chapel. Zig reste 2e au score de référence, derrière C, mais passe devant lui dans 56 % des variantes, devant C++ dans
+  79 %, devant Odin dans 92 %, devant C3 dans 96 %. Les scores des autres baissent un peu (C 80,0 à 79,3) : Zig master
+  devient la référence de plusieurs mesures (K1, K7 `tuned`, K9 naturel), ce qui relève le meilleur temps auquel tous
+  sont comparés.
 * **Ce qui fait la différence** : sur K4, Zig passe de 33 à 79 % du meilleur temps ; sur K5, de 82 à 86 % ; sur K7,
   à 100 %. Le code naturel D1 devient le meilleur de l'étude (24,9, devant Julia).
 
@@ -172,7 +173,8 @@ même jour, différaient d'au plus 0,2 rang espéré.
   pipeline de zig 0.17.0 n'auto-vectorise aucune boucle […] alors que `opt-23 -O3` vectorise le même IR ») ; je ne
   l'avais pas suivi, parce que sa note portait sur une capacité et pas sur les mesures.
 * **(c) : confirmé, et un peu au-delà.** L'estimation ponctuelle de la remarque (76 points, 3e) est proche du score
-  mesuré par S1 (74,8, 3e au score) ; sur les 20 000 variantes, Zig 0.18-dev est 2e en rang espéré.
+  mesuré par S1 (74,8, 3e au score) ; sur les 20 000 variantes, Zig 0.18-dev est 2e en rang espéré. Depuis la remesure
+  des queues de K8 (31 octobre, `docs/RUST.md`) : 76,0 points, 2e au score et 1er en rang espéré (tableau ci-dessus).
 * **(d) : exact pour le code, pas tranché pour le temps.** La boucle chaude de K5 `tuned` est la même en Zig et en C
   (quatre accumulateurs zmm, huit FMA 512 bits par tour ; `results/zig_check/k5_tuned_asm.txt`). Sur la machine 5,
   Zig/C = 1,06, contre 1,22 dans les données principales (machine 3). L'écart des données principales tient sans doute

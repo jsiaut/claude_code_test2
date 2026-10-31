@@ -425,24 +425,24 @@ recalculés : ils restent ceux de la confrontation, faite avec la copie d'origin
 ## État au 31 octobre : la confrontation rejouée après les errata
 
 Les résultats ci-dessus datent du 30 octobre. Depuis, ma grille a reçu les errata du juge à l'aveugle et des remarques
-sur Zig, Ada, Fortran, Mojo, Julia, Chapel et D, et les bancs d'Ada, de Fortran et de D ont été corrigés. Le même
-code, rejoué dans l'état actuel du classement avec la copie standard de Chapel corrigée
-(`analysis/confrontation_current.py` ;
-sorties `results/confrontation_current.json`, `results/report_confrontation_current.md`,
-`results/blind_compare_current.json`, `results/report_blind_current.md`), donne :
+sur Zig, Ada, Fortran, Mojo, Julia, Chapel, D et Rust, les bancs d'Ada, de Fortran, de D et de Rust ont été corrigés, et
+les queues de latence de K8 ont été remesurées pour tous les langages. Le même code, rejoué dans l'état actuel du
+classement avec la copie standard de Chapel corrigée (`analysis/confrontation_current.py` ; sorties
+`results/confrontation_current.json`, `results/report_confrontation_current.md`, `results/blind_compare_current.json`,
+`results/report_blind_current.md`), donne :
 
 | Résultat | 30 octobre | 31 octobre |
 |---|---|---|
-| Spearman entre leur ordre et le mien (scénario A) | 0,77 | 0,76 |
+| Spearman entre leur ordre et le mien (scénario A) | 0,77 | 0,78 |
 | Test 1 : rang de C dans mon pilier contrôle sous leur règle | 11e (63,3) | 12e (64,0) ; Mojo passe devant (61,9 → 69,7) |
 | Test 2 : plafond de C sous leur restriction de code | 94,4 % | 94,5 % |
-| Scénario C (E_R) : Spearman, rang de C | 0,79 ; 1er | 0,79 ; 1er |
-| Scénario D (C_R et E_R) : Spearman, rang de C | 0,87 ; 5e | 0,88 ; 5e |
-| Test 3 : seuils de w (P(C premier) < 0,5 ; ordre plus proche du leur ; Spearman ≥ 0,95) | 0,15 ; 0,45 ; 0,45 | 0,20 ; 0,45 ; 0,55 |
+| Scénario C (E_R) : Spearman, rang de C | 0,79 ; 1er | 0,81 ; 1er |
+| Scénario D (C_R et E_R) : Spearman, rang de C | 0,87 ; 5e | 0,87 ; 6e |
+| Test 3 : seuils de w (P(C premier) < 0,5 ; ordre plus proche du leur ; Spearman ≥ 0,95) | 0,15 ; 0,45 ; 0,45 | 0,20 ; 0,45 ; 0,50 |
 | Test 4 : accord des deux grilles (mes notes v2 ; sous leur règle) | 0,83 ; 0,88 | 0,74 ; 0,81 |
 | Juge à l'aveugle, kappa pondéré contre ma grille (règle v2 ; leur règle) | 0,75 ; 0,80 | 0,85 ; 0,86 |
 
-* **Les conclusions tiennent** : la règle du standard reste ce qui renverse l'ordre (C 1er sous ma règle, 5e sous les
+* **Les conclusions tiennent** : la règle du standard reste ce qui renverse l'ordre (C 1er sous ma règle, 6e sous les
   deux leurs), et le reste de l'écart tient au poids de la vitesse.
 * **L'accord des grilles baisse** : les errata, surtout D5 et E5 pour Mojo, D3 et D5 pour Julia, relèvent dans ma
   grille des langages que leur grille note bas ; trois désaccords apparaissent (P11 et P5 pour Mojo,
@@ -454,3 +454,7 @@ sorties `results/confrontation_current.json`, `results/report_confrontation_curr
   règle v1. D passe de la 9e à la 8e place dans mon ordre publié et dans le scénario C, de la 8e à la 7e dans le
   scénario D ; ces deux scénarios se rapprochent un peu de leur ordre (Spearman 0,78 → 0,79 et 0,87 → 0,88) ; les tests
   1, 2 et 4 et les seuils du test 3 ne bougent pas.
+* **La remesure des queues de K8** (remarque sur Rust, `docs/RUST.md`) change le pilier « code par défaut » de tous les
+  langages, et non les piliers C et E : le Spearman du scénario A passe de 0,76 à 0,78, celui du scénario C de 0,79 à
+  0,81 ; C passe 4e dans le scénario B (5e avant) et 6e dans le scénario D (5e avant), où le Spearman reste 0,87 ; les
+  tests 1, 2 et 4 ne bougent pas, et le seuil de Spearman ≥ 0,95 du test 3 descend à w = 0,50.

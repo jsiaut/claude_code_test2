@@ -695,3 +695,21 @@ Robustesse :
   erreur d'implémentation, corrigée dans le classement publié (`bench/rust_fix`) ; K8 naturel est remesuré pour les
   25 implémentations (7 processus) et ses latences remplacent celles de la campagne dans D3 pour toutes, comme K5 en
   v2 ; `_popcnt32`, l'arène de K8, `Vec<[f64; M]>` pour K9 et la règle de la libc étendue restent des sensibilités.
+* 2026-10-31, 17:27:57-17:54:01 : **mesures de la remarque sur Rust** (`tools/measure_rust.py`, machine 11) : 57
+  cellules × 7 processus (399) ; aucune somme de contrôle fausse ; 9 processus des paires refaits pour vol de temps
+  au-dessus de 2 %, aucun gardé au-dessus du seuil ; aucune reprise pour la remesure de D3 (vol médian 0,33 %, maximum
+  1,28 %). Rien d'autre ne tournait. **Écart au plan (cellules)** : `rust_ref` n'a pas mesuré K8 naturel ; le témoin de
+  `rust_k8` est comparé au binaire Rust de la remesure de D3 (même hôte, mêmes passes ; information seulement).
+* 2026-10-31, soirée : **résultats de la remarque sur Rust** (`results/report_rust.md`, `results/rust_check.json`).
+  Entrent dans le classement publié la remesure de D3 pour les 25 implémentations (latences de `results/raw_d3` lues
+  par `analysis/analyze_v2.py`) et la correction de K7 optimisé de Rust (× 1,082 par transfert, le pont s'en écartant de
+  5 %). Rust passe de 69,4 à 70,5 points et de la 9e à la 6e place (rang espéré 7,57 → 6,55), à égalité avec C3 et
+  Nim ; Zig passe de la 5e à la 4e place, C3 de la 4e à la 5e, Nim de la 6e à la 7e, Ada de la 7e à la 9e ; C# de 54,8
+  à 56,0 points. Sensibilités : K9 en `Vec<[f64; M]>`, `_popcnt32` et arène écrite comme en C, une place chacune
+  (5e) ; libc étendue à Rust, 73,5 points et la 4e place ; à tous les langages à FFI, la 4e ; tout cumulé, 75,3 et la
+  2e. Rejoués dans le nouvel état : Zig (0.18-dev 1er en rang espéré), Julia, Mojo et C# (sorties `*_current` ; avec
+  S-max, C# passe 13e devant Mojo), confrontation (Spearman 0,78). README : paragraphe sur Rust réécrit, cause du
+  stencil naturel de Rust (aliasing), latences de K8 tirées de la remesure, ordre et chiffres recalculés, règle de la
+  libc dans les limites ; `docs/NATURAL.md`, `docs/AUDIT2_RESPONSE.md` et les notes d'état actuel (Zig, Julia, Mojo,
+  C#, Ada, D, confrontation) mis à jour.
+

@@ -165,3 +165,97 @@ données principales, scénarios de la section 3.3 rejoués par `analysis/confro
 `results/rust_check.json` et `results/report_rust.md`. Le classement publié lit les latences de D3 dans
 `results/raw_d3/` (`analysis/analyze_v2.py`) et le rapport de K7 dans `results/transfers.json` ; toutes les sorties
 publiées sont recalculées (analyse v3, figures, scénarios de Zig et de Julia, confrontation).
+
+## 4. Résultats
+
+399 processus (57 cellules × 7 passes), le 31 octobre de 17 h 27 à 17 h 54 sur la machine 11 ; aucune somme de
+contrôle fausse ; 9 processus des paires refaits pour vol de temps au-dessus de 2 %, aucun gardé au-dessus du seuil ;
+aucun pour la remesure de D3 (vol médian 0,33 %, maximum 1,28 %). Rien d'autre ne tournait. **Écart au plan
+(cellules)** : `rust_ref` n'a pas mesuré K8 naturel, si bien que le témoin de `rust_k8` est comparé au binaire Rust
+de la remesure de D3 (même hôte, mêmes passes) ; c'est une information, sans effet sur les scénarios. Rapports et
+scénarios : `results/report_rust.md`, `results/rust_check.json` ; données : `results/raw_rust/`, `results/raw_d3/`.
+
+### 4.1 Mesures appariées (machine 11, même hôte)
+
+| Clé | Forme | Rapport (IC 95 %) | Remarque |
+|---|---|---|---|
+| K7 tuned | `_MM_HINT_ET0` (`rust_fix` / `rust_ref`) | 1,082 (0,992–1,172) : 199,5 → 215,8 ms | — |
+| 3 témoins (K9 tuned, Q6 tuned, K1 aos) | code inchangé | 1,029 ; 0,930 ; 0,955 | |
+| K9 naturel | `Vec<[f64; M9]>` (`rust_nat` / `rust_ref`) | 0,553 (0,522–0,585) : 44,2 → 24,4 ms | 30–35 → 11–13 ms |
+| K8 tuned | arène écrite comme en C (`rust_k8` / `rust_ref`) | 0,742 (0,691–0,811) : 260,0 → 193,0 ms | 283–302 → 251–293 ms |
+| Q1 tuned / `mt` (code de Cascade Lake) | `_popcnt32` (`rust_clpop` / `rust_cl`) | 0,825 (0,714–0,958) / 0,879 (0,765–1,005) | « ≤ + 0,45 point » |
+
+À algorithme égal, sur cet hôte (`rust_ref` / `c`) : Q1 1,00, Q6 1,02, K7 1,04, K8 tuned 1,05, K1 aos 1,07, K5 tuned
+1,09 (0,88–1,37), K4 sans branchement 1,30 (0,98–1,77), K9 tuned 1,45 (1,18–1,71). La remarque a raison pour Q1, Q6,
+K7 et K8 ; pas pour K9 tuned ici, et K4 reste incertain.
+
+**Le préchargement en écriture n'accélère pas K7 sur cet hôte** : 8 % plus lent, mais l'intervalle contient 1 et les
+témoins dont le code ne change pas varient de − 7 à + 3 % d'un binaire à l'autre (disposition du code). La correction
+suit la convention ; son effet mesuré est nul ou légèrement négatif.
+
+### 4.2 D3 remesuré (K8 naturel, 25 implémentations, 7 processus)
+
+Les queues baissent pour presque tous les langages, et l'ordre change : sur la campagne principale, deux ou trois
+processus par langage laissaient passer les queues dues au vol de temps. Rust : p99,9 538 → 132 µs, maximum 4 495 →
+1 182 µs, D3 0,272 → 0,656 (C : 0,775 → 0,753). Hausses nettes aussi pour C# (0,352 → 0,674 ; p99,9 777 → 180 µs),
+Zig (0,441 → 0,763), Odin (0,288 → 0,384) et Julia (0,095 → 0,169). Baisses pour C++ (0,763 → 0,640) et surtout C3
+(0,516 → 0,330), dont la queue ne bouge pas (maximum 2,2 ms dans les deux campagnes) quand celle des autres raccourcit.
+La latence la plus régulière est désormais celle de Zig (p99,9 = 3,0 fois la médiane), puis Nim et Mojo. Dans la
+remesure, le vol corrèle encore avec les queues (corrélation de rang 0,49 pour le p99,9 sur les 70 processus des
+langages qui passent par `malloc`), mais sept processus par langage en amortissent l'effet. Tableau complet :
+`results/report_rust.md`.
+
+### 4.3 Report sur les données principales et classement
+
+K7 tuned : transfert 538,9 ms, pont 513,2 ms, écart 5 % : transfert retenu (× 1,082). Sensibilités : K9 naturel,
+écart − 31 %, pont retenu (× 0,801 au lieu de 0,553 ; le C de ce stencil va 2,3 fois plus vite sur cet hôte que sur
+Cascade Lake, le cas déjà vu pour D et Chapel) ; Q1 tuned transfert (× 0,825), Q1 `mt` pont (× 0,697, écart 26 %) ;
+K8 tuned transfert (× 0,742).
+
+| Scénario | Score de Rust | Contrôle C | Plafond E | Défaut D | Rang espéré | Place | Rang 90 % |
+|---|---|---|---|---|---|---|---|
+| Avant (publié avant la remarque, refait par le même code) | 69,4 | 73,6 | 79,6 | 47,2 | 7,57 | 9 | 4–11 |
+| R-D3 : D3 remesuré, seul | 70,8 | 73,6 | 79,6 | 52,9 | 6,31 | 5 | 3–10 |
+| R-K7 (= D3-ancien) : K7 corrigé, seul | 69,1 | 73,6 | 78,8 | 47,2 | 7,79 | 9 | 4–11 |
+| **Publié** : D3 remesuré et K7 corrigé (Publié-T identique) | **70,5** | 73,6 | **78,8** | **52,9** | **6,55** | **6** | 3–10 |
+| S-K9 / S-K9-T : K9 naturel en `Vec<[f64; M9]>` | 70,6 / 70,7 | 73,6 | 78,8 | 53,2 / 53,8 | 6,38 / 6,06 | 5 / 5 | 3–10 / 2–10 |
+| S-Q1 / S-Q1-T : `_popcnt32` | 71,0 / 70,8 | 73,6 | 80,2 / 79,6 | 52,9 | 6,15 / 6,31 | 5 / 5 | 2–10 / 3–10 |
+| S-K8 (= S-K8-T) : arène comme en C | 71,7 | 73,6 | 81,8 | 52,9 | 5,66 | 5 | 2–9 |
+| S-libc-R : libc étendue à Rust | 73,5 | 82,1 | 78,8 | 52,9 | 4,49 | 4 | 1–8 |
+| S-libc-FFI : libc étendue aux langages à FFI | 73,5 | 82,1 | 78,8 | 52,9 | 5,17 | 4 | 2–9 |
+| S-tout / S-tout-T | 75,3 / 75,2 | 82,1 | 83,2 / 82,6 | 53,2 / 53,8 | 3,27 / 3,15 | 2 / 2 | 1–6 |
+| D3-strict : processus à vol > 0,5 % écartés | 70,5 | 73,6 | 78,8 | 52,9 | 6,64 | 7 | 3–10 |
+
+* **Publié** : Rust passe de 69,4 à 70,5 points et de la 9e à la 6e place (rang espéré 6,55), à égalité avec C3
+  (6,47) et Nim (6,57) : il devance C3 dans 47 % des variantes et Nim dans 51 %. La remesure de D3 lui vaut 1,4 point
+  et quatre places à elle seule ; la correction de K7 lui en reprend 0,3 et une place.
+* **Les autres langages** : le nouvel ordre est C, C++, Odin, Zig (5e → 4e), C3 (4e → 5e), Rust, Nim (6e → 7e), D
+  (8e), Ada (7e → 9e), Chapel, Fortran, Julia, Mojo, C# (54,8 → 56,0 points, toujours 14e). D3-strict donne le même
+  ordre en tête, mais Nim 5e et Rust 7e : l'ordre de C3, Rust et Nim n'est pas établi.
+* **Sensibilités** : chacune des trois formes de la remarque vaut une place à Rust (5e) ; la libc étendue à Rust, 3,0
+  points et la 4e place ; étendue à tous les langages à FFI, la 4e aussi, Odin et C3 en profitant également ; tout
+  cumulé, 75,3 points et la 2e place, entre C et C++.
+* **La remarque estimait** 71,3 points et la 7e place avec D3 corrigé, 71,5 et la 6e avec K9, 72,3 et la 4e avec Q1
+  et l'arène, la 7e avec la libc étendue à tous les langages à FFI, la 3e (74,5) avec D3, K9 et la libc ; mes calculs
+  donnent 70,8 et la 5e (D3 seul), 70,5 et la 6e (publié, avec K7), la 4e avec la libc étendue à tous, 75,3 et la 2e
+  avec tout.
+
+### 4.4 Verdicts
+
+* **(1) Le score et sa décomposition** : exacts, sauf le premier étage (13 langages, pas 16 : la liste de 16 datait du
+  29 octobre). L'explication du README était fausse : Rust perd d'abord sur le contrôle, puis sur D3 ; son code naturel
+  est meilleur que celui de C. Paragraphe réécrit.
+* **(2a) D3** : exact. Rust ne reposait que sur deux processus, dont le plus volé ; remesuré avec sept processus, sa
+  queue est proche de celle de C. La remesure, faite pour toutes les implémentations, change aussi d'autres places.
+* **(2b) K9 naturel** : exact sur les formes, inexact sur les bornes : sans elles, la boucle reste scalaire ; c'est
+  l'aliasing, comme pour D. Cause corrigée dans le README ; `Vec<[f64; M]>` reste une sensibilité (convention de
+  `docs/NATURAL.md`), une place.
+* **(2c) Q1** : exact (code de Cascade Lake) ; − 17,5 % sur Q1 tuned avec `_popcnt32`, une place en sensibilité.
+* **(2d) À algorithme égal** : exact pour Q1, Q6, K7 et K8 ; pas pour K9 tuned sur cet hôte ; K4 incertain.
+* **(2e) K8 optimisé** : l'arène écrite comme en C gagne 26 %, plus que les 10 % annoncés ; sensibilité, une place.
+* **K7 (proposition 3)** : écart à la convention, corrigé dans le classement publié, sans gain mesuré.
+* **(3) La règle de la libc** : exact ; c'est un choix de règle. Chiffré en sensibilité et inscrit dans les limites du
+  README ; la règle publiée ne change pas. Les autres leviers cités sont hors de la grille.
+* **(4) L'état de Rust** : exact.
+* **Effet** : Rust passe de la 9e à la 6e place (70,5 points), dans la fourchette de la remarque (4e à 7e), mais pour
+  une raison qui touche tous les langages : la queue de latence de K8 était mal mesurée pour beaucoup d'entre eux.

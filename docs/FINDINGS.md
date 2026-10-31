@@ -508,4 +508,15 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **Queues de K8 et vol de temps** (campagne principale) : sur les 24 processus des implémentations qui passent par
   `malloc`, la corrélation de rang entre le vol de l'hyperviseur et le p99,9 vaut 0,81 ; pour un même binaire (Rust), le
   p99,9 passe de 327 à 692 µs quand le vol passe de 0,43 à 0,84 % de la capacité des 4 vCPU.
+* **Préchargement en écriture sur K7** (machine 11) : `prefetchw` au lieu de `prefetcht0` rend la table 1,08 fois plus
+  lente (IC 0,99–1,17), dans la marge des clés témoins au code inchangé (0,93 à 1,03 d'un binaire à l'autre).
+* **Formes de Rust** (machine 11, rapports appariés) : K9 naturel en `Vec<[f64; M]>` 0,553 ; K8 tuned en arène écrite
+  comme en C (index de sommet, `get_unchecked`) 0,742 ; Q1 avec `_popcnt32`, code de Cascade Lake exécuté sur Emerald
+  Rapids, 0,825 (tuned) et 0,879 (`mt`). À algorithme égal, Rust et C font jeu égal sur Q1, Q6, K7 et K8 tuned (1,00 à
+  1,05), pas sur K9 tuned (1,45).
+* **Queues de latence de K8 remesurées** (machine 11, 25 implémentations × 7 processus) : la plus régulière est celle de
+  Zig (p99,9 = 3,0 fois la médiane), puis Nim (3,1) et Mojo (3,2) ; la plus longue des langages compilés sans
+  ramasse-miettes, celle de C3 (p99,9 277 µs, maximum 2,2 ms, comme sur Cascade Lake) ; la pire pause des langages
+  compilés, D (89 ms) ; Julia 30 fois la médiane ; Python 0,76 s. Le vol corrèle encore avec le p99,9 (corrélation de
+  rang 0,49 sur les 70 processus des langages à `malloc`), mais sept processus par langage en amortissent l'effet.
 

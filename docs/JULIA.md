@@ -158,12 +158,12 @@ reporte Julia en 512 bits à 3,87 ms, au niveau de C, ce qui rejoint la mesure d
 | S1 (sensibilité) : formes de la remarque pour Q1, K7, K8 | 67,1 | 73,3 | 74,5 | 9,62 | 10 | 5–13 |
 | S1-K5 : S1 et K5 en 512 bits (pont) | 68,9 | 73,3 | 79,0 | 8,35 | 9 | 4–12 |
 
-Depuis les errata de Chapel (`docs/CHAPEL.md`) et la correction de D (`docs/DLANG.md`), le classement publié donne à
-Julia un rang espéré de 11,29, sans changer son score, sa place (12e) ni son rang plausible (7–13). Rejouées dans ce
-même état le 31 octobre (même code, sorties `results/julia_check_current.json` et `results/report_julia_current.md`),
-les sensibilités donnent S1 67,1 points et la 11e place (rang espéré 9,93), Chapel la devançant désormais, et S1-K5
-68,9 points et la 10e place (8,67), entre Rust et Chapel, D étant passé devant : une ou deux places au lieu de deux ou
-trois.
+Depuis les errata de Chapel (`docs/CHAPEL.md`), la correction de D (`docs/DLANG.md`) et la remesure des queues de
+latence de K8 (`docs/RUST.md`), le classement publié donne à Julia 64,3 points et un rang espéré de 11,20, sans changer
+sa place (12e) ni son rang plausible (7–13). Rejouées dans ce même état le 31 octobre (même code, sorties
+`results/julia_check_current.json` et `results/report_julia_current.md`), les sensibilités donnent S1 67,4 points et la
+11e place (rang espéré 9,82), Chapel la devançant désormais, et S1-K5 69,2 points et la 10e place (8,54), entre Ada et
+Chapel : une ou deux places au lieu de deux ou trois.
 
 * **Publié** : les errata rapportent 1,8 point (le contrôle passe de 68,3 à 73,3). Julia reste 12e, à 0,1 point de
   Chapel, qui la devance dans 63 % des variantes ; elle devance Mojo dans 63 %.

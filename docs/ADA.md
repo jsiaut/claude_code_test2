@@ -151,9 +151,12 @@ Rapports appariés `ada_fix` / `ada` (moyenne géométrique de 7 processus chacu
 | S1-K5 : avec le transfert de K5 | 71,2 | 77,2 | 80,6 | 6,96 (7e) | 2–11 |
 | S1-27 : les 27 rapports | 70,9 | 76,6 | 80,6 | 6,65 (7e) | 2–11 |
 
-Depuis les corrections de Fortran, de Mojo, de Julia et de Chapel (`docs/FORTRAN.md`, `docs/MOJO.md`,
-`docs/JULIA.md`, `docs/CHAPEL.md`), le classement publié donne à Ada un rang espéré de 7,09, sans changer son score, sa
-place (7e) ni son rang plausible (2–11).
+Depuis les corrections de Fortran, de Mojo, de Julia et de Chapel (`docs/FORTRAN.md`, `docs/MOJO.md`, `docs/JULIA.md`,
+`docs/CHAPEL.md`), le classement publié donne à Ada un rang espéré de 7,09, sans changer son score, sa place (7e) ni son
+rang plausible (2–11). Depuis la correction de D (`docs/DLANG.md`) et surtout la remesure des queues de latence de K8
+pour tous les langages (31 octobre, `docs/RUST.md`), Ada a 71,7 points et n'est plus que 9e (rang espéré 7,94 ; rang
+plausible 3–12) : sa propre queue change peu (D3 0,551 → 0,570), mais celles de Rust, de Zig et d'autres raccourcissent,
+et C3, Rust et Nim la devancent désormais dans 64 à 66 % des variantes.
 
 * **S1** : C, C++, Odin, C3, Zig, Nim, **Ada**, Rust, D, Chapel… Ada est 4e au score de référence (71,6, derrière C,
   C++ et Odin), mais 7e en rang espéré : il devance Rust dans 52 % des variantes, D dans 62 %, et Nim le devance dans

@@ -218,3 +218,7 @@ et S-tout-T, par transfert seul.
   qui ne changent pas le score ponctuel (la règle v2 les comptait déjà), et de Q1 : la forme corrigée reste à 1,11 fois
   le C sur l'hôte, quand la remarque la mesurait plus rapide que lui (22,4 contre 23,2 ms). Le transfert seul donne
   aussi la 8e place.
+
+Note du 31 octobre au soir (remarque sur Rust, `docs/RUST.md`) : après la remesure des queues de latence de K8 pour
+tous les langages, D garde 72,6 points et la 8e place (rang espéré 7,34 ; pause maximale de K8 89 ms sur Emerald
+Rapids, la pire des langages compilés) ; Zig le dépasse au score (72,7), et D devient 4e au score.
