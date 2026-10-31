@@ -1,0 +1,5 @@
+#!/bin/sh
+# Remarque sur C# (docs/CSHARP.md) : copie bench/csharp_exp, optimisation complète dès le premier appel
+# (compilation à niveaux désactivée). Sensibilité.
+export DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1 DOTNET_TieredCompilation=0
+exec /opt/dotnet/dotnet "$(dirname "$0")/../csharp_exp/bin/rel/ms.dll" "$@"

@@ -1,0 +1,50 @@
+==== DOTNET_PreferredVectorBitWidth=(défaut)
+Vector512.IsHardwareAccelerated=True Vector256.IsHardwareAccelerated=True Avx512F.IsSupported=True Vector<byte>.Count=32
+K1SoA : 54 lignes avec zmm ; vfmadd213ps zmm3, zmm3, zmm2
+==== DOTNET_PreferredVectorBitWidth=256
+Vector512.IsHardwareAccelerated=False Vector256.IsHardwareAccelerated=True Avx512F.IsSupported=True Vector<byte>.Count=32
+K1SoA : 72 lignes avec zmm ; vfmadd213ps zmm3, zmm3, zmm2
+==== codeman.cpp (dotnet/runtime, 591622c6)
+1873:        // Some architectures can experience frequency throttling when executing
+1874-        // executing 512-bit width instructions. To account for this we set the
+1875-        // default preferred vector width to 256-bits in some scenarios. Power
+1876-        // users can override this with `DOTNET_PreferredVectorBitWidth=512` to
+1877-        // allow using such instructions where hardware support is available.
+1878-
+1879-        if (xarchCpuInfo.FamilyId == 0x06)
+1880-        {
+1881-            if (xarchCpuInfo.ExtendedModelId == 0x05)
+1882-            {
+1883-                if (xarchCpuInfo.Model == 0x05)
+1884-                {
+1885-                    // * Skylake (Server)
+1886-                    // * Cascade Lake
+1887-                    // * Cooper Lake
+1888-
+1889-                    throttleVector512 = true;
+1890-                }
+1891-            }
+1892-            else if (xarchCpuInfo.ExtendedModelId == 0x06)
+1893-            {
+1894-                if (xarchCpuInfo.Model == 0x06)
+1895-                {
+1896-                    // * Cannon Lake
+1897-
+1898-                    throttleVector512 = true;
+1899-                }
+1900-            }
+1901-        }
+1902-    }
+1903-
+1904-    // If we have a PreferredVectorBitWidth, we will pass that to JIT in the form of a virtual vector ISA of the
+1905-    // appropriate size. We will also clamp the max Vector<T> size to be no larger than PreferredVectorBitWidth,
+1906-    // because JIT maps Vector<T> to the fixed-width vector of matching size for the purposes of intrinsic
+1907-    // resolution. We want to avoid a situation where e.g. Vector.IsHardwareAccelerated returns false
+1908-    // because Vector512.IsHardwareAccelerated returns false due to config or automatic throttling.
+1909-
+1910-    uint32_t preferredVectorBitWidth = (CLRConfig::GetConfigValue(CLRConfig::EXTERNAL_PreferredVectorBitWidth) / 128) * 128;
+1911-
+1912-    if ((preferredVectorBitWidth == 0) && throttleVector512)
+1913-    {
+1914-        preferredVectorBitWidth = 256;
+1915-    }

@@ -28,3 +28,5 @@ bench/*/layout/
 
 # copie standard de Java (confrontation) : sortie de compilation
 bench/java_std/classes/
+tools/*/*/obj/
+tools/*/*/bin/

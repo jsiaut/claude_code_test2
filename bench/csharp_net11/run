@@ -1,0 +1,5 @@
+#!/bin/sh
+# Remarque sur C# (docs/CSHARP.md) : binaire de la campagne (bench/csharp, IL pour net10.0) exécuté par le runtime
+# .NET 11.0.0-rc.3.26522.148 (préversion, /opt/dotnet11) : seul le JIT et la bibliothèque changent. Information.
+export DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1 DOTNET_ROLL_FORWARD=Major DOTNET_ROLL_FORWARD_TO_PRERELEASE=1
+exec /opt/dotnet11/dotnet "$(dirname "$0")/../csharp/bin/rel/ms.dll" "$@"

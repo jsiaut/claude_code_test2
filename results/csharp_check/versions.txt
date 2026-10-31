@@ -1,0 +1,8 @@
+== .NET 10
+10.0.403 [/opt/dotnet/sdk]
+Microsoft.AspNetCore.App 10.0.14 [/opt/dotnet/shared/Microsoft.AspNetCore.App]
+Microsoft.NETCore.App 10.0.14 [/opt/dotnet/shared/Microsoft.NETCore.App]
+== .NET 11
+11.0.100-rc.3.26522.148 [/opt/dotnet11/sdk]
+Microsoft.AspNetCore.App 11.0.0-rc.3.26522.148 [/opt/dotnet11/shared/Microsoft.AspNetCore.App]
+Microsoft.NETCore.App 11.0.0-rc.3.26522.148 [/opt/dotnet11/shared/Microsoft.NETCore.App]

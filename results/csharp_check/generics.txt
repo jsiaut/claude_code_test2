@@ -1,0 +1,17 @@
+==== C# : G.Apply<T> où T : IAdder (FullOpts)
+; Assembly listing for method G:Apply[P](P,int):int (FullOpts)
+       lea      eax, [rdi+rsi]
+; Assembly listing for method G:Apply[System.__Canon](System.__Canon,int):int (FullOpts)
+       mov      rbp, rsp
+       mov      rdi, rsi
+       mov      esi, edx
+       mov      r11, 0x7F3A3E050018
+       call     [r11]IAdder:Add(int):int:this
+==== Go 1.27 : symboles et appels de main.Apply / main.Sum
+main.Apply[go.shape.struct { main.v int }] STEXT dupok size=71 align=0x0 args=0x18 locals=0x18 funcid=0x0
+	0x001a 00026 (/home/user/claude_code_test2/tools/csharp_check/generics_go/main.go:20)	CALL	SI
+main.Apply[main.P] STEXT dupok size=70 align=0x0 args=0x10 locals=0x20 funcid=0x17
+main.Sum[go.shape.float64] STEXT dupok nosplit size=29 align=0x0 args=0x20 locals=0x0 funcid=0x0
+main.Sum[float64] STEXT dupok size=86 align=0x0 args=0x18 locals=0x28 funcid=0x17
+main.Sum[go.shape.int] STEXT dupok nosplit size=27 align=0x0 args=0x20 locals=0x0 funcid=0x0
+main.Sum[int] STEXT dupok size=86 align=0x0 args=0x18 locals=0x28 funcid=0x17

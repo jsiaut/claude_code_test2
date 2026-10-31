@@ -1,0 +1,20 @@
+==== csharp_exp, protocole P0 : en-têtes des listings de Q1Tuned
+; Assembly listing for method Ms:Q1Tuned(int,int,long[]) (Instrumented Tier0)
+; compiling with minopt
+; Total bytes of code 9128
+; Assembly listing for method Ms:Q1Tuned(int,int,long[]) (Tier1-OSR)
+; Tier1-OSR code
+; OSR variant for entry point 0x5b9
+; optimized code
+; optimized using Synthesized PGO
+; Assembly listing for method Ms:Q1Tuned(int,int,long[]) (Tier1-OSR)
+; Tier1-OSR code
+; OSR variant for entry point 0x5b9
+; compiling with minopt
+; Total bytes of code 9037
+==== csharp_exp, FullOpts
+; Assembly listing for method Ms:Q1Tuned(int,int,long[]) (FullOpts)
+; optimized code
+; Total bytes of code 5351
+==== binaire de la campagne, protocole P0 : niveau de Q1Tuned
+  14: JIT compiled Ms:Q1Tuned(int,int,long[]) [Tier-0 switched to FullOpts, IL size=951, code size=1644]

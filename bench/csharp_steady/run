@@ -1,0 +1,5 @@
+#!/bin/sh
+# Remarque sur C# (docs/CSHARP.md) : binaire et réglages de la campagne (bench/csharp) ; le régime établi vient du
+# nombre d'échauffements, fixé par tools/measure_csharp.py (120). Sensibilité du protocole.
+export DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1
+exec /opt/dotnet/dotnet "$(dirname "$0")/../csharp/bin/rel/ms.dll" "$@"

@@ -1,0 +1,10 @@
+cache size	: 266240 KB
+cpu MHz		: 2100.000
+microcode	: 0x1
+model		: 207
+model name	: Intel(R) Xeon(R) Processor @ 2.10GHz
+stepping	: 2
+4
+               total        used        free      shared  buff/cache   available
+Mem:              15           0          13           0           1          14
+2026-10-31 12:08:38

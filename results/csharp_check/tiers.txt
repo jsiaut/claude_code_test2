@@ -1,0 +1,40 @@
+==== WARMUP=3
+k1 natural : méthode K1Natural : Instrumented Tier0 -> Tier1-OSR @0x5a with Synthesized PGO ; médiane 35.96 ms
+k1 aos : méthode K1AoS : Instrumented Tier0 -> Tier1-OSR @0x174 with Synthesized PGO ; médiane 25.54 ms
+k1 soa : méthode K1SoA : Instrumented Tier0 -> Tier1-OSR @0x9d with Synthesized PGO ; médiane 5.71 ms
+k2 tuned 16384: méthode K2Chase : Instrumented Tier0 -> Tier1-OSR @0x1b with Synthesized PGO ; médiane 11.96 ms
+k2 tuned 262144: méthode K2Chase : Instrumented Tier0 -> Tier1-OSR @0x1b with Synthesized PGO ; médiane 23.93 ms
+k3 sw_padded : méthode RunK3>b__1 : Instrumented Tier0 -> Tier1-OSR @0x7b with Synthesized PGO ; médiane 78.95 ms
+k4 natural_unsorted : méthode K4Natural : Instrumented Tier0 -> Tier1-OSR @0x1e with Synthesized PGO ; médiane 77.85 ms
+k4 branchless_unsorted : méthode K4Branchless : Instrumented Tier0 -> Tier1-OSR @0x1b with Synthesized PGO ; médiane 17.46 ms
+k5 natural : méthode K5Natural : Instrumented Tier0 -> Tier1-OSR @0x18 with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x18 with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 70.08 ms
+k5 tuned : méthode K5Tuned : Instrumented Tier0 ; médiane 20.85 ms
+k6 natural q6: méthode Q6Natural : Instrumented Tier0 -> Tier1-OSR @0x5a with Synthesized PGO ; médiane 121.37 ms
+k6 tuned q6: méthode Q6Tuned : Instrumented Tier0 -> Tier1-OSR @0xd1 with Synthesized PGO ; médiane 17.51 ms
+k6 natural q1: méthode Q1Natural : Instrumented Tier0 -> Tier1-OSR @0xa7 with Synthesized PGO ; médiane 98.52 ms
+k6 tuned q1: méthode Q1Tuned : Tier-0 switched to FullOpts ; médiane 41.81 ms
+k6 mt q6: méthode Q6Tuned : Instrumented Tier0 -> Tier1-OSR @0xd1 with Synthesized PGO ; médiane 8.86 ms
+k6 mt q1: méthode Q1Tuned : Tier-0 switched to FullOpts ; médiane 16.14 ms
+k9 natural : méthode K9Natural : Instrumented Tier0 -> Tier1-OSR @0x49 with Synthesized PGO ; médiane 59.19 ms
+k9 tuned : méthode K9Rows : Instrumented Tier0 -> Tier1-OSR @0xb2 with Synthesized PGO ; médiane 31.74 ms
+k9 mt : méthode K9Rows : Instrumented Tier0 -> Tier1-OSR @0xb2 with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0xb2 with Synthesized PGO ; médiane 16.17 ms
+==== WARMUP=120
+k1 natural : méthode K1Natural : Instrumented Tier0 -> Tier1-OSR @0x5a with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x5a with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 43.62 ms
+k1 aos : méthode K1AoS : Instrumented Tier0 -> Tier1-OSR @0x174 with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x174 with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 24.40 ms
+k1 soa : méthode K1SoA : Instrumented Tier0 -> Tier1-OSR @0x9d with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x9d with Synthesized PGO -> Tier1 with Dynamic PGO ; médiane 4.35 ms
+k2 tuned 16384: méthode K2Chase : Instrumented Tier0 -> Tier1-OSR @0x1b with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x1b with Synthesized PGO -> Tier1 with Dynamic PGO ; médiane 7.93 ms
+k2 tuned 262144: méthode K2Chase : Instrumented Tier0 -> Tier1-OSR @0x1b with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x1b with Synthesized PGO -> Tier1 with Dynamic PGO ; médiane 22.86 ms
+k3 sw_padded : méthode RunK3>b__1 : Instrumented Tier0 -> Tier1-OSR @0x7b with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x7b with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 75.07 ms
+k4 natural_unsorted : méthode K4Natural : Instrumented Tier0 -> Tier1-OSR @0x1e with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x1e with Synthesized PGO -> Tier1 with Dynamic PGO ; médiane 82.12 ms
+k4 branchless_unsorted : méthode K4Branchless : Instrumented Tier0 -> Tier1-OSR @0x1b with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x1b with Synthesized PGO -> Tier1 with Dynamic PGO ; médiane 15.26 ms
+k5 natural : méthode K5Natural : Instrumented Tier0 -> Tier1-OSR @0x18 with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x18 with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 83.93 ms
+k5 tuned : méthode K5Tuned : Instrumented Tier0 -> Instrumented Tier0 -> Tier1 with Dynamic PGO ; médiane 4.13 ms
+k6 natural q6: méthode Q6Natural : Instrumented Tier0 -> Tier1-OSR @0x5a with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x5a with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 130.13 ms
+k6 tuned q6: méthode Q6Tuned : Instrumented Tier0 -> Tier1-OSR @0xd1 with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0xd1 with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 17.34 ms
+k6 natural q1: méthode Q1Natural : Instrumented Tier0 -> Tier1-OSR @0xa7 with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0xa7 with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 87.00 ms
+k6 tuned q1: méthode Q1Tuned : Tier-0 switched to FullOpts ; médiane 39.81 ms
+k6 mt q6: méthode Q6Tuned : Instrumented Tier0 -> Tier1-OSR @0xd1 with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0xd1 with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 5.37 ms
+k6 mt q1: méthode Q1Tuned : Tier-0 switched to FullOpts ; médiane 13.65 ms
+k9 natural : méthode K9Natural : Instrumented Tier0 -> Tier1-OSR @0x49 with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0x49 with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 57.10 ms
+k9 tuned : méthode K9Rows : Instrumented Tier0 -> Tier1-OSR @0xb2 with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0xb2 with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 24.77 ms
+k9 mt : méthode K9Rows : Instrumented Tier0 -> Tier1-OSR @0xb2 with Synthesized PGO -> Instrumented Tier0 -> Tier1-OSR @0xb2 with Synthesized PGO -> Tier1 with Synthesized PGO ; médiane 16.81 ms

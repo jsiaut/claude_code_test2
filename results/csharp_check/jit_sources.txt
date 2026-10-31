@@ -1,0 +1,87 @@
+==== main : 591622c69134f9a790f902e364c7a6a5c572b12d Sat Oct 31 07:08:17 2026 -0400
+555-    if (!m_compiler->compStressCompile(Compiler::STRESS_IF_CONVERSION_INNER_LOOPS, 25))
+556-    {
+557:        // Don't optimise the block if it is inside a loop. Loop-carried
+558-        // dependencies can cause significant stalls if if-converted.
+559-        // Detect via the block weight as that will be high when inside a loop.
+560-
+561-        if (m_startBlock->getBBWeight(m_compiler) > BB_UNITY_WEIGHT * 1.05)
+562-        {
+563-            JITDUMP("Skipping if-conversion inside loop (via weight)\n");
+564-            return false;
+565-        }
+566-
+567-        // We may be inside an unnatural loop, so do the expensive check.
+==== recherche d'un vectoriseur de boucles dans src/coreclr/jit (main) :
+(aucun fichier)
+==== refs/pull/127032/head : propres commits de la PR
+ce65dafc 2026-04-17 EgorBo : SearchValues: use cmtst for IsNonZero byte-mask on Arm64
+db270ba1 2026-04-17 EgorBo : Ascii: unroll NarrowUtf16ToAscii 128-bit main loop 2x on Arm64
+09c488b7 2026-04-16 egorbo : JIT: tune branchless heuristics more aggressively for ARM64
+diff --git a/src/coreclr/jit/ifconversion.cpp b/src/coreclr/jit/ifconversion.cpp
+index 83664322..52ea4c71 100644
+--- a/src/coreclr/jit/ifconversion.cpp
++++ b/src/coreclr/jit/ifconversion.cpp
+@@ -436,7 +436,15 @@ bool OptIfConversionDsc::optIfConvert(int* pReachabilityBudget)
+         }
+ 
+         // Cost to allow for "x = cond ? a + b : c + d".
+-        if (thenCost > 7 || elseCost > 7)
++        // On ARM64 the result instruction (csel/csinc/csinv/csneg) is ~1c and
++        // not predicted, so tolerate substantially more work on both arms to
++        // turn a predicted branch into a data dependency.
++#ifdef TARGET_ARM64
++        const int maxArmCost = 15;
++#else
++        const int maxArmCost = 7;
++#endif
++        if (thenCost > maxArmCost || elseCost > maxArmCost)
+         {
+             JITDUMP("Skipping if-conversion that will evaluate RHS unconditionally at costs %d,%d\n", thenCost,
+                     elseCost);
+@@ -444,11 +452,17 @@ bool OptIfConversionDsc::optIfConvert(int* pReachabilityBudget)
+         }
+     }
+ 
++#ifndef TARGET_ARM64
+     if (!m_compiler->compStressCompile(Compiler::STRESS_IF_CONVERSION_INNER_LOOPS, 25))
+     {
+         // Don't optimise the block if it is inside a loop. Loop-carried
+         // dependencies can cause significant stalls if if-converted.
+         // Detect via the block weight as that will be high when inside a loop.
++        //
++        // On ARM64 csel/csinc/ccmp turn a mispredict into a fixed 1c data
++        // dependency, which is typically a win even inside loops; skip this
++        // guard entirely there so we fold branchlessly whenever the cost
++        // budget allows.
+ 
+         if (m_startBlock->getBBWeight(m_compiler) > BB_UNITY_WEIGHT * 1.05)
+         {
+@@ -470,6 +484,9 @@ bool OptIfConversionDsc::optIfConvert(int* pReachabilityBudget)
+             return false;
+         }
+     }
++#else
++    (void)pReachabilityBudget;
++#endif // !TARGET_ARM64
+ 
+     // Get the select node inputs.
+     var_types selectType;
+@@ -832,7 +849,14 @@ PhaseStatus Compiler::optIfConversion()
+     BasicBlock* block = fgLastBB;
+ 
+     // Budget for optReachability - to avoid spending too much time detecting loops in large methods.
++    // Irrelevant on ARM64 where we no longer skip inside-loop candidates (csel
++    // has fixed latency and doesn't suffer from mispredicts), but we still
++    // keep the parameter for other targets.
++#ifdef TARGET_ARM64
++    int reachabilityBudget = INT_MAX;
++#else
+     int reachabilityBudget = 20000;
+==== refs/pull/127853/head : derniers commits
+f016e5d8 2026-05-06 Steven He : Reject checked arithmetic in auto vectorizer
+9eb00947 2026-05-06 Steven He : Synthesize profile after auto vectorization phase
+02fd1cb0 2026-05-06 Steven He : Avoid unsafe loop def queries in auto vectorizer
+edf84f70 2026-05-06 Steven He : Guard auto vectorizer compare intrinsics by target
+cc3ca068 2026-05-06 Steven He : Clean up auto vectorizer policy and budgets
+3345e72e 2026-05-06 Steven He : Improve min max reduction vectorization

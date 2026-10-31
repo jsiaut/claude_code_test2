@@ -1,0 +1,2612 @@
+==== .NET 10, P0 (WARMUP=3, TieredCompilation=1), K4Branchless
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7F28A53821E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7F28A53821EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7FB398B821E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7FB398B821EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7FB398B821E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7FB398B821EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1 code
+; optimized code
+; optimized using Dynamic PGO
+; rbp based frame
+; fully interruptible
+; with Dynamic PGO: fgCalledCount is 100
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG04
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG04:                ;; offset=0x002C
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 46
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (FullOpts)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG04
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG04:                ;; offset=0x002C
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 46
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7F5BE23921E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7F5BE23921EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+==== .NET 10, W120 (WARMUP=120, TieredCompilation=1), K4Branchless
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7F28A53821E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7F28A53821EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7FB398B821E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7FB398B821EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7FB398B821E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7FB398B821EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1 code
+; optimized code
+; optimized using Dynamic PGO
+; rbp based frame
+; fully interruptible
+; with Dynamic PGO: fgCalledCount is 100
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG04
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG04:                ;; offset=0x002C
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 46
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (FullOpts)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG04
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG04:                ;; offset=0x002C
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 46
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7F5BE23921E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7F5BE23921EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7F655B5921E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7F655B5921EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7F655B5921E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7F655B5921EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1 code
+; optimized code
+; optimized using Dynamic PGO
+; rbp based frame
+; fully interruptible
+; with Dynamic PGO: fgCalledCount is 100
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG04
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG04:                ;; offset=0x002C
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 46
+
+==== .NET 10, FullOpts (WARMUP=3, TieredCompilation=0), K4Branchless
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7F28A53821E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7F28A53821EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7FB398B821E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7FB398B821EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7FB398B821E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7FB398B821EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1 code
+; optimized code
+; optimized using Dynamic PGO
+; rbp based frame
+; fully interruptible
+; with Dynamic PGO: fgCalledCount is 100
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG04
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG04:                ;; offset=0x002C
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 46
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (FullOpts)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG04
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG04:                ;; offset=0x002C
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 46
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7F5BE23921E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7F5BE23921EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7F655B5921E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7F655B5921EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Instrumented Tier0)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Instrumented Tier0 code
+; rbp based frame
+; fully interruptible
+; compiling with minopt
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       sub      rsp, 80
+       lea      rbp, [rsp+0x50]
+       vxorps   xmm8, xmm8, xmm8
+       vmovdqu  xmmword ptr [rbp-0x48], xmm8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      gword ptr [rbp-0x30], rdi
+ 
+G_M000_IG02:                ;; offset=0x001E
+       mov      dword ptr [rbp-0x50], 0x3E8
+       xor      eax, eax
+       mov      qword ptr [rbp-0x38], rax
+       mov      rax, gword ptr [rbp-0x30]
+       mov      gword ptr [rbp-0x40], rax
+       xor      eax, eax
+       mov      dword ptr [rbp-0x44], eax
+       jmp      SHORT G_M000_IG04
+ 
+G_M000_IG03:                ;; offset=0x003A
+       mov      rdi, 0x7F655B5921E8
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, gword ptr [rbp-0x40]
+       mov      ecx, dword ptr [rbp-0x44]
+       cmp      ecx, dword ptr [rax+0x08]
+       jae      SHORT G_M000_IG08
+       mov      edx, ecx
+       lea      rax, bword ptr [rax+rdx+0x10]
+       movzx    rax, byte  ptr [rax]
+       mov      dword ptr [rbp-0x48], eax
+       mov      eax, dword ptr [rbp-0x48]
+       mov      ecx, dword ptr [rbp-0x48]
+       sar      ecx, 7
+       movsxd   rcx, ecx
+       imul     rax, rcx
+       add      rax, qword ptr [rbp-0x38]
+       mov      qword ptr [rbp-0x38], rax
+       mov      eax, dword ptr [rbp-0x44]
+       inc      eax
+       mov      dword ptr [rbp-0x44], eax
+ 
+G_M000_IG04:                ;; offset=0x0082
+       mov      eax, dword ptr [rbp-0x50]
+       dec      eax
+       mov      dword ptr [rbp-0x50], eax
+       cmp      dword ptr [rbp-0x50], 0
+       jg       SHORT G_M000_IG06
+ 
+G_M000_IG05:                ;; offset=0x0090
+       lea      rdi, [rbp-0x50]
+       mov      esi, 27
+       call     CORINFO_HELP_PATCHPOINT
+ 
+G_M000_IG06:                ;; offset=0x009E
+       mov      rax, gword ptr [rbp-0x40]
+       mov      eax, dword ptr [rax+0x08]
+       cmp      eax, dword ptr [rbp-0x44]
+       jg       SHORT G_M000_IG03
+       mov      rdi, 0x7F655B5921EC
+       call     CORINFO_HELP_COUNTPROFILE32
+       mov      rax, qword ptr [rbp-0x38]
+ 
+G_M000_IG07:                ;; offset=0x00BD
+       add      rsp, 80
+       pop      rbp
+       ret      
+ 
+G_M000_IG08:                ;; offset=0x00C3
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 201
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1-OSR)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1-OSR code
+; OSR variant for entry point 0x1b
+; optimized code
+; optimized using Synthesized PGO
+; rbp based frame
+; fully interruptible
+; with Synthesized PGO: fgCalledCount is 1
+
+G_M000_IG01:                ;; offset=0x0000
+       mov      rax, qword ptr [rbp]
+       push     rax
+       mov      rbp, rsp
+       mov      rax, qword ptr [rbp+0x28]
+       mov      rcx, gword ptr [rbp+0x20]
+       mov      edx, dword ptr [rbp+0x1C]
+ 
+G_M000_IG02:                ;; offset=0x0013
+       mov      edi, dword ptr [rcx+0x08]
+       cmp      edi, edx
+       jle      SHORT G_M000_IG05
+ 
+G_M000_IG03:                ;; offset=0x001A
+       mov      edx, edx
+       align    [4 bytes for IG04]
+ 
+G_M000_IG04:                ;; offset=0x0020
+       cmp      edx, edi
+       jae      SHORT G_M000_IG06
+       movzx    rsi, byte  ptr [rcx+rdx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      edx
+       cmp      edi, edx
+       jg       SHORT G_M000_IG04
+ 
+G_M000_IG05:                ;; offset=0x0040
+       add      rsp, 96
+       pop      rbp
+       ret      
+ 
+G_M000_IG06:                ;; offset=0x0046
+       call     CORINFO_HELP_RNGCHKFAIL
+       int3     
+ 
+; Total bytes of code 76
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (Tier1)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; Tier1 code
+; optimized code
+; optimized using Dynamic PGO
+; rbp based frame
+; fully interruptible
+; with Dynamic PGO: fgCalledCount is 100
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG04
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG04:                ;; offset=0x002C
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 46
+
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (FullOpts)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG04
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       movsxd   rsi, esi
+       imul     rsi, r8
+       add      rax, rsi
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG04:                ;; offset=0x002C
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 46
+
+==== .NET 10, FullOpts, K4Natural
+; Assembly listing for method Ms:K4Natural(byte[]):ulong (FullOpts)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG06
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       cmp      esi, 128
+       jl       SHORT G_M000_IG05
+ 
+G_M000_IG04:                ;; offset=0x001E
+       mov      esi, esi
+       add      rax, rsi
+ 
+G_M000_IG05:                ;; offset=0x0023
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG06:                ;; offset=0x0029
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 43
+
+; Assembly listing for method Ms:K4Natural(byte[]):ulong (FullOpts)
+; Emitting BLENDED_CODE for generic X64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG06
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       cmp      esi, 128
+       jl       SHORT G_M000_IG05
+ 
+G_M000_IG04:                ;; offset=0x001E
+       mov      esi, esi
+       add      rax, rsi
+ 
+G_M000_IG05:                ;; offset=0x0023
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG06:                ;; offset=0x0029
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 43
+
+==== .NET 11 RC3, FullOpts, K4Branchless
+; Assembly listing for method Ms:K4Branchless(byte[]):ulong (FullOpts)
+; Emitting BLENDED_CODE for x64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG04
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       mov      r8d, esi
+       sar      esi, 7
+       imul     rsi, r8
+       add      rax, rsi
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG04:                ;; offset=0x0029
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 43
+
+==== .NET 11 RC3, FullOpts, K4Natural
+; Assembly listing for method Ms:K4Natural(byte[]):ulong (FullOpts)
+; Emitting BLENDED_CODE for x64 + VEX + EVEX on Unix
+; FullOpts code
+; optimized code
+; rbp based frame
+; fully interruptible
+; No PGO data
+
+G_M000_IG01:                ;; offset=0x0000
+       push     rbp
+       mov      rbp, rsp
+ 
+G_M000_IG02:                ;; offset=0x0004
+       xor      eax, eax
+       xor      ecx, ecx
+       mov      edx, dword ptr [rdi+0x08]
+       test     edx, edx
+       jle      SHORT G_M000_IG06
+       align    [1 bytes for IG03]
+ 
+G_M000_IG03:                ;; offset=0x0010
+       movzx    rsi, byte  ptr [rdi+rcx+0x10]
+       cmp      esi, 128
+       jl       SHORT G_M000_IG05
+ 
+G_M000_IG04:                ;; offset=0x001E
+       mov      esi, esi
+       add      rax, rsi
+ 
+G_M000_IG05:                ;; offset=0x0023
+       inc      ecx
+       cmp      edx, ecx
+       jg       SHORT G_M000_IG03
+ 
+G_M000_IG06:                ;; offset=0x0029
+       pop      rbp
+       ret      
+ 
+; Total bytes of code 43
+

@@ -628,3 +628,14 @@ Robustesse :
   K1 aos ; et, pour la confrontation, la meilleure forme standard par clé (K1 aos garde la boucle d'origine, sans
   effet sur le résultat). Confrontation corrigée : sous la règle du standard, le plafond de Chapel passe de 49,3 à
   72,1 (scénario C, état actuel). Les scénarios de Zig sont recalculés (S1 : 2,72 ; A' : 5,80 ; même verdict).
+* 2026-10-31, 12:08 : **machine 9**. La VM redémarre sur un hôte Emerald Rapids du même modèle que les machines 3 et 8
+  (modèle 207, révision 2, 4 vCPU ; latence à 4 Mio 61 ns, DRAM 13,5 Go/s : `results/hw/machine9/`). Les données de
+  `/opt/msdata`, régénérées par `tools/gendata.c`, sont identiques au bit près (`results/msdata_sha256.txt`).
+* 2026-10-31, début d'après-midi : **plan de la remarque sur C#** (`docs/CSHARP.md`, sections 1 à 3), poussé avant les
+  mesures. Vérifications faites avant le plan : versions (index officiel), désassemblage du JIT de .NET 10 et de .NET 11
+  RC3 (installé dans `/opt/dotnet11`, hors classement), sources du JIT (`dotnet/runtime`, clone partiel), niveaux de
+  compilation sous le protocole de la campagne, sondes (AVX-512, unions de C# 15, génériques de C# et de Go) :
+  `results/csharp_check/`. Aucun fait de la remarque n'est faux dans le dépôt ; E7 reste un jugement (0,5) ; rien
+  n'entre dans le classement publié en l'état. Copies du banc : `bench/csharp_exp`, `bench/csharp_nat2`,
+  `bench/c_exp`, `bench/c_gcc_exp` ; protocoles : `bench/csharp_full`, `csharp_steady`, `csharp_net11`,
+  `csharp_exp_full` (mêmes binaires).
