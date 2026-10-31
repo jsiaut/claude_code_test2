@@ -1,0 +1,28 @@
+rust_fix   k1   aos                  energy     p0 n=10 med=0.029037s ok={True} rc=0 
+rust_fix   k7   tuned                           p0 n=5 med=0.242851s ok={True} rc=0 
+rust_fix   k6   tuned                q6         p0 n=10 med=0.014799s ok={True} rc=0 
+rust_fix   k9   tuned                           p0 n=10 med=0.022448s ok={True} rc=0 
+rust_fix   k1   aos                  energy     p0 n=10 med=0.030492s ok={True} rc=0 
+rust_fix   k7   tuned                           p0 n=5 med=0.228072s ok={True} rc=0 
+rust_fix   k9   tuned                           p0 n=10 med=0.026505s ok={True} rc=0 
+rust_fix   k6   tuned                q6         p0 n=10 med=0.017034s ok={True} rc=0 
+rust_fix   k6   tuned                q6         p0 n=10 med=0.019916s ok={True} rc=0 
+rust_fix   k9   tuned                           p0 n=10 med=0.027694s ok={True} rc=0 
+rust_fix   k7   tuned                           p0 n=5 med=0.222554s ok={True} rc=0 
+rust_fix   k1   aos                  energy     p0 n=10 med=0.030486s ok={True} rc=0 
+rust_fix   k7   tuned                           p0 n=5 med=0.180699s ok={True} rc=0 
+rust_fix   k6   tuned                q6         p0 n=10 med=0.019006s ok={True} rc=0 
+rust_fix   k1   aos                  energy     p0 n=10 med=0.032132s ok={True} rc=0 
+rust_fix   k9   tuned                           p0 n=10 med=0.022298s ok={True} rc=0 
+rust_fix   k7   tuned                           p0 n=5 med=0.218651s ok={True} rc=0 
+rust_fix   k9   tuned                           p0 n=10 med=0.024532s ok={True} rc=0 
+rust_fix   k6   tuned                q6         p0 n=10 med=0.016726s ok={True} rc=0 
+rust_fix   k1   aos                  energy     p0 n=10 med=0.030372s ok={True} rc=0 
+rust_fix   k7   tuned                           p0 n=5 med=0.202305s ok={True} rc=0 
+rust_fix   k1   aos                  energy     p0 n=10 med=0.031151s ok={True} rc=0 
+rust_fix   k9   tuned                           p0 n=10 med=0.023839s ok={True} rc=0 
+rust_fix   k6   tuned                q6         p0 n=10 med=0.017118s ok={True} rc=0 
+rust_fix   k1   aos                  energy     p0 n=10 med=0.033933s ok={True} rc=0 
+rust_fix   k7   tuned                           p0 n=5 med=0.221427s ok={True} rc=0 
+rust_fix   k6   tuned                q6         p0 n=10 med=0.017443s ok={True} rc=0 
+rust_fix   k9   tuned                           p0 n=10 med=0.026517s ok={True} rc=0 

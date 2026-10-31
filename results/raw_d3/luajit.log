@@ -1,0 +1,7 @@
+luajit     k8   natural                         p0 n=2 med=4.189355s ok={True} rc=0 
+luajit     k8   natural                         p0 n=2 med=4.302661s ok={True} rc=0 
+luajit     k8   natural                         p0 n=2 med=4.286701s ok={True} rc=0 
+luajit     k8   natural                         p0 n=2 med=4.138360s ok={True} rc=0 
+luajit     k8   natural                         p0 n=2 med=3.944672s ok={True} rc=0 
+luajit     k8   natural                         p0 n=2 med=4.037350s ok={True} rc=0 
+luajit     k8   natural                         p0 n=2 med=4.229193s ok={True} rc=0 

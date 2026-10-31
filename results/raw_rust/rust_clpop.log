@@ -1,0 +1,14 @@
+rust_clpop k6   tuned                q1         p0 n=10 med=0.031494s ok={True} rc=0 
+rust_clpop k6   mt                   q1         p0 n=10 med=0.009860s ok={True} rc=0 
+rust_clpop k6   mt                   q1         p0 n=10 med=0.008511s ok={True} rc=0 
+rust_clpop k6   tuned                q1         p0 n=10 med=0.026878s ok={True} rc=0 
+rust_clpop k6   tuned                q1         p0 n=10 med=0.025681s ok={True} rc=0 
+rust_clpop k6   mt                   q1         p0 n=10 med=0.009723s ok={True} rc=0 
+rust_clpop k6   tuned                q1         p0 n=10 med=0.026372s ok={True} rc=0 
+rust_clpop k6   mt                   q1         p0 n=10 med=0.008497s ok={True} rc=0 
+rust_clpop k6   mt                   q1         p0 n=10 med=0.008611s ok={True} rc=0 
+rust_clpop k6   tuned                q1         p0 n=10 med=0.028398s ok={True} rc=0 
+rust_clpop k6   tuned                q1         p0 n=10 med=0.028351s ok={True} rc=0 
+rust_clpop k6   mt                   q1         p0 n=10 med=0.007238s ok={True} rc=0 
+rust_clpop k6   mt                   q1         p0 n=10 med=0.007366s ok={True} rc=0 
+rust_clpop k6   tuned                q1         p0 n=10 med=0.036114s ok={True} rc=0 

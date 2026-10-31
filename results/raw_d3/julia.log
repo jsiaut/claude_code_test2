@@ -1,0 +1,7 @@
+julia      k8   natural                         p0 n=3 med=0.675575s ok={True} rc=0 
+julia      k8   natural                         p0 n=3 med=0.593247s ok={True} rc=0 
+julia      k8   natural                         p0 n=3 med=0.606017s ok={True} rc=0 
+julia      k8   natural                         p0 n=3 med=0.580597s ok={True} rc=0 
+julia      k8   natural                         p0 n=3 med=0.703918s ok={True} rc=0 
+julia      k8   natural                         p0 n=3 med=0.501530s ok={True} rc=0 
+julia      k8   natural                         p0 n=3 med=0.506807s ok={True} rc=0 

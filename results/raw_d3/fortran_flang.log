@@ -1,0 +1,7 @@
+fortran_flang k8   natural                         p0 n=3 med=2.490918s ok={True} rc=0 
+fortran_flang k8   natural                         p0 n=3 med=2.511976s ok={True} rc=0 
+fortran_flang k8   natural                         p0 n=3 med=2.425347s ok={True} rc=0 
+fortran_flang k8   natural                         p0 n=3 med=2.305471s ok={True} rc=0 
+fortran_flang k8   natural                         p0 n=3 med=2.311631s ok={True} rc=0 
+fortran_flang k8   natural                         p0 n=3 med=2.149608s ok={True} rc=0 
+fortran_flang k8   natural                         p0 n=3 med=2.203321s ok={True} rc=0 

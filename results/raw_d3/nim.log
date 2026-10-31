@@ -1,0 +1,7 @@
+nim        k8   natural                         p0 n=3 med=0.472443s ok={True} rc=0 
+nim        k8   natural                         p0 n=3 med=0.727261s ok={True} rc=0 
+nim        k8   natural                         p0 n=3 med=0.706726s ok={True} rc=0 
+nim        k8   natural                         p0 n=3 med=0.628707s ok={True} rc=0 
+nim        k8   natural                         p0 n=3 med=0.577331s ok={True} rc=0 
+nim        k8   natural                         p0 n=3 med=0.679384s ok={True} rc=0 
+nim        k8   natural                         p0 n=3 med=0.592856s ok={True} rc=0 

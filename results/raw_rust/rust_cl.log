@@ -1,0 +1,14 @@
+rust_cl    k6   tuned                q1         p0 n=10 med=0.039027s ok={True} rc=0 
+rust_cl    k6   mt                   q1         p0 n=10 med=0.013381s ok={True} rc=0 
+rust_cl    k6   mt                   q1         p0 n=10 med=0.008967s ok={True} rc=0 
+rust_cl    k6   tuned                q1         p0 n=10 med=0.044104s ok={True} rc=0 
+rust_cl    k6   mt                   q1         p0 n=10 med=0.010069s ok={True} rc=0 
+rust_cl    k6   tuned                q1         p0 n=10 med=0.037404s ok={True} rc=0 
+rust_cl    k6   tuned                q1         p0 n=10 med=0.033323s ok={True} rc=0 
+rust_cl    k6   mt                   q1         p0 n=10 med=0.010714s ok={True} rc=0 
+rust_cl    k6   mt                   q1         p0 n=10 med=0.010833s ok={True} rc=0 
+rust_cl    k6   tuned                q1         p0 n=10 med=0.037259s ok={True} rc=0 
+rust_cl    k6   mt                   q1         p0 n=10 med=0.007506s ok={True} rc=0 
+rust_cl    k6   tuned                q1         p0 n=10 med=0.030211s ok={True} rc=0 
+rust_cl    k6   mt                   q1         p0 n=10 med=0.009631s ok={True} rc=0 
+rust_cl    k6   tuned                q1         p0 n=10 med=0.026772s ok={True} rc=0 

@@ -106,6 +106,39 @@ def load_lat_v1():
     return lat
 
 
+D3_TAG = "d3_m11"
+LAT_REPLACED = set()  # implémentations dont les latences de K8 naturel viennent de results/raw_d3 (align_lat les ignore)
+
+
+def load_lat_d3(tag=D3_TAG, max_steal=None):
+    """Latences de K8 naturel remesurées pour D3 sur la machine 11 (remarque sur Rust, docs/RUST.md, 3.2) : pour chaque
+    implémentation, la liste des processus valides (max_steal : seuil de vol facultatif, sensibilité D3-strict)."""
+    lat = defaultdict(list)
+    for f in sorted(glob.glob(os.path.join(ROOT, "results", "raw_d3", "*.jsonl"))):
+        for line in open(f):
+            r = json.loads(line)
+            if r.get("tag") != tag or (r["kernel"], r["variant"], r["param"]) != K8N:
+                continue
+            reps = r.get("reps", [])
+            if not reps or r.get("returncode") not in (0, None) or any(x["ok"] is not True for x in reps):
+                continue
+            if max_steal is not None and (r.get("steal_frac") or 0.0) > max_steal:
+                continue
+            if r.get("lat"):
+                lat[r["lang"]].append(r["lat"])
+    return lat
+
+
+def apply_d3(lat, max_steal=None):
+    """Remplace les latences de K8 naturel de la campagne par celles de results/raw_d3, pour toutes les implémentations
+    remesurées (décision 2 du plan de docs/RUST.md). Les temps de K8 naturel ne changent pas."""
+    new = load_lat_d3(max_steal=max_steal)
+    for l, procs in new.items():
+        lat[l][K8N] = procs
+        LAT_REPLACED.add(l)
+    return sorted(new)
+
+
 def sanity(data, bounds):
     flags = []
     for lang, d in data.items():
@@ -374,9 +407,10 @@ def apply_transfers(data, path=os.path.join(ROOT, "results", "transfers.json")):
     return tr
 
 
-def dataset_main(transfers=True):
+def dataset_main(transfers=True, d3=True):
     """Données de la configuration principale : v1 sans K5 ni K10, plus K5 de v2_k5 ; puis, si transfers, les
-    corrections transférées de results/transfers.json."""
+    corrections transférées de results/transfers.json ; si d3, les latences de K8 naturel remesurées pour D3
+    (results/raw_d3, remarque sur Rust), quand elles existent."""
     data, _lat_flat, _rss, invalid, sus, bridge = final_data()
     for l in data:
         for key in [k for k in data[l] if k[0] in ("k5", "k10")]:
@@ -398,12 +432,16 @@ def dataset_main(transfers=True):
         # alignement des latences sur les processus retenus par final_data (mêmes processus, même ordre de fichier)
     if transfers:
         apply_transfers(data)
+    if d3:
+        apply_d3(lat)
     return data, lat, invalid, sus, bridge, v1_k5, (k5, k5wit, k5inv, k5_sus, k5recs)
 
 
 def align_lat(data, lat):
     """Les latences par processus doivent correspondre aux processus de temps (même nombre, même ordre)."""
     for l in list(lat):
+        if l in LAT_REPLACED:  # latences d'une autre campagne (D3 remesuré) : pas de correspondance avec les temps
+            continue
         if K8N in lat[l] and K8N in data.get(l, {}) and len(lat[l][K8N]) != len(data[l][K8N]):
             lat[l][K8N] = [x for x in lat[l][K8N] if len(x)]
             if len(lat[l][K8N]) != len(data[l][K8N]):

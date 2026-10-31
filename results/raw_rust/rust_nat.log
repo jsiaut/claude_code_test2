@@ -1,0 +1,14 @@
+rust_nat   k9   natural                         p0 n=10 med=0.022135s ok={True} rc=0 
+rust_nat   k9   tuned                           p0 n=10 med=0.026112s ok={True} rc=0 
+rust_nat   k9   natural                         p0 n=10 med=0.025659s ok={True} rc=0 
+rust_nat   k9   tuned                           p0 n=10 med=0.027186s ok={True} rc=0 
+rust_nat   k9   natural                         p0 n=10 med=0.024968s ok={True} rc=0 
+rust_nat   k9   tuned                           p0 n=10 med=0.026732s ok={True} rc=0 
+rust_nat   k9   natural                         p0 n=10 med=0.024333s ok={True} rc=0 
+rust_nat   k9   tuned                           p0 n=10 med=0.026153s ok={True} rc=0 
+rust_nat   k9   tuned                           p0 n=10 med=0.022730s ok={True} rc=0 
+rust_nat   k9   natural                         p0 n=10 med=0.025870s ok={True} rc=0 
+rust_nat   k9   natural                         p0 n=10 med=0.025732s ok={True} rc=0 
+rust_nat   k9   tuned                           p0 n=10 med=0.022015s ok={True} rc=0 
+rust_nat   k9   natural                         p0 n=10 med=0.025241s ok={True} rc=0 
+rust_nat   k9   tuned                           p0 n=10 med=0.025235s ok={True} rc=0 

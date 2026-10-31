@@ -1,0 +1,7 @@
+rust       k8   natural                         p0 n=3 med=0.683037s ok={True} rc=0 
+rust       k8   natural                         p0 n=3 med=0.598650s ok={True} rc=0 
+rust       k8   natural                         p0 n=3 med=0.696525s ok={True} rc=0 
+rust       k8   natural                         p0 n=3 med=0.620330s ok={True} rc=0 
+rust       k8   natural                         p0 n=3 med=0.627292s ok={True} rc=0 
+rust       k8   natural                         p0 n=3 med=0.614980s ok={True} rc=0 
+rust       k8   natural                         p0 n=3 med=0.622548s ok={True} rc=0 

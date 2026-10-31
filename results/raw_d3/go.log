@@ -1,0 +1,7 @@
+go         k8   natural                         p0 n=3 med=0.924419s ok={True} rc=0 
+go         k8   natural                         p0 n=3 med=0.900351s ok={True} rc=0 
+go         k8   natural                         p0 n=3 med=0.952881s ok={True} rc=0 
+go         k8   natural                         p0 n=3 med=0.998052s ok={True} rc=0 
+go         k8   natural                         p0 n=3 med=0.930509s ok={True} rc=0 
+go         k8   natural                         p0 n=3 med=0.850587s ok={True} rc=0 
+go         k8   natural                         p0 n=3 med=0.896338s ok={True} rc=0 

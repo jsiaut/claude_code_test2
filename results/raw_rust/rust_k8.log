@@ -1,0 +1,14 @@
+rust_k8    k8   natural                         p0 n=3 med=0.711998s ok={True} rc=0 
+rust_k8    k8   tuned                           p0 n=10 med=0.195664s ok={True} rc=0 
+rust_k8    k8   natural                         p0 n=3 med=0.556921s ok={True} rc=0 
+rust_k8    k8   tuned                           p0 n=10 med=0.210100s ok={True} rc=0 
+rust_k8    k8   natural                         p0 n=3 med=0.675321s ok={True} rc=0 
+rust_k8    k8   tuned                           p0 n=10 med=0.187922s ok={True} rc=0 
+rust_k8    k8   natural                         p0 n=3 med=0.604463s ok={True} rc=0 
+rust_k8    k8   tuned                           p0 n=10 med=0.189128s ok={True} rc=0 
+rust_k8    k8   tuned                           p0 n=10 med=0.184043s ok={True} rc=0 
+rust_k8    k8   natural                         p0 n=3 med=0.632846s ok={True} rc=0 
+rust_k8    k8   tuned                           p0 n=10 med=0.192898s ok={True} rc=0 
+rust_k8    k8   natural                         p0 n=3 med=0.618179s ok={True} rc=0 
+rust_k8    k8   tuned                           p0 n=10 med=0.193979s ok={True} rc=0 
+rust_k8    k8   natural                         p0 n=3 med=0.668225s ok={True} rc=0 

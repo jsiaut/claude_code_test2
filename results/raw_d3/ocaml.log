@@ -1,0 +1,7 @@
+ocaml      k8   natural                         p0 n=8 med=0.255470s ok={True} rc=0 
+ocaml      k8   natural                         p0 n=8 med=0.254643s ok={True} rc=0 
+ocaml      k8   natural                         p0 n=8 med=0.223776s ok={True} rc=0 
+ocaml      k8   natural                         p0 n=8 med=0.211325s ok={True} rc=0 
+ocaml      k8   natural                         p0 n=8 med=0.226954s ok={True} rc=0 
+ocaml      k8   natural                         p0 n=8 med=0.225855s ok={True} rc=0 
+ocaml      k8   natural                         p0 n=8 med=0.225395s ok={True} rc=0 

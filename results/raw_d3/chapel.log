@@ -1,0 +1,7 @@
+chapel     k8   natural                         p0 n=3 med=1.100670s ok={True} rc=0 
+chapel     k8   natural                         p0 n=3 med=1.133051s ok={True} rc=0 
+chapel     k8   natural                         p0 n=3 med=1.251602s ok={True} rc=0 
+chapel     k8   natural                         p0 n=3 med=1.053394s ok={True} rc=0 
+chapel     k8   natural                         p0 n=3 med=0.781136s ok={True} rc=0 
+chapel     k8   natural                         p0 n=3 med=1.048315s ok={True} rc=0 
+chapel     k8   natural                         p0 n=3 med=1.004474s ok={True} rc=0 
