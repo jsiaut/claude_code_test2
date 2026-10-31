@@ -639,3 +639,13 @@ Robustesse :
   n'entre dans le classement publié en l'état. Copies du banc : `bench/csharp_exp`, `bench/csharp_nat2`,
   `bench/c_exp`, `bench/c_gcc_exp` ; protocoles : `bench/csharp_full`, `csharp_steady`, `csharp_net11`,
   `csharp_exp_full` (mêmes binaires).
+* 2026-10-31, 12:47-13:24 : **mesures de la remarque sur C#** (`tools/measure_csharp.py`, machine 9) : 144 cellules
+  × 7 processus (1 008) et 6 mesures d'empreinte ; aucune somme de contrôle fausse ; 22 processus refaits pour vol de
+  temps au-dessus de 2 %, un seul gardé au-dessus du seuil (K4 en SIMD explicite de `csharp_exp`, 3,5 %, hors
+  classement). Rien d'autre ne tournait.
+* 2026-10-31, après-midi : **résultats de la remarque sur C#** (`results/report_csharp.md`). Rien n'entre dans le
+  classement publié : C# garde 54,8 points et la 14e place (le calcul refait redonne 54,77). Les 19 scénarios de
+  sensibilité laissent tous C# 14e ; avec tout ce qui lui est favorable (S-max), il rejoint Mojo au score (62,0 à 62,6
+  contre 62,3), et Mojo ne le devance plus que dans 62 à 70 % des variantes. Effet moyen du protocole : 0 à 2,5 %
+  (+0,7 à +0,9 point). Aucun écart au plan. Le README précise la phrase sur les 98 % des variantes ; le texte de la
+  case E7 de C# est précisé (note inchangée).

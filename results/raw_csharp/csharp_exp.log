@@ -7,3 +7,78 @@ csharp_exp k6   mt_pool              q6         p0 n=10 med=0.005931s ok={True} 
 csharp_exp k9   tuned                           p0 n=10 med=0.024330s ok={True} rc=0 
 csharp_exp k6   mt                   q1         p0 n=10 med=0.043195s ok={True} rc=0 
 csharp_exp k6   mt                   q6         p0 n=10 med=0.008272s ok={True} rc=0 
+csharp_exp k6   mt_pool              q1         p0 n=10 med=0.043030s ok={True} rc=0 
+csharp_exp k6   tuned                q6         p0 n=10 med=0.015542s ok={True} rc=0 
+csharp_exp k8   tuned                           p0 n=10 med=0.124054s ok={True} rc=0 
+csharp_exp k6   mt_pool              q1         p0 n=10 med=0.042804s ok={True} rc=0 
+csharp_exp k6   mt_pool              q6         p0 n=10 med=0.005518s ok={True} rc=0 
+csharp_exp k6   mt                   q1         p0 n=10 med=0.039822s ok={True} rc=0 
+csharp_exp k6   mt                   q6         p0 n=10 med=0.008089s ok={True} rc=0 
+csharp_exp k6   tuned                q6         p0 n=10 med=0.016744s ok={True} rc=0 
+csharp_exp k4   branchless_unsorted             p0 n=10 med=0.013491s ok={True} rc=0 
+csharp_exp k6   tuned                q1         p0 n=10 med=0.164644s ok={True} rc=0 
+csharp_exp k9   mt                              p0 n=10 med=0.016469s ok={True} rc=0 
+csharp_exp k4   simd_unsorted                   p0 n=10 med=0.000894s ok={True} rc=0 
+csharp_exp k9   tuned                           p0 n=10 med=0.024387s ok={True} rc=0 
+csharp_exp k8   tuned                           p0 n=10 med=0.133516s ok={True} rc=0 
+csharp_exp k9   mt_pool                         p0 n=10 med=0.011514s ok={True} rc=0 
+csharp_exp k4   simd_unsorted                   p0 n=10 med=0.000854s ok={True} rc=0 
+csharp_exp k6   tuned                q1         p0 n=10 med=0.171070s ok={True} rc=0 
+csharp_exp k9   mt                              p0 n=10 med=0.016373s ok={True} rc=0 
+csharp_exp k6   mt_pool              q6         p0 n=10 med=0.005980s ok={True} rc=0 
+csharp_exp k9   tuned                           p0 n=10 med=0.026213s ok={True} rc=0 
+csharp_exp k6   mt                   q1         p0 n=10 med=0.040329s ok={True} rc=0 
+csharp_exp k6   mt                   q6         p0 n=10 med=0.007903s ok={True} rc=0 
+csharp_exp k8   tuned                           p0 n=10 med=0.132683s ok={True} rc=0 
+csharp_exp k9   mt_pool                         p0 n=10 med=0.011180s ok={True} rc=0 
+csharp_exp k4   branchless_unsorted             p0 n=10 med=0.012201s ok={True} rc=0 
+csharp_exp k6   tuned                q6         p0 n=10 med=0.017112s ok={True} rc=0 
+csharp_exp k6   mt_pool              q1         p0 n=10 med=0.044585s ok={True} rc=0 
+csharp_exp k6   mt                   q1         p0 n=10 med=0.045210s ok={True} rc=0 
+csharp_exp k9   mt                              p0 n=10 med=0.019447s ok={True} rc=0 
+csharp_exp k6   tuned                q1         p0 n=10 med=0.110646s ok={True} rc=0 
+csharp_exp k9   tuned                           p0 n=10 med=0.028411s ok={True} rc=0 
+csharp_exp k6   mt_pool              q1         p0 n=10 med=0.052844s ok={True} rc=0 
+csharp_exp k6   mt_pool              q6         p0 n=10 med=0.005430s ok={True} rc=0 
+csharp_exp k8   tuned                           p0 n=10 med=0.145358s ok={True} rc=0 
+csharp_exp k6   mt                   q6         p0 n=10 med=0.007745s ok={True} rc=0 
+csharp_exp k4   simd_unsorted                   p0 n=10 med=0.000809s ok={True} rc=0 
+csharp_exp k6   tuned                q6         p0 n=10 med=0.015768s ok={True} rc=0 
+csharp_exp k4   branchless_unsorted             p0 n=10 med=0.014653s ok={True} rc=0 
+csharp_exp k9   mt_pool                         p0 n=10 med=0.011083s ok={True} rc=0 
+csharp_exp k6   tuned                q6         p0 n=10 med=0.016297s ok={True} rc=0 
+csharp_exp k6   mt                   q6         p0 n=10 med=0.007720s ok={True} rc=0 
+csharp_exp k8   tuned                           p0 n=10 med=0.127247s ok={True} rc=0 
+csharp_exp k6   mt_pool              q6         p0 n=10 med=0.005178s ok={True} rc=0 
+csharp_exp k6   tuned                q1         p0 n=10 med=0.162248s ok={True} rc=0 
+csharp_exp k9   mt                              p0 n=10 med=0.017915s ok={True} rc=0 
+csharp_exp k6   mt                   q1         p0 n=10 med=0.037477s ok={True} rc=0 
+csharp_exp k9   mt_pool                         p0 n=10 med=0.010565s ok={True} rc=0 
+csharp_exp k6   mt_pool              q1         p0 n=10 med=0.045781s ok={True} rc=0 
+csharp_exp k4   simd_unsorted                   p0 n=10 med=0.000854s ok={True} rc=0 
+csharp_exp k9   tuned                           p0 n=10 med=0.030265s ok={True} rc=0 
+csharp_exp k4   branchless_unsorted             p0 n=10 med=0.011930s ok={True} rc=0 
+csharp_exp k4   simd_unsorted                   p0 n=10 med=0.000812s ok={True} rc=0 
+csharp_exp k4   branchless_unsorted             p0 n=10 med=0.012182s ok={True} rc=0 
+csharp_exp k6   mt                   q6         p0 n=10 med=0.006609s ok={True} rc=0 
+csharp_exp k9   mt                              p0 n=10 med=0.015645s ok={True} rc=0 
+csharp_exp k9   tuned                           p0 n=10 med=0.024278s ok={True} rc=0 
+csharp_exp k6   mt_pool              q6         p0 n=10 med=0.005182s ok={True} rc=0 
+csharp_exp k6   tuned                q6         p0 n=10 med=0.016853s ok={True} rc=0 
+csharp_exp k6   mt_pool              q1         p0 n=10 med=0.049412s ok={True} rc=0 
+csharp_exp k9   mt_pool                         p0 n=10 med=0.010925s ok={True} rc=0 
+csharp_exp k6   tuned                q1         p0 n=10 med=0.131384s ok={True} rc=0 
+csharp_exp k8   tuned                           p0 n=10 med=0.099639s ok={True} rc=0 
+csharp_exp k6   mt                   q1         p0 n=10 med=0.048153s ok={True} rc=0 
+csharp_exp k6   mt                   q6         p0 n=10 med=0.007786s ok={True} rc=0 
+csharp_exp k6   mt_pool              q1         p0 n=10 med=0.051130s ok={True} rc=0 
+csharp_exp k9   mt                              p0 n=10 med=0.016942s ok={True} rc=0 
+csharp_exp k6   mt_pool              q6         p0 n=10 med=0.004831s ok={True} rc=0 
+csharp_exp k4   simd_unsorted                   p0 n=10 med=0.000837s ok={True} rc=0 
+csharp_exp k6   mt                   q1         p0 n=10 med=0.044163s ok={True} rc=0 
+csharp_exp k6   tuned                q6         p0 n=10 med=0.016317s ok={True} rc=0 
+csharp_exp k9   tuned                           p0 n=10 med=0.027162s ok={True} rc=0 
+csharp_exp k6   tuned                q1         p0 n=10 med=0.520235s ok={True} rc=0 
+csharp_exp k9   mt_pool                         p0 n=10 med=0.009321s ok={True} rc=0 
+csharp_exp k8   tuned                           p0 n=10 med=0.126877s ok={True} rc=0 
+csharp_exp k4   branchless_unsorted             p0 n=10 med=0.013019s ok={True} rc=0 

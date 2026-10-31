@@ -190,7 +190,8 @@ def main():
     s1p1 = dict(p1)
     for k in S1_KEYS:
         s1p1[k] = min(1.0, r_full[k]["ratio"], r_exp[k]["ratio"], r_exp_full[k]["ratio"])
-    fp_nat = dict(footprint, **{LANG: round(fp_bpp.get("csharp_nat2", 64.0), 2)})
+    fp_nat = dict(footprint)
+    fp_nat[LANG] = round(fp_bpp.get("csharp_nat2", 64.0), 2)
     others8 = {}
     if r_c8["gcc"]["ratio"] < 1:
         others8 = {l: {K8T: r_c8["gcc"]["ratio"]} for l in RANKED if l != LANG}
@@ -204,8 +205,9 @@ def main():
         return out
 
     smax_t = combine(s1p1, pool_t, nat_t)
-    smax_b = combine(dict(p1, **{k: min(1.0, r_full[k]["ratio"], s1_b[k], r_exp_full[k]["ratio"]) for k in S1_KEYS}),
-                     pool_b, nat_b)
+    base_b = dict(p1)
+    base_b.update({k: min(1.0, r_full[k]["ratio"], s1_b[k], r_exp_full[k]["ratio"]) for k in S1_KEYS})
+    smax_b = combine(base_b, pool_b, nat_b)
     plans = {
         "Publié": (data, None, footprint, (), None),
         "S-E7": (data, {"E7": 1}, footprint, (), None),

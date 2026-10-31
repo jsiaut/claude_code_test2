@@ -1,1 +1,28 @@
 csharp_exp_full k8   tuned                           p0 n=10 med=0.138839s ok={True} rc=0 
+csharp_exp_full k6   mt                   q1         p0 n=10 med=0.015549s ok={True} rc=0 
+csharp_exp_full k4   branchless_unsorted             p0 n=10 med=0.010510s ok={True} rc=0 
+csharp_exp_full k6   tuned                q1         p0 n=10 med=0.034283s ok={True} rc=0 
+csharp_exp_full k8   tuned                           p0 n=10 med=0.126978s ok={True} rc=0 
+csharp_exp_full k6   tuned                q1         p0 n=10 med=0.034153s ok={True} rc=0 
+csharp_exp_full k6   mt                   q1         p0 n=10 med=0.013211s ok={True} rc=0 
+csharp_exp_full k4   branchless_unsorted             p0 n=10 med=0.011008s ok={True} rc=0 
+csharp_exp_full k6   mt                   q1         p0 n=10 med=0.011393s ok={True} rc=0 
+csharp_exp_full k6   tuned                q1         p0 n=10 med=0.036568s ok={True} rc=0 
+csharp_exp_full k8   tuned                           p0 n=10 med=0.126585s ok={True} rc=0 
+csharp_exp_full k4   branchless_unsorted             p0 n=10 med=0.011636s ok={True} rc=0 
+csharp_exp_full k6   mt                   q1         p0 n=10 med=0.015574s ok={True} rc=0 
+csharp_exp_full k4   branchless_unsorted             p0 n=10 med=0.011331s ok={True} rc=0 
+csharp_exp_full k6   tuned                q1         p0 n=10 med=0.035996s ok={True} rc=0 
+csharp_exp_full k8   tuned                           p0 n=10 med=0.125752s ok={True} rc=0 
+csharp_exp_full k4   branchless_unsorted             p0 n=10 med=0.012166s ok={True} rc=0 
+csharp_exp_full k6   mt                   q1         p0 n=10 med=0.012442s ok={True} rc=0 
+csharp_exp_full k8   tuned                           p0 n=10 med=0.134131s ok={True} rc=0 
+csharp_exp_full k6   tuned                q1         p0 n=10 med=0.035348s ok={True} rc=0 
+csharp_exp_full k4   branchless_unsorted             p0 n=10 med=0.010962s ok={True} rc=0 
+csharp_exp_full k6   mt                   q1         p0 n=10 med=0.015054s ok={True} rc=0 
+csharp_exp_full k8   tuned                           p0 n=10 med=0.126702s ok={True} rc=0 
+csharp_exp_full k6   tuned                q1         p0 n=10 med=0.037727s ok={True} rc=0 
+csharp_exp_full k4   branchless_unsorted             p0 n=10 med=0.010813s ok={True} rc=0 
+csharp_exp_full k6   mt                   q1         p0 n=10 med=0.014799s ok={True} rc=0 
+csharp_exp_full k6   tuned                q1         p0 n=10 med=0.035782s ok={True} rc=0 
+csharp_exp_full k8   tuned                           p0 n=10 med=0.128578s ok={True} rc=0 

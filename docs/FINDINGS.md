@@ -439,3 +439,30 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **Un pont par un témoin peut tromper entre deux architectures** : le C naturel de K7 (table chaînée) va dix fois plus
   vite sur cet Emerald Rapids que sur le Cascade Lake des données principales, Chapel non ; ponter K7 naturel par le C
   donnait un rapport de 2,8, quand la nouvelle forme divise le temps par 1,8.
+
+## Remarque sur C# (31 octobre, machine 9, Emerald Rapids) — `docs/CSHARP.md`, `results/csharp_check/`
+
+* **Compilation à niveaux de .NET 10** : avec 3 échauffements (au plus 13 appels), la boucle chaude d'un noyau appelé
+  une fois par répétition tourne en code OSR (« Tier1-OSR »), compilé pour une entrée au milieu de la boucle : celui de
+  K4 garde une vérification de bornes que le code de niveau 1 n'a pas. Une méthode qui contient un `stackalloc` passe
+  directement en FullOpts. Le niveau 1 avec PGO dynamique demande ici plus de 70 appels (deux phases instrumentées).
+* **Repli en MinOpts** : la compilation OSR d'une méthode qui garde une trentaine de vecteurs de 512 bits vivants (Q1
+  en variables locales) se replie en MinOpts (« compiling with minopt ») : quatre fois plus lente que la forme
+  d'origine, alors qu'en FullOpts elle gagne 16 %.
+* **Effet moyen du protocole sur C#** : FullOpts d'emblée 0,998 (26 clés), régime établi 0,975 (16 clés), .NET 11 RC3
+  0,99 ; de 0,85 à 1,16 selon la clé.
+* **Sur Cascade Lake, .NET ramène la largeur préférée des vecteurs à 256 bits** (`codeman.cpp`, modèles 0x55) :
+  `Vector512.IsHardwareAccelerated` vaut `false`, mais `Vector512` reste compilé en AVX-512.
+* **Ni vectoriseur de boucles, ni if-conversion dans les boucles** dans le JIT (.NET 10, .NET 11 RC3, branche
+  principale du 31/10) ; la PR 127032 lève ce garde-fou pour ARM64 seulement, la PR 127853 proposait un vectoriseur ;
+  ni l'une ni l'autre n'est fusionnée.
+* **Génériques** : C# spécialise une méthode générique pour chaque `struct` (l'appel contraint est inliné) et partage
+  le code des classes ; Go 1.27 fait une copie par forme GC et appelle les méthodes par dictionnaire, même pour un
+  `struct`.
+* **Unions de C# 15** : un `struct` qui contient un champ `object` ; les cas valeur sont mis en boîte.
+* **Formes optimisées** (machine 9) : K8 en pile explicite 0,51 (C par clang 0,93, par GCC 0,65) ; K4 sans branchement
+  déroulé par 4, 0,72 à 0,82 ; threads du pool au lieu d'un `new Thread` par passe : K6 `mt` Q6 0,71, K9 `mt` 0,63 ;
+  K4 en SIMD explicite : 0,83 ms.
+* **Code naturel** : K1 en `struct` dans `List<T>` : 64 octets par particule, et le parcours permuté ne coûte plus rien
+  (0,23 fois le temps de la classe) ; K6 avec les colonnes en paramètres au lieu de champs statiques : Q6 0,47, par la
+  fusion des tests de plage (les vérifications de bornes restent).

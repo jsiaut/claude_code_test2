@@ -171,7 +171,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 * **B** : B1 = 0 (GC imposé) ; B2 = 0.5 (ArrayPool, NativeMemory ; pas d'allocateur d'objets) ; B3 = 1 (struct, stackalloc, Span) ; B4 = 0.5 (boxing, fermetures, LINQ allouent) ; B5 = 1 (pointeurs unsafe)
 * **C** : C1 = 1 (Vector128/256/512<T> (bench)) ; C2 = 1 (System.Runtime.Intrinsics.X86 (bench)) ; C3 = 0.0 (mesuré) ; C4 = 0 (aucun) ; C5 = 1 (Parallel.For, PLINQ)
 * **D** : D1 = 1 (threads) ; D2 = 1 (Volatile.Read/Write (acquire/release), Interlocked, accès simples) ; D3 = 0 (aucune) ; D4 = 0.5 (Process.ProcessorAffinity (processus)) ; D5 = 1 (Thread.SpinWait/SpinWait + Interlocked.MemoryBarrier)
-* **E** : E1 = 1 (JIT/AOT, DOTNET_JitDisasm) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 1 (Sse.Prefetch0) ; E5 = 0 (aucun) ; E6 = 1 (Unsafe.Add, MemoryMarshal, pointeurs) ; E7 = 0.5 (génériques spécialisés pour les struct ; pas de CTFE)
+* **E** : E1 = 1 (JIT/AOT, DOTNET_JitDisasm) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 1 (Sse.Prefetch0) ; E5 = 0 (aucun) ; E6 = 1 (Unsafe.Add, MemoryMarshal, pointeurs) ; E7 = 0.5 (génériques spécialisés pour les types valeur (sonde : appel contraint inliné) ; pas d'évaluation à la compilation dans le langage, seulement des générateurs de source (greffons du compilateur) ; texte précisé le 31/10, remarque sur C#)
 * **F** : F1 = 1 (tableaux rectangulaires T[,] (bench K9)) ; F2 = 0 (aucun) ; F3 = 1 (uint/ulong, unchecked) ; F4 = 1 (MemoryMappedFile + pointeur (sonde))
 
 ### Java

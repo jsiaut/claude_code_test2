@@ -1,0 +1,7 @@
+c_exp      k8   tuned                           p0 n=10 med=0.230134s ok={True} rc=0 
+c_exp      k8   tuned                           p0 n=10 med=0.224161s ok={True} rc=0 
+c_exp      k8   tuned                           p0 n=10 med=0.227143s ok={True} rc=0 
+c_exp      k8   tuned                           p0 n=10 med=0.226934s ok={True} rc=0 
+c_exp      k8   tuned                           p0 n=10 med=0.223945s ok={True} rc=0 
+c_exp      k8   tuned                           p0 n=10 med=0.225104s ok={True} rc=0 
+c_exp      k8   tuned                           p0 n=10 med=0.239064s ok={True} rc=0 

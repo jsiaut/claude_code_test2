@@ -62,7 +62,10 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 
 **Ce qui est sûr, et ce qui ne l'est pas.**
 * **Les grandes marches sont établies.** Les 13 premiers devancent C# dans au moins 98 % des variantes, et sur les
-  deux machines. Go devance Haskell, Haskell OCaml, OCaml JavaScript, dans 98 à 100 % des variantes.
+  deux machines. Go devance Haskell, Haskell OCaml, OCaml JavaScript, dans 98 à 100 % des variantes. Ces variantes ne
+  font varier ni l'effort d'implémentation ni le choix du code naturel : avec ses meilleures formes mesurées, une
+  particule en `struct` et un JIT stabilisé, C# rejoint Mojo au score (62 points) et Mojo ne le devance plus que dans
+  62 à 70 % des variantes, C# restant 14e ([`docs/CSHARP.md`](docs/CSHARP.md)).
 * **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Deux voisins s'y devancent dans
   52 à 72 % des variantes. C ou C++ est premier dans 86 % des variantes (C 61 %, C++ 25 %).
 * **L'ordre fin dépend aussi de la machine.** Sur un Emerald Rapids, le même calcul donne C++ 1er, C 2e, Rust 3e.
@@ -180,9 +183,14 @@ que la règle de la bibliothèque standard exclut ([`docs/MOJO.md`](docs/MOJO.md
 ### Ramasse-miettes imposé, objets en références
 
 **14. C#.** La boîte à outils la plus riche des langages à ramasse-miettes : `struct`, `Span`, `stackalloc`,
-`Vector512`, intrinsèques, `StructLayout`. En SIMD explicite, K5 est à égalité avec C une fois le JIT stabilisé
-(4,3 contre 3,9 ms, Emerald Rapids). Mais le code par défaut va contre la machine : 88 octets par particule,
-parcours permuté 4,7 fois plus lent, et un JIT qui ne vectorise aucune boucle, même avec la PGO dynamique.
+`Vector512`, intrinsèques, `StructLayout`. En SIMD explicite, K5 est à égalité avec C une fois le JIT stabilisé (4,3
+contre 3,9 ms, Emerald Rapids). Mais le code par défaut va contre la machine : 88 octets par particule, parcours
+permuté 4,7 fois plus lent, et un JIT qui ne vectorise aucune boucle, même avec la PGO dynamique. Sa place tient au
+code par défaut, pas à une erreur du banc : le code naturel suit les directives .NET (une classe au-delà de 16
+octets ; en `struct`, une particule tiendrait 64 octets, +1,9 point), et des versions optimisées mieux travaillées (K8
+en pile explicite, K4 déroulé) vaudraient 2,6 à 4 points. Avec trois échauffements, ses boucles tournent en code OSR :
+l'effet moyen est faible (moins d'un point), mais une méthode chargée de vecteurs peut y perdre l'optimisation. Toutes
+ces sensibilités cumulées le mettent au niveau de Mojo au score, toujours 14e ([`docs/CSHARP.md`](docs/CSHARP.md)).
 
 **15. Java.** Excellent modèle mémoire (`VarHandle`), JIT C2 efficace, et le meilleur allocateur de petits objets
 de l'étude (K8 naturel, 301 ms). Pas de types valeur dans le JDK 27 : 78 octets par particule, parcours permuté 4,9
@@ -302,11 +310,13 @@ du langage.
 
 * Deux processeurs Intel, virtualisés et partagés ; ni AMD, ni ARM, ni compteurs matériels.
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Les six langages relus après coup par des connaisseurs y ont gagné : Ada et Fortran deux places chacun,
+  l'autre. Sept langages ont été relus après coup par des connaisseurs. Ada et Fortran y ont gagné deux places chacun,
   par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de mesure) ;
   Chapel une place par trois errata de la matrice ; Mojo 2,7 points et Julia 1,8 point, mais aucune place, par des
-  errata de la matrice ; Zig trois places, mais par une version de compilateur que la règle exclut. Pour Julia, des versions optimisées mieux travaillées
-  vaudraient trois places de plus : la règle les garde hors du classement, mais l'effort d'implémentation compte.
+  errata de la matrice ; Zig trois places, mais par une version de compilateur que la règle exclut ; C# rien, sa
+  remarque ne relevant ni erratum ni erreur du banc. Des versions optimisées mieux travaillées vaudraient trois places
+  de plus à Julia et, cumulées avec un autre choix de code naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour
+  rejoindre Mojo au score : la règle les garde hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine Cascade Lake, puis reportées sur les données
   principales par des rapports appariés ; pour une clé de Fortran, par un témoin mesuré sur le même hôte, au prix
   d'un écart au plan ([`docs/FORTRAN.md`](docs/FORTRAN.md), 4.2).
@@ -322,6 +332,10 @@ du langage.
   le GPU et les tenseurs sont dans le paquet MAX. Le classement mesure Mojo et sa `std` sur CPU ; ses noyaux à
   threads passent par un module privé de `std`.
 * Le plafond de K4 n'admet que des formes scalaires et compte donc la vectorisation automatique (voir plus haut).
+* Trois échauffements pour les langages à JIT : les boucles chaudes tournent souvent en code OSR (compilé pour
+  reprendre une boucle en cours), sans atteindre le niveau d'optimisation final. Mesuré pour C# : 0 à 2,5 % en moyenne
+  (moins d'un point), de −15 % à +16 % selon le noyau ([`docs/CSHARP.md`](docs/CSHARP.md)) ; non mesuré pour Java,
+  JavaScript et Julia.
 
 ## Une autre étude, un autre ordre : pourquoi
 
@@ -360,6 +374,8 @@ par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION
   et [`results/report_confrontation.md`](results/report_confrontation.md).
 * La remarque sur Ada (piège de GNAT, errata, implémentation corrigée et remesurée) : [`docs/ADA.md`](docs/ADA.md)
   et [`results/report_ada.md`](results/report_ada.md).
+* La remarque sur C# (faits vérifiés, protocole du JIT, formes optimisées et code naturel en sensibilité) :
+  [`docs/CSHARP.md`](docs/CSHARP.md) et [`results/report_csharp.md`](results/report_csharp.md).
 * La remarque sur Chapel (trois errata, leviers locaux instables, confrontation corrigée) :
   [`docs/CHAPEL.md`](docs/CHAPEL.md) et [`results/report_chapel.md`](results/report_chapel.md).
 * La remarque sur Julia (plafond, versions optimisées, trois errata, diagnostic de K10) :

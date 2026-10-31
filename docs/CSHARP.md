@@ -163,3 +163,102 @@ Décisions :
 3. **Le protocole reste commun aux langages à JIT** (Java, JavaScript, Julia, LuaJIT) : un effet mesuré sur C# est
    publié comme limite de l'étude, pas corrigé pour C# seul.
 4. **.NET 11** est une information (préversion), comme Zig 0.18.
+
+## 4. Résultats
+
+1 008 processus (144 cellules × 7 passes) et 6 mesures d'empreinte, le 31 octobre de 12 h 47 à 13 h 24 sur la machine
+9 ; aucune somme de contrôle fausse ; 22 processus refaits pour vol de temps au-dessus de 2 %, un seul gardé au-dessus
+du seuil (K4 en SIMD explicite, 3,5 %, hors classement). Témoins de disposition : 0,985, 0,975 et 1,001. Temps,
+rapports et scénarios : `results/report_csharp.md` et `results/csharp_check.json` ; données : `results/raw_csharp/`.
+
+### 4.1 Protocole et version (même binaire, même hôte)
+
+| Comparaison | Clés | Moyenne géométrique des rapports | IC 90 % | Remarque |
+|---|---|---|---|---|
+| FullOpts dès le premier appel / protocole (P1/P0) | 26 | 0,998 | 0,976–1,018 | 0,97 |
+| 120 échauffements, niveau 1 avec PGO / protocole (P2/P0) | 16 | 0,975 | 0,948–0,999 | 0,99 (0,96–1,03) |
+| .NET 11 RC3 / .NET 10, protocole P0 | 26 | 0,990 | 0,966–1,014 | 0,99 |
+
+* **En moyenne, le protocole ne pénalise presque pas C#** : 0 à 2,5 %, soit 0,7 à 0,9 point de score (S-P1, S-P2).
+  Clé par clé, l'effet va de 0,85 (K1 SoA en FullOpts, K6 `mt` Q6 en régime établi ; K5 tuned 0,86) à 1,16 (K7
+  naturel en FullOpts, c'est-à-dire sans PGO dynamique) ; K4 sans branchement gagne 6 à 10 % hors du code OSR, qui
+  garde une vérification de bornes dans la boucle.
+* **.NET 11 RC3** : 0,99 en moyenne ; K4 sans branchement 0,81 (IC 0,76–0,85 ; la remarque disait 0,64 à 0,71), dont la
+  boucle compte un `movsxd` de moins. Information seulement (préversion).
+
+### 4.2 Formes de la remarque, threads du pool, autres choix de code naturel
+
+| Clé | Forme | Rapport mesuré (IC 95 %) | Remarque |
+|---|---|---|---|
+| K4 sans branchement | déroulée par 4, protocole P0 | 0,82 (0,77–0,88) | 0,68 |
+| | déroulée par 4, FullOpts | 0,72 (0,68–0,76) | |
+| Q1 tuned | accumulateurs en variables locales, protocole P0 | 4,05 (3,07–6,02) | 0,70 |
+| | la même forme, FullOpts | 0,84 (0,79–0,89) | |
+| Q1 `mt` | la même forme, P0 / FullOpts | 2,66 / 0,85 | |
+| K8 tuned | pile explicite (C#) | 0,51 (0,47–0,54) | 0,31 |
+| | pile explicite, C par clang / par GCC | 0,93 / 0,65 | 0,32 / 0,50 |
+| K6 `mt` Q6 / K9 `mt` | threads du pool (`Parallel.For`) | 0,71 / 0,63 | |
+| K1 naturel / permuté | `struct` dans `List<T>` (64,0 octets par particule) | 0,83 / 0,23 | |
+| K6 naturel Q6 / Q1 | colonnes en paramètres | 0,47 / 0,86 | 0,38 à 0,42 (Q6) |
+| K4 | SIMD explicite (`vpsadbw`) : 0,83 ms | 0,053 | 0,6 à 0,8 ms |
+
+* **Le piège de l'OSR** : avec le protocole commun, la forme « en registres » de Q1 est quatre fois plus lente, car sa
+  compilation OSR se replie en MinOpts (section 2) ; elle n'est meilleure (0,84) qu'en optimisation complète, ce que
+  l'attribut documenté `[MethodImpl(MethodImplOptions.AggressiveOptimization)]` obtient méthode par méthode.
+* **K8** : la pile explicite aide C# (0,51) et le C de GCC (0,65), presque pas le C de clang (0,93) : le gain n'est pas
+  propre à C#. Mesurée ici, la version itérative de C# (124 ms) égale la version récursive du C de GCC (124 ms).
+* **K6 naturel** (désassemblage, FullOpts) : avec les colonnes en champs statiques, le JIT recharge le champ à chaque
+  accès et garde deux comparaisons par test de plage ; en paramètres, il fusionne chaque test en une comparaison non
+  signée (`sub`, `cmp`, `jbe`). Les vérifications de bornes restent dans les deux formes : la remarque a raison sur la
+  fusion, pas sur l'élimination des vérifications.
+* **Threads du pool** : pour Q1 `mt`, le gain est noyé par le noyau piégé de la copie (1,10) ; il est retenu à 1.
+
+### 4.3 Report sur les données principales et scénarios
+
+Le pont par le C de clang s'écarte du transfert de plus de 25 % pour K8 tuned (34 %), Q1 tuned, K1 naturel et permuté,
+K6 naturel Q1, et Q1 et K9 `mt` du pool (`results/report_csharp.md`) : les deux versions sont publiées, comme prévu. Entre les deux
+architectures, le rapport hôte de C# et celui du C diffèrent, ce que `docs/CHAPEL.md` (4.2) avait déjà montré.
+
+| Scénario | Score de C# | Plafond E | Défaut D | Rang espéré | Place | Rang 90 % | Écart avec Mojo | Min. des 13 premiers devant C# |
+|---|---|---|---|---|---|---|---|---|
+| Publié (refait par le même code) | 54,8 | 56,2 | 32,9 | 14,19 | 14 | 13–16 | 7,9 | 98 % |
+| S-E7 : E7 = 1 | 55,0 | 56,2 | 32,9 | 14,17 | 14 | 13–16 | 7,7 | 97 % |
+| S-P1 : FullOpts | 55,7 | 58,9 | 32,2 | 14,12 | 14 | 13–16 | 6,6 | 97 % |
+| S-P2 : régime établi | 55,4 | 58,0 | 32,7 | 14,12 | 14 | 13–16 | 6,9 | 97 % |
+| S-N11 : .NET 11 RC3 (information) | 55,5 | 58,1 | 32,7 | 14,15 | 14 | 13–16 | 7,2 | 97 % |
+| S1 / S1-T : formes de la remarque (P0) | 58,3 / 57,4 | 65,0 / 62,7 | 32,9 | 13,89 / 14,00 | 14 | 12–15 / 13–15 | 4,4 / 5,4 | 93 / 95 % |
+| S1-R : K8 itératif aussi pour les autres | 56,0 | 59,4 | 32,6 | 14,10 | 14 | 13–15 | 6,7 | 97 % |
+| S1-P1 : formes et FullOpts | 58,8 | 66,7 | 32,2 | 13,84 | 14 | 12–15 | 3,5 | 90 % |
+| S-pool / S-pool-T | 55,0 / 55,7 | 56,8 / 58,5 | 32,9 | 14,17 / 14,13 | 14 | 13–16 | 7,7 / 7,0 | 97 % |
+| S-nat / S-nat-T : K1 en `struct`, K6 en paramètres | 57,1 / 56,7 | 56,2 | 42,2 / 40,7 | 13,88 / 13,93 | 14 | 13–15 | 5,6 / 6,0 | 94 / 95 % |
+| S-K1 / S-K6 (transfert) | 56,6 / 54,9 | 56,2 | 40,4 / 33,2 | 13,95 / 14,16 | 14 | 13–15 / 13–16 | 6,1 / 7,9 | 96 / 98 % |
+| **S-max / S-max-T** : tout à la fois, E7 = 1 | **62,6 / 62,0** | 70,0 / 69,4 | 41,2 / 39,8 | **12,88 / 13,16** | **14** | 10–14 / 11–14 | **−0,3 / 0,2** | **62 / 70 %** |
+| S-K4 : K4 hors du plafond, pour tous | 58,9 | 66,4 | 32,9 | 13,98 | 14 | 13–15 | (Julia, 13e : 3,8) | 92 % |
+| S-K4simd (unilatéral) | 60,1 | 69,9 | 32,1 | 12,85 | 14 | 8–15 | −1,3 | 67 % |
+
+* **C# reste 14e dans les 19 scénarios.** Quand C# devient la référence d'un noyau (K1 SoA en FullOpts, K6 naturel en
+  paramètres, K4 en SIMD), les autres langages perdent un peu : Mojo passe de 62,7 à 62,3 points dans S-max ; dans
+  S-K4simd, tous perdent 4 à 5 points, ce qui rend ce scénario unilatéral.
+* **Les gains se décomposent ainsi** : formes de la remarque +2,6 à +3,5 points (+4,0 avec FullOpts, +1,2 seulement si
+  les autres langages reçoivent aussi K8 itératif) ; K1 en `struct` +1,9 ; protocole +0,7 à +0,9 ; threads du pool +0,2
+  à +0,9 ; E7 +0,25 ; K6 en paramètres +0,1.
+* **La remarque estimait** 57,9 avec les meilleures formes (ici 56,0 à 58,8 selon K8 et le protocole), 60,5 à 61,0 avec
+  K1 en `struct`, K6 en paramètres et E7 à 1 (ici, avec le protocole et le pool en plus : 62,0 à 62,6), 60,3 avec K4 en
+  SIMD pour C# seul (ici 60,1), +2,3 points pour K1 en `struct` (ici +1,9) et +0,1 pour K6 (ici +0,1).
+
+### 4.4 Verdicts
+
+* **Les faits** : tous exacts, sauf un détail : Go monomorphise par forme GC (une copie pour `int`, une pour
+  `float64`), mais appelle les méthodes par dictionnaire. Pour les PR de `dotnet/runtime`, je vérifie l'absence de
+  fusion, pas la fermeture.
+* **E7** : jugement, gardé à 0,5 (texte précisé) ; à 1, +0,25 point.
+* **Le protocole** : confirmé, l'effet moyen est faible (0 à 2,5 %, +0,7 à +0,9 point). Mais il a un piège que la
+  remarque ne voit pas : une méthode qui garde beaucoup de vecteurs vivants peut perdre l'optimisation en OSR. Le
+  protocole reste commun aux langages à JIT (décision 3) ; l'effet est publié comme limite.
+* **Les formes** : confirmées en direction, plus faibles qu'annoncé (K4 0,72 à 0,82 ; K8 0,51 ; Q1 0,84 en FullOpts
+  seulement) ; ce ne sont pas des erreurs de mon implémentation (le code fait ce qu'il annonce), elles restent des
+  sensibilités.
+* **La marge** : la remarque a raison sur le fond. Avec tout ce qui est favorable à C# à la fois (S-max), C# rejoint
+  Mojo au score (62,0 à 62,6 contre 62,3) et Mojo ne le devance plus que dans 62 à 70 % des variantes, au lieu de 98 % ;
+  C# reste 14e en rang espéré. Les autres langages ont aussi leur marge (Julia : `docs/JULIA.md`).
+* **Effet sur le classement publié** : aucun, conformément au plan (3.2) ; le README est précisé (décision 2).

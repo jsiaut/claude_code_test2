@@ -9,3 +9,104 @@ csharp_steady k6   mt                   q6         p0 n=10 med=0.004365s ok={Tru
 csharp_steady k5   natural                         p0 n=10 med=0.078365s ok={True} rc=0 
 csharp_steady k4   branchless_unsorted             p0 n=10 med=0.014622s ok={True} rc=0 
 csharp_steady k5   tuned                           p0 n=10 med=0.004502s ok={True} rc=0 
+csharp_steady k1   natural              energy     p0 n=10 med=0.032963s ok={True} rc=0 
+csharp_steady k6   natural              q1         p0 n=10 med=0.090070s ok={True} rc=0 
+csharp_steady k9   mt                              p0 n=10 med=0.014944s ok={True} rc=0 
+csharp_steady k6   tuned                q6         p0 n=10 med=0.019235s ok={True} rc=0 
+csharp_steady k9   tuned                           p0 n=10 med=0.021105s ok={True} rc=0 
+csharp_steady k3   sw_padded                       p0 n=10 med=0.079914s ok={True} rc=0 
+csharp_steady k5   natural                         p0 n=10 med=0.084130s ok={True} rc=0 
+csharp_steady k1   aos                  energy     p0 n=10 med=0.024478s ok={True} rc=0 
+csharp_steady k2   tuned                262144     p0 n=10 med=0.022871s ok={True} rc=0 
+csharp_steady k9   natural                         p0 n=10 med=0.065277s ok={True} rc=0 
+csharp_steady k9   tuned                           p0 n=10 med=0.028510s ok={True} rc=0 
+csharp_steady k6   natural              q1         p0 n=10 med=0.085767s ok={True} rc=0 
+csharp_steady k4   natural_unsorted                p0 n=10 med=0.079469s ok={True} rc=0 
+csharp_steady k6   natural              q6         p0 n=10 med=0.133476s ok={True} rc=0 
+csharp_steady k2   tuned                16384      p0 n=10 med=0.007900s ok={True} rc=0 
+csharp_steady k6   tuned                q6         p0 n=10 med=0.017998s ok={True} rc=0 
+csharp_steady k1   natural              energy     p0 n=10 med=0.035531s ok={True} rc=0 
+csharp_steady k6   mt                   q6         p0 n=10 med=0.006544s ok={True} rc=0 
+csharp_steady k5   tuned                           p0 n=10 med=0.004158s ok={True} rc=0 
+csharp_steady k4   branchless_unsorted             p0 n=10 med=0.014655s ok={True} rc=0 
+csharp_steady k9   mt                              p0 n=10 med=0.017529s ok={True} rc=0 
+csharp_steady k6   tuned                q6         p0 n=10 med=0.017258s ok={True} rc=0 
+csharp_steady k6   natural              q6         p0 n=10 med=0.123791s ok={True} rc=0 
+csharp_steady k1   aos                  energy     p0 n=10 med=0.027820s ok={True} rc=0 
+csharp_steady k9   mt                              p0 n=10 med=0.017136s ok={True} rc=0 
+csharp_steady k6   mt                   q6         p0 n=10 med=0.007635s ok={True} rc=0 
+csharp_steady k9   natural                         p0 n=10 med=0.057382s ok={True} rc=0 
+csharp_steady k3   sw_padded                       p0 n=10 med=0.082107s ok={True} rc=0 
+csharp_steady k9   tuned                           p0 n=10 med=0.024842s ok={True} rc=0 
+csharp_steady k2   tuned                262144     p0 n=10 med=0.024081s ok={True} rc=0 
+csharp_steady k2   tuned                16384      p0 n=10 med=0.007835s ok={True} rc=0 
+csharp_steady k5   natural                         p0 n=10 med=0.085209s ok={True} rc=0 
+csharp_steady k1   natural              energy     p0 n=10 med=0.035991s ok={True} rc=0 
+csharp_steady k4   branchless_unsorted             p0 n=10 med=0.014542s ok={True} rc=0 
+csharp_steady k6   natural              q1         p0 n=10 med=0.081533s ok={True} rc=0 
+csharp_steady k4   natural_unsorted                p0 n=10 med=0.078126s ok={True} rc=0 
+csharp_steady k5   tuned                           p0 n=10 med=0.004126s ok={True} rc=0 
+csharp_steady k5   tuned                           p0 n=10 med=0.004277s ok={True} rc=0 
+csharp_steady k3   sw_padded                       p0 n=10 med=0.079188s ok={True} rc=0 
+csharp_steady k4   natural_unsorted                p0 n=10 med=0.079664s ok={True} rc=0 
+csharp_steady k6   tuned                q6         p0 n=10 med=0.017347s ok={True} rc=0 
+csharp_steady k6   natural              q1         p0 n=10 med=0.089947s ok={True} rc=0 
+csharp_steady k6   mt                   q6         p0 n=10 med=0.007957s ok={True} rc=0 
+csharp_steady k1   aos                  energy     p0 n=10 med=0.025526s ok={True} rc=0 
+csharp_steady k9   mt                              p0 n=10 med=0.018643s ok={True} rc=0 
+csharp_steady k4   branchless_unsorted             p0 n=10 med=0.012598s ok={True} rc=0 
+csharp_steady k9   natural                         p0 n=10 med=0.057958s ok={True} rc=0 
+csharp_steady k1   natural              energy     p0 n=10 med=0.036528s ok={True} rc=0 
+csharp_steady k2   tuned                16384      p0 n=10 med=0.007915s ok={True} rc=0 
+csharp_steady k5   natural                         p0 n=10 med=0.086277s ok={True} rc=0 
+csharp_steady k2   tuned                262144     p0 n=10 med=0.020773s ok={True} rc=0 
+csharp_steady k9   tuned                           p0 n=10 med=0.026330s ok={True} rc=0 
+csharp_steady k6   natural              q6         p0 n=10 med=0.124547s ok={True} rc=0 
+csharp_steady k6   natural              q6         p0 n=10 med=0.127448s ok={True} rc=0 
+csharp_steady k4   natural_unsorted                p0 n=10 med=0.077700s ok={True} rc=0 
+csharp_steady k1   aos                  energy     p0 n=10 med=0.025416s ok={True} rc=0 
+csharp_steady k2   tuned                262144     p0 n=10 med=0.023933s ok={True} rc=0 
+csharp_steady k6   tuned                q6         p0 n=10 med=0.016605s ok={True} rc=0 
+csharp_steady k5   tuned                           p0 n=10 med=0.005203s ok={True} rc=0 
+csharp_steady k4   branchless_unsorted             p0 n=10 med=0.015267s ok={True} rc=0 
+csharp_steady k1   natural              energy     p0 n=10 med=0.045340s ok={True} rc=0 
+csharp_steady k9   tuned                           p0 n=10 med=0.026637s ok={True} rc=0 
+csharp_steady k6   natural              q1         p0 n=10 med=0.080120s ok={True} rc=0 
+csharp_steady k2   tuned                16384      p0 n=10 med=0.007456s ok={True} rc=0 
+csharp_steady k9   natural                         p0 n=10 med=0.058988s ok={True} rc=0 
+csharp_steady k5   natural                         p0 n=10 med=0.070742s ok={True} rc=0 
+csharp_steady k3   sw_padded                       p0 n=10 med=0.080799s ok={True} rc=0 
+csharp_steady k9   mt                              p0 n=10 med=0.017018s ok={True} rc=0 
+csharp_steady k6   mt                   q6         p0 n=10 med=0.005401s ok={True} rc=0 
+csharp_steady k3   sw_padded                       p0 n=10 med=0.077290s ok={True} rc=0 
+csharp_steady k9   mt                              p0 n=10 med=0.015515s ok={True} rc=0 
+csharp_steady k2   tuned                262144     p0 n=10 med=0.022406s ok={True} rc=0 
+csharp_steady k9   tuned                           p0 n=10 med=0.032616s ok={True} rc=0 
+csharp_steady k2   tuned                16384      p0 n=10 med=0.007903s ok={True} rc=0 
+csharp_steady k4   branchless_unsorted             p0 n=10 med=0.014014s ok={True} rc=0 
+csharp_steady k6   natural              q1         p0 n=10 med=0.081402s ok={True} rc=0 
+csharp_steady k4   natural_unsorted                p0 n=10 med=0.079936s ok={True} rc=0 
+csharp_steady k1   natural              energy     p0 n=10 med=0.045090s ok={True} rc=0 
+csharp_steady k9   natural                         p0 n=10 med=0.058303s ok={True} rc=0 
+csharp_steady k1   aos                  energy     p0 n=10 med=0.030359s ok={True} rc=0 
+csharp_steady k5   natural                         p0 n=10 med=0.083395s ok={True} rc=0 
+csharp_steady k6   tuned                q6         p0 n=10 med=0.016224s ok={True} rc=0 
+csharp_steady k5   tuned                           p0 n=10 med=0.003106s ok={True} rc=0 
+csharp_steady k6   natural              q6         p0 n=10 med=0.124911s ok={True} rc=0 
+csharp_steady k6   mt                   q6         p0 n=10 med=0.005472s ok={True} rc=0 
+csharp_steady k5   natural                         p0 n=10 med=0.083780s ok={True} rc=0 
+csharp_steady k5   tuned                           p0 n=10 med=0.005756s ok={True} rc=0 
+csharp_steady k6   mt                   q6         p0 n=10 med=0.006980s ok={True} rc=0 
+csharp_steady k2   tuned                262144     p0 n=10 med=0.022397s ok={True} rc=0 
+csharp_steady k9   mt                              p0 n=10 med=0.016270s ok={True} rc=0 
+csharp_steady k4   branchless_unsorted             p0 n=10 med=0.012734s ok={True} rc=0 
+csharp_steady k4   natural_unsorted                p0 n=10 med=0.077650s ok={True} rc=0 
+csharp_steady k2   tuned                16384      p0 n=10 med=0.007785s ok={True} rc=0 
+csharp_steady k1   natural              energy     p0 n=10 med=0.036800s ok={True} rc=0 
+csharp_steady k9   tuned                           p0 n=10 med=0.023640s ok={True} rc=0 
+csharp_steady k6   natural              q1         p0 n=10 med=0.079434s ok={True} rc=0 
+csharp_steady k1   aos                  energy     p0 n=10 med=0.025397s ok={True} rc=0 
+csharp_steady k6   natural              q6         p0 n=10 med=0.135590s ok={True} rc=0 
+csharp_steady k3   sw_padded                       p0 n=10 med=0.086567s ok={True} rc=0 
+csharp_steady k6   tuned                q6         p0 n=10 med=0.017039s ok={True} rc=0 
+csharp_steady k9   natural                         p0 n=10 med=0.058025s ok={True} rc=0 
