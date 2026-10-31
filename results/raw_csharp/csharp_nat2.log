@@ -1,0 +1,2 @@
+csharp_nat2 k6   natural              q1         p0 n=10 med=0.066601s ok={True} rc=0 
+csharp_nat2 k1   natural_shuffled     energy     p0 n=8 med=0.027474s ok={True} rc=0 

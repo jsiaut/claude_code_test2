@@ -1,0 +1,11 @@
+csharp_steady k9   natural                         p0 n=10 med=0.051684s ok={True} rc=0 
+csharp_steady k2   tuned                262144     p0 n=10 med=0.023027s ok={True} rc=0 
+csharp_steady k2   tuned                16384      p0 n=10 med=0.008117s ok={True} rc=0 
+csharp_steady k3   sw_padded                       p0 n=10 med=0.074775s ok={True} rc=0 
+csharp_steady k6   natural              q6         p0 n=10 med=0.120508s ok={True} rc=0 
+csharp_steady k4   natural_unsorted                p0 n=10 med=0.079598s ok={True} rc=0 
+csharp_steady k1   aos                  energy     p0 n=10 med=0.029225s ok={True} rc=0 
+csharp_steady k6   mt                   q6         p0 n=10 med=0.004365s ok={True} rc=0 
+csharp_steady k5   natural                         p0 n=10 med=0.078365s ok={True} rc=0 
+csharp_steady k4   branchless_unsorted             p0 n=10 med=0.014622s ok={True} rc=0 
+csharp_steady k5   tuned                           p0 n=10 med=0.004502s ok={True} rc=0 

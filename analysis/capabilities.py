@@ -279,7 +279,7 @@ MATRIX = {
         "D3": (0, "aucune"), "D4": (0.5, "Process.ProcessorAffinity (processus)"),
         "D5": (1, "Thread.SpinWait/SpinWait + Interlocked.MemoryBarrier"), "E1": (1, "JIT/AOT, DOTNET_JitDisasm"),
         "E2": (0, "aucun"), "E3": (0, "aucun"), "E4": (1, "Sse.Prefetch0"), "E5": (0, "aucun"),
-        "E6": (1, "Unsafe.Add, MemoryMarshal, pointeurs"), "E7": (0.5, "génériques spécialisés pour les struct ; pas de CTFE"),
+        "E6": (1, "Unsafe.Add, MemoryMarshal, pointeurs"), "E7": (0.5, "génériques spécialisés pour les types valeur (sonde : appel contraint inliné) ; pas d'évaluation à la compilation dans le langage, seulement des générateurs de source (greffons du compilateur) ; texte précisé le 31/10, remarque sur C#"),
         "F1": (1, "tableaux rectangulaires T[,] (bench K9)"), "F2": (0, "aucun"), "F3": (1, "uint/ulong, unchecked"),
         "F4": (1, "MemoryMappedFile + pointeur (sonde)"),
     },

@@ -1,0 +1,15 @@
+csharp     k7   tuned                           p0 n=3 med=0.560361s ok={True} rc=0 
+csharp     k4   branchless_unsorted             p0 n=10 med=0.015615s ok={True} rc=0 
+csharp     k4   natural_unsorted                p0 n=10 med=0.078903s ok={True} rc=0 
+csharp     k2   tuned                262144     p0 n=10 med=0.022293s ok={True} rc=0 
+csharp     k6   tuned                q6         p0 n=10 med=0.015315s ok={True} rc=0 
+csharp     k3   rmw_padded                      p0 n=10 med=0.223469s ok={True} rc=0 
+csharp     k6   mt                   q6         p0 n=10 med=0.004877s ok={True} rc=0 
+csharp     k2   tuned                16384      p0 n=10 med=0.007609s ok={True} rc=0 
+csharp     k5   tuned                           p0 n=10 med=0.004197s ok={True} rc=0 
+csharp     k1   natural              energy     p0 n=10 med=0.038073s ok={True} rc=0 
+csharp     k8   natural                         p0 n=3 med=0.485816s ok={True} rc=0 
+csharp     k8   tuned                           p0 n=10 med=0.250689s ok={True} rc=0 
+csharp     k6   natural              q6         p0 n=10 med=0.114790s ok={True} rc=0 
+csharp     k5   natural                         p0 n=10 med=0.085584s ok={True} rc=0 
+csharp     k9   tuned                           p0 n=10 med=0.025283s ok={True} rc=0 

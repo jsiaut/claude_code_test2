@@ -1,0 +1,9 @@
+csharp_exp k4   simd_unsorted                   p0 n=10 med=0.000784s ok={True} rc=0 
+csharp_exp k4   branchless_unsorted             p0 n=10 med=0.012132s ok={True} rc=0 
+csharp_exp k9   mt                              p0 n=10 med=0.016682s ok={True} rc=0 
+csharp_exp k6   tuned                q1         p0 n=10 med=0.132003s ok={True} rc=0 
+csharp_exp k9   mt_pool                         p0 n=10 med=0.011276s ok={True} rc=0 
+csharp_exp k6   mt_pool              q6         p0 n=10 med=0.005931s ok={True} rc=0 
+csharp_exp k9   tuned                           p0 n=10 med=0.024330s ok={True} rc=0 
+csharp_exp k6   mt                   q1         p0 n=10 med=0.043195s ok={True} rc=0 
+csharp_exp k6   mt                   q6         p0 n=10 med=0.008272s ok={True} rc=0 
