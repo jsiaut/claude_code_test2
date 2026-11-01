@@ -287,3 +287,11 @@ Recalculé de nouveau (`results/report_nosimd_current.md`, témoin égal au scé
 où Odin passe de 72,6 à 73,5 points par l'erratum C2) : les conclusions de 4.3 et 4.6 tiennent. Seul changement de
 place en tête : à forme égale (S-symétrique), Odin passe 1er devant C++ et C (78,4 points ; C++ 1er auparavant) ; sans
 les noyaux vectorisables, l'ordre reste C, Odin, C++.
+
+### 4.8 Recalcul après la remarque sur C++ (1er novembre, soir)
+
+Recalculé de nouveau (`results/report_nosimd_current.md`, témoin égal au scénario Publié de `results/cpp_check.json`,
+où C++ perd 2 points de contrôle en règle v1 par l'erratum C1 et passe 3e derrière Odin) : les conclusions tiennent,
+sauf une. À la lettre (S-scalaire), C++ passe 7e derrière Odin (6e), C restant 5e : C, Odin et C++ restent dans les
+sept premiers, et non plus C et C++ dans les six. À forme égale (S-symétrique), l'ordre reste Odin, C++, C ; sans les
+noyaux vectorisables, C, Odin, C++.

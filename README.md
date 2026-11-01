@@ -436,12 +436,12 @@ du langage.
   le GPU et les tenseurs sont dans le paquet MAX. Le classement mesure Mojo et sa `std` sur CPU ; ses noyaux à
   threads passent par un module privé de `std`.
 * Le plafond de K4 n'admet que des formes scalaires et compte donc la vectorisation automatique (voir plus haut).
-* Ailleurs, le plafond admet le SIMD explicite (« toutes techniques »). Sans lui ([`docs/NOSIMD.md`](docs/NOSIMD.md)),
-  les mêmes douze langages restent en tête, les neuf derniers ne bougent pas, et C et C++ restent dans les six
-  premiers. L'ordre des douze dépend du traitement des formes scalaires qui manquent : à la lettre, Chapel, Fortran et
-  Julia passent devant, parce que dans K1 et K5 le SIMD des autres porte aussi la disposition SoA et la réassociation
-  de la somme ; à forme égale pour tous, ou sans les noyaux vectorisables, C, C++ et Odin gardent les trois premières
-  places.
+* Ailleurs, le plafond admet le SIMD explicite (« toutes techniques »). Sans lui
+  ([`docs/NOSIMD.md`](docs/NOSIMD.md)), les mêmes douze langages restent en tête, les neuf derniers ne bougent pas, et
+  C, Odin et C++ restent dans les sept premiers. L'ordre des douze dépend du traitement des formes scalaires qui
+  manquent : à la lettre, Chapel, Fortran et Julia passent devant, parce que dans K1 et K5 le SIMD des autres porte
+  aussi la disposition SoA et la réassociation de la somme ; à forme égale pour tous, ou sans les noyaux
+  vectorisables, C, C++ et Odin gardent les trois premières places.
 * Trois échauffements pour les langages à JIT : les boucles chaudes tournent souvent en code OSR (compilé pour
   reprendre une boucle en cours), sans atteindre le niveau d'optimisation final. Mesuré pour C# : 0 à 2,5 % en moyenne
   (moins d'un point), de −15 % à +16 % selon le noyau ([`docs/CSHARP.md`](docs/CSHARP.md)) ; non mesuré pour Java,
@@ -450,7 +450,7 @@ du langage.
 ## Une autre étude, un autre ordre : pourquoi
 
 Le « Banc de sympathie mécanique », une étude voisine faite sur le même processeur que ma machine 3, classe C 11e sur 18
-langages communs, là où je le classe 1er. Corrélation de rang entre les deux ordres : 0,77, comme le 30 octobre. Je l'ai
+langages communs, là où je le classe 1er. Corrélation de rang entre les deux ordres : 0,78 (0,77 le 30 octobre). Je l'ai
 confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION.md)) :
 
 * **Leur règle du « standard »** (une extension du compilateur, POSIX pour C, une option globale ou un module

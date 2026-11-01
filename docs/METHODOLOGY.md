@@ -842,5 +842,8 @@ Robustesse :
   pointeur, 77,6 ; formes de C, 76,1. Pratique d'allocation de K9 établie (C × 1,7 à 2,0 en réallouant ; C++ au temps
   de C en allouant une fois), décrite comme limite du protocole. Sorties recalculées : classement, figures, matrice,
   scénarios de Zig, de Julia, de Mojo, de C#, de Rust et de Nim et sensibilité sans SIMD dans l'état actuel (témoin
-  pointé sur le scénario Publié de `results/cpp_check.json`), confrontation. README : tableau (Odin 2e, C++ 3e), ordre,
-  errata, paragraphes d'Odin et de C++, langages relus, limites (compilateur, harnais de K9, D2 et D4).
+  pointé sur le scénario Publié de `results/cpp_check.json`), confrontation. Conséquences hors de C++ : sans SIMD
+  explicite, à la lettre, C++ passe 7e derrière Odin (`docs/NOSIMD.md`, 4.8) ; sans K4 dans le plafond, C reprend la
+  1re place à C++, à égalité ; la corrélation de rang avec le « Banc » passe de 0,77 à 0,78. README : tableau (Odin 2e,
+  C++ 3e), ordre, errata, paragraphes d'Odin et de C++, langages relus, limites (compilateur, harnais de K9, D2 et D4),
+  ces trois conséquences, Zig de développement 1er dans 49 % des variantes.

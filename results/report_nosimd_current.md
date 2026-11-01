@@ -2,15 +2,15 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/odin_check.json, « Publié ».
+Témoin : écart maximal 0.0e+00 avec results/cpp_check.json, « Publié ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
 | Langage | Publié | Contrôle sans mt | S-scalaire | S-scalaire-Mojo | S-symétrique | S-noyaux-scalaires | S-importées |
 |---|---|---|---|---|---|---|---|
 | C | 1 (80,0) | 1 (80,5) | 5 (63,8) | 5 (63,8) | 3 (80,7) | 1 (77,6) | 1 (80,0) |
-| C++ | 2 (76,6) | 2 (77,9) | 6 (62,4) | 6 (62,4) | 2 (80,9) | 3 (73,0) | 2 (76,6) |
-| Odin | 3 (73,5) | 3 (74,9) | 7 (59,4) | 7 (59,4) | 1 (78,4) | 2 (71,8) | 3 (73,5) |
+| Odin | 2 (73,5) | 2 (74,9) | 6 (59,4) | 6 (59,4) | 1 (78,4) | 2 (71,8) | 2 (73,5) |
+| C++ | 3 (76,6) | 3 (77,9) | 7 (62,4) | 7 (62,4) | 2 (80,9) | 3 (73,0) | 3 (76,6) |
 | Zig | 4 (72,7) | 4 (74,2) | 9 (60,0) | 9 (60,0) | 4 (77,4) | 7 (68,3) | 4 (72,7) |
 | C3 | 5 (71,2) | 5 (72,4) | 11 (55,8) | 11 (55,8) | 5 (74,7) | 5 (69,0) | 5 (71,2) |
 | Nim | 6 (69,7) | 7 (70,6) | 8 (58,8) | 8 (58,8) | 6 (73,7) | 6 (68,5) | 13 (57,2) |
@@ -34,21 +34,21 @@ Témoin : écart maximal 0.0e+00 avec results/odin_check.json, « Publié ».
 
 | Scénario | Spearman / publié | 1er (part) | Places gagnées (+) ou perdues (−) par rapport au publié |
 |---|---|---|---|
-| Publié | 1,000 | C (56 %) | aucune |
-| Contrôle sans mt | 0,999 | C (46 %) | Rust +1, Nim -1 |
+| Publié | 1,000 | C (57 %) | aucune |
+| Contrôle sans mt | 0,999 | C (47 %) | Rust +1, Nim -1 |
 | S-scalaire | 0,736 | Chapel (44 %) | Julia +9, Fortran +9, Chapel +9, C3 -6, Zig -5, Ada +5, C -4, C++ -4, Odin -4, D -4, Rust -3, Nim -2 |
 | S-scalaire-Mojo | 0,736 | Chapel (44 %) | Julia +9, Fortran +9, Chapel +9, C3 -6, Zig -5, Ada +5, C -4, C++ -4, Odin -4, D -4, Rust -3, Nim -2 |
-| S-symétrique | 0,990 | C++ (28 %) | C -2, Odin +2, Chapel -2, Julia +1, Fortran +1, D +1, Rust -1 |
-| S-noyaux-scalaires | 0,975 | C (49 %) | Ada +5, Zig -3, C++ -1, Odin +1, D -1, Rust -1 |
-| S-importées | 0,956 | C (58 %) | Nim -7, Julia +2, Ada -2, Fortran +2, Chapel +2, D +1, Rust +1, Mojo +1 |
+| S-symétrique | 0,991 | Odin (25 %) | C -2, Chapel -2, C++ +1, Odin +1, Julia +1, Fortran +1, D +1, Rust -1 |
+| S-noyaux-scalaires | 0,977 | C (50 %) | Ada +5, Zig -3, D -1, Rust -1 |
+| S-importées | 0,956 | C (59 %) | Nim -7, Julia +2, Ada -2, Fortran +2, Chapel +2, D +1, Rust +1, Mojo +1 |
 
 ## Plafond E par scénario
 
 | Langage | Publié | Contrôle sans mt | S-scalaire | S-scalaire-Mojo | S-symétrique | S-noyaux-scalaires | S-importées |
 |---|---|---|---|---|---|---|---|
 | C | 85,3 | 86,6 | 44,4 | 44,4 | 79,6 | 79,3 | 85,3 |
-| C++ | 78,7 | 81,9 | 42,9 | 42,9 | 82,4 | 69,7 | 78,7 |
 | Odin | 78,6 | 82,0 | 42,9 | 42,9 | 82,4 | 74,2 | 78,6 |
+| C++ | 78,7 | 81,9 | 42,9 | 42,9 | 82,4 | 69,7 | 78,7 |
 | Zig | 70,7 | 74,6 | 38,6 | 38,6 | 74,0 | 59,6 | 70,7 |
 | C3 | 82,5 | 85,4 | 43,7 | 43,7 | 83,8 | 76,9 | 82,5 |
 | Nim | 72,9 | 75,0 | 45,1 | 45,1 | 74,3 | 69,9 | 41,6 |
@@ -83,8 +83,8 @@ Témoin : écart maximal 0.0e+00 avec results/odin_check.json, « Publié ».
 | Langage | k1#0 | k5#0 | k6#0 | k6#1 | k9#0 |
 |---|---|---|---|---|---|
 | C | aos 38,4 | natural 158,1 | tuned q6 21,3 | natural q1 83,4 | natural 38,4 |
-| C++ | aos 40,2 | natural 77,1 | natural q6 62,4 | natural q1 74,9 | tuned 36,2 |
 | Odin | aos 40,3 | natural 77,7 | natural q6 63,3 | natural q1 121,0 | natural 36,3 |
+| C++ | aos 40,2 | natural 77,1 | natural q6 62,4 | natural q1 74,9 | tuned 36,2 |
 | Zig | aos 41,9 | natural 80,0 | natural q6 67,1 | natural q1 77,7 | natural 40,2 |
 | C3 | aos 40,3 | natural 79,1 | natural q6 63,4 | natural q1 108,9 | natural 37,5 |
 | Nim | aos 38,8 | natural 81,4 | tuned q6 21,3 | natural q1 95,4 | tuned 36,6 |

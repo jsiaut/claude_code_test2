@@ -404,6 +404,11 @@ qui partait de mes notes v2). Rejouée après cette correction (`analysis/confro
 change pas : scénarios A à D 0,77, 0,85, 0,81 et 0,87, C 1er, 5e, 1er et 6e, seuils du test 3 inchangés, accord des
 grilles 0,74 et 0,81 ; le kappa du juge sous ma règle passe de 0,85 à 0,87 (sous la leur, 0,86).
 
+Rejouée après l'erratum C1 de C++ (1er novembre au soir, `docs/CPP.md` : `std::simd`, expérimental dans GCC 16, passe
+à 0,5 en règle v1 ; la règle v2 et leur règle ne changent pas) : scénario A 0,78 (Odin et C++ échangent les 2e et 3e
+places de mon ordre), B à D inchangés (0,85, 0,81 et 0,87), C 1er, 5e, 1er et 6e, accord des grilles inchangé (0,74 et
+0,81).
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le
