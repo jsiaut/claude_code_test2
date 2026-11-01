@@ -439,8 +439,9 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   [`docs/NIM.md`](docs/NIM.md) et [`results/report_nim.md`](results/report_nim.md).
 * La sensibilité « sans SIMD explicite », le classement des variantes (types vectoriels du langage, intrinsèques de la
   plateforme, intrinsèques importées) et le décompte corrigé des formes de Q1 (9 contre 5) :
-  [`docs/NOSIMD.md`](docs/NOSIMD.md) et [`results/report_nosimd.md`](results/report_nosimd.md) ; page d'explication :
-  [`docs/page/simd.html`](docs/page/simd.html).
+  [`docs/NOSIMD.md`](docs/NOSIMD.md) et [`results/report_nosimd.md`](results/report_nosimd.md) ; note d'explication
+  (règle de D, vecteurs du langage et intrinsèques importées, poids des piliers) :
+  [`docs/SIMD_EXPLICATION.md`](docs/SIMD_EXPLICATION.md).
 * La remarque sur Rust (queues de latence de K8 remesurées pour tous les langages, préchargement de K7 corrigé, cause du
   stencil naturel, règle de la libc en sensibilité) : [`docs/RUST.md`](docs/RUST.md) et
   [`results/report_rust.md`](results/report_rust.md).

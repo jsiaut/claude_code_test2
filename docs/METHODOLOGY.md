@@ -744,3 +744,5 @@ Robustesse :
   premières places reviennent aux mêmes langages et les positions 13 à 21 ne bougent pas. Le classement publié ne
   change pas. Correction : le décompte « 9 contre 2 » des formes de Q1 oubliait Java, Go et Haskell (9 contre 5 ; note
   datée dans `docs/NIM.md`). Page d'explication : `docs/page/simd.html` (`tools/nosimd/page.py`).
+* 2026-11-01, midi : la page HTML d'explication est remplacée, à la demande, par une note Markdown dans le dépôt
+  (`docs/SIMD_EXPLICATION.md`) ; `docs/page/` et `tools/nosimd/page.py` sont retirés. Rien n'est publié hors du dépôt.
