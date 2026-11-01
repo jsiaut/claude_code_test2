@@ -189,3 +189,13 @@ vite sur cet hôte que sur Cascade Lake, comme pour D, Rust et Chapel) ; K8 tune
 * **(4) K8** : exact ; × 0,91 (la remarque : 0,85), une place en sensibilité.
 * **Effet** : le classement publié ne change pas ; Nim y reste 7e. Ses formes optimisées mieux travaillées lui
   vaudraient 2,7 points et trois places.
+
+### 4.4 Correction du 1er novembre : le « 9 contre 2 »
+
+Le décompte de la section 2 (« un autre critère […] mettrait Nim et Ada en écart, à 9 contre 2 ») oubliait Java, Go et
+Haskell, qui écrivent eux aussi d'autres noyaux optimisés en SIMD explicite (Vector API, `simd/archsimd`, primitives de
+GHC). Sous ce critère, 9 implémentations écrivent Q1 en une passe vectorielle et 5 autrement : Nim et Ada en blocs
+scalaires, Java en blocs vectoriels, Go et Haskell en une passe scalaire. Le critère mettrait donc cinq langages en
+écart, pas deux. La phrase « hors de cette classe, la pratique est partagée » reste vraie, et plus encore qu'écrit. La
+règle retenue (la classe C1 = 1, dont la liste est exacte) et les verdicts ci-dessus ne changent pas. Détail :
+`docs/NOSIMD.md`, section 2.3. La section 2 reste telle qu'elle a été poussée avant les mesures.

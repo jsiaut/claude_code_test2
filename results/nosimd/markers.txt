@@ -1,0 +1,88 @@
+# Fonctions contenant des marqueurs de SIMD explicite (nombre de lignes)
+c: k1_soa(10), k5_tuned(6), q1_tuned(24), sq_prod(1), sq_cons(1)
+cpp: (global)(1), k1_soa(3), k5_tuned(1), q1_natural(2), q6_tuned(1), q1_tuned(1), cons(1), prod(1)
+zig: k1SoA(4), k5Tuned(1), q6Tuned(5), q1Tuned(6), k9Rows(1)
+odin: k1_soa(7), k5_tuned(6), q6_tuned(7), q1_tuned(17), k9_rows(1)
+c3: k1_soa(9), k5_tuned(5), ld8(1), ld32(1), q6_tuned(8), q1_tuned(15), k9_rows(5)
+rust: k1_soa(11), k5_tuned(6), q1_tuned(23), run_k7(1)
+nim: aligned_alloc(1), cfree(1), secs(3), mm512_setzero_ps(1), mm512_setzero_pd(1), mm512_set1_ps(1), mm512_load_ps(1), mm512_mul_ps(1), mm512_add_ps(1), mm512_fmadd_ps(1), mm512_reduce_add_ps(1), mm512_add_pd(1), mm512_cvtps_pd(1), mm512_castps512_ps256(1), mm512_extractf32x8_ps(1), mm512_reduce_add_pd(1), prefetchw(1), cpuRelax(1), k4Natural(1), k4Branchless(1), runK4(2), runK5(1), q6Tuned(1), runK6(3)
+d: (global)(6), k1SoA(6), k5Tuned(6), k9Rows(3)
+d_fix: (global)(6), k1SoA(6), k5Tuned(6), ld8(5), q1Tuned(13), k9Rows(3)
+ada: Pause(3), Fmadd(2), Vadd(2), K5_Tuned(1), V(2)
+mojo: k1_aos(1), k1_soa(3), k5_tuned(1), run_k5(5), q6_natural(1), ld8(1), q6_tuned(1), q1_tuned(1), run_k6(3), k9_rows(1)
+csharp: K1SoA(8), K5Tuned(6), Ld8(1), Ld32(1), Q6Tuned(6), Q1Tuned(15), RunK7(1), K9Rows(2)
+java: bench(5), k1SoA(7), k5Tuned(5), q6Tuned(6), q1Tuned(14)
+go: (global)(1), k1SoA(6), k5Tuned(5), runK5(1), q6Tuned(7)
+julia: aucune
+chapel: aucune
+fortran: load_i8(1), k4_natural(1), k4_branchless(1), run_k4(2), run_k5(1), q6_tuned(1), q1_tuned(1)
+haskell: k1SoA(7), k5Tuned(5), k9Rows(4)
+js: aucune
+python: aucune
+ocaml: aucune
+lua: aucune
+
+# Lignes lues à la main (faux positifs et cas limites)
+c bench/c/ms.c:617 [sq_prod] if (w - sq->read_idx_cache == CAP10) _mm_pause();
+c bench/c/ms.c:631 [sq_cons] if (rd == sq->write_idx_cache) _mm_pause();
+cpp bench/cpp/ms.cpp:29 [(global)] namespace ss = std::simd;
+cpp bench/cpp/ms.cpp:310 [q1_natural] using I16 = ss::vec<int32_t, 16>;
+cpp bench/cpp/ms.cpp:311 [q1_natural] using U8x16 = ss::vec<uint8_t, 16>;
+cpp bench/cpp/ms.cpp:587 [cons] if (rd == sq->write_idx_cache) __builtin_ia32_pause();
+cpp bench/cpp/ms.cpp:599 [prod] if (w - sq->read_idx_cache == CAP10) __builtin_ia32_pause();
+rust bench/rust/ms.rs:428 [run_k7] unsafe { _mm_prefetch::<_MM_HINT_T0>(tab.as_ptr().add(h[b] as usize) as *const i8) };
+nim bench/nim/ms.nim:28 [secs] M512 {.importc: "__m512", header: "<immintrin.h>".} = object
+nim bench/nim/ms.nim:29 [secs] M512d {.importc: "__m512d", header: "<immintrin.h>".} = object
+nim bench/nim/ms.nim:30 [secs] M256 {.importc: "__m256", header: "<immintrin.h>".} = object
+nim bench/nim/ms.nim:44 [prefetchw] proc prefetchw(p: pointer) {.importc: "__builtin_prefetch", header: "<stddef.h>", varargs.}
+nim bench/nim/ms.nim:45 [cpuRelax] proc cpuRelax() {.importc: "_mm_pause", header: "<immintrin.h>".}
+nim bench/nim/ms.nim:178 [k4Natural] proc k4Natural(v: seq[uint8]): uint64 {.noinline.} =
+nim bench/nim/ms.nim:181 [k4Branchless] proc k4Branchless(v: seq[uint8]): uint64 {.noinline.} =
+nim bench/nim/ms.nim:184 [runK4] let b = load[uint8]("k4_bytes.u8")
+nim bench/nim/ms.nim:185 [runK4] var d = newSeq[uint8](b.len)
+nim bench/nim/ms.nim:232 [runK5] q, d, t, rf, ls: ptr UncheckedArray[uint8]
+nim bench/nim/ms.nim:241 [q6Tuned] let m = int64(uint32(c.sd[i] - 8766) < 365'u32) and int64(uint8(c.d[i] - 5) <= 2'u8) and int64(c.q[i] < 24)
+nim bench/nim/ms.nim:287 [runK6] let c = Cols(sd: load[int32]("k6_shipdate.i32").p, pr: load[int32]("k6_extendedprice.i32").p, q: load[uint8]("k6_quantity.u8").p,
+nim bench/nim/ms.nim:288 [runK6] d: load[uint8]("k6_discount.u8").p, t: load[uint8]("k6_tax.u8").p, rf: load[uint8]("k6_returnflag.u8").p,
+nim bench/nim/ms.nim:289 [runK6] ls: load[uint8]("k6_linestatus.u8").p)
+d bench/d/ms.d:4 [(global)] import core.simd;
+d bench/d/ms.d:10 [(global)] import ldc.simd : loadUnaligned, storeUnaligned;
+d bench/d/ms.d:20 [(global)] alias float16 = __vector(float[16]);
+d bench/d/ms.d:21 [(global)] alias double8 = __vector(double[8]);
+d bench/d/ms.d:22 [(global)] alias int16 = __vector(int[16]);
+d bench/d/ms.d:23 [(global)] alias long8 = __vector(long[8]);
+ada bench/ada/ms.adb:98 [Pause] pragma Import (Intrinsic, Pause, "__builtin_ia32_pause");
+ada bench/ada/ms.adb:99 [Pause] type M512 is array (0 .. 15) of Float with Alignment => 64;
+ada bench/ada/ms.adb:100 [Pause] pragma Machine_Attribute (M512, "vector_type");
+ada bench/ada/ms.adb:424 [K5_Tuned] S0, S1, S2, S3 : M512 := [others => 0.0];
+ada bench/ada/ms.adb:426 [V] function V (Addr : System.Address) return M512 is
+ada bench/ada/ms.adb:427 [V] X : M512 with Import, Address => Addr;
+mojo bench/mojo/ms.mojo:75 [k1_aos] var acc = SIMD[DType.float64, 8](0)
+mojo bench/mojo/ms.mojo:278 [run_k5] var q: Col[DType.uint8]
+mojo bench/mojo/ms.mojo:279 [run_k5] var d: Col[DType.uint8]
+mojo bench/mojo/ms.mojo:280 [run_k5] var t: Col[DType.uint8]
+mojo bench/mojo/ms.mojo:281 [run_k5] var rf: Col[DType.uint8]
+mojo bench/mojo/ms.mojo:282 [run_k5] var ls: Col[DType.uint8]
+mojo bench/mojo/ms.mojo:292 [q6_natural] comptime I16 = SIMD[DType.int32, 16]
+mojo bench/mojo/ms.mojo:295 [ld8] def ld8(c: Col[DType.uint8], i: Int) -> I16:
+mojo bench/mojo/ms.mojo:376 [run_k6] var c = Cols(load[DType.int32]("k6_shipdate.i32"), load[DType.int32]("k6_extendedprice.i32"), load[DType.uint8]("k6_quantity.u8"),
+mojo bench/mojo/ms.mojo:377 [run_k6] load[DType.uint8]("k6_discount.u8"), load[DType.uint8]("k6_tax.u8"), load[DType.uint8]("k6_returnflag.u8"),
+mojo bench/mojo/ms.mojo:378 [run_k6] load[DType.uint8]("k6_linestatus.u8"))
+csharp bench/csharp/Program.cs:251 [Ld8] static Vector512<int> Ld8(byte[] a, int i) => Avx512F.ConvertToVector512Int32(Vector128.LoadUnsafe(ref MemoryMarshal.GetArrayDataReference(a), (nuint)i));
+csharp bench/csharp/Program.cs:252 [Ld32] static Vector512<int> Ld32(int[] a, int i) => Vector512.LoadUnsafe(ref MemoryMarshal.GetArrayDataReference(a), (nuint)i);
+csharp bench/csharp/Program.cs:393 [RunK7] for (int b = 0; b < B; b++) { h[b] = (keys[i + b] * 0x9E3779B1u) >> (32 - LOG); Sse.Prefetch0(tp + h[b]); }
+java bench/java/Ms.java:39 [bench] static final VectorSpecies<Float> FS = FloatVector.SPECIES_512;
+java bench/java/Ms.java:40 [bench] static final VectorSpecies<Double> DS = DoubleVector.SPECIES_512;
+java bench/java/Ms.java:41 [bench] static final VectorSpecies<Integer> IS = IntVector.SPECIES_512;
+java bench/java/Ms.java:42 [bench] static final VectorSpecies<Long> LS = LongVector.SPECIES_512;
+java bench/java/Ms.java:43 [bench] static final VectorSpecies<Byte> BS = ByteVector.SPECIES_128;
+go bench/go/ms.go:8 [(global)] "simd/archsimd"
+go bench/go/ms.go:346 [runK5] q, d, t, rf, ls []uint8
+fortran bench/fortran/ms.f90:86 [load_i8] integer(int8), allocatable, intent(out) :: a(:)
+fortran bench/fortran/ms.f90:268 [k4_natural] integer(int8), intent(in) :: b(:)
+fortran bench/fortran/ms.f90:277 [k4_branchless] integer(int8), intent(in) :: b(:)
+fortran bench/fortran/ms.f90:288 [run_k4] integer(int8), allocatable :: b(:)
+fortran bench/fortran/ms.f90:301 [run_k4] b(k:k + cnt(x) - 1) = int(merge(x, x - 256, x < 128), int8)
+fortran bench/fortran/ms.f90:360 [run_k5] integer(int8), allocatable :: q(:), d(:), t(:), rf(:), ls(:)
+fortran bench/fortran/tuned.f90:47 [q6_tuned] integer(int8), intent(in), contiguous :: d(:), q(:)
+fortran bench/fortran/tuned.f90:62 [q1_tuned] integer(int8), intent(in), contiguous :: q(:), d(:), t(:), rf(:), ls(:)
