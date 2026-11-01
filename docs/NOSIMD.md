@@ -295,3 +295,14 @@ où C++ perd 2 points de contrôle en règle v1 par l'erratum C1 et passe 3e der
 sauf une. À la lettre (S-scalaire), C++ passe 7e derrière Odin (6e), C restant 5e : C, Odin et C++ restent dans les
 sept premiers, et non plus C et C++ dans les six. À forme égale (S-symétrique), l'ordre reste Odin, C++, C ; sans les
 noyaux vectorisables, C, Odin, C++.
+
+### 4.9 Recalcul après la remarque sur C (1er novembre, soir)
+
+Recalculé de nouveau (`results/report_nosimd_current.md`, témoin égal au scénario Publié de `results/c_check.json`,
+où C et C++ perdent chacun 3,6 points de contrôle en règle v1 par les errata A3 et C2 ; scores inchangés) : les
+positions 13 à 21, les douze premiers et l'ordre sans les noyaux vectorisables (C, Odin, C++) ne changent pas. Deux
+places changent, de justesse. À la lettre (S-scalaire), C++ passe 9e (rang moyen 6,96), derrière Nim (6,74) et Zig
+(6,87), C et Odin restant 5e et 6e : C et Odin restent dans les six premiers dans les trois scénarios, C++ seulement
+dans deux. À forme égale (S-symétrique), Zig passe 3e devant C (3,54 contre 3,65 ; Odin 1er, 2,69 ; C++ 2e, 3,48),
+chacun des quatre étant 1er dans 20 à 28 % des variantes. Sans les mesures mt, C est 1er dans 43 % des variantes
+(52 % au publié).

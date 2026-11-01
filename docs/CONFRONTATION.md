@@ -409,6 +409,11 @@ Rejouée après l'erratum C1 de C++ (1er novembre au soir, `docs/CPP.md` : `std:
 places de mon ordre), B à D inchangés (0,85, 0,81 et 0,87), C 1er, 5e, 1er et 6e, accord des grilles inchangé (0,74 et
 0,81).
 
+Rejouée après les errata A3 et C2 de C et de C++ (1er novembre au soir, `docs/C.md` : `packed` et `<immintrin.h>`,
+hors norme ISO, passent à 0,5 en règle v1 ; la règle v2 et leur règle ne changent pas) : seuls les rangs espérés
+bougent (C 1,90 → 2,20 dans le scénario A, 2,50 → 2,84 dans le scénario C) ; ordres, Spearman (0,78, 0,85, 0,81 et
+0,87), rangs de C (1er, 5e, 1er et 6e), tests 3 et 4 et kappa du juge inchangés.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

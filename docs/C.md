@@ -180,3 +180,101 @@ Toutes partent du classement publié avec 3.2.
 * Pas de formes itératives ou par valeur pour les autres langages (C++, Rust, Zig en profiteraient) : non mesurées.
 * Pas d'ex aequo décrété : le classement reste le rang espéré sur les variantes, avec ses parts de 1re place.
 * Pas de vérification en ligne (N3837, C2y) ni de GCC 15.
+
+## 4. Résultats (après les mesures)
+
+Mesures du 1er novembre, de 18:14:14 à 18:17:43, sur la machine 16 (sans redémarrage) : 84 processus (12 cellules
+× 7), aucune somme de contrôle fausse, aucun processus refait (vol médian 0,31 %, maximum 1,63 %). Rien d'autre ne
+tournait ; pendant les mesures, seuls des fichiers ont été écrits, et poussés une fois (18:16:10). Sorties :
+`results/report_c.md` et `results/c_check.json` (`analysis/c_check.py`) ; données : `results/raw_c/`. Le scénario
+Avant reproduit exactement le publié d'avant la remarque (écart 0). Aucun écart au plan.
+
+### 4.1 Mesures appariées (machine 16)
+
+| K8 tuned | Forme du banc | Par valeur | Itérative |
+|---|---|---|---|
+| clang 23 (C classé) | 289,6 ms | 165,5 ms : 0,572 [0,514–0,637] | 115,6 ms : 0,399 [0,353–0,463] |
+| gcc 16 (annexe) | 154,9 ms | 69,8 ms : 0,450 [0,428–0,482] | 135,1 ms : 0,872 [0,795–0,967] |
+
+* **La remarque a raison sur K8.** L'arène du banc, dont l'état passe par la mémoire, coûte à C plus de la moitié de
+  son temps. Écrite par itération, elle prend 2,5 fois moins de temps sous clang ; reportée sur Cascade Lake, elle
+  ferait 106 ms, au niveau de la frontière de K8 (Ada, 107,7 ms). Sous gcc, c'est la récursion par valeur qui gagne
+  (× 0,45). Les processus de l'itératif sous clang vont de 94 à 151 ms : les 102 ms de la remarque en font partie.
+* Le témoin (K8 naturel, code inchangé) reste à 0,98 et 1,02 sous clang ; sous gcc, 1,06 et 1,11, dans le bruit de
+  cette mesure d'allocation.
+* « Clang n'est pas en cause » : en partie. Sous la forme du banc, gcc fait 0,53 fois le temps de clang ; sous la forme
+  itérative, clang fait mieux que gcc (116 contre 135 ms) ; sous la forme par valeur, gcc garde l'avantage (70 contre
+  166 ms). Le score K8 de C mesurait donc surtout l'écriture de l'arène, et secondairement le compilateur.
+
+### 4.2 Classement publié : les errata de la règle v1
+
+A3 et C2 passent à ½ en règle v1 pour C et pour C++ ; la règle v2 ne change pas, ni donc les scores. Dans la moitié
+des variantes qui tire la règle v1, le contrôle de C passe de 77,8 à 74,2 et celui de C++ de 82,7 à 79,1. **L'ordre ne
+change pas** : C reste 1er, mais moins nettement (rang espéré 1,90 → 2,20 ; 1er dans 52 % des variantes au lieu de
+57 % ; devant Odin dans 72 % au lieu de 79 %) ; Odin 2e (3,60 → 3,47), C++ 3e (3,80 → 4,16), Zig 4e (4,77 → 4,66).
+Les autres rangs espérés bougent de 0,1 au plus.
+
+### 4.3 Sensibilités et informations
+
+| Scénario | C | C++ | Odin | Rang espéré de C | C 1er | Tête |
+|---|---|---|---|---|---|---|
+| Publié | 80,01 | 76,57 | 73,49 | 2,20 (1er) | 52 % | C, Odin, C++, Zig |
+| S-K8-val : arène par valeur | 82,48 | 76,57 | 73,49 | 1,69 (1er) | 71 % | C, Odin, C++, Zig |
+| S-K8 : arène itérative | 84,08 | 76,51 | 73,42 | 1,56 (1er) | 77 % | C, Odin, C++, Zig |
+| I-K9-CL : grilles réallouées, pénalité de Cascade Lake | 79,69 | 77,18 | 74,10 | 2,52 (1er) | 42 % | C, Odin, C++, Zig |
+| R-v1 : contrôle en règle v1 | 73,90 | 71,94 | 72,53 | 2,94 (1er) | 31 % | C, Odin, Zig, C3 |
+| R-ISO : contrôle « ISO seul » | 70,33 | 71,12 | 72,61 | 5,31 (5e) | 10 % | Odin, Zig, C3, C++ |
+| T1 : C++ avec le K4 de clang++ | 80,01 | 79,71 | 73,49 | 2,49 (2e) | 36 % | C++, C, Odin, Zig |
+| T2 : T1 et I-K9-CL | 79,69 | 80,38 | 74,10 | 2,85 (2e) | 25 % | C++, C, Odin, Zig |
+| T3 : T2 et S-K8 | 83,73 | 80,30 | 74,03 | 1,78 (1er) | 67 % | C, C++, Odin, Zig |
+
+* **K8** : avec la meilleure forme, C gagne 4,1 points (le « + 3 à + 4 » de la remarque) et devient la frontière de
+  K8. L'annexe C par gcc, par valeur, passerait de 79,45 à 82,97. Meilleure forme : sensibilité, et d'autres langages
+  en profiteraient sans doute aussi (non mesurés).
+* **K9** : avec la pénalité du harnais mesurée sur Cascade Lake à code égal (× 1,58 à quatre fils, × 0,99 en un fil),
+  C perd 0,3 point et reste 1er. La remarque estimait − 0,8 : la frontière de K9 `mt` recule elle aussi (Chapel, qui
+  alloue une fois, la tenait ; elle passe à Mojo), ce qui amortit la perte. Avec la pénalité de la machine 15
+  (I-K9-C de la remarque sur C++), C perdait 2,7 points : c'est un majorant.
+* **Règle de contrôle** : en règle v1 partout, C reste 1er (73,9 points, devant Odin 72,5) ; sous la règle « ISO seule »
+  du « Banc », C tombe 5e et Odin passe 1er, comme dans la confrontation.
+* **Le tableau de la remarque se vérifie sur mesures** : avec le K4 de clang++, C++ passe devant C au rang espéré, de
+  justesse (2,45 contre 2,49 ; C reste devant au score, 80,0 contre 79,7) ; avec en plus des grilles de K9 réallouées
+  pour C, C++ est 1er (80,4 contre 79,7) ; avec en plus l'arène itérative pour C, C redevient 1er (83,7 contre 80,3).
+  La 1re place change avec ces choix : la remarque a raison de dire qu'elle n'est pas établie.
+
+### 4.4 Bilan de la remarque
+
+* **Juste** : la place de C dans le groupe de tête et ses chiffres (ensemble de rangs, annexe gcc, C ISO) ; les faits
+  de sa grille ; deux incohérences de la règle v1 (A3 ; C2 contre E4) ; l'écart C/C++ tient d'abord au compilateur
+  sur K4 ; le harnais de K9 avantage C, et la pénalité se mesure sur Cascade Lake même (× 1,58 à quatre fils) ; la
+  règle de contrôle décide (C 5e en « ISO seule ») ; C jouait à domicile (référence mise au point avant le plan, aucune
+  relecture jusqu'ici) ; l'arène de K8 sous-estime C, de 4 points.
+* **À nuancer** : l'incohérence de E4 se corrige dans l'autre sens (C2 à ½, pas E4 à 1), et l'effet n'est pas de
+  moins de 0,5 point mais de 3,6 points de contrôle en règle v1, pour C comme pour C++ ; la pénalité de K9 de type
+  Cascade Lake coûte 0,3 point à C, pas 0,8 ; « à compilateur égal, C et C++ sont à égalité » se vérifie sur K4, mais C
+  reprend l'avance dès que son arène de K8 est mieux écrite.
+* **Recommandations** : C est relu (cette remarque) ; le README dit ce qu'est le C classé, ses rangs en règle v1 et
+  « ISO seule », et les choix qui font changer la 1re place. Je ne déclare pas d'ex aequo : le classement reste le rang
+  espéré sur les variantes, où C est 1er dans 52 % d'entre elles, et la remarque montre surtout que cette place dépend
+  de choix de protocole, ce que le README dit maintenant. Harmoniser le harnais de K9 reste une décision de protocole,
+  en suspens ; son effet sur C est désormais mesuré (− 0,3 point).
+
+### 4.5 Conséquences hors de C (sorties de l'état actuel recalculées)
+
+Les errata ne touchent que les variantes en règle v1 : aucun score ne change, seuls les rangs espérés bougent. Sorties
+recalculées : classement, figures, matrice, scénarios de Zig, de Julia, de Mojo, de C#, de Rust et de Nim dans l'état
+actuel, sensibilité sans SIMD (témoin pointé sur le scénario Publié de `results/c_check.json`), confrontation.
+
+* **Sans K4 dans le plafond** (`results/report_mojo_current.md`, S-K4) : la tête se joue à trois. Zig passe 1er au
+  rang espéré (2,65), devant C (2,79) et C++ (2,79), qui restent devant au score (79,2 et 79,4 points contre 76,0) ;
+  chacun est 1er dans 27 à 30 % des variantes. Avant les errata : C 2,48, C++ 2,55, Zig 2,77.
+* **Zig de développement** (`results/report_zig.md`, S1) : toujours 1er, dans 52 % des variantes (49 % avant), C dans
+  35 % (37 %).
+* **Nim avec toutes ses versions optimisées** (`results/report_nim_current.md`, S-tout) : 3e au rang espéré (4,18)
+  au lieu de 4e (4,29) ; avec Q1 en intrinsèques seul, 5e comme avant.
+* **Sans SIMD explicite** (`docs/NOSIMD.md`, 4.9) : à la lettre, C++ passe 9e (rang espéré 6,96), derrière Nim (6,74)
+  et Zig (6,87) ; à forme égale, Zig passe 3e devant C (3,54 contre 3,65) ; sans les noyaux vectorisables, C, Odin et
+  C++ restent aux trois premières places.
+* **Julia, Mojo** : places inchangées dans tous leurs scénarios.
+* **Confrontation** (`results/confrontation_current.json`) : ordres, corrélations (0,78, 0,85, 0,81, 0,87) et rangs de
+  C (1er, 5e, 1er, 6e) inchangés ; seuls les rangs espérés bougent.

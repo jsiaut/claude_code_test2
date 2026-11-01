@@ -40,11 +40,11 @@ M = "mesure"  # rempli à partir du désassemblage (C3)
 MATRIX = {
     "c": {
         "A1": (1, "tableaux de struct (sonde)"), "A2": (1, "offsetof (sonde)"),
-        "A3": (0.5, "champs de bits standard (disposition propre à l'implémentation) ; packed seulement par attribut, extension (sonde) ; erratum v1 du 1/11, remarque sur C"), "A4": (1, "alignas, aligned_alloc (sonde)"),
+        "A3": (0.5, "champs de bits standard (disposition propre à l'implémentation) ; packed seulement par attribut, extension (sonde) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2"), "A4": (1, "alignas, aligned_alloc (sonde)"),
         "A5": (1, "union, memcpy (sonde)"), "A6": (0, "aucun"), "A7": (1, "float v[16] dans struct (sonde)"),
         "A8": (1, "stdint.h"), "B1": (1, "pas de GC"), "B2": (0.5, "malloc seulement ; arènes à la main (bench K8 tuned)"),
         "B3": (1, "tableaux sur la pile, VLA"), "B4": (1, "aucune allocation implicite"), "B5": (1, "pointeurs"),
-        "C1": (0.5, "vector_size : extension gcc/clang (sonde)"), "C2": (0.5, "immintrin.h (bench K5/K1/K6) : livré avec clang et gcc, hors norme ISO, comme _mm_prefetch (E4) et _mm_pause (D5) ; erratum v1 du 1/11, remarque sur C"),
+        "C1": (0.5, "vector_size : extension gcc/clang (sonde)"), "C2": (0.5, "immintrin.h (bench K5/K1/K6) : livré avec clang et gcc, hors norme ISO, comme _mm_prefetch (E4) et _mm_pause (D5) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2"),
         "C3": M, "C4": (0.5, "-ffast-math, #pragma clang fp reassociate (extensions)"),
         "C5": (0.5, "OpenMP (livré avec gcc/clang, hors norme C)"), "D1": (1, "threads.h / pthreads"),
         "D2": (1, "stdatomic.h memory_order_*"),
@@ -59,12 +59,12 @@ MATRIX = {
     },
     "cpp": {
         "A1": (1, "std::vector<struct> (bench)"), "A2": (1, "offsetof, disposition standard (sonde)"),
-        "A3": (0.5, "champs de bits ; packed seulement par attribut, extension (sonde) ; erratum v1 du 1/11, remarque sur C"), "A4": (1, "alignas + new aligné C++17 (sonde)"),
+        "A3": (0.5, "champs de bits ; packed seulement par attribut, extension (sonde) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2"), "A4": (1, "alignas + new aligné C++17 (sonde)"),
         "A5": (1, "std::bit_cast, unions (sonde)"), "A6": (0, "aucun en bibliothèque standard"),
         "A7": (1, "std::array en ligne"), "A8": (1, "cstdint"), "B1": (1, "pas de GC"),
         "B2": (1, "std::pmr, concept Allocator (bench K8 tuned_alloc)"), "B3": (1, "objets sur la pile"),
         "B4": (0.5, "std::function, exceptions, coroutines peuvent allouer"), "B5": (1, "pointeurs"),
-        "C1": (0.5, "std::simd C++26 (bench K1/K5/K6) : « highly experimental » dans GCC 16, __cpp_lib_simd non défini, x86 seulement, absent de libc++ 23 ; vector_size : extension gcc/clang (corrigé le 1/11, remarque sur C++)"), "C2": (0.5, "immintrin.h : livré avec g++ et clang++, hors norme ISO, comme _mm_prefetch (E4) et _mm_pause (D5) ; erratum v1 du 1/11, remarque sur C"), "C3": M,
+        "C1": (0.5, "std::simd C++26 (bench K1/K5/K6) : « highly experimental » dans GCC 16, __cpp_lib_simd non défini, x86 seulement, absent de libc++ 23 ; vector_size : extension gcc/clang (corrigé le 1/11, remarque sur C++)"), "C2": (0.5, "immintrin.h : livré avec g++ et clang++, hors norme ISO, comme _mm_prefetch (E4) et _mm_pause (D5) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2"), "C3": M,
         "C4": (1, "std::reduce/transform_reduce et std::simd::reduce : ordre libre explicite"),
         "C5": (0.5, "std::execution::par_unseq : série sans TBB tiers (libstdc++ : backend SERIAL, src c++config.h)"),
         "D1": (1, "std::jthread"), "D2": (1, "std::memory_order"),

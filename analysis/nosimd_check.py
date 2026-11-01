@@ -168,9 +168,9 @@ def main():
     pub = out["scenarios"].get("Publié")
     if pub:
         # témoin : le publié du 1er novembre au matin (results/nim_check.json, « Avant ») ; avec un suffixe (état actuel),
-        # le publié après la remarque sur C++ (results/cpp_check.json, « Publié » ; avant elle, odin_check.json, « Publié »,
-        # et c3_check.json, « Errata »)
-        src = ("cpp_check.json", "Publié") if suffix else ("nim_check.json", "Avant")
+        # le publié après la remarque sur C (results/c_check.json, « Publié » ; avant elle, cpp_check.json et
+        # odin_check.json, « Publié », et c3_check.json, « Errata »)
+        src = ("c_check.json", "Publié") if suffix else ("nim_check.json", "Avant")
         ref = json.load(open(os.path.join(ROOT, "results", src[0])))["scenarios"][src[1]]
         gap = max(max(abs(pub["ms0"][l] - ref["ms0"][l]), abs(pub["exp21"][l] - ref["exp21"][l])) for l in RANKED)
         out["check_published"] = {"max_gap": gap, "ok": gap < 1e-9, "ref": f"results/{src[0]}, « {src[1]} »"}

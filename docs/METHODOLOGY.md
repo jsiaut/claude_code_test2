@@ -847,3 +847,32 @@ Robustesse :
   1re place à C++, à égalité ; la corrélation de rang avec le « Banc » passe de 0,77 à 0,78. README : tableau (Odin 2e,
   C++ 3e), ordre, errata, paragraphes d'Odin et de C++, langages relus, limites (compilateur, harnais de K9, D2 et D4),
   ces trois conséquences, Zig de développement 1er dans 49 % des variantes.
+* 2026-11-01, vers 17:58 : **machine 16**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207,
+  4 vCPU ; 2,73 à 2,81 GHz effectifs, latence à 4 Mio 36,7 ns, DRAM 15,8 Go/s : `results/hw/machine16/`, caractérisé
+  avant la campagne de la remarque sur C).
+* 2026-11-01, 18:14 : **plan de la remarque sur C** (`docs/C.md`, sections 1 à 3, commit `a89dac6`), poussé avant les
+  mesures. Vérifications par des sondes et sur les données (`tools/c_check/`, `results/c_check/`), sans consulter de
+  page web : place de C, annexe gcc, C ISO pur, faits de la grille, pilier contrôle selon la règle exacts. Deux
+  incohérences de la règle v1, corrigées dans le sens de son texte (½ pour « non standard mais livré avec la chaîne ») :
+  A3 (`packed` par attribut) et C2 (`<immintrin.h>`, alors que E4 et D5, par le même en-tête, valaient ½) passent à ½
+  pour C et C++ ; la remarque proposait de monter E4. Sur Cascade Lake, `k9_rows` de C par gcc et de C++ par g++ sont
+  identiques : la pénalité du harnais de K9 s'y mesure (× 1,58 à quatre fils). Arène de K8 : état passé par la mémoire.
+* 2026-11-01, 18:14:14-18:17:43 : **mesures de la remarque sur C** (`tools/measure_c.py`, machine 16) : 12 cellules
+  × 7 processus (84) ; aucune somme de contrôle fausse, aucun processus refait (vol médian 0,31 %, maximum 1,63 %).
+  Rien d'autre ne tournait ; pendant les mesures, seuls des fichiers ont été écrits, et poussés une fois (18:16:10).
+* 2026-11-01, 18 h 20 à 19 h : **résultats de la remarque sur C** (`results/report_c.md`, `results/c_check.json`).
+  Aucun écart au plan. Classement publié : les errata de la règle v1 ; scores inchangés, ordre inchangé ; C reste
+  1er, moins nettement (rang espéré 1,90 → 2,20, 1er dans 52 % des variantes), Odin 2e (3,47), C++ 3e (4,16).
+  Sensibilités : arène de K8 itérative + 4,1 points (C à la frontière de K8) ; harnais de K9 de la majorité, avec la
+  pénalité de Cascade Lake, − 0,3 point (C reste 1er) ; règle v1 partout, C 1er ; « ISO seule », C 5e et Odin
+  1er ; le tableau de la remarque se vérifie (C++ 1er avec le K4 de clang++ et le harnais de K9 de la majorité ; C
+  1er avec en plus son arène itérative). Sorties recalculées : classement, figures, matrice, scénarios dans l'état
+  actuel (témoin pointé sur le scénario Publié de `results/c_check.json`), confrontation. Conséquences hors de C :
+  sans K4 dans le plafond, Zig passe 1er au rang espéré (2,65, devant C et C++, 2,79) ; sans SIMD explicite, à la
+  lettre, C++ passe 9e (6,96, derrière Nim et Zig), et à forme égale Zig passe 3e devant C (`docs/NOSIMD.md`, 4.9) ;
+  Zig de développement 1er dans 52 % des variantes ; Nim avec toutes ses versions optimisées 3e ; confrontation
+  inchangée hors des rangs espérés. Rapport : colonne du contrôle en règle v1 complétée après coup
+  (`analysis/c_check.py --report`, sans nouveau tirage). README : tableau, ordre, errata, paragraphes de C (ce qu'est
+  le C classé, rangs selon la règle, arène de K8, harnais de K9) et d'Odin, 1re place de C selon le protocole, sans
+  K4, Zig de développement, compilateur et arène de K8, langages relus, limites (versions optimisées, harnais de K9,
+  sans SIMD), lecture et reproduction.

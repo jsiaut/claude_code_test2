@@ -1,0 +1,14 @@
+c_gcc_k8val k8   natural                         p0 n=3 med=0.651902s ok={True} rc=0 
+c_gcc_k8val k8   tuned                           p0 n=10 med=0.066214s ok={True} rc=0 
+c_gcc_k8val k8   natural                         p0 n=3 med=0.818144s ok={True} rc=0 
+c_gcc_k8val k8   tuned                           p0 n=10 med=0.067178s ok={True} rc=0 
+c_gcc_k8val k8   tuned                           p0 n=10 med=0.067253s ok={True} rc=0 
+c_gcc_k8val k8   natural                         p0 n=3 med=0.743424s ok={True} rc=0 
+c_gcc_k8val k8   natural                         p0 n=3 med=0.596096s ok={True} rc=0 
+c_gcc_k8val k8   tuned                           p0 n=10 med=0.068823s ok={True} rc=0 
+c_gcc_k8val k8   tuned                           p0 n=10 med=0.067362s ok={True} rc=0 
+c_gcc_k8val k8   natural                         p0 n=3 med=0.672932s ok={True} rc=0 
+c_gcc_k8val k8   tuned                           p0 n=10 med=0.082689s ok={True} rc=0 
+c_gcc_k8val k8   natural                         p0 n=3 med=0.567610s ok={True} rc=0 
+c_gcc_k8val k8   tuned                           p0 n=10 med=0.073839s ok={True} rc=0 
+c_gcc_k8val k8   natural                         p0 n=3 med=0.638049s ok={True} rc=0 

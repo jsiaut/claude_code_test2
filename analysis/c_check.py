@@ -15,7 +15,8 @@ Scénarios (analyse globale de la v3 rejouée, mêmes tirages) :
   règle du « Banc » (analysis/standard_rule.py).
 * Tableau de la remarque : T1 = C++ avec le K4 de clang++ (rapports du pont de results/cpp_check.json) ; T2 = T1 et
   I-K9-CL ; T3 = T2 et S-K8.
-Sorties : results/c_check.json, results/report_c.md."""
+Sorties : results/c_check.json, results/report_c.md. Usage : c_check.py [--report] (--report : rapport seul, à partir
+de results/c_check.json)."""
 import glob, json, math, os, sys
 from collections import defaultdict
 
@@ -120,10 +121,31 @@ def run(data, lat, langs, footprint, c3, erratum=True, crule="main", v1_only=Fal
         v2.V2_DROP.update(saved_drop)
 
 
+def control_v1(c3):
+    """Pilier contrôle en règle v1 (poids par défaut), avec les errata (après) et sans (avant)."""
+    catw0 = {cat: w for cat, (w, _) in v2.CATEGORIES.items()}
+    after = v2.c_score(v2.c_cells("v1", c3), catw0)
+    saved = {k: v2.MATRIX[k[0]][k[1]] for k in OLD_V1}
+    try:
+        for (l, cap), old in OLD_V1.items():
+            v2.MATRIX[l][cap] = old
+        before = v2.c_score(v2.c_cells("v1", c3), catw0)
+    finally:
+        for (l, cap), v in saved.items():
+            v2.MATRIX[l][cap] = v
+    return {"before": before, "after": after}
+
+
 def main():
     for (l, cap) in OLD_V1:
         assert v2.MATRIX[l][cap][0] == 0.5 and v2.V2_OVERRIDES.get((l, cap), (None,))[0] == 1, (l, cap)
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
+    if "--report" in sys.argv:  # refait le rapport à partir des scénarios déjà calculés
+        out = json.load(open(os.path.join(ROOT, "results", "c_check.json")))
+        out["control_v1"] = control_v1(c3)
+        json.dump(out, open(os.path.join(ROOT, "results", "c_check.json"), "w"), indent=1, default=float)
+        report(out)
+        return
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
     data, lat, *_ = v2.dataset_main(transfers=True)
     v2.align_lat(data, lat)
@@ -150,7 +172,8 @@ def main():
              "T1": dict(d=scaled(data, t1)), "T2": dict(d=scaled(data, merge(t1, k9cl))),
              "T3": dict(d=scaled(data, merge(t1, k9cl, k8)))}
     out = {"bad": bad, "times_ms": times, "ratios": {n: {kk(k): v for k, v in dd.items()} for n, dd in r.items()},
-           "k9_penalty_cl": {kk(k): v for k, v in pen.items()}, "k8_frontier_ms": None, "scenarios": {}}
+           "k9_penalty_cl": {kk(k): v for k, v in pen.items()}, "k8_frontier_ms": None, "scenarios": {},
+           "control_v1": control_v1(c3)}
     for name, kw in plans.items():
         z = out["scenarios"][name] = run(kw.get("d", data), lat, langs, footprint, c3, erratum=kw.get("erratum", True),
                                          crule=kw.get("crule", "main"), v1_only=kw.get("v1_only", False))
@@ -206,7 +229,9 @@ def report(o):
     L += ["", "## Classement publié : avant et après les errata\n",
           "| Langage | Score | Contrôle v1 | Rang espéré avant → après | 1er avant → après |", "|---|---|---|---|---|"]
     for l in pu["order21"]:
-        L.append(f"| {NAMES.get(l, l)} | {f(pu['parts'][l]['MS'], 2)} | | {f(av['exp21'][l], 2)} → {f(pu['exp21'][l], 2)} | "
+        cv = o["control_v1"]
+        L.append(f"| {NAMES.get(l, l)} | {f(pu['parts'][l]['MS'], 2)} | {f(cv['before'][l])} → {f(cv['after'][l])} | "
+                 f"{f(av['exp21'][l], 2)} → {f(pu['exp21'][l], 2)} | "
                  f"{f(100 * av['first'][l], 0)} % → {f(100 * pu['first'][l], 0)} % |")
     L.append("")
     for name, z in o["scenarios"].items():

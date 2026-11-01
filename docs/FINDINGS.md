@@ -626,3 +626,18 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   6,99) ; K3 en écrivain unique y dépend du placement du code (C++ par clang++ 0,33 fois le temps de g++, 0,19 fois
   celui de C). Go met 1,8 à 2,3 s sur K1 naturel sur les Emerald Rapids (médianes de processus, machines 3 et 15), 56 ms
   sur Cascade Lake, en temps utilisateur (cause non cherchée).
+
+## Remarque sur C (1er novembre, machine 16, Emerald Rapids) — `docs/C.md`, `results/c_check/`
+
+* **C23 strict** : pas d'attribut `likely` (clang 23 l'ignore, gcc 16 le refuse en `-pedantic-errors`), ni type
+  vectoriel, ni préchargement, ni constante de ligne de cache ; `__GCC_DESTRUCTIVE_SIZE` (64) est une macro prédéfinie
+  par clang 23 et gcc 16 en mode C. `<immintrin.h>` (AVX-512, `_mm_prefetch`, `_mm_pause`) compile en C23 strict, hors
+  norme. `#pragma clang fp reassociate(on)` agit localement (somme vectorisée sous le pragma, scalaire sans).
+* **K9, harnais sur Cascade Lake** : `k9_rows` de C par gcc et de C++ par g++ compilent pour Cascade Lake en les mêmes
+  boucles. Dans les données principales, à code égal, réallouer les grilles et lancer les fils par `std::jthread`
+  coûte × 0,99 en un fil et × 1,58 à quatre fils.
+* **K8, arène de C** : `a8_build` relit et réécrit à chaque nœud ses deux compteurs passés par pointeur (`*top`,
+  `*counter`, du même type que des champs de l'arène), alors que `v = q + indice`. Sur la machine 16 : forme du banc
+  290 ms sous clang 23, 155 ms sous gcc 16 ; récursion par valeur 166 et 70 ms ; itérative 116 et 135 ms (processus de
+  94 à 151 ms sous clang). Avec la meilleure forme, le K8 tuned de C (106 ms reporté sur Cascade Lake) rejoint la
+  frontière (Ada, 107,7 ms).

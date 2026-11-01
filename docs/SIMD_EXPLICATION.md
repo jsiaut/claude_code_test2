@@ -12,10 +12,12 @@ et [`../results/report_nosimd.md`](../results/report_nosimd.md).
   vectoriels portables standard (C1 = 1) écrivent Q1 avec l'algorithme de la référence C.
 * **Nim et Ada ne sont pas dans cette classe.** Leurs Q1 en blocs restent dans le score ; leurs réécritures sont des
   sensibilités.
-* **Sans SIMD explicite, la structure tient** : les mêmes douze langages en tête, les mêmes neuf derrière, C et C++
-  dans les six premiers. Le calcul à la lettre met Chapel, Fortran et Julia devant, surtout parce que le SIMD des
-  autres porte aussi la disposition SoA (K1) et la réassociation de la somme (K5). À forme égale pour tous, C, C++ et
-  Odin gardent les trois premières places.
+* **Sans SIMD explicite, la structure tient** : les mêmes douze langages en tête, les mêmes neuf derrière, C et Odin
+  dans les six premiers (C++ aussi, sauf à la lettre, où il passe 9e de peu depuis les errata de la règle v1 des
+  remarques sur C++ et sur C). Le calcul à la lettre met Chapel, Fortran et Julia devant, surtout parce que le SIMD
+  des autres porte aussi la disposition SoA (K1) et la réassociation de la somme (K5). Sans les noyaux vectorisables,
+  C, Odin et C++ gardent les trois premières places ; à forme égale pour tous, Odin est 1er, puis C++, Zig et C au
+  coude à coude ([`NOSIMD.md`](NOSIMD.md), 4.8 et 4.9).
 
 ## Ce que pèse chaque pilier
 
@@ -197,8 +199,10 @@ leur enlève les deux.
 
 * Les positions 13 à 21 ne bougent pas : Mojo, C#, Java, Go, Haskell, OCaml, JavaScript, Python, Lua.
 * Les douze premières places reviennent aux mêmes douze langages.
-* C et C++ restent dans les six premiers ; C, C++ et Odin prennent les trois premières places à forme égale pour tous
-  comme sans les noyaux vectorisables.
+* C et Odin restent dans les six premiers ; C++ aussi dans l'état du matin, mais plus à la lettre depuis les errata
+  de la règle v1 des remarques sur C++ et sur C (9e, de peu). C, Odin et C++ prennent les trois premières places sans
+  les noyaux vectorisables ; à forme égale pour tous, c'étaient C, C++ et Odin le matin, et c'est aujourd'hui Odin,
+  puis C++, Zig et C au coude à coude ([`NOSIMD.md`](NOSIMD.md), 4.7 à 4.9).
 * Rust perd des places dans les trois. C3 en perdait aussi dans l'état du matin, plus depuis les errata de sa matrice
   (5e à forme égale comme sans les noyaux vectorisables ; `results/report_nosimd_current.md`).
 * Ne tient pas : la tête de Chapel, Fortran et Julia, 1er à 3e à la lettre, 10e à 12e dans les deux autres.
