@@ -2,9 +2,9 @@
  "missing": [],
  "c1": {
   "n": 88,
-  "exact": 0.9204545454545454,
-  "kappa_w": 0.8460769615192404,
-  "spearman": 0.9156389641539997
+  "exact": 0.9318181818181818,
+  "kappa_w": 0.8663291139240507,
+  "spearman": 0.9399551066217732
  },
  "c2": {
   "n": 88,
@@ -43,7 +43,7 @@
    "p_within1": 1.0
   },
   "odin": {
-   "a": 0.8181818181818182,
+   "a": 0.9090909090909091,
    "b": 0.9090909090909091,
    "p_within1": 1.0
   },
@@ -72,15 +72,6 @@
    "means": "aucun utilitaire public ; CachePadded priv\u00e9 (std::sync::mpmc::utils) ; #[repr(align(N))] sans constante ; crossbeam (tiers)",
    "category": "experimental",
    "evidence": "probes/rust/r_cachepad.rs : E0603 module utils is private ; nom pr\u00e9sent dans les m\u00e9tadonn\u00e9es de libstd"
-  },
-  {
-   "lang": "odin",
-   "item": "C2",
-   "blind": 1,
-   "mine": 0.5,
-   "means": "core:simd/x86 (SSE \u00e0 AVX assez complets, mais AVX2 12 proc\u00e9dures, AVX-512F 8, AVX-512BW 6) ; intrins\u00e8ques LLVM import\u00e9es par foreign + @(link_name=\"llvm.x86...\") (m\u00e9canisme de core:sys/llvm)",
-   "category": "standard_partiel",
-   "evidence": "probes/odin/x512/x.odin : vpconflictd (import LLVM) et vpsrlvd zmm (core:simd/x86) \u00e9mis"
   },
   {
    "lang": "odin",

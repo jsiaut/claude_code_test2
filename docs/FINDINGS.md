@@ -200,15 +200,15 @@ fusionner les passes répétées (355 To/s).
   `vfmadd231ss`, fréquence mesurée par une chaîne d'`imul` : 2,0 cycles contre 3,9 à 4,0 en médiane
   (`tools/addfma.c`, `results/hw/machine3/addfma.txt`). Sur Cascade Lake, les deux valent 4 cycles. C'est ce qui
   sépare les deux familles du K5 naturel (fait suivant).
-* **K3 sur la machine 3 : l'alignement du code décide d'un facteur 7.** La même boucle de 16 `incq` en mémoire,
-  celle que clang, rustc et Odin produisent pour l'écrivain unique, prend environ 10 ms pour 2²⁵ incréments, soit
-  un cycle chacun, à certains décalages dans sa ligne de 64 octets : 8, et 36 à 48. Elle prend 56 à 77 ms, soit
-  sept cycles, aux autres décalages (`tools/k3_align.c`, `results/hw/machine3/k3_align.txt`). Dans la réplication,
-  la boucle de Rust (décalage 48) tourne en 13 ms, celles de C/clang (16) et d'Odin (32) en 76 et 79 ms, octet
-  pour octet identiques. Le code de GCC (`mov`, `inc`, `mov`, sans déroulage) prend 11 à 19 ms aux 16 mêmes décalages (`tools/k3_align_mov.c`). Le
+* **K3 sur la machine 3 : l'alignement du code décide d'un facteur 7.** La même boucle de 16 `incq` en mémoire, celle
+  que clang, rustc et Odin produisent pour l'écrivain unique, prend environ 10 ms pour 2²⁵ incréments, soit un cycle
+  chacun, à certains décalages dans sa ligne de 64 octets : 8, et 36 à 48. Elle prend 56 à 77 ms, soit sept cycles, aux
+  autres décalages (`tools/k3_align.c`, `results/hw/machine3/k3_align.txt`). Dans la réplication, la boucle de Rust
+  (décalage 48) tourne en 13 ms, celles de C/clang (16) et d'Odin (32) en 76 et 79 ms, octet pour octet identiques. Le
+  code de GCC (`mov`, `inc`, `mov`, sans déroulage) prend 11 à 19 ms aux 16 mêmes décalages (`tools/k3_align_mov.c`). Le
   mécanisme probable est un raccourci matériel de la dépendance écriture-lecture, qui ne s'applique que selon le
-  placement du code ; sans compteurs matériels, je ne peux pas le confirmer. Sur Cascade Lake, tous les langages
-  étaient entre 58 et 70 ms. C'est le biais de mesure de Mytkowicz et al. (ASPLOS 2009) à l'échelle d'un facteur 7.
+  placement du code ; sans compteurs matériels, je ne peux pas le confirmer. Sur Cascade Lake, tous les langages étaient
+  entre 58 et 70 ms. C'est le biais de mesure de Mytkowicz et al. (ASPLOS 2009) à l'échelle d'un facteur 7.
 * **Disposition du code, expérience de la v3** (`tools/layout_v3.py`, `results/raw_v3`, plan
   `docs/ANALYSIS_V3.md`, section 6). Même source, huit dispositions tirées par lld 23 (`--randomize-section-padding`,
   sections par fonction), deux processus par disposition, K1 à K9, sur un hôte du modèle de la machine 3.
@@ -558,3 +558,33 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   `posix::pthread_create` ne gagne que 6 % sur K9 mt (non significatif).
 * **Sur Emerald Rapids**, le K9 de C3 met 1,58 fois le temps de celui de C en un fil et 2,18 fois à quatre (0,93 et 1,40
   sur Cascade Lake) ; aligner ses accès ne change rien.
+
+## Remarque sur Odin (1er novembre, machine 14, Emerald Rapids) — `docs/ODIN.md`, `results/odin_check/`
+
+* **Odin dev-2026-10** (commit `84bc3fc`) : `-o:speed` prend le pipeline O2 de LLVM, `-o:aggressive` le pipeline O3
+  (et une génération de code agressive) : × 1,006 en moyenne sur les 27 mesures du score, de 0,83 (Q1 `mt`) à 1,24
+  (Q1 naturel).
+* **Intrinsèques de LLVM** : `foreign _` et `@(link_name="llvm.…")` importent n'importe quelle intrinsèque, `#const`
+  pour les opérandes immédiats ; `core:simd/x86` est écrit ainsi (246 liaisons ; 554 dans `core` et `base`, dont 77
+  dans `core:sys/llvm`). Sonde : `vpconflictd` et `vpternlogd`, absentes de `core:simd/x86`, sont émises.
+* **`@(optimization_mode="favor_size")` n'empêche pas l'inlining** ; `#force_no_inline` l'empêche. Sans annotation, LLVM
+  inlinait dix des quatorze noyaux du banc dans leur boucle de mesure. **Leurs boucles chaudes n'en changent pas** :
+  mêmes instructions, registres renommés près, isolés ou inlinés, pour Emerald Rapids comme pour Cascade Lake
+  (`results/odin_check/codegen.txt`) ; seuls K5 naturel (isolé, la vérification de bornes reste dans la boucle) et les
+  boucles externes de K9 diffèrent.
+* **Placement du code** : K4 naturel et K4 sans branchement d'Odin compilent en la même boucle ; dans un même binaire,
+  elles diffèrent de 8 % sur Cascade Lake (3,02 et 3,25 ms) et de 30 % sur Emerald Rapids (2,01 et 2,60 ms).
+* **Le pont par le C ne tient pas pour un code inchangé** : quand la boucle ne change pas, l'écart entre transfert et
+  pont vaut exactement la variation du rapport du langage au C d'un hôte à l'autre. Pour Odin, ce rapport passe de
+  0,99 à 0,75 sur K2 à 8 Mio, de 1,01 à 0,81 sur Q6 optimisé, de 0,95 à 0,71 sur Q6 `mt` et de 0,94 à 1,49 sur K9
+  naturel entre Cascade Lake et Emerald Rapids.
+* **Allocateur par défaut** : `heap_allocator_proc` demande alignement − 1 + 8 + taille octets, soit 39 pour un nœud
+  de 24 : glibc rend un bloc de 48 au lieu de 32 ; mémoire remise à zéro par `calloc` ; un appel indirect par
+  allocation (`mem_alloc_bytes`).
+* **Horloge** : `time.tick_now` passe par `syscall(SYS_clock_gettime)`, sans vDSO : 32 768 appels par répétition de
+  K8, de l'ordre de 3 ms sur 1,9 s.
+* **Q1 optimisé** : chaque groupe est compté par `simd.reduce_add_pairs(m & 1)` (39 permutations, aucun `popcnt`) ;
+  `card(simd.extract_msbs(m))` donne un `popcnt` du masque et divise le temps par 1,8 (41,96 → 23,10 ms ; 0,88 fois C
+  sur l'hôte) ; à quatre threads, × 0,54.
+* **Table `map`** : 4,9 fois la table plate sur K7 naturel, mais 3e des treize premiers langages (2,42 s ; Zig 1,66,
+  Nim 2,10 ; Rust 3,77, C 5,11, C++ 10,64) : toutes les tables standard sont 3,4 à 22 fois plus lentes que la leur.

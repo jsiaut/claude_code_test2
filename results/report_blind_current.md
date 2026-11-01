@@ -4,7 +4,7 @@ Plan : `docs/CONFRONTATION.md`, addendum. Données du juge : `results/blind_nota
 
 | Comparaison | Cellules | Accord exact | Kappa pondéré | Spearman | À un niveau près |
 |---|---|---|---|---|---|
-| (1) juge règle A / ma matrice v2 | 88 | 92 % | 0,85 | 0,92 | — |
+| (1) juge règle A / ma matrice v2 | 88 | 93 % | 0,87 | 0,94 | — |
 | (2) juge règle B / ma table du test 1 | 88 | 86 % | 0,86 | 0,95 | — |
 | (3) juge principes / leur grille | 48 | 56 % | 0,46 | 0,65 | 94 % |
 
@@ -18,7 +18,7 @@ Repère : sur les mêmes principes et les mêmes 8 langages, Spearman entre leur
 | C++ | 100 % | 91 % | 100 % |
 | Rust | 91 % | 82 % | 100 % |
 | Zig | 100 % | 91 % | 100 % |
-| Odin | 82 % | 91 % | 100 % |
+| Odin | 91 % | 91 % | 100 % |
 | D | 100 % | 91 % | 83 % |
 | Nim | 91 % | 73 % | 83 % |
 | C# | 73 % | 73 % | 83 % |
@@ -28,7 +28,6 @@ Ordre des 8 langages selon le juge : règle A C, C++, D, Zig, Odin, Nim, Rust, C
 ## Désaccords (1), règle A
 
 * Rust D3 : juge 0,50, moi 0,00 — aucun utilitaire public ; CachePadded privé (std::sync::mpmc::utils) ; #[repr(align(N))] sans constante ; crossbeam (tiers) (experimental)
-* Odin C2 : juge 1,00, moi 0,50 — core:simd/x86 (SSE à AVX assez complets, mais AVX2 12 procédures, AVX-512F 8, AVX-512BW 6) ; intrinsèques LLVM importées par foreign + @(link_name="llvm.x86...") (mécanisme de core:sys/llvm) (standard_partiel)
 * Odin C4 : juge 0,50, moi 0,00 — @(fast_math={.Allow_Reassoc}) documenté, mais le compilateur livré n'applique jamais reassoc (llvm_backend_opt.cpp:63 teste l'indice 0 comme masque) ; reste simd.reduce_add_pairs/bisect sur vecteurs explicites (standard_partiel)
 * Nim D3 : juge 0,50, moi 0,00 — aucune constante publique ; const CacheLineSize = 64 privée dans std/threadpool (déprécié) ; {.align(N).} sans taille (experimental)
 * C# D2 : juge 0,50, moi 1,00 — Volatile.Read (acquire) / Volatile.Write (release), Interlocked.* (barrière complète) ; ni relaxed explicite ni paramètre d'ordre (standard_partiel)

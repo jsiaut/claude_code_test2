@@ -76,6 +76,10 @@ R_OVERRIDES = {
     ("chapel", "E5"): (0.25, "foreach instable (erratum du 31/10)"),
     ("chapel", "D4"): (0.25, "variables d'environnement de l'exécutif"),
     ("chapel", "E4"): (0.25, "module « package » Prefetch"),
+    # Odin : C2 vaut 1 en règle v2 depuis le 1/11 (remarque sur Odin) ; sous leur règle, core:simd/x86 est standard mais
+    # partiel (AVX-512), le reste passe par l'import d'intrinsèques de LLVM (foreign), moyen non standard comme l'extern
+    # de Chapel : 0,5, la valeur d'avant l'erratum (et la note du juge à l'aveugle sous leur règle)
+    ("odin", "C2"): (0.5, "core:simd/x86 standard mais partiel ; le reste par import d'intrinsèques de LLVM (foreign)"),
     # Julia
     ("julia", "D4"): (0.25, "JULIA_EXCLUSIVE : variable d'environnement globale"),
     ("julia", "E5"): (0.25, "Base.Experimental.@aliasscope : expérimental"),

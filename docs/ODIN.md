@@ -135,3 +135,110 @@ Toutes partent du classement publié avec 3.2.
   (transfert seul partout, information), S-Q1, S-agg, S-Q1+agg, H-fm, H-tout.
 * Puis classement publié régénéré et sorties recalculées dans l'état actuel (comme pour C3).
 * Sorties : `results/odin_check.json`, `results/report_odin.md`.
+
+## 4. Résultats
+
+Sorties : `results/report_odin.md`, `results/odin_check.json` (`analysis/odin_check.py`),
+`results/odin_check/codegen.txt` (`tools/odin_check/codegen.py`). Mesures du 1er novembre, 12:53:33 à 13:09:27 : 693
+processus (99 cellules × 7), aucune somme de contrôle fausse ; 31 processus refaits pour vol de temps au-dessus de 2 %,
+aucun gardé au-dessus (vol médian 0,27 %, maximum 1,99 %). Rien d'autre ne tournait. Le scénario Avant reproduit
+exactement le publié d'avant la remarque (scénario Errata de `results/c3_check.json`, écart 0), et le classement
+régénéré (`results/summary_v3.json`) redonne exactement le scénario Publié (mêmes scores et rangs espérés).
+
+**Deux écarts au plan.** (1) Étiquette de l'hôte : les sections 2 et 3 nomment la machine 13 ; la VM avait redémarré
+vers 12 h 37 sur un hôte du même modèle (Emerald Rapids, modèle 207, 4 vCPU), avant les dernières vérifications et la
+campagne. Je ne l'ai vu qu'après les mesures, et l'ai caractérisé ensuite : **machine 14** (`results/hw/machine14/` :
+2,72 à 2,80 GHz effectifs, latence à 4 Mio 34 ns, DRAM 15,2 Go/s). Les vérifications ne dépendent pas de l'hôte et les
+rapports sont appariés sur un même hôte : rien d'autre ne change. (2) **La correction du banc n'est pas reportée sur les
+données principales** (4.2), décision prise après avoir vu les rapports.
+
+### 4.1 Mesures appariées (machine 14, même hôte)
+
+| Rapport | Clé | Avant → après | Rapport [IC 95 %] |
+|---|---|---|---|
+| Noyaux isolés (`odin_fix` / `odin_ref`) | K4 sans branchement | 2,60 → 1,99 ms | 0,764 [0,58–0,98] |
+| | K4 naturel | 2,01 → 1,71 ms | 0,853 [0,72–1,02] |
+| | K1 SoA ; K2 16 Kio ; K2 8 Mio | | 0,900 ; 0,943 ; 0,901 (intervalles de 0,63 à 1,32) |
+| | K1 naturel, mélangé, aos ; K2 256 Kio ; K5 naturel, optimisé ; Q6 optimisé, mt | | 0,976 à 1,041 |
+| | K9 naturel | 21,42 → 24,25 ms | 1,132 [0,94–1,37] |
+| | 13 clés témoins (noyaux non inlinés) | | 0,950 à 1,066 ; moyenne géométrique 0,993 |
+| Q1 par popcount (`odin_q1` / `odin_fix`) | Q1 optimisé | 41,96 → 23,10 ms | 0,551 [0,51–0,59] ; 0,88 fois C sur l'hôte |
+| | Q1 `mt` | 14,32 → 7,66 ms | 0,535 [0,46–0,62] ; 0,95 fois C sur l'hôte |
+| `-o:aggressive` (`odin_agg` / `odin_fix`) | 27 clés du score | | 1,006 en moyenne géométrique ; de 0,83 (Q1 `mt`) à 1,24 (Q1 naturel) ; K5 naturel 1,20 [1,08–1,36] |
+
+* **Q1 : le comptage par popcount divise le temps par près de deux** (× 0,55 et × 0,54) ; sur cet hôte, Q1 optimisé
+  d'Odin passe sous celui de C (0,88). La remarque supposait seulement « au niveau de Zig et C3 ».
+* **`-o:aggressive`** (pipeline O3) ne gagne rien en moyenne : il accélère Q1 `mt` et ralentit K5 naturel et Q1 naturel.
+* **Isoler les noyaux** : seul K4 sans branchement sort nettement du bruit des témoins ; K9 naturel ralentit (non
+  significatif).
+
+### 4.2 Écart au plan : la correction du banc n'est pas reportée
+
+Le plan reportait les rapports `odin_fix` / `odin_ref` des 14 clés sur les données principales (Cascade Lake), par la
+règle du pont. Deux constats, faits après les mesures, s'y opposent.
+
+* **L'isolement ne change pas le code des boucles chaudes** (`results/odin_check/codegen.txt`). Pour chaque boucle des
+  noyaux isolés, la même boucle (mêmes instructions, mêmes opérandes, registres renommés) existe dans le binaire à
+  noyaux inlinés, pour les binaires mesurés comme pour les deux sources compilés pour Cascade Lake : K1 naturel et SoA,
+  K2, K4 (ses deux formes donnent d'ailleurs la même boucle), K5 optimisé, Q6 optimisé, boucle vectorielle de K9
+  naturel. Ne diffèrent que K1 aos (l'attribut `favor_size` retiré par la correction), K5 naturel (isolé, la
+  vérification de bornes reste dans la boucle ; rapport 1,03, la chaîne d'additions domine) et les boucles externes et
+  de reste de K9. L'inlining n'a donc ni retiré de travail à la boucle mesurée ni changé la vectorisation, à la
+  différence de Fortran, où gfortran laissait K4 scalaire une fois inliné.
+* **À code identique, les écarts mesurés sont des effets de placement, propres au processeur.** Dans un même binaire,
+  K4 naturel et K4 sans branchement, deux copies de la même boucle, diffèrent de 8 % dans les données principales
+  (3,02 et 3,25 ms) et de 30 % sur cet hôte (2,01 et 2,60 ms). Un rapport mesuré ici transporterait sur Cascade Lake un
+  tirage de placement d'Emerald Rapids. Reportés par transfert, ces rapports feraient d'Odin la référence de K4
+  (2,48 ms contre 2,84 pour C) et abaisseraient celle de K2 à 16 Kio, ce qui retirerait environ un point à chacun des
+  vingt autres langages (0,5 à 0,7 point pour K4 seul). Le pont ne vaut pas mieux : pour
+  Odin, l'écart entre transfert et pont vaut exactement (Odin / C, données principales) / (`odin_ref` / C, hôte), et il
+  dépasse 25 % sur K2 à 8 Mio, Q6 optimisé et Q6 `mt` parce que le rapport d'Odin au C, à source et options inchangés
+  (binaire compilé pour Cascade Lake dans les données principales, pour cet hôte ici), n'y reste pas le même d'un
+  processeur à l'autre (0,99, 1,01 et 0,95 dans les données principales ; 0,75, 0,81 et 0,71 ici) : c'est justement
+  l'hypothèse du pont qui tombe.
+
+Le temps mesuré sur la machine de référence reste donc le meilleur estimateur du noyau isolé : **la correction est faite
+dans le banc (`bench/odin_fix`), sans changer les temps publiés** ; `results/transfers.json` ne reçoit rien d'Odin. La
+décision va contre l'intérêt d'Odin (le report prévu par le plan, comme le report par transfert seul, l'aurait fait 2e),
+et contre K9 naturel dans l'autre sens. Les deux reports restent calculés en information (Fix-T, Fix-pont).
+
+### 4.3 Scénarios (analyse v3 rejouée, 20 000 variantes)
+
+| Scénario | Score d'Odin | Contrôle | Plafond | Défaut | Rang espéré (C++) | Place | Rang 90 % | Devant C++ | Devant Zig |
+|---|---|---|---|---|---|---|---|---|---|
+| Avant (publié d'avant la remarque) | 72,6 | 81,5 | 78,6 | 50,6 | 3,88 (3,58) | 3 | 1–8 | 44 % | 55 % |
+| **Publié : erratum C2** | **73,5** | **84,0** | 78,6 | 50,6 | **3,63** (3,61) | **3** | 1–7 | 47 % | 59 % |
+| Fix-T : plus la correction par transfert (information) | 73,7 | 84,0 | 79,4 | 50,3 | 3,09 (3,69) | 2 | 1–6 | 56 % | 66 % |
+| Fix-T sans K4 (information) | 73,5 | 84,0 | 78,8 | 50,2 | 3,56 (3,62) | 2 | 1–7 | 48 % | 60 % |
+| Fix-pont : publié que prévoyait le plan (information) | 74,2 | 84,0 | 80,6 | 50,3 | 2,74 (3,75) | 2 | 1–6 | 62 % | 72 % |
+| S-Q1 : Q1 par popcount | 74,3 | 84,0 | 80,7 | 50,4 | 2,99 (3,72) | 2 | 1–6 | 58 % | 69 % |
+| S-agg : `-o:aggressive` | 73,3 | 84,0 | 78,7 | 49,7 | 3,50 (3,62) | 2 | 1–7 | 49 % | 61 % |
+| S-Q1+agg | 74,0 | 84,0 | 80,5 | 49,5 | 2,90 (3,73) | 2 | 1–6 | 60 % | 70 % |
+| H-fm : `@(fast_math)` réparé, C4 = 1 (hors règle) | 75,2 | 89,0 | 78,6 | 50,6 | 2,88 (3,75) | 2 | 1–6 | 61 % | 73 % |
+| H-tout : S-Q1+agg et C4 = 1 (hors règle) | 75,7 | 89,0 | 80,5 | 49,5 | 2,29 (3,87) | 2 | 1–5 | 74 % | 82 % |
+
+C reste 1er dans tous les scénarios (rang espéré 1,94 à 2,18). Les scénarios qui changent des temps d'Odin changent
+aussi les autres langages quand Odin devient la référence d'une mesure : sous Fix-T, C perd 1,1 point (0,7 pour K4
+seul) ; sous S-agg, Odin perd 0,2 point mais gagne une place, parce que C et C++ en perdent 0,7 là où ses temps
+deviennent ou restent la référence (K2 à 16 Kio, dont il est déjà le meilleur temps).
+
+### 4.4 Verdicts
+
+* **Classement publié** : l'erratum C2 porte le contrôle d'Odin de 81,5 à 84,0 et son score de 72,6 à 73,5. Odin
+  **reste 3e** (rang espéré 3,88 → 3,63), à égalité de fait avec C++ (3,61 ; C++ devant dans 53 % des variantes), devant
+  Zig dans 59 % ; aucun autre score ne change.
+* **La remarque** : son verdict tient (Odin a sa place en tête, rien ne le surestime, la 3e place n'est pas établie).
+  Son erratum est exact, et son rejeu aussi (73,5 points ; 3,63 contre 3,61 ; 59 %). La « transcription probablement
+  fautive » de Q1 : faits exacts, mais pas une erreur au sens de la règle (section 2) ; mesurée, la forme par popcount
+  vaut davantage que l'hypothèse de la remarque (× 0,55, plus rapide que C) et donne 74,3 points et la 2e place (74,2
+  et 2e estimés). `@(fast_math)` réparé, hors règle : 75,2 points, 2e (75,2 estimés). Ses trois hypothèses ensemble
+  (avec `-o:aggressive` en plus) : 75,7 points, 2e (76,0 estimés), C restant 1er.
+* **Erreur de mon banc** : plus large que la remarque (dix noyaux inlinés, pas seulement K1 aos), mais la remarque avait
+  raison sur l'effet : aucun sur le code machine. Corrigée dans le banc, non reportée sur les temps (4.2). Le plan
+  aurait fait d'Odin le 2e (74,2), par des effets de placement d'un autre processeur et un pont dont l'hypothèse ne
+  tient pas ici.
+* **`-o:aggressive`** : rien en moyenne (× 1,006) ; option nouvelle, sensibilité.
+* **README** : SIMD explicite (à 5–7 % du meilleur sur K1 et K5, mais 1,2 fois sur Q6 et 1,4 fois sur Q1, faute de
+  popcount : pas « au niveau du meilleur »), table `map` (3e table standard des treize premiers), allocateur (`calloc`
+  enveloppé, bloc de 48 octets pour un nœud de 24, appel indirect), horloge (moins de 1 % de K8), ordre et chiffres,
+  errata, Odin parmi les langages relus.

@@ -768,3 +768,40 @@ Robustesse :
   classement, figures, matrice, scénarios de Zig, de Julia, de Mojo, de C#, de Rust et de Nim et sensibilité sans SIMD
   dans l'état actuel (`_current`), confrontation. README : tableau, ordre, errata, paragraphe de C3, Nim et Rust
   échangés, langages relus.
+* 2026-11-01, vers 12:37 : **machine 14**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207,
+  4 vCPU ; 2,72 à 2,80 GHz effectifs, latence à 4 Mio 34 ns, DRAM 15,2 Go/s : `results/hw/machine14/`, caractérisé
+  après la campagne). Je ne l'ai vu qu'après les mesures de la remarque sur Odin, dont le plan nomme la machine 13.
+* 2026-11-01, 12:53 : **plan de la remarque sur Odin** (`docs/ODIN.md`, sections 1 à 3, commit `1f023d3`), poussé
+  avant les mesures. Vérifications sur les sources de la version mesurée (Odin dev-2026-10, commit `84bc3fc`,
+  `/opt/src/odin`) et par des sondes (`tools/odin_check/`, `results/odin_check/`), sans consulter le site ni master :
+  erratum C2 = 1 en règle v2 (le juge à l'aveugle notait 1 sous ma règle ; ma correction du 30 octobre avait baissé
+  les deux règles en ne retenant que la couverture partielle de `core:simd/x86`) ; `@(fast_math)` sans effet dans la
+  version mesurée (C4 reste 0) ; allocateur, horloge et chiffres du README exacts. Erreur de mon banc, plus large que
+  la remarque : dix des quatorze noyaux d'Odin étaient inlinés dans leur boucle de mesure (la remarque ne l'avait vu
+  que pour K1 aos), quand ceux de C sont `noinline` : correction (`bench/odin_fix`, `#force_no_inline`) mesurée et
+  publiée. Q1 optimisé compté sans popcount mais conforme à l'algorithme de la référence : meilleure forme,
+  sensibilité, comme `-o:aggressive`.
+* 2026-11-01, 12:53:33-13:09:27 : **mesures de la remarque sur Odin** (`tools/measure_odin.py`, machine 14) : 99
+  cellules × 7 processus (693) ; aucune somme de contrôle fausse ; 31 processus refaits pour vol de temps au-dessus de
+  2 %, aucun gardé au-dessus (vol médian 0,27 %, maximum 1,99 %). Rien d'autre ne tournait. Écart au plan sur
+  l'étiquette seulement : la VM avait redémarré vers 12 h 37 sur un hôte du même modèle (machine 14), avant les
+  dernières vérifications ; le plan nomme la machine 13.
+* 2026-11-01, 13 h 10 à 14 h : **résultats de la remarque sur Odin** (`results/report_odin.md`,
+  `results/odin_check.json`, `results/odin_check/codegen.txt`). Classement publié : l'erratum C2 (règle v2) porte le
+  contrôle d'Odin de 81,5 à 84,0 et son score de 72,6 à 73,5 ; il reste 3e (rang espéré 3,88 → 3,63), à égalité de
+  fait avec C++ (3,61). **Écart au plan, décidé après avoir vu les rapports** : la correction du banc (noyaux isolés)
+  n'est pas reportée sur les données principales. Ordre des calculs : j'ai d'abord appliqué le plan (règle du pont :
+  74,2 points, 2e), vu que le pont se déclenchait sur K2 à 8 Mio et Q6 sans que la correction y change rien, refait le
+  calcul par transfert seul (73,7, 2e ; interrompu), puis comparé le code machine : les boucles chaudes des noyaux
+  isolés sont celles du binaire de la campagne (registres renommés près), pour Emerald Rapids comme pour Cascade Lake,
+  sauf K1 aos, K5 naturel et des boucles externes de K9 (`tools/odin_check/codegen.py`). Les écarts mesurés sont donc
+  des effets de placement (deux copies de la même boucle de K4 diffèrent de 8 % sur Cascade Lake et de 30 % sur cet
+  hôte), et le pont ne tient pas pour un code inchangé (son écart au transfert vaut la variation du rapport Odin/C
+  d'un hôte à l'autre) : le temps des données principales reste le meilleur estimateur. Les deux reports sont gardés
+  en information (Fix-pont, Fix-T). Sensibilités : Q1 par popcount × 0,55 (74,3 points, 2e), `-o:aggressive`
+  × 1,006 (73,3, 2e), `@(fast_math)` réparé hors règle (75,2, 2e) ; C reste 1er partout. Sorties recalculées :
+  classement, figures, matrice, scénarios de Zig, de Julia, de Mojo, de C#, de Rust et de Nim et sensibilité sans SIMD
+  dans l'état actuel (`_current`, témoin pointé sur le scénario Publié de `results/odin_check.json` ; Odin y passe
+  1er à forme égale), confrontation. Leur règle du standard garde Odin C2 à 0,5 (`analysis/standard_rule.py`, comme
+  le juge à l'aveugle sous cette règle) : elle partait de mes notes v2, et l'erratum s'y serait propagé. README :
+  tableau, ordre, errata, paragraphe d'Odin (SIMD, Q1, allocateur, `map`, horloge), langages relus, limites.

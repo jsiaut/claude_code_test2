@@ -399,7 +399,10 @@ notait 1 sous ma règle et 0,5 sous la leur, en citant à la fois la couverture 
 l'import des intrinsèques de LLVM (`foreign _` et `@(link_name="llvm.x86…")`, `#const` pour les immédiats ; sonde
 `vpconflictd`). Je n'avais retenu que la première, et baissé les deux règles. Ce mécanisme sert la bibliothèque livrée
 (`core:simd/x86` est lui-même écrit ainsi) et vaut 1 en v2 à Julia (`llvmcall`) et à Mojo (`llvm_intrinsic`) :
-C2 = 1 en v2, 0,5 en v1 (comme Julia et Mojo), 0,5 sous leur règle.
+C2 = 1 en v2, 0,5 en v1 (comme Julia et Mojo), 0,5 sous leur règle (surcharge ajoutée à `analysis/standard_rule.py`,
+qui partait de mes notes v2). Rejouée après cette correction (`analysis/confrontation_current.py`), la confrontation ne
+change pas : scénarios A à D 0,77, 0,85, 0,81 et 0,87, C 1er, 5e, 1er et 6e, seuils du test 3 inchangés, accord des
+grilles 0,74 et 0,81 ; le kappa du juge sous ma règle passe de 0,85 à 0,87 (sous la leur, 0,86).
 
 Autres faits relevés par le juge, sans changer ma note :
 

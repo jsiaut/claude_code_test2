@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 """Remarque sur Odin (plan : docs/ODIN.md, section 3), poussé avant les mesures.
 
-Classement publié : erratum C2 = 1 en règle v2 (surcharge déjà inscrite dans analysis/capabilities_v2.py) et correction
-du banc (noyaux isolés de la boucle de mesure : odin_fix / odin_ref sur les 14 clés dont le noyau était inliné),
-inscrite dans results/transfers.json. Règle du pont de analysis/transfer_check.py, sauf K9 naturel et K1 aos, par
-transfert seul (exception fixée d'avance). Les corrections publiées des autres langages sont appliquées.
+Classement publié : erratum C2 = 1 en règle v2 (surcharge inscrite dans analysis/capabilities_v2.py). Le plan y
+ajoutait la correction du banc (noyaux isolés de la boucle de mesure : rapports odin_fix / odin_ref sur les 14 clés dont
+le noyau était inliné), reportée sur les données principales par la règle du pont de analysis/transfer_check.py.
+Écart au plan, décidé après avoir vu les rapports (docs/ODIN.md, 4.2) : la correction n'est pas reportée. Les boucles
+chaudes des noyaux isolés sont celles du binaire de la campagne, au renommage des registres près
+(tools/odin_check/codegen.py, results/odin_check/codegen.txt), sauf K1 aos (attribut retiré), K5 naturel (vérification
+de bornes restée dans la boucle) et la boucle externe de K9 naturel ; à code identique, un rapport mesuré sur un autre
+processeur ne porte qu'un effet de placement propre à ce processeur, et le temps mesuré sur la machine de référence
+reste le meilleur estimateur. Les reports par transfert seul et par la règle du plan sont calculés en information ;
+results/transfers.json ne reçoit rien d'Odin. Les corrections publiées des autres langages sont appliquées.
 Scénarios (analyse globale de la v3 rejouée, mêmes tirages) :
-* Avant : sans l'erratum ni la correction (doit reproduire le scénario Errata de results/c3_check.json).
-* P-C2, P-fix : l'un ou l'autre ; Publié : les deux ; Publié-T : correction par transfert seul partout (information).
+* Avant : sans l'erratum (doit reproduire le scénario Errata de results/c3_check.json) ; Publié : avec l'erratum.
+* Information : Fix-T (Publié, plus la correction par transfert seul sur les 14 clés), Fix-T sans K4, Fix-pont (plan)
+  (Publié, plus la correction par la règle du pont : le classement publié que prévoyait le plan).
 * S-Q1 : Publié, plus Q1 tuned et mt x odin_q1 / odin_fix (règle du pont) ; S-agg : Publié, plus les 27 clés x
   odin_agg / odin_fix (transfert seul) ; S-Q1+agg : les deux.
 * H-fm (information, hors règle) : Publié avec C4 = 1 ; H-tout : S-Q1+agg avec C4 = 1.
-Sorties : results/odin_check.json, results/report_odin.md ; results/transfers.json (rapports d'Odin)."""
+Sorties : results/odin_check.json, results/report_odin.md."""
 import glob, json, math, os, sys
 from collections import defaultdict
 
@@ -141,16 +148,18 @@ def main():
                                           "ratio_used": used, "c_main_ms": 1e3 * gm(base["c"][key])}
         return used
 
-    fix_b = {k: bridged(data, k, r_fix[k]["ratio"], "odin_fix", "P-fix", k in TRANSFER_ONLY) for k in FIX_KEYS}
+    fix_b = {k: bridged(data, k, r_fix[k]["ratio"], "odin_fix", "Fix", k in TRANSFER_ONLY) for k in FIX_KEYS}
     fix_t = {k: r_fix[k]["ratio"] for k in FIX_KEYS}
-    pub = scaled(data, fix_b)
+    pub = data  # publié : l'erratum seul, sans report de la correction du banc (écart au plan, docs/ODIN.md 4.2)
     q1_b = {k: bridged(pub, k, r_q1[k]["ratio"], "odin_q1", "S-Q1") for k in (Q1T, Q1M)}
     agg_t = {k: r_agg[k]["ratio"] for k in SCORE}
     q1agg = dict(agg_t)
     for k, r in q1_b.items():
         q1agg[k] = q1agg[k] * r
-    plans = {"Avant": (data, False, None), "P-C2": (data, True, None), "P-fix": (pub, False, None),
-             "Publié": (pub, True, None), "Publié-T": (scaled(data, fix_t), True, None),
+    plans = {"Avant": (data, False, None), "Publié": (pub, True, None),
+             "Fix-T": (scaled(data, fix_t), True, None),
+             "Fix-T sans K4": (scaled(data, {k: r for k, r in fix_t.items() if k[0] != "k4"}), True, None),
+             "Fix-pont (plan)": (scaled(data, fix_b), True, None),
              "S-Q1": (scaled(pub, q1_b), True, None), "S-agg": (scaled(pub, agg_t), True, None),
              "S-Q1+agg": (scaled(pub, q1agg), True, None), "H-fm": (pub, True, 1),
              "H-tout": (scaled(pub, q1agg), True, 1)}
@@ -158,7 +167,8 @@ def main():
            "fix_keys": [kk(k) for k in FIX_KEYS], "r_q1": {kk(k): r for k, r in r_q1.items()},
            "r_agg": {kk(k): r for k, r in r_agg.items()}, "agg_gm": agg_gm, "control_gm": ctl_gm,
            "r_eq": {kk(k): r for k, r in r_eq.items()}, "main_eq": main_eq, "transfer": transfer,
-           "published_ratios": {kk(k): v for k, v in fix_b.items()}, "scenarios": {}}
+           "ratios_transfer": {kk(k): v for k, v in fix_t.items()},
+           "ratios_plan": {kk(k): v for k, v in fix_b.items()}, "scenarios": {}}
     for name, (d, c2, c4) in plans.items():
         z = out["scenarios"][name] = run(d, lat, langs, footprint, c3, c2=c2, c4=c4)
         po = z["prec_odin"]
@@ -170,12 +180,7 @@ def main():
     out["check_before"] = max(max(abs(av["ms0"][l] - ref["ms0"][l]), abs(av["exp21"][l] - ref["exp21"][l])) for l in RANKED)
     print(f"Contrôle : écart maximal du scénario Avant au publié d'avant la remarque = {out['check_before']:.2e}")
     json.dump(out, open(os.path.join(ROOT, "results", "odin_check.json"), "w"), indent=1, default=float)
-    # classement publié (3.2) : rapports de la correction inscrits dans les corrections transférées
-    tr["ratios"][LANG] = {"|".join(k): v for k, v in fix_b.items()}
-    note = " ; Odin : docs/ODIN.md (3.2), results/raw_odin, machine 14, results/odin_check.json"
-    if note not in tr["source"]:
-        tr["source"] += note
-    json.dump(tr, open(tpath, "w"), indent=1)
+    assert LANG not in tr["ratios"], "results/transfers.json ne doit rien recevoir d'Odin (docs/ODIN.md, 4.2)"
     report(out)
 
 
@@ -207,7 +212,10 @@ def report(o):
         L.append(f"| {k} | {f(r['old_ms'], 2)} | {f(r['new_ms'], 2)} | {f(r['ratio'], 2)} [{f(r['ci'][0], 2)}–"
                  f"{f(r['ci'][1], 2)}] | {f(o['main_eq'][k], 2)} |")
     L += ["", "## Report sur les données principales (transfert ou pont par le C de la campagne)\n",
-          "| Clé | Odin (données principales) | Transfert | Pont | Écart | Retenu |", "|---|---|---|---|---|---|"]
+          "Lignes « Fix » : information seulement, la correction du banc n'est pas reportée (écart au plan, `docs/ODIN.md`",
+          "4.2) ; la colonne « Règle du plan » donne ce que la règle du pont aurait retenu (scénario « Fix-pont (plan) »).",
+          "Lignes S-Q1 : règle du plan (sensibilité).\n",
+          "| Clé | Odin (données principales) | Transfert | Pont | Écart | Règle du plan |", "|---|---|---|---|---|---|"]
     for k, b in o["transfer"].items():
         how = "transfert seul (fixé d'avance)" if b["transfer_only"] else ("pont" if b["bridge_used"] else "transfert")
         L.append(f"| {k} | {f(b['odin_main_ms'], 2)} ms | {f(b['transfer_ms'], 2)} ms | {f(b['bridge_ms'], 2)} ms | "

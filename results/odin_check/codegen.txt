@@ -1,0 +1,40 @@
+# Code machine des noyaux d'Odin : binaire du banc (noyaux inlinés) contre noyaux isolés (#force_no_inline)
+bench/odin_ref/ms identique à l'octet à bench/odin/ms (binaire du banc, compilé le 29/10 sur la machine 3) : True ; les données principales viennent d'une compilation du même source sur Cascade Lake (results/hw/machine3/binaries.txt, « avant »)
+
+## Binaires mesurés (-microarch:native sur Emerald Rapids) : bench/odin_ref/ms contre bench/odin_fix/ms
+noyau : boucles du noyau isolé (taille, adresse mod 64) -> même boucle dans le binaire à noyaux inlinés ?
+k1_natural : 56 instr. (mod 64 = 32) -> oui, main (mod 64 = 16) | 16 instr. (mod 64 = 0) -> oui, main (mod 64 = 48)
+k1_aos : 60 instr. (mod 64 = 48) -> non
+k1_soa : 16 instr. (mod 64 = 32) -> oui, main (mod 64 = 48)
+k2_chase : 38 instr. (mod 64 = 48) -> oui, main (mod 64 = 48)
+k4_natural : 19 instr. (mod 64 = 48) -> oui, main (mod 64 = 48) | 10 instr. (mod 64 = 11) -> non | 7 instr. (mod 64 = 16) -> oui, main (mod 64 = 16)
+k4_branchless : 19 instr. (mod 64 = 16) -> oui, main (mod 64 = 48) | 10 instr. (mod 64 = 43) -> non | 7 instr. (mod 64 = 48) -> oui, main (mod 64 = 16)
+k5_natural : 8 instr. (mod 64 = 0) -> non
+k5_tuned : 11 instr. (mod 64 = 48) -> oui, main (mod 64 = 0)
+q6_natural : 31 instr. (mod 64 = 49) -> oui, ms::q6_natural (mod 64 = 33) | 24 instr. (mod 64 = 0) -> oui, ms::q6_natural (mod 64 = 48) | 18 instr. (mod 64 = 0) -> oui, ms::q6_natural (mod 64 = 48)
+q6_tuned : 19 instr. (mod 64 = 0) -> oui, ms::k6_worker (mod 64 = 0)
+q1_natural : 58 instr. (mod 64 = 0) -> oui, ms::q1_natural (mod 64 = 32) | 11 instr. (mod 64 = 54) -> oui, ms::q1_natural (mod 64 = 22) | 9 instr. (mod 64 = 21) -> oui, ms::q1_natural (mod 64 = 53)
+q1_tuned : 387 instr. (mod 64 = 32) -> oui, ms::q1_tuned (mod 64 = 48) | 173 instr. (mod 64 = 32) -> oui, ms::q1_tuned (mod 64 = 48) | 59 instr. (mod 64 = 0) -> oui, ms::q1_tuned (mod 64 = 16)
+k9_natural : 91 instr. (mod 64 = 32) -> non | 39 instr. (mod 64 = 0) -> oui, ms::run_k9 (mod 64 = 0) | 27 instr. (mod 64 = 0) -> non
+k9_rows : 84 instr. (mod 64 = 16) -> oui, ms::k9_rows (mod 64 = 16) | 35 instr. (mod 64 = 48) -> oui, ms::k9_rows (mod 64 = 48)
+
+## Mêmes sources compilés pour Cascade Lake (-microarch:cascadelake), cible des données principales
+noyau : boucles du noyau isolé (taille, adresse mod 64) -> même boucle dans le binaire à noyaux inlinés ?
+k1_natural : 30 instr. (mod 64 = 0) -> oui, main (mod 64 = 32)
+k1_aos : 60 instr. (mod 64 = 48) -> non
+k1_soa : 16 instr. (mod 64 = 16) -> oui, main (mod 64 = 0)
+k2_chase : 27 instr. (mod 64 = 48) -> oui, main (mod 64 = 32)
+k4_natural : 19 instr. (mod 64 = 48) -> oui, main (mod 64 = 0) | 10 instr. (mod 64 = 11) -> non | 7 instr. (mod 64 = 16) -> oui, main (mod 64 = 32)
+k4_branchless : 19 instr. (mod 64 = 16) -> oui, main (mod 64 = 0) | 10 instr. (mod 64 = 43) -> non | 7 instr. (mod 64 = 48) -> oui, main (mod 64 = 32)
+k5_natural : 8 instr. (mod 64 = 0) -> non
+k5_tuned : 11 instr. (mod 64 = 48) -> oui, main (mod 64 = 32)
+q6_natural : 31 instr. (mod 64 = 49) -> oui, ms::q6_natural (mod 64 = 33) | 24 instr. (mod 64 = 0) -> oui, ms::q6_natural (mod 64 = 48) | 18 instr. (mod 64 = 0) -> oui, ms::q6_natural (mod 64 = 48)
+q6_tuned : 19 instr. (mod 64 = 0) -> oui, ms::k6_worker (mod 64 = 48)
+q1_natural : 58 instr. (mod 64 = 48) -> oui, ms::q1_natural (mod 64 = 32) | 11 instr. (mod 64 = 38) -> oui, ms::q1_natural (mod 64 = 22) | 9 instr. (mod 64 = 5) -> oui, ms::q1_natural (mod 64 = 53)
+q1_tuned : 402 instr. (mod 64 = 16) -> oui, ms::q1_tuned (mod 64 = 48) | 186 instr. (mod 64 = 0) -> oui, ms::q1_tuned (mod 64 = 32) | 55 instr. (mod 64 = 48) -> oui, ms::q1_tuned (mod 64 = 16)
+k9_natural : 81 instr. (mod 64 = 32) -> non | 28 instr. (mod 64 = 0) -> oui, ms::run_k9 (mod 64 = 32) | 27 instr. (mod 64 = 32) -> non
+k9_rows : 72 instr. (mod 64 = 48) -> oui, ms::k9_rows (mod 64 = 16) | 23 instr. (mod 64 = 16) -> oui, ms::k9_rows (mod 64 = 48)
+
+K4 naturel et sans branchement : même boucle dans odin_fix : True (même chose dans le binaire du banc)
+K4, données principales (Cascade Lake, binaire de la campagne) : naturel 3.02 ms, sans branchement 3.25 ms
+K4, hôte (machine 14), odin_ref : naturel 2.01 ms, sans branchement 2.60 ms ; odin_fix : naturel 1.71 ms, sans branchement 1.99 ms

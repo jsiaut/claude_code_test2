@@ -280,3 +280,10 @@ scénario Errata de `results/c3_check.json`) : les conclusions de 4.3 tiennent (
 13 à 21 inchangées, C et C++ dans les six premiers, C, C++ et Odin aux trois premières places à forme égale comme sans
 les noyaux vectorisables), sauf une : C3, 5e au publié, garde sa 5e place dans S-symétrique et S-noyaux-scalaires (11e
 dans S-scalaire) ; seul Rust perd des places dans les trois (10e, 8e, 8e au lieu de 7e).
+
+### 4.7 Recalcul après la remarque sur Odin (1er novembre, après-midi)
+
+Recalculé de nouveau (`results/report_nosimd_current.md`, témoin égal au scénario Publié de `results/odin_check.json`,
+où Odin passe de 72,6 à 73,5 points par l'erratum C2) : les conclusions de 4.3 et 4.6 tiennent. Seul changement de
+place en tête : à forme égale (S-symétrique), Odin passe 1er devant C++ et C (78,4 points ; C++ 1er auparavant) ; sans
+les noyaux vectorisables, l'ordre reste C, Odin, C++.
