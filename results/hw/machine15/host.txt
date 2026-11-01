@@ -1,0 +1,8 @@
+cache size	: 266240 KB
+cpu MHz		: 2100.000
+microcode	: 0x1
+model		: 207
+model name	: Intel(R) Xeon(R) Processor @ 2.10GHz
+4
+ 15:11:13 up 28 min,  0 user,  load average: 0.04, 0.52, 0.37
+boot_id b524460e-af49-42fb-8f6c-3b52119d6797

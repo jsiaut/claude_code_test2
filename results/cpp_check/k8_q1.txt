@@ -1,0 +1,6 @@
+# K8 tuned : signature de la construction de l'arène
+C   : static int32_t a8_build(ANode *a, int32_t *top, int depth, int64_t *counter)
+C++ : static int32_t a8_build(std::vector<ANode> &a, int32_t &top, int depth, int64_t &counter)
+# Q1 tuned : produits 64 bits (vpmullq) et 32x32->64 (vpmuldq) dans le binaire de la campagne
+C++ g++ : vpmullq 6, vpmuldq 0
+C clang : vpmullq 0, vpmuldq 2

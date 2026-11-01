@@ -1,0 +1,19 @@
+# K9 : grilles du chemin tuned et mt allouées à chaque répétition (dans la boucle) ou une fois (avant), d'après le
+# source du banc (numéros de ligne : en-tête de la fonction, boucle des répétitions, allocation) ;
+# défauts de page par processus : results/cpp_check/data_facts.txt
+c       : une fois (bench/c/ms.c : fonction 537, boucle 541, allocation 539)
+cpp     : à chaque répétition (bench/cpp/ms.cpp : fonction 523, boucle 524, allocation 535)
+zig     : à chaque répétition (bench/zig/ms.zig : fonction 562, boucle 564, allocation 586)
+odin    : à chaque répétition (bench/odin/ms.odin : fonction 514, boucle 515, allocation 526)
+c3      : à chaque répétition (bench/c3/ms.c3 : fonction 593, boucle 595, allocation 612)
+rust    : à chaque répétition (bench/rust/ms.rs : fonction 560, boucle 561, allocation 562)
+nim     : à chaque répétition (bench/nim/ms.nim : fonction 439, boucle 440, allocation 456)
+d       : à chaque répétition (bench/d/ms.d : fonction 419, boucle 420, allocation 430)
+chapel  : une fois (bench/chapel/ms.chpl : fonction 424, boucle 427, allocation 425)
+ada     : une fois (bench/ada/ms.adb : fonction 938, boucle 955, allocation 939)
+fortran : une fois (bench/fortran/ms.f90 : fonction 695, boucle 710, allocation 706)
+julia   : à chaque répétition (bench/julia/ms.jl : fonction 377, boucle 378, allocation 379)
+csharp  : à chaque répétition (bench/csharp/Program.cs : fonction 477, boucle 479, allocation 493)
+mojo    : à chaque répétition (bench/mojo/ms.mojo : fonction 589, boucle 590, allocation 612)
+go      : à chaque répétition (bench/go/ms.go : fonction 652, boucle 653, allocation 676)
+java    : à chaque répétition (bench/java/Ms.java : fonction 396, boucle 397, allocation 407)

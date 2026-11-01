@@ -1,0 +1,8 @@
+# K4 : boucle vectorielle principale (sauts arrière) ; instructions par itération et mnémoniques
+C par clang recompilé pour Cascade Lake identique au binaire de la campagne : True
+k4_natural : C++ g++ 61 instr., C gcc 61 instr., mêmes instructions (multiensemble) : True ; C clang 35 instr. ; C++ clang++ (sonde k4.cpp) 19 instr.
+   C clang : ['add', 'cmp', 'jne', 'vmovd', 'vpaddq', 'vpminsb', 'vpmovzxbq'] ; C++ clang++ : ['add', 'cmp', 'jne', 'vmovd', 'vpaddq', 'vpminsb', 'vpmovzxbq']
+   C++ g++ : ['add', 'and', 'cmp', 'jne', 'kmovb', 'kmovw', 'kshiftrb', 'kshiftrd', 'kshiftrw', 'mov', 'vextracti32x4', 'vmovdqa', 'vmovdqu', 'vpaddq', 'vpcmpltb', 'vpmovzxbw', 'vpmovzxdq', 'vpmovzxwd']
+k4_branchless : C++ g++ 44 instr., C gcc 44 instr., mêmes instructions (multiensemble) : True ; C clang 35 instr. ; C++ clang++ (sonde k4.cpp) 19 instr.
+   C clang : ['add', 'cmp', 'jne', 'vmovd', 'vpaddq', 'vpminsb', 'vpmovzxbq'] ; C++ clang++ : ['add', 'cmp', 'jne', 'vmovd', 'vpaddq', 'vpminsb', 'vpmovzxbq']
+   C++ g++ : ['add', 'cmp', 'jne', 'vextracti32x4', 'vmovdqu', 'vpaddq', 'vpandq', 'vpblendd', 'vpmovzxbw', 'vpmovzxdq', 'vpmovzxwd', 'vpmullw', 'vpshufb', 'vpsrlw', 'vpunpckhbw', 'vpunpcklbw']

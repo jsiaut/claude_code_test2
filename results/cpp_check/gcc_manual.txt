@@ -1,0 +1,24 @@
+# Extraits du manuel livré avec GCC 16.2 (/opt/gcc-16/share/info/gcc.info)
+
+‘c++23’
+     ‘c++2b’
+          The 2023 ISO C++ standard plus amendments (published in 2024).
+          Support is experimental, and could change in incompatible ways
+          in future releases.  The name ‘c++2b’ is deprecated.
+‘c++2c’
+     ‘c++26’
+          The next revision of the ISO C++ standard, planned for 2026.
+          Support is highly experimental, and will almost certainly
+          change in incompatible ways in future releases.
+‘gnu++20’
+     ‘gnu++2a’
+          GNU dialect of ‘-std=c++20’.  This is the default for C++
+          code.  C++20 modules support is still experimental and needs
+          to be enabled with ‘-fmodules’ option.  The name ‘gnu++2a’ is
+          deprecated.
+‘-freflection’
+     Enable experimental C++26 Reflection.
+The default is ‘uninitialized’ except for C++26, in which case if
+     ‘-ftrivial-auto-var-init=’ is not specified at all automatic
+     variables or temporary objects are zero initialized, but zero
+     initialization of padding bits does not happen.

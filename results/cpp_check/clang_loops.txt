@@ -1,0 +1,11 @@
+# Boucle principale de C par clang (c_ref) retrouvée à l'identique dans C++ par clang++ (cpp_clang) ?
+k1_aos : identique (C 58 instr. ; C++ 58 instr.)
+k1_soa : identique (C 55 instr. ; C++ 55 instr.)
+k2_chase : identique (C 38 instr. ; C++ 38 instr.)
+k4_natural : différente (C 67 instr. ; C++ 19 instr.)
+k4_branchless : différente (C 67 instr. ; C++ 19 instr.)
+k5_natural : identique (C 35 instr. ; C++ 35 instr.)
+k5_tuned : identique (C 35 instr. ; C++ 35 instr.)
+q6_tuned_k : identique (C 51 instr. ; C++ 51 instr.)
+q1_tuned : différente (C 484 instr. ; C++ 484 instr.)
+k9_rows : identique (C 70 instr. ; C++ 70 instr.)

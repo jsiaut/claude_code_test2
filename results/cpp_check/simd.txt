@@ -1,0 +1,19 @@
+# libstdc++ 16 : condition de std::simd (bits/version.h) ; __cpp_lib_simd n'est pas défini
+#if !defined(__cpp_lib_simd)
+# if (__cplusplus >  202302L) && _GLIBCXX_HOSTED && (__cpp_structured_bindings >= 202411L && __cpp_expansion_statements >= 202411L && __SSE2__)
+#  define __glibcxx_simd 202506L
+#  if defined(__glibcxx_want_all) || defined(__glibcxx_want_simd)
+#  endif
+# endif
+#endif /* !defined(__cpp_lib_simd) */
+
+# clang++ 23 sur bench/cpp/ms.cpp avec la libstdc++ de GCC 16 (trois premières erreurs)
+/home/user/claude_code_test2/bench/cpp/ms.cpp:29:21: error: expected namespace name
+/home/user/claude_code_test2/bench/cpp/ms.cpp:95:15: error: use of undeclared identifier 'ss'
+/home/user/claude_code_test2/bench/cpp/ms.cpp:96:15: error: use of undeclared identifier 'ss'
+
+# libc++ 23 (installée) : en-tête <simd> de C++26 ? en-têtes de std::experimental (TS Parallelism v2)
+/usr/lib/llvm-23/include/c++/v1
+/usr/lib/llvm-23/lib/libc++.so
+ls: cannot access '/usr/lib/llvm-23/include/c++/v1/simd': No such file or directory
+experimental/ : __simd iterator memory propagate_const simd type_traits utility

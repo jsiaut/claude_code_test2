@@ -1,0 +1,105 @@
+# Composantes du score publié (results/summary_v3.json)
+c: score 80.01 ; contrôle 91.7 ; plafond 85.3 ; défaut 55.2 ; noyaux du plafond k1 0.930, k3 0.974, k4 1.000, k5 1.000, k6 0.873, k7 1.000, k8 0.405, k9 0.876 ; D D1 0.191, D2 1.000, D3 0.753, D4 0.968
+c_gcc: score 79.45 ; contrôle 91.7 ; plafond 83.8 ; défaut 55.4 ; noyaux du plafond k1 0.971, k3 0.927, k4 0.545, k5 0.999, k6 0.884, k7 0.903, k8 0.671, k9 0.927 ; D D1 0.193, D2 1.000, D3 0.751, D4 0.973
+cpp: score 76.57 ; contrôle 92.4 ; plafond 78.7 ; défaut 51.1 ; noyaux du plafond k1 0.955, k3 0.969, k4 0.434, k5 0.979, k6 0.897, k7 0.943, k8 0.594, k9 0.741 ; D D1 0.182, D2 0.956, D3 0.640, D4 0.903
+
+# Temps par processus (ms, médiane des répétitions), données principales (Cascade Lake)
+k4:natural_unsorted : c [3.73, 4.37] (moy. géom. 4.04) | c_gcc [6.03, 6.1] (moy. géom. 6.06) | cpp [6.28, 6.48, 6.88] (moy. géom. 6.54)
+k4:branchless_unsorted : c [2.67, 3.02] (moy. géom. 2.84) | c_gcc [5.13, 5.31] (moy. géom. 5.22) | cpp [5.46, 6.51, 8.83] (moy. géom. 6.79)
+k1:natural:energy : c [39.48, 41.78, 42.96] (moy. géom. 41.38) | c_gcc [46.87, 57.26] (moy. géom. 51.81) | cpp [37.14, 37.93] (moy. géom. 37.54)
+k1:natural_shuffled:energy : c [37.78, 38.61, 41.75] (moy. géom. 39.34) | c_gcc [37.68, 45.0] (moy. géom. 41.18) | cpp [37.34, 45.12] (moy. géom. 41.05)
+k2:tuned:16384 : c [6.51, 7.12] (moy. géom. 6.81) | c_gcc [6.47, 6.62] (moy. géom. 6.55) | cpp [6.5, 6.77] (moy. géom. 6.63)
+k2:tuned:262144 : c [18.27, 18.29] (moy. géom. 18.28) | c_gcc [18.4, 18.82] (moy. géom. 18.61) | cpp [19.17, 28.44] (moy. géom. 23.35)
+k2:tuned:8388608 : c [622.73, 630.57] (moy. géom. 626.64) | c_gcc [619.78, 624.36] (moy. géom. 622.06) | cpp [608.01, 631.04] (moy. géom. 619.42)
+k8:natural : c [930.91, 980.08, 1010.73] (moy. géom. 973.35) | c_gcc [813.64, 1009.39, 1066.26] (moy. géom. 956.72) | cpp [1024.1, 1079.79] (moy. géom. 1051.57)
+k8:tuned : c [242.44, 242.92, 318.24] (moy. géom. 265.63) | c_gcc [141.37, 154.59, 189.02] (moy. géom. 160.45) | cpp [173.99, 188.84] (moy. géom. 181.26)
+k8:tuned_alloc : cpp [264.57, 297.92] (moy. géom. 280.75)
+k6:tuned:q1 : c [28.19, 32.09, 36.59] (moy. géom. 32.11) | c_gcc [32.8, 33.67, 35.61] (moy. géom. 34.01) | cpp [35.65, 36.47, 38.7] (moy. géom. 36.92)
+k6:mt:q1 : c [12.2, 13.15, 15.12] (moy. géom. 13.44) | c_gcc [13.23, 13.38, 13.73] (moy. géom. 13.44) | cpp [13.84, 13.88, 15.9] (moy. géom. 14.51)
+k6:tuned:q6 : c [19.96, 21.41, 22.77] (moy. géom. 21.35) | c_gcc [19.7, 19.84, 21.3] (moy. géom. 20.27) | cpp [17.61, 18.5, 18.53] (moy. géom. 18.21)
+k6:natural:q1 : c [79.1, 82.11, 89.45] (moy. géom. 83.44) | c_gcc [74.75, 80.04, 101.7] (moy. géom. 84.74) | cpp [73.08, 73.36, 78.23] (moy. géom. 74.85)
+k7:natural : c [4848.75, 5377.99] (moy. géom. 5106.52) | c_gcc [4884.95, 5808.33] (moy. géom. 5326.67) | cpp [10477.81, 10807.69] (moy. géom. 10641.47)
+k7:tuned : c [430.7, 435.94, 507.81] (moy. géom. 456.85) | c_gcc [500.98, 510.65] (moy. géom. 505.79) | cpp [480.78, 487.69] (moy. géom. 484.22)
+
+# K9 : temps (ms, médiane des processus) et défauts de page mineurs par processus (médiane)
+## données principales (Cascade Lake)
+c        natural 37.93 ms (16626) ; tuned 37.80 ms (16627) ; mt 12.76 ms (16636)
+c_gcc    natural 36.60 ms (16625) ; tuned 35.28 ms (16625) ; mt 12.19 ms (16636)
+chapel   natural 38.86 ms (17034) ; tuned 43.12 ms (17032) ; mt 10.78 ms (17088)
+ada      natural 70.73 ms (16645) ; tuned 52.25 ms (16645) ; mt 27.52 ms (16844)
+cpp      natural 36.33 ms (180658) ; tuned 36.21 ms (180561) ; mt 19.61 ms (180572)
+zig      natural 40.39 ms (180512) ; tuned 36.41 ms (180510) ; mt 21.99 ms (192124)
+odin     natural 36.27 ms (180502) ; tuned 36.83 ms (180506) ; mt 19.67 ms (180522)
+c3       natural 37.41 ms (180491) ; tuned 36.44 ms (180493) ; mt 18.57 ms (180506)
+rust     natural 72.72 ms (41284) ; tuned 36.15 ms (188696) ; mt 17.34 ms (188713)
+nim      natural 71.08 ms (21328) ; tuned 36.57 ms (180508) ; mt 16.61 ms (180554)
+d        natural 55.64 ms (215440) ; tuned 37.15 ms (180566) ; mt 18.28 ms (180588)
+julia    natural 37.92 ms (276662) ; tuned 38.12 ms (271563) ; mt 15.80 ms (281427)
+csharp   natural 123.23 ms (93171) ; tuned 39.22 ms (215889) ; mt 24.35 ms (216271)
+fortran  natural 36.52 ms (180538) ; tuned 37.24 ms (106801) ; mt 11.67 ms (106810)
+mojo     natural 261.85 ms (20518) ; tuned 38.18 ms (107753) ; mt 14.62 ms (107754)
+go       natural 113.76 ms (41960) ; tuned 115.69 ms (55001) ; mt 15.33 ms (50465)
+java     natural 39.46 ms (178569) ; tuned 40.97 ms (28744) ; mt 19.35 ms (32760)
+## réplication (Emerald Rapids, machine 3)
+c        natural 12.56 ms (16628) ; tuned 12.60 ms (16627) ; mt 6.31 ms (16638)
+c_gcc    natural 13.41 ms (16624) ; tuned 12.18 ms (16629) ; mt 6.04 ms (16634)
+chapel   natural 14.65 ms (17034) ; tuned 14.21 ms (17038) ; mt 3.38 ms (17084)
+ada      natural 40.02 ms (16644) ; tuned 28.10 ms (16645) ; mt 12.52 ms (16842)
+cpp      natural 12.71 ms (180657) ; tuned 15.36 ms (180558) ; mt 9.03 ms (180573)
+zig      natural 29.15 ms (180512) ; tuned 13.91 ms (180509) ; mt 12.14 ms (192127)
+odin     natural 14.83 ms (180507) ; tuned 14.33 ms (180508) ; mt 8.22 ms (180523)
+c3       natural 16.18 ms (180495) ; tuned 16.81 ms (180495) ; mt 9.84 ms (180508)
+rust     natural 29.54 ms (41282) ; tuned 17.56 ms (188696) ; mt 12.33 ms (188709)
+nim      natural 40.41 ms (21329) ; tuned 16.87 ms (180509) ; mt 9.15 ms (180552)
+d        natural 21.62 ms (215441) ; tuned 15.42 ms (180563) ; mt 7.75 ms (180588)
+julia    natural 20.01 ms (271724) ; tuned 19.07 ms (272522) ; mt 12.32 ms (288833)
+csharp   natural 64.77 ms (93172) ; tuned 18.54 ms (215888) ; mt 15.84 ms (216271)
+fortran  natural 14.28 ms (180535) ; tuned 17.19 ms (106802) ; mt 4.22 ms (106808)
+mojo     natural 170.54 ms (21072) ; tuned 16.08 ms (107751) ; mt 8.40 ms (107752)
+go       natural 44.48 ms (48413) ; tuned 28.20 ms (53254) ; mt 11.19 ms (41819)
+java     natural 20.35 ms (183561) ; tuned 15.56 ms (28703) ; mt 8.31 ms (49582)
+
+# Queue de latence de K8 naturel (remesure, results/raw_d3) : p99,9 par processus et médianes regroupées
+c      p99,9 par processus (µs) [95, 105, 108, 139, 150, 169, 217] ; regroupé : p50 31.7, p99,9 116, max 1018 µs ; sans le processus au p99,9 le plus haut : p99,9 114, max 932 µs
+c_gcc  p99,9 par processus (µs) [55, 83, 83, 86, 93, 139, 279] ; regroupé : p50 26.2, p99,9 93, max 1275 µs ; sans le processus au p99,9 le plus haut : p99,9 90, max 1023 µs
+cpp    p99,9 par processus (µs) [121, 124, 132, 146, 181, 257, 573] ; regroupé : p50 34.3, p99,9 164, max 1000 µs ; sans le processus au p99,9 le plus haut : p99,9 155, max 965 µs
+
+# « Ce qui est juste » : code naturel (ms, médiane des processus, Cascade Lake)
+k1:natural:energy : cpp 37.54, c 41.78, rust 44.29, d 42.97
+k6:natural:q1 : cpp 73.36, c 82.11, rust 115.66, d 79.26
+k9:natural : cpp 36.33, c 37.93, rust 72.72, d 55.64
+K7 cpp : naturel 10.64 s, table plate 484 ms, rapport 22.0
+K7 c : naturel 5.11 s, table plate 457 ms, rapport 11.2
+
+# Décomposition de l'écart de score (points ; contrôle et défauts : linéaire ; plafond : réparti par noyau au prorata des écarts de log, E étant la moyenne géométrique des 8 noyaux)
+c − cpp : total +3.44 ; contrôle -0.25 ; E k1 -0.11 ; E k3 +0.02 ; E k4 +3.42 ; E k5 +0.09 ; E k6 -0.11 ; E k7 +0.24 ; E k8 -1.57 ; E k9 +0.69 ; D1 +0.12 ; D2 +0.16 ; D3 +0.42 ; D4 +0.32
+c_gcc − cpp : total +2.88 ; contrôle -0.25 ; E k1 +0.07 ; E k3 -0.18 ; E k4 +0.92 ; E k5 +0.08 ; E k6 -0.06 ; E k7 -0.18 ; E k8 +0.50 ; E k9 +0.91 ; D1 +0.14 ; D2 +0.16 ; D3 +0.41 ; D4 +0.35
+C++ avec le score K4 de C (1,0) : plafond 87.3, score 80.03
+C++ avec le K7 naturel de C (5.11 s au lieu de 10.64 s) : D1 0.182 -> 0.202, +0.25 point
+
+# Clés de D2 et D4 (K1 naturel et mélangé, K2 à trois tailles), données principales : processus par cellule et écart maximal entre processus d'une même cellule (rapport des médianes extrêmes)
+ada            processus [2, 2, 3, 3, 3] ; écart maximal 1.16 (k2:tuned:8388608)
+c              processus [3, 3, 2, 2, 2] ; écart maximal 1.11 (k1:natural_shuffled:energy)
+c3             processus [3, 3, 2, 2, 2] ; écart maximal 1.25 (k2:tuned:16384)
+c_gcc          processus [2, 2, 2, 2, 2] ; écart maximal 1.22 (k1:natural:energy)
+chapel         processus [2, 2, 2, 2, 2] ; écart maximal 1.17 (k2:tuned:16384)
+cpp            processus [2, 2, 2, 2, 2] ; écart maximal 1.48 (k2:tuned:262144)
+csharp         processus [2, 2, 2, 2, 2] ; écart maximal 1.33 (k2:tuned:262144)
+d              processus [3, 3, 3, 3, 3] ; écart maximal 1.33 (k1:natural_shuffled:energy)
+fortran        processus [3, 3, 3, 3, 3] ; écart maximal 1.42 (k2:tuned:16384)
+fortran_flang  processus [3, 3, 3, 3, 3] ; écart maximal 1.36 (k1:natural_shuffled:energy)
+go             processus [2, 2, 3, 3, 3] ; écart maximal 1.26 (k2:tuned:262144)
+haskell        processus [3, 3, 2, 2, 2] ; écart maximal 1.22 (k1:natural_shuffled:energy)
+java           processus [2, 2, 3, 3, 3] ; écart maximal 1.25 (k2:tuned:262144)
+js             processus [3, 3, 2, 2, 2] ; écart maximal 1.60 (k2:tuned:262144)
+js_bun         processus [2, 2, 3, 3, 3] ; écart maximal 1.07 (k2:tuned:8388608)
+julia          processus [3, 3, 2, 2, 2] ; écart maximal 1.12 (k1:natural:energy)
+lua            processus [3, 3, 2, 2, 2] ; écart maximal 1.40 (k2:tuned:262144)
+luajit         processus [3, 3, 2, 2, 2] ; écart maximal 1.28 (k2:tuned:16384)
+mojo           processus [2, 2, 2, 2, 2] ; écart maximal 1.21 (k1:natural:energy)
+nim            processus [3, 3, 2, 2, 2] ; écart maximal 1.21 (k1:natural:energy)
+ocaml          processus [3, 3, 2, 2, 2] ; écart maximal 1.11 (k1:natural_shuffled:energy)
+odin           processus [3, 3, 2, 2, 2] ; écart maximal 1.25 (k2:tuned:262144)
+python         processus [3, 2, 2, 2, 2] ; écart maximal 1.11 (k1:natural:energy)
+rust           processus [3, 3, 2, 2, 2] ; écart maximal 1.20 (k1:natural:energy)
+zig            processus [3, 3, 3, 3, 3] ; écart maximal 1.22 (k1:natural_shuffled:energy)

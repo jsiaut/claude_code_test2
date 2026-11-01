@@ -1,0 +1,8 @@
+# Sonde p2795.cpp : tableau local non initialisé ; rangements d'un registre mis à zéro (vpxor) sur la pile
+g++-16 -std=c++23 : rangements à zéro sur la pile 0
+g++-16 -std=c++26 : rangements à zéro sur la pile 2
+g++-16 -std=c++26 -ftrivial-auto-var-init=uninitialized : rangements à zéro sur la pile 0
+clang++-23 -std=c++26 : rangements à zéro sur la pile 0
+binaire C++ recompilé pour Cascade Lake identique à celui de la campagne : True
+noyaux (k*_ et q*_) comparés avec et sans -ftrivial-auto-var-init=uninitialized : 17 ; modifiés : aucun
+autres fonctions modifiées (harnais, constructeurs) : _start, main, main.cold, p8_build, run_k1, run_k2, run_k3, run_k4, run_k6, run_k8, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > fmt<double>, std::jthread::~jthread, std::thread::_State_impl<std::thread::_Invoker<std::tuple<run_k10, std::vector<float, Aligned64<float> > load<float>

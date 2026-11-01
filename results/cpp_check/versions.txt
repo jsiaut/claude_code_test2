@@ -1,0 +1,12 @@
+# Chaînes
+g++-16 (GCC) 16.2.0
+Ubuntu clang version 23.1.5 (++20261023090852+395ba2c4d274-1~exp1~20261023090919.90)
+# __cplusplus sans -std (dialecte par défaut)
+g++-16 : #define __cplusplus 202002L
+clang++-23 : #define __cplusplus 201703L
+# bibliothèque C++ chargée à l'exécution par le binaire C++ de la campagne
+libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fd221800000)
+# options de construction du banc
+/opt/gcc-16/bin/g++-16 -std=c++26 -O3 -march=native -pthread -Wall -Wno-interference-size -o ms ms.cpp
+clang-23 -std=c23 -O3 -march=native -Wall -Wextra -pthread -o ms ms.c
+/opt/gcc-16/bin/gcc-16 -std=c23 -O3 -march=native -pthread -o ms ../c/ms.c
