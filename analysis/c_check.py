@@ -190,7 +190,8 @@ def main():
     ref = json.load(open(os.path.join(ROOT, "results", "k9_check.json" if current else "cpp_check.json")))["scenarios"]["Publié"]
     av = out["scenarios"]["Publié" if current else "Avant"]
     out["check_before"] = max(max(abs(av["ms0"][l] - ref["ms0"][l]), abs(av["exp21"][l] - ref["exp21"][l])) for l in RANKED)
-    print(f"Contrôle : écart maximal du scénario Avant au publié d'avant la remarque = {out['check_before']:.2e}")
+    print(f"Contrôle : écart maximal du scénario {'Publié à results/k9_check.json' if current else 'Avant au publié d avant la remarque'}"
+          f" = {out['check_before']:.2e}")
     # frontière de K8 dans le publié : meilleur temps (moyenne géométrique) parmi les langages classés
     best = {l: min(gm(data[l][k]) for k in (K8N, K8T, ("k8", "tuned_alloc", "")) if k in data.get(l, {}))
             for l in RANKED if l in data}

@@ -108,13 +108,14 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 * **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Un langage y devance le suivant
   dans 48 à 74 % des variantes. C ou C++ est premier dans 61 % des variantes (C 49 %, C++ 12 %), Odin dans 17 %, Zig
   dans 10 %.
-* **La 1re place de C dépend de choix de protocole.** Sous la règle « ISO seule » du « Banc de sympathie mécanique »,
-  qui ne compte ni les extensions de compilateur ni la glibc, C passe 5e et Odin 1er. Avec le K4 de clang++ pour C++
-  (le même vectoriseur que C), C++ passe devant C au rang moyen, de justesse (2,45 contre 2,49) ; si C réallouait en
-  plus ses grilles de K9 comme douze autres implémentations, C++ serait 1er. Sur Emerald Rapids, C++ est 1er. À
-  l'inverse, l'arène de K8 de C, écrite de façon à faire passer son état par la mémoire, lui coûte 4 points : écrite par
-  itération, elle le remet nettement en tête (84,1 points). Le classement garde les implémentations et le protocole
-  fixés d'avance ([`docs/C.md`](docs/C.md)).
+* **La 1re place de C dépend de choix de protocole.** Sous la règle « ISO seule » du « Banc de sympathie
+  mécanique », qui ne compte ni les extensions de compilateur ni la glibc, C passe 5e et Odin 1er ; avec le contrôle
+  noté en règle v1 partout, Odin passe aussi devant C, de peu (rang moyen 2,74 contre 2,97). Avec le K4 de clang++
+  pour C++ (le même vectoriseur que C), C++ passe 1er (80,3 points contre 79,9 ; rang moyen 2,20 contre 2,54). Sur
+  Emerald Rapids, C++ est 1er. À l'inverse, l'arène de K8 de C, écrite de façon à faire passer son état par la
+  mémoire, lui coûte 4 points : écrite par itération, elle le remet nettement en tête (84,0 points), même face au K4
+  de clang++ pour C++ (80,2). Le classement garde les implémentations et le protocole fixés d'avance
+  ([`docs/C.md`](docs/C.md)).
 * **L'ordre fin dépend aussi de la machine.** Sur un Emerald Rapids, le même calcul donne C++ 1er, Rust 2e, C 3e.
   L'écart vient surtout de l'écrivain unique (K3), dont le temps dépend, sur ce processeur, du placement du code par
   l'éditeur de liens (voir plus bas).
@@ -147,13 +148,13 @@ permuté), tableau 2D vectorisé, allocation `malloc`/`free` régulière. Presqu
 partie passe par des extensions de compilateur (types vectoriels, `__builtin_prefetch`, OpenMP). Sans bibliothèque de
 structures de données, la table de hachage naturelle (chaînage, un `malloc` par entrée) est 12 fois plus lente que la
 table plate. Le C classé est celui de clang 23 et de la glibc, extensions de GNU C, intrinsèques d'Intel et OpenMP
-compris : sous la règle « ISO seule », son contrôle passe de 91,7 à 64,0 et C tombe 5e ; en règle v1, il reste 1er
-(73,9 points, devant Odin, 72,5). Deux choix de son banc jouent en sens contraire. Son arène de K8 optimisée passe le
-sommet de pile et le compteur par pointeur, ce qui oblige clang à les relire et à les réécrire en mémoire à chaque
-nœud : écrite par itération, elle prend 0,40 fois le temps sur Emerald Rapids et vaudrait 4,1 points à C (84,1). Ses
-grilles de K9 sont allouées une fois, quand douze autres implémentations les réallouent à chaque répétition : avec la
-pénalité mesurée sur Cascade Lake, il perdrait 0,3 point. Aucun des deux ne change sa place
-([`docs/C.md`](docs/C.md)).
+compris : sous la règle « ISO seule », son contrôle passe de 91,7 à 64,0 et C tombe 5e ; en règle v1 partout, Odin
+passe devant lui, de peu (rang moyen 2,74 contre 2,97). Un choix de son banc le dessert : son arène de K8 optimisée
+passe le sommet de pile et le compteur par pointeur, ce qui oblige clang à les relire et à les réécrire en mémoire à
+chaque nœud : écrite par itération, elle prend 0,40 fois le temps sur Emerald Rapids et vaudrait 4,1 points à C
+(84,0). Ses grilles de K9 étaient allouées une fois, quand presque toutes les autres implémentations les réallouaient
+à chaque répétition : depuis le 1er novembre, toutes les allouent une fois ([`docs/C.md`](docs/C.md),
+[`docs/K9.md`](docs/K9.md)).
 
 **2. Odin.** Le langage le plus proche du Data-Oriented Design : `#soa` transpose une structure en colonnes dans le
 langage même, `#simd` donne les vecteurs et toute intrinsèque de LLVM s'importe par `foreign` (c'est ainsi qu'est
@@ -170,12 +171,12 @@ retire plus de contrôle à C++ qu'à lui.
 explicites, `mdspan`, et `std::simd` (meilleur K5 sur Cascade Lake, 4,75 ms), encore expérimental dans GCC 16. Ce qui
 le sépare de C tient d'abord au compilateur : K4, deux boucles scalaires que g++ vectorise moins bien que clang, lui
 coûte 3,4 points ; avec le K4 de clang++ (1,06 à 1,11 fois le temps de C sur un même hôte, contre 2,6 à 3,7 fois avec
-g++), C++ aurait 79,7 points, à égalité avec C. Mais le classement garde un compilateur par langage, et g++, le seul à
-livrer `std::simd`, lui rapporte aussi : sous clang++, l'arène de K8 prend 1,55 fois plus de temps et K5 naturel deux
-fois plus. Vient ensuite la queue de latence de K8 (0,4 point) ; K9, qui lui coûtait 0,7 point quand il réallouait
-ses grilles à chaque répétition, ne pèse plus depuis que toutes les implémentations les allouent une fois (voir
-Limites). `std::unordered_map`, à nœuds chaînés, est 22 fois plus lent que la table plate sur K7, mais ne lui coûte
-que 0,25 point face à C, dont la table naturelle est lente aussi. Premier sur Emerald Rapids
+g++), C++ aurait 80,3 points et passerait 1er, devant C (79,9). Mais le classement garde un compilateur par langage,
+et g++, le seul à livrer `std::simd`, lui rapporte aussi : sous clang++, l'arène de K8 prend 1,55 fois plus de temps
+et K5 naturel deux fois plus. Vient ensuite la queue de latence de K8 (0,4 point) ; K9, qui lui coûtait 0,7 point
+quand il réallouait ses grilles à chaque répétition, ne pèse plus depuis que toutes les implémentations les allouent
+une fois (voir Limites). `std::unordered_map`, à nœuds chaînés, est 22 fois plus lent que la table plate sur K7, mais
+ne lui coûte que 0,25 point face à C, dont la table naturelle est lente aussi. Premier sur Emerald Rapids
 ([`docs/CPP.md`](docs/CPP.md)).
 
 ### Le peloton des langages compilés à types valeur
@@ -424,10 +425,9 @@ du langage.
   dans 52 % des variantes, contre 57 %) ; C# et Nim rien, leurs remarques ne relevant ni erratum ni erreur du banc.
   Des versions optimisées mieux travaillées vaudraient deux places à Nim (Q1 en intrinsèques), 0,8 point à Odin, déjà
   2e (Q1 par popcount), une ou deux places à Julia et à Rust, aucune à C3 et, cumulées avec un autre choix de code
-  naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour dépasser Mojo au score ; à C++, les corrections de sa
-  remarque (clang++, formes de C, grilles de K9 allouées une fois, arène par pointeur) rendraient la 2e place, au
-  niveau de C (78,9 points contre 79,3, estimés par le pont), et à C une arène de K8 écrite par itération, 4,1 points
-  (84,1) : la règle les garde hors du classement, mais l'effort d'implémentation compte.
+  naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour dépasser Mojo au score ; à C++, le K4 de clang++
+  donnerait la 1re place (80,3 points contre 79,9), et à C une arène de K8 écrite par itération 4,1 points (84,0) :
+  la règle les garde hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine (Cascade Lake pour Ada et Fortran, Emerald Rapids
   pour D et Rust), puis reportées sur les données principales par des rapports appariés ; pour une clé de Fortran et
   une de D, par un témoin mesuré sur le même hôte, au prix d'un écart au plan pour Fortran
@@ -448,15 +448,15 @@ du langage.
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
 * Une seule version de compilateur par langage, la dernière stable au 28 octobre, à l'installation : Nim 2.4.0 est
   sorti le même jour, après les premières mesures, et son code machine est identique pour 20 des 21 fonctions des
-  noyaux. Un réglage temporaire d'une chaîne
-  peut coûter des rangs : Zig 0.17, dont le vectoriseur de boucles est désactivé, perd trois places en rang espéré par
-  rapport à sa version de développement. Je n'ai mesuré deux versions que pour Zig et pour C# (.NET 11, en
-  préversion : 0,99 fois les temps de .NET 10 en moyenne, aucune place gagnée). D est compilé par LDC 1.43.0 construit
-  depuis ses sources contre LLVM 21.1.8 ; le paquet officiel embarque LLVM 22.1.8, sans gain mesuré (D y perdrait une
-  place). Et un seul compilateur par langage : Fortran est classé avec gfortran ; flang n'est mesuré qu'en annexe, ifx
-  pas du tout. C++ est classé avec g++ 16, le seul à livrer `std::simd` : il y perd K4, que clang++ vectorise comme C
-  (avec le K4 de clang++, C++ aurait 79,7 points, à égalité avec C), mais y gagne l'arène de K8 et K5 naturel, que
-  clang++ fait 1,55 et 2 fois plus lentement ([`docs/CPP.md`](docs/CPP.md)).
+  noyaux. Un réglage temporaire d'une chaîne peut coûter des rangs : Zig 0.17, dont le vectoriseur de boucles est
+  désactivé, perd trois places en rang espéré par rapport à sa version de développement. Je n'ai mesuré deux versions
+  que pour Zig et pour C# (.NET 11, en préversion : 0,99 fois les temps de .NET 10 en moyenne, aucune place gagnée).
+  D est compilé par LDC 1.43.0 construit depuis ses sources contre LLVM 21.1.8 ; le paquet officiel embarque LLVM
+  22.1.8, sans gain mesuré (D y perdrait une place). Et un seul compilateur par langage : Fortran est classé avec
+  gfortran ; flang n'est mesuré qu'en annexe, ifx pas du tout. C++ est classé avec g++ 16, le seul à livrer
+  `std::simd` : il y perd K4, que clang++ vectorise comme C (avec le K4 de clang++, C++ aurait 80,3 points et la 1re
+  place), mais y gagne l'arène de K8 et K5 naturel, que clang++ fait 1,55 et 2 fois plus lentement
+  ([`docs/CPP.md`](docs/CPP.md)).
 * K9 vient d'un Emerald Rapids (machine 16), remesuré pour toutes les implémentations avec le harnais commun du 1er
   novembre (grilles allouées une fois) : sur cet hôte, la lecture sur un fil atteint 25 à 27 Go/s pour les 64 Mio des
   deux grilles, contre 7 à 10 Go/s sur Cascade Lake, et les écarts de code y pèsent davantage. Reportée sur les temps

@@ -279,3 +279,22 @@ actuel, sensibilité sans SIMD (témoin pointé sur le scénario Publié de `res
   Rust 4e avec la règle de la libc étendue, 2e avec toutes les corrections de sa remarque).
 * **Confrontation** (`results/confrontation_current.json`) : ordres, corrélations (0,78, 0,85, 0,81, 0,87) et rangs de
   C (1er, 5e, 1er, 6e) inchangés ; seuls les rangs espérés bougent.
+
+### 4.6 État actuel, après le harnais commun de K9 (1er novembre au soir)
+
+Depuis l'harmonisation du harnais de K9 (`docs/K9.md`), toutes les implémentations allouent leurs grilles une fois et K9
+vient de la machine 16 : la pénalité de K9 (I-K9-CL, T2) n'a plus d'objet. Les autres scénarios, rejoués dans l'état
+actuel (`analysis/c_check.py --current`, `results/report_c_current.md` ; Publié identique à `results/k9_check.json`) :
+
+| Scénario | C | C++ | Odin | Rang espéré de C | C 1er | Tête |
+|---|---|---|---|---|---|---|
+| Publié | 79,94 | 77,10 | 74,00 | 2,21 (1er) | 49 % | C, Odin, C++, Zig |
+| S-K8 : arène itérative | 84,01 | 77,03 | 73,94 | 1,52 (1er) | 77 % | C, Odin, C++, Zig |
+| R-v1 : contrôle en règle v1 | 73,83 | 72,47 | 73,04 | 2,97 (2e) | 28 % | Odin, C, C3, C++ |
+| R-ISO : contrôle « ISO seul » | 70,26 | 71,65 | 73,13 | 5,26 (5e) | 9 % | Odin, Zig, C3, C++ |
+| T1 : C++ avec le K4 de clang++ | 79,94 | 80,29 | 74,00 | 2,54 (2e) | 30 % | C++, C, Odin, Zig |
+| T1 et S-K8 | 84,01 | 80,22 | 73,94 | 1,62 (1er) | 71 % | C, C++, Odin, Zig |
+
+Deux constats changent : en règle v1 partout, Odin passe devant C, de peu (2,74 contre 2,97) ; avec le K4 de clang++,
+C++ passe 1er nettement (80,3 contre 79,9 points), et non plus de justesse. La règle « ISO seule » (C 5e) et l'arène de
+K8 (+ 4,1 points, C 1er même face au K4 de clang++) ne changent pas.
