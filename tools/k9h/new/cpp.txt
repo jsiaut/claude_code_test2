@@ -1,0 +1,33 @@
+static void run_k9(std::string_view v, int reps) {
+    // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+    std::vector<std::vector<double>> na, nb;
+    avec<double> fa, fb;
+    if (v == "natural") { na.assign(M9, std::vector<double>(M9)); nb.assign(M9, std::vector<double>(M9)); }
+    else { fa.resize((size_t)M9 * M9); fb.resize((size_t)M9 * M9); }
+    for (int r = -warmup_count(); r < reps; r++) {
+        double s = 0, t0, t1;
+        if (v == "natural") {
+            auto &a = na, &b = nb;
+            for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) a[i][j] = b[i][j] = k9_init(i, j);
+            t0 = now();
+            for (int it = 0; it < IT9; it++) { k9_natural(a, b); std::swap(a, b); }
+            t1 = now();
+            for (const auto &row : a) for (double x : row) s += x;
+        } else {
+            for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) fa[(size_t)i * M9 + j] = fb[(size_t)i * M9 + j] = k9_init(i, j);
+            double *in = fa.data(), *out = fb.data();
+            t0 = now();
+            for (int it = 0; it < IT9; it++) {
+                if (v == "tuned") k9_rows(in, out, 1, M9 - 1);
+                else {
+                    std::array<std::jthread, 4> th;
+                    for (int t = 0; t < 4; t++) th[t] = std::jthread(k9_rows, in, out, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4);
+                }
+                std::swap(in, out);
+            }
+            t1 = now();
+            for (size_t k = 0; k < (size_t)M9 * M9; k++) s += in[k];
+        }
+        if (r >= 0) result("k9", v, "2048^2x4", r, t1 - t0, fmt("%.15e", s));
+    }
+}

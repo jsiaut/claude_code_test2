@@ -876,3 +876,14 @@ Robustesse :
   le C classé, rangs selon la règle, arène de K8, harnais de K9) et d'Odin, 1re place de C selon le protocole, sans
   K4, Zig de développement, compilateur et arène de K8, langages relus, limites (versions optimisées, harnais de K9,
   sans SIMD), lecture et reproduction.
+* 2026-11-01, 19:23 : **plan du harnais commun de K9** (`docs/K9.md`, sections 1 à 3), poussé avant les
+  mesures. Décision de l'auteur de l'étude (« Oui harmonise le harnais K9 pour toutes les implémentations ») :
+  révision du protocole, datée dans `docs/SPEC.md` (grilles allouées une fois par processus, réinitialisées hors
+  chrono ; code chronométré et fils de `mt` inchangés). Inventaire lu dans les sources : C, C par gcc, Chapel et Ada
+  allouaient une fois ; Fortran et JavaScript, sauf leur naturel ; toutes les autres implémentations réallouaient.
+  Copies `bench/*_k9h` (`tools/k9h/`), identiques hors de la fonction de K9, compilées et validées. Mesures prévues
+  sur la machine 16 (ancien harnais pour les 26 implémentations, harnais commun pour les copies, copies de
+  sensibilité) ; K9 de toutes les implémentations viendra de la machine 16, comme K5 de la machine 3, avec les
+  scénarios H-hôte (effet de l'hôte seul) et I-CL (transfert sur Cascade Lake) en information. Code d'analyse :
+  `analysis/analyze_v2.py` (`apply_k9h`, `k9h_ratios`), `analysis/analyze_v3.py` (réplication, Cascade Lake seul),
+  `analysis/k9_check.py`.

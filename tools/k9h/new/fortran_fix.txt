@@ -1,0 +1,50 @@
+  subroutine run_k9(v, reps)
+    character(*), intent(in) :: v
+    integer, intent(in) :: reps
+    real(real64), allocatable :: a(:, :), b(:, :)
+    real(real64), allocatable, target :: ba(:), bb(:)
+    real(real64), pointer, contiguous :: pa(:), pb(:), tmp(:)
+    integer :: r, it, th
+    real(real64) :: t0, t1
+    character(40) :: s
+    integer(int64), parameter :: NN = int(M9, int64) * M9
+    ! harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+    if (v /= "natural") then
+      allocate (ba(NN + 8), bb(NN + 8))
+      pa => align64_r64(ba, NN)
+      pb => align64_r64(bb, NN)
+    else
+      allocate (a(0:M9 - 1, 0:M9 - 1), b(0:M9 - 1, 0:M9 - 1))
+    end if
+    do r = -warm, reps - 1
+      if (v == "natural") then  ! tableau 2D allouable + syntaxe tableau (idiome Fortran)
+        call k9_init(a)
+        b = a
+        t0 = now()
+        do it = 1, IT9
+          call k9_natural(a, b)
+          call swap2(a, b)
+        end do
+        t1 = now()
+        write (s, '(es22.15e2)') sum(a)
+      else
+        call k9_init(pa)
+        pb = pa
+        t0 = now()
+        do it = 1, IT9
+          if (v == "tuned") then
+            call k9_cols(pa, pb, M9, 1, M9 - 2)
+          else
+            !$omp parallel do num_threads(4) schedule(static, 1)
+            do th = 0, 3
+              call k9_cols(pa, pb, M9, 1 + (M9 - 2) * th / 4, (M9 - 2) * (th + 1) / 4)
+            end do
+            !$omp end parallel do
+          end if
+          tmp => pa; pa => pb; pb => tmp
+        end do
+        t1 = now()
+        write (s, '(es22.15e2)') sum(pa)
+      end if
+      if (r >= 0) call result("k9", v, "2048^2x4", r, t1 - t0, trim(adjustl(s)))
+    end do

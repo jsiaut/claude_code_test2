@@ -1,0 +1,30 @@
+let run_k9 v reps =
+  (* harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono *)
+  if v = "natural" then begin
+    let a = Array.make_matrix m9 m9 0.0 and b = Array.make_matrix m9 m9 0.0 in
+    for r = -warmup to reps - 1 do
+      for i = 0 to m9 - 1 do
+        for j = 0 to m9 - 1 do let x = k9_init i j in a.(i).(j) <- x; b.(i).(j) <- x done
+      done;
+      let t0 = now () in
+      k9_natural a b; k9_natural b a; k9_natural a b; k9_natural b a;
+      let dt = now () -. t0 in
+      let s = Array.fold_left (Array.fold_left ( +. )) 0.0 a in
+      if r >= 0 then result "k9" v "2048^2x4" r dt (Printf.sprintf "%.15e" s)
+    done
+  end else begin
+    let a = Array1.create float64 c_layout (m9 * m9) and b = Array1.create float64 c_layout (m9 * m9) in
+    let step x y =
+      if v = "tuned" then k9_rows x y 1 (m9 - 1)
+      else Array.iter Domain.join (Array.init 4 (fun t -> Domain.spawn (fun () -> k9_rows x y (1 + ((m9 - 2) * t / 4)) (1 + ((m9 - 2) * (t + 1) / 4)))))
+    in
+    for r = -warmup to reps - 1 do
+      for k = 0 to (m9 * m9) - 1 do let x = k9_init (k / m9) (k mod m9) in a.{k} <- x; b.{k} <- x done;
+      let t0 = now () in
+      step a b; step b a; step a b; step b a;
+      let dt = now () -. t0 in
+      let s = ref 0.0 in
+      for k = 0 to (m9 * m9) - 1 do s := !s +. a.{k} done;
+      if r >= 0 then result "k9" v "2048^2x4" r dt (Printf.sprintf "%.15e" !s)
+    done
+  end

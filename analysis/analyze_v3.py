@@ -435,6 +435,12 @@ def main():
     for l in langs:
         for key, procs in k5.get(l, {}).items():
             d3m[l][key] = procs
+    # harnais commun de K9 (docs/K9.md, plan 3.4) : K9 de la machine 3 multiplié par le rapport harnais commun / ancien
+    # mesuré sur la machine 16 (même modèle de processeur), 1 quand le harnais de la variante ne change pas
+    for l, keys in v2.k9h_ratios().items():
+        for key, r in keys.items():
+            if l in d3m and key in d3m[l]:
+                d3m[l][key] = [[t * r for t in p] for p in d3m[l][key]]
     A3 = Arrays3(d3m, lat3, langs, 0, rng, pools)
     refs3 = {e: references(A3, e) for e in ("mean", "min")}
     S3 = scores3(A3, 0, MAIN, C_main, footprint, refs3)
@@ -596,8 +602,11 @@ def main():
         without_k3[name] = {"MS": agreement(r1_, r3_, sorted(r1_, key=r1_.get)),
                             "E": agreement(e1_, e3_, sorted(e1_, key=e1_.get)),
                             "rank_m1": r1_, "rank_m3": r3_}
-    # Cascade Lake seul : K5 d'avant (machines 1 et 2, même modèle) à la place de K5 de la machine 3
-    dcl = {l: {k: v for k, v in data.get(l, {}).items() if k[0] != "k5"} for l in langs}
+    # Cascade Lake seul : K5 d'avant (machines 1 et 2, même modèle) à la place de K5 de la machine 3, et K9 de Cascade
+    # Lake (harnais d'origine : le harnais commun n'a pas été mesuré sur Cascade Lake, docs/K9.md)
+    data_cl, *_ = v2.dataset_main(k9h=None)
+    dcl = {l: {k: (data_cl[l][k] if k[0] == "k9" and k in data_cl.get(l, {}) else v) for k, v in data.get(l, {}).items()
+               if k[0] != "k5"} for l in langs}
     for l in langs:
         for key, procs in v1_k5.get(l, {}).items():
             dcl[l][key] = procs
@@ -681,7 +690,8 @@ def report(o):
                  f"{d['MS']['inv13']} | {fr(d['E']['rho21'], 2)} / {fr(d['E']['rho13'], 2)} / {fr(d['E']['rho9'], 2)} | "
                  f"{d['E']['inv13']} |")
     cl = o["cascade_lake_only"]
-    L.append("\n## Hors plan : Cascade Lake seul (K5 d'avant, machines 1 et 2), estimation ponctuelle\n")
+    L.append("\n## Hors plan : Cascade Lake seul (K5 d'avant, machines 1 et 2 ; K9 de Cascade Lake, harnais d'origine), "
+             "estimation ponctuelle\n")
     L.append(", ".join(f"{NAMES[l]} {r} (E {fr(cl['E'][l])}, D1 {fr(cl['D1'][l])})"
                        for l, r in sorted(cl["rank"].items(), key=lambda kv: kv[1])) + ".\n")
     L.append("## Réplication : bruit ou interaction ?\n")

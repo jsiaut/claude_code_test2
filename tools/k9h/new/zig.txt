@@ -1,0 +1,52 @@
+fn runK9(v: []const u8, reps: i32) void {
+    // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+    if (std.mem.eql(u8, v, "natural")) {
+        var a = gpa.create([M9][M9]f64) catch @panic("oom");
+        var b = gpa.create([M9][M9]f64) catch @panic("oom");
+        var r: i32 = -warmup;
+        while (r < reps) : (r += 1) {
+            var s: f64 = 0;
+            for (0..M9) |i| for (0..M9) |j| {
+                a[i][j] = k9Init(i, j);
+                b[i][j] = a[i][j];
+            };
+            const t0 = nowNs();
+            for (0..4) |_| {
+                k9Natural(a, b);
+                std.mem.swap(*[M9][M9]f64, &a, &b);
+            }
+            const dt = secs(t0);
+            for (a) |row| for (row) |x| {
+                s += x;
+            };
+            if (r >= 0) result("k9", v, "2048^2x4", r, dt, fmt("{e:.15}", .{s}));
+        }
+        gpa.destroy(a);
+        gpa.destroy(b);
+        return;
+    }
+    var a = gpa.alignedAlloc(f64, .@"64", M9 * M9) catch @panic("oom");
+    var b = gpa.alignedAlloc(f64, .@"64", M9 * M9) catch @panic("oom");
+    var r: i32 = -warmup;
+    while (r < reps) : (r += 1) {
+        var s: f64 = 0;
+        for (0..M9 * M9) |k| {
+            a[k] = k9Init(k / M9, k % M9);
+            b[k] = a[k];
+        }
+        const t0 = nowNs();
+        for (0..4) |_| {
+            if (std.mem.eql(u8, v, "tuned")) k9Rows(a, b, 1, M9 - 1) else {
+                var th: [4]std.Thread = undefined;
+                for (0..4) |t| th[t] = std.Thread.spawn(.{}, k9Rows, .{ a, b, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4 }) catch @panic("spawn");
+                for (th) |x| x.join();
+            }
+            std.mem.swap([]align(64) f64, &a, &b);
+        }
+        const dt = secs(t0);
+        for (a) |x| s += x;
+        if (r >= 0) result("k9", v, "2048^2x4", r, dt, fmt("{e:.15}", .{s}));
+    }
+    gpa.free(a);
+    gpa.free(b);
+}

@@ -1,0 +1,37 @@
+proc runK9(v: string, reps: int) =
+  # harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+  if v == "natural":
+    var a, b: ref Grid9
+    new(a); new(b)
+    for r in -WARMUP ..< reps:
+      var s, dt: float
+      for i in 0 ..< M9:
+        for j in 0 ..< M9: a[i][j] = k9Init(i, j)
+      b[] = a[]
+      let t0 = getMonoTime()
+      for _ in 0 ..< 4:
+        k9Natural(a, b)
+        swap(a, b)
+      dt = secs(t0)
+      for i in 0 ..< M9:
+        for j in 0 ..< M9: s += a[i][j]
+      if r >= 0: result("k9", v, "2048^2x4", r, dt, formatFloat(s, ffScientific, 15).replace("e+", "e+0"))
+    return
+  var a = cast[ptr UncheckedArray[float]](aligned_alloc(64, csize_t(M9 * M9 * 8)))
+  var b = cast[ptr UncheckedArray[float]](aligned_alloc(64, csize_t(M9 * M9 * 8)))
+  for r in -WARMUP ..< reps:
+    var s, dt: float
+    for k in 0 ..< M9 * M9:
+      a[k] = k9Init(k div M9, k mod M9); b[k] = a[k]
+    let t0 = getMonoTime()
+    for _ in 0 ..< 4:
+      if v == "tuned": k9Rows(a, b, 1, M9 - 1)
+      else:
+        var th: array[4, Thread[K9Job]]
+        for t in 0 ..< 4: createThread(th[t], k9Worker, (a, b, 1 + (M9 - 2) * t div 4, 1 + (M9 - 2) * (t + 1) div 4))
+        joinThreads(th)
+      swap(a, b)
+    dt = secs(t0)
+    for k in 0 ..< M9 * M9: s += a[k]
+    if r >= 0: result("k9", v, "2048^2x4", r, dt, formatFloat(s, ffScientific, 15).replace("e+", "e+0"))
+  cfree(a); cfree(b)

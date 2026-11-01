@@ -1,0 +1,40 @@
+run_k9 :: proc(v: string, reps: int) {
+	// harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+	if v == "natural" {
+		a, b := new([M9][M9]f64), new([M9][M9]f64)
+		for r := -WARMUP; r < reps; r += 1 {
+			s, dt: f64
+			for i in 0 ..< M9 do for j in 0 ..< M9 {a[i][j] = k9_init(i, j); b[i][j] = a[i][j]}
+			t0 := time.tick_now()
+			for _ in 0 ..< 4 {k9_natural(a, b); a, b = b, a}
+			dt = secs(t0)
+			for i in 0 ..< M9 do for j in 0 ..< M9 do s += a[i][j]
+			if r >= 0 do result("k9", v, "2048^2x4", r, dt, fmt.tprintf("%.15e", s))
+		}
+		free(a); free(b)
+		return
+	}
+	a, _ := mem.make_aligned([]f64, M9 * M9, 64)
+	b, _ := mem.make_aligned([]f64, M9 * M9, 64)
+	for r := -WARMUP; r < reps; r += 1 {
+		s, dt: f64
+		for k in 0 ..< M9 * M9 {a[k] = k9_init(k / M9, k % M9); b[k] = a[k]}
+		t0 := time.tick_now()
+		for _ in 0 ..< 4 {
+			if v == "tuned" {k9_rows(a, b, 1, M9 - 1)} else {
+				jobs: [4]K9Job
+				th: [4]^thread.Thread
+				for t in 0 ..< 4 {
+					jobs[t] = {a, b, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4}
+					th[t] = thread.create_and_start_with_poly_data(&jobs[t], proc(j: ^K9Job) {k9_rows(j.a, j.b, j.r0, j.r1)})
+				}
+				for t in th {thread.join(t); thread.destroy(t)}
+			}
+			a, b = b, a
+		}
+		dt = secs(t0)
+		for x in a do s += x
+		if r >= 0 do result("k9", v, "2048^2x4", r, dt, fmt.tprintf("%.15e", s))
+	}
+	delete(a); delete(b)
+}

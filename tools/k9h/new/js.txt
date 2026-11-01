@@ -1,0 +1,35 @@
+async function runK9(v, reps) {
+  // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+  if (v === 'natural') {
+    const na = Array.from({ length: M9 }, (_, i) => Array.from({ length: M9 }, (_, j) => k9Init(i, j)));
+    const nb = na.map(row => row.slice());
+    for (let r = -WARMUP; r < reps; r++) {
+      for (let i = 0; i < M9; i++) { const ra = na[i], rb = nb[i]; for (let j = 0; j < M9; j++) ra[j] = rb[j] = k9Init(i, j); }
+      let a = na, b = nb;
+      const t0 = now();
+      for (let it = 0; it < 4; it++) { k9Natural(a, b); [a, b] = [b, a]; }
+      const dt = Number(now() - t0) * 1e-9;
+      let s = 0; for (const row of a) for (const x of row) s += x;
+      if (r >= 0) result('k9', v, '2048^2x4', r, dt, fmtE(s));
+    }
+    return;
+  }
+  const mk = () => { const g = new Float64Array(new SharedArrayBuffer(8 * M9 * M9)); for (let k = 0; k < M9 * M9; k++) g[k] = k9Init((k / M9) | 0, k % M9); return g; };
+  const ga = mk(), gb = mk();
+  let ws = null;
+  if (v === 'mt') { ws = spawn(4, { kind: 'k9', ga, gb }); await Promise.all(ws.map(w => new Promise(res => w.once('online', res)))); }
+  for (let r = -WARMUP; r < reps; r++) {
+    for (let k = 0; k < M9 * M9; k++) ga[k] = gb[k] = k9Init((k / M9) | 0, k % M9);
+    let a = ga, b = gb;
+    const t0 = now();
+    for (let it = 0; it < 4; it++) {
+      if (v === 'tuned') k9Rows(a, b, 1, M9 - 1);
+      else await Promise.all(ws.map(w => new Promise(res => { w.once('message', res); w.postMessage(a === ga ? 0 : 1); })));
+      [a, b] = [b, a];
+    }
+    const dt = Number(now() - t0) * 1e-9;
+    let s = 0; for (let k = 0; k < M9 * M9; k++) s += a[k];
+    if (r >= 0) result('k9', v, '2048^2x4', r, dt, fmtE(s));
+  }
+  if (ws) ws.forEach(w => w.terminate());
+}

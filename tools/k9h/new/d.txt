@@ -1,0 +1,38 @@
+void runK9(string v, int reps) {
+    // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+    double[][] na, nb;
+    double* ga, gb;
+    if (v == "natural") { na = new double[][](M9, M9); nb = new double[][](M9, M9); } // tableau de tableaux (idiome D)
+    else { ga = cast(double*) aligned_alloc(64, M9 * M9 * 8); gb = cast(double*) aligned_alloc(64, M9 * M9 * 8); }
+    foreach (r; -WARMUP .. reps) {
+        double s = 0, dt;
+        if (v == "natural") {
+            auto a = na, b = nb;
+            foreach (i; 0 .. M9) foreach (j; 0 .. M9) a[i][j] = b[i][j] = k9Init(i, j);
+            auto t0 = MonoTime.currTime;
+            foreach (_; 0 .. 4) { k9Natural(a, b); auto tmp = a; a = b; b = tmp; }
+            dt = secs(t0);
+            foreach (row; a) foreach (x; row) s += x;
+        } else {
+            auto a = ga, b = gb;
+            foreach (k; 0 .. M9 * M9) a[k] = b[k] = k9Init(k / M9, k % M9);
+            auto t0 = MonoTime.currTime;
+            foreach (_; 0 .. 4) {
+                if (v == "tuned") k9Rows(a, b, 1, M9 - 1);
+                else {
+                    static Thread mk(double* fa, double* fb, size_t r0, size_t r1) {
+                        return new Thread({ k9Rows(fa, fb, r0, r1); }).start();
+                    }
+                    Thread[4] th;
+                    foreach (t; 0 .. 4) th[t] = mk(a, b, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4);
+                    foreach (t; th) t.join();
+                }
+                auto tmp = a; a = b; b = tmp;
+            }
+            dt = secs(t0);
+            foreach (k; 0 .. M9 * M9) s += a[k];
+        }
+        if (r >= 0) result("k9", v, "2048^2x4", r, dt, format("%.15e", s));
+    }
+    if (v != "natural") { free(ga); free(gb); }
+}

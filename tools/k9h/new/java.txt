@@ -1,0 +1,39 @@
+    static void runK9(String v, int reps) {
+        // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+        double[][] na = null, nb = null;
+        double[] ga = null, gb = null;
+        if (v.equals("natural")) { na = new double[M9][M9]; nb = new double[M9][M9]; }
+        else { ga = new double[M9 * M9]; gb = new double[M9 * M9]; }
+        for (int r = -warmup(); r < reps; r++) {
+            double s = 0; long t0, t1;
+            if (v.equals("natural")) {
+                double[][] a = na, b = nb;
+                for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) a[i][j] = b[i][j] = k9Init(i, j);
+                t0 = System.nanoTime();
+                for (int it = 0; it < 4; it++) { k9Natural(a, b); double[][] tmp = a; a = b; b = tmp; }
+                t1 = System.nanoTime();
+                for (double[] row : a) for (double x : row) s += x;
+            } else {
+                double[] a = ga, b = gb;
+                for (int k = 0; k < M9 * M9; k++) a[k] = b[k] = k9Init(k / M9, k % M9);
+                t0 = System.nanoTime();
+                for (int it = 0; it < 4; it++) {
+                    if (v.equals("tuned")) k9Rows(a, b, 1, M9 - 1);
+                    else {
+                        Thread[] th = new Thread[4];
+                        final double[] fa = a, fb = b;
+                        for (int k = 0; k < 4; k++) {
+                            final int r0 = 1 + (M9 - 2) * k / 4, r1 = 1 + (M9 - 2) * (k + 1) / 4;
+                            th[k] = new Thread(() -> k9Rows(fa, fb, r0, r1));
+                            th[k].start();
+                        }
+                        try { for (Thread x : th) x.join(); } catch (InterruptedException e) { throw new RuntimeException(e); }
+                    }
+                    double[] tmp = a; a = b; b = tmp;
+                }
+                t1 = System.nanoTime();
+                for (double x : a) s += x;
+            }
+            if (r >= 0) result("k9", v, "2048^2x4", r, (t1 - t0) * 1e-9, String.format("%.15e", s));
+        }
+    }

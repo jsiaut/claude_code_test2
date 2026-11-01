@@ -1,0 +1,62 @@
+fn run_k9(v: &str, reps: i32) {
+    // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+    if v == "natural" {
+        let init: Vec<[f64; M9]> = (0..M9).map(|i| { let mut r = [0.0; M9]; for j in 0..M9 { r[j] = k9_init(i, j); } r }).collect();
+        let mut a = init.clone();
+        let mut b = init.clone();
+        for r in -warmup()..reps {
+            for (row, src) in a.iter_mut().zip(init.iter()) {
+                row.copy_from_slice(src);
+            }
+            for (row, src) in b.iter_mut().zip(init.iter()) {
+                row.copy_from_slice(src);
+            }
+            let t0 = Instant::now();
+            for _ in 0..4 {
+                k9_natural(&a, &mut b);
+                std::mem::swap(&mut a, &mut b);
+            }
+            let dt = t0.elapsed().as_secs_f64();
+            let s: f64 = a.iter().flatten().sum();
+            if r >= 0 {
+                result("k9", v, "2048^2x4", r, dt, &format!("{s:.15e}"));
+            }
+        }
+        return;
+    }
+    let init: Vec<f64> = (0..M9 * M9).map(|k| k9_init(k / M9, k % M9)).collect();
+    let mut a = init.clone();
+    let mut b = init.clone();
+    for r in -warmup()..reps {
+        a.copy_from_slice(&init);
+        b.copy_from_slice(&init);
+        let t0 = Instant::now();
+        for _ in 0..4 {
+            let inner = &mut b[M9..(M9 - 1) * M9];
+            if v == "tuned" {
+                k9_rows(&a, inner, 1);
+            } else {
+                let rows = M9 - 2;
+                std::thread::scope(|s| {
+                    let mut rest = inner;
+                    let mut r0 = 1;
+                    for t in 0..4 {
+                        let nr = (rows * (t + 1)) / 4 - (rows * t) / 4;
+                        let (chunk, tail) = rest.split_at_mut(nr * M9);
+                        rest = tail;
+                        let a = &a;
+                        let start = r0;
+                        s.spawn(move || k9_rows(a, chunk, start));
+                        r0 += nr;
+                    }
+                });
+            }
+            std::mem::swap(&mut a, &mut b);
+        }
+        let dt = t0.elapsed().as_secs_f64();
+        let s: f64 = a.iter().sum();
+        if r >= 0 {
+            result("k9", v, "2048^2x4", r, dt, &format!("{s:.15e}"));
+        }
+    }
+}

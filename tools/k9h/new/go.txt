@@ -1,0 +1,66 @@
+func runK9(v string, reps int) {
+	// harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+	var na, nb [][]float64
+	var ga, gb []float64
+	if v == "natural" {
+		na, nb = make([][]float64, M9), make([][]float64, M9)
+		for i := range M9 {
+			na[i], nb[i] = make([]float64, M9), make([]float64, M9)
+		}
+	} else {
+		ga, gb = make([]float64, M9*M9), make([]float64, M9*M9)
+	}
+	for r := -warmup(); r < reps; r++ {
+		var s, dt float64
+		if v == "natural" {
+			a, b := na, nb
+			for i := range M9 {
+				for j := range M9 {
+					a[i][j] = k9Init(i, j)
+					b[i][j] = a[i][j]
+				}
+			}
+			t0 := time.Now()
+			for range 4 {
+				k9Natural(a, b)
+				a, b = b, a
+			}
+			dt = time.Since(t0).Seconds()
+			for i := range M9 {
+				for j := range M9 {
+					s += a[i][j]
+				}
+			}
+		} else {
+			a, b := ga, gb
+			for k := range a {
+				a[k] = k9Init(k/M9, k%M9)
+				b[k] = a[k]
+			}
+			t0 := time.Now()
+			for range 4 {
+				if v == "tuned" {
+					k9Rows(a, b, 1, M9-1)
+				} else {
+					var wg sync.WaitGroup
+					for t := range 4 {
+						wg.Add(1)
+						go func() {
+							defer wg.Done()
+							k9Rows(a, b, 1+(M9-2)*t/4, 1+(M9-2)*(t+1)/4)
+						}()
+					}
+					wg.Wait()
+				}
+				a, b = b, a
+			}
+			dt = time.Since(t0).Seconds()
+			for _, x := range a {
+				s += x
+			}
+		}
+		if r >= 0 {
+			result("k9", v, "2048^2x4", r, dt, fmt.Sprintf("%.15e", s))
+		}
+	}
+}

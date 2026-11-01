@@ -1,0 +1,23 @@
+runK9 :: String -> Int -> Int -> IO ()
+-- harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono ; la grille
+-- initiale du naturel, immuable, est construite une fois
+runK9 v warm reps
+  | v == "natural" = do
+      let a0 = listArray ((0, 0), (m9 - 1, m9 - 1)) [k9Init i j | i <- [0 .. m9 - 1], j <- [0 .. m9 - 1]] :: UArray (Int, Int) Double
+      a0 `seq` return ()
+      forM_ [-warm .. reps - 1] $ \r -> do
+        ref <- newIORef a0
+        (a4, dt) <- timed (readIORef ref >>= \x -> return $! k9Step (k9Step (k9Step (k9Step x))))
+        let s = foldl' (+) 0 (elems a4)
+        when (r >= 0) $ result "k9" v "2048^2x4" r dt (printf "%.15e" s)
+  | otherwise = do
+      fa <- mallocPlainForeignPtrAlignedBytes (m9 * m9 * 8) 64 :: IO (ForeignPtr Double)
+      fb <- mallocPlainForeignPtrAlignedBytes (m9 * m9 * 8) 64 :: IO (ForeignPtr Double)
+      unsafeWithForeignPtr fa $ \pa -> unsafeWithForeignPtr fb $ \pb ->
+        forM_ [-warm .. reps - 1] $ \r -> do
+          forM_ [0 .. m9 * m9 - 1] $ \k -> let x = k9Init (k `div` m9) (k `mod` m9) in pokeElemOff pa k x >> pokeElemOff pb k x
+          let step a b = if v == "tuned" then k9Rows a b 1 (m9 - 1)
+                         else parallelIO [k9Rows a b (1 + (m9 - 2) * t `div` 4) (1 + (m9 - 2) * (t + 1) `div` 4) | t <- [0 .. 3]]
+          (_, dt) <- timed (step pa pb >> step pb pa >> step pa pb >> step pb pa)
+          s <- foldM (\acc k -> (acc +) <$> peekElemOff pa k) 0 [0 .. m9 * m9 - 1]
+          when (r >= 0) $ result "k9" v "2048^2x4" r dt (printf "%.15e" (s :: Double))

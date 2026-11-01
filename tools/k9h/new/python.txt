@@ -1,0 +1,31 @@
+def run_k9(v, reps):
+    # harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+    init = [[k9_init(i, j) for j in range(M9)] for i in range(M9)]
+    ga = [row[:] for row in init]
+    gb = [row[:] for row in init]
+    for r in range(-WARMUP, reps):
+        for i in range(M9):
+            ga[i][:] = init[i]
+            gb[i][:] = init[i]
+        a, b = ga, gb
+        t0 = time.perf_counter()
+        for _ in range(4):
+            if v == "natural":
+                k9_natural(a, b)
+            elif v == "tuned":
+                k9_rows(a, b, 1, M9 - 1)
+            else:
+                th = [threading.Thread(target=k9_rows, args=(a, b, 1 + (M9 - 2) * t // 4, 1 + (M9 - 2) * (t + 1) // 4)) for t in range(4)]
+                for x in th:
+                    x.start()
+                for x in th:
+                    x.join()
+            a, b = b, a
+        dt = time.perf_counter() - t0
+        s = 0.0
+        for row in a:  # somme naïve séquentielle (sum() de Python est compensée depuis 3.12)
+            for x in row:
+                s += x
+        if r >= 0:
+            result("k9", v, "2048^2x4", r, dt, f"{s:.15e}")
+

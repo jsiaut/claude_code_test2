@@ -2,6 +2,8 @@
 
 Version 1.0 — figée le 2026-10-28, **avant** toute mesure inter-langages.
 
+Révision : 1er novembre 2026, harnais de K9 (décision de l'auteur de l'étude, `docs/K9.md`) ; voir K9.
+
 Chaque noyau illustre un ou plusieurs principes de *mechanical sympathy*. Toutes
 les implémentations lisent **les mêmes fichiers binaires** (générés une fois par
 `tools/gendata.c`). Elles calculent **le même résultat**, vérifié au bit près pour
@@ -173,6 +175,11 @@ Principe : latence L1/L2/L3/DRAM et coût d'une dépendance de données.
   (ordre d'évaluation imposé, sans contraction FMA, résultats identiques au bit
   près). Le bord est recopié. On échange `in` et `out`. IT = 4 itérations par
   répétition, toujours repartant de la grille initiale (réinitialisation hors chrono).
+* **Harnais (révision du 1er novembre 2026, `docs/K9.md`)** : les deux grilles sont allouées une fois par
+  processus, avant l'échauffement, dans le conteneur de la variante ; chaque répétition les réinitialise hors
+  chrono (valeurs initiales réécrites dans les deux grilles, bord compris) ; aucune grille n'est allouée ni libérée
+  entre deux répétitions. Une grille initiale immuable (K9 naturel de Haskell) est construite une fois. Le code
+  chronométré et la façon de lancer les fils de `mt` ne changent pas.
 * Checksum = Σ de la grille finale (f64), tolérance relative 1e-9.
 * Variantes : `natural` (le tableau 2D idiomatique du langage), `tuned` (tableau plat
   contigu, toutes techniques, mono-thread), `mt` (tuned, 4 threads). Chaque

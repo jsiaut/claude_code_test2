@@ -1,0 +1,27 @@
+"""Harmonisation du harnais de K9 (docs/K9.md) : où se trouve la fonction qui fait tourner K9 dans chaque source.
+(source, marqueur de début, marqueur de fin exclu) ; la fonction est remplacée en entier par tools/k9h/new/<nom>."""
+FUNCS = {
+    "cpp": ("cpp/ms.cpp", "static void run_k9(std::string_view v, int reps) {", "\n// ------------------------------------------------------------------ K10"),
+    "zig": ("zig/ms.zig", "fn runK9(v: []const u8, reps: i32) void {", "\n// ------------------------------------------------------------------ K10"),
+    "odin": ("odin/ms.odin", "run_k9 :: proc(v: string, reps: int) {", "\n// ------------------------------------------------------------------ K10"),
+    "c3": ("c3/ms.c3", "fn void run_k9(String v, int reps)", "\n// ------------------------------------------------------------------ K10"),
+    "rust": ("rust/ms.rs", "fn run_k9(v: &str, reps: i32) {", "\n// ------------------------------------------------------------------ K10"),
+    "rust_nat": ("rust_nat/ms.rs", "fn run_k9(v: &str, reps: i32) {", "\n// ------------------------------------------------------------------ K10"),
+    "nim": ("nim/ms.nim", "proc runK9(v: string, reps: int) =", "\n# ------------------------------------------------------------------ K10"),
+    "nim_nat": ("nim_nat/ms.nim", "proc runK9(v: string, reps: int) =", "\n# ------------------------------------------------------------------ K10"),
+    "d": ("d/ms.d", "void runK9(string v, int reps) {", "\n// ------------------------------------------------------------------ K10"),
+    "julia": ("julia/ms.jl", "function run_k9(v, reps)", "\n# ------------------------------------------------------------------ K10"),
+    "csharp": ("csharp/Program.cs", "    static void RunK9(string v, int reps)", "\n    // ------------------------------------------------------------------ K10"),
+    "csharp_exp": ("csharp_exp/Program.cs", "    static void RunK9(string v, int reps)", "\n    // ------------------------------------------------------------------ K10"),
+    "mojo": ("mojo/ms.mojo", "def run_k9(v: String, reps: Int, warmup: Int) raises:", "\n# ------------------------------------------------------------------ K10"),
+    "go": ("go/ms.go", "func runK9(v string, reps int) {", "\n// ------------------------------------------------------------------ K10"),
+    "java": ("java/Ms.java", "    static void runK9(String v, int reps) {", "\n    // ------------------------------------------------------------------ K10"),
+    "haskell": ("haskell/Ms.hs", "runK9 :: String -> Int -> Int -> IO ()", "\n-- ------------------------------------------------------------------ K10"),
+    "ocaml": ("ocaml/ms.ml", "let run_k9 v reps =", "\n(* ------------------------------------------------------------------ K10 *)"),
+    "js": ("js/ms.js", "async function runK9(v, reps) {", "\n// ------------------------------------------------------------------ K10"),
+    "python": ("python/ms.py", "def run_k9(v, reps):", "\n# ------------------------------------------------------------------ K10"),
+    "lua": ("lua/ms.lua", "local function run_k9(v, reps)", "\n-- ------------------------------------------------------------------ K10"),
+    "luajit": ("luajit/ms.lua", "local function run_k9(v, reps)", "\n-- ------------------------------------------------------------------ K10"),
+    "fortran_fix": ("fortran_fix/ms.f90", "  subroutine run_k9(v, reps)", "\n  contains\n    subroutine swap2(x, y)"),
+    "fortran": ("fortran/ms.f90", "  subroutine run_k9(v, reps)", "\n  contains\n    subroutine swap2(x, y)"),
+}

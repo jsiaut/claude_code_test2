@@ -1,0 +1,58 @@
+def run_k9(v: String, reps: Int, warmup: Int) raises:
+    # harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+    if v == "natural":
+        var a = List[List[Float64]]()
+        for i in range(M9):
+            var row = List[Float64](capacity=M9)
+            for j in range(M9):
+                row.append(k9_init(i, j))
+            a.append(row^)
+        var b = a.copy()
+        for r in range(-warmup, reps):
+            var s: Float64 = 0
+            var dt: Float64
+            for i in range(M9):
+                for j in range(M9):
+                    a[i][j] = k9_init(i, j)
+                    b[i][j] = a[i][j]
+            var t0 = perf_counter_ns()
+            for it in range(4):
+                if it % 2 == 0:
+                    k9_natural(a, b)
+                else:
+                    k9_natural(b, a)
+            dt = secs(t0)
+            for row in a:
+                for x in row:
+                    s += x
+            if r >= 0:
+                result("k9", v, "2048^2x4", r, dt, String(s))
+        return
+    var a = unsafe_alloc[Float64](M9 * M9, alignment=64)
+    var b = unsafe_alloc[Float64](M9 * M9, alignment=64)
+    for r in range(-warmup, reps):
+        var s: Float64 = 0
+        var dt: Float64
+        for k in range(M9 * M9):
+            a[unsafe_offset=k] = k9_init(k // M9, k % M9)
+            b[unsafe_offset=k] = a[unsafe_offset=k]
+        var t0 = perf_counter_ns()
+        for _ in range(4):
+            if v == "tuned":
+                k9_rows(a, b, 1, M9 - 1)
+            else:
+                var w0 = create_task(k9_worker(a, b, 1, 1 + (M9 - 2) // 4))
+                var w1 = create_task(k9_worker(a, b, 1 + (M9 - 2) // 4, 1 + (M9 - 2) * 2 // 4))
+                var w2 = create_task(k9_worker(a, b, 1 + (M9 - 2) * 2 // 4, 1 + (M9 - 2) * 3 // 4))
+                var w3 = create_task(k9_worker(a, b, 1 + (M9 - 2) * 3 // 4, M9 - 1))
+                _ = w0.wait() + w1.wait() + w2.wait() + w3.wait()
+            var tmp = a
+            a = b
+            b = tmp
+        dt = secs(t0)
+        for k in range(M9 * M9):
+            s += a[unsafe_offset=k]
+        if r >= 0:
+            result("k9", v, "2048^2x4", r, dt, String(s))
+    a.free()
+    b.free()

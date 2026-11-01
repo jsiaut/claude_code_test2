@@ -182,6 +182,82 @@ def apply_d24(data, transfers=True, path=os.path.join(ROOT, "results", "transfer
     return sorted(new)
 
 
+K9H_TAG = "k9h"
+# Harnais commun de K9 (docs/K9.md, révision du protocole du 1er novembre) : K9 (natural, tuned, mt) de toutes les
+# implémentations remesuré sur la machine 16. Mesure « ancienne » : le binaire publié (Ada et Fortran : leurs copies
+# corrigées, docs/ADA.md et docs/FORTRAN.md) ; mesure au harnais commun : sa copie <mesure>_k9h, quand le harnais de la
+# variante change.
+K9H_OLD = {"ada": "ada_fix", "fortran": "fortran_fix"}
+K9H_ONCE = {"c", "c_gcc", "chapel", "ada"}  # grilles déjà allouées une fois dans les trois variantes
+K9H_NAT_ONLY = {"fortran", "fortran_flang", "js", "js_bun"}  # seul le naturel réallouait
+K9H_VARIANTS = ("natural", "tuned", "mt")
+
+
+def load_k9h_raw():
+    """Processus valides de results/raw_k9h (étiquette k9h) : {implémentation mesurée: {clé: [temps par répétition]}}."""
+    raw = defaultdict(dict)
+    for f in sorted(glob.glob(os.path.join(ROOT, "results", "raw_k9h", "*.jsonl"))):
+        for line in open(f):
+            r = json.loads(line)
+            if r.get("tag") != K9H_TAG:
+                continue
+            reps = r.get("reps", [])
+            if not reps or r.get("returncode") not in (0, None) or any(x["ok"] is not True for x in reps):
+                continue
+            raw[r["lang"]].setdefault((r["kernel"], r["variant"], r["param"]), []).append([x["sec"] for x in reps])
+    return raw
+
+
+def k9h_source(lang, variant, harness):
+    """Implémentation mesurée qui fournit K9 <variant> de lang : copie _k9h si harness == 'common' et que le harnais de
+    la variante change, binaire publié sinon."""
+    old = K9H_OLD.get(lang, lang)
+    changed = lang not in K9H_ONCE and (variant == "natural" or lang not in K9H_NAT_ONLY)
+    return f"{old}_k9h" if harness == "common" and changed else old
+
+
+def load_k9h(harness="common"):
+    """K9 remesuré sur la machine 16 pour les implémentations classées et les annexes : {lang: {clé: processus}} ;
+    harness = 'common' (harnais commun, classement publié) ou 'old' (harnais d'origine, information). {} sans données."""
+    raw = load_k9h_raw()
+    out = defaultdict(dict)
+    for l in RANKED + list(ANNEX):
+        for v in K9H_VARIANTS:
+            key = ("k9", v, "")
+            src = k9h_source(l, v, harness)
+            if key in raw.get(src, {}):
+                out[l][key] = raw[src][key]
+    return out
+
+
+def apply_k9h(data, harness="common"):
+    """Remplace K9 (trois variantes) de toutes les implémentations par la remesure de la machine 16 (docs/K9.md, plan
+    3.4) : elle prend la place des temps de Cascade Lake et des corrections transférées de K9 (Ada, Fortran), mesurées
+    ici sur les copies corrigées elles-mêmes. Sans données, rien ne change."""
+    new = load_k9h(harness)
+    for l, keys in new.items():
+        if l not in data:
+            continue
+        for key, procs in keys.items():
+            data[l][key] = procs
+    return sorted(new)
+
+
+def k9h_ratios():
+    """Rapport du harnais commun à l'ancien, même hôte (machine 16) : {lang: {clé: rapport des moyennes géométriques
+    des médianes de processus}}, 1 quand le harnais ne change pas. Sert à la réplication (machine 3, même modèle)."""
+    raw = load_k9h_raw()
+    gm = lambda ps: math.exp(np.mean([math.log(float(np.median(p))) for p in ps]))  # noqa: E731
+    out = defaultdict(dict)
+    for l in RANKED + list(ANNEX):
+        for v in K9H_VARIANTS:
+            key = ("k9", v, "")
+            new, old = raw.get(k9h_source(l, v, "common"), {}).get(key), raw.get(k9h_source(l, v, "old"), {}).get(key)
+            if new and old:
+                out[l][key] = 1.0 if k9h_source(l, v, "common") == k9h_source(l, v, "old") else gm(new) / gm(old)
+    return out
+
+
 def sanity(data, bounds):
     flags = []
     for lang, d in data.items():
@@ -450,12 +526,13 @@ def apply_transfers(data, path=os.path.join(ROOT, "results", "transfers.json")):
     return tr
 
 
-def dataset_main(transfers=True, d3=True, d24=False):
+def dataset_main(transfers=True, d3=True, d24=False, k9h="common"):
     """Données de la configuration principale : v1 sans K5 ni K10, plus K5 de v2_k5 ; puis, si transfers, les
     corrections transférées de results/transfers.json ; si d3, les latences de K8 naturel remesurées pour D3
     (results/raw_d3, remarque sur Rust), quand elles existent ; si d24 (information seulement, pas dans le classement
     publié : docs/CPP.md, 4), les temps remesurés de D2 et D4 (results/raw_d24, remarque sur C++), sous leurs clés à
-    part."""
+    part ; si k9h ('common', classement publié, ou 'old', information), K9 de toutes les implémentations remesuré sur la
+    machine 16 (results/raw_k9h, docs/K9.md), quand il existe."""
     data, _lat_flat, _rss, invalid, sus, bridge = final_data()
     for l in data:
         for key in [k for k in data[l] if k[0] in ("k5", "k10")]:
@@ -481,6 +558,8 @@ def dataset_main(transfers=True, d3=True, d24=False):
         apply_d3(lat)
     if d24:
         apply_d24(data, transfers=transfers)
+    if k9h:
+        apply_k9h(data, k9h)
     return data, lat, invalid, sus, bridge, v1_k5, (k5, k5wit, k5inv, k5_sus, k5recs)
 
 
