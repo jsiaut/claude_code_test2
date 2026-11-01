@@ -424,10 +424,10 @@ du langage.
   règle v1 par deux autres, relevés par la remarque sur C, sans changer de place (C reste 1er, mais ne l'est plus que
   dans 52 % des variantes, contre 57 %) ; C# et Nim rien, leurs remarques ne relevant ni erratum ni erreur du banc.
   Des versions optimisées mieux travaillées vaudraient deux places à Nim (Q1 en intrinsèques), 0,8 point à Odin, déjà
-  2e (Q1 par popcount), une ou deux places à Julia et à Rust, aucune à C3 et, cumulées avec un autre choix de code
-  naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour dépasser Mojo au score ; à C++, le K4 de clang++
-  donnerait la 1re place (80,3 points contre 79,9), et à C une arène de K8 écrite par itération 4,1 points (84,0) :
-  la règle les garde hors du classement, mais l'effort d'implémentation compte.
+  2e (Q1 par popcount), une place à Julia (avec K5 en 512 bits), aucune à Rust ni à C3 une par une et, cumulées avec
+  un autre choix de code naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour dépasser Mojo au score ; à C++,
+  le K4 de clang++ donnerait la 1re place (80,3 points contre 79,9), et à C une arène de K8 écrite par itération 4,1
+  points (84,0) : la règle les garde hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine (Cascade Lake pour Ada et Fortran, Emerald Rapids
   pour D et Rust), puis reportées sur les données principales par des rapports appariés ; pour une clé de Fortran et
   une de D, par un témoin mesuré sur le même hôte, au prix d'un écart au plan pour Fortran
@@ -443,7 +443,7 @@ du langage.
   runtimes par défaut.
 * La libc ne compte que pour C et C++ : l'affinité, `mmap` et la taille de ligne de cache qu'elle leur donne valent 0
   à Rust et aux autres langages qui doivent passer par une FFI pour les appeler. Étendue à Rust, la règle lui vaudrait
-  3 points et la 4e place ; étendue à tous les langages dotés d'une FFI sans C, la 4e aussi
+  3 points et la 4e place ; étendue à tous les langages dotés d'une FFI sans C, la 5e
   ([`docs/RUST.md`](docs/RUST.md)).
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
 * Une seule version de compilateur par langage, la dernière stable au 28 octobre, à l'installation : Nim 2.4.0 est
