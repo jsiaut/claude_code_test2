@@ -1,0 +1,21 @@
+Nim Compiler Version 2.2.12 [Linux: amd64]
+Nim Compiler Version 2.4.0 [Linux: amd64]
+paquet nim-2.4.0-linux_x64.tar.xz, SHA-256 23c1c83d9031c498a2b3ad0bce153b8905710d04eb5922cf8ebd8f9d12125743 (fichier .sha256 officiel identique)
+Ubuntu clang version 23.1.5 (++20261023090852+395ba2c4d274-1~exp1~20261023090919.90)
+gcc-16 (GCC) 16.2.0
+
+== /opt/nim/config/nim.cfg (2.2.12)
+262-  # For now we only support compiling RTPs applications (i.e. no DKMs)
+263:  gcc.options.always = "-mrtp -fno-strict-aliasing -D_C99 -D_HAS_C9X -std=c99 -fasm -Wall -Wno-write-strings"
+269-  # For now we only support the PowerPC CPU
+270:  gcc.options.linker %= "-L $WIND_BASE/target/lib/usr/lib/ppc/PPC32/common -mrtp -fno-strict-aliasing -D_C99 -D_HAS_C9X -std=c99 -fasm -Wall -Wno-write-strings"
+273-# seqs_v2 violates strict aliasing.
+274:gcc.options.always %= "${gcc.options.always} -fno-strict-aliasing"
+284-@end
+285:gcc.cpp.options.speed = "-O3 -fno-strict-aliasing -fno-ident -fno-math-errno"
+298-clang.cpp.options.debug = "-g"
+299:clang.options.always = "-w -ferror-limit=3 -fno-strict-aliasing"
+
+== /opt/nim240/config/nim.cfg (2.4.0)
+273:# seqs_v2 violates strict aliasing.
+299:clang.options.always = "-w -ferror-limit=3 -fno-strict-aliasing"

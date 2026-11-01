@@ -1,0 +1,3 @@
+fonctions de noyaux : 21 ; identiques : 20 ; différentes : 1 ; absentes : []
+  tBuild : 92 -> 89 instructions
+identiques : aBuild, aSum, k1AoS, k1Natural, k1SoA, k2Chase, k3Worker, k4Branchless, k4Natural, k5Natural, k5Tuned, k6Worker, k9Natural, k9Rows, k9Worker, q1Natural, q1Tuned, q6Natural, q6Tuned, tSum

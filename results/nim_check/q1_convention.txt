@@ -1,0 +1,20 @@
+Langage | C1 (v1) | C2 (v1 / v2) | SIMD explicite des autres noyaux optimisés | Q1 tuned
+c | 0.5 | 1 / 1 | intrinsèques | une passe (référence)
+cpp | 1 | 1 / 1 | std::simd, intrinsèques | une passe
+zig | 1 | 0.5 / 0.5 | @Vector | une passe
+odin | 1 | 0.5 / 0.5 | #simd | une passe
+c3 | 1 | 0.5 / 0.5 | vecteurs natifs | une passe
+mojo | 1 | 0.5 / 1 | SIMD | une passe
+csharp | 1 | 1 / 1 | Vector512 | une passe
+d | 1 | 0.5 / 1 | core.simd | une passe (corrigé le 31/10)
+rust | 0.5 | 1 / 1 | std::arch (intrinsèques) | une passe
+nim | 0 | 0.5 / 1 | intrinsèques importées (K1 soa, K5 tuned) | blocs
+ada | 0.5 | 0.5 / 1 | vector_type GCC et builtins (K5 tuned) | blocs
+chapel | 0 | 0.5 / 0.5 | aucun (boucles) | blocs
+julia | 0.5 | 0.5 / 1 | aucun (@simd) | blocs
+fortran | 0 | 0 / 0 | aucun | blocs
+
+docs/DLANG.md (section 2, poussée avant les mesures de D) : « parmi les langages à types vectoriels portables standard
+(C1 = 1 en règle v1), C++, Zig, Odin, C3, Mojo et C# écrivent Q1 tuned avec l'algorithme de la référence C, en une
+passe de 16 lignes ; les blocs servent aux langages qui n'en ont pas (Nim, Fortran, Chapel, Julia ; Ada, dont les
+vecteurs sont propres à GNAT). »

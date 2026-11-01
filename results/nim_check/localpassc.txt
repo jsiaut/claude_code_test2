@@ -1,0 +1,8 @@
+sonde tools/nim_check/lp.nim : {.localPassC: "-ffast-math".}
+@psystem@sexceptions.nim.c -> sans
+@pstd@sprivate@sdigitsutils.nim.c -> sans
+@pstd@sprivate@sschubfach.nim.c -> sans
+@pstd@sformatfloat.nim.c -> sans
+@psystem@sdollars.nim.c -> sans
+@psystem.nim.c -> sans
+@mlp.nim.c -> avec -ffast-math

@@ -1,0 +1,10 @@
+tools/nim_check/k9forms.nim : k9Seq = seq[seq[float]] (forme du banc) ; k9Arr = ref array[M, array[M, float]].
+Nim 2.2.12 -> clang 23 -O3 -march=cascadelake ; nombre d'instructions vectorielles sur des doubles (ymm/zmm).
+-d:release (-fno-strict-aliasing seul, défaut de Nim) k9Seq : 0 vectorielles, 7 scalaires
+-d:release (-fno-strict-aliasing seul, défaut de Nim) k9Arr : 24 vectorielles, 32 scalaires
+-d:release -fstrict-aliasing k9Seq : 0 vectorielles, 7 scalaires
+-d:release -fstrict-aliasing k9Arr : 24 vectorielles, 32 scalaires
+-d:danger (-fno-strict-aliasing seul, défaut de Nim) k9Seq : 0 vectorielles, 13 scalaires
+-d:danger (-fno-strict-aliasing seul, défaut de Nim) k9Arr : 42 vectorielles, 32 scalaires
+-d:danger -fstrict-aliasing k9Seq : 42 vectorielles, 32 scalaires
+-d:danger -fstrict-aliasing k9Arr : 42 vectorielles, 32 scalaires
