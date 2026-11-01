@@ -437,8 +437,8 @@ def main():
             d3m[l][key] = procs
     # harnais commun de K9 (docs/K9.md, plan 3.4) : K9 de la machine 3 multiplié par le rapport harnais commun / ancien
     # mesuré sur la machine 16 (même modèle de processeur), 1 quand le harnais de la variante ne change pas
-    for l, keys in v2.k9h_ratios().items():
-        for key, r in keys.items():
+    for l, k9r in v2.k9h_ratios().items():
+        for key, r in k9r.items():
             if l in d3m and key in d3m[l]:
                 d3m[l][key] = [[t * r for t in p] for p in d3m[l][key]]
     A3 = Arrays3(d3m, lat3, langs, 0, rng, pools)
