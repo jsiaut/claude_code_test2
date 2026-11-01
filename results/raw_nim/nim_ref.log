@@ -1,0 +1,84 @@
+nim_ref    k6   natural              q1         p0 n=10 med=0.070149s ok={True} rc=0 
+nim_ref    k5   tuned                           p0 n=10 med=0.003481s ok={True} rc=0 
+nim_ref    k4   branchless_unsorted             p0 n=10 med=0.001556s ok={True} rc=0 
+nim_ref    k4   natural_unsorted                p0 n=10 med=0.001689s ok={True} rc=0 
+nim_ref    k8   tuned                           p0 n=8 med=0.371122s ok={True} rc=0 
+nim_ref    k6   mt                   q1         p0 n=10 med=0.026875s ok={True} rc=0 
+nim_ref    k6   tuned                q6         p0 n=10 med=0.015991s ok={True} rc=0 
+nim_ref    k8   natural                         p0 n=3 med=0.760523s ok={True} rc=0 
+nim_ref    k5   natural                         p0 n=10 med=0.095669s ok={True} rc=0 
+nim_ref    k9   natural                         p0 n=10 med=0.042507s ok={True} rc=0 
+nim_ref    k9   tuned                           p0 n=10 med=0.016651s ok={True} rc=0 
+nim_ref    k6   tuned                q1         p0 n=10 med=0.077749s ok={True} rc=0 
+nim_ref    k8   natural                         p0 n=3 med=0.716645s ok={True} rc=0 
+nim_ref    k9   natural                         p0 n=10 med=0.044266s ok={True} rc=0 
+nim_ref    k5   natural                         p0 n=10 med=0.096798s ok={True} rc=0 
+nim_ref    k6   tuned                q1         p0 n=10 med=0.075932s ok={True} rc=0 
+nim_ref    k6   tuned                q6         p0 n=10 med=0.016567s ok={True} rc=0 
+nim_ref    k5   tuned                           p0 n=10 med=0.003721s ok={True} rc=0 
+nim_ref    k8   tuned                           p0 n=8 med=0.380586s ok={True} rc=0 
+nim_ref    k6   natural              q1         p0 n=10 med=0.073514s ok={True} rc=0 
+nim_ref    k4   branchless_unsorted             p0 n=10 med=0.001561s ok={True} rc=0 
+nim_ref    k9   tuned                           p0 n=10 med=0.019474s ok={True} rc=0 
+nim_ref    k6   mt                   q1         p0 n=10 med=0.022599s ok={True} rc=0 
+nim_ref    k4   natural_unsorted                p0 n=10 med=0.001552s ok={True} rc=0 
+nim_ref    k5   tuned                           p0 n=10 med=0.003895s ok={True} rc=0 
+nim_ref    k9   tuned                           p0 n=10 med=0.030217s ok={True} rc=0 
+nim_ref    k6   tuned                q1         p0 n=10 med=0.086404s ok={True} rc=0 
+nim_ref    k8   natural                         p0 n=3 med=0.799615s ok={True} rc=0 
+nim_ref    k8   tuned                           p0 n=8 med=0.376864s ok={True} rc=0 
+nim_ref    k4   natural_unsorted                p0 n=10 med=0.004460s ok={True} rc=0 
+nim_ref    k5   natural                         p0 n=10 med=0.094882s ok={True} rc=0 
+nim_ref    k4   branchless_unsorted             p0 n=10 med=0.001557s ok={True} rc=0 
+nim_ref    k6   tuned                q6         p0 n=10 med=0.016987s ok={True} rc=0 
+nim_ref    k6   natural              q1         p0 n=10 med=0.090734s ok={True} rc=0 
+nim_ref    k6   mt                   q1         p0 n=10 med=0.023771s ok={True} rc=0 
+nim_ref    k9   natural                         p0 n=10 med=0.045694s ok={True} rc=0 
+nim_ref    k8   natural                         p0 n=3 med=0.774894s ok={True} rc=0 
+nim_ref    k9   natural                         p0 n=10 med=0.045440s ok={True} rc=0 
+nim_ref    k6   tuned                q1         p0 n=10 med=0.075529s ok={True} rc=0 
+nim_ref    k6   mt                   q1         p0 n=10 med=0.033761s ok={True} rc=0 
+nim_ref    k6   natural              q1         p0 n=10 med=0.061999s ok={True} rc=0 
+nim_ref    k5   tuned                           p0 n=10 med=0.003466s ok={True} rc=0 
+nim_ref    k5   natural                         p0 n=10 med=0.094870s ok={True} rc=0 
+nim_ref    k4   natural_unsorted                p0 n=10 med=0.001638s ok={True} rc=0 
+nim_ref    k8   tuned                           p0 n=8 med=0.378616s ok={True} rc=0 
+nim_ref    k6   tuned                q6         p0 n=10 med=0.018440s ok={True} rc=0 
+nim_ref    k9   tuned                           p0 n=10 med=0.032294s ok={True} rc=0 
+nim_ref    k4   branchless_unsorted             p0 n=10 med=0.002309s ok={True} rc=0 
+nim_ref    k8   natural                         p0 n=3 med=0.783777s ok={True} rc=0 
+nim_ref    k6   tuned                q1         p0 n=10 med=0.077136s ok={True} rc=0 
+nim_ref    k6   mt                   q1         p0 n=10 med=0.026022s ok={True} rc=0 
+nim_ref    k5   natural                         p0 n=10 med=0.094368s ok={True} rc=0 
+nim_ref    k8   tuned                           p0 n=8 med=0.371270s ok={True} rc=0 
+nim_ref    k9   tuned                           p0 n=10 med=0.029544s ok={True} rc=0 
+nim_ref    k9   natural                         p0 n=10 med=0.048282s ok={True} rc=0 
+nim_ref    k6   natural              q1         p0 n=10 med=0.066447s ok={True} rc=0 
+nim_ref    k5   tuned                           p0 n=10 med=0.004125s ok={True} rc=0 
+nim_ref    k4   branchless_unsorted             p0 n=10 med=0.001594s ok={True} rc=0 
+nim_ref    k4   natural_unsorted                p0 n=10 med=0.001571s ok={True} rc=0 
+nim_ref    k6   tuned                q6         p0 n=10 med=0.017825s ok={True} rc=0 
+nim_ref    k6   natural              q1         p0 n=10 med=0.067661s ok={True} rc=0 
+nim_ref    k4   natural_unsorted                p0 n=10 med=0.002112s ok={True} rc=0 
+nim_ref    k9   tuned                           p0 n=10 med=0.024830s ok={True} rc=0 
+nim_ref    k4   branchless_unsorted             p0 n=10 med=0.002689s ok={True} rc=0 
+nim_ref    k5   tuned                           p0 n=10 med=0.004036s ok={True} rc=0 
+nim_ref    k6   tuned                q1         p0 n=10 med=0.076572s ok={True} rc=0 
+nim_ref    k8   tuned                           p0 n=8 med=0.370612s ok={True} rc=0 
+nim_ref    k6   tuned                q6         p0 n=10 med=0.017904s ok={True} rc=0 
+nim_ref    k5   natural                         p0 n=10 med=0.093514s ok={True} rc=0 
+nim_ref    k8   natural                         p0 n=3 med=0.759042s ok={True} rc=0 
+nim_ref    k9   natural                         p0 n=10 med=0.062016s ok={True} rc=0 
+nim_ref    k6   mt                   q1         p0 n=10 med=0.026912s ok={True} rc=0 
+nim_ref    k6   tuned                q1         p0 n=10 med=0.086113s ok={True} rc=0 
+nim_ref    k6   tuned                q6         p0 n=10 med=0.016962s ok={True} rc=0 
+nim_ref    k9   natural                         p0 n=10 med=0.045662s ok={True} rc=0 
+nim_ref    k8   tuned                           p0 n=8 med=0.379087s ok={True} rc=0 
+nim_ref    k9   tuned                           p0 n=10 med=0.027119s ok={True} rc=0 
+nim_ref    k6   mt                   q1         p0 n=10 med=0.028629s ok={True} rc=0 
+nim_ref    k5   natural                         p0 n=10 med=0.097224s ok={True} rc=0 
+nim_ref    k5   tuned                           p0 n=10 med=0.004776s ok={True} rc=0 
+nim_ref    k4   natural_unsorted                p0 n=10 med=0.001597s ok={True} rc=0 
+nim_ref    k4   branchless_unsorted             p0 n=10 med=0.001808s ok={True} rc=0 
+nim_ref    k8   natural                         p0 n=3 med=0.818453s ok={True} rc=0 
+nim_ref    k6   natural              q1         p0 n=10 med=0.066221s ok={True} rc=0 

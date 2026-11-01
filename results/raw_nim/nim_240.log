@@ -1,0 +1,14 @@
+nim_240    k8   natural                         p0 n=3 med=0.784273s ok={True} rc=0 
+nim_240    k8   tuned                           p0 n=8 med=0.366944s ok={True} rc=0 
+nim_240    k8   tuned                           p0 n=8 med=0.367498s ok={True} rc=0 
+nim_240    k8   natural                         p0 n=3 med=0.889585s ok={True} rc=0 
+nim_240    k8   tuned                           p0 n=8 med=0.379281s ok={True} rc=0 
+nim_240    k8   natural                         p0 n=3 med=0.794359s ok={True} rc=0 
+nim_240    k8   tuned                           p0 n=8 med=0.367026s ok={True} rc=0 
+nim_240    k8   natural                         p0 n=3 med=0.859144s ok={True} rc=0 
+nim_240    k8   tuned                           p0 n=8 med=0.375704s ok={True} rc=0 
+nim_240    k8   natural                         p0 n=3 med=0.850397s ok={True} rc=0 
+nim_240    k8   natural                         p0 n=3 med=0.829133s ok={True} rc=0 
+nim_240    k8   tuned                           p0 n=8 med=0.370132s ok={True} rc=0 
+nim_240    k8   tuned                           p0 n=8 med=0.368477s ok={True} rc=0 
+nim_240    k8   natural                         p0 n=3 med=0.949181s ok={True} rc=0 

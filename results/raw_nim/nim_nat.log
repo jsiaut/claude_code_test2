@@ -1,0 +1,14 @@
+nim_nat    k9   tuned                           p0 n=10 med=0.015916s ok={True} rc=0 
+nim_nat    k9   natural                         p0 n=10 med=0.012407s ok={True} rc=0 
+nim_nat    k9   tuned                           p0 n=10 med=0.026564s ok={True} rc=0 
+nim_nat    k9   natural                         p0 n=10 med=0.013147s ok={True} rc=0 
+nim_nat    k9   natural                         p0 n=10 med=0.013749s ok={True} rc=0 
+nim_nat    k9   tuned                           p0 n=10 med=0.023742s ok={True} rc=0 
+nim_nat    k9   tuned                           p0 n=10 med=0.032825s ok={True} rc=0 
+nim_nat    k9   natural                         p0 n=10 med=0.014931s ok={True} rc=0 
+nim_nat    k9   natural                         p0 n=10 med=0.015213s ok={True} rc=0 
+nim_nat    k9   tuned                           p0 n=10 med=0.027534s ok={True} rc=0 
+nim_nat    k9   natural                         p0 n=10 med=0.012833s ok={True} rc=0 
+nim_nat    k9   tuned                           p0 n=10 med=0.026229s ok={True} rc=0 
+nim_nat    k9   tuned                           p0 n=10 med=0.026627s ok={True} rc=0 
+nim_nat    k9   natural                         p0 n=10 med=0.013157s ok={True} rc=0 
