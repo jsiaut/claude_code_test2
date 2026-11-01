@@ -172,9 +172,12 @@ fusionner les passes répétées (355 To/s).
   version). Zig 0.15.2 et master (0.18-dev, LLVM 23) vectorisent les deux boucles, K9 après un test
   de recouvrement des deux tableaux à l'exécution. *Corrigé le 30/10* : j'attribuais K9 à l'aliasing
   possible des deux tableaux ; c'était faux (`docs/ZIG.md`). Rust, D, Nim et Ada ne vectorisent pas le
-  stencil naturel, à cause des vérifications de bornes de leurs tableaux de tableaux (Ada : tableau
-  2D non contraint et bornes littérales ; sur un type contraint, GNAT vectorise, `docs/ADA.md`) ; dans le banc
-  d'origine, gfortran ne vectorisait pas K4, parce que le noyau était inliné dans la boucle de mesure
+  stencil naturel (*corrigé le 1/11*, j'accusais partout les vérifications de bornes) : en D et en Rust, c'est
+  l'aliasing (ni LDC ni rustc n'émettent de métadonnées TBAA ; les pointeurs de lignes sont relus après chaque
+  écriture, même sans vérification, `docs/DLANG.md`, `docs/RUST.md`) ; en Nim, les vérifications et
+  `-fno-strict-aliasing`, que Nim impose au compilateur C, ensemble (`docs/NIM.md`) ; en Ada, les vérifications d'un
+  tableau 2D non contraint écrit avec des bornes littérales (sur un type contraint, GNAT vectorise, `docs/ADA.md`) ;
+  dans le banc d'origine, gfortran ne vectorisait pas K4, parce que le noyau était inliné dans la boucle de mesure
   (hors ligne, comme le banc C l'impose à ses noyaux, gfortran le vectorise : corrigé le 30/10,
   `docs/FORTRAN.md`) ; flang le vectorisait déjà dans le banc d'origine ; le JIT de
   .NET n'a pas de vectoriseur automatique ; C2 (Java) vectorise K9 en 128 bits mais pas K4.
@@ -519,4 +522,20 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   ramasse-miettes, celle de C3 (p99,9 277 µs, maximum 2,2 ms, comme sur Cascade Lake) ; la pire pause des langages
   compilés, D (89 ms) ; Julia 30 fois la médiane ; Python 0,76 s. Le vol corrèle encore avec le p99,9 (corrélation de
   rang 0,49 sur les 70 processus des langages à `malloc`), mais sept processus par langage en amortissent l'effet.
+
+## Remarque sur Nim (1er novembre, machine 12, Emerald Rapids) — `docs/NIM.md`, `results/nim_check/`
+
+* **Nim impose `-fno-strict-aliasing` au compilateur C** (`config/nim.cfg`, 2.2.12 et 2.4.0 : « seqs_v2 violates strict
+  aliasing »). Dans le stencil en `seq[seq[float]]`, la boucle ne vectorise qu'avec `-d:danger` **et**
+  `-fstrict-aliasing` ; en `ref array[M, array[M, float]]`, elle vectorise en `-d:release` : × 0,29, au niveau de C.
+* **Le Q1 optimisé en blocs est vectorisé** par clang (8 lignes par tour, additions masquées sur xmm et ymm), mais il
+  relit chaque colonne six fois par bloc ; transcrit avec les intrinsèques importées de la référence C : × 0,30, au
+  niveau de C (1,02 fois son temps).
+* **`{.localPassC.}`** ajoute une option au seul fichier C du module qui la déclare.
+* **Nim 2.4.0** (sorti le 28 octobre) : code machine identique à 2.2.12 pour 20 des 21 fonctions des noyaux ; la
+  construction de l'arbre de K8 naturel change (92 → 89 instructions) et devient 1,10 fois plus lente.
+* **Nim vers gcc 16 au lieu de clang 23** : K4 2,5 à 2,9 fois plus lent, arène de K8 23 % plus rapide, et le harnais de
+  K5 naturel ne mesure plus rien (0,03 ms au lieu de 95) : gcc ne garde que le dernier des 65 536 appels, dont les
+  résultats sont écrasés, la boucle ne faisant plus que la barrière volatile (`results/nim_check/gcc_k5.txt`).
+* **Arène de K8 sans vérification de débordement** : × 0,91.
 

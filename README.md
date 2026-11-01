@@ -17,7 +17,7 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | 4 | **Zig** | 72,7 | 1–10 | 69 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (1er avec la version de développement) |
 | 5 | **C3** | 70,3 | 2–10 | 53 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels |
 | 6 | **Rust** | 70,5 | 3–10 | 51 % | 4e plafond et bon code naturel ; contrôle limité par sa bibliothèque standard (ni affinité, ni `mmap`, SIMD portable instable) |
-| 7 | **Nim** | 69,7 | 2–11 | 52 % | Les leviers de C par sa compilation vers C ; vérifications de bornes qui bloquent la vectorisation |
+| 7 | **Nim** | 69,7 | 2–11 | 52 % | Les leviers de C par sa compilation vers C ; vérifications et aliasing non strict qui bloquent la vectorisation du stencil |
 | 8 | **D** | 72,6 | 3–12 | 58 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
 | 9 | **Ada** | 71,7 | 3–12 | 58 % | Disposition au bit près, 8e plafond ; vérifications coûteuses sur le code naturel |
 | 10 | **Chapel** | 66,1 | 3–13 | 69 % | 3e plafond grâce au parallélisme natif ; leviers bas niveau rares ou instables |
@@ -151,8 +151,12 @@ ses deux processus : remesurée, elle est proche de celle de C ([`docs/RUST.md`]
 Rapids.
 
 **7. Nim.** Il compile vers C et en hérite la disposition et les compilateurs ; comptage de références déterministe
-(ORC) ; l'un des meilleurs codes naturels de l'étude. Mais les vérifications de bornes gardées en `-d:release`
-empêchent la vectorisation du stencil naturel (71 contre 36 ms), et sa bibliothèque standard n'a pas de types SIMD.
+(ORC) ; l'un des meilleurs codes naturels de l'étude. Mais son stencil naturel n'est pas vectorisé (71 contre 36 ms) :
+il faudrait lever à la fois les vérifications de bornes gardées en `-d:release` et l'interdiction d'aliasing par type
+que Nim impose au compilateur C (`-fno-strict-aliasing`) ; en tableau de taille fixe, il vectorise. Sa bibliothèque
+standard n'a pas de types SIMD : ses noyaux optimisés importent les intrinsèques de C, sauf Q1, écrit en blocs comme
+pour les langages sans types vectoriels portables et 3 fois plus lent que celui de C ; en intrinsèques, il rejoint C et
+Nim passerait 5e, en sensibilité ([`docs/NIM.md`](docs/NIM.md)).
 
 **8. D.** Le contrôle de C avec templates, exécution à la compilation, `core.simd`, indications de branchement et de
 préchargement de druntime et atomiques à ordres explicites : 4e score de l'étude (72,6). Ce qui le fait reculer au rang
@@ -269,9 +273,10 @@ Les résultats les plus solides de l'étude : chacun isole une cause, avec ses c
 3. **La vectorisation automatique se vérifie sur le code exécuté.** Aucune des deux boucles naturelles testées n'est
    vectorisée en C#, Go, Mojo (dont le compilateur n'a pas de vectoriseur de boucles), Zig 0.17 (vectoriseur de boucles
    désactivé par l'équipe Zig, réactivé dans la version de développement), Haskell, OCaml, JavaScript, Lua et Python.
-   Les vérifications de bornes l'empêchent sur le stencil naturel en Nim et Ada (71 ms, contre 36 ms) ; en D (56 ms,
-   sans vérifications) et en Rust (73 ms, scalaire même sans elles), c'est l'aliasing : ni LDC ni rustc ne transmettent
-   de règle de type à LLVM, et les pointeurs de lignes sont relus après chaque écriture ; en Ada, sur un type contraint,
+   Les vérifications de bornes l'empêchent sur le stencil naturel en Ada (71 ms, contre 36 ms) ; en D (56 ms, sans
+   vérifications) et en Rust (73 ms, scalaire même sans elles), c'est l'aliasing : ni LDC ni rustc ne transmettent de
+   règle de type à LLVM, et les pointeurs de lignes sont relus après chaque écriture ; en Nim (71 ms), ce sont les deux,
+   vérifications et `-fno-strict-aliasing`, que Nim impose au compilateur C ; en Ada, sur un type contraint,
    GNAT élimine les vérifications et vectorise. En Mojo, elles coûtent plus que l'absence de vectorisation : sans elles,
    le stencil naturel passe de 169 à 41 ms (C : 28 ms) et Q1 de 137 à 67 ms, au niveau de C (même machine). Le contexte
    d'appel compte aussi : inlinés dans la boucle de mesure, les deux noyaux de K4 de Fortran restaient scalaires, alors
@@ -339,13 +344,14 @@ du langage.
 
 * Deux processeurs Intel, virtualisés et partagés ; ni AMD, ni ARM, ni compteurs matériels.
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Neuf langages ont été relus après coup par des connaisseurs. Ada et Fortran y ont gagné deux places chacun,
+  l'autre. Dix langages ont été relus après coup par des connaisseurs. Ada et Fortran y ont gagné deux places chacun,
   par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de mesure) ; D une
   place, par la correction de son Q1 optimisé et deux errata de la règle v1 ; Rust trois places, surtout par la
   remesure des queues de latence de K8, qui a aussi déplacé Zig, C3, Nim et Ada ; Chapel une place par trois errata de
   la matrice ; Mojo 2,7 points et Julia 1,8 point, mais aucune place, par des errata de la matrice ; Zig trois places,
-  mais par une version de compilateur que la règle exclut ; C# rien, sa remarque ne relevant ni erratum ni erreur du
-  banc. Des versions optimisées mieux travaillées vaudraient une ou deux places de plus à Julia, une à Rust et,
+  mais par une version de compilateur que la règle exclut ; C# et Nim rien, leurs remarques ne relevant ni erratum ni
+  erreur du banc. Des versions optimisées mieux travaillées vaudraient deux places de plus à Nim (Q1 en intrinsèques),
+  une ou deux à Julia, une à Rust et,
   cumulées avec un autre choix de code naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour dépasser Mojo au
   score : la règle les garde hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine (Cascade Lake pour Ada et Fortran, Emerald Rapids
@@ -362,7 +368,9 @@ du langage.
   3 points et la 4e place ; étendue à tous les langages dotés d'une FFI sans C, la 4e aussi
   ([`docs/RUST.md`](docs/RUST.md)).
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
-* Une seule version de compilateur par langage, la dernière stable au 28 octobre. Un réglage temporaire d'une chaîne
+* Une seule version de compilateur par langage, la dernière stable au 28 octobre, à l'installation : Nim 2.4.0 est
+  sorti le même jour, après les premières mesures, et son code machine est identique pour 20 des 21 fonctions des
+  noyaux. Un réglage temporaire d'une chaîne
   peut coûter des rangs : Zig 0.17, dont le vectoriseur de boucles est désactivé, perd trois places en rang espéré par
   rapport à sa version de développement. Je n'ai mesuré deux versions que pour Zig et pour C# (.NET 11, en
   préversion : 0,99 fois les temps de .NET 10 en moyenne, aucune place gagnée). D est compilé par LDC 1.43.0 construit
@@ -421,6 +429,8 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   et [`results/report_ada.md`](results/report_ada.md).
 * La remarque sur D (Q1 corrigé, deux errata de la règle v1, cause du stencil naturel) :
   [`docs/DLANG.md`](docs/DLANG.md) et [`results/report_d.md`](results/report_d.md).
+* La remarque sur Nim (Q1 en blocs conforme à la pratique de sa classe, cause du stencil naturel, sensibilités) :
+  [`docs/NIM.md`](docs/NIM.md) et [`results/report_nim.md`](results/report_nim.md).
 * La remarque sur Rust (queues de latence de K8 remesurées pour tous les langages, préchargement de K7 corrigé, cause du
   stencil naturel, règle de la libc en sensibilité) : [`docs/RUST.md`](docs/RUST.md) et
   [`results/report_rust.md`](results/report_rust.md).

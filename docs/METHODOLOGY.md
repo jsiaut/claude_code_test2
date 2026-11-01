@@ -712,8 +712,8 @@ Robustesse :
   stencil naturel de Rust (aliasing), latences de K8 tirées de la remesure, ordre et chiffres recalculés, règle de la
   libc dans les limites ; `docs/NATURAL.md`, `docs/AUDIT2_RESPONSE.md` et les notes d'état actuel (Zig, Julia, Mojo,
   C#, Ada, D, confrontation) mis à jour.
-* 2026-11-01, vers 9:10 : **machine 12**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207, 4 vCPU),
-  plus lent que les machines 10 et 11 : 2,6 à 2,8 GHz effectifs, latence à 4 Mio 36 ns, DRAM 15,3 Go/s
+* 2026-11-01, vers 9:10 : **machine 12**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207,
+  4 vCPU), plus lent que les machines 10 et 11 : 2,6 à 2,8 GHz effectifs, latence à 4 Mio 36 ns, DRAM 15,3 Go/s
   (`results/hw/machine12/`).
 * 2026-11-01, matinée : **plan de la remarque sur Nim** (`docs/NIM.md`, sections 1 à 3), poussé avant les mesures.
   Vérifications faites avant le plan (`results/nim_check/`) : code machine du Q1 en blocs (vectorisé, comme son
@@ -722,4 +722,14 @@ Robustesse :
   le Q1 en blocs de Nim suit la pratique de sa classe (le plan de D le rangeait nommément parmi les langages à blocs) ;
   le Q1 en intrinsèques, le K9 en tableau fixe et l'arène sans vérification de débordement sont des sensibilités ;
   aucune donnée publiée ne change ; le README corrige la cause du stencil naturel de Nim et la matrice précise C4.
+* 2026-11-01, 9:27:14-9:32:09 : **mesures de la remarque sur Nim** (`tools/measure_nim.py`, machine 12) : 33 cellules ×
+  7 processus (231) ; aucune somme de contrôle fausse ; 12 processus refaits pour vol de temps au-dessus de 2 %, aucun
+  gardé au-dessus du seuil. Rien d'autre ne tournait. Aucun écart au plan.
+* 2026-11-01, matinée : **résultats de la remarque sur Nim** (`results/report_nim.md`, `results/nim_check.json`).
+  Rien n'entre dans le classement publié : Nim reste 7e (69,7 points). Sensibilités : Q1 en intrinsèques × 0,302
+  (au niveau de C), 71,8 points et la 5e place ; K9 naturel en tableau fixe et arène sans vérification de débordement,
+  une place chacune ; les trois, 72,4 points et la 4e place. README : cause du stencil naturel de Nim (vérifications et
+  `-fno-strict-aliasing`), Nim 2.4.0 dans les limites ; `docs/FINDINGS.md` : phrase ancienne sur le stencil de Rust, D,
+  Nim et Ada corrigée ; matrice : texte de C4 de Nim précisé. Ajouté après les mesures : `results/nim_check/gcc_k5.txt`
+  (harnais de K5 naturel compilé par gcc).
 

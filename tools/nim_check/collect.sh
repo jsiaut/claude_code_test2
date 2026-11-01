@@ -78,4 +78,10 @@ for v in 2212:/opt/nim 240:/opt/nim240; do tag=${v%%:*}; dir=${v#*:}; rm -rf v$t
   clang-23 -S -w -ferror-limit=3 -fno-strict-aliasing -pthread -march=cascadelake -O3 -I$dir/lib -I"$ROOT/bench/nim" -o v$tag.s v$tag/@mms.nim.c
 done
 python3 "$T/cmpfun.py" v2212.s v240.s > "$OUT/nim240.txt"
+# 7. (ajouté après les mesures) Harnais de K5 naturel compilé par gcc 16 : un seul appel du noyau subsiste
+cd "$W"; rm -rf gccnc
+/opt/nim/bin/nim c -d:release --cc:gcc --gcc.exe:/opt/gcc-16/bin/gcc-16 --gcc.linkerexe:/opt/gcc-16/bin/gcc-16 --passC:"-march=cascadelake" --threads:on --mm:orc --hints:off --warnings:off --nimcache:./gccnc --compileOnly "$ROOT/bench/nim/ms.nim" > /dev/null 2>&1
+/opt/gcc-16/bin/gcc-16 -S -w -fno-strict-aliasing -pthread -march=cascadelake -O3 -I/opt/nim/lib -I"$ROOT/bench/nim" -o gcc_ms.s gccnc/@mms.nim.c
+{ echo "runK5 de bench/nim/ms.nim, Nim 2.2.12 -> gcc 16 -O3 : boucle de mesure de K5 naturel (INNER5 = 65 536 tours)"
+  awk '/^runK5__ms[^:]*:/,/\.size\s+runK5/' gcc_ms.s | awk '/^\.L934:/{p=1} p{print} p&&/k5Natural/{exit}'; } > "$OUT/gcc_k5.txt"
 echo "écrit : $(ls "$OUT")"

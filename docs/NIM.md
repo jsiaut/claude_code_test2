@@ -126,3 +126,66 @@ hasard (graine fixe), règle de vol du pilote, échauffements des données princ
 données principales (transfert, ou pont au-delà de 25 % d'écart), scénarios de la section 3.3 rejoués par
 `analysis/confrontation.py` (`scenario`) ; sorties `results/nim_check.json` et `results/report_nim.md`.
 `results/transfers.json` ne change pas.
+
+## 4. Résultats
+
+231 processus (33 cellules × 7 passes), le 1er novembre de 9 h 27 à 9 h 32 sur la machine 12 ; aucune somme de
+contrôle fausse ; 12 processus refaits pour vol de temps au-dessus de 2 %, aucun gardé au-dessus du seuil (vol médian
+0,24 %, maximum 1,98 %). Rien d'autre ne tournait. Aucun écart au plan. Rapports et scénarios : `results/report_nim.md`,
+`results/nim_check.json` ; données : `results/raw_nim/`.
+
+### 4.1 Mesures appariées (machine 12, même hôte)
+
+| Clé | Forme | Rapport (IC 95 %) | Remarque |
+|---|---|---|---|
+| Q1 tuned | intrinsèques (`nim_q1` / `nim_ref`) | 0,302 (0,284–0,323) : 79,0 → 23,8 ms ; 1,02 fois C (0,96–1,09) | 0,417 ; 1,02 fois C |
+| Q1 `mt` | idem | 0,276 (0,245–0,310) : 26,0 → 7,2 ms ; 0,89 fois C | 0,403 ; 1,03 fois C |
+| 2 témoins (Q1 naturel, Q6 tuned) | code inchangé | 0,914 ; 0,989 | |
+| K9 naturel | `ref array[M9, array[M9, float]]` (`nim_nat` / `nim_ref`) | 0,292 (0,267–0,316) : 46,2 → 13,5 ms (C : 14,0) | 32,4 → 12,0 ms (C : 11,6) |
+| K8 tuned | arène sans vérification de débordement (`nim_k8` / `nim_ref`) | 0,913 (0,903–0,925) | 0,85 |
+| K4 naturel / sans branchement, K8 tuned | gcc 16 (`nim_gcc` / `nim_ref`) | 2,89 / 2,50 ; 0,768 | 2,5–7,5 ; − 23 à − 31 % |
+| K5 naturel | gcc 16 | 0,03 ms au lieu de 95 : rien n'est mesuré | 0,02 ms |
+| K8 naturel / tuned | Nim 2.4.0 (`nim_240` / `nim_ref`) | 1,099 (1,04–1,16) / 0,986 | 1,01 |
+
+Sur cet hôte, Nim fait jeu égal avec C sur Q6 tuned (0,98) et K4 (1,01 à 1,14) : les écarts de K4 et K5 au plafond ne
+se reproduisent pas, comme le dit la remarque. Nim 2.4.0 ralentit K8 naturel de 10 %, la seule fonction dont le code
+change ; ailleurs le code est identique.
+
+### 4.2 Report sur les données principales et scénarios
+
+Q1 tuned : transfert 29,7 ms, pont 32,8 ms, écart − 9 % : transfert retenu (× 0,302) ; Q1 `mt` : transfert (× 0,276,
+écart − 14 %) ; K9 naturel : écart − 44 %, pont retenu (× 0,520 au lieu de 0,292 : le C de ce stencil va 2,7 fois plus
+vite sur cet hôte que sur Cascade Lake, comme pour D, Rust et Chapel) ; K8 tuned : transfert (× 0,913).
+
+| Scénario | Score de Nim | Contrôle C | Plafond E | Défaut D | K6 | Rang espéré | Place | Rang 90 % |
+|---|---|---|---|---|---|---|---|---|
+| **Avant (= publié)** | **69,7** | 76,1 | 72,9 | 55,6 | 0,519 | **6,57** | **7** | 2–11 |
+| S-Q1 (= S-Q1-T) : Q1 en intrinsèques | 71,8 | 76,1 | 78,1 | 55,6 | 0,898 | 4,91 | 5 | 1–9 |
+| S-K9 / S-K9-T : K9 en tableau fixe | 70,0 / 70,0 | 76,1 | 72,9 / 73,0 | 56,7 | 0,519 | 6,04 / 5,23 | 5 / 5 | 1–10 |
+| S-K8 (= S-K8-T) : arène sans vérification de débordement | 70,1 | 76,1 | 73,8 | 55,6 | 0,519 | 6,33 | 5 | 2–10 |
+| S-tout / S-tout-T | 72,4 / 72,4 | 76,1 | 79,0 | 56,6 / 56,7 | 0,898 | 4,18 / 3,54 | 4 / 2 | 1–8 |
+
+* **Publié** : inchangé, Nim reste 7e (69,7 points), à égalité avec C3 et Rust.
+* **S-Q1** : Nim gagne 2,1 points et passe 5e (rang espéré 4,91), au contact de Zig (4,87 ; Nim le devance dans 46 %
+  des variantes) ; C3 et Rust reculent d'une place. C'est ce que donnerait le critère « SIMD explicite dans les autres
+  noyaux optimisés » pour Nim ; Ada, que ce critère toucherait aussi, n'est pas mesuré.
+* **Les deux autres formes** valent chacune une place (5e) ; tout cumulé, 72,4 points et la 4e place (2e par transfert
+  seul, où le K9 de Nim devient la référence du stencil naturel et fait baisser les autres d'environ un point).
+* **La remarque estimait** K6 0,85, plafond 77,6 et 71,6 points avec Q1 corrigé, 72,4 avec K8 et K9 ; mes calculs
+  donnent K6 0,898, plafond 78,1, 71,8 points (5e en rang espéré), et 72,4 points (4e) avec les trois.
+
+### 4.3 Verdicts
+
+* **(1) Q1** : chiffres exacts, gain confirmé (× 0,30, au niveau de C). Mais ce n'est pas une erreur de banc au sens
+  de la règle commune : le code fait ce qu'il annonce (il est vectorisé) et suit la pratique de sa classe, et le dépôt
+  ne réserve pas les blocs aux langages « sans instructions vectorielles » : il les donne aux langages sans types
+  vectoriels portables, Nim nommément. Sensibilité : + 2,1 points, 5e.
+* **(2) Stencil** : exact. La cause écrite dans le README était incomplète : il faut lever les vérifications et
+  `-fno-strict-aliasing` ensemble. Corrigé dans le README (ligne du tableau, paragraphe de Nim, « Ce qui sépare
+  vraiment les langages ») et dans `docs/FINDINGS.md`, où la même phrase était aussi fausse pour D et Rust.
+* **(3) Ce qui tient** : exact. C4 précisé (`{.localPassC.}`), note inchangée ; version : 20 fonctions sur 21
+  identiques (19 selon la remarque), et 2.4.0 ralentit K8 naturel de 10 % ; gcc : K4 2,5 à 2,9 fois plus lent, arène
+  23 % plus rapide, harnais de K5 naturel vidé par gcc (un seul appel sur 65 536).
+* **(4) K8** : exact ; × 0,91 (la remarque : 0,85), une place en sensibilité.
+* **Effet** : le classement publié ne change pas ; Nim y reste 7e. Ses formes optimisées mieux travaillées lui
+  vaudraient 2,7 points et trois places.

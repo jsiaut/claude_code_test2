@@ -173,7 +173,7 @@ MATRIX = {
         "B2": (0.5, "alloc/dealloc manuels ; pas d'interface d'allocateur"), "B3": (1, "objets valeur sur la pile"),
         "B4": (0.5, "fermetures, chaînes et seq allouent implicitement"), "B5": (1, "ptr, cast"),
         "C1": (0, "aucun type vectoriel en std"), "C2": (0.5, "importc depuis immintrin.h (passage par le C)"), "C3": M,
-        "C4": (0.5, "seulement --passC:-ffast-math global"), "C5": (0.5, "itérateur || (OpenMP) ; threadpool obsolète"),
+        "C4": (0.5, "-ffast-math par option globale (--passC) ou par module ({.localPassC.}, sonde), pas par opération ; texte précisé le 1/11, remarque sur Nim"), "C5": (0.5, "itérateur || (OpenMP) ; threadpool obsolète"),
         "D1": (1, "threads"), "D2": (1, "std/atomics moRelaxed/moAcquire..."), "D3": (0, "aucune"),
         "D4": (1, "Thread.pinToCpu (src std/typedthreads)"), "D5": (1, "cpuRelax (std/sysatomics) + fence (sonde)"), "E1": (1, "natif via C"),
         "E2": (1, "instruction asm"), "E3": (1, "likely/unlikely (system)"),

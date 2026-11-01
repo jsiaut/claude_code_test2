@@ -1,0 +1,18 @@
+runK5 de bench/nim/ms.nim, Nim 2.2.12 -> gcc 16 -O3 : boucle de mesure de K5 naturel (INNER5 = 65 536 tours)
+.L934:
+	call	getMonoTime__stdZmonotimes_u5
+	cmpb	$0, %fs:0(%rbp)
+	movq	%rax, %rcx
+	jne	.L966
+	movl	$65536, %eax
+	.p2align 4,,10
+	.p2align 3
+.L925:
+	movq	%r12, sinkA__ms_u2079(%rip)
+	movq	sinkA__ms_u2079(%rip), %rdi
+	decq	%rax
+	jne	.L925
+	movq	%r13, %rdx
+	movq	%r14, %rsi
+	movq	%rcx, 16(%rsp)
+	call	k5Natural__ms_u2051
