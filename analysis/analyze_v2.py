@@ -139,6 +139,47 @@ def apply_d3(lat, max_steal=None):
     return sorted(new)
 
 
+# Remesure de D2 et D4 (remarque sur C++, docs/CPP.md, 3.2) : K1 naturel et mélangé, K2 aux trois tailles, les 25
+# implémentations de la campagne, 7 processus chacune, machine 15. Les temps remesurés entrent sous des clés à part
+# (« k1d2 », « k2d4 ») : D2 et D4 les lisent quand elles existent, D1 garde le K1 naturel de la campagne, et les
+# tirages des autres clés ne changent pas (analysis/analyze_v3.py, Arrays3).
+D24_TAG = "d24_m15"
+D24_KEYS = {K1N: ("k1d2", "natural", "energy"), K1S: ("k1d2", "natural_shuffled", "energy"),
+            **{("k2", "tuned", s): ("k2d4", "tuned", s) for s in K2_SIZES}}
+
+
+def load_d24(tag=D24_TAG):
+    """Temps remesurés pour D2 et D4 (results/raw_d24) : {implémentation: {clé de la campagne: processus}}."""
+    out = defaultdict(dict)
+    for f in sorted(glob.glob(os.path.join(ROOT, "results", "raw_d24", "*.jsonl"))):
+        for line in open(f):
+            r = json.loads(line)
+            key = (r["kernel"], r["variant"], r["param"])
+            if r.get("tag") != tag or key not in D24_KEYS:
+                continue
+            reps = r.get("reps", [])
+            if not reps or r.get("returncode") not in (0, None) or any(x["ok"] is not True for x in reps):
+                continue
+            out[r["lang"]].setdefault(key, []).append([x["sec"] for x in reps])
+    return out
+
+
+def apply_d24(data, transfers=True, path=os.path.join(ROOT, "results", "transfers.json")):
+    """Ajoute les temps remesurés de D2 et D4 sous leurs clés à part, pour toutes les implémentations remesurées. La
+    remesure tourne avec les binaires de la campagne : si transfers, les corrections publiées de ces clés
+    (results/transfers.json : K2 d'Ada et de Fortran, K1 de Fortran) leur sont appliquées comme aux données de la
+    campagne."""
+    tr = json.load(open(path))["ratios"] if transfers and os.path.exists(path) else {}
+    new = load_d24()
+    for l, keys in new.items():
+        if l not in data:
+            continue
+        for key, procs in keys.items():
+            r = tr.get(l, {}).get("|".join(key), 1.0)
+            data[l][D24_KEYS[key]] = [[t * r for t in p] for p in procs]
+    return sorted(new)
+
+
 def sanity(data, bounds):
     flags = []
     for lang, d in data.items():
@@ -407,10 +448,11 @@ def apply_transfers(data, path=os.path.join(ROOT, "results", "transfers.json")):
     return tr
 
 
-def dataset_main(transfers=True, d3=True):
+def dataset_main(transfers=True, d3=True, d24=True):
     """Données de la configuration principale : v1 sans K5 ni K10, plus K5 de v2_k5 ; puis, si transfers, les
     corrections transférées de results/transfers.json ; si d3, les latences de K8 naturel remesurées pour D3
-    (results/raw_d3, remarque sur Rust), quand elles existent."""
+    (results/raw_d3, remarque sur Rust), quand elles existent ; si d24, les temps remesurés de D2 et D4
+    (results/raw_d24, remarque sur C++), sous leurs clés à part."""
     data, _lat_flat, _rss, invalid, sus, bridge = final_data()
     for l in data:
         for key in [k for k in data[l] if k[0] in ("k5", "k10")]:
@@ -434,6 +476,8 @@ def dataset_main(transfers=True, d3=True):
         apply_transfers(data)
     if d3:
         apply_d3(lat)
+    if d24:
+        apply_d24(data, transfers=transfers)
     return data, lat, invalid, sus, bridge, v1_k5, (k5, k5wit, k5inv, k5_sus, k5recs)
 
 

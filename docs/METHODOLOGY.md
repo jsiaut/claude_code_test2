@@ -805,3 +805,18 @@ Robustesse :
   1er à forme égale), confrontation. Leur règle du standard garde Odin C2 à 0,5 (`analysis/standard_rule.py`, comme
   le juge à l'aveugle sous cette règle) : elle partait de mes notes v2, et l'erratum s'y serait propagé. README :
   tableau, ordre, errata, paragraphe d'Odin (SIMD, Q1, allocateur, `map`, horloge), langages relus, limites.
+* 2026-11-01, vers 14:42 : **machine 15**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207,
+  4 vCPU ; 2,63 à 2,64 GHz effectifs, latence à 4 Mio 35,7 ns, DRAM 14,8 Go/s : `results/hw/machine15/`, caractérisé
+  avant la campagne de la remarque sur C++).
+* 2026-11-01, 15:34 : **plan de la remarque sur C++** (`docs/CPP.md`, sections 1 à 3, commit `0ebe0af`), poussé avant
+  les mesures. Vérifications par des sondes et sur les données (`tools/cpp_check/`, `results/cpp_check/`), sans
+  consulter de page web : la décomposition de la remarque est exacte (K4 explique l'écart à C ; avec le K4 de C, C++
+  aurait 80,03 points ; `unordered_map` ne pèse que 0,25 point), mais ni g++ (un compilateur par langage) ni la
+  réallocation des grilles de K9 (la pratique de douze implémentations sur seize, la spécification n'impose que la
+  réinitialisation hors chrono) ne sont des erreurs au sens de la règle commune. D2 et D4 tiennent chacun à un
+  processus aberrant, D3 non (queue de C++ plus longue sur six processus sur sept). Erratum de la grille : C1 de C++
+  à 0,5 en règle v1 (`std::simd` « highly experimental » dans GCC 16, `__cpp_lib_simd` non défini, x86 seulement,
+  absent de libc++ 23) ; en règle v2, 1 par `vector_size`, comme C, justification explicitée. A6 reste 0. P2795
+  (mise à zéro des variables locales en C++26 par GCC 16) ne touche aucune fonction de noyau. Décision : remesurer D2
+  et D4 pour les 25 implémentations (7 processus, comme D3), publié ; clang++, formes de C et grilles de K9 allouées
+  une fois en sensibilités ; C avec réallocation en information.

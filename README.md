@@ -558,6 +558,26 @@ python3 analysis/odin_check.py             # erratum C2 (déjà dans la matrice)
 ```
 
 ```bash
+python3 tools/cpp_check/make_copies.py     # remarque sur C++ : copies clang++, formes de C, K9, K8 -> bench/cpp_*, c_*
+```
+
+```bash
+python3 tools/cpp_check/collect.py         # sondes : std::simd, réflexion, P2795, K4, harnais de K9 -> results/cpp_check
+```
+
+```bash
+python3 tools/cpp_check/data_facts.py      # faits tirés des données et décomposition -> results/cpp_check
+```
+
+```bash
+python3 tools/measure_cpp.py               # copies appariées et remesure de D2 et D4 -> results/raw_cpp, raw_d24
+```
+
+```bash
+python3 analysis/cpp_check.py              # erratum C1 (déjà dans la matrice), remesure, scénarios -> report_cpp.md
+```
+
+```bash
 python3 analysis/analyze_v3.py             # analyse -> results/summary_v3.json, results/report_v3.md
 ```
 

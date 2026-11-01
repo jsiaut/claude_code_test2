@@ -35,6 +35,8 @@ V2_OVERRIDES = {
     ("c", "E4"): (1, "__builtin_prefetch, _mm_prefetch"),
     ("c", "F4"): (1, "mmap (POSIX, glibc)"),
     # C++ (g++ 16 + libstdc++ + glibc)
+    ("cpp", "C1"): (1, "vector_size : extension documentée de g++ et clang++, stable, comme pour C ; std::simd de C++26, "
+                       "qu'utilise le banc, reste expérimental dans GCC 16 (justification précisée le 1/11, remarque sur C++)"),
     ("cpp", "C5"): (1, "OpenMP livré avec g++ (-fopenmp) ; par_unseq reste série sans TBB"),
     ("cpp", "D4"): (1, "sched_setaffinity de la glibc"),
     ("cpp", "D5"): (1, "atomic_thread_fence et _mm_pause (<immintrin.h> livré)"),

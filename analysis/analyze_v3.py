@@ -18,7 +18,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import analyze_v2 as v2  # noqa: E402
-from analyze_v2 import (E_V2, D1_V2, K1N, K1S, K8N, K2_SIZES, RANKED, ANNEX, ROOT, EBOUND, BOUNDS_M3, NAMES, fr,  # noqa: E402
+from analyze_v2 import (E_V2, D1_V2, K1N, K1S, K8N, K2_SIZES, D24_KEYS, RANKED, ANNEX, ROOT, EBOUND, BOUNDS_M3, NAMES, fr,  # noqa: E402
                         c_cells, c_score, c_vector, ranks_of, spearman, dirichlet, lat_rows, steady, CATEGORIES)
 
 B = int(os.environ.get("BOOT", "2000"))
@@ -104,6 +104,34 @@ class Arrays3:
             lp = lat.get(l, {}).get(K8N)
             if lp and any(len(p) for p in lp):
                 self.lat[:, self.idx[l], :] = lat_rows(lp, nb, rng)
+        # remesure de D2 et D4 (docs/CPP.md, 3.2) : clés à part, tirées après tout le reste avec leur propre générateur et
+        # leurs propres réservoirs, pour que les tirages des autres clés et des variantes ne changent pas
+        d24 = sorted(k for k in D24_KEYS.values() if any(data.get(l, {}).get(k) for l in langs))
+        if d24:
+            pools24 = build_pools(data, langs, d24)
+            rng24 = np.random.default_rng(SEED + 2401)
+            for key in d24:
+                mean = np.full((nb + 1, len(langs)), np.nan)
+                mn = np.full((nb + 1, len(langs)), np.nan)
+                for l in langs:
+                    procs = data.get(l, {}).get(key)
+                    if not procs:
+                        continue
+                    y = proc_logs(procs)
+                    j = self.idx[l]
+                    mean[0, j], mn[0, j] = math.exp(y.mean()), math.exp(y.min())
+                    self.P[(l, key)] = len(y)
+                    if nb:
+                        pool = pools24[(key[0], klass(l))]
+                        draws = y.mean() + pool[rng24.integers(0, len(pool), size=(nb, len(y)))]
+                        mean[1:, j], mn[1:, j] = np.exp(draws.mean(axis=1)), np.exp(draws.min(axis=1))
+                self.t[("mean", key)], self.t[("min", key)] = mean, mn
+
+    def dt(self, est, key, r):
+        """Temps d'une clé de D2 ou D4 : la remesure quand elle existe pour l'implémentation, la campagne sinon."""
+        base = self.t[(est, key)][r]
+        alt = self.t.get((est, D24_KEYS[key]))
+        return base if alt is None else np.where(np.isnan(alt[r]), base, alt[r])
 
     def best(self, est, keys, r):
         arr = np.vstack([self.t[(est, k)][r] for k in keys])
@@ -128,7 +156,7 @@ def references(A, est):
             for i, ks in lst:
                 ref["nat"][(k, i)] = float(np.nanmin(A.best(est, ks, 0)[rk]))
         for s in K2_SIZES:
-            t = A.t[(est, ("k2", "tuned", s))][0]
+            t = A.dt(est, ("k2", "tuned", s), 0)
             ref["k2_best"][s] = float(np.nanmin(t[rk]))
             ref["k2_c"][s] = float(t[A.idx["c"]])
         p50, p999, mx = A.lat[0, :, 0], A.lat[0, :, 1], A.lat[0, :, 2]
@@ -166,7 +194,7 @@ def scores3(A, r, cfg, C, footprint, refs, wE=None, wD=None, wP=None):
             d1k.append(np.mean(lr, axis=0))
         D1 = np.exp(np.mean(d1k, axis=0))
         a = np.array([min(1.0, 64.0 / footprint[l]) if footprint.get(l) else np.nan for l in A.langs])
-        bb = np.minimum(1.0, A.t[(est, K1N)][r] / A.t[(est, K1S)][r])
+        bb = np.minimum(1.0, A.dt(est, K1N, r) / A.dt(est, K1S, r))
         D2 = np.where(np.isnan(a), bb, np.sqrt(a * bb))
         p50, p999, mx = A.lat[r, :, 0], A.lat[r, :, 1], A.lat[r, :, 2]
         if cfg["d3"] == "abs":
@@ -175,7 +203,7 @@ def scores3(A, r, cfg, C, footprint, refs, wE=None, wD=None, wP=None):
             D3 = np.sqrt((ref["d3_rel"][0] / (p999 / p50)) * (ref["d3_rel"][1] / (mx / p50)))
         l4 = []
         for s in K2_SIZES:
-            t = A.t[(est, ("k2", "tuned", s))][r]
+            t = A.dt(est, ("k2", "tuned", s), r)
             refv = ref["k2_best"][s] if cfg["d4"] == "best" else ref["k2_c"][s]
             l4.append(np.log(np.minimum(1.0, refv / t)))
         D4 = np.exp(np.mean(l4, axis=0))
@@ -212,8 +240,11 @@ def bound_share(A, est, i):
 def classify_processes(data):
     """Classement descriptif des processus (Barrett et al.) avec le critère de rupture de la v2."""
     out = defaultdict(lambda: defaultdict(int))
+    d24 = set(D24_KEYS.values())  # processus de la remesure de D2 et D4 (machine 15) : hors de ce décompte de la campagne
     for l, d in data.items():
         for key, procs in d.items():
+            if key in d24:
+                continue
             for p in procs:
                 s = steady(p) if len(p) >= 6 else None
                 c = "plat" if s is None else ("accélération" if s[2] < s[1] else "ralentissement")

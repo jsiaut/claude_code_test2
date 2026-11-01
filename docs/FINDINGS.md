@@ -588,3 +588,24 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   sur l'hôte) ; à quatre threads, × 0,54.
 * **Table `map`** : 4,9 fois la table plate sur K7 naturel, mais 3e des treize premiers langages (2,42 s ; Zig 1,66,
   Nim 2,10 ; Rust 3,77, C 5,11, C++ 10,64) : toutes les tables standard sont 3,4 à 22 fois plus lentes que la leur.
+
+## Remarque sur C++ (1er novembre, machine 15, Emerald Rapids) — `docs/CPP.md`, `results/cpp_check/`
+
+* **`std::simd` dans GCC 16.2** : le manuel qualifie `-std=c++26` de « highly experimental » ; libstdc++ ne définit
+  pas `__cpp_lib_simd` et ne déclare `std::simd` qu'en C++26 hébergé, avec les liaisons structurées et les
+  instructions d'expansion de C++26, et `__SSE2__` (x86 seulement) ; `__cpp_lib_mdspan` est défini dès C++23. libc++
+  23 n'a pas d'en-tête `<simd>`, seulement `<experimental/simd>` (TS Parallelism v2) : le C++ du banc ne compile pas
+  avec clang++ 23.
+* **Réflexion** : g++ 16 la compile et l'exécute avec `-std=c++26 -freflection` (« experimental »), la refuse sans
+  `-freflection` ; clang++ 23 ignore `-freflection` (« argument unused ») et refuse l'opérateur `^^`.
+* **C++20 par défaut** : g++ 16 sans `-std` définit `__cplusplus` à 202002L ; clang++ 23, à 201703L.
+* **P2795** : sous `-std=c++26`, g++ 16 met à zéro les variables locales non initialisées (sonde : deux rangements à
+  zéro sur la pile), pas sous `-std=c++23`, ni avec `-ftrivial-auto-var-init=uninitialized`, ni clang++ 23. Dans le
+  binaire du banc, aucune des 17 fonctions de noyaux n'en change ; seules des fonctions du harnais, hors chrono.
+* **K4 et le compilateur** : sous GCC, C et C++ donnent la même boucle pour chaque forme (61 et 44 instructions) ;
+  clang++ 23 vectorise comme clang (`vpminsb`, `vpmovzxbq`, `vpaddq`), en boucle plus courte que celle de C (19
+  instructions, contre 35 sur Cascade Lake et 67 sur Emerald Rapids). Sous clang++, les boucles de K1 aos et SoA, K2,
+  K5, Q6 et K9 sont celles de C à l'instruction près (`results/cpp_check/clang_loops.txt`).
+* **Harnais de K9** : d'après les sources, les grilles du chemin tuned et `mt` sont allouées une fois en C, Chapel, Ada
+  et Fortran, à chaque répétition en C++, Zig, Odin, C3, Rust, Nim, D, Julia, C#, Mojo, Go et Java ; la spécification
+  n'impose que la réinitialisation hors chrono (`results/cpp_check/k9_harness.txt`).

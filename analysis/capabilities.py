@@ -64,7 +64,7 @@ MATRIX = {
         "A7": (1, "std::array en ligne"), "A8": (1, "cstdint"), "B1": (1, "pas de GC"),
         "B2": (1, "std::pmr, concept Allocator (bench K8 tuned_alloc)"), "B3": (1, "objets sur la pile"),
         "B4": (0.5, "std::function, exceptions, coroutines peuvent allouer"), "B5": (1, "pointeurs"),
-        "C1": (1, "std::simd C++26 (bench K1/K5/K6)"), "C2": (1, "immintrin.h"), "C3": M,
+        "C1": (0.5, "std::simd C++26 (bench K1/K5/K6) : « highly experimental » dans GCC 16, __cpp_lib_simd non défini, x86 seulement, absent de libc++ 23 ; vector_size : extension gcc/clang (corrigé le 1/11, remarque sur C++)"), "C2": (1, "immintrin.h"), "C3": M,
         "C4": (1, "std::reduce/transform_reduce et std::simd::reduce : ordre libre explicite"),
         "C5": (0.5, "std::execution::par_unseq : série sans TBB tiers (libstdc++ : backend SERIAL, src c++config.h)"),
         "D1": (1, "std::jthread"), "D2": (1, "std::memory_order"),
