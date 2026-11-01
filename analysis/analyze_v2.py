@@ -139,10 +139,12 @@ def apply_d3(lat, max_steal=None):
     return sorted(new)
 
 
-# Remesure de D2 et D4 (remarque sur C++, docs/CPP.md, 3.2) : K1 naturel et mélangé, K2 aux trois tailles, les 25
-# implémentations de la campagne, 7 processus chacune, machine 15. Les temps remesurés entrent sous des clés à part
-# (« k1d2 », « k2d4 ») : D2 et D4 les lisent quand elles existent, D1 garde le K1 naturel de la campagne, et les
-# tirages des autres clés ne changent pas (analysis/analyze_v3.py, Arrays3).
+# Remesure de D2 et D4 (remarque sur C++, docs/CPP.md) : K1 naturel et mélangé, K2 aux trois tailles, les 25
+# implémentations de la campagne, 7 processus chacune, machine 15. Prévue pour le classement publié (plan, 3.2), elle
+# n'y entre pas (écart au plan, 4) : sur cet hôte, K2 à 8 Mio est bimodal et la pénalité de désordre des langages à
+# références deux fois plus faible ; elle reste une information. Quand on la charge (dataset_main(d24=True)), les temps
+# remesurés entrent sous des clés à part (« k1d2 », « k2d4 ») : D2 et D4 les lisent, D1 garde le K1 naturel de la
+# campagne, et les tirages des autres clés ne changent pas (analysis/analyze_v3.py, Arrays3).
 D24_TAG = "d24_m15"
 D24_KEYS = {K1N: ("k1d2", "natural", "energy"), K1S: ("k1d2", "natural_shuffled", "energy"),
             **{("k2", "tuned", s): ("k2d4", "tuned", s) for s in K2_SIZES}}
@@ -448,11 +450,12 @@ def apply_transfers(data, path=os.path.join(ROOT, "results", "transfers.json")):
     return tr
 
 
-def dataset_main(transfers=True, d3=True, d24=True):
+def dataset_main(transfers=True, d3=True, d24=False):
     """Données de la configuration principale : v1 sans K5 ni K10, plus K5 de v2_k5 ; puis, si transfers, les
     corrections transférées de results/transfers.json ; si d3, les latences de K8 naturel remesurées pour D3
-    (results/raw_d3, remarque sur Rust), quand elles existent ; si d24, les temps remesurés de D2 et D4
-    (results/raw_d24, remarque sur C++), sous leurs clés à part."""
+    (results/raw_d3, remarque sur Rust), quand elles existent ; si d24 (information seulement, pas dans le classement
+    publié : docs/CPP.md, 4), les temps remesurés de D2 et D4 (results/raw_d24, remarque sur C++), sous leurs clés à
+    part."""
     data, _lat_flat, _rss, invalid, sus, bridge = final_data()
     for l in data:
         for key in [k for k in data[l] if k[0] in ("k5", "k10")]:

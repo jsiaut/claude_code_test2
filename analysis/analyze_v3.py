@@ -104,8 +104,9 @@ class Arrays3:
             lp = lat.get(l, {}).get(K8N)
             if lp and any(len(p) for p in lp):
                 self.lat[:, self.idx[l], :] = lat_rows(lp, nb, rng)
-        # remesure de D2 et D4 (docs/CPP.md, 3.2) : clés à part, tirées après tout le reste avec leur propre générateur et
-        # leurs propres réservoirs, pour que les tirages des autres clés et des variantes ne changent pas
+        # remesure de D2 et D4 (docs/CPP.md ; information, hors du classement publié), quand elle est chargée : clés à part,
+        # tirées après tout le reste avec leur propre générateur et leurs propres réservoirs, pour que les tirages des
+        # autres clés et des variantes ne changent pas
         d24 = sorted(k for k in D24_KEYS.values() if any(data.get(l, {}).get(k) for l in langs))
         if d24:
             pools24 = build_pools(data, langs, d24)
