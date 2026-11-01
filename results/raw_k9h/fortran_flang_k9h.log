@@ -1,0 +1,7 @@
+fortran_flang_k9h k9   natural                         p0 n=10 med=0.016045s ok={True} rc=0 
+fortran_flang_k9h k9   natural                         p0 n=10 med=0.012933s ok={True} rc=0 
+fortran_flang_k9h k9   natural                         p0 n=10 med=0.013972s ok={True} rc=0 
+fortran_flang_k9h k9   natural                         p0 n=10 med=0.015845s ok={True} rc=0 
+fortran_flang_k9h k9   natural                         p0 n=10 med=0.016880s ok={True} rc=0 
+fortran_flang_k9h k9   natural                         p0 n=10 med=0.020781s ok={True} rc=0 
+fortran_flang_k9h k9   natural                         p0 n=10 med=0.013988s ok={True} rc=0 

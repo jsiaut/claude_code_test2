@@ -887,3 +887,8 @@ Robustesse :
   scénarios H-hôte (effet de l'hôte seul) et I-CL (transfert sur Cascade Lake) en information. Code d'analyse :
   `analysis/analyze_v2.py` (`apply_k9h`, `k9h_ratios`), `analysis/analyze_v3.py` (réplication, Cascade Lake seul),
   `analysis/k9_check.py`.
+* 2026-11-01, 19:23:45-20:03:45 : **mesures du harnais commun de K9** (`tools/measure_k9h.py`, machine 16) : 143
+  cellules × 7 processus (1 001), aucune somme de contrôle fausse ; 25 processus refaits pour vol de temps au-dessus de
+  2 % (un deux fois), aucun gardé au-dessus (vol médian 0,39 %, maximum 2,00 %). Rien d'autre ne tournait ; pendant
+  les mesures, seuls des fichiers ont été écrits, et poussés une fois (19:26:11, adaptation des scénarios de l'état
+  actuel prévue au plan 3.5).

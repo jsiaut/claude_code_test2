@@ -1,0 +1,7 @@
+nim_nat_k9h k9   natural                         p0 n=10 med=0.013881s ok={True} rc=0 
+nim_nat_k9h k9   natural                         p0 n=10 med=0.013474s ok={True} rc=0 
+nim_nat_k9h k9   natural                         p0 n=10 med=0.013745s ok={True} rc=0 
+nim_nat_k9h k9   natural                         p0 n=10 med=0.012374s ok={True} rc=0 
+nim_nat_k9h k9   natural                         p0 n=10 med=0.012851s ok={True} rc=0 
+nim_nat_k9h k9   natural                         p0 n=10 med=0.017122s ok={True} rc=0 
+nim_nat_k9h k9   natural                         p0 n=10 med=0.013543s ok={True} rc=0 
