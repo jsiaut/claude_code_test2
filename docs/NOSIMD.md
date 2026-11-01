@@ -163,3 +163,112 @@ tirages.
 * S-scalaire répond à la lettre de la demande ; S-symétrique et S-noyaux-scalaires disent ce qui tient sans le biais de
   forme. Une conclusion n'est retenue que si elle tient dans les trois.
 * Quel que soit le résultat, le classement publié ne change pas : ce serait changer la règle après coup.
+
+## 4. Résultats
+
+Sorties : `results/report_nosimd.md` et `results/nosimd_check.json` (`analysis/nosimd_check.py`, environ 40 s par
+scénario). Le témoin reproduit exactement le scénario « Avant » de `results/nim_check.json` (écart 0). Aucun écart au
+plan.
+
+### 4.1 Classement par scénario
+
+Position par rang espéré (convention publiée) ; entre parenthèses, le score ponctuel.
+
+| Langage | Publié | Sans mt | S-scalaire | S-symétrique | S-noyaux-scalaires | S-importées |
+|---|---|---|---|---|---|---|
+| C | 1 (80,0) | 1 (80,5) | 5 (63,8) | 3 (80,7) | 1 (77,6) | 1 (80,0) |
+| C++ | 2 (76,6) | 2 (77,9) | 6 (62,4) | 1 (80,9) | 3 (73,0) | 2 (76,6) |
+| Odin | 3 (72,6) | 3 (74,0) | 7 (58,5) | 2 (77,5) | 2 (70,9) | 3 (72,6) |
+| Zig | 4 (72,7) | 4 (74,2) | 9 (60,0) | 4 (77,4) | 7 (68,3) | 4 (72,7) |
+| C3 | 5 (70,3) | 5 (71,5) | 12 (54,9) | 6 (73,8) | 6 (68,1) | 5 (70,3) |
+| Rust | 6 (70,5) | 6 (71,6) | 10 (57,1) | 8 (71,7) | 8 (68,1) | 6 (70,5) |
+| Nim | 7 (69,7) | 7 (70,6) | 8 (58,8) | 5 (73,7) | 5 (68,5) | 13 (57,2) |
+| D | 8 (72,6) | 8 (74,1) | 11 (58,6) | 7 (74,8) | 9 (70,4) | 7 (72,6) |
+| Ada | 9 (71,7) | 9 (73,8) | 4 (65,1) | 9 (72,2) | 4 (72,9) | 11 (62,3) |
+| Chapel | 10 (66,1) | 10 (65,9) | 1 (67,8) | 12 (66,1) | 10 (63,9) | 8 (66,1) |
+| Fortran | 11 (66,1) | 11 (66,4) | 2 (68,2) | 10 (70,2) | 11 (63,2) | 9 (66,1) |
+| Julia | 12 (64,3) | 12 (64,9) | 3 (66,5) | 11 (69,2) | 12 (63,2) | 10 (64,3) |
+| Mojo | 13 (62,8) | 13 (63,3) | 13 (46,0) | 13 (57,0) | 13 (57,8) | 12 (62,8) |
+| C# | 14 (56,0) | 14 (57,2) | 14 (43,7) | 14 (54,5) | 14 (50,3) | 14 (56,0) |
+| Java | 15 (47,2) | 15 (47,9) | 15 (36,9) | 15 (50,4) | 15 (44,8) | 15 (47,2) |
+| Go | 16 (43,0) | 16 (42,4) | 16 (36,8) | 16 (46,7) | 16 (40,1) | 16 (43,0) |
+| Haskell | 17 (35,5) | 17 (35,8) | 17 (26,8) | 17 (32,7) | 17 (30,0) | 17 (35,5) |
+| OCaml | 18 (24,7) | 18 (25,1) | 18 (25,6) | 18 (26,9) | 18 (24,9) | 18 (24,7) |
+| JavaScript | 19 (14,7) | 19 (14,8) | 19 (15,1) | 19 (19,1) | 19 (14,4) | 19 (14,7) |
+| Python | 20 (10,0) | 20 (10,0) | 20 (10,0) | 20 (10,3) | 20 (10,0) | 20 (10,0) |
+| Lua | 21 (4,0) | 21 (4,1) | 21 (4,1) | 21 (4,8) | 21 (4,1) | 21 (4,0) |
+| *Spearman / publié* | 1,000 | 1,000 | 0,730 | 0,986 | 0,970 | 0,965 |
+| *1re place (part)* | C 57 % | C 47 % | Chapel 43 % | C++ 29 % | C 50 % | C 58 % |
+
+La sous-vérification de Mojo (scénario 4) ne change rien : Mojo reste 13e (45,9 points au lieu de 46,0), les autres
+positions sont celles de S-scalaire.
+
+### 4.2 Pourquoi S-scalaire bouleverse la tête
+
+Le plafond des langages qui écrivent du SIMD s'effondre dans S-scalaire (C : 86,6 → 44,4 entre le contrôle sans mt et
+S-scalaire), et presque tout vient de deux noyaux où leur variante SIMD porte aussi un gain qui n'a rien de vectoriel :
+
+| Données principales | K1 aos | K1 soa | K5 naturel | K5 optimisé |
+|---|---|---|---|---|
+| C (intrinsèques) | 38,4 ms | 7,8 ms | 158,1 ms | 3,94 ms |
+| C++ (`std::simd`) | 40,2 ms | 7,6 ms | 77,1 ms | 4,02 ms |
+| Ada (K1 soa scalaire) | 38,5 ms | 7,2 ms | 86,1 ms | 4,95 ms |
+| Chapel (scalaire, `foreach`) | 50,7 ms | 7,7 ms | 156,9 ms | 4,68 ms |
+| Fortran (scalaire) | 41,5 ms | 7,5 ms | 85,7 ms | 5,50 ms |
+| Julia (scalaire, `@simd`) | 62,2 ms | 8,0 ms | 81,4 ms | 6,29 ms |
+
+* **K1 : la disposition, pas le SIMD.** Les variantes SoA des quatorze langages qui écrivent du SIMD et de Chapel,
+  Fortran et Julia tiennent entre 7,2 et 9,4 ms, vectorielles ou non ; c'est Ada, en scalaire, qui fixe t* (7,2 ms). Le
+  gain (× 5 sur AoS) vient de ne lire que 16 octets par particule au lieu de 64. Mais treize des quatorze langages qui
+  écrivent du SIMD (tous sauf Ada) l'écrivent dans la même variante que la disposition SoA : S-scalaire leur retire les
+  deux, et leur facteur K1 tombe de 0,9-1,0 à 0,15-0,19.
+* **K5 : la réassociation, pas le SIMD.** Le meilleur SIMD (C, 3,94 ms) ne bat la meilleure forme scalaire (Chapel,
+  4,68 ms) que de 1,2 fois. Le code naturel, une somme séquentielle que le compilateur n'a pas le droit de réordonner,
+  prend 77 à 350 ms. Chez les quatorze, la permission de réordonner est dans la variante SIMD (plusieurs accumulateurs
+  vectoriels) ; sans elle, leur facteur K5 tombe à 0,01-0,06.
+* **Ensemble, K1 et K5 expliquent 82 à 96 % de la baisse du plafond** de C, C++, Zig, Odin, C3, Rust, D, Java et Go
+  (en logarithme, du contrôle sans mt à S-scalaire) ; toute celle de Nim et d'Ada ; 62 à 72 % pour Mojo, C# et
+  Haskell, dont les K6 et K9 naturels sont lents aussi. Chapel, Fortran et Julia ne gagnent presque rien en valeur
+  absolue (+ 5,5 % de plafond, parce que t* monte sur K5, Q6 et Q1) : ils passent devant parce que les autres tombent.
+* **Le paradoxe de Q1** : dans S-scalaire, la référence de Q1 est une forme scalaire en blocs (Fortran, 47,5 ms ;
+  Chapel 48,5, Ada 57,5). Nim et D gardent leur naturel (95,4 et 88,3 ms), comme E le faisait déjà pour Nim.
+
+S-scalaire mesure donc surtout qui a écrit la disposition SoA et la réassociation de K5 en forme scalaire, plus que la
+capacité à se passer du SIMD.
+
+### 4.3 Ce qui tient dans les trois scénarios (règle de lecture 3.4)
+
+* **Les positions 13 à 21 ne bougent pas** : Mojo, C#, Java, Go, Haskell, OCaml, JavaScript, Python, Lua.
+* **Les douze premières places reviennent aux mêmes douze langages** : C, C++, Odin, Zig, C3, Rust, Nim, D, Ada,
+  Chapel, Fortran, Julia.
+* **C et C++ restent dans les six premiers** : C 5e, 3e, 1er ; C++ 6e, 1er, 3e.
+* **Rust et C3 perdent des places** dans les trois : Rust 10e, 8e, 8e au lieu de 6e ; C3 12e, 6e, 6e au lieu de 5e.
+
+**Ce qui ne tient pas** : la tête de Chapel, Fortran et Julia (1er, 2e, 3e dans S-scalaire ; 10e à 12e dans les deux
+autres), qui vient du biais de forme décrit en 4.2. Dans S-symétrique et S-noyaux-scalaires, les neuf premiers sont
+les neuf du classement publié, dans un autre ordre (Spearman 0,986 et 0,970) ; la première place se partage dans
+S-symétrique (C++ 29 %, C 23 %, Odin 22 %, Zig 19 %) et reste à C dans S-noyaux-scalaires (50 %).
+
+### 4.4 Contrôle sans mt et S-importées
+
+* **Sans les mesures mt**, aucune position ne change (Spearman 1,000) ; la part des premières places de C passe de
+  57 % à 47 %.
+* **S-importées** : Nim passe de la 7e à la 13e place (69,7 → 57,2 points), Ada de la 9e à la 11e (71,7 → 62,3).
+  Plafond de Nim 72,9 → 41,6 (K1 0,98 → 0,19 ; K5 0,82 → 0,05), d'Ada 78,1 → 54,6 (K5 0,79 → 0,05). Le biais de
+  4.2 joue ici aussi : la variante SoA de Nim porte la disposition avec les intrinsèques, et les deux langages portent
+  la réassociation de K5 dans leur variante importée. C'est donc une borne haute de ce que les intrinsèques importées
+  leur apportent ; Ada garde son K1 SoA, scalaire.
+
+### 4.5 Verdicts
+
+* **Le classement publié ne change pas.**
+* **Sans SIMD explicite, la structure tient** : les mêmes douze langages en tête, les mêmes neuf derrière, C et C++
+  dans les six premiers. L'ordre à l'intérieur des douze dépend du traitement des formes scalaires qui manquent. Le
+  calcul à la lettre (S-scalaire) met Chapel, Fortran et Julia devant, mais il mesure surtout un biais de forme ; à
+  forme égale pour tous (S-symétrique) comme sans les noyaux vectorisables (S-noyaux-scalaires), C, C++ et Odin
+  occupent les trois premières places (Zig 4e et 7e, Ada 9e et 4e).
+* **Le paradoxe de Q1 ne coûte rien** : E prend le minimum des variantes ; sans SIMD, la meilleure forme scalaire de
+  Q1 est en blocs (Fortran, Chapel, Ada), et Nim et D gardent leur naturel.
+* **Limite du banc mise au jour** : dans K1 et K5, le SIMD explicite emporte des gains qui ne sont pas vectoriels (la
+  disposition SoA, la réassociation). Les séparer demanderait des variantes optimisées scalaires (K1 en SoA, K5 à
+  accumulateurs multiples) dans les quatorze langages, donc de nouvelles mesures ; ce n'est pas fait ici.

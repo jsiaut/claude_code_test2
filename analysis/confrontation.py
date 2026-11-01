@@ -117,14 +117,21 @@ def noisy_r(base, prng, noise=0.10):
 
 
 # ------------------------------------------------------------------ scénarios
-def scenario(data, lat, langs, footprint, c3, crule, e_drop=()):
+def scenario(data, lat, langs, footprint, c3, crule, e_drop=(), e_meas=None, patch=None):
     """Rejoue l'analyse v3 (même graine, mêmes tirages) sur data, avec la règle crule : 'main' (v2/v1) ou 'R'.
     e_drop : noyaux de poids nul dans le plafond E (docs/MOJO.md, scénario sans K4) ; leurs références restent
-    calculées, car le code par défaut D1 les partage. Vide par défaut : le calcul publié est inchangé."""
+    calculées, car le code par défaut D1 les partage. Vide par défaut : le calcul publié est inchangé.
+    e_meas, patch (docs/NOSIMD.md) : mesures de E à la place de E_V2, et fonction appliquée aux temps simulés (A)
+    après leur tirage ; les cellules sont chargées et tirées comme dans le calcul publié, donc les tirages ne changent
+    pas. Absents par défaut : le calcul publié est inchangé."""
     rng = np.random.default_rng(v3.SEED)
     keys = sorted(needed_keys())
     pools = build_pools(data, langs, keys)
     A = Arrays3(data, lat, langs, B, rng, pools)
+    if e_meas is not None:
+        A.e_meas = e_meas
+    if patch is not None:
+        patch(A)
     refs = {e: references(A, e) for e in ("mean", "min")}
     catw0 = {cat: w for cat, (w, _) in CATEGORIES.items()}
     base_r = c_cells_r(c3)

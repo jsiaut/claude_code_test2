@@ -381,6 +381,12 @@ du langage.
   le GPU et les tenseurs sont dans le paquet MAX. Le classement mesure Mojo et sa `std` sur CPU ; ses noyaux à
   threads passent par un module privé de `std`.
 * Le plafond de K4 n'admet que des formes scalaires et compte donc la vectorisation automatique (voir plus haut).
+* Ailleurs, le plafond admet le SIMD explicite (« toutes techniques »). Sans lui ([`docs/NOSIMD.md`](docs/NOSIMD.md)),
+  les mêmes douze langages restent en tête, les neuf derniers ne bougent pas, et C et C++ restent dans les six
+  premiers. L'ordre des douze dépend du traitement des formes scalaires qui manquent : à la lettre, Chapel, Fortran et
+  Julia passent devant, parce que dans K1 et K5 le SIMD des autres porte aussi la disposition SoA et la réassociation
+  de la somme ; à forme égale pour tous, ou sans les noyaux vectorisables, C, C++ et Odin gardent les trois premières
+  places.
 * Trois échauffements pour les langages à JIT : les boucles chaudes tournent souvent en code OSR (compilé pour
   reprendre une boucle en cours), sans atteindre le niveau d'optimisation final. Mesuré pour C# : 0 à 2,5 % en moyenne
   (moins d'un point), de −15 % à +16 % selon le noyau ([`docs/CSHARP.md`](docs/CSHARP.md)) ; non mesuré pour Java,
@@ -431,6 +437,10 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   [`docs/DLANG.md`](docs/DLANG.md) et [`results/report_d.md`](results/report_d.md).
 * La remarque sur Nim (Q1 en blocs conforme à la pratique de sa classe, cause du stencil naturel, sensibilités) :
   [`docs/NIM.md`](docs/NIM.md) et [`results/report_nim.md`](results/report_nim.md).
+* La sensibilité « sans SIMD explicite », le classement des variantes (types vectoriels du langage, intrinsèques de la
+  plateforme, intrinsèques importées) et le décompte corrigé des formes de Q1 (9 contre 5) :
+  [`docs/NOSIMD.md`](docs/NOSIMD.md) et [`results/report_nosimd.md`](results/report_nosimd.md) ; page d'explication :
+  [`docs/page/simd.html`](docs/page/simd.html).
 * La remarque sur Rust (queues de latence de K8 remesurées pour tous les langages, préchargement de K7 corrigé, cause du
   stencil naturel, règle de la libc en sensibilité) : [`docs/RUST.md`](docs/RUST.md) et
   [`results/report_rust.md`](results/report_rust.md).
@@ -504,6 +514,10 @@ python3 analysis/analyze_v3.py             # analyse -> results/summary_v3.json,
 
 ```bash
 python3 analysis/confrontation_current.py  # confrontation et juge à l'aveugle, état actuel -> results/*_current*
+```
+
+```bash
+python3 analysis/nosimd_check.py           # sensibilité sans SIMD explicite -> results/report_nosimd.md
 ```
 
 ```bash

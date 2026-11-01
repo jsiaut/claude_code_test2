@@ -733,3 +733,14 @@ Robustesse :
   Nim et Ada corrigée ; matrice : texte de C4 de Nim précisé. Ajouté après les mesures : `results/nim_check/gcc_k5.txt`
   (harnais de K5 naturel compilé par gcc).
 
+* 2026-11-01, fin de matinée : **sensibilité « sans SIMD explicite »**, demandée après la réponse sur la règle de D.
+  Classement des variantes du plafond (scalaire, types vectoriels du langage, intrinsèques de la plateforme,
+  intrinsèques importées) et plan de sept scénarios poussés avant tout calcul (`docs/NOSIMD.md`, commit `bf650a0`) ;
+  `cf.scenario` reçoit deux paramètres optionnels sans effet par défaut (`e_meas`, `patch`). Résultats
+  (`results/report_nosimd.md`) : le témoin reproduit le publié à l'identique ; à la lettre (S-scalaire), Chapel,
+  Fortran et Julia passent devant, mais K1 et K5 expliquent 82 à 96 % de la baisse du plafond des langages à SIMD (la
+  disposition SoA et la réassociation de K5 sont écrites dans leurs variantes SIMD) ; à forme égale pour tous et sans
+  les noyaux vectorisables, C, C++ et Odin gardent les trois premières places. Dans les trois scénarios, les douze
+  premières places reviennent aux mêmes langages et les positions 13 à 21 ne bougent pas. Le classement publié ne
+  change pas. Correction : le décompte « 9 contre 2 » des formes de Q1 oubliait Java, Go et Haskell (9 contre 5 ; note
+  datée dans `docs/NIM.md`). Page d'explication : `docs/page/simd.html` (`tools/nosimd/page.py`).
