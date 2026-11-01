@@ -1,0 +1,4 @@
+# #pragma clang fp reassociate(on) : additions par fonction (clang 23 -O3 -march=native)
+sum_reassoc : 11
+sum_reassoc (scalaire) : 3
+sum_strict (scalaire) : 9

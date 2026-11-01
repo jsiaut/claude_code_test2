@@ -1,0 +1,18 @@
+# Place publiée de C (results/summary_v3.json, results/cpp_check.json « Publié »)
+score 80.01 ; ensemble de rangs simultané [1, 2] ; rang dans 90 % des variantes [1, 5] ; groupe 1 (avec ada, c3, chapel, cpp, d, fortran, julia, mojo, nim, odin, rust, zig) ; 1er dans 57.4 % des variantes
+rang espéré : C 1.90, Odin 3.60, C++ 3.80 ; C++ devant C dans 20 % des variantes
+annexe C par gcc : 79.45 points (données principales), 75.52 sur la machine 3, où C++ est 1er des langages classés (71.19) et C 2e (69.43)
+
+# Pilier contrôle selon la règle (C et les cinq premiers en règle v1)
+règle v1 : zig 83.2, cpp 82.7, odin 81.3, d 78.9, c 77.8, c3 77.7 ; C : v2 91.7, v1 77.8
+confrontation, scénario B : ordre odin, zig, c3, cpp, c, rust ; contrôle de C 64.0, score de C 70.3
+confrontation, scénario C : ordre c, odin, cpp, zig, c3, rust ; contrôle de C 91.7, score de C 78.2
+
+# K9 dans les données principales (Cascade Lake) : C++ (g++) contre C par gcc, même boucle k9_rows (results/c_check/k9_code.txt) ; seul le harnais diffère (grilles réallouées, fils std::jthread contre pthread)
+tuned : C++ [37.12, 35.3] ms ; C par gcc [40.59, 33.86, 35.28] ms ; C [37.8, 43.68, 37.24] ms ; C++ / C par gcc = 0.993
+mt : C++ [19.24, 19.98] ms ; C par gcc [12.19, 11.38, 13.85] ms ; C [12.74, 14.23, 12.76] ms ; C++ / C par gcc = 1.577
+natural : C++ [35.94, 36.73] ms ; C par gcc [36.88, 36.6, 36.35] ms ; C [39.42, 37.93, 37.83] ms ; C++ / C par gcc = 0.992 (formes naturelles différentes : vector<vector> contre tableau 2D)
+
+# Relectures : documents de remarque par langage (docs/*.md)
+langages relus (13) : ada, c3, chapel, cpp, csharp, d, fortran, julia, mojo, nim, odin, rust, zig ; parmi les 13 premiers, non relus : c
+docs/METHODOLOGY.md, préambule : Rédigé le 2026-10-28, **avant** les mesures inter-langages. Seules les mesures de mise au point de la référence C l'ont précédé. Toute modification ultérieure sera datée et justifiée dans

@@ -1,0 +1,10 @@
+# a8_build du banc C (clang 23 -O3, Emerald Rapids) : instructions qui touchent la mémoire
+45 instructions, dont 8 accès mémoire (hors pile d'appel) :
+movslq (%rsi),%rbx
+mov %eax,(%rsi)
+mov (%rcx),%rax
+mov %r8,(%rcx)
+mov %rax,(%rdi,%r8,1)
+mov %eax,0x8(%r13)
+movl $0xffffffff,0x8(%r13)
+mov %eax,0xc(%r13)
