@@ -275,6 +275,7 @@ actuel, sensibilité sans SIMD (témoin pointé sur le scénario Publié de `res
 * **Sans SIMD explicite** (`docs/NOSIMD.md`, 4.9) : à la lettre, C++ passe 9e (rang espéré 6,96), derrière Nim (6,74)
   et Zig (6,87) ; à forme égale, Zig passe 3e devant C (3,54 contre 3,65) ; sans les noyaux vectorisables, C, Odin et
   C++ restent aux trois premières places.
-* **Julia, Mojo, C#** : places inchangées dans tous leurs scénarios (C# 13e ou 14e avec toutes ses formes).
+* **Julia, Mojo, C#, Rust** : places inchangées dans tous leurs scénarios (C# 13e ou 14e avec toutes ses formes ;
+  Rust 4e avec la règle de la libc étendue, 2e avec toutes les corrections de sa remarque).
 * **Confrontation** (`results/confrontation_current.json`) : ordres, corrélations (0,78, 0,85, 0,81, 0,87) et rangs de
   C (1er, 5e, 1er, 6e) inchangés ; seuls les rangs espérés bougent.
