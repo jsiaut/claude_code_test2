@@ -414,6 +414,12 @@ hors norme ISO, passent à 0,5 en règle v1 ; la règle v2 et leur règle ne cha
 bougent (C 1,90 → 2,20 dans le scénario A, 2,50 → 2,84 dans le scénario C) ; ordres, Spearman (0,78, 0,85, 0,81 et
 0,87), rangs de C (1er, 5e, 1er et 6e), tests 3 et 4 et kappa du juge inchangés.
 
+Rejouée après le harnais commun de K9 (1er novembre au soir, `docs/K9.md` : grilles allouées une fois par processus
+pour toutes les implémentations, K9 de toutes remesuré sur la machine 16) : scénario A 0,78 (Rust et Nim échangent
+les 6e et 7e places de mon ordre), B 0,85, C 0,84 (Odin passe devant C, 2e), D 0,89 ; C 1er, 5e, 2e et 6e ; au test
+3, P(C premier) passe sous 0,5 dès w = 0,15 (0,20 avant), les deux autres seuils ne changent pas ; test 2 : C garde
+94 % de son plafond sous leur restriction de code ; tests 1 et 4 et kappa du juge inchangés.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

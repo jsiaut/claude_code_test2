@@ -641,3 +641,22 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   290 ms sous clang 23, 155 ms sous gcc 16 ; récursion par valeur 166 et 70 ms ; itérative 116 et 135 ms (processus de
   94 à 151 ms sous clang). Avec la meilleure forme, le K8 tuned de C (106 ms reporté sur Cascade Lake) rejoint la
   frontière (Ada, 107,7 ms).
+
+## Harnais commun de K9 (1er novembre, machine 16, Emerald Rapids) — `docs/K9.md`, `results/raw_k9h/`
+
+* **Inventaire des harnais** (sources de `bench/`) : C, C par gcc, Chapel et Ada allouaient leurs grilles une fois ;
+  Fortran et JavaScript aussi, sauf pour leur naturel ; toutes les autres implémentations les réallouaient à chaque
+  répétition. Les fils de `mt` sont créés à chaque itération (C, C++, Zig, Odin, C3, Nim, D, C#, Java, Ada, OCaml,
+  Python), pris dans une réserve (Chapel, Fortran par OpenMP, JavaScript par des workers créés une fois) ou lancés comme
+  tâches ou goroutines (Julia, Mojo, Go, Haskell).
+* **Défauts de page par processus**, ancien harnais puis harnais commun : C++ et Zig, environ 180 000 puis 16 700 (C :
+  16 600) ; C# (tuned) 216 000 puis 19 000 ; Rust (tuned) 189 000 puis 25 000 ; Go (tuned) 51 000 puis 17 000. Java en
+  a peu dès l'ancien harnais en tuned et `mt` (28 700 et 32 800) : la JVM réutilise son tas.
+* **À hôte égal**, le harnais commun prend 0,41 à 0,65 fois le temps à quatre fils pour les compilés qui réallouaient,
+  0,73 à 0,99 pour les langages à ramasse-miettes (Java tuned et `mt` : aucun gain), environ 1 pour les interprètes et
+  Haskell.
+* **L'hôte** : la machine 16 lit 25 à 27 Go/s sur un fil jusqu'à 64 Mio (Cascade Lake : 7 à 10 Go/s) ; les
+  implémentations natives qui allouaient une fois y vont 1,9 à 2,8 fois plus vite qu'à Cascade Lake, celles qui
+  réallouaient 1,2 à 2 fois.
+* **Au harnais commun**, K9 `mt` prend de 3,8 ms (Chapel) à 6,5 ms (Mojo) pour douze implémentations compilées ; le
+  naturel le plus rapide est celui de C3 (13,1 ms), le tuned celui de D (12,8 ms).

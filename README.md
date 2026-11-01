@@ -261,7 +261,7 @@ vectorisait déjà K4 dans le banc d'origine, et ifx n'est pas mesuré.
 boucles naturelles sont vectorisées, et son code naturel est le 2e de l'étude, derrière celui d'Odin. Ce qui la place
 12e, c'est d'abord son plafond (62, le plus bas des 13 premiers) : ses versions optimisées de K8, Q1, K5 et K7
 restent loin des meilleures, en partie parce qu'elles sont moins travaillées que celles des autres langages ;
-réécrites comme le propose un relecteur, elles lui vaudraient 3 à 5 points et la 10e ou la 11e place
+réécrites comme le propose un relecteur, elles lui vaudraient 3 à 5 points, et la 11e place avec K5 en 512 bits
 ([`docs/JULIA.md`](docs/JULIA.md)). Son runtime pèse moins : sur K8, le ramasse-miettes porte bien la latence p99,9 à
 30 fois la médiane (Emerald Rapids), mais son code par défaut reste entre ceux de C3 et d'Ada. Sur la file de K10
 (hors score), le blocage que j'attribuais à l'ordonnanceur venait de mon code : une variable capturée faisait
@@ -495,7 +495,7 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   n'ont pas de threads standard. À Chapel, 8 points de plafond, une fois ses réductions réécrites en sommes
   partielles comme celles des autres ; j'avais d'abord compté un produit scalaire 23 fois plus lent, faute de cette
   réécriture ([`docs/CHAPEL.md`](docs/CHAPEL.md)).
-* **Les deux règles à la fois** : C passe 6e, la corrélation monte à 0,87. Le reste de l'écart tient à la question
+* **Les deux règles à la fois** : C passe 6e, la corrélation monte à 0,89. Le reste de l'écart tient à la question
   posée : leur score ne compte pas la vitesse. Mêler à peu près moitié de leur score au mien reproduit leur ordre.
 * **Sur les faits, les deux grilles, notées indépendamment, s'accordent** (0,74 à 0,81 ; 0,83 à 0,88 le 30 octobre :
   les errata de ma grille, surtout ceux de Mojo et de Julia, l'en ont éloignée). Leurs désaccords portent presque tous

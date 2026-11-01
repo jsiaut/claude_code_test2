@@ -898,4 +898,15 @@ Robustesse :
   simulations ne gardaient plus que K9 et étaient écartées, et l'analyse s'arrêtait. Corrigé (variable renommée) ;
   la régénération a été relancée en entier. `analysis/k9_check.py` n'utilise pas ce code : ses résultats ne
   changent pas.
+* 2026-11-01, 20 h 05 à 21 h : **résultats du harnais commun de K9** (`results/report_k9.md`, `results/k9_check.json`).
+  Aucun écart au plan. À hôte égal, le harnais commun prend 0,41 à 0,65 fois le temps à quatre fils pour les compilés
+  qui réallouaient (défauts de page divisés par 10), 0,73 à 0,99 pour les langages à ramasse-miettes, environ 1 pour
+  les interprètes. Effet de l'hôte seul (H-hôte) : C renforcé (1er dans 66 % des variantes). Classement publié (K9 de
+  la machine 16, harnais commun) : les cinq premiers ne bougent pas (C 79,94, 1er dans 49 % des variantes ; Odin,
+  C++, Zig, C3) ; Rust et Nim, à égalité, échangent les 6e et 7e places ; Julia − 1,9 point. Réplication (machine 3) :
+  C++, Rust, C. Information (I-CL) : la correction reportée sur Cascade Lake surcorrige (C 2e derrière Odin). Sorties
+  recalculées : classement, figures, scénarios de l'état actuel (Zig, Julia, Mojo, C#, Rust, Nim), sensibilité sans
+  SIMD, confrontation, sensibilités de la remarque sur C (`analysis/c_check.py --current`). README : tableau, ordre,
+  révision, plafonds, paragraphes (C, Odin, C++, Zig, C3, Rust, Nim, Ada, Chapel, Julia), limites, lecture et
+  reproduction ; `docs/SPEC.md`, `docs/FINDINGS.md`, `docs/CONFRONTATION.md`.
 
