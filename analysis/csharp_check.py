@@ -182,6 +182,13 @@ def main(suffix=""):
     s1_t = {k: min(1.0, r_exp[k]["ratio"]) for k in S1_KEYS}
     pool_b = {k: min(1.0, bridged(k, r_pool[k]["ratio"], "csharp_exp", POOL[k])) for k in POOL}
     pool_t = {k: min(1.0, r_pool[k]["ratio"]) for k in POOL}
+    k9raw = v2.load_k9h_raw().get("csharp_exp_k9h", {})
+    if v2.load_k9h() and POOL[K9M] in k9raw and K9M in k9raw:
+        # harnais commun de K9 (docs/K9.md, 3.5) : K9 de C# vient de la machine 16, et la réserve de fils y est mesurée
+        # dans la même campagne (csharp_exp_k9h, mt_pool / mt, même hôte, même harnais) : ni pont ni transfert
+        r_pool[K9M] = dict(ratio(k9raw[POOL[K9M]], k9raw[K9M], np.random.default_rng(v3.SEED + 3100)), k9h=True)
+        transfer.pop(kk(K9M) + " (" + POOL[K9M][1] + ")", None)
+        pool_b[K9M] = pool_t[K9M] = min(1.0, r_pool[K9M]["ratio"])
     nat_b = {k: bridged(k, r_nat[k]["ratio"], "csharp_nat2", k) for k in NAT}
     nat_t = {k: r_nat[k]["ratio"] for k in NAT}
     p1 = {k: r_full[k]["ratio"] for k in ALL}

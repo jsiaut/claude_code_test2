@@ -110,6 +110,15 @@ def main():
     c3m = dict(c3)
     c3m["zig"] = c3["zig_master"]
     rm = {k: r["ratio"] for k, r in ratios["zig_master"].items()}
+    k9raw = v2.load_k9h_raw()
+    if v2.load_k9h():
+        # harnais commun de K9 (docs/K9.md, 3.5) : K9 de Zig vient de la machine 16, et la version de développement y
+        # est mesurée dans la même campagne (zig_master_k9h / zig_k9h, même hôte, même harnais)
+        k9rng = np.random.default_rng(v3.SEED + 3100)
+        for k in [k for k in rm if k[0] == "k9"]:
+            if k in k9raw.get("zig_master_k9h", {}) and k in k9raw.get("zig_k9h", {}):
+                ratios["zig_master"][k] = dict(ratio(k9raw["zig_master_k9h"][k], k9raw["zig_k9h"][k], k9rng), k9h=True)
+                rm[k] = ratios["zig_master"][k]["ratio"]
     plans = {
         "A'": (data, c3),
         "S1": (scaled(data, rm), c3m),

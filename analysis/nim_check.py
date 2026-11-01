@@ -118,8 +118,19 @@ def main(suffix=""):
 
     q1_b = {k: bridged(k, r_q1[k]["ratio"], "nim_q1", "S-Q1") for k in (Q1T, Q1M)}
     q1_t = {k: r_q1[k]["ratio"] for k in (Q1T, Q1M)}
-    k9_b = {K9N: bridged(K9N, r_nat[K9N]["ratio"], "nim_nat", "S-K9")}
-    k9_t = {K9N: r_nat[K9N]["ratio"]}
+    k9raw = v2.load_k9h_raw()
+    if v2.load_k9h() and K9N in k9raw.get("nim_nat_k9h", {}) and K9N in k9raw.get("nim_k9h", {}):
+        # harnais commun de K9 (docs/K9.md, 3.5) : K9 de Nim vient de la machine 16, et la forme naturelle de la
+        # remarque y est mesurée dans la même campagne (nim_nat_k9h / nim_k9h, même hôte, même harnais)
+        r9 = ratio(k9raw["nim_nat_k9h"][K9N], k9raw["nim_k9h"][K9N], np.random.default_rng(v3.SEED + 3100))["ratio"]
+        t9 = gm(data[LANG][K9N])
+        transfer[f"S-K9 {kk(K9N)}"] = {"nim_main_ms": 1e3 * t9, "transfer_ms": 1e3 * t9 * r9, "bridge_ms": 1e3 * t9 * r9,
+                                       "gap": 0.0, "bridge_used": False, "ratio": r9, "ratio_used": r9,
+                                       "c_main_ms": 1e3 * gm(data["c"][K9N]), "k9h": True}
+        k9_b = k9_t = {K9N: r9}
+    else:
+        k9_b = {K9N: bridged(K9N, r_nat[K9N]["ratio"], "nim_nat", "S-K9")}
+        k9_t = {K9N: r_nat[K9N]["ratio"]}
     k8_b = {K8T: bridged(K8T, r_k8[K8T]["ratio"], "nim_k8", "S-K8")}
     k8_t = {K8T: r_k8[K8T]["ratio"]}
     plans = {"Avant": data, "S-Q1": scaled(data, q1_b), "S-Q1-T": scaled(data, q1_t),

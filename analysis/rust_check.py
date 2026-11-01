@@ -178,9 +178,12 @@ def main(suffix=""):
     data, lat_old, *_ = v2.dataset_main(transfers=False, d3=False)
     tpath = os.path.join(ROOT, "results", "transfers.json")
     tr = json.load(open(tpath))
+    k9h = bool(v2.load_k9h())  # K9 remesuré sur la machine 16 (docs/K9.md) : ses corrections y sont déjà mesurées
     for lang, keys in tr["ratios"].items():  # corrections publiées des autres langages, sans celles de Rust
         if lang != LANG:
             for k, r in keys.items():
+                if k9h and k.startswith("k9|"):
+                    continue
                 key = tuple(k.split("|"))
                 data[lang][key] = [[t * r for t in p] for p in data[lang][key]]
     v2.align_lat(data, lat_old)
@@ -221,8 +224,19 @@ def main(suffix=""):
 
     k7_b = {K7T: bridged(K7T, r_fix[K7T]["ratio"], "rust_fix", "K7")}
     k7_t = {K7T: r_fix[K7T]["ratio"]}
-    k9_b = {K9N: bridged(K9N, r_nat[K9N]["ratio"], "rust_nat", "S-K9")}
-    k9_t = {K9N: r_nat[K9N]["ratio"]}
+    k9raw = v2.load_k9h_raw()
+    if k9h and K9N in k9raw.get("rust_nat_k9h", {}) and K9N in k9raw.get("rust_k9h", {}):
+        # harnais commun de K9 (docs/K9.md, 3.5) : K9 de Rust vient de la machine 16, et la forme naturelle de la
+        # remarque y est mesurée dans la même campagne (rust_nat_k9h / rust_k9h, même hôte, même harnais)
+        r9 = ratio(k9raw["rust_nat_k9h"][K9N], k9raw["rust_k9h"][K9N], np.random.default_rng(v3.SEED + 3100))["ratio"]
+        t9 = gm(data[LANG][K9N])
+        transfer[f"S-K9 {kk(K9N)}"] = {"rust_main_ms": 1e3 * t9, "transfer_ms": 1e3 * t9 * r9, "bridge_ms": 1e3 * t9 * r9,
+                                       "gap": 0.0, "bridge_used": False, "ratio": r9, "ratio_used": r9,
+                                       "c_main_ms": 1e3 * gm(data["c"][K9N]), "k9h": True}
+        k9_b = k9_t = {K9N: r9}
+    else:
+        k9_b = {K9N: bridged(K9N, r_nat[K9N]["ratio"], "rust_nat", "S-K9")}
+        k9_t = {K9N: r_nat[K9N]["ratio"]}
     q1_b = {k: bridged(k, r_pop[k]["ratio"], "rust_clpop", "S-Q1") for k in (Q1T, Q1M)}
     q1_t = {k: r_pop[k]["ratio"] for k in (Q1T, Q1M)}
     k8_b = {K8T: bridged(K8T, r_k8[K8T]["ratio"], "rust_k8", "S-K8")}
