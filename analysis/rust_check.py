@@ -172,7 +172,9 @@ def run(data, lat, langs, footprint, c3, cells=None):
             v2.V2_OVERRIDES[k] = v
 
 
-def main():
+def main(suffix=""):
+    """suffix : sorties results/rust_check<suffix>.json et report_rust<suffix>.md (« _current » : état actuel) ;
+    results/transfers.json n'est réécrit que sans suffixe."""
     data, lat_old, *_ = v2.dataset_main(transfers=False, d3=False)
     tpath = os.path.join(ROOT, "results", "transfers.json")
     tr = json.load(open(tpath))
@@ -269,7 +271,10 @@ def main():
         print(f"{name} : Rust {z['ms0'][LANG]:.2f} points, C {z['C'][LANG]:.1f}, E {z['E'][LANG]:.1f}, "
               f"D {z['D'][LANG]:.1f}, rang espéré {z['exp21'][LANG]:.2f} ({z['pos']}e), rang 90 % {z['rank90'][LANG]}",
               flush=True)
-    json.dump(out, open(os.path.join(ROOT, "results", "rust_check.json"), "w"), indent=1, default=float)
+    json.dump(out, open(os.path.join(ROOT, "results", f"rust_check{suffix}.json"), "w"), indent=1, default=float)
+    if suffix:
+        report(out, suffix)
+        return
     # classement publié (décision 1) : rapport de K7 de Publié inscrit dans les corrections transférées
     tr["ratios"][LANG] = {"|".join(k): v for k, v in k7_b.items()}
     note = " ; Rust : docs/RUST.md (3.2), results/raw_rust, machine 11, results/rust_check.json"
@@ -283,7 +288,7 @@ def f(x, d=1):
     return "—" if x is None else f"{x:.{d}f}".replace(".", ",")
 
 
-def report(o):
+def report(o, suffix=""):
     L = ["# Remarque sur Rust : rapports appariés, remesure de D3 et scénarios\n",
          "Plan : `docs/RUST.md`. Mesures : `results/raw_rust/` et `results/raw_d3/` (machine 11, 7 processus par cellule).",
          "Code : `analysis/rust_check.py`. Processus rejetés : " + (str(len(o["bad"]) + len(o["bad_d3"])) if o["bad"] or o["bad_d3"] else "aucun") + ".\n",
@@ -330,8 +335,8 @@ def report(o):
         top = ", ".join(f"{i + 1}. {NAMES.get(l, l)} ({f(z['exp21'][l], 2)}, {f(z['ms0'][l])})"
                         for i, l in enumerate(z["order21"][:14]))
         L.append(f"**{name}** : {top}.\n")
-    open(os.path.join(ROOT, "results", "report_rust.md"), "w").write("\n".join(L) + "\n")
+    open(os.path.join(ROOT, "results", f"report_rust{suffix}.md"), "w").write("\n".join(L) + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else "")

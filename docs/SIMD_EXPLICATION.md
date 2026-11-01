@@ -140,6 +140,8 @@ repartent de l'état publié, avec les mêmes tirages ; seules les variantes adm
 * **S-importées** : seules les intrinsèques importées de Nim et d'Ada sont retirées.
 
 Position par rang espéré sur les 20 000 variantes de l'analyse d'incertitude ; entre parenthèses, le score ponctuel.
+État du 1er novembre au matin, avant les errata de C3 ; recalcul dans l'état actuel :
+[`../results/report_nosimd_current.md`](../results/report_nosimd_current.md).
 
 | Langage | Publié | Sans mt | S-scalaire | S-symétrique | S-noyaux-scalaires | S-importées |
 |---|---|---|---|---|---|---|
@@ -197,7 +199,8 @@ leur enlève les deux.
 * Les douze premières places reviennent aux mêmes douze langages.
 * C et C++ restent dans les six premiers ; C, C++ et Odin prennent les trois premières places à forme égale pour tous
   comme sans les noyaux vectorisables.
-* Rust et C3 perdent des places dans les trois.
+* Rust perd des places dans les trois. C3 en perdait aussi dans l'état du matin, plus depuis les errata de sa matrice
+  (5e à forme égale comme sans les noyaux vectorisables ; `results/report_nosimd_current.md`).
 * Ne tient pas : la tête de Chapel, Fortran et Julia, 1er à 3e à la lettre, 10e à 12e dans les deux autres.
 
 ### Nim et Ada sans leurs intrinsèques importées

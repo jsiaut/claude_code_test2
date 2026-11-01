@@ -272,3 +272,11 @@ S-symétrique (C++ 29 %, C 23 %, Odin 22 %, Zig 19 %) et reste à C dans S-noyau
 * **Limite du banc mise au jour** : dans K1 et K5, le SIMD explicite emporte des gains qui ne sont pas vectoriels (la
   disposition SoA, la réassociation). Les séparer demanderait des variantes optimisées scalaires (K1 en SoA, K5 à
   accumulateurs multiples) dans les quatorze langages, donc de nouvelles mesures ; ce n'est pas fait ici.
+
+### 4.6 Recalcul après les errata de C3 (1er novembre, midi)
+
+Les sorties ci-dessus datent du matin. Recalculé dans l'état actuel (`results/report_nosimd_current.md`, témoin égal au
+scénario Errata de `results/c3_check.json`) : les conclusions de 4.3 tiennent (mêmes douze langages en tête, positions
+13 à 21 inchangées, C et C++ dans les six premiers, C, C++ et Odin aux trois premières places à forme égale comme sans
+les noyaux vectorisables), sauf une : C3, 5e au publié, garde sa 5e place dans S-symétrique et S-noyaux-scalaires (11e
+dans S-scalaire) ; seul Rust perd des places dans les trois (10e, 8e, 8e au lieu de 7e).

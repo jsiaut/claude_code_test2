@@ -746,3 +746,25 @@ Robustesse :
   datée dans `docs/NIM.md`). Page d'explication : `docs/page/simd.html` (`tools/nosimd/page.py`).
 * 2026-11-01, midi : la page HTML d'explication est remplacée, à la demande, par une note Markdown dans le dépôt
   (`docs/SIMD_EXPLICATION.md`) ; `docs/page/` et `tools/nosimd/page.py` sont retirés. Rien n'est publié hors du dépôt.
+* 2026-11-01, vers 11:00 : **machine 13**. La VM tourne sur un hôte Emerald Rapids du même modèle (modèle 207, 4 vCPU ;
+  2,73 à 2,77 GHz effectifs, latence à 4 Mio 36 ns, DRAM 14,8 Go/s : `results/hw/machine13/`).
+* 2026-11-01, 11:16 : **plan de la remarque sur C3** (`docs/C3.md`, sections 1 à 3, commit `0c4a503`), poussé avant les
+  mesures. Vérifications sur les sources de la version mesurée (C3 0.8.5_1, `/opt/src/c3c`) et par des sondes de
+  compilation (`tools/c3_check/`, `results/c3_check/`), sans consulter le site ni master : quatre errata de la remarque
+  confirmés (C4, E2, E5, F4 en règle v1 ; `noalias` posé sur le mauvais paramètre, vu dans l'IR), un cinquième retenu
+  (D4, appel système brut, comme Go et Odin en règle v1), D3 laissé à 0 ; le chiffre de 400 mnémoniques x86 est faux
+  (217). Les trois pistes mesurées (réduction de K5, démarrage des fils de K9 mt, `--optlevel=max`) sont des formes ou
+  des options nouvelles : sensibilités.
+* 2026-11-01, 11:16:59-11:28:09 : **mesures de la remarque sur C3** (`tools/measure_c3.py`, machine 13) : 61 cellules
+  × 7 processus (427) ; aucune somme de contrôle fausse ; 26 processus refaits pour vol de temps au-dessus de 2 %, un
+  seul gardé au-dessus (2,4 %). Rien d'autre ne tournait. Aucun écart au plan.
+* 2026-11-01, midi : **résultats de la remarque sur C3** (`results/report_c3.md`, `results/c3_check.json`). Classement
+  publié : les cinq errata portent le contrôle de C3 de 73,1 à 75,7 et son score de 70,3 à 71,2 ; il reste 5e (rang
+  espéré 6,47 → 5,74) ; Nim et Rust, à égalité, échangent leurs places (Nim 6e, 6,66 ; Rust 7e, 6,67). Sensibilités :
+  réduction en arbre de K5 × 1,02 (rien), fils de K9 mt par `pthread_create` × 0,94 (non significatif),
+  `--optlevel=max` × 0,98 en moyenne et 72,2 points ; D3 à 0,5, 71,8 points ; C3 reste 5e partout. Le pont par le C
+  se trompe sur K9 entre Cascade Lake et Emerald Rapids (C3 / C : 1,58 et 2,18 sur cet hôte contre 0,93 et 1,40) : les
+  variantes par transfert seul, calculées par le même code, sont la lecture retenue pour K9. Sorties recalculées :
+  classement, figures, matrice, scénarios de Zig, de Julia, de Mojo, de C#, de Rust et de Nim et sensibilité sans SIMD
+  dans l'état actuel (`_current`), confrontation. README : tableau, ordre, errata, paragraphe de C3, Nim et Rust
+  échangés, langages relus.

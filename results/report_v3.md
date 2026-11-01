@@ -13,14 +13,14 @@
 | 1 | Ada | 78,1 [74,9–81,1] | 61,8 | 45 % | 14,0 | 10,9 | 18 % | 80,6 / 71,7 | 71,7 [70,2–73,5] | 0,43 | 3–9 | 8 [3–12] | 7 |
 | 1 | C | 85,3 [82,4–88,5] | 59,8 | 60 % | 19,1 | 20,8 | 24 % | 91,7 / 77,8 | 80,0 [78,3–82,1] | 0,45 | 1–2 | 1 [1–5] | 2 |
 | 1 | C++ | 78,7 [76,4–81,9] | 65,6 | 54 % | 18,2 | 18,9 | 24 % | 92,4 / 84,7 | 76,6 [75,1–78,0] | 0,51 | 1–3 | 3 [1–8] | 1 |
-| 1 | C3 | 82,5 [80,3–85,7] | 70,4 | 58 % | 19,0 | 18,3 | 24 % | 73,1 / 74,4 | 70,3 [69,3–71,8] | 0,41 | 3–10 | 6 [2–10] | 6 |
-| 1 | Chapel | 80,2 [77,9–83,3] | 59,2 | 55 % | 18,5 | 14,7 | 25 % | 61,8 / 63,8 | 66,1 [65,0–69,0] | 0,26 | 7–13 | 9 [3–13] | 11 |
+| 1 | C3 | 82,5 [80,3–85,7] | 70,4 | 58 % | 19,0 | 18,3 | 24 % | 75,7 / 77,7 | 71,2 [70,2–72,7] | 0,41 | 3–9 | 6 [2–10] | 6 |
+| 1 | Chapel | 80,2 [77,9–83,3] | 59,2 | 55 % | 18,5 | 14,7 | 25 % | 61,8 / 63,8 | 66,1 [65,0–69,0] | 0,26 | 8–13 | 9 [3–13] | 11 |
 | 1 | D | 78,8 [76,0–81,7] | 65,8 | 54 % | 17,0 | 17,0 | 22 % | 87,1 / 78,9 | 72,6 [71,4–73,8] | 0,50 | 3–9 | 7 [3–12] | 4 |
 | 1 | Fortran | 74,7 [72,3–77,6] | 45,0 | 51 % | 19,8 | 18,0 | 28 % | 65,3 / 59,2 | 66,1 [64,6–67,9] | 0,46 | 8–13 | 11 [6–13] | 13 |
-| 1 | Julia | 66,6 [64,4–69,2] | 47,2 | 45 % | 22,4 | 19,1 | 36 % | 73,3 / 68,9 | 64,3 [63,1–65,3] | 0,53 | 10–13 | 12 [7–13] | 12 |
+| 1 | Julia | 66,6 [64,4–69,2] | 47,2 | 45 % | 22,4 | 19,1 | 36 % | 73,3 / 68,9 | 64,3 [63,1–65,3] | 0,53 | 10–13 | 12 [8–13] | 12 |
 | 1 | Mojo | 67,9 [65,9–70,3] | 58,1 | 47 % | 10,7 | 9,0 | 17 % | 70,5 / 66,0 | 62,8 [61,8–64,4] | 0,36 | 10–13 | 13 [10–13] | 10 |
 | 1 | Nim | 72,9 [70,6–75,6] | 68,2 | 46 % | 21,9 | 20,0 | 33 % | 76,1 / 73,4 | 69,7 [68,3–72,7] | 0,33 | 3–11 | 7 [2–11] | 5 |
-| 1 | Odin | 78,6 [76,0–81,6] | 54,9 | 53 % | 21,8 | 17,6 | 28 % | 81,5 / 81,3 | 72,6 [71,5–74,1] | 0,44 | 3–9 | 4 [1–7] | 9 |
+| 1 | Odin | 78,6 [76,0–81,6] | 54,9 | 53 % | 21,8 | 17,6 | 28 % | 81,5 / 81,3 | 72,6 [71,5–74,1] | 0,44 | 3–9 | 4 [1–8] | 9 |
 | 1 | Rust | 78,8 [76,1–81,8] | 71,8 | 54 % | 19,5 | 17,7 | 26 % | 73,6 / 73,1 | 70,5 [68,8–73,3] | 0,38 | 3–11 | 7 [3–10] | 3 |
 | 1 | Zig | 70,7 [68,3–73,5] | 50,1 | 51 % | 22,0 | 15,9 | 31 % | 87,2 / 83,2 | 72,7 [71,0–74,4] | 0,50 | 2–9 | 4 [1–10] | 8 |
 | 2 | C# | 56,2 [54,1–58,3] | 40,8 | 39 % | 9,8 | 8,3 | 18 % | 68,8 / 65,8 | 56,0 [54,6–57,2] | 0,53 | 14–14 | 14 [13–15] | 14 |
@@ -47,13 +47,13 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 
 | Langage | Composite MS | Plafond E | Code naturel D1 |
 |---|---|---|---|
-| C | 1–5 | 1–8 | 1–10 |
+| C | 1–6 | 1–8 | 1–10 |
 | Odin | 1–10 | 2–12 | 1–9 |
 | C++ | 1–11 | 1–11 | 3–11 |
 | Zig | 1–11 | 5–13 | 1–10 |
 | Nim | 1–11 | 3–12 | 1–5 |
+| C3 | 1–12 | 1–8 | 3–10 |
 | Ada | 2–12 | 1–13 | 12 |
-| C3 | 2–12 | 1–8 | 3–10 |
 | Rust | 2–12 | 1–10 | 3–10 |
 | D | 2–13 | 1–12 | 8–11 |
 | Chapel | 2–13 | 1–10 | 6–11 |
@@ -73,25 +73,25 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 
 | Noyaux | MS : Spearman 21 / 13 / 9 premiers | MS : inversions dans les 13 premiers | E : Spearman 21 / 13 / 9 premiers | E : inversions dans les 13 premiers |
 |---|---|---|---|---|
-| tous les noyaux | 0,94 / 0,73 / 0,33 | 20 | 0,89 / 0,56 / 0,43 | 23 |
-| sans K3 | 0,98 / 0,90 / 0,80 | 9 | 0,96 / 0,86 / 0,78 | 11 |
+| tous les noyaux | 0,93 / 0,71 / 0,28 | 21 | 0,89 / 0,56 / 0,43 | 23 |
+| sans K3 | 0,97 / 0,88 / 0,73 | 10 | 0,96 / 0,86 / 0,78 | 11 |
 
 ## Hors plan : Cascade Lake seul (K5 d'avant, machines 1 et 2), estimation ponctuelle
 
-C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), Rust 7 (E 78,2, D1 18,3), C3 8 (E 81,0, D1 17,7), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Fortran 11 (E 72,7, D1 18,7), Julia 12 (E 67,9, D1 20,9), Mojo 13 (E 69,0, D1 11,0), C# 14 (E 49,5, D1 9,3), Java 15 (E 57,9, D1 12,4), Go 16 (E 41,5, D1 11,0), Haskell 17 (E 36,8, D1 4,1), OCaml 18 (E 19,1, D1 7,3), JavaScript 19 (E 12,3, D1 4,9), Python 20 (E 0,5, D1 0,5), Lua 21 (E 1,2, D1 1,1).
+C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Fortran 11 (E 72,7, D1 18,7), Julia 12 (E 67,9, D1 20,9), Mojo 13 (E 69,0, D1 11,0), C# 14 (E 49,5, D1 9,3), Java 15 (E 57,9, D1 12,4), Go 16 (E 41,5, D1 11,0), Haskell 17 (E 36,8, D1 4,1), OCaml 18 (E 19,1, D1 7,3), JavaScript 19 (E 12,3, D1 4,9), Python 20 (E 0,5, D1 0,5), Lua 21 (E 1,2, D1 1,1).
 
 ## Réplication : bruit ou interaction ?
 
 | Statistique | Observée | Hypothèse nulle : médiane [5–95 %] | p |
 |---|---|---|---|
-| Spearman, 21 langages | 0,94 | 0,99 [0,98–1,00] | 0,000 |
-| Spearman, 13 premiers | 0,73 | 0,96 [0,91–0,99] | 0,000 |
-| Spearman, 9 premiers | 0,33 | 0,90 [0,75–0,98] | 0,000 |
-| Paires inversées parmi les 13 premiers | 20,00 | 5,00 [2,00–8,00] | 0,000 |
+| Spearman, 21 langages | 0,93 | 0,99 [0,98–1,00] | 0,000 |
+| Spearman, 13 premiers | 0,71 | 0,96 [0,90–0,99] | 0,000 |
+| Spearman, 9 premiers | 0,28 | 0,88 [0,70–0,98] | 0,000 |
+| Paires inversées parmi les 13 premiers | 21,00 | 5,00 [2,00–9,00] | 0,000 |
 
-Hors plan, bruit de la machine 3 multiplié par 1,5 : Spearman, 21 langages p = 0,000 (médiane nulle 0,99) ; Spearman, 13 premiers p = 0,000 (médiane nulle 0,95) ; Spearman, 9 premiers p = 0,000 (médiane nulle 0,87) ; Paires inversées parmi les 13 premiers p = 0,000 (médiane nulle 6,00).
+Hors plan, bruit de la machine 3 multiplié par 1,5 : Spearman, 21 langages p = 0,000 (médiane nulle 0,99) ; Spearman, 13 premiers p = 0,000 (médiane nulle 0,95) ; Spearman, 9 premiers p = 0,000 (médiane nulle 0,85) ; Paires inversées parmi les 13 premiers p = 0,000 (médiane nulle 6,00).
 
-Hors plan, bruit de la machine 3 multiplié par 2,0 : Spearman, 21 langages p = 0,000 (médiane nulle 0,98) ; Spearman, 13 premiers p = 0,000 (médiane nulle 0,93) ; Spearman, 9 premiers p = 0,000 (médiane nulle 0,83) ; Paires inversées parmi les 13 premiers p = 0,000 (médiane nulle 7,00).
+Hors plan, bruit de la machine 3 multiplié par 2,0 : Spearman, 21 langages p = 0,000 (médiane nulle 0,98) ; Spearman, 13 premiers p = 0,000 (médiane nulle 0,92) ; Spearman, 9 premiers p = 0,002 (médiane nulle 0,80) ; Paires inversées parmi les 13 premiers p = 0,000 (médiane nulle 8,00).
 
 ## Décomposition de la variance entre les machines 1 et 3, tous les langages (part de chaque source)
 
@@ -274,5 +274,5 @@ Hors plan, bruit de la machine 3 multiplié par 2,0 : Spearman, 21 langages p = 
 * aot : plat 1548, accélération 115, ralentissement 88
 * jit : ralentissement 46, plat 519, accélération 36
 
-Rangs avec l'estimateur de la v2 (médiane des médianes de processus, frontière recalculée, sans coupure de régime établi) : C 1, C++ 2, D 3, Zig 4, Odin 5, Ada 6, Rust 7, C3 8, Nim 9, Fortran 10, Chapel 11, Julia 12, Mojo 13, C# 14, Java 15, Go 16, Haskell 17, OCaml 18, JavaScript 19, Python 20, Lua 21.
+Rangs avec l'estimateur de la v2 (médiane des médianes de processus, frontière recalculée, sans coupure de régime établi) : C 1, C++ 2, D 3, Zig 4, Odin 5, Ada 6, C3 7, Rust 8, Nim 9, Fortran 10, Chapel 11, Julia 12, Mojo 13, C# 14, Java 15, Go 16, Haskell 17, OCaml 18, JavaScript 19, Python 20, Lua 21.
 

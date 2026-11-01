@@ -24,27 +24,27 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | C1 types vectoriels portables | ◐ | ● | ◐ | ● | ● | ● | ● | ○ | ◐ | ○ | ○ | ● | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
 | C2 intrinsèques de la cible | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | C3 auto-vectorisation (mesurée) | ● | ● | ◐ | ○ | ● | ● | ◐ | ◐ | ◐ | ● | ● | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
-| C4 contrôle de la réassociation flottante | ◐ | ● | ● | ● | ○ | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
+| C4 contrôle de la réassociation flottante | ◐ | ● | ● | ● | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
 | C5 parallélisme de données | ◐ | ◐ | ○ | ○ | ○ | ○ | ● | ◐ | ○ | ● | ● | ○ | ○ | ● | ● | ● | ◐ | ○ | ○ | ◐ | ○ |
 | **D** (15 %) | | | | | | | | | | | | | | | | | | | | | |
 | D1 threads parallèles en mémoire partagée | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ○ |
 | D2 atomiques à ordres mémoire explicites | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ● | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ○ |
 | D3 aide ligne de cache | ◐ | ● | ○ | ● | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ◐ | ○ | ● | ○ | ○ | ○ |
-| D4 affinité CPU | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ | ○ |
+| D4 affinité CPU | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ | ○ |
 | D5 barrières et indication d'attente active | ◐ | ◐ | ● | ◐ | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ● | ○ | ● | ● | ◐ | ○ | ● | ◐ | ○ | ○ |
 | **E** (10 %) | | | | | | | | | | | | | | | | | | | | | |
 | E1 code natif inspectable | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ◐ | ○ | ○ |
-| E2 assembleur en ligne | ◐ | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ○ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| E2 assembleur en ligne | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ● | ○ | ○ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | E3 indications de branchement | ◐ | ● | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
 | E4 préchargement explicite | ◐ | ◐ | ● | ● | ● | ● | ● | ◐ | ◐ | ○ | ◐ | ● | ○ | ● | ○ | ◐ | ● | ○ | ○ | ○ | ○ |
-| E5 garanties de non-aliasing | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ● | ◐ | ● | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| E5 garanties de non-aliasing | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ● | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | E6 contrôle local des vérifications de bornes | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ● | ● | ● | ○ | ◐ | ○ |
 | E7 calcul à la compilation + génériques monomorphisés | ◐ | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ○ | ● | ◐ | ○ | ○ | ○ | ○ |
 | **F** (10 %) | | | | | | | | | | | | | | | | | | | | | |
 | F1 tableaux multidimensionnels contigus | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ● | ○ | ● | ● | ● | ○ | ◐ | ○ |
 | F2 localité / distribution (PGAS, NUMA) | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | F3 entiers fixes signés et non signés modulaires | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ |
-| F4 fichiers projetés + réinterprétation sans copie | ◐ | ◐ | ○ | ● | ◐ | ◐ | ● | ● | ◐ | ○ | ○ | ○ | ◐ | ● | ● | ● | ○ | ● | ○ | ● | ○ |
+| F4 fichiers projetés + réinterprétation sans copie | ◐ | ◐ | ○ | ● | ◐ | ● | ● | ● | ◐ | ○ | ○ | ○ | ◐ | ● | ● | ● | ○ | ● | ○ | ● | ○ |
 
 ## Justifications
 
@@ -97,10 +97,10 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 
 * **A** : A1 = 1 (Particle[] (bench)) ; A2 = 1 (ordre déclaré, .offsetof (sonde)) ; A3 = 1 (@packed + bitstruct (sonde)) ; A4 = 1 (@align(128) (bench K10)) ; A5 = 1 (union + bitcast (sonde)) ; A6 = 0 (aucun) ; A7 = 1 (float[16]) ; A8 = 1 (char/short/float)
 * **B** : B1 = 1 (pas de GC) ; B2 = 1 (interface Allocator, @pool temporaire (bench K8)) ; B3 = 1 (valeurs sur la pile) ; B4 = 1 (allocations explicites) ; B5 = 1 (pointeurs)
-* **C** : C1 = 1 (vecteurs float[<16>] (bench)) ; C2 = 0.5 (builtins $$ (avertissement : réservés à la bibliothèque standard)) ; C3 = 1.0 (mesuré) ; C4 = 0 (pas de contrôle local) ; C5 = 0 (aucun)
-* **D** : D1 = 1 (std::thread) ; D2 = 1 (std::atomic avec AtomicOrdering (src)) ; D3 = 0 (aucune) ; D4 = 0 (aucune) ; D5 = 0.5 (thread::fence ; pas d'indication pause (src))
-* **E** : E1 = 1 (natif) ; E2 = 1 (asm) ; E3 = 1 (@likely/@unlikely (src)) ; E4 = 1 (prefetch dans std::core::builtin (src)) ; E5 = 1 (attribut @noalias (src du compilateur)) ; E6 = 1 (pas de vérification en -O3 ; @unchecked) ; E7 = 1 (modules génériques + macros à la compilation ($foreach...))
-* **F** : F1 = 0.5 (tableaux fixes de tableaux fixes) ; F2 = 0 (aucun) ; F3 = 1 (débordement défini (enveloppant)) ; F4 = 0.5 (mmap par la liaison libc std::os::posix (src))
+* **C** : C1 = 1 (vecteurs float[<16>] (bench)) ; C2 = 0.5 (les builtins $$ sont génériques (fma, reduce, swizzle…), pas propres à la cible ; seul un extern @cname vers une intrinsèque de LLVM, non documenté et partiel, l'atteint (sonde : pause oui, pext non) ; texte corrigé le 1/11, remarque sur C3) ; C3 = 1.0 (mesuré) ; C4 = 0.5 (--fp-math=relaxed|fast, -O4/-O5 : option globale seulement, pas de contrôle local (sonde) ; erratum du 1/11, remarque sur C3) ; C5 = 0 (aucun)
+* **D** : D1 = 1 (std::thread) ; D2 = 1 (std::atomic avec AtomicOrdering (src)) ; D3 = 0 (aucune constante ni type de bourrage (posix::sysconf sans _SC_LEVEL1_DCACHE_LINESIZE)) ; D4 = 0.5 (appel système brut par la macro @syscall de std::core::builtin, sans constante ni enveloppe (src) ; erratum du 1/11, remarque sur C3) ; D5 = 0.5 (thread::fence ; pas d'indication pause (src))
+* **E** : E1 = 1 (natif) ; E2 = 0.5 (blocs asm limités à 217 mnémoniques x86 (ni chargement vectoriel, ni FMA, ni pause, ni barrière) ; asm("…") sans opérandes (sonde) ; erratum du 1/11, remarque sur C3) ; E3 = 1 (@likely/@unlikely (src)) ; E4 = 1 (prefetch dans std::core::builtin (src)) ; E5 = 0.5 (@noalias expérimental (0.6.2), sans test ; noalias posé sur le 1er paramètre quel que soit le paramètre annoté, rien sur une tranche (sonde IR) ; erratum du 1/11, remarque sur C3) ; E6 = 1 (pas de vérification en -O3 ; .ptr[i] sans vérification (@unchecked n'existe pas : texte corrigé le 1/11)) ; E7 = 1 (génériques par déclaration <...> (depuis 0.7.9 ; modules génériques retirés en 0.8.0) + macros à la compilation ($foreach...))
+* **F** : F1 = 0.5 (tableaux fixes de tableaux fixes ; vue Slice2d de la bibliothèque standard) ; F2 = 0 (aucun) ; F3 = 1 (débordement défini (enveloppant)) ; F4 = 1 (std::io::file::mmap (mmap_open, FileMmap.bytes) portable POSIX et Win32 depuis 0.7.5 (sonde) ; erratum du 1/11, remarque sur C3)
 
 ### D
 

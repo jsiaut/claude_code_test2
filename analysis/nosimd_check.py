@@ -155,7 +155,8 @@ def main():
         "S-noyaux-scalaires": {"e_drop": tuple(k for k in E_V2 if k not in SCALAR_KERNELS)},
         "S-importées": {"patch": patch_imported},
     }
-    only = sys.argv[1:]
+    only = [a for a in sys.argv[1:] if not a.startswith("--")]
+    suffix = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--suffix=")), "")
     out = {"class": {l: {kk(k): c for k, c in d.items()} for l, d in CLASS.items()}, "d_q1_ratio": d_q1_ratio(),
            "scenarios": {}}
     for name, kw in plans.items():
@@ -166,30 +167,33 @@ def main():
         print(f"{name} : {top}", flush=True)
     pub = out["scenarios"].get("Publié")
     if pub:
-        ref = json.load(open(os.path.join(ROOT, "results", "nim_check.json")))["scenarios"]["Avant"]
+        # témoin : le publié du 1er novembre au matin (results/nim_check.json, « Avant ») ; avec un suffixe (état actuel),
+        # le publié après les errata de C3 (results/c3_check.json, « Errata »)
+        src = ("c3_check.json", "Errata") if suffix else ("nim_check.json", "Avant")
+        ref = json.load(open(os.path.join(ROOT, "results", src[0])))["scenarios"][src[1]]
         gap = max(max(abs(pub["ms0"][l] - ref["ms0"][l]), abs(pub["exp21"][l] - ref["exp21"][l])) for l in RANKED)
-        out["check_published"] = {"max_gap": gap, "ok": gap < 1e-9}
-        print(f"Contrôle du témoin : écart maximal {gap:.2e} avec le scénario « Avant » de results/nim_check.json")
+        out["check_published"] = {"max_gap": gap, "ok": gap < 1e-9, "ref": f"results/{src[0]}, « {src[1]} »"}
+        print(f"Contrôle du témoin : écart maximal {gap:.2e} avec le scénario « {src[1]} » de results/{src[0]}")
         for name, z in out["scenarios"].items():
             z["spearman_vs_published"] = spearman(z["exp21"], pub["exp21"])
             z["moves"] = {l: z["pos"][l] - pub["pos"][l] for l in RANKED}
     if not only:
-        json.dump(out, open(os.path.join(ROOT, "results", "nosimd_check.json"), "w"), indent=1, default=float)
-        report(out)
+        json.dump(out, open(os.path.join(ROOT, "results", f"nosimd_check{suffix}.json"), "w"), indent=1, default=float)
+        report(out, suffix)
 
 
 def f(x, d=1):
     return "—" if x is None or (isinstance(x, float) and math.isnan(x)) else f"{x:.{d}f}".replace(".", ",")
 
 
-def report(o):
+def report(o, suffix=""):
     S = o["scenarios"]
     pub = S["Publié"]
     names = list(S)
     L = ["# Sensibilité « sans SIMD explicite » : sorties de analysis/nosimd_check.py", "",
          "Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.", "",
-         f"Témoin : écart maximal {o['check_published']['max_gap']:.1e} avec le scénario « Avant » de "
-         "results/nim_check.json.", "",
+         f"Témoin : écart maximal {o['check_published']['max_gap']:.1e} avec "
+         f"{o['check_published'].get('ref', 'results/nim_check.json, « Avant »')}.", "",
          "## Rang (position par rang espéré) et score ponctuel", "",
          "| Langage | " + " | ".join(names) + " |", "|---|" + "---|" * len(names)]
     for l in pub["order21"]:
@@ -220,7 +224,7 @@ def report(o):
     for l in pub["order21"]:
         ch = S["S-scalaire"]["chosen"][l]
         L.append(f"| {NAMES[l]} | " + " | ".join(f"{ch[m][0]} {f(ch[m][1], 1)}" for m in ms) + " |")
-    open(os.path.join(ROOT, "results", "report_nosimd.md"), "w").write("\n".join(L) + "\n")
+    open(os.path.join(ROOT, "results", f"report_nosimd{suffix}.md"), "w").write("\n".join(L) + "\n")
 
 
 if __name__ == "__main__":

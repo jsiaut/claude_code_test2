@@ -13,16 +13,16 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 |---|---|---|---|---|---|
 | 1 | **C** | 80,0 | 1–5 | 77 % | Plafond le plus haut et l'un des trois meilleurs codes par défaut ; une partie des leviers passe par des extensions de compilateur |
 | 2 | **C++** | 76,6 | 1–8 | 56 % | Le plus de contrôle (`std::simd`, `pmr`, atomiques) ; conteneurs standard à contre-courant du cache |
-| 3 | **Odin** | 72,6 | 1–7 | 55 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, allocateurs explicites) ; table et allocateur généralistes lents |
-| 4 | **Zig** | 72,7 | 1–10 | 69 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (1er avec la version de développement) |
-| 5 | **C3** | 70,3 | 2–10 | 53 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels |
-| 6 | **Rust** | 70,5 | 3–10 | 51 % | 4e plafond et bon code naturel ; contrôle limité par sa bibliothèque standard (ni affinité, ni `mmap`, SIMD portable instable) |
-| 7 | **Nim** | 69,7 | 2–11 | 52 % | Les leviers de C par sa compilation vers C ; vérifications et aliasing non strict qui bloquent la vectorisation du stencil |
+| 3 | **Odin** | 72,6 | 1–8 | 55 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, allocateurs explicites) ; table et allocateur généralistes lents |
+| 4 | **Zig** | 72,7 | 1–10 | 62 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (1er avec la version de développement) |
+| 5 | **C3** | 71,2 | 2–10 | 60 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels, `asm` et `@noalias` incomplets |
+| 6 | **Nim** | 69,7 | 2–11 | 49 % | Les leviers de C par sa compilation vers C ; vérifications et aliasing non strict qui bloquent la vectorisation du stencil |
+| 7 | **Rust** | 70,5 | 3–10 | 57 % | 4e plafond et bon code naturel ; contrôle limité par sa bibliothèque standard (ni affinité, ni `mmap`, SIMD portable instable) |
 | 8 | **D** | 72,6 | 3–12 | 58 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
 | 9 | **Ada** | 71,7 | 3–12 | 58 % | Disposition au bit près, 8e plafond ; vérifications coûteuses sur le code naturel |
-| 10 | **Chapel** | 66,1 | 3–13 | 69 % | 3e plafond grâce au parallélisme natif ; leviers bas niveau rares ou instables |
+| 10 | **Chapel** | 66,1 | 3–13 | 68 % | 3e plafond grâce au parallélisme natif ; leviers bas niveau rares ou instables |
 | 11 | **Fortran** | 66,1 | 6–13 | 66 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
-| 12 | **Julia** | 64,3 | 7–13 | 66 % | Le meilleur code naturel ; le plafond le plus bas des 13 premiers |
+| 12 | **Julia** | 64,3 | 8–13 | 66 % | Le meilleur code naturel ; le plafond le plus bas des 13 premiers |
 | 13 | **Mojo** | 62,8 | 10–13 | 96 % | Le SIMD au cœur du langage ; ni vectoriseur de boucles, ni threads publics dans `std` |
 | 14 | **C#** | 56,0 | 13–15 | 91 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
 | 15 | **Java** | 47,2 | 14–16 | 70 % | Meilleur allocateur de petits objets ; pas de types valeur |
@@ -38,11 +38,11 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   langage et sa chaîne de compilation).
 * **Ordre** : le rang moyen sur 20 000 variantes de l'analyse, qui tirent au hasard les poids, les normalisations, le
   jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf en quatre endroits. Odin et Zig
-  (72,6 et 72,7 points) : Odin devance Zig dans 55 % des variantes. C3 et Rust (70,3 et 70,5) : C3 devance Rust dans
-  53 %. D et Ada, 4e et 6e au score, ne sont que 8e et 9e : leur code par défaut est le plus lent (D) et l'un des plus
-  lents (Ada) des neuf premiers ; C3, Rust et Nim, moins bien notés, les devancent dans 52 à 66 % des variantes, et
-  Odin, à égalité de score avec D, le devance dans 82 %. Chapel : derrière Fortran au score (66,06 contre 66,14), mais
-  devant lui dans 69 % des variantes.
+  (72,6 et 72,7 points) : Odin devance Zig dans 55 % des variantes. Nim et Rust (69,7 et 70,5) : à égalité au rang
+  moyen (6,66 contre 6,67), et Rust devance Nim dans 51 % des variantes. D et Ada, 4e et 6e au score, ne sont que 8e et
+  9e : leur code par défaut est le plus lent (D) et l'un des plus lents (Ada) des neuf premiers ; C3, Nim et Rust, moins
+  bien notés, les devancent dans 52 à 73 % des variantes, et Odin, à égalité de score avec D, le devance dans 82 %.
+  Chapel : derrière Fortran au score (66,06 contre 66,14), mais devant lui dans 68 % des variantes.
 * **Rang plausible** : le rang dans 90 % des variantes. **Devance le suivant** : la part des variantes où le
   langage passe devant celui de la ligne suivante.
 * **Errata des 30 et 31 octobre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de contrôle
@@ -52,8 +52,11 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   sous-notés), une remarque sur Mojo cinq autres (alignement, unions, réassociation, attente active et non-aliasing
   sous-notés), une remarque sur Julia trois encore (allocateurs, aide de ligne de cache, indication d'attente active
   sous-notés), une remarque sur Chapel trois encore (allocateurs, intrinsèques, non-aliasing sous-notés), une remarque
-  sur D deux autres (indications de branchement et préchargement de druntime, sous-notés en règle v1). Seules celles de
-  Fortran (de la 12e à la 11e place) et de Chapel (de la 11e à la 10e) changent un rang à elles seules. Les remarques
+  sur D deux autres (indications de branchement et préchargement de druntime, sous-notés en règle v1), une remarque sur
+  C3 cinq autres (réassociation globale, affinité par appel système brut et projection de fichiers en règle v1
+  sous-notées ; assembleur et non-aliasing sur-notés). Seules celles de Fortran (de la 12e à la 11e place), de Chapel
+  (de la 11e à la 10e) et de C3 (Nim et Rust, à égalité, échangent les 6e et 7e places) changent un rang à elles
+  seules. Les remarques
   sur Ada, Fortran, D et Rust ont aussi trouvé quatre erreurs de mon banc, corrigées et remesurées. Un piège de GNAT
   (`-fnon-call-exceptions`) laissait scalaires les noyaux optimisés d'Ada une fois inlinés : Ada passe de la 9e à la 7e
   place ([`docs/ADA.md`](docs/ADA.md)). Les noyaux de Fortran n'étaient pas isolés de la boucle de mesure comme ceux de
@@ -77,8 +80,9 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   font varier ni l'effort d'implémentation ni le choix du code naturel : avec ses meilleures formes mesurées, une
   particule en `struct` et un JIT stabilisé, C# dépasse Mojo au score (63,2 à 63,8 points contre 62,3) et fait jeu égal
   avec lui au rang, 13e ou 14e ([`docs/CSHARP.md`](docs/CSHARP.md)).
-* **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Deux voisins s'y devancent dans 51
-  à 77 % des variantes. C ou C++ est premier dans 71 % des variantes (C 57 %, C++ 15 %), Zig dans 11 %, Odin dans 9 %.
+* **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Un langage y devance le suivant
+  dans 49 à 77 % des variantes. C ou C++ est premier dans 71 % des variantes (C 57 %, C++ 14 %), Zig dans 11 %, Odin
+  dans 9 %.
 * **L'ordre fin dépend aussi de la machine.** Sur un Emerald Rapids, le même calcul donne C++ 1er, C 2e, Rust 3e.
   L'écart vient surtout de l'écrivain unique (K3), dont le temps dépend, sur ce processeur, du placement du code
   par l'éditeur de liens (voir plus bas).
@@ -133,14 +137,30 @@ réactive, vectorise les deux boucles sans changer une ligne de code ; Zig a alo
 naturel de l'étude, et passe 1er en rang espéré, devant C. Ses threads coûtent aussi trois fois plus cher à lancer que
 ceux de la glibc (environ 160 µs contre 50 par thread).
 
-**5. C3.** C avec des vecteurs natifs, des génériques par modules, des allocateurs et `@pool` : 2e plafond de l'étude
-(83), deux boucles naturelles vectorisées. Il lui manque le SoA, les intrinsèques officiels et le contrôle de la
-réassociation flottante, et sa latence d'allocation a la queue la plus longue des langages compilés sans
-ramasse-miettes (sur K8 : p99,9 de 277 µs, maximum de 2,2 ms, Emerald Rapids).
+**5. C3.** C avec des vecteurs natifs, des génériques par déclaration, des allocateurs et `@pool` : 2e plafond de
+l'étude (83), deux boucles naturelles vectorisées. Il lui manque le SoA, les intrinsèques officiels et un contrôle local
+de la réassociation flottante (seule une option globale, `--fp-math`, l'autorise) ; son assembleur en ligne ne couvre
+qu'un sous-ensemble du jeu x86, et son `@noalias`, expérimental, marque le mauvais paramètre. Son code naturel paie
+trois choix de sa bibliothèque et de son compilateur : chaque allocation passe par l'interface `Allocator`, résolue à
+l'exécution, et `alloc::new` remet la mémoire à zéro (K8, 1,5 fois le temps de C) ; sans information d'aliasing par
+type, les pointeurs des colonnes sont relus à chaque ligne (Q1, 1,3 fois) ; `HashMap` est chaînée, une entrée allouée
+par insertion (K7, 4 fois le meilleur). Sa latence d'allocation a le p99,9 le plus long des langages compilés sans
+ramasse-miettes (277 µs sur K8, Emerald Rapids) ; son maximum (2,2 ms) est au niveau de ceux d'Odin et de Mojo. Cinq
+errata de sa matrice, le 1er novembre, portent son contrôle de 73 à 76 sans changer sa place ; ni une réduction en arbre
+(K5), ni des fils lancés sans attente (K9), ni le pipeline O3 de LLVM ne lui en font gagner une
+([`docs/C3.md`](docs/C3.md)).
 
-**6. Rust.** 4e plafond (79) et un code naturel meilleur que celui de C, de C++ et de D : `repr(C)`, `repr(align)`,
+**6. Nim.** Il compile vers C et en hérite la disposition et les compilateurs ; comptage de références déterministe
+(ORC) ; l'un des meilleurs codes naturels de l'étude. Mais son stencil naturel n'est pas vectorisé (71 contre 36 ms) :
+il faudrait lever à la fois les vérifications de bornes gardées en `-d:release` et l'interdiction d'aliasing par type
+que Nim impose au compilateur C (`-fno-strict-aliasing`) ; en tableau de taille fixe, il vectorise. Sa bibliothèque
+standard n'a pas de types SIMD : ses noyaux optimisés importent les intrinsèques de C, sauf Q1, écrit en blocs comme
+pour les langages sans types vectoriels portables et 3 fois plus lent que celui de C ; en intrinsèques, il rejoint C et
+Nim passerait 5e, en sensibilité ([`docs/NIM.md`](docs/NIM.md)).
+
+**7. Rust.** 4e plafond (79) et un code naturel meilleur que celui de C, de C++ et de D : `repr(C)`, `repr(align)`,
 `std::arch` avec AVX-512 stable, flottants `algebraic_*` pour réassocier opération par opération, seule file standard
-sans verrou. Ce qui le retient, c'est d'abord le contrôle (74, le plus bas des neuf premiers avec C3) : sa
+sans verrou. Ce qui le retient, c'est d'abord le contrôle (74, le plus bas des neuf premiers) : sa
 bibliothèque standard n'expose ni l'affinité, ni `mmap`, ni la taille de ligne de cache, que C et C++ tirent de la
 libc (la règle ne compte la libc que pour eux ; étendue à Rust, elle lui vaudrait 3 points et la 4e place), et son
 SIMD portable reste en *nightly*. Son stencil naturel `Vec<Vec<f64>>` n'est pas vectorisé, et pas à cause des bornes :
@@ -149,14 +169,6 @@ après chaque écriture ; en lignes de taille fixe (`Vec<[f64; M]>`), il vectori
 table plate sur K7. Sa queue de latence sur K8, qui le plaçait 9e, venait du vol de temps de la machine virtuelle sur
 ses deux processus : remesurée, elle est proche de celle de C ([`docs/RUST.md`](docs/RUST.md)). 3e sur Emerald
 Rapids.
-
-**7. Nim.** Il compile vers C et en hérite la disposition et les compilateurs ; comptage de références déterministe
-(ORC) ; l'un des meilleurs codes naturels de l'étude. Mais son stencil naturel n'est pas vectorisé (71 contre 36 ms) :
-il faudrait lever à la fois les vérifications de bornes gardées en `-d:release` et l'interdiction d'aliasing par type
-que Nim impose au compilateur C (`-fno-strict-aliasing`) ; en tableau de taille fixe, il vectorise. Sa bibliothèque
-standard n'a pas de types SIMD : ses noyaux optimisés importent les intrinsèques de C, sauf Q1, écrit en blocs comme
-pour les langages sans types vectoriels portables et 3 fois plus lent que celui de C ; en intrinsèques, il rejoint C et
-Nim passerait 5e, en sensibilité ([`docs/NIM.md`](docs/NIM.md)).
 
 **8. D.** Le contrôle de C avec templates, exécution à la compilation, `core.simd`, indications de branchement et de
 préchargement de druntime et atomiques à ordres explicites : 4e score de l'étude (72,6). Ce qui le fait reculer au rang
@@ -343,17 +355,17 @@ du langage.
 ## Limites
 
 * Deux processeurs Intel, virtualisés et partagés ; ni AMD, ni ARM, ni compteurs matériels.
-* Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Dix langages ont été relus après coup par des connaisseurs. Ada et Fortran y ont gagné deux places chacun,
-  par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de mesure) ; D une
-  place, par la correction de son Q1 optimisé et deux errata de la règle v1 ; Rust trois places, surtout par la
-  remesure des queues de latence de K8, qui a aussi déplacé Zig, C3, Nim et Ada ; Chapel une place par trois errata de
-  la matrice ; Mojo 2,7 points et Julia 1,8 point, mais aucune place, par des errata de la matrice ; Zig trois places,
-  mais par une version de compilateur que la règle exclut ; C# et Nim rien, leurs remarques ne relevant ni erratum ni
-  erreur du banc. Des versions optimisées mieux travaillées vaudraient deux places de plus à Nim (Q1 en intrinsèques),
-  une ou deux à Julia, une à Rust et,
-  cumulées avec un autre choix de code naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour dépasser Mojo au
-  score : la règle les garde hors du classement, mais l'effort d'implémentation compte.
+* Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à l'autre.
+  Onze langages ont été relus après coup par des connaisseurs. Ada et Fortran y ont gagné deux places chacun, par la
+  correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de mesure) ; D une place,
+  par la correction de son Q1 optimisé et deux errata de la règle v1 ; Rust deux places (trois avant les errata de C3),
+  surtout par la remesure des queues de latence de K8, qui a aussi déplacé Zig, C3, Nim et Ada ; Chapel une place par
+  trois errata de la matrice ; Mojo 2,7 points, Julia 1,8 point et C3 0,9 point, mais aucune place, par des errata de la
+  matrice (ceux de C3 font passer Nim devant Rust, à égalité) ; Zig trois places, mais par une version de compilateur
+  que la règle exclut ; C# et Nim rien, leurs remarques ne relevant ni erratum ni erreur du banc. Des versions
+  optimisées mieux travaillées vaudraient une place de plus à Nim (Q1 en intrinsèques), une ou deux à Julia et à Rust,
+  aucune à C3 et, cumulées avec un autre choix de code naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour
+  dépasser Mojo au score : la règle les garde hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine (Cascade Lake pour Ada et Fortran, Emerald Rapids
   pour D et Rust), puis reportées sur les données principales par des rapports appariés ; pour une clé de Fortran et une
   de D, par un témoin mesuré sur le même hôte, au prix d'un écart au plan pour Fortran
@@ -395,7 +407,7 @@ du langage.
 ## Une autre étude, un autre ordre : pourquoi
 
 Le « Banc de sympathie mécanique », une étude voisine faite sur le même processeur que ma machine 3, classe C 11e sur 18
-langages communs, là où je le classe 1er. Corrélation de rang entre les deux ordres : 0,78 (0,77 le 30 octobre). Je l'ai
+langages communs, là où je le classe 1er. Corrélation de rang entre les deux ordres : 0,77, comme le 30 octobre. Je l'ai
 confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATION.md`](docs/CONFRONTATION.md)) :
 
 * **Leur règle du « standard »** (une extension du compilateur, POSIX pour C, une option globale ou un module
@@ -437,6 +449,8 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   [`docs/DLANG.md`](docs/DLANG.md) et [`results/report_d.md`](results/report_d.md).
 * La remarque sur Nim (Q1 en blocs conforme à la pratique de sa classe, cause du stencil naturel, sensibilités) :
   [`docs/NIM.md`](docs/NIM.md) et [`results/report_nim.md`](results/report_nim.md).
+* La remarque sur C3 (cinq errata de la matrice, `noalias` posé sur le mauvais paramètre, réduction de K5, démarrage des
+  fils, `--optlevel=max`) : [`docs/C3.md`](docs/C3.md) et [`results/report_c3.md`](results/report_c3.md).
 * La sensibilité « sans SIMD explicite », le classement des variantes (types vectoriels du langage, intrinsèques de la
   plateforme, intrinsèques importées) et le décompte corrigé des formes de Q1 (9 contre 5) :
   [`docs/NOSIMD.md`](docs/NOSIMD.md) et [`results/report_nosimd.md`](results/report_nosimd.md) ; note d'explication
@@ -507,6 +521,14 @@ python3 tools/measure_rust.py              # remarque sur Rust : paires et K8 re
 
 ```bash
 python3 analysis/rust_check.py             # rapport de K7 -> results/transfers.json ; scénarios -> report_rust.md
+```
+
+```bash
+python3 tools/measure_c3.py                # remarque sur C3 : paires et --optlevel=max -> results/raw_c3
+```
+
+```bash
+python3 analysis/c3_check.py               # errata de C3 (déjà dans la matrice) et scénarios -> report_c3.md
 ```
 
 ```bash

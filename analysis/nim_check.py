@@ -83,7 +83,8 @@ def scaled(data, factors):
     return d
 
 
-def main():
+def main(suffix=""):
+    """suffix : sorties results/nim_check<suffix>.json et report_nim<suffix>.md (« _current » : état actuel)."""
     data, lat, *_ = v2.dataset_main(transfers=True)
     v2.align_lat(data, lat)
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
@@ -135,15 +136,15 @@ def main():
         print(f"{name} : Nim {z['ms0'][LANG]:.2f} points, C {z['C'][LANG]:.1f}, E {z['E'][LANG]:.1f}, "
               f"D {z['D'][LANG]:.1f}, K6 {z['Ek'].get('k6', float('nan')):.3f}, rang espéré {z['exp21'][LANG]:.2f} "
               f"({z['pos']}e), rang 90 % {z['rank90'][LANG]}", flush=True)
-    json.dump(out, open(os.path.join(ROOT, "results", "nim_check.json"), "w"), indent=1, default=float)
-    report(out)
+    json.dump(out, open(os.path.join(ROOT, "results", f"nim_check{suffix}.json"), "w"), indent=1, default=float)
+    report(out, suffix)
 
 
 def f(x, d=1):
     return "—" if x is None else f"{x:.{d}f}".replace(".", ",")
 
 
-def report(o):
+def report(o, suffix=""):
     L = ["# Remarque sur Nim : rapports appariés et scénarios\n",
          "Plan : `docs/NIM.md`. Mesures : `results/raw_nim/` (machine 12, 7 processus par cellule). Code :",
          "`analysis/nim_check.py`. Processus rejetés : " + (str(len(o["bad"])) if o["bad"] else "aucun") + ".\n",
@@ -177,8 +178,8 @@ def report(o):
         top = ", ".join(f"{i + 1}. {NAMES.get(l, l)} ({f(z['exp21'][l], 2)}, {f(z['ms0'][l])})"
                         for i, l in enumerate(z["order21"][:14]))
         L.append(f"**{name}** : {top}.\n")
-    open(os.path.join(ROOT, "results", "report_nim.md"), "w").write("\n".join(L) + "\n")
+    open(os.path.join(ROOT, "results", f"report_nim{suffix}.md"), "w").write("\n".join(L) + "\n")
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else "")

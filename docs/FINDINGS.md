@@ -519,7 +519,8 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   1,05), pas sur K9 tuned (1,45).
 * **Queues de latence de K8 remesurées** (machine 11, 25 implémentations × 7 processus) : la plus régulière est celle de
   Zig (p99,9 = 3,0 fois la médiane), puis Nim (3,1) et Mojo (3,2) ; la plus longue des langages compilés sans
-  ramasse-miettes, celle de C3 (p99,9 277 µs, maximum 2,2 ms, comme sur Cascade Lake) ; la pire pause des langages
+  ramasse-miettes, celle de C3 par son p99,9 (277 µs ; son maximum, 2,2 ms, est au niveau d'Odin et de Mojo : précisé le
+  1/11, remarque sur C3) ; la pire pause des langages
   compilés, D (89 ms) ; Julia 30 fois la médiane ; Python 0,76 s. Le vol corrèle encore avec le p99,9 (corrélation de
   rang 0,49 sur les 70 processus des langages à `malloc`), mais sept processus par langage en amortissent l'effet.
 
@@ -539,3 +540,21 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   résultats sont écrasés, la boucle ne faisant plus que la barrière volatile (`results/nim_check/gcc_k5.txt`).
 * **Arène de K8 sans vérification de débordement** : × 0,91.
 
+## Remarque sur C3 (1er novembre, machine 13, Emerald Rapids) — `docs/C3.md`, `results/c3_check/`
+
+* **C3 0.8.5_1** (LLVM 23.1.5) : `-O3` prend le pipeline O2 de LLVM ; -O4 et -O5 donnent O3 avec des flottants
+  relâchés, `--optlevel=max` donne O3 en flottants stricts (× 0,98 en moyenne sur les 27 mesures du score).
+* **Réassociation** : seulement globale (`--fp-math=relaxed|fast`, qui pose `reassoc` sur tout le module) ; en mode
+  strict, `.sum()` d'un vecteur flottant est une réduction ordonnée (16 `vaddss`). Remplacée par un arbre, elle ne
+  change rien de mesurable sur K5 (× 1,02) : la chaîne se recouvre avec l'appel suivant.
+* **`@noalias`** est posé sur le premier paramètre quel que soit le paramètre annoté (`llvm_codegen.c`, l. 1245), et
+  rien n'est posé sur une tranche.
+* **Blocs `asm`** : 217 mnémoniques x86, ni chargement vectoriel, ni FMA, ni `pause`, ni barrière ; `asm("…")` passe
+  du texte sans opérandes.
+* **Pas de TBAA** dans l'IR de C3 : la boucle de Q1 naturel relit les sept pointeurs de colonnes à chaque ligne.
+* **`alloc::new`** appelle `calloc` par l'interface `Allocator`, résolue par `.dyn_search` (recherche linéaire, sans
+  cache) ; **`HashMap`** est chaînée, une `Entry` allouée par insertion.
+* **`Thread.create`** attend sous Linux que le fils ait démarré (sémaphore) ; lancer les fils par
+  `posix::pthread_create` ne gagne que 6 % sur K9 mt (non significatif).
+* **Sur Emerald Rapids**, le K9 de C3 met 1,58 fois le temps de celui de C en un fil et 2,18 fois à quatre (0,93 et 1,40
+  sur Cascade Lake) ; aligner ses accès ne change rien.
