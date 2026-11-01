@@ -25,7 +25,11 @@ E (K4) et par D1 (K4 et K9 naturels), un double compte relevé par l'audit (sect
 
 V2_OVERRIDES = {
     # C (clang 23 + glibc)
+    ("c", "A3"): (1, "champs de bits (norme) et __attribute__((packed)) : extension documentée de clang et gcc (règle v1 à ½ : "
+                     "erratum du 1/11, remarque sur C)"),
     ("c", "C1"): (1, "vector_size : extension documentée de clang et gcc, stable"),
+    ("c", "C2"): (1, "<immintrin.h> livré avec clang et gcc : intrinsèques documentées (règle v1 à ½ : erratum du 1/11, "
+                     "remarque sur C)"),
     ("c", "C4"): (1, "#pragma clang fp reassociate(on) : contrôle local, documenté"),
     ("c", "C5"): (1, "OpenMP livré avec clang et gcc (-fopenmp), exécuté par la sonde"),
     ("c", "D4"): (1, "sched_setaffinity de la glibc (bibliothèque système de la plateforme)"),
@@ -35,6 +39,10 @@ V2_OVERRIDES = {
     ("c", "E4"): (1, "__builtin_prefetch, _mm_prefetch"),
     ("c", "F4"): (1, "mmap (POSIX, glibc)"),
     # C++ (g++ 16 + libstdc++ + glibc)
+    ("cpp", "A3"): (1, "champs de bits (norme) et __attribute__((packed)) : extension documentée de g++ et clang++ (règle v1 à "
+                       "½ : erratum du 1/11, remarque sur C)"),
+    ("cpp", "C2"): (1, "<immintrin.h> livré avec g++ et clang++ : intrinsèques documentées (règle v1 à ½ : erratum du 1/11, "
+                       "remarque sur C)"),
     ("cpp", "C1"): (1, "vector_size : extension documentée de g++ et clang++, stable, comme pour C ; std::simd de C++26, "
                        "qu'utilise le banc, reste expérimental dans GCC 16 (justification précisée le 1/11, remarque sur C++)"),
     ("cpp", "C5"): (1, "OpenMP livré avec g++ (-fopenmp) ; par_unseq reste série sans TBB"),
