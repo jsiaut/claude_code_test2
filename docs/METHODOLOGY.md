@@ -892,3 +892,10 @@ Robustesse :
   2 % (un deux fois), aucun gardé au-dessus (vol médian 0,39 %, maximum 2,00 %). Rien d'autre ne tournait ; pendant
   les mesures, seuls des fichiers ont été écrits, et poussés une fois (19:26:11, adaptation des scénarios de l'état
   actuel prévue au plan 3.5).
+* 2026-11-01, 20 h 05 à 20 h 20 : **erreur de mon code d'analyse, avant toute publication.** Dans
+  `analysis/analyze_v3.py`, la boucle ajoutée pour reporter le rapport du harnais de K9 sur la réplication réutilisait
+  le nom `keys`, la liste des clés du score, que la simulation nulle de la réplication relit ensuite : toutes ses
+  simulations ne gardaient plus que K9 et étaient écartées, et l'analyse s'arrêtait. Corrigé (variable renommée) ;
+  la régénération a été relancée en entier. `analysis/k9_check.py` n'utilise pas ce code : ses résultats ne
+  changent pas.
+

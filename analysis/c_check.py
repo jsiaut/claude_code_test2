@@ -146,6 +146,7 @@ def main():
         json.dump(out, open(os.path.join(ROOT, "results", "c_check.json"), "w"), indent=1, default=float)
         report(out)
         return
+    current = "--current" in sys.argv  # état actuel (harnais commun de K9, docs/K9.md) : sorties *_current
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
     data, lat, *_ = v2.dataset_main(transfers=True)
     v2.align_lat(data, lat)
@@ -171,9 +172,14 @@ def main():
              "I-K9-CL": dict(d=scaled(data, k9cl)), "R-v1": dict(v1_only=True), "R-ISO": dict(crule="R"),
              "T1": dict(d=scaled(data, t1)), "T2": dict(d=scaled(data, merge(t1, k9cl))),
              "T3": dict(d=scaled(data, merge(t1, k9cl, k8)))}
+    if current:  # K9 au harnais commun pour toutes les implémentations : I-K9-CL et T2 n'ont plus d'objet
+        plans = {"Publié": {}, "S-K8-val": plans["S-K8-val"], "S-K8-it": plans["S-K8-it"], "S-K8": plans["S-K8"],
+                 "R-v1": plans["R-v1"], "R-ISO": plans["R-ISO"], "T1": plans["T1"],
+                 "T1+S-K8": dict(d=scaled(data, merge(t1, k8)))}
+        pen = {}
     out = {"bad": bad, "times_ms": times, "ratios": {n: {kk(k): v for k, v in dd.items()} for n, dd in r.items()},
            "k9_penalty_cl": {kk(k): v for k, v in pen.items()}, "k8_frontier_ms": None, "scenarios": {},
-           "control_v1": control_v1(c3)}
+           "control_v1": control_v1(c3), "current": current}
     for name, kw in plans.items():
         z = out["scenarios"][name] = run(kw.get("d", data), lat, langs, footprint, c3, erratum=kw.get("erratum", True),
                                          crule=kw.get("crule", "main"), v1_only=kw.get("v1_only", False))
@@ -181,8 +187,8 @@ def main():
         print(f"{name} : C {p['c']['MS']:.2f} ({z['exp21']['c']:.2f}, {z['pos']}e, 1er {100 * z['first']['c']:.0f} %), "
               f"C++ {p['cpp']['MS']:.2f} ({z['exp21']['cpp']:.2f}), Odin {p['odin']['MS']:.2f} ({z['exp21']['odin']:.2f}) ; "
               f"tête : {', '.join(z['order21'][:4])}", flush=True)
-    ref = json.load(open(os.path.join(ROOT, "results", "cpp_check.json")))["scenarios"]["Publié"]
-    av = out["scenarios"]["Avant"]
+    ref = json.load(open(os.path.join(ROOT, "results", "k9_check.json" if current else "cpp_check.json")))["scenarios"]["Publié"]
+    av = out["scenarios"]["Publié" if current else "Avant"]
     out["check_before"] = max(max(abs(av["ms0"][l] - ref["ms0"][l]), abs(av["exp21"][l] - ref["exp21"][l])) for l in RANKED)
     print(f"Contrôle : écart maximal du scénario Avant au publié d'avant la remarque = {out['check_before']:.2e}")
     # frontière de K8 dans le publié : meilleur temps (moyenne géométrique) parmi les langages classés
@@ -191,20 +197,23 @@ def main():
     lf = min(best, key=best.get)
     out["k8_frontier_ms"] = {"lang": lf, "ms": 1e3 * best[lf], "c_tuned_ms": 1e3 * gm(data["c"][K8T]),
                              "c_tuned_s_k8_ms": 1e3 * gm(data["c"][K8T]) * min(val, it)}
-    json.dump(out, open(os.path.join(ROOT, "results", "c_check.json"), "w"), indent=1, default=float)
-    report(out)
+    suffix = "_current" if current else ""
+    json.dump(out, open(os.path.join(ROOT, "results", f"c_check{suffix}.json"), "w"), indent=1, default=float)
+    report(out, suffix)
 
 
 def f(x, d=1):
     return "—" if x is None else f"{x:.{d}f}".replace(".", ",")
 
 
-def report(o):
+def report(o, suffix=""):
     INFO = {"I-K8-gcc", "I-K9-CL", "R-v1", "R-ISO", "T1", "T2", "T3"}
     L = ["# Remarque sur C : rapports appariés et scénarios\n",
          "Plan : `docs/C.md`. Mesures : `results/raw_c/` (machine 16, 7 processus par cellule). Code : `analysis/c_check.py`.",
          "Processus rejetés : " + (str(len(o["bad"])) if o["bad"] else "aucun") + ".",
-         f"Contrôle : le scénario Avant reproduit le publié d'avant la remarque (écart maximal {o['check_before']:.1e}).\n",
+         (f"Contrôle : le scénario Publié reproduit results/k9_check.json (écart maximal {o['check_before']:.1e}).\n"
+          if o.get("current") else
+          f"Contrôle : le scénario Avant reproduit le publié d'avant la remarque (écart maximal {o['check_before']:.1e}).\n"),
          "## Rapports appariés (même hôte)\n", "| Rapport | Clé | Ancien (ms) | Nouveau (ms) | Rapport | IC 95 % |",
          "|---|---|---|---|---|---|"]
     for n, dd in o["ratios"].items():
@@ -214,8 +223,9 @@ def report(o):
     fr = o["k8_frontier_ms"]
     L += ["", f"Frontière de K8 dans le publié : {NAMES.get(fr['lang'], fr['lang'])}, {f(fr['ms'], 1)} ms ; K8 tuned de C "
           f"{f(fr['c_tuned_ms'], 1)} ms, {f(fr['c_tuned_s_k8_ms'], 1)} ms avec la meilleure forme (S-K8).",
-          "Pénalité du harnais de K9 sur Cascade Lake, à code égal (C++ / C par gcc) : "
-          + " ; ".join(f"{k} {f(v, 3)}" for k, v in o["k9_penalty_cl"].items()) + ".\n",
+          ("Pénalité du harnais de K9 sur Cascade Lake, à code égal (C++ / C par gcc) : "
+           + " ; ".join(f"{k} {f(v, 3)}" for k, v in o["k9_penalty_cl"].items()) + ".\n") if o["k9_penalty_cl"] else
+          "État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md) ; Publié = results/k9_check.json.\n",
           "## Scénarios (analyse globale de la v3 rejouée, 20 000 variantes)\n",
           "| Scénario | Statut | C | C++ | Odin | Rang espéré de C | Place de C | C 1er | C devant C++ | C devant Odin | Tête |",
           "|---|---|---|---|---|---|---|---|---|---|---|"]
@@ -225,7 +235,9 @@ def report(o):
         L.append(f"| {name} | {st} | {f(p['c']['MS'], 2)} | {f(p['cpp']['MS'], 2)} | {f(p['odin']['MS'], 2)} | "
                  f"{f(z['exp21']['c'], 2)} | {z['pos']} | {f(100 * z['first']['c'], 0)} % | {f(100 * z['prec_c']['cpp'], 0)} % | "
                  f"{f(100 * z['prec_c']['odin'], 0)} % | {', '.join(NAMES.get(l, l) for l in z['order21'][:4])} |")
-    av, pu = o["scenarios"]["Avant"], o["scenarios"]["Publié"]
+    av, pu = o["scenarios"].get("Avant"), o["scenarios"]["Publié"]
+    if av is None:  # état actuel : pas de comparaison avant / après les errata
+        av = pu
     L += ["", "## Classement publié : avant et après les errata\n",
           "| Langage | Score | Contrôle v1 | Rang espéré avant → après | 1er avant → après |", "|---|---|---|---|---|"]
     for l in pu["order21"]:
@@ -238,7 +250,7 @@ def report(o):
         top = ", ".join(f"{i + 1}. {NAMES.get(l, l)} ({f(z['exp21'][l], 2)}, {f(z['ms0'][l])})"
                         for i, l in enumerate(z["order21"][:8]))
         L.append(f"**{name}** : {top}.\n")
-    open(os.path.join(ROOT, "results", "report_c.md"), "w").write("\n".join(L) + "\n")
+    open(os.path.join(ROOT, "results", f"report_c{suffix}.md"), "w").write("\n".join(L) + "\n")
 
 
 if __name__ == "__main__":
