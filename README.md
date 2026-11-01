@@ -468,13 +468,12 @@ du langage.
   threads passent par un module privé de `std`.
 * Le plafond de K4 n'admet que des formes scalaires et compte donc la vectorisation automatique (voir plus haut).
 * Ailleurs, le plafond admet le SIMD explicite (« toutes techniques »). Sans lui
-  ([`docs/NOSIMD.md`](docs/NOSIMD.md)), les mêmes douze langages restent en tête, les neuf derniers ne bougent pas, et
-  C et Odin restent dans les six premiers ; C++ y est aussi, sauf à la lettre, où il passe 9e, de peu (rang moyen
-  6,96, contre 6,74 à Nim, 7e). L'ordre des douze dépend du traitement des formes scalaires qui manquent : à la
-  lettre, Chapel, Fortran et Julia passent devant, parce que dans K1 et K5 le SIMD des autres porte aussi la
-  disposition SoA et la réassociation de la somme ; sans les noyaux vectorisables, C, Odin et C++ gardent les trois
-  premières places ; à forme égale pour tous, Odin est 1er, puis C++, Zig et C au coude à coude (rang moyen 3,48 à
-  3,65).
+  ([`docs/NOSIMD.md`](docs/NOSIMD.md)), les mêmes douze langages restent en tête et les neuf mêmes derrière (Go et
+  Java, au coude à coude, échangent leurs places à la lettre) ; C et Odin restent dans les six premiers, C++ dans les
+  sept. L'ordre des douze dépend du traitement des formes scalaires qui manquent : à la lettre, Chapel, Fortran et
+  Julia passent devant, parce que dans K1 et K5 le SIMD des autres porte aussi la disposition SoA et la réassociation
+  de la somme ; à forme égale pour tous, comme sans les noyaux vectorisables, C, Odin et C++ gardent les trois
+  premières places (Odin 1er à forme égale, C 1er sans les noyaux vectorisables).
 * Trois échauffements pour les langages à JIT : les boucles chaudes tournent souvent en code OSR (compilé pour
   reprendre une boucle en cours), sans atteindre le niveau d'optimisation final. Mesuré pour C# : 0 à 2,5 % en moyenne
   (moins d'un point), de −15 % à +16 % selon le noyau ([`docs/CSHARP.md`](docs/CSHARP.md)) ; non mesuré pour Java,

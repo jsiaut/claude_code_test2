@@ -306,3 +306,13 @@ places changent, de justesse. À la lettre (S-scalaire), C++ passe 9e (rang moye
 dans deux. À forme égale (S-symétrique), Zig passe 3e devant C (3,54 contre 3,65 ; Odin 1er, 2,69 ; C++ 2e, 3,48),
 chacun des quatre étant 1er dans 20 à 28 % des variantes. Sans les mesures mt, C est 1er dans 43 % des variantes
 (52 % au publié).
+
+### 4.10 Recalcul après le harnais commun de K9 (1er novembre, soir)
+
+Recalculé de nouveau (`results/report_nosimd_current.md`, témoin égal au scénario Publié de `results/k9_check.json` :
+K9 de toutes les implémentations remesuré sur la machine 16, grilles allouées une fois) : les douze premiers restent
+les mêmes et les neuf derniers aussi, mais à la lettre (S-scalaire) Go et Java échangent les 15e et 16e places (rang
+moyen 15,11 contre 15,16). À la lettre, C est 5e, Odin 6e et C++ 7e (il était 9e) : C et Odin restent dans les six
+premiers dans les trois scénarios, C++ dans les sept. À forme égale (S-symétrique), C, Odin et C++ retrouvent les
+trois premières places : Odin 1er (2,64), C 2e (3,32), C++ 3e (3,33), Zig 4e (4,25) ; sans les noyaux vectorisables,
+C, Odin, C++, comme avant. Sans les mesures mt, C est 1er dans 48 % des variantes (49 % au publié).
