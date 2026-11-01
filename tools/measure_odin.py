@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Mesures de la vérification de la remarque sur Odin (plan : docs/ODIN.md, section 3), sur l'hôte Emerald Rapids actuel
-(machine 13). La correction du banc (odin_fix / odin_ref) entre dans le classement publié ; le reste est sensibilité.
+(machine 14 : le plan disait 13, la VM avait redémarré vers 12 h 37 sur un hôte du même modèle). La correction du banc
+(odin_fix / odin_ref) entre dans le classement publié ; le reste est sensibilité.
 
 Implémentations (même hôte, appariées par passe), sortie results/raw_odin/<implémentation>.jsonl, étiquette « odin » :
 * odin_ref : source de la campagne (bench/odin/ms.odin) recompilé sur l'hôte, options du banc (-o:speed) ;

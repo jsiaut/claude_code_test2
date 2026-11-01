@@ -1,0 +1,189 @@
+odin_ref   k9   tuned                           p0 n=10 med=0.019787s ok={True} rc=0 
+odin_ref   k2   tuned                262144     p0 n=10 med=0.025771s ok={True} rc=0 
+odin_ref   k1   natural_shuffled     energy     p0 n=10 med=0.032781s ok={True} rc=0 
+odin_ref   k9   natural                         p0 n=10 med=0.020701s ok={True} rc=0 
+odin_ref   k6   natural              q1         p0 n=10 med=0.083206s ok={True} rc=0 
+odin_ref   k2   tuned                16384      p0 n=10 med=0.007555s ok={True} rc=0 
+odin_ref   k8   tuned                           p0 n=8 med=0.304300s ok={True} rc=0 
+odin_ref   k7   tuned                           p0 n=6 med=0.200938s ok={True} rc=0 
+odin_ref   k4   natural_unsorted                p0 n=10 med=0.001680s ok={True} rc=0 
+odin_ref   k7   natural                         p0 n=3 med=0.961125s ok={True} rc=0 
+odin_ref   k4   branchless_unsorted             p0 n=10 med=0.001908s ok={True} rc=0 
+odin_ref   k1   soa                  energy     p0 n=10 med=0.002814s ok={True} rc=0 
+odin_ref   k1   natural              energy     p0 n=10 med=0.038698s ok={True} rc=0 
+odin_ref   k2   tuned                8388608    p0 n=4 med=0.155496s ok={True} rc=0 
+odin_ref   k6   mt                   q6         p0 n=10 med=0.003771s ok={True} rc=0 
+odin_ref   k6   mt                   q1         p0 n=10 med=0.011297s ok={True} rc=0 
+odin_ref   k3   sw_padded                       p0 n=10 med=0.087383s ok={True} rc=0 
+odin_ref   k6   natural              q6         p0 n=10 med=0.067915s ok={True} rc=0 
+odin_ref   k5   natural                         p0 n=10 med=0.107239s ok={True} rc=0 
+odin_ref   k6   tuned                q6         p0 n=10 med=0.013540s ok={True} rc=0 
+odin_ref   k6   tuned                q1         p0 n=10 med=0.038702s ok={True} rc=0 
+odin_ref   k5   tuned                           p0 n=10 med=0.003496s ok={True} rc=0 
+odin_ref   k8   tuned_alloc                     p0 n=3 med=1.006201s ok={True} rc=0 
+odin_ref   k3   rmw_padded                      p0 n=10 med=0.272030s ok={True} rc=0 
+odin_ref   k8   natural                         p0 n=3 med=1.400258s ok={True} rc=0 
+odin_ref   k1   aos                  energy     p0 n=10 med=0.028735s ok={True} rc=0 
+odin_ref   k9   mt                              p0 n=10 med=0.011671s ok={True} rc=0 
+odin_ref   k2   tuned                16384      p0 n=10 med=0.007593s ok={True} rc=0 
+odin_ref   k2   tuned                8388608    p0 n=4 med=0.176500s ok={True} rc=0 
+odin_ref   k8   tuned_alloc                     p0 n=3 med=1.079135s ok={True} rc=0 
+odin_ref   k5   natural                         p0 n=10 med=0.096380s ok={True} rc=0 
+odin_ref   k9   tuned                           p0 n=10 med=0.025875s ok={True} rc=0 
+odin_ref   k6   natural              q6         p0 n=10 med=0.072190s ok={True} rc=0 
+odin_ref   k6   tuned                q1         p0 n=10 med=0.052204s ok={True} rc=0 
+odin_ref   k4   branchless_unsorted             p0 n=10 med=0.003012s ok={True} rc=0 
+odin_ref   k6   tuned                q6         p0 n=10 med=0.014954s ok={True} rc=0 
+odin_ref   k3   sw_padded                       p0 n=10 med=0.098760s ok={True} rc=0 
+odin_ref   k4   natural_unsorted                p0 n=10 med=0.001562s ok={True} rc=0 
+odin_ref   k1   aos                  energy     p0 n=10 med=0.030821s ok={True} rc=0 
+odin_ref   k5   tuned                           p0 n=10 med=0.005121s ok={True} rc=0 
+odin_ref   k6   mt                   q1         p0 n=10 med=0.011788s ok={True} rc=0 
+odin_ref   k1   natural              energy     p0 n=10 med=0.040143s ok={True} rc=0 
+odin_ref   k1   soa                  energy     p0 n=10 med=0.005593s ok={True} rc=0 
+odin_ref   k3   rmw_padded                      p0 n=10 med=0.257459s ok={True} rc=0 
+odin_ref   k8   natural                         p0 n=3 med=1.517027s ok={True} rc=0 
+odin_ref   k2   tuned                262144     p0 n=10 med=0.024430s ok={True} rc=0 
+odin_ref   k9   natural                         p0 n=10 med=0.025406s ok={True} rc=0 
+odin_ref   k7   natural                         p0 n=3 med=1.084508s ok={True} rc=0 
+odin_ref   k8   tuned                           p0 n=8 med=0.287767s ok={True} rc=0 
+odin_ref   k9   mt                              p0 n=10 med=0.011001s ok={True} rc=0 
+odin_ref   k7   tuned                           p0 n=6 med=0.216753s ok={True} rc=0 
+odin_ref   k6   natural              q1         p0 n=10 med=0.090553s ok={True} rc=0 
+odin_ref   k1   natural_shuffled     energy     p0 n=10 med=0.041585s ok={True} rc=0 
+odin_ref   k6   mt                   q6         p0 n=10 med=0.006339s ok={True} rc=0 
+odin_ref   k4   branchless_unsorted             p0 n=10 med=0.002327s ok={True} rc=0 
+odin_ref   k2   tuned                8388608    p0 n=4 med=0.438785s ok={True} rc=0 
+odin_ref   k6   natural              q1         p0 n=10 med=0.073783s ok={True} rc=0 
+odin_ref   k2   tuned                262144     p0 n=10 med=0.024053s ok={True} rc=0 
+odin_ref   k7   natural                         p0 n=3 med=1.141927s ok={True} rc=0 
+odin_ref   k6   natural              q6         p0 n=10 med=0.064414s ok={True} rc=0 
+odin_ref   k5   tuned                           p0 n=10 med=0.003987s ok={True} rc=0 
+odin_ref   k9   tuned                           p0 n=10 med=0.018884s ok={True} rc=0 
+odin_ref   k3   sw_padded                       p0 n=10 med=0.094600s ok={True} rc=0 
+odin_ref   k1   natural              energy     p0 n=10 med=0.036416s ok={True} rc=0 
+odin_ref   k9   natural                         p0 n=10 med=0.018055s ok={True} rc=0 
+odin_ref   k8   tuned_alloc                     p0 n=3 med=1.154399s ok={True} rc=0 
+odin_ref   k1   natural_shuffled     energy     p0 n=10 med=0.038504s ok={True} rc=0 
+odin_ref   k5   natural                         p0 n=10 med=0.100124s ok={True} rc=0 
+odin_ref   k6   tuned                q1         p0 n=10 med=0.039766s ok={True} rc=0 
+odin_ref   k1   soa                  energy     p0 n=10 med=0.002971s ok={True} rc=0 
+odin_ref   k2   tuned                16384      p0 n=10 med=0.007603s ok={True} rc=0 
+odin_ref   k9   mt                              p0 n=10 med=0.010702s ok={True} rc=0 
+odin_ref   k6   tuned                q6         p0 n=10 med=0.016435s ok={True} rc=0 
+odin_ref   k4   natural_unsorted                p0 n=10 med=0.001646s ok={True} rc=0 
+odin_ref   k1   aos                  energy     p0 n=10 med=0.031983s ok={True} rc=0 
+odin_ref   k6   mt                   q6         p0 n=10 med=0.005536s ok={True} rc=0 
+odin_ref   k6   mt                   q1         p0 n=10 med=0.014090s ok={True} rc=0 
+odin_ref   k7   tuned                           p0 n=6 med=0.215585s ok={True} rc=0 
+odin_ref   k3   rmw_padded                      p0 n=10 med=0.292731s ok={True} rc=0 
+odin_ref   k8   tuned                           p0 n=8 med=0.312887s ok={True} rc=0 
+odin_ref   k8   natural                         p0 n=3 med=1.793385s ok={True} rc=0 
+odin_ref   k5   tuned                           p0 n=10 med=0.005692s ok={True} rc=0 
+odin_ref   k9   mt                              p0 n=10 med=0.010695s ok={True} rc=0 
+odin_ref   k6   mt                   q1         p0 n=10 med=0.011739s ok={True} rc=0 
+odin_ref   k1   aos                  energy     p0 n=10 med=0.031672s ok={True} rc=0 
+odin_ref   k7   natural                         p0 n=3 med=1.049204s ok={True} rc=0 
+odin_ref   k6   mt                   q6         p0 n=10 med=0.003974s ok={True} rc=0 
+odin_ref   k8   natural                         p0 n=3 med=1.302259s ok={True} rc=0 
+odin_ref   k6   natural              q1         p0 n=10 med=0.068983s ok={True} rc=0 
+odin_ref   k1   natural_shuffled     energy     p0 n=10 med=0.032153s ok={True} rc=0 
+odin_ref   k1   soa                  energy     p0 n=10 med=0.002932s ok={True} rc=0 
+odin_ref   k9   natural                         p0 n=10 med=0.018484s ok={True} rc=0 
+odin_ref   k7   tuned                           p0 n=6 med=0.218992s ok={True} rc=0 
+odin_ref   k3   sw_padded                       p0 n=10 med=0.087590s ok={True} rc=0 
+odin_ref   k9   tuned                           p0 n=10 med=0.017557s ok={True} rc=0 
+odin_ref   k6   tuned                q1         p0 n=10 med=0.042612s ok={True} rc=0 
+odin_ref   k6   natural              q6         p0 n=10 med=0.071166s ok={True} rc=0 
+odin_ref   k2   tuned                8388608    p0 n=4 med=0.169668s ok={True} rc=0 
+odin_ref   k2   tuned                262144     p0 n=10 med=0.023914s ok={True} rc=0 
+odin_ref   k3   rmw_padded                      p0 n=10 med=0.390691s ok={True} rc=0 
+odin_ref   k8   tuned_alloc                     p0 n=3 med=1.046462s ok={True} rc=0 
+odin_ref   k5   natural                         p0 n=10 med=0.095151s ok={True} rc=0 
+odin_ref   k8   tuned                           p0 n=8 med=0.293656s ok={True} rc=0 
+odin_ref   k1   natural              energy     p0 n=10 med=0.038605s ok={True} rc=0 
+odin_ref   k2   tuned                16384      p0 n=10 med=0.007860s ok={True} rc=0 
+odin_ref   k4   natural_unsorted                p0 n=10 med=0.002733s ok={True} rc=0 
+odin_ref   k6   tuned                q6         p0 n=10 med=0.014594s ok={True} rc=0 
+odin_ref   k4   branchless_unsorted             p0 n=10 med=0.002035s ok={True} rc=0 
+odin_ref   k1   natural_shuffled     energy     p0 n=10 med=0.040848s ok={True} rc=0 
+odin_ref   k2   tuned                16384      p0 n=10 med=0.023423s ok={True} rc=0 
+odin_ref   k7   natural                         p0 n=3 med=1.233414s ok={True} rc=0 
+odin_ref   k6   mt                   q6         p0 n=10 med=0.004024s ok={True} rc=0 
+odin_ref   k9   mt                              p0 n=10 med=0.011472s ok={True} rc=0 
+odin_ref   k3   sw_padded                       p0 n=10 med=0.089906s ok={True} rc=0 
+odin_ref   k8   natural                         p0 n=3 med=1.676317s ok={True} rc=0 
+odin_ref   k6   mt                   q1         p0 n=10 med=0.013151s ok={True} rc=0 
+odin_ref   k6   tuned                q6         p0 n=10 med=0.014243s ok={True} rc=0 
+odin_ref   k7   tuned                           p0 n=6 med=0.221606s ok={True} rc=0 
+odin_ref   k9   natural                         p0 n=10 med=0.026033s ok={True} rc=0 
+odin_ref   k8   tuned                           p0 n=8 med=0.314995s ok={True} rc=0 
+odin_ref   k6   natural              q1         p0 n=10 med=0.115514s ok={True} rc=0 
+odin_ref   k4   natural_unsorted                p0 n=10 med=0.002162s ok={True} rc=0 
+odin_ref   k6   tuned                q1         p0 n=10 med=0.038242s ok={True} rc=0 
+odin_ref   k5   natural                         p0 n=10 med=0.096478s ok={True} rc=0 
+odin_ref   k1   aos                  energy     p0 n=10 med=0.034537s ok={True} rc=0 
+odin_ref   k3   rmw_padded                      p0 n=10 med=0.268243s ok={True} rc=0 
+odin_ref   k6   natural              q6         p0 n=10 med=0.074606s ok={True} rc=0 
+odin_ref   k9   tuned                           p0 n=10 med=0.038389s ok={True} rc=0 
+odin_ref   k8   tuned_alloc                     p0 n=3 med=0.987715s ok={True} rc=0 
+odin_ref   k1   soa                  energy     p0 n=10 med=0.005775s ok={True} rc=0 
+odin_ref   k5   tuned                           p0 n=10 med=0.003561s ok={True} rc=0 
+odin_ref   k1   natural              energy     p0 n=10 med=0.041086s ok={True} rc=0 
+odin_ref   k2   tuned                262144     p0 n=10 med=0.026069s ok={True} rc=0 
+odin_ref   k4   branchless_unsorted             p0 n=10 med=0.003131s ok={True} rc=0 
+odin_ref   k2   tuned                8388608    p0 n=4 med=0.222463s ok={True} rc=0 
+odin_ref   k9   tuned                           p0 n=10 med=0.024801s ok={True} rc=0 
+odin_ref   k8   tuned_alloc                     p0 n=3 med=1.022642s ok={True} rc=0 
+odin_ref   k1   aos                  energy     p0 n=10 med=0.033573s ok={True} rc=0 
+odin_ref   k7   tuned                           p0 n=6 med=0.209470s ok={True} rc=0 
+odin_ref   k2   tuned                16384      p0 n=10 med=0.007594s ok={True} rc=0 
+odin_ref   k3   rmw_padded                      p0 n=10 med=0.269255s ok={True} rc=0 
+odin_ref   k6   natural              q6         p0 n=10 med=0.071887s ok={True} rc=0 
+odin_ref   k9   mt                              p0 n=10 med=0.013310s ok={True} rc=0 
+odin_ref   k3   sw_padded                       p0 n=10 med=0.091318s ok={True} rc=0 
+odin_ref   k1   natural              energy     p0 n=10 med=0.034905s ok={True} rc=0 
+odin_ref   k4   natural_unsorted                p0 n=10 med=0.002345s ok={True} rc=0 
+odin_ref   k6   natural              q1         p0 n=10 med=0.073788s ok={True} rc=0 
+odin_ref   k6   mt                   q1         p0 n=10 med=0.017877s ok={True} rc=0 
+odin_ref   k8   tuned                           p0 n=8 med=0.318703s ok={True} rc=0 
+odin_ref   k2   tuned                8388608    p0 n=4 med=0.412393s ok={True} rc=0 
+odin_ref   k2   tuned                262144     p0 n=10 med=0.025770s ok={True} rc=0 
+odin_ref   k4   branchless_unsorted             p0 n=10 med=0.002580s ok={True} rc=0 
+odin_ref   k8   natural                         p0 n=3 med=1.682748s ok={True} rc=0 
+odin_ref   k5   tuned                           p0 n=10 med=0.003968s ok={True} rc=0 
+odin_ref   k6   mt                   q6         p0 n=10 med=0.004103s ok={True} rc=0 
+odin_ref   k6   tuned                q6         p0 n=10 med=0.014558s ok={True} rc=0 
+odin_ref   k1   soa                  energy     p0 n=10 med=0.002729s ok={True} rc=0 
+odin_ref   k1   natural_shuffled     energy     p0 n=10 med=0.038851s ok={True} rc=0 
+odin_ref   k7   natural                         p0 n=3 med=0.995018s ok={True} rc=0 
+odin_ref   k5   natural                         p0 n=10 med=0.105888s ok={True} rc=0 
+odin_ref   k9   natural                         p0 n=10 med=0.026724s ok={True} rc=0 
+odin_ref   k6   tuned                q1         p0 n=10 med=0.040951s ok={True} rc=0 
+odin_ref   k6   tuned                q6         p0 n=10 med=0.014949s ok={True} rc=0 
+odin_ref   k6   mt                   q1         p0 n=10 med=0.015724s ok={True} rc=0 
+odin_ref   k2   tuned                16384      p0 n=10 med=0.007459s ok={True} rc=0 
+odin_ref   k9   tuned                           p0 n=10 med=0.020975s ok={True} rc=0 
+odin_ref   k6   natural              q1         p0 n=10 med=0.113530s ok={True} rc=0 
+odin_ref   k7   natural                         p0 n=3 med=0.855118s ok={True} rc=0 
+odin_ref   k8   natural                         p0 n=3 med=1.448606s ok={True} rc=0 
+odin_ref   k8   tuned_alloc                     p0 n=3 med=1.107975s ok={True} rc=0 
+odin_ref   k9   natural                         p0 n=10 med=0.020614s ok={True} rc=0 
+odin_ref   k6   natural              q6         p0 n=10 med=0.069121s ok={True} rc=0 
+odin_ref   k4   natural_unsorted                p0 n=10 med=0.002230s ok={True} rc=0 
+odin_ref   k5   tuned                           p0 n=10 med=0.004941s ok={True} rc=0 
+odin_ref   k3   sw_padded                       p0 n=10 med=0.099465s ok={True} rc=0 
+odin_ref   k4   branchless_unsorted             p0 n=10 med=0.004187s ok={True} rc=0 
+odin_ref   k6   tuned                q1         p0 n=10 med=0.042107s ok={True} rc=0 
+odin_ref   k7   tuned                           p0 n=6 med=0.220721s ok={True} rc=0 
+odin_ref   k1   natural_shuffled     energy     p0 n=10 med=0.033232s ok={True} rc=0 
+odin_ref   k1   soa                  energy     p0 n=10 med=0.003138s ok={True} rc=0 
+odin_ref   k1   natural              energy     p0 n=10 med=0.039783s ok={True} rc=0 
+odin_ref   k3   rmw_padded                      p0 n=10 med=0.281329s ok={True} rc=0 
+odin_ref   k9   mt                              p0 n=10 med=0.010376s ok={True} rc=0 
+odin_ref   k2   tuned                8388608    p0 n=4 med=0.179427s ok={True} rc=0 
+odin_ref   k2   tuned                262144     p0 n=10 med=0.024407s ok={True} rc=0 
+odin_ref   k6   mt                   q6         p0 n=10 med=0.004476s ok={True} rc=0 
+odin_ref   k8   tuned                           p0 n=8 med=0.304389s ok={True} rc=0 
+odin_ref   k5   natural                         p0 n=10 med=0.093347s ok={True} rc=0 
+odin_ref   k1   aos                  energy     p0 n=10 med=0.031768s ok={True} rc=0 

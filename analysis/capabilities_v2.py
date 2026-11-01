@@ -47,6 +47,7 @@ V2_OVERRIDES = {
     # Odin
     ("odin", "D4"): (1, "core:sys/linux livré avec le compilateur"),
     ("odin", "F4"): (1, "core:sys/linux et core:mem/virtual livrés"),
+    ("odin", "C2"): (1, "intrinsèques de LLVM importées par foreign _ + @(link_name=\"llvm.x86…\"), #const pour les immédiats : mécanisme de la bibliothèque livrée (core:simd/x86, core:sys/llvm ; sonde : vpconflictd, vpternlogd) ; erratum du 1/11, remarque sur Odin"),
     # C3
     ("c3", "F4"): (1, "std::io::file::mmap (portable) et liaison std::os::posix livrés"),
     # D (LDC, compilateur de référence de l'étude)

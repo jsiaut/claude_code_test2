@@ -387,12 +387,19 @@ kappas dépassent 0,6 ; le troisième est entre 0,4 et 0,6.
 | C, D3 aide ligne de cache | 0 | `sysconf(_SC_LEVEL1_DCACHE_LINESIZE)` (glibc) ; `__GCC_DESTRUCTIVE_SIZE` = 64 prédéfini en C par clang 23 et gcc 16 | 1 ; 0,25 |
 | D, D3 | 0 | `std.parallelism.cacheLineSize` (Phobos), `core.cpuid.dataCaches` (druntime) | 1 ; 1 |
 | Odin, D3 | 0 | `base:runtime.MAP_CACHE_LINE_SIZE`, public mais réglage des tables | 0,5 ; 0,5 |
-| Odin, C2 intrinsèques | 1 | `core:simd/x86` ne couvre l'AVX-512 que par 8 procédures AVX-512F et 6 AVX-512BW | 0,5 ; 0,5 |
+| Odin, C2 intrinsèques | 1 | `core:simd/x86` ne couvre l'AVX-512 que par 8 procédures AVX-512F et 6 AVX-512BW | 0,5 ; 0,5 (v2 : 1, corrigé le 1/11, voir la note) |
 | Nim, C5 parallélisme de données | 1 | une réduction avec l'itérateur `||` ne compile pas en `-d:release` (C généré invalide) | 0,5 ; 0,25 |
 
 **Effet des cinq corrections** (`analysis/blind_corrections.py`, analyse v3 recalculée) : aucun rang ne change dans
 mon classement publié. C passe de 79,1 à 80,1, D de 70,0 à 71,1, Odin de 72,6 à 72,3 et Nim de 70,5 à 69,6. Dans la
 confrontation, le scénario D garde C au 5e rang, avec la même corrélation de 0,87.
+
+**Correction du 1er novembre (remarque sur Odin, [`docs/ODIN.md`](ODIN.md)) : Odin C2 vaut 1 en règle v2.** Le juge
+notait 1 sous ma règle et 0,5 sous la leur, en citant à la fois la couverture partielle de `core:simd/x86` et
+l'import des intrinsèques de LLVM (`foreign _` et `@(link_name="llvm.x86…")`, `#const` pour les immédiats ; sonde
+`vpconflictd`). Je n'avais retenu que la première, et baissé les deux règles. Ce mécanisme sert la bibliothèque livrée
+(`core:simd/x86` est lui-même écrit ainsi) et vaut 1 en v2 à Julia (`llvmcall`) et à Mojo (`llvm_intrinsic`) :
+C2 = 1 en v2, 0,5 en v1 (comme Julia et Mojo), 0,5 sous leur règle.
 
 Autres faits relevés par le juge, sans changer ma note :
 

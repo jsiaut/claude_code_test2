@@ -1,0 +1,14 @@
+odin_q1    k6   mt                   q1         p0 n=10 med=0.009504s ok={True} rc=0 
+odin_q1    k6   tuned                q1         p0 n=10 med=0.020638s ok={True} rc=0 
+odin_q1    k6   mt                   q1         p0 n=10 med=0.006670s ok={True} rc=0 
+odin_q1    k6   tuned                q1         p0 n=10 med=0.021161s ok={True} rc=0 
+odin_q1    k6   tuned                q1         p0 n=10 med=0.024995s ok={True} rc=0 
+odin_q1    k6   mt                   q1         p0 n=10 med=0.007209s ok={True} rc=0 
+odin_q1    k6   tuned                q1         p0 n=10 med=0.025630s ok={True} rc=0 
+odin_q1    k6   mt                   q1         p0 n=10 med=0.006861s ok={True} rc=0 
+odin_q1    k6   tuned                q1         p0 n=10 med=0.024327s ok={True} rc=0 
+odin_q1    k6   mt                   q1         p0 n=10 med=0.007408s ok={True} rc=0 
+odin_q1    k6   mt                   q1         p0 n=10 med=0.008451s ok={True} rc=0 
+odin_q1    k6   tuned                q1         p0 n=10 med=0.022972s ok={True} rc=0 
+odin_q1    k6   tuned                q1         p0 n=10 med=0.022908s ok={True} rc=0 
+odin_q1    k6   mt                   q1         p0 n=10 med=0.008832s ok={True} rc=0 

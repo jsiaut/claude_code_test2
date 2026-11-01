@@ -118,7 +118,7 @@ MATRIX = {
         "A8": (1, "u8/i16/f32"), "B1": (1, "pas de GC"),
         "B2": (1, "context.allocator, arènes core:mem (bench K8)"), "B3": (1, "valeurs sur la pile"),
         "B4": (1, "allocations explicites via l'allocateur du contexte"), "B5": (1, "rawptr, [^]T"),
-        "C1": (1, "#simd[16]f32 (bench)"), "C2": (0.5, "core:simd/x86 : AVX-512 très partiel (8 procédures AVX-512F, 6 AVX-512BW) ; corrigé le 30/10, juge à l'aveugle"), "C3": M,
+        "C1": (1, "#simd[16]f32 (bench)"), "C2": (0.5, "core:simd/x86 : AVX-512 très partiel (8 procédures AVX-512F, 6 AVX-512BW) ; le reste par import d'intrinsèques de LLVM (foreign + @(link_name), 1 en règle v2 : erratum du 1/11, remarque sur Odin)"), "C3": M,
         "C4": (0, "pas de contrôle local de la réassociation"), "C5": (0, "core:thread.Pool seulement"),
         "D1": (1, "core:thread"), "D2": (1, "intrinsics.atomic_*_explicit avec ordre"),
         "D3": (0.5, "base:runtime.MAP_CACHE_LINE_SIZE, public mais propre aux tables ; corrigé le 30/10, juge à l'aveugle"),
