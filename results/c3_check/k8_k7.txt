@@ -1,0 +1,40 @@
+# lib/std/core/alloc.c3 : alloc::new sans valeur initiale -> calloc par l'interface Allocator
+macro new(Allocator allocator, $Type, #init = ...) @nodiscard @safemacro
+{
+	$if $defined(#init):
+		$Type* val = malloc(allocator, $Type::size);
+		*val = #init;
+		return val;
+	$else
+		return ($Type*)calloc(allocator, $Type::size);
+	$endif
+}
+
+# K8 naturel de C3 (binaire de la campagne) : appels de t_build
+    dc4a:	call   15b10 <.dyn_search>
+    dc6d:	call   *%rax
+    dc98:	call   dc20 <ms.t_build>
+    dcad:	call   dc20 <ms.t_build>
+    dd2d:	call   1efe0 <std.core.builtin.panicf>
+    dd65:	call   *(%rax)
+
+# src/compiler/llvm_codegen_expr.c : .dyn_search, recherche linéaire dans la table de méthodes, sans cache
+5441:		func = c->dyn_find_function = LLVMAddFunction(c->module, ".dyn_search", c->dyn_find_function_type);
+5455:		LLVMBasicBlockRef next_parent = llvm_basic_block_new(c, "next_parent");
+5456:		LLVMBasicBlockRef missing_function = llvm_basic_block_new(c, "missing_function");
+5483:		// if (cmp) goto next_parent else compare
+5484:		LLVMBuildCondBr(builder, cmp, next_parent, compare);
+5486:		LLVMAppendExistingBasicBlock(func, next_parent);
+5487:		LLVMPositionBuilderAtEnd(builder, next_parent);
+5496:		// if (cmp) goto missing_function else get_dtable
+
+# lib/std/collections/hashmap.c3 : table chaînée, une Entry allouée par insertion
+struct Entry
+{
+	uint hash;
+	Key key;
+	Value value;
+	Entry* next;
+}
+410:	Entry* entry = alloc::new(map.allocator, Entry, { .hash = hash, .key = key, .value = value, .next = map.table[bucket_index] });
+535:	Entry* entry = alloc::new(map.allocator, Entry, { .hash = hash, .key = key, .value = value, .next = map.table[bucket_index] });

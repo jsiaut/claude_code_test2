@@ -1,0 +1,13 @@
+# Sonde fpmath.c3 (C4) : mode strict (-O3) puis --fp-math=relaxed
+## strict : réductions et additions flottantes avec drapeaux
+      1 call float @llvm.vector.reduce.fadd.v16f32(float 0.000000e+00, <16 x float> %1)
+## --fp-math=relaxed
+      1 call reassoc arcp contract float @llvm.vector.reduce.fadd.v16f32
+      1 call reassoc arcp contract float @llvm.vector.reduce.fadd.v4f32
+      1 call reassoc arcp contract float @llvm.vector.reduce.fadd.v8f32
+      1 fadd reassoc arcp contract <4 x float>
+      7 fadd reassoc arcp contract <8 x float>
+     10 fadd reassoc arcp contract float
+
+# Attributs du compilateur (aucun contrôle local des mathématiques flottantes)
+"@deprecated" "@ensure" "@enum_lookup" "@jump" "@align" "@simd" "@param" "@pure" "@require" "@return" "@allow_deprecated" "@benchmark" "@bigendian" "@builtin" "@callconv" "@stackprobe" "@nostackprobe" "@stackprotector" "@nostackprotector" "@cname" "@compact" "@const" "@constinit" "@deprecated" "@dynamic" "@export" "@feat" "@finalizer" "@format" "@if" "@init" "@inline" "@link" "@littleendian" "@local" "@maydiscard" "@mustinit" "@naked" "@noalias" "@nodiscard" "@noinit" "@noinline" "@nopadding" "@norecurse" "@noreturn" "@noredzone" "@nosanitize" "@nostrip" "@obfuscate" "@operator" "@operator_r" "@operator_s" "@optional" "@overlap" "@packed" "@private" "@public" "@reflect" "@safeinfer" "@safemacro" "@section" "@test" "@tag" "@unused" "@used" "@wasm" "@weak" "@weaklink" "@winmain" 

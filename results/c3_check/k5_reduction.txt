@@ -1,0 +1,45 @@
+# K5 tuned de C3 (bench/c3/ms, binaire de la campagne) : réduction finale
+    b069:	vxorps %xmm1,%xmm1,%xmm1
+    b06d:	vaddss %xmm1,%xmm0,%xmm1
+    b071:	vmovshdup %xmm0,%xmm2
+    b075:	vaddss %xmm2,%xmm1,%xmm1
+    b079:	vshufpd $0x1,%xmm0,%xmm0,%xmm2
+    b07e:	vaddss %xmm2,%xmm1,%xmm1
+    b082:	vshufps $0xff,%xmm0,%xmm0,%xmm2
+    b087:	vaddss %xmm2,%xmm1,%xmm1
+    b08b:	vextractf128 $0x1,%ymm0,%xmm2
+    b091:	vaddss %xmm2,%xmm1,%xmm1
+    b095:	vmovshdup %xmm2,%xmm3
+    b099:	vaddss %xmm3,%xmm1,%xmm1
+    b09d:	vshufpd $0x1,%xmm2,%xmm2,%xmm3
+    b0a2:	vaddss %xmm3,%xmm1,%xmm1
+    b0a6:	vshufps $0xff,%xmm2,%xmm2,%xmm2
+    b0ab:	vaddss %xmm2,%xmm1,%xmm1
+    b0af:	vextractf32x4 $0x2,%zmm0,%xmm2
+    b0b6:	vaddss %xmm2,%xmm1,%xmm1
+    b0ba:	vmovshdup %xmm2,%xmm3
+    b0be:	vaddss %xmm3,%xmm1,%xmm1
+    b0c2:	vshufpd $0x1,%xmm2,%xmm2,%xmm3
+    b0c7:	vaddss %xmm3,%xmm1,%xmm1
+    b0cb:	vshufps $0xff,%xmm2,%xmm2,%xmm2
+    b0d0:	vaddss %xmm2,%xmm1,%xmm1
+    b0d4:	vextractf32x4 $0x3,%zmm0,%xmm0
+    b0db:	vaddss %xmm0,%xmm1,%xmm1
+    b0df:	vmovshdup %xmm0,%xmm2
+    b0e3:	vaddss %xmm2,%xmm1,%xmm1
+    b0e7:	vshufpd $0x1,%xmm0,%xmm0,%xmm2
+    b0ec:	vaddss %xmm2,%xmm1,%xmm1
+    b0f0:	vshufps $0xff,%xmm0,%xmm0,%xmm0
+    b0f5:	vaddss %xmm0,%xmm1,%xmm0
+    b0f9:	vzeroupper
+    b0fc:	ret
+
+# Réduction finale de K5 tuned dans les autres implémentations (binaires du banc) : nombre de vaddss (chaîne ordonnée ~16, arbre 1)
+c : vaddss=1 vaddps=6
+cpp : vaddss=1 vaddps=6
+zig : vaddss=15 vaddps=3
+c3 : vaddss=16 vaddps=3
+d : vaddss=16 vaddps=3
+nim : vaddss=1 vaddps=6
+mojo : vaddss=1 vaddps=6
+go : vaddss=0 vaddps=3

@@ -1,0 +1,16 @@
+# lib/std/io/file_mmap.c3 et lib/std/core/os/mem_vm.c3
+module std::io::file::mmap @feat(POSIX, WIN32);
+import std::core::mem::vm, std::io::file;
+44:fn FileMmap? mmap_file(File file, sz offset = 0, sz len = 0, VirtualMemoryAccess access = READ, bool shared = false)
+79:fn FileMmap? mmap_open(String filename, String mode, sz offset = 0, sz len = 0, VirtualMemoryAccess access = READ, bool shared = false)
+235:fn void*? mmap_file(Fd fd, sz size, sz offset = 0, VirtualMemoryAccess access = READ, bool shared = false) @feat(POSIX)
+266:fn void*? mmap_file(Fd fd, sz size, sz offset = 0, VirtualMemoryAccess access = READ, bool shared = false) @feat(WIN32)
+
+# releasenotes.md
+1142:- Added `FileMmap` to manage memory mapped files.
+1143:- Add `vm::mmap_file` to memory map a file.
+(ligne 1142 dans : ## 0.7.5 Change list)
+
+# Sonde mmap.c3 sur /opt/msdata/k1_perm.u32, puis le premier mot lu par Python
+octets 16777216, premier mot 196513
+python : premier mot 196513

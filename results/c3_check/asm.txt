@@ -1,0 +1,25 @@
+# src/compiler/asm_target.c : mnémoniques x86 reconnues (init_asm_x86)
+nombre : 217
+aaa adcb adcl adcq adcw adcx addb addl addpd addps addq addsd addss addw adox aesdec aesdec128kl aesdec256kl aesdeclas
+t aesdecwide128kl aesdecwide256kl aesenc aesenc128kl aesenc256kl aesenclast aesencwide128kl aesencwide256kl aesimc aes
+keygenassist andn bextr blsi blsmsk blsr bswapl bswapq bzhi cbtw clc cld clflush cltq clui cmovael cmovaeq cmovaew cmo
+val cmovaq cmovaw cmovbel cmovbeq cmovbew cmovbl cmovbq cmovbw cmpxchg16b cmpxchg8b cmpxchgb cmpxchgl cmpxchgq cmpxchg
+w cpuid crc32 cwtl decb decl decq decw divb divl divq divw encodekey128 encodekey256 hlt idivb idivl idivq idivw in in
+cb incl incq incw insb insl insw int int1 int3 into invd invlpg invlpga invpcid iret iretl iretq iretw lgdt lidt loadi
+wkey lzcnt movb movl movq movsbl movsbq movsbw movslq movswl movswq movw movzbl movzbq movzbw movzlq movzwl movzwq mul
+b mull mulq mulw mulx negb negl negq negw nop nopl nopw notb notl notq notw orb orl orq orw pclmulqdq pcmpestri pcmpes
+trm pcmpgtq pcmpistri pdep pext popcnt popl popq popw push pushl pushq pushw rdrand rdseed rdtsc rdtscp ret rorx sarx 
+senduipi sha1msg1 sha1msg2 sha1nexte sha1rnds4 sha256msg1 sha256msg2 sha256rnds2 shlx shrx stui subb subl subq subw sy
+scall tzcnt uiret vaddpd vaddps vaddsd vaddss vaesdec vaesdeclast vaesenc vaesenclast vaesimc vaeskeygenassist vpclmul
+qdq vpcmpestri vpcmpestrm vpcmpgtq vpcmpistri vsha512msg1 vsha512msg2 vsha512rnds2 vsm3msg1 vsm3msg2 vsm3rnds2 vsm4key
+4 vsm4rnds4 vzeroall vzeroupper xaddb xaddl xaddq xaddw xchgb xchgl xchgq xchgw xgetbv xorb xorl xorq xorw 
+
+# Sondes (compilation -O3)
+asm_scalar : compile
+asm_vaddps : compile
+asm_vecload : Unknown instruction for the current target.
+asm_fma : Unknown instruction for the current target.
+asm_pause : Unknown instruction for the current target.
+asm_mfence : Unknown instruction for the current target.
+asm_string : compile
+asm("...") dans l'IR : asm sideeffect "pause", "~{dirflag},~{fpsr},~{flags}"

@@ -1,0 +1,48 @@
+# TBAA dans l'IR du banc (C3 -O3) et de la référence C (clang -O3)
+C3 : 0 métadonnées !tbaa
+C : 1190 métadonnées !tbaa
+
+# Q1 naturel de C3 (binaire de la campagne) : les pointeurs des colonnes sont relus dans la boucle
+000000000000b5f0 <ms.q1_natural>:
+    b5f0:	cmp    %rdx,%rsi
+    b5f3:	jb     b608 <ms.q1_natural+0x18>
+    b5f5:	ret
+    b5f6:	cs nopw 0x0(%rax,%rax,1)
+    b600:	inc    %rsi
+    b603:	cmp    %rsi,%rdx
+    b606:	je     b5f5 <ms.q1_natural+0x5>
+    b608:	mov    (%rdi),%rax
+    b60b:	cmpl   $0x28e7,(%rax,%rsi,4)
+    b612:	jg     b600 <ms.q1_natural+0x10>
+    b614:	mov    0x50(%rdi),%rax
+    b618:	movzbl (%rax,%rsi,1),%eax
+    b61c:	mov    0x60(%rdi),%r8
+    b620:	movzbl (%r8,%rsi,1),%r8d
+    b625:	mov    0x10(%rdi),%r9
+    b629:	mov    0x30(%rdi),%r10
+    b62d:	movslq (%r9,%rsi,4),%r9
+    b631:	movzbl (%r10,%rsi,1),%r10d
+    b636:	mov    $0x64,%r11d
+    b63c:	sub    %r10,%r11
+    b63f:	imul   %r9,%r11
+    b643:	lea    (%rax,%rax,4),%rax
+    b647:	shl    $0x4,%eax
+    b64a:	add    %rcx,%rax
+    b64d:	lea    (%r8,%r8,4),%r8
+    b651:	incq   (%rax,%r8,8)
+    b655:	mov    0x20(%rdi),%r10
+    b659:	movzbl (%r10,%rsi,1),%r10d
+    b65e:	vmovq  %r9,%xmm0
+    b663:	vmovd  %r10d,%xmm1
+    b668:	vpunpcklqdq %xmm0,%xmm1,%xmm0
+    b66c:	vpaddq 0x8(%rax,%r8,8),%xmm0,%xmm0
+    b673:	vmovdqu %xmm0,0x8(%rax,%r8,8)
+    b67a:	add    %r11,0x18(%rax,%r8,8)
+    b67f:	mov    0x40(%rdi),%r9
+    b683:	movzbl (%r9,%rsi,1),%r9d
+    b688:	add    $0x64,%r9
+    b68c:	imul   %r11,%r9
+    b690:	add    %r9,0x20(%rax,%r8,8)
+    b695:	jmp    b600 <ms.q1_natural+0x10>
+    b69a:	nopw   0x0(%rax,%rax,1)
+

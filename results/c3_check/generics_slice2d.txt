@@ -1,0 +1,7 @@
+# Génériques (releasenotes.md, sections 0.7.9 et 0.8.0)
+377:- Removed deprecated `module foo {Type}` generic syntax.
+705:- Generics using ad-hoc `<...>` rather than module based.
+711:- Module-based generics using {} is deprecated.
+
+# Slice2d
+7:struct Slice2d <Type>

@@ -1,0 +1,8 @@
+C3 Compiler Version:       0.8.5_1
+Installed directory:       /opt/src/c3c/build
+Git Hash:                  d1b1e4451716a34e9c5eb46b78999ff92e71c3a1
+Backends:                  LLVM
+LLVM version:              23.1.5
+LLVM default target:       x86_64-pc-linux-gnu
+
+d1b1e44 Update version.

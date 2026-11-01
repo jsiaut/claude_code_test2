@@ -1,0 +1,23 @@
+# src/compiler/llvm_codegen.c, l. 1240-1248 : noalias posé à l'indice 1, quel que soit le paramètre
+	switch (info->kind)
+	{
+		case ABI_ARG_DIRECT:
+			if (decl && decl->var.no_alias)
+			{
+				llvm_attribute_add(c, function, attribute_id.noalias, 1);
+			}
+			break;
+		case ABI_ARG_EXPAND:
+
+# Sonde noalias.c3 : signatures dans l'IR (-O3)
+define dso_local void @probe_noalias.first(ptr noalias nofree writeonly captures(none) initializes((0, 4)) %0, ptr nofree readonly captures(none) %1) local_unnamed_addr
+define dso_local void @probe_noalias.slice_arg(ptr nofree writeonly captures(none) initializes((0, 4)) %0, i64 %1, ptr nofree readonly captures(none) %2, i64 %3) local_unnamed_addr
+define dso_local void @probe_noalias.second(ptr noalias nofree writeonly captures(none) initializes((0, 4)) %0, ptr nofree readonly captures(none) %1) local_unnamed_addr
+
+# Tests et bibliothèque standard qui utilisent @noalias
+0
+
+# releasenotes.md
+466:- Attributes `@allow_deprecated`, `@constinit`, `@noalias`, `@nostrip`, and `@optional` would erroneously accept parameters. #3098
+2010:- Add experimental `@noalias` attribute.
+(ligne 2010 dans : ## 0.6.2 Change list)

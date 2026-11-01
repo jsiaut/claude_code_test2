@@ -1,0 +1,17 @@
+# Builtins $$ utilisés par la bibliothèque standard (opérations génériques de LLVM, aucune propre à x86)
+$$abs $$acos $$any_make $$asin $$atan $$atomic_fetch_add $$atomic_fetch_and $$atomic_fetch_exchange $$atomic_fetch_max
+ $$atomic_fetch_min $$atomic_fetch_or $$atomic_fetch_sub $$atomic_fetch_xor $$atomic_load $$atomic_store $$bitreverse 
+$$breakpoint $$bswap $$ceil $$clz $$compare_exchange $$copysign $$cos $$cosh $$ctz $$exp $$exp10 $$exp2 $$expect $$exp
+ect_with_probability $$fence $$floor $$fma $$fmuladd $$frameaddress $$fshl $$fshr $$gather $$int_to_mask $$log $$log10
+ $$log2 $$mask_to_int $$masked_load $$masked_store $$matrix_mul $$max $$memcpy $$memcpy_inline $$memmove $$memset $$me
+mset_inline $$min $$nearbyint $$overflow_add $$overflow_mul $$overflow_sub $$popcount $$pow $$pow_int $$prefetch $$red
+uce_add $$reduce_and $$reduce_fadd $$reduce_fmul $$reduce_max $$reduce_min $$reduce_mul $$reduce_or $$reduce_xor $$ret
+urnaddress $$rint $$rnd $$round $$roundeven $$sat_add $$sat_mul $$sat_shl $$sat_sub $$scatter $$select $$sin $$sinh $$
+sprintf $$sqrt $$str_find $$str_hash $$str_lower $$str_pascalcase $$str_replace $$str_snakecase $$str_upper $$swizzle 
+$$swizzle2 $$syscall $$sysclock $$tan $$tanh $$trap $$trunc $$unaligned_load $$unaligned_store $$unreachable $$veccomp
+eq $$veccompge $$veccompgt $$veccomple $$veccomplt $$veccompne $$volatile_load $$volatile_store $$wasm_memory_grow $$w
+asm_memory_size $$wstr16 $$wstr32 
+
+# Sonde c2_llvm.c3 : intrinsèques de LLVM par extern @cname (non documenté)
+undefined reference to `llvm.x86.bmi.pext.32'
+instructions émises :       2 	pause 

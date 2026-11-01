@@ -1,0 +1,37 @@
+# lib/std/threads/os/thread_posix.c3 : NativeThread.create attend le démarrage du fils (Linux)
+fn void? NativeThread.create(&thread, ThreadFn thread_fn, void* arg, ThreadSettings settings)
+{
+	thread.thread_fn = thread_fn;
+	thread.arg = arg;
+	Pthread_attr_t attr;
+	Pthread_attr_t* attr_ptr = null;
+	defer if (attr_ptr) posix::pthread_attr_destroy(attr_ptr);
+	if (settings.stack_size > 0)
+	{
+		if (posix::pthread_attr_init(&attr)) return thread::INIT_FAILED~;
+		attr_ptr = &attr;
+		if (posix::pthread_attr_setstacksize(attr_ptr, (usz)settings.stack_size)) return thread::INVALID_THREAD_SETTINGS~;
+	}
+	$if ANDROID_LINUX:
+		os::sem_init(&thread.sem, 0, 0);
+		defer os::sem_destroy(&thread.sem);
+	$endif
+	if (posix::pthread_create(&thread.pthread, attr_ptr, &callback, thread) != 0)
+	{
+		return thread::INIT_FAILED~;
+	}
+	$if ANDROID_LINUX:
+		os::sem_wait(&thread.sem);
+	$endif
+	if (settings.priority != DEFAULT) thread.set_priority(settings.priority);
+}
+fn void* callback(void* arg) @private
+{
+	NativeThread* thread = arg;
+	$if ANDROID_LINUX:
+		thread.tid = (Pid_t)@syscall(libc::SYS_GETTID);
+		os::sem_post(&thread.sem);
+	$endif
+	current_thread = *thread;
+	return (void*)(iptr)thread.thread_fn(thread.arg);
+}

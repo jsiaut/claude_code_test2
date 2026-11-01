@@ -1,0 +1,46 @@
+# c3c --help
+  -O0                        - Safe, no optimizations, emit debug info.
+  -O1                        - Safe, high optimization, emit debug info.
+  -O2                        - Unsafe, high optimization, emit debug info.
+  -O3                        - Unsafe, high optimization, single module, emit debug info.
+  -O4                        - Unsafe, highest optimization, relaxed maths, single module, emit debug info, no panic messages.
+  -O5                        - Unsafe, highest optimization, fast maths, single module, emit debug info, no panic messages, no backtrace.
+  --optlevel=<option>        - Code optimization level: none, less, more, max.
+  --fp-math=<option>         - FP math behaviour: strict, relaxed, fast.
+
+# src/build/builder.c : réglages de -O3, -O4 et -O5
+		case OPT_SETTING_O3:
+			merge_functions = MERGE_FUNCTIONS_ON;
+			optlevel = OPTIMIZATION_MORE;
+			safety_level = SAFETY_OFF;
+			single_module = SINGLE_MODULE_ON;
+			slp_vectorization = VECTORIZATION_ON;
+			unroll_loops = UNROLL_LOOPS_ON;
+			vectorization = VECTORIZATION_ON;
+			break;
+		case OPT_SETTING_O4:
+			fp_opt = FP_RELAXED;
+			merge_functions = MERGE_FUNCTIONS_ON;
+			optlevel = OPTIMIZATION_AGGRESSIVE;
+			panic_level = PANIC_OFF;
+			safety_level = SAFETY_OFF;
+			single_module = SINGLE_MODULE_ON;
+			slp_vectorization = VECTORIZATION_ON;
+			unroll_loops = UNROLL_LOOPS_ON;
+			vectorization = VECTORIZATION_ON;
+			break;
+		case OPT_SETTING_O5:
+
+# src/compiler/llvm_codegen.c : niveau d'optimisation -> pipeline de LLVM
+				case OPTIMIZATION_LESS:
+					level = LLVM_O1;
+					break;
+				case OPTIMIZATION_MORE:
+					level = LLVM_O2;
+					break;
+				case OPTIMIZATION_AGGRESSIVE:
+					level = LLVM_O3;
+
+# src/build/builder.c : une option explicite l'emporte sur le réglage de -O
+266:	COPY_IF_DEFAULT(target->optlevel, optlevel);
+271:	COPY_IF_DEFAULT(target->feature.fp_math, fp_opt);

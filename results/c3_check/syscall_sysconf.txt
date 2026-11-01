@@ -1,0 +1,7 @@
+# Appels système et cache : @syscall, constantes SYS_*, sysconf
+195:macro uptr @syscall(...) @builtin
+lib/std/libc/os/linux.c3:88:const SYS_GETTID = gettid_code();
+SYS_SCHED_SETAFFINITY : 0 occurrence(s)
+sched_setaffinity : 0 occurrence(s)
+lib/std/os/posix/general.c3:5:extern fn CLong sysconf(CInt name);
+_SC_LEVEL1_DCACHE_LINESIZE : 0 occurrence(s)
