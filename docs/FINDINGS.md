@@ -609,3 +609,20 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **Harnais de K9** : d'après les sources, les grilles du chemin tuned et `mt` sont allouées une fois en C, Chapel, Ada
   et Fortran, à chaque répétition en C++, Zig, Odin, C3, Rust, Nim, D, Julia, C#, Mojo, Go et Java ; la spécification
   n'impose que la réinitialisation hors chrono (`results/cpp_check/k9_harness.txt`).
+* **Mesures appariées (machine 15, sept processus)** : clang++ 23 divise le temps de g++ 16 par 2,4 à 3,5 sur K4 (0,285
+  et 0,423) et fait 1,06 et 1,11 fois le temps de C ; sur les 26 mesures communes, C++ compilé par clang++ fait 0,995
+  fois le temps de C (moyenne géométrique). Mais clang++ prend 1,55 fois plus de temps sur l'arène de K8 et 1,94 fois
+  sur K5 naturel (GCC met moitié moins de temps que clang sur ce noyau, en C comme en C++), et vectorise Q6 naturel dans
+  la forme de C++ (0,31 fois g++ et 0,31 fois C). L'arène de K8 par pointeur brut gagne 23 % sous g++. La forme en
+  intrinsèques de C n'accélère pas Q1 sous g++ (1,04) ; le Q1 `std::simd` de C++ fait 1,03 fois celui de C sur cet
+  hôte (1,15 sur Cascade Lake).
+* **Allocation des grilles de K9** : réallouer à chaque répétition coûte à C 1,70, 1,93 et 2,01 fois son temps
+  (naturel, tuned, `mt`) sur la machine 15 ; allouées une fois, les grilles de C++ lui donnent le temps de C (0,98 en
+  `mt`). Sur Cascade Lake, les implémentations qui réallouent font le temps de C en un fil et 1,1 à 1,9 fois à quatre
+  fils : la pénalité dépend de l'hôte.
+* **Machine 15, artefacts d'hôte** : K2 à 8 Mio y est bimodal (pour 21 implémentations sur 25, facteur 3,2 à 4,0
+  entre processus d'une même cellule, au même nombre de défauts de page, en pages de 4 Kio) ; la pénalité de désordre
+  des langages à références y est deux fois plus faible que sur Cascade Lake (C# 2,68 contre 4,70, OCaml 2,22 contre
+  6,99) ; K3 en écrivain unique y dépend du placement du code (C++ par clang++ 0,33 fois le temps de g++, 0,19 fois
+  celui de C). Go met 1,8 à 2,3 s sur K1 naturel sur les Emerald Rapids (médianes de processus, machines 3 et 15), 56 ms
+  sur Cascade Lake, en temps utilisateur (cause non cherchée).

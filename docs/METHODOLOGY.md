@@ -820,3 +820,27 @@ Robustesse :
   (mise à zéro des variables locales en C++26 par GCC 16) ne touche aucune fonction de noyau. Décision : remesurer D2
   et D4 pour les 25 implémentations (7 processus, comme D3), publié ; clang++, formes de C et grilles de K9 allouées
   une fois en sensibilités ; C avec réallocation en information.
+* 2026-11-01, 15:34:14-16:30:08 : **mesures de la remarque sur C++** (`tools/measure_cpp.py`, machine 15) : 245
+  cellules × 7 processus (1 715), copies de C++ et de C (`results/raw_cpp/`) et remesure de D2 et D4 pour les 25
+  implémentations (`results/raw_d24/`) mêlées dans chaque passe ; aucune somme de contrôle fausse ; 64 processus refaits
+  pour vol de temps au-dessus de 2 % (3 deux fois), aucun gardé au-dessus (vol médian 0,22 %, maximum 1,98 %). Rien
+  d'autre ne tournait.
+* 2026-11-01, 16 h 30 à 17 h 30 : **résultats de la remarque sur C++** (`results/report_cpp.md`,
+  `results/cpp_check.json`). Ordre des calculs : j'ai lu les rapports bruts, comparé le rapport C++/C de l'hôte à celui
+  de Cascade Lake clé par clé, puis regardé la remesure de D2 et D4 ; j'ai lancé l'analyse du plan, et l'ai arrêtée
+  après dix scénarios (`results/cpp_check/run1_plan.log`), quand les transferts ont montré leur artefact (C à 73,1 points
+  dans S-clang).
+  **Deux écarts au plan, décidés après avoir vu les données.** (1) La remesure de D2 et D4 n'est pas publiée : sur cet
+  hôte, K2 à 8 Mio est bimodal (facteur 3,2 à 4,0 entre processus pour 21 implémentations sur 25) et la pénalité de
+  désordre des langages à références est deux fois plus faible ; elle changerait ce que D2 et D4 mesurent (information :
+  scénario P-D24). (2) Le transfert seul déplace les références de K4, K3 et K9 (le rapport C++/C de l'hôte s'écarte de
+  celui de Cascade Lake de − 42 % à + 130 %) : les scénarios du plan sont donnés tels quels, et des variantes par le pont
+  (C de Cascade Lake × rapport au C du même hôte, K3 inchangé) sont ajoutées, avec leurs propres limites. Classement
+  publié : l'erratum C1 seul ; C++ garde 76,57 points mais passe du 2e au 3e rang espéré (3,61 → 3,80), derrière Odin
+  (3,60), à égalité de fait (50 %). Sensibilités : K4 de clang++ par le pont prévu, 79,7 points contre 80,0 à C (devant
+  C dans 49 % des variantes) ; toutes les corrections de la remarque par le pont, 78,9 contre 79,3 ; arène par
+  pointeur, 77,6 ; formes de C, 76,1. Pratique d'allocation de K9 établie (C × 1,7 à 2,0 en réallouant ; C++ au temps
+  de C en allouant une fois), décrite comme limite du protocole. Sorties recalculées : classement, figures, matrice,
+  scénarios de Zig, de Julia, de Mojo, de C#, de Rust et de Nim et sensibilité sans SIMD dans l'état actuel (témoin
+  pointé sur le scénario Publié de `results/cpp_check.json`), confrontation. README : tableau (Odin 2e, C++ 3e), ordre,
+  errata, paragraphes d'Odin et de C++, langages relus, limites (compilateur, harnais de K9, D2 et D4).

@@ -1,0 +1,42 @@
+cpp_intr   k6   tuned                q6         p0 n=10 med=0.017521s ok={True} rc=0 
+cpp_intr   k6   mt                   q6         p0 n=10 med=0.004789s ok={True} rc=0 
+cpp_intr   k1   soa                  energy     p0 n=10 med=0.003157s ok={True} rc=0 
+cpp_intr   k6   tuned                q1         p0 n=10 med=0.031175s ok={True} rc=0 
+cpp_intr   k5   tuned                           p0 n=10 med=0.005124s ok={True} rc=0 
+cpp_intr   k6   mt                   q1         p0 n=10 med=0.007617s ok={True} rc=0 
+cpp_intr   k6   tuned                q1         p0 n=10 med=0.029699s ok={True} rc=0 
+cpp_intr   k6   mt                   q1         p0 n=10 med=0.009179s ok={True} rc=0 
+cpp_intr   k6   tuned                q6         p0 n=10 med=0.016520s ok={True} rc=0 
+cpp_intr   k1   soa                  energy     p0 n=10 med=0.002624s ok={True} rc=0 
+cpp_intr   k5   tuned                           p0 n=10 med=0.004660s ok={True} rc=0 
+cpp_intr   k6   mt                   q6         p0 n=10 med=0.004484s ok={True} rc=0 
+cpp_intr   k1   soa                  energy     p0 n=10 med=0.002556s ok={True} rc=0 
+cpp_intr   k6   tuned                q6         p0 n=10 med=0.019714s ok={True} rc=0 
+cpp_intr   k6   mt                   q6         p0 n=10 med=0.005121s ok={True} rc=0 
+cpp_intr   k5   tuned                           p0 n=10 med=0.003381s ok={True} rc=0 
+cpp_intr   k6   mt                   q1         p0 n=10 med=0.009324s ok={True} rc=0 
+cpp_intr   k6   tuned                q1         p0 n=10 med=0.026905s ok={True} rc=0 
+cpp_intr   k1   soa                  energy     p0 n=10 med=0.003840s ok={True} rc=0 
+cpp_intr   k6   mt                   q6         p0 n=10 med=0.005503s ok={True} rc=0 
+cpp_intr   k6   tuned                q1         p0 n=10 med=0.031761s ok={True} rc=0 
+cpp_intr   k6   mt                   q1         p0 n=10 med=0.008992s ok={True} rc=0 
+cpp_intr   k5   tuned                           p0 n=10 med=0.004818s ok={True} rc=0 
+cpp_intr   k6   tuned                q6         p0 n=10 med=0.017048s ok={True} rc=0 
+cpp_intr   k6   tuned                q6         p0 n=10 med=0.015714s ok={True} rc=0 
+cpp_intr   k1   soa                  energy     p0 n=10 med=0.005622s ok={True} rc=0 
+cpp_intr   k5   tuned                           p0 n=10 med=0.003461s ok={True} rc=0 
+cpp_intr   k6   tuned                q1         p0 n=10 med=0.032220s ok={True} rc=0 
+cpp_intr   k6   mt                   q6         p0 n=10 med=0.006754s ok={True} rc=0 
+cpp_intr   k6   mt                   q1         p0 n=10 med=0.007452s ok={True} rc=0 
+cpp_intr   k6   tuned                q6         p0 n=10 med=0.015760s ok={True} rc=0 
+cpp_intr   k6   mt                   q1         p0 n=10 med=0.008026s ok={True} rc=0 
+cpp_intr   k1   soa                  energy     p0 n=10 med=0.002628s ok={True} rc=0 
+cpp_intr   k6   mt                   q6         p0 n=10 med=0.004449s ok={True} rc=0 
+cpp_intr   k5   tuned                           p0 n=10 med=0.003453s ok={True} rc=0 
+cpp_intr   k6   tuned                q1         p0 n=10 med=0.026729s ok={True} rc=0 
+cpp_intr   k6   mt                   q6         p0 n=10 med=0.004462s ok={True} rc=0 
+cpp_intr   k6   tuned                q6         p0 n=10 med=0.015347s ok={True} rc=0 
+cpp_intr   k6   mt                   q1         p0 n=10 med=0.005798s ok={True} rc=0 
+cpp_intr   k6   tuned                q1         p0 n=10 med=0.022925s ok={True} rc=0 
+cpp_intr   k5   tuned                           p0 n=10 med=0.004547s ok={True} rc=0 
+cpp_intr   k1   soa                  energy     p0 n=10 med=0.003016s ok={True} rc=0 

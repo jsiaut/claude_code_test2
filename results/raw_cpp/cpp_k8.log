@@ -1,0 +1,7 @@
+cpp_k8     k8   tuned                           p0 n=10 med=0.173909s ok={True} rc=0 
+cpp_k8     k8   tuned                           p0 n=10 med=0.144509s ok={True} rc=0 
+cpp_k8     k8   tuned                           p0 n=10 med=0.173474s ok={True} rc=0 
+cpp_k8     k8   tuned                           p0 n=10 med=0.148194s ok={True} rc=0 
+cpp_k8     k8   tuned                           p0 n=10 med=0.156954s ok={True} rc=0 
+cpp_k8     k8   tuned                           p0 n=10 med=0.150881s ok={True} rc=0 
+cpp_k8     k8   tuned                           p0 n=10 med=0.146657s ok={True} rc=0 

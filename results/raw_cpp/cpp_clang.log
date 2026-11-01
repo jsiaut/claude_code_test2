@@ -1,0 +1,189 @@
+cpp_clang  k9   mt                              p0 n=10 med=0.013884s ok={True} rc=0 
+cpp_clang  k1   aos                  energy     p0 n=10 med=0.026128s ok={True} rc=0 
+cpp_clang  k5   tuned                           p0 n=10 med=0.005217s ok={True} rc=0 
+cpp_clang  k1   soa                  energy     p0 n=10 med=0.002822s ok={True} rc=0 
+cpp_clang  k6   mt                   q6         p0 n=10 med=0.005074s ok={True} rc=0 
+cpp_clang  k3   sw_padded                       p0 n=10 med=0.018395s ok={True} rc=0 
+cpp_clang  k8   tuned                           p0 n=10 med=0.296519s ok={True} rc=0 
+cpp_clang  k9   natural                         p0 n=10 med=0.029079s ok={True} rc=0 
+cpp_clang  k6   tuned                q1         p0 n=10 med=0.032232s ok={True} rc=0 
+cpp_clang  k7   natural                         p0 n=2 med=1.320124s ok={True} rc=0 
+cpp_clang  k2   tuned                16384      p0 n=10 med=0.007734s ok={True} rc=0 
+cpp_clang  k3   rmw_padded                      p0 n=10 med=0.277914s ok={True} rc=0 
+cpp_clang  k8   natural                         p0 n=3 med=0.874917s ok={True} rc=0 
+cpp_clang  k2   tuned                262144     p0 n=10 med=0.025078s ok={True} rc=0 
+cpp_clang  k4   branchless_unsorted             p0 n=10 med=0.001649s ok={True} rc=0 
+cpp_clang  k6   natural              q6         p0 n=10 med=0.019040s ok={True} rc=0 
+cpp_clang  k7   tuned                           p0 n=7 med=0.205737s ok={True} rc=0 
+cpp_clang  k8   tuned_alloc                     p0 n=10 med=0.358766s ok={True} rc=0 
+cpp_clang  k1   natural              energy     p0 n=10 med=0.038044s ok={True} rc=0 
+cpp_clang  k2   tuned                8388608    p0 n=4 med=0.179601s ok={True} rc=0 
+cpp_clang  k4   natural_unsorted                p0 n=10 med=0.002323s ok={True} rc=0 
+cpp_clang  k1   natural_shuffled     energy     p0 n=10 med=0.036020s ok={True} rc=0 
+cpp_clang  k5   natural                         p0 n=10 med=0.193420s ok={True} rc=0 
+cpp_clang  k6   mt                   q1         p0 n=10 med=0.010074s ok={True} rc=0 
+cpp_clang  k9   tuned                           p0 n=10 med=0.025454s ok={True} rc=0 
+cpp_clang  k6   natural              q1         p0 n=10 med=0.067031s ok={True} rc=0 
+cpp_clang  k6   tuned                q6         p0 n=10 med=0.017294s ok={True} rc=0 
+cpp_clang  k4   natural_unsorted                p0 n=10 med=0.001781s ok={True} rc=0 
+cpp_clang  k1   aos                  energy     p0 n=10 med=0.026573s ok={True} rc=0 
+cpp_clang  k1   soa                  energy     p0 n=10 med=0.002506s ok={True} rc=0 
+cpp_clang  k6   tuned                q1         p0 n=10 med=0.042485s ok={True} rc=0 
+cpp_clang  k3   rmw_padded                      p0 n=10 med=0.267400s ok={True} rc=0 
+cpp_clang  k1   natural              energy     p0 n=10 med=0.034597s ok={True} rc=0 
+cpp_clang  k8   natural                         p0 n=3 med=0.870499s ok={True} rc=0 
+cpp_clang  k9   mt                              p0 n=10 med=0.012434s ok={True} rc=0 
+cpp_clang  k2   tuned                8388608    p0 n=4 med=0.190301s ok={True} rc=0 
+cpp_clang  k5   natural                         p0 n=10 med=0.201112s ok={True} rc=0 
+cpp_clang  k8   tuned_alloc                     p0 n=10 med=0.277363s ok={True} rc=0 
+cpp_clang  k8   tuned                           p0 n=10 med=0.302830s ok={True} rc=0 
+cpp_clang  k4   branchless_unsorted             p0 n=10 med=0.002263s ok={True} rc=0 
+cpp_clang  k6   natural              q1         p0 n=10 med=0.057100s ok={True} rc=0 
+cpp_clang  k6   mt                   q6         p0 n=10 med=0.005109s ok={True} rc=0 
+cpp_clang  k6   tuned                q6         p0 n=10 med=0.017390s ok={True} rc=0 
+cpp_clang  k6   mt                   q1         p0 n=10 med=0.006993s ok={True} rc=0 
+cpp_clang  k9   natural                         p0 n=10 med=0.021943s ok={True} rc=0 
+cpp_clang  k1   natural_shuffled     energy     p0 n=10 med=0.040292s ok={True} rc=0 
+cpp_clang  k2   tuned                16384      p0 n=10 med=0.007549s ok={True} rc=0 
+cpp_clang  k6   natural              q6         p0 n=10 med=0.019545s ok={True} rc=0 
+cpp_clang  k3   sw_padded                       p0 n=10 med=0.017782s ok={True} rc=0 
+cpp_clang  k7   tuned                           p0 n=7 med=0.175629s ok={True} rc=0 
+cpp_clang  k2   tuned                262144     p0 n=10 med=0.026203s ok={True} rc=0 
+cpp_clang  k9   tuned                           p0 n=10 med=0.025365s ok={True} rc=0 
+cpp_clang  k5   tuned                           p0 n=10 med=0.004249s ok={True} rc=0 
+cpp_clang  k7   natural                         p0 n=2 med=1.175631s ok={True} rc=0 
+cpp_clang  k1   aos                  energy     p0 n=10 med=0.030411s ok={True} rc=0 
+cpp_clang  k2   tuned                16384      p0 n=10 med=0.007961s ok={True} rc=0 
+cpp_clang  k8   tuned                           p0 n=10 med=0.330073s ok={True} rc=0 
+cpp_clang  k2   tuned                262144     p0 n=10 med=0.024867s ok={True} rc=0 
+cpp_clang  k9   tuned                           p0 n=10 med=0.033442s ok={True} rc=0 
+cpp_clang  k3   sw_padded                       p0 n=10 med=0.021058s ok={True} rc=0 
+cpp_clang  k5   tuned                           p0 n=10 med=0.004143s ok={True} rc=0 
+cpp_clang  k1   soa                  energy     p0 n=10 med=0.005665s ok={True} rc=0 
+cpp_clang  k8   tuned_alloc                     p0 n=10 med=0.310252s ok={True} rc=0 
+cpp_clang  k6   tuned                q1         p0 n=10 med=0.029112s ok={True} rc=0 
+cpp_clang  k4   branchless_unsorted             p0 n=10 med=0.001629s ok={True} rc=0 
+cpp_clang  k4   natural_unsorted                p0 n=10 med=0.001746s ok={True} rc=0 
+cpp_clang  k6   tuned                q6         p0 n=10 med=0.017226s ok={True} rc=0 
+cpp_clang  k9   mt                              p0 n=10 med=0.013042s ok={True} rc=0 
+cpp_clang  k6   natural              q1         p0 n=10 med=0.063386s ok={True} rc=0 
+cpp_clang  k6   mt                   q1         p0 n=10 med=0.007720s ok={True} rc=0 
+cpp_clang  k3   rmw_padded                      p0 n=10 med=0.266914s ok={True} rc=0 
+cpp_clang  k1   natural_shuffled     energy     p0 n=10 med=0.038289s ok={True} rc=0 
+cpp_clang  k8   natural                         p0 n=3 med=0.845791s ok={True} rc=0 
+cpp_clang  k6   mt                   q6         p0 n=10 med=0.006409s ok={True} rc=0 
+cpp_clang  k9   natural                         p0 n=10 med=0.028097s ok={True} rc=0 
+cpp_clang  k7   tuned                           p0 n=7 med=0.178302s ok={True} rc=0 
+cpp_clang  k1   natural              energy     p0 n=10 med=0.035409s ok={True} rc=0 
+cpp_clang  k5   natural                         p0 n=10 med=0.195606s ok={True} rc=0 
+cpp_clang  k7   natural                         p0 n=2 med=1.292901s ok={True} rc=0 
+cpp_clang  k2   tuned                8388608    p0 n=4 med=0.508993s ok={True} rc=0 
+cpp_clang  k6   natural              q6         p0 n=10 med=0.018812s ok={True} rc=0 
+cpp_clang  k9   natural                         p0 n=10 med=0.036151s ok={True} rc=0 
+cpp_clang  k1   soa                  energy     p0 n=10 med=0.003177s ok={True} rc=0 
+cpp_clang  k6   natural              q6         p0 n=10 med=0.019567s ok={True} rc=0 
+cpp_clang  k8   tuned_alloc                     p0 n=10 med=0.301471s ok={True} rc=0 
+cpp_clang  k4   natural_unsorted                p0 n=10 med=0.001689s ok={True} rc=0 
+cpp_clang  k8   tuned                           p0 n=10 med=0.294104s ok={True} rc=0 
+cpp_clang  k6   mt                   q1         p0 n=10 med=0.008234s ok={True} rc=0 
+cpp_clang  k9   tuned                           p0 n=10 med=0.033882s ok={True} rc=0 
+cpp_clang  k3   sw_padded                       p0 n=10 med=0.018761s ok={True} rc=0 
+cpp_clang  k2   tuned                8388608    p0 n=4 med=0.196214s ok={True} rc=0 
+cpp_clang  k7   natural                         p0 n=2 med=1.256062s ok={True} rc=0 
+cpp_clang  k5   natural                         p0 n=10 med=0.192907s ok={True} rc=0 
+cpp_clang  k4   branchless_unsorted             p0 n=10 med=0.002217s ok={True} rc=0 
+cpp_clang  k2   tuned                262144     p0 n=10 med=0.026084s ok={True} rc=0 
+cpp_clang  k6   tuned                q1         p0 n=10 med=0.023738s ok={True} rc=0 
+cpp_clang  k8   natural                         p0 n=3 med=0.929083s ok={True} rc=0 
+cpp_clang  k9   mt                              p0 n=10 med=0.014005s ok={True} rc=0 
+cpp_clang  k1   natural_shuffled     energy     p0 n=10 med=0.035399s ok={True} rc=0 
+cpp_clang  k1   aos                  energy     p0 n=10 med=0.031424s ok={True} rc=0 
+cpp_clang  k6   mt                   q6         p0 n=10 med=0.005822s ok={True} rc=0 
+cpp_clang  k1   natural              energy     p0 n=10 med=0.038340s ok={True} rc=0 
+cpp_clang  k3   rmw_padded                      p0 n=10 med=0.270091s ok={True} rc=0 
+cpp_clang  k5   tuned                           p0 n=10 med=0.005077s ok={True} rc=0 
+cpp_clang  k7   tuned                           p0 n=7 med=0.174792s ok={True} rc=0 
+cpp_clang  k6   tuned                q6         p0 n=10 med=0.017015s ok={True} rc=0 
+cpp_clang  k6   natural              q1         p0 n=10 med=0.049888s ok={True} rc=0 
+cpp_clang  k2   tuned                16384      p0 n=10 med=0.007515s ok={True} rc=0 
+cpp_clang  k8   tuned_alloc                     p0 n=10 med=0.341467s ok={True} rc=0 
+cpp_clang  k4   natural_unsorted                p0 n=10 med=0.002324s ok={True} rc=0 
+cpp_clang  k2   tuned                8388608    p0 n=4 med=0.544270s ok={True} rc=0 
+cpp_clang  k5   natural                         p0 n=10 med=0.193425s ok={True} rc=0 
+cpp_clang  k3   sw_padded                       p0 n=10 med=0.016794s ok={True} rc=0 
+cpp_clang  k1   natural_shuffled     energy     p0 n=10 med=0.040629s ok={True} rc=0 
+cpp_clang  k7   tuned                           p0 n=7 med=0.169978s ok={True} rc=0 
+cpp_clang  k5   tuned                           p0 n=10 med=0.005574s ok={True} rc=0 
+cpp_clang  k6   natural              q1         p0 n=10 med=0.070893s ok={True} rc=0 
+cpp_clang  k8   natural                         p0 n=3 med=0.982745s ok={True} rc=0 
+cpp_clang  k1   natural              energy     p0 n=10 med=0.042059s ok={True} rc=0 
+cpp_clang  k1   aos                  energy     p0 n=10 med=0.028728s ok={True} rc=0 
+cpp_clang  k6   natural              q6         p0 n=10 med=0.017189s ok={True} rc=0 
+cpp_clang  k6   mt                   q1         p0 n=10 med=0.010514s ok={True} rc=0 
+cpp_clang  k2   tuned                16384      p0 n=10 med=0.007475s ok={True} rc=0 
+cpp_clang  k9   tuned                           p0 n=10 med=0.025514s ok={True} rc=0 
+cpp_clang  k6   tuned                q1         p0 n=10 med=0.026181s ok={True} rc=0 
+cpp_clang  k8   tuned                           p0 n=10 med=0.324569s ok={True} rc=0 
+cpp_clang  k3   rmw_padded                      p0 n=10 med=0.266184s ok={True} rc=0 
+cpp_clang  k9   natural                         p0 n=10 med=0.031323s ok={True} rc=0 
+cpp_clang  k4   branchless_unsorted             p0 n=10 med=0.002283s ok={True} rc=0 
+cpp_clang  k9   mt                              p0 n=10 med=0.011083s ok={True} rc=0 
+cpp_clang  k1   soa                  energy     p0 n=10 med=0.002920s ok={True} rc=0 
+cpp_clang  k6   mt                   q6         p0 n=10 med=0.006438s ok={True} rc=0 
+cpp_clang  k2   tuned                262144     p0 n=10 med=0.024561s ok={True} rc=0 
+cpp_clang  k7   natural                         p0 n=2 med=0.808304s ok={True} rc=0 
+cpp_clang  k6   tuned                q6         p0 n=10 med=0.016660s ok={True} rc=0 
+cpp_clang  k1   soa                  energy     p0 n=10 med=0.002499s ok={True} rc=0 
+cpp_clang  k6   natural              q6         p0 n=10 med=0.016593s ok={True} rc=0 
+cpp_clang  k1   natural_shuffled     energy     p0 n=10 med=0.035434s ok={True} rc=0 
+cpp_clang  k4   branchless_unsorted             p0 n=10 med=0.002128s ok={True} rc=0 
+cpp_clang  k2   tuned                8388608    p0 n=4 med=0.172874s ok={True} rc=0 
+cpp_clang  k8   tuned_alloc                     p0 n=10 med=0.247883s ok={True} rc=0 
+cpp_clang  k8   tuned                           p0 n=10 med=0.325216s ok={True} rc=0 
+cpp_clang  k6   natural              q1         p0 n=10 med=0.047363s ok={True} rc=0 
+cpp_clang  k2   tuned                16384      p0 n=10 med=0.007920s ok={True} rc=0 
+cpp_clang  k9   tuned                           p0 n=10 med=0.025097s ok={True} rc=0 
+cpp_clang  k4   natural_unsorted                p0 n=10 med=0.002191s ok={True} rc=0 
+cpp_clang  k6   tuned                q1         p0 n=10 med=0.024735s ok={True} rc=0 
+cpp_clang  k6   mt                   q6         p0 n=10 med=0.006408s ok={True} rc=0 
+cpp_clang  k8   natural                         p0 n=3 med=0.985096s ok={True} rc=0 
+cpp_clang  k3   rmw_padded                      p0 n=10 med=0.251653s ok={True} rc=0 
+cpp_clang  k2   tuned                262144     p0 n=10 med=0.024754s ok={True} rc=0 
+cpp_clang  k9   mt                              p0 n=10 med=0.008546s ok={True} rc=0 
+cpp_clang  k1   aos                  energy     p0 n=10 med=0.025952s ok={True} rc=0 
+cpp_clang  k6   tuned                q6         p0 n=10 med=0.017082s ok={True} rc=0 
+cpp_clang  k3   sw_padded                       p0 n=10 med=0.014189s ok={True} rc=0 
+cpp_clang  k7   tuned                           p0 n=7 med=0.163834s ok={True} rc=0 
+cpp_clang  k1   natural              energy     p0 n=10 med=0.034266s ok={True} rc=0 
+cpp_clang  k6   mt                   q1         p0 n=10 med=0.007945s ok={True} rc=0 
+cpp_clang  k5   tuned                           p0 n=10 med=0.003559s ok={True} rc=0 
+cpp_clang  k9   natural                         p0 n=10 med=0.023181s ok={True} rc=0 
+cpp_clang  k5   natural                         p0 n=10 med=0.188938s ok={True} rc=0 
+cpp_clang  k7   natural                         p0 n=2 med=0.686704s ok={True} rc=0 
+cpp_clang  k6   tuned                q6         p0 n=10 med=0.016869s ok={True} rc=0 
+cpp_clang  k1   soa                  energy     p0 n=10 med=0.002517s ok={True} rc=0 
+cpp_clang  k6   mt                   q6         p0 n=10 med=0.004667s ok={True} rc=0 
+cpp_clang  k9   mt                              p0 n=10 med=0.010286s ok={True} rc=0 
+cpp_clang  k2   tuned                262144     p0 n=10 med=0.024822s ok={True} rc=0 
+cpp_clang  k2   tuned                16384      p0 n=10 med=0.007768s ok={True} rc=0 
+cpp_clang  k8   tuned_alloc                     p0 n=10 med=0.257039s ok={True} rc=0 
+cpp_clang  k9   natural                         p0 n=10 med=0.023428s ok={True} rc=0 
+cpp_clang  k8   natural                         p0 n=3 med=1.034099s ok={True} rc=0 
+cpp_clang  k6   mt                   q1         p0 n=10 med=0.008060s ok={True} rc=0 
+cpp_clang  k5   tuned                           p0 n=10 med=0.004209s ok={True} rc=0 
+cpp_clang  k1   natural              energy     p0 n=10 med=0.038351s ok={True} rc=0 
+cpp_clang  k7   natural                         p0 n=2 med=0.825845s ok={True} rc=0 
+cpp_clang  k6   tuned                q1         p0 n=10 med=0.022190s ok={True} rc=0 
+cpp_clang  k6   natural              q1         p0 n=10 med=0.048808s ok={True} rc=0 
+cpp_clang  k8   tuned                           p0 n=10 med=0.326712s ok={True} rc=0 
+cpp_clang  k6   natural              q6         p0 n=10 med=0.017677s ok={True} rc=0 
+cpp_clang  k5   natural                         p0 n=10 med=0.192824s ok={True} rc=0 
+cpp_clang  k1   natural_shuffled     energy     p0 n=10 med=0.039077s ok={True} rc=0 
+cpp_clang  k3   rmw_padded                      p0 n=10 med=0.233623s ok={True} rc=0 
+cpp_clang  k7   tuned                           p0 n=7 med=0.170868s ok={True} rc=0 
+cpp_clang  k2   tuned                8388608    p0 n=4 med=0.188630s ok={True} rc=0 
+cpp_clang  k3   sw_padded                       p0 n=10 med=0.014174s ok={True} rc=0 
+cpp_clang  k1   aos                  energy     p0 n=10 med=0.027816s ok={True} rc=0 
+cpp_clang  k4   branchless_unsorted             p0 n=10 med=0.002206s ok={True} rc=0 
+cpp_clang  k4   natural_unsorted                p0 n=10 med=0.001618s ok={True} rc=0 
+cpp_clang  k9   tuned                           p0 n=10 med=0.013488s ok={True} rc=0 

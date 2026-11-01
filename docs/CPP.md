@@ -231,3 +231,136 @@ pour toutes les implémentations, hors de cette remarque.
 * Pas d'harmonisation des harnais de K9 dans cette remarque (voir l'interprétation de 3.3).
 * Pas de remesure de K4 pour tous (non demandée).
 * Pas de vérification en ligne (dates, pages de statut, contrats).
+
+## 4. Résultats (après les mesures)
+
+Mesures du 1er novembre, de 15:34:14 à 16:30:08, sur la machine 15 (sans redémarrage) : 1 715 processus (245 cellules
+× 7), aucune somme de contrôle fausse ; 64 processus refaits pour vol de temps au-dessus de 2 % (dont 3 deux fois),
+aucun gardé au-dessus (vol médian 0,22 %, maximum 1,98 %). Rien d'autre ne tournait. Sorties : `results/report_cpp.md`
+et `results/cpp_check.json` (`analysis/cpp_check.py`) ; données : `results/raw_cpp/`, `results/raw_d24/`. Le scénario
+Avant reproduit exactement le publié d'avant la remarque (écart 0).
+
+### 4.1 Écarts au plan, décidés après avoir vu les données
+
+Ordre des calculs : j'ai lu les rapports bruts, comparé le rapport C++/C de l'hôte à celui de Cascade Lake clé par clé,
+puis regardé la remesure de D2 et D4 ; j'ai lancé l'analyse telle que le plan la prévoyait, et l'ai arrêtée après dix
+scénarios, quand les transferts ont montré leur artefact (C à 73,1 points dans S-clang ; journal :
+`results/cpp_check/run1_plan.log`). Les décisions ci-dessous ont été prises à ce moment-là.
+
+1. **La remesure de D2 et D4 n'est pas publiée.** Elle devait réduire le bruit de ces deux composantes ; sur cet hôte,
+   elle change ce qu'elles mesurent.
+   * K2 à 8 Mio est bimodal : pour 21 implémentations sur 25, les sept processus d'une cellule s'écartent d'un facteur
+     3,2 à 4,0 (C : cinq processus de 160 à 205 ms, deux à 480 et 584 ms, au même nombre de défauts de page ; pages de
+     4 Kio, THP en `madvise`), contre 1,6 au plus dans la campagne pour les cinq clés. Le tableau tient dans le L3 de
+     cet hôte ; son temps dépend sans doute de ce que les autres machines virtuelles y laissent.
+   * La pénalité de désordre des langages à références y est deux fois plus faible que sur Cascade Lake (C# 4,70 →
+     2,68, Java 4,91 → 2,75, JavaScript 5,93 → 3,48, OCaml 6,99 → 2,22, Lua 6,68 → 4,32, Python 5,20 → 3,84), et celle
+     de Haskell passe de 0,93 à 1,50 : D2 y mesure un autre régime de cache.
+   * Go met 2,2 s sur K1 naturel (56 ms sur Cascade Lake ; 1,8 à 1,9 s déjà sur la machine 3, en temps utilisateur ;
+     cause non cherchée), au même rapport entre ordres naturel et mélangé.
+
+   Publier ces valeurs déplacerait tous les langages pour des raisons d'hôte (scénario P-D24, information : C 80,01 →
+   79,53, Odin 73,49 → 73,01, D 72,62 → 71,99, Mojo 62,76 → 63,02). La remesure de D3 (remarque sur Rust) visait un
+   bruit démontré, lié au vol de temps ; celle-ci ajoute ses propres artefacts. Elle confirme en revanche le diagnostic
+   de la remarque pour C++ : sur sept processus, son K1 mélangé fait 1,04 fois le naturel (1,09 dans la campagne, à
+   cause d'un processus) et K2 à 256 Kio 24,9 ms, comme C (25,0). (Les corrections publiées d'Ada et de Fortran sur K1
+   et K2 sont appliquées à leur remesure, faite avec les binaires de la campagne.)
+2. **Le transfert seul ne tient pas pour plusieurs clés.** Le rapport C++/C de l'hôte s'écarte de celui de Cascade Lake
+   de + 130 % sur K4 naturel, de + 60 à + 91 % sur K9, de − 42 % sur K3 en écrivain unique et de − 36 % sur K2 à 8 Mio.
+   Reporté sur les temps de C++ de Cascade Lake, un rapport de l'hôte y donne des temps qui deviennent la référence du
+   noyau et abaissent tous les autres langages : C tombe à 78,1 points (S-clang-K4), 73,6 (S-clang), 78,3 (S-K9) et
+   71,7 (S-remarque). Ces scénarios du plan sont donnés tels quels, mais ne mesurent pas ce qu'ils annoncent. J'ai
+   ajouté S-clang-pont, S-K9-pont et S-remarque-pont : chaque clé de C++ y vaut le temps de C de Cascade Lake multiplié
+   par le rapport au C du même hôte, sauf K3 (temps dépendant du placement du code sur Emerald Rapids, laissé aux
+   données principales) et K8 `tuned_alloc` (sans équivalent en C : transfert). Le pont a ses propres limites : il
+   suppose le rapport C++/C indépendant de l'hôte, ce que démentent K9 (pénalité d'allocation bien plus forte ici) et
+   K2 à 8 Mio (bimodal), et il prend pour D3 le maximum de latence de cet hôte. Seuls S-clang-K4-pont (prévu ; deux
+   clés mesurées avec précision), S-K8 et S-intr (rapports de l'hôte proches de ceux de Cascade Lake) sont propres.
+3. Précision : pour S-clang et S-remarque, les cinq colonnes de latence de K8 naturel sont multipliées (le plan nommait
+   le p99,9 et le maximum ; le p50 ne sert qu'à la variante relative de D3).
+
+### 4.2 Mesures appariées (machine 15)
+
+| Question | Clé | Rapport [IC 95 %] |
+|---|---|---|
+| clang++ / g++ (`cpp_clang` / `cpp_ref`) | K4 naturel ; sans branchement | 0,285 [0,256–0,317] ; 0,423 [0,374–0,472] |
+| | K8 tuned ; K8 naturel | 1,546 [1,488–1,605] ; 1,220 [1,084–1,356] |
+| | K5 naturel ; Q6 naturel | 1,938 [1,834–2,035] ; 0,309 [0,291–0,327] |
+| C++ / C, même hôte | K4 naturel ; sans branchement, clang++ | 1,06 [0,91–1,22] ; 1,11 [0,95–1,26] |
+| | K4 naturel ; sans branchement, g++ | 3,72 [3,35–4,08] ; 2,63 [2,35–2,92] (Cascade Lake : 1,62 ; 2,39) |
+| | 26 clés, moyenne géométrique : g++ ; clang++ ; corrections de la remarque | 1,105 ; 0,995 ; 0,901 |
+| C, grilles de K9 réallouées (`c_k9` / `c_ref`) | naturel ; tuned ; `mt` | 1,70 [1,33–2,16] ; 1,93 [1,58–2,32] ; 2,01 [1,63–2,42] |
+| C++, grilles allouées une fois (`cpp_k9` / `cpp_ref`) | naturel ; tuned ; `mt` | 0,63 [0,51–0,79] ; 0,72 [0,57–0,92] ; 0,41 [0,36–0,47] |
+| `cpp_k9` / C, même hôte | naturel ; tuned ; `mt` | 1,13 [0,96–1,30] ; 1,09 [0,90–1,34] ; 0,98 [0,79–1,17] |
+| Arène par `ANode*` (`cpp_k8` / `cpp_ref`) | K8 tuned | 0,766 [0,728–0,812] |
+| Forme de C, g++ (`cpp_intr` / `cpp_ref`) | Q1 tuned ; Q1 `mt` | 1,037 [0,951–1,117] ; 0,898 [0,787–1,006] |
+| | K5 tuned ; Q6 tuned ; Q6 `mt` ; K1 SoA | 1,109 ; 1,192 ; 1,152 ; 0,916 |
+
+* **À compilateur égal, C++ fait comme C** : sur l'hôte, C++ compilé par clang++ fait 0,995 fois le temps de C en
+  moyenne géométrique des 26 clés communes. Les écarts restants tiennent à la forme (K7 naturel, `unordered_map`, 2,25 ;
+  Q6 naturel, que clang++ vectorise dans la forme de C++ et pas dans celle de C, 0,31), au harnais (K9, 1,7 à 2,1) et au
+  placement du code (K3 en écrivain unique, 0,19).
+* **K4** : clang++ divise le temps de g++ par 2,4 à 3,5 et rejoint C (1,06 et 1,11).
+* **K9** : l'effet de la pratique d'allocation est établi (intervalles hors de 1). Sur cet hôte, réallouer les grilles
+  double presque le temps de C lui-même, en un fil comme à quatre ; allouées une fois, les grilles de C++ lui donnent
+  le temps de C (0,98 en `mt`). La pénalité dépend de l'hôte : dans les données principales (Cascade Lake), les
+  implémentations qui réallouent font le temps de C en un fil, et 1,1 à 1,9 fois celui de C à quatre fils.
+* **K8** : l'avantage de GCC se confirme (clang++ × 1,55 sur l'arène) ; l'arène par pointeur brut gagne 23 % sous g++.
+* **Q1** : non confirmé sur cet hôte. La forme de C n'y est pas plus rapide sous g++ (1,04), et le Q1 de C++ ne fait
+  que 1,03 fois celui de C (1,15 sur Cascade Lake).
+* **clang++ ne gagne pas partout** : il perd l'arène de K8 (× 1,55) et K5 naturel (× 1,94 ; GCC y met moitié moins
+  de temps que clang, en C comme en C++ : 79 contre 158 ms en C dans les données publiées de K5).
+
+### 4.3 Classement publié : l'erratum C1
+
+C++ garde 76,57 points (la règle v2, celle du score principal, ne change pas), mais son pilier de contrôle en règle v1
+perd 2 points, et la moitié des variantes tire cette règle : son rang espéré passe de 3,61 à 3,80, celui d'Odin de 3,63
+à 3,60. **Odin passe 2e et C++ 3e**, à égalité de fait (C++ devance Odin dans 50 % des variantes). C reste 1er (rang
+espéré 1,90 ; 1er dans 57 % des variantes, C++ dans 11 % au lieu de 14 %). Aucun autre langage ne change de place.
+
+### 4.4 Sensibilités (hors classement publié)
+
+| Scénario | Statut | C++ | C | Rang espéré de C++ | Devant C | Devant Odin | Fiabilité |
+|---|---|---|---|---|---|---|---|
+| Publié | publié | 76,57 | 80,01 | 3,80 (3e) | 20 % | 50 % | |
+| S-clang-K4-pont : K4 de clang++ | plan (information) | 79,71 | 80,01 | 2,24 (2e) | 49 % | 79 % | propre |
+| S-K8 : arène par `ANode*` | plan | 77,64 | 80,01 | 3,28 (2e) | 29 % | 59 % | propre |
+| S-intr : formes de C | plan | 76,09 | 79,82 | 3,97 (3e) | 18 % | 47 % | propre |
+| S-K9 : grilles allouées une fois | plan | 77,77 | 78,30 | 2,52 (2e) | 46 % | 72 % | références déplacées |
+| S-K9-pont | après coup | 77,00 | 80,01 | 3,64 (3e) | 22 % | 53 % | pénalité de l'hôte |
+| S-clang-K4 | plan | 80,32 | 78,11 | 1,52 (1er) | 80 % | 92 % | références déplacées |
+| S-clang : tout par clang++ | plan | 77,10 | 73,56 | 1,89 (1er) | 67 % | 86 % | références déplacées |
+| S-clang-pont | après coup | 75,09 | 79,46 | 4,83 (4e) | 10 % | 35 % | K9 de l'hôte (2,6 points) |
+| S-remarque : corrections 1 à 4 | plan | 78,42 | 71,70 | 1,55 (1er) | 83 % | 92 % | références déplacées |
+| S-remarque-pont | après coup | 78,88 | 79,28 | 2,66 (2e) | 41 % | 73 % | K2 à 8 Mio, D3 de l'hôte |
+| I-K9-C : C réalloue | plan (information) | 76,57 | 77,32 | 3,52 (3e) ; C 3,41 | 48 % | 50 % | majorant |
+| I-K9-maj : C, C par gcc, Chapel, Ada, Fortran réallouent | plan (information) | 77,18 | 77,93 | 3,37 (3e) ; C 3,23 | 48 % | 50 % | majorant |
+
+* **K4 suffit à combler l'écart** : avec le K4 de clang++, estimé par le pont prévu au plan, C++ aurait 79,7 points
+  contre 80,0 à C, et le devancerait dans 49 % des variantes. C'est le point central de la remarque, et il est exact.
+* **Mais le compilateur joue dans les deux sens.** g++ coûte K4 à C++ et lui rapporte l'arène de K8 et K5 naturel. Un
+  score de C++ entièrement compilé par clang++ ne se déduit pas proprement de cet hôte : le transfert déplace les
+  références (C à 73,6), et le pont importe la pénalité d'allocation de K9 propre à cet hôte (2,6 points de l'écart de
+  S-clang-pont). Le classement garde g++, seul à livrer `std::simd`, comme il garde un compilateur par langage.
+* **Toutes les corrections de la remarque ensemble** donnent, par le pont, 78,9 points contre 79,3 à C : C++ 2e, devant
+  Odin dans 73 % des variantes et devant C dans 41 %. « À égalité avec C » est presque juste, mais ce sont des
+  sensibilités (autre compilateur, meilleures formes, autre harnais), pas des erreurs.
+* **Le harnais de K9 pèse aussi sur C.** Si C réallouait ses grilles comme la majorité, avec la pénalité de cet hôte,
+  il perdrait 2,7 points et sa 1re place en rang espéré (3,41, derrière Odin, 3,33). Sur Cascade Lake, la pénalité est
+  moindre (sensible seulement à quatre fils) : c'est un majorant. Harmoniser les harnais de K9 serait une révision du
+  protocole pour toutes les implémentations, hors de cette remarque (plan, 3.3) : la limite est décrite dans le README.
+
+### 4.5 Bilan de la remarque
+
+* **Juste** : le code naturel de C++ est honnête ; `unordered_map` est 22 fois plus lent que sa table plate mais ne
+  coûte que 0,25 point face à C ; la décomposition de l'écart est exacte ; l'écart tient d'abord à K4, donc à g++
+  (79,7 points avec le K4 de clang++) ; le K9 à quatre fils de C++ tient au harnais (grilles réallouées) ; D2 et D4
+  tenaient à un processus chacun (confirmé par la remesure) ; GCC avantage C++ sur K8 ; la note C1 de `std::simd`
+  était trop haute en règle v1 (erratum) ; les faits sur GCC 16 et clang 23 vérifiables sans le web sont exacts.
+* **Inexact ou à nuancer** : le harnais de K9 n'est pas un défaut de C++ mais la pratique de la majorité, que la
+  spécification ne tranche pas ; D3 ne tient pas à un seul processus ; le compilateur ne joue pas que contre C++ (K8,
+  K5 naturel) ; le Q1 en intrinsèques n'est pas plus rapide sur cet hôte ; P2795 ne touche aucun noyau ; A6 reste 0.
+* **Ce qui change dans le classement publié** : l'erratum C1, qui fait passer C++ du 2e au 3e rang espéré, derrière
+  Odin, à égalité de fait (50 %). Le README dit désormais ce qui sépare C++ de C (K4 et le compilateur, puis K9 et la
+  pratique d'allocation, puis D3) et décrit deux limites du protocole : un compilateur par langage, et l'allocation
+  des grilles de K9, libre.

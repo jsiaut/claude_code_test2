@@ -21,7 +21,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ |
 | **C** (20 %) | | | | | | | | | | | | | | | | | | | | | |
-| C1 types vectoriels portables | ◐ | ● | ◐ | ● | ● | ● | ● | ○ | ◐ | ○ | ○ | ● | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
+| C1 types vectoriels portables | ◐ | ◐ | ◐ | ● | ● | ● | ● | ○ | ◐ | ○ | ○ | ● | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
 | C2 intrinsèques de la cible | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | C3 auto-vectorisation (mesurée) | ● | ● | ◐ | ○ | ● | ● | ◐ | ◐ | ◐ | ● | ● | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
 | C4 contrôle de la réassociation flottante | ◐ | ● | ● | ● | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
@@ -61,7 +61,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 
 * **A** : A1 = 1 (std::vector<struct> (bench)) ; A2 = 1 (offsetof, disposition standard (sonde)) ; A3 = 1 (champs de bits ; packed par attribut (sonde)) ; A4 = 1 (alignas + new aligné C++17 (sonde)) ; A5 = 1 (std::bit_cast, unions (sonde)) ; A6 = 0 (aucun en bibliothèque standard) ; A7 = 1 (std::array en ligne) ; A8 = 1 (cstdint)
 * **B** : B1 = 1 (pas de GC) ; B2 = 1 (std::pmr, concept Allocator (bench K8 tuned_alloc)) ; B3 = 1 (objets sur la pile) ; B4 = 0.5 (std::function, exceptions, coroutines peuvent allouer) ; B5 = 1 (pointeurs)
-* **C** : C1 = 1 (std::simd C++26 (bench K1/K5/K6)) ; C2 = 1 (immintrin.h) ; C3 = 1.0 (mesuré) ; C4 = 1 (std::reduce/transform_reduce et std::simd::reduce : ordre libre explicite) ; C5 = 0.5 (std::execution::par_unseq : série sans TBB tiers (libstdc++ : backend SERIAL, src c++config.h))
+* **C** : C1 = 0.5 (std::simd C++26 (bench K1/K5/K6) : « highly experimental » dans GCC 16, __cpp_lib_simd non défini, x86 seulement, absent de libc++ 23 ; vector_size : extension gcc/clang (corrigé le 1/11, remarque sur C++)) ; C2 = 1 (immintrin.h) ; C3 = 1.0 (mesuré) ; C4 = 1 (std::reduce/transform_reduce et std::simd::reduce : ordre libre explicite) ; C5 = 0.5 (std::execution::par_unseq : série sans TBB tiers (libstdc++ : backend SERIAL, src c++config.h))
 * **D** : D1 = 1 (std::jthread) ; D2 = 1 (std::memory_order) ; D3 = 1 (std::hardware_destructive_interference_size (sonde : 64)) ; D4 = 0.5 (pas en bibliothèque standard ; sched_setaffinity de la libc) ; D5 = 0.5 (atomic_thread_fence, std::barrier ; pause seulement par intrinsèque)
 * **E** : E1 = 1 (natif) ; E2 = 1 (déclaration asm (norme, sens défini par l'implémentation) (sonde)) ; E3 = 1 ([[likely]]/[[unlikely]] C++20 (sonde)) ; E4 = 0.5 (__builtin_prefetch (extension)) ; E5 = 0.5 (__restrict__ (extension)) ; E6 = 1 (pas de vérification par défaut) ; E7 = 1 (templates + consteval (sonde))
 * **F** : F1 = 1 (std::mdspan C++23 (sonde)) ; F2 = 0 (aucun) ; F3 = 1 (non signés modulaires) ; F4 = 0.5 (mmap POSIX + start_lifetime_as (sonde))
