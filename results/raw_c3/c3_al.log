@@ -1,0 +1,14 @@
+c3_al      k9   tuned                           p0 n=10 med=0.016486s ok={True} rc=0 
+c3_al      k9   mt                              p0 n=10 med=0.013123s ok={True} rc=0 
+c3_al      k9   mt                              p0 n=10 med=0.010767s ok={True} rc=0 
+c3_al      k9   tuned                           p0 n=10 med=0.028209s ok={True} rc=0 
+c3_al      k9   mt                              p0 n=10 med=0.009165s ok={True} rc=0 
+c3_al      k9   tuned                           p0 n=10 med=0.019451s ok={True} rc=0 
+c3_al      k9   tuned                           p0 n=10 med=0.025908s ok={True} rc=0 
+c3_al      k9   mt                              p0 n=10 med=0.013381s ok={True} rc=0 
+c3_al      k9   mt                              p0 n=10 med=0.010878s ok={True} rc=0 
+c3_al      k9   tuned                           p0 n=10 med=0.023494s ok={True} rc=0 
+c3_al      k9   mt                              p0 n=10 med=0.012948s ok={True} rc=0 
+c3_al      k9   tuned                           p0 n=10 med=0.024842s ok={True} rc=0 
+c3_al      k9   mt                              p0 n=10 med=0.011535s ok={True} rc=0 
+c3_al      k9   tuned                           p0 n=10 med=0.019342s ok={True} rc=0 

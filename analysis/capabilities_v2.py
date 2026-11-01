@@ -48,7 +48,7 @@ V2_OVERRIDES = {
     ("odin", "D4"): (1, "core:sys/linux livré avec le compilateur"),
     ("odin", "F4"): (1, "core:sys/linux et core:mem/virtual livrés"),
     # C3
-    ("c3", "F4"): (1, "liaison std::os::posix livrée"),
+    ("c3", "F4"): (1, "std::io::file::mmap (portable) et liaison std::os::posix livrés"),
     # D (LDC, compilateur de référence de l'étude)
     ("d", "C2"): (1, "ldc.gccbuiltins_x86 livré avec LDC"),
     ("d", "C4"): (1, "@fastmath (ldc.attributes), par fonction"),

@@ -1,0 +1,7 @@
+c3_thr     k9   mt                              p0 n=10 med=0.011766s ok={True} rc=0 
+c3_thr     k9   mt                              p0 n=10 med=0.011281s ok={True} rc=0 
+c3_thr     k9   mt                              p0 n=10 med=0.008493s ok={True} rc=0 
+c3_thr     k9   mt                              p0 n=10 med=0.010334s ok={True} rc=0 
+c3_thr     k9   mt                              p0 n=10 med=0.011255s ok={True} rc=0 
+c3_thr     k9   mt                              p0 n=10 med=0.010070s ok={True} rc=0 
+c3_thr     k9   mt                              p0 n=10 med=0.012562s ok={True} rc=0 
