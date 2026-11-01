@@ -103,8 +103,8 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 * **Les grandes marches sont établies.** Les 13 premiers devancent C# dans au moins 96 % des variantes, et sur les
   deux machines. Go devance Haskell, Haskell OCaml, OCaml JavaScript, dans 98 à 100 % des variantes. Ces variantes ne
   font varier ni l'effort d'implémentation ni le choix du code naturel : avec ses meilleures formes mesurées, une
-  particule en `struct` et un JIT stabilisé, C# dépasse Mojo au score (63,2 à 63,8 points contre 62,3) et fait jeu égal
-  avec lui au rang, 13e ou 14e ([`docs/CSHARP.md`](docs/CSHARP.md)).
+  particule en `struct` et un JIT stabilisé, C# dépasse Mojo au score (62,0 à 63,3 points contre 61,8) et fait jeu
+  égal avec lui au rang, 13e ou 14e ([`docs/CSHARP.md`](docs/CSHARP.md)).
 * **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Un langage y devance le suivant
   dans 48 à 74 % des variantes. C ou C++ est premier dans 61 % des variantes (C 49 %, C++ 12 %), Odin dans 17 %, Zig
   dans 10 %.
@@ -279,14 +279,14 @@ que la règle de la bibliothèque standard exclut ([`docs/MOJO.md`](docs/MOJO.md
 
 **14. C#.** La boîte à outils la plus riche des langages à ramasse-miettes : `struct`, `Span`, `stackalloc`,
 `Vector512`, intrinsèques, `StructLayout`. En SIMD explicite, K5 est à égalité avec C une fois le JIT stabilisé (4,3
-contre 3,9 ms, Emerald Rapids). Mais le code par défaut va contre la machine : 88 octets par particule, parcours permuté
-4,7 fois plus lent, et un JIT qui ne vectorise aucune boucle, même avec la PGO dynamique. Sa place tient au code par
-défaut, pas à une erreur du banc : le code naturel suit les directives .NET (une classe au-delà de 16 octets ; en
-`struct`, une particule tiendrait 64 octets, +1,9 point), et des versions optimisées mieux travaillées (K8 en pile
-explicite, K4 déroulé) vaudraient 2,6 à 4 points. Avec trois échauffements, ses boucles tournent en code OSR : l'effet
-moyen est faible (moins d'un point), mais une méthode chargée de vecteurs peut y perdre l'optimisation. Toutes ces
-sensibilités cumulées le mettent devant Mojo au score (63 à 64 points) et à égalité avec lui au rang, 13e ou 14e
-([`docs/CSHARP.md`](docs/CSHARP.md)).
+contre 3,9 ms, Emerald Rapids). Mais le code par défaut va contre la machine : 88 octets par particule, parcours
+permuté 4,7 fois plus lent, et un JIT qui ne vectorise aucune boucle, même avec la PGO dynamique. Sa place tient au
+code par défaut, pas à une erreur du banc : le code naturel suit les directives .NET (une classe au-delà de 16
+octets ; en `struct`, une particule tiendrait 64 octets, +1,9 point), et des versions optimisées mieux travaillées
+(K8 en pile explicite, K4 déroulé) vaudraient 2,5 à 3,9 points. Avec trois échauffements, ses boucles tournent en code
+OSR : l'effet moyen est faible (moins d'un point), mais une méthode chargée de vecteurs peut y perdre l'optimisation.
+Toutes ces sensibilités cumulées le mettent devant Mojo au score (62 à 63 points) et à égalité avec lui au rang, 13e
+ou 14e ([`docs/CSHARP.md`](docs/CSHARP.md)).
 
 **15. Java.** Excellent modèle mémoire (`VarHandle`), JIT C2 efficace, et le meilleur allocateur de petits objets
 de l'étude (K8 naturel, 301 ms). Pas de types valeur dans le JDK 27 : 78 octets par particule, parcours permuté 4,9
