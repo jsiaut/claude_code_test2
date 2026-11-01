@@ -1,0 +1,7 @@
+# Les 14 noyaux que le banc C déclare noinline
+k1_natural k1_aos k1_soa k2_chase k4_natural k4_branchless k5_natural k5_tuned q6_natural q6_tuned q1_natural q1_tuned k9_natural k9_rows
+bench/odin/ms : noyaux absents (inlinés) k1_natural k1_aos k1_soa k2_chase k4_natural k4_branchless k5_natural k5_tuned q6_tuned k9_natural
+bench/odin_fix/ms : noyaux absents (inlinés)
+
+# Seule annotation du banc de la campagne
+47:@(optimization_mode = "favor_size") // empêche l'inlining agressif de la boucle mesurée (comme noinline)

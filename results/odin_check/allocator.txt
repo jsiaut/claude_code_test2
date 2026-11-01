@@ -1,0 +1,27 @@
+# base/runtime/heap_allocator.odin : sur-allocation pour l'alignement
+28:		a := max(alignment, align_of(rawptr))
+29:		space := a-1 + size_of(rawptr) + size
+38:			allocated_mem = heap_alloc(space, zero_memory)
+
+# base/runtime/heap_allocator_unix.odin : calloc par défaut
+_heap_alloc :: proc "contextless" (size: int, zero_memory := true) -> rawptr {
+	if size <= 0 {
+		return nil
+	}
+	if zero_memory {
+		return _unix_calloc(1, size)
+	} else {
+		return _unix_malloc(size)
+	}
+}
+
+# Sonde usable.c : bloc occupé par 24 et 39 octets
+demande 24 octets : utilisable 24, bloc 32
+demande 39 octets : utilisable 40, bloc 48
+
+# K8 naturel (binaire de la campagne) : t_build -> mem_alloc_bytes -> appel indirect -> heap_allocator_proc -> calloc
+   1c210:	call   13fc0 <runtime::mem_alloc_bytes>
+   1c23a:	call   1c1d0 <ms::t_build>
+   1c24d:	call   1c1d0 <ms::t_build>
+   14011:	call   *%r11
+   14065:	call   *%r11

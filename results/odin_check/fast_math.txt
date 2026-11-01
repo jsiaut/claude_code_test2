@@ -1,0 +1,14 @@
+# src/types.cpp : indices de bit de OdinFastMathFlag
+819:enum OdinFastMathFlag : u8 {
+820-	OdinFastMath_Allow_Reassoc    = 0,
+821-	OdinFastMath_No_NaNs          = 1,
+822-	OdinFastMath_No_Infs          = 2,
+
+# src/llvm_backend_opt.cpp : les indices sont testés comme des masques (Allow_Reassoc = 0 n'est jamais posé)
+	u64 fast_math_flags = e->Procedure.fast_math_flags;
+	LLVMFastMathFlags llvm_flags = 0;
+	if (fast_math_flags & OdinFastMath_Allow_Reassoc)    llvm_flags |= LLVMFastMathAllowReassoc;
+	if (fast_math_flags & OdinFastMath_No_NaNs)          llvm_flags |= LLVMFastMathNoNaNs;
+
+# odin build -help : aucune option globale de mathématiques rapides
+occurrences de « fast » : 0

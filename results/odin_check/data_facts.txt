@@ -1,0 +1,4 @@
+k6:tuned:q1 : odin 46.1 ms, c 32.1 ms, zig 34.6 ms, c3 33.5 ms, cpp 36.9 ms, rust 39.5 ms
+k6:mt:q1 : odin 20.5 ms, c 13.4 ms, zig 14.7 ms, c3 12.4 ms, cpp 14.5 ms, rust 18.6 ms
+K7 naturel, 13 premiers (s ; rapport à leur table optimisée) : 1. zig 1.66 (3.4), 2. nim 2.10 (4.3), 3. odin 2.42 (4.9), 4. julia 3.27 (4.5), 5. chapel 3.52 (7.4), 6. rust 3.77 (7.0), 7. mojo 4.82 (10.0), 8. c 5.11 (11.2), 9. fortran 5.19 (8.7), 10. d 6.03 (12.3), 11. c3 7.10 (14.9), 12. cpp 10.64 (22.0), 13. ada 11.07 (21.2)
+K8 naturel, 13 premiers (s) : nim 0.87, fortran 0.91, c 0.97, julia 0.99, ada 1.03, cpp 1.05, zig 1.05, rust 1.13, c3 1.50, mojo 1.79, odin 1.88, chapel 1.93, d 2.98

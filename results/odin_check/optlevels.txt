@@ -1,0 +1,17 @@
+# src/build_settings.cpp : niveaux d'optimisation
+enum OptimizationLevel : i32 {
+	OptimizationLevel_None       = -1,
+	OptimizationLevel_Minimal    =  0,
+	OptimizationLevel_Size       =  1,
+	OptimizationLevel_Speed      =  2,
+	OptimizationLevel_Aggressive =  3,
+};
+
+# src/llvm_backend_passes.cpp : pipeline de LLVM par niveau
+549:// default<O2>
+551:	case 2:
+1083:	case 3:
+1084:// default<O3>
+
+# -o:aggressive n'a pas d'autre effet
+src/build_settings.cpp:479:	OptimizationLevel_Aggressive =  3,

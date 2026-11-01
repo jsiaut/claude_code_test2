@@ -1,0 +1,8 @@
+# core/time/time_linux.odin et core/sys/linux/sys.odin : lecture d'horloge par appel système brut (sans vDSO)
+30:_tick_now :: proc "contextless" () -> Tick {
+31-	t, _ := linux.clock_gettime(.MONOTONIC_RAW)
+32-	return Tick{_nsec = i64(t.time_sec)*1e9 + i64(t.time_nsec)}
+2750:clock_gettime :: proc "contextless" (clock: Clock_Id) -> (ts: Time_Spec, err: Errno) {
+2751-	ret := syscall(SYS_clock_gettime, clock, &ts)
+2752-	err = Errno(-ret)
+2753-	return

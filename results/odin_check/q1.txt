@@ -1,0 +1,20 @@
+# Q1 tuned : comptage de chaque groupe
+313:				cnt[g] += i64(simd.reduce_add_pairs(m & 1))
+c : 337: cnt[g] += __builtin_popcount(m);
+zig : 330: cnt[g] += @popCount(@as(u16, @bitCast(m)));
+rust : 331: cnt[g] += m.count_ones() as i64;
+cpp : 348: cnt[k] += ss::reduce_count(m);
+csharp : 307: cnt[g] += BitOperations.PopCount((uint)Vector512.ExtractMostSignificantBits(m));
+c3 : 355: cnt[$g] += math::select(m, (int[<16>])1, zi).sum();
+mojo : 347: cnt[g] += Int64(m.select(I16(1), I16(0)).reduce_add())
+d_fix : 297: cnt[g] -= m;
+
+# Binaires de la campagne : popcnt et permutations dans Q1 tuned
+odin : 428 instructions, popcnt 0, permutations 39
+c : 603 instructions, popcnt 6, permutations 92
+zig : 583 instructions, popcnt 2, permutations 88
+c3 : 401 instructions, popcnt 2, permutations 17
+
+# core:simd : extract_msbs et card existent dans dev-2026-10
+2251:extract_msbs :: intrinsics.simd_extract_msbs
+1658:card :: proc "contextless" (s: $S/bit_set[$E; $U]) -> int {
