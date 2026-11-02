@@ -143,3 +143,77 @@ réplication comprise) et de l'état actuel.
 * Pas de mesure sur Cascade Lake (aucun hôte disponible) : les clés de Go qui en viennent gardent leurs temps.
 * Pas de `GODEBUG` ni d'option du runtime dans les données publiées : `go_nopre` ne sert qu'à montrer le mécanisme.
 * Pas de changement de la matrice : ses cellules de Go sont exactes.
+
+## 4. Résultats (après les mesures)
+
+Mesures du 2 novembre, de 10:07:12 à 10:38:43, sur la machine 18 : 672 processus (96 cellules × 7), aucune somme de
+contrôle fausse ; 26 processus refaits pour vol de temps (six deux fois), deux gardés au-dessus de 2 % après les deux
+reprises que prévoit la règle (C, K9 `mt`, 2,72 % ; `go_fix`, K5 tuned, 2,08 %) ; vol médian 0,50 % ; 2,57 à 2,76 GHz
+effectifs avant et après. Rien d'autre ne tournait. Sorties : `results/report_go.md` et `results/go_check.json`
+(`analysis/go_check.py`) ; données : `results/raw_go/`. Le scénario Avant reproduit exactement le classement publié
+d'avant (écart 0). Aucun écart au plan.
+
+### 4.1 La transition AVX→SSE (`go_fix` / `go_ref`, même hôte)
+
+| Clé | `go_ref` | `go_fix` | Rapport (IC 95 %) | C, même hôte | Retenu |
+|---|---|---|---|---|---|
+| K5 tuned | 22,57 ms | 8,66 ms | 0,384 (0,318–0,482) | 4,32 ms | 0,384 : 18,86 → 7,24 ms (C 3,94) |
+| K1 soa | 2,56 ms | 2,77 ms | 1,081 (1,029–1,141) | 2,77 ms | 1 (plafond) |
+| Q6 tuned | 17,15 ms | 17,67 ms | 1,031 (0,955–1,123) | 17,75 ms | 1 (plafond) |
+| Q6 `mt` | 4,92 ms | 4,51 ms | 0,917 (0,812–1,021) | 4,84 ms | 0,917 |
+
+K5 appelle son noyau 65 536 fois par répétition, et payait la transition à chaque appel : corrigé, Go passe de 4,8 à
+1,8 fois le temps de C. K1 soa et Q6 n'appellent le leur qu'une fois par répétition : rien à gagner, comme attendu.
+
+### 4.2 L'artefact (`go_noexp` / `go_ref`, même hôte)
+
+* **Massif sur K1, nul ailleurs.** K1 naturel, aos et permuté : × 0,017, 0,023 et 0,016 (2 241 → 38 ms, 1 464 → 34,
+  2 298 → 37) ; sans préemption asynchrone (`go_nopre`), K1 naturel fait aussi 37 ms. Les 29 autres clés sans
+  archsimd : 0,87 à 1,11, presque toutes dans l'intervalle de 1. Le désassemblage dit pourquoi : K1 mêle SSE hérité
+  (`MOVSS`, `CVTSS2SD`, `MULSD`) et VEX (les FMA de `GOAMD64=v4`), K9 est tout en SSE ; c'est le passage d'un encodage à
+  l'autre, une fois les registres salis par la préemption, qui coûte.
+* **Clés publiées depuis Emerald Rapids** : K5 naturel × 1,023, K9 naturel × 0,989, `mt` × 0,914 (transfert) ; K9 tuned
+  : transfert 27,64 ms, pont 21,88 ms, écart 26 %, la règle retient le pont (× 0,820). L'effet sur le classement publié
+  est donc faible, comme le dit la remarque, mais pas parce que le publié viendrait de Cascade Lake : K5 et K9 viennent
+  d'Emerald Rapids, et l'artefact ne touche presque pas ces deux noyaux.
+* **Information** : sans préemption asynchrone, K9 tuned va 1,38 fois plus lentement (non expliqué ; hors du publié).
+
+### 4.3 Les sensibilités
+
+| Forme | Clé | Rapport (IC 95 %), même hôte | Remarque | Facteur retenu |
+|---|---|---|---|---|
+| Réduction de K5 dans les registres | K5 tuned | 0,753 (0,616–0,929) : 10,60 → 7,98 ms (`go_exp`) | 5,5 ms | 0,289 (5,45 ms) |
+| K9 en archsimd | K9 tuned | 0,776 (0,674–0,879) : 20,0 → 15,5 ms (C 14,5) | 18,4 → 11,9 ms | 0,636 |
+| K9 en archsimd, quatre goroutines | K9 `mt` | 0,730 (0,657–0,817) : 7,9 → 5,8 ms (C 4,8) | | 0,667 |
+| Q1 en une passe, archsimd | K6 tuned Q1 | 1,361 (1,088–1,644) : 75,9 → 103,2 ms (C 24,5) | 60,5 → 40,6 ms | 1 |
+| idem, quatre goroutines | K6 `mt` Q1 | 0,940 (0,898–0,988) | | 0,940 |
+| Arène itérative | K8 tuned | 0,621 (0,556–0,691) : 277 → 172 ms (C 295) | 257 → 132 ms | pont 0,378 |
+
+* **Mon Q1 en une passe est plus lent que la forme scalaire** : trente accumulateurs vectoriels et les additions
+  masquées par `IfElse` ne tiennent pas en registres avec ce compilateur ; la forme de la remarque (40,6 ms sur son
+  hôte) n'est pas la mienne, et je ne la connais pas. La règle du plan (min(1, r)) n'en retient rien.
+* **K8** : sur Cascade Lake, le K8 optimisé de Go fait 1,54 fois le temps de C ; sur la machine 18, 0,94 fois (le K8 de
+  C, compilé par clang, y est lent : `docs/C.md`). Le pont (155 ms) s'écarte du transfert (255 ms) de 64 % ; la règle
+  retient le pont. S-mesures-T, en transfert seul, donne l'autre lecture.
+* Dans `go_exp`, le K5 tuned corrigé fait 10,6 ms, contre 8,7 dans `go_fix` : même code, autre binaire (placement).
+
+### 4.4 Classement (analyse globale de la v3 rejouée, 20 000 variantes)
+
+| Scénario | Score de Go | Plafond | Rang espéré | Place | Devant Java |
+|---|---|---|---|---|---|
+| Avant | 43,0 | 38,7 | 15,62 | 16 | 30 % |
+| G-K5 ; G-K5-T | 45,0 ; 45,0 | 43,7 | 15,47 | 16 | 42 % |
+| G-pre ; G-pre-T | 43,3 ; 43,1 | 39,4 ; 38,8 | 15,61 ; 15,62 | 16 | 31 % |
+| **G-E (publié)** ; G-E-T | **45,3** ; 45,1 | 44,5 ; 43,9 | 15,45 ; 15,47 | 16 | 43 % ; 42 % |
+| S-K5r | 46,0 | 46,1 | 15,39 | 16 | 48 % |
+| S-K9v | 46,0 | 46,1 | 15,41 | 16 | 47 % |
+| S-Q1 | 45,4 | 44,6 | 15,45 | 16 | 44 % |
+| S-K8 | 47,7 | 50,3 | 15,17 | 15 | 62 % |
+| S-mesures ; S-mesures-T | 49,2 ; 47,6 | 54,1 ; 50,1 | 15,01 ; 15,21 | 15 | 71 % ; 60 % |
+
+* **Classement publié** : Go gagne 2,3 points (45,3 : 2,0 par K5, 0,3 par l'artefact) et reste 16e, mais l'avance de
+  Java n'est plus solide : Go le devance dans 43 % des variantes (30 % avant). C# reste loin (54,9). Les autres
+  langages ne bougent pas.
+* **Les estimations de la remarque tiennent** : 45,8 avec les errata a minima (ici 45,3), 47,3 avec les formes expertes
+  (46,0 pour K5 ou K9 seuls), 47,4 à 49,0 avec l'arène (S-mesures-T 47,6, S-mesures 49,2). Avec l'arène seule, ou avec
+  toutes ses formes optimisées, Go passe 15e, devant Java.

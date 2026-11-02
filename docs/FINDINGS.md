@@ -687,3 +687,22 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **API FFM** (finale depuis le JDK 22) : `MemoryLayout.unionLayout` et les vues de segments, y compris d'un tableau
   du tas, réinterprètent la mémoire sans option de préversion ; des `sequenceLayout` imbriqués donnent un tableau
   multidimensionnel contigu, lu et écrit par plusieurs indices.
+
+## Remarque sur Go (2 novembre, machine 18, Emerald Rapids) — `docs/GO.md`, `results/go_check/`
+
+* **Le K1 naturel de Go à 2 s sur Emerald Rapids** (machines 3 et 15, « cause non cherchée ») : avec
+  `GOEXPERIMENT=simd`, sur un processeur AVX-512, la préemption asynchrone de go1.27.3 (`runtime/preempt_amd64.s`)
+  sauvegarde et restaure les registres Z0 à Z31, puis revient sans `VZEROUPPER`. Le code scalaire qui mêle SSE hérité
+  (`MOVSS`, `CVTSS2SD`, `MULSD`) et VEX (les FMA de `GOAMD64=v4`) paie ensuite chaque passage d'un encodage à l'autre :
+  K1 naturel 2 241 ms avec l'expérience, 38 ms sans, 37 ms avec `GODEBUG=asyncpreemptoff=1`. K9, tout en SSE, et les
+  autres noyaux ne sont presque pas touchés (0,87 à 1,11). Toutes les variantes de Go étaient compilées avec
+  l'expérience ; celles qui n'utilisent pas archsimd sont désormais prises d'une copie compilée sans elle.
+* **K5 tuned de Go** : après la boucle AVX-512, la réduction s'exécute en SSE hérité (`XORPS`, `ADDSS`) sans
+  `VZEROUPPER` ; les autres compilateurs l'émettent d'eux-mêmes, archsimd demande `ClearAVXUpperBits()`. Une ligne :
+  22,6 → 8,7 ms sur la machine 18 (C 4,3).
+* **Le compilateur Go déplace `ClearAVXUpperBits`** : dans une réduction horizontale suivie de l'appel, il a sorti les
+  accumulateurs, exécuté `VZEROUPPER`, puis refait la réduction en AVX-512 avant un `MOVD` SSE. Passer le résultat par
+  la mémoire (`StoreArray`) avant l'appel impose l'ordre.
+* **K9 en archsimd** (`Float64x8`, même ordre des additions, résultat identique au bit près) : × 0,78 en un fil, × 0,73
+  à quatre goroutines. **Q1 en une passe** en archsimd (six groupes, trente accumulateurs) : × 1,36, plus lent que la
+  forme scalaire. **K8 tuned itératif** : × 0,62 (277 → 172 ms ; C 295 sur cet hôte).

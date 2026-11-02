@@ -957,3 +957,15 @@ Robustesse :
   archsimd (Go a C1 = ½, hors de la classe de la règle de D), arène de K8 itérative, réduction de K5 dans les registres.
   Plan (`docs/GO.md`, sections 1 à 3), copies (`tools/go_check/make_copies.py`, 79 cellules validées) et outil de
   mesure (`tools/measure_go.py`) poussés avant les mesures.
+* 2026-11-02, 10:07:12-10:38:43 : **mesures de la remarque sur Go** (`tools/measure_go.py`, machine 18) : 672
+  processus (96 cellules × 7), aucune somme de contrôle fausse ; 26 refaits pour vol de temps (six deux fois), deux
+  gardés au-dessus de 2 % après les deux reprises (2,72 et 2,08 %). Le script d'analyse et les deux points d'accroche du
+  calcul publié (`ratios_k9h` appliqués après K9 de la machine 16, rapports de la réplication) ont été poussés pendant
+  les mesures, avant tout résultat.
+* 2026-11-02, 10:41 à 10:50 : **résultats de la remarque sur Go** (`results/report_go.md`). Aucun écart au plan.
+  Transition AVX→SSE : K5 tuned × 0,384 (22,6 → 8,7 ms ; publié 18,86 → 7,24 ms), sans effet sur K1 soa et Q6 (un
+  appel par répétition). Artefact : × 0,016 à 0,023 sur K1 naturel, aos et permuté ; 0,87 à 1,11 ailleurs ; clés
+  publiées depuis Emerald Rapids peu touchées (K9 tuned × 0,820 par le pont, les autres 0,91 à 1,02). Classement
+  publié (G-E) : Go 45,35 points (43,02), 16e, devant Java dans 43 % des variantes (30 %). Sensibilités : K9 en
+  archsimd × 0,78 et 0,73, K8 itératif × 0,62 (pont 0,378), réduction de K5 dans les registres × 0,75, Q1 en une passe
+  en archsimd plus lent (× 1,36) ; avec l'arène ou toutes les formes, Go passe 15e (47,6 à 49,2 points).
