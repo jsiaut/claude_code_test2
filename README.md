@@ -424,23 +424,23 @@ du langage.
 
 * Deux processeurs Intel, virtualisés et partagés ; ni AMD, ni ARM, ni compteurs matériels.
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Quinze langages ont été relus après coup par des connaisseurs, Java en dernier, alors que la référence de C
-  est la seule implémentation mise au point, mesures à l'appui, avant le plan. Ada et Fortran y ont gagné deux places
-  chacun, par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la boucle de
-  mesure) ; D une place, par la correction de son Q1 optimisé et deux errata de la règle v1 ; Rust deux places
-  (trois avant les errata de C3), surtout par la remesure des queues de latence de K8, qui a aussi déplacé Zig, C3,
-  Nim et Ada ; Chapel une place par trois errata de la matrice ; Mojo 2,7 points, Julia 1,8 point, C3 et Odin 0,9
-  point, mais aucune place, par des errata de la matrice (ceux de C3 font passer Nim devant Rust, à égalité ; celui
-  d'Odin le met à égalité avec C++) ; Zig trois places, mais par une version de compilateur que la règle exclut ;
-  C++ a perdu la 2e place au profit d'Odin par un erratum de la règle v1, et C et C++ chacun 3,6 points de contrôle en
-  règle v1 par deux autres, relevés par la remarque sur C, sans changer de place (C reste 1er, mais ne l'est plus que
-  dans 52 % des variantes, contre 57 %) ; Java 1,0 point, sans changer de place, par la correction de son K5
-  désaligné et un erratum de la matrice ; C# et Nim rien, leurs remarques ne relevant ni erratum ni erreur du banc.
-  Des versions optimisées mieux travaillées vaudraient deux places à Nim (Q1 en intrinsèques), 0,8 point à Odin, déjà
-  2e (Q1 par popcount), une place à Julia (avec K5 en 512 bits), aucune à Rust ni à C3 une par une et, cumulées avec
-  un autre choix de code naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour dépasser Mojo au score ; 4 points
-  à Java (Q1 en une passe, K7 isolé de sa boucle de mesure, K8 itératif), sans changer de place ; à C++, le K4 de
-  clang++ donnerait la 1re place (80,3 points contre 79,9), et à C une arène de K8 écrite par itération 4,1 points
+  l'autre. Quinze langages ont été relus après coup par des connaisseurs, Java en dernier et C juste avant, alors que
+  sa référence est la seule implémentation mise au point, mesures à l'appui, avant le plan. Ada et Fortran y ont gagné
+  deux places chacun, par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la
+  boucle de mesure) ; D une place, par la correction de son Q1 optimisé et deux errata de la règle v1 ; Rust deux
+  places (trois avant les errata de C3), surtout par la remesure des queues de latence de K8, qui a aussi déplacé Zig,
+  C3, Nim et Ada ; Chapel une place par trois errata de la matrice ; Mojo 2,7 points, Julia 1,8 point, C3 et Odin
+  0,9 point, mais aucune place, par des errata de la matrice (ceux de C3 font passer Nim devant Rust, à égalité ;
+  celui d'Odin le met à égalité avec C++) ; Zig trois places, mais par une version de compilateur que la règle
+  exclut ; C++ a perdu la 2e place au profit d'Odin par un erratum de la règle v1, et C et C++ chacun 3,6 points de
+  contrôle en règle v1 par deux autres, relevés par la remarque sur C, sans changer de place (C reste 1er, mais ne
+  l'est plus que dans 52 % des variantes, contre 57 %) ; Java 1,0 point, sans changer de place, par la correction de
+  son K5 désaligné et un erratum de la matrice ; C# et Nim rien, leurs remarques ne relevant ni erratum ni erreur du
+  banc. Des versions optimisées mieux travaillées vaudraient deux places à Nim (Q1 en intrinsèques), 0,8 point à Odin,
+  déjà 2e (Q1 par popcount), une place à Julia (avec K5 en 512 bits), aucune à Rust ni à C3 une par une et, cumulées
+  avec un autre choix de code naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour dépasser Mojo au score ; 4
+  points à Java (Q1 en une passe, K7 isolé de sa boucle de mesure, K8 itératif), sans changer de place ; à C++, le K4
+  de clang++ donnerait la 1re place (80,3 points contre 79,9), et à C une arène de K8 écrite par itération 4,1 points
   (84,0) : la règle les garde hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine (Cascade Lake pour Ada et Fortran, Emerald Rapids
   pour D et Rust), puis reportées sur les données principales par des rapports appariés ; pour une clé de Fortran et
@@ -482,12 +482,12 @@ du langage.
   threads passent par un module privé de `std`.
 * Le plafond de K4 n'admet que des formes scalaires et compte donc la vectorisation automatique (voir plus haut).
 * Ailleurs, le plafond admet le SIMD explicite (« toutes techniques »). Sans lui
-  ([`docs/NOSIMD.md`](docs/NOSIMD.md)), les mêmes douze langages restent en tête et les neuf mêmes derrière (Go et
-  Java, au coude à coude, échangent leurs places à la lettre) ; C et Odin restent dans les six premiers, C++ dans les
-  sept. L'ordre des douze dépend du traitement des formes scalaires qui manquent : à la lettre, Chapel, Fortran et
-  Julia passent devant, parce que dans K1 et K5 le SIMD des autres porte aussi la disposition SoA et la réassociation
-  de la somme ; à forme égale pour tous, comme sans les noyaux vectorisables, C, Odin et C++ gardent les trois
-  premières places (Odin 1er à forme égale, C 1er sans les noyaux vectorisables).
+  ([`docs/NOSIMD.md`](docs/NOSIMD.md)), les mêmes douze langages restent en tête et les neuf mêmes derrière (Java
+  devant Go, de peu, même à la lettre) ; C et Odin restent dans les six premiers, C++ dans les sept. L'ordre des
+  douze dépend du traitement des formes scalaires qui manquent : à la lettre, Chapel, Fortran et Julia passent
+  devant, parce que dans K1 et K5 le SIMD des autres porte aussi la disposition SoA et la réassociation de la somme ;
+  à forme égale pour tous, comme sans les noyaux vectorisables, C, Odin et C++ gardent les trois premières places
+  (Odin 1er à forme égale, C 1er sans les noyaux vectorisables).
 * Trois échauffements pour les langages à JIT : les boucles chaudes tournent souvent en code OSR (compilé pour
   reprendre une boucle en cours), sans atteindre le niveau d'optimisation final. Mesuré pour C# : 0 à 2,5 % en moyenne
   (moins d'un point), de −15 % à +16 % selon le noyau ([`docs/CSHARP.md`](docs/CSHARP.md)) ; pour Java, le K7
@@ -509,7 +509,7 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   n'ont pas de threads standard. À Chapel, 8 points de plafond, une fois ses réductions réécrites en sommes
   partielles comme celles des autres ; j'avais d'abord compté un produit scalaire 23 fois plus lent, faute de cette
   réécriture ([`docs/CHAPEL.md`](docs/CHAPEL.md)).
-* **Les deux règles à la fois** : C passe 6e, la corrélation monte à 0,89. Le reste de l'écart tient à la question
+* **Les deux règles à la fois** : C passe 6e, la corrélation monte à 0,90. Le reste de l'écart tient à la question
   posée : leur score ne compte pas la vitesse. Mêler à peu près moitié de leur score au mien reproduit leur ordre.
 * **Sur les faits, les deux grilles, notées indépendamment, s'accordent** (0,74 à 0,81 ; 0,83 à 0,88 le 30 octobre :
   les errata de ma grille, surtout ceux de Mojo et de Julia, l'en ont éloignée). Leurs désaccords portent presque tous

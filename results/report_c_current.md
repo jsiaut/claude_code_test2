@@ -2,7 +2,7 @@
 
 Plan : `docs/C.md`. Mesures : `results/raw_c/` (machine 16, 7 processus par cellule). Code : `analysis/c_check.py`.
 Processus rejetés : aucun.
-Contrôle : le scénario Publié reproduit results/k9_check.json (écart maximal 0.0e+00).
+Contrôle : le scénario Publié reproduit results/java_check.json, J-E (écart maximal 0.0e+00).
 
 ## Rapports appariés (même hôte)
 
@@ -20,14 +20,14 @@ Contrôle : le scénario Publié reproduit results/k9_check.json (écart maximal
 | c_gcc_ref / c_ref | k8:natural (témoin) | 771,3 | 602,2 | 0,781 | 0,700–0,871 |
 
 Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0 ms avec la meilleure forme (S-K8).
-État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md) ; Publié = results/k9_check.json.
+État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md), K5 et K1 soa de Java corrigés et F1 de Java à ½ (docs/JAVA.md) ; Publié = results/java_check.json (J-E).
 
 ## Scénarios (analyse globale de la v3 rejouée, 20 000 variantes)
 
 | Scénario | Statut | C | C++ | Odin | Rang espéré de C | Place de C | C 1er | C devant C++ | C devant Odin | Tête |
 |---|---|---|---|---|---|---|---|---|---|---|
 | Publié | publié | 79,94 | 77,10 | 74,00 | 2,21 | 1 | 49 % | 76 % | 69 % | C, Odin, C++, Zig |
-| S-K8-val | sensibilité | 82,41 | 77,10 | 74,00 | 1,67 | 1 | 70 % | 90 % | 81 % | C, Odin, C++, Zig |
+| S-K8-val | sensibilité | 82,41 | 77,10 | 74,00 | 1,66 | 1 | 70 % | 90 % | 81 % | C, Odin, C++, Zig |
 | S-K8-it | sensibilité | 84,01 | 77,03 | 73,94 | 1,52 | 1 | 77 % | 93 % | 85 % | C, Odin, C++, Zig |
 | S-K8 | sensibilité | 84,01 | 77,03 | 73,94 | 1,52 | 1 | 77 % | 93 % | 85 % | C, Odin, C++, Zig |
 | R-v1 | info | 73,83 | 72,47 | 73,04 | 2,97 | 2 | 28 % | 68 % | 47 % | Odin, C, C3, C++ |
@@ -40,7 +40,7 @@ Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0
 | Langage | Score | Contrôle v1 | Rang espéré avant → après | 1er avant → après |
 |---|---|---|---|---|
 | C | 79,94 | 77,8 → 74,2 | 2,21 → 2,21 | 49 % → 49 % |
-| Odin | 74,00 | 81,3 → 81,3 | 3,16 → 3,16 | 17 % → 17 % |
+| Odin | 74,00 | 81,3 → 81,3 | 3,16 → 3,16 | 18 % → 18 % |
 | C++ | 77,10 | 82,7 → 79,1 | 3,76 → 3,76 | 12 % → 12 % |
 | Zig | 72,28 | 83,2 → 83,2 | 4,93 → 4,93 | 10 % → 10 % |
 | C3 | 71,62 | 77,7 → 77,7 | 5,14 → 5,14 | 4 % → 4 % |
@@ -52,10 +52,10 @@ Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0
 | Fortran | 65,42 | 59,2 → 59,2 | 10,29 → 10,29 | 0 % → 0 % |
 | Julia | 62,34 | 68,9 → 68,9 | 11,57 → 11,57 | 0 % → 0 % |
 | Mojo | 62,28 | 66,0 → 66,0 | 12,18 → 12,18 | 0 % → 0 % |
-| C# | 54,86 | 65,8 → 65,8 | 14,06 → 14,06 | 0 % → 0 % |
-| Java | 46,14 | 41,5 → 41,5 | 15,27 → 15,27 | 0 % → 0 % |
-| Go | 43,02 | 44,9 → 44,9 | 15,57 → 15,57 | 0 % → 0 % |
-| Haskell | 34,47 | 33,4 → 33,4 | 16,99 → 16,99 | 0 % → 0 % |
+| C# | 54,86 | 65,8 → 65,8 | 14,09 → 14,09 | 0 % → 0 % |
+| Java | 47,15 | 42,7 → 42,7 | 15,18 → 15,18 | 0 % → 0 % |
+| Go | 43,02 | 44,9 → 44,9 | 15,62 → 15,62 | 0 % → 0 % |
+| Haskell | 34,47 | 33,4 → 33,4 | 17,00 → 17,00 | 0 % → 0 % |
 | OCaml | 23,99 | 24,7 → 24,7 | 17,98 → 17,98 | 0 % → 0 % |
 | JavaScript | 14,24 | 11,6 → 11,6 | 19,07 → 19,07 | 0 % → 0 % |
 | Python | 9,94 | 22,4 → 22,4 | 20,30 → 20,30 | 0 % → 0 % |
@@ -63,11 +63,11 @@ Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0
 
 **Publié** : 1. C (2,21, 79,9), 2. Odin (3,16, 74,0), 3. C++ (3,76, 77,1), 4. Zig (4,93, 72,3), 5. C3 (5,14, 71,6), 6. Rust (6,82, 69,9), 7. Nim (6,91, 69,3), 8. D (7,23, 72,6).
 
-**S-K8-val** : 1. C (1,67, 82,4), 2. Odin (3,28, 74,0), 3. C++ (3,90, 77,1), 4. Zig (5,00, 72,3), 5. C3 (5,23, 71,6), 6. Rust (6,85, 69,9), 7. Nim (6,94, 69,3), 8. D (7,26, 72,6).
+**S-K8-val** : 1. C (1,66, 82,4), 2. Odin (3,28, 74,0), 3. C++ (3,90, 77,1), 4. Zig (5,00, 72,3), 5. C3 (5,23, 71,6), 6. Rust (6,85, 69,9), 7. Nim (6,94, 69,3), 8. D (7,25, 72,6).
 
-**S-K8-it** : 1. C (1,52, 84,0), 2. Odin (3,32, 73,9), 3. C++ (3,93, 77,0), 4. Zig (5,02, 72,2), 5. C3 (5,26, 71,5), 6. Rust (6,85, 69,9), 7. Nim (6,94, 69,2), 8. D (7,26, 72,6).
+**S-K8-it** : 1. C (1,52, 84,0), 2. Odin (3,32, 73,9), 3. C++ (3,93, 77,0), 4. Zig (5,02, 72,2), 5. C3 (5,26, 71,5), 6. Rust (6,86, 69,9), 7. Nim (6,94, 69,2), 8. D (7,26, 72,6).
 
-**S-K8** : 1. C (1,52, 84,0), 2. Odin (3,32, 73,9), 3. C++ (3,93, 77,0), 4. Zig (5,02, 72,2), 5. C3 (5,26, 71,5), 6. Rust (6,85, 69,9), 7. Nim (6,94, 69,2), 8. D (7,26, 72,6).
+**S-K8** : 1. C (1,52, 84,0), 2. Odin (3,32, 73,9), 3. C++ (3,93, 77,0), 4. Zig (5,02, 72,2), 5. C3 (5,26, 71,5), 6. Rust (6,86, 69,9), 7. Nim (6,94, 69,2), 8. D (7,26, 72,6).
 
 **R-v1** : 1. Odin (2,74, 73,0), 2. C (2,97, 73,8), 3. C3 (4,23, 72,3), 4. C++ (4,41, 72,5), 5. Zig (4,78, 70,9), 6. Rust (6,39, 69,8), 7. Nim (6,77, 68,3), 8. D (7,66, 69,8).
 

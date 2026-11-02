@@ -2,7 +2,7 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/k9_check.json, « Publié ».
+Témoin : écart maximal 0.0e+00 avec results/java_check.json, « J-E ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
@@ -22,8 +22,8 @@ Témoin : écart maximal 0.0e+00 avec results/k9_check.json, « Publié ».
 | Julia | 12 (62,3) | 12 (63,1) | 3 (64,8) | 3 (64,8) | 12 (67,3) | 12 (63,0) | 10 (62,3) |
 | Mojo | 13 (62,3) | 13 (63,2) | 13 (44,9) | 13 (44,9) | 13 (55,0) | 13 (57,7) | 12 (62,3) |
 | C# | 14 (54,9) | 14 (56,2) | 14 (43,0) | 14 (43,0) | 14 (53,1) | 14 (50,2) | 14 (54,9) |
-| Java | 15 (46,1) | 15 (47,3) | 16 (36,6) | 16 (36,6) | 15 (49,8) | 15 (44,8) | 15 (46,1) |
-| Go | 16 (43,0) | 16 (43,1) | 15 (37,3) | 15 (37,3) | 16 (46,6) | 16 (40,1) | 16 (43,0) |
+| Java | 15 (47,2) | 15 (48,3) | 15 (37,1) | 15 (37,1) | 15 (50,3) | 15 (45,2) | 15 (47,2) |
+| Go | 16 (43,0) | 16 (43,1) | 16 (37,3) | 16 (37,3) | 16 (46,6) | 16 (40,1) | 16 (43,0) |
 | Haskell | 17 (34,5) | 17 (34,9) | 17 (26,3) | 17 (26,3) | 17 (31,7) | 17 (29,9) | 17 (34,5) |
 | OCaml | 18 (24,0) | 18 (24,3) | 18 (24,8) | 18 (24,8) | 18 (26,2) | 18 (24,8) | 18 (24,0) |
 | JavaScript | 19 (14,2) | 19 (14,3) | 19 (14,6) | 19 (14,6) | 19 (18,3) | 19 (14,4) | 19 (14,2) |
@@ -36,8 +36,8 @@ Témoin : écart maximal 0.0e+00 avec results/k9_check.json, « Publié ».
 |---|---|---|---|
 | Publié | 1,000 | C (49 %) | aucune |
 | Contrôle sans mt | 0,996 | C (48 %) | D +2, Rust -1, Nim -1 |
-| S-scalaire | 0,734 | Chapel (46 %) | Julia +9, Fortran +9, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Java -1, Nim -1, Go +1 |
-| S-scalaire-Mojo | 0,734 | Chapel (46 %) | Julia +9, Fortran +9, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Java -1, Nim -1, Go +1 |
+| S-scalaire | 0,735 | Chapel (45 %) | Julia +9, Fortran +9, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Nim -1 |
+| S-scalaire-Mojo | 0,735 | Chapel (45 %) | Julia +9, Fortran +9, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Nim -1 |
 | S-symétrique | 0,994 | Odin (29 %) | Rust -2, C -1, Odin +1, Fortran +1, D +1, Chapel -1, Nim +1 |
 | S-noyaux-scalaires | 0,979 | C (48 %) | Ada +4, Zig -3, Rust -2, C3 +1, D -1, Nim +1 |
 | S-importées | 0,965 | C (50 %) | Nim -6, Julia +2, Ada -2, Fortran +2, Chapel +2, D +1, Mojo +1 |
@@ -60,7 +60,7 @@ Témoin : écart maximal 0.0e+00 avec results/k9_check.json, « Publié ».
 | Julia | 62,3 | 64,2 | 67,9 | 67,9 | 66,5 | 64,0 | 62,3 |
 | Mojo | 67,0 | 69,3 | 23,5 | 23,3 | 45,0 | 55,5 | 67,0 |
 | C# | 53,6 | 57,0 | 23,8 | 23,8 | 45,7 | 42,1 | 53,6 |
-| Java | 55,0 | 57,8 | 31,0 | 31,0 | 59,5 | 51,6 | 55,0 |
+| Java | 56,5 | 59,4 | 31,0 | 31,0 | 59,5 | 51,6 | 56,5 |
 | Go | 38,7 | 39,0 | 24,1 | 24,1 | 42,7 | 31,5 | 38,7 |
 | Haskell | 34,6 | 35,6 | 14,1 | 14,1 | 26,2 | 23,3 | 34,6 |
 | OCaml | 18,4 | 19,0 | 20,1 | 20,1 | 21,2 | 20,4 | 18,4 |

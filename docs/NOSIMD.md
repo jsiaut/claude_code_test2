@@ -316,3 +316,10 @@ moyen 15,11 contre 15,16). À la lettre, C est 5e, Odin 6e et C++ 7e (il était 
 premiers dans les trois scénarios, C++ dans les sept. À forme égale (S-symétrique), C, Odin et C++ retrouvent les
 trois premières places : Odin 1er (2,64), C 2e (3,32), C++ 3e (3,33), Zig 4e (4,25) ; sans les noyaux vectorisables,
 C, Odin, C++, comme avant. Sans les mesures mt, C est 1er dans 48 % des variantes (49 % au publié).
+
+### 4.11 Recalcul après la remarque sur Java (2 novembre)
+
+Recalculé de nouveau (`results/report_nosimd_current.md`, témoin égal au scénario J-E de `results/java_check.json` :
+K5 de Java corrigé, F1 de Java à ½). Seules deux places bougent : à la lettre (S-scalaire), Java repasse devant Go
+(15e et 16e, rang moyen 15,09 contre 15,14) ; Java est donc 15e dans tous les scénarios. Le reste ne change pas : à
+forme égale, Odin, C et C++ en tête ; sans les mesures mt, C est 1er dans 48 % des variantes (49 % au publié).

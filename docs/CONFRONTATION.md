@@ -420,6 +420,10 @@ les 6e et 7e places de mon ordre), B 0,85, C 0,84 (Odin passe devant C, 2e), D 0
 3, P(C premier) passe sous 0,5 dès w = 0,15 (0,20 avant), les deux autres seuils ne changent pas ; test 2 : C garde
 94 % de son plafond sous leur restriction de code ; tests 1 et 4 et kappa du juge inchangés.
 
+Rejouée après la remarque sur Java (2 novembre, `docs/JAVA.md` : K5 de Java corrigé, F1 de Java à ½) : Java passe
+devant Go dans les scénarios C et D (15e et 16e, comme dans leur ordre où Java est 12e et Go 17e) ; scénario A 0,78,
+B 0,85, C 0,85, D 0,90 ; C 1er, 5e, 2e et 6e ; seuils du test 3 inchangés.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le
