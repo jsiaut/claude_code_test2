@@ -1,0 +1,48 @@
+# Données publiées (K5 : machine 3 ; K9 : machine 16, harnais commun ; autres : Cascade Lake)
+clé ; Java ; C ; C# (ms, moyenne géométrique des médianes de processus)
+k1:aos:energy ; 42.28 ; 38.44 ; 38.86
+k1:natural:energy ; 56.23 ; 41.38 ; 55.09
+k1:natural_shuffled:energy ; 276.03 ; 39.34 ; 259.19
+k1:soa:energy ; 8.71 ; 7.76 ; 7.93
+k2:tuned:16384 ; 7.27 ; 6.81 ; 8.05
+k2:tuned:16777216 ; 679.96 ; 695.47 ; 695.31
+k2:tuned:2097152 ; 119.53 ; 113.97 ; 107.92
+k2:tuned:262144 ; 21.75 ; 18.28 ; 23.21
+k2:tuned:268435456 ; 1538.75 ; 1460.69 ; 1484.10
+k2:tuned:33554432 ; 765.25 ; 770.59 ; 785.26
+k2:tuned:524288 ; 26.62 ; 26.51 ; 34.46
+k2:tuned:65536 ; 18.88 ; 18.12 ; 20.26
+k2:tuned:67108864 ; 1082.36 ; 974.96 ; 1033.96
+k2:tuned:8388608 ; 620.15 ; 626.64 ; 635.19
+k3:rmw_packed ; 2038.88 ; 2459.20 ; 2549.60
+k3:rmw_padded ; 227.62 ; 226.93 ; 271.83
+k3:sw_packed ; 142.19 ; 156.05 ; 115.69
+k3:sw_padded ; 63.10 ; 59.74 ; 65.43
+k4:branchless_unsorted ; 6.69 ; 2.84 ; 16.31
+k4:natural_sorted ; 8.37 ; 3.64 ; 11.26
+k4:natural_unsorted ; 78.06 ; 4.04 ; 82.81
+k5:natural ; 141.89 ; 158.11 ; 86.69
+k5:tuned ; 6.95 ; 3.94 ; 4.13
+k6:mt:q1 ; 30.67 ; 13.44 ; 29.32
+k6:mt:q6 ; 9.61 ; 8.54 ; 9.71
+k6:natural:q1 ; 111.50 ; 83.44 ; 186.31
+k6:natural:q6 ; 111.04 ; 64.00 ; 155.72
+k6:tuned:q1 ; 88.35 ; 32.11 ; 71.08
+k6:tuned:q6 ; 25.76 ; 21.35 ; 21.73
+k7:natural ; 9150.67 ; 5106.52 ; 5649.81
+k7:tuned ; 1165.82 ; 456.85 ; 685.58
+k8:natural ; 302.12 ; 973.35 ; 884.16
+k8:tuned ; 233.04 ; 265.63 ; 354.14
+k9:mt ; 11.83 ; 4.73 ; 13.21
+k9:natural ; 16.96 ; 13.86 ; 71.90
+k9:tuned ; 20.09 ; 15.88 ; 18.88
+K1 permuté / naturel (Java) : 4.91
+K7 tuned Java / C, Cascade Lake : 2.55
+K7 tuned Java / C, machine 3 : 1.26
+java : contrôle 41.46, plafond 55.02, défaut 38.46, score 46.14
+csharp : contrôle 68.75, plafond 53.64, défaut 37.37, score 54.86
+go : contrôle 48.66, plafond 38.68, défaut 42.07, score 43.02
+écart C# - Java : 8.72 points, dont contrôle 9.55, plafond -0.55, défaut -0.27
+K1, empreinte publiée : 78.01 o par particule ; objet 8 + 64 = 72 o ; tableau de références de l'ArrayList : capacité 6153400 (croissance de 1,5 à partir de 10), 5.87 o par particule (dont 4 o de référence) ; total 77.87 o
+K10 tuned, campagne (médiane des médianes de processus, ms) : odin 11.5 (3), c_gcc 18.5 (2), fortran 19.5 (3), luajit 22.3 (2), java 29.0 (2), d 33.8 (3), chapel 36.8 (3), zig 39.4 (2)
+K10 tuned, remesure à 9 processus (médiane des médianes de processus, ms) : java 12.7 (9), odin 17.6 (9), chapel 18.6 (9), fortran 19.3 (9), luajit 22.0 (9), d 26.2 (9), ada 32.9 (9), cpp 33.8 (9)

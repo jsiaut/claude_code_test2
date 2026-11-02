@@ -910,3 +910,16 @@ Robustesse :
   révision, plafonds, paragraphes (C, Odin, C++, Zig, C3, Rust, Nim, Ada, Chapel, Julia), limites, lecture et
   reproduction ; `docs/SPEC.md`, `docs/FINDINGS.md`, `docs/CONFRONTATION.md`.
 
+* 2026-11-02, 7 h 24 : **machine 17**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207, 4 vCPU ;
+  2,15 à 2,44 GHz effectifs, latence à 4 Mio 57 ns, DRAM 15 Go/s : `results/hw/machine17/`).
+* 2026-11-02 : **remarque sur Java** transmise par l'utilisateur ; vérifications sans consulter de page web, sur le
+  JDK 27.0.1 de l'étude, par des sondes et sur les données (`tools/java_check/`, `results/java_check/`). Exacts : place,
+  piliers, en-têtes compacts, 78 octets (la somme de la remarque compte la référence deux fois), Valhalla, handicaps,
+  K7 sur la machine 3, K10 (dans la remesure à 9 processus). Erreur de mon implémentation : K5 lisait ses vecteurs dans
+  des tableaux du tas, à 12 octets de l'objet, quand toutes les autres implémentations à SIMD explicite alignent leurs
+  données sur 64 octets (C# par la mémoire native). Erratum de la grille : F1 = ½ (`sequenceLayout` imbriqués, déjà
+  crédités ½ en A7) ; A5 : texte corrigé, note ½ (règle FFM de toute la ligne). Inexact pour le JDK 27 : K9 optimisé
+  « scalaire » (C2 le vectorise). Sensibilités : Q1 en une passe (Java a C1 = ½, hors de la classe de la règle de D),
+  réserve de fils, K9 en Vector API, K7 isolé et par lots, K8 itératif, cases B3 et F2, libc. Plan (`docs/JAVA.md`,
+  sections 1 à 3), copies (`tools/java_check/make_copies.py`, 30 cellules validées) et outil de mesure
+  (`tools/measure_java.py`) poussés avant les mesures.

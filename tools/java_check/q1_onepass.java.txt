@@ -1,0 +1,65 @@
+    // Q1 en une passe (remarque sur Java, sensibilité) : l'algorithme de la référence C (lignes 16 par 16, masques par
+    // groupe), les accumulateurs des six groupes en variables locales (un tableau de vecteurs les mettrait sur le tas).
+    static void q1OnePass(int lo, int hi, long[] acc) {
+        IntVector c100 = IntVector.broadcast(IS, 100), z = IntVector.zero(IS);
+        LongVector zl = LongVector.zero(LS);
+        int i = lo;
+        while (i + 16 <= hi) {
+            int end = i + 2048 <= hi ? i + 2048 : hi - (hi - i) % 16;
+            IntVector q0 = z, p0 = z, dp0 = z; LongVector cl0 = zl, ch0 = zl; long n0 = 0;
+            IntVector q1 = z, p1 = z, dp1 = z; LongVector cl1 = zl, ch1 = zl; long n1 = 0;
+            IntVector q2 = z, p2 = z, dp2 = z; LongVector cl2 = zl, ch2 = zl; long n2 = 0;
+            IntVector q3 = z, p3 = z, dp3 = z; LongVector cl3 = zl, ch3 = zl; long n3 = 0;
+            IntVector q4 = z, p4 = z, dp4 = z; LongVector cl4 = zl, ch4 = zl; long n4 = 0;
+            IntVector q5 = z, p5 = z, dp5 = z; LongVector cl5 = zl, ch5 = zl; long n5 = 0;
+            for (; i < end; i += 16) {
+                VectorMask<Integer> pass = IntVector.fromArray(IS, sd, i).compare(VectorOperators.LE, 10471);
+                IntVector vg = ((IntVector) ByteVector.fromArray(BS, rf, i).convertShape(VectorOperators.B2I, IS, 0)).lanewise(VectorOperators.LSHL, 1)
+                        .add((IntVector) ByteVector.fromArray(BS, ls, i).convertShape(VectorOperators.B2I, IS, 0));
+                IntVector vq = (IntVector) ByteVector.fromArray(BS, q, i).convertShape(VectorOperators.B2I, IS, 0);
+                IntVector vd = (IntVector) ByteVector.fromArray(BS, d, i).convertShape(VectorOperators.B2I, IS, 0);
+                IntVector vt = ((IntVector) ByteVector.fromArray(BS, t, i).convertShape(VectorOperators.B2I, IS, 0)).add(c100);
+                IntVector vp = IntVector.fromArray(IS, pr, i);
+                IntVector vdp = vp.mul(c100.sub(vd));
+                LongVector chl = ((LongVector) vdp.convertShape(VectorOperators.I2L, LS, 0)).mul((LongVector) vt.convertShape(VectorOperators.I2L, LS, 0));
+                LongVector chh = ((LongVector) vdp.convertShape(VectorOperators.I2L, LS, 1)).mul((LongVector) vt.convertShape(VectorOperators.I2L, LS, 1));
+                VectorMask<Integer> m0 = pass.and(vg.compare(VectorOperators.EQ, 0)); long b0 = m0.toLong();
+                n0 += Long.bitCount(b0); q0 = q0.add(vq, m0); p0 = p0.add(vp, m0); dp0 = dp0.add(vdp, m0);
+                cl0 = cl0.add(chl, VectorMask.fromLong(LS, b0)); ch0 = ch0.add(chh, VectorMask.fromLong(LS, b0 >>> 8));
+                VectorMask<Integer> m1 = pass.and(vg.compare(VectorOperators.EQ, 1)); long b1 = m1.toLong();
+                n1 += Long.bitCount(b1); q1 = q1.add(vq, m1); p1 = p1.add(vp, m1); dp1 = dp1.add(vdp, m1);
+                cl1 = cl1.add(chl, VectorMask.fromLong(LS, b1)); ch1 = ch1.add(chh, VectorMask.fromLong(LS, b1 >>> 8));
+                VectorMask<Integer> m2 = pass.and(vg.compare(VectorOperators.EQ, 2)); long b2 = m2.toLong();
+                n2 += Long.bitCount(b2); q2 = q2.add(vq, m2); p2 = p2.add(vp, m2); dp2 = dp2.add(vdp, m2);
+                cl2 = cl2.add(chl, VectorMask.fromLong(LS, b2)); ch2 = ch2.add(chh, VectorMask.fromLong(LS, b2 >>> 8));
+                VectorMask<Integer> m3 = pass.and(vg.compare(VectorOperators.EQ, 3)); long b3 = m3.toLong();
+                n3 += Long.bitCount(b3); q3 = q3.add(vq, m3); p3 = p3.add(vp, m3); dp3 = dp3.add(vdp, m3);
+                cl3 = cl3.add(chl, VectorMask.fromLong(LS, b3)); ch3 = ch3.add(chh, VectorMask.fromLong(LS, b3 >>> 8));
+                VectorMask<Integer> m4 = pass.and(vg.compare(VectorOperators.EQ, 4)); long b4 = m4.toLong();
+                n4 += Long.bitCount(b4); q4 = q4.add(vq, m4); p4 = p4.add(vp, m4); dp4 = dp4.add(vdp, m4);
+                cl4 = cl4.add(chl, VectorMask.fromLong(LS, b4)); ch4 = ch4.add(chh, VectorMask.fromLong(LS, b4 >>> 8));
+                VectorMask<Integer> m5 = pass.and(vg.compare(VectorOperators.EQ, 5)); long b5 = m5.toLong();
+                n5 += Long.bitCount(b5); q5 = q5.add(vq, m5); p5 = p5.add(vp, m5); dp5 = dp5.add(vdp, m5);
+                cl5 = cl5.add(chl, VectorMask.fromLong(LS, b5)); ch5 = ch5.add(chh, VectorMask.fromLong(LS, b5 >>> 8));
+            }
+            acc[0] += n0; acc[1] += q0.reduceLanesToLong(VectorOperators.ADD); acc[2] += p0.reduceLanesToLong(VectorOperators.ADD);
+            acc[3] += ((LongVector) dp0.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp0.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[4] += cl0.add(ch0).reduceLanes(VectorOperators.ADD);
+            acc[5] += n1; acc[6] += q1.reduceLanesToLong(VectorOperators.ADD); acc[7] += p1.reduceLanesToLong(VectorOperators.ADD);
+            acc[8] += ((LongVector) dp1.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp1.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[9] += cl1.add(ch1).reduceLanes(VectorOperators.ADD);
+            acc[10] += n2; acc[11] += q2.reduceLanesToLong(VectorOperators.ADD); acc[12] += p2.reduceLanesToLong(VectorOperators.ADD);
+            acc[13] += ((LongVector) dp2.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp2.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[14] += cl2.add(ch2).reduceLanes(VectorOperators.ADD);
+            acc[15] += n3; acc[16] += q3.reduceLanesToLong(VectorOperators.ADD); acc[17] += p3.reduceLanesToLong(VectorOperators.ADD);
+            acc[18] += ((LongVector) dp3.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp3.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[19] += cl3.add(ch3).reduceLanes(VectorOperators.ADD);
+            acc[20] += n4; acc[21] += q4.reduceLanesToLong(VectorOperators.ADD); acc[22] += p4.reduceLanesToLong(VectorOperators.ADD);
+            acc[23] += ((LongVector) dp4.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp4.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[24] += cl4.add(ch4).reduceLanes(VectorOperators.ADD);
+            acc[25] += n5; acc[26] += q5.reduceLanesToLong(VectorOperators.ADD); acc[27] += p5.reduceLanesToLong(VectorOperators.ADD);
+            acc[28] += ((LongVector) dp5.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp5.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[29] += cl5.add(ch5).reduceLanes(VectorOperators.ADD);
+        }
+        if (i < hi) q1Natural(i, hi, acc);
+    }

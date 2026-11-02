@@ -1,0 +1,5 @@
+# Sonde FFM (JDK 27.0.1, sans option de préversion) : F1 et A5
+F1 : taille 96 o ; [2][1] = 21.0 ; décalage de [2][1] = 56 ; lu à plat : 21.0
+F1 sur le tas : heap[11] = 42.0
+A5 : union de 4 o ; bits de 1.0f lus par le membre i : 0x3f800000
+A5 : float[] du tas lu en int : 0x3f800000 0xc0000000

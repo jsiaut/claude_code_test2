@@ -1,0 +1,12 @@
+k6 tuned_1p q1
+k6 mt_1p q1
+k6 mt_pool q1
+k6 mt_pool_1p q1
+k6 mt_pool q6
+k9 tuned_vec
+k9 mt_pool
+k9 mt_pool_vec
+k7 natural_iso
+k7 tuned_iso
+k7 tuned_batch
+k8 tuned_it

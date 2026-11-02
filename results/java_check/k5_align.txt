@@ -1,0 +1,16 @@
+# K5 tuned, sonde indicative (machine 17) : médiane de 31 répétitions après 3 d'échauffement, un processus par ligne
+C décalage 0 : médiane 5.537 ms (min 4.352) somme 509.0858
+C décalage 12 : médiane 7.559 ms (min 6.930) somme 509.0858
+C décalage 0 : médiane 3.813 ms (min 3.421) somme 509.0858
+C décalage 12 : médiane 7.636 ms (min 6.959) somme 509.0858
+C décalage 0 : médiane 3.971 ms (min 3.481) somme 509.0858
+C décalage 12 : médiane 8.210 ms (min 6.971) somme 509.0858
+Java heap : médiane 7.131 ms (min 7.086) somme 509.0858 adresse%64=0
+Java seg : médiane 4.944 ms (min 4.719) somme 509.0858 adresse%64=0
+Java seg12 : médiane 8.194 ms (min 8.102) somme 509.0858 adresse%64=12
+Java heap : médiane 8.053 ms (min 7.225) somme 509.0858 adresse%64=0
+Java seg : médiane 4.821 ms (min 4.697) somme 509.0858 adresse%64=0
+Java seg12 : médiane 8.384 ms (min 8.076) somme 509.0858 adresse%64=12
+Java heap : médiane 7.215 ms (min 7.111) somme 509.0858 adresse%64=0
+Java seg : médiane 4.839 ms (min 4.660) somme 509.0858 adresse%64=0
+Java seg12 : médiane 10.904 ms (min 8.191) somme 509.0858 adresse%64=12

@@ -1,0 +1,9 @@
+# Base des données des tableaux (sun.misc.Unsafe.arrayBaseOffset), JDK 27.0.1, machine 17
+## défaut (UseCompactObjectHeaders=true)
+byte[] 12 int[] 12 float[] 12 long[] 16 double[] 16 Object[] 12
+## -XX:-UseCompactObjectHeaders
+byte[] 16 int[] 16 float[] 16 long[] 16 double[] 16 Object[] 16
+     intx MaxVectorSize                            = 64                                     {C2 product} {default}
+      int ObjectAlignmentInBytes                   = 8                              {product lp64_product} {default}
+      int UseAVX                                   = 3                                    {ARCH product} {default}
+     bool UseCompactObjectHeaders                  = true                           {product lp64_product} {default}

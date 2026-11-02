@@ -1,0 +1,7 @@
+# Création, lancement et attente de 4 fils (2 000 mesures après 500 d'échauffement), machine 17
+C : 4 fils créés, lancés, attendus : médiane 109.8 µs (p10 85.7, p90 143.2)
+Java : 4 fils créés, lancés, attendus : médiane 446.8 µs (p10 379.0, p90 545.2)
+C : 4 fils créés, lancés, attendus : médiane 111.4 µs (p10 101.2, p90 143.7)
+Java : 4 fils créés, lancés, attendus : médiane 453.2 µs (p10 373.1, p90 568.3)
+C : 4 fils créés, lancés, attendus : médiane 102.7 µs (p10 88.6, p90 156.3)
+Java : 4 fils créés, lancés, attendus : médiane 537.0 µs (p10 427.2, p90 737.5)
