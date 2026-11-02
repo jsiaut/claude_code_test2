@@ -197,3 +197,103 @@ Pour chacun : score, piliers, rang espéré, place, rang à 90 %, voisins. Sorti
   tous les langages.
 * Pas de changement des variantes naturelles, ni du protocole (échauffements, compilation sur place).
 * Pas de remesure sur la machine 3 (indisponible) : K5 y est corrigé par le rapport mesuré sur un hôte du même modèle.
+
+## 4. Résultats (après les mesures)
+
+Mesures du 2 novembre, de 7:56:48 à 8:11:02, sur la machine 17 : 280 processus (40 cellules × 7), aucune somme de
+contrôle fausse ; 24 processus refaits pour vol de temps (trois deux fois), aucun gardé au-dessus de 2 % (vol médian
+0,70 %, maximum 1,95 %) ; 2,65 à 2,75 GHz effectifs avant et après. Rien d'autre ne tournait. Sorties :
+`results/report_java.md` et `results/java_check.json` (`analysis/java_check.py`) ; données : `results/raw_java/`. Le
+scénario Avant reproduit exactement le classement publié d'avant (écart 0).
+
+**Un écart au plan**, décidé après avoir vu les ponts et avant tout score corrigé (commit `9a1f793`) : dans J-K5 et
+J-E, un rapport de correction supérieur à 1 est ramené à 1. La règle du pont donnait 1,085 à K1 soa, c'est-à-dire un
+temps publié plus long pour un code qui, sur le même hôte, va 1,3 fois plus vite (4.1). J-E-règle applique la règle
+telle quelle, pour information.
+
+### 4.1 La correction (`java_fix` / `java_ref`, même hôte)
+
+| Clé | `java_ref` | `java_fix` | Rapport (IC 95 %) | C, même hôte |
+|---|---|---|---|---|
+| K5 tuned | 9,23 ms | 5,54 ms | 0,600 (0,508–0,722) | 3,86 ms |
+| K1 soa | 4,85 ms | 3,68 ms | 0,758 (0,615–0,936) | 3,02 ms |
+| Témoins : K5 naturel, K1 naturel, K6 tuned Q6 | | | 1,013 ; 1,021 ; 1,019 | |
+
+* **K5** : aligné, Java passe de 2,4 à 1,4 fois le temps de C sur le même hôte. Report sur les données publiées
+  (machine 3) : transfert 4,17 ms, pont par le C 5,65 ms, écart 26 % ; la règle retient le pont (× 0,813) : 6,95 →
+  5,65 ms (C 3,94).
+* **K1 soa** : sur la machine 17, les quatre colonnes lues (4 × 16 Mio) tiennent dans le cache L3 de 260 Mio, et
+  l'alignement compte (× 0,76). Sur Cascade Lake, d'où vient le K1 publié, la boucle est limitée par la mémoire (Java
+  8,71 ms, C 7,76) : le transfert (6,60 ms) mettrait Java devant C sur une boucle que la bande passante borne, et le
+  pont (9,45 ms) allongerait le temps d'un code corrigé. Aucun des deux reports n'est crédible ; par l'écart au plan,
+  K1 soa garde son temps publié.
+
+### 4.2 Les sensibilités (`java_exp`, forme nouvelle / variante d'origine, même copie)
+
+| Forme | Clé | Rapport (IC 95 %) | Remarque | Retenu |
+|---|---|---|---|---|
+| Q1 en une passe | K6 tuned Q1 | 0,402 (0,336–0,476) : 72,8 → 29,3 ms (C 25,3) | × 0,40 à 0,58 | 0,402 |
+| Q1 en une passe, quatre fils | K6 `mt` Q1 | 0,510 (0,458–0,560) : 19,9 → 10,1 ms (C 8,0) | | 0,510 |
+| Réserve de quatre fils | K6 `mt` Q1 | 1,065 (0,944–1,190) | | 1 |
+| Réserve de quatre fils | K6 `mt` Q6 | 1,084 (0,967–1,210) | × 0,81 | 1 |
+| Réserve, Q1 en une passe | K6 `mt` Q1 | 0,509 (0,454–0,569) | | 0,509 |
+| Réserve de quatre fils | K9 `mt` | 0,814 (0,708–0,944) | × 0,72 | pont 0,639 |
+| Vector API | K9 tuned | 0,960 (0,786–1,196) | | 0,960 |
+| Réserve et Vector API | K9 `mt` | 0,765 (0,661–0,885) | × 0,63 | pont 0,601 |
+| Noyau isolé | K7 tuned | 0,716 (0,639–0,806) : 436 → 312 ms (C 184) | × 0,78 | information |
+| Isolé, lots de 16 lus d'avance | K7 tuned | 0,802 (0,720–0,899) | × 0,67 | 0,802 |
+| Noyau isolé | K7 naturel | 0,964 (0,791–1,200) | | 1 (pont) |
+| Arène itérative | K8 tuned | 0,641 (0,561–0,726) : 246 → 158 ms (C 301) | × 0,79 | 0,641 |
+
+* **Q1 en une passe** : confirmé ; Java fait alors 1,16 fois le temps de C sur le même hôte (2,9 fois en blocs).
+* **La réserve de fils** ne gagne rien sur K6 avec quatre vCPU : créer quatre fils (0,45 ms) pèse peu face à 6 à
+  20 ms de calcul, et la remise des tâches à la réserve coûte autant. Elle gagne sur K9 `mt` (× 0,81), qui crée quatre
+  fils à chacune de ses quatre itérations. La remarque (deux vCPU) trouvait × 0,81 sur Q6.
+* **K9 en Vector API** : × 0,96, dans le bruit, puisque le C2 du JDK 27 vectorise déjà la boucle (section 2).
+* **K7** : isoler le noyau dans sa méthode suffit (× 0,72) : sinon, le code mesuré est la compilation sur place de
+  `runK7`, appelé une seule fois. Les lots de 16 lus d'avance y perdent (× 0,80 au total) : sans instruction de
+  préchargement, une lecture anticipée est une vraie lecture, qui attend. S-K7 retient la forme prévue au plan
+  (`tuned_batch`) ; l'isolement seul vaudrait un peu plus. Le pont du K7 naturel est absurde (38,6 s : le K7 naturel de
+  C, qui alloue chaque entrée, va 11 fois plus vite sur Emerald Rapids que sur Cascade Lake) ; plafonné à 1.
+* **K8 itératif** : × 0,64. Sur cet hôte, le K8 optimisé de Java était déjà plus rapide que celui de C (246 contre
+  301 ms).
+
+### 4.3 Classement (analyse globale de la v3 rejouée, 20 000 variantes)
+
+| Scénario | Score de Java | Contrôle | Plafond | Rang espéré | Place | Devant Go | Devant C# |
+|---|---|---|---|---|---|---|---|
+| Avant | 46,1 | 41,5 | 55,0 | 15,27 | 15 | 64 % | 10 % |
+| J-F1 | 46,6 | 42,7 | 55,0 | 15,23 | 15 | 68 % | 10 % |
+| J-K5 ; J-K5-T | 46,7 ; 48,1 | 41,5 | 56,5 ; 60,1 | 15,22 ; 15,08 | 15 | 67 % ; 73 % | 12 % ; 19 % |
+| **J-E (publié)** | **47,2** | 42,7 | 56,5 | 15,18 | 15 | 70 % | 12 % |
+| J-E-T ; J-E-règle | 48,6 ; 46,9 | 42,7 | 60,1 ; 55,9 | 15,04 ; 15,20 | 15 | 75 % ; 69 % | 20 % ; 12 % |
+| S-Q1 | 48,3 | 42,7 | 59,3 | 15,08 | 15 | 74 % | 18 % |
+| S-pool | 47,8 | 42,7 | 58,1 | 15,13 | 15 | 72 % | 15 % |
+| S-K9v | 47,9 | 42,7 | 58,3 | 15,12 | 15 | 72 % | 16 % |
+| S-K7 | 47,8 | 42,7 | 58,0 | 15,13 | 15 | 73 % | 15 % |
+| S-K8 | 48,4 | 42,7 | 59,7 | 15,06 | 15 | 74 % | 19 % |
+| S-mesures ; S-mesures-T | 51,2 ; 52,4 | 42,7 | 66,6 ; 69,7 | 14,79 ; 14,62 | 15 | 81 % ; 83 % | 33 % ; 42 % |
+| S-cases | 48,3 | 46,0 | 56,5 | 15,08 | 15 | 77 % | 15 % |
+| S-libc-J | 48,7 | 47,2 | 56,5 | 15,04 | 15 | 78 % | 17 % |
+| S-tout | 53,9 | 50,5 | 66,6 | 14,48 | 15 | 89 % | 50 % |
+
+* **Classement publié** : Java gagne 1,0 point (47,2 : 0,4 par F1, 0,6 par K5) et reste 15e ; il devance Go dans 70 %
+  des variantes (64 % avant) et C# dans 12 %. Les vingt autres langages gardent leurs scores et leurs places. En
+  transfert seul (J-E-T), le K1 soa de Java (6,60 ms) deviendrait la frontière de K1 et retirerait 0,3 à 0,4 point à
+  tous les autres : c'est ce que l'écart au plan évite.
+* **Les estimations de la remarque tiennent** : 47,1 avec la grille (ici 46,6, F1 seul), 47,3 à 49,2 avec Q1 et K5
+  (47,2 et 48,3), 51,1 avec K7 et K8 (S-mesures : 51,2), 53,2 avec les cases discutables (S-tout : 53,9). Dans tous les
+  scénarios, Java reste 15e.
+* **Avec tout** (S-tout), Java rejoint C# au rang espéré (14,48 contre 14,46 ; devant lui dans 50 % des variantes),
+  mais C# a lui aussi ses formes optimisées : 63,3 points avec toutes ses sensibilités (`docs/CSHARP.md`).
+
+### 4.4 Bilan
+
+* **Exact** : la place et les piliers ; les faits du JDK 27 (la somme des 78 octets compte la référence deux fois) ;
+  le désalignement de K5, une erreur de mon banc, corrigée ; F1 ; les gains de Q1, de K7 et de K8.
+* **Inexact ou à nuancer** : le K9 optimisé « scalaire » (vrai pour le JDK 25, pas pour le 27) ; Q1, « exactement le
+  défaut corrigé pour D » (Java est hors de la classe où la règle s'applique) ; A5 = 1 (les équivalents cités sont des
+  unions et des réinterprétations du langage lui-même) ; les 29 ms de K10 (première campagne) ; le rapport de K7 sur
+  Cascade Lake (2,55 et non 2,7) ; la réserve de fils (aucun gain sur K6 avec quatre vCPU).
+* **Effet** : + 1,0 point au classement publié, toujours 15e ; 51 à 54 points avec toutes les formes optimisées et les
+  cases discutables, toujours 15e, avec une avance nette sur Go (81 à 89 % des variantes).

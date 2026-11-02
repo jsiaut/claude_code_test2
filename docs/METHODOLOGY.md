@@ -923,3 +923,18 @@ Robustesse :
   réserve de fils, K9 en Vector API, K7 isolé et par lots, K8 itératif, cases B3 et F2, libc. Plan (`docs/JAVA.md`,
   sections 1 à 3), copies (`tools/java_check/make_copies.py`, 30 cellules validées) et outil de mesure
   (`tools/measure_java.py`) poussés avant les mesures.
+* 2026-11-02, 7:56:48-8:11:02 : **mesures de la remarque sur Java** (`tools/measure_java.py`, machine 17) : 280
+  processus (40 cellules × 7), aucune somme de contrôle fausse ; 24 refaits pour vol de temps (trois deux fois), aucun
+  gardé au-dessus de 2 % (vol médian 0,70 %). Le script d'analyse, l'erratum F1 et les contrôles de l'état actuel ont
+  été poussés pendant les mesures, avant tout résultat (commit `4a5f53b`).
+* 2026-11-02, vers 8:13 : **écart au plan** (commit `9a1f793`), décidé après avoir vu les ponts et avant tout score
+  corrigé : un rapport de correction supérieur à 1 est ramené à 1. La règle du pont donnait × 1,085 à K1 soa (colonnes
+  en cache L3 sur la machine 17, en mémoire sur Cascade Lake), un temps publié plus long pour un code 1,3 fois plus
+  rapide sur le même hôte. Le calcul interrompu pour le corriger n'avait produit que les scénarios Avant et J-F1.
+* 2026-11-02, 8:14 à 8:26 : **résultats de la remarque sur Java** (`results/report_java.md`). Correction : K5 tuned
+  × 0,600 sur le même hôte (9,23 → 5,54 ms ; C 3,86), reporté par le pont (× 0,813 : 6,95 → 5,65 ms) ; K1 soa × 0,758,
+  non reporté (écart au plan) ; témoins 1,01 à 1,02. Classement publié (J-E, avec l'erratum F1) : Java 47,15 points
+  (46,14), 15e, devant Go dans 70 % des variantes (64 %) ; les autres langages ne bougent pas. Sensibilités : Q1 en
+  une passe × 0,40 ; réserve de fils sans gain sur K6, × 0,81 sur K9 `mt` ; K9 en Vector API × 0,96 ; K7 isolé × 0,72,
+  par lots × 0,80 ; K8 itératif × 0,64 ; toutes : 51,2 points ; avec les cases discutables et la libc : 53,9, toujours
+  15e (à égalité avec C# au rang espéré).

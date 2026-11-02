@@ -660,3 +660,30 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   réallouaient 1,2 à 2 fois.
 * **Au harnais commun**, K9 `mt` prend de 3,8 ms (Chapel) à 6,5 ms (Mojo) pour douze implémentations compilées ; le
   naturel le plus rapide est celui de C3 (13,1 ms), le tuned celui de D (12,8 ms).
+
+## Remarque sur Java (2 novembre, machine 17, Emerald Rapids) — `docs/JAVA.md`, `results/java_check/`
+
+* **En-têtes compacts du JDK 27** (activés par défaut) : les données d'un `byte[]`, `int[]`, `float[]` ou `Object[]`
+  commencent à 12 octets de l'objet (16 pour `long[]` et `double[]`, 16 pour tous sans en-têtes compacts) ; les
+  objets sont alignés sur 8 octets. Un `float[]` n'est donc jamais aligné sur 16, 32 ou 64 octets, et chaque
+  chargement de 64 octets de la Vector API chevauche deux lignes de cache.
+* **K5 tuned** : sur la machine 17, C aligné 3,8 à 5,5 ms, décalé de 12 octets 7,6 à 8,2 ; Java sur le tas 7,1 à 8,1,
+  sur une copie hors tas alignée (`Arena.allocate(n, 64)`, `FloatVector.fromMemorySegment`) 4,8 à 4,9, sur la même
+  copie décalée de 12 octets 8,2 à 10,9 : le désalignement fait l'essentiel de l'écart à C. Campagne : × 0,60
+  (9,23 → 5,54 ms ; C 3,86). Toutes les autres implémentations à SIMD explicite alignaient leurs données, C# par
+  `NativeMemory.AlignedAlloc`.
+* **K1 soa** : × 0,76 sur la machine 17, où les colonnes tiennent dans le cache L3 ; sur Cascade Lake, limité par la
+  mémoire (Java 8,71 ms, C 7,76), l'effet ne se reporte pas.
+* **Créer, lancer et attendre quatre fils** : 0,45 à 0,54 ms en Java, 0,10 à 0,11 ms en C. Une réserve de quatre
+  fils (`Executors.newFixedThreadPool(4)`) gagne sur K9 `mt` (× 0,81), pas sur K6 `mt` (× 1,07 et 1,08).
+* **Le C2 du JDK 27 vectorise le K9 à tableau plat** (xmm et ymm) ; écrit en Vector API, × 0,96 seulement.
+* **Q1 en une passe**, accumulateurs des six groupes en variables locales et masques convertis par `toLong` et
+  `fromLong` : × 0,40 (72,8 → 29,3 ms ; C 25,3) ; à quatre fils × 0,51.
+* **K7 tuned** : le noyau isolé dans sa propre méthode va 1,4 fois plus vite (× 0,72) : sinon, le code mesuré est la
+  compilation sur place (OSR) de `runK7`, appelé une seule fois. Des lots de 16 lus d'avance y perdent (× 0,80 au total
+  avec l'isolement) : sans instruction de préchargement, la lecture anticipée attend la donnée.
+* **K8 tuned** : arène construite et sommée itérativement, × 0,64 (246 → 158 ms) ; la forme du banc était déjà plus
+  rapide que celle de C sur cet hôte (301 ms).
+* **API FFM** (finale depuis le JDK 22) : `MemoryLayout.unionLayout` et les vues de segments, y compris d'un tableau
+  du tas, réinterprètent la mémoire sans option de préversion ; des `sequenceLayout` imbriqués donnent un tableau
+  multidimensionnel contigu, lu et écrit par plusieurs indices.
