@@ -230,17 +230,39 @@ def load_k9h(harness="common"):
     return out
 
 
-def apply_k9h(data, harness="common"):
+def apply_k9h(data, harness="common", skip=()):
     """Remplace K9 (trois variantes) de toutes les implémentations par la remesure de la machine 16 (docs/K9.md, plan
     3.4) : elle prend la place des temps de Cascade Lake et des corrections transférées de K9 (Ada, Fortran), mesurées
-    ici sur les copies corrigées elles-mêmes. Sans données, rien ne change."""
+    ici sur les copies corrigées elles-mêmes. Sans données, rien ne change. Avec le harnais commun, les corrections de
+    K9 mesurées après coup sur le même modèle d'hôte (results/transfers.json, « ratios_k9h » : remarque sur Go,
+    docs/GO.md) sont appliquées ensuite, sauf pour les langages de skip."""
     new = load_k9h(harness)
     for l, keys in new.items():
         if l not in data:
             continue
         for key, procs in keys.items():
             data[l][key] = procs
+    path = os.path.join(ROOT, "results", "transfers.json")
+    if harness == "common" and os.path.exists(path):
+        for l, keys in json.load(open(path)).get("ratios_k9h", {}).items():
+            if l in skip or l not in data:
+                continue
+            for k, r in keys.items():
+                key = tuple(k.split("|"))
+                if key in data[l]:
+                    data[l][key] = [[t * r for t in p] for p in data[l][key]]
     return sorted(new)
+
+
+def m3_ratios():
+    """Rapports reportés sur les données de la réplication (machine 3) par une remarque mesurée sur un hôte du même
+    modèle : remarque sur Go (results/go_check.json, « replication_ratios » : copie sans GOEXPERIMENT pour les clés
+    sans archsimd, ClearAVXUpperBits pour les autres, docs/GO.md). {langage: {clé: rapport}} ; vide sans fichier."""
+    path = os.path.join(ROOT, "results", "go_check.json")
+    if not os.path.exists(path):
+        return {}
+    rr = json.load(open(path)).get("replication_ratios", {})
+    return {"go": {tuple(k.split("|")): r for k, r in rr.items()}} if rr else {}
 
 
 def k9h_ratios():

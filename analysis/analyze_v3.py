@@ -441,6 +441,12 @@ def main():
         for key, r in k9r.items():
             if l in d3m and key in d3m[l]:
                 d3m[l][key] = [[t * r for t in p] for p in d3m[l][key]]
+    # remarque sur Go (docs/GO.md, plan 3.2) : données de Go de la machine 3 multipliées par les rapports mesurés sur la
+    # machine 18 (même modèle) : copie sans GOEXPERIMENT pour les clés sans archsimd, ClearAVXUpperBits pour les autres
+    for l, mr in v2.m3_ratios().items():
+        for key, r in mr.items():
+            if l in d3m and key in d3m[l]:
+                d3m[l][key] = [[t * r for t in p] for p in d3m[l][key]]
     A3 = Arrays3(d3m, lat3, langs, 0, rng, pools)
     refs3 = {e: references(A3, e) for e in ("mean", "min")}
     S3 = scores3(A3, 0, MAIN, C_main, footprint, refs3)
