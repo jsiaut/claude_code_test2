@@ -944,3 +944,16 @@ Robustesse :
   Java : aucun changement de place au classement publié ; sans SIMD explicite, Java repasse devant Go à la lettre ;
   confrontation, Java 15e devant Go dans les scénarios C et D (Spearman 0,85 et 0,90). README : tableau, paragraphe de
   Java, errata, langages relus, versions optimisées, leçon sur le SIMD, limite des JIT, lecture et reproduction.
+* 2026-11-02, 9 h 48 : **machine 18**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207, 4 vCPU ;
+  2,62 à 2,77 GHz effectifs, latence à 4 Mio 37 ns, DRAM 14 à 15 Go/s : `results/hw/machine18/`).
+* 2026-11-02 : **remarque sur Go** transmise par l'utilisateur ; vérifications sans consulter de page web, sur les
+  sources de go1.27.3, par des sondes et sur les données. Exacts : les faits du langage et de la matrice, l'artefact.
+  Erreur de mon implémentation : K5 tuned (et les deux autres fonctions archsimd) passe d'AVX-512 à une réduction en
+  SSE sans `ClearAVXUpperBits` (`VZEROUPPER`), que les compilateurs des autres langages émettent d'eux-mêmes ; 19 à
+  27 ms → 7,4 ms avec une ligne. Défaut de ma mesure : toutes les variantes de Go étaient compilées avec
+  `GOEXPERIMENT=simd`, et la préemption asynchrone de go1.27.3 restaure alors les registres ZMM sans `VZEROUPPER`
+  (`runtime/preempt_amd64.s`) : K1 naturel 2,4 s contre 39 ms sur Emerald Rapids ; il touche la réplication et deux
+  noyaux publiés depuis Emerald Rapids (K5 et K9), contrairement à ce qu'écrit la remarque. Sensibilités : K9 et Q1 en
+  archsimd (Go a C1 = ½, hors de la classe de la règle de D), arène de K8 itérative, réduction de K5 dans les registres.
+  Plan (`docs/GO.md`, sections 1 à 3), copies (`tools/go_check/make_copies.py`, 79 cellules validées) et outil de
+  mesure (`tools/measure_go.py`) poussés avant les mesures.
