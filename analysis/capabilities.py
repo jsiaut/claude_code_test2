@@ -286,7 +286,7 @@ MATRIX = {
     "java": {
         "A1": (0.5, "objets référencés (JEP 401 absente du JDK 27) ; tableaux de structures hors tas par l'API FFM (sonde)"),
         "A2": (0.5, "aucun contrôle des objets ; MemoryLayout (FFM) pour la mémoire hors tas"), "A3": (0.5, "FFM : dispositions non alignées (withByteAlignment(1)) ; pas de champs de bits (sonde)"),
-        "A4": (0.5, "Arena.allocate(taille, alignement) hors tas seulement"), "A5": (0.5, "Float.floatToRawIntBits ; pas d'unions"),
+        "A4": (0.5, "Arena.allocate(taille, alignement) hors tas seulement"), "A5": (0.5, "Float.floatToRawIntBits ; unions et réinterprétation par l'API FFM, sur des segments seulement (unionLayout ; vues de segments, y compris d'un tableau du tas : sonde) ; pas d'union dans les objets (texte corrigé le 2/11, remarque sur Java)"),
         "A6": (0, "aucun"), "A7": (0.5, "objets : non ; FFM : sequenceLayout dans structLayout (sonde)"), "A8": (1, "byte/short/float"),
         "B1": (0, "GC imposé"), "B2": (0.5, "Arena (FFM) pour les segments hors tas"), "B3": (0, "pas d'agrégat sur la pile (scalar replacement non garanti)"),
         "B4": (0, "boxing, varargs, lambdas"), "B5": (0.5, "MemorySegment (accès vérifié, pas de pointeurs)"),
@@ -296,7 +296,7 @@ MATRIX = {
         "D3": (0.5, "@Contended interne (jdk.internal, -XX:-RestrictContended)"), "D4": (0, "aucune"),
         "D5": (1, "Thread.onSpinWait + VarHandle.fullFence"), "E1": (0.5, "JIT C2 ; désassemblage seulement avec hsdis (non livré)"),
         "E2": (0, "aucun"), "E3": (0, "aucun"), "E4": (0, "aucun"), "E5": (0, "aucun"), "E6": (0, "vérification toujours active"),
-        "E7": (0, "génériques effacés, pas de CTFE"), "F1": (0, "tableaux de tableaux"), "F2": (0, "aucun"),
+        "E7": (0, "génériques effacés, pas de CTFE"), "F1": (0.5, "tableaux du langage : tableaux de tableaux ; FFM : sequenceLayout imbriqués, tableau multidimensionnel contigu lu par plusieurs indices, hors tas ou sur un tableau du tas (sonde ; erratum du 2/11, remarque sur Java)"), "F2": (0, "aucun"),
         "F3": (0.5, "entiers signés seulement + méthodes unsigned"), "F4": (1, "FileChannel.map -> MemorySegment"),
     },
     "julia": {
