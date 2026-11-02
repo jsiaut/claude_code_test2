@@ -938,3 +938,9 @@ Robustesse :
   une passe × 0,40 ; réserve de fils sans gain sur K6, × 0,81 sur K9 `mt` ; K9 en Vector API × 0,96 ; K7 isolé × 0,72,
   par lots × 0,80 ; K8 itératif × 0,64 ; toutes : 51,2 points ; avec les cases discutables et la libc : 53,9, toujours
   15e (à égalité avec C# au rang espéré).
+* 2026-11-02, 8:27 à 9:05 : **sorties régénérées après la remarque sur Java** (`.work`, hors dépôt : même chaîne que
+  pour K9) : classement, figures, matrice (`docs/CAPABILITIES.md`), scénarios de l'état actuel (Zig, Julia, Mojo, C#,
+  Rust, Nim, confrontation, sans SIMD, remarque sur C) ; leurs contrôles reproduisent J-E à l'identique. Effets hors de
+  Java : aucun changement de place au classement publié ; sans SIMD explicite, Java repasse devant Go à la lettre ;
+  confrontation, Java 15e devant Go dans les scénarios C et D (Spearman 0,85 et 0,90). README : tableau, paragraphe de
+  Java, errata, langages relus, versions optimisées, leçon sur le SIMD, limite des JIT, lecture et reproduction.
