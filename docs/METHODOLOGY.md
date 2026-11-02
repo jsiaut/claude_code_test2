@@ -969,3 +969,8 @@ Robustesse :
   publié (G-E) : Go 45,35 points (43,02), 16e, devant Java dans 43 % des variantes (30 %). Sensibilités : K9 en
   archsimd × 0,78 et 0,73, K8 itératif × 0,62 (pont 0,378), réduction de K5 dans les registres × 0,75, Q1 en une passe
   en archsimd plus lent (× 1,36) ; avec l'arène ou toutes les formes, Go passe 15e (47,6 à 49,2 points).
+* 2026-11-02, 10:48 à 11:23 : **sorties régénérées après la remarque sur Go** (même chaîne que pour Java) :
+  classement, figures, réplication (données de Go de la machine 3 corrigées : code naturel 5,8 → 10,7, score 37,3 →
+  39,3, toujours 16e ; ordre de la réplication inchangé), scénarios de l'état actuel ; leurs contrôles reproduisent
+  G-E à l'identique. Effets hors de Go : aucun changement de place au classement publié ; sans SIMD explicite, rien ne
+  bouge (Java devant Go de 0,02 rang à la lettre) ; confrontation, Go devant Java dans le scénario C (Spearman 0,84).

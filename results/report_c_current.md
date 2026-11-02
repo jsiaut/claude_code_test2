@@ -2,7 +2,7 @@
 
 Plan : `docs/C.md`. Mesures : `results/raw_c/` (machine 16, 7 processus par cellule). Code : `analysis/c_check.py`.
 Processus rejetés : aucun.
-Contrôle : le scénario Publié reproduit results/java_check.json, J-E (écart maximal 0.0e+00).
+Contrôle : le scénario Publié reproduit results/go_check.json, G-E (écart maximal 0.0e+00).
 
 ## Rapports appariés (même hôte)
 
@@ -20,7 +20,7 @@ Contrôle : le scénario Publié reproduit results/java_check.json, J-E (écart 
 | c_gcc_ref / c_ref | k8:natural (témoin) | 771,3 | 602,2 | 0,781 | 0,700–0,871 |
 
 Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0 ms avec la meilleure forme (S-K8).
-État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md), K5 et K1 soa de Java corrigés et F1 de Java à ½ (docs/JAVA.md) ; Publié = results/java_check.json (J-E).
+État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md), K5 et K1 soa de Java corrigés et F1 de Java à ½ (docs/JAVA.md), K5 et K9 de Go corrigés (docs/GO.md) ; Publié = results/go_check.json (G-E).
 
 ## Scénarios (analyse globale de la v3 rejouée, 20 000 variantes)
 
@@ -51,11 +51,11 @@ Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0
 | Chapel | 65,70 | 63,8 → 63,8 | 8,85 → 8,85 | 1 % → 1 % |
 | Fortran | 65,42 | 59,2 → 59,2 | 10,29 → 10,29 | 0 % → 0 % |
 | Julia | 62,34 | 68,9 → 68,9 | 11,57 → 11,57 | 0 % → 0 % |
-| Mojo | 62,28 | 66,0 → 66,0 | 12,18 → 12,18 | 0 % → 0 % |
-| C# | 54,86 | 65,8 → 65,8 | 14,09 → 14,09 | 0 % → 0 % |
-| Java | 47,15 | 42,7 → 42,7 | 15,18 → 15,18 | 0 % → 0 % |
-| Go | 43,02 | 44,9 → 44,9 | 15,62 → 15,62 | 0 % → 0 % |
-| Haskell | 34,47 | 33,4 → 33,4 | 17,00 → 17,00 | 0 % → 0 % |
+| Mojo | 62,28 | 66,0 → 66,0 | 12,19 → 12,19 | 0 % → 0 % |
+| C# | 54,86 | 65,8 → 65,8 | 14,12 → 14,12 | 0 % → 0 % |
+| Java | 47,15 | 42,7 → 42,7 | 15,31 → 15,31 | 0 % → 0 % |
+| Go | 45,35 | 44,9 → 44,9 | 15,45 → 15,45 | 0 % → 0 % |
+| Haskell | 34,47 | 33,4 → 33,4 | 17,01 → 17,01 | 0 % → 0 % |
 | OCaml | 23,99 | 24,7 → 24,7 | 17,98 → 17,98 | 0 % → 0 % |
 | JavaScript | 14,24 | 11,6 → 11,6 | 19,07 → 19,07 | 0 % → 0 % |
 | Python | 9,94 | 22,4 → 22,4 | 20,30 → 20,30 | 0 % → 0 % |

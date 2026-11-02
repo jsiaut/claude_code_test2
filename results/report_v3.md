@@ -23,9 +23,9 @@
 | 1 | Odin | 80,0 [77,3–83,0] | 57,1 | 60 % | 21,3 | 17,0 | 28 % | 84,0 / 81,3 | 74,0 [72,8–75,4] | 0,47 | 2–9 | 3 [1–6] | 7 |
 | 1 | Rust | 77,8 [75,3–80,9] | 74,3 | 61 % | 18,2 | 16,5 | 25 % | 73,6 / 73,1 | 69,9 [68,3–72,7] | 0,38 | 3–11 | 7 [3–10] | 2 |
 | 1 | Zig | 70,3 [67,8–73,0] | 51,1 | 57 % | 20,2 | 14,7 | 29 % | 87,2 / 83,2 | 72,3 [70,5–73,9] | 0,52 | 3–9 | 4 [1–10] | 9 |
-| 2 | C# | 53,6 [51,6–55,8] | 40,5 | 42 % | 9,1 | 7,7 | 18 % | 68,8 / 65,8 | 54,9 [53,5–56,1] | 0,53 | 14–14 | 14 [13–15] | 14 |
-| 2 | Go | 38,7 [37,3–40,1] | 27,1 | 34 % | 12,3 | 5,8 | 30 % | 48,7 / 44,9 | 43,0 [42,4–43,7] | 0,48 | 16–16 | 16 [14–16] | 16 |
-| 2 | Java | 56,5 [54,3–58,7] | 46,0 | 43 % | 12,1 | 9,3 | 24 % | 42,7 / 42,7 | 47,2 [46,2–48,1] | 0,50 | 15–15 | 15 [14–16] | 15 |
+| 2 | C# | 53,6 [51,6–55,8] | 40,5 | 42 % | 9,1 | 7,7 | 18 % | 68,8 / 65,8 | 54,9 [53,5–56,1] | 0,53 | 14–14 | 14 [13–16] | 14 |
+| 2 | Go | 44,5 [42,9–46,2] | 30,2 | 38 % | 12,3 | 10,7 | 26 % | 48,7 / 44,9 | 45,3 [44,7–46,1] | 0,48 | 15–16 | 16 [14–16] | 16 |
+| 2 | Java | 56,5 [54,3–58,7] | 46,0 | 43 % | 12,1 | 9,3 | 24 % | 42,7 / 42,7 | 47,2 [46,2–48,1] | 0,50 | 15–16 | 15 [14–16] | 15 |
 | 3 | Haskell | 34,6 [33,4–35,9] | 25,3 | 30 % | 3,9 | 2,6 | 13 % | 34,4 / 33,4 | 34,5 [33,9–35,0] | 0,54 | 17–17 | 17 [17–17] | 17 |
 | 4 | OCaml | 18,4 [17,7–19,0] | 14,0 | 11 % | 7,0 | 5,2 | 41 % | 24,7 / 24,7 | 24,0 [23,5–25,0] | 0,34 | 18–18 | 18 [18–18] | 18 |
 | 5 | JavaScript | 11,4 [11,0–11,8] | 8,0 | 9 % | 4,5 | 3,4 | 40 % | 11,6 / 11,6 | 14,2 [13,9–14,6] | 0,49 | 19–19 | 19 [19–20] | 19 |
@@ -38,8 +38,8 @@ Hors plan, par composante (moyenne sur les 21 langages ; C ; extrêmes) : E 0,47
 
 ## Hors plan : étages par quantité mesurée (même règle ; précédences tirées des mêmes 20 000 tirages)
 
-* plafond E : {Ada, C, C#, C++, C3, Chapel, D, Fortran, Java, Julia, Mojo, Nim, Odin, Rust, Zig} > {Go, Haskell} > {OCaml} > {JavaScript} > {Lua} > {Python}
-* code naturel D1 : {C, C++, C3, Chapel, D, Fortran, Julia, Nim, Odin, Rust, Zig} > {Ada} > {C#, Go, Java, Mojo} > {OCaml} > {JavaScript} > {Haskell} > {Lua} > {Python}
+* plafond E : {Ada, C, C#, C++, C3, Chapel, D, Fortran, Java, Julia, Mojo, Nim, Odin, Rust, Zig} > {Go} > {Haskell} > {OCaml} > {JavaScript} > {Lua} > {Python}
+* code naturel D1 : {C, C++, C3, Chapel, D, Fortran, Julia, Nim, Odin, Rust, Zig} > {Ada, Go, Java} > {Mojo} > {C#} > {OCaml} > {JavaScript} > {Haskell} > {Lua} > {Python}
 
 ## Hors plan : rangs compatibles avec les paires établies
 
@@ -55,15 +55,15 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 | Nim | 1–11 | 3–12 | 1–8 |
 | Rust | 1–12 | 1–10 | 5–10 |
 | D | 1–13 | 1–11 | 9–11 |
-| Ada | 2–12 | 1–12 | 12 |
+| Ada | 2–12 | 1–12 | 12–13 |
 | Chapel | 2–13 | 2–12 | 8–11 |
 | Fortran | 4–13 | 4–14 | 2–8 |
 | Julia | 7–13 | 10–15 | 1–7 |
-| Mojo | 9–13 | 5–13 | 14–15 |
-| C# | 14–16 | 13–15 | 15–16 |
+| Mojo | 9–13 | 5–13 | 15 |
+| C# | 14–16 | 13–15 | 16 |
 | Java | 14–16 | 12–15 | 13–14 |
-| Go | 14–16 | 16–17 | 13–16 |
-| Haskell | 17 | 16–17 | 19 |
+| Go | 14–16 | 16 | 12–14 |
+| Haskell | 17 | 17 | 19 |
 | OCaml | 18 | 18 | 17 |
 | JavaScript | 19–20 | 19 | 18 |
 | Python | 19–21 | 21 | 21 |
@@ -78,7 +78,7 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 
 ## Hors plan : Cascade Lake seul (K5 d'avant, machines 1 et 2 ; K9 de Cascade Lake, harnais d'origine), estimation ponctuelle
 
-C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Fortran 11 (E 72,7, D1 18,7), Julia 12 (E 67,9, D1 20,9), Mojo 13 (E 69,0, D1 11,0), C# 14 (E 49,5, D1 9,3), Java 15 (E 57,9, D1 12,4), Go 16 (E 41,5, D1 11,0), Haskell 17 (E 36,8, D1 4,1), OCaml 18 (E 19,1, D1 7,3), JavaScript 19 (E 12,3, D1 4,9), Python 20 (E 0,5, D1 0,5), Lua 21 (E 1,2, D1 1,1).
+C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Fortran 11 (E 72,7, D1 18,7), Julia 12 (E 67,9, D1 20,9), Mojo 13 (E 69,0, D1 11,0), C# 14 (E 49,5, D1 9,3), Java 15 (E 57,9, D1 12,4), Go 16 (E 41,6, D1 11,0), Haskell 17 (E 36,8, D1 4,1), OCaml 18 (E 19,1, D1 7,3), JavaScript 19 (E 12,3, D1 4,9), Python 20 (E 0,5, D1 0,5), Lua 21 (E 1,2, D1 1,1).
 
 ## Réplication : bruit ou interaction ?
 

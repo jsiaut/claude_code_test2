@@ -2,7 +2,7 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/java_check.json, « J-E ».
+Témoin : écart maximal 0.0e+00 avec results/go_check.json, « G-E ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
@@ -23,7 +23,7 @@ Témoin : écart maximal 0.0e+00 avec results/java_check.json, « J-E ».
 | Mojo | 13 (62,3) | 13 (63,2) | 13 (44,9) | 13 (44,9) | 13 (55,0) | 13 (57,7) | 12 (62,3) |
 | C# | 14 (54,9) | 14 (56,2) | 14 (43,0) | 14 (43,0) | 14 (53,1) | 14 (50,2) | 14 (54,9) |
 | Java | 15 (47,2) | 15 (48,3) | 15 (37,1) | 15 (37,1) | 15 (50,3) | 15 (45,2) | 15 (47,2) |
-| Go | 16 (43,0) | 16 (43,1) | 16 (37,3) | 16 (37,3) | 16 (46,6) | 16 (40,1) | 16 (43,0) |
+| Go | 16 (45,3) | 16 (45,6) | 16 (37,5) | 16 (37,5) | 16 (46,5) | 16 (40,1) | 16 (45,3) |
 | Haskell | 17 (34,5) | 17 (34,9) | 17 (26,3) | 17 (26,3) | 17 (31,7) | 17 (29,9) | 17 (34,5) |
 | OCaml | 18 (24,0) | 18 (24,3) | 18 (24,8) | 18 (24,8) | 18 (26,2) | 18 (24,8) | 18 (24,0) |
 | JavaScript | 19 (14,2) | 19 (14,3) | 19 (14,6) | 19 (14,6) | 19 (18,3) | 19 (14,4) | 19 (14,2) |
@@ -61,7 +61,7 @@ Témoin : écart maximal 0.0e+00 avec results/java_check.json, « J-E ».
 | Mojo | 67,0 | 69,3 | 23,5 | 23,3 | 45,0 | 55,5 | 67,0 |
 | C# | 53,6 | 57,0 | 23,8 | 23,8 | 45,7 | 42,1 | 53,6 |
 | Java | 56,5 | 59,4 | 31,0 | 31,0 | 59,5 | 51,6 | 56,5 |
-| Go | 38,7 | 39,0 | 24,1 | 24,1 | 42,7 | 31,5 | 38,7 |
+| Go | 44,5 | 45,1 | 24,6 | 24,6 | 42,6 | 31,5 | 44,5 |
 | Haskell | 34,6 | 35,6 | 14,1 | 14,1 | 26,2 | 23,3 | 34,6 |
 | OCaml | 18,4 | 19,0 | 20,1 | 20,1 | 21,2 | 20,4 | 18,4 |
 | JavaScript | 11,4 | 11,5 | 12,2 | 12,2 | 19,7 | 11,6 | 11,4 |
@@ -97,7 +97,7 @@ Témoin : écart maximal 0.0e+00 avec results/java_check.json, « J-E ».
 | Mojo | aos 38,0 | natural 161,2 | natural q6 56,9 | natural q1 227,3 | natural 202,3 |
 | C# | aos 38,9 | natural 86,7 | natural q6 155,7 | natural q1 186,3 | natural 71,9 |
 | Java | aos 42,3 | natural 141,9 | natural q6 111,0 | natural q1 111,5 | natural 17,0 |
-| Go | aos 47,2 | natural 84,9 | natural q6 138,4 | tuned q1 86,3 | tuned 26,7 |
+| Go | aos 47,2 | natural 86,8 | natural q6 138,4 | tuned q1 86,3 | tuned 21,9 |
 | Haskell | aos 39,2 | natural 349,7 | tuned q6 70,5 | tuned q1 70,2 | natural 270,5 |
 | OCaml | soa 12,3 | tuned 71,6 | natural q6 200,6 | tuned q1 214,5 | tuned 48,1 |
 | JavaScript | soa 23,2 | tuned 149,9 | tuned q6 131,5 | natural q1 376,4 | tuned 65,0 |

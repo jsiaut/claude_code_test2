@@ -323,3 +323,9 @@ Recalculé de nouveau (`results/report_nosimd_current.md`, témoin égal au scé
 K5 de Java corrigé, F1 de Java à ½). Seules deux places bougent : à la lettre (S-scalaire), Java repasse devant Go
 (15e et 16e, rang moyen 15,09 contre 15,14) ; Java est donc 15e dans tous les scénarios. Le reste ne change pas : à
 forme égale, Odin, C et C++ en tête ; sans les mesures mt, C est 1er dans 48 % des variantes (49 % au publié).
+
+### 4.12 Recalcul après la remarque sur Go (2 novembre)
+
+Recalculé de nouveau (témoin égal au scénario G-E de `results/go_check.json` : K5 de Go corrigé, artefact de la
+préemption retiré des clés publiées depuis Emerald Rapids). Aucune place ne change : Java reste 15e et Go 16e dans
+tous les scénarios, de peu à la lettre (rang moyen 15,10 contre 15,12) ; en tête, rien ne bouge.

@@ -45,9 +45,9 @@ Plan : `docs/CONFRONTATION.md`. Calcul : `analysis/confrontation.py`. Rangs sur 
 | Chapel | k5:tuned: | 5,02 | 8,89 | 1,77 [1,52–2,06] | — |
 | Chapel | k7:tuned: | 363,76 | 463,50 | 1,27 [1,16–1,40] | 0,77 |
 | Go | k1:soa:energy | 5,67 | 8,39 | 1,48 [1,31–1,68] | 0,75 |
-| Go | k5:tuned: | 10,72 | 96,48 | 9,00 [6,98–11,32] | 0,57 |
+| Go | k5:tuned: | 10,72 | 96,48 | 9,00 [6,98–11,32] | 1,48 |
 | Go | k6:tuned:q6 | 16,04 | 40,58 | 2,53 [2,12–3,11] | 0,80 |
-| Go | k6:mt:q6 | 5,19 | 15,87 | 3,05 [2,52–3,54] | 0,67 |
+| Go | k6:mt:q6 | 5,19 | 15,87 | 3,05 [2,52–3,54] | 0,73 |
 | Java | k1:soa:energy | 5,87 | 8,96 | 1,53 [1,35–1,72] | 0,67 |
 | Java | k5:tuned: | 11,74 | 57,24 | 4,87 [4,14–6,04] | 2,08 |
 | Java | k6:tuned:q6 | 15,83 | 123,16 | 7,78 [7,30–8,27] | 0,61 |
@@ -75,8 +75,8 @@ Replis et pénalités : mojo k6:mt:q6 : même travail sur un thread (tuned) ; mo
 | Julia | 13,0 | 12 | 11 | 11 | 10 | 73,3 → 72,2 | 62,3 → 62,2 |
 | Mojo | 15,0 | 13 | 12 | 14 | 13 | 70,5 → 69,7 | 67,0 → 29,9 |
 | C# | 8,0 | 14 | 14 | 12 | 12 | 68,8 → 68,8 | 53,6 → 53,6 |
-| Java | 12,0 | 15 | 15 | 15 | 15 | 42,7 → 39,5 | 56,5 → 37,1 |
-| Go | 17,0 | 16 | 16 | 16 | 16 | 48,7 → 42,9 | 38,7 → 28,6 |
+| Java | 12,0 | 15 | 15 | 16 | 15 | 42,7 → 39,5 | 56,5 → 37,1 |
+| Go | 17,0 | 16 | 16 | 15 | 16 | 48,7 → 42,9 | 44,5 → 30,2 |
 | JavaScript | 18,0 | 17 | 17 | 17 | 17 | 11,6 → 11,6 | 11,4 → 11,4 |
 | Python | 16,0 | 18 | 18 | 18 | 18 | 24,4 → 24,4 | 0,5 → 0,5 |
 
@@ -84,10 +84,10 @@ Replis et pénalités : mojo k6:mt:q6 : même travail sur un thread (tuned) ; mo
 |---|---|---|---|---|---|
 | A | 0,78 | 0,63 | 208,5 | 48 % | 1 |
 | B | 0,85 | 0,67 | 145,5 | 25 % | 5 |
-| C | 0,85 | 0,69 | 149,5 | 54 % | 2 |
+| C | 0,84 | 0,68 | 159,5 | 51 % | 2 |
 | D | 0,90 | 0,72 | 100,5 | 25 % | 6 |
 
-Sensibilité (K3 retiré du plafond de Mojo et de Fortran, configuration de référence), scénario C : Spearman 0,81, rang de C 1.
+Sensibilité (K3 retiré du plafond de Mojo et de Fortran, configuration de référence), scénario C : Spearman 0,80, rang de C 1.
 
 Sensibilité (K3 retiré du plafond de Mojo et de Fortran, configuration de référence), scénario D : Spearman 0,89, rang de C 7.
 
