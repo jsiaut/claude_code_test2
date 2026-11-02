@@ -1,5 +1,5 @@
 {
- "source": "docs/ADA.md (d\u00e9cision 2) ; rapports appari\u00e9s de results/raw_ada, machine 5 ; results/ada_check.json ; Fortran : docs/FORTRAN.md (3.4), results/raw_fortran, results/fortran_check.json ; ponts par le t\u00e9moin : results/transfer_check.json ; D : docs/DLANG.md (3.2), results/raw_d, machine 10, results/d_check.json ; Rust : docs/RUST.md (3.2), results/raw_rust, machine 11, results/rust_check.json ; Java : docs/JAVA.md (3.2), results/raw_java, machine 17, results/java_check.json",
+ "source": "docs/ADA.md (d\u00e9cision 2) ; rapports appari\u00e9s de results/raw_ada, machine 5 ; results/ada_check.json ; Fortran : docs/FORTRAN.md (3.4), results/raw_fortran, results/fortran_check.json ; ponts par le t\u00e9moin : results/transfer_check.json ; D : docs/DLANG.md (3.2), results/raw_d, machine 10, results/d_check.json ; Rust : docs/RUST.md (3.2), results/raw_rust, machine 11, results/rust_check.json ; Java : docs/JAVA.md (3.2), results/raw_java, machine 17, results/java_check.json ; Go : docs/GO.md (3.2), results/raw_go, machine 18, results/go_check.json (K9 : ratios_k9h)",
  "ratios": {
   "ada": {
    "k1|aos|energy": 0.948697189225563,
@@ -36,6 +36,20 @@
   "java": {
    "k5|tuned|": 0.8129034737221559,
    "k1|soa|energy": 1.0
+  },
+  "go": {
+   "k5|tuned|": 0.38392663543618094,
+   "k1|soa|energy": 1.0,
+   "k6|tuned|q6": 1.0,
+   "k6|mt|q6": 0.9168143781482941,
+   "k5|natural|": 1.0234358266802697
+  }
+ },
+ "ratios_k9h": {
+  "go": {
+   "k9|natural|": 0.9894867645626252,
+   "k9|tuned|": 0.8201307286192266,
+   "k9|mt|": 0.9144144054788362
   }
  }
 }

@@ -1,0 +1,42 @@
+go_exp     k6   tuned_1p             q1         p0 n=10 med=0.115899s ok={True} rc=0 
+go_exp     k5   tuned_r                         p0 n=10 med=0.006868s ok={True} rc=0 
+go_exp     k6   mt_1p                q1         p0 n=10 med=0.027247s ok={True} rc=0 
+go_exp     k5   tuned                           p0 n=10 med=0.012640s ok={True} rc=0 
+go_exp     k9   mt_vec                          p0 n=10 med=0.007238s ok={True} rc=0 
+go_exp     k9   tuned_vec                       p0 n=10 med=0.019786s ok={True} rc=0 
+go_exp     k6   mt_1p                q1         p0 n=10 med=0.025113s ok={True} rc=0 
+go_exp     k9   mt_vec                          p0 n=10 med=0.004895s ok={True} rc=0 
+go_exp     k5   tuned                           p0 n=10 med=0.010551s ok={True} rc=0 
+go_exp     k9   tuned_vec                       p0 n=10 med=0.014843s ok={True} rc=0 
+go_exp     k5   tuned_r                         p0 n=10 med=0.007244s ok={True} rc=0 
+go_exp     k6   tuned_1p             q1         p0 n=10 med=0.119166s ok={True} rc=0 
+go_exp     k9   mt_vec                          p0 n=10 med=0.005310s ok={True} rc=0 
+go_exp     k9   tuned_vec                       p0 n=10 med=0.013550s ok={True} rc=0 
+go_exp     k6   mt_1p                q1         p0 n=10 med=0.024354s ok={True} rc=0 
+go_exp     k5   tuned                           p0 n=10 med=0.011818s ok={True} rc=0 
+go_exp     k5   tuned_r                         p0 n=10 med=0.007759s ok={True} rc=0 
+go_exp     k6   tuned_1p             q1         p0 n=10 med=0.100916s ok={True} rc=0 
+go_exp     k5   tuned_r                         p0 n=10 med=0.006897s ok={True} rc=0 
+go_exp     k6   tuned_1p             q1         p0 n=10 med=0.103739s ok={True} rc=0 
+go_exp     k6   mt_1p                q1         p0 n=10 med=0.026863s ok={True} rc=0 
+go_exp     k5   tuned                           p0 n=10 med=0.007241s ok={True} rc=0 
+go_exp     k9   mt_vec                          p0 n=10 med=0.005548s ok={True} rc=0 
+go_exp     k9   tuned_vec                       p0 n=10 med=0.015840s ok={True} rc=0 
+go_exp     k9   tuned_vec                       p0 n=10 med=0.013690s ok={True} rc=0 
+go_exp     k9   mt_vec                          p0 n=10 med=0.006246s ok={True} rc=0 
+go_exp     k5   tuned_r                         p0 n=10 med=0.011342s ok={True} rc=0 
+go_exp     k6   tuned_1p             q1         p0 n=10 med=0.088246s ok={True} rc=0 
+go_exp     k6   mt_1p                q1         p0 n=10 med=0.026946s ok={True} rc=0 
+go_exp     k5   tuned                           p0 n=10 med=0.010065s ok={True} rc=0 
+go_exp     k6   mt_1p                q1         p0 n=10 med=0.026075s ok={True} rc=0 
+go_exp     k9   mt_vec                          p0 n=10 med=0.005577s ok={True} rc=0 
+go_exp     k5   tuned_r                         p0 n=10 med=0.007557s ok={True} rc=0 
+go_exp     k9   tuned_vec                       p0 n=10 med=0.016553s ok={True} rc=0 
+go_exp     k6   tuned_1p             q1         p0 n=10 med=0.100906s ok={True} rc=0 
+go_exp     k5   tuned                           p0 n=10 med=0.012401s ok={True} rc=0 
+go_exp     k5   tuned_r                         p0 n=10 med=0.010494s ok={True} rc=0 
+go_exp     k6   mt_1p                q1         p0 n=10 med=0.026569s ok={True} rc=0 
+go_exp     k6   tuned_1p             q1         p0 n=10 med=0.114873s ok={True} rc=0 
+go_exp     k9   tuned_vec                       p0 n=10 med=0.016959s ok={True} rc=0 
+go_exp     k5   tuned                           p0 n=10 med=0.014696s ok={True} rc=0 
+go_exp     k9   mt_vec                          p0 n=10 med=0.006781s ok={True} rc=0 

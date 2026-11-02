@@ -1,0 +1,42 @@
+go_nopre   k7   natural                         p0 n=2 med=1.771744s ok={True} rc=0 
+go_nopre   k1   natural              energy     p0 n=10 med=0.039150s ok={True} rc=0 
+go_nopre   k8   natural                         p0 n=3 med=1.067136s ok={True} rc=0 
+go_nopre   k5   natural                         p0 n=10 med=0.099141s ok={True} rc=0 
+go_nopre   k9   tuned                           p0 n=10 med=0.035419s ok={True} rc=0 
+go_nopre   k9   natural                         p0 n=10 med=0.040453s ok={True} rc=0 
+go_nopre   k5   natural                         p0 n=10 med=0.104570s ok={True} rc=0 
+go_nopre   k7   natural                         p0 n=2 med=1.878690s ok={True} rc=0 
+go_nopre   k8   natural                         p0 n=3 med=1.088236s ok={True} rc=0 
+go_nopre   k1   natural              energy     p0 n=10 med=0.035945s ok={True} rc=0 
+go_nopre   k9   natural                         p0 n=10 med=0.039040s ok={True} rc=0 
+go_nopre   k9   tuned                           p0 n=10 med=0.029006s ok={True} rc=0 
+go_nopre   k9   natural                         p0 n=10 med=0.051911s ok={True} rc=0 
+go_nopre   k8   natural                         p0 n=3 med=1.200462s ok={True} rc=0 
+go_nopre   k9   tuned                           p0 n=10 med=0.033232s ok={True} rc=0 
+go_nopre   k7   natural                         p0 n=2 med=2.169565s ok={True} rc=0 
+go_nopre   k1   natural              energy     p0 n=10 med=0.037045s ok={True} rc=0 
+go_nopre   k5   natural                         p0 n=10 med=0.094924s ok={True} rc=0 
+go_nopre   k9   tuned                           p0 n=10 med=0.030097s ok={True} rc=0 
+go_nopre   k7   natural                         p0 n=2 med=2.462059s ok={True} rc=0 
+go_nopre   k8   natural                         p0 n=3 med=1.133570s ok={True} rc=0 
+go_nopre   k9   natural                         p0 n=10 med=0.060826s ok={True} rc=0 
+go_nopre   k1   natural              energy     p0 n=10 med=0.035826s ok={True} rc=0 
+go_nopre   k5   natural                         p0 n=10 med=0.097296s ok={True} rc=0 
+go_nopre   k9   tuned                           p0 n=10 med=0.024329s ok={True} rc=0 
+go_nopre   k7   natural                         p0 n=2 med=2.568366s ok={True} rc=0 
+go_nopre   k5   natural                         p0 n=10 med=0.098914s ok={True} rc=0 
+go_nopre   k9   natural                         p0 n=10 med=0.034376s ok={True} rc=0 
+go_nopre   k1   natural              energy     p0 n=10 med=0.040227s ok={True} rc=0 
+go_nopre   k8   natural                         p0 n=3 med=1.063132s ok={True} rc=0 
+go_nopre   k9   tuned                           p0 n=10 med=0.020245s ok={True} rc=0 
+go_nopre   k9   natural                         p0 n=10 med=0.045561s ok={True} rc=0 
+go_nopre   k1   natural              energy     p0 n=10 med=0.040295s ok={True} rc=0 
+go_nopre   k8   natural                         p0 n=3 med=1.151366s ok={True} rc=0 
+go_nopre   k7   natural                         p0 n=2 med=2.053024s ok={True} rc=0 
+go_nopre   k5   natural                         p0 n=10 med=0.097928s ok={True} rc=0 
+go_nopre   k9   natural                         p0 n=10 med=0.053579s ok={True} rc=0 
+go_nopre   k8   natural                         p0 n=3 med=1.106575s ok={True} rc=0 
+go_nopre   k9   tuned                           p0 n=10 med=0.021232s ok={True} rc=0 
+go_nopre   k7   natural                         p0 n=2 med=1.812470s ok={True} rc=0 
+go_nopre   k1   natural              energy     p0 n=10 med=0.033483s ok={True} rc=0 
+go_nopre   k5   natural                         p0 n=10 med=0.098356s ok={True} rc=0 

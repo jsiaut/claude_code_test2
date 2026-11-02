@@ -1,0 +1,28 @@
+go_fix     k1   soa                  energy     p0 n=10 med=0.003276s ok={True} rc=0 
+go_fix     k6   tuned                q6         p0 n=10 med=0.017394s ok={True} rc=0 
+go_fix     k6   mt                   q6         p0 n=10 med=0.004751s ok={True} rc=0 
+go_fix     k5   tuned                           p0 n=10 med=0.007245s ok={True} rc=0 
+go_fix     k1   soa                  energy     p0 n=10 med=0.002871s ok={True} rc=0 
+go_fix     k6   mt                   q6         p0 n=10 med=0.004343s ok={True} rc=0 
+go_fix     k6   tuned                q6         p0 n=10 med=0.016686s ok={True} rc=0 
+go_fix     k5   tuned                           p0 n=10 med=0.007632s ok={True} rc=0 
+go_fix     k5   tuned                           p0 n=10 med=0.010629s ok={True} rc=0 
+go_fix     k6   tuned                q6         p0 n=10 med=0.017780s ok={True} rc=0 
+go_fix     k1   soa                  energy     p0 n=10 med=0.002707s ok={True} rc=0 
+go_fix     k6   mt                   q6         p0 n=10 med=0.004632s ok={True} rc=0 
+go_fix     k5   tuned                           p0 n=10 med=0.014091s ok={True} rc=0 
+go_fix     k6   tuned                q6         p0 n=10 med=0.018067s ok={True} rc=0 
+go_fix     k6   mt                   q6         p0 n=10 med=0.004623s ok={True} rc=0 
+go_fix     k1   soa                  energy     p0 n=10 med=0.002765s ok={True} rc=0 
+go_fix     k1   soa                  energy     p0 n=10 med=0.002715s ok={True} rc=0 
+go_fix     k6   mt                   q6         p0 n=10 med=0.004442s ok={True} rc=0 
+go_fix     k5   tuned                           p0 n=10 med=0.007261s ok={True} rc=0 
+go_fix     k6   tuned                q6         p0 n=10 med=0.015834s ok={True} rc=0 
+go_fix     k6   mt                   q6         p0 n=10 med=0.004679s ok={True} rc=0 
+go_fix     k6   tuned                q6         p0 n=10 med=0.021914s ok={True} rc=0 
+go_fix     k5   tuned                           p0 n=10 med=0.007261s ok={True} rc=0 
+go_fix     k1   soa                  energy     p0 n=10 med=0.002822s ok={True} rc=0 
+go_fix     k1   soa                  energy     p0 n=10 med=0.002568s ok={True} rc=0 
+go_fix     k5   tuned                           p0 n=10 med=0.009082s ok={True} rc=0 
+go_fix     k6   mt                   q6         p0 n=10 med=0.004397s ok={True} rc=0 
+go_fix     k6   tuned                q6         p0 n=10 med=0.017367s ok={True} rc=0 
