@@ -217,3 +217,21 @@ K5 appelle son noyau 65 536 fois par répétition, et payait la transition à ch
 * **Les estimations de la remarque tiennent** : 45,8 avec les errata a minima (ici 45,3), 47,3 avec les formes expertes
   (46,0 pour K5 ou K9 seuls), 47,4 à 49,0 avec l'arène (S-mesures-T 47,6, S-mesures 49,2). Avec l'arène seule, ou avec
   toutes ses formes optimisées, Go passe 15e, devant Java.
+
+### 4.5 Réplication (machine 3)
+
+Avec les rapports de la machine 18 (`go_noexp` / `go_ref` pour les clés sans archsimd, `go_fix` / `go_ref` pour les
+autres), le code naturel de Go passe de 5,8 à 10,7 sur la machine 3 (12,3 sur Cascade Lake) et son score de réplication
+de 37,3 à 39,3 ; il y reste 16e, et l'ordre de la réplication ne change pas (C++, Rust, C en tête).
+
+### 4.6 Bilan
+
+* **Exact** : les faits du langage et de la matrice ; le défaut de K5, une erreur de mon banc, corrigée ; l'artefact,
+  un défaut de ma mesure, corrigé dans le classement publié et dans la réplication ; les estimations de score.
+* **À nuancer** : K9 et Q1 ne relèvent pas de la règle appliquée à D (Go est hors de la classe C1 = 1, et C, C++, Rust
+  et Java écrivent aussi K9 en scalaire) : sensibilités ; l'artefact « pèse peu sur le classement publié », mais parce
+  qu'il ne touche presque que K1, pas parce que le publié viendrait de Cascade Lake (K5 et K9 viennent d'Emerald
+  Rapids) ; ma forme de Q1 en une passe ne retrouve pas le gain annoncé.
+* **Effet** : + 2,3 points au classement publié (45,3), toujours 16e, mais à portée de Java (devant lui dans 43 % des
+  variantes) ; 15e avec l'arène itérative ou toutes ses formes optimisées (47,6 à 49,2 points) ; C# reste loin (54,9),
+  par son contrôle.
