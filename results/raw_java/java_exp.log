@@ -1,0 +1,140 @@
+java_exp   k6   mt_1p                q1         p0 n=10 med=0.011311s ok={True} rc=0 
+java_exp   k7   tuned_batch                     p0 n=3 med=0.318135s ok={True} rc=0 
+java_exp   k7   natural_iso                     p0 n=2 med=5.251575s ok={True} rc=0 
+java_exp   k9   tuned_vec                       p0 n=10 med=0.016811s ok={True} rc=0 
+java_exp   k6   mt                   q6         p0 n=10 med=0.006650s ok={True} rc=0 
+java_exp   k6   mt_pool_1p           q1         p0 n=10 med=0.012736s ok={True} rc=0 
+java_exp   k8   tuned                           p0 n=10 med=0.246463s ok={True} rc=0 
+java_exp   k9   mt                              p0 n=10 med=0.011673s ok={True} rc=0 
+java_exp   k9   mt_pool_vec                     p0 n=10 med=0.008920s ok={True} rc=0 
+java_exp   k8   tuned_it                        p0 n=10 med=0.134059s ok={True} rc=0 
+java_exp   k6   tuned_1p             q1         p0 n=10 med=0.027413s ok={True} rc=0 
+java_exp   k6   tuned                q1         p0 n=10 med=0.096240s ok={True} rc=0 
+java_exp   k6   mt                   q1         p0 n=10 med=0.019894s ok={True} rc=0 
+java_exp   k7   natural                         p0 n=2 med=4.196708s ok={True} rc=0 
+java_exp   k6   mt_pool              q6         p0 n=10 med=0.007647s ok={True} rc=0 
+java_exp   k7   tuned                           p0 n=3 med=0.433446s ok={True} rc=0 
+java_exp   k9   mt_pool                         p0 n=10 med=0.007981s ok={True} rc=0 
+java_exp   k9   tuned                           p0 n=10 med=0.019076s ok={True} rc=0 
+java_exp   k7   tuned_iso                       p0 n=3 med=0.358132s ok={True} rc=0 
+java_exp   k6   mt_pool              q1         p0 n=10 med=0.019573s ok={True} rc=0 
+java_exp   k8   tuned                           p0 n=10 med=0.289230s ok={True} rc=0 
+java_exp   k6   mt_pool              q6         p0 n=10 med=0.006340s ok={True} rc=0 
+java_exp   k8   tuned_it                        p0 n=10 med=0.130711s ok={True} rc=0 
+java_exp   k9   mt_pool_vec                     p0 n=10 med=0.007792s ok={True} rc=0 
+java_exp   k6   mt_1p                q1         p0 n=10 med=0.009309s ok={True} rc=0 
+java_exp   k7   natural_iso                     p0 n=2 med=3.611862s ok={True} rc=0 
+java_exp   k6   mt_pool_1p           q1         p0 n=10 med=0.009923s ok={True} rc=0 
+java_exp   k7   tuned                           p0 n=3 med=0.338701s ok={True} rc=0 
+java_exp   k6   mt                   q1         p0 n=10 med=0.021227s ok={True} rc=0 
+java_exp   k9   tuned                           p0 n=10 med=0.015826s ok={True} rc=0 
+java_exp   k6   mt                   q6         p0 n=10 med=0.005841s ok={True} rc=0 
+java_exp   k6   tuned                q1         p0 n=10 med=0.061091s ok={True} rc=0 
+java_exp   k7   tuned_iso                       p0 n=3 med=0.317064s ok={True} rc=0 
+java_exp   k6   mt_pool              q1         p0 n=10 med=0.020711s ok={True} rc=0 
+java_exp   k7   tuned_batch                     p0 n=3 med=0.358713s ok={True} rc=0 
+java_exp   k9   mt_pool                         p0 n=10 med=0.008457s ok={True} rc=0 
+java_exp   k9   mt                              p0 n=10 med=0.011904s ok={True} rc=0 
+java_exp   k6   tuned_1p             q1         p0 n=10 med=0.037857s ok={True} rc=0 
+java_exp   k7   natural                         p0 n=2 med=4.019010s ok={True} rc=0 
+java_exp   k9   tuned_vec                       p0 n=10 med=0.019097s ok={True} rc=0 
+java_exp   k6   tuned_1p             q1         p0 n=10 med=0.030847s ok={True} rc=0 
+java_exp   k9   tuned                           p0 n=10 med=0.020762s ok={True} rc=0 
+java_exp   k6   mt_pool              q1         p0 n=10 med=0.021917s ok={True} rc=0 
+java_exp   k6   mt_1p                q1         p0 n=10 med=0.010873s ok={True} rc=0 
+java_exp   k6   mt                   q6         p0 n=10 med=0.005405s ok={True} rc=0 
+java_exp   k9   mt_pool_vec                     p0 n=10 med=0.008655s ok={True} rc=0 
+java_exp   k8   tuned_it                        p0 n=10 med=0.182490s ok={True} rc=0 
+java_exp   k8   tuned                           p0 n=10 med=0.240153s ok={True} rc=0 
+java_exp   k7   tuned_batch                     p0 n=3 med=0.403620s ok={True} rc=0 
+java_exp   k6   tuned                q1         p0 n=10 med=0.098356s ok={True} rc=0 
+java_exp   k9   mt                              p0 n=10 med=0.008436s ok={True} rc=0 
+java_exp   k7   natural                         p0 n=2 med=4.407198s ok={True} rc=0 
+java_exp   k9   mt_pool                         p0 n=10 med=0.009295s ok={True} rc=0 
+java_exp   k7   natural_iso                     p0 n=2 med=3.774939s ok={True} rc=0 
+java_exp   k6   mt                   q1         p0 n=10 med=0.018893s ok={True} rc=0 
+java_exp   k6   mt_pool              q6         p0 n=10 med=0.008324s ok={True} rc=0 
+java_exp   k7   tuned_iso                       p0 n=3 med=0.329222s ok={True} rc=0 
+java_exp   k6   mt_pool_1p           q1         p0 n=10 med=0.013309s ok={True} rc=0 
+java_exp   k9   tuned_vec                       p0 n=10 med=0.031662s ok={True} rc=0 
+java_exp   k7   tuned                           p0 n=3 med=0.511716s ok={True} rc=0 
+java_exp   k9   mt_pool                         p0 n=10 med=0.010257s ok={True} rc=0 
+java_exp   k6   mt_pool              q6         p0 n=10 med=0.007386s ok={True} rc=0 
+java_exp   k7   tuned_iso                       p0 n=3 med=0.301963s ok={True} rc=0 
+java_exp   k9   mt                              p0 n=10 med=0.014277s ok={True} rc=0 
+java_exp   k7   tuned                           p0 n=3 med=0.382575s ok={True} rc=0 
+java_exp   k8   tuned                           p0 n=10 med=0.236509s ok={True} rc=0 
+java_exp   k7   tuned_batch                     p0 n=3 med=0.338037s ok={True} rc=0 
+java_exp   k8   tuned_it                        p0 n=10 med=0.187300s ok={True} rc=0 
+java_exp   k6   tuned                q1         p0 n=10 med=0.069437s ok={True} rc=0 
+java_exp   k9   tuned                           p0 n=10 med=0.023134s ok={True} rc=0 
+java_exp   k6   mt_pool_1p           q1         p0 n=10 med=0.009345s ok={True} rc=0 
+java_exp   k9   mt_pool_vec                     p0 n=10 med=0.010406s ok={True} rc=0 
+java_exp   k6   mt                   q1         p0 n=10 med=0.017719s ok={True} rc=0 
+java_exp   k7   natural                         p0 n=2 med=5.434838s ok={True} rc=0 
+java_exp   k6   mt_pool              q1         p0 n=10 med=0.020044s ok={True} rc=0 
+java_exp   k6   mt_1p                q1         p0 n=10 med=0.010712s ok={True} rc=0 
+java_exp   k6   mt                   q6         p0 n=10 med=0.008252s ok={True} rc=0 
+java_exp   k6   tuned_1p             q1         p0 n=10 med=0.025342s ok={True} rc=0 
+java_exp   k7   natural_iso                     p0 n=2 med=3.379615s ok={True} rc=0 
+java_exp   k9   tuned_vec                       p0 n=10 med=0.021830s ok={True} rc=0 
+java_exp   k9   mt_pool_vec                     p0 n=10 med=0.008072s ok={True} rc=0 
+java_exp   k6   mt_pool_1p           q1         p0 n=10 med=0.009805s ok={True} rc=0 
+java_exp   k6   mt_pool              q1         p0 n=10 med=0.025987s ok={True} rc=0 
+java_exp   k8   tuned_it                        p0 n=10 med=0.201568s ok={True} rc=0 
+java_exp   k9   mt                              p0 n=10 med=0.012602s ok={True} rc=0 
+java_exp   k9   tuned_vec                       p0 n=10 med=0.016510s ok={True} rc=0 
+java_exp   k6   mt                   q1         p0 n=10 med=0.025669s ok={True} rc=0 
+java_exp   k7   natural_iso                     p0 n=2 med=6.242737s ok={True} rc=0 
+java_exp   k6   mt_pool              q6         p0 n=10 med=0.008112s ok={True} rc=0 
+java_exp   k8   tuned                           p0 n=10 med=0.225132s ok={True} rc=0 
+java_exp   k6   mt_1p                q1         p0 n=10 med=0.010073s ok={True} rc=0 
+java_exp   k6   tuned                q1         p0 n=10 med=0.068233s ok={True} rc=0 
+java_exp   k6   mt                   q6         p0 n=10 med=0.006378s ok={True} rc=0 
+java_exp   k7   natural                         p0 n=2 med=3.269977s ok={True} rc=0 
+java_exp   k9   tuned                           p0 n=10 med=0.025429s ok={True} rc=0 
+java_exp   k6   tuned_1p             q1         p0 n=10 med=0.037070s ok={True} rc=0 
+java_exp   k9   mt_pool                         p0 n=10 med=0.010168s ok={True} rc=0 
+java_exp   k7   tuned_batch                     p0 n=3 med=0.362519s ok={True} rc=0 
+java_exp   k7   tuned                           p0 n=3 med=0.454393s ok={True} rc=0 
+java_exp   k7   tuned_iso                       p0 n=3 med=0.276237s ok={True} rc=0 
+java_exp   k6   tuned_1p             q1         p0 n=10 med=0.024498s ok={True} rc=0 
+java_exp   k8   tuned                           p0 n=10 med=0.254987s ok={True} rc=0 
+java_exp   k6   mt_pool_1p           q1         p0 n=10 med=0.009811s ok={True} rc=0 
+java_exp   k6   mt_pool              q1         p0 n=10 med=0.019108s ok={True} rc=0 
+java_exp   k6   mt_1p                q1         p0 n=10 med=0.009225s ok={True} rc=0 
+java_exp   k6   mt                   q1         p0 n=10 med=0.018757s ok={True} rc=0 
+java_exp   k7   tuned                           p0 n=3 med=0.492839s ok={True} rc=0 
+java_exp   k6   tuned                q1         p0 n=10 med=0.067076s ok={True} rc=0 
+java_exp   k9   mt                              p0 n=10 med=0.010387s ok={True} rc=0 
+java_exp   k7   tuned_iso                       p0 n=3 med=0.327947s ok={True} rc=0 
+java_exp   k6   mt                   q6         p0 n=10 med=0.005495s ok={True} rc=0 
+java_exp   k6   mt_pool              q6         p0 n=10 med=0.005625s ok={True} rc=0 
+java_exp   k9   tuned                           p0 n=10 med=0.026219s ok={True} rc=0 
+java_exp   k7   natural                         p0 n=2 med=3.212272s ok={True} rc=0 
+java_exp   k7   tuned_batch                     p0 n=3 med=0.359937s ok={True} rc=0 
+java_exp   k9   mt_pool                         p0 n=10 med=0.009640s ok={True} rc=0 
+java_exp   k8   tuned_it                        p0 n=10 med=0.184940s ok={True} rc=0 
+java_exp   k9   tuned_vec                       p0 n=10 med=0.021761s ok={True} rc=0 
+java_exp   k7   natural_iso                     p0 n=2 med=2.755442s ok={True} rc=0 
+java_exp   k9   mt_pool_vec                     p0 n=10 med=0.008806s ok={True} rc=0 
+java_exp   k6   mt_pool              q1         p0 n=10 med=0.022713s ok={True} rc=0 
+java_exp   k7   tuned_batch                     p0 n=3 med=0.316542s ok={True} rc=0 
+java_exp   k9   mt_pool_vec                     p0 n=10 med=0.006924s ok={True} rc=0 
+java_exp   k7   natural                         p0 n=2 med=3.439583s ok={True} rc=0 
+java_exp   k9   tuned_vec                       p0 n=10 med=0.016617s ok={True} rc=0 
+java_exp   k7   tuned                           p0 n=3 med=0.468076s ok={True} rc=0 
+java_exp   k9   tuned                           p0 n=10 med=0.017807s ok={True} rc=0 
+java_exp   k9   mt                              p0 n=10 med=0.010298s ok={True} rc=0 
+java_exp   k6   mt                   q1         p0 n=10 med=0.019325s ok={True} rc=0 
+java_exp   k6   mt_1p                q1         p0 n=10 med=0.010250s ok={True} rc=0 
+java_exp   k7   natural_iso                     p0 n=2 med=3.766404s ok={True} rc=0 
+java_exp   k8   tuned                           p0 n=10 med=0.246408s ok={True} rc=0 
+java_exp   k6   mt_pool_1p           q1         p0 n=10 med=0.009910s ok={True} rc=0 
+java_exp   k7   tuned_iso                       p0 n=3 med=0.283933s ok={True} rc=0 
+java_exp   k6   mt_pool              q6         p0 n=10 med=0.005729s ok={True} rc=0 
+java_exp   k6   tuned_1p             q1         p0 n=10 med=0.031330s ok={True} rc=0 
+java_exp   k8   tuned_it                        p0 n=10 med=0.131778s ok={True} rc=0 
+java_exp   k6   tuned                q1         p0 n=10 med=0.061312s ok={True} rc=0 
+java_exp   k6   mt                   q6         p0 n=10 med=0.005638s ok={True} rc=0 
+java_exp   k9   mt_pool                         p0 n=10 med=0.007761s ok={True} rc=0 

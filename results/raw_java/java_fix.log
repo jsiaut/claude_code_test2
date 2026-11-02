@@ -1,0 +1,35 @@
+java_fix   k6   tuned                q6         p0 n=10 med=0.018553s ok={True} rc=0 
+java_fix   k1   soa                  energy     p0 n=10 med=0.004486s ok={True} rc=0 
+java_fix   k5   natural                         p0 n=10 med=0.152214s ok={True} rc=0 
+java_fix   k1   natural              energy     p0 n=10 med=0.045464s ok={True} rc=0 
+java_fix   k5   tuned                           p0 n=10 med=0.005474s ok={True} rc=0 
+java_fix   k5   tuned                           p0 n=10 med=0.005047s ok={True} rc=0 
+java_fix   k1   natural              energy     p0 n=10 med=0.048308s ok={True} rc=0 
+java_fix   k5   natural                         p0 n=10 med=0.154167s ok={True} rc=0 
+java_fix   k6   tuned                q6         p0 n=10 med=0.017464s ok={True} rc=0 
+java_fix   k1   soa                  energy     p0 n=10 med=0.004085s ok={True} rc=0 
+java_fix   k6   tuned                q6         p0 n=10 med=0.017482s ok={True} rc=0 
+java_fix   k1   natural              energy     p0 n=10 med=0.039979s ok={True} rc=0 
+java_fix   k1   soa                  energy     p0 n=10 med=0.003870s ok={True} rc=0 
+java_fix   k5   tuned                           p0 n=10 med=0.006852s ok={True} rc=0 
+java_fix   k5   natural                         p0 n=10 med=0.152910s ok={True} rc=0 
+java_fix   k5   tuned                           p0 n=10 med=0.004714s ok={True} rc=0 
+java_fix   k6   tuned                q6         p0 n=10 med=0.017565s ok={True} rc=0 
+java_fix   k1   natural              energy     p0 n=10 med=0.049296s ok={True} rc=0 
+java_fix   k5   natural                         p0 n=10 med=0.160124s ok={True} rc=0 
+java_fix   k1   soa                  energy     p0 n=10 med=0.003740s ok={True} rc=0 
+java_fix   k1   soa                  energy     p0 n=10 med=0.005156s ok={True} rc=0 
+java_fix   k1   natural              energy     p0 n=10 med=0.042232s ok={True} rc=0 
+java_fix   k5   tuned                           p0 n=10 med=0.007692s ok={True} rc=0 
+java_fix   k5   natural                         p0 n=10 med=0.159843s ok={True} rc=0 
+java_fix   k6   tuned                q6         p0 n=10 med=0.017486s ok={True} rc=0 
+java_fix   k1   natural              energy     p0 n=10 med=0.048349s ok={True} rc=0 
+java_fix   k1   soa                  energy     p0 n=10 med=0.003033s ok={True} rc=0 
+java_fix   k5   natural                         p0 n=10 med=0.154126s ok={True} rc=0 
+java_fix   k5   tuned                           p0 n=10 med=0.005089s ok={True} rc=0 
+java_fix   k6   tuned                q6         p0 n=10 med=0.017460s ok={True} rc=0 
+java_fix   k1   soa                  energy     p0 n=10 med=0.003524s ok={True} rc=0 
+java_fix   k1   natural              energy     p0 n=10 med=0.048883s ok={True} rc=0 
+java_fix   k6   tuned                q6         p0 n=10 med=0.016932s ok={True} rc=0 
+java_fix   k5   tuned                           p0 n=10 med=0.004772s ok={True} rc=0 
+java_fix   k5   natural                         p0 n=10 med=0.156018s ok={True} rc=0 
