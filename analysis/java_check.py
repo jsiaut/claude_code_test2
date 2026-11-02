@@ -6,6 +6,8 @@ analyse globale de la v3 rejouée (mêmes tirages) pour chaque scénario du plan
 * Avant : le classement publié d'avant (F1 = 0, sans correction) ; doit reproduire results/k9_check.json (Publié).
 * J-F1 : erratum F1 = 1/2 seul. J-K5, J-K5-T : correction de K5 tuned et K1 soa seule (règle du pont de
   analysis/transfer_check.py ; transfert seul). J-E (classement publié), J-E-T : erratum et correction.
+  Écart au plan (docs/JAVA.md, 4) : dans J-K5 et J-E, un rapport retenu supérieur à 1 est ramené à 1 ; J-E-règle
+  (information) applique la règle telle quelle.
 * Sensibilités (sur J-E ; rapports pris dans java_exp, forme nouvelle / variante d'origine, appliqués en min(1, r)) :
   S-Q1, S-pool, S-K9v, S-K7, S-K8, S-mesures (toutes ; S-mesures-T par transfert seul), S-cases (B3 = F2 = 1/2),
   S-libc-J (D3 = D4 = 1), S-tout.
@@ -154,7 +156,11 @@ def main():
                            "c_main_ms": 1e3 * gm(data["c"][key]), "c_here_ms": 1e3 * gm(raw["c"][key])}
         return used
 
-    fix_b = {k: bridged(f"correction {kk(k)}", k, r_fix[k]["ratio"], raw["java_fix"][k]) for k in FIX}
+    fix_rule = {k: bridged(f"correction {kk(k)}", k, r_fix[k]["ratio"], raw["java_fix"][k]) for k in FIX}
+    # écart au plan (décidé après avoir vu les ponts, avant tout score corrigé) : une correction qui accélère le code sur
+    # le même hôte ne peut pas allonger le temps publié ; un rapport retenu supérieur à 1 (le pont de K1 soa, qui se
+    # trompe entre Emerald Rapids, colonnes en cache L3, et Cascade Lake, colonnes en mémoire) est ramené à 1.
+    fix_b = {k: min(1.0, r) for k, r in fix_rule.items()}
     fix_t = {k: r_fix[k]["ratio"] for k in FIX}
     sens_b = {n: min(1.0, bridged(n, old, r_sens[n]["ratio"], raw["java_exp"][new])) for n, (old, new) in SENS.items()}
     sens_t = {n: min(1.0, r_sens[n]["ratio"]) for n in SENS}
@@ -167,7 +173,8 @@ def main():
 
     plans = {"Avant": (data, BEFORE), "J-F1": (data, None),
              "J-K5": (scaled(data, fix_b), BEFORE), "J-K5-T": (scaled(data, fix_t), BEFORE),
-             "J-E": (scaled(data, fix_b), None), "J-E-T": (scaled(data, fix_t), None)}
+             "J-E": (scaled(data, fix_b), None), "J-E-T": (scaled(data, fix_t), None),
+             "J-E-règle": (scaled(data, fix_rule), None)}
     for name, names in PLAN.items():
         plans[name] = (scaled(data, with_sens(names, fix_b, sens_b)), None)
     plans["S-mesures-T"] = (scaled(data, with_sens(PLAN["S-mesures"], fix_t, sens_t)), None)
@@ -176,7 +183,8 @@ def main():
     plans["S-tout"] = (scaled(data, with_sens(PLAN["S-mesures"], fix_b, sens_b)), {**CASES, **LIBC})
     out = {"bad": bad, "times_ms": times, "r_fix": {kk(k): r for k, r in r_fix.items()}, "r_sens": r_sens,
            "sens_used": sens_b, "sens_transfer": sens_t, "transfer": transfer,
-           "published_ratios": {kk(k): v for k, v in fix_b.items()}, "scenarios": {}}
+           "published_ratios": {kk(k): v for k, v in fix_b.items()},
+           "rule_ratios": {kk(k): v for k, v in fix_rule.items()}, "scenarios": {}}
     for name, (d, cells) in plans.items():
         z = out["scenarios"][name] = run(d, lat, langs, footprint, c3, cells)
         print(f"{name} : Java {z['ms0'][LANG]:.2f} points, C {z['C'][LANG]:.1f}, E {z['E'][LANG]:.1f}, D {z['D'][LANG]:.1f}, "
