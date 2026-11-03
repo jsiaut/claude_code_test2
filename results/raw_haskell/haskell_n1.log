@@ -1,0 +1,42 @@
+haskell_n1 k1   natural              energy     p0 n=10 med=0.087980s ok={True} rc=0 
+haskell_n1 k9   natural                         p0 n=8 med=0.117701s ok={True} rc=0 
+haskell_n1 k1   natural_shuffled     energy     p0 n=10 med=0.170722s ok={True} rc=0 
+haskell_n1 k5   natural                         p0 n=4 med=0.191415s ok={True} rc=0 
+haskell_n1 k8   natural                         p0 n=3 med=1.122540s ok={True} rc=0 
+haskell_n1 k4   natural_unsorted                p0 n=10 med=0.012160s ok={True} rc=0 
+haskell_n1 k1   natural              energy     p0 n=10 med=0.092293s ok={True} rc=0 
+haskell_n1 k8   natural                         p0 n=3 med=1.180478s ok={True} rc=0 
+haskell_n1 k9   natural                         p0 n=8 med=0.111854s ok={True} rc=0 
+haskell_n1 k1   natural_shuffled     energy     p0 n=10 med=0.146148s ok={True} rc=0 
+haskell_n1 k4   natural_unsorted                p0 n=10 med=0.013714s ok={True} rc=0 
+haskell_n1 k5   natural                         p0 n=4 med=0.257388s ok={True} rc=0 
+haskell_n1 k8   natural                         p0 n=3 med=1.181367s ok={True} rc=0 
+haskell_n1 k4   natural_unsorted                p0 n=10 med=0.011138s ok={True} rc=0 
+haskell_n1 k9   natural                         p0 n=8 med=0.116110s ok={True} rc=0 
+haskell_n1 k5   natural                         p0 n=4 med=0.196183s ok={True} rc=0 
+haskell_n1 k1   natural              energy     p0 n=10 med=0.090578s ok={True} rc=0 
+haskell_n1 k1   natural_shuffled     energy     p0 n=10 med=0.163138s ok={True} rc=0 
+haskell_n1 k5   natural                         p0 n=4 med=0.181659s ok={True} rc=0 
+haskell_n1 k1   natural_shuffled     energy     p0 n=10 med=0.162080s ok={True} rc=0 
+haskell_n1 k9   natural                         p0 n=8 med=0.128119s ok={True} rc=0 
+haskell_n1 k4   natural_unsorted                p0 n=10 med=0.011265s ok={True} rc=0 
+haskell_n1 k8   natural                         p0 n=3 med=1.158671s ok={True} rc=0 
+haskell_n1 k1   natural              energy     p0 n=10 med=0.095870s ok={True} rc=0 
+haskell_n1 k9   natural                         p0 n=8 med=0.109627s ok={True} rc=0 
+haskell_n1 k5   natural                         p0 n=4 med=0.190550s ok={True} rc=0 
+haskell_n1 k1   natural              energy     p0 n=10 med=0.083935s ok={True} rc=0 
+haskell_n1 k4   natural_unsorted                p0 n=10 med=0.011457s ok={True} rc=0 
+haskell_n1 k8   natural                         p0 n=3 med=1.187798s ok={True} rc=0 
+haskell_n1 k1   natural_shuffled     energy     p0 n=10 med=0.146225s ok={True} rc=0 
+haskell_n1 k5   natural                         p0 n=4 med=0.198135s ok={True} rc=0 
+haskell_n1 k1   natural_shuffled     energy     p0 n=10 med=0.143878s ok={True} rc=0 
+haskell_n1 k1   natural              energy     p0 n=10 med=0.084230s ok={True} rc=0 
+haskell_n1 k4   natural_unsorted                p0 n=10 med=0.011340s ok={True} rc=0 
+haskell_n1 k8   natural                         p0 n=3 med=1.163928s ok={True} rc=0 
+haskell_n1 k9   natural                         p0 n=8 med=0.114399s ok={True} rc=0 
+haskell_n1 k9   natural                         p0 n=8 med=0.114347s ok={True} rc=0 
+haskell_n1 k1   natural              energy     p0 n=10 med=0.077379s ok={True} rc=0 
+haskell_n1 k5   natural                         p0 n=4 med=0.205503s ok={True} rc=0 
+haskell_n1 k8   natural                         p0 n=3 med=1.199329s ok={True} rc=0 
+haskell_n1 k4   natural_unsorted                p0 n=10 med=0.010002s ok={True} rc=0 
+haskell_n1 k1   natural_shuffled     energy     p0 n=10 med=0.149911s ok={True} rc=0 

@@ -1,0 +1,28 @@
+haskell_rel k8   tuned                           p0 n=3 med=0.673248s ok={True} rc=0 
+haskell_rel k1   soa                  energy     p0 n=10 med=0.005572s ok={True} rc=0 
+haskell_rel k8   natural                         p0 n=3 med=1.665964s ok={True} rc=0 
+haskell_rel k5   tuned                           p0 n=10 med=0.005330s ok={True} rc=0 
+haskell_rel k8   natural                         p0 n=3 med=1.639774s ok={True} rc=0 
+haskell_rel k8   tuned                           p0 n=3 med=0.752865s ok={True} rc=0 
+haskell_rel k1   soa                  energy     p0 n=10 med=0.004318s ok={True} rc=0 
+haskell_rel k5   tuned                           p0 n=10 med=0.005522s ok={True} rc=0 
+haskell_rel k5   tuned                           p0 n=10 med=0.005683s ok={True} rc=0 
+haskell_rel k1   soa                  energy     p0 n=10 med=0.007211s ok={True} rc=0 
+haskell_rel k8   natural                         p0 n=3 med=1.656330s ok={True} rc=0 
+haskell_rel k8   tuned                           p0 n=3 med=0.701691s ok={True} rc=0 
+haskell_rel k5   tuned                           p0 n=10 med=0.008223s ok={True} rc=0 
+haskell_rel k8   tuned                           p0 n=3 med=0.703841s ok={True} rc=0 
+haskell_rel k8   natural                         p0 n=3 med=1.567580s ok={True} rc=0 
+haskell_rel k1   soa                  energy     p0 n=10 med=0.006229s ok={True} rc=0 
+haskell_rel k8   tuned                           p0 n=3 med=0.697652s ok={True} rc=0 
+haskell_rel k8   natural                         p0 n=3 med=1.650030s ok={True} rc=0 
+haskell_rel k5   tuned                           p0 n=10 med=0.005214s ok={True} rc=0 
+haskell_rel k1   soa                  energy     p0 n=10 med=0.004263s ok={True} rc=0 
+haskell_rel k8   tuned                           p0 n=3 med=0.776068s ok={True} rc=0 
+haskell_rel k1   soa                  energy     p0 n=10 med=0.003727s ok={True} rc=0 
+haskell_rel k5   tuned                           p0 n=10 med=0.005558s ok={True} rc=0 
+haskell_rel k8   natural                         p0 n=3 med=1.690073s ok={True} rc=0 
+haskell_rel k8   tuned                           p0 n=3 med=0.732151s ok={True} rc=0 
+haskell_rel k8   natural                         p0 n=3 med=1.603196s ok={True} rc=0 
+haskell_rel k5   tuned                           p0 n=10 med=0.007214s ok={True} rc=0 
+haskell_rel k1   soa                  energy     p0 n=10 med=0.003576s ok={True} rc=0 
