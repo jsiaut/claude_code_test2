@@ -1,0 +1,78 @@
+; K4 naturel, binaire du banc (-fno-omit-yields) : corps de boucle (état sur la pile Sp, appel terminal vers l'en-tête)
+cdGL:
+  %ln1uq = load i64*, i64**  %Sp_Var
+  %ln1ur = getelementptr inbounds i64, i64*  %ln1uq, i32  2 
+  %ln1us = bitcast i64* %ln1ur to i64*
+  %ln1ut = load i64, i64*  %ln1us, !tbaa !2
+  store i64  %ln1ut, i64*  %lsc1T 
+  %ln1uu = load i64*, i64**  %Sp_Var
+  %ln1uv = getelementptr inbounds i64, i64*  %ln1uu, i32  3 
+  %ln1uw = bitcast i64* %ln1uv to i64*
+  %ln1ux = load i64, i64*  %ln1uw, !tbaa !2
+  store i64  %ln1ux, i64*  %lsc1U 
+  %ln1uy = load i64, i64*  %lsc1U
+  %ln1uz = load i64*, i64**  %Sp_Var
+  %ln1uA = getelementptr inbounds i64, i64*  %ln1uz, i32  1 
+  %ln1uB = bitcast i64* %ln1uA to i64*
+  %ln1uC = load i64, i64*  %ln1uB, !tbaa !2
+  %ln1uD = icmp eq i64 %ln1uy, %ln1uC
+  %ln1uE = zext i1 %ln1uD to i64
+switch i64  %ln1uE, label  %cdGJ [
+  i64  1, label  %cdGK
+]
+cdGJ:
+  %ln1uF = load i64, i64*  %lsc1U
+  %ln1uG = inttoptr i64 %ln1uF to i8*
+  %ln1uH = load i8, i8*  %ln1uG, !tbaa !1
+  store i8  %ln1uH, i8*  %lsc20 
+  %ln1uI = load i8, i8*  %lsc20
+  %ln1uJ = icmp uge i8 %ln1uI, 128
+  %ln1uK = zext i1 %ln1uJ to i64
+switch i64  %ln1uK, label  %cdGG [
+  i64  1, label  %cdGH
+]
+cdGG:
+  %ln1uM = load i64, i64*  %lsc1T
+  %ln1uL = load i64*, i64**  %Sp_Var
+  %ln1uN = getelementptr inbounds i64, i64*  %ln1uL, i32  2 
+  store i64  %ln1uM, i64*  %ln1uN , !tbaa !2
+  %ln1uO = load i64*, i64**  %Sp_Var
+  %ln1uP = getelementptr inbounds i64, i64*  %ln1uO, i32  1 
+  %ln1uQ = ptrtoint i64* %ln1uP to i64
+  %ln1uR = inttoptr i64 %ln1uQ to i64*
+  store i64*  %ln1uR, i64**  %Sp_Var 
+  br label  %n1tu
+n1tu:
+  %ln1uS = bitcast void (i64*, i64*, i64*, i64, i64, i64, i64, i64, i64, i64 )* @_blk_cdGz$def to void (i64*, i64*, i64*, i64, i64, i64, i64, i64, i64, i64 )*
+  %ln1uT = load i64*, i64**  %Sp_Var
+  tail call ghccc void (i64*, i64*, i64*, i64, i64, i64, i64, i64, i64, i64 ) %ln1uS( i64* noalias nocapture  %Base_Arg, i64* noalias nocapture  %ln1uT, i64* noalias nocapture  %Hp_Arg, i64  %R1_Arg, 
+  ret void
+cdGH:
+  %ln1uV = load i64, i64*  %lsc1T
+  %ln1uW = load i8, i8*  %lsc20
+
+; en-tête de la boucle : bloc séparé _blk_cdGz, test de préemption sur Base[107] (HpLim)
+define internal ghccc void @_blk_cdGz$def(i64* noalias nocapture  %Base_Arg, i64* noalias nocapture  %Sp_Arg, i64* noalias nocapture  %Hp_Arg, i64  %R1_Arg, i64  %R2_Arg, i64  %R3_Arg, i64  %R4_Arg, i
+{
+n1vQ:
+  %lsc23 = alloca i64, i32  1
+  %Sp_Var = alloca i64*, i32  1
+  store i64*  %Sp_Arg, i64**  %Sp_Var 
+  %R1_Var = alloca i64, i32  1
+  store i64  %R1_Arg, i64*  %R1_Var 
+  br label  %cdGz
+n1vR:
+  unreachable
+cdGz:
+  %ln1vS = load i64*, i64**  %Sp_Var
+  %ln1vT = getelementptr inbounds i64, i64*  %ln1vS, i32  1 
+  %ln1vU = bitcast i64* %ln1vT to i64*
+  %ln1vV = load i64, i64*  %ln1vU, !tbaa !2
+  store i64  %ln1vV, i64*  %lsc23 
+  %ln1vW = getelementptr inbounds i64, i64*  %Base_Arg, i32  107 
+  %ln1vX = bitcast i64* %ln1vW to i64*
+  %ln1vY = load i64, i64*  %ln1vX, !tbaa !5
+  %ln1vZ = icmp eq i64 %ln1vY, 0
+  %ln1w0 = call ccc i1 (i1, i1 ) @llvm.expect.i1( i1  %ln1vZ, i1  0  ) 
+  br i1  %ln1w0, label  %cdGB, label  %cdGC
+cdGC:

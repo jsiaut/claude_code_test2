@@ -1,0 +1,57 @@
+; K4 naturel, mode release (sans -fno-omit-yields) : boucle locale à la fonction (variables locales, branches qui se rejoignent)
+  br label  %cdVR
+n1dF:
+  unreachable
+cdVR:
+  %ln1dG = add i64 %R2_Arg, %R4_Arg
+  store i64  %ln1dG, i64*  %lscEe 
+  store i64  %R3_Arg, i64*  %lscEi 
+  store i64  %R2_Arg, i64*  %lscEh 
+  store i64  0, i64*  %lscEg 
+  br label  %cdVX
+cdVX:
+  %ln1dH = load i64, i64*  %lscEh
+  %ln1dI = load i64, i64*  %lscEe
+  %ln1dJ = icmp eq i64 %ln1dH, %ln1dI
+  %ln1dK = zext i1 %ln1dJ to i64
+switch i64  %ln1dK, label  %cdWh [
+  i64  1, label  %cdWi
+]
+cdWh:
+  %ln1dL = load i64, i64*  %lscEh
+  %ln1dM = inttoptr i64 %ln1dL to i8*
+  %ln1dN = load i8, i8*  %ln1dM, !tbaa !1
+  store i8  %ln1dN, i8*  %lscEn 
+  %ln1dO = load i8, i8*  %lscEn
+  %ln1dP = icmp uge i8 %ln1dO, 128
+  %ln1dQ = zext i1 %ln1dP to i64
+switch i64  %ln1dQ, label  %cdWe [
+  i64  1, label  %cdWf
+]
+cdWe:
+  %ln1dR = load i64, i64*  %lscEg
+  store i64  %ln1dR, i64*  %lscEq 
+  br label  %scEp
+scEp:
+  %ln1dS = load i64, i64*  %lscEh
+  %ln1dT = add i64 %ln1dS, 1
+  store i64  %ln1dT, i64*  %lscEh 
+  %ln1dU = load i64, i64*  %lscEq
+  store i64  %ln1dU, i64*  %lscEg 
+  br label  %cdVX
+cdWf:
+  %ln1dV = load i64, i64*  %lscEg
+  %ln1dW = load i8, i8*  %lscEn
+  %ln1dX = zext i8 %ln1dW to i64
+  %ln1dY = add i64 %ln1dV, %ln1dX
+  store i64  %ln1dY, i64*  %lscEq 
+  br label  %scEp
+cdWi:
+  %ln1dZ = load i64, i64*  %lscEg
+  store i64  %ln1dZ, i64*  %R1_Var 
+  %ln1e0 = getelementptr inbounds i64, i64*  %Sp_Arg, i32  0 
+  %ln1e1 = bitcast i64* %ln1e0 to i64*
+  %ln1e2 = load i64, i64*  %ln1e1, !tbaa !2
+  %ln1e3 = inttoptr i64 %ln1e2 to void (i64*, i64*, i64*, i64, i64, i64, i64, i64, i64, i64 )*
+  %ln1e4 = load i64, i64*  %R1_Var
+  tail call ghccc void (i64*, i64*, i64*, i64, i64, i64, i64, i64, i64, i64 ) %ln1e3( i64* noalias nocapture  %Base_Arg, i64* noalias nocapture  %Sp_Arg, i64* noalias nocapture  %Hp_Arg, i64  %ln1e4, 

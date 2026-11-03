@@ -1,5 +1,5 @@
 {
- "source": "docs/ADA.md (d\u00e9cision 2) ; rapports appari\u00e9s de results/raw_ada, machine 5 ; results/ada_check.json ; Fortran : docs/FORTRAN.md (3.4), results/raw_fortran, results/fortran_check.json ; ponts par le t\u00e9moin : results/transfer_check.json ; D : docs/DLANG.md (3.2), results/raw_d, machine 10, results/d_check.json ; Rust : docs/RUST.md (3.2), results/raw_rust, machine 11, results/rust_check.json ; Java : docs/JAVA.md (3.2), results/raw_java, machine 17, results/java_check.json ; Go : docs/GO.md (3.2), results/raw_go, machine 18, results/go_check.json (K9 : ratios_k9h)",
+ "source": "docs/ADA.md (d\u00e9cision 2) ; rapports appari\u00e9s de results/raw_ada, machine 5 ; results/ada_check.json ; Fortran : docs/FORTRAN.md (3.4), results/raw_fortran, results/fortran_check.json ; ponts par le t\u00e9moin : results/transfer_check.json ; D : docs/DLANG.md (3.2), results/raw_d, machine 10, results/d_check.json ; Rust : docs/RUST.md (3.2), results/raw_rust, machine 11, results/rust_check.json ; Java : docs/JAVA.md (3.2), results/raw_java, machine 17, results/java_check.json ; Go : docs/GO.md (3.2), results/raw_go, machine 18, results/go_check.json (K9 : ratios_k9h) ; Haskell : docs/HASKELL.md (3.2), results/raw_haskell, machine 19, results/haskell_check.json (K9 : ratios_k9h ; latences de K8 naturel : lat_ratios)",
  "ratios": {
   "ada": {
    "k1|aos|energy": 0.948697189225563,
@@ -43,6 +43,41 @@
    "k6|tuned|q6": 1.0,
    "k6|mt|q6": 0.9168143781482941,
    "k5|natural|": 1.0234358266802697
+  },
+  "haskell": {
+   "k1|aos|energy": 0.9756485345540981,
+   "k1|natural|energy": 1.0302675815341635,
+   "k1|natural_shuffled|energy": 0.9906401144840452,
+   "k1|soa|energy": 0.9811981726404195,
+   "k2|tuned|16384": 1.051124079051014,
+   "k2|tuned|16777216": 0.9733725875227552,
+   "k2|tuned|2097152": 1.0073254452318474,
+   "k2|tuned|262144": 0.9908386786143917,
+   "k2|tuned|268435456": 0.9837772015245367,
+   "k2|tuned|33554432": 1.0043355683972115,
+   "k2|tuned|524288": 1.016702497579018,
+   "k2|tuned|65536": 0.9909475387930036,
+   "k2|tuned|67108864": 0.9808335962753585,
+   "k2|tuned|8388608": 1.016429714945908,
+   "k3|rmw_packed|": 1.1173063139012807,
+   "k3|rmw_padded|": 0.6844074405182149,
+   "k3|sw_packed|": 0.8261531306738967,
+   "k3|sw_padded|": 1.1701609317374757,
+   "k4|branchless_unsorted|": 0.9736621610729014,
+   "k4|natural_sorted|": 1.1260030180108118,
+   "k4|natural_unsorted|": 0.15319394073618045,
+   "k5|natural|": 0.5410450765345932,
+   "k5|tuned|": 0.7450671214755671,
+   "k6|mt|q1": 0.9436949896482453,
+   "k6|mt|q6": 0.8402127859481003,
+   "k6|natural|q1": 1.0071864919681972,
+   "k6|natural|q6": 1.0516194664873904,
+   "k6|tuned|q1": 0.960704582807439,
+   "k6|tuned|q6": 0.8540849404344524,
+   "k7|natural|": 1.011888037988946,
+   "k7|tuned|": 0.7779991344443342,
+   "k8|natural|": 1.0271906654909744,
+   "k8|tuned|": 0.2949603512931323
   }
  },
  "ratios_k9h": {
@@ -50,6 +85,20 @@
    "k9|natural|": 0.9894867645626252,
    "k9|tuned|": 0.8201307286192266,
    "k9|mt|": 0.9144144054788362
+  },
+  "haskell": {
+   "k9|mt|": 1.000493526614965,
+   "k9|natural|": 0.6040350741531127,
+   "k9|tuned|": 0.9736010940597422
   }
+ },
+ "lat_ratios": {
+  "haskell": [
+   1.060754421116822,
+   1.0099154283907683,
+   0.959993103625947,
+   0.799585768571607,
+   1.1135899957117052
+  ]
  }
 }
