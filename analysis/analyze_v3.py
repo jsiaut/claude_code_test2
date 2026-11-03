@@ -447,6 +447,11 @@ def main():
         for key, r in mr.items():
             if l in d3m and key in d3m[l]:
                 d3m[l][key] = [[t * r for t in p] for p in d3m[l][key]]
+    # remarque sur Haskell (docs/HASKELL.md, plan 3.2) : latences de K8 naturel de la machine 3 multipliées par les
+    # rapports mesurés sur la machine 19 (même modèle)
+    for l, lr in v2.m3_lat_ratios().items():
+        if K8N in lat3.get(l, {}):
+            lat3[l][K8N] = v2.scale_lat(lat3[l][K8N], lr)
     A3 = Arrays3(d3m, lat3, langs, 0, rng, pools)
     refs3 = {e: references(A3, e) for e in ("mean", "min")}
     S3 = scores3(A3, 0, MAIN, C_main, footprint, refs3)

@@ -320,8 +320,15 @@ MATRIX = {
         "A1": (0.5, "pas de tableau d'enregistrements non boxés dans le langage ; tableaux Storable (base, Foreign.Marshal.Array)"),
         "A2": (0.5, "Storable manuel (base)"),
         "A3": (0, "aucun"), "A4": (0.5, "allocaBytesAligned, tableaux épinglés alignés"), "A5": (0.5, "castWord32ToFloat, unsafeCoerce#"),
-        "A6": (0, "aucun"), "A7": (0, "aucun"), "A8": (1, "Word8/Int16/Float (UArray)"), "B1": (0, "GC imposé"),
-        "B2": (0, "aucun (régions compactes : données immuables durables)"), "B3": (0, "aucun"),
+        "A6": (0, "aucun"),
+        "A7": (0.5, "pas de tableau fixe dans un enregistrement du langage ; Storable manuel (base) : enregistrement de "
+                    "72 o à 16 flottants en ligne, rangé à plat dans un tableau (sonde ; erratum du 3/11, remarque sur "
+                    "Haskell : même mécanisme que A1 et A2)"),
+        "A8": (1, "Word8/Int16/Float (UArray)"), "B1": (0, "GC imposé"),
+        "B2": (0.5, "mallocBytes/free et Foreign.Marshal.Pool (régions libérées d'un bloc) dans base : arènes à la main "
+                    "(bench K8 tuned) ; pas d'allocateur d'objets du tas (sonde ; erratum du 3/11, remarque sur Haskell)"),
+        "B3": (0.5, "n-uplets et valeurs non boxés (Int#, FloatX16#, (# , #)) jamais sur le tas, garanti par le type ; "
+                    "enregistrements et tableaux sur le tas (sonde ; erratum du 3/11, remarque sur Haskell)"),
         "B4": (0, "paresse, thunks, boxing omniprésents (bench : partage)"), "B5": (1, "Foreign.Ptr, mallocBytes, peek/poke"),
         "C1": (0.5, "primops SIMD (GHC.Exts) ; NCG faux en 9.14.1, LLVM requis (bench)"), "C2": (0, "aucun"), "C3": M,
         "C4": (0, "aucun"), "C5": (0.5, "par# (ghc-prim) ; parallel/strategies non livrés"), "D1": (1, "RTS threadé, forkOn"),

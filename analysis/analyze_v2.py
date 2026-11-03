@@ -254,15 +254,55 @@ def apply_k9h(data, harness="common", skip=()):
     return sorted(new)
 
 
+# remarques mesurées sur un hôte du même modèle que la machine 3, dont les rapports sont reportés sur la réplication
+M3_CHECKS = {"go": "go_check.json", "haskell": "haskell_check.json"}
+
+
 def m3_ratios():
     """Rapports reportés sur les données de la réplication (machine 3) par une remarque mesurée sur un hôte du même
     modèle : remarque sur Go (results/go_check.json, « replication_ratios » : copie sans GOEXPERIMENT pour les clés
-    sans archsimd, ClearAVXUpperBits pour les autres, docs/GO.md). {langage: {clé: rapport}} ; vide sans fichier."""
-    path = os.path.join(ROOT, "results", "go_check.json")
+    sans archsimd, ClearAVXUpperBits pour les autres, docs/GO.md) ; remarque sur Haskell (results/haskell_check.json :
+    copie corrigée sur copie publiée, docs/HASKELL.md). {langage: {clé: rapport}} ; vide sans fichier."""
+    out = {}
+    for lang, name in M3_CHECKS.items():
+        path = os.path.join(ROOT, "results", name)
+        if os.path.exists(path):
+            rr = json.load(open(path)).get("replication_ratios", {})
+            if rr:
+                out[lang] = {tuple(k.split("|")): r for k, r in rr.items()}
+    return out
+
+
+def m3_lat_ratios():
+    """Rapports des latences de K8 naturel ([p50, p90, p99, p99,9, max]) reportés sur la réplication (machine 3) :
+    remarque sur Haskell (results/haskell_check.json, « replication_lat_ratios », docs/HASKELL.md, 3.2).
+    {langage: [5 rapports]} ; vide sans fichier."""
+    out = {}
+    for lang, name in M3_CHECKS.items():
+        path = os.path.join(ROOT, "results", name)
+        if os.path.exists(path):
+            lr = json.load(open(path)).get("replication_lat_ratios")
+            if lr:
+                out[lang] = lr
+    return out
+
+
+def scale_lat(procs, r):
+    """Lignes de latence [p50, p90, p99, p99,9, max] de chaque processus multipliées colonne par colonne."""
+    return [[[x * f for x, f in zip(row, r)] for row in p] for p in procs]
+
+
+def apply_lat_ratios(lat, path=os.path.join(ROOT, "results", "transfers.json")):
+    """Corrections des latences de K8 naturel (D3) mesurées après coup sur un autre hôte, par rapports appariés
+    (« lat_ratios » de results/transfers.json, remarque sur Haskell, docs/HASKELL.md, 3.2), appliquées après le
+    remplacement des latences par la remesure de la machine 11. Sans fichier ou sans clé, rien ne change."""
     if not os.path.exists(path):
         return {}
-    rr = json.load(open(path)).get("replication_ratios", {})
-    return {"go": {tuple(k.split("|")): r for k, r in rr.items()}} if rr else {}
+    lr = json.load(open(path)).get("lat_ratios", {})
+    for l, r in lr.items():
+        if K8N in lat.get(l, {}):
+            lat[l][K8N] = scale_lat(lat[l][K8N], r)
+    return lr
 
 
 def k9h_ratios():
@@ -553,7 +593,7 @@ def dataset_main(transfers=True, d3=True, d24=False, k9h="common"):
     corrections transférées de results/transfers.json ; si d3, les latences de K8 naturel remesurées pour D3
     (results/raw_d3, remarque sur Rust), quand elles existent ; si d24 (information seulement, pas dans le classement
     publié : docs/CPP.md, 4), les temps remesurés de D2 et D4 (results/raw_d24, remarque sur C++), sous leurs clés à
-    part ; si k9h ('common', classement publié, ou 'old', information), K9 de toutes les implémentations remesuré sur la
+    part ; si transfers, les corrections de latence (« lat_ratios », après D3) ; si k9h ('common', classement publié, ou 'old', information), K9 de toutes les implémentations remesuré sur la
     machine 16 (results/raw_k9h, docs/K9.md), quand il existe."""
     data, _lat_flat, _rss, invalid, sus, bridge = final_data()
     for l in data:
@@ -578,6 +618,8 @@ def dataset_main(transfers=True, d3=True, d24=False, k9h="common"):
         apply_transfers(data)
     if d3:
         apply_d3(lat)
+    if transfers:
+        apply_lat_ratios(lat)
     if d24:
         apply_d24(data, transfers=transfers)
     if k9h:
