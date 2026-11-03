@@ -1,0 +1,14 @@
+js_n22     k6   tuned                q1         p0 n=9 med=0.108691s ok={True} rc=0 
+js_n22     k6   natural              q1         p0 n=5 med=0.147986s ok={True} rc=0 
+js_n22     k6   natural              q1         p0 n=5 med=0.131493s ok={True} rc=0 
+js_n22     k6   tuned                q1         p0 n=9 med=0.111253s ok={True} rc=0 
+js_n22     k6   tuned                q1         p0 n=9 med=0.111425s ok={True} rc=0 
+js_n22     k6   natural              q1         p0 n=5 med=0.125155s ok={True} rc=0 
+js_n22     k6   natural              q1         p0 n=5 med=0.125792s ok={True} rc=0 
+js_n22     k6   tuned                q1         p0 n=9 med=0.113264s ok={True} rc=0 
+js_n22     k6   tuned                q1         p0 n=9 med=0.112773s ok={True} rc=0 
+js_n22     k6   natural              q1         p0 n=5 med=0.126349s ok={True} rc=0 
+js_n22     k6   tuned                q1         p0 n=9 med=0.109388s ok={True} rc=0 
+js_n22     k6   natural              q1         p0 n=5 med=0.131000s ok={True} rc=0 
+js_n22     k6   natural              q1         p0 n=5 med=0.132175s ok={True} rc=0 
+js_n22     k6   tuned                q1         p0 n=9 med=0.115545s ok={True} rc=0 

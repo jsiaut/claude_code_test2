@@ -1,0 +1,77 @@
+js_ref     k9   tuned                           p0 n=10 med=0.057111s ok={True} rc=0 
+js_ref     k8   natural                         p0 n=3 med=1.147700s ok={True} rc=0 
+js_ref     k6   mt                   q6         p0 n=10 med=0.033161s ok={True} rc=0 
+js_ref     k8   tuned                           p0 n=4 med=0.416816s ok={True} rc=0 
+js_ref     k6   natural              q1         p0 n=5 med=0.261866s ok={True} rc=0 
+js_ref     k9   mt                              p0 n=10 med=0.024375s ok={True} rc=0 
+js_ref     k7   tuned                           p0 n=3 med=1.368752s ok={True} rc=0 
+js_ref     k1   soa                  energy     p0 n=10 med=0.014710s ok={True} rc=0 
+js_ref     k6   tuned                q6         p0 n=10 med=0.079383s ok={True} rc=0 
+js_ref     k5   tuned                           p0 n=10 med=0.131614s ok={True} rc=0 
+js_ref     k6   tuned                q1         p0 n=9 med=0.262293s ok={True} rc=0 
+js_ref     k6   mt                   q6         p0 n=10 med=0.029906s ok={True} rc=0 
+js_ref     k6   tuned                q1         p0 n=9 med=0.275016s ok={True} rc=0 
+js_ref     k9   tuned                           p0 n=10 med=0.060255s ok={True} rc=0 
+js_ref     k9   mt                              p0 n=10 med=0.022344s ok={True} rc=0 
+js_ref     k8   tuned                           p0 n=4 med=0.443322s ok={True} rc=0 
+js_ref     k6   natural              q1         p0 n=5 med=0.270960s ok={True} rc=0 
+js_ref     k7   tuned                           p0 n=3 med=1.417697s ok={True} rc=0 
+js_ref     k6   tuned                q6         p0 n=10 med=0.081219s ok={True} rc=0 
+js_ref     k5   tuned                           p0 n=10 med=0.146255s ok={True} rc=0 
+js_ref     k8   natural                         p0 n=3 med=1.064819s ok={True} rc=0 
+js_ref     k1   soa                  energy     p0 n=10 med=0.014184s ok={True} rc=0 
+js_ref     k6   tuned                q1         p0 n=9 med=0.269897s ok={True} rc=0 
+js_ref     k8   natural                         p0 n=3 med=1.155791s ok={True} rc=0 
+js_ref     k1   soa                  energy     p0 n=10 med=0.016953s ok={True} rc=0 
+js_ref     k9   tuned                           p0 n=10 med=0.065485s ok={True} rc=0 
+js_ref     k6   natural              q1         p0 n=5 med=0.268978s ok={True} rc=0 
+js_ref     k9   mt                              p0 n=10 med=0.029096s ok={True} rc=0 
+js_ref     k5   tuned                           p0 n=10 med=0.133530s ok={True} rc=0 
+js_ref     k6   tuned                q6         p0 n=10 med=0.082048s ok={True} rc=0 
+js_ref     k6   mt                   q6         p0 n=10 med=0.037313s ok={True} rc=0 
+js_ref     k7   tuned                           p0 n=3 med=1.365977s ok={True} rc=0 
+js_ref     k8   tuned                           p0 n=4 med=0.413061s ok={True} rc=0 
+js_ref     k6   mt                   q6         p0 n=10 med=0.040447s ok={True} rc=0 
+js_ref     k8   tuned                           p0 n=4 med=0.451783s ok={True} rc=0 
+js_ref     k9   mt                              p0 n=10 med=0.029545s ok={True} rc=0 
+js_ref     k6   tuned                q1         p0 n=9 med=0.264933s ok={True} rc=0 
+js_ref     k6   tuned                q6         p0 n=10 med=0.084396s ok={True} rc=0 
+js_ref     k5   tuned                           p0 n=10 med=0.138950s ok={True} rc=0 
+js_ref     k7   tuned                           p0 n=3 med=1.469842s ok={True} rc=0 
+js_ref     k1   soa                  energy     p0 n=10 med=0.015540s ok={True} rc=0 
+js_ref     k8   natural                         p0 n=3 med=1.147358s ok={True} rc=0 
+js_ref     k6   natural              q1         p0 n=5 med=0.259977s ok={True} rc=0 
+js_ref     k9   tuned                           p0 n=10 med=0.056225s ok={True} rc=0 
+js_ref     k8   tuned                           p0 n=4 med=0.467886s ok={True} rc=0 
+js_ref     k7   tuned                           p0 n=3 med=1.609303s ok={True} rc=0 
+js_ref     k6   mt                   q6         p0 n=10 med=0.039454s ok={True} rc=0 
+js_ref     k6   tuned                q1         p0 n=9 med=0.268911s ok={True} rc=0 
+js_ref     k6   natural              q1         p0 n=5 med=0.262872s ok={True} rc=0 
+js_ref     k8   natural                         p0 n=3 med=1.237890s ok={True} rc=0 
+js_ref     k9   mt                              p0 n=10 med=0.045618s ok={True} rc=0 
+js_ref     k6   tuned                q6         p0 n=10 med=0.095682s ok={True} rc=0 
+js_ref     k5   tuned                           p0 n=10 med=0.162445s ok={True} rc=0 
+js_ref     k1   soa                  energy     p0 n=10 med=0.014602s ok={True} rc=0 
+js_ref     k9   tuned                           p0 n=10 med=0.057034s ok={True} rc=0 
+js_ref     k8   natural                         p0 n=3 med=0.731103s ok={True} rc=0 
+js_ref     k6   tuned                q1         p0 n=9 med=0.272356s ok={True} rc=0 
+js_ref     k6   mt                   q6         p0 n=10 med=0.037034s ok={True} rc=0 
+js_ref     k9   mt                              p0 n=10 med=0.031246s ok={True} rc=0 
+js_ref     k8   tuned                           p0 n=4 med=0.418811s ok={True} rc=0 
+js_ref     k6   tuned                q6         p0 n=10 med=0.081157s ok={True} rc=0 
+js_ref     k5   tuned                           p0 n=10 med=0.131214s ok={True} rc=0 
+js_ref     k9   tuned                           p0 n=10 med=0.062192s ok={True} rc=0 
+js_ref     k6   natural              q1         p0 n=5 med=0.258029s ok={True} rc=0 
+js_ref     k1   soa                  energy     p0 n=10 med=0.014224s ok={True} rc=0 
+js_ref     k7   tuned                           p0 n=3 med=1.276049s ok={True} rc=0 
+js_ref     k6   natural              q1         p0 n=5 med=0.262039s ok={True} rc=0 
+js_ref     k7   tuned                           p0 n=3 med=1.436263s ok={True} rc=0 
+js_ref     k8   tuned                           p0 n=4 med=0.408089s ok={True} rc=0 
+js_ref     k9   tuned                           p0 n=10 med=0.057073s ok={True} rc=0 
+js_ref     k1   soa                  energy     p0 n=10 med=0.014770s ok={True} rc=0 
+js_ref     k5   tuned                           p0 n=10 med=0.133477s ok={True} rc=0 
+js_ref     k8   natural                         p0 n=3 med=1.206825s ok={True} rc=0 
+js_ref     k6   tuned                q1         p0 n=9 med=0.276068s ok={True} rc=0 
+js_ref     k9   mt                              p0 n=10 med=0.030587s ok={True} rc=0 
+js_ref     k6   tuned                q6         p0 n=10 med=0.083566s ok={True} rc=0 
+js_ref     k6   mt                   q6         p0 n=10 med=0.038703s ok={True} rc=0 

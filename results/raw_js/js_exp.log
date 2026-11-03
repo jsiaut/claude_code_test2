@@ -1,0 +1,56 @@
+js_exp     k6   mt_m                 q6         p0 n=10 med=0.020465s ok={True} rc=0 
+js_exp     k8   tuned_it                        p0 n=4 med=0.302200s ok={True} rc=0 
+js_exp     k5   tuned_f64                       p0 n=10 med=0.118232s ok={True} rc=0 
+js_exp     k9   mt_v                            p0 n=10 med=0.019416s ok={True} rc=0 
+js_exp     k8   natural_s                       p0 n=3 med=0.705573s ok={True} rc=0 
+js_exp     k1   soa_f64              energy     p0 n=10 med=0.015650s ok={True} rc=0 
+js_exp     k9   tuned_v                         p0 n=10 med=0.053538s ok={True} rc=0 
+js_exp     k6   tuned_m              q6         p0 n=10 med=0.051779s ok={True} rc=0 
+js_exp     k6   mt_m                 q6         p0 n=10 med=0.019863s ok={True} rc=0 
+js_exp     k5   tuned_f64                       p0 n=10 med=0.120036s ok={True} rc=0 
+js_exp     k8   tuned_it                        p0 n=4 med=0.323438s ok={True} rc=0 
+js_exp     k9   tuned_v                         p0 n=10 med=0.050810s ok={True} rc=0 
+js_exp     k1   soa_f64              energy     p0 n=10 med=0.014638s ok={True} rc=0 
+js_exp     k9   mt_v                            p0 n=10 med=0.022354s ok={True} rc=0 
+js_exp     k6   tuned_m              q6         p0 n=10 med=0.048967s ok={True} rc=0 
+js_exp     k8   natural_s                       p0 n=3 med=0.620194s ok={True} rc=0 
+js_exp     k6   tuned_m              q6         p0 n=10 med=0.047767s ok={True} rc=0 
+js_exp     k8   natural_s                       p0 n=3 med=0.650456s ok={True} rc=0 
+js_exp     k8   tuned_it                        p0 n=4 med=0.311926s ok={True} rc=0 
+js_exp     k1   soa_f64              energy     p0 n=10 med=0.014907s ok={True} rc=0 
+js_exp     k9   mt_v                            p0 n=10 med=0.028996s ok={True} rc=0 
+js_exp     k9   tuned_v                         p0 n=10 med=0.051908s ok={True} rc=0 
+js_exp     k6   mt_m                 q6         p0 n=10 med=0.026960s ok={True} rc=0 
+js_exp     k5   tuned_f64                       p0 n=10 med=0.119600s ok={True} rc=0 
+js_exp     k5   tuned_f64                       p0 n=10 med=0.121615s ok={True} rc=0 
+js_exp     k8   tuned_it                        p0 n=4 med=0.321062s ok={True} rc=0 
+js_exp     k6   tuned_m              q6         p0 n=10 med=0.051423s ok={True} rc=0 
+js_exp     k9   tuned_v                         p0 n=10 med=0.046894s ok={True} rc=0 
+js_exp     k1   soa_f64              energy     p0 n=10 med=0.015004s ok={True} rc=0 
+js_exp     k6   mt_m                 q6         p0 n=10 med=0.022351s ok={True} rc=0 
+js_exp     k8   natural_s                       p0 n=3 med=0.704147s ok={True} rc=0 
+js_exp     k9   mt_v                            p0 n=10 med=0.026978s ok={True} rc=0 
+js_exp     k6   tuned_m              q6         p0 n=10 med=0.047262s ok={True} rc=0 
+js_exp     k8   tuned_it                        p0 n=4 med=0.335000s ok={True} rc=0 
+js_exp     k1   soa_f64              energy     p0 n=10 med=0.015325s ok={True} rc=0 
+js_exp     k9   mt_v                            p0 n=10 med=0.024210s ok={True} rc=0 
+js_exp     k9   tuned_v                         p0 n=10 med=0.052888s ok={True} rc=0 
+js_exp     k8   natural_s                       p0 n=3 med=0.673845s ok={True} rc=0 
+js_exp     k6   mt_m                 q6         p0 n=10 med=0.024182s ok={True} rc=0 
+js_exp     k5   tuned_f64                       p0 n=10 med=0.123269s ok={True} rc=0 
+js_exp     k9   mt_v                            p0 n=10 med=0.023760s ok={True} rc=0 
+js_exp     k9   tuned_v                         p0 n=10 med=0.054055s ok={True} rc=0 
+js_exp     k8   tuned_it                        p0 n=4 med=0.309733s ok={True} rc=0 
+js_exp     k6   tuned_m              q6         p0 n=10 med=0.057596s ok={True} rc=0 
+js_exp     k8   natural_s                       p0 n=3 med=0.675741s ok={True} rc=0 
+js_exp     k1   soa_f64              energy     p0 n=10 med=0.019206s ok={True} rc=0 
+js_exp     k5   tuned_f64                       p0 n=10 med=0.125328s ok={True} rc=0 
+js_exp     k6   mt_m                 q6         p0 n=10 med=0.025935s ok={True} rc=0 
+js_exp     k8   natural_s                       p0 n=3 med=0.662556s ok={True} rc=0 
+js_exp     k1   soa_f64              energy     p0 n=10 med=0.015314s ok={True} rc=0 
+js_exp     k6   tuned_m              q6         p0 n=10 med=0.046733s ok={True} rc=0 
+js_exp     k6   mt_m                 q6         p0 n=10 med=0.029359s ok={True} rc=0 
+js_exp     k5   tuned_f64                       p0 n=10 med=0.126074s ok={True} rc=0 
+js_exp     k8   tuned_it                        p0 n=4 med=0.316305s ok={True} rc=0 
+js_exp     k9   tuned_v                         p0 n=10 med=0.058795s ok={True} rc=0 
+js_exp     k9   mt_v                            p0 n=10 med=0.026042s ok={True} rc=0 
