@@ -38,7 +38,8 @@ fusionner les passes répétées (355 To/s).
 * **GHC 9.14.1** : le générateur natif (NCG) produit des résultats faux en SIMD 256/512 bits. Le
   backend LLVM (`-fllvm`) est correct (`bench/haskell`).
 * **GHC** : sans `-fno-full-laziness` ni `NOINLINE`, le partage paresseux fait calculer K1, K4 et
-  K9 une seule fois pour toutes les répétitions (temps ≈ 0).
+  K9 une seule fois pour toutes les répétitions (temps ≈ 0). Les `NOINLINE` et la relecture des entrées dans une
+  `IORef` suffisent : l'option, redondante et plus lente, est retirée depuis la remarque sur Haskell.
 * **LDC 1.43** : erreur interne du compilateur sur `storeUnaligned` appliqué à une expression,
   contournée par une variable temporaire (`bench/d/ms.d`).
 * **D et Julia** : les délégués (D) et les fermetures (Julia) capturent les variables de boucle
@@ -283,9 +284,9 @@ fusionner les passes répétées (355 To/s).
 * **Threads** : sur K3, la plupart des implémentations créent leurs 4 threads à chaque répétition ; flang (OpenMP),
   C# et Bun attendent en `sched_yield` (des centaines à des milliers par répétition) ; Python sérialise ses 4
   threads (24 000 `futex` par répétition, rapport CPU / temps écoulé de 1,09).
-* **Runtimes** : des centaines à des dizaines de milliers d'appels système par répétition (Haskell 60 000 `futex`
-  sur K8 naturel ; Node 26 000 `futex` et 24 000 `malloc` sur K1 naturel). En régime établi, le code compilé n'en
-  fait qu'un ou deux (l'écriture du résultat).
+* **Runtimes** : des centaines à des dizaines de milliers d'appels système par répétition (Haskell 60 000 `futex` sur
+  K8 naturel avec `+RTS -N4`, ramasse-miettes parallèle ; quelques dizaines avec `-N1` ; Node 26 000 `futex` et 24 000
+  `malloc` sur K1 naturel). En régime établi, le code compilé n'en fait qu'un ou deux (l'écriture du résultat).
 * **Le contrôle du bruit dans l'invité ne réduit pas le bruit** : épingler sur un CPU, passer en `SCHED_FIFO` et
   déplacer les interruptions laisse l'écart-type entre processus inchangé (rapport 1,00 [0,64–1,33] sur cinq
   mesures natives), et ni la PSI, ni le temps volé, ni les changements de contexte, ni les migrations ne prédisent
@@ -706,3 +707,29 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **K9 en archsimd** (`Float64x8`, même ordre des additions, résultat identique au bit près) : × 0,78 en un fil, × 0,73
   à quatre goroutines. **Q1 en une passe** en archsimd (six groupes, trente accumulateurs) : × 1,36, plus lent que la
   forme scalaire. **K8 tuned itératif** : × 0,62 (277 → 172 ms ; C 295 sur cet hôte).
+
+## Remarque sur Haskell (3 novembre, machine 19, Emerald Rapids) — `docs/HASKELL.md`, `results/haskell_check/`
+
+* **`-fno-omit-yields` ralentit les boucles serrées** : l'option met un test de préemption (`HpLim`) en tête de chaque
+  boucle qui n'alloue pas ; l'en-tête devient un bloc à part, et chaque itération range son état sur la pile Haskell
+  puis y revient par un appel terminal. LLVM ne garde plus la boucle dans les registres et ne change plus un
+  branchement en déplacement conditionnel (IR : `results/haskell_check/llvm_k4_*.txt`). Sans elle (sept processus) :
+  K4 naturel non trié 73,4 → 11,2 ms, K5 naturel 346 → 187 ms (C : 168), K3 `rmw_padded` 343 → 235 ms. L'option
+  était appliquée à tout le banc, sans justification écrite ; K10 et K3 tournent sans elle.
+* **`-fno-full-laziness` n'était pas nécessaire au harnais** (entrées relues dans une `IORef` à chaque répétition,
+  noyaux naturels `NOINLINE`) ; sans elle, aucun temps ne s'effondre, et K9 naturel passe de 208 à 126 ms (avec
+  `-fno-omit-yields` retirée aussi).
+* **La FMA vectorielle de GHC 9.14.1 est dans `GHC.Prim`, pas dans `GHC.Exts`** : `fmaddFloatX16#`,
+  `fmsubFloatX16#`, `fnmaddFloatX16#` ; le générateur natif refuse la FMA large (« sorry! … Please use -fllvm for
+  wide vector FMA support »). K5 tuned avec elle : 5,97 → 4,60 ms, 1,04 fois C sur le même hôte.
+* **Allocation cachée dans une arène** : une `IORef Int` boxe l'entier à chaque écriture (1,35 Go par répétition de
+  K8 tuned, 33,5 millions de nœuds) ; un compteur rendu dans un n-uplet par une fonction récursive en `IO` reste
+  boxé à chaque feuille (`I# (+# ww5 1#)` dans le Core), 281 Mo de plus. Les deux compteurs en mémoire brute, comme
+  les pointeurs du C : 12,8 Mo par répétition (les latences du harnais), 719 → 214 ms (C de clang : 252 ms).
+* **L'arbre longue durée de K8 gardé vivant (`touch#`)** : deux fois moins de collections majeures, mais plus longues
+  (pause maximale 32 contre 9 ms, un processus) ; K8 naturel × 1,031, maximum des latences × 1,11 (intervalle large).
+* **`+RTS -N4` rend le ramasse-miettes parallèle**, à quatre fils par défaut (`-qg0`, `-qn` = `-N` dans GHC 9.14.1),
+  même pour un noyau séquentiel : sur K8 naturel, 87 414 `futex` sous `strace` contre 25 avec `-N1`, et `-N1`
+  ramène le temps à 0,69 fois et le p99,9 à 0,29 fois. Julia, lancé avec `-t 4`, marque aussi à quatre fils.
+* **K7 naturel (`Data.IntMap`)** : 51 à 54 s sur la machine 19 (89 s publiés, Cascade Lake) ; ni les options ni
+  `-N1` ne le changent.

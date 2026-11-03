@@ -55,6 +55,10 @@ flang-23), `luajit` (dialecte 5.1 + FFI), `js_bun` (même source JS, JavaScriptC
   vérifiés (relevé par la remarque sur Rust, `docs/RUST.md` ; l'arène écrite comme en C y est une sensibilité).
 * **Chapel** : `--fast` est l'option que recommande la documentation pour mesurer les
   performances, et elle retire les vérifications.
+* **Haskell** : `ghc -O2 -fllvm` (le générateur natif de GHC 9.14.1 calcule faux le SIMD 256/512 bits et refuse la
+  FMA vectorielle), avec les options de la cible et le runtime multi-thread ; `+RTS -N4` pour tous les noyaux, comme
+  `-t 4` pour Julia. Le banc publié ajoutait `-fno-omit-yields` et `-fno-full-laziness`, hors de ce mode : ses données
+  sont corrigées depuis la remarque sur Haskell (`docs/HASKELL.md`), la copie `bench/haskell_fix` suit ce mode.
 * **Lua** : le langage standard n'a ni threads ni tableaux typés. Les noyaux
   multi-threads s'exécutent en séquence ou en coroutines, et c'est signalé par `META`.
 * **Mojo** : Mojo 1.2 n'expose pas d'API publique de threads CPU (`parallelize` est dans

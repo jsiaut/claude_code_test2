@@ -12,12 +12,12 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | A4 alignement explicite >= 64 o | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ◐ | ○ |
 | A5 unions et réinterprétation de bits | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ |
 | A6 SoA natif | ○ | ○ | ○ | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| A7 tableaux fixes en ligne dans les agrégats | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ○ | ○ | ○ | ◐ | ○ |
+| A7 tableaux fixes en ligne dans les agrégats | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ |
 | A8 types numériques étroits de stockage | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ |
 | **B** (20 %) | | | | | | | | | | | | | | | | | | | | | |
 | B1 pas de GC traçant imposé | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ○ |
-| B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
+| B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ |
 | B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
 | B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ |
 | **C** (20 %) | | | | | | | | | | | | | | | | | | | | | |
@@ -194,8 +194,8 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 
 ### Haskell
 
-* **A** : A1 = 0.5 (pas de tableau d'enregistrements non boxés dans le langage ; tableaux Storable (base, Foreign.Marshal.Array)) ; A2 = 0.5 (Storable manuel (base)) ; A3 = 0 (aucun) ; A4 = 0.5 (allocaBytesAligned, tableaux épinglés alignés) ; A5 = 0.5 (castWord32ToFloat, unsafeCoerce#) ; A6 = 0 (aucun) ; A7 = 0 (aucun) ; A8 = 1 (Word8/Int16/Float (UArray))
-* **B** : B1 = 0 (GC imposé) ; B2 = 0 (aucun (régions compactes : données immuables durables)) ; B3 = 0 (aucun) ; B4 = 0 (paresse, thunks, boxing omniprésents (bench : partage)) ; B5 = 1 (Foreign.Ptr, mallocBytes, peek/poke)
+* **A** : A1 = 0.5 (pas de tableau d'enregistrements non boxés dans le langage ; tableaux Storable (base, Foreign.Marshal.Array)) ; A2 = 0.5 (Storable manuel (base)) ; A3 = 0 (aucun) ; A4 = 0.5 (allocaBytesAligned, tableaux épinglés alignés) ; A5 = 0.5 (castWord32ToFloat, unsafeCoerce#) ; A6 = 0 (aucun) ; A7 = 0.5 (pas de tableau fixe dans un enregistrement du langage ; Storable manuel (base) : enregistrement de 72 o à 16 flottants en ligne, rangé à plat dans un tableau (sonde ; erratum du 3/11, remarque sur Haskell : même mécanisme que A1 et A2)) ; A8 = 1 (Word8/Int16/Float (UArray))
+* **B** : B1 = 0 (GC imposé) ; B2 = 0.5 (mallocBytes/free et Foreign.Marshal.Pool (régions libérées d'un bloc) dans base : arènes à la main (bench K8 tuned) ; pas d'allocateur d'objets du tas (sonde ; erratum du 3/11, remarque sur Haskell)) ; B3 = 0.5 (n-uplets et valeurs non boxés (Int#, FloatX16#, (# , #)) jamais sur le tas, garanti par le type ; enregistrements et tableaux sur le tas (sonde ; erratum du 3/11, remarque sur Haskell)) ; B4 = 0 (paresse, thunks, boxing omniprésents (bench : partage)) ; B5 = 1 (Foreign.Ptr, mallocBytes, peek/poke)
 * **C** : C1 = 0.5 (primops SIMD (GHC.Exts) ; NCG faux en 9.14.1, LLVM requis (bench)) ; C2 = 0 (aucun) ; C3 = 0.0 (mesuré) ; C4 = 0 (aucun) ; C5 = 0.5 (par# (ghc-prim) ; parallel/strategies non livrés)
 * **D** : D1 = 1 (RTS threadé, forkOn) ; D2 = 0.5 (IORef/MVar/STM, primops atomiques séquentiellement cohérents) ; D3 = 0 (aucune) ; D4 = 0.5 (forkOn + RTS -qa) ; D5 = 0 (aucun)
 * **E** : E1 = 1 (natif) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 1 (primops prefetch*# (GHC.Exts)) ; E5 = 0 (aucun) ; E6 = 1 (unsafeRead/unsafeAt) ; E7 = 0.5 (Template Haskell ; spécialisation non garantie)

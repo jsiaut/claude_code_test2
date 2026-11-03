@@ -992,3 +992,26 @@ Robustesse :
   (`tools/haskell_check/make_copies.py`, 82 cellules validées), outil de mesure (`tools/measure_haskell.py`), script
   d'analyse et points d'accroche du calcul publié (latences de K8 naturel : `lat_ratios` ; réplication) poussés avant
   les mesures (commit `890b58c`) ; contrôles de l'état actuel pendant les mesures (commit `e54b69d`).
+* 2026-11-03, 12:33:31-13:42:59 : **mesures de la remarque sur Haskell** (`tools/measure_haskell.py`, machine 19) :
+  820 processus (118 cellules × 7, K7 naturel de `haskell_ref` et `haskell_fix` × 4), aucune somme de contrôle
+  fausse ; 39 refaits pour vol de temps (quatre deux fois), aucun gardé au-dessus de 2 % (vol médian 0,58 %).
+* 2026-11-03, 13:43 à 13:48 : **résultats de la remarque sur Haskell** (`results/report_haskell.md`). Aucun écart au
+  plan ; le scénario Avant reproduit G-E à l'identique. Options (même hôte) : K4 naturel × 0,153, K5 naturel × 0,541,
+  K9 naturel × 0,604, K7 tuned × 0,778, Q6 tuned × 0,854, K3 de 0,68 à 1,17 (placement) ; code : K5 tuned × 0,770
+  (FMA), K8 tuned × 0,297 (arène sans allocation), K8 naturel × 1,031 (arbre gardé vivant) ; latences de K8 naturel :
+  p99,9 × 0,80, maximum × 1,11. Classement publié (H-E, transfert et errata B2, B3, A7) : Haskell 41,28 points
+  (34,47), 17e, Go devant dans 93 % des variantes (100 %) ; plafond 46,2, au-dessus de Go (44,5) ; aucun autre
+  langage ne change de place. Sensibilités : `-N1` (K8 naturel × 0,69, p99,9 × 0,29) 42,1 ; cases C2, E7, F2 42,8 ;
+  les deux 43,7, Go devant dans 73 %. Le pont par le C (information) aurait donné 42,9, avec des facteurs de 0,19 à
+  7,3 importés de l'écart entre hôtes. Mécanisme de `-fno-omit-yields` vérifié dans l'IR de LLVM (en-tête de boucle en
+  bloc séparé, état sur la pile Haskell).
+* 2026-11-03, 13:48 à 14:17 : **sorties régénérées après la remarque sur Haskell** (même chaîne que pour Go) :
+  classement, figures, matrice (`docs/CAPABILITIES.md`), réplication (données de Haskell de la machine 3 corrigées,
+  latences de K8 comprises : score 29,2 → 34,7, toujours 17e ; ordre de la réplication inchangé), scénarios de l'état
+  actuel ; leurs contrôles reproduisent H-E à l'identique. Effets hors de Haskell : aucun changement de place au
+  classement publié, scores des autres langages de +0,004 à +0,026 point (le K3 `rmw_padded` corrigé de Haskell
+  devient la référence de sa clé) ; sans SIMD explicite, à la lettre, Go passe devant Java (15,13 contre 15,17) ;
+  confrontation, D repasse devant Nim dans le scénario B (Spearman 0,86). README : tableau, paragraphe de Haskell,
+  grandes marches, errata, limites (langages relus, nombre de fils, bibliothèque standard, report par transfert),
+  versions optimisées, lecture et reproduction ; `docs/NATURAL.md`, `docs/FINDINGS.md`, `docs/NOSIMD.md`,
+  `docs/CONFRONTATION.md`.

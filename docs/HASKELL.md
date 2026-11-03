@@ -60,16 +60,17 @@ l'identique (octet pour octet). Sondes : `tools/haskell_check/probes/` ; sorties
   sans écart net sur neuf répétitions) ; sommes de contrôle identiques. Effet par option : sans `-fno-omit-yields`
   seule, K4 12,3 ms et K5 176 ms ; sans `-fno-full-laziness` seule, K9 124 ms. **La règle** (`docs/NATURAL.md`) : le
   code naturel est compilé dans le mode « release » documenté de la chaîne, ce que la ligne de Haskell annonce
-  (`ghc -O2 -fllvm`). `-fno-omit-yields` a été ajoutée à la première version (commit `dab7b69`) sans justification écrite ;
-  K10 et K3, les seuls noyaux à boucles sans allocation sur plusieurs fils, tournent sans elle (K10 : trois processus
-  de cinq répétitions, aucun blocage). `-fno-full-laziness` était justifiée (« éviter que les calculs purs soient
-  partagés entre répétitions ») ; mais le harnais lit déjà chaque entrée dans une `IORef` à chaque répétition, et les
-  noyaux naturels sont `NOINLINE` : sans l'option, aucun temps ne s'effondre (vérifié sur toutes les cellules à la
-  validation). **`+RTS -N4` n'est pas une erreur** : c'est la convention de l'étude pour les runtimes dont le défaut
-  est un seul fil (Julia est lancé avec `-t 4` pour tous les noyaux, et son ramasse-miettes marque alors avec quatre
-  fils, `Threads.ngcthreads()` = 4) ; Go et Java prennent les quatre cœurs par défaut. Avec `-N4`, le runtime de GHC
-  9.14.1 active par défaut le ramasse-miettes parallèle (`-qg0`, `-qn` = `-N`, aide `+RTS -?`). Le README doit le
-  dire : « réglages des runtimes par défaut », sauf le nombre de fils. **Sensibilité** (`-N1` pour les noyaux séquentiels).
+  (`ghc -O2 -fllvm`). `-fno-omit-yields` a été ajoutée à la première version (commit `dab7b69`) sans justification
+  écrite ; K10 et K3, les seuls noyaux à boucles sans allocation sur plusieurs fils, tournent sans elle (K10 : trois
+  processus de cinq répétitions, aucun blocage). `-fno-full-laziness` était justifiée (« éviter que les calculs purs
+  soient partagés entre répétitions ») ; mais le harnais lit déjà chaque entrée dans une `IORef` à chaque répétition,
+  et les noyaux naturels sont `NOINLINE` : sans l'option, aucun temps ne s'effondre (vérifié sur toutes les cellules à
+  la validation). **`+RTS -N4` n'est pas une erreur** : c'est la convention de l'étude pour les runtimes dont le
+  défaut est un seul fil (Julia est lancé avec `-t 4` pour tous les noyaux, et son ramasse-miettes marque alors avec
+  quatre fils, `Threads.ngcthreads()` = 4) ; Go et Java prennent les quatre cœurs par défaut. Avec `-N4`, le runtime
+  de GHC 9.14.1 active par défaut le ramasse-miettes parallèle (`-qg0`, `-qn` = `-N`, aide `+RTS -?`). Le README doit
+  le dire : « réglages des runtimes par défaut », sauf le nombre de fils. **Sensibilité** (`-N1` pour les noyaux
+  séquentiels).
 * **(3a) K5 optimisé** : **exact, et c'est une erreur de mon implémentation.** `fmaddFloatX16#` est dans `GHC.Prim`
   (et `GHC.Internal.Prim`), absente de `GHC.Exts` (`:browse`) ; la sonde calcule 2 × 3 + 1 = 7. Avec elle : 6,16 →
   4,59 ms (C, même hôte : 3,73). **La convention** : toutes les autres implémentations à SIMD explicite écrivent K5
@@ -194,3 +195,134 @@ comprise) et de l'état actuel.
 * Pas de changement de `+RTS -N4` dans les données publiées (convention de l'étude) ; `-N1` reste une sensibilité.
 * Pas de K10 (hors score) ni de remesure de l'empreinte (D2, la structure ne change pas).
 * Pas de bibliothèque hors de GHC (`vector`, `primitive`, `unordered-containers`) : la règle vaut pour tous.
+
+## 4. Résultats (après les mesures)
+
+Mesures du 3 novembre, de 12:33:31 à 13:42:59, sur la machine 19 : 820 processus (118 cellules, 7 processus chacune,
+4 pour K7 naturel de `haskell_ref` et `haskell_fix`), aucune somme de contrôle fausse ; 39 refaits pour vol de temps
+(quatre deux fois), aucun gardé au-dessus de 2 % (vol médian 0,58 %). Aucun écart au plan. Le scénario Avant reproduit
+le classement publié d'avant à l'identique (écart 0). Rapports : `results/report_haskell.md` ; temps : moyenne
+géométrique des médianes de processus, intervalle à 95 % par bootstrap.
+
+### 4.1 Les options (même hôte)
+
+`haskell_fix` / `haskell_ref` pour les 32 clés dont le code ne change pas, `haskell_rel` / `haskell_ref` pour les
+quatre autres :
+
+| Clé | Options du banc (ms) | Mode release (ms) | Rapport [IC 95 %] | C, même hôte (ms) |
+|---|---|---|---|---|
+| K4 naturel non trié | 73,4 | 11,2 | 0,153 [0,148–0,159] | 1,97 |
+| K5 naturel | 346,5 | 187,5 | 0,541 [0,515–0,574] | 168,3 |
+| K9 naturel | 207,8 | 125,5 | 0,604 [0,569–0,651] | 14,1 |
+| K7 tuned | 251,4 | 195,6 | 0,778 [0,729–0,834] | 198,8 |
+| Q6 tuned | 36,5 | 31,2 | 0,854 [0,813–0,897] | 18,2 |
+| Q6 `mt` | 15,0 | 12,6 | 0,840 [0,737–0,943] | 5,8 |
+| K3 `rmw_padded` | 342,9 | 234,7 | 0,684 [0,624–0,776] | 218,4 |
+| K3 `sw_packed` | 7 374 | 6 092 | 0,826 [0,784–0,874] | 12,5 |
+| K3 `sw_padded` | 358,8 | 419,8 | 1,170 [1,003–1,429] | 12,4 |
+| K3 `rmw_packed` | 4 118 | 4 601 | 1,117 [1,056–1,173] | 4 327 |
+| K4 naturel trié | 10,3 | 11,6 | 1,126 [1,028–1,229] | 1,73 |
+| Q6 naturel | 48,6 | 51,1 | 1,052 [1,019–1,091] | 51,1 |
+
+Les 21 autres clés vont de 0,94 à 1,05 (K1, K2, Q1, K7 et K8 naturels, K9 tuned et `mt`), dont une seule hors de
+l'intervalle de 1 (K2 à 16 Kio, 1,051). Le gain vient des boucles serrées : le désassemblage de l'IR de LLVM
+(`results/haskell_check/llvm_k4_ref.txt`, `llvm_k4_rel.txt`) montre qu'avec `-fno-omit-yields` l'en-tête de la boucle
+de K4 devient un bloc à part, qui teste `HpLim` (`Base[107]`) : chaque itération range son état sur la pile Haskell
+et y revient par un appel terminal, si bien que LLVM ne peut ni garder la boucle dans les registres ni changer le
+branchement en déplacement conditionnel (sur des octets aléatoires, il est mal prédit une fois sur deux). Sans
+l'option, la boucle reste locale à une fonction. K5 naturel paie de même le passage de son accumulateur par la
+mémoire ; il va désormais à 1,11 fois C sur cet hôte. K3 bouge dans les deux sens (0,68 à 1,17), comme le placement
+du code le fait déjà sur cet hôte (`docs/FINDINGS.md`, une même boucle à 1 ou 7 cycles par incrément) : le transfert
+reporte ces écarts tels quels, comme prévu.
+
+### 4.2 Les corrections du code (`haskell_fix` / `haskell_rel`, même hôte)
+
+* **K5 tuned (FMA vectorielle)** : 5,97 → 4,60 ms (× 0,770), 1,04 fois C (4,43 ms) ; avec les options, × 0,745 sur
+  le binaire publié. Temps publié reporté : 6,35 → 4,73 ms (C : 3,94).
+* **K1 soa (même FMA)** : 4,74 → 4,35 ms (× 0,917) ; avec les options, × 0,981 [0,78–1,24], dans le bruit : le noyau
+  est limité par la mémoire.
+* **K8 tuned (arène sans allocation)** : 719 → 214 ms (× 0,297) ; le C de clang fait 252 ms sur cet hôte. Temps
+  publié reporté : 1 189 → 351 ms (C : 266).
+* **K8 naturel (arbre longue durée gardé vivant)** : 1 639 → 1 690 ms (× 1,031) ; avec les options, × 1,027
+  [1,002–1,055]. Comme prévu, la correction joue contre Haskell, de 3 %.
+
+### 4.3 Latences de K8 naturel (D3)
+
+Médianes de toutes les répétitions (µs), même hôte :
+
+| | p50 | p90 | p99 | p99,9 | max |
+|---|---|---|---|---|---|
+| Options du banc (`haskell_ref`) | 57 | 253 | 505 | 1 729 | 6 002 |
+| Mode release (`haskell_rel`) | 59 | 251 | 485 | 1 427 | 5 930 |
+| Corrigé (`haskell_fix`) | 61 | 256 | 484 | 1 383 | 6 684 |
+| Rapport `fix` / `ref` [IC 95 %] | 1,061 [1,05–1,11] | 1,010 [0,95–1,07] | 0,960 [0,89–1,05] | 0,800 [0,60–1,08] | 1,114 [0,70–1,38] |
+| `-N1` (`haskell_n1`) | 60 | 97 | 147 | 404 | 3 550 |
+
+Les options abaissent le p99,9 (× 0,825 [0,68–0,95]) ; l'arbre gardé vivant relève le maximum (pauses majeures plus
+longues), dans un intervalle large. Les lignes publiées (machine 11) sont multipliées par la ligne `fix` / `ref`.
+
+### 4.4 Sensibilités
+
+* **S-N1** (`+RTS -N1` pour les noyaux séquentiels) : K8 naturel × 0,692 (1 690 → 1 170 ms), ses latences × 0,38
+  (p90), 0,30 (p99), 0,29 (p99,9) et 0,53 (max) : le ramasse-miettes parallèle coûte cher à un noyau qui n'a qu'un fil.
+  K9 naturel × 0,915, K1 naturel × 0,957 ; K1 mélangé, K4 et K5 naturels sans gain (0,995 à 1,046, comptés 1).
+* **S-cases** : C2 = ½, E7 = 1, F2 = ½.
+* **H-E-P** (information) : la règle du pont retiendrait le C du même hôte pour 11 clés sur 36, avec des facteurs de
+  0,19 (K8 tuned) à 7,3 (K7 naturel : 89 s → 639 s, parce que le K7 naturel du C va 12 fois plus vite sur la
+  machine 19 qu'à Cascade Lake, 433 contre 5 107 ms) ; la règle de sens en ramène trois à 1 (K1 mélangé, K4 sans
+  branchement, K3 `sw_packed`), pas K4 trié (× 2,7) ni K3 `sw_padded` (× 6,1), dont le rapport mesuré dépasse 1.
+  C'est l'écart d'hôte que le plan voulait éviter (3.2) ; le score qui en sort (42,9) dépasse celui du transfert,
+  parce que le pont corrige davantage le plafond (K8, Q6 et K7 optimisés) qu'il ne pénalise le code par défaut.
+
+### 4.5 Classement (analyse globale de la v3 rejouée, 20 000 variantes)
+
+| Scénario | Score | Contrôle | Plafond | Défaut | Rang espéré | Place | Go devant | Devant OCaml |
+|---|---|---|---|---|---|---|---|---|
+| Avant (publié d'avant) | 34,47 | 34,4 | 34,6 | 34,4 | 17,01 | 17 | 100 % | 98 % |
+| H-opt (options) | 36,08 | 34,4 | 38,0 | 35,4 | 16,98 | 17 | 100 % | 99 % |
+| H-code (options et code) | 39,33 | 34,4 | 46,2 | 35,2 | 16,92 | 17 | 97 % | 99 % |
+| H-M (errata seuls) | 36,42 | 39,9 | 34,6 | 34,4 | 16,98 | 17 | 100 % | 99 % |
+| **H-E (publié)** | **41,28** | 39,9 | 46,2 | 35,2 | 16,82 | 17 | 93 % | 100 % |
+| H-E-P (pont, information) | 42,88 | 39,9 | 50,8 | 34,4 | 16,64 | 17 | 83 % | 99 % |
+| S-N1 | 42,11 | 39,9 | 46,2 | 38,6 | 16,62 | 17 | 86 % | 100 % |
+| S-cases | 42,84 | 44,4 | 46,2 | 35,2 | 16,66 | 17 | 85 % | 100 % |
+| S-tout | 43,67 | 44,4 | 46,2 | 38,6 | 16,41 | 17 | 73 % | 100 % |
+
+« Go devant » : part des variantes où Go devance Haskell. Au classement publié (H-E), Haskell gagne 6,8 points et
+reste 17e, rang plausible 16 à 17 ; aucun autre langage ne change de place (Go 45,37, Java 47,18, C# 54,88). Le
+plafond de Haskell (46,2) dépasse désormais celui de Go (44,5), grâce à K5 (0,62 → 0,83 de la référence), K7 (0,63 →
+0,81), K8 (0,09 → 0,31) et K3 (0,21 → 0,30) ; son contrôle (39,9 contre 48,7) et son code par défaut (35,2 contre
+42,2) restent derrière.
+
+Effet sur les autres langages : leurs scores bougent de +0,004 à +0,026 point, sans changement de place. Le K3
+`rmw_padded` corrigé de Haskell (192,6 ms) devient le meilleur temps de sa clé, devant Nim (204,1), et K2 à 8 Mio
+(593,8 contre 595,3) : les références communes bougent un peu. Sans SIMD explicite, à la lettre, Go passe ainsi
+devant Java (rang moyen 15,13 contre 15,17, `docs/NOSIMD.md`, 4.13) ; dans la confrontation, D repasse devant Nim dans
+le scénario B (`docs/CONFRONTATION.md`).
+
+### 4.6 Réplication (machine 3)
+
+Données de Haskell de la machine 3 multipliées par les rapports `haskell_fix` / `haskell_ref` (transfert, même modèle
+de processeur), latences de K8 naturel comprises : score 29,2 → 34,7, toujours 17e ; code par défaut 0,026 → 0,039,
+plafond 25,3 → 33,8. L'ordre de la réplication ne change pas.
+
+### 4.7 Bilan
+
+* **La remarque est juste sur l'essentiel.** Les options du banc sortaient tout le programme du mode release annoncé,
+  et `-fno-omit-yields` découpe les boucles serrées (vérifié dans l'IR de LLVM) ; K5 se passait d'une FMA vectorielle
+  que GHC 9.14.1 livre ; l'arène de K8 allouait à chaque nœud ; trois cases de la matrice étaient incohérentes avec
+  celles des autres langages ; les deux phrases du README attribuaient au langage des effets du banc. S'y ajoutent
+  K1 soa (même FMA) et l'arbre longue durée de K8, gardé vivant contre Haskell. Le score passe de 34,47 à 41,28
+  points (+ 6,8), en haut de la fourchette de 4 à 7 points de la remarque ; Haskell reste 17e.
+* **Les estimations de la remarque** (36,4 avec les options, 38,3 avec K5 et K8, 40,3 avec les errata, 41,8 avec les
+  cases discutables) sont proches des miennes (36,1, 39,3, 41,3, 42,8), un peu en dessous à partir du code.
+* **Une affirmation ne tient pas** : corrigé, le plafond de Haskell (46,2) dépasse celui de Go (44,5). Son contrôle
+  (39,9 contre 48,7) et son code par défaut (35,2 contre 42,2) restent derrière, et Go devance Haskell dans 93 % des
+  variantes, mais pas dans toutes : « aucune pondération ne le fait passer 16e » est faux pour 7 % des variantes, 27 %
+  avec `-N1` et les cases discutables.
+* **Ce que je retiens autrement** : `+RTS -N4` suit la convention de l'étude (Julia est lancé avec `-t 4`) et reste
+  dans le classement publié ; le gain de `-N1` (K8 naturel 1,4 fois plus rapide, p99,9 3,4 fois plus bas) est une
+  sensibilité. Le report se fait par transfert, sans le pont par le C, écart décidé avant les mesures : le pont aurait
+  importé des facteurs de 0,19 à 7,3 venus de l'écart entre hôtes.
+* **Réserve de méthode** : exacte ; la règle de la bibliothèque standard est désormais signalée comme pesant aussi sur
+  Haskell dans les limites du README.

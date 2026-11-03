@@ -329,3 +329,12 @@ forme égale, Odin, C et C++ en tête ; sans les mesures mt, C est 1er dans 48 %
 Recalculé de nouveau (témoin égal au scénario G-E de `results/go_check.json` : K5 de Go corrigé, artefact de la
 préemption retiré des clés publiées depuis Emerald Rapids). Aucune place ne change : Java reste 15e et Go 16e dans
 tous les scénarios, de peu à la lettre (rang moyen 15,10 contre 15,12) ; en tête, rien ne bouge.
+
+### 4.13 Recalcul après la remarque sur Haskell (3 novembre)
+
+Recalculé de nouveau (témoin égal au scénario H-E de `results/haskell_check.json` : options, K1, K5 et K8 de Haskell
+corrigés, B2, B3 et A7 de Haskell à ½). Haskell reste 17e dans tous les scénarios (41,3 points publiés, 31,1 à la
+lettre). À la lettre (S-scalaire), Go passe devant Java (rang moyen 15,13 contre 15,17) : le K3 `rmw_padded` corrigé
+de Haskell devient le meilleur temps de sa clé, et ce déplacement des références suffit à départager ces deux
+langages si proches ; à forme égale (S-symétrique) et sans les noyaux vectorisables, Java reste devant (14,90 contre
+15,35 ; 14,99 contre 15,90). En tête, rien ne bouge.

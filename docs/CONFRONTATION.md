@@ -427,6 +427,10 @@ B 0,85, C 0,85, D 0,90 ; C 1er, 5e, 2e et 6e ; seuils du test 3 inchangés.
 Rejouée après la remarque sur Go (2 novembre, `docs/GO.md` : K5 de Go corrigé, artefact de la préemption retiré) : Go
 repasse devant Java dans le scénario C ; scénario A 0,78, B 0,85, C 0,84, D 0,90 ; C 1er, 5e, 2e et 6e.
 
+Rejouée après la remarque sur Haskell (3 novembre, `docs/HASKELL.md` : options, K1, K5 et K8 de Haskell corrigés, B2,
+B3 et A7 de Haskell à ½ ; Haskell n'est pas dans l'autre étude) : D repasse devant Nim dans le scénario B ; scénario A
+0,78, B 0,86, C 0,84, D 0,90 ; C 1er, 5e, 2e et 6e.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

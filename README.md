@@ -11,25 +11,25 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 
 | Rang | Langage | Score | Rang plausible | Devance le suivant | Ce qui le place là |
 |---|---|---|---|---|---|
-| 1 | **C** | 79,9 | 1–6 | 69 % | Plafond le plus haut et l'un des trois meilleurs codes par défaut ; son contrôle est celui de GNU C (extensions de clang, intrinsèques d'Intel, OpenMP, glibc) |
+| 1 | **C** | 80,0 | 1–6 | 69 % | Plafond le plus haut et l'un des trois meilleurs codes par défaut ; son contrôle est celui de GNU C (extensions de clang, intrinsèques d'Intel, OpenMP, glibc) |
 | 2 | **Odin** | 74,0 | 1–6 | 55 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, intrinsèques de LLVM, allocateurs explicites) ; allocateur généraliste lent |
 | 3 | **C++** | 77,1 | 1–8 | 66 % | Le plus de contrôle (`pmr`, atomiques, `std::simd` encore expérimental) ; derrière C surtout par K4, que g++ vectorise moins bien que clang |
 | 4 | **Zig** | 72,3 | 1–10 | 55 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (1er avec la version de développement) |
 | 5 | **C3** | 71,6 | 2–9 | 74 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels, `asm` et `@noalias` incomplets |
-| 6 | **Rust** | 69,9 | 3–10 | 53 % | 7e plafond et bon code naturel ; contrôle limité par sa bibliothèque standard (ni affinité, ni `mmap`, SIMD portable instable) |
+| 6 | **Rust** | 70,0 | 3–10 | 52 % | 7e plafond et bon code naturel ; contrôle limité par sa bibliothèque standard (ni affinité, ni `mmap`, SIMD portable instable) |
 | 7 | **Nim** | 69,3 | 3–10 | 48 % | Les leviers de C par sa compilation vers C ; vérifications et aliasing non strict qui bloquent la vectorisation du stencil |
-| 8 | **D** | 72,6 | 3–12 | 62 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
-| 9 | **Ada** | 71,0 | 3–12 | 58 % | Disposition au bit près, 8e plafond ; vérifications coûteuses sur le code naturel |
+| 8 | **D** | 72,7 | 3–12 | 61 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
+| 9 | **Ada** | 71,1 | 3–12 | 58 % | Disposition au bit près, 8e plafond ; vérifications coûteuses sur le code naturel |
 | 10 | **Chapel** | 65,7 | 4–12 | 70 % | 5e plafond grâce au parallélisme natif ; leviers bas niveau rares ou instables |
 | 11 | **Fortran** | 65,4 | 6–13 | 72 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
-| 12 | **Julia** | 62,3 | 8–13 | 60 % | Le 2e code naturel, derrière Odin ; le plafond le plus bas des 13 premiers |
+| 12 | **Julia** | 62,4 | 8–13 | 60 % | Le 2e code naturel, derrière Odin ; le plafond le plus bas des 13 premiers |
 | 13 | **Mojo** | 62,3 | 10–13 | 96 % | Le SIMD au cœur du langage ; ni vectoriseur de boucles, ni threads publics dans `std` |
 | 14 | **C#** | 54,9 | 13–16 | 88 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
-| 15 | **Java** | 47,2 | 14–16 | 57 % | Meilleur allocateur de petits objets ; pas de types valeur |
-| 16 | **Go** | 45,3 | 14–16 | 100 % | Structures par valeur ; ni vectoriseur, ni SIMD stable, atomiques séquentiellement cohérentes |
-| 17 | **Haskell** | 34,5 | 17 | 98 % | Peut descendre bas, mais tout le code par défaut est paresseux et boxé |
+| 15 | **Java** | 47,2 | 14–17 | 56 % | Meilleur allocateur de petits objets ; pas de types valeur |
+| 16 | **Go** | 45,4 | 14–17 | 93 % | Structures par valeur ; ni vectoriseur, ni SIMD stable, atomiques séquentiellement cohérentes |
+| 17 | **Haskell** | 41,3 | 16–17 | 100 % | Peut descendre bas (FMA vectorielle, mémoire brute) ; code par défaut boxé, ramasse-miettes imposé |
 | 18 | **OCaml** | 24,0 | 18 | 100 % | Bonne allocation générationnelle ; flottants boxés, aucun SIMD |
-| 19 | **JavaScript** | 14,2 | 19–20 | 93 % | Tableaux typés bien compilés ; objets en références, aucun SIMD |
+| 19 | **JavaScript** | 14,3 | 19–20 | 93 % | Tableaux typés bien compilés ; objets en références, aucun SIMD |
 | 20 | **Python** | 9,9 | 19–21 | 63 % | Environ 200 fois plus lent que le meilleur ; la hiérarchie mémoire disparaît derrière l'interpréteur |
 | 21 | **Lua** | 3,9 | 20–21 | — | Des tables seulement : ni types étroits, ni structures en ligne, ni threads, ni SIMD |
 
@@ -56,37 +56,45 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   non-aliasing sous-notés), une remarque sur D deux autres (indications de branchement et préchargement de druntime,
   sous-notés en règle v1), une remarque sur C3 cinq autres (réassociation globale, affinité par appel système brut et
   projection de fichiers en règle v1 sous-notées ; assembleur et non-aliasing sur-notés), une remarque sur Odin une
-  autre, qui corrige ma propre correction de l'AVX-512 d'Odin : ses intrinsèques, importées de LLVM, valent 1 en
-  règle v2, comme celles de Julia et de Mojo (Odin passe de 72,6 à 73,5 points et reste 3e, à égalité avec C++), une
-  remarque sur C++ une autre : `std::simd`, que GCC 16 livre comme « highly experimental » (x86 seulement, absent
-  de libc++), valait 1 à C++ en règle v1, quand les types vectoriels de GCC valent ½ à C et le `std::simd` nightly ½ à
+  autre, qui corrige ma propre correction de l'AVX-512 d'Odin : ses intrinsèques, importées de LLVM, valent 1 en règle
+  v2, comme celles de Julia et de Mojo (Odin passe de 72,6 à 73,5 points et reste 3e, à égalité avec C++), une
+  remarque sur C++ une autre : `std::simd`, que GCC 16 livre comme « highly experimental » (x86 seulement, absent de
+  libc++), valait 1 à C++ en règle v1, quand les types vectoriels de GCC valent ½ à C et le `std::simd` nightly ½ à
   Rust ; il vaut ½ (en règle v2, les types vectoriels de GCC lui gardent 1, comme à C), une remarque sur C deux
   dernières, en règle v1 : `<immintrin.h>` (C2) et `packed` (A3), hors norme ISO, valaient 1 à C et à C++, alors que
   la règle donne ½ à ce qui est livré hors norme, comme pour `_mm_prefetch` et `_mm_pause` du même en-tête (en règle
-  v2, 1), une remarque sur Java une dernière : les tableaux multidimensionnels contigus de l'API FFM
-  (`sequenceLayout` imbriqués), que la grille créditait déjà de ½ en A7, valaient 0 en F1 (½ désormais). Seules celles
-  de Fortran (de la 12e à la 11e place), de Chapel (de la 11e à la 10e), de C3 (Nim et Rust, à égalité, échangent les
-  6e et 7e places) et de C++ (son score ne change pas, mais Odin et C++, à égalité, échangent les 2e et 3e places)
-  changent un rang à elles seules. Les remarques sur Ada, Fortran, D, Rust, Java et Go ont aussi trouvé six erreurs de
-  mon banc, corrigées et remesurées ; celle sur Odin, une septième, sans effet : dix de ses noyaux étaient inlinés
-  dans la boucle de mesure, comme ceux de Fortran, mais leur code machine ne change pas une fois isolés, et les écarts
-  remesurés sur un autre processeur, des effets de placement, ne sont pas reportés ([`docs/ODIN.md`](docs/ODIN.md)).
-  Un piège de GNAT (`-fnon-call-exceptions`) laissait scalaires les noyaux optimisés d'Ada une fois inlinés : Ada
-  passe de la 9e à la 7e place ([`docs/ADA.md`](docs/ADA.md)). Les noyaux de Fortran n'étaient pas isolés de la boucle
-  de mesure comme ceux de C, et gfortran y laissait K4 scalaire : Fortran gagne deux places (11e depuis les errata de
-  Chapel) ([`docs/FORTRAN.md`](docs/FORTRAN.md) ; 9e avec le calcul prévu par le plan, dont je me suis écarté sur une
-  clé). Le Q1 optimisé de D était écrit en blocs, comme pour les langages sans types vectoriels, et non en une passe
-  comme dans les autres langages à types vectoriels : réécrit avec `core.simd`, il est 2,3 fois plus rapide, et D
-  passe de la 9e à la 8e place ([`docs/DLANG.md`](docs/DLANG.md)). Le K7 optimisé de Rust préchargeait en lecture,
-  quand la référence C et huit autres implémentations préchargent en écriture : corrigé, sans gain (le préchargement
-  en écriture y est même 1,08 fois plus lent, dans la marge des clés témoins). Le K5 optimisé de Java lisait ses
-  vecteurs dans des tableaux du tas, désalignés depuis les en-têtes compacts du JDK 27, quand toutes les autres
-  implémentations à SIMD explicite alignent leurs données : aligné, il va 1,7 fois plus vite sur un même hôte, et
-  Java gagne 1,0 point avec son erratum, sans changer de place ([`docs/JAVA.md`](docs/JAVA.md)). Le K5 optimisé de Go
-  passait d'AVX-512 à une réduction en SSE sans `ClearAVXUpperBits`, qu'archsimd laisse au programmeur : corrigé, il
-  va 2,6 fois plus vite ; la même remarque a trouvé un défaut de ma mesure, toutes les variantes de Go compilées avec
-  `GOEXPERIMENT=simd`, sous lequel la préemption de Go 1.27 salit les registres vectoriels (K1 naturel 60 fois plus
-  lent sur Emerald Rapids) : Go gagne 2,3 points et reste 16e ([`docs/GO.md`](docs/GO.md)). La remarque sur Rust a
+  v2, 1), une remarque sur Java une autre : les tableaux multidimensionnels contigus de l'API FFM (`sequenceLayout`
+  imbriqués), que la grille créditait déjà de ½ en A7, valaient 0 en F1 (½ désormais), une remarque sur Haskell trois
+  dernières : les régions de `Foreign.Marshal.Pool` et `malloc` (arènes à la main), les n-uplets non boxés, jamais sur
+  le tas, et les enregistrements `Storable` à tableau en ligne valaient 0 en B2, B3 et A7, quand C, Julia et Fortran
+  ont ½ pour leurs arènes à la main, Julia ½ pour ses tuples sur la pile, Java et Python ½ pour leurs tableaux en
+  ligne par FFM et `ctypes` (½ désormais). Seules celles de Fortran (de la 12e à la 11e place), de Chapel (de la 11e à
+  la 10e), de C3 (Nim et Rust, à égalité, échangent les 6e et 7e places) et de C++ (son score ne change pas, mais Odin
+  et C++, à égalité, échangent les 2e et 3e places) changent un rang à elles seules. Les remarques sur Ada, Fortran,
+  D, Rust, Java, Go et Haskell ont aussi trouvé des erreurs de mon banc, corrigées et remesurées ; celle sur Odin, une
+  de plus, sans effet : dix de ses noyaux étaient inlinés dans la boucle de mesure, comme ceux de Fortran, mais leur
+  code machine ne change pas une fois isolés, et les écarts remesurés sur un autre processeur, des effets de
+  placement, ne sont pas reportés ([`docs/ODIN.md`](docs/ODIN.md)). Un piège de GNAT (`-fnon-call-exceptions`)
+  laissait scalaires les noyaux optimisés d'Ada une fois inlinés : Ada passe de la 9e à la 7e place
+  ([`docs/ADA.md`](docs/ADA.md)). Les noyaux de Fortran n'étaient pas isolés de la boucle de mesure comme ceux de C,
+  et gfortran y laissait K4 scalaire : Fortran gagne deux places (11e depuis les errata de Chapel)
+  ([`docs/FORTRAN.md`](docs/FORTRAN.md) ; 9e avec le calcul prévu par le plan, dont je me suis écarté sur une clé). Le
+  Q1 optimisé de D était écrit en blocs, comme pour les langages sans types vectoriels, et non en une passe comme dans
+  les autres langages à types vectoriels : réécrit avec `core.simd`, il est 2,3 fois plus rapide, et D passe de la 9e
+  à la 8e place ([`docs/DLANG.md`](docs/DLANG.md)). Le K7 optimisé de Rust préchargeait en lecture, quand la référence
+  C et huit autres implémentations préchargent en écriture : corrigé, sans gain (le préchargement en écriture y est
+  même 1,08 fois plus lent, dans la marge des clés témoins). Le K5 optimisé de Java lisait ses vecteurs dans des
+  tableaux du tas, désalignés depuis les en-têtes compacts du JDK 27, quand toutes les autres implémentations à SIMD
+  explicite alignent leurs données : aligné, il va 1,7 fois plus vite sur un même hôte, et Java gagne 1,0 point avec
+  son erratum, sans changer de place ([`docs/JAVA.md`](docs/JAVA.md)). Le K5 optimisé de Go passait d'AVX-512 à une
+  réduction en SSE sans `ClearAVXUpperBits`, qu'archsimd laisse au programmeur : corrigé, il va 2,6 fois plus vite ;
+  la même remarque a trouvé un défaut de ma mesure, toutes les variantes de Go compilées avec `GOEXPERIMENT=simd`,
+  sous lequel la préemption de Go 1.27 salit les registres vectoriels (K1 naturel 60 fois plus lent sur Emerald
+  Rapids) : Go gagne 2,3 points et reste 16e ([`docs/GO.md`](docs/GO.md)). Le banc de Haskell était compilé avec deux
+  options hors du mode release annoncé (`-fno-omit-yields` découpait les boucles serrées : K4 naturel 6,5 fois plus
+  lent), son K5 optimisé et son K1 soa se passaient de la FMA vectorielle, que GHC 9.14 livre dans `GHC.Prim`, son
+  arène de K8 allouait à chaque nœud et son arbre longue durée mourait avant la mesure : corrigé et remesuré, avec ses
+  trois errata, Haskell gagne 6,8 points et reste 17e ([`docs/HASKELL.md`](docs/HASKELL.md)). La remarque sur Rust a
   aussi trouvé un défaut de mesure : les queues de latence de K8, qui comptent dans le code par défaut, suivaient le
   vol de temps de la machine virtuelle et ne reposaient que sur deux ou trois processus par langage. K8 naturel a été
   remesuré pour les 25 implémentations, sept processus chacune (Emerald Rapids) : Rust passe de la 9e à la 6e place,
@@ -110,17 +118,18 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 
 **Ce qui est sûr, et ce qui ne l'est pas.**
 * **Les grandes marches sont établies.** Les 13 premiers devancent C# dans au moins 96 % des variantes, et sur les
-  deux machines. Go devance Haskell, Haskell OCaml, OCaml JavaScript, dans 98 à 100 % des variantes. Ces variantes ne
-  font varier ni l'effort d'implémentation ni le choix du code naturel : avec ses meilleures formes mesurées, une
-  particule en `struct` et un JIT stabilisé, C# dépasse Mojo au score (62,0 à 63,3 points contre 61,8) et fait jeu
-  égal avec lui au rang, 13e ou 14e ([`docs/CSHARP.md`](docs/CSHARP.md)).
+  deux machines. Haskell devance OCaml, et OCaml JavaScript, dans plus de 99 % des variantes ; Go devance Haskell dans
+  93 % (100 % avant la correction du banc de Haskell). Ces variantes ne font varier ni l'effort d'implémentation ni le
+  choix du code naturel : avec ses meilleures formes mesurées, une particule en `struct` et un JIT stabilisé, C#
+  dépasse Mojo au score (62,0 à 63,3 points contre 61,9) et fait jeu égal avec lui au rang, 13e ou 14e
+  ([`docs/CSHARP.md`](docs/CSHARP.md)).
 * **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Un langage y devance le suivant
   dans 48 à 74 % des variantes. C ou C++ est premier dans 61 % des variantes (C 49 %, C++ 12 %), Odin dans 17 %, Zig
   dans 10 %.
 * **La 1re place de C dépend de choix de protocole.** Sous la règle « ISO seule » du « Banc de sympathie
   mécanique », qui ne compte ni les extensions de compilateur ni la glibc, C passe 5e et Odin 1er ; avec le contrôle
   noté en règle v1 partout, Odin passe aussi devant C, de peu (rang moyen 2,74 contre 2,97). Avec le K4 de clang++
-  pour C++ (le même vectoriseur que C), C++ passe 1er (80,3 points contre 79,9 ; rang moyen 2,20 contre 2,54). Sur
+  pour C++ (le même vectoriseur que C), C++ passe 1er (80,3 points contre 80,0 ; rang moyen 2,20 contre 2,54). Sur
   Emerald Rapids, C++ est 1er. À l'inverse, l'arène de K8 de C, écrite de façon à faire passer son état par la
   mémoire, lui coûte 4 points : écrite par itération, elle le remet nettement en tête (84,0 points), même face au K4
   de clang++ pour C++ (80,2). Le classement garde les implémentations et le protocole fixés d'avance
@@ -180,7 +189,7 @@ retire plus de contrôle à C++ qu'à lui.
 explicites, `mdspan`, et `std::simd` (meilleur K5 sur Cascade Lake, 4,75 ms), encore expérimental dans GCC 16. Ce qui
 le sépare de C tient d'abord au compilateur : K4, deux boucles scalaires que g++ vectorise moins bien que clang, lui
 coûte 3,4 points ; avec le K4 de clang++ (1,06 à 1,11 fois le temps de C sur un même hôte, contre 2,6 à 3,7 fois avec
-g++), C++ aurait 80,3 points et passerait 1er, devant C (79,9). Mais le classement garde un compilateur par langage,
+g++), C++ aurait 80,3 points et passerait 1er, devant C (80,0). Mais le classement garde un compilateur par langage,
 et g++, le seul à livrer `std::simd`, lui rapporte aussi : sous clang++, l'arène de K8 prend 1,55 fois plus de temps
 et K5 naturel deux fois plus. Vient ensuite la queue de latence de K8 (0,4 point) ; K9, qui lui coûtait 0,7 point
 quand il réallouait ses grilles à chaque répétition, ne pèse plus depuis que toutes les implémentations les allouent
@@ -232,7 +241,7 @@ pour les langages sans types vectoriels portables et 3 fois plus lent que celui 
 Nim passerait 5e, en sensibilité ([`docs/NIM.md`](docs/NIM.md)).
 
 **8. D.** Le contrôle de C avec templates, exécution à la compilation, `core.simd`, indications de branchement et de
-préchargement de druntime et atomiques à ordres explicites : 4e score de l'étude (72,6). Ce qui le fait reculer au rang
+préchargement de druntime et atomiques à ordres explicites : 4e score de l'étude (72,7). Ce qui le fait reculer au rang
 espéré : son ramasse-miettes par défaut, qui donne la pire pause des langages compilés sur K8 (89 ms, Emerald Rapids),
 et un code par défaut plus lent que celui de Nim ou de Zig. Son stencil naturel `double[][]` n'est pas vectorisé, non à
 cause des vérifications de bornes (`-release` ne les garde que dans le code `@safe`), mais parce que LDC ne transmet pas
@@ -306,7 +315,7 @@ de l'objet avec les en-têtes compacts du JDK 27, si bien que chaque chargement 
 cache ; copié hors tas sur une frontière de 64 octets par l'API FFM, comme les autres langages alignent leurs
 données, il va 1,7 fois plus vite sur un même hôte (7,0 → 5,7 ms une fois reporté sur les données publiées). Avec un
 erratum de la grille (tableaux multidimensionnels contigus de l'API FFM), Java gagne 1,0 point (47,2) et reste 15e,
-devant Go dans 57 % des variantes depuis la correction de Go. Des versions optimisées mieux travaillées (Q1 en une
+devant Go dans 56 % des variantes depuis la correction de Go. Des versions optimisées mieux travaillées (Q1 en une
 passe, K7 isolé de sa boucle de mesure, K8 itératif, réserve de fils) lui vaudraient 4 points de plus, et les cases
 discutables de la grille avec la règle de la libc encore 2,7 ([`docs/JAVA.md`](docs/JAVA.md)).
 
@@ -317,16 +326,23 @@ atomiques seulement séquentiellement cohérentes : l'écrivain unique de K3 est
 que les compilateurs des autres langages émettent d'eux-mêmes (4,8 fois le temps de C avant cette ligne) ; et toutes
 ses variantes étaient compilées avec `GOEXPERIMENT=simd`, avec lequel la préemption asynchrone de Go 1.27 laisse
 les registres vectoriels salis : sur Emerald Rapids, le code scalaire qui mêle SSE et VEX en devient jusqu'à 60 fois
-plus lent (K1 naturel, 2,2 s contre 38 ms). Corrigé, Go gagne 2,3 points (45,3) et reste 16e, devant Java dans 43 % des
-variantes ; K9 en SIMD explicite et une arène de K8 itérative le mettraient 15e, devant Java (47,6 à 49,2 points)
-([`docs/GO.md`](docs/GO.md)).
+plus lent (K1 naturel, 2,2 s contre 38 ms). Corrigé, Go gagne 2,3 points (45,4 aujourd'hui) et reste 16e, devant
+Java dans 44 % des variantes ; K9 en SIMD explicite et une arène de K8 itérative le mettraient 15e, devant Java (47,6
+à 49,2 points) ([`docs/GO.md`](docs/GO.md)).
 
 ### À contre-courant par défaut
 
-**17. Haskell.** Il peut descendre bas (`UArray`, primops non boxées, primops SIMD par LLVM), mais tout le défaut va
-contre la machine : code naturel paresseux et boxé (K5 naturel en 639 ms ; K7 avec `Data.IntMap` en 88 s, le pire
-de l'étude), ramasse-miettes imposé, écritures atomiques séquentiellement cohérentes. Sur K8 naturel, son runtime
-fait 60 000 `futex` par répétition (Emerald Rapids).
+**17. Haskell.** Il peut descendre bas (`UArray`, primops non boxées, SIMD et FMA vectorielle par LLVM, mémoire
+brute) : son plafond (46,2) dépasse celui de Go. Mais le défaut va contre la machine : des structures boxées (une
+particule de 64 octets en occupe 96 dans une liste ; K7 avec `Data.IntMap`, faute de table de hachage livrée, en 89 s,
+le pire de l'étude ; un arbre de nœuds boxés sur K8), un ramasse-miettes imposé, des écritures atomiques
+séquentiellement cohérentes. Une boucle stricte sur un tableau non boxé va, elle, au rythme de C (K5 naturel : 187 ms
+contre 168 sur Emerald Rapids). Avec `+RTS -N4`, que l'étude donne à tous ses noyaux, le ramasse-miettes est
+parallèle même pour un noyau séquentiel : sur K8 naturel, des dizaines de milliers de `futex` par répétition, et un
+temps 1,4 fois plus long qu'avec `-N1`. La remarque sur Haskell a corrigé des options de compilation hors du mode
+release annoncé (`-fno-omit-yields` découpait les boucles serrées : K4 naturel 6,5 fois plus lent), K5 et K1 sans la
+FMA vectorielle de GHC, une arène de K8 qui allouait à chaque nœud et trois errata de la matrice : Haskell gagne 6,8
+points et reste 17e, Go devant lui dans 93 % des variantes ([`docs/HASKELL.md`](docs/HASKELL.md)).
 
 **18. OCaml.** OCaml 5 apporte les domaines et `Atomic.make_contended`, et son allocation générationnelle est parmi
 les meilleures (K8 naturel, 319 ms). Mais il n'a pas de flottant 32 bits non boxé (144 octets par particule,
@@ -434,40 +450,47 @@ du langage.
 
 * Deux processeurs Intel, virtualisés et partagés ; ni AMD, ni ARM, ni compteurs matériels.
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Seize langages ont été relus après coup par des connaisseurs, Go en dernier et C peu avant, alors que sa
-  référence est la seule implémentation mise au point, mesures à l'appui, avant le plan. Ada et Fortran y ont gagné
-  deux places chacun, par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la
+  l'autre. Dix-sept langages ont été relus après coup par des connaisseurs, Haskell en dernier et C peu avant, alors
+  que sa référence est la seule implémentation mise au point, mesures à l'appui, avant le plan. Ada et Fortran y ont
+  gagné deux places chacun, par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la
   boucle de mesure) ; D une place, par la correction de son Q1 optimisé et deux errata de la règle v1 ; Rust deux
   places (trois avant les errata de C3), surtout par la remesure des queues de latence de K8, qui a aussi déplacé Zig,
-  C3, Nim et Ada ; Chapel une place par trois errata de la matrice ; Mojo 2,7 points, Julia 1,8 point, C3 et Odin
-  0,9 point, mais aucune place, par des errata de la matrice (ceux de C3 font passer Nim devant Rust, à égalité ;
-  celui d'Odin le met à égalité avec C++) ; Zig trois places, mais par une version de compilateur que la règle
-  exclut ; C++ a perdu la 2e place au profit d'Odin par un erratum de la règle v1, et C et C++ chacun 3,6 points de
-  contrôle en règle v1 par deux autres, relevés par la remarque sur C, sans changer de place (C reste 1er, mais ne
-  l'est plus que dans 52 % des variantes, contre 57 %) ; Java 1,0 point, sans changer de place, par la correction de
-  son K5 désaligné et un erratum de la matrice ; Go 2,3 points, sans changer de place, par la correction de son K5
-  (une transition d'AVX à SSE) et d'un artefact de mesure (la préemption de Go 1.27 sous `GOEXPERIMENT=simd`) ; C# et
-  Nim rien, leurs remarques ne relevant ni erratum ni erreur du banc. Des versions optimisées mieux travaillées
-  vaudraient deux places à Nim (Q1 en intrinsèques), 0,8 point à Odin, déjà 2e (Q1 par popcount), une place à Julia
-  (avec K5 en 512 bits), aucune à Rust ni à C3 une par une et, cumulées avec un autre choix de code naturel et un JIT
-  stabilisé, 7 à 8 points à C#, assez pour dépasser Mojo au score ; 4 points à Java (Q1 en une passe, K7 isolé de sa
-  boucle de mesure, K8 itératif), sans changer de place ; une place à Go (K9 en SIMD explicite, K8 itératif), qui
-  passerait devant Java ; à C++, le K4 de clang++ donnerait la 1re place (80,3 points contre 79,9), et à C une arène
-  de K8 écrite par itération 4,1 points (84,0) : la règle les garde hors du classement, mais l'effort
-  d'implémentation compte.
+  C3, Nim et Ada ; Chapel une place par trois errata de la matrice ; Mojo 2,7 points, Julia 1,8 point, C3 et Odin 0,9
+  point, mais aucune place, par des errata de la matrice (ceux de C3 font passer Nim devant Rust, à égalité ; celui
+  d'Odin le met à égalité avec C++) ; Zig trois places, mais par une version de compilateur que la règle exclut ; C++
+  a perdu la 2e place au profit d'Odin par un erratum de la règle v1, et C et C++ chacun 3,6 points de contrôle en
+  règle v1 par deux autres, relevés par la remarque sur C, sans changer de place (C reste 1er, mais ne l'est plus que
+  dans 52 % des variantes, contre 57 %) ; Java 1,0 point, sans changer de place, par la correction de son K5 désaligné
+  et un erratum de la matrice ; Go 2,3 points, sans changer de place, par la correction de son K5 (une transition
+  d'AVX à SSE) et d'un artefact de mesure (la préemption de Go 1.27 sous `GOEXPERIMENT=simd`) ; Haskell 6,8 points,
+  sans changer de place (Go le devance encore dans 93 % des variantes), par la correction de ses options de
+  compilation, de K5, de K1 et de K8 et trois errata de la matrice ; C# et Nim rien, leurs remarques ne relevant ni
+  erratum ni erreur du banc. Des versions optimisées mieux travaillées vaudraient deux places à Nim (Q1 en
+  intrinsèques), 0,8 point à Odin, déjà 2e (Q1 par popcount), une place à Julia (avec K5 en 512 bits), aucune à Rust
+  ni à C3 une par une et, cumulées avec un autre choix de code naturel et un JIT stabilisé, 7 à 8 points à C#, assez
+  pour dépasser Mojo au score ; 4 points à Java (Q1 en une passe, K7 isolé de sa boucle de mesure, K8 itératif), sans
+  changer de place ; une place à Go (K9 en SIMD explicite, K8 itératif), qui passerait devant Java ; aucune à Haskell
+  (`-N1` pour ses noyaux séquentiels et les cases discutables : 43,7 points, Go devant lui dans 73 % des variantes) ;
+  à C++, le K4 de clang++ donnerait la 1re place (80,3 points contre 80,0), et à C une arène de K8 écrite par
+  itération 4,1 points (84,0) : la règle les garde hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine (Cascade Lake pour Ada et Fortran, Emerald Rapids
   pour D et Rust), puis reportées sur les données principales par des rapports appariés ; pour une clé de Fortran et
   une de D, par un témoin mesuré sur le même hôte, au prix d'un écart au plan pour Fortran
   ([`docs/FORTRAN.md`](docs/FORTRAN.md), 4.2), comme le prévoyait le plan pour D ([`docs/DLANG.md`](docs/DLANG.md),
   4.2). Pour Odin, dont le code des noyaux ne change pas une fois isolés, rien n'est reporté : à code identique, un
   rapport mesuré sur un autre processeur ne porte qu'un effet de placement (écart au plan,
-  [`docs/ODIN.md`](docs/ODIN.md), 4.2). Les queues de latence de K8 de tous les langages viennent d'une remesure sur
+  [`docs/ODIN.md`](docs/ODIN.md), 4.2). Pour Haskell, dont la correction touche toutes les clés, le report se fait par
+  transfert seul, sans le pont par le C : le rapport de Haskell à C d'un même binaire change d'un modèle d'hôte à
+  l'autre (écart à la pratique précédente, décidé avant les mesures, [`docs/HASKELL.md`](docs/HASKELL.md), 3.2) ; ses
+  latences de K8 sont corrigées de même. Les queues de latence de K8 de tous les langages viennent d'une remesure sur
   Emerald Rapids (sept processus), K5 de la machine 3 depuis la v2, et K9 de la machine 16 depuis le 1er novembre ;
   tous les autres temps sont ceux de Cascade Lake, y compris D2 et D4, dont la remesure sur un autre Emerald Rapids
   n'est pas publiée (voir les errata).
 * Des microbenchmarks : ni E/S, ni décompression, ni tri ou jointure ; une seule taille d'entrée par noyau, sauf K2.
 * Des règles de construit : bibliothèque standard seule, compilation pour le CPU hôte, ni PGO ni LTO, réglages des
-  runtimes par défaut.
+  runtimes par défaut, sauf le nombre de fils, fixé aux quatre cœurs pour tous les noyaux (`-t 4` pour Julia,
+  `+RTS -N4` pour Haskell ; Go et Java les prennent d'eux-mêmes) : le ramasse-miettes de Julia et de Haskell y devient
+  parallèle, même pour les noyaux séquentiels ([`docs/HASKELL.md`](docs/HASKELL.md)).
 * La libc ne compte que pour C et C++ : l'affinité, `mmap` et la taille de ligne de cache qu'elle leur donne valent 0
   à Rust et aux autres langages qui doivent passer par une FFI pour les appeler. Étendue à Rust, la règle lui vaudrait
   3 points et la 4e place ; étendue à tous les langages dotés d'une FFI sans C, la 5e
@@ -490,17 +513,20 @@ du langage.
   de Cascade Lake par les rapports de la machine 16 (information), la correction du harnais ferait passer Odin 1er,
   devant C et C++, à égalité : la pénalité de réallocation de cet hôte dépasse celle de Cascade Lake (1,58 fois à
   quatre fils, rien en un fil), et ce report surcorrige ([`docs/K9.md`](docs/K9.md)).
+* La règle de la bibliothèque standard pèse aussi sur Haskell : `vector`, `primitive`, `unordered-containers` et
+  `hashtables`, l'outillage habituel du Haskell performant, sont des paquets de Hackage ; le banc n'utilise que les
+  paquets livrés avec GHC (`base`, `ghc-prim`, `bytestring`, `array`, `containers`), d'où `Data.IntMap` pour K7.
 * La règle de la bibliothèque standard pèse plus sur Mojo que sur les autres : depuis juillet 2026, `parallelize`,
   le GPU et les tenseurs sont dans le paquet MAX. Le classement mesure Mojo et sa `std` sur CPU ; ses noyaux à
   threads passent par un module privé de `std`.
 * Le plafond de K4 n'admet que des formes scalaires et compte donc la vectorisation automatique (voir plus haut).
-* Ailleurs, le plafond admet le SIMD explicite (« toutes techniques »). Sans lui
-  ([`docs/NOSIMD.md`](docs/NOSIMD.md)), les mêmes douze langages restent en tête et les neuf mêmes derrière (Java
-  devant Go, de peu, même à la lettre) ; C et Odin restent dans les six premiers, C++ dans les sept. L'ordre des
-  douze dépend du traitement des formes scalaires qui manquent : à la lettre, Chapel, Fortran et Julia passent
-  devant, parce que dans K1 et K5 le SIMD des autres porte aussi la disposition SoA et la réassociation de la somme ;
-  à forme égale pour tous, comme sans les noyaux vectorisables, C, Odin et C++ gardent les trois premières places
-  (Odin 1er à forme égale, C 1er sans les noyaux vectorisables).
+* Ailleurs, le plafond admet le SIMD explicite (« toutes techniques »). Sans lui ([`docs/NOSIMD.md`](docs/NOSIMD.md)),
+  les mêmes douze langages restent en tête et les neuf mêmes derrière (Java devant Go, de peu, sauf à la lettre, où Go
+  passe devant de 0,04 rang) ; C et Odin restent dans les six premiers, C++ dans les sept. L'ordre des douze dépend du
+  traitement des formes scalaires qui manquent : à la lettre, Chapel, Fortran et Julia passent devant, parce que dans
+  K1 et K5 le SIMD des autres porte aussi la disposition SoA et la réassociation de la somme ; à forme égale pour
+  tous, comme sans les noyaux vectorisables, C, Odin et C++ gardent les trois premières places (Odin 1er à forme
+  égale, C 1er sans les noyaux vectorisables).
 * Trois échauffements pour les langages à JIT : les boucles chaudes tournent souvent en code OSR (compilé pour
   reprendre une boucle en cours), sans atteindre le niveau d'optimisation final. Mesuré pour C# : 0 à 2,5 % en moyenne
   (moins d'un point), de −15 % à +16 % selon le noyau ([`docs/CSHARP.md`](docs/CSHARP.md)) ; pour Java, le K7
@@ -565,6 +591,10 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   [`docs/C.md`](docs/C.md) et [`results/report_c.md`](results/report_c.md).
 * Le harnais commun de K9 (inventaire des harnais, règle, copies, campagne de la machine 16, effet du harnais à hôte
   égal et de l'hôte, scénarios) : [`docs/K9.md`](docs/K9.md) et [`results/report_k9.md`](results/report_k9.md).
+* La remarque sur Haskell (options de compilation hors du mode release annoncé, FMA vectorielle de K5 et de K1,
+  arène et arbre longue durée de K8, trois errata de la matrice ; report par transfert, latences de K8 reportées ;
+  `-N1` et cases discutables en sensibilité) : [`docs/HASKELL.md`](docs/HASKELL.md) et
+  [`results/report_haskell.md`](results/report_haskell.md).
 * La remarque sur Go (transition d'AVX à SSE de K5 corrigée ; artefact de la préemption sous `GOEXPERIMENT=simd`,
   corrigé dans le classement publié et dans la réplication ; K9 et Q1 en archsimd, K8 itératif en sensibilité) :
   [`docs/GO.md`](docs/GO.md) et [`results/report_go.md`](results/report_go.md).
@@ -753,6 +783,22 @@ python3 tools/measure_go.py                # copies appariées et témoin C, mac
 
 ```bash
 python3 analysis/go_check.py               # corrections de K5 et de l'artefact, scénarios -> report_go.md
+```
+
+```bash
+python3 tools/haskell_check/make_copies.py # remarque sur Haskell : haskell_ref, _rel, _fix, _n1 (puis leurs build.sh)
+```
+
+```bash
+python3 tools/haskell_check/validate.py    # sommes de contrôle des copies (un processus par cellule)
+```
+
+```bash
+python3 tools/measure_haskell.py           # copies appariées et témoin C, machine 19 -> results/raw_haskell
+```
+
+```bash
+python3 analysis/haskell_check.py          # options, K1, K5, K8, errata B2, B3, A7 ; scénarios -> report_haskell.md
 ```
 
 ```bash
