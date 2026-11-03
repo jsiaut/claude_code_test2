@@ -431,6 +431,10 @@ Rejouée après la remarque sur Haskell (3 novembre, `docs/HASKELL.md` : options
 B3 et A7 de Haskell à ½ ; Haskell n'est pas dans l'autre étude) : D repasse devant Nim dans le scénario B ; scénario A
 0,78, B 0,86, C 0,84, D 0,90 ; C 1er, 5e, 2e et 6e.
 
+Rejouée après la remarque sur OCaml (3 novembre, `docs/OCAML.md` : Q6, K1 aos et K8 d'OCaml corrigés, D5 d'OCaml à ½ ;
+OCaml n'est pas dans l'autre étude) : rien ne change hors des rangs espérés, qui bougent de 0,002 au plus ; scénario A
+0,78, B 0,86, C 0,84, D 0,90 ; C 1er, 5e, 2e et 6e.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

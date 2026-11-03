@@ -2,7 +2,7 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/haskell_check.json, « H-E ».
+Témoin : écart maximal 0.0e+00 avec results/ocaml_check.json, « O-E ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
@@ -25,7 +25,7 @@ Témoin : écart maximal 0.0e+00 avec results/haskell_check.json, « H-E ».
 | Java | 15 (47,2) | 15 (48,3) | 16 (37,1) | 16 (37,1) | 15 (50,3) | 15 (45,2) | 15 (47,2) |
 | Go | 16 (45,4) | 16 (45,6) | 15 (37,5) | 15 (37,5) | 16 (46,5) | 16 (40,2) | 16 (45,4) |
 | Haskell | 17 (41,3) | 17 (41,8) | 17 (31,1) | 17 (31,1) | 17 (39,0) | 17 (37,7) | 17 (41,3) |
-| OCaml | 18 (24,0) | 18 (24,3) | 18 (24,8) | 18 (24,8) | 18 (26,2) | 18 (24,8) | 18 (24,0) |
+| OCaml | 18 (23,8) | 18 (24,0) | 18 (24,6) | 18 (24,6) | 18 (27,8) | 18 (24,3) | 18 (23,8) |
 | JavaScript | 19 (14,3) | 19 (14,3) | 19 (14,6) | 19 (14,6) | 19 (18,3) | 19 (14,4) | 19 (14,3) |
 | Python | 20 (9,9) | 20 (10,0) | 20 (10,0) | 20 (10,0) | 20 (10,2) | 20 (10,0) | 20 (9,9) |
 | Lua | 21 (3,9) | 21 (4,0) | 21 (4,0) | 21 (4,0) | 21 (4,6) | 21 (4,1) | 21 (3,9) |
@@ -63,7 +63,7 @@ Témoin : écart maximal 0.0e+00 avec results/haskell_check.json, « H-E ».
 | Java | 56,5 | 59,4 | 31,0 | 31,0 | 59,5 | 51,6 | 56,5 |
 | Go | 44,5 | 45,1 | 24,6 | 24,6 | 42,6 | 31,5 | 44,5 |
 | Haskell | 46,2 | 47,5 | 20,8 | 20,8 | 38,1 | 37,2 | 46,2 |
-| OCaml | 18,4 | 19,0 | 20,1 | 20,1 | 21,2 | 20,4 | 18,4 |
+| OCaml | 19,1 | 19,7 | 20,9 | 20,9 | 26,4 | 20,4 | 19,1 |
 | JavaScript | 11,4 | 11,5 | 12,2 | 12,2 | 19,7 | 11,6 | 11,4 |
 | Python | 0,5 | 0,5 | 0,6 | 0,6 | 0,9 | 0,6 | 0,5 |
 | Lua | 1,1 | 1,3 | 1,4 | 1,4 | 2,5 | 1,4 | 1,1 |
@@ -99,7 +99,7 @@ Témoin : écart maximal 0.0e+00 avec results/haskell_check.json, « H-E ».
 | Java | aos 42,3 | natural 141,9 | natural q6 111,0 | natural q1 111,5 | natural 17,0 |
 | Go | aos 47,2 | natural 86,8 | natural q6 138,4 | tuned q1 86,3 | tuned 21,9 |
 | Haskell | aos 38,3 | natural 189,2 | tuned q6 60,2 | tuned q1 67,4 | natural 163,4 |
-| OCaml | soa 12,3 | tuned 71,6 | natural q6 200,6 | tuned q1 214,5 | tuned 48,1 |
+| OCaml | soa 12,3 | tuned 71,6 | tuned q6 112,5 | tuned q1 214,5 | tuned 48,1 |
 | JavaScript | soa 23,2 | tuned 149,9 | tuned q6 131,5 | natural q1 376,4 | tuned 65,0 |
 | Python | soa 963,1 | tuned 3096,7 | natural q6 1833,8 | tuned q1 7941,8 | natural 1558,9 |
 | Lua | soa 293,9 | natural 1742,4 | natural q6 627,0 | tuned q1 2215,7 | natural 682,0 |

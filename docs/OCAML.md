@@ -66,8 +66,9 @@ d'un processus.
   compteur ; somme] par case »), et les autres langages n'atteignent 16 octets par case que par des champs de 32 bits,
   qu'OCaml n'a pas ; tasser clé et compteur dans un entier est une forme nouvelle. **Sensibilité** (644 → 560 ms).
 * **(2e) K9 et K5** : **sensibilités.** K9 en `floatarray` : aucun gain avec flambda (35,9 → 35,5 ms ; `mt` 22,4 →
-  20,1) ; l'écart de la remarque vient d'OCaml 4.14 sans flambda, qui ne compile pas en ligne les accès `Bigarray`.
-  K5 à 8 accumulateurs : 69 → 65 ms ; JavaScript en utilise 8, Lua et OCaml 4 : pas de convention.
+  20,1) ; ~~l'écart de la remarque vient d'OCaml 4.14 sans flambda, qui ne compile pas en ligne les accès `Bigarray`~~
+  (supposition retirée après les mesures, voir 4.4). K5 à 8 accumulateurs : 69 → 65 ms ; JavaScript en utilise 8, Lua
+  et OCaml 4 : pas de convention.
 * **(2f) Horloge** : **exact, erreur de mon implémentation.** La spécification demande « l'horloge monotone de plus
   haute résolution du langage » ; l'écart (`Unix.gettimeofday`, murale, à la microseconde) était consigné depuis le
   premier audit, faute d'horloge monotone connue dans la distribution ; `Runtime_events.Timestamp.get_current` y est
@@ -151,3 +152,120 @@ puis régénération des sorties publiées (la réplication comprise) et de l'é
 
 * Pas de mesure sur Cascade Lake ; pas d'OxCaml (expérimental, hors de la règle) ni d'OCaml 4.14.
 * Pas de K10 (hors score) ; pas de remesure de l'empreinte (la structure ne change pas).
+
+## 4. Résultats (après les mesures)
+
+Mesures du 3 novembre, de 15:18:04 à 15:40:11, sur la machine 20 : 609 processus (87 cellules, 7 processus chacune),
+aucune somme de contrôle fausse ; 14 refaits pour vol de temps, dont deux deux fois et gardés au-dessus de 2 % (le C
+de K9 `mt`, 2,2 % ; Q6 `mt_m`, 3,3 %) ; vol médian 0,40 %. Aucun écart au plan. Le scénario Avant reproduit le
+classement publié d'avant à l'identique (écart 0). Rapports : `results/report_ocaml.md` ; temps : moyenne géométrique
+des médianes de processus, intervalle à 95 % par bootstrap.
+
+### 4.1 Les corrections du code (`ocaml_fix` / `ocaml_ref`, même hôte)
+
+| Clé | Banc d'origine (ms) | Corrigé (ms) | Rapport [IC 95 %] | C, même hôte (ms) | Publié d'avant → reporté (ms) |
+|---|---|---|---|---|---|
+| Q6 tuned | 213,6 | 87,4 | 0,409 [0,397–0,421] | 18,7 | 274,9 → 112,5 |
+| Q6 `mt` | 59,2 | 27,6 | 0,467 [0,432–0,508] | 6,0 | 80,0 → 37,3 |
+| K1 aos | 266,5 | 45,3 | 0,170 [0,154–0,187] | 32,5 | 312,2 → 53,0 |
+| K8 tuned | 205,9 | 207,6 | 1,008 [0,974–1,041] | 252,0 | 263,6 → 265,7 |
+
+* **Q6** : sans branchement, le Q6 optimisé va 2,4 fois plus vite (`mt` : 2,1 fois) ; il passe devant le naturel
+  (151,9 ms sur cet hôte, 200,6 publiés) et devant JavaScript (131,5 ms publiés), à 4,7 fois C sur cet hôte (`mt` :
+  4,6 fois).
+* **K1 aos** : une multiplication au lieu de `pow` divise le temps par 5,9 ; il reste 1,4 fois C sur cet hôte, au
+  niveau de JavaScript (48,7 ms publiés), car les 144 octets par particule restent. Sans effet sur le score, comme
+  prévu : le plafond de K1 prend soa (12,3 ms publiés).
+* **K8 tuned** : sans effet (× 1,008, dans le bruit), reporté tel quel comme prévu ; les deux références par requête
+  n'étaient que deux petites allocations dans le tas mineur. Sur cet hôte, l'arène d'OCaml va plus vite que celle du C
+  de clang (207,6 contre 252,0 ms), récursive comme elle.
+
+### 4.2 Les autres clés : contrôle de l'horloge (non reportées)
+
+Pour les 32 clés dont seule l'horloge change, la moyenne géométrique des rapports vaut 1,008, de 0,824 (Q1 `mt`) à
+1,107 (K9 tuned) ; quatre intervalles excluent 1, dans les deux sens : Q1 `mt` 0,824 [0,736–0,924], K9 tuned 1,107
+[1,028–1,205], K2 à 256 Kio 1,051 [1,005–1,102] et K3 `sw_packed` 1,039 [1,000–1,084], de justesse. L'horloge n'y est
+pour rien : elle coûte autant que l'ancienne et n'alloue pas (section 2). Le binaire, lui, change (la correction de Q6
+dans la même unité, une bibliothèque de plus à l'édition des liens), et avec lui le placement du code. C'est l'effet
+que le plan écartait en ne reportant que les clés corrigées (3.2) : reportés, ces écarts auraient pesé autant qu'une
+correction (K9 tuned, + 11 %).
+
+### 4.3 Pont par le C (information, O-E-P)
+
+Le C du même hôte place les quatre clés à moins de 25 % du transfert (Q6 tuned + 12,8 %, Q6 `mt` − 4,7 %, K1 aos
+− 1,0 %, K8 tuned + 21,4 %) : la règle du pont garde le transfert pour les quatre, et O-E-P se confond avec O-E. Sur
+K8 tuned, la règle de sens aurait de toute façon écarté le pont (facteur 0,83 contre un rapport mesuré de 1,008).
+
+### 4.4 Sensibilités
+
+| Forme (scénario) | Clé | `ocaml_fix` (ms) | Forme nouvelle (ms) | Rapport [IC 95 %] | Gain annoncé par la remarque |
+|---|---|---|---|---|---|
+| Masque de signe (S-Q6m) | Q6 tuned | 87,4 | 75,1 | 0,859 [0,815–0,926] | × 3,7 sur le banc d'origine (ici × 2,8) |
+| | Q6 `mt` | 27,6 | 24,0 | 0,870 [0,751–0,991] | (ici × 2,5) |
+| Arène par valeur (S-K8v) | K8 tuned | 207,6 | 159,9 | 0,770 [0,747–0,792] | × 1,5 (ici × 1,30) |
+| Deux mots par case (S-K7p) | K7 tuned | 589,1 | 515,4 | 0,875 [0,795–0,951] | × 1,22 (ici × 1,14) |
+| `floatarray` (S-K9fa) | K9 tuned | 46,6 | 44,0 | 0,945 [0,894–0,998] | × 1,45 à 1,56 (ici × 1,06) |
+| | K9 `mt` | 24,9 | 23,4 | 0,939 [0,901–0,981] | (ici × 1,06) |
+| Huit accumulateurs (S-K5) | K5 tuned | 69,1 | 66,9 | 0,968 [0,916–1,038] | 35 à 51 ms contre 71,6 (ici 66,9 contre 69,1) |
+
+Toutes les formes vont dans le sens annoncé, moins loin. Les facteurs de la remarque ont été mesurés par son auteur
+avec OCaml 4.14.1 sans flambda, sur ses propres réécritures (section 1, point 5), conditions que je ne peux pas
+reproduire ici. **Correction de la section 2** : j'y attribuais l'écart de K9 à OCaml 4.14 sans flambda, qui ne
+compilerait pas en ligne les accès `Bigarray` ; c'était une supposition, invérifiable sans cette chaîne, et je la
+retire. Ce qui est vérifié : dans le binaire publié, le noyau de K9 tuned et `mt` (`k9_rows`) n'appelle rien d'autre
+que le point de contrôle du ramasse-miettes, et ses accès aux `Bigarray` sont des lectures en ligne (désassemblage).
+S-cases : E7 = ½.
+
+### 4.5 Classement (analyse globale de la v3 rejouée, 20 000 variantes)
+
+| Scénario | Score | Contrôle | Plafond | Défaut | Rang espéré | Place | Rang 90 % | Haskell devant | Devant JavaScript |
+|---|---|---|---|---|---|---|---|---|---|
+| Avant (publié d'avant) | 24,01 | 24,7 | 18,4 | 32,1 | 18,00 | 18 | 18–18 | 99,5 % | 99,9 % |
+| O-code (corrections du code) | 24,32 | 24,7 | 19,1 | 32,1 | 18,00 | 18 | 18–18 | 99,5 % | 99,9 % |
+| O-M (erratum D5 seul) | 23,49 | 23,2 | 18,4 | 32,1 | 18,00 | 18 | 18–18 | 99,6 % | 99,9 % |
+| **O-E (publié)** | **23,80** | 23,2 | 19,1 | 32,1 | 18,00 | 18 | 18–18 | 99,6 % | 99,9 % |
+| O-E-P (pont, information) | 23,80 | 23,2 | 19,1 | 32,1 | 18,00 | 18 | 18–18 | 99,6 % | 99,9 % |
+| S-Q6m | 23,87 | 23,2 | 19,3 | 32,1 | 18,00 | 18 | 18–18 | 99,6 % | 99,9 % |
+| S-K8v | 24,05 | 23,2 | 19,8 | 32,1 | 18,00 | 18 | 18–18 | 99,6 % | 99,9 % |
+| S-K7p | 23,92 | 23,2 | 19,4 | 32,1 | 18,00 | 18 | 18–18 | 99,6 % | 99,9 % |
+| S-K9fa | 23,85 | 23,2 | 19,3 | 32,1 | 18,00 | 18 | 18–18 | 99,6 % | 99,9 % |
+| S-K5 | 23,83 | 23,2 | 19,2 | 32,1 | 18,00 | 18 | 18–18 | 99,6 % | 99,9 % |
+| S-mesures | 24,35 | 23,2 | 20,5 | 32,1 | 18,00 | 18 | 18–18 | 99,6 % | 99,9 % |
+| S-cases | 24,05 | 23,9 | 19,1 | 32,1 | 18,00 | 18 | 18–18 | 99,6 % | 99,9 % |
+| S-tout | 24,60 | 23,9 | 20,5 | 32,1 | 18,00 | 18 | 18–18 | 99,5 % | 99,9 % |
+
+« Haskell devant » : part des variantes où Haskell devance OCaml ; « Devant JavaScript » : part des variantes où OCaml
+devance JavaScript. Au classement publié (O-E), OCaml perd 0,22 point (24,01 → 23,80) et reste 18e, rang plausible
+18 : les corrections du code lui rendent 0,31 point, l'erratum D5 lui en retire 0,52. Le plafond passe de 18,4 à 19,1
+par K6 seul (0,117 → 0,163 de la référence ; K8, 0,408 → 0,405). Haskell garde 17,5 points d'avance, JavaScript 9,5
+points de retard. Les scores des autres langages ne changent pas (OCaml n'a le meilleur temps d'aucune mesure, et
+l'erratum ne touche que sa ligne de la matrice) ; leurs rangs espérés bougent de 0,0007 au plus.
+
+### 4.6 Réplication (machine 3)
+
+Données d'OCaml de la machine 3 multipliées par les rapports des quatre clés corrigées (transfert, même modèle de
+processeur), avec l'erratum : score 21,9 → 21,6, toujours 18e ; plafond 14,0 → 14,6. L'ordre de la réplication ne
+change pas.
+
+### 4.7 Bilan
+
+* **La remarque est juste sur les faits.** Le Q6 optimisé branchait (`&&` en court-circuit), K1 aos appelait `pow`,
+  l'horloge n'était pas celle qu'exige la spécification, D5 était sur-noté, et les trois passages du README étaient
+  inexacts (corrigés, avec deux chiffres dépassés du paragraphe d'OCaml). S'y ajoute une erreur qu'elle n'avait pas
+  vue, sans effet sur le temps : l'arène de K8 allouait deux références par requête.
+* **Le rang tient**, comme elle le disait : OCaml reste 18e dans tous les scénarios, rang plausible 18 ; Haskell le
+  devance dans 99,6 % des variantes, et il devance JavaScript dans 99,9 %.
+* **Le score ne monte pas** : 24,01 → 23,80. La remarque annonçait 25,9 à 27,8 points avec le code corrigé, 0,3 de
+  moins avec la grille ; je mesure 24,32 avec les corrections, environ 24,9 en y ajoutant toutes ses formes (S-mesures
+  sans l'erratum) et 24,60 au plus avec la grille (S-tout). La grille fait ce qu'elle annonçait : D5 − 0,52, E7
+  + 0,25.
+* **Pourquoi l'estimation est trop haute** : (1) K1 aos ne compte pas (le plafond de K1 prend soa), ce que la remarque
+  disait elle-même ; (2) la correction de K8 ne change pas le temps, et sa forme par valeur gagne × 1,30, pas × 1,5 ;
+  (3) les formes de K7, K9 et K5 gagnent moins ici (OCaml 5.5.2, flambda) que dans les mesures de l'auteur (OCaml
+  4.14.1 sans flambda, ses réécritures) : K9 en `floatarray`, × 1,06 au lieu de × 1,45 à 1,56 ; (4) surtout, le
+  plafond est une moyenne géométrique sur huit noyaux, et Q6 ne fait que deux des quatre mesures de K6 : Q6 2,4 fois
+  plus rapide (`mt` 2,1 fois) relève K6 de 0,117 à 0,163 de la référence, et le plafond de 4 %. Pour atteindre 25,9
+  points, il faudrait un plafond de 23,1 (+ 26 %), soit, environ, les huit noyaux chacun 1,26 fois plus rapides à leur
+  meilleure variante, ou un seul 6,2 fois.
+* **Ce que je ne retiens pas** : OxCaml et OCaml 4.14, hors de la règle, ne sont pas mesurés (3.6).
+

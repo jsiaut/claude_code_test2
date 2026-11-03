@@ -338,3 +338,11 @@ lettre). À la lettre (S-scalaire), Go passe devant Java (rang moyen 15,13 contr
 de Haskell devient le meilleur temps de sa clé, et ce déplacement des références suffit à départager ces deux
 langages si proches ; à forme égale (S-symétrique) et sans les noyaux vectorisables, Java reste devant (14,90 contre
 15,35 ; 14,99 contre 15,90). En tête, rien ne bouge.
+
+### 4.14 Recalcul après la remarque sur OCaml (3 novembre)
+
+Recalculé de nouveau (témoin égal au scénario O-E de `results/ocaml_check.json` : Q6, K1 aos et K8 d'OCaml corrigés,
+D5 d'OCaml à ½). OCaml reste 18e dans tous les scénarios (23,8 points publiés, 24,6 à la lettre), et aucun autre
+langage ne change de score ni de place. Q6 sans branchement devient la variante qu'OCaml garde pour Q6 dans S-scalaire
+(112,5 ms, au lieu du naturel, 200,6). Le scénario symétrique, où K1 ne compte que par aos, est le seul où la
+correction de K1 aos pèse : OCaml y passe de 26,2 à 27,8 points (plafond 21,2 → 26,4), toujours 18e.

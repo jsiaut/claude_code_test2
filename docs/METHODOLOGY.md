@@ -1026,3 +1026,26 @@ Robustesse :
   flambda), K5 à huit accumulateurs, E7. Plan (`docs/OCAML.md`, sections 1 à 3) : seules les clés dont le code change
   sont reportées, par transfert ; copies (`tools/ocaml_check/make_copies.py`, 79 cellules validées), outil de mesure
   (`tools/measure_ocaml.py`), script d'analyse, erratum et contrôles de l'état actuel poussés avant les mesures.
+* 2026-11-03, 15:18:04-15:40:11 : **mesures de la remarque sur OCaml** (`tools/measure_ocaml.py`, machine 20) : 609
+  processus (87 cellules × 7), aucune somme de contrôle fausse ; 14 refaits pour vol de temps, dont deux deux fois et
+  gardés au-dessus de 2 % (2,2 et 3,3 %) ; vol médian 0,40 %.
+* 2026-11-03, 15:40 à 15:47 : **résultats de la remarque sur OCaml** (`results/report_ocaml.md`). Aucun écart au
+  plan ; le scénario Avant reproduit H-E à l'identique. Code (même hôte) : Q6 tuned × 0,409, `mt` × 0,467, K1 aos
+  × 0,170, K8 tuned × 1,008 ; les 32 clés dont seule l'horloge change vont de 0,82 à 1,11 (moyenne géométrique 1,008 :
+  placement, non reportées). Classement publié (O-E, transfert et erratum D5) : OCaml 23,80 points (24,01), 18e, rang
+  plausible 18, Haskell devant dans 99,6 % des variantes ; plafond 18,4 → 19,1 (K6 seul : K1 prend soa), contrôle 24,7
+  → 23,2 ; les scores des autres langages ne changent pas. Sensibilités : formes de la remarque 24,35 (masque de signe
+  × 0,86 et 0,87, arène par valeur × 0,77, K7 à deux mots × 0,87, `floatarray` × 0,95 et 0,94, huit accumulateurs
+  × 0,97), avec E7 à ½ 24,60, loin des 25,9 à 27,8 annoncés. Pont par le C (information) : écarts sous 25 %, transfert
+  gardé pour les quatre clés. Une supposition de la section 2 d'OCAML.md (l'écart de K9 attribué, sans preuve, à OCaml
+  4.14 sans flambda) est retirée, rayée et signalée (4.4).
+* 2026-11-03, 15:49 à 16:18 : **sorties régénérées après la remarque sur OCaml** (même chaîne que pour Haskell) :
+  classement, figures, matrice (`docs/CAPABILITIES.md`), réplication (données d'OCaml de la machine 3 corrigées :
+  score 21,9 → 21,6, toujours 18e ; ordre de la réplication inchangé), scénarios de l'état actuel ; leurs contrôles
+  reproduisent O-E à l'identique. Effets hors d'OCaml : aucun changement de score ni de place (rangs espérés à 0,0007
+  près au classement publié, à 0,002 près dans la confrontation) ; sans SIMD explicite, OCaml reste 18e partout (27,8
+  points dans le scénario symétrique, où K1 ne compte que par aos). README : tableau, paragraphe d'OCaml (les trois
+  passages inexacts relevés par la remarque, deux chiffres dépassés), errata (et leur date, restée au 1er novembre),
+  points 6 et 7 des résultats solides, limites (langages relus, report, versions optimisées), lecture et
+  reproduction ; `docs/FINDINGS.md` (dont la taille de la particule d'OCaml), `docs/NOSIMD.md`,
+  `docs/CONFRONTATION.md`.

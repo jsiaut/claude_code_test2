@@ -31,7 +31,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | D2 atomiques à ordres mémoire explicites | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ● | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ○ |
 | D3 aide ligne de cache | ◐ | ● | ○ | ● | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ◐ | ○ | ● | ○ | ○ | ○ |
 | D4 affinité CPU | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ | ○ |
-| D5 barrières et indication d'attente active | ◐ | ◐ | ● | ◐ | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ● | ○ | ● | ● | ◐ | ○ | ● | ◐ | ○ | ○ |
+| D5 barrières et indication d'attente active | ◐ | ◐ | ● | ◐ | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ● | ○ | ● | ● | ◐ | ○ | ◐ | ◐ | ○ | ○ |
 | **E** (10 %) | | | | | | | | | | | | | | | | | | | | | |
 | E1 code natif inspectable | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ◐ | ○ | ○ |
 | E2 assembleur en ligne | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ● | ○ | ○ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
@@ -206,7 +206,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 * **A** : A1 = 0 (enregistrements boxés (sauf flottants)) ; A2 = 0 (aucun contrôle) ; A3 = 0 (aucun) ; A4 = 0 (aucun) ; A5 = 0.5 (Int32.bits_of_float...) ; A6 = 0 (aucun) ; A7 = 0 (aucun) ; A8 = 0.5 (Bigarray int8/int16/float32 pour le stockage ; scalaires larges)
 * **B** : B1 = 0 (GC imposé) ; B2 = 0 (aucun) ; B3 = 0 (flambda déboxe localement, sans garantie) ; B4 = 0 (boxing des flottants, fermetures, tuples) ; B5 = 0.5 (Bigarray hors tas, Obj)
 * **C** : C1 = 0 (aucun en OCaml 5.5) ; C2 = 0 (aucun) ; C3 = 0.0 (mesuré) ; C4 = 0 (aucun) ; C5 = 0 (Domainslib est tiers)
-* **D** : D1 = 1 (Domain (OCaml 5)) ; D2 = 0.5 (Atomic séquentiellement cohérent) ; D3 = 1 (Atomic.make_contended) ; D4 = 0 (aucune) ; D5 = 1 (Domain.cpu_relax + Atomic)
+* **D** : D1 = 1 (Domain (OCaml 5)) ; D2 = 0.5 (Atomic séquentiellement cohérent) ; D3 = 1 (Atomic.make_contended) ; D4 = 0 (aucune) ; D5 = 0.5 (Domain.cpu_relax ; pas de barrière explicite (Atomic séquentiellement cohérent) ; erratum du 3/11, remarque sur OCaml : une seule des deux capacités, comme Zig, C3, Chapel, Fortran et JavaScript)
 * **E** : E1 = 1 (natif) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 0 (aucun) ; E5 = 0 (aucun) ; E6 = 1 (unsafe_get, -unsafe) ; E7 = 0 (pas de monomorphisation (représentation uniforme))
 * **F** : F1 = 1 (Bigarray.Array2 c_layout/fortran_layout) ; F2 = 0 (aucun) ; F3 = 0.5 (Int32/Int64 signés boxés ; pas de non signés) ; F4 = 1 (Unix.map_file (bench))
 

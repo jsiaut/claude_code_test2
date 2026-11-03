@@ -2,7 +2,7 @@
 
 Plan : `docs/C.md`. Mesures : `results/raw_c/` (machine 16, 7 processus par cellule). Code : `analysis/c_check.py`.
 Processus rejetés : aucun.
-Contrôle : le scénario Publié reproduit results/haskell_check.json, H-E (écart maximal 0.0e+00).
+Contrôle : le scénario Publié reproduit results/ocaml_check.json, O-E (écart maximal 0.0e+00).
 
 ## Rapports appariés (même hôte)
 
@@ -20,7 +20,7 @@ Contrôle : le scénario Publié reproduit results/haskell_check.json, H-E (éca
 | c_gcc_ref / c_ref | k8:natural (témoin) | 771,3 | 602,2 | 0,781 | 0,700–0,871 |
 
 Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0 ms avec la meilleure forme (S-K8).
-État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md), K5 et K1 soa de Java corrigés et F1 de Java à ½ (docs/JAVA.md), K5 et K9 de Go corrigés (docs/GO.md), options et K1, K5, K8 de Haskell corrigés et B2, B3, A7 de Haskell à ½ (docs/HASKELL.md) ; Publié = results/haskell_check.json (H-E).
+État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md), K5 et K1 soa de Java corrigés et F1 de Java à ½ (docs/JAVA.md), K5 et K9 de Go corrigés (docs/GO.md), options et K1, K5, K8 de Haskell corrigés et B2, B3, A7 de Haskell à ½ (docs/HASKELL.md), Q6, K1 aos et K8 d'OCaml corrigés et D5 d'OCaml à ½ (docs/OCAML.md) ; Publié = results/ocaml_check.json (O-E).
 
 ## Scénarios (analyse globale de la v3 rejouée, 20 000 variantes)
 
@@ -56,7 +56,7 @@ Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0
 | Java | 47,18 | 42,7 → 42,7 | 15,41 → 15,41 | 0 % → 0 % |
 | Go | 45,37 | 44,9 → 44,9 | 15,52 → 15,52 | 0 % → 0 % |
 | Haskell | 41,28 | 38,9 → 38,9 | 16,82 → 16,82 | 0 % → 0 % |
-| OCaml | 24,01 | 24,7 → 24,7 | 18,00 → 18,00 | 0 % → 0 % |
+| OCaml | 23,80 | 23,2 → 23,2 | 18,00 → 18,00 | 0 % → 0 % |
 | JavaScript | 14,27 | 11,6 → 11,6 | 19,07 → 19,07 | 0 % → 0 % |
 | Python | 9,94 | 22,4 → 22,4 | 20,30 → 20,30 | 0 % → 0 % |
 | Lua | 3,92 | 2,8 → 2,8 | 20,63 → 20,63 | 0 % → 0 % |

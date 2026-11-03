@@ -136,16 +136,18 @@ fusionner les passes répétées (355 To/s).
   libéré (vu avec `strace`) ; les tas de Java et de C# réutilisent eux aussi la mémoire libérée (RSS
   de 37 et 26 o par particule pour 78 et 88 o vivants). Seule la comptabilité du runtime, après un
   GC complet, donne la taille réelle d'une collection dans ces langages.
-* **Taille d'une particule de 64 o selon le langage** (octets vivants par élément de la
-  collection naturelle) : 64 pour les tableaux de valeurs (C, C++, Rust, Zig, Odin, C3, D, Nim,
-  Mojo, Chapel, Fortran, Ada, Go, Julia) ; Java 78 (en-tête compact de 8 o + 4 o de référence +
-  marge de capacité de l'`ArrayList`) ; C# 88 (en-tête de 16 o + référence de 8 o) ; Haskell 96
-  (constructeur à champs `Float` stricts empaquetés, 72 o, plus une cellule de liste de 24 o) ;
-  OCaml 144 (un enregistrement de flottants est stocké à plat, mais chaque `float` y occupe 8 o :
-  pas de flottant 32 bits non boxé) ; Bun 170 (JavaScriptCore range les nombres dans les mots de
-  64 bits de l'objet) ; Node 416 (V8, avec la compression de pointeurs, range chaque propriété
-  flottante dans un objet `HeapNumber` séparé) ; LuaJIT 428 et Lua 449 (table à 16 champs nommés) ;
-  Python 750 (dont 608 o demandés selon `tracemalloc`, le reste en arrondis de pymalloc).
+* **Taille d'une particule de 64 o selon le langage** (octets vivants par élément de la collection
+  naturelle) : 64 pour les tableaux de valeurs (C, C++, Rust, Zig, Odin, C3, D, Nim, Mojo, Chapel,
+  Fortran, Ada, Go, Julia) ; Java 78 (en-tête compact de 8 o + 4 o de référence + marge de capacité
+  de l'`ArrayList`) ; C# 88 (en-tête de 16 o + référence de 8 o) ; Haskell 96 (constructeur à champs
+  `Float` stricts empaquetés, 72 o, plus une cellule de liste de 24 o) ; OCaml 144 (un
+  enregistrement de flottants est stocké à plat, derrière un en-tête de 8 o, plus le pointeur de 8 o
+  qui le désigne ; chaque `float` y occupe 8 o : OCaml n'a pas de flottant 32 bits de calcul, le
+  format n'existant que pour stocker, dans un `Bigarray`) ; Bun 170 (JavaScriptCore range les
+  nombres dans les mots de 64 bits de l'objet) ; Node 416 (V8, avec la compression de pointeurs,
+  range chaque propriété flottante dans un objet `HeapNumber` séparé) ; LuaJIT 428 et Lua 449 (table
+  à 16 champs nommés) ; Python 750 (dont 608 o demandés selon `tracemalloc`, le reste en arrondis de
+  pymalloc).
 * **Valhalla (JEP 401, build EA `27-jep401ea3`)** : un tableau de `value record` de 16 `float` n'est
   pas aplati (85,8 o par élément ; parcours permuté 4,1 fois plus lent, comme pour des objets
   ordinaires). La JVM n'aplatit un tableau que si la valeur et son marqueur de nullité tiennent
@@ -733,3 +735,29 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   ramène le temps à 0,69 fois et le p99,9 à 0,29 fois. Julia, lancé avec `-t 4`, marque aussi à quatre fils.
 * **K7 naturel (`Data.IntMap`)** : 51 à 54 s sur la machine 19 (89 s publiés, Cascade Lake) ; ni les options ni
   `-N1` ne le changent.
+
+## Remarque sur OCaml (3 novembre, machine 20, Emerald Rapids) — `docs/OCAML.md`, `results/ocaml_check/`
+
+* **`Bool.to_int (a && b)` branche** : `ocamlopt -O3` (OCaml 5.5.2, flambda) compile les `&&` en court-circuit en
+  branchements conditionnels (`jl`), même sous `Bool.to_int` ; des comparaisons séparées, chacune par `Bool.to_int` et
+  combinées par `land`, donnent des `setcc` et plus aucun branchement de données. Q6 tuned 213,6 → 87,4 ms (× 0,409,
+  sept processus), `mt` × 0,467 ; le masque des bits de signe gagne encore × 0,86.
+* **`x ** 2.` appelle `pow`** : flambda ne le remplace pas par une multiplication, et la fonction d'énergie de K1 aos,
+  non inlinée, appelle `pow@plt` trois fois par particule ; `x *. x` : 266,5 → 45,3 ms (× 0,170).
+* **Ni `cmov`, ni `popcnt`, ni préchargement** dans le code x86-64 d'`ocamlopt` (sondes : un `max` garde `cmp` et
+  `jle`) ; `Int.popcount` est écrit en OCaml (`int.ml`). `Atomic.get` est une lecture de champ ; `Atomic.set` (par
+  `exchange`) et `fetch_and_add` appellent des fonctions C du runtime (`caml_atomic_exchange_field`,
+  `caml_atomic_fetch_add_field`) : l'écrivain unique de K3 est 7,2 fois plus lent qu'en C (Go 6,2, Haskell 6,5).
+* **Horloge monotone** : `Runtime_events.Timestamp.get_current` (OCaml 5.4 et suivants, nanosecondes) coûte autant que
+  `Unix.gettimeofday` (31 à 36 ns la lecture) et n'alloue pas ; deux lectures successives sont à 29 ns d'écart, contre
+  0 avec `gettimeofday` (microseconde).
+* **Références dans une arène** : deux `ref` par requête dans K8 tuned font 65 536 mots alloués par répétition dans le
+  tas mineur, sans effet mesurable (× 1,008) ; passer sommet et compteur par valeur gagne × 0,770 (sensibilité, comme
+  `c_k8val` pour C).
+* **Formes plus poussées, même hôte** : K7 à deux mots par case (clé et compteur tassés dans un entier) × 0,875 ; K9
+  en `floatarray` × 0,945 (`mt` × 0,939), les accès `Bigarray` du banc, à *kind* annoté, étant déjà des lectures en
+  ligne (désassemblage) ; K5 à huit accumulateurs × 0,968. Les facteurs de la remarque (× 1,22, × 1,45 à 1,56)
+  venaient d'OCaml 4.14.1 sans flambda et de réécritures de son auteur, que je n'ai pas pu reproduire.
+* **Placement** : sur les 32 clés dont seule l'horloge change, les rapports vont de 0,82 (Q1 `mt`) à 1,11 (K9 tuned),
+  moyenne géométrique 1,008 ; à code identique, des effets du binaire, non reportés.
+
