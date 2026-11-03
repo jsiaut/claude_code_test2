@@ -11,6 +11,10 @@ d'OCaml ; analyse globale de la v3 rejouée (mêmes tirages) pour chaque scénar
 * Sensibilités (sur O-E, en min(1, r) par rapport à O-E) : S-Q6m, S-K8v, S-K7p, S-K9fa, S-K5, S-mesures, S-cases
   (E7 = 1/2), S-tout.
 Les autres clés ne changent que d'horloge : leur rapport ocaml_fix / ocaml_ref est un contrôle, non reporté (plan 3.2).
+Correction du 3 novembre au soir (docs/OCAML.md, 4.8 ; docs/JAVASCRIPT.md, 2) : K7 tuned à deux mots par case n'est
+pas une forme nouvelle, mais la convention (16 octets par case, comme en C ; Java tasse clé et compteur dans un long) :
+K7 tuned × r(ocaml_exp tuned_p / ocaml_fix tuned) passe des sensibilités (S-K7p) au classement publié (O-code, O-E,
+réplication) ; le scénario O-E-311 garde l'O-E d'avant cette correction, pour mémoire.
 Les corrections publiées des autres langages (results/transfers.json : ratios, ratios_k9h, lat_ratios) sont appliquées
 comme dans le calcul publié ; celles d'OCaml en sont retirées pour le calcul, puis les rapports d'O-E y sont écrits
 (« ratios »). Les rapports de la réplication (« replication_ratios ») vont dans results/ocaml_check.json.
@@ -38,6 +42,7 @@ Q6T, Q6M = ("k6", "tuned", "q6"), ("k6", "mt", "q6")
 K1A, K8T = ("k1", "aos", "energy"), ("k8", "tuned", "")
 K7T, K9T, K9M, K5T = ("k7", "tuned", ""), ("k9", "tuned", ""), ("k9", "mt", ""), ("k5", "tuned", "")
 CORR = [Q6T, Q6M, K1A, K8T]
+CORR_SENS = {K7T: "k7_tuned_p"}  # correction du 3/11 au soir : rapport de la forme mesurée en sensibilité
 SENS = {"q6_tuned_m": (Q6T, ("ocaml_exp", ("k6", "tuned_m", "q6")), ("ocaml_fix", Q6T)),
         "q6_mt_m": (Q6M, ("ocaml_exp", ("k6", "mt_m", "q6")), ("ocaml_fix", Q6M)),
         "k8_tuned_val": (K8T, ("ocaml_exp", ("k8", "tuned_val", "")), ("ocaml_fix", K8T)),
@@ -45,8 +50,9 @@ SENS = {"q6_tuned_m": (Q6T, ("ocaml_exp", ("k6", "tuned_m", "q6")), ("ocaml_fix"
         "k9_tuned_fa": (K9T, ("ocaml_exp", ("k9", "tuned_fa", "")), ("ocaml_fix", K9T)),
         "k9_mt_fa": (K9M, ("ocaml_exp", ("k9", "mt_fa", "")), ("ocaml_fix", K9M)),
         "k5_tuned_8": (K5T, ("ocaml_exp", ("k5", "tuned_8", "")), ("ocaml_fix", K5T))}
-PLAN = {"S-Q6m": ["q6_tuned_m", "q6_mt_m"], "S-K8v": ["k8_tuned_val"], "S-K7p": ["k7_tuned_p"],
-        "S-K9fa": ["k9_tuned_fa", "k9_mt_fa"], "S-K5": ["k5_tuned_8"], "S-mesures": list(SENS)}
+PLAN = {"S-Q6m": ["q6_tuned_m", "q6_mt_m"], "S-K8v": ["k8_tuned_val"],
+        "S-K9fa": ["k9_tuned_fa", "k9_mt_fa"], "S-K5": ["k5_tuned_8"],
+        "S-mesures": [n for n in SENS if n not in CORR_SENS.values()]}
 ERRATA = {"D5": 0.5}
 BEFORE = {"D5": 1}
 CASES = {"E7": 0.5}
@@ -162,11 +168,16 @@ def main():
                            "c_main_ms": 1e3 * gm(data["c"][key]), "c_here_ms": 1e3 * gm(raw["c"][key])}
         return used
 
-    fix_t = {k: r_fix[k]["ratio"] for k in CORR}
+    fix_311 = {k: r_fix[k]["ratio"] for k in CORR}  # O-E d'avant la correction de K7 (3/11 après-midi)
+    fix_t = dict(fix_311)
     fix_b = {k: bridged(f"pont {kk(k)}", k, r_fix[k]["ratio"], raw["ocaml_fix"][k]) for k in CORR}
+    for k, n in CORR_SENS.items():
+        fix_t[k] = r_sens[n]["ratio"]
+        fix_b[k] = bridged(f"pont {kk(k)}", k, r_sens[n]["ratio"], raw[SENS[n][1][0]][SENS[n][1][1]])
     sens_t = {}
     for n, (key, _, _) in SENS.items():
-        sens_t[n] = fix_t.get(key, 1.0) * min(1.0, r_sens[n]["ratio"])
+        if n not in CORR_SENS.values():
+            sens_t[n] = fix_t.get(key, 1.0) * min(1.0, r_sens[n]["ratio"])
 
     def with_sens(names):
         f = dict(fix_t)
@@ -175,7 +186,8 @@ def main():
         return f
 
     plans = {"Avant": (data, BEFORE), "O-code": (scaled(data, fix_t), BEFORE), "O-M": (data, None),
-             "O-E": (scaled(data, fix_t), None), "O-E-P": (scaled(data, fix_b), None)}
+             "O-E": (scaled(data, fix_t), None), "O-E-P": (scaled(data, fix_b), None),
+             "O-E-311": (scaled(data, fix_311), None)}
     for name, names in PLAN.items():
         plans[name] = (scaled(data, with_sens(names)), None)
     plans["S-cases"] = (scaled(data, fix_t), CASES)
@@ -183,7 +195,8 @@ def main():
     out = {"bad": bad, "times_ms": times, "r_fix": {kk(k): r for k, r in r_fix.items()}, "r_sens": r_sens,
            "transfer": transfer, "published_ratios": {kk(k): v for k, v in fix_t.items()},
            "bridge_ratios": {kk(k): v for k, v in fix_b.items()}, "sens_factors": sens_t,
-           "replication_ratios": {"|".join(k): fix_t[k] for k in CORR}, "scenarios": {}}
+           "corr_from_sens": {kk(k): n for k, n in CORR_SENS.items()},
+           "replication_ratios": {"|".join(k): v for k, v in fix_t.items()}, "scenarios": {}}
     for name, (d, cells) in plans.items():
         z = out["scenarios"][name] = run(d, lat, langs, footprint, c3, cells)
         print(f"{name} : OCaml {z['ms0'][LANG]:.2f} points, C {z['C'][LANG]:.1f}, E {z['E'][LANG]:.1f}, "
@@ -222,7 +235,10 @@ def report(o):
         b = "**" if k in corr else ""
         L.append(f"| {b}{k}{b} | {f(r['old_ms'], 2)} | {f(r['new_ms'], 2)} | {b}{f(r['ratio'], 3)}{b} | "
                  f"{f(r['ci'][0], 3)}–{f(r['ci'][1], 3)} |")
-    L += ["", "## Sensibilités (forme nouvelle / ocaml_fix, même hôte)\n",
+    L += ["", "**Correction du 3 novembre au soir** (docs/OCAML.md, 4.8) : K7 tuned à deux mots par case est la convention "
+          "(16 octets par case, comme en C ; Java tasse clé et compteur dans un long) ; son rapport, mesuré en sensibilité "
+          "(k7_tuned_p ci-dessous), est reporté dans le classement publié. Le scénario O-E-311 garde l'O-E d'avant.",
+          "", "## Sensibilités (forme nouvelle / ocaml_fix, même hôte)\n",
           "| Sensibilité | Clé | Base (ms) | Forme nouvelle (ms) | Rapport | IC 95 % |", "|---|---|---|---|---|---|"]
     for n, r in o["r_sens"].items():
         L.append(f"| {n} | {kk(SENS[n][0])} | {f(r['old_ms'], 2)} | {f(r['new_ms'], 2)} | {f(r['ratio'], 3)} | "

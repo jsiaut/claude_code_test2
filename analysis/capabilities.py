@@ -352,16 +352,24 @@ MATRIX = {
         "F2": (0, "aucun"), "F3": (0.5, "Int32/Int64 signés boxés ; pas de non signés"), "F4": (1, "Unix.map_file (bench)"),
     },
     "js": {
-        "A1": (0, "objets référencés"), "A2": (0, "aucun"), "A3": (0, "aucun"), "A4": (0, "aucun"),
+        "A1": (0, "objets référencés"), "A2": (0, "aucun"), "A3": (0, "aucun"),
+        "A4": (0.5, "node:ffi (expérimental, actif par défaut) : getRawPointer et sur-allocation, comme ctypes.addressof "
+                    "en Python (sonde) ; erratum du 3/11, remarque sur JavaScript"),
         "A5": (0.5, "vues typées sur le même ArrayBuffer, DataView"), "A6": (0, "aucun"), "A7": (0, "aucun"),
         "A8": (0.5, "tableaux typés pour le stockage ; nombres f64"), "B1": (0, "GC imposé"), "B2": (0, "aucun"),
-        "B3": (0, "aucun"), "B4": (0, "allocations implicites omniprésentes"), "B5": (0.5, "ArrayBuffer, pas de pointeurs"),
-        "C1": (0, "SIMD.js retiré"), "C2": (0, "aucun"), "C3": M, "C4": (0, "aucun"), "C5": (0, "aucun"),
+        "B3": (0, "aucun"), "B4": (0, "allocations implicites omniprésentes"), "B5": (0.5, "ArrayBuffer ; pointeurs bruts par node:ffi (expérimental)"),
+        "C1": (0, "SIMD.js retiré ; le SIMD de WebAssembly n'est pas exposé à JavaScript"), "C2": (0, "aucun"), "C3": M,
+        "C4": (0, "aucun"), "C5": (0, "aucun"),
         "D1": (0.5, "Workers isolés + SharedArrayBuffer"), "D2": (0.5, "Atomics séquentiellement cohérents seulement"),
         "D3": (0, "aucune"), "D4": (0, "aucune"), "D5": (0.5, "Atomics.pause (sonde) ; pas de barrière explicite"),
-        "E1": (0.5, "JIT (V8) ; --print-opt-code selon la compilation de node"), "E2": (0, "aucun"), "E3": (0, "aucun"),
-        "E4": (0, "aucun"), "E5": (0, "aucun"), "E6": (0, "aucun"), "E7": (0, "aucun"), "F1": (0, "aucun"),
-        "F2": (0, "aucun"), "F3": (0.5, "|0 et >>>0 sur 32 bits, BigInt.asUintN"), "F4": (0, "pas de mmap dans node"),
+        "E1": (1, "JIT (V8) ; --print-opt-code affiche le code machine de TurboFan avec le binaire officiel de Node "
+                  "(sonde) ; erratum du 3/11, remarque sur JavaScript"), "E2": (0, "aucun"), "E3": (0, "aucun"),
+        "E4": (0, "aucun"), "E5": (0, "aucun"),
+        "E6": (0.5, "seulement par les pointeurs de node:ffi (getFloat64…, non vérifiés, expérimental), comme les "
+                    "pointeurs ctypes de Python (sonde) ; erratum du 3/11, remarque sur JavaScript"),
+        "E7": (0, "aucun"), "F1": (0, "aucun"),
+        "F2": (0, "aucun"), "F3": (0.5, "|0 et >>>0 sur 32 bits, BigInt.asUintN"),
+        "F4": (0, "mmap seulement par node:ffi (appel de la libc : FFI, comme pour Rust)"),
     },
     "python": {
         "A1": (0.5, "ctypes.Structure en tableaux (stdlib) ; les objets Python sont référencés"),

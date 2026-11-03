@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /opt/node26/bin/node --expose-gc --max-old-space-size=8192 "$(dirname "$0")/ms.js" "$@"

@@ -1,0 +1,16 @@
+getRawPointer function 0
+getFloat64 function 0
+setFloat64 function 0
+toArrayBuffer function 0
+exportArrayBuffer function 3
+dlopen function 2
+dlsym function 2
+DynamicLibrary function 1
+types object undefined
+getRawPointer(ArrayBuffer) = bigint 860793472n mod 64 = 0
+getRawPointer(view) = 860793480n
+setFloat64/getFloat64 : 3.25 3.25
+lecture au-delà de la vue (offset 2048) : 0
+toArrayBuffer : 64 3.25
+types : VOID,POINTER,BUFFER,ARRAY_BUFFER,FUNCTION,BOOL,CHAR,STRING,FLOAT,DOUBLE,INT_8,UINT_8,INT_16,UINT_16,INT_32,UINT_32,INT_64,UINT_64,FLOAT_32,FLOAT_64
+(node:2223) ExperimentalWarning: FFI is an experimental feature and might change at any time

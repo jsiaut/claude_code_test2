@@ -62,9 +62,11 @@ d'un processus.
   C les tient sur la pile : **erreur de mon implémentation**, corrigée en allouant les deux références une fois
   (remises à zéro à chaque requête) ; effet nul sur le temps (200 et 205 ms). Le reste des allocations de la variante
   vient du harnais, hors de la section chronométrée (le tri des latences par `compare`).
-* **(2d) K7 tuned** : exact sur le fait (3 mots par case), pas une erreur : le code fait ce qu'il annonce (« [clé ;
+* **(2d) K7 tuned** : exact sur le fait (3 mots par case), ~~pas une erreur : le code fait ce qu'il annonce (« [clé ;
   compteur ; somme] par case »), et les autres langages n'atteignent 16 octets par case que par des champs de 32 bits,
-  qu'OCaml n'a pas ; tasser clé et compteur dans un entier est une forme nouvelle. **Sensibilité** (644 → 560 ms).
+  qu'OCaml n'a pas ; tasser clé et compteur dans un entier est une forme nouvelle. **Sensibilité**~~ (644 → 560 ms).
+  **Corrigé le 3 novembre au soir (4.8)** : Java tasse clé et compteur dans un `long` pour tenir dans 16 octets ;
+  c'est une erreur de mon implémentation.
 * **(2e) K9 et K5** : **sensibilités.** K9 en `floatarray` : aucun gain avec flambda (35,9 → 35,5 ms ; `mt` 22,4 →
   20,1) ; ~~l'écart de la remarque vient d'OCaml 4.14 sans flambda, qui ne compile pas en ligne les accès `Bigarray`~~
   (supposition retirée après les mesures, voir 4.4). K5 à 8 accumulateurs : 69 → 65 ms ; JavaScript en utilise 8, Lua
@@ -269,3 +271,25 @@ change pas.
   meilleure variante, ou un seul 6,2 fois.
 * **Ce que je ne retiens pas** : OxCaml et OCaml 4.14, hors de la règle, ne sont pas mesurés (3.6).
 
+### 4.8 Correction du 3 novembre au soir : K7
+
+En vérifiant la remarque sur JavaScript (`docs/JAVASCRIPT.md`, section 2), j'ai relevé que la raison donnée en 2d pour
+garder K7 en sensibilité était fausse : Java atteint les 16 octets par case de la convention en tassant clé et
+compteur dans un `long` (« comme en C »), et OCaml peut faire de même dans un entier de 63 bits (clé sur 32 bits,
+compteur sous 2^25). Par la règle commune, les trois mots par case d'OCaml sont donc une erreur de mon implémentation,
+comme les quatre f64 par case de JavaScript. Le rapport déjà mesuré en paires sur la machine 20 (`tuned_p` /
+`ocaml_fix` : 589,1 → 515,4 ms, × 0,875 [0,795–0,951]) passe des sensibilités au classement publié
+(`analysis/ocaml_check.py` : O-code, O-E et réplication ; le scénario O-E-311 garde l'O-E d'avant, pour mémoire).
+Temps publié reporté : 1 433,8 → 1 254,6 ms ; le pont par le C (information) donnerait 1 217,6 ms, à 3 % du transfert.
+
+| Scénario | Score | Contrôle | Plafond | Défaut | Place | Haskell devant | Devant JavaScript |
+|---|---|---|---|---|---|---|---|
+| O-E du 3 novembre après-midi (O-E-311) | 23,80 | 23,2 | 19,1 | 32,1 | 18 | 99,6 % | 99,9 % |
+| **O-E (publié)** | **23,92** | 23,2 | 19,4 | 32,1 | 18 | 99,6 % | 99,9 % |
+| S-mesures (formes restantes) | 24,35 | 23,2 | 20,5 | 32,1 | 18 | 99,6 % | 99,9 % |
+| S-cases | 24,17 | 23,9 | 19,4 | 32,1 | 18 | 99,6 % | 99,9 % |
+| S-tout | 24,60 | 23,9 | 20,5 | 32,1 | 18 | 99,5 % | 99,9 % |
+
+OCaml gagne 0,12 point (K7 : 0,319 → 0,364 de la référence) et reste 18e ; S-mesures et S-tout ne changent pas, la
+forme y étant déjà. Le bilan (4.7) tient : de 24,01 à 23,92, le score ne monte toujours pas, et la remarque avait
+raison sur ce point de K7, que j'avais écarté à tort.

@@ -1049,3 +1049,19 @@ Robustesse :
   points 6 et 7 des résultats solides, limites (langages relus, report, versions optimisées), lecture et
   reproduction ; `docs/FINDINGS.md` (dont la taille de la particule d'OCaml), `docs/NOSIMD.md`,
   `docs/CONFRONTATION.md`.
+* 2026-11-03, 17 h 13 : **machine 21**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207, 4
+  vCPU ; 2,95 à 3,19 GHz effectifs, latence à 4 Mio 55 ns, DRAM 12,7 à 13,3 Go/s : `results/hw/machine21/`).
+* 2026-11-03 : **remarque sur JavaScript** transmise par l'utilisateur ; vérifications sans consulter de page web, sur
+  Node.js 26.12.1 (et Node.js 22.22.0, Bun 1.4.4), par le code machine de TurboFan (`--print-opt-code`) et des sondes
+  (`results/js_check/`). Erreur de mon implémentation : K7 tuned en cases de 32 octets, quand toutes les
+  implémentations qui disposent la mémoire en prennent 16 (Java en tassant clé et compteur dans un `long`). Par la
+  même règle, **erreur de mon classement pour OCaml** : son K7 à deux mots, mis en sensibilité au motif faux que les
+  autres n'atteignaient 16 octets que par des champs de 32 bits, passe au classement publié avec le rapport déjà
+  mesuré sur la machine 20 (× 0,875 ; `analysis/ocaml_check.py` rejoué : O-E 23,92 points contre 23,80, toujours 18e ;
+  `docs/OCAML.md`, 4.8 ; sorties publiées régénérées à la fin de la remarque sur JavaScript). Errata : E1 = 1
+  (`--print-opt-code` marche avec le binaire officiel), A4 = E6 = ½ (`node:ffi`, comme `ctypes` en Python). Texte :
+  les 416 octets sont ceux de V8 sans compression de pointeurs. Sensibilités : Q6, K9, K8 naturel (site d'allocation
+  distinct, contre le pretenuring de V8), K8 itératif, K5 et K1 soa en f64, cases C1, E2, A1, A2, A7. Q1 sous Node 22
+  en information (Node 26 deux fois plus lent, Turbolev n'y étant pour rien). Plan (`docs/JAVASCRIPT.md`, sections 1 à
+  3) : copies (`tools/js_check/make_copies.py`, 24 cellules validées), outil de mesure (`tools/measure_js.py`), script
+  d'analyse (`analysis/js_check.py`), errata et réplication poussés avant les mesures.

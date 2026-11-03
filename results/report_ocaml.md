@@ -47,6 +47,8 @@ Clés corrigées (reportées) en gras ; les autres ne changent que d'horloge (co
 | k9:natural | 57,06 | 53,46 | 0,937 | 0,858–1,002 |
 | k9:tuned | 42,05 | 46,56 | 1,107 | 1,028–1,205 |
 
+**Correction du 3 novembre au soir** (docs/OCAML.md, 4.8) : K7 tuned à deux mots par case est la convention (16 octets par case, comme en C ; Java tasse clé et compteur dans un long) ; son rapport, mesuré en sensibilité (k7_tuned_p ci-dessous), est reporté dans le classement publié. Le scénario O-E-311 garde l'O-E d'avant.
+
 ## Sensibilités (forme nouvelle / ocaml_fix, même hôte)
 
 | Sensibilité | Clé | Base (ms) | Forme nouvelle (ms) | Rapport | IC 95 % |
@@ -67,51 +69,52 @@ Clés corrigées (reportées) en gras ; les autres ne changent que d'horloge (co
 | pont k6:mt:q6 | k6:mt:q6 | 80,01 ms | 37,34 ms | 39,16 ms | -4,7 % | transfert | 0,467 |
 | pont k1:aos:energy | k1:aos:energy | 312,22 ms | 53,01 ms | 53,55 ms | -1,0 % | transfert | 0,170 |
 | pont k8:tuned | k8:tuned | 263,58 ms | 265,75 ms | 218,83 ms | 21,4 % | transfert | 1,008 |
+| pont k7:tuned | k7:tuned | 1433,85 ms | 1254,59 ms | 1217,61 ms | 3,0 % | transfert | 0,875 |
 
 ## Scénarios (analyse globale de la v3 rejouée, 20 000 variantes)
 
 | Scénario | Score d'OCaml | C | E | D | Rang espéré | Place | Rang 90 % | Voisins |
 |---|---|---|---|---|---|---|---|---|
 | Avant | 24,0 | 24,7 | 18,4 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
-| O-code | 24,3 | 24,7 | 19,1 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
+| O-code | 24,4 | 24,7 | 19,4 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 1 %; derrière JavaScript 100 % |
 | O-M | 23,5 | 23,2 | 18,4 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
-| O-E | 23,8 | 23,2 | 19,1 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
-| O-E-P | 23,8 | 23,2 | 19,1 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
-| S-Q6m | 23,9 | 23,2 | 19,3 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
-| S-K8v | 24,0 | 23,2 | 19,8 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
-| S-K7p | 23,9 | 23,2 | 19,4 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
-| S-K9fa | 23,9 | 23,2 | 19,3 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
-| S-K5 | 23,8 | 23,2 | 19,2 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
+| O-E | 23,9 | 23,2 | 19,4 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
+| O-E-P | 23,9 | 23,2 | 19,4 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
+| O-E-311 | 23,8 | 23,2 | 19,1 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
+| S-Q6m | 24,0 | 23,2 | 19,6 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
+| S-K8v | 24,2 | 23,2 | 20,1 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
+| S-K9fa | 24,0 | 23,2 | 19,6 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
+| S-K5 | 24,0 | 23,2 | 19,5 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
 | S-mesures | 24,4 | 23,2 | 20,5 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
-| S-cases | 24,0 | 23,9 | 19,1 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
+| S-cases | 24,2 | 23,9 | 19,4 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
 | S-tout | 24,6 | 23,9 | 20,5 | 32,1 | 18,00 | 18 | 18–18 | devant Haskell 0 %; derrière JavaScript 100 % |
 
 **Avant** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,0), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
-**O-code** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,3), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
+**O-code** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,4), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
 **O-M** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 23,5), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
-**O-E** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 23,8), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
+**O-E** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 23,9), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
-**O-E-P** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 23,8), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
+**O-E-P** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 23,9), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
-**S-Q6m** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 23,9), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
+**O-E-311** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 23,8), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
-**S-K8v** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,0), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
+**S-Q6m** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,0), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
-**S-K7p** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 23,9), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
+**S-K8v** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,2), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
-**S-K9fa** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 23,9), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
+**S-K9fa** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,0), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
-**S-K5** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 23,8), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
+**S-K5** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,0), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
 **S-mesures** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,4), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
-**S-cases** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,0), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
+**S-cases** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,2), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
 **S-tout** : 14. C# (14,13, 54,9), 15. Java (15,41, 47,2), 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,00, 24,6), 19. JavaScript (19,07, 14,3), 20. Python (20,30, 9,9).
 
 ## Rapports reportés sur la réplication (machine 3)
 
-k1:aos:energy 0,170, k6:mt:q6 0,467, k6:tuned:q6 0,409, k8:tuned 1,008.
+k1:aos:energy 0,170, k6:mt:q6 0,467, k6:tuned:q6 0,409, k7:tuned 0,875, k8:tuned 1,008.

@@ -1,0 +1,18 @@
+## rmw, node26
+a8  e813fae51f           call 0x7f0053e64900  (AtomicsAdd)    ;; near builtin entry
+153  e868f9e51f           call 0x7f0053e64900  (AtomicsAdd)    ;; near builtin entry
+8e  e86df4e51f           call 0x7f0053e64900  (AtomicsAdd)    ;; near builtin entry
+113  e8e8f3e51f           call 0x7f0053e64900  (AtomicsAdd)    ;; near builtin entry
+## sw, node26
+9c  e89fcee51f           call 0x7effd3e62000  (AtomicsLoad)    ;; near builtin entry
+f1  e88ad6e51f           call 0x7effd3e62840  (AtomicsStore)    ;; near builtin entry
+18a  e8b1cde51f           call 0x7effd3e62000  (AtomicsLoad)    ;; near builtin entry
+1df  e89cd5e51f           call 0x7effd3e62840  (AtomicsStore)    ;; near builtin entry
+## rmw, node22
+b6  e845bae81f           call 0x7f317ee51f40  (AtomicsAdd)    ;; near builtin entry
+14d  e8aeb9e81f           call 0x7f317ee51f40  (AtomicsAdd)    ;; near builtin entry
+## sw, node22
+aa  e8918be81f           call 0x7f492f64f500  (AtomicsLoad)    ;; near builtin entry
+fc  e8bf93e81f           call 0x7f492f64fd80  (AtomicsStore)    ;; near builtin entry
+18e  e8ad8ae81f           call 0x7f492f64f500  (AtomicsLoad)    ;; near builtin entry
+1e0  e8db92e81f           call 0x7f492f64fd80  (AtomicsStore)    ;; near builtin entry

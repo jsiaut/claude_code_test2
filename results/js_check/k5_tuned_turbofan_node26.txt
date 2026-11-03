@@ -1,0 +1,324 @@
+# k5Tuned (bench/js_k9h/ms.js), Node.js 26.12.1 (V8 14.6), TurboFan : boucle principale
+# MS_DATA=/opt/msdata node --expose-gc --print-opt-code --print-opt-code-filter=k5Tuned ms.js k5 tuned 2
+# décalage  instruction
+   280  REX.W movq rax,rbx
+   283  vmovapd xmm7,xmm5
+   287  vmovapd xmm5,xmm3
+   28b  vmovapd xmm15,xmm1
+   28f  vmovapd xmm1,xmm6
+   293  vmovapd xmm6,xmm15
+   298  cmpl rax,r8
+   29b  jge 0x7f9fd7007fda  <+0x51a>
+   2a1  REX.W cmpq rax,r8
+   2a4  jnc 0x7f9fd70082e3  <+0x823>
+   2aa  REX.W leaq rbx,[r11+r9*1]
+   2ae  vmovss xmm3,[rbx+rax*4]
+   2b3  REX.W cmpq rax,rdi
+   2b6  jnc 0x7f9fd7008337  <+0x877>
+   2bc  REX.W leaq rbx,[r14+r15*1]
+   2c0  vmovss xmm9,[rbx+rax*4]
+   2c5  REX.W movq rbx,rax
+   2c8  addl rbx,0x1
+   2cb  jo 0x7f9fd700828b  <+0x7cb>
+   2d1  REX.W cmpq rbx,r8
+   2d4  jnc 0x7f9fd700828f  <+0x7cf>
+   2da  REX.W leaq rdx,[r11+r9*1]
+   2de  vmovss xmm10,[rdx+rbx*4]
+   2e3  REX.W cmpq rbx,rdi
+   2e6  jnc 0x7f9fd7008293  <+0x7d3>
+   2ec  REX.W leaq rdx,[r14+r15*1]
+   2f0  vmovss xmm11,[rdx+rbx*4]
+   2f5  REX.W movq rbx,rax
+   2f8  addl rbx,0x2
+   2fb  jo 0x7f9fd7008297  <+0x7d7>
+   301  REX.W cmpq rbx,r8
+   304  jnc 0x7f9fd700829b  <+0x7db>
+   30a  REX.W leaq rdx,[r11+r9*1]
+   30e  vmovss xmm12,[rdx+rbx*4]
+   313  REX.W cmpq rbx,rdi
+   316  jnc 0x7f9fd700829f  <+0x7df>
+   31c  REX.W leaq rdx,[r14+r15*1]
+   320  vmovss xmm13,[rdx+rbx*4]
+   325  REX.W movq rbx,rax
+   328  addl rbx,0x3
+   32b  jo 0x7f9fd70082a3  <+0x7e3>
+   331  REX.W cmpq rbx,r8
+   334  jnc 0x7f9fd70082a7  <+0x7e7>
+   33a  REX.W leaq rdx,[r11+r9*1]
+   33e  vmovss xmm14,[rdx+rbx*4]
+   343  REX.W cmpq rbx,rdi
+   346  jnc 0x7f9fd70082ab  <+0x7eb>
+   34c  REX.W leaq rdx,[r14+r15*1]
+   350  vmovsd [rbp-0x38],xmm1
+   355  vmovss xmm1,[rdx+rbx*4]
+   35a  REX.W movq rbx,rax
+   35d  addl rbx,0x4
+   360  jo 0x7f9fd70082af  <+0x7ef>
+   366  REX.W cmpq rbx,r8
+   369  jnc 0x7f9fd70082b3  <+0x7f3>
+   36f  REX.W leaq rdx,[r11+r9*1]
+   373  vmovsd [rbp-0x20],xmm2
+   378  vmovss xmm2,[rdx+rbx*4]
+   37d  REX.W cmpq rbx,rdi
+   380  jnc 0x7f9fd7008287  <+0x7c7>
+   386  REX.W leaq rdx,[r14+r15*1]
+   38a  vmovsd [rbp-0x80],xmm4
+   38f  vmovss xmm4,[rdx+rbx*4]
+   394  REX.W movq rbx,rax
+   397  addl rbx,0x5
+   39a  jo 0x7f9fd70082bb  <+0x7fb>
+   3a0  REX.W cmpq rbx,r8
+   3a3  jnc 0x7f9fd70082bf  <+0x7ff>
+   3a9  REX.W leaq rdx,[r11+r9*1]
+   3ad  vmovsd [rbp-0x88],xmm6
+   3b5  vmovss xmm6,[rdx+rbx*4]
+   3ba  REX.W cmpq rbx,rdi
+   3bd  jnc 0x7f9fd70082c3  <+0x803>
+   3c3  REX.W leaq rdx,[r14+r15*1]
+   3c7  vmovsd [rbp-0xd8],xmm8
+   3cf  vmovss xmm8,[rdx+rbx*4]
+   3d4  REX.W movq rbx,rax
+   3d7  addl rbx,0x6
+   3da  jo 0x7f9fd70082c7  <+0x807>
+   3e0  REX.W cmpq rbx,r8
+   3e3  jnc 0x7f9fd70082cb  <+0x80b>
+   3e9  REX.W leaq rdx,[r11+r9*1]
+   3ed  vmovsd [rbp-0xd0],xmm7
+   3f5  vmovss xmm7,[rdx+rbx*4]
+   3fa  REX.W cmpq rbx,rdi
+   3fd  jnc 0x7f9fd70082cf  <+0x80f>
+   403  REX.W leaq rdx,[r14+r15*1]
+   407  vmovsd [rbp-0xc8],xmm5
+   40f  vmovss xmm5,[rdx+rbx*4]
+   414  REX.W movq rbx,rax
+   417  addl rbx,0x7
+   41a  jo 0x7f9fd70082d3  <+0x813>
+   420  REX.W cmpq rbx,r8
+   423  jnc 0x7f9fd70082d7  <+0x817>
+   429  REX.W leaq rdx,[r11+r9*1]
+   42d  vmovsd [rbp-0xc0],xmm0
+   435  vmovss xmm0,[rdx+rbx*4]
+   43a  REX.W cmpq rbx,rdi
+   43d  jnc 0x7f9fd70082db  <+0x81b>
+   443  REX.W leaq rdx,[r14+r15*1]
+   447  vmovsd [rbp-0x40],xmm3
+   44c  vmovss xmm3,[rdx+rbx*4]
+   451  vcvtss2sd xmm3,xmm3,xmm3
+   455  vcvtss2sd xmm0,xmm0,xmm0
+   459  vcvtss2sd xmm5,xmm5,xmm5
+   45d  vcvtss2sd xmm7,xmm7,xmm7
+   461  vcvtss2sd xmm8,xmm8,xmm8
+   466  vcvtss2sd xmm6,xmm6,xmm6
+   46a  vcvtss2sd xmm4,xmm4,xmm4
+   46e  vcvtss2sd xmm2,xmm2,xmm2
+   472  vcvtss2sd xmm1,xmm1,xmm1
+   476  vcvtss2sd xmm14,xmm14,xmm14
+   47b  vcvtss2sd xmm13,xmm13,xmm13
+   480  vcvtss2sd xmm12,xmm12,xmm12
+   485  vcvtss2sd xmm11,xmm11,xmm11
+   48a  vcvtss2sd xmm10,xmm10,xmm10
+   48f  vcvtss2sd xmm9,xmm9,xmm9
+   494  vmovsd [rbp-0x28],xmm9
+   499  vcvtss2sd xmm9,xmm9,[rbp-0x40]
+   49e  vmulsd xmm0,xmm3,xmm0
+   4a2  vmulsd xmm3,xmm5,xmm7
+   4a6  vmulsd xmm5,xmm8,xmm6
+   4aa  vmulsd xmm2,xmm4,xmm2
+   4ae  vmulsd xmm1,xmm1,xmm14
+   4b3  vmulsd xmm4,xmm13,xmm12
+   4b8  vmulsd xmm6,xmm11,xmm10
+   4bd  vmovsd xmm7,[rbp-0x28]
+   4c2  vmulsd xmm7,xmm7,xmm9
+   4c7  vaddsd xmm0,xmm0,[rbp-0xc0]
+   4cf  vaddsd xmm3,xmm3,[rbp-0xc8]
+   4d7  vaddsd xmm5,xmm5,[rbp-0xd0]
+   4df  vaddsd xmm8,xmm2,[rbp-0xd8]
+   4e7  vaddsd xmm1,xmm1,[rbp-0x88]
+   4ef  vaddsd xmm4,xmm4,[rbp-0x80]
+   4f4  vaddsd xmm2,xmm6,[rbp-0x20]
+   4f9  vaddsd xmm6,xmm7,[rbp-0x38]
+   4fe  REX.W movq rbx,rax
+   501  addl rbx,0x8
+   504  jo 0x7f9fd70082df  <+0x81f>
+   50a  cmpb [r13-0x4f] (external value (StackGuard::address_of_interrupt_request(StackGuard::InterruptLevel::kNoH
+   50f  jz 0x7f9fd7007d40  <+0x280>
+   515  jmp 0x7f9fd7008198  <+0x6d8>
+   51a  vmovapd xmm15,xmm0
+   51e  vmovapd xmm0,xmm2
+   522  vmovapd xmm2,xmm6
+   526  vmovapd xmm6,xmm15
+   52b  vmovapd xmm3,xmm4
+   52f  vmovapd xmm4,xmm7
+   533  vmovapd xmm7,xmm5
+   537  vmovapd xmm5,xmm8
+   53c  vaddsd xmm6,xmm6,xmm7
+   540  vaddsd xmm4,xmm4,xmm5
+   544  vaddsd xmm2,xmm2,xmm3
+   548  vaddsd xmm0,xmm0,xmm1
+   54c  vaddsd xmm1,xmm6,xmm4
+   550  vaddsd xmm0,xmm2,xmm0
+   554  vaddsd xmm0,xmm1,xmm0
+   558  vcvttsd2si rcx,xmm0
+   55c  vcvtlsi2sd xmm1,xmm15,rcx
+   560  vucomisd xmm1,xmm0
+   564  jpe 0x7f9fd700802c  <+0x56c>
+   566  jz 0x7f9fd7008077  <+0x5b7>
+   56c  REX.W movq rcx,[r13+0x50] (external value (IsolateData::new_allocation_info_top_address()))
+   570  REX.W leaq rdi,[rcx+0x10]
+   574  REX.W cmpq [r13+0x58] (external value (IsolateData::new_allocation_info_limit_address())),rdi
+   578  jna 0x7f9fd7008269  <+0x7a9>
+   57e  REX.W leaq rdi,[rcx+0x10]
+   582  REX.W movq [r13+0x50] (external value (IsolateData::new_allocation_info_top_address())),rdi
+   586  REX.W addq rcx,0x1
+   58a  REX.W movq rdi,[r13+0x2d0] (root (heap_number_map))
+   591  REX.W movq [rcx-0x1],rdi
+   595  vmovsd [rcx+0x7],xmm0
+   59a  REX.W movq rax,rcx
+   59d  REX.W movq rcx,[rbp-0x18]
+   5a1  REX.W movq rsp,rbp
+   5a4  pop rbp
+   5a5  REX.W cmpq rcx,0x3
+   5a9  jg 0x7f9fd700806e  <+0x5ae>
+   5ab  ret 0x18
+   5ae  pop r10
+   5b0  REX.W leaq rsp,[rsp+rcx*8]
+   5b4  push r10
+   5b6  retl
+   5b7  REX.W shlq rcx,32
+   5bb  REX.W movq rax,rcx
+   5be  jmp 0x7f9fd700805d  <+0x59d>
+   5c0  REX.W movq rcx,0x800000000
+   5ca  push rcx
+   5cb  REX.W movq rsi,0x39cd1437a641    ;; object: 0x39cd1437a641 <NativeContext[306]>
+   5d5  REX.W movq rbx,0x13ce290
+   5df  movl rax,0x1
+   5e4  call 0x7f9ff6e3ea40  (CEntry_Return1_ArgvOnStack_NoBuiltinExit)    ;; near builtin entry
+   5e9  jmp 0x7f9fd7007adc  <+0x1c>
+   5ee  REX.W movq [rbp-0x90],r14
+   5f5  REX.W movq [rbp-0x98],r15
+   5fc  REX.W movq [rbp-0xa0],rdi
+   603  REX.W movq [rbp-0xa8],r11
+   60a  REX.W movq [rbp-0xb0],r9
+   611  REX.W movq [rbp-0xb8],r8
+   618  vmovsd [rbp-0xc0],xmm0
+   620  vmovsd [rbp-0xc8],xmm5
+   628  vmovsd [rbp-0xd0],xmm7
+   630  vmovsd [rbp-0xd8],xmm8
+   638  vmovsd [rbp-0x88],xmm6
+   640  vmovsd [rbp-0x80],xmm4
+   645  vmovsd [rbp-0x20],xmm2
+   64a  vmovsd [rbp-0x38],xmm1
+   64f  xorl rax,rax
+   651  REX.W movq rbx,0x13ce130
+   65b  REX.W movq rsi,0x39cd1437a641    ;; object: 0x39cd1437a641 <NativeContext[306]>
+   665  call 0x7f9ff6e3ea40  (CEntry_Return1_ArgvOnStack_NoBuiltinExit)    ;; near builtin entry
+   66a  REX.W movq rcx,[rbp+0x18]
+   66e  REX.W movq r12,[rbp+0x20]
+   672  REX.W movq r14,[rbp-0x90]
+   679  REX.W movq r15,[rbp-0x98]
+   680  REX.W movq rdi,[rbp-0xa0]
+   687  REX.W movq r11,[rbp-0xa8]
+   68e  REX.W movq r9,[rbp-0xb0]
+   695  REX.W movq r8,[rbp-0xb8]
+   69c  vmovsd xmm0,[rbp-0xc0]
+   6a4  vmovsd xmm5,[rbp-0xc8]
+   6ac  vmovsd xmm7,[rbp-0xd0]
+   6b4  vmovsd xmm8,[rbp-0xd8]
+   6bc  vmovsd xmm6,[rbp-0x88]
+   6c4  vmovsd xmm4,[rbp-0x80]
+   6c9  vmovsd xmm2,[rbp-0x20]
+   6ce  vmovsd xmm1,[rbp-0x38]
+   6d3  jmp 0x7f9fd7007d2a  <+0x26a>
+   6d8  vmovsd [rbp-0x28],xmm6
+   6dd  vmovsd [rbp-0x40],xmm2
+   6e2  vmovsd [rbp-0x48],xmm4
+   6e7  vmovsd [rbp-0x50],xmm1
+   6ec  vmovsd [rbp-0x58],xmm8
+   6f1  vmovsd [rbp-0x60],xmm5
+   6f6  vmovsd [rbp-0x68],xmm3
+   6fb  vmovsd [rbp-0x70],xmm0
+   700  REX.W movq [rbp-0x78],rbx
+   704  REX.W movq [rbp-0x90],r14
+   70b  REX.W movq [rbp-0x98],r15
+   712  REX.W movq [rbp-0xa0],rdi
+   719  REX.W movq [rbp-0xa8],r11
+   720  REX.W movq [rbp-0xb0],r9
+   727  REX.W movq [rbp-0xb8],r8
+   72e  REX.W movq rbx,[rip+0xffffff1e]
+   735  xorl rax,rax
+   737  REX.W movq rsi,0x39cd1437a641    ;; object: 0x39cd1437a641 <NativeContext[306]>
+   741  call 0x7f9ff6e3ea40  (CEntry_Return1_ArgvOnStack_NoBuiltinExit)    ;; near builtin entry
+   746  REX.W movq rcx,[rbp+0x18]
+   74a  REX.W movq r12,[rbp+0x20]
+   74e  vmovsd xmm6,[rbp-0x28]
+   753  vmovsd xmm2,[rbp-0x40]
+   758  vmovsd xmm4,[rbp-0x48]
+   75d  vmovsd xmm1,[rbp-0x50]
+   762  vmovsd xmm8,[rbp-0x58]
+   767  vmovsd xmm5,[rbp-0x60]
+   76c  vmovsd xmm3,[rbp-0x68]
+   771  vmovsd xmm0,[rbp-0x70]
+   776  REX.W movq rbx,[rbp-0x78]
+   77a  REX.W movq r14,[rbp-0x90]
+   781  REX.W movq r15,[rbp-0x98]
+   788  REX.W movq rdi,[rbp-0xa0]
+   78f  REX.W movq r11,[rbp-0xa8]
+   796  REX.W movq r9,[rbp-0xb0]
+   79d  REX.W movq r8,[rbp-0xb8]
+   7a4  jmp 0x7f9fd7007d40  <+0x280>
+   7a9  movl rdx,0x10
+   7ae  vmovsd [rbp-0x20],xmm0
+   7b3  call 0x7f9ff6d90180  (AllocateInYoungGeneration)    ;; near builtin entry
+   7b8  REX.W leaq rcx,[rax-0x1]
+   7bc  vmovsd xmm0,[rbp-0x20]
+   7c1  jmp 0x7f9fd700803e  <+0x57e>
+   7c6  nop
+   7c7  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1dea'
+   7cb  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d8d'
+   7cf  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d8a'
+   7d3  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d95'
+   7d7  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1da8'
+   7db  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1da5'
+   7df  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1db0'
+   7e3  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1dc3'
+   7e7  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1dc0'
+   7eb  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1dcb'
+   7ef  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1de2'
+   7f3  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1ddf'
+   7f7  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d5a'
+   7fb  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1dfd'
+   7ff  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1dfa'
+   803  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e05'
+   807  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e18'
+   80b  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e15'
+   80f  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e20'
+   813  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e33'
+   817  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e30'
+   81b  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e3b'
+   81f  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d64'
+   823  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d77'
+   827  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d5a'
+   82b  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d56'
+   82f  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d77'
+   833  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d7e'
+   837  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d7e'
+   83b  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d7e'
+   83f  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d8a'
+   843  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d95'
+   847  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1da5'
+   84b  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1db0'
+   84f  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1dc0'
+   853  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1dcb'
+   857  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1ddf'
+   85b  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1dea'
+   85f  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1dfa'
+   863  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e05'
+   867  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e15'
+   86b  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e20'
+   86f  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e30'
+   873  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1e3b'
+   877  call [r13-0x28] (external value (IsolateData::builtin_tier0_entry_table_))    ;; debug: deopt position, script offset '1d7e'
+   87b  call [r13-0x20]    ;; debug: deopt position, script offset '1cbf'
+   87f  call [r13-0x20]    ;; debug: deopt position, script offset '1d44'
+   883  call [r13-0x20]    ;; debug: deopt position, script offset '1d44'
+   887  nop

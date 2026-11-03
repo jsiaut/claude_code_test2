@@ -1,0 +1,25 @@
+js_ref       k7  tuned                           ok rc=0 [1516.87] ms wall 4.1 s 1048575:4294504410765
+js_ref       k6  tuned                q6         ok rc=0 [97.99, 95.62] ms wall 0.8 s 45333132534
+js_ref       k6  mt                   q6         ok rc=0 [29.14, 42.56] ms wall 0.9 s 45333132534
+js_ref       k9  tuned                           ok rc=0 [74.14, 59.61] ms wall 0.4 s 2.095103199218750e+06
+js_ref       k9  mt                              ok rc=0 [24.32, 22.09] ms wall 0.3 s 2.095103199218750e+06
+js_ref       k8  natural                         ok rc=0 [1098.81] ms wall 4.3 s 2508056453121
+js_ref       k8  tuned                           ok rc=0 [404.39] ms wall 1.0 s 2508056453121
+js_ref       k5  tuned                           ok rc=0 [133.03, 129.24] ms wall 0.5 s 509.0857
+js_ref       k1  soa                  energy     ok rc=0 [22.25, 24.2] ms wall 1.5 s 1049202.377006
+js_ref       k6  tuned                q1         ok rc=0 [257.8, 255.82] ms wall 1.0 s 3997084032331541
+js_ref       k6  natural              q1         ok rc=0 [260.97, 333.09] ms wall 1.0 s 3997084032331541
+js_fix       k7  tuned                           ok rc=0 [861.13] ms wall 1.9 s 1048575:4294504410765
+js_fix       k5  tuned                           ok rc=0 [126.63, 128.0] ms wall 0.5 s 509.0857
+js_fix       k9  tuned                           ok rc=0 [57.97, 57.81] ms wall 0.4 s 2.095103199218750e+06
+js_exp       k6  tuned_m              q6         ok rc=0 [62.37, 58.33] ms wall 0.4 s 45333132534
+js_exp       k6  mt_m                 q6         ok rc=0 [22.27, 23.76] ms wall 0.5 s 45333132534
+js_exp       k9  tuned_v                         ok rc=0 [53.92, 52.22] ms wall 0.4 s 2.095103199218750e+06
+js_exp       k9  mt_v                            ok rc=0 [29.04, 24.49] ms wall 0.4 s 2.095103199218750e+06
+js_exp       k8  natural_s                       ok rc=0 [714.05] ms wall 1.6 s 2508056453121
+js_exp       k8  tuned_it                        ok rc=0 [293.44] ms wall 0.8 s 2508056453121
+js_exp       k5  tuned_f64                       ok rc=0 [119.78, 117.86] ms wall 0.4 s 509.0857
+js_exp       k1  soa_f64              energy     ok rc=0 [14.81, 14.73] ms wall 3.1 s 1049202.377006
+js_n22       k6  tuned                q1         ok rc=0 [142.72, 110.31] ms wall 0.6 s 3997084032331541
+js_n22       k6  natural              q1         ok rc=0 [151.35, 137.66] ms wall 0.7 s 3997084032331541
+cellules : 24, échecs : 0, manquantes : []
