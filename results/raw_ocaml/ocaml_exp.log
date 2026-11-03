@@ -1,0 +1,49 @@
+ocaml_exp  k7   tuned_p                         p0 n=3 med=0.527418s ok={True} rc=0 
+ocaml_exp  k6   tuned_m              q6         p0 n=10 med=0.072743s ok={True} rc=0 
+ocaml_exp  k6   mt_m                 q6         p0 n=10 med=0.027227s ok={True} rc=0 
+ocaml_exp  k5   tuned_8                         p0 n=10 med=0.066021s ok={True} rc=0 
+ocaml_exp  k9   mt_fa                           p0 n=10 med=0.022821s ok={True} rc=0 
+ocaml_exp  k9   tuned_fa                        p0 n=10 med=0.042221s ok={True} rc=0 
+ocaml_exp  k8   tuned_val                       p0 n=9 med=0.168767s ok={True} rc=0 
+ocaml_exp  k6   mt_m                 q6         p0 n=10 med=0.026162s ok={True} rc=0 
+ocaml_exp  k9   tuned_fa                        p0 n=10 med=0.046521s ok={True} rc=0 
+ocaml_exp  k9   mt_fa                           p0 n=10 med=0.026251s ok={True} rc=0 
+ocaml_exp  k6   tuned_m              q6         p0 n=10 med=0.071705s ok={True} rc=0 
+ocaml_exp  k7   tuned_p                         p0 n=3 med=0.561332s ok={True} rc=0 
+ocaml_exp  k8   tuned_val                       p0 n=9 med=0.159822s ok={True} rc=0 
+ocaml_exp  k5   tuned_8                         p0 n=10 med=0.066525s ok={True} rc=0 
+ocaml_exp  k7   tuned_p                         p0 n=3 med=0.587524s ok={True} rc=0 
+ocaml_exp  k5   tuned_8                         p0 n=10 med=0.096430s ok={True} rc=0 
+ocaml_exp  k9   mt_fa                           p0 n=10 med=0.024257s ok={True} rc=0 
+ocaml_exp  k9   tuned_fa                        p0 n=10 med=0.047785s ok={True} rc=0 
+ocaml_exp  k6   tuned_m              q6         p0 n=10 med=0.092256s ok={True} rc=0 
+ocaml_exp  k8   tuned_val                       p0 n=9 med=0.161720s ok={True} rc=0 
+ocaml_exp  k6   mt_m                 q6         p0 n=10 med=0.024656s ok={True} rc=0 
+ocaml_exp  k9   tuned_fa                        p0 n=10 med=0.043627s ok={True} rc=0 
+ocaml_exp  k8   tuned_val                       p0 n=9 med=0.162853s ok={True} rc=0 
+ocaml_exp  k6   mt_m                 q6         p0 n=10 med=0.028830s ok={True} rc=0 
+ocaml_exp  k7   tuned_p                         p0 n=3 med=0.563414s ok={True} rc=0 
+ocaml_exp  k6   tuned_m              q6         p0 n=10 med=0.073500s ok={True} rc=0 
+ocaml_exp  k5   tuned_8                         p0 n=10 med=0.064183s ok={True} rc=0 
+ocaml_exp  k9   mt_fa                           p0 n=10 med=0.025152s ok={True} rc=0 
+ocaml_exp  k7   tuned_p                         p0 n=3 med=0.414803s ok={True} rc=0 
+ocaml_exp  k6   mt_m                 q6         p0 n=10 med=0.026412s ok={True} rc=0 
+ocaml_exp  k6   tuned_m              q6         p0 n=10 med=0.071067s ok={True} rc=0 
+ocaml_exp  k8   tuned_val                       p0 n=9 med=0.154166s ok={True} rc=0 
+ocaml_exp  k5   tuned_8                         p0 n=10 med=0.063153s ok={True} rc=0 
+ocaml_exp  k9   mt_fa                           p0 n=10 med=0.023350s ok={True} rc=0 
+ocaml_exp  k9   tuned_fa                        p0 n=10 med=0.043248s ok={True} rc=0 
+ocaml_exp  k9   mt_fa                           p0 n=10 med=0.022895s ok={True} rc=0 
+ocaml_exp  k6   mt_m                 q6         p0 n=10 med=0.018878s ok={True} rc=0 
+ocaml_exp  k5   tuned_8                         p0 n=10 med=0.065452s ok={True} rc=0 
+ocaml_exp  k7   tuned_p                         p0 n=3 med=0.509981s ok={True} rc=0 
+ocaml_exp  k9   tuned_fa                        p0 n=10 med=0.043521s ok={True} rc=0 
+ocaml_exp  k8   tuned_val                       p0 n=9 med=0.153107s ok={True} rc=0 
+ocaml_exp  k6   tuned_m              q6         p0 n=10 med=0.073438s ok={True} rc=0 
+ocaml_exp  k5   tuned_8                         p0 n=10 med=0.065341s ok={True} rc=0 
+ocaml_exp  k9   mt_fa                           p0 n=10 med=0.022833s ok={True} rc=0 
+ocaml_exp  k7   tuned_p                         p0 n=3 med=0.466271s ok={True} rc=0 
+ocaml_exp  k6   mt_m                 q6         p0 n=10 med=0.019501s ok={True} rc=0 
+ocaml_exp  k6   tuned_m              q6         p0 n=10 med=0.074264s ok={True} rc=0 
+ocaml_exp  k8   tuned_val                       p0 n=9 med=0.159225s ok={True} rc=0 
+ocaml_exp  k9   tuned_fa                        p0 n=10 med=0.044033s ok={True} rc=0 

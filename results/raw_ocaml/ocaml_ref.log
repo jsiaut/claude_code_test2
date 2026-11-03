@@ -1,0 +1,252 @@
+ocaml_ref  k2   tuned                2097152    p0 n=10 med=0.195073s ok={True} rc=0 
+ocaml_ref  k1   natural_shuffled     energy     p0 n=3 med=0.206698s ok={True} rc=0 
+ocaml_ref  k2   tuned                268435456  p0 n=3 med=0.988356s ok={True} rc=0 
+ocaml_ref  k2   tuned                524288     p0 n=10 med=0.029099s ok={True} rc=0 
+ocaml_ref  k9   mt                              p0 n=10 med=0.021767s ok={True} rc=0 
+ocaml_ref  k1   aos                  energy     p0 n=9 med=0.258639s ok={True} rc=0 
+ocaml_ref  k3   rmw_padded                      p0 n=8 med=0.328677s ok={True} rc=0 
+ocaml_ref  k2   tuned                16777216   p0 n=4 med=0.680186s ok={True} rc=0 
+ocaml_ref  k2   tuned                67108864   p0 n=3 med=0.760026s ok={True} rc=0 
+ocaml_ref  k3   sw_padded                       p0 n=7 med=0.400937s ok={True} rc=0 
+ocaml_ref  k3   sw_packed                       p0 n=4 med=0.775852s ok={True} rc=0 
+ocaml_ref  k2   tuned                8388608    p0 n=5 med=0.299025s ok={True} rc=0 
+ocaml_ref  k6   natural              q6         p0 n=10 med=0.146491s ok={True} rc=0 
+ocaml_ref  k2   tuned                65536      p0 n=10 med=0.026232s ok={True} rc=0 
+ocaml_ref  k1   soa                  energy     p0 n=10 med=0.007075s ok={True} rc=0 
+ocaml_ref  k2   tuned                262144     p0 n=10 med=0.026637s ok={True} rc=0 
+ocaml_ref  k6   natural              q1         p0 n=10 med=0.104786s ok={True} rc=0 
+ocaml_ref  k8   natural                         p0 n=8 med=0.233345s ok={True} rc=0 
+ocaml_ref  k9   tuned                           p0 n=10 med=0.039950s ok={True} rc=0 
+ocaml_ref  k1   natural              energy     p0 n=10 med=0.081318s ok={True} rc=0 
+ocaml_ref  k9   natural                         p0 n=10 med=0.061282s ok={True} rc=0 
+ocaml_ref  k7   tuned                           p0 n=3 med=0.609240s ok={True} rc=0 
+ocaml_ref  k2   tuned                33554432   p0 n=4 med=0.707439s ok={True} rc=0 
+ocaml_ref  k3   rmw_packed                      p0 n=5 med=0.525130s ok={True} rc=0 
+ocaml_ref  k5   tuned                           p0 n=10 med=0.065970s ok={True} rc=0 
+ocaml_ref  k2   tuned                16384      p0 n=10 med=0.012584s ok={True} rc=0 
+ocaml_ref  k6   mt                   q6         p0 n=10 med=0.056618s ok={True} rc=0 
+ocaml_ref  k6   tuned                q1         p0 n=10 med=0.096131s ok={True} rc=0 
+ocaml_ref  k6   tuned                q6         p0 n=10 med=0.221153s ok={True} rc=0 
+ocaml_ref  k6   mt                   q1         p0 n=10 med=0.044768s ok={True} rc=0 
+ocaml_ref  k4   branchless_unsorted             p0 n=10 med=0.020670s ok={True} rc=0 
+ocaml_ref  k8   tuned                           p0 n=9 med=0.207140s ok={True} rc=0 
+ocaml_ref  k4   natural_sorted                  p0 n=10 med=0.018084s ok={True} rc=0 
+ocaml_ref  k7   natural                         p0 n=2 med=6.141437s ok={True} rc=0 
+ocaml_ref  k5   natural                         p0 n=7 med=0.222457s ok={True} rc=0 
+ocaml_ref  k4   natural_unsorted                p0 n=10 med=0.091618s ok={True} rc=0 
+ocaml_ref  k7   tuned                           p0 n=3 med=0.572978s ok={True} rc=0 
+ocaml_ref  k2   tuned                16384      p0 n=10 med=0.013442s ok={True} rc=0 
+ocaml_ref  k1   natural_shuffled     energy     p0 n=3 med=0.241434s ok={True} rc=0 
+ocaml_ref  k6   natural              q6         p0 n=10 med=0.151742s ok={True} rc=0 
+ocaml_ref  k2   tuned                33554432   p0 n=4 med=0.750868s ok={True} rc=0 
+ocaml_ref  k8   tuned                           p0 n=9 med=0.198826s ok={True} rc=0 
+ocaml_ref  k4   natural_sorted                  p0 n=10 med=0.022720s ok={True} rc=0 
+ocaml_ref  k6   natural              q1         p0 n=10 med=0.105905s ok={True} rc=0 
+ocaml_ref  k2   tuned                8388608    p0 n=5 med=0.258969s ok={True} rc=0 
+ocaml_ref  k5   natural                         p0 n=7 med=0.226317s ok={True} rc=0 
+ocaml_ref  k6   mt                   q6         p0 n=10 med=0.060788s ok={True} rc=0 
+ocaml_ref  k2   tuned                524288     p0 n=10 med=0.029031s ok={True} rc=0 
+ocaml_ref  k5   tuned                           p0 n=10 med=0.066354s ok={True} rc=0 
+ocaml_ref  k1   aos                  energy     p0 n=9 med=0.272110s ok={True} rc=0 
+ocaml_ref  k9   natural                         p0 n=10 med=0.053834s ok={True} rc=0 
+ocaml_ref  k6   tuned                q1         p0 n=10 med=0.103474s ok={True} rc=0 
+ocaml_ref  k7   natural                         p0 n=2 med=6.816766s ok={True} rc=0 
+ocaml_ref  k6   tuned                q6         p0 n=10 med=0.211897s ok={True} rc=0 
+ocaml_ref  k9   tuned                           p0 n=10 med=0.042940s ok={True} rc=0 
+ocaml_ref  k2   tuned                16777216   p0 n=4 med=0.711375s ok={True} rc=0 
+ocaml_ref  k1   natural              energy     p0 n=10 med=0.088849s ok={True} rc=0 
+ocaml_ref  k3   rmw_padded                      p0 n=8 med=0.335118s ok={True} rc=0 
+ocaml_ref  k2   tuned                67108864   p0 n=3 med=0.764676s ok={True} rc=0 
+ocaml_ref  k2   tuned                2097152    p0 n=10 med=0.191327s ok={True} rc=0 
+ocaml_ref  k4   natural_unsorted                p0 n=10 med=0.093132s ok={True} rc=0 
+ocaml_ref  k9   mt                              p0 n=10 med=0.026927s ok={True} rc=0 
+ocaml_ref  k2   tuned                262144     p0 n=10 med=0.027884s ok={True} rc=0 
+ocaml_ref  k4   branchless_unsorted             p0 n=10 med=0.020990s ok={True} rc=0 
+ocaml_ref  k8   natural                         p0 n=8 med=0.248809s ok={True} rc=0 
+ocaml_ref  k2   tuned                268435456  p0 n=3 med=0.998393s ok={True} rc=0 
+ocaml_ref  k1   soa                  energy     p0 n=10 med=0.007611s ok={True} rc=0 
+ocaml_ref  k2   tuned                65536      p0 n=10 med=0.027031s ok={True} rc=0 
+ocaml_ref  k3   sw_padded                       p0 n=7 med=0.415540s ok={True} rc=0 
+ocaml_ref  k3   sw_packed                       p0 n=4 med=0.759784s ok={True} rc=0 
+ocaml_ref  k6   mt                   q1         p0 n=10 med=0.043275s ok={True} rc=0 
+ocaml_ref  k3   rmw_packed                      p0 n=5 med=0.609004s ok={True} rc=0 
+ocaml_ref  k5   natural                         p0 n=7 med=0.195432s ok={True} rc=0 
+ocaml_ref  k6   mt                   q1         p0 n=10 med=0.044290s ok={True} rc=0 
+ocaml_ref  k1   aos                  energy     p0 n=9 med=0.291739s ok={True} rc=0 
+ocaml_ref  k4   branchless_unsorted             p0 n=10 med=0.025261s ok={True} rc=0 
+ocaml_ref  k1   natural_shuffled     energy     p0 n=3 med=0.266164s ok={True} rc=0 
+ocaml_ref  k6   mt                   q6         p0 n=10 med=0.060565s ok={True} rc=0 
+ocaml_ref  k9   natural                         p0 n=10 med=0.073654s ok={True} rc=0 
+ocaml_ref  k2   tuned                33554432   p0 n=4 med=0.725218s ok={True} rc=0 
+ocaml_ref  k4   natural_sorted                  p0 n=10 med=0.019017s ok={True} rc=0 
+ocaml_ref  k6   tuned                q6         p0 n=10 med=0.211532s ok={True} rc=0 
+ocaml_ref  k2   tuned                524288     p0 n=10 med=0.029000s ok={True} rc=0 
+ocaml_ref  k2   tuned                8388608    p0 n=5 med=0.292143s ok={True} rc=0 
+ocaml_ref  k3   rmw_padded                      p0 n=8 med=0.323204s ok={True} rc=0 
+ocaml_ref  k2   tuned                16777216   p0 n=4 med=0.668491s ok={True} rc=0 
+ocaml_ref  k3   sw_padded                       p0 n=7 med=0.463696s ok={True} rc=0 
+ocaml_ref  k5   tuned                           p0 n=10 med=0.112847s ok={True} rc=0 
+ocaml_ref  k2   tuned                65536      p0 n=10 med=0.026706s ok={True} rc=0 
+ocaml_ref  k1   natural              energy     p0 n=10 med=0.086039s ok={True} rc=0 
+ocaml_ref  k3   sw_packed                       p0 n=4 med=0.780696s ok={True} rc=0 
+ocaml_ref  k2   tuned                268435456  p0 n=3 med=0.958759s ok={True} rc=0 
+ocaml_ref  k8   natural                         p0 n=8 med=0.211397s ok={True} rc=0 
+ocaml_ref  k6   tuned                q1         p0 n=10 med=0.103924s ok={True} rc=0 
+ocaml_ref  k2   tuned                67108864   p0 n=3 med=0.847422s ok={True} rc=0 
+ocaml_ref  k7   tuned                           p0 n=3 med=0.681845s ok={True} rc=0 
+ocaml_ref  k2   tuned                2097152    p0 n=10 med=0.190520s ok={True} rc=0 
+ocaml_ref  k7   natural                         p0 n=2 med=6.604779s ok={True} rc=0 
+ocaml_ref  k8   tuned                           p0 n=9 med=0.199532s ok={True} rc=0 
+ocaml_ref  k9   tuned                           p0 n=10 med=0.043640s ok={True} rc=0 
+ocaml_ref  k4   natural_unsorted                p0 n=10 med=0.094986s ok={True} rc=0 
+ocaml_ref  k2   tuned                262144     p0 n=10 med=0.026160s ok={True} rc=0 
+ocaml_ref  k1   soa                  energy     p0 n=10 med=0.011173s ok={True} rc=0 
+ocaml_ref  k6   natural              q1         p0 n=10 med=0.102457s ok={True} rc=0 
+ocaml_ref  k6   natural              q6         p0 n=10 med=0.151839s ok={True} rc=0 
+ocaml_ref  k3   rmw_packed                      p0 n=5 med=0.531250s ok={True} rc=0 
+ocaml_ref  k2   tuned                16384      p0 n=10 med=0.011950s ok={True} rc=0 
+ocaml_ref  k9   mt                              p0 n=10 med=0.025436s ok={True} rc=0 
+ocaml_ref  k2   tuned                65536      p0 n=10 med=0.026703s ok={True} rc=0 
+ocaml_ref  k2   tuned                16384      p0 n=10 med=0.011834s ok={True} rc=0 
+ocaml_ref  k6   natural              q1         p0 n=10 med=0.113283s ok={True} rc=0 
+ocaml_ref  k8   tuned                           p0 n=9 med=0.204086s ok={True} rc=0 
+ocaml_ref  k1   soa                  energy     p0 n=10 med=0.007896s ok={True} rc=0 
+ocaml_ref  k2   tuned                268435456  p0 n=3 med=1.014110s ok={True} rc=0 
+ocaml_ref  k1   natural_shuffled     energy     p0 n=3 med=0.236228s ok={True} rc=0 
+ocaml_ref  k6   tuned                q1         p0 n=10 med=0.097189s ok={True} rc=0 
+ocaml_ref  k1   aos                  energy     p0 n=9 med=0.250144s ok={True} rc=0 
+ocaml_ref  k2   tuned                67108864   p0 n=3 med=0.766676s ok={True} rc=0 
+ocaml_ref  k4   branchless_unsorted             p0 n=10 med=0.020582s ok={True} rc=0 
+ocaml_ref  k6   tuned                q6         p0 n=10 med=0.222946s ok={True} rc=0 
+ocaml_ref  k9   tuned                           p0 n=10 med=0.046821s ok={True} rc=0 
+ocaml_ref  k5   tuned                           p0 n=10 med=0.083077s ok={True} rc=0 
+ocaml_ref  k2   tuned                33554432   p0 n=4 med=0.754296s ok={True} rc=0 
+ocaml_ref  k3   rmw_padded                      p0 n=8 med=0.312544s ok={True} rc=0 
+ocaml_ref  k3   sw_padded                       p0 n=7 med=0.395402s ok={True} rc=0 
+ocaml_ref  k6   mt                   q1         p0 n=10 med=0.043414s ok={True} rc=0 
+ocaml_ref  k2   tuned                524288     p0 n=10 med=0.028587s ok={True} rc=0 
+ocaml_ref  k4   natural_sorted                  p0 n=10 med=0.025479s ok={True} rc=0 
+ocaml_ref  k4   natural_unsorted                p0 n=10 med=0.091304s ok={True} rc=0 
+ocaml_ref  k3   rmw_packed                      p0 n=5 med=0.560109s ok={True} rc=0 
+ocaml_ref  k7   tuned                           p0 n=3 med=0.539558s ok={True} rc=0 
+ocaml_ref  k3   sw_packed                       p0 n=4 med=0.746532s ok={True} rc=0 
+ocaml_ref  k2   tuned                8388608    p0 n=5 med=0.283703s ok={True} rc=0 
+ocaml_ref  k9   mt                              p0 n=10 med=0.027672s ok={True} rc=0 
+ocaml_ref  k1   natural              energy     p0 n=10 med=0.083167s ok={True} rc=0 
+ocaml_ref  k9   natural                         p0 n=10 med=0.053758s ok={True} rc=0 
+ocaml_ref  k8   natural                         p0 n=8 med=0.229174s ok={True} rc=0 
+ocaml_ref  k2   tuned                262144     p0 n=10 med=0.026129s ok={True} rc=0 
+ocaml_ref  k2   tuned                2097152    p0 n=10 med=0.190208s ok={True} rc=0 
+ocaml_ref  k7   natural                         p0 n=2 med=6.577700s ok={True} rc=0 
+ocaml_ref  k6   mt                   q6         p0 n=10 med=0.060189s ok={True} rc=0 
+ocaml_ref  k2   tuned                16777216   p0 n=4 med=0.690430s ok={True} rc=0 
+ocaml_ref  k6   natural              q6         p0 n=10 med=0.152600s ok={True} rc=0 
+ocaml_ref  k5   natural                         p0 n=7 med=0.190284s ok={True} rc=0 
+ocaml_ref  k9   natural                         p0 n=10 med=0.053299s ok={True} rc=0 
+ocaml_ref  k9   tuned                           p0 n=10 med=0.043130s ok={True} rc=0 
+ocaml_ref  k4   branchless_unsorted             p0 n=10 med=0.020280s ok={True} rc=0 
+ocaml_ref  k1   natural              energy     p0 n=10 med=0.077735s ok={True} rc=0 
+ocaml_ref  k3   rmw_packed                      p0 n=5 med=0.530779s ok={True} rc=0 
+ocaml_ref  k2   tuned                268435456  p0 n=3 med=0.916155s ok={True} rc=0 
+ocaml_ref  k2   tuned                65536      p0 n=10 med=0.026222s ok={True} rc=0 
+ocaml_ref  k1   soa                  energy     p0 n=10 med=0.007896s ok={True} rc=0 
+ocaml_ref  k2   tuned                16384      p0 n=10 med=0.011822s ok={True} rc=0 
+ocaml_ref  k2   tuned                2097152    p0 n=10 med=0.197810s ok={True} rc=0 
+ocaml_ref  k7   tuned                           p0 n=3 med=0.544897s ok={True} rc=0 
+ocaml_ref  k2   tuned                262144     p0 n=10 med=0.026100s ok={True} rc=0 
+ocaml_ref  k6   natural              q1         p0 n=10 med=0.104704s ok={True} rc=0 
+ocaml_ref  k2   tuned                524288     p0 n=10 med=0.028791s ok={True} rc=0 
+ocaml_ref  k5   natural                         p0 n=7 med=0.199231s ok={True} rc=0 
+ocaml_ref  k4   natural_sorted                  p0 n=10 med=0.018334s ok={True} rc=0 
+ocaml_ref  k5   tuned                           p0 n=10 med=0.064644s ok={True} rc=0 
+ocaml_ref  k7   natural                         p0 n=2 med=6.719274s ok={True} rc=0 
+ocaml_ref  k4   natural_unsorted                p0 n=10 med=0.095891s ok={True} rc=0 
+ocaml_ref  k6   mt                   q6         p0 n=10 med=0.060767s ok={True} rc=0 
+ocaml_ref  k2   tuned                67108864   p0 n=3 med=0.732503s ok={True} rc=0 
+ocaml_ref  k1   aos                  energy     p0 n=9 med=0.269168s ok={True} rc=0 
+ocaml_ref  k2   tuned                8388608    p0 n=5 med=0.282733s ok={True} rc=0 
+ocaml_ref  k6   natural              q6         p0 n=10 med=0.151425s ok={True} rc=0 
+ocaml_ref  k8   natural                         p0 n=8 med=0.241641s ok={True} rc=0 
+ocaml_ref  k6   tuned                q1         p0 n=10 med=0.098845s ok={True} rc=0 
+ocaml_ref  k9   mt                              p0 n=10 med=0.025247s ok={True} rc=0 
+ocaml_ref  k3   rmw_padded                      p0 n=8 med=0.282520s ok={True} rc=0 
+ocaml_ref  k2   tuned                33554432   p0 n=4 med=0.728311s ok={True} rc=0 
+ocaml_ref  k6   mt                   q1         p0 n=10 med=0.034536s ok={True} rc=0 
+ocaml_ref  k3   sw_packed                       p0 n=4 med=0.765123s ok={True} rc=0 
+ocaml_ref  k6   tuned                q6         p0 n=10 med=0.211459s ok={True} rc=0 
+ocaml_ref  k3   sw_padded                       p0 n=7 med=0.409106s ok={True} rc=0 
+ocaml_ref  k1   natural_shuffled     energy     p0 n=3 med=0.232151s ok={True} rc=0 
+ocaml_ref  k2   tuned                16777216   p0 n=4 med=0.614911s ok={True} rc=0 
+ocaml_ref  k8   tuned                           p0 n=9 med=0.212052s ok={True} rc=0 
+ocaml_ref  k2   tuned                16384      p0 n=10 med=0.011851s ok={True} rc=0 
+ocaml_ref  k2   tuned                262144     p0 n=10 med=0.027120s ok={True} rc=0 
+ocaml_ref  k2   tuned                8388608    p0 n=5 med=0.252510s ok={True} rc=0 
+ocaml_ref  k2   tuned                33554432   p0 n=4 med=0.704160s ok={True} rc=0 
+ocaml_ref  k5   natural                         p0 n=7 med=0.205777s ok={True} rc=0 
+ocaml_ref  k4   natural_sorted                  p0 n=10 med=0.017673s ok={True} rc=0 
+ocaml_ref  k2   tuned                67108864   p0 n=3 med=0.736023s ok={True} rc=0 
+ocaml_ref  k6   natural              q1         p0 n=10 med=0.100122s ok={True} rc=0 
+ocaml_ref  k8   natural                         p0 n=8 med=0.231188s ok={True} rc=0 
+ocaml_ref  k2   tuned                65536      p0 n=10 med=0.027431s ok={True} rc=0 
+ocaml_ref  k2   tuned                2097152    p0 n=10 med=0.189210s ok={True} rc=0 
+ocaml_ref  k3   rmw_packed                      p0 n=5 med=0.523492s ok={True} rc=0 
+ocaml_ref  k1   soa                  energy     p0 n=10 med=0.008296s ok={True} rc=0 
+ocaml_ref  k6   tuned                q1         p0 n=10 med=0.097505s ok={True} rc=0 
+ocaml_ref  k4   branchless_unsorted             p0 n=10 med=0.020717s ok={True} rc=0 
+ocaml_ref  k6   mt                   q1         p0 n=10 med=0.037394s ok={True} rc=0 
+ocaml_ref  k6   natural              q6         p0 n=10 med=0.154208s ok={True} rc=0 
+ocaml_ref  k7   natural                         p0 n=2 med=6.174341s ok={True} rc=0 
+ocaml_ref  k6   mt                   q6         p0 n=10 med=0.060853s ok={True} rc=0 
+ocaml_ref  k6   tuned                q6         p0 n=10 med=0.214261s ok={True} rc=0 
+ocaml_ref  k3   sw_packed                       p0 n=4 med=0.807966s ok={True} rc=0 
+ocaml_ref  k1   natural              energy     p0 n=10 med=0.076480s ok={True} rc=0 
+ocaml_ref  k1   natural_shuffled     energy     p0 n=3 med=0.218844s ok={True} rc=0 
+ocaml_ref  k9   tuned                           p0 n=10 med=0.044588s ok={True} rc=0 
+ocaml_ref  k2   tuned                16777216   p0 n=4 med=0.571826s ok={True} rc=0 
+ocaml_ref  k5   tuned                           p0 n=10 med=0.065227s ok={True} rc=0 
+ocaml_ref  k3   sw_padded                       p0 n=7 med=0.392154s ok={True} rc=0 
+ocaml_ref  k7   tuned                           p0 n=3 med=0.527821s ok={True} rc=0 
+ocaml_ref  k8   tuned                           p0 n=9 med=0.198932s ok={True} rc=0 
+ocaml_ref  k9   mt                              p0 n=10 med=0.023647s ok={True} rc=0 
+ocaml_ref  k3   rmw_padded                      p0 n=8 med=0.305654s ok={True} rc=0 
+ocaml_ref  k2   tuned                268435456  p0 n=3 med=0.956017s ok={True} rc=0 
+ocaml_ref  k1   aos                  energy     p0 n=9 med=0.270717s ok={True} rc=0 
+ocaml_ref  k2   tuned                524288     p0 n=10 med=0.029183s ok={True} rc=0 
+ocaml_ref  k4   natural_unsorted                p0 n=10 med=0.089934s ok={True} rc=0 
+ocaml_ref  k9   natural                         p0 n=10 med=0.055979s ok={True} rc=0 
+ocaml_ref  k1   natural              energy     p0 n=10 med=0.075484s ok={True} rc=0 
+ocaml_ref  k3   sw_padded                       p0 n=7 med=0.395996s ok={True} rc=0 
+ocaml_ref  k6   mt                   q1         p0 n=10 med=0.039501s ok={True} rc=0 
+ocaml_ref  k8   natural                         p0 n=8 med=0.229639s ok={True} rc=0 
+ocaml_ref  k3   rmw_packed                      p0 n=5 med=0.521380s ok={True} rc=0 
+ocaml_ref  k8   tuned                           p0 n=9 med=0.221776s ok={True} rc=0 
+ocaml_ref  k6   tuned                q6         p0 n=10 med=0.211459s ok={True} rc=0 
+ocaml_ref  k2   tuned                524288     p0 n=10 med=0.031065s ok={True} rc=0 
+ocaml_ref  k2   tuned                33554432   p0 n=4 med=0.744122s ok={True} rc=0 
+ocaml_ref  k6   natural              q6         p0 n=10 med=0.157712s ok={True} rc=0 
+ocaml_ref  k5   tuned                           p0 n=10 med=0.064453s ok={True} rc=0 
+ocaml_ref  k2   tuned                16384      p0 n=10 med=0.011889s ok={True} rc=0 
+ocaml_ref  k4   natural_sorted                  p0 n=10 med=0.017186s ok={True} rc=0 
+ocaml_ref  k6   tuned                q1         p0 n=10 med=0.099144s ok={True} rc=0 
+ocaml_ref  k1   aos                  energy     p0 n=9 med=0.255329s ok={True} rc=0 
+ocaml_ref  k3   rmw_padded                      p0 n=8 med=0.289106s ok={True} rc=0 
+ocaml_ref  k2   tuned                65536      p0 n=10 med=0.026245s ok={True} rc=0 
+ocaml_ref  k7   natural                         p0 n=2 med=5.906979s ok={True} rc=0 
+ocaml_ref  k1   natural_shuffled     energy     p0 n=3 med=0.253249s ok={True} rc=0 
+ocaml_ref  k2   tuned                268435456  p0 n=3 med=0.949603s ok={True} rc=0 
+ocaml_ref  k4   branchless_unsorted             p0 n=10 med=0.020590s ok={True} rc=0 
+ocaml_ref  k7   tuned                           p0 n=3 med=0.511062s ok={True} rc=0 
+ocaml_ref  k9   mt                              p0 n=10 med=0.025460s ok={True} rc=0 
+ocaml_ref  k5   natural                         p0 n=7 med=0.195185s ok={True} rc=0 
+ocaml_ref  k3   sw_packed                       p0 n=4 med=0.795482s ok={True} rc=0 
+ocaml_ref  k2   tuned                8388608    p0 n=5 med=0.233254s ok={True} rc=0 
+ocaml_ref  k2   tuned                262144     p0 n=10 med=0.026133s ok={True} rc=0 
+ocaml_ref  k9   natural                         p0 n=10 med=0.054820s ok={True} rc=0 
+ocaml_ref  k4   natural_unsorted                p0 n=10 med=0.096920s ok={True} rc=0 
+ocaml_ref  k6   mt                   q6         p0 n=10 med=0.059219s ok={True} rc=0 
+ocaml_ref  k2   tuned                67108864   p0 n=3 med=0.735345s ok={True} rc=0 
+ocaml_ref  k6   natural              q1         p0 n=10 med=0.105789s ok={True} rc=0 
+ocaml_ref  k2   tuned                2097152    p0 n=10 med=0.160798s ok={True} rc=0 
+ocaml_ref  k9   tuned                           p0 n=10 med=0.035657s ok={True} rc=0 
+ocaml_ref  k2   tuned                16777216   p0 n=4 med=0.569590s ok={True} rc=0 
+ocaml_ref  k1   soa                  energy     p0 n=10 med=0.006905s ok={True} rc=0 
