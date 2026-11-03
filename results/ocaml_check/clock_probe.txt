@@ -1,0 +1,4 @@
+gettimeofday : 75.9 ns par paire, 0.00 mots alloués par paire, médiane de l'écart 0 ns
+Runtime_events : 59.7 ns par paire, 0.00 mots alloués par paire, médiane de l'écart 29 ns
+gettimeofday : 74.0 ns par paire, 0.00 mots alloués par paire, médiane de l'écart 0 ns
+Runtime_events : 61.6 ns par paire, 0.00 mots alloués par paire, médiane de l'écart 29 ns

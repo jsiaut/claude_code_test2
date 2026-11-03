@@ -1015,3 +1015,14 @@ Robustesse :
   grandes marches, errata, limites (langages relus, nombre de fils, bibliothèque standard, report par transfert),
   versions optimisées, lecture et reproduction ; `docs/NATURAL.md`, `docs/FINDINGS.md`, `docs/NOSIMD.md`,
   `docs/CONFRONTATION.md`.
+* 2026-11-03, 15 h 02 : **machine 20**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207, 4 vCPU ;
+  2,93 à 3,19 GHz effectifs, latence à 4 Mio 55 ns, DRAM 12,2 à 12,9 Go/s : `results/hw/machine20/`).
+* 2026-11-03 : **remarque sur OCaml** transmise par l'utilisateur ; vérifications sans consulter de page web, sur OCaml
+  5.5.2 avec flambda, par la bibliothèque standard installée, le désassemblage et des sondes (`results/ocaml_check/`).
+  Erreurs de mon implémentation : Q6 tuned branchait encore (`&&` en court-circuit) ; K1 aos appelait `pow` ; l'arène
+  de K8 allouait deux références par requête ; l'horloge (`Unix.gettimeofday`) était murale et à la microseconde, quand
+  `Runtime_events.Timestamp.get_current`, monotone et à la nanoseconde, est livrée depuis 5.4. Erratum : D5 à ½.
+  Sensibilités : Q6 au masque de signe, arène par valeur, K7 à deux mots par case, K9 en `floatarray` (sans gain avec
+  flambda), K5 à huit accumulateurs, E7. Plan (`docs/OCAML.md`, sections 1 à 3) : seules les clés dont le code change
+  sont reportées, par transfert ; copies (`tools/ocaml_check/make_copies.py`, 79 cellules validées), outil de mesure
+  (`tools/measure_ocaml.py`), script d'analyse, erratum et contrôles de l'état actuel poussés avant les mesures.

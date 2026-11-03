@@ -1,0 +1,88 @@
+00000000000d7b10 <camlMs.q6_tuned_1952>:
+   d7b10:	mov    %rax,%r12
+   d7b13:	mov    $0x1,%r13d
+   d7b19:	mov    %rbx,%r9
+   d7b1c:	add    $0xfffffffffffffffe,%rdi
+   d7b20:	cmp    %rdi,%r9
+   d7b23:	jg     d7c39 <camlMs.q6_tuned_1952+0x129>
+   d7b29:	mov    (%r12),%rax
+   d7b2d:	mov    %r9,%rbx
+   d7b30:	shl    $1,%rbx
+   d7b33:	mov    0x8(%rax),%rax
+   d7b37:	add    %rbx,%rax
+   d7b3a:	add    $0xfffffffffffffffe,%rax
+   d7b3e:	movslq (%rax),%rcx
+   d7b41:	shl    $0x20,%rcx
+   d7b45:	sar    $0x1f,%rcx
+   d7b49:	or     $0x1,%rcx
+   d7b4d:	mov    0x18(%r12),%rax
+   d7b52:	mov    %r9,%rbx
+   d7b55:	sar    $1,%rbx
+   d7b58:	mov    0x8(%rax),%rax
+   d7b5c:	add    %rbx,%rax
+   d7b5f:	movzbq (%rax),%r8
+   d7b63:	shl    $1,%r8
+   d7b66:	inc    %r8
+   d7b69:	mov    0x10(%r12),%rax
+   d7b6e:	mov    0x8(%rax),%rax
+   d7b72:	add    %rbx,%rax
+   d7b75:	movzbq (%rax),%rax
+   d7b79:	shl    $1,%rax
+   d7b7c:	inc    %rax
+   d7b7f:	cmp    $0x31,%rax
+   d7b83:	setl   %al
+   d7b86:	movzbq %al,%rdx
+   d7b8a:	shl    $1,%rdx
+   d7b8d:	inc    %rdx
+   d7b90:	mov    %r8,%rax
+   d7b93:	add    $0xfffffffffffffff6,%rax
+   d7b97:	cmp    $0x1,%rax
+   d7b9b:	jl     d7bb0 <camlMs.q6_tuned_1952+0xa0>
+   d7b9d:	cmp    $0x5,%rax
+   d7ba1:	setle  %al
+   d7ba4:	movzbq %al,%rax
+   d7ba8:	lea    0x1(%rax,%rax,1),%rsi
+   d7bad:	jmp    d7bb5 <camlMs.q6_tuned_1952+0xa5>
+   d7baf:	nop
+   d7bb0:	mov    $0x1,%esi
+   d7bb5:	add    $0xffffffffffffbb84,%rcx
+   d7bbc:	cmp    $0x1,%rcx
+   d7bc0:	jl     d7bd8 <camlMs.q6_tuned_1952+0xc8>
+   d7bc2:	cmp    $0x2db,%rcx
+   d7bc9:	setl   %al
+   d7bcc:	movzbq %al,%rax
+   d7bd0:	lea    0x1(%rax,%rax,1),%rax
+   d7bd5:	jmp    d7bdd <camlMs.q6_tuned_1952+0xcd>
+   d7bd7:	nop
+   d7bd8:	mov    $0x1,%eax
+   d7bdd:	and    %rsi,%rax
+   d7be0:	and    %rdx,%rax
+   d7be3:	sar    $1,%rax
+   d7be6:	mov    0x8(%r12),%rbx
+   d7beb:	mov    %r9,%rsi
+   d7bee:	shl    $1,%rsi
+   d7bf1:	mov    0x8(%rbx),%rbx
+   d7bf5:	add    %rsi,%rbx
+   d7bf8:	add    $0xfffffffffffffffe,%rbx
+   d7bfc:	movslq (%rbx),%rbx
+   d7bff:	shl    $0x20,%rbx
+   d7c03:	sar    $0x1f,%rbx
+   d7c07:	or     $0x1,%rbx
+   d7c0b:	dec    %rbx
+   d7c0e:	sar    $1,%r8
+   d7c11:	imul   %r8,%rbx
+   d7c15:	imul   %rax,%rbx
+   d7c19:	inc    %rbx
+   d7c1c:	add    %rbx,%r13
+   d7c1f:	dec    %r13
+   d7c22:	mov    %r9,%rax
+   d7c25:	add    $0x2,%r9
+   d7c29:	cmp    %rdi,%rax
+   d7c2c:	je     d7c39 <camlMs.q6_tuned_1952+0x129>
+   d7c2e:	cmp    (%r14),%r15
+   d7c31:	ja     d7b29 <camlMs.q6_tuned_1952+0x19>
+   d7c37:	jmp    d7c3d <camlMs.q6_tuned_1952+0x12d>
+   d7c39:	mov    %r13,%rax
+   d7c3c:	ret
+   d7c3d:	.byte 0xe8
+   d7c3e:	sbb    (%rcx),%ch

@@ -255,14 +255,15 @@ def apply_k9h(data, harness="common", skip=()):
 
 
 # remarques mesurées sur un hôte du même modèle que la machine 3, dont les rapports sont reportés sur la réplication
-M3_CHECKS = {"go": "go_check.json", "haskell": "haskell_check.json"}
+M3_CHECKS = {"go": "go_check.json", "haskell": "haskell_check.json", "ocaml": "ocaml_check.json"}
 
 
 def m3_ratios():
     """Rapports reportés sur les données de la réplication (machine 3) par une remarque mesurée sur un hôte du même
     modèle : remarque sur Go (results/go_check.json, « replication_ratios » : copie sans GOEXPERIMENT pour les clés
     sans archsimd, ClearAVXUpperBits pour les autres, docs/GO.md) ; remarque sur Haskell (results/haskell_check.json :
-    copie corrigée sur copie publiée, docs/HASKELL.md). {langage: {clé: rapport}} ; vide sans fichier."""
+    copie corrigée sur copie publiée, docs/HASKELL.md) ; remarque sur OCaml (results/ocaml_check.json, clés dont le code
+    change, docs/OCAML.md). {langage: {clé: rapport}} ; vide sans fichier."""
     out = {}
     for lang, name in M3_CHECKS.items():
         path = os.path.join(ROOT, "results", name)

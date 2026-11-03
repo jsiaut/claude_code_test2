@@ -1,0 +1,16 @@
+4 200 8
+0
+	.globl	camlCg.mx_11_closure
+camlCg.mx_11_closure:
+	.quad	caml_curry2
+	.quad	0x200000000000007
+	.quad	camlCg.mx_11
+	.data
+	.align	8
+	.quad	1792
+	.globl	camlCg__full_apply_124
+camlCg__full_apply_124:
+	.quad	1
+	.data
+	.align	8
+	.quad	1792

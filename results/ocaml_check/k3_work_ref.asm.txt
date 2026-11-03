@@ -1,0 +1,39 @@
+00000000000d6f80 <camlMs.work_1342>:
+   d6f80:	mov    %rax,%r13
+   d6f83:	mov    0x18(%rdi),%rax
+   d6f87:	cmp    $0x1,%rax
+   d6f8b:	je     d6fd4 <camlMs.work_1342+0x54>
+   d6f8d:	mov    $0x3,%r12d
+   d6f93:	cmp    $0x4000001,%r12
+   d6f9a:	jg     d6fce <camlMs.work_1342+0x4e>
+   d6f9c:	mov    $0x3,%edx
+   d6fa1:	mov    $0x1,%esi
+   d6fa6:	mov    %r13,%rdi
+   d6fa9:	mov    %rsp,%rbx
+   d6fac:	mov    0x40(%r14),%rsp
+   d6fb0:	call   1585e0 <caml_atomic_fetch_add_field>
+   d6fb5:	mov    %rbx,%rsp
+   d6fb8:	mov    %r12,%rax
+   d6fbb:	add    $0x2,%r12
+   d6fbf:	cmp    $0x4000001,%rax
+   d6fc5:	je     d6fce <camlMs.work_1342+0x4e>
+   d6fc7:	cmp    (%r14),%r15
+   d6fca:	ja     d6f9c <camlMs.work_1342+0x1c>
+   d6fcc:	jmp    d7025 <camlMs.work_1342+0xa5>
+   d6fce:	mov    $0x1,%eax
+   d6fd3:	ret
+   d6fd4:	mov    $0x3,%r12d
+   d6fda:	cmp    $0x4000001,%r12
+   d6fe1:	jg     d7018 <camlMs.work_1342+0x98>
+   d6fe3:	mov    0x0(%r13),%rdx
+   d6fe7:	add    $0x2,%rdx
+   d6feb:	mov    $0x1,%esi
+   d6ff0:	mov    %r13,%rdi
+   d6ff3:	mov    %rsp,%rbx
+   d6ff6:	mov    0x40(%r14),%rsp
+   d6ffa:	call   158240 <caml_atomic_exchange_field>
+   d6fff:	mov    %rbx,%rsp
+   d7002:	mov    %r12,%rax
+   d7005:	add    $0x2,%r12
+   d7009:	cmp    $0x4000001,%rax
+   d700f:	.byte 0x74

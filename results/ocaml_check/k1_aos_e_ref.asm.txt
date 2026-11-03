@@ -1,0 +1,62 @@
+00000000000d5290 <camlMs.e_402>:
+   d5290:	sub    $0x10,%rsp
+   d5294:	mov    %rax,%r13
+   d5297:	mov    %rbx,%r12
+   d529a:	movsd  0x96f86(%rip),%xmm1        # 16c228 <caml_absf_mask+0x1e8>
+   d52a2:	mov    0x10(%r12),%rax
+   d52a7:	mov    0x8(%rax),%rax
+   d52ab:	xorpd  %xmm0,%xmm0
+   d52af:	cvtss2sd 0x12(%rax,%r13,2),%xmm0
+   d52b6:	mov    %rsp,%rbx
+   d52b9:	mov    0x40(%r14),%rsp
+   d52bd:	call   d1e00 <pow@plt>
+   d52c2:	mov    %rbx,%rsp
+   d52c5:	movsd  %xmm0,0x8(%rsp)
+   d52cb:	movsd  0x96f55(%rip),%xmm1        # 16c228 <caml_absf_mask+0x1e8>
+   d52d3:	mov    0x10(%r12),%rax
+   d52d8:	mov    0x8(%rax),%rax
+   d52dc:	xorpd  %xmm0,%xmm0
+   d52e0:	cvtss2sd 0xe(%rax,%r13,2),%xmm0
+   d52e7:	mov    %rsp,%rbx
+   d52ea:	mov    0x40(%r14),%rsp
+   d52ee:	call   d1e00 <pow@plt>
+   d52f3:	mov    %rbx,%rsp
+   d52f6:	movsd  %xmm0,(%rsp)
+   d52fb:	movsd  0x96f25(%rip),%xmm1        # 16c228 <caml_absf_mask+0x1e8>
+   d5303:	mov    0x10(%r12),%rax
+   d5308:	mov    0x8(%rax),%rax
+   d530c:	xorpd  %xmm0,%xmm0
+   d5310:	cvtss2sd 0xa(%rax,%r13,2),%xmm0
+   d5317:	mov    %rsp,%rbx
+   d531a:	mov    0x40(%r14),%rsp
+   d531e:	call   d1e00 <pow@plt>
+   d5323:	mov    %rbx,%rsp
+   d5326:	movsd  (%rsp),%xmm1
+   d532b:	addsd  %xmm1,%xmm0
+   d532f:	movsd  0x8(%rsp),%xmm1
+   d5335:	addsd  %xmm1,%xmm0
+   d5339:	sub    $0x10,%r15
+   d533d:	cmp    (%r14),%r15
+   d5340:	jb     d537b <camlMs.e_402+0xeb>
+   d5342:	lea    0x8(%r15),%rax
+   d5346:	movq   $0x4fd,-0x8(%rax)
+   d534e:	mov    0x10(%r12),%rbx
+   d5353:	mov    0x8(%rbx),%rbx
+   d5357:	xorpd  %xmm1,%xmm1
+   d535b:	cvtss2sd 0x22(%rbx,%r13,2),%xmm1
+   d5362:	movsd  0x96ec6(%rip),%xmm2        # 16c230 <caml_absf_mask+0x1f0>
+   d536a:	mulsd  %xmm1,%xmm2
+   d536e:	mulsd  %xmm0,%xmm2
+   d5372:	movsd  %xmm2,(%rax)
+   d5376:	add    $0x10,%rsp
+   d537a:	ret
+   d537b:	call   16a55c <caml_call_gc>
+   d5380:	jmp    d5342 <camlMs.e_402+0xb2>
+   d5382:	data16 cs nopw 0x0(%rax,%rax,1)
+   d538d:	nopl   (%rax)
+
+00000000000d5390 <camlMs.k1_soa_537>:
+   d5390:	xorpd  %xmm4,%xmm4
+   d5394:	movapd %xmm4,%xmm2
+   d5398:	movapd %xmm2,%xmm1
+   d539c:	movapd %xmm1,%xmm3

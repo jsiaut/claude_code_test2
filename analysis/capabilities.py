@@ -346,7 +346,7 @@ MATRIX = {
         "B4": (0, "boxing des flottants, fermetures, tuples"), "B5": (0.5, "Bigarray hors tas, Obj"),
         "C1": (0, "aucun en OCaml 5.5"), "C2": (0, "aucun"), "C3": M, "C4": (0, "aucun"), "C5": (0, "Domainslib est tiers"),
         "D1": (1, "Domain (OCaml 5)"), "D2": (0.5, "Atomic séquentiellement cohérent"), "D3": (1, "Atomic.make_contended"),
-        "D4": (0, "aucune"), "D5": (1, "Domain.cpu_relax + Atomic"), "E1": (1, "natif"), "E2": (0, "aucun"),
+        "D4": (0, "aucune"), "D5": (0.5, "Domain.cpu_relax ; pas de barrière explicite (Atomic séquentiellement cohérent) ; erratum du 3/11, remarque sur OCaml : une seule des deux capacités, comme Zig, C3, Chapel, Fortran et JavaScript"), "E1": (1, "natif"), "E2": (0, "aucun"),
         "E3": (0, "aucun"), "E4": (0, "aucun"), "E5": (0, "aucun"), "E6": (1, "unsafe_get, -unsafe"),
         "E7": (0, "pas de monomorphisation (représentation uniforme)"), "F1": (1, "Bigarray.Array2 c_layout/fortran_layout"),
         "F2": (0, "aucun"), "F3": (0.5, "Int32/Int64 signés boxés ; pas de non signés"), "F4": (1, "Unix.map_file (bench)"),
