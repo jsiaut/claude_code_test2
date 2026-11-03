@@ -974,3 +974,21 @@ Robustesse :
   39,3, toujours 16e ; ordre de la réplication inchangé), scénarios de l'état actuel ; leurs contrôles reproduisent
   G-E à l'identique. Effets hors de Go : aucun changement de place au classement publié ; sans SIMD explicite, rien ne
   bouge (Java devant Go de 0,02 rang à la lettre) ; confrontation, Go devant Java dans le scénario C (Spearman 0,84).
+* 2026-11-03, 12 h 00 : **machine 19**. La VM redémarre sur un hôte Emerald Rapids du même modèle (modèle 207, 4 vCPU ;
+  3,02 à 3,18 GHz effectifs, latence à 4 Mio 55 ns, DRAM 10,6 à 12,7 Go/s : `results/hw/machine19/`).
+* 2026-11-03 : **remarque sur Haskell** transmise par l'utilisateur ; vérifications sans consulter de page web, sur
+  GHC 9.14.1 et LLVM 18.1.3, par des sondes et sur les données (`tools/haskell_check/`). Erreurs de mon
+  implémentation : les options `-fno-omit-yields` (ajoutée sans justification) et `-fno-full-laziness` (redondante avec
+  les `NOINLINE` et les `IORef` du harnais) sortent tout le programme du mode release annoncé par `docs/NATURAL.md`
+  (K4 naturel 81 → 12 ms, K5 naturel 351 → 177 ms, K9 naturel 200 → 110 ms, un processus) ; K5 et K1 soa sans la
+  FMA vectorielle `fmaddFloatX16#` de `GHC.Prim`, quand mon commentaire la disait absente ; l'arène de K8 alloue 1,6
+  Go par répétition (une `IORef` d'entier boxé, un compteur rendu dans un n-uplet) contre « aucune allocation en
+  régime permanent » ; l'arbre longue durée de K8 meurt avant la mesure. Errata de la matrice : B2, B3 et A7 à ½.
+  Pas une erreur : `+RTS -N4` pour tous les noyaux, convention de l'étude (Julia est lancé avec `-t 4`) ;
+  sensibilités : `-N1` pour les noyaux séquentiels, cases C2, E7 et F2. Écart à la pratique des remarques
+  précédentes, décidé avant les mesures : report par transfert (le pont par le C est en information), parce que le
+  rapport de Haskell à C d'un même binaire change d'un modèle d'hôte à l'autre (K4 naturel : 18 fois C sur Cascade
+  Lake, 42 fois sur la machine 19). Plan (`docs/HASKELL.md`, sections 1 à 3), copies
+  (`tools/haskell_check/make_copies.py`, 82 cellules validées), outil de mesure (`tools/measure_haskell.py`), script
+  d'analyse et points d'accroche du calcul publié (latences de K8 naturel : `lat_ratios` ; réplication) poussés avant
+  les mesures (commit `890b58c`) ; contrôles de l'état actuel pendant les mesures (commit `e54b69d`).

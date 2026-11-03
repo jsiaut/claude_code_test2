@@ -45,7 +45,8 @@ données publiées.
 **Machine 19.** La VM a redémarré le 3 novembre à 12 h 00 sur un hôte Emerald Rapids du même modèle que les machines
 3 et 8 à 18 (modèle 207, 4 vCPU ; 3,02 à 3,18 GHz effectifs, latence à 4 Mio 55 ns, DRAM 10,6 à 12,7 Go/s :
 `results/hw/machine19/`). Chaîne de l'étude : GHC 9.14.1 (`/opt/ghc`), LLVM 18.1.3. Le binaire publié se recompile à
-l'identique (octet pour octet). Sondes : `tools/haskell_check/probes/`. Temps ci-dessous : médianes d'un processus.
+l'identique (octet pour octet). Sondes : `tools/haskell_check/probes/` ; sorties et chiffres bruts :
+`results/haskell_check/` (`probes.md`). Temps ci-dessous : médianes d'un processus.
 
 * **Ce qui est juste (1)** : exact pour ce que je peux vérifier. La version est celle de l'inventaire (non vérifiable
   sans le web) ; 96 octets par particule (`docs/FINDINGS.md`) ; K7 naturel 50,9 s sur la machine 19 avec les options
@@ -53,23 +54,22 @@ l'identique (octet pour octet). Sondes : `tools/haskell_check/probes/`. Temps ci
   séquentiellement cohérentes. Le générateur natif refuse la FMA large (« sorry! … Please use -fllvm for wide vector
   FMA support ») ; `docs/FINDINGS.md` note qu'il calcule faux les autres opérations 256/512 bits.
 * **(2) Options du banc** : **exact, et c'est une erreur de mon implémentation.** Même source, options du banc puis
-  `-O2 -fllvm` (avec les options de la cible et le runtime multi-thread) : K4 naturel non trié 81,4 → 12,3 ms (C,
-  même hôte : 1,95) ; K5 naturel 351 → 177 ms (C : 176) ; K9 naturel 200 → 110 ms ; Q6 optimisé 33,2 → 29,3 ms ;
-  K3 `rmw_padded` 353 → 200 à 223 ms ; les autres clés sondées changent de −11 à +18 % (un processus ; K6 `mt` et
-  K9 `mt` sans écart net sur neuf répétitions) ; sommes de contrôle identiques. Effet par option : sans `-fno-omit-yields` seule, K4 12,3 ms et
-  K5 176 ms ; sans `-fno-full-laziness` seule, K9 124 ms. **La règle** (`docs/NATURAL.md`) : le code naturel est
-  compilé dans le mode « release » documenté de la chaîne, ce que la ligne de Haskell annonce (`ghc -O2 -fllvm`).
-  `-fno-omit-yields` a été ajoutée à la première version (commit `dab7b69`) sans justification écrite ; K10 et K3, les
-  seuls noyaux à boucles sans allocation sur plusieurs fils, tournent sans elle (K10 : trois processus de cinq
-  répétitions, aucun blocage). `-fno-full-laziness` était justifiée (« éviter que les calculs purs soient partagés
-  entre répétitions ») ; mais le harnais lit déjà chaque entrée dans une `IORef` à chaque répétition, et les noyaux
-  naturels sont `NOINLINE` : sans l'option, aucun temps ne s'effondre (vérifié sur toutes les cellules à la
+  `-O2 -fllvm` (avec les options de la cible et le runtime multi-thread) : K4 naturel non trié 81,4 → 12,3 ms (C, même
+  hôte : 1,95) ; K5 naturel 351 → 177 ms (C : 176) ; K9 naturel 200 → 110 ms ; Q6 optimisé 33,2 → 29,3 ms ; K3
+  `rmw_padded` 353 → 200 à 223 ms ; les autres clés sondées changent de −11 à +18 % (un processus ; K6 `mt` et K9 `mt`
+  sans écart net sur neuf répétitions) ; sommes de contrôle identiques. Effet par option : sans `-fno-omit-yields`
+  seule, K4 12,3 ms et K5 176 ms ; sans `-fno-full-laziness` seule, K9 124 ms. **La règle** (`docs/NATURAL.md`) : le
+  code naturel est compilé dans le mode « release » documenté de la chaîne, ce que la ligne de Haskell annonce
+  (`ghc -O2 -fllvm`). `-fno-omit-yields` a été ajoutée à la première version (commit `dab7b69`) sans justification écrite ;
+  K10 et K3, les seuls noyaux à boucles sans allocation sur plusieurs fils, tournent sans elle (K10 : trois processus
+  de cinq répétitions, aucun blocage). `-fno-full-laziness` était justifiée (« éviter que les calculs purs soient
+  partagés entre répétitions ») ; mais le harnais lit déjà chaque entrée dans une `IORef` à chaque répétition, et les
+  noyaux naturels sont `NOINLINE` : sans l'option, aucun temps ne s'effondre (vérifié sur toutes les cellules à la
   validation). **`+RTS -N4` n'est pas une erreur** : c'est la convention de l'étude pour les runtimes dont le défaut
   est un seul fil (Julia est lancé avec `-t 4` pour tous les noyaux, et son ramasse-miettes marque alors avec quatre
   fils, `Threads.ngcthreads()` = 4) ; Go et Java prennent les quatre cœurs par défaut. Avec `-N4`, le runtime de GHC
   9.14.1 active par défaut le ramasse-miettes parallèle (`-qg0`, `-qn` = `-N`, aide `+RTS -?`). Le README doit le
-  dire : « réglages des runtimes par défaut », sauf le nombre de fils. **Sensibilité** (`-N1` pour les noyaux
-  séquentiels).
+  dire : « réglages des runtimes par défaut », sauf le nombre de fils. **Sensibilité** (`-N1` pour les noyaux séquentiels).
 * **(3a) K5 optimisé** : **exact, et c'est une erreur de mon implémentation.** `fmaddFloatX16#` est dans `GHC.Prim`
   (et `GHC.Internal.Prim`), absente de `GHC.Exts` (`:browse`) ; la sonde calcule 2 × 3 + 1 = 7. Avec elle : 6,16 →
   4,59 ms (C, même hôte : 3,73). **La convention** : toutes les autres implémentations à SIMD explicite écrivent K5
@@ -120,13 +120,14 @@ séquentiels, les cases C2, E7 et F2.
   (`analysis/transfer_check.py` : le C du même hôte remplace le transfert au-delà de 25 % d'écart) a été calibrée sur
   des clés corrigées une à une et des témoins mesurés sur le même modèle d'hôte (Ada et Fortran, Cascade Lake). Ici la
   correction touche les 36 clés, dont 31 sont publiées depuis un autre modèle d'hôte (Cascade Lake ; K5 et K9 viennent
-  des machines 3 et 16, du même modèle que la machine 19), et le rapport de Haskell à C d'un même binaire change d'un modèle à l'autre : K4 naturel, binaire
-  publié, 18 fois C sur Cascade Lake (73,4 contre 4,04 ms), 42 fois sur la machine 19 (81,4 contre 1,95 ms), parce que
-  la boucle vectorisée de C gagne plus à changer d'hôte que la boucle scalaire de Haskell. Le pont importerait cet
-  écart d'hôte comme une correction, y compris sur des clés que les options ne changent pas ; le transfert suppose
-  seulement que le rapport entre deux versions de Haskell se conserve. Le pont est calculé en information (scénario
-  H-E-P, avec une **règle de sens** : le facteur retenu ne va pas contre le rapport mesuré sur le même hôte, plafonné
-  à 1 si r < 1 et au moins 1 si r > 1, généralisation du plafond adopté pour Java, `docs/JAVA.md`, 4).
+  des machines 3 et 16, du même modèle que la machine 19), et le rapport de Haskell à C d'un même binaire change d'un
+  modèle à l'autre : K4 naturel, binaire publié, 18 fois C sur Cascade Lake (73,4 contre 4,04 ms), 42 fois sur la
+  machine 19 (81,4 contre 1,95 ms), parce que la boucle vectorisée de C gagne plus à changer d'hôte que la boucle
+  scalaire de Haskell. Le pont importerait cet écart d'hôte comme une correction, y compris sur des clés que les
+  options ne changent pas ; le transfert suppose seulement que le rapport entre deux versions de Haskell se conserve.
+  Le pont est calculé en information (scénario H-E-P, avec une **règle de sens** : le facteur retenu ne va pas contre
+  le rapport mesuré sur le même hôte, plafonné à 1 si r < 1 et au moins 1 si r > 1, généralisation du plafond adopté
+  pour Java, `docs/JAVA.md`, 4).
 * **Latences de K8 naturel (D3)** : les lignes publiées (machine 11) × le rapport, sur le même hôte, des médianes de
   p50, p90, p99, p99,9 et du maximum (`haskell_fix` / `haskell_ref`), par transfert seul : un pont par le C n'a pas de
   sens pour des queues dominées par les pauses du ramasse-miettes.

@@ -1,0 +1,7 @@
+[1 of 2] Compiling Main             ( Fma.hs, ncg/Main.o )
+<no location info>: error:
+    sorry! (unimplemented feature or known bug)
+  GHC version 9.14.1:
+	Please use -fllvm for wide vector FMA support
+
+

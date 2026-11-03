@@ -1,0 +1,33 @@
+Rec {
+$waBuild
+  = \ ww ww1 ww2 ww3 ww4 ww5 s ->
+      case readIntOffAddr# ww3 0# s of { (# ipv, ipv1 #) ->
+      case writeIntOffAddr# ww3 0# (+# ipv1 1#) ipv of s2 { __DEFAULT ->
+      case writeIntOffAddr# ww ipv1 ww5 s2 of s1 { __DEFAULT ->
+      case ww4 of wild {
+        __DEFAULT ->
+          case $waBuild ww ww1 ww2 ww3 (-# wild 1#) (+# ww5 1#) s1 of
+          { (# ww6, ww7, ww8 #) ->
+          case ww8 of { I# ww9 ->
+          case $waBuild ww ww1 ww2 ww3 (-# wild 1#) ww9 ww6 of
+          { (# ww10, ww11, ww12 #) ->
+          case writeInt32OffAddr# ww1 ipv1 ww7 ww10 of s3 { __DEFAULT ->
+          case writeInt32OffAddr# ww2 ipv1 ww11 s3 of s4 { __DEFAULT ->
+          (# s4, intToInt32# ipv1, ww12 #)
+          }
+          }
+          }
+          }
+          };
+        0# ->
+          case writeInt32OffAddr# ww1 ipv1 -1#Int32 s1 of s3 { __DEFAULT ->
+          case writeInt32OffAddr# ww2 ipv1 -1#Int32 s3 of s4 { __DEFAULT ->
+          (# s4, intToInt32# ipv1, I# (+# ww5 1#) #)
+          }
+          }
+      }
+      }
+      }
+      }
+end Rec }
+

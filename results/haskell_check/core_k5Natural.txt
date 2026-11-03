@@ -1,0 +1,46 @@
+$wk5Natural
+  = \ ww ww1 ww2 ww3 ww4 ww5 ww6 ww7 ->
+      join { exit x = case lvl23 x ww ww1 of {} } in
+      join { exit1 y = case lvl22 y ww2 of {} } in
+      join { exit2 x = case lvl23 x ww4 ww5 of {} } in
+      join { exit3 y = case lvl22 y ww6 of {} } in
+      joinrec {
+        $wgo x ww8
+          = case <=# ww x of {
+              __DEFAULT -> jump exit x;
+              1# ->
+                case <=# x ww1 of {
+                  __DEFAULT -> jump exit x;
+                  1# ->
+                    let { y = -# x ww } in
+                    case <=# 0# y of {
+                      __DEFAULT -> jump exit1 y;
+                      1# ->
+                        case <# y ww2 of {
+                          __DEFAULT -> jump exit1 y;
+                          1# ->
+                            case indexFloatArray# ww3 y of ds4 { __DEFAULT ->
+                            case <=# ww4 x of {
+                              __DEFAULT -> jump exit2 x;
+                              1# ->
+                                case <=# x ww5 of {
+                                  __DEFAULT -> jump exit2 x;
+                                  1# ->
+                                    let { y1 = -# x ww4 } in
+                                    case <=# 0# y1 of {
+                                      __DEFAULT -> jump exit3 y1;
+                                      1# ->
+                                        case <# y1 ww6 of {
+                                          __DEFAULT -> jump exit3 y1;
+                                          1# ->
+                                            case indexFloatArray# ww7 y1 of ds1 { __DEFAULT ->
+                                            case x of wild {
+                                              __DEFAULT ->
+                                                jump $wgo
+                                                  (+# wild 1#)
+                                                  (plusFloat# ww8 (timesFloat# ds4 ds1));
+                                              2047# -> plusFloat# ww8 (timesFloat# ds4 ds1)
+                                            }
+                                            }
+                                        }
+                                    }
