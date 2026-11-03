@@ -346,3 +346,10 @@ D5 d'OCaml à ½). OCaml reste 18e dans tous les scénarios (23,8 points publié
 langage ne change de score ni de place. Q6 sans branchement devient la variante qu'OCaml garde pour Q6 dans S-scalaire
 (112,5 ms, au lieu du naturel, 200,6). Le scénario symétrique, où K1 ne compte que par aos, est le seul où la
 correction de K1 aos pèse : OCaml y passe de 26,2 à 27,8 points (plafond 21,2 → 26,4), toujours 18e.
+
+### 4.15 Recalcul après la remarque sur JavaScript (3 novembre)
+
+Recalculé de nouveau (témoin égal au scénario J-E de `results/js_check.json` : K7 de JavaScript corrigé, E1, A4 et E6
+de JavaScript à 1, ½ et ½, K7 d'OCaml reclassé). JavaScript reste 19e et OCaml 18e dans tous les scénarios (JavaScript
+15,6 points publiés, 16,0 à la lettre ; OCaml 23,9 et 24,7), et aucun autre langage ne change de place. À la lettre,
+Chapel est 1er dans 46 % des variantes (45 % avant).

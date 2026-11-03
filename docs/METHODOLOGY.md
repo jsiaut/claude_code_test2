@@ -1065,3 +1065,25 @@ Robustesse :
   en information (Node 26 deux fois plus lent, Turbolev n'y étant pour rien). Plan (`docs/JAVASCRIPT.md`, sections 1 à
   3) : copies (`tools/js_check/make_copies.py`, 24 cellules validées), outil de mesure (`tools/measure_js.py`), script
   d'analyse (`analysis/js_check.py`), errata et réplication poussés avant les mesures.
+* 2026-11-03, 17:45:01-17:50:43 : **mesures de la remarque sur JavaScript** (`tools/measure_js.py`, machine 21) : 175
+  processus (25 cellules × 7), aucune somme de contrôle fausse, aucun refait pour vol de temps (vol médian 0,68 %).
+* 2026-11-03, 17:51 à 17:58 : **résultats de la remarque sur JavaScript** (`results/report_js.md`). Aucun écart au
+  plan ; le scénario Avant reproduit O-E (avec le K7 d'OCaml) à l'identique. Correction : K7 tuned × 0,577
+  [0,541–0,618] (cases de 16 octets ; clés témoins au code identique : 0,969 et 0,971). Classement publié (J-E,
+  transfert et errata E1, A4, E6) : JavaScript 15,64 points (14,27), 19e, rang plausible 19, OCaml devant dans 99,5 %
+  des variantes, Python derrière dans 95,5 % (92,8 %) ; plafond 11,4 → 12,2, contrôle 11,6 → 14,6 ; les scores des
+  autres langages ne changent pas. Sensibilités : Q6 × 0,60 et 0,65, K9 × 0,88 et 0,83, K8 naturel × 0,62 avec ses
+  latences (pire pause 81,6 → 1,1 ms : le pretenuring de V8), K8 itératif × 0,73, K5 en f64 × 0,88, K1 soa en f64 sans
+  gain ; S-mesures 17,84, S-cases 18,40, S-tout 20,60 (OCaml devant dans 83,5 %). Information : Q1 sous Node 22 × 0,41
+  (tuned) et × 0,50 (naturel) par rapport à Node 26. Pont par le C : écart de 22,7 %, transfert gardé.
+* 2026-11-03, 17:59 à 18:26 : **sorties régénérées après les remarques sur OCaml (K7) et JavaScript** (même chaîne) :
+  classement, figures, matrice (`docs/CAPABILITIES.md`), réplication (machine 3 : JavaScript 12,9 → 14,2, OCaml 21,6 →
+  21,7 ; ordre inchangé), scénarios de l'état actuel ; leurs contrôles reproduisent J-E à l'identique. Effets hors de
+  JavaScript et d'OCaml : aucun changement de score ni de place ; dans les étages de la v3, JavaScript forme désormais
+  un étage à lui seul, devant Python et Lua ; sans SIMD explicite, rien ne bouge (Chapel 1er à la lettre dans 46 % des
+  variantes, contre 45) ; confrontation : Spearman inchangés, accord du principe P11 0,66 → 0,65. README : tableau
+  (OCaml 23,9, JavaScript 15,6, Python 20–21), paragraphes d'OCaml et de JavaScript (code de K5, 416 octets, appels
+  atomiques de V8, Q1 sous Node 26, pretenuring, WebAssembly exclu), grandes marches, errata, point 6 des résultats
+  solides, limites (langages relus, versions optimisées, report, échauffements des JIT), lecture et reproduction ;
+  `docs/FINDINGS.md` (416 octets corrigé, section JavaScript), `docs/NOSIMD.md` (4.15), `docs/CONFRONTATION.md`,
+  `docs/JAVASCRIPT.md` (4), `docs/OCAML.md` (4.8).

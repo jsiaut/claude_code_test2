@@ -435,6 +435,12 @@ Rejouée après la remarque sur OCaml (3 novembre, `docs/OCAML.md` : Q6, K1 aos 
 OCaml n'est pas dans l'autre étude) : rien ne change hors des rangs espérés, qui bougent de 0,002 au plus ; scénario A
 0,78, B 0,86, C 0,84, D 0,90 ; C 1er, 5e, 2e et 6e.
 
+Rejouée après la remarque sur JavaScript (3 novembre, `docs/JAVASCRIPT.md` : K7 de JavaScript corrigé, E1, A4 et E6 de
+JavaScript à 1, ½ et ½ ; K7 d'OCaml reclassé) : JavaScript reste 17e des 18 langages communs dans les quatre scénarios
+(18e dans leur ordre) ; scénario A 0,78, B 0,86, C 0,84, D 0,90 ; C 1er, 5e, 2e et 6e ; au test 3, la corrélation avec
+leur ordre à w = 0,30 passe de 0,88 à 0,87 ; au test 4, l'accord du principe P11 (transparence : E1, E2, E5, E6) passe
+de 0,66 à 0,65 (de 0,57 à 0,56 sous leur règle), sans changer l'accord d'ensemble (0,74 et 0,81).
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

@@ -2,7 +2,7 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/ocaml_check.json, « O-E ».
+Témoin : écart maximal 0.0e+00 avec results/js_check.json, « J-E ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
@@ -25,8 +25,8 @@ Témoin : écart maximal 0.0e+00 avec results/ocaml_check.json, « O-E ».
 | Java | 15 (47,2) | 15 (48,3) | 16 (37,1) | 16 (37,1) | 15 (50,3) | 15 (45,2) | 15 (47,2) |
 | Go | 16 (45,4) | 16 (45,6) | 15 (37,5) | 15 (37,5) | 16 (46,5) | 16 (40,2) | 16 (45,4) |
 | Haskell | 17 (41,3) | 17 (41,8) | 17 (31,1) | 17 (31,1) | 17 (39,0) | 17 (37,7) | 17 (41,3) |
-| OCaml | 18 (23,8) | 18 (24,0) | 18 (24,6) | 18 (24,6) | 18 (27,8) | 18 (24,3) | 18 (23,8) |
-| JavaScript | 19 (14,3) | 19 (14,3) | 19 (14,6) | 19 (14,6) | 19 (18,3) | 19 (14,4) | 19 (14,3) |
+| OCaml | 18 (23,9) | 18 (24,2) | 18 (24,7) | 18 (24,7) | 18 (28,0) | 18 (24,6) | 18 (23,9) |
+| JavaScript | 19 (15,6) | 19 (15,7) | 19 (16,0) | 19 (16,0) | 19 (19,9) | 19 (16,1) | 19 (15,6) |
 | Python | 20 (9,9) | 20 (10,0) | 20 (10,0) | 20 (10,0) | 20 (10,2) | 20 (10,0) | 20 (9,9) |
 | Lua | 21 (3,9) | 21 (4,0) | 21 (4,0) | 21 (4,0) | 21 (4,6) | 21 (4,1) | 21 (3,9) |
 
@@ -36,8 +36,8 @@ Témoin : écart maximal 0.0e+00 avec results/ocaml_check.json, « O-E ».
 |---|---|---|---|
 | Publié | 1,000 | C (49 %) | aucune |
 | Contrôle sans mt | 0,996 | C (48 %) | D +2, Rust -1, Nim -1 |
-| S-scalaire | 0,734 | Chapel (45 %) | Julia +9, Fortran +9, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Java -1, Nim -1, Go +1 |
-| S-scalaire-Mojo | 0,734 | Chapel (45 %) | Julia +9, Fortran +9, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Java -1, Nim -1, Go +1 |
+| S-scalaire | 0,734 | Chapel (46 %) | Julia +9, Fortran +9, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Java -1, Nim -1, Go +1 |
+| S-scalaire-Mojo | 0,734 | Chapel (46 %) | Julia +9, Fortran +9, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Java -1, Nim -1, Go +1 |
 | S-symétrique | 0,994 | Odin (29 %) | Rust -2, C -1, Odin +1, Fortran +1, D +1, Chapel -1, Nim +1 |
 | S-noyaux-scalaires | 0,979 | C (48 %) | Ada +4, Zig -3, Rust -2, C3 +1, D -1, Nim +1 |
 | S-importées | 0,965 | C (50 %) | Nim -6, Julia +2, Ada -2, Fortran +2, Chapel +2, D +1, Mojo +1 |
@@ -63,8 +63,8 @@ Témoin : écart maximal 0.0e+00 avec results/ocaml_check.json, « O-E ».
 | Java | 56,5 | 59,4 | 31,0 | 31,0 | 59,5 | 51,6 | 56,5 |
 | Go | 44,5 | 45,1 | 24,6 | 24,6 | 42,6 | 31,5 | 44,5 |
 | Haskell | 46,2 | 47,5 | 20,8 | 20,8 | 38,1 | 37,2 | 46,2 |
-| OCaml | 19,1 | 19,7 | 20,9 | 20,9 | 26,4 | 20,4 | 19,1 |
-| JavaScript | 11,4 | 11,5 | 12,2 | 12,2 | 19,7 | 11,6 | 11,4 |
+| OCaml | 19,4 | 20,0 | 21,2 | 21,2 | 26,9 | 21,1 | 19,4 |
+| JavaScript | 12,2 | 12,4 | 13,1 | 13,1 | 21,1 | 13,3 | 12,2 |
 | Python | 0,5 | 0,5 | 0,6 | 0,6 | 0,9 | 0,6 | 0,5 |
 | Lua | 1,1 | 1,3 | 1,4 | 1,4 | 2,5 | 1,4 | 1,1 |
 

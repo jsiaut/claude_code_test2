@@ -77,7 +77,7 @@ Replis et pénalités : mojo k6:mt:q6 : même travail sur un thread (tuned) ; mo
 | C# | 8,0 | 14 | 14 | 12 | 12 | 68,8 → 68,8 | 53,6 → 53,6 |
 | Java | 12,0 | 15 | 15 | 16 | 15 | 42,7 → 39,5 | 56,5 → 37,1 |
 | Go | 17,0 | 16 | 16 | 15 | 16 | 48,7 → 42,9 | 44,5 → 30,2 |
-| JavaScript | 18,0 | 17 | 17 | 17 | 17 | 11,6 → 11,6 | 11,4 → 11,4 |
+| JavaScript | 18,0 | 17 | 17 | 17 | 17 | 14,6 → 14,6 | 12,2 → 12,2 |
 | Python | 16,0 | 18 | 18 | 18 | 18 | 24,4 → 24,4 | 0,5 → 0,5 |
 
 | Scénario | Spearman | Kendall | Σd² | part de C | rang de C |
@@ -101,7 +101,7 @@ Sensibilité (K3 retiré du plafond de Mojo et de Fortran, configuration de réf
 | 0,15 | 0,81 | 1,00 | 0,48 | 1,0 | C, C++, Odin, Zig, D |
 | 0,20 | 0,83 | 0,99 | 0,20 | 2,0 | C++, C, Zig, Odin, D |
 | 0,25 | 0,87 | 0,98 | 0,07 | 4,0 | C++, Zig, Odin, C, D |
-| 0,30 | 0,88 | 0,97 | 0,02 | 4,0 | Zig, C++, Odin, C, D |
+| 0,30 | 0,87 | 0,97 | 0,02 | 4,0 | Zig, C++, Odin, C, D |
 | 0,35 | 0,89 | 0,96 | 0,00 | 5,0 | Zig, C++, Odin, D, C |
 | 0,40 | 0,92 | 0,95 | 0,00 | 6,0 | Zig, C++, Odin, D, C3 |
 | 0,45 | 0,94 | 0,93 | 0,00 | 7,0 | Zig, C++, Odin, D, C3 |
@@ -132,7 +132,7 @@ Seuils : P(C premier) < 0,5 à partir de w = 0,15 ; ordre plus proche du leur à
 | P8 SIMD/ILP | C1, C2, C4 | 0,57 | 0,74 |
 | P9 branchements | E3 | 0,48 | 0,61 |
 | P10 hiérarchie mémoire | E4 | 0,57 | 0,82 |
-| P11 transparence | E1, E2, E5, E6 | 0,66 | 0,57 |
+| P11 transparence | E1, E2, E5, E6 | 0,65 | 0,56 |
 | P12 threads/topologie | C5, D1, D4, F2 | 0,30 | 0,79 |
 
 Accord d'ensemble (11 principes communs, leurs poids) : 0,74 avec mes notes v2, 0,81 sous leur règle. Correspondances à une capacité : 60 % des 72 cellules diffèrent de moins de 0,5.

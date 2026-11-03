@@ -144,10 +144,12 @@ fusionner les passes répétées (355 To/s).
   enregistrement de flottants est stocké à plat, derrière un en-tête de 8 o, plus le pointeur de 8 o
   qui le désigne ; chaque `float` y occupe 8 o : OCaml n'a pas de flottant 32 bits de calcul, le
   format n'existant que pour stocker, dans un `Bigarray`) ; Bun 170 (JavaScriptCore range les
-  nombres dans les mots de 64 bits de l'objet) ; Node 416 (V8, avec la compression de pointeurs,
-  range chaque propriété flottante dans un objet `HeapNumber` séparé) ; LuaJIT 428 et Lua 449 (table
-  à 16 champs nommés) ; Python 750 (dont 608 o demandés selon `tracemalloc`, le reste en arrondis de
-  pymalloc).
+  nombres dans les mots de 64 bits de l'objet) ; Node 416 (V8 sans compression de pointeurs, que les
+  binaires officiels de Node n'activent pas : un objet de 24 o d'en-tête et de 16 champs de 8 o, un
+  objet `HeapNumber` séparé de 16 o par propriété flottante, et la case du tableau ; 272 o avec la
+  compression, celle de Chrome ; corrigé le 3/11, remarque sur JavaScript) ; LuaJIT 428 et Lua 449
+  (table à 16 champs nommés) ; Python 750 (dont 608 o demandés selon `tracemalloc`, le reste en
+  arrondis de pymalloc).
 * **Valhalla (JEP 401, build EA `27-jep401ea3`)** : un tableau de `value record` de 16 `float` n'est
   pas aplati (85,8 o par élément ; parcours permuté 4,1 fois plus lent, comme pour des objets
   ordinaires). La JVM n'aplatit un tableau que si la valeur et son marqueur de nullité tiennent
@@ -761,3 +763,33 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **Placement** : sur les 32 clés dont seule l'horloge change, les rapports vont de 0,82 (Q1 `mt`) à 1,11 (K9 tuned),
   moyenne géométrique 1,008 ; à code identique, des effets du binaire, non reportés.
 
+## Remarque sur JavaScript (3 novembre, machine 21, Emerald Rapids) — `docs/JAVASCRIPT.md`, `results/js_check/`
+
+* **Node.js n'active pas la compression de pointeurs de V8** (`process.config.variables.v8_enable_pointer_compression`
+  = 0 dans le binaire officiel de Node 26.12.1) : un objet à 16 propriétés flottantes coûte 24 o d'en-tête, 16 champs
+  de 8 o et un `HeapNumber` de 16 o par flottant, d'où 416 o par particule (272 o avec la compression, celle de
+  Chrome).
+* **TurboFan garde les vérifications sur les tableaux typés** : dans la boucle de `k5Tuned` (Node 26), pour 8
+  éléments, 16 vérifications de bornes, 8 de débordement (7 indices et l'incrément), une adresse recalculée (`leaq`)
+  avant chaque chargement, et les accumulateurs relus depuis la pile. K5 naturel (machine 3) : 152 ms contre 79 pour
+  le C scalaire de GCC.
+* **Une opération atomique est un appel** : sous Node 26 comme sous Node 22, `Atomics.add`, `Atomics.load` et
+  `Atomics.store` deviennent des appels aux fonctions internes `AtomicsAdd`, `AtomicsLoad`, `AtomicsStore`. K3
+  `rmw_padded` : 4,1 fois C sous Node, 1,3 fois sous Bun (JavaScriptCore) ; `sw_padded` : 26 et 8 fois.
+* **Pretenuring de V8 sur K8 naturel** : l'arbre longue durée, construit par la même fonction que les arbres des
+  requêtes, fait marquer le site d'allocation comme durable, et V8 alloue ensuite les nœuds jetables dans la vieille
+  génération. Avec un site distinct (même hôte, sept processus) : temps × 0,617 [0,558–0,714], p99 × 0,496, p99,9
+  × 0,488, pire pause 81,6 → 1,1 ms ; `--no-allocation-site-pretenuring` fait de même (sonde).
+* **Q1 deux fois plus lent sous Node 26 que sous Node 22** (même source, même hôte) : tuned 269,9 contre 111,7 ms,
+  naturel 263,5 contre 131,2. Turbolev est désactivé par défaut dans Node 26 (`--turbolev`), et l'activer accélère Q1
+  (178 ms, sonde) : la lenteur vient du chemin par défaut de V8 14.6.
+* **Cases de 16 o en JavaScript** : clé et compteur en `Uint32Array`, somme en `Float64Array`, deux vues sur le même
+  `ArrayBuffer` ; K7 tuned × 0,577 [0,541–0,618] par rapport aux quatre f64 par case.
+* **Formes plus poussées, même hôte** : Q6 par masque de négation et sommes entières par blocs de 4 096 × 0,596 (`mt`
+  × 0,654) ; K9 par vues de lignes et voisins dans des variables × 0,883 (`mt` × 0,828) ; arène de K8 itérative
+  × 0,727 ; K5 avec les données copiées en f64 × 0,883 ; K1 soa en colonnes f64 sans gain (× 1,046).
+* **Outils** : `--print-opt-code` affiche le code machine de TurboFan avec les binaires officiels de Node 26 et 22 ;
+  le module `node:ffi` de Node 26.12.1, actif par défaut (avertissement expérimental), donne l'adresse d'un
+  `ArrayBuffer` (`getRawPointer`), la lecture et l'écriture par pointeur sans vérification (`getFloat64`…) et la
+  conversion d'un pointeur en `ArrayBuffer` (`toArrayBuffer`). `Atomics.pause`, `Float16Array` et `Math.f16round` sont
+  livrés ; pas d'objet `SIMD`.

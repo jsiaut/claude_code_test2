@@ -199,3 +199,106 @@ d'OCaml) ; puis régénération des sorties publiées (la réplication comprise)
   mesure la version officielle actuelle).
 * Pas de règle « FFI sans C » (elle vaudrait pour tous les langages) ; pas de K10 (hors score) ; pas de remesure de
   l'empreinte.
+
+## 4. Résultats (après les mesures)
+
+Mesures du 3 novembre, de 17:45:01 à 17:50:43, sur la machine 21 : 175 processus (25 cellules, 7 processus chacune),
+aucune somme de contrôle fausse, aucun refait pour vol de temps (vol médian 0,68 %). Aucun écart au plan. Le scénario
+Avant reproduit le classement publié d'avant (O-E, avec le K7 d'OCaml) à l'identique. Rapports :
+`results/report_js.md` ; temps : moyenne géométrique des médianes de processus, intervalle à 95 % par bootstrap.
+
+### 4.1 La correction de K7 (`js_fix` / `js_ref`, même hôte)
+
+| Clé | Banc d'origine (ms) | Corrigé (ms) | Rapport [IC 95 %] | C, même hôte (ms) | Publié d'avant → reporté (ms) |
+|---|---|---|---|---|---|
+| **K7 tuned** | 1 417,4 | 818,0 | **0,577** [0,541–0,618] | 184,4 | 2 715,8 → 1 567,3 |
+| K5 tuned (contrôle) | 137,5 | 133,2 | 0,969 [0,916–1,015] | — | non reporté |
+| K9 tuned (contrôle) | 58,9 | 57,2 | 0,971 [0,925–1,019] | — | non reporté |
+
+Avec des cases de 16 octets, K7 tuned va 1,7 fois plus vite (× 0,48 à 0,70 selon la remarque, sous d'autres versions
+de V8) ; il reste 4,4 fois C sur cet hôte, contre 7,7 fois avant. Les deux clés témoins, au code identique dans les
+deux copies, restent dans le bruit. Pont par le C (information) : 2 026,6 ms, à 22,7 % du transfert, sous le seuil de
+25 % : la règle garde le transfert, et J-E-P se confond avec J-E. Le K7 du C de clang va 2,5 fois plus vite sur cet
+hôte que sur Cascade Lake (184 contre 457 ms) : le pont, s'il s'appliquait, importerait cet écart d'hôte.
+
+### 4.2 Sensibilités (forme nouvelle / `js_ref`, même hôte)
+
+| Forme (scénario) | Clé | `js_ref` (ms) | Forme nouvelle (ms) | Rapport [IC 95 %] | Remarque |
+|---|---|---|---|---|---|
+| Masque par négation, sommes par blocs (S-Q6m) | Q6 tuned | 83,5 | 49,8 | 0,596 [0,560–0,633] | × 0,53 à 0,60 |
+| | Q6 `mt` | 35,9 | 23,5 | 0,654 [0,578–0,742] | |
+| Vues de lignes, voisins dans des variables (S-K9v) | K9 tuned | 58,9 | 52,1 | 0,883 [0,828–0,935] | × 0,68 à 0,86 |
+| | K9 `mt` | 29,1 | 24,1 | 0,828 [0,684–0,987] | |
+| Site d'allocation distinct (S-K8s) | K8 naturel | 1 085,0 | 669,8 | 0,617 [0,558–0,714] | − 35 % |
+| Arène itérative (S-K8it) | K8 tuned | 424,6 | 308,7 | 0,727 [0,701–0,751] | |
+| Données en f64 (S-K5d) | K5 tuned | 137,5 | 121,4 | 0,883 [0,839–0,920] | |
+| Colonnes en f64 (S-K1d) | K1 soa | 14,9 | 15,6 | 1,046 [0,981–1,132] | |
+
+Latences de K8 naturel (médianes de toutes les répétitions), arbre longue durée par une fonction à part : p50 40 → 36
+µs (× 0,890), p90 63 → 47 µs (× 0,749), p99 200 → 99 µs (× 0,496), p99,9 721 → 352 µs (× 0,488), maximum 81,6 → 1,1 ms
+(× 0,014 [0,01–0,02]). La remarque l'avait vu juste : le pretenuring de V8 fait les pauses longues de K8 naturel. K1
+soa en f64 ne gagne rien (compté 1) : l'écart de la validation (22 à 24 ms contre 14,7) venait d'un premier processus
+à froid. Les autres formes gagnent dans le sens annoncé, Q6 autant que la remarque le disait, K9 un peu moins.
+
+### 4.3 Information : Node 22 et Node 26 (même source, même hôte)
+
+Q1 tuned : 269,9 ms sous Node 26, 111,7 ms sous Node 22 (× 0,414 [0,406–0,422]) ; Q1 naturel : 263,5 et 131,2 ms
+(× 0,498 [0,481–0,522]). Node 26 est 2,0 à 2,4 fois plus lent que Node 22 sur Q1, dans les deux variantes, et Turbolev
+n'y est pour rien (section 2). La règle mesure la version officielle actuelle : les temps publiés de Q1 restent ceux
+de Node 26.
+
+### 4.4 Classement (analyse globale de la v3 rejouée, 20 000 variantes)
+
+| Scénario | Score | Contrôle | Plafond | Défaut | Rang espéré | Place | Rang 90 % | OCaml devant | Devant Python |
+|---|---|---|---|---|---|---|---|---|---|
+| Avant (publié d'avant) | 14,27 | 11,6 | 11,4 | 22,7 | 19,07 | 19 | 19–20 | 99,9 % | 92,8 % |
+| J-code (K7) | 14,59 | 11,6 | 12,2 | 22,7 | 19,07 | 19 | 19–20 | 99,9 % | 93,2 % |
+| J-M (errata E1, A4, E6) | 15,31 | 14,6 | 11,4 | 22,7 | 19,04 | 19 | 19–19 | 99,6 % | 95,2 % |
+| **J-E (publié)** | **15,64** | 14,6 | 12,2 | 22,7 | 19,04 | 19 | 19–19 | 99,5 % | 95,5 % |
+| J-E-P (pont, information) | 15,64 | 14,6 | 12,2 | 22,7 | 19,04 | 19 | 19–19 | 99,5 % | 95,5 % |
+| S-Q6m | 15,78 | 14,6 | 12,5 | 22,7 | 19,04 | 19 | 19–19 | 99,5 % | 95,5 % |
+| S-K9v | 15,73 | 14,6 | 12,4 | 22,7 | 19,04 | 19 | 19–19 | 99,5 % | 95,5 % |
+| S-K8s | 17,30 | 14,6 | 12,2 | 29,3 | 19,00 | 19 | 19–19 | 96,4 % | 96,4 % |
+| S-K8it | 15,84 | 14,6 | 12,7 | 22,7 | 19,04 | 19 | 19–19 | 99,5 % | 95,6 % |
+| S-K5d | 15,71 | 14,6 | 12,4 | 22,7 | 19,04 | 19 | 19–19 | 99,5 % | 95,5 % |
+| S-K1d | 15,64 | 14,6 | 12,2 | 22,7 | 19,04 | 19 | 19–19 | 99,5 % | 95,5 % |
+| S-mesures | 17,84 | 14,6 | 13,5 | 29,3 | 18,99 | 19 | 19–19 | 95,8 % | 96,7 % |
+| S-cases (C1, E2, A1, A2, A7 = ½) | 18,40 | 22,5 | 12,2 | 22,7 | 18,96 | 19 | 18–19 | 94,6 % | 99,0 % |
+| S-tout | 20,60 | 22,5 | 13,5 | 29,3 | 18,84 | 19 | 18–19 | 83,5 % | 99,4 % |
+
+« OCaml devant » : part des variantes où OCaml devance JavaScript ; « Devant Python » : part des variantes où
+JavaScript devance Python. Au classement publié (J-E), JavaScript gagne 1,37 point (14,27 → 15,64) et reste 19e, rang
+plausible 19 : la correction de K7 lui rend 0,32 point (plafond 11,4 → 12,2 ; K7 : 0,168 → 0,291 de la référence), les
+errata 1,04 (contrôle 11,6 → 14,6). Les scores des autres langages ne changent pas ; leurs rangs espérés bougent de
+0,03 au plus (Python, que JavaScript devance désormais dans 95,5 % des variantes, contre 92,8 %). De toutes les
+formes, celle qui pèse le plus est un détour du pretenuring de V8 (S-K8s, + 1,66, code par défaut 22,7 → 29,3) ; avec
+toutes les formes et les cases discutables, JavaScript atteint 20,6 points et devance OCaml dans 16,5 % des variantes,
+sans changer de place. Dans les étages de la v3 (ordre établi dans 95 % des tirages, sans inversion sur la machine 3),
+JavaScript forme désormais un étage à lui seul, entre OCaml et le groupe de Python et Lua (`results/report_v3.md`).
+
+### 4.5 Réplication (machine 3)
+
+Données de JavaScript de la machine 3 multipliées par le rapport de K7 tuned (transfert, même modèle de processeur),
+avec les errata : score 12,9 → 14,2, toujours 19e ; plafond 8,0 → 8,5. OCaml, avec son K7 : 21,6 → 21,7, toujours 18e.
+L'ordre de la réplication ne change pas (Spearman 0,93 sur les 21 langages, comme avant).
+
+### 4.6 Bilan
+
+* **La remarque est juste sur l'essentiel.** Le K7 optimisé rangeait ses cases sur 32 octets quand la convention en
+  prend 16 (erreur de mon implémentation) ; E1, A4 et E6 étaient faux (errata) ; les 416 octets sont ceux de V8 sans
+  compression de pointeurs (erreur de mon texte) ; K3 paie un appel de fonction interne par opération atomique ; le
+  code de K5 garde ses vérifications et ses accumulateurs sur la pile ; le pretenuring de V8 fait les pauses de K8
+  naturel, et son détour vaut même plus que l'estimation de la remarque (1,7 point contre environ 1).
+* **Une erreur de plus, chez OCaml** : la règle qui fait de K7 une erreur pour JavaScript en fait une pour OCaml, dont
+  j'avais mis la forme à deux mots en sensibilité sur un motif faux (`docs/OCAML.md`, 4.8) : + 0,12 point, toujours
+  18e.
+* **Ce que je retiens autrement** : Q6 et K9 n'appliquent pas une convention que les autres suivraient (Lua et OCaml
+  multiplient aussi par le masque ; Java écrit K9 comme JavaScript) : sensibilités ; K1 SoA ne gagne rien ; les cases
+  C1, E2, A1, A2 et A7 restent discutables (sensibilité) ; la règle « FFI sans C » vaudrait pour tous les langages et
+  n'est pas appliquée.
+* **Une cause inexacte** : la lenteur de Q1 sous Node 26 est réelle (2 fois Node 22), mais Turbolev, désactivé par
+  défaut dans Node 26, n'en est pas la cause : l'activer l'accélère.
+* **Les estimations de la remarque**, avec ma classification, sont proches des miennes : 14,7 à 15,1 avec K6, K7 et K9
+  (ici 14,59 avec K7 seul, environ 14,8 avec les formes de Q6 et de K9) ; 15,8 à 16,1 avec les errata (15,64 publié,
+  environ 15,9 avec ces formes) ; 21,0 à 21,9 avec les cases discutables et la règle « FFI sans C » (20,60 sans cette
+  règle). JavaScript reste 19e dans tous les scénarios.
