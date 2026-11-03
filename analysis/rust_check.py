@@ -191,6 +191,9 @@ def main(suffix=""):
     remeasured = v2.apply_d3(lat_new)
     lat_strict = defaultdict(dict, {l: dict(dd) for l, dd in lat_old.items()})
     v2.apply_d3(lat_strict, max_steal=STRICT)
+    # corrections de latence publiées des autres langages (remarque sur Haskell, docs/HASKELL.md, 3.2), après D3
+    v2.apply_lat_ratios(lat_new)
+    v2.apply_lat_ratios(lat_strict)
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
     langs = [l for l in RANKED + list(ANNEX) if l in data]
