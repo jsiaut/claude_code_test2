@@ -21,7 +21,7 @@ utilise la boucle sérielle équivalente, et la forme parallèle n'apparaît que
 | Ada | gnatmake -O3, **vérifications actives** (défaut GNAT) | `record` / tableau (valeurs) | `Ada.Containers.Hashed_Maps` | `new` + `Unchecked_Deallocation` | tableau 2D Ada contigu | objet protégé (entrées gardées) |
 | Fortran | gfortran -O3 -march=native | type dérivé / tableau allouable (valeurs) | aucune en standard : chaînage avec pointeurs | `allocate` de pointeurs | tableau 2D allouable, syntaxe tableau | verrou OpenMP (pas de variable de condition) |
 | JavaScript | Node (V8) | objet littéral / `Array` | `Map` | objets (GC) | tableau de tableaux | `postMessage` entre Workers |
-| Python | CPython 3.15 | `class` ordinaire / `list` | `dict` | objets `__slots__` (GC + comptage) | liste de listes | `queue.Queue` bornée + `threading` |
+| Python | CPython 3.15 | `class` ordinaire / `list` | `dict` | objets d'une `class` ordinaire (GC + comptage ; `__slots__` jusqu'au 5/11, corrigé par la remarque sur Lua) | liste de listes | `queue.Queue` bornée + `threading` |
 | Haskell | ghc -O2 -fllvm | `data` à champs stricts / liste | `Data.IntMap.Strict` | constructeurs (GC) | `UArray` immuable | `Control.Concurrent.Chan` |
 | C3 | -O3 | `struct` / tranche `mem::new_array` (valeurs) | `HashMap` | `alloc::new` | tableau 2D fixe | `BufferedChannel` |
 | D | ldc2 -O3 -release | `struct` / tableau dynamique (valeurs) | tableau associatif intégré `Agg[uint]` | `class` + `new` (GC) | `double[][]` | `std.concurrency` (messages) |
@@ -31,13 +31,18 @@ utilise la boucle sérielle équivalente, et la forme parallèle n'apparaît que
 | Mojo | `mojo build` | `struct` / `List` (valeurs) | `Dict` | allocation manuelle par nœud (pas de type récursif possédé simple) | `List[List[Float64]]` | `Deque` + `BlockingSpinLock` (seules primitives de std) |
 | Go | `go build`, GOAMD64=v4 | `struct` / slice (valeurs) | `map[uint32]agg` | `&Node{}` (GC) | `[][]float64` | `chan uint64` bufferisé |
 | OCaml | ocamlopt -O3 (flambda) | enregistrement (champs flottants stockés à plat) / `array` de pointeurs vers les enregistrements | `Hashtbl` | variants (GC) | `float array array` | `Queue` + `Mutex` + `Condition` |
-| Lua | PUC-Lua 5.5 | table à champs nommés / table | table | tables (GC) | table de tables | coroutines (pas de threads en Lua standard) |
+| Lua | PUC-Lua 5.5 | table à champs nommés / table | table | tables à champs nommés (GC ; tables positionnelles `{v, false, false}` jusqu'au 5/11, corrigé par la remarque sur Lua) | table de tables | coroutines (pas de threads en Lua standard) |
 
 Annexes (hors classement) : `c_gcc` (même source C, gcc-16), `fortran_flang` (même source,
 flang-23), `luajit` (dialecte 5.1 + FFI), `js_bun` (même source JS, JavaScriptCore),
 `python_ft` (CPython 3.15 sans GIL).
 
 ## Justifications des cas discutables
+
+* **Python et Lua (K8, corrigé le 5 novembre)** : le naturel de K8 déclarait `__slots__` en Python (une annotation de
+  mémoire et de vitesse) et rangeait ses nœuds dans des tables positionnelles en Lua (une astuce : la partie tableau),
+  contre la règle ci-dessus et contre leur propre K1 naturel. Les copies publiées (`python_k9h`, `lua_k9h`) gardent leur
+  code ; la correction (`python_k8n`, `lua_fix`) est reportée par transfert (`docs/LUA.md`, `docs/PYTHON.md` 4.8).
 
 * **C et Fortran (K7)** : la bibliothèque standard n'a pas de table de hachage. Le chaînage
   séparé avec une allocation par entrée est la structure des manuels (K&R 6.6 pour C).

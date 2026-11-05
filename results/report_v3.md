@@ -28,12 +28,12 @@
 | 2 | Java | 56,5 [54,3–58,7] | 46,0 | 43 % | 12,1 | 9,3 | 24 % | 42,7 / 42,7 | 47,2 [46,2–48,2] | 0,50 | 15–16 | 15 [14–17] | 15 |
 | 3 | OCaml | 19,4 [18,8–20,1] | 14,8 | 13 % | 7,0 | 5,2 | 38 % | 23,2 / 23,2 | 23,9 [23,4–24,9] | 0,35 | 18–18 | 18 [18–18] | 18 |
 | 4 | JavaScript | 12,2 [11,8–12,6] | 8,5 | 9 % | 4,5 | 3,4 | 38 % | 14,6 / 14,6 | 15,6 [15,3–16,0] | 0,49 | 19–19 | 19 [19–20] | 19 |
-| 4 | Lua | 1,1 [1,0–1,1] | 0,8 | 1 % | 1,0 | 0,8 | 77 % | 2,8 / 2,8 | 3,9 [3,8–4,1] | 0,47 | 21–21 | 21 [20–21] | 21 |
-| 4 | Python | 0,6 [0,6–0,6] | 0,4 | 0 % | 0,5 | 0,4 | 82 % | 29,7 / 27,7 | 11,8 [11,8–11,9] | 0,49 | 20–20 | 20 [19–21] | 20 |
+| 4 | Lua | 1,3 [1,3–1,4] | 1,0 | 1 % | 1,1 | 0,9 | 72 % | 6,8 / 6,8 | 5,4 [5,3–5,6] | 0,48 | 21–21 | 21 [20–21] | 21 |
+| 4 | Python | 0,6 [0,6–0,6] | 0,4 | 0 % | 0,5 | 0,4 | 81 % | 29,7 / 27,7 | 11,8 [11,8–11,9] | 0,49 | 20–20 | 20 [19–21] | 20 |
 
 Position moyenne des estimations dans leur intervalle : 0,45 (0,78 en v2).
 
-Hors plan, par composante (moyenne sur les 21 langages ; C ; extrêmes) : E 0,46 (C 0,49 ; 0,41 à 0,50) ; D 0,46 (C 0,38 ; 0,19 à 0,73) ; D1 0,51 (C 0,51 ; 0,48 à 0,54) ; D2 0,80 (C 1,00 ; 0,46 à 1,00) ; D3 0,41 (C 0,35 ; 0,13 à 0,79) ; D4 0,58 (C 0,72 ; 0,49 à 0,72).
+Hors plan, par composante (moyenne sur les 21 langages ; C ; extrêmes) : E 0,47 (C 0,49 ; 0,41 à 0,50) ; D 0,46 (C 0,38 ; 0,19 à 0,73) ; D1 0,51 (C 0,51 ; 0,48 à 0,54) ; D2 0,80 (C 1,00 ; 0,46 à 1,00) ; D3 0,41 (C 0,35 ; 0,13 à 0,79) ; D4 0,58 (C 0,72 ; 0,49 à 0,72).
 
 ## Hors plan : étages par quantité mesurée (même règle ; précédences tirées des mêmes 20 000 tirages)
 
@@ -77,7 +77,7 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 
 ## Hors plan : Cascade Lake seul (K5 d'avant, machines 1 et 2 ; K9 de Cascade Lake, harnais d'origine), estimation ponctuelle
 
-C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Fortran 11 (E 72,7, D1 18,7), Julia 12 (E 67,9, D1 20,9), Mojo 13 (E 69,0, D1 11,0), C# 14 (E 49,5, D1 9,3), Java 15 (E 57,9, D1 12,4), Go 16 (E 41,6, D1 11,0), Haskell 17 (E 47,3, D1 5,2), OCaml 18 (E 20,2, D1 7,3), JavaScript 19 (E 13,1, D1 4,9), Python 20 (E 0,6, D1 0,5), Lua 21 (E 1,2, D1 1,1).
+C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Fortran 11 (E 72,7, D1 18,7), Julia 12 (E 67,9, D1 20,9), Mojo 13 (E 69,0, D1 11,0), C# 14 (E 49,5, D1 9,3), Java 15 (E 57,9, D1 12,4), Go 16 (E 41,6, D1 11,0), Haskell 17 (E 47,3, D1 5,2), OCaml 18 (E 20,2, D1 7,3), JavaScript 19 (E 13,1, D1 4,9), Python 20 (E 0,6, D1 0,5), Lua 21 (E 1,4, D1 1,2).
 
 ## Réplication : bruit ou interaction ?
 
@@ -86,7 +86,7 @@ C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 
 | Spearman, 21 langages | 0,93 | 0,99 [0,98–1,00] | 0,000 |
 | Spearman, 13 premiers | 0,72 | 0,97 [0,93–0,99] | 0,000 |
 | Spearman, 9 premiers | 0,30 | 0,93 [0,80–0,98] | 0,000 |
-| Paires inversées parmi les 13 premiers | 19,00 | 4,00 [1,00–7,05] | 0,000 |
+| Paires inversées parmi les 13 premiers | 19,00 | 4,00 [1,00–7,00] | 0,000 |
 
 Hors plan, bruit de la machine 3 multiplié par 1,5 : Spearman, 21 langages p = 0,000 (médiane nulle 0,99) ; Spearman, 13 premiers p = 0,000 (médiane nulle 0,96) ; Spearman, 9 premiers p = 0,000 (médiane nulle 0,88) ; Paires inversées parmi les 13 premiers p = 0,000 (médiane nulle 6,00).
 
@@ -104,9 +104,9 @@ Hors plan, bruit de la machine 3 multiplié par 2,0 : Spearman, 21 langages p = 
 | k2:tuned:262144 | 25 | 95 % | 2 % | 4 % |
 | k2:tuned:8388608 | 25 | 11 % | 0 % | 89 % |
 | k3:rmw_padded: | 25 | 99 % | 1 % | 0 % |
-| k3:sw_padded: | 25 | 96 % | 3 % | 0 % |
+| k3:sw_padded: | 25 | 96 % | 4 % | 0 % |
 | k4:branchless_unsorted: | 25 | 98 % | 1 % | 1 % |
-| k4:natural_unsorted: | 25 | 97 % | 2 % | 0 % |
+| k4:natural_unsorted: | 25 | 97 % | 2 % | 1 % |
 | k6:mt:q1 | 26 | 99 % | 0 % | 1 % |
 | k6:mt:q6 | 26 | 98 % | 2 % | 1 % |
 | k6:natural:q1 | 26 | 99 % | 0 % | 1 % |

@@ -2,7 +2,7 @@
 
 Plan : `docs/C.md`. Mesures : `results/raw_c/` (machine 16, 7 processus par cellule). Code : `analysis/c_check.py`.
 Processus rejetés : aucun.
-Contrôle : le scénario Publié reproduit results/python_check.json, P-E (écart maximal 0.0e+00).
+Contrôle : le scénario Publié reproduit results/lua_check.json, L-E (écart maximal 0.0e+00).
 
 ## Rapports appariés (même hôte)
 
@@ -20,7 +20,7 @@ Contrôle : le scénario Publié reproduit results/python_check.json, P-E (écar
 | c_gcc_ref / c_ref | k8:natural (témoin) | 771,3 | 602,2 | 0,781 | 0,700–0,871 |
 
 Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0 ms avec la meilleure forme (S-K8).
-État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md), K5 et K1 soa de Java corrigés et F1 de Java à ½ (docs/JAVA.md), K5 et K9 de Go corrigés (docs/GO.md), options et K1, K5, K8 de Haskell corrigés et B2, B3, A7 de Haskell à ½ (docs/HASKELL.md), Q6, K1 aos, K7 et K8 d'OCaml corrigés et D5 d'OCaml à ½ (docs/OCAML.md), K7 de JavaScript corrigé et E1, A4, E6 de JavaScript à 1, ½, ½ (docs/JAVASCRIPT.md), K3, K6 mt et K9 mt de Python corrigés et B1, F3 de Python à 1, ½ (docs/PYTHON.md) ; Publié = results/python_check.json (P-E).
+État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md), K5 et K1 soa de Java corrigés et F1 de Java à ½ (docs/JAVA.md), K5 et K9 de Go corrigés (docs/GO.md), options et K1, K5, K8 de Haskell corrigés et B2, B3, A7 de Haskell à ½ (docs/HASKELL.md), Q6, K1 aos, K7 et K8 d'OCaml corrigés et D5 d'OCaml à ½ (docs/OCAML.md), K7 de JavaScript corrigé et E1, A4, E6 de JavaScript à 1, ½, ½ (docs/JAVASCRIPT.md), K3, K6 mt, K9 mt et K8 naturel de Python corrigés et B1, F3 de Python à 1, ½ (docs/PYTHON.md), K3, K4, Q6 et K8 naturel de Lua corrigés et B3, B4 de Lua à ½ (docs/LUA.md) ; Publié = results/lua_check.json (L-E).
 
 ## Scénarios (analyse globale de la v3 rejouée, 20 000 variantes)
 
@@ -58,8 +58,8 @@ Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0
 | Haskell | 41,28 | 38,9 → 38,9 | 16,82 → 16,82 | 0 % → 0 % |
 | OCaml | 23,92 | 23,2 → 23,2 | 18,02 → 18,02 | 0 % → 0 % |
 | JavaScript | 15,64 | 14,6 → 14,6 | 19,08 → 19,08 | 0 % → 0 % |
-| Python | 11,83 | 27,7 → 27,7 | 20,17 → 20,17 | 0 % → 0 % |
-| Lua | 3,92 | 2,8 → 2,8 | 20,72 → 20,72 | 0 % → 0 % |
+| Python | 11,83 | 27,7 → 27,7 | 20,31 → 20,31 | 0 % → 0 % |
+| Lua | 5,41 | 6,8 → 6,8 | 20,58 → 20,58 | 0 % → 0 % |
 
 **Publié** : 1. C (2,21, 80,0), 2. Odin (3,16, 74,0), 3. C++ (3,76, 77,1), 4. Zig (4,93, 72,3), 5. C3 (5,14, 71,6), 6. Rust (6,82, 70,0), 7. Nim (6,92, 69,3), 8. D (7,24, 72,7).
 

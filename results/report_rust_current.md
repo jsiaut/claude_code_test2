@@ -57,7 +57,7 @@ Code : `analysis/rust_check.py`. Processus rejetés : aucun.
 | Ada | 2 → 7 | 52,0 → 31,9 | 283,5 → 149,2 | 2075 → 1384 | 0,551 → 0,570 |
 | Fortran | 2 → 7 | 48,1 → 32,8 | 262,6 → 147,2 | 1394 → 1040 | 0,698 → 0,662 |
 | JavaScript | 2 → 7 | 54,4 → 38,3 | 880,8 → 554,1 | 170395 → 82674 | 0,034 → 0,038 |
-| Python | 2 → 7 | 1050,1 → 579,1 | 4579,3 → 2689,5 | 1083620 → 759188 | 0,006 → 0,006 |
+| Python | 2 → 7 | 1050,1 → 590,6 | 4579,3 → 2946,9 | 1083620 → 978725 | 0,006 → 0,005 |
 | Haskell | 3 → 7 | 97,7 → 62,2 | 2217,9 → 832,1 | 8739 → 4443 | 0,096 → 0,135 |
 | C3 | 3 → 7 | 76,7 → 49,6 | 303,1 → 277,2 | 2211 → 2219 | 0,516 → 0,330 |
 | D | 2 → 7 | 82,2 → 63,2 | 1245,3 → 819,0 | 126875 → 89243 | 0,034 → 0,030 |
@@ -67,7 +67,7 @@ Code : `analysis/rust_check.py`. Processus rejetés : aucun.
 | Mojo | 3 → 7 | 80,9 → 54,0 | 444,4 → 173,1 | 2247 → 2053 | 0,423 → 0,434 |
 | Go | 2 → 7 | 73,0 → 41,7 | 1132,1 → 707,4 | 3589 → 3038 | 0,210 → 0,177 |
 | OCaml | 3 → 7 | 15,0 → 10,0 | 191,4 → 114,9 | 2200 → 1428 | 0,651 → 0,639 |
-| Lua | 2 → 7 | 472,0 → 282,5 | 37758,0 → 20719,5 | 50326 → 35397 | 0,010 → 0,010 |
+| Lua | 2 → 7 | 472,0 → 409,4 | 37758,0 → 27497,3 | 50326 → 44890 | 0,010 → 0,007 |
 
 Vol de temps dans la remesure : médiane 0,33 %, maximum 1,28 % ; 0 processus refaits au-dessus de 2 % ; au-dessus de 0,5 % : C (gcc) 0,67 %, C (gcc) 0,72 %, C# 0,59 %, Fortran 0,59 %, Go 0,77 %, Go 0,91 %, Go 0,94 %, Go 0,96 %, Go 0,98 %, Go 1,04 %, Go 1,28 %, Haskell 0,56 %, Haskell 0,57 %, Haskell 0,58 %, Haskell 0,67 %, Haskell 0,69 %, Haskell 0,75 %, Haskell 0,94 %, Java 0,57 %, JavaScript 0,53 %, JavaScript 0,57 %, JavaScript 0,59 %, JavaScript 0,61 %, JS (Bun) 0,58 %, Julia 0,51 %, Julia 0,57 %, Julia 0,61 %, Julia 0,69 %, Nim 0,54 %, OCaml 0,59 %, OCaml 0,68 %, Zig 0,57 %.
 Corrélation de rang entre le vol et la queue (processus des langages à malloc, n = 70) : p99,9 0,49, max 0,67 ; tous (n = 175) : 0,31 et 0,45.

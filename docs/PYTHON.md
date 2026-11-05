@@ -351,3 +351,21 @@ pas (Spearman 0,93 sur les 21 langages, comme avant).
   tous les scénarios, confirmé. Python, JavaScript et Lua forment désormais un seul étage.
 * **Ce que le classement mesure** : le README dit désormais que le classement mesure CPython sans son écosystème, dans
   son build par défaut ; NumPy, PyPy et le JIT ne sont pas mesurés.
+
+### 4.8 K8 naturel sans `__slots__` (remarque sur Lua, 5 novembre au soir)
+
+La remarque sur Lua a relevé que le K8 naturel de Lua rangeait ses nœuds dans des tables positionnelles, quand son K1
+naturel utilise des champs nommés (`docs/LUA.md`, 2). Par la même règle (le type d'enregistrement par défaut, sans
+annotation de performance : `docs/NATURAL.md`), le K8 naturel de Python déclarait `__slots__`, une annotation de
+mémoire et de vitesse, quand son K1 naturel est une classe ordinaire « comme dans le tutoriel officiel » : **erreur de
+mon implémentation**, en sens inverse (elle avantageait Python). Mesuré en paires sur la machine 23 (`python_k8n` /
+`python_ref`, sept processus, `results/raw_lua/`) : temps 18 796,6 → 19 939,7 ms, × 1,061 [1,026–1,099] ; latences
+p50 × 1,02, p90 × 0,94, p99 × 1,01, p99,9 × 1,10, pire pause × 1,29 [1,24–1,33] (730 → 941 ms).
+
+Reporté dans tous les scénarios de code de `analysis/python_check.py`, rejoué le soir même (temps et latences ;
+« lat_ratios » de `results/transfers.json`, « replication_lat_ratios » pour la machine 3). Le scénario P-E-511 garde le
+P-E du matin et le reproduit à l'identique ; les errata de Lua (B3, B4), postérieurs, y sont neutralisés, pour que le
+scénario Avant de la remarque sur Lua reproduise le P-E rejoué. P-E : 11,833 → 11,830 points (code par défaut 4,876 →
+4,860), toujours 20e, devant Lua dans 72,1 % des variantes (72,4 %) avant la remarque sur Lua. La sensibilité S-K8f
+(`gc.freeze()`, rapport mesuré avec `__slots__`) s'applique désormais sur la classe ordinaire : 11,99 points (12,02),
+S-mesures 12,01 (12,04), S-tout 13,23 (13,26).

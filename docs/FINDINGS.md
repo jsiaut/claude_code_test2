@@ -819,3 +819,32 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   compris), `array('I')` qui refuse les valeurs hors bornes ; NumPy, Numba, Polars, DuckDB et cffi absents.
   Empreinte de K1 selon `tracemalloc` : 608 o par particule pour une classe ordinaire, 552 avec `__slots__`, 64,7 en
   `array('f')`.
+
+## Remarque sur Lua (5 novembre, machine 23, Cascade Lake) — `docs/LUA.md`, `results/lua_check/`
+
+* **Partie tableau et partie hachée** : une table Lua n'étend sa partie tableau que si plus de la moitié de ses cases
+  sont prises ; avec `c = {}`, les compteurs aux indices 17, 33 et 49 de K3 « espacé » allaient dans la partie
+  hachée, 1,42 fois plus lente : le « faux partage × 0,63 » publié pour Lua, qui n'a pas de fils, venait de là.
+  Préremplie, la table rend espacé et serré égaux (1,05 et 0,99).
+* **Un appel C par octet** : `string.byte` coûtait 62 ns par octet dans K4 ; sur une table d'octets décodée hors
+  chrono, K4 va 2,8 à 3,6 fois plus vite, et la prédiction de branchement apparaît (trié 1,5 fois plus rapide que non
+  trié, contre 1,2).
+* **`cond and 1 or 0` branche** : dans le bytecode de la 5.5.1, chaque prédicat du masque de Q6 donne une comparaison
+  et deux sauts (`LT`, `JMP`, `LOADI`, `TEST`, `JMP`) ; le bit de signe d'une différence, décalé de 63 bits, donne le
+  même masque sans saut (× 0,74), et des tests imbriqués font mieux encore dans l'interpréteur (× 0,51 de plus).
+* **Champs nommés contre table positionnelle** : un nœud de K8 à trois champs nommés coûte 1,44 fois un nœud
+  `{v, false, false}` (latences 1,27 à 1,58 fois ; LuaJIT, 1,37 fois) ; en Python, un nœud de classe ordinaire coûte
+  1,06 fois un nœud à `__slots__` (pire pause 1,29 fois).
+* **Allocations de PUC-Lua 5.5.1** (sonde) : aucun octet pour un million d'opérations flottantes et entières ni pour un
+  million d'appels à trois retours ; 80 octets par fermeture, 82 par concaténation, 12 par élément d'une table
+  construite élément par élément. **Empreinte** : 48 octets par table vide, 24 par champ nommé, 9 par case de
+  tableau ; une particule à 16 champs coûte 449 octets (48 + 8 + 16 × 24 + 9).
+* **LuaJIT** : son code compilé ignore `volatile` (sa documentation ; sonde : 0,32 à 0,64 ns par incrément de K3, le
+  compteur en registre) ; la boucle interprétée (`jit.off`) sur une table, conforme, coûte 0,74 à 0,78 fois celle de
+  PUC-Lua ; `-jdump=m` affiche le code machine des traces ; la version 2.1.1792588164 est l'horodatage de son commit
+  du 21 octobre 2026.
+* **Formes plus poussées, même hôte** : Q6 par tests imbriqués × 0,51 (`mt` × 0,49) ; K7 dans une seule table, compte
+  et somme tassés dans un entier, × 0,71 ; K9 aux voisins glissants × 0,87 (`mt` × 0,96) ; K1 `soa` au 0,5 sorti de
+  la boucle × 0,83 ; K2 aux indices décalés × 0,77, 0,82 et 0,97 ; arène itérative de K8 × 1,06, plus lente.
+* **Machine 23** : latence 25 ns jusqu'à 2 Mio, 137 ns dès 4 Mio ; sur la machine 22, du même modèle, 25 ns encore à
+  4 Mio : l'hôte ne laisse à la VM qu'une part de son L3.

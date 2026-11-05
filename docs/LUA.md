@@ -234,3 +234,127 @@ réplication comprise) et de l'état actuel.
 * Ni l'API C (la règle de la bibliothèque standard), ni LuaJIT classé (annexe et sensibilité) ; pas de règle « FFI
   sans C » ; pas de mesure sous Lua 5.4.
 * Pas de K10 (hors score) ; pas de remesure de l'empreinte ; rien sur les champs stricts du naturel de Haskell.
+
+## 4. Résultats (après les mesures)
+
+Mesures du 5 novembre, de 13:03:10 à 14:07:34, sur la machine 23 : 364 processus (52 cellules, 7 processus chacune),
+aucune somme de contrôle fausse, sept processus refaits pour vol de temps (deux deux fois), aucun gardé au-dessus de
+2 % (vol médian 0,63 %). Aucun écart au plan. `analysis/python_check.py`, rejoué d'abord, reproduit J-E (Avant) et le
+P-E du matin (P-E-511) à l'identique ; le scénario Avant de Lua reproduit le P-E rejoué à l'identique. Rapports :
+`results/report_lua.md` ; temps : moyenne géométrique des médianes de processus, intervalle à 95 % par bootstrap.
+
+### 4.1 Les corrections (`lua_fix` / `lua_ref`, même hôte)
+
+| Clé | Code publié (ms) | Corrigé (ms) | Rapport [IC 95 %] | Publié d'avant → reporté (ms) |
+|---|---|---|---|---|
+| **K3 `rmw_packed`** | 2 073,7 | 2 000,6 | **0,965** [0,913–1,019] | 2 542,5 → 2 452,9 |
+| **K3 `rmw_padded`** | 2 938,8 | 2 104,9 | **0,716** [0,679–0,754] | 4 115,2 → 2 947,4 |
+| **K3 `sw_packed`** | 2 065,8 | 2 187,0 | **1,059** [0,975–1,146] | 2 559,5 → 2 709,7 |
+| **K3 `sw_padded`** | 2 931,6 | 2 154,6 | **0,735** [0,689–0,790] | 4 343,0 → 3 191,9 |
+| **K4 naturel non trié** | 821,5 | 290,8 | **0,354** [0,331–0,380] | 1 040,3 → 368,2 |
+| **K4 naturel trié** | 689,1 | 189,2 | **0,275** [0,242–0,312] | 874,8 → 240,2 |
+| **K4 sans branchement** | 715,2 | 225,7 | **0,316** [0,288–0,345] | 985,2 → 310,9 |
+| **Q6 tuned** | 1 212,5 | 900,2 | **0,742** [0,691–0,811] | 1 633,9 → 1 213,0 |
+| **Q6 `mt`** | 1 209,6 | 933,5 | **0,772** [0,702–0,853] | 1 592,0 → 1 228,6 |
+| **K8 naturel** | 8 538,3 | 12 259,4 | **1,436** [1,381–1,500] | 10 944,0 → 15 713,5 |
+| Q6 naturel (contrôle) | 496,6 | 531,0 | 1,069 [1,013–1,124] | non reporté |
+
+Dans la partie tableau, les compteurs espacés coûtent ce que coûtent les serrés (espacé contre serré : 1,05 en `rmw`,
+0,99 en `sw`, contre 1,42 avant) : le « faux partage » publié de Lua disparaît. Sur une table d'octets, K4 va 2,8 à 3,6
+fois plus vite, et la prédiction de branchement apparaît (trié 1,5 fois plus rapide que non trié, contre 1,2 fois).
+Le masque sans branchement accélère Q6 tuned d'un quart, sans rattraper le naturel (900 contre 497 ms). À champs
+nommés, K8 naturel coûte 1,44 fois plus, et ses latences 1,27 à 1,58 fois (`report_lua.md`) : médianes de la machine
+11, p50 282 → 409 µs, p99,9 20,7 → 27,5 ms, pire pause 35,4 → 44,9 ms. La clé témoin, au code identique, dévie de 7 %
+(IC 1,01–1,12) : c'est la précision de ces rapports, sous les effets mesurés, sauf pour K3 serré, qui reste dans le
+bruit. Pont par le C (information) : écarts de 204 et 110 % sur K3 (le C de cet hôte est 2,1 et 1,5 fois plus lent
+que celui des données principales), de − 16 et 23 % sur K4 : il donnerait 5,49 points (L-E-P), même place.
+
+### 4.2 Sensibilités (forme nouvelle / base, même hôte)
+
+| Forme (scénario) | Clé | Base | Rapport [IC 95 %] | Remarque (Lua 5.4.6) |
+|---|---|---|---|---|
+| Tests imbriqués (S-Q6n) | Q6 tuned | `lua_fix` | 0,511 [0,465–0,552] | |
+| | Q6 `mt` | `lua_fix` | 0,485 [0,436–0,534] | × 0,45 |
+| Voisins glissants (S-K9s) | K9 tuned | `lua_ref` | 0,873 [0,810–0,944] | |
+| | K9 `mt` | `lua_ref` | 0,957 [0,888–1,040] | × 0,77 |
+| Table tassée (S-K7p) | K7 tuned | `lua_ref` | 0,707 [0,684–0,730] | × 0,83 |
+| Arène itérative (S-K8it) | K8 tuned | `lua_ref` | 1,064 [0,995–1,131] | × 0,83 |
+| 0,5 sorti (S-K1h) | K1 `soa` | `lua_ref` | 0,831 [0,737–0,937] | × 0,86 |
+| Indices décalés (S-K2s) | K2 à 16 Kio, 256 Kio, 8 Mio | `lua_ref` | 0,770 ; 0,821 ; 0,974 | × 0,89 |
+
+Les tests imbriqués ramènent Q6 au niveau du naturel ; la table tassée de K7 gagne plus que sur la 5.4.6 ; l'arène
+itérative, plus lente, ne compte pas (min(1, r)).
+
+### 4.3 LuaJIT et Python
+
+* **K3 conforme de LuaJIT** (boucle interprétée sur une table, `luajit_fix` / `lua_fix`) : × 0,736 à 0,776 ; LuaJIT
+  interprété fait à peine mieux que PUC-Lua. **K8 naturel à champs nommés** (`luajit_fix` / `luajit_ref`) : × 1,370
+  [1,286–1,457].
+* **Python**, K8 naturel sans `__slots__` (`python_k8n` / `python_ref`) : × 1,061 [1,026–1,099], pire pause × 1,29 ;
+  le P-E de Python passe de 11,833 à 11,830 points, toujours 20e (`docs/PYTHON.md`, 4.8).
+
+### 4.4 Classement (analyse globale de la v3 rejouée, 20 000 variantes)
+
+| Scénario | Score | Contrôle | Plafond | Défaut | Rang espéré | Place | Rang 90 % | Python devant |
+|---|---|---|---|---|---|---|---|---|
+| Avant (publié d'avant) | 3,92 | 2,8 | 1,08 | 10,0 | 20,72 | 21 | 20–21 | 72,1 % |
+| L-code (K3, K4, Q6, K8) | 4,01 | 2,8 | 1,31 | 10,0 | 20,67 | 21 | 20–21 | 67,5 % |
+| L-M (errata B3, B4) | 5,32 | 6,8 | 1,08 | 10,0 | 20,62 | 21 | 20–21 | 62,6 % |
+| **L-E (publié)** | **5,41** | 6,8 | 1,31 | 10,0 | 20,58 | 21 | 20–21 | 58,3 % |
+| L-E-P (pont, information) | 5,49 | 6,8 | 1,49 | 10,0 | 20,56 | 21 | 20–21 | 56,0 % |
+| S-Q6n | 5,43 | 6,8 | 1,34 | 10,0 | 20,58 | 21 | 20–21 | 57,9 % |
+| S-K9s | 5,42 | 6,8 | 1,31 | 10,0 | 20,58 | 21 | 20–21 | 58,2 % |
+| S-K7p | 5,44 | 6,8 | 1,37 | 10,0 | 20,57 | 21 | 20–21 | 57,5 % |
+| S-K8it | 5,41 | 6,8 | 1,31 | 10,0 | 20,58 | 21 | 20–21 | 58,3 % |
+| S-K1h | 5,43 | 6,8 | 1,34 | 10,0 | 20,58 | 21 | 20–21 | 57,9 % |
+| S-K2s | 5,73 | 6,8 | 1,31 | 11,3 | 20,56 | 21 | 20–21 | 55,7 % |
+| S-mesures | 5,78 | 6,8 | 1,43 | 11,3 | 20,54 | 21 | 20–21 | 54,2 % |
+| S-cases (A8 = ½) | 5,96 | 8,4 | 1,31 | 10,0 | 20,55 | 21 | 20–21 | 55,0 % |
+| S-tout | 6,33 | 8,4 | 1,43 | 11,3 | 20,51 | 21 | 20–21 | 51,0 % |
+| S-LuaJIT (grille de Lua) | 11,12 | 6,8 | 11,61 | 16,4 | 20,13 | 20 | 19–21 | 20,7 % |
+| S-LuaJIT-FFI | 15,85 | 20,3 | 11,61 | 16,4 | 19,49 | 19 | 19–20 | 5,2 % |
+
+« Python devant » : part des variantes où Python devance Lua (dans S-LuaJIT et S-LuaJIT-FFI, LuaJIT). Au classement
+publié (L-E), Lua gagne 1,49 point (3,92 → 5,41) et reste 21e, rang plausible 20 à 21 : les errata lui rendent 1,40
+point (contrôle 2,8 → 6,8), les corrections du banc 0,09 (plafond 1,08 → 1,31 : K3 0,0141 → 0,0198 de la référence,
+K4 0,0029 → 0,0091, K6 0,0098 → 0,0104), le K8 naturel plus lent retirant presque autant au code par défaut que K4 lui
+apporte (10,01 → 10,03). Python ne devance plus Lua que dans 58,3 % des variantes (72,1 %). Les scores des autres
+langages ne changent pas, hors Python (− 0,004).
+
+**LuaJIT** : avec la grille de Lua, errata compris, 11,12 points (plafond 11,61, code par défaut 16,4 : son K8
+naturel à champs nommés compte), au niveau de Python, qu'il devance dans 79 % des variantes ; sa FFI notée comme
+`ctypes` et `node:ffi` et son `-jdump` comme le `--print-opt-code` de Node (contrôle 20,3), 15,85 points : 19e,
+devant JavaScript dans 52,5 % des variantes. La remarque estimait 9,8 à 11,2 et 14,9 à 16,4.
+
+### 4.5 Réplication (machine 3)
+
+Données de Lua de la machine 3 multipliées par les rapports des dix clés corrigées (transfert de Cascade Lake vers
+Emerald Rapids ; latences de K8 naturel comprises), avec les errata : score 4,38 → 5,86, toujours 21e ; plafond 0,85 →
+1,03. Python 11,985 → 11,983, toujours 20e. L'ordre de la réplication ne change pas (Spearman 0,93 sur les 21
+langages, comme avant).
+
+### 4.6 Hors de Lua
+
+* **Étages de la v3** : inchangés ; JavaScript, Lua et Python forment toujours le dernier étage.
+* **Sans SIMD explicite** (`docs/NOSIMD.md`, 4.17) : Lua 21e dans tous les scénarios (5,4 à 6,2 points), Python 20e.
+* **Confrontation** (`docs/CONFRONTATION.md`) : Lua n'est pas dans l'autre étude ; rien ne change.
+* **L'annexe LuaJIT** partage la grille de Lua (contrôle 2,8 → 6,8) ; son plafond reste indéfini au classement publié
+  (K3 non conforme), d'où la sensibilité S-LuaJIT.
+
+### 4.7 Bilan
+
+* **La remarque est juste sur l'essentiel.** Trois défauts sont des erreurs de mon implémentation (K3 dans la partie
+  hachée, K4 décodé dans la boucle, masque de Q6 qui branche), un quatrième aussi, en sens inverse (K8 naturel
+  positionnel), et la même règle en trouve un chez Python (`__slots__`) ; B4 et B3 étaient faux (errata) ; seul le
+  pilier jugé met Lua derrière Python, qui ne le devance plus que dans 58 % des variantes ; LuaJIT le mettrait au
+  niveau de Python ou de JavaScript.
+* **Ce que je retiens autrement** : le masque de Q6 est corrigé tel que le code l'annonce (sans branchement), et la
+  forme de la remarque, des tests imbriqués, reste une sensibilité ; K9, K7, K8 tuned, K1 et K2 sont des formes
+  nouvelles, des sensibilités, dont trois ne gagnent rien ou presque sur la 5.5.1 ; A8 reste à 0 (stockage en lecture
+  seule : ½ discutable).
+* **Les estimations de la remarque** : plafond 1,08 → 1,47 (ici 1,31 au publié, 1,43 avec les formes) ; score 4,2 avec
+  le banc corrigé (ici 4,01 : le K8 naturel corrigé en sens inverse retire ce que K4 apporte au code par défaut),
+  environ 6,1 avec les trois cases (ici 5,96 avec les errata et A8, 6,33 avec les formes) ; 21e partout, confirmé.
+  LuaJIT : 9,8 à 11,2 et 14,9 à 16,4 points (ici 11,12 et 15,85, le K3 conforme et les errata compris).
+* **Le README** dit désormais que le classement mesure PUC-Lua sans son API C, et que seul le contrôle le place
+  derrière Python ; les 21 langages ont été relus.

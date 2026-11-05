@@ -1154,3 +1154,27 @@ Robustesse :
   `volatile`). Plan (`docs/LUA.md`, sections 1 à 3) : copies (`tools/lua_check/make_copies.py`, 48 cellules validées),
   outil de mesure (`tools/measure_lua.py`), scripts d'analyse (`analysis/lua_check.py` ; `analysis/python_check.py`
   pour le K8 de Python), errata et réplication poussés avant les mesures.
+* 2026-11-05, 13:03:10-14:07:34 : **mesures de la remarque sur Lua** (`tools/measure_lua.py`, machine 23) : 364
+  processus (52 cellules × 7), aucune somme de contrôle fausse, sept processus refaits pour vol de temps (deux deux
+  fois), aucun gardé au-dessus de 2 % (vol médian 0,63 %).
+* 2026-11-05, 14:07 à 14:27 : **résultats de la remarque sur Lua** (`results/report_lua.md`). Aucun écart au plan.
+  `analysis/python_check.py` rejoué d'abord : K8 naturel de Python sans `__slots__` × 1,061 [1,026–1,099], pire pause
+  × 1,29 ; P-E 11,833 → 11,830, toujours 20e ; ses contrôles reproduisent J-E et le P-E du matin (P-E-511) à
+  l'identique. Puis `analysis/lua_check.py`, dont le scénario Avant reproduit le P-E rejoué à l'identique. Corrections :
+  K3 espacé × 0,716 et 0,735 (serré dans le bruit), K4 × 0,354, 0,275 et 0,316, Q6 tuned × 0,742 et `mt` × 0,772,
+  K8 naturel × 1,436 (latences × 1,27 à 1,58) ; clé témoin 1,069 [1,013–1,124]. Classement publié (L-E, transfert et
+  errata B3, B4) : Lua 5,41 points (3,92), 21e, rang plausible 20 à 21, Python devant dans 58,3 % des variantes
+  (72,1 %) ; contrôle 2,8 → 6,8, plafond 1,08 → 1,31. Sensibilités : Q6 imbriqué × 0,51 et 0,49, K7 tassé × 0,71, K9
+  × 0,87 et 0,96, K1 × 0,83, K2 × 0,77 à 0,97, arène itérative plus lente ; S-mesures 5,78, S-cases (A8) 5,96, S-tout
+  6,33. LuaJIT à la place de PUC-Lua : 11,12 points avec la grille de Lua (20e, devant Python dans 79 % des
+  variantes), 15,85 avec sa FFI notée comme `ctypes` (19e, devant JavaScript dans 52,5 %). Pont par le C : écarts de
+  110 et 204 % sur K3 (l'hôte), transfert gardé (L-E-P 5,49).
+* 2026-11-05, 14:27 à 15:11 : **sorties régénérées après la remarque sur Lua** (même chaîne, 2 612 s, lancée en tâche
+  de fond avec un délai suffisant) : classement, figures, matrice (`docs/CAPABILITIES.md`), réplication (machine 3 :
+  Lua 4,38 → 5,86, toujours 21e ; Python 11,985 → 11,983 ; ordre inchangé, Spearman 0,93), scénarios de l'état actuel
+  ; leurs contrôles reproduisent L-E à l'identique. Effets hors de Lua : aucun changement de score ni de place, hors
+  Python (− 0,004) ; étages inchangés ; sans SIMD explicite, rien ne bouge ; confrontation inchangée (Lua n'est pas
+  dans l'autre étude). README : tableau (Lua 5,4 ; Python devant Lua dans 58 %), paragraphes de Python et de Lua
+  (PUC-Lua sans son API C, piliers mesurés contre pilier jugé, LuaJIT), errata, limites (les 21 langages relus,
+  versions optimisées), lecture et reproduction ; `docs/FINDINGS.md` (section Lua), `docs/NATURAL.md` (K8 de Python
+  et de Lua), `docs/NOSIMD.md` (4.17), `docs/CONFRONTATION.md`, `docs/PYTHON.md` (4.8), `docs/LUA.md` (4).

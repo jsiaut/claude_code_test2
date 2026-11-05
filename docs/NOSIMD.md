@@ -359,3 +359,10 @@ Chapel est 1er dans 46 % des variantes (45 % avant).
 Recalculé de nouveau (témoin égal au scénario P-E de `results/python_check.json` : K3, K6 `mt` et K9 `mt` de Python
 corrigés, B1 et F3 de Python à 1 et ½). Python reste 20e dans tous les scénarios (11,8 points publiés, 11,8 à 12,1
 selon le scénario ; plafond 0,6 à 1,1), et aucun autre langage ne change de score ni de place.
+
+### 4.17 Recalcul après la remarque sur Lua (5 novembre)
+
+Recalculé de nouveau (témoin égal au scénario L-E de `results/lua_check.json` : K3, K4, Q6 et K8 naturel de Lua
+corrigés, B3 et B4 de Lua à ½, K8 naturel de Python corrigé). Lua reste 21e dans tous les scénarios (5,4 points
+publiés, 5,4 à 6,2 selon le scénario ; plafond 1,3 à 3,0), Python 20e, et aucun autre langage ne change de score ni de
+place.

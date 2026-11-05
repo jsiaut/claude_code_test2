@@ -449,6 +449,10 @@ dans le scénario C, Fortran passe devant C# (12e et 13e). Scénario A 0,78, B 0
 1er, 5e, 2e et 6e ; au test 3, la corrélation avec leur ordre à w = 0,30 passe de 0,87 à 0,88 ; au test 4, l'accord du
 principe P7 (allocation : B1 à B4) passe de 0,94 à 0,93, sans changer l'accord d'ensemble (0,74 et 0,81).
 
+Rejouée après la remarque sur Lua (5 novembre, `docs/LUA.md` : K3, K4, Q6 et K8 naturel de Lua corrigés, B3 et B4 de
+Lua à ½, K8 naturel de Python corrigé ; Lua n'est pas dans l'autre étude) : rien ne change, ni les rangs des 18
+langages communs, ni les corrélations des quatre scénarios, ni les accords des tests 3 et 4.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le
