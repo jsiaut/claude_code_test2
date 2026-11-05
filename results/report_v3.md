@@ -1,6 +1,6 @@
 ## Étages v3 (règle du plan : pas d'inversion sur la machine 3, ordre établi dans 95 % des tirages)
 
-1. Ada, C, C++, C3, Chapel, D, Fortran, Julia, Mojo, Nim, Odin, Rust, Zig
+1. Ada, C, C++, C3, Chapel, D, Fortran, Julia, Mojo, Nim, Odin, Rust, Swift, Zig
 2. C#, Go, Haskell, Java
 3. OCaml
 4. JavaScript, Lua, Python
@@ -9,36 +9,37 @@
 
 | Étage | Langage | Plafond E [IC 95 %] | E machine 3 | Part de la borne | Code naturel D1 | D1 machine 3 | Écart à son meilleur code | Contrôle C (v2 / v1) | MS [IC 95 %] | Position dans l'IC | Ensemble simultané | Rang global [5–95 %] | Rang machine 3 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | Ada | 76,8 [73,7–79,8] | 59,3 | 50 % | 13,2 | 9,9 | 17 % | 80,6 / 71,7 | 71,1 [69,7–72,9] | 0,43 | 3–9 | 8 [3–12] | 8 |
+| 1 | Ada | 76,8 [73,7–79,8] | 59,3 | 50 % | 13,2 | 9,9 | 17 % | 80,6 / 71,7 | 71,1 [69,7–72,9] | 0,43 | 3–9 | 9 [3–12] | 8 |
 | 1 | C | 85,2 [82,1–88,3] | 57,4 | 66 % | 19,0 | 18,9 | 24 % | 91,7 / 74,2 | 80,0 [78,3–82,1] | 0,44 | 1–2 | 2 [1–6] | 3 |
 | 1 | C++ | 80,1 [77,6–83,3] | 69,3 | 61 % | 17,9 | 18,9 | 24 % | 92,4 / 79,1 | 77,1 [75,6–78,6] | 0,50 | 1–3 | 3 [1–8] | 1 |
 | 1 | C3 | 83,5 [81,2–86,7] | 73,9 | 66 % | 19,0 | 18,1 | 24 % | 75,7 / 77,7 | 71,6 [70,6–73,1] | 0,42 | 3–9 | 5 [2–9] | 5 |
-| 1 | Chapel | 79,5 [77,3–82,7] | 56,8 | 60 % | 17,9 | 13,4 | 25 % | 61,8 / 63,8 | 65,7 [64,7–68,6] | 0,27 | 8–13 | 9 [4–12] | 12 |
+| 1 | Chapel | 79,5 [77,3–82,7] | 56,8 | 60 % | 17,9 | 13,4 | 25 % | 61,8 / 63,8 | 65,7 [64,7–68,6] | 0,27 | 8–14 | 10 [4–13] | 13 |
 | 1 | D | 79,2 [76,3–82,3] | 66,9 | 61 % | 15,9 | 15,8 | 21 % | 87,1 / 78,9 | 72,7 [71,5–73,9] | 0,48 | 3–9 | 7 [3–12] | 4 |
-| 1 | Fortran | 73,0 [70,6–75,6] | 44,7 | 55 % | 19,6 | 17,7 | 28 % | 65,3 / 59,2 | 65,4 [63,9–67,1] | 0,48 | 8–13 | 11 [6–13] | 13 |
-| 1 | Julia | 62,3 [60,1–64,7] | 46,2 | 48 % | 20,9 | 17,8 | 36 % | 73,3 / 68,9 | 62,4 [61,3–63,3] | 0,53 | 10–13 | 12 [8–13] | 11 |
-| 1 | Mojo | 67,0 [65,0–69,4] | 59,0 | 53 % | 9,6 | 8,1 | 16 % | 70,5 / 66,0 | 62,3 [61,3–64,0] | 0,36 | 10–13 | 13 [10–13] | 10 |
-| 1 | Nim | 72,4 [70,3–75,0] | 69,8 | 51 % | 20,0 | 18,5 | 31 % | 76,1 / 73,4 | 69,3 [67,7–72,2] | 0,36 | 3–11 | 7 [3–10] | 6 |
+| 1 | Fortran | 73,0 [70,6–75,6] | 44,7 | 55 % | 19,6 | 17,7 | 28 % | 65,3 / 59,2 | 65,4 [63,9–67,1] | 0,48 | 8–14 | 11 [6–14] | 14 |
+| 1 | Julia | 62,3 [60,1–64,7] | 46,2 | 48 % | 20,9 | 17,8 | 36 % | 73,3 / 68,9 | 62,4 [61,3–63,3] | 0,53 | 10–14 | 13 [8–14] | 11 |
+| 1 | Mojo | 67,0 [65,0–69,4] | 59,0 | 53 % | 9,6 | 8,1 | 16 % | 70,5 / 66,0 | 62,3 [61,3–64,0] | 0,36 | 10–14 | 13 [10–14] | 10 |
+| 1 | Nim | 72,4 [70,3–75,0] | 69,8 | 51 % | 20,0 | 18,5 | 31 % | 76,1 / 73,4 | 69,3 [67,7–72,2] | 0,36 | 3–12 | 7 [3–11] | 6 |
 | 1 | Odin | 80,0 [77,3–83,0] | 57,1 | 60 % | 21,3 | 17,0 | 28 % | 84,0 / 81,3 | 74,0 [72,8–75,4] | 0,47 | 2–9 | 3 [1–6] | 7 |
-| 1 | Rust | 77,8 [75,3–80,9] | 74,3 | 61 % | 18,2 | 16,5 | 25 % | 73,6 / 73,1 | 70,0 [68,3–72,7] | 0,38 | 3–11 | 7 [3–10] | 2 |
-| 1 | Zig | 70,3 [67,8–73,0] | 51,1 | 57 % | 20,2 | 14,7 | 29 % | 87,2 / 83,2 | 72,3 [70,5–74,0] | 0,52 | 3–9 | 4 [1–10] | 9 |
-| 2 | C# | 53,6 [51,6–55,8] | 40,5 | 42 % | 9,1 | 7,7 | 18 % | 68,8 / 65,8 | 54,9 [53,5–56,1] | 0,54 | 14–14 | 14 [13–16] | 14 |
-| 2 | Go | 44,5 [42,9–46,2] | 30,2 | 38 % | 12,3 | 10,7 | 26 % | 48,7 / 44,9 | 45,4 [44,7–46,1] | 0,48 | 15–16 | 16 [14–17] | 16 |
-| 2 | Haskell | 46,2 [44,9–48,0] | 33,8 | 34 % | 5,9 | 3,9 | 14 % | 39,9 / 38,9 | 41,3 [40,6–42,0] | 0,47 | 17–17 | 17 [16–17] | 17 |
-| 2 | Java | 56,5 [54,3–58,7] | 46,0 | 43 % | 12,1 | 9,3 | 24 % | 42,7 / 42,7 | 47,2 [46,2–48,2] | 0,50 | 15–16 | 15 [14–17] | 15 |
-| 3 | OCaml | 19,4 [18,8–20,1] | 14,8 | 13 % | 7,0 | 5,2 | 38 % | 23,2 / 23,2 | 23,9 [23,4–24,9] | 0,35 | 18–18 | 18 [18–18] | 18 |
-| 4 | JavaScript | 12,2 [11,8–12,6] | 8,5 | 9 % | 4,5 | 3,4 | 38 % | 14,6 / 14,6 | 15,6 [15,3–16,0] | 0,49 | 19–19 | 19 [19–20] | 19 |
-| 4 | Lua | 1,3 [1,3–1,4] | 1,0 | 1 % | 1,1 | 0,9 | 72 % | 6,8 / 6,8 | 5,4 [5,3–5,6] | 0,48 | 21–21 | 21 [20–21] | 21 |
-| 4 | Python | 0,6 [0,6–0,6] | 0,4 | 0 % | 0,5 | 0,4 | 81 % | 29,7 / 27,7 | 11,8 [11,8–11,9] | 0,49 | 20–20 | 20 [19–21] | 20 |
+| 1 | Rust | 77,8 [75,3–80,9] | 74,3 | 61 % | 18,2 | 16,5 | 25 % | 73,6 / 73,1 | 70,0 [68,3–72,7] | 0,38 | 3–12 | 7 [3–10] | 2 |
+| 1 | Swift | 79,4 [77,2–81,5] | 53,9 | 62 % | 7,3 | 7,3 | 11 % | 64,4 / 61,9 | 65,2 [64,0–66,4] | 0,52 | 8–14 | 12 [6–14] | 12 |
+| 1 | Zig | 70,3 [67,8–73,0] | 51,1 | 57 % | 20,2 | 14,7 | 29 % | 87,2 / 83,2 | 72,3 [70,5–74,0] | 0,52 | 3–9 | 5 [1–11] | 9 |
+| 2 | C# | 53,6 [51,6–55,8] | 40,5 | 42 % | 9,1 | 7,7 | 18 % | 68,8 / 65,8 | 54,9 [53,5–56,1] | 0,54 | 15–15 | 15 [14–17] | 15 |
+| 2 | Go | 44,5 [42,9–46,2] | 30,2 | 38 % | 12,3 | 10,7 | 26 % | 48,7 / 44,9 | 45,4 [44,7–46,1] | 0,48 | 16–17 | 17 [15–18] | 17 |
+| 2 | Haskell | 46,2 [44,9–48,0] | 33,8 | 34 % | 5,9 | 3,9 | 14 % | 39,9 / 38,9 | 41,3 [40,6–42,0] | 0,47 | 18–18 | 18 [17–18] | 18 |
+| 2 | Java | 56,5 [54,3–58,7] | 46,0 | 43 % | 12,1 | 9,3 | 24 % | 42,7 / 42,7 | 47,2 [46,2–48,2] | 0,50 | 16–17 | 16 [15–18] | 16 |
+| 3 | OCaml | 19,4 [18,8–20,1] | 14,8 | 13 % | 7,0 | 5,2 | 38 % | 23,2 / 23,2 | 23,9 [23,4–24,9] | 0,35 | 19–19 | 19 [19–19] | 19 |
+| 4 | JavaScript | 12,2 [11,8–12,6] | 8,5 | 9 % | 4,5 | 3,4 | 38 % | 14,6 / 14,6 | 15,6 [15,3–16,0] | 0,49 | 20–20 | 20 [20–21] | 20 |
+| 4 | Lua | 1,3 [1,3–1,4] | 1,0 | 1 % | 1,1 | 0,9 | 72 % | 6,8 / 6,8 | 5,4 [5,3–5,6] | 0,48 | 22–22 | 22 [21–22] | 22 |
+| 4 | Python | 0,6 [0,6–0,6] | 0,4 | 0 % | 0,5 | 0,4 | 81 % | 29,7 / 27,7 | 11,8 [11,8–11,9] | 0,49 | 21–21 | 21 [20–22] | 21 |
 
 Position moyenne des estimations dans leur intervalle : 0,45 (0,78 en v2).
 
-Hors plan, par composante (moyenne sur les 21 langages ; C ; extrêmes) : E 0,47 (C 0,49 ; 0,41 à 0,50) ; D 0,46 (C 0,38 ; 0,19 à 0,73) ; D1 0,51 (C 0,51 ; 0,48 à 0,54) ; D2 0,80 (C 1,00 ; 0,46 à 1,00) ; D3 0,41 (C 0,35 ; 0,13 à 0,79) ; D4 0,58 (C 0,72 ; 0,49 à 0,72).
+Hors plan, par composante (moyenne sur les 22 langages ; C ; extrêmes) : E 0,47 (C 0,49 ; 0,41 à 0,51) ; D 0,46 (C 0,38 ; 0,19 à 0,73) ; D1 0,51 (C 0,51 ; 0,48 à 0,54) ; D2 0,79 (C 1,00 ; 0,46 à 1,00) ; D3 0,42 (C 0,35 ; 0,13 à 0,79) ; D4 0,58 (C 0,72 ; 0,49 à 0,72).
 
 ## Hors plan : étages par quantité mesurée (même règle ; précédences tirées des mêmes 20 000 tirages)
 
-* plafond E : {Ada, C, C#, C++, C3, Chapel, D, Fortran, Go, Haskell, Java, Julia, Mojo, Nim, Odin, Rust, Zig} > {OCaml} > {JavaScript} > {Lua} > {Python}
-* code naturel D1 : {C, C++, C3, Chapel, D, Fortran, Julia, Nim, Odin, Rust, Zig} > {Ada, Go, Java} > {Mojo} > {C#} > {OCaml} > {Haskell} > {JavaScript} > {Lua} > {Python}
+* plafond E : {Ada, C, C#, C++, C3, Chapel, D, Fortran, Go, Haskell, Java, Julia, Mojo, Nim, Odin, Rust, Swift, Zig} > {OCaml} > {JavaScript} > {Lua} > {Python}
+* code naturel D1 : {C, C++, C3, Chapel, D, Fortran, Julia, Nim, Odin, Rust, Zig} > {Ada, Go, Java} > {Mojo} > {C#} > {Swift} > {OCaml} > {Haskell} > {JavaScript} > {Lua} > {Python}
 
 ## Hors plan : rangs compatibles avec les paires établies
 
@@ -46,27 +47,28 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 
 | Langage | Composite MS | Plafond E | Code naturel D1 |
 |---|---|---|---|
-| C | 1–8 | 1–8 | 1–9 |
-| C++ | 1–10 | 1–9 | 1–10 |
-| Odin | 1–10 | 2–12 | 1–8 |
-| Zig | 1–11 | 4–13 | 1–10 |
-| C3 | 1–11 | 1–8 | 1–9 |
-| Nim | 1–11 | 3–12 | 1–8 |
-| Rust | 1–12 | 1–10 | 5–10 |
-| D | 1–13 | 1–11 | 9–11 |
-| Ada | 2–12 | 1–12 | 12–13 |
-| Chapel | 2–13 | 2–12 | 8–11 |
-| Fortran | 4–13 | 4–14 | 2–8 |
-| Julia | 7–13 | 10–15 | 1–7 |
-| Mojo | 9–13 | 5–13 | 15 |
-| C# | 14–16 | 13–16 | 16 |
-| Java | 14–17 | 12–16 | 13–14 |
-| Go | 14–17 | 16–17 | 12–14 |
-| Haskell | 15–17 | 14–17 | 18 |
-| OCaml | 18 | 18 | 17 |
-| JavaScript | 19–20 | 19 | 19 |
-| Python | 19–21 | 21 | 21 |
-| Lua | 20–21 | 20 | 20 |
+| C | 1–8 | 1–9 | 1–9 |
+| Odin | 1–9 | 2–13 | 1–8 |
+| C++ | 1–11 | 1–10 | 1–10 |
+| C3 | 1–11 | 1–9 | 1–9 |
+| Zig | 1–12 | 5–14 | 1–10 |
+| Nim | 1–12 | 3–13 | 1–8 |
+| D | 1–13 | 1–12 | 9–11 |
+| Rust | 1–13 | 1–11 | 5–10 |
+| Ada | 2–13 | 1–13 | 12–13 |
+| Chapel | 3–14 | 2–13 | 8–11 |
+| Fortran | 4–14 | 5–15 | 2–8 |
+| Swift | 4–14 | 1–11 | 17 |
+| Julia | 7–14 | 11–16 | 1–7 |
+| Mojo | 10–14 | 5–14 | 15 |
+| C# | 15–17 | 14–17 | 16 |
+| Java | 15–18 | 13–17 | 13–14 |
+| Go | 15–18 | 17–18 | 12–14 |
+| Haskell | 16–18 | 15–18 | 19 |
+| OCaml | 19 | 19 | 18 |
+| JavaScript | 20–21 | 20 | 20 |
+| Python | 20–22 | 22 | 22 |
+| Lua | 21–22 | 21 | 21 |
 
 ## Hors plan : accord entre machines avec et sans K3
 
@@ -77,7 +79,7 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 
 ## Hors plan : Cascade Lake seul (K5 d'avant, machines 1 et 2 ; K9 de Cascade Lake, harnais d'origine), estimation ponctuelle
 
-C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Fortran 11 (E 72,7, D1 18,7), Julia 12 (E 67,9, D1 20,9), Mojo 13 (E 69,0, D1 11,0), C# 14 (E 49,5, D1 9,3), Java 15 (E 57,9, D1 12,4), Go 16 (E 41,6, D1 11,0), Haskell 17 (E 47,3, D1 5,2), OCaml 18 (E 20,2, D1 7,3), JavaScript 19 (E 13,1, D1 4,9), Python 20 (E 0,6, D1 0,5), Lua 21 (E 1,4, D1 1,2).
+C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Fortran 11 (E 72,7, D1 18,7), Swift 12 (E 79,0, D1 7,6), Julia 13 (E 67,9, D1 20,9), Mojo 14 (E 69,0, D1 11,0), C# 15 (E 49,5, D1 9,3), Java 16 (E 57,9, D1 12,4), Go 17 (E 41,6, D1 11,0), Haskell 18 (E 47,3, D1 5,2), OCaml 19 (E 20,2, D1 7,3), JavaScript 20 (E 13,1, D1 4,9), Python 21 (E 0,6, D1 0,5), Lua 22 (E 1,4, D1 1,2).
 
 ## Réplication : bruit ou interaction ?
 
@@ -126,31 +128,31 @@ Hors plan, bruit de la machine 3 multiplié par 2,0 : Spearman, 21 langages p = 
 
 | Mesure | n | Langage | Interaction langage × machine | Processus |
 |---|---|---|---|---|
-| k1:aos:energy | 13 | 0 % | 53 % | 47 % |
-| k1:natural:energy | 13 | 31 % | 2 % | 67 % |
-| k1:natural_shuffled:energy | 13 | 0 % | 35 % | 65 % |
-| k1:soa:energy | 13 | 0 % | 0 % | 100 % |
-| k2:tuned:16384 | 13 | 26 % | 21 % | 53 % |
-| k2:tuned:262144 | 13 | 0 % | 0 % | 100 % |
-| k2:tuned:8388608 | 13 | 0 % | 0 % | 100 % |
-| k3:rmw_padded: | 13 | 63 % | 0 % | 37 % |
-| k3:sw_padded: | 13 | 1 % | 97 % | 2 % |
-| k4:branchless_unsorted: | 13 | 81 % | 14 % | 5 % |
-| k4:natural_unsorted: | 13 | 83 % | 12 % | 5 % |
-| k6:mt:q1 | 13 | 81 % | 6 % | 13 % |
-| k6:mt:q6 | 13 | 34 % | 46 % | 20 % |
-| k6:natural:q1 | 13 | 74 % | 8 % | 17 % |
-| k6:natural:q6 | 13 | 21 % | 0 % | 79 % |
-| k6:tuned:q1 | 13 | 74 % | 13 % | 13 % |
-| k6:tuned:q6 | 13 | 10 % | 0 % | 90 % |
-| k7:natural: | 13 | 58 % | 41 % | 2 % |
-| k7:tuned: | 13 | 52 % | 18 % | 30 % |
-| k8:natural: | 13 | 94 % | 0 % | 6 % |
-| k8:tuned: | 13 | 92 % | 0 % | 8 % |
+| k1:aos:energy | 12 | 0 % | 56 % | 44 % |
+| k1:natural:energy | 12 | 31 % | 2 % | 67 % |
+| k1:natural_shuffled:energy | 12 | 0 % | 37 % | 63 % |
+| k1:soa:energy | 12 | 0 % | 0 % | 100 % |
+| k2:tuned:16384 | 12 | 30 % | 19 % | 51 % |
+| k2:tuned:262144 | 12 | 0 % | 0 % | 100 % |
+| k2:tuned:8388608 | 12 | 0 % | 0 % | 100 % |
+| k3:rmw_padded: | 12 | 65 % | 0 % | 35 % |
+| k3:sw_padded: | 12 | 2 % | 97 % | 2 % |
+| k4:branchless_unsorted: | 12 | 75 % | 19 % | 6 % |
+| k4:natural_unsorted: | 12 | 77 % | 17 % | 7 % |
+| k6:mt:q1 | 12 | 81 % | 7 % | 12 % |
+| k6:mt:q6 | 12 | 35 % | 47 % | 19 % |
+| k6:natural:q1 | 12 | 50 % | 17 % | 33 % |
+| k6:natural:q6 | 12 | 7 % | 2 % | 90 % |
+| k6:tuned:q1 | 12 | 74 % | 14 % | 12 % |
+| k6:tuned:q6 | 12 | 6 % | 0 % | 94 % |
+| k7:natural: | 12 | 58 % | 41 % | 2 % |
+| k7:tuned: | 12 | 53 % | 19 % | 28 % |
+| k8:natural: | 12 | 95 % | 0 % | 5 % |
+| k8:tuned: | 12 | 93 % | 0 % | 7 % |
 | k8:tuned_alloc: | 5 | 98 % | 0 % | 2 % |
-| k9:mt: | 13 | 63 % | 11 % | 25 % |
-| k9:natural: | 13 | 95 % | 0 % | 5 % |
-| k9:tuned: | 13 | 17 % | 9 % | 73 % |
+| k9:mt: | 12 | 64 % | 12 % | 24 % |
+| k9:natural: | 12 | 86 % | 0 % | 14 % |
+| k9:tuned: | 12 | 18 % | 11 % | 72 % |
 
 ## Disposition du code (machine actuelle) : écart-type entre dispositions et entre processus
 
@@ -270,8 +272,8 @@ Hors plan, bruit de la machine 3 multiplié par 2,0 : Spearman, 21 langages p = 
 ## Processus classés (critère de rupture de la v2, descriptif)
 
 * interp : plat 260, accélération 3, ralentissement 1
-* aot : plat 1696, accélération 181, ralentissement 99
+* aot : plat 1889, accélération 187, ralentissement 103
 * jit : plat 575, ralentissement 50, accélération 51
 
-Rangs avec l'estimateur de la v2 (médiane des médianes de processus, frontière recalculée, sans coupure de régime établi) : C 1, C++ 2, Odin 3, D 4, Zig 5, C3 6, Ada 7, Rust 8, Nim 9, Chapel 10, Fortran 11, Mojo 12, Julia 13, C# 14, Java 15, Go 16, Haskell 17, OCaml 18, JavaScript 19, Python 20, Lua 21.
+Rangs avec l'estimateur de la v2 (médiane des médianes de processus, frontière recalculée, sans coupure de régime établi) : C 1, C++ 2, Odin 3, D 4, Zig 5, C3 6, Ada 7, Rust 8, Nim 9, Chapel 10, Fortran 11, Swift 12, Mojo 13, Julia 14, C# 15, Java 16, Go 17, Haskell 18, OCaml 19, JavaScript 20, Python 21, Lua 22.
 

@@ -453,6 +453,11 @@ Rejouée après la remarque sur Lua (5 novembre, `docs/LUA.md` : K3, K4, Q6 et K
 Lua à ½, K8 naturel de Python corrigé ; Lua n'est pas dans l'autre étude) : rien ne change, ni les rangs des 18
 langages communs, ni les corrélations des quatre scénarios, ni les accords des tests 3 et 4.
 
+Rejouée après l'ajout de Swift (5 novembre, `docs/SWIFT.md` ; Swift n'est pas dans l'autre étude) : les rangs des 18
+langages communs, les corrélations des quatre scénarios (0,78, 0,86, 0,82, 0,90) et les accords des tests 3 et 4 ne
+changent pas ; seuls les rangs espérés bougent, de 0,17 au plus parmi les 18 (Swift s'intercale, et devient dans une
+partie des tirages la référence du code naturel de K1).
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

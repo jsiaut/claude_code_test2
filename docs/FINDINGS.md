@@ -848,3 +848,44 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   la boucle × 0,83 ; K2 aux indices décalés × 0,77, 0,82 et 0,97 ; arène itérative de K8 × 1,06, plus lente.
 * **Machine 23** : latence 25 ns jusqu'à 2 Mio, 137 ns dès 4 Mio ; sur la machine 22, du même modèle, 25 ns encore à
   4 Mio : l'hôte ne laisse à la VM qu'une part de son L3.
+
+## Ajout de Swift (5 novembre, machine 23, Cascade Lake) — `docs/SWIFT.md`, `results/swift_check/`
+
+* **Chaîne et mode** : Swift 6.4.2 (29 octobre), LLVM de la chaîne (clang 21). `swift build -c release` compile en `-O`
+  sur le module entier et en mode Swift 6 (relevé sur un paquet de `swift package init`) ; `-O` garde les
+  vérifications de bornes et de débordement, `-Ounchecked` les retire.
+* **Conversions SIMD de la bibliothèque** : `SIMD16<Int32>(truncatingIfNeeded:)` depuis des octets ou vers des entiers
+  de 64 bits n'est pas inliné (un appel par conversion, `vzeroupper` et écritures sur la pile) ; écrite voie par voie,
+  la même conversion donne `vpmovzxbd` / `vpmovsxdq`.
+* **Comparaisons vecteur contre scalaire** : `v .== 3` est compilé voie par voie, avec trois branchements (44
+  instructions, contre 14 sans branchement pour `v .== SIMD16(repeating: 3)`) ; dans Q1 optimisé, 1,79 s au lieu de
+  39 ms. Une boucle sur un `InlineArray` de six accumulateurs SIMD n'est pas déroulée (accumulateurs en mémoire, 82 ms).
+  `sum()` additionne dans l'ordre des voies (15 `vaddss`), sans réassociation.
+* **Masques** : ni compte des bits d'un `SIMDMask`, ni conversion d'un masque entre largeurs de voies. Q1 optimisé
+  compte donc ses lignes dans un accumulateur vectoriel de plus par groupe et refait des comparaisons 64 bits pour la
+  colonne des charges : 36 vecteurs vivants pour 32 registres zmm, 74 accès à la pile par tour de 16 lignes, 1,47 fois
+  le temps du C sur le même hôte (le C compte par `popcnt` du masque).
+* **Intrinsèques** : `import _Builtin_intrinsics.intel` (module Clang non documenté) donne les intrinsèques à corps ;
+  `_mm_pause` est appelée comme une fonction externe (`undefined reference`), `_m_prefetchw` disparaît du code sans
+  message, `_mm_prefetch` est une macro refusée : ni préchargement ni `pause` en Swift.
+* **Module Glibc** : sans les extensions GNU (`sched_setaffinity`, `sched_getcpu`, `gettid`, `mallinfo2` introuvables) ;
+  aucune affinité possible avec la chaîne livrée. `@_alignment` (non documenté) plafonne à 16 octets ; les paramètres
+  `inout` n'ont pas `noalias` dans l'IR.
+* **Allocations cachées** (sonde) : une struct de 64 octets rangée dans un `[any Shape]` (conteneur existentiel de 40
+  octets, tampon en ligne de 24) est mise en boîte sur le tas sans allocation écrite ; de même les fermetures
+  échappantes et la copie sur écriture.
+* **Ce que `-O` garde, sur le code exécuté** : K4 naturel (`if x >= 128 { s += UInt64(x) }` sur un `[UInt8]`) reste
+  scalaire, un branchement par octet et un test de débordement par addition : 29 fois le temps du C sur le même hôte
+  (76,6 contre 2,6 ms), 5,8 fois moins en `-Ounchecked`. Dans le stencil `[[Double]]`, la boucle chaude (48 % des
+  échantillons) teste les bornes de chaque lecture et appelle `swift_isUniquelyReferenced_nonNull_native` à chaque
+  écriture (copie sur écriture de la ligne de destination) : 3,0 fois le C, 2,5 fois en `-Ounchecked`.
+* **ARC sur K8** : l'arbre de `class Node` à champs `var` coûte 2,4 fois le `malloc`/`free` du C ; une classe finale à
+  champs `let`, construite de bas en haut, prend 0,67 fois ce temps (moins de comptages de références). Latences :
+  p50 101 µs, p99,9 372 µs (C : 38 et 189 µs), sans pause : chaque arbre est libéré dans le chrono.
+* **`AsyncStream`** (K10 naturel, hors score) : chaque élément suspend et reprend la tâche consommatrice ; 14 à 19 s
+  pour 2^22 éléments, 5,8 s de temps système, 388 000 changements de contexte volontaires.
+* **Empreinte** : 64,02 octets par particule (structs en ligne dans un `Array`).
+* **Facteur d'hôte** : la machine 1 était plus lente que la machine 23 pour tous les codes mesurés sur les deux (21
+  couples de Lua, LuaJIT et Python : 1,10 à 1,78, médiane 1,28). Le facteur du C suit celui des autres à ±20 % près
+  sur les clés à un fil de la machine 1, mais pas sur K3 (0,75 à 1,76 contre 1,23 à 1,48), Q6 `mt` (1,68 contre 1,32)
+  ni K9, venu de la machine 16 (0,55 et 0,64 contre 1,17 et 1,08 pour Lua).

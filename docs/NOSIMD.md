@@ -366,3 +366,14 @@ Recalculé de nouveau (témoin égal au scénario L-E de `results/lua_check.json
 corrigés, B3 et B4 de Lua à ½, K8 naturel de Python corrigé). Lua reste 21e dans tous les scénarios (5,4 points
 publiés, 5,4 à 6,2 selon le scénario ; plafond 1,3 à 3,0), Python 20e, et aucun autre langage ne change de score ni de
 place.
+
+### 4.18 Recalcul après l'ajout de Swift (5 novembre)
+
+Recalculé avec Swift, 22e langage (témoin égal au scénario S-E de `results/swift_check.json`, `docs/SWIFT.md`).
+Classement de Swift (table 2.1 : K1 `aos` et `soa`, K5, Q6, Q1 et K9 tuned écrits avec ses types SIMD, classe V ; sans
+eux, K1 prend sa variante naturelle, comme celle de Mojo dans S-scalaire-Mojo) : 12e publié (65,2 points) et sans `mt`
+(65,4) ; 13e en S-scalaire (47,0 ; plafond 33,7 : sans types SIMD, il ne lui reste que son code naturel), en
+S-symétrique (60,2) et en S-noyaux-scalaires (62,8, à 0,01 rang derrière Julia) ; 10e en S-importées (65,2 : Nim et
+Ada perdent leurs intrinsèques importées). Les scores des 21 autres langages ne changent dans aucun scénario ; trois
+paires de voisins quasi à égalité s'échangent quand Swift s'intercale (Nim et Ada sans `mt`, rangs espérés 7,41 et
+7,38 ; Chapel et Julia en S-symétrique, 10,26 et 10,19 ; Zig et Rust en S-noyaux-scalaires, 7,16 et 7,08).

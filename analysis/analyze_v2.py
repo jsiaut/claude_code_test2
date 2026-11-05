@@ -152,13 +152,15 @@ def _lat_cols(procs):
 BRIDGE_SUS = []  # (langage, clé, temps, borne) : clés reliées écartées par le contrôle de la borne physique
 
 
-def bridge_added(data, lat, keys=None, latency=True):
+def bridge_added(data, lat, keys=None, latency=True, bounds=None):
     """Pont par le C (docs/SWIFT.md, plan 3.2) : chaque processus du langage ajouté est multiplié par
     G(C de data) / G(C de sa campagne), G = moyenne géométrique des médianes de processus, clé par clé (toutes les clés,
     ou celles de keys) ; latences de K8 naturel (si latency et lat) multipliées colonne par colonne par le rapport des
     médianes du C. Rappelée après chaque fonction qui remplace des données du C (K9 de la machine 16, latences de la
     machine 11, corrections transférées), pour que le facteur suive la valeur finale du C. Les clés reliées passent le
-    contrôle de la borne physique de la campagne (comme final_data). Sans données, rien ne change."""
+    contrôle de la borne physique de l'hôte des données cibles : bounds s'il est donné (BOUNDS_M3 pour la réplication de
+    la machine 3), sinon les bornes de la machine 1, et celles de la machine 3 pour K5 et K9 (sources Emerald Rapids du
+    jeu principal), comme final_data et load_m3. Sans données, rien ne change."""
     for lang in ADDED:
         own, c23, own_lat, c23_lat = added_raw(lang)
         if not own:
@@ -173,7 +175,7 @@ def bridge_added(data, lat, keys=None, latency=True):
                     continue
                 f = _gm_procs(ref) / _gm_procs(wit)
                 new = [[t * f for t in p] for p in procs]
-                bound = (BOUNDS_M3 if key[0] in ("k5", "k9") else BOUNDS).get(key)  # K5, K9 : source Emerald Rapids
+                bound = (bounds if bounds is not None else BOUNDS_M3 if key[0] in ("k5", "k9") else BOUNDS).get(key)
                 if bound is not None and float(np.median([np.median(p) for p in new])) < 0.9 * bound:
                     d.pop(key, None)
                     BRIDGE_SUS.append((lang, key, float(np.median([np.median(p) for p in new])), bound))

@@ -14,6 +14,9 @@ la v3 rejouée (mêmes tirages ; ceux de Swift isolés) pour chaque scénario du
   × r(swift_ou / swift) ; sensibilités en min(1, r).
 * S-cases-bas (A2 = C5 = F4 = 1/2, D3 = 0), S-cases-haut (C2 = E3 = E5 = 1), S-tout-bas (= S-cases-bas),
   S-tout-haut (S-K8fl, S-Ou et S-cases-haut).
+* Hors plan, information (ajouté après avoir vu les facteurs du pont) : S-hôte, temps de la machine 23 × un facteur
+  d'hôte commun par machine source, médiane des langages mesurés avec leur code publié sur la machine 23 (Lua, LuaJIT,
+  Python ; remarque sur Lua) ; K5 et latences de K8 : pont du C.
 Information : rapport Swift / C de chaque cellule sur la machine 23 ; K10 ; clés écartées par la borne physique.
 Sorties : results/swift_check.json, results/report_swift.md."""
 import copy, glob, json, os, sys
@@ -115,6 +118,42 @@ def with_lat(lat, r):
     return out
 
 
+# Hors plan, ajouté après avoir vu les facteurs du pont (docs/SWIFT.md, 4.5) : S-hôte, information. Facteur d'hôte
+# commun par machine source (publié / machine 23), médiane des langages mesurés avec leur code publié sur la machine 23
+# (remarque sur Lua : lua_ref, luajit_ref, python_ref, results/raw_lua) ; K5 (machine 3) et latences (machine 11) : pont
+# du C, faute d'autre donnée.
+HOST_IMPLS = {"lua_ref": "lua", "luajit_ref": "luajit", "python_ref": "python"}
+
+
+def source(key):
+    return "machine 3" if key[0] == "k5" else ("machine 16" if key[0] == "k9" else "machine 1")
+
+
+def host_factors():
+    orig, *_ = v2.dataset_main(transfers=False)  # code publié d'origine, sans corrections transférées
+    per, rows = defaultdict(list), []
+    for fn in sorted(glob.glob(os.path.join(ROOT, "results", "raw_lua", "*.jsonl"))):
+        for line in open(fn):
+            r = json.loads(line)
+            reps = r.get("reps", [])
+            if r.get("tag") != "lua" or r["lang"] not in HOST_IMPLS or not reps or r.get("returncode") not in (0, None) \
+                    or any(x["ok"] is not True for x in reps):
+                continue
+            rows.append((r["lang"], (r["kernel"], r["variant"], r["param"]), [x["sec"] for x in reps]))
+    procs = defaultdict(lambda: defaultdict(list))
+    for impl, k, sec in rows:
+        procs[impl][k].append(sec)
+    table = []
+    for impl, dd in procs.items():
+        lang = HOST_IMPLS[impl]
+        for k, ps in sorted(dd.items()):
+            if k in orig.get(lang, {}):
+                fct = gm(orig[lang][k]) / gm(ps)
+                per[source(k)].append(fct)
+                table.append((lang, kk(k), source(k), fct))
+    return {m: float(np.median(v)) for m, v in per.items()}, table
+
+
 def main():
     assert RANKED[-1] == LANG, "Swift doit être le dernier de RANKED (tirages isolés)"
     raw, rawlat, bad = load_raw()
@@ -149,6 +188,10 @@ def main():
     # S-direct : temps de la machine 23 pour les clés de la machine 1 (même modèle), pont gardé ailleurs
     dd = {l: v for l, v in data.items()}
     dd[LANG] = {k: ([list(p) for p in raw[LANG][k]] if k[0] not in OTHER_MODEL else v) for k, v in data[LANG].items()}
+    hf, htable = host_factors()
+    dh = {l: v for l, v in data.items()}
+    dh[LANG] = {k: ([[t * hf[source(k)] for t in p] for p in raw[LANG][k]] if source(k) in hf else v)
+                for k, v in data[LANG].items()}
     plans = {
         "S-E": (data, lat, None),
         "S-direct": (dd, lat, None),
@@ -158,13 +201,15 @@ def main():
         "S-cases-haut": (data, lat, CASES_HIGH),
         "S-tout-bas": (data, lat, CASES_LOW),
         "S-tout-haut": (scaled(data, both), with_lat(lat, lat_fl), CASES_HIGH),
+        "S-hôte": (dh, lat, None),  # hors plan, information (voir host_factors)
     }
     out = {"bad": bad, "times_ms": times, "r_swift_c": r_sw_c, "bridge": bridge, "lat_bridge": lat_bridge,
-           "bridge_sus": [(l, kk(k), t, b) for l, k, t, b in v2.BRIDGE_SUS],
+           "bridge_sus": sorted({(l, kk(k), t, b) for l, k, t, b in v2.BRIDGE_SUS}),
            "r_k8fl": r_k8fl, "lat_k8fl": l_k8fl, "r_ou": {kk(k): r for k, r in r_ou.items()},
            "sens_factors": {"S-K8fl": {kk(k): v for k, v in fl.items()}, "S-K8fl-lat": lat_fl,
                             "S-Ou": {kk(k): v for k, v in ou.items()}},
-           "c3": c3[LANG], "footprint": footprint[LANG], "scenarios": {}}
+           "c3": c3[LANG], "footprint": footprint[LANG], "host_factors": hf,
+           "host_table": [(l, k, m, f_) for l, k, m, f_ in htable], "scenarios": {}}
     av = out["scenarios"]["Avant"] = without_swift(data, lat, langs, footprint, c3)
     ref = json.load(open(os.path.join(ROOT, "results", "lua_check.json")))["scenarios"]["L-E"]
     out["check_before"] = max(max(abs(av["ms0"][l] - ref["ms0"][l]), abs(av["exp21"][l] - ref["exp21"][l]))
@@ -211,6 +256,10 @@ def report(o):
           + ", ".join(f"{c} {f(x, 2)}" for c, x in zip(LATCOLS, o["lat_k8fl"]["ratio"])) + ".",
           "* `-Ounchecked` / `-O` (cellules naturelles) : "
           + " ; ".join(f"{k} {f(r['ratio'], 3)} [{f(r['ci'][0], 3)}–{f(r['ci'][1], 3)}]" for k, r in o["r_ou"].items()) + ".", "",
+          "## Hors plan : facteurs d'hôte (publié / machine 23) des langages mesurés avec leur code publié\n",
+          "Médianes par machine source (S-hôte) : " + " ; ".join(f"{m} {f(x, 3)}" for m, x in sorted(o["host_factors"].items()))
+          + ". Par clé : " + " ; ".join(f"{l} {k} {f(x, 2)} (C {f(o['bridge'][k]['factor'], 2)})" for l, k, m, x in o["host_table"]
+                                       if k in o["bridge"]) + ".\n",
           "## Scénarios (analyse globale de la v3 rejouée, 20 000 variantes)\n",
           "| Scénario | Score | C | E | D | rang espéré | place | rang à 90 % |", "|---|---|---|---|---|---|---|---|"]
     for name, z in S.items():

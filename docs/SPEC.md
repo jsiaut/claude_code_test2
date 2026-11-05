@@ -1,4 +1,4 @@
-# Spécification des noyaux de mesure (contrat commun aux 21 langages)
+# Spécification des noyaux de mesure (contrat commun aux 22 langages ; Swift ajouté le 5 novembre)
 
 Version 1.0 — figée le 2026-10-28, **avant** toute mesure inter-langages.
 

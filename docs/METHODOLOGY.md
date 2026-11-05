@@ -1191,3 +1191,35 @@ Robustesse :
   Swift 22e langage classé, relié aux données publiées par le pont du C (machine 23 : même modèle que la machine 1 ;
   K5, K9 et les latences de K8 viennent d'Emerald Rapids), tirages isolés ; outil de mesure `tools/measure_swift.py`
   (73 cellules × 7 passes), script d'analyse `analysis/swift_check.py` écrit pendant la campagne.
+* 2026-11-05, 16:04:32-16:27:23 : **mesures de l'ajout de Swift** (`tools/measure_swift.py`, machine 23) : calibration
+  de Swift (une répétition par cellule, règle du pilote), puis 511 processus (73 cellules × 7, 16:05:35-16:27:22),
+  aucune somme de contrôle fausse, neuf processus refaits pour vol de temps, aucun gardé au-dessus de 2 % (vol médian
+  0,31 %) ; empreinte de K1 (3 processus, 64,02 octets par particule) ; C3 mesurée après (`tools/c3_measure.py swift` :
+  K4 et K9 naturels scalaires, C3 = 0).
+* 2026-11-05, 16:28 à 17:04 : **résultats de l'ajout de Swift, sorties régénérées** (`analysis/swift_check.py`, puis
+  la chaîne publiée : classement, réplication, figures, matrice, états actuels). Contrôles : le scénario Avant (Swift
+  retiré) reproduit L-E de `results/lua_check.json` à l'identique (écart 0,0), et les états actuels de la sensibilité
+  sans SIMD et de la remarque sur C reproduisent S-E à l'identique. Swift **12e sur 22** (65,24 points [63,97–66,40],
+  rang espéré 11,01, rang plausible 6 à 14) ; contrôle 64,4 (14e), plafond 79,4 (6e), code par défaut 43,8 (12e).
+  Les 21 autres gardent leur ordre et leurs scores ; ceux que Swift devance reculent d'un rang ; les précédences entre
+  eux bougent de 2,4 points au plus (Swift devient, dans une partie des tirages, la référence du code naturel de K1).
+  Sensibilités du plan : 11e à 13e ; S-direct 6e (information, biaisé : la machine 1 était plus lente pour tous les
+  codes) ; S-hôte (hors plan, facteur d'hôte des autres langages) 13e, 60,77 points. Réplication : Swift 12e sur la
+  machine 3, par le pont ; accord et test nul (sur les 21 langages répliqués indépendamment) inchangés ; étages
+  [14, 4, 1, 3]. Corrigé en cours de route : les clés reliées à la machine 3 étaient contrôlées avec les bornes de la
+  machine 1, ce qui écartait K1 `soa` de Swift (plafond 39,1 sur la machine 3, étages [18, 1, 3]) ; elles le sont
+  désormais avec les bornes de l'hôte cible (`docs/SWIFT.md`, 4.6). Sans SIMD explicite (`docs/NOSIMD.md`, 4.18) :
+  Swift 13e dans les trois lectures, 10e sans intrinsèques importées. Confrontation : rangs des 18 langages communs,
+  corrélations et accords inchangés.
+* 2026-11-05, 17:05 à 17:25 : **README et documents après l'ajout de Swift**. README : titre, tableau à 22 lignes,
+  paragraphe de Swift, renumérotation ; chiffres recalés sur les sorties régénérées (précédences et rangs moyens de
+  l'ordre, parts en tête, scénarios de C, de Zig, de Mojo, de C#, de Julia, de Nim et sans SIMD explicite) ; places
+  citées dans l'historique des errata remplacées par « sans changer de place ». Les chiffres sur « les 13 premiers »
+  portent désormais sur les langages classés devant C#, 14 avec Swift (`analysis/readme_figures.py` généralisé :
+  R² 0,74, voisins 46 à 75 %, tous devant C# dans au moins 96 % des variantes). Au passage, quatre chiffres du README
+  faux avant l'ajout, corrigés : Nim avec Q1 en intrinsèques passe 6e, et non 5e, depuis la remarque sur Haskell
+  (d'où « une place », et non deux, dans les limites) ; sans K4 au plafond, C++ a 80,1 points et Zig 75,6 (80,0 et
+  75,5 étaient tronqués) ; Odin devance C++ dans 55 % des variantes, et non 56 % comme l'écrivait son paragraphe.
+  `docs/FINDINGS.md` (section Swift), `docs/SWIFT.md` (4.1 retouché, 4.5 à 4.7, erratum du point 8 de 2.4 : le test
+  d'unicité du stencil naturel est fait à chaque écriture), `docs/NOSIMD.md` (4.18), `docs/CONFRONTATION.md`,
+  `docs/CAPABILITIES.md` (colonne et section de Swift, rien d'autre ne change), `env/toolchains.txt`.
