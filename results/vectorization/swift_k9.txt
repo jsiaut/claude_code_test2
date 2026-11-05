@@ -1,0 +1,46 @@
+48.1% des échantillons : ms+0xd831 boucle=0xd770-0xd846 {'n': 43, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+    d770: cmp    QWORD PTR [rsp+0x40],rbx
+    d775: je     d877 <$s2ms9k9NaturalyySaySaySdGG_ADztF+0x1d7>
+    d77b: cmp    QWORD PTR [rsp+0x38],rbx
+    d780: je     d879 <$s2ms9k9NaturalyySaySaySdGG_ADztF+0x1d9>
+    d786: cmp    QWORD PTR [rsp+0x30],rbx
+    d78b: je     d87b <$s2ms9k9NaturalyySaySaySdGG_ADztF+0x1db>
+    d791: cmp    r13,rbx
+    d794: je     d87d <$s2ms9k9NaturalyySaySaySdGG_ADztF+0x1dd>
+    d79a: cmp    rbp,QWORD PTR [r15+0x10]
+    d79e: jae    d87f <$s2ms9k9NaturalyySaySaySdGG_ADztF+0x1df>
+    d7a4: mov    rax,QWORD PTR [rsp+0x28]
+    d7a9: vmovsd xmm0,QWORD PTR [rax+rbx*8+0x28]
+    d7af: vmovsd QWORD PTR [rsp+0x60],xmm0
+    d7b5: mov    rax,QWORD PTR [rsp+0x20]
+    d7ba: vmovsd xmm0,QWORD PTR [rax+rbx*8+0x28]
+    d7c0: vmovsd QWORD PTR [rsp+0x58],xmm0
+    d7c6: vmovsd xmm0,QWORD PTR [r14+rbx*8+0x20]
+    d7cd: vmovsd QWORD PTR [rsp+0x50],xmm0
+    d7d3: vmovsd xmm0,QWORD PTR [r14+rbx*8+0x30]
+    d7da: vmovsd QWORD PTR [rsp+0x48],xmm0
+    d7e0: mov    r12,QWORD PTR [r15+rbp*8+0x20]
+    d7e5: mov    rdi,r12
+    d7e8: call   40c0 <swift_isUniquelyReferenced_nonNull_native@plt>
+    d7ed: mov    QWORD PTR [r15+rbp*8+0x20],r12
+    d7f2: test   al,al
+    d7f4: jne    d806 <$s2ms9k9NaturalyySaySaySdGG_ADztF+0x166>
+    d7f6: mov    rdi,r12
+    d7f9: call   143d0 <$ss22_ContiguousArrayBufferV20_consumeAndCreateNewAByxGyFSd_Tg5>
+    d7fe: mov    r12,rax
+    d801: mov    QWORD PTR [r15+rbp*8+0x20],rax
+    d806: lea    rax,[rbx+0x1]
+    d80a: cmp    rax,QWORD PTR [r12+0x10]
+    d80f: jae    d881 <$s2ms9k9NaturalyySaySaySdGG_ADztF+0x1e1>
+    d811: vmovsd xmm0,QWORD PTR [rsp+0x58]
+    d817: vaddsd xmm0,xmm0,QWORD PTR [rsp+0x60]
+    d81d: vaddsd xmm0,xmm0,QWORD PTR [rsp+0x50]
+    d823: vaddsd xmm0,xmm0,QWORD PTR [rsp+0x48]
+    d829: vmulsd xmm0,xmm0,QWORD PTR [rip+0xcb77]        # 1a3a8 <_IO_stdin_used+0x88>
+    d831: vmovsd QWORD PTR [r12+rbx*8+0x28],xmm0
+    d838: mov    QWORD PTR [r15+rbp*8+0x20],r12
+    d83d: mov    rbx,rax
+    d840: cmp    rax,0x7fe
+    d846: jne    d770 <$s2ms9k9NaturalyySaySaySdGG_ADztF+0xd0>
+22.6% des échantillons : ms+0xdddd boucle=0xdd50-0xde59 {'n': 62, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}
+10.0% des échantillons : ms+0x40c0 boucle=0x3e80-0x40cb {'n': 114, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

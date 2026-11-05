@@ -335,6 +335,20 @@
   "rss_bytes_per_particle": 64.01,
   "rss_p1_mib": 258.1
  },
+ "swift": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.02,
+  "kind": "rss",
+  "measured": 64.02,
+  "note": "",
+  "per_process": [
+   64.017,
+   64.017,
+   64.017
+  ],
+  "rss_bytes_per_particle": 64.02,
+  "rss_p1_mib": 273.8
+ },
  "zig": {
   "D2a": 1.0,
   "bytes_per_particle": 64.0,

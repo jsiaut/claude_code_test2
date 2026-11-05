@@ -1,0 +1,14 @@
+swift_exp  k8   natural_fl                      p0 n=3 med=1.238315s ok={True} rc=0 
+swift_exp  k8   natural                         p0 n=3 med=2.045721s ok={True} rc=0 
+swift_exp  k8   natural                         p0 n=3 med=2.067648s ok={True} rc=0 
+swift_exp  k8   natural_fl                      p0 n=3 med=1.356305s ok={True} rc=0 
+swift_exp  k8   natural_fl                      p0 n=3 med=1.423059s ok={True} rc=0 
+swift_exp  k8   natural                         p0 n=3 med=2.044431s ok={True} rc=0 
+swift_exp  k8   natural                         p0 n=3 med=2.147076s ok={True} rc=0 
+swift_exp  k8   natural_fl                      p0 n=3 med=1.580069s ok={True} rc=0 
+swift_exp  k8   natural_fl                      p0 n=3 med=1.534047s ok={True} rc=0 
+swift_exp  k8   natural                         p0 n=3 med=2.481939s ok={True} rc=0 
+swift_exp  k8   natural_fl                      p0 n=3 med=1.290818s ok={True} rc=0 
+swift_exp  k8   natural                         p0 n=3 med=1.857976s ok={True} rc=0 
+swift_exp  k8   natural                         p0 n=3 med=1.802020s ok={True} rc=0 
+swift_exp  k8   natural_fl                      p0 n=3 med=1.296835s ok={True} rc=0 

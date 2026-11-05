@@ -1,0 +1,8 @@
+64.7% des échantillons : ms+0x7c00 boucle=0x7c00-0x7c10 {'n': 6, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    7c00: inc    rdx
+    7c03: cmp    rcx,rdx
+    7c06: je     7c19 <$s2ms9k4Naturalys6UInt64VSays5UInt8VGF+0x29>
+    7c08: movzx  esi,BYTE PTR [rdi+rdx*1+0x20]
+    7c0d: test   sil,sil
+    7c10: jns    7c00 <$s2ms9k4Naturalys6UInt64VSays5UInt8VGF+0x10>
+27.5% des échantillons : ms+0x7c12 boucle=0x7c00-0x7c15 {'n': 8, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

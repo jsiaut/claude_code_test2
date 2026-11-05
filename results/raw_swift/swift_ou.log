@@ -1,0 +1,63 @@
+swift_ou   k4   natural_unsorted                p0 n=10 med=0.012964s ok={True} rc=0 
+swift_ou   k9   natural                         p0 n=10 med=0.062900s ok={True} rc=0 
+swift_ou   k1   natural_shuffled     energy     p0 n=10 med=0.029833s ok={True} rc=0 
+swift_ou   k1   natural              energy     p0 n=10 med=0.027550s ok={True} rc=0 
+swift_ou   k6   natural              q6         p0 n=10 med=0.052292s ok={True} rc=0 
+swift_ou   k5   natural                         p0 n=10 med=0.164841s ok={True} rc=0 
+swift_ou   k8   natural                         p0 n=3 med=2.061043s ok={True} rc=0 
+swift_ou   k7   natural                         p0 n=3 med=1.994876s ok={True} rc=0 
+swift_ou   k6   natural              q1         p0 n=10 med=0.060879s ok={True} rc=0 
+swift_ou   k6   natural              q6         p0 n=10 med=0.056715s ok={True} rc=0 
+swift_ou   k1   natural_shuffled     energy     p0 n=10 med=0.028818s ok={True} rc=0 
+swift_ou   k6   natural              q1         p0 n=10 med=0.070341s ok={True} rc=0 
+swift_ou   k9   natural                         p0 n=10 med=0.059423s ok={True} rc=0 
+swift_ou   k5   natural                         p0 n=10 med=0.167204s ok={True} rc=0 
+swift_ou   k7   natural                         p0 n=3 med=2.266773s ok={True} rc=0 
+swift_ou   k8   natural                         p0 n=3 med=2.014256s ok={True} rc=0 
+swift_ou   k1   natural              energy     p0 n=10 med=0.028778s ok={True} rc=0 
+swift_ou   k4   natural_unsorted                p0 n=10 med=0.014819s ok={True} rc=0 
+swift_ou   k1   natural              energy     p0 n=10 med=0.032030s ok={True} rc=0 
+swift_ou   k5   natural                         p0 n=10 med=0.163761s ok={True} rc=0 
+swift_ou   k8   natural                         p0 n=3 med=1.978564s ok={True} rc=0 
+swift_ou   k9   natural                         p0 n=10 med=0.070327s ok={True} rc=0 
+swift_ou   k6   natural              q6         p0 n=10 med=0.052367s ok={True} rc=0 
+swift_ou   k7   natural                         p0 n=3 med=2.102498s ok={True} rc=0 
+swift_ou   k4   natural_unsorted                p0 n=10 med=0.013420s ok={True} rc=0 
+swift_ou   k1   natural_shuffled     energy     p0 n=10 med=0.036478s ok={True} rc=0 
+swift_ou   k6   natural              q1         p0 n=10 med=0.065127s ok={True} rc=0 
+swift_ou   k8   natural                         p0 n=3 med=1.989781s ok={True} rc=0 
+swift_ou   k1   natural_shuffled     energy     p0 n=10 med=0.030963s ok={True} rc=0 
+swift_ou   k6   natural              q6         p0 n=10 med=0.048083s ok={True} rc=0 
+swift_ou   k4   natural_unsorted                p0 n=10 med=0.013096s ok={True} rc=0 
+swift_ou   k9   natural                         p0 n=10 med=0.060209s ok={True} rc=0 
+swift_ou   k6   natural              q1         p0 n=10 med=0.111780s ok={True} rc=0 
+swift_ou   k1   natural              energy     p0 n=10 med=0.029829s ok={True} rc=0 
+swift_ou   k7   natural                         p0 n=3 med=2.302057s ok={True} rc=0 
+swift_ou   k5   natural                         p0 n=10 med=0.166186s ok={True} rc=0 
+swift_ou   k4   natural_unsorted                p0 n=10 med=0.012842s ok={True} rc=0 
+swift_ou   k1   natural_shuffled     energy     p0 n=10 med=0.030178s ok={True} rc=0 
+swift_ou   k9   natural                         p0 n=10 med=0.067470s ok={True} rc=0 
+swift_ou   k5   natural                         p0 n=10 med=0.170511s ok={True} rc=0 
+swift_ou   k1   natural              energy     p0 n=10 med=0.032155s ok={True} rc=0 
+swift_ou   k7   natural                         p0 n=3 med=2.002031s ok={True} rc=0 
+swift_ou   k6   natural              q6         p0 n=10 med=0.056279s ok={True} rc=0 
+swift_ou   k6   natural              q1         p0 n=10 med=0.058967s ok={True} rc=0 
+swift_ou   k8   natural                         p0 n=3 med=1.913464s ok={True} rc=0 
+swift_ou   k6   natural              q6         p0 n=10 med=0.050151s ok={True} rc=0 
+swift_ou   k6   natural              q1         p0 n=10 med=0.064647s ok={True} rc=0 
+swift_ou   k5   natural                         p0 n=10 med=0.163860s ok={True} rc=0 
+swift_ou   k8   natural                         p0 n=3 med=2.248176s ok={True} rc=0 
+swift_ou   k9   natural                         p0 n=10 med=0.063469s ok={True} rc=0 
+swift_ou   k1   natural              energy     p0 n=10 med=0.030971s ok={True} rc=0 
+swift_ou   k7   natural                         p0 n=3 med=1.941234s ok={True} rc=0 
+swift_ou   k4   natural_unsorted                p0 n=10 med=0.012865s ok={True} rc=0 
+swift_ou   k1   natural_shuffled     energy     p0 n=10 med=0.033066s ok={True} rc=0 
+swift_ou   k5   natural                         p0 n=10 med=0.164061s ok={True} rc=0 
+swift_ou   k6   natural              q6         p0 n=10 med=0.048335s ok={True} rc=0 
+swift_ou   k8   natural                         p0 n=3 med=1.896824s ok={True} rc=0 
+swift_ou   k9   natural                         p0 n=10 med=0.061315s ok={True} rc=0 
+swift_ou   k1   natural_shuffled     energy     p0 n=10 med=0.032129s ok={True} rc=0 
+swift_ou   k6   natural              q1         p0 n=10 med=0.060390s ok={True} rc=0 
+swift_ou   k4   natural_unsorted                p0 n=10 med=0.012899s ok={True} rc=0 
+swift_ou   k1   natural              energy     p0 n=10 med=0.034863s ok={True} rc=0 
+swift_ou   k7   natural                         p0 n=3 med=1.923032s ok={True} rc=0 
