@@ -47,6 +47,16 @@ Clés corrigées (reportées) en gras : sous-interpréteurs au lieu de fils sér
 | natural_f (python_exp) | 793 | 1433 | 1714 | 3204 | 8985 |
 | rapport [IC 95 %] | 1,003 [0,96–1,05] | 0,940 [0,84–1,21] | 0,987 [0,93–1,09] | 0,899 [0,81–1,07] | 0,012 [0,01–0,01] |
 
+## K8 naturel sans `__slots__` (remarque sur Lua, docs/PYTHON.md 4.8 ; python_k8n / python_ref, machine 23)
+
+Temps : 18796,6 → 19939,7 ms, rapport 1,061 [1,026–1,098], reporté dans tous les scénarios de code (P-E-511 : le P-E du 5 novembre au matin).
+
+| | p50 | p90 | p99 | p99,9 | max |
+|---|---|---|---|---|---|
+| `__slots__` (python_ref) | 785 | 1535 | 1736 | 3419 | 730021 |
+| classe ordinaire (python_k8n) | 801 | 1448 | 1756 | 3747 | 941123 |
+| rapport [IC 95 %] | 1,020 [1,01–1,04] | 0,943 [0,90–1,03] | 1,012 [0,98–1,06] | 1,096 [0,97–1,23] | 1,289 [1,24–1,33] |
+
 ## Pont par le C de clang (information : scénario P-E-P ; le classement publié reporte par transfert)
 
 | Rapport | Clé | Python publié | Transfert | Pont | Écart | Retenu | Facteur appliqué |
@@ -62,39 +72,42 @@ Clés corrigées (reportées) en gras : sous-interpréteurs au lieu de fils sér
 | Scénario | Score de Python | C | E | D | Rang espéré | Place | Rang 90 % | Voisins |
 |---|---|---|---|---|---|---|---|---|
 | Avant | 9,9 | 24,4 | 0,46 | 4,9 | 20,32 | 20 | 20–21 | devant JavaScript 5 %; derrière Lua 62 % |
-| P-code | 10,0 | 24,4 | 0,59 | 4,9 | 20,27 | 20 | 20–21 | devant JavaScript 5 %; derrière Lua 68 % |
+| P-code | 10,0 | 24,4 | 0,59 | 4,9 | 20,27 | 20 | 20–21 | devant JavaScript 5 %; derrière Lua 67 % |
 | P-M | 11,8 | 29,7 | 0,46 | 4,9 | 20,23 | 20 | 19–21 | devant JavaScript 9 %; derrière Lua 67 % |
 | P-E | 11,8 | 29,7 | 0,59 | 4,9 | 20,17 | 20 | 19–21 | devant JavaScript 9 %; derrière Lua 72 % |
-| P-E-P | 11,9 | 29,7 | 0,72 | 4,9 | 20,12 | 20 | 19–21 | devant JavaScript 9 %; derrière Lua 77 % |
-| S-Q6c | 11,9 | 29,7 | 0,63 | 4,9 | 20,15 | 20 | 19–21 | devant JavaScript 9 %; derrière Lua 74 % |
-| S-K8f | 12,0 | 29,7 | 0,59 | 5,6 | 19,99 | 20 | 19–21 | devant JavaScript 14 %; derrière Lua 83 % |
+| P-E-511 | 11,8 | 29,7 | 0,59 | 4,9 | 20,17 | 20 | 19–21 | devant JavaScript 9 %; derrière Lua 72 % |
+| P-E-P | 11,9 | 29,7 | 0,72 | 4,9 | 20,13 | 20 | 19–21 | devant JavaScript 9 %; derrière Lua 76 % |
+| S-Q6c | 11,8 | 29,7 | 0,63 | 4,9 | 20,16 | 20 | 19–21 | devant JavaScript 9 %; derrière Lua 74 % |
+| S-K8f | 12,0 | 29,7 | 0,59 | 5,5 | 20,00 | 20 | 19–21 | devant JavaScript 14 %; derrière Lua 83 % |
 | S-FT | 11,8 | 29,7 | 0,59 | 4,9 | 20,17 | 20 | 19–21 | devant JavaScript 9 %; derrière Lua 72 % |
-| S-mesures | 12,0 | 29,7 | 0,63 | 5,6 | 19,98 | 20 | 19–21 | devant JavaScript 15 %; derrière Lua 85 % |
-| S-cases | 13,1 | 33,2 | 0,59 | 4,9 | 20,10 | 20 | 19–21 | devant JavaScript 12 %; derrière Lua 75 % |
-| S-tout | 13,3 | 33,2 | 0,63 | 5,6 | 19,91 | 20 | 19–21 | devant JavaScript 19 %; derrière Lua 86 % |
+| S-mesures | 12,0 | 29,7 | 0,63 | 5,5 | 19,99 | 20 | 19–21 | devant JavaScript 14 %; derrière Lua 84 % |
+| S-cases | 13,1 | 33,2 | 0,59 | 4,9 | 20,11 | 20 | 19–21 | devant JavaScript 12 %; derrière Lua 74 % |
+| S-tout | 13,2 | 33,2 | 0,63 | 5,5 | 19,92 | 20 | 19–21 | devant JavaScript 18 %; derrière Lua 85 % |
 
 **Avant** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,01, 23,9), 19. JavaScript (19,04, 15,6), 20. Python (20,32, 9,9), 21. Lua (20,62, 3,9).
 
-**P-code** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,01, 23,9), 19. JavaScript (19,04, 15,6), 20. Python (20,27, 10,0), 21. Lua (20,68, 3,9).
+**P-code** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,01, 23,9), 19. JavaScript (19,04, 15,6), 20. Python (20,27, 10,0), 21. Lua (20,67, 3,9).
 
 **P-M** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,02, 23,9), 19. JavaScript (19,08, 15,6), 20. Python (20,23, 11,8), 21. Lua (20,67, 3,9).
 
 **P-E** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,02, 23,9), 19. JavaScript (19,08, 15,6), 20. Python (20,17, 11,8), 21. Lua (20,72, 3,9).
 
-**P-E-P** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,02, 23,9), 19. JavaScript (19,09, 15,6), 20. Python (20,12, 11,9), 21. Lua (20,77, 3,9).
+**P-E-511** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,02, 23,9), 19. JavaScript (19,08, 15,6), 20. Python (20,17, 11,8), 21. Lua (20,72, 3,9).
 
-**S-Q6c** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,02, 23,9), 19. JavaScript (19,08, 15,6), 20. Python (20,15, 11,9), 21. Lua (20,74, 3,9).
+**P-E-P** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,02, 23,9), 19. JavaScript (19,08, 15,6), 20. Python (20,13, 11,9), 21. Lua (20,76, 3,9).
 
-**S-K8f** : 16. Go (15,51, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,03, 23,9), 19. JavaScript (19,14, 15,6), 20. Python (19,99, 12,0), 21. Lua (20,83, 3,9).
+**S-Q6c** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,02, 23,9), 19. JavaScript (19,08, 15,6), 20. Python (20,16, 11,8), 21. Lua (20,74, 3,9).
+
+**S-K8f** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,03, 23,9), 19. JavaScript (19,14, 15,6), 20. Python (20,00, 12,0), 21. Lua (20,83, 3,9).
 
 **S-FT** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,02, 23,9), 19. JavaScript (19,08, 15,6), 20. Python (20,17, 11,8), 21. Lua (20,72, 3,9).
 
-**S-mesures** : 16. Go (15,51, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,03, 23,9), 19. JavaScript (19,14, 15,6), 20. Python (19,98, 12,0), 21. Lua (20,85, 3,9).
+**S-mesures** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,03, 23,9), 19. JavaScript (19,14, 15,6), 20. Python (19,99, 12,0), 21. Lua (20,84, 3,9).
 
-**S-cases** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,03, 23,9), 19. JavaScript (19,12, 15,6), 20. Python (20,10, 13,1), 21. Lua (20,75, 3,9).
+**S-cases** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,03, 23,9), 19. JavaScript (19,12, 15,6), 20. Python (20,11, 13,1), 21. Lua (20,74, 3,9).
 
-**S-tout** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,05, 23,9), 19. JavaScript (19,18, 15,6), 20. Python (19,91, 13,3), 21. Lua (20,86, 3,9).
+**S-tout** : 16. Go (15,52, 45,4), 17. Haskell (16,82, 41,3), 18. OCaml (18,04, 23,9), 19. JavaScript (19,18, 15,6), 20. Python (19,92, 13,2), 21. Lua (20,85, 3,9).
 
 ## Rapports reportés sur la réplication (machine 3)
 
-k3:rmw_packed 0,699, k3:rmw_padded 0,323, k3:sw_packed 0,902, k3:sw_padded 0,308, k6:mt:q1 0,343, k6:mt:q6 0,371, k9:mt 0,515.
+k3:rmw_packed 0,699, k3:rmw_padded 0,323, k3:sw_packed 0,902, k3:sw_padded 0,308, k6:mt:q1 0,343, k6:mt:q6 0,371, k8:natural 1,061, k9:mt 0,515.
