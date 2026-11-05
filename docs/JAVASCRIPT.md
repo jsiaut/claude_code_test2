@@ -274,7 +274,9 @@ errata 1,04 (contrôle 11,6 → 14,6). Les scores des autres langages ne changen
 formes, celle qui pèse le plus est un détour du pretenuring de V8 (S-K8s, + 1,66, code par défaut 22,7 → 29,3) ; avec
 toutes les formes et les cases discutables, JavaScript atteint 20,6 points et devance OCaml dans 16,5 % des variantes,
 sans changer de place. Dans les étages de la v3 (ordre établi dans 95 % des tirages, sans inversion sur la machine 3),
-JavaScript forme désormais un étage à lui seul, entre OCaml et le groupe de Python et Lua (`results/report_v3.md`).
+JavaScript forme désormais un étage à lui seul, entre OCaml et le groupe de Python et Lua (`results/report_v3.md`) ;
+depuis la remarque sur Python (5 novembre), qui a fait passer la part des variantes où JavaScript devance Python de
+95,5 à 91,1 %, les trois forment un seul étage (`docs/PYTHON.md`, 4.6).
 
 ### 4.5 Réplication (machine 3)
 
