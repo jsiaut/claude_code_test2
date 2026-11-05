@@ -57,6 +57,8 @@ def build_pools(data, langs, keys):
     """Réservoirs de résidus par (noyau, classe), fusionnés avec le noyau s'ils ont moins de 20 résidus."""
     pools, kpool = defaultdict(list), defaultdict(list)
     for l in langs:
+        if l in v2.ADDED:  # langages ajoutés (docs/SWIFT.md 3.2) : leurs résidus n'entrent pas dans les réservoirs
+            continue
         for key in sorted(keys):  # ordre fixe : l'ordre d'un ensemble change d'un processus à l'autre
             procs = data.get(l, {}).get(key)
             if not procs or len(procs) < 2:
@@ -83,6 +85,8 @@ class Arrays3:
         self.idx = {l: i for i, l in enumerate(langs)}
         self.ranked = np.array([self.idx[l] for l in RANKED if l in self.idx])
         self.t, self.P = {}, {}
+        # langages ajoutés (docs/SWIFT.md 3.2) : générateur propre, pour que les tirages des autres ne changent pas
+        rng_add = np.random.default_rng(SEED + 2402)
         for key in sorted(needed_keys(e_meas, d1_meas)):
             mean = np.full((nb + 1, len(langs)), np.nan)
             mn = np.full((nb + 1, len(langs)), np.nan)
@@ -96,14 +100,15 @@ class Arrays3:
                 self.P[(l, key)] = len(y)
                 if nb:
                     pool = pools[(key[0], klass(l))]
-                    draws = y.mean() + pool[rng.integers(0, len(pool), size=(nb, len(y)))]
+                    g = rng_add if l in v2.ADDED else rng
+                    draws = y.mean() + pool[g.integers(0, len(pool), size=(nb, len(y)))]
                     mean[1:, j], mn[1:, j] = np.exp(draws.mean(axis=1)), np.exp(draws.min(axis=1))
             self.t[("mean", key)], self.t[("min", key)] = mean, mn
         self.lat = np.full((nb + 1, len(langs), 3), np.nan)
         for l in langs:
             lp = lat.get(l, {}).get(K8N)
             if lp and any(len(p) for p in lp):
-                self.lat[:, self.idx[l], :] = lat_rows(lp, nb, rng)
+                self.lat[:, self.idx[l], :] = lat_rows(lp, nb, rng_add if l in v2.ADDED else rng)
         # remesure de D2 et D4 (docs/CPP.md ; information, hors du classement publié), quand elle est chargée : clés à part,
         # tirées après tout le reste avec leur propre générateur et leurs propres réservoirs, pour que les tirages des
         # autres clés et des variantes ne changent pas
@@ -452,12 +457,18 @@ def main():
     for l, lr in v2.m3_lat_ratios().items():
         if K8N in lat3.get(l, {}):
             lat3[l][K8N] = v2.scale_lat(lat3[l][K8N], lr)
+    # langages ajoutés (docs/SWIFT.md 3.1) : reliés aux données de la machine 3 par le même pont, avec le C de la machine 3
+    # (pas une réplication indépendante pour eux)
+    v2.bridge_added(d3m, lat3)
     A3 = Arrays3(d3m, lat3, langs, 0, rng, pools)
     refs3 = {e: references(A3, e) for e in ("mean", "min")}
     S3 = scores3(A3, 0, MAIN, C_main, footprint, refs3)
     m3_rank = rank_dict(list(S3["MS"]), langs)
     main_order = [RANKED[j] for j in order]
-    obs_agree = agreement(main_rank, m3_rank, main_order)
+    # accord entre machines : sur les langages répliqués indépendamment (les langages ajoutés n'ont, sur la machine 3,
+    # que le pont du C ; docs/SWIFT.md 3.1)
+    obs_agree = agreement(main_rank, m3_rank, [l for l in main_order if l not in v2.ADDED])
+    NR_IND = sum(1 for l in RANKED if l not in v2.ADDED)
 
     # ---------------- étages (section 3 du plan)
     tiers, boundaries = tiers_of(main_order, m3_rank, prec)
@@ -465,6 +476,8 @@ def main():
     # ---------------- test bruit ou interaction (section 4)
     mu = {}
     for l in langs:
+        if l in v2.ADDED:  # pas de données brutes de la machine 3 (pont seulement) : hors du test
+            continue
         for key in keys:
             procs = data.get(l, {}).get(key)
             if procs and key[0] != "k5":
@@ -494,7 +507,7 @@ def main():
         r1 = rank_dict(list(scores3(Asim1, 0, MAIN, C_main, footprint, {"mean": references(Asim1, "mean")})["MS"]), langs)
         r3 = rank_dict(list(scores3(Asim3, 0, MAIN, C_main, footprint, {"mean": references(Asim3, "mean")})["MS"]), langs)
         o1 = sorted(r1, key=r1.get)
-        if len(r1) == NR and len(r3) == NR:
+        if len(r1) == NR_IND and len(r3) == NR_IND:
             null.append(agreement(r1, r3, o1))
         # hors plan, ajouté avant le calcul : bruit de la machine 3 multiplié par 1,5 et 2 (un seul processus, hôte
         # possiblement plus bruyant que la machine 1), sur un quart des simulations
@@ -510,7 +523,7 @@ def main():
                         d3i[l][key] = procs
                 Ai = Arrays3(d3i, lat, langs, 0, rng, pools)
                 ri = rank_dict(list(scores3(Ai, 0, MAIN, C_main, footprint, {"mean": references(Ai, "mean")})["MS"]), langs)
-                if len(ri) == NR and len(r1) == NR:
+                if len(ri) == NR_IND and len(r1) == NR_IND:
                     null_infl[f].append(agreement(r1, ri, o1))
     def summarize(sims):
         out_ = {}
@@ -610,8 +623,8 @@ def main():
         E3_, M3_ = ms_drop(S3, drop)
         r1_, r3_ = rank_dict(list(M1_), langs), rank_dict(list(M3_), langs)
         e1_, e3_ = rank_dict(list(E1_), langs), rank_dict(list(E3_), langs)
-        without_k3[name] = {"MS": agreement(r1_, r3_, sorted(r1_, key=r1_.get)),
-                            "E": agreement(e1_, e3_, sorted(e1_, key=e1_.get)),
+        without_k3[name] = {"MS": agreement(r1_, r3_, sorted([l for l in r1_ if l not in v2.ADDED], key=r1_.get)),
+                            "E": agreement(e1_, e3_, sorted([l for l in e1_ if l not in v2.ADDED], key=e1_.get)),
                             "rank_m1": r1_, "rank_m3": r3_}
     # Cascade Lake seul : K5 d'avant (machines 1 et 2, même modèle) à la place de K5 de la machine 3, et K9 de Cascade
     # Lake (harnais d'origine : le harnais commun n'a pas été mesuré sur Cascade Lake, docs/K9.md)
@@ -621,6 +634,7 @@ def main():
     for l in langs:
         for key, procs in v1_k5.get(l, {}).items():
             dcl[l][key] = procs
+    v2.bridge_added(dcl, None, keys={k for k in v1_k5.get("c", {})}, latency=False)  # K5 Cascade Lake des ajoutés
     Acl = Arrays3(dcl, lat, langs, 0, rng, pools)
     Scl = scores3(Acl, 0, MAIN, C_main, footprint, {e: references(Acl, e) for e in ("mean", "min")})
     cascade = {"rank": rank_dict(list(Scl["MS"]), langs),
@@ -675,7 +689,7 @@ def report(o):
                  f"{r['rank_set'][0]}–{r['rank_set'][1]} | {fr(r['ua_rank_median'], 0)} [{r['ua_rank_90'][0]}–{r['ua_rank_90'][1]}] | "
                  f"{r['rank_m3']} |")
     L.append(f"\nPosition moyenne des estimations dans leur intervalle : {fr(o['ci_position_mean'], 2)} (0,78 en v2).")
-    L.append("\nHors plan, par composante (moyenne sur les 21 langages ; C ; extrêmes) : " + " ; ".join(
+    L.append("\nHors plan, par composante (moyenne sur les " + str(len(RANKED)) + " langages ; C ; extrêmes) : " + " ; ".join(
         f"{k} {fr(v['mean'], 2)} (C {fr(v['c'], 2)} ; {fr(v['min'], 2)} à {fr(v['max'], 2)}"
         + (f", {v['n']} langages à intervalle non nul)" if v['n'] < len(RANKED) else ")")
         for k, v in o["ci_position_components"].items()) + ".\n")

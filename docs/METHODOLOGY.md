@@ -1178,3 +1178,16 @@ Robustesse :
   (PUC-Lua sans son API C, piliers mesurés contre pilier jugé, LuaJIT), errata, limites (les 21 langages relus,
   versions optimisées), lecture et reproduction ; `docs/FINDINGS.md` (section Lua), `docs/NATURAL.md` (K8 de Python
   et de Lua), `docs/NOSIMD.md` (4.17), `docs/CONFRONTATION.md`, `docs/PYTHON.md` (4.8), `docs/LUA.md` (4).
+* 2026-11-05, 15:19 à 16:03 : **ajout de Swift, à la demande de l'auteur** (`docs/SWIFT.md`). Chaîne : Swift 6.4.2
+  (dernière version stable le 5 novembre ; archive et signature vérifiées), LLVM de la chaîne (clang 21). Mode release
+  vérifié sur un paquet de `swift package init` : `-O -whole-module-optimization -swift-version 6` ; le banc ajoute
+  `-target-cpu native`. Dix noyaux (`bench/swift/ms.swift`), copies de sensibilité `bench/swift_exp` (K8 en classe
+  finale à champs `let`) et `bench/swift_ou` (`-Ounchecked`), 51 cellules validées. Faits relevés en écrivant le code
+  (`tools/swift_check/facts.sh`) : conversions SIMD de la bibliothèque non inlinées, comparaisons vecteur contre scalaire
+  compilées voie par voie, `sum()` dans l'ordre des voies, ni `pause` ni préchargement (intrinsèques sans corps
+  inutilisables), module Glibc sans extensions GNU (pas d'affinité), `inout` sans `noalias`, `AsyncStream` à 14–19 s
+  pour K10 naturel (hors score). Grille notée par une sonde exécutée (`probes/swift`, 36 lignes), sans case changée en
+  règle v2 ; ligne de Swift dans `docs/NATURAL.md`. Plan (`docs/SWIFT.md`, sections 1 à 3) poussé avant les mesures :
+  Swift 22e langage classé, relié aux données publiées par le pont du C (machine 23 : même modèle que la machine 1 ;
+  K5, K9 et les latences de K8 viennent d'Emerald Rapids), tirages isolés ; outil de mesure `tools/measure_swift.py`
+  (73 cellules × 7 passes), script d'analyse `analysis/swift_check.py` écrit pendant la campagne.

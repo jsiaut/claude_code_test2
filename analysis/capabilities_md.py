@@ -6,12 +6,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "analysis"))
 from capabilities import MATRIX, CATEGORIES, LABELS, M  # noqa: E402
 
-ORDER = ["c", "cpp", "rust", "zig", "odin", "c3", "d", "nim", "ada", "fortran", "chapel", "mojo", "go",
+ORDER = ["c", "cpp", "rust", "zig", "odin", "c3", "d", "nim", "ada", "fortran", "chapel", "mojo", "swift", "go",
          "csharp", "java", "julia", "haskell", "ocaml", "js", "python", "lua"]
 SHORT = {"c": "C", "cpp": "C++", "rust": "Rust", "zig": "Zig", "odin": "Odin", "c3": "C3", "d": "D", "nim": "Nim",
          "ada": "Ada", "fortran": "Fortran", "chapel": "Chapel", "mojo": "Mojo", "go": "Go", "csharp": "C#",
          "java": "Java", "julia": "Julia", "haskell": "Haskell", "ocaml": "OCaml", "js": "JS", "python": "Python",
-         "lua": "Lua"}
+         "lua": "Lua", "swift": "Swift"}
 
 
 def main():

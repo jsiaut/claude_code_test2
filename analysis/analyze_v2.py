@@ -63,7 +63,7 @@ for key, b in BOUNDS.items():
 # Regroupement par backend (profil « langage et implémentation »)
 BACKEND = {
     "GCC": ["c_gcc", "cpp", "fortran", "ada"],
-    "LLVM": ["c", "fortran_flang", "rust", "zig", "odin", "c3", "d", "nim", "chapel", "julia", "mojo", "haskell"],
+    "LLVM": ["c", "fortran_flang", "rust", "zig", "odin", "c3", "d", "nim", "chapel", "julia", "mojo", "haskell", "swift"],
     "natif, autre": ["go", "ocaml"],
     "JIT ou VM": ["java", "csharp", "js", "js_bun", "luajit"],
     "interprète": ["python", "lua"],
@@ -109,6 +109,80 @@ def load_lat_v1():
 D3_TAG = "d3_m11"
 LAT_REPLACED = set()  # implémentations dont les latences de K8 naturel viennent de results/raw_d3 (align_lat les ignore)
 
+# Langages ajoutés après la campagne, mesurés sur un autre hôte avec le C comme témoin et reliés aux données publiées
+# par le pont du C (docs/SWIFT.md, plan 3.2) : {langage: (répertoire de results, étiquette)}.
+ADDED = {"swift": ("raw_swift", "swift")}
+_ADDED_CACHE = {}
+
+
+def added_raw(lang):
+    """Processus valides du langage ajouté et du témoin C de la même campagne : ({clé: [temps]} du langage,
+    {clé: [temps]} du C, latences de K8 naturel du langage et du C (une liste de lignes par processus))."""
+    if lang in _ADDED_CACHE:
+        return _ADDED_CACHE[lang]
+    sub, tag = ADDED[lang]
+    out = ({}, {}, [], [])
+    for i, impl in enumerate((lang, "c")):
+        path = os.path.join(ROOT, "results", sub, f"{impl}.jsonl")
+        if not os.path.exists(path):
+            continue
+        for line in open(path):
+            r = json.loads(line)
+            reps = r.get("reps", [])
+            if r.get("tag") != tag or not reps or r.get("returncode") not in (0, None) or any(x["ok"] is not True for x in reps):
+                continue
+            key = (r["kernel"], r["variant"], r["param"])
+            out[i].setdefault(key, []).append([x["sec"] for x in reps])
+            if key == K8N and r.get("lat"):
+                out[2 + i].append(r["lat"])
+    _ADDED_CACHE[lang] = out
+    return out
+
+
+def _gm_procs(procs):
+    return math.exp(sum(math.log(float(np.median(p))) for p in procs) / len(procs))
+
+
+def _lat_cols(procs):
+    """Médiane de chaque colonne [p50, p90, p99, p99,9, max] sur toutes les répétitions de tous les processus."""
+    rows = [row for p in procs for row in p]
+    return [float(np.median([row[j] for row in rows])) for j in range(5)]
+
+
+BRIDGE_SUS = []  # (langage, clé, temps, borne) : clés reliées écartées par le contrôle de la borne physique
+
+
+def bridge_added(data, lat, keys=None, latency=True):
+    """Pont par le C (docs/SWIFT.md, plan 3.2) : chaque processus du langage ajouté est multiplié par
+    G(C de data) / G(C de sa campagne), G = moyenne géométrique des médianes de processus, clé par clé (toutes les clés,
+    ou celles de keys) ; latences de K8 naturel (si latency et lat) multipliées colonne par colonne par le rapport des
+    médianes du C. Rappelée après chaque fonction qui remplace des données du C (K9 de la machine 16, latences de la
+    machine 11, corrections transférées), pour que le facteur suive la valeur finale du C. Les clés reliées passent le
+    contrôle de la borne physique de la campagne (comme final_data). Sans données, rien ne change."""
+    for lang in ADDED:
+        own, c23, own_lat, c23_lat = added_raw(lang)
+        if not own:
+            continue
+        if data is not None:
+            d = data.setdefault(lang, {})
+            for key, procs in own.items():
+                if keys is not None and key not in keys:
+                    continue
+                ref, wit = data.get("c", {}).get(key), c23.get(key)
+                if not ref or not wit:
+                    continue
+                f = _gm_procs(ref) / _gm_procs(wit)
+                new = [[t * f for t in p] for p in procs]
+                bound = (BOUNDS_M3 if key[0] in ("k5", "k9") else BOUNDS).get(key)  # K5, K9 : source Emerald Rapids
+                if bound is not None and float(np.median([np.median(p) for p in new])) < 0.9 * bound:
+                    d.pop(key, None)
+                    BRIDGE_SUS.append((lang, key, float(np.median([np.median(p) for p in new])), bound))
+                    continue
+                d[key] = new
+        if latency and lat is not None and own_lat and c23_lat and lat.get("c", {}).get(K8N):
+            f = [a / b for a, b in zip(_lat_cols(lat["c"][K8N]), _lat_cols(c23_lat))]
+            lat.setdefault(lang, {})[K8N] = scale_lat(own_lat, f)
+
 
 def load_lat_d3(tag=D3_TAG, max_steal=None):
     """Latences de K8 naturel remesurées pour D3 sur la machine 11 (remarque sur Rust, docs/RUST.md, 3.2) : pour chaque
@@ -136,6 +210,7 @@ def apply_d3(lat, max_steal=None):
     for l, procs in new.items():
         lat[l][K8N] = procs
         LAT_REPLACED.add(l)
+    bridge_added(None, lat)  # latences du C remplacées : pont des langages ajoutés recalculé
     return sorted(new)
 
 
@@ -251,6 +326,7 @@ def apply_k9h(data, harness="common", skip=()):
                 key = tuple(k.split("|"))
                 if key in data[l]:
                     data[l][key] = [[t * r for t in p] for p in data[l][key]]
+    bridge_added(data, None, keys={("k9", v, "") for v in K9H_VARIANTS}, latency=False)  # K9 du C remplacé
     return sorted(new)
 
 
@@ -307,6 +383,8 @@ def apply_lat_ratios(lat, path=os.path.join(ROOT, "results", "transfers.json")):
     for l, r in lr.items():
         if K8N in lat.get(l, {}):
             lat[l][K8N] = scale_lat(lat[l][K8N], r)
+    if "c" in lr:
+        bridge_added(None, lat)
     return lr
 
 
@@ -590,6 +668,8 @@ def apply_transfers(data, path=os.path.join(ROOT, "results", "transfers.json")):
         for k, r in keys.items():
             key = tuple(k.split("|"))
             data[lang][key] = [[t * r for t in p] for p in data[lang][key]]
+    if "c" in tr["ratios"]:
+        bridge_added(data, None, latency=False)
     return tr
 
 
@@ -599,7 +679,8 @@ def dataset_main(transfers=True, d3=True, d24=False, k9h="common"):
     (results/raw_d3, remarque sur Rust), quand elles existent ; si d24 (information seulement, pas dans le classement
     publié : docs/CPP.md, 4), les temps remesurés de D2 et D4 (results/raw_d24, remarque sur C++), sous leurs clés à
     part ; si transfers, les corrections de latence (« lat_ratios », après D3) ; si k9h ('common', classement publié, ou 'old', information), K9 de toutes les implémentations remesuré sur la
-    machine 16 (results/raw_k9h, docs/K9.md), quand il existe."""
+    machine 16 (results/raw_k9h, docs/K9.md), quand il existe ; enfin les langages ajoutés (ADDED : Swift), reliés par le
+    pont du C (bridge_added, docs/SWIFT.md 3.2)."""
     data, _lat_flat, _rss, invalid, sus, bridge = final_data()
     for l in data:
         for key in [k for k in data[l] if k[0] in ("k5", "k10")]:
@@ -629,6 +710,7 @@ def dataset_main(transfers=True, d3=True, d24=False, k9h="common"):
         apply_d24(data, transfers=transfers)
     if k9h:
         apply_k9h(data, k9h)
+    bridge_added(data, lat)  # langages ajoutés (docs/SWIFT.md) : pont par le C, sur les valeurs finales du C
     return data, lat, invalid, sus, bridge, v1_k5, (k5, k5wit, k5inv, k5_sus, k5recs)
 
 
@@ -1011,7 +1093,7 @@ NAMES = {"c": "C", "cpp": "C++", "csharp": "C#", "java": "Java", "zig": "Zig", "
          "ada": "Ada", "fortran": "Fortran", "js": "JavaScript", "python": "Python", "haskell": "Haskell", "c3": "C3",
          "d": "D", "rust": "Rust", "chapel": "Chapel", "nim": "Nim", "mojo": "Mojo", "go": "Go", "ocaml": "OCaml",
          "lua": "Lua", "c_gcc": "C (gcc)", "fortran_flang": "Fortran (flang)", "luajit": "LuaJIT", "js_bun": "JS (Bun)",
-         "python_ft": "Python (sans GIL)"}
+         "python_ft": "Python (sans GIL)", "swift": "Swift"}
 
 
 def fr(x, d=1):

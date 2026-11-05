@@ -45,6 +45,7 @@ CLASS = {
     "haskell": {K1S: "V", K5T: "V", K9T: "V"},
     "nim": {K1S: "M", K5T: "M"},
     "ada": {K5T: "M"},
+    "swift": {**_ALLV, K1A: "V"},  # ajouté le 5/11 (docs/SWIFT.md) : types SIMD de la bibliothèque, K1 aos compris
 }
 E_NOMT = {k: [m for m in ms if not any(key[1] == "mt" for key in m)] for k, ms in E_V2.items()}
 E_SYM = {**E_NOMT, "k1": [[K1A]], "k5": [[K5N]], "k6": [[Q6N], [Q1N]], "k9": [[K9N]]}
@@ -94,6 +95,8 @@ def patch_scalar(mojo_aos=False):
         scale_cell(A, "d", Q1T, 1 / r_d)  # Q1 en blocs d'avant la correction du 31/10 (forme scalaire)
         if mojo_aos:
             copy_cell(A, "mojo", K1A, K1N)
+        if "swift" in A.idx:  # K1 aos de Swift écrit en types SIMD (classe V) : K1 prend sa variante naturelle, comme Mojo
+            copy_cell(A, "swift", K1A, K1N)
     return patch
 
 
@@ -168,10 +171,11 @@ def main():
     pub = out["scenarios"].get("Publié")
     if pub:
         # témoin : le publié du 1er novembre au matin (results/nim_check.json, « Avant ») ; avec un suffixe (état actuel),
-        # le publié après la remarque sur Lua (results/lua_check.json, « L-E » ; avant elle, python_check.json, « P-E »,
+        # le publié après l'ajout de Swift (results/swift_check.json, « S-E » ; avant lui, lua_check.json, « L-E »,
+        # python_check.json, « P-E »,
         # js_check.json, « J-E », ocaml_check.json, « O-E », haskell_check.json, « H-E », go_check.json, « G-E », java_check.json, « J-E »,
         # k9_check.json, c_check.json, cpp_check.json et odin_check.json, « Publié », et c3_check.json, « Errata »)
-        src = ("lua_check.json", "L-E") if suffix else ("nim_check.json", "Avant")
+        src = ("swift_check.json", "S-E") if suffix else ("nim_check.json", "Avant")
         ref = json.load(open(os.path.join(ROOT, "results", src[0])))["scenarios"][src[1]]
         gap = max(max(abs(pub["ms0"][l] - ref["ms0"][l]), abs(pub["exp21"][l] - ref["exp21"][l])) for l in RANKED)
         out["check_published"] = {"max_gap": gap, "ok": gap < 1e-9, "ref": f"results/{src[0]}, « {src[1]} »"}
