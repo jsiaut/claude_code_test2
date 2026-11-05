@@ -1,0 +1,35 @@
+c          k3   rmw_padded                      p0 n=10 med=0.341743s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.014486s ok={True} rc=0 
+c          k6   mt                   q6         p0 n=10 med=0.007823s ok={True} rc=0 
+c          k6   mt                   q1         p0 n=10 med=0.011893s ok={True} rc=0 
+c          k3   sw_padded                       p0 n=10 med=0.125335s ok={True} rc=0 
+c          k6   mt                   q1         p0 n=10 med=0.014783s ok={True} rc=0 
+c          k3   rmw_padded                      p0 n=10 med=0.345860s ok={True} rc=0 
+c          k6   mt                   q6         p0 n=10 med=0.007788s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.015215s ok={True} rc=0 
+c          k3   sw_padded                       p0 n=10 med=0.122415s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.014053s ok={True} rc=0 
+c          k6   mt                   q1         p0 n=10 med=0.012763s ok={True} rc=0 
+c          k3   rmw_padded                      p0 n=10 med=0.340860s ok={True} rc=0 
+c          k3   sw_padded                       p0 n=10 med=0.122336s ok={True} rc=0 
+c          k6   mt                   q6         p0 n=10 med=0.007573s ok={True} rc=0 
+c          k3   sw_padded                       p0 n=10 med=0.123071s ok={True} rc=0 
+c          k6   mt                   q6         p0 n=10 med=0.008290s ok={True} rc=0 
+c          k6   mt                   q1         p0 n=10 med=0.014812s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.014594s ok={True} rc=0 
+c          k3   rmw_padded                      p0 n=10 med=0.340098s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.014385s ok={True} rc=0 
+c          k6   mt                   q6         p0 n=10 med=0.008664s ok={True} rc=0 
+c          k6   mt                   q1         p0 n=10 med=0.014957s ok={True} rc=0 
+c          k3   rmw_padded                      p0 n=10 med=0.342133s ok={True} rc=0 
+c          k3   sw_padded                       p0 n=10 med=0.123658s ok={True} rc=0 
+c          k3   rmw_padded                      p0 n=10 med=0.352289s ok={True} rc=0 
+c          k3   sw_padded                       p0 n=10 med=0.123552s ok={True} rc=0 
+c          k6   mt                   q1         p0 n=10 med=0.012104s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.013283s ok={True} rc=0 
+c          k6   mt                   q6         p0 n=10 med=0.008369s ok={True} rc=0 
+c          k6   mt                   q1         p0 n=10 med=0.012171s ok={True} rc=0 
+c          k3   sw_padded                       p0 n=10 med=0.122549s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.013457s ok={True} rc=0 
+c          k3   rmw_padded                      p0 n=10 med=0.341991s ok={True} rc=0 
+c          k6   mt                   q6         p0 n=10 med=0.007648s ok={True} rc=0 

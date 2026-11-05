@@ -1,0 +1,21 @@
+python_exp k6   mt_c                 q6         p0 n=3 med=0.207126s ok={True} rc=0 
+python_exp k6   tuned_c              q6         p0 n=3 med=0.587044s ok={True} rc=0 
+python_exp k8   natural_f                       p0 n=2 med=18.228862s ok={True} rc=0 
+python_exp k8   natural_f                       p0 n=2 med=17.199293s ok={True} rc=0 
+python_exp k6   tuned_c              q6         p0 n=3 med=0.687094s ok={True} rc=0 
+python_exp k6   mt_c                 q6         p0 n=3 med=0.207474s ok={True} rc=0 
+python_exp k8   natural_f                       p0 n=2 med=16.787482s ok={True} rc=0 
+python_exp k6   tuned_c              q6         p0 n=3 med=0.549413s ok={True} rc=0 
+python_exp k6   mt_c                 q6         p0 n=3 med=0.161792s ok={True} rc=0 
+python_exp k8   natural_f                       p0 n=2 med=14.967561s ok={True} rc=0 
+python_exp k6   mt_c                 q6         p0 n=3 med=0.219193s ok={True} rc=0 
+python_exp k6   tuned_c              q6         p0 n=3 med=0.525982s ok={True} rc=0 
+python_exp k8   natural_f                       p0 n=2 med=14.761359s ok={True} rc=0 
+python_exp k6   tuned_c              q6         p0 n=3 med=0.532239s ok={True} rc=0 
+python_exp k6   mt_c                 q6         p0 n=3 med=0.187446s ok={True} rc=0 
+python_exp k6   tuned_c              q6         p0 n=3 med=0.518775s ok={True} rc=0 
+python_exp k8   natural_f                       p0 n=2 med=14.987754s ok={True} rc=0 
+python_exp k6   mt_c                 q6         p0 n=3 med=0.164467s ok={True} rc=0 
+python_exp k8   natural_f                       p0 n=2 med=13.897825s ok={True} rc=0 
+python_exp k6   mt_c                 q6         p0 n=3 med=0.195026s ok={True} rc=0 
+python_exp k6   tuned_c              q6         p0 n=3 med=0.557200s ok={True} rc=0 
