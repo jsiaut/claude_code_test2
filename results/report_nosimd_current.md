@@ -2,7 +2,7 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/swift_check.json, « S-E ».
+Témoin : écart maximal 0.0e+00 avec results/swift_remark.json, « R-E ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
@@ -17,10 +17,10 @@ Témoin : écart maximal 0.0e+00 avec results/swift_check.json, « S-E ».
 | Nim | 7 (69,3) | 9 (69,5) | 8 (58,1) | 8 (58,1) | 6 (71,0) | 6 (68,3) | 14 (56,9) |
 | D | 8 (72,7) | 6 (74,1) | 12 (57,5) | 12 (57,5) | 7 (72,8) | 9 (70,3) | 7 (72,7) |
 | Ada | 9 (71,1) | 8 (73,3) | 4 (64,9) | 4 (64,9) | 9 (70,6) | 5 (72,8) | 12 (61,8) |
-| Chapel | 10 (65,7) | 10 (65,2) | 1 (67,2) | 1 (67,2) | 12 (65,3) | 10 (63,8) | 8 (65,7) |
-| Fortran | 11 (65,4) | 11 (66,1) | 2 (68,0) | 2 (68,0) | 10 (70,0) | 11 (63,2) | 9 (65,4) |
-| Swift | 12 (65,2) | 12 (65,4) | 13 (47,0) | 13 (47,0) | 13 (60,2) | 13 (62,8) | 10 (65,2) |
-| Julia | 13 (62,4) | 13 (63,1) | 3 (64,8) | 3 (64,8) | 11 (67,3) | 12 (63,0) | 11 (62,4) |
+| Chapel | 10 (65,7) | 10 (65,2) | 1 (67,2) | 1 (67,2) | 11 (65,3) | 10 (63,8) | 8 (65,7) |
+| Swift | 11 (66,5) | 12 (66,4) | 13 (48,3) | 13 (48,3) | 13 (61,8) | 12 (63,7) | 10 (66,5) |
+| Fortran | 12 (65,4) | 11 (66,1) | 2 (68,0) | 2 (68,0) | 10 (70,0) | 11 (63,2) | 9 (65,4) |
+| Julia | 13 (62,4) | 13 (63,1) | 3 (64,8) | 3 (64,8) | 12 (67,3) | 13 (63,0) | 11 (62,4) |
 | Mojo | 14 (62,3) | 14 (63,2) | 14 (45,0) | 14 (44,9) | 14 (55,0) | 14 (57,7) | 13 (62,3) |
 | C# | 15 (54,9) | 15 (56,2) | 15 (43,0) | 15 (43,0) | 15 (53,1) | 15 (50,3) | 15 (54,9) |
 | Java | 16 (47,2) | 16 (48,3) | 17 (37,1) | 17 (37,1) | 16 (50,3) | 16 (45,2) | 16 (47,2) |
@@ -36,12 +36,12 @@ Témoin : écart maximal 0.0e+00 avec results/swift_check.json, « S-E ».
 | Scénario | Spearman / publié | 1er (part) | Places gagnées (+) ou perdues (−) par rapport au publié |
 |---|---|---|---|
 | Publié | 1,000 | C (49 %) | aucune |
-| Contrôle sans mt | 0,994 | C (48 %) | D +2, Nim -2, Ada +1, Rust -1 |
-| S-scalaire | 0,757 | Chapel (45 %) | Julia +10, Fortran +9, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Java -1, Nim -1, Go +1, Swift -1 |
-| S-scalaire-Mojo | 0,757 | Chapel (45 %) | Julia +10, Fortran +9, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Java -1, Nim -1, Go +1, Swift -1 |
-| S-symétrique | 0,990 | Odin (29 %) | Julia +2, Rust -2, Chapel -2, C -1, Odin +1, Fortran +1, D +1, Nim +1, Swift -1 |
-| S-noyaux-scalaires | 0,979 | C (48 %) | Zig -4, Ada +4, Julia +1, C3 +1, D -1, Rust -1, Nim +1, Swift -1 |
-| S-importées | 0,957 | C (51 %) | Nim -7, Ada -3, Julia +2, Fortran +2, Chapel +2, Swift +2, D +1, Mojo +1 |
+| Contrôle sans mt | 0,993 | C (48 %) | D +2, Nim -2, Ada +1, Fortran +1, Rust -1, Swift -1 |
+| S-scalaire | 0,745 | Chapel (46 %) | Julia +10, Fortran +10, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Swift -2, Java -1, Nim -1, Go +1 |
+| S-scalaire-Mojo | 0,745 | Chapel (46 %) | Julia +10, Fortran +10, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Swift -2, Java -1, Nim -1, Go +1 |
+| S-symétrique | 0,990 | Odin (29 %) | Fortran +2, Rust -2, Swift -2, C -1, Odin +1, Julia +1, D +1, Chapel -1, Nim +1 |
+| S-noyaux-scalaires | 0,979 | C (48 %) | Zig -4, Ada +4, Fortran +1, C3 +1, D -1, Rust -1, Nim +1, Swift -1 |
+| S-importées | 0,956 | C (50 %) | Nim -7, Ada -3, Fortran +3, Julia +2, Chapel +2, D +1, Mojo +1, Swift +1 |
 
 ## Plafond E par scénario
 
@@ -57,8 +57,8 @@ Témoin : écart maximal 0.0e+00 avec results/swift_check.json, « S-E ».
 | D | 79,2 | 82,7 | 41,0 | 41,0 | 73,4 | 73,2 | 79,2 |
 | Ada | 76,8 | 82,3 | 61,0 | 61,0 | 70,4 | 81,2 | 53,7 |
 | Chapel | 79,5 | 78,3 | 82,8 | 82,8 | 71,3 | 74,7 | 79,5 |
+| Swift | 80,3 | 80,3 | 34,7 | 34,7 | 65,7 | 73,3 | 80,3 |
 | Fortran | 73,0 | 74,5 | 78,9 | 78,9 | 76,7 | 67,4 | 73,0 |
-| Swift | 79,4 | 79,9 | 33,7 | 33,7 | 64,0 | 73,3 | 79,4 |
 | Julia | 62,3 | 64,2 | 67,9 | 67,9 | 66,5 | 64,0 | 62,3 |
 | Mojo | 67,0 | 69,3 | 23,5 | 23,3 | 45,0 | 55,5 | 67,0 |
 | C# | 53,6 | 57,0 | 23,8 | 23,8 | 45,7 | 42,1 | 53,6 |
@@ -94,8 +94,8 @@ Témoin : écart maximal 0.0e+00 avec results/swift_check.json, « S-E ».
 | D | aos 43,7 | natural 84,3 | tuned q6 20,9 | natural q1 88,3 | natural 31,1 |
 | Ada | soa 7,2 | natural 86,1 | tuned q6 20,0 | tuned q1 57,5 | tuned 14,7 |
 | Chapel | soa 7,7 | tuned 4,7 | tuned q6 22,8 | tuned q1 48,5 | tuned 15,9 |
+| Swift | aos 38,9 | natural 79,1 | natural q6 69,6 | natural q1 121,6 | natural 66,6 |
 | Fortran | soa 7,5 | tuned 5,5 | tuned q6 22,6 | tuned q1 47,5 | natural 13,9 |
-| Swift | aos 38,9 | natural 158,6 | natural q6 69,6 | natural q1 121,6 | natural 41,3 |
 | Julia | soa 8,0 | tuned 6,3 | tuned q6 21,4 | tuned q1 98,8 | natural 21,6 |
 | Mojo | aos 38,0 | natural 161,2 | natural q6 56,9 | natural q1 227,3 | natural 202,3 |
 | C# | aos 38,9 | natural 86,7 | natural q6 155,7 | natural q1 186,3 | natural 71,9 |

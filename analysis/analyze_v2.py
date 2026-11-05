@@ -112,18 +112,29 @@ LAT_REPLACED = set()  # implémentations dont les latences de K8 naturel viennen
 # Langages ajoutés après la campagne, mesurés sur un autre hôte avec le C comme témoin et reliés aux données publiées
 # par le pont du C (docs/SWIFT.md, plan 3.2) : {langage: (répertoire de results, étiquette)}.
 ADDED = {"swift": ("raw_swift", "swift")}
+# Remarque sur Swift (docs/SWIFT.md, plan 5.3) : les clés venues d'Emerald Rapids sont reliées par les rapports au C
+# mesurés sur la machine 24 (même modèle que les machines 3, 11 et 16), dans la construction qui a produit leurs données
+# publiées : {langage: {source: (répertoire, étiquette, implémentation du langage, implémentation du C)}}, source « k5 »
+# (machine 3, binaires recompilés pour Emerald Rapids), « k9 » (machine 16) et « lat » (latences de K8 naturel,
+# machine 11) pour les binaires publiés (Cascade Lake), « m3 » (réplication, toutes les clés, constructions natives).
+ADDED_ER = {"swift": {"k5": ("raw_swift_er", "swift_er", "swift_er", "c_er"),
+                      "k9": ("raw_swift_er", "swift_er", "swift", "c"),
+                      "lat": ("raw_swift_er", "swift_er", "swift", "c"),
+                      "m3": ("raw_swift_er", "swift_er", "swift_er", "c_er")}}
+BRIDGE_ER = True  # False : pont de la machine 23 seul (classement d'avant la remarque sur Swift, scénario « Avant »)
 _ADDED_CACHE = {}
 
 
-def added_raw(lang):
-    """Processus valides du langage ajouté et du témoin C de la même campagne : ({clé: [temps]} du langage,
-    {clé: [temps]} du C, latences de K8 naturel du langage et du C (une liste de lignes par processus))."""
-    if lang in _ADDED_CACHE:
-        return _ADDED_CACHE[lang]
-    sub, tag = ADDED[lang]
+def campaign_raw(sub, tag, impl, impl_c="c"):
+    """Processus valides d'une implémentation et de son témoin C dans une campagne : ({clé: [temps]} de
+    l'implémentation, {clé: [temps]} du C, latences de K8 naturel de l'une et de l'autre (une liste de lignes par
+    processus))."""
+    ck = (sub, tag, impl, impl_c)
+    if ck in _ADDED_CACHE:
+        return _ADDED_CACHE[ck]
     out = ({}, {}, [], [])
-    for i, impl in enumerate((lang, "c")):
-        path = os.path.join(ROOT, "results", sub, f"{impl}.jsonl")
+    for i, im in enumerate((impl, impl_c)):
+        path = os.path.join(ROOT, "results", sub, f"{im}.jsonl")
         if not os.path.exists(path):
             continue
         for line in open(path):
@@ -135,8 +146,33 @@ def added_raw(lang):
             out[i].setdefault(key, []).append([x["sec"] for x in reps])
             if key == K8N and r.get("lat"):
                 out[2 + i].append(r["lat"])
-    _ADDED_CACHE[lang] = out
+    _ADDED_CACHE[ck] = out
     return out
+
+
+def added_raw(lang):
+    """Processus valides du langage ajouté et du témoin C de sa campagne d'origine (machine 23 pour Swift)."""
+    sub, tag = ADDED[lang]
+    return campaign_raw(sub, tag, lang, "c")
+
+
+def _added_source(lang, key, host, no_er):
+    """Campagne d'où vient le rapport au C d'une clé (docs/SWIFT.md, 5.3) : host « main » (classement publié), « m3 »
+    (réplication) ou « cl » (Cascade Lake seul, machine 23 partout) ; repli sur la campagne d'origine si la clé n'a pas
+    été mesurée ailleurs."""
+    er = ADDED_ER.get(lang, {}) if BRIDGE_ER else {}
+    src = None
+    if host == "m3":
+        src = er.get("m3")
+    elif host == "main" and key is not None and key[0] in er and key[0] not in no_er:
+        src = er[key[0]]
+    elif host == "main" and key is None and "lat" not in no_er:
+        src = er.get("lat")
+    if src is not None:
+        got = campaign_raw(*src)
+        if (key is None and got[2] and got[3]) or (key is not None and key in got[0] and key in got[1]):
+            return got
+    return added_raw(lang)
 
 
 def _gm_procs(procs):
@@ -152,7 +188,7 @@ def _lat_cols(procs):
 BRIDGE_SUS = []  # (langage, clé, temps, borne) : clés reliées écartées par le contrôle de la borne physique
 
 
-def bridge_added(data, lat, keys=None, latency=True, bounds=None):
+def bridge_added(data, lat, keys=None, latency=True, bounds=None, host="main", no_er=()):
     """Pont par le C (docs/SWIFT.md, plan 3.2) : chaque processus du langage ajouté est multiplié par
     G(C de data) / G(C de sa campagne), G = moyenne géométrique des médianes de processus, clé par clé (toutes les clés,
     ou celles de keys) ; latences de K8 naturel (si latency et lat) multipliées colonne par colonne par le rapport des
@@ -160,18 +196,21 @@ def bridge_added(data, lat, keys=None, latency=True, bounds=None):
     machine 11, corrections transférées), pour que le facteur suive la valeur finale du C. Les clés reliées passent le
     contrôle de la borne physique de l'hôte des données cibles : bounds s'il est donné (BOUNDS_M3 pour la réplication de
     la machine 3), sinon les bornes de la machine 1, et celles de la machine 3 pour K5 et K9 (sources Emerald Rapids du
-    jeu principal), comme final_data et load_m3. Sans données, rien ne change."""
+    jeu principal), comme final_data et load_m3. La campagne de chaque rapport suit _added_source (remarque sur Swift,
+    5.3 : machine 24 pour les clés venues d'Emerald Rapids ; no_er : préfixes de clés gardés sur la machine 23). Sans
+    données, rien ne change."""
     for lang in ADDED:
-        own, c23, own_lat, c23_lat = added_raw(lang)
-        if not own:
+        own0, *_ = added_raw(lang)
+        if not own0:
             continue
         if data is not None:
             d = data.setdefault(lang, {})
-            for key, procs in own.items():
+            for key in own0:
                 if keys is not None and key not in keys:
                     continue
-                ref, wit = data.get("c", {}).get(key), c23.get(key)
-                if not ref or not wit:
+                own, cw, *_ = _added_source(lang, key, host, no_er)
+                procs, ref, wit = own.get(key), data.get("c", {}).get(key), cw.get(key)
+                if not procs or not ref or not wit:
                     continue
                 f = _gm_procs(ref) / _gm_procs(wit)
                 new = [[t * f for t in p] for p in procs]
@@ -181,9 +220,11 @@ def bridge_added(data, lat, keys=None, latency=True, bounds=None):
                     BRIDGE_SUS.append((lang, key, float(np.median([np.median(p) for p in new])), bound))
                     continue
                 d[key] = new
-        if latency and lat is not None and own_lat and c23_lat and lat.get("c", {}).get(K8N):
-            f = [a / b for a, b in zip(_lat_cols(lat["c"][K8N]), _lat_cols(c23_lat))]
-            lat.setdefault(lang, {})[K8N] = scale_lat(own_lat, f)
+        if latency and lat is not None and lat.get("c", {}).get(K8N):
+            *_, own_lat, cw_lat = _added_source(lang, None, host, no_er)
+            if own_lat and cw_lat:
+                f = [a / b for a, b in zip(_lat_cols(lat["c"][K8N]), _lat_cols(cw_lat))]
+                lat.setdefault(lang, {})[K8N] = scale_lat(own_lat, f)
 
 
 def load_lat_d3(tag=D3_TAG, max_steal=None):
@@ -712,7 +753,9 @@ def dataset_main(transfers=True, d3=True, d24=False, k9h="common"):
         apply_d24(data, transfers=transfers)
     if k9h:
         apply_k9h(data, k9h)
-    bridge_added(data, lat)  # langages ajoutés (docs/SWIFT.md) : pont par le C, sur les valeurs finales du C
+    # langages ajoutés (docs/SWIFT.md) : pont par le C, sur les valeurs finales du C ; K9 de Cascade Lake (k9h None) :
+    # pont de la machine 23 pour K9
+    bridge_added(data, lat, no_er=() if k9h else ("k9",))
     return data, lat, invalid, sus, bridge, v1_k5, (k5, k5wit, k5inv, k5_sus, k5recs)
 
 

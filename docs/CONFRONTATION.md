@@ -458,6 +458,10 @@ langages communs, les corrélations des quatre scénarios (0,78, 0,86, 0,82, 0,9
 changent pas ; seuls les rangs espérés bougent, de 0,17 au plus parmi les 18 (Swift s'intercale, et devient dans une
 partie des tirages la référence du code naturel de K1).
 
+Rejouée après la remarque sur Swift (5 novembre au soir, `docs/SWIFT.md`, 5 : errata D4 et E4 de Swift, pont par un
+Emerald Rapids) : les rangs des 18 langages communs, les corrélations des quatre scénarios et les accords des tests 3
+et 4 ne changent pas ; les rangs espérés des 18 bougent de 0,18 au plus.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

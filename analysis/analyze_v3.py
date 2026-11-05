@@ -459,7 +459,8 @@ def main():
             lat3[l][K8N] = v2.scale_lat(lat3[l][K8N], lr)
     # langages ajoutés (docs/SWIFT.md 3.1) : reliés aux données de la machine 3 par le même pont, avec le C de la machine 3
     # (pas une réplication indépendante pour eux)
-    v2.bridge_added(d3m, lat3, bounds=BOUNDS_M3)
+    # (remarque sur Swift, docs/SWIFT.md 5.3 : rapports des constructions natives de la machine 24, même modèle)
+    v2.bridge_added(d3m, lat3, bounds=BOUNDS_M3, host="m3")
     A3 = Arrays3(d3m, lat3, langs, 0, rng, pools)
     refs3 = {e: references(A3, e) for e in ("mean", "min")}
     S3 = scores3(A3, 0, MAIN, C_main, footprint, refs3)
@@ -634,7 +635,8 @@ def main():
     for l in langs:
         for key, procs in v1_k5.get(l, {}).items():
             dcl[l][key] = procs
-    v2.bridge_added(dcl, None, keys={k for k in v1_k5.get("c", {})}, latency=False, bounds=v2.BOUNDS)  # K5 Cascade Lake
+    v2.bridge_added(dcl, None, keys={k for k in v1_k5.get("c", {})}, latency=False, bounds=v2.BOUNDS,
+                    host="cl")  # K5 Cascade Lake : pont de la machine 23
     Acl = Arrays3(dcl, lat, langs, 0, rng, pools)
     Scl = scores3(Acl, 0, MAIN, C_main, footprint, {e: references(Acl, e) for e in ("mean", "min")})
     cascade = {"rank": rank_dict(list(Scl["MS"]), langs),

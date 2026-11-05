@@ -179,16 +179,15 @@
 | swift | B1 | 1 | 1 |  | ARC : isKnownUniquelyReferenced true ; pas de GC traçant |
 | swift | B2 | 0.5 | 0.5 |  | allocate/deallocate de pointeurs bruts ; pas d'interface d'allocateur (arènes à la main, bench K8 tuned) |
 | swift | B3 | 1 | 1 |  | withUnsafeTemporaryAllocation : tampon à 944 o d'une variable locale (pile) ; structs et InlineArray en ligne |
-| swift | B4 | 0.5 | 0.5 |  | [any Shape] (conteneur de 40 o, tampon en ligne de 24 o) d'une struct de 64 o : boîte 0x55b358a6a6c0 sur le ta |
+| swift | B4 | 0.5 | 0.5 |  | [any Shape] (conteneur de 40 o, tampon en ligne de 24 o) d'une struct de 64 o : boîte 0x55ef1d3156c0 sur le ta |
 | swift | B5 | 1 | 1 |  | UnsafeMutableRawPointer, UnsafePointer (bench) |
 | swift | C1 | 1 | 1 |  | SIMD16<Float>.addProduct (FMA) : 7.0 |
 | swift | C4 | 0 | 0 |  | aucun contrôle de la réassociation (ni fast-math ni API relâchée en bibliothèque standard ; Relaxed est dans s |
-| swift | C5 | 1 | 1 |  | DispatchQueue.concurrentPerform : 64 itérations sur 4 threads |
+| swift | C5 | 1 | 1 |  | DispatchQueue.concurrentPerform : 64 itérations sur 3 threads |
 | swift | D1 | 1 | 1 |  | Foundation.Thread et tâches (withTaskGroup, somme 6) |
 | swift | D2 | 1 | 1 |  | Atomic : .relaxed/.acquiring/.releasing/.sequentiallyConsistent -> 5 |
 | swift | D3 | 0.5 | 0.5 |  | sysconf(_SC_LEVEL1_DCACHE_LINESIZE) = 64 par le module Glibc livré : requête à l'exécution, ni constante ni ty |
-| swift | D4 | 0 | 0 |  | ni Foundation, ni Dispatch, ni la bibliothèque standard n'offrent d'affinité ; sched_setaffinity absent du mod |
-| swift | D5 | 0.5 | 0.5 |  | atomicMemoryFence ; pas d'indication d'attente active (_mm_pause importée : symbole introuvable, run.sh) |
+| swift | D5 | 0.5 | 0.5 |  | atomicMemoryFence ; pause seulement par @_silgen_name, attribut souligné (_mm_pause importée : symbole introuv |
 | swift | E1 | 1 | 1 |  | natif, -emit-assembly / -emit-ir |
 | swift | E2 | 0 | 0 |  | pas d'assembleur en ligne |
 | swift | E6 | 1 | 1 |  | UnsafeBufferPointer sans vérification en -O (bench), -Ounchecked global |
@@ -198,8 +197,9 @@
 | swift | F3 | 1 | 1 |  | UInt8...Int64, &+ &- &* : 4 -2147483648 |
 | swift | F4 | 1 | 1 |  | Data(contentsOf:options: .alwaysMapped) projeté (/proc/self/maps) + withUnsafeBytes/bindMemory : 67108864 o, p |
 | swift | C2 | 0.5 | 0.5 |  | import _Builtin_intrinsics.intel (module Clang non documenté) : 1 vaddps pour _mm512_add_ps ; fonctions intégr |
+| swift | D4 | 0.5 | 0.5 |  | sched_setaffinity du module Glibc livré avec swiftc -Xcc -D_GNU_SOURCE : fil épinglé sur le CPU 1, sched_getcp |
 | swift | E3 | 0.5 | 0.5 |  | _slowPath/_fastPath (publics mais soulignés) : poids de branchement dans l'IR = 1 |
-| swift | E4 | 0 | 0 |  | _m_prefetchw importée mais supprimée : 0 instruction de préchargement dans le code produit ; _mm_prefetch est  |
+| swift | E4 | 0.5 | 0.5 |  | @_silgen_name("llvm.prefetch.p0"), attribut souligné : 9 prefetchw dans le code produit ; _m_prefetchw importé |
 | swift | E5 | 0.5 | 0.5 |  | exclusivité des inout (règle du langage, exploitée par l'optimiseur SIL) ; IR de two(_:_:) sans noalias : 0 ;  |
 | zig | A2 | 1 | 1 |  | @offsetOf(S, "c")=8 |
 | zig | A3 | 1 | 1 |  | packed struct u3/u5/u8 : @bitSizeOf=16 |

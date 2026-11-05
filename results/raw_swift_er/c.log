@@ -1,0 +1,35 @@
+c          k8   natural                         p0 n=3 med=0.517651s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.014230s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.004384s ok={True} rc=0 
+c          k6   tuned                q1         p0 n=10 med=0.025519s ok={True} rc=0 
+c          k9   tuned                           p0 n=10 med=0.013766s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.004246s ok={True} rc=0 
+c          k9   tuned                           p0 n=10 med=0.012234s ok={True} rc=0 
+c          k8   natural                         p0 n=3 med=0.459543s ok={True} rc=0 
+c          k6   tuned                q1         p0 n=10 med=0.028299s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.012945s ok={True} rc=0 
+c          k8   natural                         p0 n=3 med=0.561916s ok={True} rc=0 
+c          k9   tuned                           p0 n=10 med=0.011204s ok={True} rc=0 
+c          k6   tuned                q1         p0 n=10 med=0.028620s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.013633s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.004718s ok={True} rc=0 
+c          k9   tuned                           p0 n=10 med=0.011820s ok={True} rc=0 
+c          k6   tuned                q1         p0 n=10 med=0.028135s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.005139s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.012954s ok={True} rc=0 
+c          k8   natural                         p0 n=3 med=0.544473s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.004356s ok={True} rc=0 
+c          k6   tuned                q1         p0 n=10 med=0.026363s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.012038s ok={True} rc=0 
+c          k9   tuned                           p0 n=10 med=0.012061s ok={True} rc=0 
+c          k8   natural                         p0 n=3 med=0.595351s ok={True} rc=0 
+c          k8   natural                         p0 n=3 med=0.501759s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.005531s ok={True} rc=0 
+c          k6   tuned                q1         p0 n=10 med=0.030750s ok={True} rc=0 
+c          k9   tuned                           p0 n=10 med=0.011540s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.010997s ok={True} rc=0 
+c          k9   natural                         p0 n=10 med=0.013988s ok={True} rc=0 
+c          k9   mt                              p0 n=10 med=0.004537s ok={True} rc=0 
+c          k6   tuned                q1         p0 n=10 med=0.027083s ok={True} rc=0 
+c          k8   natural                         p0 n=3 med=0.571334s ok={True} rc=0 
+c          k9   tuned                           p0 n=10 med=0.012571s ok={True} rc=0 

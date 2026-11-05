@@ -98,6 +98,9 @@ V2_OVERRIDES = {
     ("python", "D4"): (1, "os.sched_setaffinity de la bibliothèque standard"),
     # erratum du 30 octobre (notation à l'aveugle) : fait omis
     ("c", "D3"): (1, "sysconf(_SC_LEVEL1_DCACHE_LINESIZE) de la glibc ; __GCC_DESTRUCTIVE_SIZE prédéfini par clang et gcc"),
+    # Swift (erratum du 5/11, remarque sur Swift, docs/SWIFT.md 5.3) : le module Glibc livré est la liaison au système
+    # de la bibliothèque standard, comme core.sys.linux pour D, std.os.linux pour Zig ou os pour Python
+    ("swift", "D4"): (1, "sched_setaffinity / pthread_setaffinity_np du module Glibc livré (swiftc -Xcc -D_GNU_SOURCE)"),
 }
 
 # C3 (vectorisation automatique mesurée) sort du pilier C en v2 : double compte avec E et D1.

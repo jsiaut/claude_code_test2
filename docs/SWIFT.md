@@ -490,3 +490,116 @@ comprise) et de l'état actuel.
 **Ce que je ne fais pas.** Pas de mesure de K7 naturel sur la machine 1 (indisponible) : R-K7 reste une sensibilité.
 `UniqueBox` n'entre pas au code naturel (il faut un `deinit` vide pour compiler l'arbre), ni K4 en `&+=` (l'idiome
 est `+=`) : ce sont des informations et une sensibilité.
+
+### 5.4 Résultats (après les mesures)
+
+Mesures du 5 novembre, de 20:43:14 à 20:56:33, sur la machine 24 : 504 processus (72 cellules × 7), aucune somme de
+contrôle fausse ; huit processus refaits pour vol de temps, aucun gardé au-dessus de 2 % (vol médian 0,14 %, maximum
+1,82 %). Analyse : `analysis/swift_remark.py` (`results/report_swift_remark.md`), puis les sorties publiées
+régénérées. Contrôle : le scénario Avant (grille et pont d'avant la remarque) reproduit S-E à l'identique (écart 0,0).
+
+#### 5.4.1 Swift face au C sur Emerald Rapids
+
+Moyenne géométrique des médianes de 7 processus, intervalle à 95 % par bootstrap ; constructions natives sauf mention.
+
+| Cellule | Swift / C, machine 24 (Emerald Rapids) | Swift / C, machine 23 (Cascade Lake) | Remarque (Emerald Rapids) |
+|---|---|---|---|
+| K5 naturel | **0,50** [0,49–0,51] | 1,00 | 0,51 |
+| K5 optimisé | 1,02 [0,84–1,22] | 1,07 | 1,00 |
+| K9 naturel | **5,04** [4,67–5,44] ; binaires publiés 4,81 | 2,98 | 7,1 |
+| K9 optimisé, `mt` | 1,04 et 1,05 ; binaires publiés 1,01 et 1,00 | 1,00 et 1,12 | 0,91 |
+| Q1 optimisé | **1,03** [0,95–1,10] ; code de Cascade Lake 1,13 [1,07–1,19] | 1,47 | 1,07 ; 1,14 |
+| Q1 `mt`, Q1 naturel | 1,06 ; 1,22 | 1,33 ; 1,46 | — |
+| K4 naturel | 29,8 [26,6–33,0] | 29,3 | 55 |
+| K4 sans branchement | 0,83 | 1,17 | — |
+| K8 naturel | 2,66 ; binaires publiés 2,58 | 2,42 | 2,6 |
+| K1 naturel permuté, K3 écrivain unique | 1,28 ; 1,10 | 1,09 ; 1,01 | — |
+| Latences de K8 (p50, p90, p99, p99,9, max ; binaires publiés) | 2,63 ; 2,43 ; 2,17 ; 2,29 ; 1,78 | 2,64 ; 2,49 ; 2,48 ; 1,97 ; 1,14 | — |
+
+* **La remarque a raison sur le sens des écarts.** Sur Emerald Rapids, le K5 naturel du C est deux fois plus lent que
+  celui de Swift (sa chaîne de FMA scalaires, 5.2) ; le K9 naturel de Swift y perd davantage (5,0 fois le C au lieu de
+  3,0 : les vérifications et le test d'unicité par écriture ne profitent pas du débit mémoire de cet hôte) ; Q1
+  optimisé y est au niveau du C (1,03, et 1,13 avec le code de Cascade Lake) : l'écart de 1,47 tient surtout à Cascade
+  Lake, où les 74 accès à la pile par tour coûtent plus cher. Ses chiffres de K9 naturel (7,1) et de K4 naturel (55)
+  viennent de ses réimplémentations ; les binaires mesurés ici donnent 5,0 et 29,8.
+* **Information** (copie `swift_ub`, code de Cascade Lake exécuté sur la machine 24) : K4 naturel avec `&+=` prend
+  1,78 ms au lieu de 67,2 (× 0,026), 0,84 fois le C natif : seule l'addition vérifiée bloque la vectorisation. K8
+  naturel en `UniqueBox` prend 0,45 fois le temps de la classe [0,43–0,48], 1,20 fois le C, et ses latences 0,45 à
+  0,59 fois celles de la classe.
+
+#### 5.4.2 Classement publié (R-E)
+
+| Scénario | Score | C | E | D | rang espéré | place | rang à 90 % |
+|---|---|---|---|---|---|---|---|
+| Avant (publié jusqu'ici) | 65,24 | 64,4 | 79,38 | 43,8 | 11,01 | 12e | 6–14 |
+| R-D4 | 66,29 | 67,4 | 79,38 | 43,8 | 10,60 | 11e | 5–14 |
+| R-E4 | 65,49 | 65,1 | 79,38 | 43,8 | 10,89 | 12e | 5–14 |
+| R-grille (D4 et E4) | 66,54 | 68,1 | 79,38 | 43,8 | 10,47 | 11e | 5–14 |
+| R-pont (machine 24 seule) | 65,16 | 64,4 | 80,35 | 42,0 | 11,22 | 12e | 6–14 |
+| **R-E (publié)** | **66,46** | **68,1** | **80,35** | **42,0** | **10,69** | **11e** | **6–14** |
+
+**Swift passe 11e sur 22, avec 66,46 points**, rang espéré 10,69 (rang plausible 6 à 14) : il devance Fortran (65,4
+points, 12e) dans 54 % des variantes, et Chapel (10e) le devance dans 67 %. Contrôle 68,1 en règle v2 (64,1 en v1),
+plafond 80,35, code par défaut 42,0.
+
+* **Les errata** valent + 1,3 point : D4 + 1,05 (règle v2 : + 3 points de contrôle), E4 + 0,25.
+* **Le pont de la machine 24** se compense presque (− 0,08 point), comme la remarque l'annonçait, mais dans l'autre
+  sens que son estimation (+ 0,4) : le plafond gagne 1,0 point (K5 de 0,94 à 0,98, K9 de 0,76 à 0,81) ; dans le code
+  par défaut, K5 naturel (79 ms au lieu de 159) et K9 naturel (66,6 ms au lieu de 41,3) se compensent (D1 de 0,073 à
+  0,076), mais les queues de latence de K8, plus longues sur Emerald Rapids (Swift / C : 2,29 au p99,9 et 1,78 au
+  maximum, contre 1,97 et 1,14 sur Cascade Lake), font tomber D3 de 0,50 à 0,37 : − 1,8 point de code par défaut.
+* **Les 21 autres langages** gardent leurs scores publiés ; leurs rangs espérés bougent de 0,19 au plus (D, 7,22 →
+  7,41), par le seul effet de Swift sur les références et les rangs : aucune de leurs données ne change. Le K5 naturel
+  de Swift (79 ms) est désormais le 4e de l'étude, derrière C++, Odin et C3. Fortran recule à la 12e place.
+
+#### 5.4.3 Sensibilités
+
+| Scénario | Score | C | E | D | rang espéré | place | rang à 90 % | voisin (Swift devant) |
+|---|---|---|---|---|---|---|---|---|
+| R-E4-0 (E4 = 0, lecture de la remarque) | 66,21 | 67,4 | 80,35 | 42,0 | 10,81 | 12e | 6–14 | Fortran devant (52 %) |
+| R-D4-½ (D4 = ½ en v2, lecture de la remarque) | 65,93 | 66,6 | 80,35 | 42,0 | 10,83 | 12e | 6–14 | Fortran devant (51 %) |
+| R-K7 (K7 naturel au facteur de la table plate) | 66,69 | 68,1 | 80,35 | 42,9 | 10,36 | 11e | 5–14 | Fortran derrière (58 %) |
+| R-UB (K8 naturel en `UniqueBox`) | 67,84 | 68,1 | 80,35 | 47,5 | 10,23 | 11e | 5–14 | Fortran derrière (60 %) |
+| R-hôte (facteur d'hôte des autres langages) | 64,44 | 68,1 | 76,63 | 39,8 | 11,10 | 12e | 6–14 | Fortran devant (47 %) |
+| R-Ou (`-Ounchecked`) | 66,80 | 68,1 | 80,35 | 43,3 | 10,18 | 11e | 5–14 | Fortran derrière (60 %) |
+| R-cases-bas | 64,08 | 61,3 | 80,35 | 42,0 | 11,80 | 12e | 7–15 | Fortran devant (35 %) |
+| R-cases-haut | 67,83 | 72,0 | 80,35 | 42,0 | 9,97 | 11e | 5–14 | Fortran derrière (62 %) |
+
+Swift et Fortran sont au coude à coude : chacune des deux lectures de la remarque, seule, ramène Swift à la 12e place
+de justesse (Fortran devant dans 52 et 51 % des variantes, rangs espérés égaux au centième près). Le facteur de K7
+(7,6 ; 1,7 pour la table plate du C) vaut 0,23 point, dans la marge annoncée par la remarque. Aucun scénario ne fait
+passer Swift devant Chapel (10e) ni derrière Julia (13e).
+
+#### 5.4.4 Réplication (machine 3) et calculs hors plan
+
+* **Machine 3**, Swift relié par les constructions natives de la machine 24 : **11e** (56,8 points ; plafond 57,2 au
+  lieu de 53,9 avec le pont de Cascade Lake : K4 sans branchement et Q1 y sont au niveau du C). Ce n'est toujours pas
+  une réplication indépendante. Accord entre machines (sur les 21 langages répliqués indépendamment) et test nul
+  inchangés (Spearman 0,93 / 0,72 / 0,30 ; 19 inversions parmi les 13 premiers) ; étages inchangés, [14, 4, 1, 3].
+* **« Cascade Lake seul »** (K5 d'avant, K9 au harnais d'origine, pont de la machine 23) : Swift 11e (plafond 79,0),
+  devant Fortran. Estimateur de la v2 : 10e. Rangs compatibles avec les paires établies : 3 à 14 au score, 1 à 11 au
+  plafond ; son code naturel reste 17e, seul rang possible.
+
+### 5.5 Écarts au plan, réponse point par point et bilan
+
+**Écarts au plan** : aucun. Le calcul a suivi 5.3 ; la combinaison des deux lectures de la remarque (D4 = ½ en règle v2
+et E4 = 0) n'était pas un scénario du plan et n'a pas été calculée : chacune, seule, place déjà Swift 12e de justesse.
+
+| Point de la remarque | Réponse |
+|---|---|
+| K4, K9, K8, bibliothèque SIMD, alignement, préchargement et `pause`, E5 | Exacts (5.2). Sa cause de la disparition du préchargement est vérifiée (importation `[readnone]`) ; la note de E5 reste ½, sa justification est précisée |
+| D4 vaut ½ | **Exact sur le fait** : ma sonde ne définissait pas `_GNU_SOURCE`. Erratum : ½ en règle v1, **1 en règle v2**, la règle qui donne 1 au module système livré de D, de Zig, d'Odin, de Python et de Go |
+| E4 et D5 restent 0 et ½ | D5 reste ½. **E4 passe à ½** : le contournement qu'elle cite s'exprime avec la chaîne livrée, par un attribut souligné, et ma grille donne ½ à ce qui est livré mais souligné (E3, C2). Sa lecture (E4 = 0) est la sensibilité R-E4-0 : Swift 12e de justesse |
+| Le pont est fragile | **Exact** : mesuré sur un Emerald Rapids, Swift / C vaut 0,50 sur K5 naturel, 5,0 sur K9 naturel, 1,03 sur Q1 optimisé. Ces rapports remplacent ceux de Cascade Lake pour les clés venues d'Emerald Rapids. Effet net : − 0,08 point, et non + 0,4 : K5 et K9 naturels se compensent, mais les queues de latence de K8 s'allongent |
+| L'écart de Q1 tient surtout à Cascade Lake | **Exact** : 1,03 sur Emerald Rapids (1,13 avec le code de Cascade Lake), contre 1,47. Q1 publié vient de la machine 1 (Cascade Lake) : son rapport y reste celui de Cascade Lake ; le texte le dit désormais |
+| E7, types de la 6.4 | Exacts ; E7 reste ½ (`@const` expérimental), sa justification est mise à jour. K8 en `UniqueBox` : 1,20 fois le C, 0,45 fois la classe ; l'arbre ne compile qu'avec un `deinit {}` vide, donc pas au code naturel (R-UB : + 1,4 point) |
+| Facteur de K7 naturel | Exact en partie : relié par le facteur de la table plate du C (1,7 au lieu de 7,6), Swift gagne 0,23 point (R-K7), dans la marge qu'elle donne. La machine 1 n'étant pas disponible, le classement garde la règle du plan |
+| Rang : plutôt 11e, devant Fortran | **Exact** : 11e (66,46 points), devant Fortran dans 54 % des variantes |
+
+**Bilan.** Swift passe **11e sur 22, avec 66,46 points**, devant Fortran de peu. Deux errata de ma grille (D4, E4)
+lui valent 1,3 point ; le pont par un Emerald Rapids, du modèle même des hôtes de K5, de K9 et des latences de K8,
+remplace un rapport transporté d'un modèle à l'autre, sans effet net. Son plafond devient le 3e de l'étude (80,3),
+au coude à coude avec C++ et Odin (80,1 et 80,0) ; ce qui le retient reste le contrôle (68,1, 13e : ni assembleur, ni
+alignement de type au-delà de 16 octets, ni réassociation, et préchargement, `pause` et intrinsèques par des voies
+soulignées) et le code par défaut (42,0, 15e : vérifications de `-O`, ARC, `Dictionary`). Les 21 autres langages
+gardent leurs scores ; Fortran recule d'une place.

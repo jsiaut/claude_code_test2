@@ -377,3 +377,11 @@ S-symétrique (60,2) et en S-noyaux-scalaires (62,8, à 0,01 rang derrière Juli
 Ada perdent leurs intrinsèques importées). Les scores des 21 autres langages ne changent dans aucun scénario ; trois
 paires de voisins quasi à égalité s'échangent quand Swift s'intercale (Nim et Ada sans `mt`, rangs espérés 7,41 et
 7,38 ; Chapel et Julia en S-symétrique, 10,26 et 10,19 ; Zig et Rust en S-noyaux-scalaires, 7,16 et 7,08).
+
+### 4.19 Recalcul après la remarque sur Swift (5 novembre au soir)
+
+Recalculé avec les errata D4 et E4 de Swift et son pont par la machine 24 (témoin égal au scénario R-E de
+`results/swift_remark.json`, `docs/SWIFT.md`, 5). Swift : 11e publié (66,5 points), 12e sans `mt` (66,4, Fortran
+devant), 13e en S-scalaire (48,3) et en S-symétrique (61,8), 12e en S-noyaux-scalaires (63,7, devant Julia, 13e),
+10e en S-importées (66,5). Les scores des 21 autres langages ne changent dans aucun scénario ; à la lettre, Go devance
+encore Java de 0,04 rang.

@@ -889,3 +889,29 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   couples de Lua, LuaJIT et Python : 1,10 à 1,78, médiane 1,28). Le facteur du C suit celui des autres à ±20 % près
   sur les clés à un fil de la machine 1, mais pas sur K3 (0,75 à 1,76 contre 1,23 à 1,48), Q6 `mt` (1,68 contre 1,32)
   ni K9, venu de la machine 16 (0,55 et 0,64 contre 1,17 et 1,08 pour Lua).
+
+## Remarque sur Swift (5 novembre au soir, machine 24, Emerald Rapids) — `docs/SWIFT.md` (5), `results/swift_check/facts2.txt`
+
+* **Affinité** : `sched_setaffinity`, `pthread_setaffinity_np`, `sched_getcpu` et `gettid` sont dans le module Glibc
+  livré, derrière `_GNU_SOURCE`, comme en C ; avec `swiftc -Xcc -D_GNU_SOURCE`, un fil s'épingle (`sched_getcpu`
+  rend le CPU demandé). Sans l'option, « cannot find 'sched_setaffinity' in scope ».
+* **Préchargement et `pause`** : `prfchwintrin.h` (Clang 21 de la chaîne) déclare `_m_prefetch` et `_m_prefetchw` sans
+  corps ; Swift les importe `[readnone]` (SIL) et l'optimiseur supprime l'appel. `@_silgen_name("llvm.prefetch.p0")`
+  donne `prefetchw`, `@_silgen_name("llvm.x86.sse2.pause")` donne `pause` : un attribut souligné, que l'interface
+  publique de la bibliothèque standard emploie 59 fois, jamais vers une intrinsèque de LLVM.
+* **`noalias`** : seuls les `inout` de type pointeur le portent dans l'IR ; ni `inout Int`, ni `inout [Float]`, ni
+  l'`inout` d'une struct, ni les pointeurs passés par valeur.
+* **Spécialisation** : `@specialized(where T == Int)` et `@inline(always)` compilent sans option dans la 6.4.2 ;
+  `@const` exige `-enable-experimental-feature CompileTimeValues`.
+* **Types de la 6.4** : `UniqueBox`, `UniqueArray`, `Ref`, `MutableRef`, `Iterable` sont publics. Un arbre de nœuds
+  `~Copyable` reliés par `UniqueBox` épuise la mémoire du compilateur (« LLVM ERROR: out of memory » après 201 à 210 s,
+  plafond de 6 Go, passe `EarlyPerfInliner`) sauf avec un `deinit {}` vide (1,1 s). En K8, il prend 0,45 fois le temps
+  de la classe et 1,20 fois celui du C (Emerald Rapids).
+* **K4 naturel avec `&+=`** : vectorisé (12 `vpaddq`), 1,78 ms contre 67,2 ms avec `+=`, 0,84 fois le C natif ; en
+  `-Ounchecked`, la boucle avec `+=` reste scalaire, sans branchement (18 `cmov`).
+* **Swift / C sur Emerald Rapids** (constructions natives, 7 processus) : K5 naturel 0,50 (le C y fusionne la somme en
+  FMA scalaire, Swift non), K9 naturel 5,0 (3,0 sur Cascade Lake), Q1 optimisé 1,03 (1,47 sur Cascade Lake ; 1,13 avec
+  le code de Cascade Lake exécuté sur Emerald Rapids), K4 sans branchement 0,83 ; queues de latence de K8 plus longues
+  qu'à Cascade Lake (p99,9 2,29 fois le C contre 1,97, maximum 1,78 contre 1,14).
+* **Provenance** : recompilé sur la machine 24 par les options de `bench/c/build.sh`, le C est identique octet pour
+  octet au binaire de la machine 3 ; compilé pour `cascadelake`, au binaire publié.

@@ -1239,3 +1239,26 @@ Robustesse :
   rapports mesurés sur la machine 24 dans la construction de leurs données publiées, réplication reliée par les
   constructions natives de la machine 24 ; copies `bench/swift_er`, `bench/c_er`, `bench/swift_ub` validées ; outil
   `tools/measure_swift_er.py` (72 cellules × 7 passes).
+* 2026-11-05, 20:43:13-20:56:33 : **mesures de la remarque sur Swift** (`tools/measure_swift_er.py`, machine 24) :
+  504 processus (72 cellules × 7), aucune somme de contrôle fausse, huit processus refaits pour vol de temps, aucun
+  gardé au-dessus de 2 % (vol médian 0,14 %, maximum 1,82 %). Pendant la campagne, seule l'intégration à l'analyse a
+  été écrite (pont par clé et par campagne dans `analysis/analyze_v2.py`, réplication et « Cascade Lake seul » dans
+  `analysis/analyze_v3.py`, `analysis/swift_remark.py`), sans rien exécuter.
+* 2026-11-05, 20:58 à 21:21 : **résultats de la remarque sur Swift, sorties régénérées** (`analysis/swift_remark.py`,
+  puis la chaîne publiée). Contrôles : le scénario Avant reproduit S-E de `results/swift_check.json` à l'identique
+  (0,0) ; les états actuels de la sensibilité sans SIMD et de la remarque sur C reproduisent R-E à l'identique.
+  Swift / C sur Emerald Rapids : K5 naturel 0,50, K9 naturel 5,0, Q1 optimisé 1,03 (1,13 avec le code de Cascade
+  Lake). Errata D4 (½ en v1, 1 en v2) et E4 (½) : + 1,3 point ; pont de la machine 24 : − 0,08 point (plafond + 1,0,
+  code par défaut − 1,8 par les queues de latence de K8). Swift **11e sur 22** (66,46 points, rang espéré 10,69,
+  devant Fortran dans 54 % des variantes) ; plafond 80,3 (3e), contrôle 68,1 (13e), code par défaut 42,0 (15e).
+  Sensibilités : 11e ou 12e (chacune des deux lectures de la remarque, E4 = 0 ou D4 = ½ en v2, le laisse 12e de
+  justesse). Réplication : Swift 11e sur la machine 3 ; accord, test nul et étages inchangés. Les 21 autres gardent
+  leurs scores ; rangs espérés bougés de 0,19 au plus ; Fortran passe 12e.
+* 2026-11-05, 21:05 à 21:30 : **README et documents après la remarque sur Swift**. README : tableau (Swift 11e,
+  Fortran 12e), ordre (Swift derrière Chapel malgré un meilleur score), errata, paragraphes de Swift (3e plafond,
+  contrôle, code par défaut, pont, relecture), de Chapel (6e plafond), de Fortran et de Julia (sensibilité : 12e, et
+  11e avec K5 en 512 bits), parts en tête et figures (`analysis/readme_figures.py`), scénarios de C, de Zig et de Mojo
+  (Mojo 13e sans K4 au plafond), machines, limites (pont, relecture des 22 langages, sans SIMD explicite),
+  reproduction ; au passage, le rang moyen d'Odin en règle v1 cité dans le paragraphe de C (2,74, resté de l'état
+  d'avant l'ajout de Swift) est mis à jour. `docs/SWIFT.md` (5.4, 5.5), `docs/FINDINGS.md`, `docs/NOSIMD.md` (4.19),
+  `docs/CONFRONTATION.md`, `docs/CAPABILITIES.md` (D4 et E4 de Swift), sonde de Swift (`results/probes/swift.txt`).
