@@ -1,0 +1,9 @@
+# luajit_k3.lua (machine 23, 5 novembre), LuaJIT 2.1.1792588164
+jit_volatile   stride  1 : 0.086 s, 0.64 ns/incrément, somme 134217728
+jit_table      stride  1 : 0.167 s, 1.24 ns/incrément, somme 134217728
+interp_ffi     stride  1 : 22.300 s, 166.15 ns/incrément, somme 134217728
+interp_table   stride  1 : 1.272 s, 9.48 ns/incrément, somme 134217728
+jit_volatile   stride 16 : 0.043 s, 0.32 ns/incrément, somme 134217728
+jit_table      stride 16 : 0.165 s, 1.23 ns/incrément, somme 134217728
+interp_ffi     stride 16 : 22.093 s, 164.61 ns/incrément, somme 134217728
+interp_table   stride 16 : 1.183 s, 8.82 ns/incrément, somme 134217728

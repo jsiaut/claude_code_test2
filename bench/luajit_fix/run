@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /opt/luajit/bin/luajit "$(dirname "$0")/ms.lua" "$@"

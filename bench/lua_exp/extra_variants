@@ -1,0 +1,10 @@
+k1 soa_h energy
+k2 tuned_s 16384
+k2 tuned_s 262144
+k2 tuned_s 8388608
+k6 tuned_n q6
+k6 mt_n q6
+k7 tuned_p
+k8 tuned_it
+k9 tuned_s
+k9 mt_s

@@ -1,0 +1,14 @@
+Lua 5.5	table.create : true
+collectgarbage('param', 'pause') : true 250
+mode incrémental : generational (mode précédent)
+table vide : 48.0 o ; case du tableau qui la contient : 9.0 o
+particule à 16 champs nommés : 440.0 o (+ 9.0 o de case) = 449.0 o
+case d'un tableau de flottants : 9.00 o
+1e6 opérations flottantes et entières : 0 o alloués
+1e6 appels à trois retours : 0 o alloués
+1e6 appels variadiques (3 arguments) : 544 o alloués
+1e5 concaténations : 8170907 o alloués
+1e5 fermetures : 8000000 o alloués
+une table de 1e5 entiers construite par t[#t+1] : 1179700 o alloués
+string.pack('<i1i2i4f') : 11 octets ; relu : -5, 1000, 70000, 0.10000000149011612
+écriture en place dans une chaîne : false

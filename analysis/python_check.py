@@ -14,6 +14,10 @@ rejouée (mêmes tirages) pour chaque scénario du plan (3.5) :
   meilleur du build par défaut corrigé et du build sans GIL, K3 par une memoryview propre à chaque fil), S-mesures
   (toutes ; chaque clé prend la meilleure de ses formes), S-cases (B2 = 1/2, D1 = 1), S-tout.
 Information : Q6 naturel sous python_fix / python_ref (code inchangé : contrôle).
+Correction ajoutée le 5 novembre au soir (remarque sur Lua, docs/LUA.md ; docs/PYTHON.md 4.8) : K8 naturel sur une classe
+ordinaire, sans __slots__ (le type par défaut, comme K1), × r(python_k8n / python_ref) mesuré en paires sur la machine 23
+(results/raw_lua, étiquette « lua »), temps et latences, dans tous les scénarios de code ; P-E-511 garde le P-E publié
+le 5 novembre au matin.
 Les corrections publiées des autres langages (results/transfers.json : ratios, ratios_k9h, lat_ratios) sont appliquées
 comme dans le calcul publié ; celles de Python en sont retirées pour le calcul, puis les rapports de P-E y sont écrits
 (« ratios », et « ratios_k9h » pour K9 mt). Les rapports de la réplication (« replication_ratios ») vont dans
@@ -54,17 +58,21 @@ LAT_SENS = "k8_natural_f"  # la sensibilité qui porte aussi les latences de K8 
 ERRATA = {"B1": 1, "F3": 0.5}
 BEFORE = {"B1": 0, "F3": 0}
 CASES = {"B2": 0.5, "D1": 1}
+# remarque sur Lua (docs/LUA.md ; docs/PYTHON.md 4.8) : K8 naturel sans __slots__, paires de la machine 23
+K8N_RAW = os.environ.get("PY_K8N_RAW", os.path.join(ROOT, "results", "raw_lua"))
+K8N_TAG = os.environ.get("PY_K8N_TAG", "lua")
 
 def kk(k):
     return ":".join(x for x in k if x)
 
 
-def load_raw():
+def load_raw(raw_dir=None, tag=None):
+    raw_dir, tag = raw_dir or RAW, tag or TAG
     d, lat, bad = defaultdict(dict), defaultdict(dict), []
-    for f in sorted(glob.glob(os.path.join(RAW, "*.jsonl"))):
+    for f in sorted(glob.glob(os.path.join(raw_dir, "*.jsonl"))):
         for line in open(f):
             r = json.loads(line)
-            if r.get("tag") != TAG:
+            if r.get("tag") != tag:
                 continue
             key = (r["kernel"], r["variant"], r["param"])
             reps = r.get("reps", [])
@@ -125,17 +133,23 @@ def scaled_lat(lat, r):
     return out
 
 
+# errata de la matrice publiés après la remarque sur Python, neutralisés dans ses scénarios : son classement publié
+# (P-E) reste celui d'avant la remarque sur Lua, que le scénario Avant de analysis/lua_check.py reproduit (docs/LUA.md)
+LATER = {"lua": {"B3": 0, "B4": 0}}
+
+
 def run(data, lat, langs, footprint, c3, cells=None):
-    """Scénario avec des cases de Python remplacées le temps du calcul."""
+    """Scénario avec des cases de Python remplacées le temps du calcul (et les errata postérieurs neutralisés)."""
     saved = {}
     try:
-        for cap, val in (cells or {}).items():
-            saved[cap] = v2.MATRIX[LANG][cap]
-            v2.MATRIX[LANG][cap] = (val, saved[cap][1])
+        for lang, cs in [(LANG, cells or {})] + list(LATER.items()):
+            for cap, val in cs.items():
+                saved[(lang, cap)] = v2.MATRIX[lang][cap]
+                v2.MATRIX[lang][cap] = (val, saved[(lang, cap)][1])
         return summary(cf.scenario(data, lat, langs, footprint, c3, "main"))
     finally:
-        for cap, v in saved.items():
-            v2.MATRIX[LANG][cap] = v
+        for (lang, cap), v in saved.items():
+            v2.MATRIX[lang][cap] = v
 
 
 def published_data():
@@ -160,6 +174,9 @@ def published_data():
 def main():
     m = v2.MATRIX[LANG]
     assert {c: m[c][0] for c in ERRATA} == ERRATA, "errata B1, F3 absents de analysis/capabilities.py"
+    prev = os.path.join(ROOT, "results", "python_check.json")  # P-E du 5 novembre au matin, pour le contrôle de P-E-511
+    prev = json.load(open(prev)) if os.path.exists(prev) else None
+    ref511 = (prev["scenarios"]["P-E-511"] if "k8_natural_fix" in prev else prev["scenarios"]["P-E"]) if prev else None
     data, lat, tr = published_data()
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
@@ -191,6 +208,14 @@ def main():
 
     fix_t = {k: r_fix[k]["ratio"] for k in CORR}
     fix_b = {k: bridged(f"pont {kk(k)}", k, r_fix[k]["ratio"], raw["python_fix"][k]) for k in CORR}
+    fix_511 = dict(fix_t)  # P-E du 5 novembre au matin
+    # remarque sur Lua : K8 naturel sans __slots__ (temps et latences), tirages à part
+    raw8, rawlat8, _ = load_raw(K8N_RAW, K8N_TAG)
+    rng8 = np.random.default_rng(v3.SEED + 1001)
+    r_k8n = ratio(raw8["python_k8n"][K8N], raw8["python_ref"][K8N], rng8)
+    l_k8n = lat_ratio(rawlat8["python_k8n"][K8N], rawlat8["python_ref"][K8N], rng8)
+    fix_t[K8N] = fix_b[K8N] = r_k8n["ratio"]
+    lat_c = scaled_lat(lat, l_k8n["ratio"])
     sens_t = {n: fix_t.get(key, 1.0) * min(1.0, r_sens[n]["ratio"]) for n, (key, _, _) in SENS.items()}
     ft_t = {k: min(fix_t[k], r_ft[k]["ratio"]) for k in FT}  # le meilleur des deux builds, par rapport au publié
     lat_s = [min(1.0, x) for x in l_s["ratio"]]
@@ -205,21 +230,24 @@ def main():
         return f
 
     def lat_for(names):
-        return scaled_lat(lat, lat_s) if LAT_SENS in names else lat
+        return scaled_lat(lat_c, lat_s) if LAT_SENS in names else lat_c
 
-    plans = {"Avant": (data, lat, BEFORE), "P-code": (scaled(data, fix_t), lat, BEFORE), "P-M": (data, lat, None),
-             "P-E": (scaled(data, fix_t), lat, None), "P-E-P": (scaled(data, fix_b), lat, None)}
+    plans = {"Avant": (data, lat, BEFORE), "P-code": (scaled(data, fix_t), lat_c, BEFORE), "P-M": (data, lat, None),
+             "P-E": (scaled(data, fix_t), lat_c, None), "P-E-511": (scaled(data, fix_511), lat, None),
+             "P-E-P": (scaled(data, fix_b), lat_c, None)}
     for name, names in PLAN.items():
         ft = name in ("S-FT", "S-mesures")
         plans[name] = (scaled(data, with_sens(names, ft)), lat_for(names), None)
-    plans["S-cases"] = (scaled(data, fix_t), lat, CASES)
+    plans["S-cases"] = (scaled(data, fix_t), lat_c, CASES)
     plans["S-tout"] = (scaled(data, with_sens(PLAN["S-mesures"], True)), lat_for(PLAN["S-mesures"]), CASES)
     out = {"bad": bad, "times_ms": times, "r_fix": {kk(k): r for k, r in r_fix.items()}, "r_sens": r_sens,
            "r_ft": {kk(k): r for k, r in r_ft.items()}, "lat_s": l_s, "transfer": transfer,
            "published_ratios": {kk(k): v for k, v in fix_t.items()},
            "bridge_ratios": {kk(k): v for k, v in fix_b.items()}, "sens_factors": sens_t,
            "ft_factors": {kk(k): v for k, v in ft_t.items()}, "sens_lat": lat_s,
-           "replication_ratios": {"|".join(k): v for k, v in fix_t.items()}, "scenarios": {}}
+           "k8_natural_fix": {"ratio": r_k8n, "lat": l_k8n},
+           "replication_ratios": {"|".join(k): v for k, v in fix_t.items()},
+           "replication_lat_ratios": l_k8n["ratio"], "scenarios": {}}
     for name, (d, lt, cells) in plans.items():
         z = out["scenarios"][name] = run(d, lt, langs, footprint, c3, cells)
         print(f"{name} : Python {z['ms0'][LANG]:.2f} points, C {z['C'][LANG]:.1f}, E {z['E'][LANG]:.1f}, "
@@ -229,6 +257,10 @@ def main():
     av = out["scenarios"]["Avant"]
     out["check_before"] = max(max(abs(av["ms0"][l] - ref["ms0"][l]), abs(av["exp21"][l] - ref["exp21"][l])) for l in RANKED)
     print(f"Contrôle : écart maximal du scénario Avant au publié d'avant = {out['check_before']:.2e}")
+    if ref511:
+        z = out["scenarios"]["P-E-511"]
+        out["check_511"] = max(max(abs(z["ms0"][l] - ref511["ms0"][l]), abs(z["exp21"][l] - ref511["exp21"][l])) for l in RANKED)
+        print(f"Contrôle : écart maximal de P-E-511 au P-E du 5 novembre au matin = {out['check_511']:.2e}")
     json.dump(out, open(os.path.join(OUT, "python_check.json"), "w"), indent=1, default=float)
     report(out)
     if OUT != os.path.join(ROOT, "results"):
@@ -236,9 +268,14 @@ def main():
     # classement publié (3.2) : rapports de P-E inscrits dans les corrections transférées (K9 mt dans ratios_k9h)
     tr["ratios"][LANG] = {"|".join(k): v for k, v in fix_t.items() if k not in K9_KEYS}
     tr.setdefault("ratios_k9h", {})[LANG] = {"|".join(k): v for k, v in fix_t.items() if k in K9_KEYS}
+    tr.setdefault("lat_ratios", {})[LANG] = out["k8_natural_fix"]["lat"]["ratio"]
     note = " ; Python : docs/PYTHON.md (3.2), results/raw_python, machine 22, results/python_check.json (K9 : ratios_k9h)"
     if note not in tr["source"]:
         tr["source"] += note
+    note8 = (" ; Python, K8 naturel sans __slots__ : docs/PYTHON.md (4.8), results/raw_lua, machine 23 (ratios, "
+             "lat_ratios)")
+    if note8 not in tr["source"]:
+        tr["source"] += note8
     json.dump(tr, open(os.path.join(ROOT, "results", "transfers.json"), "w"), indent=1)
 
 
@@ -277,6 +314,19 @@ def report(o):
           "| natural_f (python_exp) | " + " | ".join(f(v, 0) for v in x["new_us"]) + " |",
           "| rapport [IC 95 %] | " + " | ".join(f"{f(r, 3)} [{f(a, 2)}–{f(b, 2)}]"
                                               for r, a, b in zip(x["ratio"], x["ci_lo"], x["ci_hi"])) + " |"]
+    y = o.get("k8_natural_fix")
+    if y:
+        r, x8 = y["ratio"], y["lat"]
+        L += ["", "## K8 naturel sans `__slots__` (remarque sur Lua, docs/PYTHON.md 4.8 ; python_k8n / python_ref, "
+              "machine 23)\n",
+              f"Temps : {f(r['old_ms'], 1)} → {f(r['new_ms'], 1)} ms, rapport {f(r['ratio'], 3)} "
+              f"[{f(r['ci'][0], 3)}–{f(r['ci'][1], 3)}], reporté dans tous les scénarios de code (P-E-511 : le P-E "
+              "du 5 novembre au matin).\n",
+              "| | " + " | ".join(LATCOLS) + " |", "|---|" + "---|" * len(LATCOLS),
+              "| `__slots__` (python_ref) | " + " | ".join(f(v, 0) for v in x8["old_us"]) + " |",
+              "| classe ordinaire (python_k8n) | " + " | ".join(f(v, 0) for v in x8["new_us"]) + " |",
+              "| rapport [IC 95 %] | " + " | ".join(f"{f(q, 3)} [{f(a, 2)}–{f(b, 2)}]"
+                                                  for q, a, b in zip(x8["ratio"], x8["ci_lo"], x8["ci_hi"])) + " |"]
     L += ["", "## Pont par le C de clang (information : scénario P-E-P ; le classement publié reporte par transfert)\n",
           "| Rapport | Clé | Python publié | Transfert | Pont | Écart | Retenu | Facteur appliqué |",
           "|---|---|---|---|---|---|---|---|"]

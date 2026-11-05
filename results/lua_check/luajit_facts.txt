@@ -1,0 +1,13 @@
+# LuaJIT : version, documentation et code machine (machine 23)
+LuaJIT 2.1.1792588164 -- Copyright (C) 2005-2026 Mike Pall. https://luajit.org/
+commit de /opt/dl/luajit : a4c064539ea931274d407e1249b4bb575424a0f4 Wed Oct 21 15:09:24 2026 +0200
+doc/ext_ffi_semantics.html : The volatile type qualifier is currently ignored by compiled code. 
+luajit -jdump=m (extrait) :
+---- TRACE 1 start (command line):1
+---- TRACE 1 mcode 90
+55bf3099ffa5  mov dword [r14-0xee8], 0x1
+55bf3099ffb0  cvttsd2si ebp, [rdx+0x8]
+55bf3099ffb5  xorps xmm7, xmm7
+55bf3099ffb8  cvtsi2sd xmm7, ebp
+55bf3099ffbc  addsd xmm7, xmm7
+55bf3099ffc0  cmp dword [rdx+0x4], 0xfff90000

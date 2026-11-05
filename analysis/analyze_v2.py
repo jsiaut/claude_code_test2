@@ -256,7 +256,7 @@ def apply_k9h(data, harness="common", skip=()):
 
 # remarques mesurées sur un hôte du même modèle que la machine 3, dont les rapports sont reportés sur la réplication
 M3_CHECKS = {"go": "go_check.json", "haskell": "haskell_check.json", "ocaml": "ocaml_check.json",
-             "js": "js_check.json", "python": "python_check.json"}
+             "js": "js_check.json", "python": "python_check.json", "lua": "lua_check.json"}
 
 
 def m3_ratios():
@@ -265,7 +265,8 @@ def m3_ratios():
     sans archsimd, ClearAVXUpperBits pour les autres, docs/GO.md) ; remarque sur Haskell (results/haskell_check.json :
     copie corrigée sur copie publiée, docs/HASKELL.md) ; remarque sur OCaml (results/ocaml_check.json, clés dont le code
     change, docs/OCAML.md) ; remarque sur JavaScript (results/js_check.json, K7 tuned, docs/JAVASCRIPT.md) ; remarque
-    sur Python (results/python_check.json, clés parallèles par sous-interpréteurs, docs/PYTHON.md).
+    sur Python (results/python_check.json, clés parallèles par sous-interpréteurs et K8 naturel, docs/PYTHON.md) ;
+    remarque sur Lua (results/lua_check.json, K3, K4, Q6 et K8 naturel, docs/LUA.md).
     {langage: {clé: rapport}} ; vide sans fichier."""
     out = {}
     for lang, name in M3_CHECKS.items():

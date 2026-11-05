@@ -392,8 +392,16 @@ MATRIX = {
     },
     "lua": {
         "A1": (0, "tables"), "A2": (0, "aucun"), "A3": (0, "aucun"), "A4": (0, "aucun"), "A5": (0.5, "string.pack/unpack"),
-        "A6": (0, "aucun"), "A7": (0, "aucun"), "A8": (0, "nombres 64 bits seulement ; chaînes comme octets"),
-        "B1": (0, "GC imposé"), "B2": (0, "aucun (lua_Alloc côté C)"), "B3": (0, "aucun"), "B4": (0, "allocations omniprésentes"),
+        "A6": (0, "aucun"), "A7": (0, "aucun"),
+        "A8": (0, "nombres 64 bits seulement ; string.pack stocke i1, i2, i4 et f, mais en lecture seule (chaînes "
+                  "immuables ; sonde) : 1/2 discutable, en sensibilité (remarque sur Lua)"),
+        "B1": (0, "GC imposé"), "B2": (0, "aucun (lua_Alloc côté C)"),
+        "B3": (0.5, "nombres jamais boxés ; retours multiples et arguments variadiques sur la pile de la VM, jamais sur "
+                    "le tas (sonde : 0 octet pour un million d'appels à trois retours), comme les n-uplets non boxés de "
+                    "Haskell ; tables sur le tas ; erratum du 5/11, remarque sur Lua"),
+        "B4": (0.5, "l'arithmétique et les appels n'allouent pas (sonde) ; concaténation, fermetures, constructeurs et "
+                    "croissance des tables allouent, comme les fermetures, ~ et littéraux de tableaux de D ; erratum du "
+                    "5/11, remarque sur Lua"),
         "B5": (0, "aucun"), "C1": (0, "aucun"), "C2": (0, "aucun"), "C3": M, "C4": (0, "aucun"), "C5": (0, "aucun"),
         "D1": (0, "pas de threads (coroutines)"), "D2": (0, "aucun"), "D3": (0, "aucune"), "D4": (0, "aucune"), "D5": (0, "aucun"),
         "E1": (0, "interpréteur"), "E2": (0, "aucun"), "E3": (0, "aucun"), "E4": (0, "aucun"), "E5": (0, "aucun"),

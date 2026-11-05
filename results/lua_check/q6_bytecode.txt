@@ -1,0 +1,77 @@
+# luac 5.5.1 -l : corps des deux formes du masque de Q6 (une ligne), publiée puis corrigée
+	1	[2]	GETTABLE 	5 1 4
+	2	[3]	GETTABLE 	6 0 4
+	3	[3]	SUBK     	6 6 0	; 8766
+	4	[3]	MMBINK   	6 0 7 0	; __sub 8766
+	5	[3]	BANDK    	6 6 1	; 4294967295
+	6	[3]	MMBINK   	6 1 13 0	; __band 4294967295
+	7	[3]	LOADI    	7 365
+	8	[3]	LT       	6 7 0
+	9	[3]	JMP      	3	; to 13
+	10	[3]	LOADI    	6 1
+	11	[3]	TEST     	6 1
+	12	[3]	JMP      	1	; to 14
+	13	[3]	LOADI    	6 0
+	14	[3]	ADDI     	7 5 -5
+	15	[3]	MMBINI   	5 5 7 0	; __sub
+	16	[3]	BANDK    	7 7 2	; 255
+	17	[3]	MMBINK   	7 2 13 0	; __band 255
+	18	[3]	LEI      	7 2 0
+	19	[3]	JMP      	3	; to 23
+	20	[3]	LOADI    	7 1
+	21	[3]	TEST     	7 1
+	22	[3]	JMP      	1	; to 24
+	23	[3]	LOADI    	7 0
+	24	[3]	MUL      	6 6 7
+	25	[3]	MMBIN    	6 7 8	; __mul
+	26	[3]	GETTABLE 	7 2 4
+	27	[3]	LTI      	7 24 0
+	28	[3]	JMP      	3	; to 32
+	29	[3]	LOADI    	7 1
+	30	[3]	TEST     	7 1
+	31	[3]	JMP      	1	; to 33
+	32	[3]	LOADI    	7 0
+	33	[3]	MUL      	6 6 7
+	34	[3]	MMBIN    	6 7 8	; __mul
+	35	[4]	GETTABLE 	7 3 4
+	36	[4]	MUL      	7 7 5
+	37	[4]	MMBIN    	7 5 8	; __mul
+	38	[4]	MUL      	7 7 6
+	39	[4]	MMBIN    	7 6 8	; __mul
+	40	[4]	RETURN1  	7
+	41	[5]	RETURN0  	
+---
+	1	[7]	GETTABLE 	5 1 4
+	2	[8]	GETTABLE 	6 0 4
+	3	[8]	SUBK     	6 6 0	; 8766
+	4	[8]	MMBINK   	6 0 7 0	; __sub 8766
+	5	[8]	BANDK    	6 6 1	; 4294967295
+	6	[8]	MMBINK   	6 1 13 0	; __band 4294967295
+	7	[8]	SUBK     	6 6 2	; 365
+	8	[8]	MMBINK   	6 2 7 0	; __sub 365
+	9	[8]	SHRI     	6 6 63
+	10	[8]	MMBINI   	6 63 17 0	; __shr
+	11	[8]	ADDI     	7 5 -5
+	12	[8]	MMBINI   	5 5 7 0	; __sub
+	13	[8]	BANDK    	7 7 3	; 255
+	14	[8]	MMBINK   	7 3 13 0	; __band 255
+	15	[8]	ADDI     	7 7 -3
+	16	[8]	MMBINI   	7 3 7 0	; __sub
+	17	[8]	SHRI     	7 7 63
+	18	[8]	MMBINI   	7 63 17 0	; __shr
+	19	[8]	BAND     	6 6 7
+	20	[8]	MMBIN    	6 7 13	; __band
+	21	[8]	GETTABLE 	7 2 4
+	22	[8]	ADDI     	7 7 -24
+	23	[8]	MMBINI   	7 24 7 0	; __sub
+	24	[8]	SHRI     	7 7 63
+	25	[8]	MMBINI   	7 63 17 0	; __shr
+	26	[8]	BAND     	6 6 7
+	27	[8]	MMBIN    	6 7 13	; __band
+	28	[9]	GETTABLE 	7 3 4
+	29	[9]	MUL      	7 7 5
+	30	[9]	MMBIN    	7 5 8	; __mul
+	31	[9]	MUL      	7 7 6
+	32	[9]	MMBIN    	7 6 8	; __mul
+	33	[9]	RETURN1  	7
+	34	[10]	RETURN0  	

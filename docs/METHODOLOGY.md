@@ -1132,3 +1132,25 @@ Robustesse :
   marches, point 6 des résultats solides, limites (langages relus, versions optimisées, règle de la bibliothèque
   standard pour Python, PyPy), lecture et reproduction ; `docs/FINDINGS.md` (section Python, fils de K3),
   `docs/NOSIMD.md` (4.16), `docs/CONFRONTATION.md`, `docs/PYTHON.md` (4).
+* 2026-11-05, 12 h 23 : **machine 23**. La VM redémarre sur un hôte Cascade Lake du même modèle que celui des données
+  principales (modèle 85, 4 vCPU, un fil par cœur ; 3,04 à 3,22 GHz effectifs ; latence 25 ns jusqu'à 2 Mio, 137 ns
+  dès 4 Mio : la VM n'a qu'une part du L3 ; DRAM 11,7 Go/s : `results/hw/machine23/`) ; les 24 fichiers d'entrée
+  correspondent à `env/msdata.sha256`.
+* 2026-11-05 : **remarque sur Lua** transmise par l'utilisateur (Lua était le seul langage jamais relu) ; vérifications
+  sans consulter de page web, sur PUC-Lua 5.5.1 et LuaJIT 2.1.1792588164 (documentation livrée avec ses sources), par
+  des sondes, le bytecode (`luac -l`) et les données publiées (`tools/lua_check/probes/`, `results/lua_check/`).
+  Erreurs de mon implémentation : K3 (trois compteurs « espacés » dans la partie hachée de la table : le « faux
+  partage × 0,63 » de Lua, sans fils, venait de là), K4 (octets décodés par `string.byte` dans la boucle
+  chronométrée, quand les autres noyaux décodent leurs fichiers en tables hors chrono), Q6 tuned et `mt` (le masque
+  annoncé branche : `cond and 1 or 0` compile en sauts ; corrigé par le bit de signe, comme le Q6 d'OCaml l'avait été),
+  et, en sens inverse, K8 naturel (nœuds positionnels `{v, false, false}` au lieu de l'enregistrement à champs nommés,
+  le type par défaut) ; par la même règle, **erreur de mon implémentation pour Python** : son K8 naturel déclarait
+  `__slots__`, une annotation de performance (corrigé par `analysis/python_check.py` rejoué après la campagne ; P-E-511
+  garde le P-E du matin). Errata : B4 = ½ (l'arithmétique n'alloue pas ; fermetures, chaînes et croissance des tables
+  allouent, comme pour D) et B3 = ½ (nombres non boxés, retours multiples sur la pile de la VM, comme les n-uplets non
+  boxés de Haskell). Sensibilités : Q6 par tests imbriqués, K9 aux voisins glissants, K7 tassé dans une table, K8
+  tuned itératif, K1 `soa` au 0,5 sorti, K2 décalé, A8 = ½ (`string.pack`, en lecture seule), et LuaJIT à la place de
+  PUC-Lua, avec la grille de Lua ou sa FFI notée comme `ctypes` (K3 conforme interprété : son code compilé ignore
+  `volatile`). Plan (`docs/LUA.md`, sections 1 à 3) : copies (`tools/lua_check/make_copies.py`, 48 cellules validées),
+  outil de mesure (`tools/measure_lua.py`), scripts d'analyse (`analysis/lua_check.py` ; `analysis/python_check.py`
+  pour le K8 de Python), errata et réplication poussés avant les mesures.
