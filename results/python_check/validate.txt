@@ -1,0 +1,37 @@
+# Validation des copies (tools/python_check/validate.py, machine 22, 5 novembre) : un processus par cellule ;
+# temps des répétitions (ms), somme de contrôle ; K8 : latences [p50, p90, p99, p99,9, max] en µs
+## première validation (27 cellules, toutes justes ; tuned_c y prenait encore les lignes par itertools.compress)
+python_ref   k3  rmw_packed                      ok rc=0 [23812.24] ms wall 48.0 s 134217728
+python_ref   k3  rmw_padded                      ok rc=0 [25150.44] ms wall 50.5 s 134217728
+python_ref   k3  sw_packed                       ok rc=0 [13174.05] ms wall 25.4 s 134217728
+python_ref   k3  sw_padded                       ok rc=0 [13545.57] ms wall 27.1 s 134217728
+python_ref   k6  mt                   q6         ok rc=0 [1936.93, 1816.2] ms wall 17.7 s 45333132534
+python_ref   k6  mt                   q1         ok rc=0 [6477.83, 6708.71] ms wall 19.8 s 3997084032331541
+python_ref   k9  mt                              ok rc=0 [2109.8, 1929.14] ms wall 7.5 s 2.095103199218750e+06
+python_ref   k6  tuned                q6         ok rc=0 [1727.3, 1342.35] ms wall 5.1 s 45333132534
+python_ref   k6  natural              q6         ok rc=0 [1510.17, 1608.89] ms wall 4.8 s 45333132534
+python_ref   k8  natural                         ok rc=0 [18507.06] ms wall 42.4 s 2508056453121
+python_fix   k3  rmw_packed                      ok rc=0 [18165.94] ms wall 35.6 s 134217728
+python_fix   k3  rmw_padded                      ok rc=0 [7884.09] ms wall 15.1 s 134217728
+python_fix   k3  sw_packed                       ok rc=0 [12320.21] ms wall 23.4 s 134217728
+python_fix   k3  sw_padded                       ok rc=0 [4214.97] ms wall 8.8 s 134217728
+python_fix   k6  mt                   q6         ok rc=0 [604.58, 700.38] ms wall 2.9 s 45333132534
+python_fix   k6  mt                   q1         ok rc=0 [2255.14, 2206.08] ms wall 7.1 s 3997084032331541
+python_fix   k9  mt                              ok rc=0 [1176.32, 1008.32] ms wall 4.5 s 2.095103199218750e+06
+python_fix   k6  natural              q6         ok rc=0 [1448.95, 1374.77] ms wall 4.5 s 45333132534
+python_exp   k6  tuned_c              q6         ok rc=0 [985.68, 935.28] ms wall 3.2 s 45333132534
+python_exp   k8  natural_f                       ok rc=0 [13964.75] ms wall 33.2 s 2508056453121
+python_ftfix k3  rmw_packed                      ok rc=0 [19848.49] ms wall 40.9 s 134217728
+python_ftfix k3  rmw_padded                      ok rc=0 [8434.91] ms wall 17.2 s 134217728
+python_ftfix k3  sw_packed                       ok rc=0 [16931.01] ms wall 33.7 s 134217728
+python_ftfix k3  sw_padded                       ok rc=0 [5025.2] ms wall 9.5 s 134217728
+python_ftfix k6  mt                   q6         ok rc=0 [745.33, 832.52] ms wall 2.6 s 45333132534
+python_ftfix k6  mt                   q1         ok rc=0 [3193.87, 3155.85] ms wall 10.0 s 3997084032331541
+python_ftfix k9  mt                              ok rc=0 [2478.71, 2354.62] ms wall 10.6 s 2.095103199218750e+06
+## lignes de K8 de la première validation, avec les latences
+python_ref natural [18507.1] lat µs [[780.0, 1442.3, 1968.6, 3737.6, 762873.9]]
+python_exp natural_f [13964.8] lat µs [[769.8, 995.0, 1695.3, 3388.8, 7414.3]]
+## python_exp revalidé après le passage de Q6 en colonnes à bytes.find et l'ajout de mt_c (même pilote)
+python_exp k6 tuned_c q6 ok [531.6, 598.2] 45333132534
+python_exp k6 mt_c q6 ok [192.3, 189.3] 45333132534
+python_exp k8 natural_f  ok [16915.8] 2508056453121 lat µs [[797.3, 1651.0, 1978.9, 3962.9, 8765.3]]

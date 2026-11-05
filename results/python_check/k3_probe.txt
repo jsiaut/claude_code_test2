@@ -1,0 +1,22 @@
+# k3_probe.py (machine 22, 5 novembre) : quatre fils de 2^22 incréments chacun ; array partagé, memoryview propre au fil, sous-interpréteurs
+3.15.2 GIL=True shared  padded 1.875 s
+3.15.2 GIL=True shared  packed 1.647 s
+3.15.2 GIL=True view    padded 1.602 s
+3.15.2 GIL=True view    packed 1.784 s
+3.15.2 GIL=True sub     padded 1.069 s
+3.15.2 GIL=True sub     packed 2.286 s
+3.15.2 GIL=False shared  padded 6.739 s
+3.15.2 GIL=False shared  packed 9.442 s
+3.15.2 GIL=False view    padded 0.711 s
+3.15.2 GIL=False view    packed 1.753 s
+3.15.2 GIL=False sub     padded 2.064 s
+3.15.2 GIL=False sub     packed 3.588 s
+# k3_single.py : un fil, 2^22 incréments dans une fonction, sur l'array ou par une memoryview (deux lancements par build)
+3.15.2 GIL=True un fil  array  0.335 s
+3.15.2 GIL=True un fil  view   0.472 s
+3.15.2 GIL=True un fil  array  0.446 s
+3.15.2 GIL=True un fil  view   0.362 s
+3.15.2 GIL=False un fil  array  0.487 s
+3.15.2 GIL=False un fil  view   0.345 s
+3.15.2 GIL=False un fil  array  0.393 s
+3.15.2 GIL=False un fil  view   0.411 s

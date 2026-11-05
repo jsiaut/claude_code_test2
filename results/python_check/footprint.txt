@@ -1,0 +1,12 @@
+3.15.2 GIL=True N=200000
+classe ordinaire : 608.1 o/particule
+classe à __slots__ : 552.1 o/particule
+array('d') : 129.5 o/particule
+array('f') : 64.7 o/particule
+sys.getsizeof : objet ordinaire 48, à __slots__ 160, flottant 24
+3.15.2 GIL=False N=200000
+classe ordinaire : 864.2 o/particule
+classe à __slots__ : 808.1 o/particule
+array('d') : 129.5 o/particule
+array('f') : 64.7 o/particule
+sys.getsizeof : objet ordinaire 48, à __slots__ 160, flottant 40

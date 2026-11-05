@@ -1,0 +1,3 @@
+#!/bin/sh
+# Remarque sur Python (docs/PYTHON.md) : CPython 3.15.2 sans GIL (annexe python_ft), K3 corrigé
+exec python3.15t "$(dirname "$0")/ms.py" "$@"

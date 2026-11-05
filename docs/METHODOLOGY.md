@@ -1087,3 +1087,22 @@ Robustesse :
   solides, limites (langages relus, versions optimisées, report, échauffements des JIT), lecture et reproduction ;
   `docs/FINDINGS.md` (416 octets corrigé, section JavaScript), `docs/NOSIMD.md` (4.15), `docs/CONFRONTATION.md`,
   `docs/JAVASCRIPT.md` (4), `docs/OCAML.md` (4.8).
+* 2026-11-05, 7 h 59 : **machine 22**. La VM redémarre sur un hôte Cascade Lake du même modèle que celui des données
+  principales (modèle 85, 4 vCPU, un fil par cœur ; 3,05 à 3,18 GHz effectifs, latence 25 ns à 4 Mio et 201 ns à 1
+  Gio, DRAM 10,7 à 12,4 Go/s : `results/hw/machine22/`) ; les 24 fichiers d'entrée correspondent à
+  `env/msdata.sha256`.
+* 2026-11-05 : **remarque sur Python** transmise par l'utilisateur ; vérifications sans consulter de page web, sur
+  CPython 3.15.2 (build par défaut et build sans GIL, ceux de l'étude), par des sondes (`tools/python_check/probes/`,
+  `results/python_check/`) et les données publiées. Erreur de mon implémentation : K3 (quatre variantes), K6 `mt` (Q6,
+  Q1) et K9 `mt` tournent sur des fils que le GIL sérialise, alors que la spécification exige de vrais fils parallèles
+  et que la bibliothèque standard en donne par ses sous-interpréteurs (`concurrent.interpreters`, données partagées par
+  `memoryview`), comme Mojo (module privé) et JavaScript (Workers) en obtiennent de leur chaîne ; dans l'annexe
+  `python_ft`, l'`array` partagé de K3 sérialise aussi les fils par son verrou d'objet. Errata : B1 = 1 (le collecteur
+  de cycles se désactive, comme celui d'ORC pour Nim), F3 = ½ (types `ctypes` de largeur fixe qui enveloppent, masques,
+  comme JavaScript) ; D1 reste ½ (note complétée), B2 reste 0 (discutable). Sensibilités : Q6 en colonnes
+  (`bytes.translate`, entiers longs, `bytes.find`), K8 naturel avec `gc.freeze()` (pire pause 763 → 7,4 ms à la
+  validation), build sans GIL pour les noyaux parallèles (borne haute : son surcoût sur les noyaux séquentiels est de
+  − 15 à + 59 % ici, non de 1 à 8 %), cases B2 = ½ et D1 = 1. Plan (`docs/PYTHON.md`, sections 1 à 3) : copies
+  (`tools/python_check/make_copies.py`, 27 cellules validées, puis les deux variantes en colonnes), outil de mesure
+  (`tools/measure_python.py`), script d'analyse (`analysis/python_check.py`), errata et réplication poussés avant les
+  mesures.

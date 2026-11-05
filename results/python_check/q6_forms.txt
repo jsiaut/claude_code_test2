@@ -1,0 +1,5 @@
+# q6_forms.py 3 (machine 22, 5 novembre, python3.15) : temps de trois répétitions
+3.15.2 tuned    45333132534 1592 1557 1756 ms
+3.15.2 columns  45333132534 1079 855 1149 ms
+3.15.2 find     45333132534 583 613 621 ms
+masque seul 702 ms ; lignes retenues 300971 sur 16777216 (1.79 %)

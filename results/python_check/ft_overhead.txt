@@ -1,0 +1,16 @@
+# Surcoût du build sans GIL (machine 22, 5 novembre)
+# même source (bench/python_ref/ms.py), un processus par ligne, un échauffement ; temps en s
+python3.15 k6 natural 2 q6 : 1.323985592 1.313602080 
+python3.15t k6 natural 2 q6 : 1.662562012 1.831892079 
+python3.15 k6 tuned 2 q6 : 1.403173569 1.519550907 
+python3.15t k6 tuned 2 q6 : 1.638464306 1.947501138 
+python3.15 k9 natural 2 : 1.794066658 1.832567049 
+python3.15t k9 natural 2 : 2.522164866 3.236454254 
+python3.15 k9 tuned 2 : 2.379364255 2.122523233 
+python3.15t k9 tuned 2 : 3.170732755 2.947172621 
+python3.15 k10 natural 1 : 5.562396440 
+python3.15t k10 natural 1 : 29.140114885 
+python3.15 k10 tuned 2 : 2.693638061 2.711262468 
+python3.15t k10 tuned 2 : 2.473104577 1.841805511 
+python3.15 k5 tuned 1 : 4.336498317 
+python3.15t k5 tuned 1 : 3.688517233 
