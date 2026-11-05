@@ -1106,3 +1106,29 @@ Robustesse :
   (`tools/python_check/make_copies.py`, 27 cellules validées, puis les deux variantes en colonnes), outil de mesure
   (`tools/measure_python.py`), script d'analyse (`analysis/python_check.py`), errata et réplication poussés avant les
   mesures.
+* 2026-11-05, 8:48:28-10:15:42 : **mesures de la remarque sur Python** (`tools/measure_python.py`, machine 22) : 231
+  processus (33 cellules × 7), aucune somme de contrôle fausse, un processus refait pour vol de temps, aucun gardé
+  au-dessus de 2 % (vol médian 1,11 %).
+* 2026-11-05, 10:16 à 10:24 : **résultats de la remarque sur Python** (`results/report_python.md`). Aucun écart au
+  plan ; le scénario Avant reproduit J-E à l'identique. Correction : K3 espacé × 0,323 et 0,308, tassé × 0,699 et
+  0,902, K6 `mt` × 0,371 et 0,343, K9 `mt` × 0,515 (clé témoin : 1,016). Classement publié (P-E, transfert et errata
+  B1, F3) : Python 11,83 points (9,94), 20e, rang plausible 19 à 21, devant Lua dans 72,4 % des variantes (62,5 %),
+  JavaScript devant lui dans 91,1 % (95,5 %) ; contrôle 24,4 → 29,7, plafond 0,46 → 0,59 ; les scores des autres
+  langages ne changent pas. Build sans GIL (K3 par une vue propre à chaque fil) : il ne bat les sous-interpréteurs sur
+  aucune clé, et S-FT se confond avec P-E. Sensibilités : Q6 en colonnes × 0,354 (`mt` × 0,286), K8 naturel avec
+  `gc.freeze()` × 0,800 et pire pause 752 → 9,0 ms ; S-mesures 12,04, S-cases 13,06, S-tout 13,26. Pont par le C :
+  écarts de 22,6 à 182 % au transfert, qui reste la règle (P-E-P 11,88).
+* 2026-11-05, 10:24 à 11:11 : **sorties régénérées après la remarque sur Python** (même chaîne ; la tâche de fond qui
+  les enchaînait a été arrêtée par sa limite de temps juste après l'étape de Rust, et la dernière,
+  `analysis/c_check.py --current`, relancée seule de 11:05 à 11:11) : classement, figures, matrice
+  (`docs/CAPABILITIES.md`), réplication (machine 3 : Python 10,1 → 12,0, toujours 20e ; ordre inchangé, Spearman
+  0,93), scénarios de l'état actuel ; leurs contrôles reproduisent P-E à l'identique. Effets hors de Python : aucun
+  changement de score ni de place ; rangs espérés de Lua + 0,10, de JavaScript + 0,04, des autres 0,01 au plus ; dans
+  les étages de la v3, JavaScript rejoint Python et Lua (quatre étages au lieu de cinq) ; sans SIMD explicite, rien ne
+  bouge ; confrontation : sous leur règle, la pénalité de K3 de Fortran et de Mojo, le temps de Python, s'allège
+  (plafond 32,2 → 37,3 et 29,9 → 34,7 ; Fortran passe devant C# dans le scénario C, Spearman 0,84 → 0,82), accord du
+  principe P7 0,94 → 0,93. README : tableau (JavaScript 19–20 et 91 % ; Python 11,8, 19–21, 72 %), paragraphe de
+  Python (ce que mesure le classement, sous-interpréteurs, build sans GIL, poids du contrôle), errata, grandes
+  marches, point 6 des résultats solides, limites (langages relus, versions optimisées, règle de la bibliothèque
+  standard pour Python, PyPy), lecture et reproduction ; `docs/FINDINGS.md` (section Python, fils de K3),
+  `docs/NOSIMD.md` (4.16), `docs/CONFRONTATION.md`, `docs/PYTHON.md` (4).

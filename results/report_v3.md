@@ -3,8 +3,7 @@
 1. Ada, C, C++, C3, Chapel, D, Fortran, Julia, Mojo, Nim, Odin, Rust, Zig
 2. C#, Go, Haskell, Java
 3. OCaml
-4. JavaScript
-5. Lua, Python
+4. JavaScript, Lua, Python
 
 ## Trois quantités, par langage (machine 1, sauf K5 sur la machine 3)
 
@@ -28,9 +27,9 @@
 | 2 | Haskell | 46,2 [44,9–48,0] | 33,8 | 34 % | 5,9 | 3,9 | 14 % | 39,9 / 38,9 | 41,3 [40,6–42,0] | 0,47 | 17–17 | 17 [16–17] | 17 |
 | 2 | Java | 56,5 [54,3–58,7] | 46,0 | 43 % | 12,1 | 9,3 | 24 % | 42,7 / 42,7 | 47,2 [46,2–48,2] | 0,50 | 15–16 | 15 [14–17] | 15 |
 | 3 | OCaml | 19,4 [18,8–20,1] | 14,8 | 13 % | 7,0 | 5,2 | 38 % | 23,2 / 23,2 | 23,9 [23,4–24,9] | 0,35 | 18–18 | 18 [18–18] | 18 |
-| 4 | JavaScript | 12,2 [11,8–12,6] | 8,5 | 9 % | 4,5 | 3,4 | 38 % | 14,6 / 14,6 | 15,6 [15,3–16,0] | 0,49 | 19–19 | 19 [19–19] | 19 |
-| 5 | Lua | 1,1 [1,0–1,1] | 0,8 | 1 % | 1,0 | 0,8 | 77 % | 2,8 / 2,8 | 3,9 [3,8–4,1] | 0,47 | 21–21 | 21 [20–21] | 21 |
-| 5 | Python | 0,5 [0,4–0,5] | 0,3 | 0 % | 0,5 | 0,4 | 82 % | 24,4 / 22,4 | 9,9 [9,9–10,0] | 0,49 | 20–20 | 20 [20–21] | 20 |
+| 4 | JavaScript | 12,2 [11,8–12,6] | 8,5 | 9 % | 4,5 | 3,4 | 38 % | 14,6 / 14,6 | 15,6 [15,3–16,0] | 0,49 | 19–19 | 19 [19–20] | 19 |
+| 4 | Lua | 1,1 [1,0–1,1] | 0,8 | 1 % | 1,0 | 0,8 | 77 % | 2,8 / 2,8 | 3,9 [3,8–4,1] | 0,47 | 21–21 | 21 [20–21] | 21 |
+| 4 | Python | 0,6 [0,6–0,6] | 0,4 | 0 % | 0,5 | 0,4 | 82 % | 29,7 / 27,7 | 11,8 [11,8–11,9] | 0,49 | 20–20 | 20 [19–21] | 20 |
 
 Position moyenne des estimations dans leur intervalle : 0,45 (0,78 en v2).
 
@@ -65,8 +64,8 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 | Go | 14–17 | 16–17 | 12–14 |
 | Haskell | 15–17 | 14–17 | 18 |
 | OCaml | 18 | 18 | 17 |
-| JavaScript | 19 | 19 | 19 |
-| Python | 20–21 | 21 | 21 |
+| JavaScript | 19–20 | 19 | 19 |
+| Python | 19–21 | 21 | 21 |
 | Lua | 20–21 | 20 | 20 |
 
 ## Hors plan : accord entre machines avec et sans K3
@@ -78,7 +77,7 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 
 ## Hors plan : Cascade Lake seul (K5 d'avant, machines 1 et 2 ; K9 de Cascade Lake, harnais d'origine), estimation ponctuelle
 
-C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Fortran 11 (E 72,7, D1 18,7), Julia 12 (E 67,9, D1 20,9), Mojo 13 (E 69,0, D1 11,0), C# 14 (E 49,5, D1 9,3), Java 15 (E 57,9, D1 12,4), Go 16 (E 41,6, D1 11,0), Haskell 17 (E 47,3, D1 5,2), OCaml 18 (E 20,2, D1 7,3), JavaScript 19 (E 13,1, D1 4,9), Python 20 (E 0,5, D1 0,5), Lua 21 (E 1,2, D1 1,1).
+C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Fortran 11 (E 72,7, D1 18,7), Julia 12 (E 67,9, D1 20,9), Mojo 13 (E 69,0, D1 11,0), C# 14 (E 49,5, D1 9,3), Java 15 (E 57,9, D1 12,4), Go 16 (E 41,6, D1 11,0), Haskell 17 (E 47,3, D1 5,2), OCaml 18 (E 20,2, D1 7,3), JavaScript 19 (E 13,1, D1 4,9), Python 20 (E 0,6, D1 0,5), Lua 21 (E 1,2, D1 1,1).
 
 ## Réplication : bruit ou interaction ?
 
@@ -105,11 +104,11 @@ Hors plan, bruit de la machine 3 multiplié par 2,0 : Spearman, 21 langages p = 
 | k2:tuned:262144 | 25 | 95 % | 2 % | 4 % |
 | k2:tuned:8388608 | 25 | 11 % | 0 % | 89 % |
 | k3:rmw_padded: | 25 | 99 % | 1 % | 0 % |
-| k3:sw_padded: | 25 | 97 % | 3 % | 0 % |
+| k3:sw_padded: | 25 | 96 % | 3 % | 0 % |
 | k4:branchless_unsorted: | 25 | 98 % | 1 % | 1 % |
 | k4:natural_unsorted: | 25 | 97 % | 2 % | 0 % |
 | k6:mt:q1 | 26 | 99 % | 0 % | 1 % |
-| k6:mt:q6 | 26 | 98 % | 1 % | 1 % |
+| k6:mt:q6 | 26 | 98 % | 2 % | 1 % |
 | k6:natural:q1 | 26 | 99 % | 0 % | 1 % |
 | k6:natural:q6 | 26 | 98 % | 0 % | 2 % |
 | k6:tuned:q1 | 26 | 98 % | 1 % | 1 % |

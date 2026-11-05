@@ -15,7 +15,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | A7 tableaux fixes en ligne dans les agrégats | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ |
 | A8 types numériques étroits de stockage | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ |
 | **B** (20 %) | | | | | | | | | | | | | | | | | | | | | |
-| B1 pas de GC traçant imposé | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| B1 pas de GC traçant imposé | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ● | ○ |
 | B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
 | B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ |
 | B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
@@ -43,7 +43,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | **F** (10 %) | | | | | | | | | | | | | | | | | | | | | |
 | F1 tableaux multidimensionnels contigus | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ● | ● | ● | ○ | ◐ | ○ |
 | F2 localité / distribution (PGAS, NUMA) | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
-| F3 entiers fixes signés et non signés modulaires | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ |
+| F3 entiers fixes signés et non signés modulaires | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ◐ |
 | F4 fichiers projetés + réinterprétation sans copie | ◐ | ◐ | ○ | ● | ◐ | ● | ● | ● | ◐ | ○ | ○ | ○ | ◐ | ● | ● | ● | ○ | ● | ○ | ● | ○ |
 
 ## Justifications
@@ -222,11 +222,11 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 ### Python
 
 * **A** : A1 = 0.5 (ctypes.Structure en tableaux (stdlib) ; les objets Python sont référencés) ; A2 = 0.5 (ctypes (_fields_, offset)) ; A3 = 0.5 (ctypes _pack_ et champs de bits) ; A4 = 0.5 (sur-allocation + ctypes.addressof) ; A5 = 0.5 (struct.pack/unpack, ctypes.Union) ; A6 = 0 (numpy est tiers) ; A7 = 0.5 (tableaux ctypes dans Structure) ; A8 = 0.5 (array, memoryview.cast pour le stockage ; entiers arbitraires)
-* **B** : B1 = 0 (comptage de références + GC de cycles) ; B2 = 0 (aucun) ; B3 = 0 (aucun) ; B4 = 0 (allocations omniprésentes) ; B5 = 0.5 (ctypes, mmap)
+* **B** : B1 = 1 (comptage de références ; le ramasse-miettes de cycles se désactive (gc.disable, gc.freeze), comme le collecteur de cycles d'ORC pour Nim ; erratum du 5/11, remarque sur Python) ; B2 = 0 (aucun) ; B3 = 0 (aucun) ; B4 = 0 (allocations omniprésentes) ; B5 = 0.5 (ctypes, mmap)
 * **C** : C1 = 0 (aucun) ; C2 = 0 (aucun) ; C3 = 0.0 (mesuré) ; C4 = 0 (aucun) ; C5 = 0.5 (multiprocessing.Pool.map, concurrent.futures)
-* **D** : D1 = 0.5 (threads avec GIL (version par défaut) ; sans GIL dans la version free-threaded) ; D2 = 0 (aucun atomique) ; D3 = 0 (aucune) ; D4 = 0.5 (os.sched_setaffinity (Unix)) ; D5 = 0 (aucun)
+* **D** : D1 = 0.5 (threads avec GIL dans le build par défaut ; vrais fils parallèles par sous-interpréteurs (concurrent.interpreters, mémoire partagée par memoryview, comme les Workers de JavaScript) ; build sans GIL livré à part) ; D2 = 0 (aucun atomique) ; D3 = 0 (aucune) ; D4 = 0.5 (os.sched_setaffinity (Unix)) ; D5 = 0 (aucun)
 * **E** : E1 = 0 (interpréteur (JIT expérimental désactivé par défaut)) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 0 (aucun) ; E5 = 0 (aucun) ; E6 = 0.5 (seulement par pointeurs ctypes, non vérifiés) ; E7 = 0 (aucun)
-* **F** : F1 = 0.5 (memoryview.cast(shape=...)) ; F2 = 0 (aucun) ; F3 = 0 (entiers à précision arbitraire) ; F4 = 1 (mmap + memoryview.cast sans copie (sonde))
+* **F** : F1 = 0.5 (memoryview.cast(shape=...)) ; F2 = 0 (aucun) ; F3 = 0.5 (entiers à précision arbitraire ; types ctypes de largeur fixe qui enveloppent (c_uint32…), masques & 0xFFFFFFFF, comme |0, >>>0 et BigInt.asUintN pour JavaScript (sonde) ; erratum du 5/11, remarque sur Python) ; F4 = 1 (mmap + memoryview.cast sans copie (sonde))
 
 ### Lua
 

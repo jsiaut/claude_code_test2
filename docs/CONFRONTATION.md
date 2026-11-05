@@ -441,6 +441,14 @@ JavaScript à 1, ½ et ½ ; K7 d'OCaml reclassé) : JavaScript reste 17e des 18 
 leur ordre à w = 0,30 passe de 0,88 à 0,87 ; au test 4, l'accord du principe P11 (transparence : E1, E2, E5, E6) passe
 de 0,66 à 0,65 (de 0,57 à 0,56 sous leur règle), sans changer l'accord d'ensemble (0,74 et 0,81).
 
+Rejouée après la remarque sur Python (5 novembre, `docs/PYTHON.md` : K3, K6 `mt` et K9 `mt` de Python corrigés, B1 et
+F3 de Python à 1 et ½) : Python reste 18e des 18 langages communs dans les quatre scénarios (16e dans leur ordre).
+Sous leur règle, Fortran et Mojo, sans fils standard, prennent pour K3 le temps admissible le plus lent des 18, celui
+de Python : sa correction allège cette pénalité, et leur plafond sous la règle passe de 32,2 à 37,3 et de 29,9 à 34,7 ;
+dans le scénario C, Fortran passe devant C# (12e et 13e). Scénario A 0,78, B 0,86, C 0,82 (0,84 avant), D 0,90 ; C
+1er, 5e, 2e et 6e ; au test 3, la corrélation avec leur ordre à w = 0,30 passe de 0,87 à 0,88 ; au test 4, l'accord du
+principe P7 (allocation : B1 à B4) passe de 0,94 à 0,93, sans changer l'accord d'ensemble (0,74 et 0,81).
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

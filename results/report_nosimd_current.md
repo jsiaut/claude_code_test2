@@ -2,7 +2,7 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/js_check.json, « J-E ».
+Témoin : écart maximal 0.0e+00 avec results/python_check.json, « P-E ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
@@ -27,7 +27,7 @@ Témoin : écart maximal 0.0e+00 avec results/js_check.json, « J-E ».
 | Haskell | 17 (41,3) | 17 (41,8) | 17 (31,1) | 17 (31,1) | 17 (39,0) | 17 (37,7) | 17 (41,3) |
 | OCaml | 18 (23,9) | 18 (24,2) | 18 (24,7) | 18 (24,7) | 18 (28,0) | 18 (24,6) | 18 (23,9) |
 | JavaScript | 19 (15,6) | 19 (15,7) | 19 (16,0) | 19 (16,0) | 19 (19,9) | 19 (16,1) | 19 (15,6) |
-| Python | 20 (9,9) | 20 (10,0) | 20 (10,0) | 20 (10,0) | 20 (10,2) | 20 (10,0) | 20 (9,9) |
+| Python | 20 (11,8) | 20 (11,8) | 20 (11,9) | 20 (11,9) | 20 (12,1) | 20 (11,9) | 20 (11,8) |
 | Lua | 21 (3,9) | 21 (4,0) | 21 (4,0) | 21 (4,0) | 21 (4,6) | 21 (4,1) | 21 (3,9) |
 
 ## Résumé par scénario
@@ -65,7 +65,7 @@ Témoin : écart maximal 0.0e+00 avec results/js_check.json, « J-E ».
 | Haskell | 46,2 | 47,5 | 20,8 | 20,8 | 38,1 | 37,2 | 46,2 |
 | OCaml | 19,4 | 20,0 | 21,2 | 21,2 | 26,9 | 21,1 | 19,4 |
 | JavaScript | 12,2 | 12,4 | 13,1 | 13,1 | 21,1 | 13,3 | 12,2 |
-| Python | 0,5 | 0,5 | 0,6 | 0,6 | 0,9 | 0,6 | 0,5 |
+| Python | 0,6 | 0,6 | 0,7 | 0,7 | 1,1 | 0,8 | 0,6 |
 | Lua | 1,1 | 1,3 | 1,4 | 1,4 | 2,5 | 1,4 | 1,1 |
 
 ## Références t* (ms) et langage qui les fixe

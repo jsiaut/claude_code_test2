@@ -286,8 +286,9 @@ fusionner les passes répétées (355 To/s).
   table au système à chaque répétition, puis subissent 10 000 à 29 000 défauts de page en la reprenant (1 à 5 % du
   temps) ; C, C++, C3, Nim et gfortran la réutilisent.
 * **Threads** : sur K3, la plupart des implémentations créent leurs 4 threads à chaque répétition ; flang (OpenMP),
-  C# et Bun attendent en `sched_yield` (des centaines à des milliers par répétition) ; Python sérialise ses 4
-  threads (24 000 `futex` par répétition, rapport CPU / temps écoulé de 1,09).
+  C# et Bun attendent en `sched_yield` (des centaines à des milliers par répétition) ; Python sérialisait ses 4
+  threads (24 000 `futex` par répétition, rapport CPU / temps écoulé de 1,09), des fils du build par défaut, avant la
+  remarque sur Python, qui les a remplacés par des sous-interpréteurs.
 * **Runtimes** : des centaines à des dizaines de milliers d'appels système par répétition (Haskell 60 000 `futex` sur
   K8 naturel avec `+RTS -N4`, ramasse-miettes parallèle ; quelques dizaines avec `-N1` ; Node 26 000 `futex` et 24 000
   `malloc` sur K1 naturel). En régime établi, le code compilé n'en fait qu'un ou deux (l'écriture du résultat).
@@ -793,3 +794,28 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   `ArrayBuffer` (`getRawPointer`), la lecture et l'écriture par pointeur sans vérification (`getFloat64`…) et la
   conversion d'un pointeur en `ArrayBuffer` (`toArrayBuffer`). `Atomics.pause`, `Float16Array` et `Math.f16round` sont
   livrés ; pas d'objet `SIMD`.
+
+## Remarque sur Python (5 novembre, machine 22, Cascade Lake) — `docs/PYTHON.md`, `results/python_check/`
+
+* **Des sous-interpréteurs, un GIL chacun** : CPython 3.15.2 livre `concurrent.interpreters` dans sa bibliothèque
+  standard ; une `memoryview` d'un `array` se partage entre eux sans copie. Par rapport aux fils du build par défaut
+  (même hôte, sept processus) : K3 espacé × 0,323 et 0,308, tassé × 0,699 et 0,902 ; K6 `mt` × 0,371 (Q6) et 0,343
+  (Q1) ; K9 `mt` × 0,515. Le faux partage, invisible sous le GIL (tassé contre espacé : 0,98 et 1,03), apparaît : 2,1
+  fois en `rmw`, 3,0 fois en `sw`.
+* **Le build sans GIL** : un `array` partagé y sérialise les fils par son verrou d'objet (sonde, quatre fils de 2^22
+  incréments : 6,7 et 9,4 s, contre 0,71 et 1,75 s par une `memoryview` propre à chaque fil). Même avec K3 ainsi
+  corrigé, il ne bat les sous-interpréteurs sur aucune clé parallèle (K9 `mt` × 1,155 par rapport aux fils du build
+  par défaut). À source égale, sur les noyaux séquentiels de cet hôte : Q6 × 1,23 à 1,32, K9 × 1,36 à 1,59, K5 tuned
+  × 0,85 (un processus) ; K10, deux fils qui échangent par une `queue.Queue`, 5,2 fois plus lent.
+* **Pauses de K8 naturel** : elles viennent des collectes de la plus vieille génération, qui parcourent l'arbre longue
+  durée (2^21 − 1 nœuds). Avec `gc.freeze()` après sa construction : temps × 0,800 [0,729–0,881], pire pause 752 →
+  9,0 ms, p50 à p99,9 à 10 % près.
+* **Q6 en colonnes** : masques 0/1 par `bytes.translate` (l'entier de date lu par ses octets), combinés en entiers
+  longs, lignes retenues (1,79 %) trouvées par `bytes.find` : × 0,354 en tuned, × 0,286 en `mt` ; le masque seul
+  coûte 0,70 s pour 16,8 millions de lignes.
+* **Faits de CPython 3.15.2** (sondes, deux builds) : JIT non compilé (`sys._jit.is_available()` = `False`) ;
+  ramasse-miettes générationnel (seuils 2000, 10, 10 ; trois générations) ; `gc.disable()` et `gc.freeze()` ; types
+  `ctypes` de largeur fixe qui enveloppent (`c_uint32(2**32 + 5)` = 5, `c_int32(2**31)` = −2 147 483 648, tableaux
+  compris), `array('I')` qui refuse les valeurs hors bornes ; NumPy, Numba, Polars, DuckDB et cffi absents.
+  Empreinte de K1 selon `tracemalloc` : 608 o par particule pour une classe ordinaire, 552 avec `__slots__`, 64,7 en
+  `array('f')`.

@@ -225,3 +225,129 @@ actuel.
   naturels (sans effet) ; pas de K10 (hors score), bien que ses deux fils passent aussi par le GIL ; pas de remesure
   de l'empreinte.
 * Pas de changement de build classé : le build sans GIL reste une annexe et une sensibilité.
+
+## 4. Résultats (après les mesures)
+
+Mesures du 5 novembre, de 8:48:28 à 10:15:42, sur la machine 22 : 231 processus (33 cellules, 7 processus chacune),
+aucune somme de contrôle fausse, un processus refait pour vol de temps, aucun gardé au-dessus de 2 % (vol médian
+1,11 %). Aucun écart au plan. Le scénario Avant reproduit le classement publié d'avant (J-E) à l'identique. Rapports :
+`results/report_python.md` ; temps : moyenne géométrique des médianes de processus, intervalle à 95 % par bootstrap.
+
+### 4.1 La correction (`python_fix` / `python_ref`, même hôte)
+
+| Clé | Code publié (ms) | Sous-interpréteurs (ms) | Rapport [IC 95 %] | C, même hôte (ms) | Publié d'avant → reporté (ms) |
+|---|---|---|---|---|---|
+| **K3 `rmw_packed`** | 26 036,9 | 18 200,6 | **0,699** [0,669–0,731] | — | 33 874,6 → 23 679 |
+| **K3 `rmw_padded`** | 26 658,1 | 8 609,8 | **0,323** [0,286–0,366] | 342,7 | 33 100,3 → 10 690,5 |
+| **K3 `sw_packed`** | 14 034,6 | 12 654,3 | **0,902** [0,847–0,954] | — | 18 046,0 → 16 271 |
+| **K3 `sw_padded`** | 13 584,6 | 4 181,6 | **0,308** [0,286–0,332] | 122,8 | 17 536,4 → 5 398,0 |
+| **K6 `mt` Q6** | 1 798,3 | 667,6 | **0,371** [0,339–0,409] | 8,0 | 2 358,8 → 875,7 |
+| **K6 `mt` Q1** | 6 671,6 | 2 285,4 | **0,343** [0,323–0,363] | 13,1 | 9 031,5 → 3 093,8 |
+| **K9 `mt`** | 1 987,4 | 1 023,1 | **0,515** [0,472–0,558] | 14,1 | 1 889,0 → 972,4 (machine 16) |
+| Q6 naturel (contrôle) | 1 340,3 | 1 361,7 | 1,016 [0,958–1,072] | — | non reporté |
+
+Sur quatre sous-interpréteurs, K3 espacé va 3,1 à 3,2 fois plus vite, K6 `mt` 2,7 à 2,9 fois, K9 `mt` 1,9 fois ; la
+clé témoin, au code identique dans les deux copies, reste dans le bruit. Le faux partage, que le GIL masquait (tassé
+contre espacé : 0,98 en `rmw`, 1,03 en `sw`), apparaît : 2,1 fois en `rmw`, 3,0 fois en `sw`. Python reste loin de C :
+34 fois en K3 `sw_padded` sur cet hôte, 84 fois en K6 `mt` Q6. Pont par le C (information) : écarts de 87,5 % (K3
+`rmw_padded`), 165 % (K3 `sw_padded`), 22,6 % (Q6 `mt`), 31,8 % (Q1 `mt`) et 182 % (K9 `mt`) au transfert ; le C de
+cet hôte est 1,5 à 2,1 fois plus lent que celui des données principales sur K3 (343 contre 227 ms, 123 contre 60 ms),
+et 3 fois plus lent sur K9 `mt` que celui de la machine 16 (14,1 contre 4,7 ms) : le pont importerait ces écarts
+d'hôte. Il donnerait 11,88 points au lieu de 11,83 (P-E-P), même place.
+
+### 4.2 Le build sans GIL (`python_ftfix` / `python_ref`, même hôte : S-FT)
+
+| Clé | Build par défaut, code publié (ms) | Sans GIL, K3 par vue propre au fil (ms) | Rapport [IC 95 %] |
+|---|---|---|---|
+| K3 `rmw_packed` | 26 036,9 | 20 085,6 | 0,771 [0,744–0,802] |
+| K3 `rmw_padded` | 26 658,1 | 9 231,5 | 0,346 [0,324–0,367] |
+| K3 `sw_packed` | 14 034,6 | 17 411,0 | 1,241 [1,174–1,322] |
+| K3 `sw_padded` | 13 584,6 | 5 219,3 | 0,384 [0,349–0,427] |
+| K6 `mt` Q6 | 1 798,3 | 786,1 | 0,437 [0,409–0,470] |
+| K6 `mt` Q1 | 6 671,6 | 3 294,5 | 0,494 [0,466–0,524] |
+| K9 `mt` | 1 987,4 | 2 295,5 | 1,155 [1,071–1,250] |
+
+Le build sans GIL ne bat les sous-interpréteurs sur aucune clé : K3 espacé 9,2 et 5,2 s contre 8,6 et 4,2 s, K6 `mt`
+786 et 3 295 ms contre 668 et 2 285, K9 `mt` 2 296 ms contre 1 023 (ses listes partagées y coûtent plus que le GIL).
+S-FT, qui prend pour chaque clé le meilleur des deux builds, se confond donc avec P-E. Son K3 `sw_packed` est même plus
+lent qu'avec le GIL (× 1,24) : sans GIL, le faux partage se paie entier.
+
+### 4.3 Sensibilités (forme nouvelle / base, même hôte)
+
+| Forme (scénario) | Clé | Base (ms) | Forme nouvelle (ms) | Rapport [IC 95 %] | Remarque |
+|---|---|---|---|---|---|
+| Q6 en colonnes (S-Q6c) | Q6 tuned (`python_ref`) | 1 590,2 | 563,0 | 0,354 [0,324–0,391] | 0,45 contre 1,5 s (× 0,30) |
+| | Q6 `mt` (`python_fix`) | 667,6 | 190,7 | 0,286 [0,255–0,319] | |
+| `gc.freeze()` (S-K8f) | K8 naturel (`python_ref`) | 19 472,7 | 15 573,4 | 0,800 [0,729–0,881] | − 30 % |
+
+Latences de K8 naturel (médianes de toutes les répétitions) : p50 791 → 793 µs (× 1,003), p90 1 525 → 1 433 µs
+(× 0,940), p99 1 737 → 1 714 µs (× 0,987), p99,9 3 564 → 3 204 µs (× 0,899), maximum 752 → 9,0 ms (× 0,012
+[0,009–0,014]). La remarque l'avait vu juste : les collectes de la plus vieille génération, qui parcourent l'arbre
+longue durée, font les pauses de K8 naturel ; `gc.freeze()` les supprime (1,03 s → 7 ms selon elle). Q6 en colonnes va
+2,8 fois plus vite en tuned et 3,5 fois en `mt`, un peu moins que les 3,3 fois de la remarque.
+
+### 4.4 Classement (analyse globale de la v3 rejouée, 20 000 variantes)
+
+| Scénario | Score | Contrôle | Plafond | Défaut | Rang espéré | Place | Rang 90 % | JavaScript devant | Devant Lua |
+|---|---|---|---|---|---|---|---|---|---|
+| Avant (publié d'avant) | 9,94 | 24,4 | 0,46 | 4,9 | 20,32 | 20 | 20–21 | 95,5 % | 62,5 % |
+| P-code (noyaux parallèles) | 10,00 | 24,4 | 0,59 | 4,9 | 20,27 | 20 | 20–21 | 95,4 % | 67,8 % |
+| P-M (errata B1, F3) | 11,78 | 29,7 | 0,46 | 4,9 | 20,23 | 20 | 19–21 | 91,4 % | 67,1 % |
+| **P-E (publié)** | **11,83** | 29,7 | 0,59 | 4,9 | 20,17 | 20 | 19–21 | 91,1 % | 72,4 % |
+| P-E-P (pont, information) | 11,88 | 29,7 | 0,72 | 4,9 | 20,12 | 20 | 19–21 | 91,0 % | 76,8 % |
+| S-Q6c | 11,85 | 29,7 | 0,63 | 4,9 | 20,15 | 20 | 19–21 | 91,1 % | 74,1 % |
+| S-K8f | 12,02 | 29,7 | 0,59 | 5,6 | 19,99 | 20 | 19–21 | 85,5 % | 83,2 % |
+| S-FT | 11,83 | 29,7 | 0,59 | 4,9 | 20,17 | 20 | 19–21 | 91,1 % | 72,4 % |
+| S-mesures | 12,04 | 29,7 | 0,63 | 5,6 | 19,98 | 20 | 19–21 | 85,5 % | 84,5 % |
+| S-cases (B2 = ½, D1 = 1) | 13,06 | 33,2 | 0,59 | 4,9 | 20,10 | 20 | 19–21 | 87,7 % | 74,8 % |
+| S-tout | 13,26 | 33,2 | 0,63 | 5,6 | 19,91 | 20 | 19–21 | 81,4 % | 85,8 % |
+
+« JavaScript devant » : part des variantes où JavaScript devance Python ; « Devant Lua » : part des variantes où
+Python devance Lua. Au classement publié (P-E), Python gagne 1,89 point (9,94 → 11,83) et reste 20e, rang plausible 19
+à 21 : les errata lui rendent 1,84 point (contrôle 24,4 → 29,7), la correction des noyaux parallèles 0,06 (plafond 0,46
+→ 0,59 : K3 0,0033 → 0,0108 de la référence, K6 0,0035 → 0,0058, K9 0,0041 → 0,0057), car le plafond, moyenne
+géométrique sur huit noyaux où Python reste 60 à 800 fois plus lent que le meilleur, bouge peu quand trois noyaux
+gagnent un facteur 2 à 3. Décomposition : 11,83 = 0,35 × 29,7 + 0,40 × 0,59 + 0,25 × 4,9 (10,38 + 0,24 + 1,22) ; le
+contrôle fait 88 % du score, contre 86 % avant. Python devance désormais Lua dans 72,4 % des variantes (62,5 %), et
+JavaScript ne le devance plus que dans 91,1 % (95,5 %). Les scores des autres langages ne changent pas ; leurs rangs
+espérés bougent de 0,10 au plus (JavaScript 19,04 → 19,08, Lua 20,62 → 20,72), de 0,01 au plus au-dessus de la 19e
+place. De toutes les formes, celle qui pèse le plus est `gc.freeze()` (S-K8f, + 0,19 : code par défaut 4,9 → 5,6) ;
+avec toutes les formes et les cases discutables, Python atteint 13,3 points, devance Lua dans 86 % des variantes et
+JavaScript dans 19 %, sans changer de place.
+
+### 4.5 Réplication (machine 3)
+
+Données de Python de la machine 3 multipliées par les rapports des sept clés (transfert de Cascade Lake vers Emerald
+Rapids), avec les errata : score 10,1 → 12,0, toujours 20e ; plafond 0,35 → 0,44. L'ordre de la réplication ne change
+pas (Spearman 0,93 sur les 21 langages, comme avant).
+
+### 4.6 Hors de Python
+
+* **Étages de la v3** : JavaScript ne devance plus Python dans 95 % des variantes ; l'étage qu'il formait seul se fond
+  avec celui de Python et Lua. Il reste quatre étages : les treize premiers ; C#, Go, Haskell et Java ; OCaml ;
+  JavaScript, Lua et Python. Rangs compatibles avec les paires établies : JavaScript 19 à 20, Python 19 à 21, Lua 20 à
+  21.
+* **Sans SIMD explicite** (`docs/NOSIMD.md`, 4.16) : Python 20e dans tous les scénarios (11,8 à 12,1 points) ; rien ne
+  bouge ailleurs.
+* **Confrontation** (`docs/CONFRONTATION.md`) : sous la règle du standard de l'autre étude, Fortran et Mojo, sans fils
+  standard, prennent pour K3 le temps admissible le plus lent des 18 langages communs, celui de Python : la correction
+  allège cette pénalité, et leur plafond sous la règle passe de 32,2 à 37,3 et de 29,9 à 34,7 ; dans le scénario C,
+  Fortran passe devant C# (12e et 13e), Spearman 0,84 → 0,82. Au test 4, l'accord du principe P7 (allocation : B1 à
+  B4) passe de 0,94 à 0,93, sans changer l'accord d'ensemble.
+
+### 4.7 Bilan
+
+* **La remarque est juste sur l'essentiel.** Les noyaux parallèles de Python tournaient sur des fils que le GIL
+  sérialise, quand la spécification exige de vrais fils parallèles et que la bibliothèque standard en donne (erreur de
+  mon implémentation, corrigée par des sous-interpréteurs, K3 × 0,31) ; B1 et F3 étaient faux (errata) ; le GIL
+  masquait le faux partage ; `gc.freeze()` supprime les pauses de K8 naturel (752 → 9 ms) ; Q6 en colonnes va 2,8 fois
+  plus vite ; le rang est fragile au sens où le contrôle fait presque tout le score.
+* **Ce que je retiens autrement** : le build sans GIL n'est pas un gain gratuit (20 à 60 % de surcoût sur les noyaux
+  séquentiels de cet hôte, et il ne bat les sous-interpréteurs sur aucune clé parallèle) ; il reste une annexe et une
+  sensibilité. B2 reste à 0 (discutable : la règle changerait aussi pour JavaScript et OCaml), D1 à ½ ; Q6 en colonnes
+  et `gc.freeze()` sont des sensibilités.
+* **Les estimations de la remarque** : un plafond d'environ 0,5 à environ 1 (ici 0,46 → 0,59 au publié, 0,63 avec Q6 en
+  colonnes) ; environ 12 points (11,83 au publié, 12,04 avec les formes, 13,26 avec les cases discutables) ; 20e dans
+  tous les scénarios, confirmé. Python, JavaScript et Lua forment désormais un seul étage.
+* **Ce que le classement mesure** : le README dit désormais que le classement mesure CPython sans son écosystème, dans
+  son build par défaut ; NumPy, PyPy et le JIT ne sont pas mesurés.

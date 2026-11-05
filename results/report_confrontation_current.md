@@ -71,20 +71,20 @@ Replis et pénalités : mojo k6:mt:q6 : même travail sur un thread (tuned) ; mo
 | D | 3,5 | 8 | 7 | 7 | 7 | 87,1 → 77,6 | 79,2 → 77,8 |
 | Ada | 7,0 | 9 | 10 | 9 | 9 | 80,6 → 65,4 | 76,8 → 73,8 |
 | Chapel | 9,0 | 10 | 9 | 10 | 11 | 61,8 → 56,9 | 79,5 → 71,3 |
-| Fortran | 14,0 | 11 | 13 | 13 | 14 | 65,3 → 49,9 | 73,0 → 32,2 |
+| Fortran | 14,0 | 11 | 13 | 12 | 14 | 65,3 → 49,9 | 73,0 → 37,3 |
 | Julia | 13,0 | 12 | 11 | 11 | 10 | 73,3 → 72,2 | 62,3 → 62,2 |
-| Mojo | 15,0 | 13 | 12 | 14 | 13 | 70,5 → 69,7 | 67,0 → 29,9 |
-| C# | 8,0 | 14 | 14 | 12 | 12 | 68,8 → 68,8 | 53,6 → 53,6 |
+| Mojo | 15,0 | 13 | 12 | 14 | 13 | 70,5 → 69,7 | 67,0 → 34,7 |
+| C# | 8,0 | 14 | 14 | 13 | 12 | 68,8 → 68,8 | 53,6 → 53,6 |
 | Java | 12,0 | 15 | 15 | 16 | 15 | 42,7 → 39,5 | 56,5 → 37,1 |
 | Go | 17,0 | 16 | 16 | 15 | 16 | 48,7 → 42,9 | 44,5 → 30,2 |
 | JavaScript | 18,0 | 17 | 17 | 17 | 17 | 14,6 → 14,6 | 12,2 → 12,2 |
-| Python | 16,0 | 18 | 18 | 18 | 18 | 24,4 → 24,4 | 0,5 → 0,5 |
+| Python | 16,0 | 18 | 18 | 18 | 18 | 29,7 → 29,7 | 0,6 → 0,6 |
 
 | Scénario | Spearman | Kendall | Σd² | part de C | rang de C |
 |---|---|---|---|---|---|
 | A | 0,78 | 0,63 | 208,5 | 48 % | 1 |
 | B | 0,86 | 0,68 | 132,5 | 27 % | 5 |
-| C | 0,84 | 0,68 | 159,5 | 51 % | 2 |
+| C | 0,82 | 0,67 | 171,5 | 47 % | 2 |
 | D | 0,90 | 0,72 | 100,5 | 25 % | 6 |
 
 Sensibilité (K3 retiré du plafond de Mojo et de Fortran, configuration de référence), scénario C : Spearman 0,80, rang de C 1.
@@ -101,7 +101,7 @@ Sensibilité (K3 retiré du plafond de Mojo et de Fortran, configuration de réf
 | 0,15 | 0,81 | 1,00 | 0,48 | 1,0 | C, C++, Odin, Zig, D |
 | 0,20 | 0,83 | 0,99 | 0,20 | 2,0 | C++, C, Zig, Odin, D |
 | 0,25 | 0,87 | 0,98 | 0,07 | 4,0 | C++, Zig, Odin, C, D |
-| 0,30 | 0,87 | 0,97 | 0,02 | 4,0 | Zig, C++, Odin, C, D |
+| 0,30 | 0,88 | 0,97 | 0,02 | 4,0 | Zig, C++, Odin, C, D |
 | 0,35 | 0,89 | 0,96 | 0,00 | 5,0 | Zig, C++, Odin, D, C |
 | 0,40 | 0,92 | 0,95 | 0,00 | 6,0 | Zig, C++, Odin, D, C3 |
 | 0,45 | 0,94 | 0,93 | 0,00 | 7,0 | Zig, C++, Odin, D, C3 |
@@ -128,7 +128,7 @@ Seuils : P(C premier) < 0,5 à partir de w = 0,15 ; ordre plus proche du leur à
 | P3 SoA | A6 | 1,00 | 1,00 |
 | P4 faux partage | D3 | 0,58 | 0,56 |
 | P5 concurrence | D2, D5 | 0,55 | 0,61 |
-| P7 allocation | B1, B2, B3, B4 | 0,94 | 0,94 |
+| P7 allocation | B1, B2, B3, B4 | 0,93 | 0,93 |
 | P8 SIMD/ILP | C1, C2, C4 | 0,57 | 0,74 |
 | P9 branchements | E3 | 0,48 | 0,61 |
 | P10 hiérarchie mémoire | E4 | 0,57 | 0,82 |

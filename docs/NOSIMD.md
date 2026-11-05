@@ -353,3 +353,9 @@ Recalculé de nouveau (témoin égal au scénario J-E de `results/js_check.json`
 de JavaScript à 1, ½ et ½, K7 d'OCaml reclassé). JavaScript reste 19e et OCaml 18e dans tous les scénarios (JavaScript
 15,6 points publiés, 16,0 à la lettre ; OCaml 23,9 et 24,7), et aucun autre langage ne change de place. À la lettre,
 Chapel est 1er dans 46 % des variantes (45 % avant).
+
+### 4.16 Recalcul après la remarque sur Python (5 novembre)
+
+Recalculé de nouveau (témoin égal au scénario P-E de `results/python_check.json` : K3, K6 `mt` et K9 `mt` de Python
+corrigés, B1 et F3 de Python à 1 et ½). Python reste 20e dans tous les scénarios (11,8 points publiés, 11,8 à 12,1
+selon le scénario ; plafond 0,6 à 1,1), et aucun autre langage ne change de score ni de place.
