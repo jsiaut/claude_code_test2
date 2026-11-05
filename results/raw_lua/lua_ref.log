@@ -1,0 +1,133 @@
+lua_ref    k8   tuned                           p0 n=2 med=5.624491s ok={True} rc=0 
+lua_ref    k4   branchless_unsorted             p0 n=3 med=0.807199s ok={True} rc=0 
+lua_ref    k3   sw_packed                       p0 n=3 med=2.247170s ok={True} rc=0 
+lua_ref    k3   sw_padded                       p0 n=3 med=3.096222s ok={True} rc=0 
+lua_ref    k3   rmw_packed                      p0 n=3 med=2.035009s ok={True} rc=0 
+lua_ref    k3   rmw_padded                      p0 n=3 med=3.123081s ok={True} rc=0 
+lua_ref    k4   natural_unsorted                p0 n=3 med=0.855144s ok={True} rc=0 
+lua_ref    k2   tuned                16384      p0 n=10 med=0.037792s ok={True} rc=0 
+lua_ref    k7   tuned                           p0 n=2 med=6.105126s ok={True} rc=0 
+lua_ref    k6   mt                   q6         p0 n=3 med=1.234795s ok={True} rc=0 
+lua_ref    k6   tuned                q6         p0 n=3 med=1.252150s ok={True} rc=0 
+lua_ref    k9   mt                              p0 n=3 med=0.848143s ok={True} rc=0 
+lua_ref    k8   natural                         p0 n=2 med=8.854844s ok={True} rc=0 
+lua_ref    k2   tuned                262144     p0 n=10 med=0.054979s ok={True} rc=0 
+lua_ref    k1   soa                  energy     p0 n=10 med=0.230179s ok={True} rc=0 
+lua_ref    k9   tuned                           p0 n=3 med=0.819110s ok={True} rc=0 
+lua_ref    k6   natural              q6         p0 n=5 med=0.501120s ok={True} rc=0 
+lua_ref    k4   natural_sorted                  p0 n=3 med=0.752883s ok={True} rc=0 
+lua_ref    k2   tuned                8388608    p0 n=4 med=0.638155s ok={True} rc=0 
+lua_ref    k3   sw_padded                       p0 n=3 med=3.174105s ok={True} rc=0 
+lua_ref    k8   tuned                           p0 n=2 med=4.863723s ok={True} rc=0 
+lua_ref    k8   natural                         p0 n=2 med=8.847771s ok={True} rc=0 
+lua_ref    k2   tuned                16384      p0 n=10 med=0.032484s ok={True} rc=0 
+lua_ref    k6   tuned                q6         p0 n=3 med=1.147262s ok={True} rc=0 
+lua_ref    k6   natural              q6         p0 n=5 med=0.498167s ok={True} rc=0 
+lua_ref    k6   mt                   q6         p0 n=3 med=1.161098s ok={True} rc=0 
+lua_ref    k7   tuned                           p0 n=2 med=6.155725s ok={True} rc=0 
+lua_ref    k9   mt                              p0 n=3 med=0.756310s ok={True} rc=0 
+lua_ref    k2   tuned                262144     p0 n=10 med=0.043308s ok={True} rc=0 
+lua_ref    k2   tuned                8388608    p0 n=4 med=0.671283s ok={True} rc=0 
+lua_ref    k4   natural_sorted                  p0 n=3 med=0.695940s ok={True} rc=0 
+lua_ref    k3   rmw_padded                      p0 n=3 med=2.701801s ok={True} rc=0 
+lua_ref    k9   tuned                           p0 n=3 med=1.035700s ok={True} rc=0 
+lua_ref    k4   branchless_unsorted             p0 n=3 med=0.694350s ok={True} rc=0 
+lua_ref    k1   soa                  energy     p0 n=10 med=0.256047s ok={True} rc=0 
+lua_ref    k3   sw_packed                       p0 n=3 med=2.323971s ok={True} rc=0 
+lua_ref    k4   natural_unsorted                p0 n=3 med=0.905074s ok={True} rc=0 
+lua_ref    k3   rmw_packed                      p0 n=3 med=2.206092s ok={True} rc=0 
+lua_ref    k2   tuned                262144     p0 n=10 med=0.047749s ok={True} rc=0 
+lua_ref    k1   soa                  energy     p0 n=10 med=0.215218s ok={True} rc=0 
+lua_ref    k6   natural              q6         p0 n=5 med=0.489808s ok={True} rc=0 
+lua_ref    k9   tuned                           p0 n=3 med=0.859240s ok={True} rc=0 
+lua_ref    k4   natural_sorted                  p0 n=3 med=0.773627s ok={True} rc=0 
+lua_ref    k6   mt                   q6         p0 n=3 med=1.221873s ok={True} rc=0 
+lua_ref    k9   mt                              p0 n=3 med=0.962398s ok={True} rc=0 
+lua_ref    k4   branchless_unsorted             p0 n=3 med=0.706348s ok={True} rc=0 
+lua_ref    k2   tuned                16384      p0 n=10 med=0.035957s ok={True} rc=0 
+lua_ref    k8   tuned                           p0 n=2 med=4.225856s ok={True} rc=0 
+lua_ref    k4   natural_unsorted                p0 n=3 med=0.903643s ok={True} rc=0 
+lua_ref    k3   sw_padded                       p0 n=3 med=3.030634s ok={True} rc=0 
+lua_ref    k3   rmw_padded                      p0 n=3 med=2.905612s ok={True} rc=0 
+lua_ref    k8   natural                         p0 n=2 med=8.990339s ok={True} rc=0 
+lua_ref    k2   tuned                8388608    p0 n=4 med=0.645518s ok={True} rc=0 
+lua_ref    k7   tuned                           p0 n=2 med=6.519744s ok={True} rc=0 
+lua_ref    k6   tuned                q6         p0 n=3 med=1.324547s ok={True} rc=0 
+lua_ref    k3   rmw_packed                      p0 n=3 med=2.111008s ok={True} rc=0 
+lua_ref    k3   sw_packed                       p0 n=3 med=1.975258s ok={True} rc=0 
+lua_ref    k2   tuned                8388608    p0 n=4 med=0.641859s ok={True} rc=0 
+lua_ref    k9   mt                              p0 n=3 med=0.835701s ok={True} rc=0 
+lua_ref    k4   natural_unsorted                p0 n=3 med=0.816242s ok={True} rc=0 
+lua_ref    k1   soa                  energy     p0 n=10 med=0.180525s ok={True} rc=0 
+lua_ref    k8   tuned                           p0 n=2 med=4.349541s ok={True} rc=0 
+lua_ref    k6   natural              q6         p0 n=5 med=0.481187s ok={True} rc=0 
+lua_ref    k6   tuned                q6         p0 n=3 med=1.150123s ok={True} rc=0 
+lua_ref    k2   tuned                262144     p0 n=10 med=0.045550s ok={True} rc=0 
+lua_ref    k3   rmw_packed                      p0 n=3 med=1.921190s ok={True} rc=0 
+lua_ref    k4   branchless_unsorted             p0 n=3 med=0.688863s ok={True} rc=0 
+lua_ref    k8   natural                         p0 n=2 med=8.422608s ok={True} rc=0 
+lua_ref    k3   sw_padded                       p0 n=3 med=2.691410s ok={True} rc=0 
+lua_ref    k3   rmw_padded                      p0 n=3 med=2.788456s ok={True} rc=0 
+lua_ref    k6   mt                   q6         p0 n=3 med=1.132098s ok={True} rc=0 
+lua_ref    k7   tuned                           p0 n=2 med=5.452605s ok={True} rc=0 
+lua_ref    k9   tuned                           p0 n=3 med=0.891235s ok={True} rc=0 
+lua_ref    k4   natural_sorted                  p0 n=3 med=0.614089s ok={True} rc=0 
+lua_ref    k3   sw_packed                       p0 n=3 med=1.893383s ok={True} rc=0 
+lua_ref    k2   tuned                16384      p0 n=10 med=0.029418s ok={True} rc=0 
+lua_ref    k3   sw_packed                       p0 n=3 med=1.950878s ok={True} rc=0 
+lua_ref    k6   mt                   q6         p0 n=3 med=1.280859s ok={True} rc=0 
+lua_ref    k9   mt                              p0 n=3 med=0.896052s ok={True} rc=0 
+lua_ref    k8   natural                         p0 n=2 med=8.899095s ok={True} rc=0 
+lua_ref    k9   tuned                           p0 n=3 med=0.852841s ok={True} rc=0 
+lua_ref    k6   tuned                q6         p0 n=3 med=1.230771s ok={True} rc=0 
+lua_ref    k3   rmw_packed                      p0 n=3 med=2.232031s ok={True} rc=0 
+lua_ref    k7   tuned                           p0 n=2 med=5.833572s ok={True} rc=0 
+lua_ref    k2   tuned                8388608    p0 n=4 med=0.649437s ok={True} rc=0 
+lua_ref    k3   sw_padded                       p0 n=3 med=2.868438s ok={True} rc=0 
+lua_ref    k1   soa                  energy     p0 n=10 med=0.202914s ok={True} rc=0 
+lua_ref    k8   tuned                           p0 n=2 med=4.476463s ok={True} rc=0 
+lua_ref    k3   rmw_padded                      p0 n=3 med=3.145477s ok={True} rc=0 
+lua_ref    k2   tuned                16384      p0 n=10 med=0.032669s ok={True} rc=0 
+lua_ref    k4   natural_sorted                  p0 n=3 med=0.675475s ok={True} rc=0 
+lua_ref    k6   natural              q6         p0 n=5 med=0.489961s ok={True} rc=0 
+lua_ref    k4   natural_unsorted                p0 n=3 med=0.809635s ok={True} rc=0 
+lua_ref    k2   tuned                262144     p0 n=10 med=0.044893s ok={True} rc=0 
+lua_ref    k4   branchless_unsorted             p0 n=3 med=0.726154s ok={True} rc=0 
+lua_ref    k6   natural              q6         p0 n=5 med=0.502876s ok={True} rc=0 
+lua_ref    k8   tuned                           p0 n=2 med=4.284083s ok={True} rc=0 
+lua_ref    k4   natural_unsorted                p0 n=3 med=0.725588s ok={True} rc=0 
+lua_ref    k2   tuned                16384      p0 n=10 med=0.040167s ok={True} rc=0 
+lua_ref    k9   tuned                           p0 n=3 med=1.036973s ok={True} rc=0 
+lua_ref    k3   sw_packed                       p0 n=3 med=2.142347s ok={True} rc=0 
+lua_ref    k2   tuned                8388608    p0 n=4 med=0.652771s ok={True} rc=0 
+lua_ref    k3   rmw_packed                      p0 n=3 med=2.086302s ok={True} rc=0 
+lua_ref    k1   soa                  energy     p0 n=10 med=0.218106s ok={True} rc=0 
+lua_ref    k3   rmw_padded                      p0 n=3 med=3.039548s ok={True} rc=0 
+lua_ref    k4   branchless_unsorted             p0 n=3 med=0.704198s ok={True} rc=0 
+lua_ref    k7   tuned                           p0 n=2 med=5.765984s ok={True} rc=0 
+lua_ref    k9   mt                              p0 n=3 med=0.851812s ok={True} rc=0 
+lua_ref    k6   mt                   q6         p0 n=3 med=1.084638s ok={True} rc=0 
+lua_ref    k6   tuned                q6         p0 n=3 med=1.171490s ok={True} rc=0 
+lua_ref    k4   natural_sorted                  p0 n=3 med=0.643111s ok={True} rc=0 
+lua_ref    k8   natural                         p0 n=2 med=7.897868s ok={True} rc=0 
+lua_ref    k2   tuned                262144     p0 n=10 med=0.043666s ok={True} rc=0 
+lua_ref    k3   sw_padded                       p0 n=3 med=2.659623s ok={True} rc=0 
+lua_ref    k9   mt                              p0 n=3 med=0.821480s ok={True} rc=0 
+lua_ref    k2   tuned                262144     p0 n=10 med=0.043115s ok={True} rc=0 
+lua_ref    k6   mt                   q6         p0 n=3 med=1.374982s ok={True} rc=0 
+lua_ref    k7   tuned                           p0 n=2 med=5.713536s ok={True} rc=0 
+lua_ref    k2   tuned                8388608    p0 n=4 med=0.688244s ok={True} rc=0 
+lua_ref    k8   tuned                           p0 n=2 med=4.808219s ok={True} rc=0 
+lua_ref    k4   branchless_unsorted             p0 n=3 med=0.686112s ok={True} rc=0 
+lua_ref    k9   tuned                           p0 n=3 med=0.960213s ok={True} rc=0 
+lua_ref    k8   natural                         p0 n=2 med=9.188055s ok={True} rc=0 
+lua_ref    k2   tuned                16384      p0 n=10 med=0.029613s ok={True} rc=0 
+lua_ref    k6   tuned                q6         p0 n=3 med=1.220937s ok={True} rc=0 
+lua_ref    k4   natural_unsorted                p0 n=3 med=0.753154s ok={True} rc=0 
+lua_ref    k1   soa                  energy     p0 n=10 med=0.283679s ok={True} rc=0 
+lua_ref    k6   natural              q6         p0 n=5 med=0.513597s ok={True} rc=0 
+lua_ref    k3   sw_packed                       p0 n=3 med=1.966674s ok={True} rc=0 
+lua_ref    k4   natural_sorted                  p0 n=3 med=0.682084s ok={True} rc=0 
+lua_ref    k3   sw_padded                       p0 n=3 med=3.043010s ok={True} rc=0 
+lua_ref    k3   rmw_padded                      p0 n=3 med=2.896721s ok={True} rc=0 
+lua_ref    k3   rmw_packed                      p0 n=3 med=1.944885s ok={True} rc=0 

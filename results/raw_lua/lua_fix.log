@@ -1,0 +1,77 @@
+lua_fix    k4   natural_sorted                  p0 n=3 med=0.237173s ok={True} rc=0 
+lua_fix    k3   sw_padded                       p0 n=3 med=2.128966s ok={True} rc=0 
+lua_fix    k6   natural              q6         p0 n=5 med=0.557499s ok={True} rc=0 
+lua_fix    k4   natural_unsorted                p0 n=3 med=0.304296s ok={True} rc=0 
+lua_fix    k6   tuned                q6         p0 n=3 med=1.142656s ok={True} rc=0 
+lua_fix    k3   rmw_padded                      p0 n=3 med=2.134265s ok={True} rc=0 
+lua_fix    k8   natural                         p0 n=2 med=13.094347s ok={True} rc=0 
+lua_fix    k3   sw_packed                       p0 n=3 med=2.234730s ok={True} rc=0 
+lua_fix    k3   rmw_packed                      p0 n=3 med=2.100857s ok={True} rc=0 
+lua_fix    k6   mt                   q6         p0 n=3 med=0.828566s ok={True} rc=0 
+lua_fix    k4   branchless_unsorted             p0 n=3 med=0.206553s ok={True} rc=0 
+lua_fix    k4   natural_sorted                  p0 n=3 med=0.169947s ok={True} rc=0 
+lua_fix    k3   rmw_padded                      p0 n=3 med=2.186733s ok={True} rc=0 
+lua_fix    k6   mt                   q6         p0 n=3 med=0.833428s ok={True} rc=0 
+lua_fix    k6   natural              q6         p0 n=5 med=0.575036s ok={True} rc=0 
+lua_fix    k3   rmw_packed                      p0 n=3 med=1.893154s ok={True} rc=0 
+lua_fix    k6   tuned                q6         p0 n=3 med=0.861163s ok={True} rc=0 
+lua_fix    k4   natural_unsorted                p0 n=3 med=0.277424s ok={True} rc=0 
+lua_fix    k8   natural                         p0 n=2 med=12.363048s ok={True} rc=0 
+lua_fix    k3   sw_packed                       p0 n=3 med=1.969991s ok={True} rc=0 
+lua_fix    k4   branchless_unsorted             p0 n=3 med=0.206201s ok={True} rc=0 
+lua_fix    k3   sw_padded                       p0 n=3 med=2.160439s ok={True} rc=0 
+lua_fix    k6   mt                   q6         p0 n=3 med=1.013540s ok={True} rc=0 
+lua_fix    k3   sw_packed                       p0 n=3 med=2.176715s ok={True} rc=0 
+lua_fix    k6   natural              q6         p0 n=5 med=0.560010s ok={True} rc=0 
+lua_fix    k6   tuned                q6         p0 n=3 med=0.914960s ok={True} rc=0 
+lua_fix    k3   rmw_padded                      p0 n=3 med=2.115902s ok={True} rc=0 
+lua_fix    k3   sw_padded                       p0 n=3 med=2.434942s ok={True} rc=0 
+lua_fix    k4   natural_sorted                  p0 n=3 med=0.227567s ok={True} rc=0 
+lua_fix    k8   natural                         p0 n=2 med=13.282708s ok={True} rc=0 
+lua_fix    k3   rmw_packed                      p0 n=3 med=1.941256s ok={True} rc=0 
+lua_fix    k4   natural_unsorted                p0 n=3 med=0.271338s ok={True} rc=0 
+lua_fix    k4   branchless_unsorted             p0 n=3 med=0.270621s ok={True} rc=0 
+lua_fix    k4   branchless_unsorted             p0 n=3 med=0.210801s ok={True} rc=0 
+lua_fix    k6   natural              q6         p0 n=5 med=0.486427s ok={True} rc=0 
+lua_fix    k6   mt                   q6         p0 n=3 med=0.880040s ok={True} rc=0 
+lua_fix    k4   natural_sorted                  p0 n=3 med=0.205772s ok={True} rc=0 
+lua_fix    k3   sw_packed                       p0 n=3 med=2.130106s ok={True} rc=0 
+lua_fix    k3   sw_padded                       p0 n=3 med=1.994825s ok={True} rc=0 
+lua_fix    k3   rmw_padded                      p0 n=3 med=2.189506s ok={True} rc=0 
+lua_fix    k3   rmw_packed                      p0 n=3 med=1.872153s ok={True} rc=0 
+lua_fix    k8   natural                         p0 n=2 med=11.534932s ok={True} rc=0 
+lua_fix    k6   tuned                q6         p0 n=3 med=0.869077s ok={True} rc=0 
+lua_fix    k4   natural_unsorted                p0 n=3 med=0.279326s ok={True} rc=0 
+lua_fix    k3   rmw_packed                      p0 n=3 med=2.155574s ok={True} rc=0 
+lua_fix    k6   natural              q6         p0 n=5 med=0.541764s ok={True} rc=0 
+lua_fix    k4   natural_unsorted                p0 n=3 med=0.315357s ok={True} rc=0 
+lua_fix    k3   sw_padded                       p0 n=3 med=2.223818s ok={True} rc=0 
+lua_fix    k6   mt                   q6         p0 n=3 med=1.163117s ok={True} rc=0 
+lua_fix    k6   tuned                q6         p0 n=3 med=0.823671s ok={True} rc=0 
+lua_fix    k4   natural_sorted                  p0 n=3 med=0.154672s ok={True} rc=0 
+lua_fix    k3   rmw_padded                      p0 n=3 med=2.190026s ok={True} rc=0 
+lua_fix    k8   natural                         p0 n=2 med=12.327259s ok={True} rc=0 
+lua_fix    k4   branchless_unsorted             p0 n=3 med=0.200161s ok={True} rc=0 
+lua_fix    k3   sw_packed                       p0 n=3 med=2.312621s ok={True} rc=0 
+lua_fix    k3   rmw_packed                      p0 n=3 med=2.088963s ok={True} rc=0 
+lua_fix    k6   tuned                q6         p0 n=3 med=0.875580s ok={True} rc=0 
+lua_fix    k8   natural                         p0 n=2 med=12.416190s ok={True} rc=0 
+lua_fix    k6   natural              q6         p0 n=5 med=0.475484s ok={True} rc=0 
+lua_fix    k3   rmw_padded                      p0 n=3 med=2.022452s ok={True} rc=0 
+lua_fix    k3   sw_packed                       p0 n=3 med=2.022518s ok={True} rc=0 
+lua_fix    k4   natural_unsorted                p0 n=3 med=0.306107s ok={True} rc=0 
+lua_fix    k6   mt                   q6         p0 n=3 med=0.959089s ok={True} rc=0 
+lua_fix    k4   natural_sorted                  p0 n=3 med=0.189822s ok={True} rc=0 
+lua_fix    k3   sw_padded                       p0 n=3 med=2.227537s ok={True} rc=0 
+lua_fix    k4   branchless_unsorted             p0 n=3 med=0.244622s ok={True} rc=0 
+lua_fix    k6   natural              q6         p0 n=5 med=0.529251s ok={True} rc=0 
+lua_fix    k4   branchless_unsorted             p0 n=3 med=0.250447s ok={True} rc=0 
+lua_fix    k6   tuned                q6         p0 n=3 med=0.848587s ok={True} rc=0 
+lua_fix    k3   sw_padded                       p0 n=3 med=1.947673s ok={True} rc=0 
+lua_fix    k3   rmw_packed                      p0 n=3 med=1.970614s ok={True} rc=0 
+lua_fix    k4   natural_unsorted                p0 n=3 med=0.284862s ok={True} rc=0 
+lua_fix    k4   natural_sorted                  p0 n=3 med=0.156784s ok={True} rc=0 
+lua_fix    k6   mt                   q6         p0 n=3 med=0.898739s ok={True} rc=0 
+lua_fix    k3   rmw_padded                      p0 n=3 med=1.911475s ok={True} rc=0 
+lua_fix    k8   natural                         p0 n=2 med=12.301381s ok={True} rc=0 
+lua_fix    k3   sw_packed                       p0 n=3 med=2.506456s ok={True} rc=0 

@@ -1,0 +1,70 @@
+lua_exp    k2   tuned_s              16384      p0 n=10 med=0.030028s ok={True} rc=0 
+lua_exp    k6   tuned_n              q6         p0 n=3 med=0.435496s ok={True} rc=0 
+lua_exp    k2   tuned_s              8388608    p0 n=4 med=0.744734s ok={True} rc=0 
+lua_exp    k9   mt_s                            p0 n=3 med=0.795217s ok={True} rc=0 
+lua_exp    k7   tuned_p                         p0 n=2 med=4.119592s ok={True} rc=0 
+lua_exp    k8   tuned_it                        p0 n=2 med=4.871896s ok={True} rc=0 
+lua_exp    k9   tuned_s                         p0 n=3 med=0.863898s ok={True} rc=0 
+lua_exp    k1   soa_h                energy     p0 n=10 med=0.207552s ok={True} rc=0 
+lua_exp    k2   tuned_s              262144     p0 n=10 med=0.041917s ok={True} rc=0 
+lua_exp    k6   mt_n                 q6         p0 n=3 med=0.432525s ok={True} rc=0 
+lua_exp    k8   tuned_it                        p0 n=2 med=4.874578s ok={True} rc=0 
+lua_exp    k6   mt_n                 q6         p0 n=3 med=0.413803s ok={True} rc=0 
+lua_exp    k2   tuned_s              8388608    p0 n=4 med=0.488120s ok={True} rc=0 
+lua_exp    k7   tuned_p                         p0 n=2 med=3.926303s ok={True} rc=0 
+lua_exp    k9   mt_s                            p0 n=3 med=0.784547s ok={True} rc=0 
+lua_exp    k1   soa_h                energy     p0 n=10 med=0.157662s ok={True} rc=0 
+lua_exp    k6   tuned_n              q6         p0 n=3 med=0.459814s ok={True} rc=0 
+lua_exp    k2   tuned_s              262144     p0 n=10 med=0.040352s ok={True} rc=0 
+lua_exp    k9   tuned_s                         p0 n=3 med=0.792223s ok={True} rc=0 
+lua_exp    k2   tuned_s              16384      p0 n=10 med=0.022934s ok={True} rc=0 
+lua_exp    k6   mt_n                 q6         p0 n=3 med=0.499779s ok={True} rc=0 
+lua_exp    k2   tuned_s              16384      p0 n=10 med=0.028269s ok={True} rc=0 
+lua_exp    k2   tuned_s              262144     p0 n=10 med=0.035663s ok={True} rc=0 
+lua_exp    k9   tuned_s                         p0 n=3 med=0.762829s ok={True} rc=0 
+lua_exp    k7   tuned_p                         p0 n=2 med=4.206783s ok={True} rc=0 
+lua_exp    k1   soa_h                energy     p0 n=10 med=0.234159s ok={True} rc=0 
+lua_exp    k8   tuned_it                        p0 n=2 med=4.824417s ok={True} rc=0 
+lua_exp    k6   tuned_n              q6         p0 n=3 med=0.476211s ok={True} rc=0 
+lua_exp    k9   mt_s                            p0 n=3 med=0.798905s ok={True} rc=0 
+lua_exp    k2   tuned_s              8388608    p0 n=4 med=0.666965s ok={True} rc=0 
+lua_exp    k7   tuned_p                         p0 n=2 med=4.168528s ok={True} rc=0 
+lua_exp    k2   tuned_s              262144     p0 n=10 med=0.034594s ok={True} rc=0 
+lua_exp    k2   tuned_s              8388608    p0 n=4 med=0.615699s ok={True} rc=0 
+lua_exp    k6   tuned_n              q6         p0 n=3 med=0.458451s ok={True} rc=0 
+lua_exp    k9   tuned_s                         p0 n=3 med=0.739841s ok={True} rc=0 
+lua_exp    k9   mt_s                            p0 n=3 med=0.814946s ok={True} rc=0 
+lua_exp    k1   soa_h                energy     p0 n=10 med=0.168479s ok={True} rc=0 
+lua_exp    k8   tuned_it                        p0 n=2 med=5.207420s ok={True} rc=0 
+lua_exp    k2   tuned_s              16384      p0 n=10 med=0.022912s ok={True} rc=0 
+lua_exp    k6   mt_n                 q6         p0 n=3 med=0.412289s ok={True} rc=0 
+lua_exp    k6   tuned_n              q6         p0 n=3 med=0.434473s ok={True} rc=0 
+lua_exp    k2   tuned_s              262144     p0 n=10 med=0.035777s ok={True} rc=0 
+lua_exp    k7   tuned_p                         p0 n=2 med=4.206519s ok={True} rc=0 
+lua_exp    k1   soa_h                energy     p0 n=10 med=0.177618s ok={True} rc=0 
+lua_exp    k9   mt_s                            p0 n=3 med=0.998110s ok={True} rc=0 
+lua_exp    k9   tuned_s                         p0 n=3 med=0.808876s ok={True} rc=0 
+lua_exp    k6   mt_n                 q6         p0 n=3 med=0.441290s ok={True} rc=0 
+lua_exp    k2   tuned_s              16384      p0 n=10 med=0.023922s ok={True} rc=0 
+lua_exp    k8   tuned_it                        p0 n=2 med=5.400271s ok={True} rc=0 
+lua_exp    k2   tuned_s              8388608    p0 n=4 med=0.629872s ok={True} rc=0 
+lua_exp    k2   tuned_s              16384      p0 n=10 med=0.032416s ok={True} rc=0 
+lua_exp    k1   soa_h                energy     p0 n=10 med=0.167442s ok={True} rc=0 
+lua_exp    k2   tuned_s              262144     p0 n=10 med=0.042859s ok={True} rc=0 
+lua_exp    k2   tuned_s              8388608    p0 n=4 med=0.638256s ok={True} rc=0 
+lua_exp    k7   tuned_p                         p0 n=2 med=4.004605s ok={True} rc=0 
+lua_exp    k8   tuned_it                        p0 n=2 med=4.918936s ok={True} rc=0 
+lua_exp    k9   tuned_s                         p0 n=3 med=0.792352s ok={True} rc=0 
+lua_exp    k6   mt_n                 q6         p0 n=3 med=0.522928s ok={True} rc=0 
+lua_exp    k9   mt_s                            p0 n=3 med=0.779712s ok={True} rc=0 
+lua_exp    k6   tuned_n              q6         p0 n=3 med=0.445162s ok={True} rc=0 
+lua_exp    k7   tuned_p                         p0 n=2 med=3.870372s ok={True} rc=0 
+lua_exp    k1   soa_h                energy     p0 n=10 med=0.192780s ok={True} rc=0 
+lua_exp    k9   tuned_s                         p0 n=3 med=0.860570s ok={True} rc=0 
+lua_exp    k2   tuned_s              8388608    p0 n=4 med=0.694310s ok={True} rc=0 
+lua_exp    k6   mt_n                 q6         p0 n=3 med=0.457866s ok={True} rc=0 
+lua_exp    k2   tuned_s              262144     p0 n=10 med=0.035536s ok={True} rc=0 
+lua_exp    k6   tuned_n              q6         p0 n=3 med=0.516104s ok={True} rc=0 
+lua_exp    k8   tuned_it                        p0 n=2 med=5.038234s ok={True} rc=0 
+lua_exp    k2   tuned_s              16384      p0 n=10 med=0.023761s ok={True} rc=0 
+lua_exp    k9   mt_s                            p0 n=3 med=0.754221s ok={True} rc=0 

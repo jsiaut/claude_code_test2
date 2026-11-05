@@ -1,0 +1,7 @@
+python_k8n k8   natural                         p0 n=2 med=21.508683s ok={True} rc=0 
+python_k8n k8   natural                         p0 n=2 med=20.170591s ok={True} rc=0 
+python_k8n k8   natural                         p0 n=2 med=21.433146s ok={True} rc=0 
+python_k8n k8   natural                         p0 n=2 med=19.110335s ok={True} rc=0 
+python_k8n k8   natural                         p0 n=2 med=20.605814s ok={True} rc=0 
+python_k8n k8   natural                         p0 n=2 med=20.454554s ok={True} rc=0 
+python_k8n k8   natural                         p0 n=2 med=19.459284s ok={True} rc=0 
