@@ -1,0 +1,45 @@
+# Faits de la remarque sur Swift (2026-11-05 20:39:19, Intel(R) Xeon(R) Processor @ 2.10GHz, modèle 207)
+## D4 : affinité par le module Glibc
+sans option : cannot find 'gettid' in scope;cannot find 'pthread_setaffinity_np' in scope;cannot find 'sched_getcpu' in scope;cannot find 'sched_setaffinity' in scope;
+avec -Xcc -D_GNU_SOURCE : sched_setaffinity -> 0 sched_getcpu -> 1 pthread_setaffinity_np -> 0 sched_getcpu -> 2 gettid -> 3115 
+swiftc --help : -Xcc <arg> Pass <arg> to the C/C++/Objective-C compiler
+## E4 et D5 : préchargement et pause
+prfchwintrin.h livré : void _m_prefetch(void *__P); void _m_prefetchw(volatile const void *__P); (déclarations sans corps)
+import en SIL : sil [readnone] [asmname "_m_prefetchw"] sil [readnone] [asmname "_m_prefetch"] 
+appels restant dans le SIL -O : 0 ; instructions prefetch dans le code : 0
+@_silgen_name("llvm.prefetch.p0") : 9 prefetchw ; @_silgen_name("llvm.x86.sse2.pause") : 1 pause
+@_silgen_name dans les interfaces livrées : 59 fois (Swift), dont vers une intrinsèque LLVM : 0
+## E5 : noalias dans l'IR
+inoutIntyySiz(ptr dereferenceable(8) %0, ptr dereferenceable(8) %1)
+inoutArryySaySfGz(ptr dereferenceable(8) %0, ptr readonly dereferenceable(8) %1)
+inoutBigyyAA(ptr dereferenceable(64) %0, ptr readonly dereferenceable(64) %1)
+inoutPtryySpySfGz(ptr noalias readonly dereferenceable(8) %0, ptr noalias readonly dereferenceable(8) %1)
+rawPtrsyySpySfG(ptr %0, ptr readonly %1, i64 %2)
+## E7 : spécialisation et calcul à la compilation
+@specialized(where T == Int/Double) et @inline(always) sans option : 3 fonctions sum dans le SIL, dont 2 spécialisées
+@const sans option : 'const' attribute is only valid when experimental feature CompileTimeValues is enabled
+## Types de la 6.4 dans Swift.swiftinterface
+struct UniqueBox : 1
+struct UniqueArray : 1
+struct Ref< : 1
+struct MutableRef : 1
+protocol Iterable : 1
+## Alignement
+MemoryLayout alignment SIMD16<Float>, SIMD8<Double>, SIMD64<UInt8> ; taille SIMD16<Float> : 16 16 16 64
+@_alignment(64) : '@_alignment' cannot increase alignment above maximum alignment of 16
+## K4 naturel : += vérifié contre &+= (cible cascadelake)
+-O k4Checked : 16 instructions, 0 vectorielles (vpaddq 0), cmov 0, ud2 1
+-O k4Wrapping : 85 instructions, 15 vectorielles (vpaddq 12), cmov 1, ud2 0
+-Ounchecked k4Checked : 83 instructions, 0 vectorielles (vpaddq 0), cmov 18, ud2 0
+-Ounchecked k4Wrapping : 85 instructions, 15 vectorielles (vpaddq 12), cmov 1, ud2 0
+## K8 : comptage de références dans le binaire mesuré (bench/swift_exp/ms)
+$s2ms4tSumys5Int64VAA4NodeCSgF : retain 2, release 2
+$s2ms4fSumys5Int64VAA5FNodeCSgF : retain 0, release 0
+swift_beginAccess importé par bench/swift/ms : 0
+## K5 naturel : FMA scalaire (binaires publiés)
+C k5_natural : 8 vfmadd ; Swift k5Natural : 0 vfmadd, 9 vaddss
+## Arbre UniqueBox (K8) : avec et sans deinit {} vide (mémoire plafonnée à 6 Go)
+avec deinit {} : retour 0 ; 1.0 s ; exécution : UniqueBox K8: 309036343296 0.6541608559998622 s
+sans deinit : retour 1 ; 201.4 s ; LLVM ERROR: out of memory ; While running pass #2075 SILFunctionTransform "EarlyPerfInliner"
+## Provenance des binaires (machine 24)
+bench/c/ms (publié, Cascade Lake) ff81685a4701bf95 ; bench/c_er/ms (natif ici) ca4eeb97e93b68a5 ; machine 3 : ca4eeb97e93b68a5

@@ -367,3 +367,126 @@ le facteur d'hôte des autres langages, 13e ; sans pont, 6e, mais cette lecture 
 plan le placent de la 11e à la 13e place. Les 21 autres langages gardent leur ordre et leurs scores. Comme le pont
 traverse les modèles de processeur pour K5, K9 et les latences de K8, une mesure de Swift sur un Emerald Rapids et une
 relecture par un connaisseur restent à faire.
+
+## 5. Remarque sur Swift (5 novembre au soir)
+
+L'auteur de l'étude m'a transmis une remarque sur l'ajout de Swift. Comme pour les remarques sur les autres langages,
+je vérifie chaque affirmation sur la chaîne installée, sans page web (5.2), je fixe le plan avant toute mesure (5.3),
+puis je donne les résultats (5.4). La VM a redémarré à 20 h 09 sur un Emerald Rapids (machine 24, modèle 207 comme les
+machines 3, 11 et 16 ; 3,1 à 3,4 GHz effectifs, 56 ns à 4 Mio, 13,5 Go/s : `results/hw/machine24/`). Le pont que la
+remarque met en doute peut donc être mesuré sur le modèle même des hôtes dont viennent K5, K9 et les latences de K8.
+
+### 5.1 La remarque
+
+* **Verdict** : classement juste à une ou deux places près ; corrigé, Swift serait plutôt 11e, devant Fortran, et ne
+  rejoindrait pas les langages système en tête. Rang plausible : 10e à 13e.
+* **Ce qui tient** : K4 naturel (seul le `+=` vérifié empêche la vectorisation ; en `-Ounchecked`, la boucle reste
+  scalaire) ; le test d'unicité de K9 naturel à chaque écriture ; les comptages de références de la classe à champs
+  `var` de K8 (aucun pour `let`, pas de contrôle d'exclusivité dynamique) ; les pièges de la bibliothèque SIMD ;
+  l'alignement plafonné à 16 ; ni préchargement ni `pause` officiels (`_m_prefetch` et `_m_prefetchw` sont déclarées
+  `const` dans le Clang de la chaîne, et l'importateur en fait des fonctions sans effet, que l'optimiseur supprime ;
+  `@_silgen_name("llvm.prefetch.p0")` contourne, par un attribut que la documentation déconseille) ; E5 = ½.
+* **À corriger** :
+  1. D4 vaut ½, pas 0 : `sched_setaffinity`, `pthread_setaffinity_np` et `sched_getcpu` sont dans le module Glibc
+     livré, derrière `_GNU_SOURCE`, comme en C ; `swiftc -Xcc -D_GNU_SOURCE` les rend visibles. Contrôle 64,4 → 65,9,
+     score 65,2 → 65,8, devant Fortran.
+  2. Le pont est fragile : mesurés sur Emerald Rapids, Swift/C vaut 0,51 sur K5 naturel (le C y fusionne la somme en
+     FMA scalaire, deux fois plus lente sur ce cœur), 1,00 sur K5 optimisé, 7,1 sur K9 naturel, 0,91 sur K9 optimisé,
+     1,07 sur Q1 optimisé (1,14 avec le code compilé pour Cascade Lake) : effet net d'environ +0,4 point, et l'écart
+     de Q1 est en bonne partie propre à Cascade Lake.
+  3. Des justifications dépassées : `@specialized` et `@inline(always)` compilent sans option (E7 reste ½ :
+     `@const` est expérimental) ; la 6.4 apporte `UniqueBox`, `UniqueArray`, `Ref`, `MutableRef`, `Iterable` ; un K8
+     en `UniqueBox` va à 1,2 fois le C, mais l'optimiseur de 6.4.2 épuise la mémoire sur l'arbre sans `deinit {}`
+     vide : le choix de l'étude pour K8 reste le bon.
+  4. Moins sûr : K7 naturel est relié par le facteur de la table chaînée du C (7,6), discutable pour le `Dictionary`
+     à adressage ouvert (0,3 point au plus).
+
+### 5.2 Vérification (avant le plan ; `tools/swift_rq/facts.sh`, `results/swift_check/facts2.txt`)
+
+| Affirmation | Verdict | Fait relevé (Swift 6.4.2, machine 24) |
+|---|---|---|
+| D4 : affinité par le module Glibc | **Exact** | Sans option, `cannot find 'sched_setaffinity' in scope` (de même `pthread_setaffinity_np`, `sched_getcpu`, `gettid`) ; avec `-Xcc -D_GNU_SOURCE` (option de `swiftc --help`), `sched_setaffinity` puis `pthread_setaffinity_np` épinglent le fil, `sched_getcpu` rend 1 puis 2. Ma sonde ne définissait pas `_GNU_SOURCE`, que le C de référence définit en tête de fichier |
+| Préchargement et `pause` | **Exact** | `prfchwintrin.h` livré déclare `_m_prefetch` et `_m_prefetchw` sans corps ; Swift les importe `[readnone]` (SIL) et l'appel disparaît (0 instruction). `@_silgen_name("llvm.prefetch.p0")` donne `prefetchw` (9 dans la boucle déroulée), `@_silgen_name("llvm.x86.sse2.pause")` donne `pause`. L'attribut est souligné ; l'interface publique de la bibliothèque standard l'emploie 59 fois, jamais vers une intrinsèque de LLVM |
+| E5 : `noalias` | **Exact** (précise ma grille) | Seuls les `inout` de type pointeur (`inout UnsafeMutablePointer<Float>`) portent `noalias` ; `inout Int`, `inout [Float]`, `inout` d'une struct et les pointeurs passés par valeur, non |
+| E7 : spécialisation | **Exact** | `@specialized(where T == Int)` et `@inline(always)` compilent sans option (deux `sum` spécialisées dans le SIL) ; `@const` est refusé sans `-enable-experimental-feature CompileTimeValues` |
+| Types de la 6.4 | **Exact** | `UniqueBox`, `UniqueArray`, `Ref`, `MutableRef`, `Iterable` sont publics dans `Swift.swiftinterface`. L'arbre de K8 en `UniqueBox` : sans `deinit {}` vide, « LLVM ERROR: out of memory » au bout de 201 à 210 s (deux essais, mémoire plafonnée à 6 Go, passe `EarlyPerfInliner`) ; avec, compilé en 1,1 s |
+| K4 naturel | **Exact** | Cible cascadelake, `-O` : avec `+=`, 16 instructions scalaires et le piège `ud2` ; avec `&+=`, vectorisée (12 `vpaddq`). `-Ounchecked` : avec `+=`, scalaire sans branchement (18 `cmov`) |
+| K8 | **Exact** | Dans le binaire mesuré, le parcours de la classe à champs `var` fait 2 `swift_retain` et 2 `swift_release` par nœud, celui de la classe à champs `let` aucun ; `swift_beginAccess` n'est pas importé |
+| Alignement | **Exact** | `SIMD16<Float>` (64 octets) est aligné sur 16 ; `@_alignment(64)` est refusé |
+| K5 naturel sur Emerald Rapids | Mécanisme **exact** ; rapports à mesurer | Dans les binaires publiés, le C fait une chaîne de 8 `vfmadd231ss`, Swift des `vmulss` et `vaddss` sans contraction |
+| K7 naturel | Non vérifiable | La machine 1 n'est pas disponible : sensibilité (5.3) |
+
+**Provenance des binaires.** Les données publiées venues d'Emerald Rapids n'ont pas toutes la même construction. K5
+(machine 3) vient des binaires recompilés sur la machine 3 : le C compilé ici par les options de `bench/c/build.sh`
+(cible native) leur est identique octet pour octet (`ca4eeb97…`, `results/hw/machine3/binaries.txt`). K9 (machine 16)
+et les latences de K8 (machine 11) viennent des binaires publiés, compilés pour Cascade Lake : le C compilé ici pour
+`cascadelake` est identique à `bench/c/ms` (`ff81685a…`), et `bench/swift/ms` a le même code qu'une compilation pour
+`cascadelake` (seules les sections `.note.gnu.build-id` et `.swift_modhash` diffèrent).
+
+### 5.3 Plan (poussé avant les mesures)
+
+**Errata de la grille (classement publié)**, selon les règles écrites (`analysis/capabilities_v2.py`) :
+* **D4 : ½ en règle v1, 1 en règle v2** (0 avant). La règle v1 donne ½ à ce qui est livré avec la chaîne hors du
+  langage, comme `sched_setaffinity` de la glibc à C. La règle v2 compte « la bibliothèque standard et ses liaisons
+  au système » : elle donne 1 à D (`core.sys.linux`), Zig (`std.os.linux`), Odin (`core:sys/linux`), Python
+  (`os.sched_setaffinity`), Go et C. Le module Glibc, livré avec la chaîne, est la liaison au système de Swift, et ma
+  grille le compte déjà pour D3. La remarque proposait ½, sans distinguer les deux règles.
+* **E4 : ½ en règles v1 et v2** (0 avant). Le préchargement s'exprime avec la chaîne livrée, par un attribut souligné
+  lié à l'intrinsèque de LLVM. Ma grille donne ½ à ce qui est livré mais souligné ou non documenté : E3
+  (`_fastPath`, `_slowPath`), C2 (module Clang `_Builtin_intrinsics.intel`) ; laisser E4 à 0 serait incohérent. La
+  remarque juge que E4 reste à 0, l'attribut étant déconseillé : sensibilité R-E4-0.
+* **D5 reste ½** (barrière documentée ; `pause` seulement par l'attribut souligné). Justifications mises à jour sans
+  changement de note : C2 (toutes les intrinsèques par l'attribut souligné), E5 (`noalias` sur les seuls `inout` de
+  type pointeur), E7 (`@specialized`, `@inline(always)` ; `@const` expérimental), A4 (`SIMD16<Float>` aligné sur 16).
+  La sonde (`probes/swift/run.sh`) relève D4, E4 et D5 de la même façon.
+* Effet attendu sur le pilier : 64,4 → 68,1 en règle v2 (D4 + 3,0, E4 + 0,7), 61,9 → 64,1 en règle v1.
+
+**Pont des clés venues d'Emerald Rapids (classement publié).** Pour K5 (machine 3), K9 (machine 16) et les latences de
+K8 naturel (machine 11), le rapport Swift / C est mesuré sur la machine 24, du même modèle que ces hôtes, et non plus
+sur la machine 23 (Cascade Lake). Pour chaque clé, Swift et le C sont pris dans la construction qui a produit les
+données publiées de cette clé : natives Emerald Rapids pour K5 (`bench/swift_er`, `bench/c_er`), binaires publiés
+pour K9 et les latences (`bench/swift`, `bench/c`). Le calcul ne change pas (processus de Swift × G(C publié) /
+G(C de l'hôte), latences colonne par colonne, contrôle des bornes physiques). Les clés de la machine 1 gardent le pont
+de la machine 23, du même modèle qu'elle.
+
+**Réplication (machine 3).** Swift y est relié, pour toutes les clés, par les constructions natives Emerald Rapids de
+la machine 24 (`swift_er` / `c_er`) au lieu de la machine 23 : même modèle et même construction que les données de la
+machine 3. Ce n'est toujours pas une réplication indépendante ; l'accord entre machines reste calculé sans Swift.
+« Cascade Lake seul » (hors plan de la v3) garde le pont de la machine 23.
+
+**Mesures (`tools/measure_swift_er.py`, machine 24)** : 72 cellules × 7 passes (504 processus) ; dans chaque passe,
+toutes les cellules dans un ordre tiré au hasard (graine 20261105 + 2400) :
+* `swift_er` et `c_er` : les 29 cellules du score (sans K10) ;
+* `swift` et `c` (binaires publiés) : K9 natural, tuned et mt, K8 natural (latences), Q1 tuned (information) ;
+* `swift_ub` (copie de sensibilité, cible cascadelake, `tools/swift_rq/make_ub.py` : le source publié plus deux
+  variantes, vérifié à l'octet près) : K4 natural_unsorted et `natural_w_unsorted` (`&+=`), K8 natural et
+  `natural_ub` (arbre en `UniqueBox`, `deinit {}` vide).
+Répétitions : celles de `results/calib.json` (« c|… » pour `c` et `c_er`, « swift|… » pour les trois autres ;
+`natural_w_unsorted` prend celles de natural_unsorted, `natural_ub` celles de natural). Échauffement 1 ; règle de vol
+du pilote. Rien d'autre ne tourne. Copies compilées et validées avant le plan (sommes de contrôle de toutes les
+cellules).
+
+**Scénarios (`analysis/swift_remark.py`, analyse globale de la v3 rejouée, mêmes tirages)** :
+
+| Scénario | Contenu |
+|---|---|
+| Avant | le classement publié avant la remarque ; contrôle : reproduit S-E de `results/swift_check.json` à l'identique |
+| R-D4, R-E4 | Avant + un erratum |
+| R-grille | Avant + D4 et E4 |
+| R-pont | Avant + pont Emerald Rapids (K5, K9, latences de K8) |
+| **R-E (publié)** | R-grille + R-pont |
+| R-E4-0, R-D4-½ | R-E avec E4 = 0, ou D4 = ½ en règle v2 (lectures de la remarque) |
+| R-K7 | R-E ; K7 naturel relié par le facteur de K7 optimisé du C (table plate à adressage ouvert, comme `Dictionary`) au lieu de celui de sa table chaînée |
+| R-UB | R-E ; K8 naturel (temps et latences) × min(1, r(`natural_ub` / `natural`)) (`swift_ub`, machine 24) |
+| R-hôte | R-E ; clés de la machine 1 reliées par le facteur d'hôte médian des autres langages (comme S-hôte, 4.4) |
+| R-Ou, R-cases-bas, R-cases-haut | S-Ou, S-cases-bas et S-cases-haut (3.5) appliqués à R-E |
+
+Information : rapports Swift / C de toutes les cellules sur la machine 24 (constructions natives) à côté de ceux de la
+machine 23 ; Q1 optimisé avec le code de Cascade Lake ; K4 avec `&+=`. Rapports : moyenne géométrique des médianes de
+processus, intervalle par bootstrap ; latences : médiane de toutes les répétitions, colonne par colonne. Sorties :
+`results/swift_remark.json`, `results/report_swift_remark.md` ; puis régénération des sorties publiées (réplication
+comprise) et de l'état actuel.
+
+**Ce que je ne fais pas.** Pas de mesure de K7 naturel sur la machine 1 (indisponible) : R-K7 reste une sensibilité.
+`UniqueBox` n'entre pas au code naturel (il faut un `deinit` vide pour compiler l'arbre), ni K4 en `&+=` (l'idiome
+est `+=`) : ce sont des informations et une sensibilité.

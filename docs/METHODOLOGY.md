@@ -1223,3 +1223,19 @@ Robustesse :
   `docs/FINDINGS.md` (section Swift), `docs/SWIFT.md` (4.1 retouché, 4.5 à 4.7, erratum du point 8 de 2.4 : le test
   d'unicité du stencil naturel est fait à chaque écriture), `docs/NOSIMD.md` (4.18), `docs/CONFRONTATION.md`,
   `docs/CAPABILITIES.md` (colonne et section de Swift, rien d'autre ne change), `env/toolchains.txt`.
+* 2026-11-05, 20 h 09 : **machine 24**. La VM redémarre sur un hôte Emerald Rapids du même modèle que les machines 3,
+  11 et 16 (modèle 207, 4 vCPU ; 3,13 à 3,43 GHz effectifs ; latence 32 ns à 2 Mio, 56 ns à 4 Mio ; DRAM 13,5 Go/s :
+  `results/hw/machine24/`) ; les 24 fichiers d'entrée correspondent à `env/msdata.sha256`.
+* 2026-11-05, 20:15 à 20:45 : **remarque sur Swift, transmise par l'auteur ; vérification et plan** (`docs/SWIFT.md`,
+  section 5, poussé avant les mesures). Faits vérifiés sur la chaîne installée, sans page web
+  (`tools/swift_rq/facts.sh`, `results/swift_check/facts2.txt`) : D4 (affinité par le module Glibc avec
+  `-Xcc -D_GNU_SOURCE`, fil épinglé : ma sonde ne définissait pas `_GNU_SOURCE`), préchargement (`_m_prefetchw`
+  importée `[readnone]`, supprimée ; `@_silgen_name("llvm.prefetch.p0")` donne `prefetchw`, et `pause` de même),
+  `noalias` sur les seuls `inout` de type pointeur, `@specialized` et `@inline(always)` sans option, `@const`
+  expérimental, types de la 6.4, arbre en `UniqueBox` (mémoire épuisée sans `deinit {}` vide), K4 en `&+=` vectorisé et
+  en `-Ounchecked` scalaire, comptages de références de K8, alignement. Provenance : le C recompilé ici en cible native
+  est identique au binaire de la machine 3 (`ca4eeb97…`), en cible cascadelake au binaire publié (`ff81685a…`).
+  Décisions fixées d'avance : errata D4 (½ en v1, 1 en v2) et E4 (½), K5, K9 et les latences de K8 reliés par les
+  rapports mesurés sur la machine 24 dans la construction de leurs données publiées, réplication reliée par les
+  constructions natives de la machine 24 ; copies `bench/swift_er`, `bench/c_er`, `bench/swift_ub` validées ; outil
+  `tools/measure_swift_er.py` (72 cellules × 7 passes).
