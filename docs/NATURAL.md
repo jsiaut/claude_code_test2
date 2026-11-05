@@ -32,6 +32,7 @@ utilise la boucle sérielle équivalente, et la forme parallèle n'apparaît que
 | Go | `go build`, GOAMD64=v4 | `struct` / slice (valeurs) | `map[uint32]agg` | `&Node{}` (GC) | `[][]float64` | `chan uint64` bufferisé |
 | OCaml | ocamlopt -O3 (flambda) | enregistrement (champs flottants stockés à plat) / `array` de pointeurs vers les enregistrements | `Hashtbl` | variants (GC) | `float array array` | `Queue` + `Mutex` + `Condition` |
 | Lua | PUC-Lua 5.5 | table à champs nommés / table | table | tables à champs nommés (GC ; tables positionnelles `{v, false, false}` jusqu'au 5/11, corrigé par la remarque sur Lua) | table de tables | coroutines (pas de threads en Lua standard) |
+| Swift | `swiftc -O` (bornes et débordements vérifiés), module entier, mode Swift 6 | `struct` / `Array` (valeurs en ligne) | `Dictionary<UInt32, Agg>` (`subscript(_:default:)` et méthode `mutating`) | `class` à champs `var` (ARC) | `[[Double]]` | `AsyncStream` entre deux tâches (tampon non borné ; seule file de la bibliothèque standard) |
 
 Annexes (hors classement) : `c_gcc` (même source C, gcc-16), `fortran_flang` (même source,
 flang-23), `luajit` (dialecte 5.1 + FFI), `js_bun` (même source JS, JavaScriptCore),
@@ -44,6 +45,7 @@ flang-23), `luajit` (dialecte 5.1 + FFI), `js_bun` (même source JS, JavaScriptC
   contre la règle ci-dessus et contre leur propre K1 naturel. Les copies publiées (`python_k9h`, `lua_k9h`) gardent leur
   code ; la correction (`python_k8n`, `lua_fix`) est reportée par transfert (`docs/LUA.md`, `docs/PYTHON.md` 4.8).
 
+* **Swift (ajouté le 5 novembre, `docs/SWIFT.md`)** : `swift build -c release` compile en `-O` sur le module entier, qui garde les vérifications de bornes et de débordement ; le banc appelle `swiftc` avec ces options et le mode de langage Swift 6 (celui des paquets créés par la chaîne 6.x). Le guide du langage recommande les structures par défaut (K1) ; K8 prend la classe à champs `var` des exemples du guide (la classe finale à champs `let` est une sensibilité) ; la bibliothèque standard n'a pas de file bornée : K10 prend `AsyncStream` (hors score).
 * **C et Fortran (K7)** : la bibliothèque standard n'a pas de table de hachage. Le chaînage
   séparé avec une allocation par entrée est la structure des manuels (K&R 6.6 pour C).
 * **C# (K1)** : les directives de conception .NET recommandent une classe au-delà de 16

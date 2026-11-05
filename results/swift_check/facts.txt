@@ -1,0 +1,18 @@
+== chaîne
+Swift version 6.4.2 (swift-6.4.2-RELEASE)
+clang version 21.0.0 (https://github.com/swiftlang/llvm-project.git fb5f84d903a3b4e7aea15cd5666598a46f56c833)
+archive : 2e9ebec040ad459dd89a6d093a02d8314939135104850fae4d5c0f174fb3ba8c 1124819616 octets
+releases.json (swift.org) : [('6.4.1', '2026-10-12'), ('6.4.2', '2026-10-29')]
+== mode release de SwiftPM (paquet créé par swift package init)
+// swift-tools-version: 6.4
+      3 -O 
+      4 -swift-version 6 
+      3 -whole-module-optimization 
+== génération de code (-O -target-cpu native)
+convLib : 2 instructions, appels 1, branchements 0, 
+convLanes : 5 instructions, appels 0, branchements 0,       4 vpmovzxbd 
+cmpScalar : 44 instructions, appels 0, branchements 3,       1 vpcmpeqd       1 vpcmpneqd 
+cmpVector : 14 instructions, appels 0, branchements 0,       1 vpcmpeqd 
+sumLib : 28 instructions, appels 0, branchements 0,      15 vaddss 
+sumTree : 8 instructions, appels 0, branchements 0,       4 vaddps       1 vaddss 
+k4 : 16 instructions, appels 0, branchements 4,       1 ud2 

@@ -9,7 +9,7 @@
 | ada | B4 | 0.5 | 0.5 |  | retour non contraint de 4 Mo par la pile secondaire (tas au-delà du morceau statique) :  5.00000000000000E+05 |
 | c | A1 | 1 | 1 |  | tableau de struct contigu sizeof(arr)=64 (4x16) |
 | c | A2 | 1 | 1 |  | offsetof(S,b)=4 offsetof(S,c)=8 |
-| c | A3 | 1 | 1 |  | bitfields sizeof(BF)=4 ; packed (extension) sizeof(P)=5 |
+| c | A3 | 1 | 0.5 | DIVERGENCE | bitfields sizeof(BF)=4 ; packed (extension) sizeof(P)=5 |
 | c | A4 | 1 | 1 |  | alignas(64) alignof(L)=64, aligned_alloc % 64=0 |
 | c | A5 | 1 | 1 |  | union f32->u32 = 0x3f800000 |
 | c | A6 | 0 | 0 |  | pas de SoA dans le langage ni la bibliothèque standard |
@@ -21,7 +21,7 @@
 | c | B4 | 1 | 1 |  | aucune allocation implicite du langage |
 | c | B5 | 1 | 1 |  | pointeurs bruts, mmap anonyme 0x7f3a61090000 |
 | c | C1 | 0.5 | 0.5 |  | types vectoriels portables par extension (vector_size) : 3 ; pas dans le standard C |
-| c | C2 | 1 | 1 |  | intrinsèques AVX-512 <immintrin.h> : 32 |
+| c | C2 | 1 | 0.5 | DIVERGENCE | intrinsèques AVX-512 <immintrin.h> : 32 |
 | c | C3 | 1 | mesuré |  | auto-vectorisation clang/gcc -O3 (vérifiée sur K4/K9 natural) |
 | c | C4 | 0.5 | 0.5 |  | réassociation : options -ffast-math/-fassociative-math, #pragma clang fp reassociate (extension) ; pas de cont |
 | c | C5 | 0.5 | 0.5 |  | OpenMP, livré avec clang et gcc mais hors norme ISO C : parallel for simd reduction = 499500 |
@@ -56,7 +56,7 @@
 | chapel | E5 | 0.5 | 0.5 |  | foreach (instable) : llvm.loop.parallel_accesses ; noalias automatique, a[0] = 2.0 |
 | cpp | A1 | 1 | 1 |  | std::vector<S> de valeurs contiguës : &v[1]-&v[0]=16 o |
 | cpp | A2 | 1 | 1 |  | offsetof(S,c)=8 (types à disposition standard) |
-| cpp | A3 | 1 | 1 |  | champs de bits sizeof(BF)=4 ; packed par attribut gnu sizeof(P)=5 |
+| cpp | A3 | 1 | 0.5 | DIVERGENCE | champs de bits sizeof(BF)=4 ; packed par attribut gnu sizeof(P)=5 |
 | cpp | A4 | 1 | 1 |  | alignas(64) + new aligné C++17 : 0 |
 | cpp | A5 | 1 | 1 |  | std::bit_cast<uint32_t>(1.0f)=0x3f800000 ; unions |
 | cpp | A6 | 0 | 0 |  | pas de SoA standard (la réflexion C++26 permettrait de l'écrire) |
@@ -67,8 +67,8 @@
 | cpp | B3 | 1 | 1 |  | objets et std::array sur la pile |
 | cpp | B4 | 0.5 | 0.5 |  | pas d'allocation cachée par le langage, mais std::function, exceptions et coroutines peuvent allouer |
 | cpp | B5 | 1 | 1 |  | pointeurs bruts |
-| cpp | C1 | 1 | 1 |  | std::simd (C++26) : reduce=32 |
-| cpp | C2 | 1 | 1 |  | intrinsèques <immintrin.h> : 16 |
+| cpp | C1 | 1 | 0.5 | DIVERGENCE | std::simd (C++26) : reduce=32 |
+| cpp | C2 | 1 | 0.5 | DIVERGENCE | intrinsèques <immintrin.h> : 16 |
 | cpp | C3 | 1 | mesuré |  | auto-vectorisation -O3 |
 | cpp | C4 | 1 | 1 |  | réassociation permise dans la norme : std::reduce/transform_reduce (ordre non spécifié) et std::simd::reduce |
 | cpp | C5 | 0.5 | 0.5 |  | std::execution::par_unseq compile, mais libstdc++ l'exécute en série sans TBB, bibliothèque tierce (backend SE |
@@ -168,6 +168,39 @@
 | rust | E2 | 1 | 1 |  | asm! stable : 2 |
 | rust | E3 | 1 | 1 |  | std::hint::cold_path stable |
 | rust | E4 | 1 | 1 |  | _mm_prefetch (std::arch) |
+| swift | A1 | 1 | 1 |  | [P] contigu : stride 64 o, écart entre éléments 64 o |
+| swift | A2 | 1 | 1 |  | MemoryLayout.offset(of:) a=0 c=8 b=16 : ordre déclaré gardé (docs/ABI/TypeLayout.rst), sans attribut de dispos |
+| swift | A3 | 0 | 0 |  | {UInt8, UInt32} : size 8 o (bourrage imposé) ; ni packed ni champs de bits hors struct C importée |
+| swift | A4 | 0.5 | 0.5 |  | UnsafeMutableRawPointer.allocate(alignment: 64) -> adresse % 64 = 0 ; pas d'alignement de type au-delà de 16 |
+| swift | A5 | 0.5 | 0.5 |  | Float(bitPattern:) 0x3f800000, lecture des octets 0x3f800000, unsafeBitCast entre types de même taille ; enum  |
+| swift | A6 | 0 | 0 |  | aucun type SoA en bibliothèque standard |
+| swift | A7 | 1 | 1 |  | InlineArray<16, Float> dans une struct : stride 64 o |
+| swift | A8 | 1 | 1 |  | UInt8 1 Int16 2 Float16 2 Float 4 |
+| swift | B1 | 1 | 1 |  | ARC : isKnownUniquelyReferenced true ; pas de GC traçant |
+| swift | B2 | 0.5 | 0.5 |  | allocate/deallocate de pointeurs bruts ; pas d'interface d'allocateur (arènes à la main, bench K8 tuned) |
+| swift | B3 | 1 | 1 |  | withUnsafeTemporaryAllocation : tampon à 944 o d'une variable locale (pile) ; structs et InlineArray en ligne |
+| swift | B4 | 0.5 | 0.5 |  | [any Shape] (conteneur de 40 o, tampon en ligne de 24 o) d'une struct de 64 o : boîte 0x55b358a6a6c0 sur le ta |
+| swift | B5 | 1 | 1 |  | UnsafeMutableRawPointer, UnsafePointer (bench) |
+| swift | C1 | 1 | 1 |  | SIMD16<Float>.addProduct (FMA) : 7.0 |
+| swift | C4 | 0 | 0 |  | aucun contrôle de la réassociation (ni fast-math ni API relâchée en bibliothèque standard ; Relaxed est dans s |
+| swift | C5 | 1 | 1 |  | DispatchQueue.concurrentPerform : 64 itérations sur 4 threads |
+| swift | D1 | 1 | 1 |  | Foundation.Thread et tâches (withTaskGroup, somme 6) |
+| swift | D2 | 1 | 1 |  | Atomic : .relaxed/.acquiring/.releasing/.sequentiallyConsistent -> 5 |
+| swift | D3 | 0.5 | 0.5 |  | sysconf(_SC_LEVEL1_DCACHE_LINESIZE) = 64 par le module Glibc livré : requête à l'exécution, ni constante ni ty |
+| swift | D4 | 0 | 0 |  | ni Foundation, ni Dispatch, ni la bibliothèque standard n'offrent d'affinité ; sched_setaffinity absent du mod |
+| swift | D5 | 0.5 | 0.5 |  | atomicMemoryFence ; pas d'indication d'attente active (_mm_pause importée : symbole introuvable, run.sh) |
+| swift | E1 | 1 | 1 |  | natif, -emit-assembly / -emit-ir |
+| swift | E2 | 0 | 0 |  | pas d'assembleur en ligne |
+| swift | E6 | 1 | 1 |  | UnsafeBufferPointer sans vérification en -O (bench), -Ounchecked global |
+| swift | E7 | 0.5 | 0.5 |  | génériques spécialisés par l'optimiseur (non garanti, 9) ; pas d'évaluation à la compilation (macros : paquet  |
+| swift | F1 | 0.5 | 0.5 |  | InlineArray<4, InlineArray<8, Double>> : 256 o contigus ; tailles fixées à la compilation seulement ; [[Double |
+| swift | F2 | 0 | 0 |  | aucun |
+| swift | F3 | 1 | 1 |  | UInt8...Int64, &+ &- &* : 4 -2147483648 |
+| swift | F4 | 1 | 1 |  | Data(contentsOf:options: .alwaysMapped) projeté (/proc/self/maps) + withUnsafeBytes/bindMemory : 67108864 o, p |
+| swift | C2 | 0.5 | 0.5 |  | import _Builtin_intrinsics.intel (module Clang non documenté) : 1 vaddps pour _mm512_add_ps ; fonctions intégr |
+| swift | E3 | 0.5 | 0.5 |  | _slowPath/_fastPath (publics mais soulignés) : poids de branchement dans l'IR = 1 |
+| swift | E4 | 0 | 0 |  | _m_prefetchw importée mais supprimée : 0 instruction de préchargement dans le code produit ; _mm_prefetch est  |
+| swift | E5 | 0.5 | 0.5 |  | exclusivité des inout (règle du langage, exploitée par l'optimiseur SIL) ; IR de two(_:_:) sans noalias : 0 ;  |
 | zig | A2 | 1 | 1 |  | @offsetOf(S, "c")=8 |
 | zig | A3 | 1 | 1 |  | packed struct u3/u5/u8 : @bitSizeOf=16 |
 | zig | A4 | 1 | 1 |  | align(64) : @alignOf(L)=64 |

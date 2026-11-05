@@ -1,0 +1,36 @@
+CAP;A1;1;[P] contigu : stride 64 o, écart entre éléments 64 o
+CAP;A2;1;MemoryLayout.offset(of:) a=0 c=8 b=16 : ordre déclaré gardé (docs/ABI/TypeLayout.rst), sans attribut de disposition
+CAP;A3;0;{UInt8, UInt32} : size 8 o (bourrage imposé) ; ni packed ni champs de bits hors struct C importée
+CAP;A4;0.5;UnsafeMutableRawPointer.allocate(alignment: 64) -> adresse % 64 = 0 ; pas d'alignement de type au-delà de 16
+CAP;A5;0.5;Float(bitPattern:) 0x3f800000, lecture des octets 0x3f800000, unsafeBitCast entre types de même taille ; enum à charge = union étiquetée, pas d'union brute
+CAP;A6;0;aucun type SoA en bibliothèque standard
+CAP;A7;1;InlineArray<16, Float> dans une struct : stride 64 o
+CAP;A8;1;UInt8 1 Int16 2 Float16 2 Float 4
+CAP;B1;1;ARC : isKnownUniquelyReferenced true ; pas de GC traçant
+CAP;B2;0.5;allocate/deallocate de pointeurs bruts ; pas d'interface d'allocateur (arènes à la main, bench K8 tuned)
+CAP;B3;1;withUnsafeTemporaryAllocation : tampon à 944 o d'une variable locale (pile) ; structs et InlineArray en ligne
+CAP;B4;0.5;[any Shape] (conteneur de 40 o, tampon en ligne de 24 o) d'une struct de 64 o : boîte 0x55b358a6a6c0 sur le tas (malloc voisin 0x55b358a6a4e0) sans allocation écrite (aire 9.0) ; aussi fermetures échappantes, copie sur écriture
+CAP;B5;1;UnsafeMutableRawPointer, UnsafePointer (bench)
+CAP;C1;1;SIMD16<Float>.addProduct (FMA) : 7.0
+CAP;C4;0;aucun contrôle de la réassociation (ni fast-math ni API relâchée en bibliothèque standard ; Relaxed est dans swift-numerics, paquet tiers)
+CAP;C5;1;DispatchQueue.concurrentPerform : 64 itérations sur 4 threads
+CAP;D1;1;Foundation.Thread et tâches (withTaskGroup, somme 6)
+CAP;D2;1;Atomic : .relaxed/.acquiring/.releasing/.sequentiallyConsistent -> 5
+CAP;D3;0.5;sysconf(_SC_LEVEL1_DCACHE_LINESIZE) = 64 par le module Glibc livré : requête à l'exécution, ni constante ni type de bourrage
+CAP;D4;0;ni Foundation, ni Dispatch, ni la bibliothèque standard n'offrent d'affinité ; sched_setaffinity absent du module Glibc livré (extension GNU, run.sh)
+CAP;D5;0.5;atomicMemoryFence ; pas d'indication d'attente active (_mm_pause importée : symbole introuvable, run.sh)
+CAP;E1;1;natif, -emit-assembly / -emit-ir
+CAP;E2;0;pas d'assembleur en ligne
+CAP;E6;1;UnsafeBufferPointer sans vérification en -O (bench), -Ounchecked global
+CAP;E7;0.5;génériques spécialisés par l'optimiseur (non garanti, 9) ; pas d'évaluation à la compilation (macros : paquet swift-syntax ; @const expérimental)
+CAP;F1;0.5;InlineArray<4, InlineArray<8, Double>> : 256 o contigus ; tailles fixées à la compilation seulement ; [[Double]] non contigu
+CAP;F2;0;aucun
+CAP;F3;1;UInt8...Int64, &+ &- &* : 4 -2147483648
+CAP;F4;1;Data(contentsOf:options: .alwaysMapped) projeté (/proc/self/maps) + withUnsafeBytes/bindMemory : 67108864 o, premier mot 3904868352
+CAP;C2;0.5;import _Builtin_intrinsics.intel (module Clang non documenté) : 1 vaddps pour _mm512_add_ps ; fonctions intégrées sans corps inutilisables (pause, préchargement) ; macros à immédiat refusées
+NOTE;D5;_mm_pause importée mais non liée : undefined reference to '_mm_pause'
+NOTE;D4;cannot find 'sched_setaffinity' in scope (module Glibc)
+CAP;E3;0.5;_slowPath/_fastPath (publics mais soulignés) : poids de branchement dans l'IR = 1
+CAP;E4;0;_m_prefetchw importée mais supprimée : 0 instruction de préchargement dans le code produit ; _mm_prefetch est une macro refusée
+CAP;E5;0.5;exclusivité des inout (règle du langage, exploitée par l'optimiseur SIL) ; IR de two(_:_:) sans noalias : 0 ; pas de restrict pour les pointeurs
+NOTE;A4;'@_alignment' cannot increase alignment above maximum alignment of 16
