@@ -1,0 +1,105 @@
+bqn_rq     k9   tuned_flat                      p0 n=10 med=0.096732s ok={True} rc=0 
+bqn_rq     k1   aos                  energy     p0 n=10 med=0.067103s ok={True} rc=0 
+bqn_rq     k9   tuned                           p0 n=10 med=0.057139s ok={True} rc=0 
+bqn_rq     k6   tuned                q6         p0 n=10 med=0.017429s ok={True} rc=0 
+bqn_rq     k4   branchless_unsorted             p0 n=10 med=0.002714s ok={True} rc=0 
+bqn_rq     k6   mt                   q6         p0 n=10 med=0.017780s ok={True} rc=0 
+bqn_rq     k9   mt_flat                         p0 n=10 med=0.092214s ok={True} rc=0 
+bqn_rq     k9   mt                              p0 n=10 med=0.060518s ok={True} rc=0 
+bqn_rq     k6   tuned                q1         p0 n=10 med=0.083968s ok={True} rc=0 
+bqn_rq     k1   natural              energy     p0 n=10 med=0.125444s ok={True} rc=0 
+bqn_rq     k7   natural                         p0 n=2 med=1.143075s ok={True} rc=0 
+bqn_rq     k5   tuned                           p0 n=10 med=0.033668s ok={True} rc=0 
+bqn_rq     k9   natural                         p0 n=10 med=0.237736s ok={True} rc=0 
+bqn_rq     k6   mt                   q1         p0 n=10 med=0.084548s ok={True} rc=0 
+bqn_rq     k1   soa                  energy     p0 n=10 med=0.015241s ok={True} rc=0 
+bqn_rq     k6   tuned                q1         p0 n=10 med=0.082068s ok={True} rc=0 
+bqn_rq     k9   mt                              p0 n=10 med=0.052877s ok={True} rc=0 
+bqn_rq     k9   tuned_flat                      p0 n=10 med=0.081820s ok={True} rc=0 
+bqn_rq     k1   natural              energy     p0 n=10 med=0.127037s ok={True} rc=0 
+bqn_rq     k6   mt                   q6         p0 n=10 med=0.017878s ok={True} rc=0 
+bqn_rq     k9   tuned                           p0 n=10 med=0.054468s ok={True} rc=0 
+bqn_rq     k1   aos                  energy     p0 n=10 med=0.066399s ok={True} rc=0 
+bqn_rq     k9   natural                         p0 n=10 med=0.249139s ok={True} rc=0 
+bqn_rq     k1   soa                  energy     p0 n=10 med=0.014600s ok={True} rc=0 
+bqn_rq     k6   tuned                q6         p0 n=10 med=0.017513s ok={True} rc=0 
+bqn_rq     k6   mt                   q1         p0 n=10 med=0.083797s ok={True} rc=0 
+bqn_rq     k9   mt_flat                         p0 n=10 med=0.082381s ok={True} rc=0 
+bqn_rq     k4   branchless_unsorted             p0 n=10 med=0.002726s ok={True} rc=0 
+bqn_rq     k7   natural                         p0 n=2 med=1.147932s ok={True} rc=0 
+bqn_rq     k5   tuned                           p0 n=10 med=0.030565s ok={True} rc=0 
+bqn_rq     k6   mt                   q1         p0 n=10 med=0.082695s ok={True} rc=0 
+bqn_rq     k9   mt                              p0 n=10 med=0.046866s ok={True} rc=0 
+bqn_rq     k9   natural                         p0 n=10 med=0.242132s ok={True} rc=0 
+bqn_rq     k1   aos                  energy     p0 n=10 med=0.064466s ok={True} rc=0 
+bqn_rq     k5   tuned                           p0 n=10 med=0.031367s ok={True} rc=0 
+bqn_rq     k6   tuned                q1         p0 n=10 med=0.088569s ok={True} rc=0 
+bqn_rq     k1   natural              energy     p0 n=10 med=0.130938s ok={True} rc=0 
+bqn_rq     k4   branchless_unsorted             p0 n=10 med=0.002642s ok={True} rc=0 
+bqn_rq     k9   tuned                           p0 n=10 med=0.050937s ok={True} rc=0 
+bqn_rq     k6   mt                   q6         p0 n=10 med=0.017722s ok={True} rc=0 
+bqn_rq     k9   tuned_flat                      p0 n=10 med=0.080853s ok={True} rc=0 
+bqn_rq     k7   natural                         p0 n=2 med=1.136007s ok={True} rc=0 
+bqn_rq     k6   tuned                q6         p0 n=10 med=0.017897s ok={True} rc=0 
+bqn_rq     k1   soa                  energy     p0 n=10 med=0.015135s ok={True} rc=0 
+bqn_rq     k9   mt_flat                         p0 n=10 med=0.087500s ok={True} rc=0 
+bqn_rq     k6   tuned                q1         p0 n=10 med=0.082637s ok={True} rc=0 
+bqn_rq     k6   mt                   q6         p0 n=10 med=0.018284s ok={True} rc=0 
+bqn_rq     k5   tuned                           p0 n=10 med=0.032575s ok={True} rc=0 
+bqn_rq     k4   branchless_unsorted             p0 n=10 med=0.002677s ok={True} rc=0 
+bqn_rq     k6   tuned                q6         p0 n=10 med=0.017562s ok={True} rc=0 
+bqn_rq     k7   natural                         p0 n=2 med=1.198740s ok={True} rc=0 
+bqn_rq     k1   natural              energy     p0 n=10 med=0.132851s ok={True} rc=0 
+bqn_rq     k1   aos                  energy     p0 n=10 med=0.062064s ok={True} rc=0 
+bqn_rq     k9   mt_flat                         p0 n=10 med=0.087594s ok={True} rc=0 
+bqn_rq     k9   tuned_flat                      p0 n=10 med=0.086287s ok={True} rc=0 
+bqn_rq     k1   soa                  energy     p0 n=10 med=0.016433s ok={True} rc=0 
+bqn_rq     k9   mt                              p0 n=10 med=0.054871s ok={True} rc=0 
+bqn_rq     k6   mt                   q1         p0 n=10 med=0.081523s ok={True} rc=0 
+bqn_rq     k9   natural                         p0 n=10 med=0.253265s ok={True} rc=0 
+bqn_rq     k9   tuned                           p0 n=10 med=0.056660s ok={True} rc=0 
+bqn_rq     k1   natural              energy     p0 n=10 med=0.130711s ok={True} rc=0 
+bqn_rq     k6   tuned                q1         p0 n=10 med=0.083484s ok={True} rc=0 
+bqn_rq     k4   branchless_unsorted             p0 n=10 med=0.002626s ok={True} rc=0 
+bqn_rq     k9   tuned_flat                      p0 n=10 med=0.081835s ok={True} rc=0 
+bqn_rq     k9   tuned                           p0 n=10 med=0.053968s ok={True} rc=0 
+bqn_rq     k6   tuned                q6         p0 n=10 med=0.017634s ok={True} rc=0 
+bqn_rq     k9   natural                         p0 n=10 med=0.255289s ok={True} rc=0 
+bqn_rq     k1   aos                  energy     p0 n=10 med=0.063662s ok={True} rc=0 
+bqn_rq     k6   mt                   q1         p0 n=10 med=0.081631s ok={True} rc=0 
+bqn_rq     k7   natural                         p0 n=2 med=1.128470s ok={True} rc=0 
+bqn_rq     k9   mt                              p0 n=10 med=0.048942s ok={True} rc=0 
+bqn_rq     k5   tuned                           p0 n=10 med=0.031975s ok={True} rc=0 
+bqn_rq     k9   mt_flat                         p0 n=10 med=0.087664s ok={True} rc=0 
+bqn_rq     k1   soa                  energy     p0 n=10 med=0.016406s ok={True} rc=0 
+bqn_rq     k6   mt                   q6         p0 n=10 med=0.018064s ok={True} rc=0 
+bqn_rq     k9   mt_flat                         p0 n=10 med=0.086084s ok={True} rc=0 
+bqn_rq     k6   mt                   q6         p0 n=10 med=0.017535s ok={True} rc=0 
+bqn_rq     k1   aos                  energy     p0 n=10 med=0.064660s ok={True} rc=0 
+bqn_rq     k6   tuned                q6         p0 n=10 med=0.017727s ok={True} rc=0 
+bqn_rq     k9   mt                              p0 n=10 med=0.050551s ok={True} rc=0 
+bqn_rq     k1   natural              energy     p0 n=10 med=0.132530s ok={True} rc=0 
+bqn_rq     k1   soa                  energy     p0 n=10 med=0.015577s ok={True} rc=0 
+bqn_rq     k4   branchless_unsorted             p0 n=10 med=0.002622s ok={True} rc=0 
+bqn_rq     k7   natural                         p0 n=2 med=1.177751s ok={True} rc=0 
+bqn_rq     k9   natural                         p0 n=10 med=0.244685s ok={True} rc=0 
+bqn_rq     k6   tuned                q1         p0 n=10 med=0.081997s ok={True} rc=0 
+bqn_rq     k9   tuned_flat                      p0 n=10 med=0.086172s ok={True} rc=0 
+bqn_rq     k6   mt                   q1         p0 n=10 med=0.084988s ok={True} rc=0 
+bqn_rq     k9   tuned                           p0 n=10 med=0.063600s ok={True} rc=0 
+bqn_rq     k5   tuned                           p0 n=10 med=0.032266s ok={True} rc=0 
+bqn_rq     k9   tuned                           p0 n=10 med=0.065605s ok={True} rc=0 
+bqn_rq     k9   mt_flat                         p0 n=10 med=0.088537s ok={True} rc=0 
+bqn_rq     k6   mt                   q6         p0 n=10 med=0.018988s ok={True} rc=0 
+bqn_rq     k1   natural              energy     p0 n=10 med=0.138851s ok={True} rc=0 
+bqn_rq     k9   tuned_flat                      p0 n=10 med=0.102630s ok={True} rc=0 
+bqn_rq     k5   tuned                           p0 n=10 med=0.032037s ok={True} rc=0 
+bqn_rq     k4   branchless_unsorted             p0 n=10 med=0.004814s ok={True} rc=0 
+bqn_rq     k1   aos                  energy     p0 n=10 med=0.072072s ok={True} rc=0 
+bqn_rq     k1   soa                  energy     p0 n=10 med=0.021201s ok={True} rc=0 
+bqn_rq     k9   mt                              p0 n=10 med=0.057510s ok={True} rc=0 
+bqn_rq     k6   mt                   q1         p0 n=10 med=0.087082s ok={True} rc=0 
+bqn_rq     k6   tuned                q6         p0 n=10 med=0.019475s ok={True} rc=0 
+bqn_rq     k9   natural                         p0 n=10 med=0.296693s ok={True} rc=0 
+bqn_rq     k6   tuned                q1         p0 n=10 med=0.082747s ok={True} rc=0 
+bqn_rq     k7   natural                         p0 n=2 med=1.263401s ok={True} rc=0 
