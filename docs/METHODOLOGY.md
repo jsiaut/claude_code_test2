@@ -1393,4 +1393,17 @@ Robustesse :
   FreePascal, qui y manquait), reproduction ; « les neuf mêmes restent derrière » corrigé en « les onze » (le compte
   n'avait pas suivi l'ajout de FreePascal). `docs/BQN.md` (section 4), `docs/FINDINGS.md`, `docs/NOSIMD.md` (4.22),
   `docs/CONFRONTATION.md`, `docs/CAPABILITIES.md` (régénéré : colonne de BQN).
+* 2026-11-06, 16:30 à 17:20 : **remarque sur BQN : vérification, errata et plan** (`docs/BQN.md`, sections 5.1 à
+  5.7, poussé avant les mesures). Machine 27 (nouvel hôte Emerald Rapids du même modèle, caractérisé). Vérifié dans
+  les sources (CBQN 0.12.0 et sa branche `develop`, dépôt officiel du langage : `doc/`, `spec/`, `implementation/`) :
+  84 commits sur `develop`, sans threads ni f32 ; vecteurs de 256 bits (`arch_defvw`) ; `•bit._add`, `_sub`, `_mul`,
+  `_neg` présents dans 0.12.0 mais absents de sa documentation ; options `-X` de la branche ; `⊐⊸⊔`, la façon directe
+  de regrouper (`doc/group.md`) ; la somme `sum_i16` vectorisée (`vpdpwssd`, que `analysis/hotloop.py` ne compte
+  pas, sans effet sur C3) ; la somme de contrôle de K9 dans le chrono (erreur de mon banc). Non retrouvé : « 10 fois
+  plus lent que le C sur du code scalaire ». Errata : K9 (somme hors chrono), K7 naturel (idiome de la documentation,
+  comme mon Q1 naturel), A6 et A3 à 0 (règle de Fortran et de Julia) ; C5 reste 0 (définition précisée : plusieurs
+  cœurs). Les formes en blocs (K1, K4, K6, K9 ; essais : Q1 82 ms contre 229, K9 61 contre 92) restent une
+  sensibilité (R-blocs), comme les formes mieux écrites des autres langages. Copie `bench/bqn_rq` (et `bqn_er_rq`),
+  validée ; outil `tools/measure_bqn_rq.py` (56 cellules × 7 passes) ; scénarios Avant, R-grille, R-K9, R-K7, R-E,
+  R-blocs, R-C5, R-blocs-C5, R-K7map.
 

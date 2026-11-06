@@ -1,0 +1,4 @@
+#!/bin/sh
+# Copie de la remarque sur BQN (docs/BQN.md, 5) : bench/bqn_rq/ms.bqn exécuté par le binaire de la cible Cascade Lake
+# (/opt/cbqn-cl), comme bench/bqn
+exec /opt/cbqn-cl/bin/BQN "$(dirname "$0")/ms.bqn" "${MS_DATA:-/opt/msdata}" "${WARMUP:-3}" "$@"

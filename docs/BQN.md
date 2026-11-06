@@ -412,3 +412,147 @@ coût fixe par primitive qui masque la hiérarchie mémoire aux petites tailles 
 d'un langage de tableaux : tableaux multidimensionnels natifs, stockage étroit automatique, projection de fichiers sans
 copie, mais ni disposition des enregistrements, ni SIMD explicite, ni threads, ni atomiques. Le rang résiste aux deux
 contrôles du pont entre modèles et à toutes les sensibilités du plan.
+
+## 5. Remarque sur BQN (6 novembre)
+
+Un relecteur a lu le code de CBQN 0.12.0, sa branche de développement, la documentation de BQN et mes fichiers de
+résultats, sans pouvoir construire CBQN dans son environnement. Ce qui suit vérifie ses affirmations, puis fixe les
+errata et le plan des mesures avant de mesurer. Sources : les dépôts eux-mêmes, lus comme sources et non comme pages
+web (CBQN à l'étiquette `v0.12.0` et sa branche `develop` au 6 novembre ; le dépôt officiel du langage, mlochbaum/BQN,
+commit `5abbab96` du 26 août 2026 : `doc/`, `spec/`, `implementation/`), le binaire publié et des essais sur la
+machine 27.
+
+### 5.1 La remarque
+
+« La 21e place est justifiée, mais le score de 18,6 est probablement trop bas » (sous-estimé de 1 à 2,5 points, sans
+changement de rang). Points, par ordre d'impact selon le relecteur :
+1. **Code optimisé jamais découpé en blocs** : sans fusion, chaque primitive écrit un intermédiaire de la taille du
+   tableau ; mes propres variantes `mt` (quatre morceaux, en séquence) battent l'optimisé (Q1 157 ms contre 229, Q6
+   20,7 contre 22,6) ; K1 `soa` 32 ms quand la bande passante en permettrait 5 à 9 ; K9 optimisé 92 ms contre 14 en C.
+   Estimation non mesurée : plafond de 15 à 19 au lieu de 12,45, soit 1,2 à 2,5 points.
+2. **K7 naturel contraire à ma règle pour BQN** : la documentation présente `⊐⊸⊔` comme la façon directe de regrouper ;
+   le naturel serait `⊐`, `/⁼`, `⊔` (B-K7arr, + 0,16). Les 143 s publiés sont un artefact du pont.
+3. **Somme de contrôle de K9 dans le chrono** (environ 2,6 ms, 3 % de K9 optimisé).
+4. **Grille** : A6 ½ généreux (Fortran et Julia ont une transposition et 0), de même A3 face au `BitArray` de Julia ;
+   F3 ½ défendable, mais la note oublie `•bit._add`, `_sub`, `_mul`, `_neg` ; C5 à trancher (½ si les opérations sur
+   tableaux entiers comptent, comme les notes de Fortran et de Chapel le laissent penser) ; B1 et E1 justes pour 0.12.0
+   mais changeront (`-Xgc-disable`, `•internal.XOpt`, `-Xjit-perf-map` sur la branche de développement) ; la somme
+   `+´` des entiers de 16 bits n'est pas scalaire.
+5. **Faits exacts** : la version, `+´` séquentielle et `•math.Sum` vectorielle, `•bit._cast` sans f32 ni u32, le JIT au
+   troisième appel, comptage de références et ramasse-miettes, la construction pour Cascade Lake ; un fait manque :
+   CBQN s'en tient à des vecteurs de 256 bits. K3 sans threads, les variantes `mt`, la chasse de pointeurs, l'arbre de
+   K8 et l'empreinte pénalisent BQN à juste titre ; le README pourrait dire que le rang mesure le contrôle laissé au
+   programmeur, pas la qualité des primitives.
+
+### 5.2 Vérification (avant le plan)
+
+**Machine 27.** La VM a redémarré sur un nouvel hôte Emerald Rapids du même modèle (207, 4 vCPU) : 2,71 à 2,81 GHz
+effectifs ; latence 21 ns à 2 Mio, 36 ns à 4 Mio, 134 ns à 32 Mio ; DRAM 15,3 à 15,6 Go/s (`results/hw/machine27/`),
+comme la machine 26 ; les 24 fichiers d'entrée correspondent à `env/msdata.sha256`. CBQN et ses trois constructions
+sont celles de l'ajout (mêmes SHA-256).
+
+| Affirmation | Constat |
+|---|---|
+| 0.12.0, dernière version ; 84 modifications depuis sur la branche de développement, la dernière aujourd'hui, sans threads ni f32 | **Exact** : 84 commits sur `develop` depuis `v0.12.0`, le dernier du 6 novembre (00:55, +0200) ; ni `pthread` ni type de tableau f32 dans ses sources |
+| Vecteurs limités à 256 bits, AVX-512 seulement dans quelques primitives | **Exact** : `arch_defvw` vaut 256 avec AVX2 (`src/singeli/src/base.singeli`) ; l'AVX-512 n'apparaît que dans la compression de `/`, un balayage GFNI et des écritures masquées (2.4, point 7) |
+| `•bit._add`, `_sub`, `_mul`, `_neg` présents dans 0.12.0, absents de sa documentation | **Exact** : le module `•bit` de 0.12.0 expose `cast`, `not`, `neg`, `and`, `or`, `xor`, `add`, `sub`, `mul` (essayés : `⟨100,¯56⟩ 8•bit._add ⟨100,100⟩` donne `⟨¯56,44⟩`) ; `docs/system.md` de 0.12.0 ne cite que `_cast` ; corrigé sur `develop` le 1er août (« update system value docs ») ; la spécification (`spec/system.md`) les définit en complément à deux, largeurs de 8 à 64 bits |
+| `-Xgc-disable`, `•internal.XOpt`, `-Xjit-perf-map` sur la branche de développement | **Exact** : commit `a280295f` du 16 août (« move many configuration things into -X options »), `•internal.XOpt` du 30 août ; absents de 0.12.0 |
+| JIT au troisième appel | **Exact** : `JIT_START 2`, « JIT after n non-JIT invocations », comme écrit en 2.1 |
+| La somme `+´` des entiers de 16 bits n'est pas scalaire | **Exact, et mon texte (4) était faux** : `sum_i16` (`src/builtins/fold.c`) somme par blocs de 65 536 avec une routine Singeli ; dans le binaire publié, la boucle chaude est faite de `vpdpwssd` sur des registres ymm (VNNI). `analysis/hotloop.py` ne compte pas cette instruction ; aucune autre boucle chaude de l'étude n'en contient, et la mesure de C3 de BQN tient à la boucle du filtre (52 % des échantillons), pas à celle-ci |
+| `⊐⊸⊔` présenté comme la façon directe de regrouper | **Exact** : `doc/group.md`, « The most direct application of Group is to group some values according to a known or computed property », par Classify (`⊐`) : `co ⊐⊸⊔ ln` |
+| Le découpage en blocs, remède donné par la documentation | **En partie** : `implementation/compile/fusion.md` présente le découpage en blocs comme la forme la plus simple de fusion, à faire par l'implémentation ; CBQN 0.12.0 ne le fait pas, un programme peut le faire à la main |
+| « Environ 10 fois plus lent que le C sur du code scalaire », selon l'auteur de BQN | **Non retrouvé** dans le dépôt : `implementation/perf.md` dit le code scalaire de CBQN « on par with lightweight interpreters (not JIT compilers) » et confirme un seul cœur (« CBQN doesn't use additional cores ») |
+| Mes variantes `mt` battent l'optimisé ; K1 `soa` 32 ms ; K9 optimisé 92 ms contre 14 | **Exact** (`results/report_bqn.md`) ; la bande passante de la machine 26 (15 à 28 Go/s) donne 5 à 9 ms pour les 128 Mio de K1 `soa` |
+| Somme de contrôle de K9 dans le chrono, pas en C | **Exact, et c'est une erreur de mon banc** : `docs/SPEC.md` exclut la vérification du chrono ; le C somme la grille après `now()` (`bench/c/ms.c`) ; mes autres noyaux n'ont pas ce défaut (leur somme est le résultat du noyau ou se calcule hors chrono) |
+| A6 et A3 généreux | **Exact** : A6 (« SoA natif ») vaut 0 partout sauf pour Zig et Odin, qui ont un conteneur SoA ; la transposition d'une matrice homogène n'en est pas un (Fortran, Julia : 0). A3 (« disposition au bit près : packed, champs de bits ») vaut 0 pour Julia malgré `BitArray` ; BQN n'a ni enregistrement compacté ni champ de bits |
+| C5 à trancher | **Tranché : plusieurs cœurs.** Les notes à 1 citent toutes une exécution sur plusieurs cœurs (OpenMP, `do concurrent`, `forall`, threads, flux parallèles) ; C++ a ½ pour `par_unseq`, une construction parallèle que libstdc++ exécute en série. BQN n'a aucune construction qui demande plusieurs cœurs ; ses primitives relèvent du SIMD (C1 à C4). C5 reste 0 ; la définition est précisée et la lecture du relecteur devient une sensibilité |
+
+Essais (machine 27, une à quelques répétitions, échauffement 1) des formes découpées en blocs, écrites dans
+`bench/bqn_rq/ms.bqn` (5.4) : K1 `soa` 17 ms (32 publiés), `aos` 63 ms (126), K4 sans branchement 2,7 ms (7,3), Q6
+optimisé 17,3 ms (22,6), Q1 optimisé 82 ms (229), K9 optimisé 61 ms (92). Tailles choisies sur ces essais : 32 768
+éléments pour K1 `soa`, 1024 rangées pour `aos`, 65 536 pour K4 et K6 (16 384 est plus lent pour K4 : trop de blocs),
+bandes de 32 lignes pour K9. Pour Q1, les masques par groupe restent plus rapides en blocs (84 ms) que le regroupement
+`⊔` (170 ms) ou un tri par groupe (146 ms) ; pour K7 optimisé, je n'ai pas trouvé de forme plus rapide que la publiée
+(un classement par hachage ne gagne rien à être découpé) ; K5 tient en L1 et n'a rien à découper.
+
+### 5.3 Errata (classement publié)
+
+Erreurs de mon banc, corrigées dans le classement publié par rapports appariés (5.4, 5.5) :
+* **K9, somme de contrôle hors chrono** (naturel, optimisé, `mt`), comme le demande la spécification.
+* **K7 naturel : l'idiome de la documentation** (`⊐` pour classer, `/⁼` pour compter, `⊔` pour regrouper et `+´¨`
+  pour sommer). Mon choix de `•HashMap` suivait la lettre de `docs/SPEC.md` (« table de hachage de la bibliothèque
+  standard »), mais contredisait ma propre règle pour BQN (le code naturel en primitives sur des tableaux entiers) et
+  mon Q1 naturel, déjà écrit avec `⊔` ; comme le K8 naturel de Lua, corrigé pour la même raison (une incohérence
+  interne du banc). `⊐` est d'ailleurs lui-même une table de hachage. `•HashMap` ligne à ligne devient une information.
+* **Grille** : **A6 ½ → 0** et **A3 ½ → 0** (la règle des autres langages : Fortran et Julia pour A6, Julia pour A3).
+  F3 reste ½ (opérations modulaires de 8 à 64 bits sur des tableaux par `•bit`, sans type entier : partielle, comme
+  les types de `ctypes` pour Python) ; sa note est complétée. C5 reste 0 (5.2) ; B1 et E1 restent ½ pour 0.12.0 (les
+  options de la branche de développement ne sont pas publiées).
+
+Pilier capacités de BQN : 22,84 → **19,71** en règle v2, 24,34 → 21,21 en v1. Textes : la somme de K4 (`sum_i16`) est
+vectorisée (`vpdpwssd`) ; CBQN s'en tient à 256 bits ; le README dira que le rang mesure le contrôle laissé au
+programmeur et la vitesse du code qu'il écrit, pas la qualité des primitives, qui battent parfois le C.
+
+**Les formes découpées en blocs ne sont pas un erratum** : ce sont des noyaux optimisés mieux écrits, que la règle de
+l'étude traite en sensibilité pour tous les langages (l'arène itérative de C, les formes de FreePascal, de Lua, de
+Java, de Go…). Mes variantes `mt`, plus rapides que l'optimisé, montrent que je l'aurais pu ; elles sont publiées
+telles quelles, comme les autres. R-blocs (5.5) donne leur effet mesuré.
+
+### 5.4 Copies et mesures (`tools/measure_bqn_rq.py`, machine 27)
+
+**Copie** `bench/bqn_rq/ms.bqn` : le banc publié, sauf :
+* K1 `aos` et `soa`, K4 `branchless_unsorted`, K6 `tuned` et `mt` (Q6, Q1), K9 `tuned` et `mt` en blocs (5.2) ; `mt`
+  y est le code optimisé, sans threads ;
+* K9 : la somme de la grille hors chrono pour toutes les variantes ; `tuned_flat` et `mt_flat`, le code publié avec
+  cette seule correction ;
+* K7 `natural` : l'idiome de la documentation ; `natural_map`, la forme publiée (information).
+
+`bench/bqn_rq` l'exécute avec le binaire de la cible Cascade Lake, `bench/bqn_er_rq` avec la construction native,
+comme `bench/bqn` et `bench/bqn_er`. Toutes les cellules ont été validées (sommes de contrôle justes).
+
+Cellules (13 par construction publiée, 15 par copie), appariées sur la même machine : les 11 cellules que la copie
+change (K1 `aos` et `soa`, K4 `branchless_unsorted`, K6 `tuned` et `mt` sur Q6 et Q1, K7 `natural`, K9 `natural`,
+`tuned` et `mt`), deux témoins inchangés (K1 `natural`, K5 `tuned`), et pour les copies K9 `tuned_flat` et `mt_flat`.
+`bqn` et `bqn_rq`, `bqn_er` et `bqn_er_rq` : 56 cellules × 7 passes = 392 processus, répétitions de
+`results/calib.json` (celles de `bqn` ; `tuned_flat` et `mt_flat` prennent celles de `tuned` et `mt`), échauffement
+3, ordre tiré au hasard dans chaque passe (graine 20261106 + 2700), règle de vol du pilote ; sortie
+`results/raw_bqn_rq/`, étiquette `bqn_rq`. Pendant la campagne, seuls l'analyse (`analysis/bqn_remark.py`), le
+report des rapports dans la chaîne publiée et les textes s'écrivent, sans rien exécuter hors de vérifications de
+syntaxe.
+
+### 5.5 Scénarios (`analysis/bqn_remark.py`, analyse globale de la v3 rejouée, mêmes tirages)
+
+Rapports r(copie / construction publiée) de la machine 27, cellule par cellule, appliqués aux données publiées de BQN
+(reliées par le pont) : ceux de la cible Cascade Lake pour le classement, ceux de la construction native pour la
+réplication. Les rapports d'errata entrent dans la chaîne publiée par `results/transfers.json` (section
+`ratios_added`, appliquée par `bridge_added` après le pont).
+
+| Scénario | Définition |
+|---|---|
+| Avant | le classement publié (B-E de `results/bqn_check.json`) ; doit le reproduire à l'identique |
+| R-grille, R-K9, R-K7 | Avant avec un seul erratum : A3 et A6 à 0 ; K9 × r(`natural`, `tuned_flat`, `mt_flat`) ; K7 naturel × r(`natural`) |
+| **R-E (publié)** | les trois errata (5.3) |
+| R-blocs | R-E ; K1 `aos` et `soa`, K4 `branchless_unsorted`, K6 `tuned` et `mt`, K9 `tuned` et `mt` × r(copie en blocs / publié) : le point 1 de la remarque |
+| R-C5 | R-E ; C5 = ½ (la lecture du relecteur) |
+| R-blocs-C5 | R-blocs et R-C5 : la lecture la plus favorable |
+| R-K7map | information : R-E, mais K7 naturel en `•HashMap` (sans le deuxième erratum) |
+
+Pour chaque scénario : score, piliers, rang espéré de BQN, voisins et probabilités de précédence ; les 23 autres et
+leurs écarts à « Avant ». Information : les rapports de la machine 27 avec leurs intervalles, les deux témoins (rapport
+attendu 1), le plafond de BQN noyau par noyau. Sorties : `results/bqn_remark.json`, `results/report_bqn_remark.md` ;
+puis régénération des sorties publiées (réplication comprise) et des états actuels, qui prennent R-E pour témoin.
+
+### 5.6 Ce qui change ailleurs
+
+`analysis/capabilities.py` (A3, A6 ; notes de F3 et de C5), `analysis/analyze_v2.py` (`ratios_added` dans
+`bridge_added`), `results/transfers.json`, `analysis/c_check.py` et `analysis/nosimd_check.py` (témoin R-E),
+`docs/NATURAL.md` (K7 de BQN), `docs/CAPABILITIES.md` (régénéré ; définition de C5 précisée), README, FINDINGS,
+METHODOLOGY (journal), NOSIMD, CONFRONTATION.
+
+### 5.7 Ce que je ne fais pas
+
+* Publier les formes en blocs : sensibilité (5.3), comme pour les autres langages.
+* Changer B1 et E1 : la branche de développement n'est pas une version publiée.
+* Compter VNNI dans `analysis/hotloop.py` : la règle de C3 est celle de tous les langages, et aucune autre boucle
+  chaude n'en dépend ; le texte de BQN est corrigé.
+* Construire CBQN autrement : les trois constructions de l'ajout servent telles quelles.

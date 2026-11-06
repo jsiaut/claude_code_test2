@@ -1,0 +1,4 @@
+#!/bin/sh
+# Copie de la remarque sur BQN (docs/BQN.md, 5) : bench/bqn_rq/ms.bqn exécuté par la construction native (/opt/cbqn),
+# comme bench/bqn_er
+exec /opt/cbqn/bin/BQN "$(dirname "$0")/../bqn_rq/ms.bqn" "${MS_DATA:-/opt/msdata}" "${WARMUP:-3}" "$@"
