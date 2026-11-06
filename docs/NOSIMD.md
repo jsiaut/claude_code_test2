@@ -416,3 +416,13 @@ S-symétrique : chacun n'y garde que sa forme naturelle de Q6, et celle de BQN (
 55,0 ms publiés) y devient la référence ; les scores baissent de 0,09 point au plus (C3, Odin, C++, C), sans changement
 de place. JavaScript, Python et Lua reculent d'un rang dans toutes les lectures, OCaml de 0,25 à 0,34 en rang espéré ;
 les autres bougent de 0,03 au plus.
+
+### 4.23 Recalcul après la remarque sur BQN (6 novembre)
+
+Recalculé avec les errata de BQN (K9, K7 naturel, A3 et A6 ; témoin égal au scénario R-E de
+`results/bqn_remark.json`, écart 0, `docs/BQN.md`, section 5). Le K7 naturel de BQN devient l'idiome de la
+documentation (classement `⊐`, histogramme `/⁼`, regroupement `⊔`) : des primitives, sans vecteurs explicites ;
+aucune cellule ne change de classe. BQN reste 21e dans toutes les lectures, avec 0,67 à 0,93 point de moins
+(17,7 points publié, 18,5 sans `mt`, 18,8 en S-scalaire et en S-scalaire-Mojo, 21,3 en S-symétrique, 19,1 en
+S-noyaux-scalaires, 17,7 en S-importées). Les scores des 23 autres ne changent pas ; aucun rang ne change, et les
+rangs espérés bougent de 0,05 au plus (OCaml).

@@ -2,7 +2,7 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/bqn_check.json, « B-E ».
+Témoin : écart maximal 0.0e+00 avec results/bqn_remark.json, « R-E ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
@@ -28,7 +28,7 @@ Témoin : écart maximal 0.0e+00 avec results/bqn_check.json, « B-E ».
 | Go | 18 (45,4) | 18 (45,6) | 18 (37,5) | 18 (37,5) | 18 (46,5) | 18 (40,1) | 18 (45,4) |
 | Haskell | 19 (41,3) | 19 (41,8) | 19 (31,1) | 19 (31,1) | 19 (38,9) | 19 (37,7) | 19 (41,3) |
 | OCaml | 20 (23,9) | 20 (24,2) | 20 (24,7) | 20 (24,7) | 20 (27,9) | 20 (24,6) | 20 (23,9) |
-| BQN | 21 (18,6) | 21 (19,4) | 21 (19,8) | 21 (19,8) | 21 (22,0) | 21 (20,0) | 21 (18,6) |
+| BQN | 21 (17,7) | 21 (18,5) | 21 (18,8) | 21 (18,8) | 21 (21,3) | 21 (19,1) | 21 (17,7) |
 | JavaScript | 22 (15,6) | 22 (15,7) | 22 (16,0) | 22 (16,0) | 22 (19,9) | 22 (16,1) | 22 (15,6) |
 | Python | 23 (11,8) | 23 (11,8) | 23 (11,9) | 23 (11,9) | 23 (12,1) | 23 (11,9) | 23 (11,8) |
 | Lua | 24 (5,4) | 24 (5,5) | 24 (5,6) | 24 (5,6) | 24 (6,2) | 24 (5,7) | 24 (5,4) |
@@ -69,7 +69,7 @@ Témoin : écart maximal 0.0e+00 avec results/bqn_check.json, « B-E ».
 | Go | 44,5 | 45,1 | 24,6 | 24,6 | 42,6 | 31,5 | 44,5 |
 | Haskell | 46,2 | 47,5 | 20,8 | 20,8 | 38,0 | 37,2 | 46,2 |
 | OCaml | 19,4 | 20,0 | 21,2 | 21,2 | 26,8 | 21,1 | 19,4 |
-| BQN | 12,5 | 14,3 | 15,1 | 15,1 | 19,3 | 15,8 | 12,5 |
+| BQN | 12,5 | 14,3 | 15,1 | 15,1 | 19,5 | 15,8 | 12,5 |
 | JavaScript | 12,2 | 12,4 | 13,1 | 13,1 | 21,1 | 13,3 | 12,2 |
 | Python | 0,6 | 0,6 | 0,7 | 0,7 | 1,1 | 0,8 | 0,6 |
 | Lua | 1,3 | 1,6 | 1,7 | 1,7 | 3,0 | 2,0 | 1,3 |
@@ -108,7 +108,7 @@ Témoin : écart maximal 0.0e+00 avec results/bqn_check.json, « B-E ».
 | Go | aos 47,2 | natural 86,8 | natural q6 138,4 | tuned q1 86,3 | tuned 21,9 |
 | Haskell | aos 38,3 | natural 189,2 | tuned q6 60,2 | tuned q1 67,4 | natural 163,4 |
 | OCaml | soa 12,3 | tuned 71,6 | tuned q6 112,5 | tuned q1 214,5 | tuned 48,1 |
-| BQN | soa 96,0 | tuned 32,3 | tuned q6 28,5 | tuned q1 317,9 | tuned 104,9 |
+| BQN | soa 96,0 | tuned 32,3 | tuned q6 28,5 | tuned q1 317,9 | tuned 105,2 |
 | JavaScript | soa 23,2 | tuned 149,9 | tuned q6 131,5 | natural q1 376,4 | tuned 65,0 |
 | Python | soa 963,1 | tuned 3096,7 | natural q6 1833,8 | tuned q1 7941,8 | natural 1558,9 |
 | Lua | soa 293,9 | natural 1742,4 | natural q6 627,0 | tuned q1 2215,7 | natural 682,0 |

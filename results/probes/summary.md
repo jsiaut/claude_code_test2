@@ -9,10 +9,10 @@
 | ada | B4 | 0.5 | 0.5 |  | retour non contraint de 4 Mo par la pile secondaire (tas au-delà du morceau statique) :  5.00000000000000E+05 |
 | bqn | A1 | 0.5 | 0.5 |  | matrice 1000×16 : f64arr d'un seul tenant (rangées homogènes en ligne) ; liste d'espaces de noms : harr (référ |
 | bqn | A2 | 0 | 0 |  | ni ordre ni taille de champs : un espace de noms n'a pas de disposition (les types de structure de •FFI ne ser |
-| bqn | A3 | 0.5 | 0.5 |  | booléens rangés à 1 bit (bitarr) ; ⟨1,'u'⟩‿⟨8,'i'⟩ •bit._cast 8 bits → ⟨ -115 ⟩ ; pas de champs de bits dans u |
+| bqn | A3 | 0 | 0 |  | ni enregistrement compacté ni champ de bits ; booléens rangés à 1 bit (bitarr) et ⟨1,'u'⟩‿⟨8,'i'⟩ •bit._cast 8 |
 | bqn | A4 | 0 | 0 |  | aucun contrôle de l'alignement |
 | bqn | A5 | 0.5 | 0.5 |  | •bit._cast : 1.0 en f64 → deux i32 ⟨ 0 1072693248 ⟩ (tableaux seulement ; ni union ni f32) |
-| bqn | A6 | 0.5 | 0.5 |  | ⍉ fait passer la matrice 1000×16 (une particule par rangée) en 16×1000 (un champ par rangée, f64arr) : AoS et  |
+| bqn | A6 | 0 | 0 |  | aucun conteneur SoA : ⍉ transpose la matrice 1000×16 en 16×1000 (f64arr, une copie), comme la transposition de |
 | bqn | A7 | 0.5 | 0.5 |  | tableau de rang 3 (2×16×4, f64arr) : sous-tableaux fixes en ligne, homogènes seulement |
 | bqn | A8 | 0.5 | 0.5 |  | stockage étroit choisi par l'implémentation : 1‿2‿3 i8arr, 300‿1 i16arr, 70000‿1 i32arr, 0.5‿1 f64arr ; •bit._ |
 | bqn | B1 | 0.5 | 0.5 |  | comptage de références (•internal.Refc ↕1000 : 1) ; ramasse-miettes traçant automatique, désactivable seulemen |
@@ -23,7 +23,7 @@
 | bqn | C1 | 0 | 0 |  | aucun type vectoriel : les primitives travaillent sur des tableaux entiers |
 | bqn | C2 | 0 | 0 |  | aucune intrinsèque |
 | bqn | C4 | 0.5 | 0.5 |  | +´ ordonnée 14.392726722865772 ; •math.Sum (somme vectorielle réassociée) 14.392726722865621 ; écart 1.5099033 |
-| bqn | C5 | 0 | 0 |  | ni threads ni boucle parallèle |
+| bqn | C5 | 0 | 0 |  | aucune construction qui demande plusieurs cœurs (CBQN n'en utilise qu'un) ; les primitives sur tableaux entier |
 | bqn | D1 | 0 | 0 |  | pas de threads (la bibliothèque système n'en a pas ; CBQN n'est pas réentrant) |
 | bqn | D2 | 0 | 0 |  | aucun atomique |
 | bqn | D3 | 0 | 0 |  | aucune aide de ligne de cache |
@@ -38,7 +38,7 @@
 | bqn | E7 | 0 | 0 |  | ni calcul à la compilation ni génériques |
 | bqn | F1 | 1 | 1 |  | tableaux multidimensionnels natifs, contigus en ordre des rangées (3×4×5 : i8arr, (⟨1,2,3⟩⊑r) = 33) |
 | bqn | F2 | 0 | 0 |  | aucun |
-| bqn | F3 | 0.5 | 0.5 |  | entiers exacts jusqu'à 2⋆53 (f64) ; enveloppement par modulo : (2⋆32)|¯1 = 4294967295, par •bit._cast 300 → i8 |
+| bqn | F3 | 0.5 | 0.5 |  | pas de type entier de largeur fixe : entiers exacts jusqu'à 2⋆53 (f64) ; opérations modulaires sur des tableau |
 | bqn | F4 | 1 | 1 |  | •file.MapBytes projette 64 Mio (c8slice, tas vivant + 128 o) ; •bit._cast en i32 sans copie (i32slice, tas + 6 |
 | c | A1 | 1 | 1 |  | tableau de struct contigu sizeof(arr)=64 (4x16) |
 | c | A2 | 1 | 1 |  | offsetof(S,b)=4 offsetof(S,c)=8 |

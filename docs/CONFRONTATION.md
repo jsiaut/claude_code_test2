@@ -476,6 +476,11 @@ langages (`results/report_confrontation_current.md`), le juge à l'aveugle et le
 rangs espérés du classement à 18 bougent de 0,0024 au plus ; dans le classement à 24, JavaScript et Python reculent
 d'un rang, BQN s'intercalant devant eux.
 
+Rejouée après la remarque sur BQN (6 novembre, `docs/BQN.md`, 5 : errata K9, K7 naturel, A3 et A6 de BQN) : le
+rapport à 18 langages (`results/report_confrontation_current.md`) ne change pas ; seuls les rangs espérés du
+classement à 24 bougent, de 0,08 à 0,10 pour BQN (toujours 21e), de 0,05 au plus pour OCaml, JavaScript et Python,
+et de moins de 0,001 pour les autres.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

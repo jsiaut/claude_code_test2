@@ -1018,7 +1018,9 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   `sw_padded` 211 fois le C ; K9 `mt` 21 fois) ; pas de K10.
 * **Vectorisation mesurée** (C3) : ½. Les boucles chaudes sont celles des primitives : le stencil est vectorisé
   (ymm) ; celle de K4 naturel est le filtre, une compression par `vpshufb` sur table (128 bits) que la règle compte
-  scalaire, faute d'arithmétique empaquetée ; la somme `+´` d'entiers de 16 bits qui suit est scalaire.
+  scalaire, faute d'arithmétique empaquetée ; la somme `+´` d'entiers de 16 bits qui suit est vectorisée par
+  `vpdpwssd` (VNNI), que la règle ne reconnaît pas (j'avais écrit cette somme scalaire : corrigé par la remarque
+  sur BQN).
 * **Grille** (`probes/bqn`) : contrôle 22,8 en règle v2 (24,3 en v1 avec C3 = ½), 22e : tableaux multidimensionnels
   natifs (F1), projection de fichiers sans copie (F4), stockage étroit automatique, `•bit._cast`, transposition AoS/SoA,
   pointeurs de `•FFI` ; ni disposition des enregistrements, ni alignement, ni SIMD explicite, ni threads, ni atomiques,
@@ -1033,3 +1035,28 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   construction par défaut 18,52 ; espaces de noms pour K1 17,31 ; empreinte du tas 17,87 ; cases basses 16,06, hautes
   21,02 ; toutes les lectures défavorables 14,19, où il ne devance plus JavaScript que dans 47 % des variantes) ; 20e
   sans pont (information, biaisé).
+
+## Remarque sur BQN (6 novembre, machine 27, Emerald Rapids) — `docs/BQN.md`, section 5
+
+* **Vérifié dans les sources** (CBQN 0.12.0 et sa branche `develop`, dépôt officiel du langage) : 84 commits depuis la
+  0.12.0, toujours sans threads ni f32 ; vecteurs de 256 bits par défaut (`arch_defvw`), l'AVX-512 réservé à quelques
+  primitives ; `•bit._add`, `_sub`, `_mul`, `_neg` (complément à deux, 8 à 64 bits, sur des tableaux) présents dans la
+  0.12.0 mais absents de sa documentation ; `-Xgc-disable`, `•internal.XOpt` et `-Xjit-perf-map` seulement sur la
+  branche de développement ; `⊐⊸⊔`, « the most direct application of Group » (`doc/group.md`). Non retrouvé : un
+  rapport de 10 au C sur le code scalaire (la documentation dit le code scalaire de CBQN au niveau des interpréteurs
+  légers).
+* **Deux erreurs de mon banc** : la somme de contrôle de K9 était chronométrée (quelques millisecondes ; rapports dans
+  le bruit) ; K7 naturel prenait `•HashMap` ligne à ligne, contre ma règle pour BQN et mon Q1 naturel (`⊔`) : en idiome
+  de la documentation, 0,133 fois le temps publié (1,16 s contre 8,68 s sur la machine 27 ; 19,0 s dans les données
+  publiées, contre 142,9 ; 3,7 s au facteur de la table plate du C : R-K7tab, information, 17,89 points, 21e).
+* **Deux errata de la grille** : A6 et A3 à 0 (la transposition n'est pas un conteneur SoA, les booléens rangés à un
+  bit ne sont pas une disposition au bit près : la règle de Fortran et de Julia). Contrôle 22,8 → 19,7. C5 reste 0 :
+  « parallélisme de données » se lit sur plusieurs cœurs (définition précisée).
+* **Une phrase fausse** : la somme `sum_i16` de K4 est vectorisée (`vpdpwssd`, VNNI), que `analysis/hotloop.py` ne
+  compte pas ; aucune autre boucle chaude n'en dépend.
+* **Classement publié** : BQN reste **21e, 17,72 points** (− 0,93 : grille − 1,10, K7 + 0,16, K9 + 0,01) ; OCaml le
+  devance dans 79 % des variantes, il devance JavaScript dans 84 %.
+* **Formes en blocs** (sensibilité, comme les formes mieux écrites des autres langages) : CBQN ne fusionne pas les
+  primitives, et chacune écrit un intermédiaire de la taille du tableau. Découpé en blocs, le code optimisé va 1,3 à
+  2,9 fois plus vite (Q1 × 0,35, K4 sans branchement × 0,37, K1 `soa` × 0,46, K9 × 0,65) : plafond 17,45 au lieu de
+  12,46, 19,72 points, toujours 21e ; avec C5 à ½, 20,59.

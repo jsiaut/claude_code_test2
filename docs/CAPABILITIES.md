@@ -8,10 +8,10 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | **A** (25 %) | | | | | | | | | | | | | | | | | | | | | | | | |
 | A1 agrégats valeurs en ligne dans les tableaux | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ | ◐ |
 | A2 ordre/taille des champs, disposition C, offsetof | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ |
-| A3 disposition au bit près (packed, champs de bits) | ◐ | ◐ | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ | ◐ |
+| A3 disposition au bit près (packed, champs de bits) | ◐ | ◐ | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ |
 | A4 alignement explicite >= 64 o | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ |
 | A5 unions et réinterprétation de bits | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ |
-| A6 SoA natif | ○ | ○ | ○ | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ |
+| A6 SoA natif | ○ | ○ | ○ | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
 | A7 tableaux fixes en ligne dans les agrégats | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ | ◐ |
 | A8 types numériques étroits de stockage | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ◐ |
 | **B** (20 %) | | | | | | | | | | | | | | | | | | | | | | | | |
@@ -25,7 +25,7 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | C2 intrinsèques de la cible | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ |
 | C3 auto-vectorisation (mesurée) | ● | ● | ◐ | ○ | ● | ● | ◐ | ◐ | ◐ | ● | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ | ◐ |
 | C4 contrôle de la réassociation flottante | ◐ | ● | ● | ● | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ | ◐ |
-| C5 parallélisme de données | ◐ | ◐ | ○ | ○ | ○ | ○ | ● | ◐ | ○ | ● | ● | ○ | ● | ○ | ○ | ● | ● | ● | ◐ | ○ | ○ | ◐ | ○ | ○ |
+| C5 parallélisme de données sur plusieurs cœurs | ◐ | ◐ | ○ | ○ | ○ | ○ | ● | ◐ | ○ | ● | ● | ○ | ● | ○ | ○ | ● | ● | ● | ◐ | ○ | ○ | ◐ | ○ | ○ |
 | **D** (15 %) | | | | | | | | | | | | | | | | | | | | | | | | |
 | D1 threads parallèles en mémoire partagée | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ○ | ○ |
 | D2 atomiques à ordres mémoire explicites | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ |
@@ -257,10 +257,10 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 
 ### BQN
 
-* **A** : A1 = 0.5 (matrice n×16 de f64 d'un seul tenant (rangées homogènes en ligne, bench K1) ; espaces de noms en références ; pas d'enregistrement hétérogène en ligne (sonde)) ; A2 = 0 (aucun : un espace de noms n'a pas de disposition) ; A3 = 0.5 (booléens rangés à 1 bit (bitarr) et •bit._cast u1 ; pas de champs de bits (sonde)) ; A4 = 0 (aucun) ; A5 = 0.5 (•bit._cast entre i8/i16/i32/f64/caractères (tableaux seulement ; ni union ni f32, sonde)) ; A6 = 0.5 (⍉ fait passer une matrice d'une particule par rangée à un champ par rangée : AoS et SoA dans le même conteneur, sans champs nommés (sonde)) ; A7 = 0.5 (tableaux de rang 3 et plus : sous-tableaux fixes en ligne, homogènes seulement (sonde)) ; A8 = 0.5 (i8/i16/i32/bits choisis par l'implémentation, forçables par •bit._cast ; flottants f64 seulement (sonde))
+* **A** : A1 = 0.5 (matrice n×16 de f64 d'un seul tenant (rangées homogènes en ligne, bench K1) ; espaces de noms en références ; pas d'enregistrement hétérogène en ligne (sonde)) ; A2 = 0 (aucun : un espace de noms n'a pas de disposition) ; A3 = 0 (ni enregistrement compacté ni champ de bits ; booléens rangés à 1 bit (bitarr) et •bit._cast u1 sur des tableaux, comme le BitArray de Julia (sonde ; erratum du 6/11, remarque sur BQN : ½ avant)) ; A4 = 0 (aucun) ; A5 = 0.5 (•bit._cast entre i8/i16/i32/f64/caractères (tableaux seulement ; ni union ni f32, sonde)) ; A6 = 0 (aucun conteneur SoA : ⍉ transpose une matrice homogène (copie), comme la transposition de Fortran et de Julia (sonde ; erratum du 6/11, remarque sur BQN : ½ avant)) ; A7 = 0.5 (tableaux de rang 3 et plus : sous-tableaux fixes en ligne, homogènes seulement (sonde)) ; A8 = 0.5 (i8/i16/i32/bits choisis par l'implémentation, forçables par •bit._cast ; flottants f64 seulement (sonde))
 * **B** : B1 = 0.5 (comptage de références ; ramasse-miettes traçant automatique, désactivable seulement par la commande )gc disable du REPL (sonde, docs/commands.md)) ; B2 = 0 (aucun) ; B3 = 0 (nombres jamais boxés, mais tout tableau sur le tas (sonde), comme JavaScript) ; B4 = 0 (chaque primitive alloue son résultat) ; B5 = 0.5 (objets pointeurs de •FFI (Read, Write, Add, Cast ; malloc de la libc, sonde))
-* **C** : C1 = 0 (aucun type vectoriel) ; C2 = 0 (aucune) ; C3 = 0.5 (mesuré) ; C4 = 0.5 (+´ ordonnée ou •math.Sum, somme vectorielle réassociée (sonde) ; pour la somme seulement) ; C5 = 0 (ni threads ni boucle parallèle)
+* **C** : C1 = 0 (aucun type vectoriel) ; C2 = 0 (aucune) ; C3 = 0.5 (mesuré) ; C4 = 0.5 (+´ ordonnée ou •math.Sum, somme vectorielle réassociée (sonde) ; pour la somme seulement) ; C5 = 0 (aucune construction qui demande plusieurs cœurs (CBQN n'en utilise qu'un, implementation/perf.md) ; les primitives sur tableaux entiers relèvent du SIMD (C1 à C4))
 * **D** : D1 = 0 (pas de threads) ; D2 = 0 (aucun) ; D3 = 0 (aucune) ; D4 = 0 (aucune (sched_setaffinity seulement par •FFI)) ; D5 = 0 (aucun)
 * **E** : E1 = 0.5 (bytecode et JIT x86-64 actif par défaut ; code machine visible seulement par une option de construction (USE_PERF, sonde)) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 0 (aucun) ; E5 = 0 (aucun (valeurs immuables)) ; E6 = 0 (indices toujours vérifiés (sonde)) ; E7 = 0 (aucun)
-* **F** : F1 = 1 (tableaux multidimensionnels natifs et contigus (sonde, bench K9)) ; F2 = 0 (aucun) ; F3 = 0.5 (entiers exacts jusqu'à 2⋆53 (f64) ; enveloppement par modulo, comme les masques de Python et de JavaScript (sonde)) ; F4 = 1 (•file.MapBytes + •bit._cast sans copie (i32slice, sonde))
+* **F** : F1 = 1 (tableaux multidimensionnels natifs et contigus (sonde, bench K9)) ; F2 = 0 (aucun) ; F3 = 0.5 (pas de type entier : entiers exacts jusqu'à 2⋆53 (f64) ; opérations modulaires de 8 à 64 bits sur des tableaux par •bit._add, _sub, _mul, _neg (spécification ; dans 0.12.0, absentes de sa documentation) et enveloppement par modulo, comme ctypes et les masques pour Python (sonde ; note complétée le 6/11, remarque sur BQN)) ; F4 = 1 (•file.MapBytes + •bit._cast sans copie (i32slice, sonde))
 

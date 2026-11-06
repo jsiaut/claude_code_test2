@@ -1,5 +1,5 @@
 {
- "source": "docs/ADA.md (d\u00e9cision 2) ; rapports appari\u00e9s de results/raw_ada, machine 5 ; results/ada_check.json ; Fortran : docs/FORTRAN.md (3.4), results/raw_fortran, results/fortran_check.json ; ponts par le t\u00e9moin : results/transfer_check.json ; D : docs/DLANG.md (3.2), results/raw_d, machine 10, results/d_check.json ; Rust : docs/RUST.md (3.2), results/raw_rust, machine 11, results/rust_check.json ; Java : docs/JAVA.md (3.2), results/raw_java, machine 17, results/java_check.json ; Go : docs/GO.md (3.2), results/raw_go, machine 18, results/go_check.json (K9 : ratios_k9h) ; Haskell : docs/HASKELL.md (3.2), results/raw_haskell, machine 19, results/haskell_check.json (K9 : ratios_k9h ; latences de K8 naturel : lat_ratios) ; OCaml : docs/OCAML.md (3.2), results/raw_ocaml, machine 20, results/ocaml_check.json ; JavaScript : docs/JAVASCRIPT.md (3.2), results/raw_js, machine 21, results/js_check.json ; Python : docs/PYTHON.md (3.2), results/raw_python, machine 22, results/python_check.json (K9 : ratios_k9h) ; Python, K8 naturel sans __slots__ : docs/PYTHON.md (4.8), results/raw_lua, machine 23 (ratios, lat_ratios) ; Lua : docs/LUA.md (3.2), results/raw_lua, machine 23, results/lua_check.json (K8 naturel : lat_ratios)",
+ "source": "docs/ADA.md (d\u00e9cision 2) ; rapports appari\u00e9s de results/raw_ada, machine 5 ; results/ada_check.json ; Fortran : docs/FORTRAN.md (3.4), results/raw_fortran, results/fortran_check.json ; ponts par le t\u00e9moin : results/transfer_check.json ; D : docs/DLANG.md (3.2), results/raw_d, machine 10, results/d_check.json ; Rust : docs/RUST.md (3.2), results/raw_rust, machine 11, results/rust_check.json ; Java : docs/JAVA.md (3.2), results/raw_java, machine 17, results/java_check.json ; Go : docs/GO.md (3.2), results/raw_go, machine 18, results/go_check.json (K9 : ratios_k9h) ; Haskell : docs/HASKELL.md (3.2), results/raw_haskell, machine 19, results/haskell_check.json (K9 : ratios_k9h ; latences de K8 naturel : lat_ratios) ; OCaml : docs/OCAML.md (3.2), results/raw_ocaml, machine 20, results/ocaml_check.json ; JavaScript : docs/JAVASCRIPT.md (3.2), results/raw_js, machine 21, results/js_check.json ; Python : docs/PYTHON.md (3.2), results/raw_python, machine 22, results/python_check.json (K9 : ratios_k9h) ; Python, K8 naturel sans __slots__ : docs/PYTHON.md (4.8), results/raw_lua, machine 23 (ratios, lat_ratios) ; Lua : docs/LUA.md (3.2), results/raw_lua, machine 23, results/lua_check.json (K8 naturel : lat_ratios) ; BQN (langage ajout\u00e9, appliqu\u00e9s apr\u00e8s le pont) : docs/BQN.md (5.3), results/raw_bqn_rq, machine 27, results/bqn_remark.json (ratios_added : main, cible Cascade Lake ; m3, r\u00e9plication)",
  "ratios": {
   "ada": {
    "k1|aos|energy": 0.948697189225563,
@@ -148,5 +148,23 @@
    1.3271212532826224,
    1.2681849428418668
   ]
+ },
+ "ratios_added": {
+  "main": {
+   "bqn": {
+    "k9|natural|": 0.9404029814180705,
+    "k9|tuned|": 1.0030251855975765,
+    "k9|mt|": 0.9841732600412043,
+    "k7|natural|": 0.1330843076818235
+   }
+  },
+  "m3": {
+   "bqn": {
+    "k9|natural|": 1.000912348298121,
+    "k9|tuned|": 0.9636908798835743,
+    "k9|mt|": 1.0168354557355181,
+    "k7|natural|": 0.13242587898818753
+   }
+  }
  }
 }

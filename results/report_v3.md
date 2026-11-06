@@ -27,7 +27,7 @@
 | 2 | Go | 44,5 [42,9–46,2] | 30,2 | 38 % | 12,3 | 10,7 | 26 % | 48,7 / 44,9 | 45,4 [44,7–46,1] | 0,48 | 17–18 | 17 [15–18] | 18 |
 | 2 | Haskell | 46,2 [44,9–48,0] | 33,8 | 34 % | 5,9 | 3,9 | 14 % | 39,9 / 38,9 | 41,3 [40,6–42,0] | 0,47 | 19–19 | 19 [17–19] | 19 |
 | 2 | Java | 56,5 [54,3–58,7] | 46,0 | 43 % | 12,1 | 9,3 | 24 % | 42,7 / 42,7 | 47,2 [46,2–48,1] | 0,50 | 16–18 | 17 [15–19] | 17 |
-| 3 | BQN | 12,5 [12,1–12,8] | 8,9 | 8 % | 3,8 | 3,7 | 23 % | 22,8 / 24,3 | 18,6 [18,5–18,8] | 0,48 | 21–21 | 21 [20–22] | 21 |
+| 3 | BQN | 12,5 [12,2–12,8] | 8,9 | 8 % | 5,1 | 5,0 | 30 % | 19,7 / 21,2 | 17,7 [17,5–17,9] | 0,48 | 21–21 | 21 [20–22] | 21 |
 | 3 | JavaScript | 12,2 [11,8–12,6] | 8,5 | 9 % | 4,5 | 3,4 | 38 % | 14,6 / 14,6 | 15,6 [15,3–16,0] | 0,49 | 22–22 | 22 [21–23] | 22 |
 | 3 | Lua | 1,3 [1,3–1,4] | 1,0 | 1 % | 1,1 | 0,9 | 72 % | 6,8 / 6,8 | 5,4 [5,3–5,6] | 0,48 | 24–24 | 24 [23–24] | 24 |
 | 3 | OCaml | 19,4 [18,8–20,1] | 14,8 | 13 % | 7,0 | 5,2 | 38 % | 23,2 / 23,2 | 23,9 [23,4–24,9] | 0,35 | 20–20 | 20 [20–21] | 20 |
@@ -40,7 +40,7 @@ Hors plan, par composante (moyenne sur les 24 langages ; C ; extrêmes) : E 0,47
 ## Hors plan : étages par quantité mesurée (même règle ; précédences tirées des mêmes 20 000 tirages)
 
 * plafond E : {Ada, C, C#, C++, C3, Chapel, D, Fortran, FreePascal, Go, Haskell, Java, Julia, Mojo, Nim, Odin, Rust, Swift, Zig} > {OCaml} > {BQN, JavaScript} > {Lua} > {Python}
-* code naturel D1 : {C, C++, C3, Chapel, D, Fortran, Julia, Nim, Odin, Rust, Zig} > {Ada, Go, Java} > {Mojo} > {C#} > {Swift} > {OCaml} > {FreePascal, Haskell} > {BQN, JavaScript} > {Lua} > {Python}
+* code naturel D1 : {C, C++, C3, Chapel, D, Fortran, Julia, Nim, Odin, Rust, Zig} > {Ada, Go, Java} > {Mojo} > {C#} > {Swift} > {OCaml} > {BQN, FreePascal, Haskell} > {JavaScript} > {Lua} > {Python}
 
 ## Hors plan : rangs compatibles avec les paires établies
 
@@ -65,11 +65,11 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 | C# | 15–18 | 14–17 | 16 |
 | Java | 15–19 | 13–17 | 13–14 |
 | Go | 15–19 | 17–19 | 12–14 |
-| FreePascal | 15–19 | 17–19 | 19–20 |
-| Haskell | 16–19 | 15–19 | 19–20 |
+| FreePascal | 15–19 | 17–19 | 19–21 |
+| Haskell | 16–19 | 15–19 | 19–21 |
 | OCaml | 20–21 | 20 | 18 |
-| BQN | 20–22 | 21–22 | 21–22 |
-| JavaScript | 21–23 | 21–22 | 21–22 |
+| BQN | 20–22 | 21–22 | 19–21 |
+| JavaScript | 21–23 | 21–22 | 22 |
 | Python | 22–24 | 24 | 24 |
 | Lua | 23–24 | 23 | 23 |
 
@@ -82,7 +82,7 @@ Une paire est établie si elle est ordonnée dans le même sens dans au moins 95
 
 ## Hors plan : Cascade Lake seul (K5 d'avant, machines 1 et 2 ; K9 de Cascade Lake, harnais d'origine), estimation ponctuelle
 
-C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Swift 11 (E 79,0, D1 7,6), Fortran 12 (E 72,7, D1 18,7), Julia 13 (E 67,9, D1 20,9), Mojo 14 (E 69,0, D1 11,0), C# 15 (E 49,5, D1 9,3), FreePascal 16 (E 35,8, D1 5,1), Java 17 (E 57,9, D1 12,4), Go 18 (E 41,6, D1 11,0), Haskell 19 (E 47,3, D1 5,2), OCaml 20 (E 20,2, D1 7,3), BQN 21 (E 12,5, D1 3,9), JavaScript 22 (E 13,1, D1 4,9), Python 23 (E 0,6, D1 0,5), Lua 24 (E 1,4, D1 1,2).
+C 1 (E 84,2, D1 19,7), C++ 2 (E 78,5, D1 17,0), Odin 3 (E 79,3, D1 20,2), Zig 4 (E 71,0, D1 20,6), D 5 (E 78,6, D1 16,0), Ada 6 (E 79,2, D1 13,3), C3 7 (E 81,0, D1 17,7), Rust 8 (E 78,2, D1 18,3), Nim 9 (E 72,7, D1 20,3), Chapel 10 (E 80,7, D1 18,9), Swift 11 (E 79,0, D1 7,6), Fortran 12 (E 72,7, D1 18,7), Julia 13 (E 67,9, D1 20,9), Mojo 14 (E 69,0, D1 11,0), C# 15 (E 49,5, D1 9,3), FreePascal 16 (E 35,8, D1 5,1), Java 17 (E 57,9, D1 12,4), Go 18 (E 41,6, D1 11,0), Haskell 19 (E 47,3, D1 5,2), OCaml 20 (E 20,2, D1 7,3), BQN 21 (E 12,5, D1 5,3), JavaScript 22 (E 13,1, D1 4,9), Python 23 (E 0,6, D1 0,5), Lua 24 (E 1,4, D1 1,2).
 
 ## Réplication : bruit ou interaction ?
 

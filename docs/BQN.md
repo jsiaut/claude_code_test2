@@ -72,7 +72,7 @@ vitesse ; le code optimisé garde la forme la plus rapide parmi celles que j'ai 
 | K4 | `+´ (128 ≤ d) / d` (filtre) | `branchless` : `+´ d × 128 ≤ d` |
 | K5 | `+´ a × b` (pli ordonné) | `•math.Sum a × b` (somme vectorielle réassociée) |
 | K6 | Q6 : masque, filtre `/`, `+´` ; Q1 : filtre, numéro de groupe, regroupement `⊔` et histogramme `/⁼` (l'idiome du GROUP BY) | Q6 : masque, deux filtrages ; Q1 : un masque par groupe et des sommes filtrées ; `mt` : quatre morceaux en séquence |
-| K7 | `•HashMap` de la bibliothèque système : `Get` puis `Set` d'un couple ⟨compte, somme⟩ par ligne | clés lues en motifs de 32 bits, classement `⊐` (table de hachage interne de CBQN), histogramme `/⁼`, sommes par tri stable `⍋` et sommes préfixes |
+| K7 | `•HashMap` de la bibliothèque système : `Get` puis `Set` d'un couple ⟨compte, somme⟩ par ligne (corrigé, 5.3 : `⊐`, `/⁼`, `⊔`) | clés lues en motifs de 32 bits, classement `⊐` (table de hachage interne de CBQN), histogramme `/⁼`, sommes par tri stable `⍋` et sommes préfixes |
 | K8 | listes imbriquées ⟨valeur, gauche, droite⟩ construites par récursion, sommées par récursion | nœuds indexés : trois listes (valeurs, fils gauches, fils droits) construites niveau par niveau en primitives, sommées par un parcours en largeur |
 | K9 | matrice 2048×2048 de f64 ; voisins par `»`, `«`, `»˘`, `«˘` ; bord recollé par `∾` et `∾˘` | grille plate ; voisins par tranches décalées (`↓`), sans copie ; bord recopié par `⌾` sur les seuls indices des colonnes de bord ; `mt` : même code, un cœur |
 | K10 | absent (ni threads ni coroutines) | absent |
@@ -301,7 +301,8 @@ intermédiaires du décodage des f32 restant dans le tas. C3 mesurée : ½. La b
 (registres ymm, 28 % des échantillons) ; celle de K4 naturel (52 %) est le filtre `/`, une compression Singeli par
 `vpshufb` sur une table de 256 motifs, 128 bits, que la règle de `analysis/hotloop.py` compte scalaire parce qu'elle
 ne retient que l'arithmétique empaquetée (une seule instruction, `vpaddb`) ; la comparaison `128 ≤ d` (25 %) est
-vectorisée, la somme `+´` des entiers de 16 bits (13 %, `sum_i16`) est scalaire.
+vectorisée ; la somme `+´` des entiers de 16 bits (13 %, `sum_i16`) l'est aussi, par `vpdpwssd` (VNNI), que la règle
+ne reconnaît pas (corrigé, 5.2 : j'avais écrit cette somme scalaire).
 Contrôle : le scénario Avant (BQN retiré) reproduit à l'identique le classement d'avant (R-E de
 `results/fpc_remark.json`, écart 0). Sorties : `results/bqn_check.json`, `results/report_bqn.md`.
 
@@ -556,3 +557,77 @@ METHODOLOGY (journal), NOSIMD, CONFRONTATION.
 * Compter VNNI dans `analysis/hotloop.py` : la règle de C3 est celle de tous les langages, et aucune autre boucle
   chaude n'en dépend ; le texte de BQN est corrigé.
 * Construire CBQN autrement : les trois constructions de l'ajout servent telles quelles.
+
+### 5.8 Mesures (machine 27)
+
+`tools/measure_bqn_rq.py`, de 16:53:17 à 17:19:15 : 392 processus (56 cellules × 7 passes), aucune somme de contrôle
+fausse, aucun processus refait ni gardé au-dessus de 2 % de vol de temps (1,97 % au plus), vol médian 0,20 %. Les deux
+témoins inchangés valent 1 (K1 naturel 1,015 [0,990–1,042], K5 optimisé 0,988 [0,960–1,016]). Rapports r(copie /
+publié), cible Cascade Lake (natif entre parenthèses) :
+
+| Cellule | Rapport [IC 95 %] | Ce qui change |
+|---|---|---|
+| K7 naturel | **0,133** [0,127–0,140] (0,132) | l'idiome de la documentation au lieu de `•HashMap` ligne à ligne : 1,16 s contre 8,68 s |
+| K9 naturel | 0,940 [0,846–1,036] (1,001) | somme de contrôle hors chrono |
+| K9 `tuned_flat`, `mt_flat` | 1,003 [0,946–1,077], 0,984 [0,919–1,037] (0,964 ; 1,017) | somme de contrôle hors chrono, sans blocs |
+| K1 `aos`, `soa` | 0,515 [0,492–0,540], 0,460 [0,377–0,541] | blocs (`soa` : 16,2 ms) |
+| K4 sans branchement | 0,371 [0,308–0,448] | blocs (2,9 ms ; le naturel publié en prend 4,9) |
+| Q6 `tuned`, `mt` | 0,789 [0,732–0,849], 0,856 [0,820–0,894] | blocs |
+| Q1 `tuned`, `mt` | **0,350** [0,335–0,364], 0,511 [0,465–0,553] | blocs (83 ms contre 238) |
+| K9 `tuned`, `mt` | 0,650 [0,613–0,692], 0,593 [0,547–0,644] | bandes de 32 lignes et somme hors chrono (57 et 52 ms) |
+
+La somme de contrôle de K9 ne pesait que quelques millisecondes : ses rapports restent dans le bruit des processus,
+et sont appliqués tels qu'ils sont mesurés (plan 5.5).
+
+### 5.9 Le classement publié (R-E) et les scénarios
+
+| Scénario | Score | Contrôle | Plafond | Code par défaut | Rang espéré | Place | Rang à 90 % | devant OCaml | devant JavaScript |
+|---|---|---|---|---|---|---|---|---|---|
+| Avant (B-E) | 18,65 | 22,8 | 12,45 | 22,7 | 20,89 | 21e | 20–22 | 25 % | 87 % |
+| R-grille | 17,55 | 19,7 | 12,45 | 22,7 | 21,01 | 21e | 20–22 | 19 % | 82 % |
+| R-K9 | 18,66 | 22,8 | 12,46 | 22,7 | 20,88 | 21e | 20–22 | 25 % | 87 % |
+| R-K7 | 18,81 | 22,8 | 12,45 | 23,3 | 20,84 | 21e | 20–22 | 27 % | 89 % |
+| **R-E (publié)** | **17,72** | 19,7 | 12,46 | 23,3 | 20,96 | **21e** | 20–22 | 21 % | 84 % |
+| R-blocs | 19,72 | 19,7 | 17,45 | 23,3 | 20,69 | 21e | 20–22 | 38 % | 94 % |
+| R-C5 | 18,60 | 22,2 | 12,46 | 23,3 | 20,88 | 21e | 20–22 | 26 % | 88 % |
+| R-blocs-C5 | 20,59 | 22,2 | 17,45 | 23,3 | 20,61 | 21e | 20–22 | 43 % | 96 % |
+| R-K7map (information) | 17,56 | 19,7 | 12,46 | 22,7 | 21,01 | 21e | 20–22 | 19 % | 82 % |
+| R-K7tab (information, hors plan) | 17,89 | 19,7 | 12,46 | 24,0 | 20,92 | 21e | 20–22 | 23 % | 86 % |
+
+* **Classement publié (R-E)** : BQN reste **21e, 17,72 points** (− 0,93) : les deux errata de la grille lui retirent
+  1,10 point (contrôle 22,8 → 19,7), le K7 naturel corrigé lui en rend 0,16 (code par défaut 22,7 → 23,3), la somme de
+  contrôle de K9 0,01. OCaml le devance dans 79 % des variantes, il devance JavaScript dans 84 %. Les 23 autres gardent
+  leurs scores ; leurs rangs espérés bougent de 0,04 au plus (OCaml, JavaScript, Python).
+* **Les formes en blocs (R-blocs)** confirment l'estimation du relecteur : plafond 17,45 au lieu de 12,46 (dans sa
+  fourchette de 15 à 19), + 2,0 points. Par noyau : K4 0,23 → 0,58, K1 0,08 → 0,16, K6 0,15 → 0,25, K9 0,07 → 0,11 ;
+  K3, K5, K7 et K8 ne bougent pas. BQN resterait 21e (devant JavaScript dans 94 % des variantes, derrière OCaml dans
+  62 %) ; avec aussi C5 à ½, 20,59 points, toujours 21e.
+* Mesuré en blocs, le plafond de BQN dépasse celui de JavaScript de 5 points (17,5 contre 12,2) au lieu d'être à
+  égalité, comme l'annonçait le relecteur ; dans le classement publié, ils restent à égalité.
+* **K7 naturel et le pont (R-K7tab, information)** : en idiome de la documentation, K7 naturel de BQN vaut 19,0 s
+  dans les données publiées (142,9 s avant), toujours relié par le facteur de la table chaînée du C (16,3) ; relié
+  par celui de sa table plate, comme dans B-K7tab (4.4), il vaudrait 3,7 s : 17,89 points (+ 0,17), rang espéré
+  20,92, 21e.
+
+### 5.10 Ce que corrige la remarque, et ce qu'elle ne change pas
+
+* Deux erreurs de mon banc (K9, K7 naturel) et deux errata de la grille (A3, A6), qui se compensent en partie : le
+  score publié baisse de 0,93 point, le rang ne change pas. Le relecteur attendait un score plus haut ; il l'est dans
+  la lecture qui publierait les formes en blocs, que la règle de l'étude garde en sensibilité pour tous les langages.
+* Une phrase fausse de ce document (la somme `sum_i16` dite scalaire) et un fait manquant (les vecteurs de 256 bits).
+* Le rang mesure le contrôle laissé au programmeur et la vitesse du code qu'il écrit, pas la qualité des primitives de
+  CBQN, qui battent parfois le C (K5 et Q6 naturels, K8 optimisé) : le README le dit désormais.
+
+### 5.11 Écarts au plan
+
+* Cellules, répétitions, scénarios et règles comme fixés en 5.4 et 5.5. L'heure de poussée du plan est 16:53 (et non
+  17:20, corrigé dans le journal).
+* R-K7tab, ajouté après les résultats (information, hors du classement) : B-K7tab (4.4) rejoué sur les données
+  corrigées, pour vérifier la phrase du README sur le facteur de K7 naturel ; les autres scénarios et
+  `results/transfers.json` n'en changent pas.
+
+### 5.12 Bilan
+
+BQN reste **21e sur 24**, à 17,72 points : la remarque a trouvé deux erreurs de mon banc et deux notes trop généreuses,
+et montré, mesures à l'appui, que mon code optimisé gagnerait 2 points à être découpé en blocs (19,72), sans changer de
+place. Ce gain reste une sensibilité, comme les formes mieux écrites des autres langages.

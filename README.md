@@ -30,8 +30,8 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | 17 | **Java** | 47,2 | 15–19 | 56 % | Meilleur allocateur de petits objets ; pas de types valeur |
 | 18 | **Go** | 45,4 | 15–18 | 93 % | Structures par valeur ; ni vectoriseur, ni SIMD stable, atomiques séquentiellement cohérentes |
 | 19 | **Haskell** | 41,3 | 17–19 | 100 % | Peut descendre bas (FMA vectorielle, mémoire brute) ; code par défaut boxé, ramasse-miettes imposé |
-| 20 | **OCaml** | 23,9 | 20–21 | 75 % | Bonne allocation générationnelle ; pas de types valeur, ni flottant 32 bits de calcul, ni SIMD |
-| 21 | **BQN** | 18,6 | 20–22 | 87 % | Langage de tableaux : primitives vectorisées dans CBQN, mais un coût fixe par appel ; ni threads, ni flottant 32 bits, ni disposition des enregistrements |
+| 20 | **OCaml** | 23,9 | 20–21 | 79 % | Bonne allocation générationnelle ; pas de types valeur, ni flottant 32 bits de calcul, ni SIMD |
+| 21 | **BQN** | 17,7 | 20–22 | 84 % | Langage de tableaux : primitives vectorisées dans CBQN, mais un coût fixe par appel et aucune fusion ; ni threads, ni flottant 32 bits, ni disposition des enregistrements |
 | 22 | **JavaScript** | 15,6 | 21–23 | 91 % | Tableaux typés compilés, mais vérifiés à chaque accès ; objets en références, aucun SIMD |
 | 23 | **Python** | 11,8 | 22–24 | 58 % | CPython seul : environ 200 fois plus lent que le meilleur ; la hiérarchie mémoire disparaît derrière l'interpréteur |
 | 24 | **Lua** | 5,4 | 23–24 | — | PUC-Lua sans son API C : mieux que CPython sur les mesures, presque aucun levier dans sa bibliothèque |
@@ -162,7 +162,7 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   variantes, et sur les deux machines. Haskell devance OCaml, et OCaml JavaScript, dans plus de 99 % des variantes ;
   JavaScript ne devance plus Python que dans 91 % (95 % avant la correction du banc de Python) ; Go devance Haskell
   dans 93 % (100 % avant la correction du banc de Haskell). BQN, ajouté le 6 novembre, se place entre OCaml, qui le
-  devance dans 75 % des variantes, et JavaScript, qu'il devance dans 87 % : proche des deux, il relie les deux
+  devance dans 79 % des variantes, et JavaScript, qu'il devance dans 84 % : proche des deux, il relie les deux
   derniers étages de la v3, qui n'en font plus qu'un, d'OCaml à Lua (étages [14, 5, 5], contre [14, 5, 1, 3] avant
   lui).
   FreePascal, ajouté le 6 novembre, entre dans l'étage de C#, Java, Go et Haskell : C# le devance dans 82 % des
@@ -426,7 +426,7 @@ Java (47,6 à 49,2 points) ([`docs/GO.md`](docs/GO.md)).
 **19. Haskell.** Il peut descendre bas (`UArray`, primops non boxées, SIMD et FMA vectorielle par LLVM, mémoire
 brute) : son plafond (46,2) dépasse celui de Go. Mais le défaut va contre la machine : des structures boxées (une
 particule de 64 octets en occupe 96 dans une liste ; K7 avec `Data.IntMap`, faute de table de hachage livrée, en 89 s,
-l'un des deux plus lents de l'étude avec celui de BQN ; un arbre de nœuds boxés sur K8), un ramasse-miettes imposé, des écritures atomiques
+le pire de l'étude ; un arbre de nœuds boxés sur K8), un ramasse-miettes imposé, des écritures atomiques
 séquentiellement cohérentes. Une boucle stricte sur un tableau non boxé va, elle, au rythme de C (K5 naturel : 187 ms
 contre 168 sur Emerald Rapids). Avec `+RTS -N4`, que l'étude donne à tous ses noyaux, le ramasse-miettes est
 parallèle même pour un noyau séquentiel : sur K8 naturel, des dizaines de milliers de `futex` par répétition, et un
@@ -449,22 +449,29 @@ et la case discutable n'y ajouteraient que 0,7 point ([`docs/OCAML.md`](docs/OCA
 
 ### Des tableaux entiers, sans boucle ni thread
 
-**21. BQN.** Ajouté le 6 novembre (CBQN 0.12.0, [`docs/BQN.md`](docs/BQN.md)), pas encore relu. Le seul langage de
+**21. BQN.** Ajouté le 6 novembre (CBQN 0.12.0, [`docs/BQN.md`](docs/BQN.md)), relu le jour même. Le seul langage de
 tableaux de l'étude : le code s'écrit en primitives appliquées à des tableaux entiers, que CBQN exécute dans du C et du
-Singeli (un générateur de code SIMD) écrits à la main ; le coût se paie par appel de primitive, pas par élément. Quand
-un noyau tient en quelques primitives sur de grands tableaux, BQN approche le C, voire le dépasse (Emerald Rapids) : K5
-naturel 0,60 fois le C (le produit en vecteurs, puis une chaîne d'additions, contre la chaîne de FMA du C), Q6 naturel
-0,86 (des masques sur des colonnes entières, contre une boucle à conditions), K8 optimisé 0,66 (un arbre indexé
-construit niveau par niveau), K4 2 à 5 fois. Quand il faut une boucle, l'interprète domine : la table de hachage de sa
-bibliothèque, alimentée ligne à ligne (K7 naturel 28 fois le C), un arbre de nœuds (K8 naturel 9 fois), une chasse de
-pointeurs en cache (8 ns par saut). Il n'a ni threads ni coroutines : K3 et les variantes parallèles s'exécutent en
-séquence (K3 en écriture unique, 211 fois le C). Il n'a ni flottant 32 bits ni enregistrement à champs nommés en ligne :
-la particule naturelle est une rangée d'une matrice de f64 (128 octets) ; en espaces de noms à champs nommés, K1 naturel
-serait 3,5 fois plus lent (13 fois dans le désordre) et BQN perdrait 1,3 point. Son contrôle (22,8, 22e) est celui d'un
-langage de tableaux : tableaux multidimensionnels natifs, stockage étroit automatique (bits, entiers de 8 à 32 bits),
-projection de fichiers sans copie, mais ni disposition des données, ni SIMD explicite, ni atomiques. Toutes ses clés
-sont mesurées sur un Emerald Rapids et reliées par le C, comme FreePascal, avec CBQN construit pour la cible de chaque
-donnée publiée ; il reste 21e dans toutes les sensibilités du plan.
+Singeli (un générateur de code SIMD, en vecteurs de 256 bits) écrits à la main ; le coût se paie par appel de
+primitive, pas par élément, et CBQN ne fusionne pas les primitives : chacune écrit un résultat de la taille de son
+argument. Quand un noyau tient en quelques primitives sur de grands tableaux, BQN approche le C, voire le dépasse
+(Emerald Rapids) : K5 naturel 0,60 fois le C (le produit en vecteurs, puis une chaîne d'additions, contre la chaîne de
+FMA du C), Q6 naturel 0,86 (des masques sur des colonnes entières, contre une boucle à conditions), K8 optimisé 0,66
+(un arbre indexé construit niveau par niveau), K4 2 à 5 fois ; le GROUP BY de K7, écrit avec l'idiome de la
+documentation (`⊐` et `⊔`), 3,7 fois. Quand il faut une boucle, l'interprète domine : un arbre de nœuds (K8 naturel 9
+fois le C), une chasse de pointeurs en cache (8 ns par saut), une table de hachage alimentée ligne à ligne (28 fois).
+Il n'a ni threads ni coroutines : K3 et les variantes parallèles s'exécutent en séquence (K3 en écriture unique, 211
+fois le C). Il n'a ni flottant 32 bits ni enregistrement à champs nommés en ligne : la particule naturelle est une
+rangée d'une matrice de f64 (128 octets) ; en espaces de noms à champs nommés, K1 naturel serait 3,5 fois plus lent
+(13 fois dans le désordre). Son contrôle (19,7, 22e) est celui d'un langage de tableaux : tableaux multidimensionnels
+natifs, stockage étroit automatique, projection de fichiers sans copie, mais ni disposition des données, ni SIMD
+explicite, ni atomiques. Ce rang mesure le contrôle laissé au programmeur et la vitesse du code qu'il écrit, pas la
+qualité des primitives de CBQN, qui battent parfois le C. La remarque sur BQN a corrigé deux erreurs de mon banc (K7
+naturel, qui prenait la table de hachage ligne à ligne contre ma propre règle ; la somme de contrôle de K9, dans le
+chrono) et deux notes trop généreuses de la matrice (A3, A6) : BQN passe de 18,6 à 17,7 points, sans changer de place.
+Découpé en blocs pour garder ses intermédiaires en cache, son code optimisé irait 1,3 à 2,9 fois plus vite (plafond
+17,5 au lieu de 12,5, devant celui de JavaScript) et lui vaudrait 2 points de plus, toujours 21e : une sensibilité,
+comme les formes mieux écrites des autres langages. Toutes ses clés sont mesurées sur un Emerald Rapids et reliées par
+le C, comme FreePascal, avec CBQN construit pour la cible de chaque donnée publiée.
 
 ### La machine disparaît derrière le moteur
 
@@ -593,7 +600,8 @@ du langage.
   ([`docs/FPC.md`](docs/FPC.md)) ; les sensibilités de sa remarque (3.2.4-rc2, branche main, formes mieux écrites)
   le sont sur un autre hôte du même modèle (machine 26), par rapports au binaire publié. BQN est mesuré de même, toutes
   ses clés sur la machine 26, avec le C de la construction de chaque donnée publiée et CBQN construit pour la même
-  cible ([`docs/BQN.md`](docs/BQN.md)). Pas de compteurs matériels ;
+  cible ; les corrections de sa remarque le sont sur la machine 27, par rapports au binaire publié
+  ([`docs/BQN.md`](docs/BQN.md)). Pas de compteurs matériels ;
   les compteurs du noyau (appels système, défauts de page, uprobes) servent aux faits de mécanisme
   ([`docs/INSTRUMENTS_V3.md`](docs/INSTRUMENTS_V3.md)).
 * **Score** :
@@ -627,19 +635,21 @@ du langage.
 * BQN non plus : toutes ses clés viennent d'un Emerald Rapids (machine 26), reliées par le C ; CBQN choisissant son
   code à la construction, il y est construit pour la cible de chaque donnée publiée (Cascade Lake pour les clés de la
   machine 1), ce qui retire les extensions qu'Emerald Rapids a en plus. Le second témoin et un facteur d'hôte unique
-  ne changent pas sa place (21e) ; relié par le facteur de la table chaînée du C (16,3), son K7 naturel (`•HashMap`,
-  une table à adressage ouvert) vaut 143 s, sans doute trop (27,6 s avec le facteur de la table plate du C ; même
-  place). Sa réplication passe par le même pont ([`docs/BQN.md`](docs/BQN.md), 4).
+  ne changent pas sa place (21e) ; le facteur de K7 naturel (16,3, celui de la table chaînée du C) le pénalise sans
+  doute (19,0 s publiés ; 3,7 s avec le facteur de la table plate, + 0,17 point, même place). Sa réplication passe
+  par le même pont ([`docs/BQN.md`](docs/BQN.md), 4 et 5.9).
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Les 23 premiers langages ont été relus après coup par des connaisseurs, Swift puis FreePascal en dernier ;
-  BQN, ajouté le 6 novembre, ne l'a pas encore été ; C l'a été
+  l'autre. Les 24 langages ont été relus après coup par des connaisseurs, Swift, FreePascal puis BQN en dernier ;
+  C l'a été
   alors que sa
   référence est la seule implémentation mise au point, mesures à l'appui, avant le plan. Ada et Fortran y ont gagné
   deux places chacun, par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la
   boucle de mesure) ; D une place, par la correction de son Q1 optimisé et deux errata de la règle v1 ; Rust deux
   places (trois avant les errata de C3), surtout par la remesure des queues de latence de K8, qui a aussi déplacé Zig,
   C3, Nim et Ada ; Chapel une place par trois errata de la matrice ; Swift une place par deux errata de la matrice ;
-  FreePascal 0,6 point, sans changer de place, par trois errata de la matrice ;
+  FreePascal 0,6 point, sans changer de place, par trois errata de la matrice ; BQN a perdu 0,9 point, sans changer
+  de place, par deux errata de la matrice (− 1,1) et deux corrections de son banc (K7 naturel en idiome de la
+  documentation, somme de contrôle de K9 hors chrono) ;
   Mojo 2,7 points, Julia 1,8 point, C3 et Odin 0,9 point, mais aucune place, par des errata de la matrice (ceux de C3
   font passer Nim devant Rust, à égalité ; celui d'Odin le met à égalité avec C++) ; Zig trois places, mais par une
   version de compilateur que la règle exclut ; C++ a perdu la 2e place au profit d'Odin par un erratum de la règle v1,
@@ -792,7 +802,9 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   section 5, et [`results/report_fpc_remark.md`](results/report_fpc_remark.md).
 * L'ajout de BQN (CBQN construit pour la cible de chaque donnée publiée, choix du code naturel d'un langage de
   tableaux, faits relevés, grille, plan, pont par le C, sensibilités) : [`docs/BQN.md`](docs/BQN.md) et
-  [`results/report_bqn.md`](results/report_bqn.md).
+  [`results/report_bqn.md`](results/report_bqn.md) ; la remarque sur BQN (K7 naturel et somme de contrôle de K9
+  corrigés, errata A3 et A6, formes en blocs en sensibilité) : [`docs/BQN.md`](docs/BQN.md), section 5, et
+  [`results/report_bqn_remark.md`](results/report_bqn_remark.md).
 * La remarque sur Ada (piège de GNAT, errata, implémentation corrigée et remesurée) : [`docs/ADA.md`](docs/ADA.md)
   et [`results/report_ada.md`](results/report_ada.md).
 * La remarque sur D (Q1 corrigé, deux errata de la règle v1, cause du stencil naturel) :
@@ -1179,6 +1191,14 @@ python3 tools/measure_bqn.py               # BQN (trois constructions), trois t�
 
 ```bash
 python3 analysis/bqn_check.py              # pont par le C, classement avec BQN, sensibilités -> report_bqn.md
+```
+
+```bash
+python3 tools/measure_bqn_rq.py            # remarque sur BQN : copie bqn_rq (blocs, K9, K7), machine 27 -> results/raw_bqn_rq
+```
+
+```bash
+python3 analysis/bqn_remark.py             # errata, formes en blocs, C5 ; transfers.json (ratios_added) -> report_bqn_remark.md
 ```
 
 ```bash

@@ -14,11 +14,11 @@ Cap "A1"‿"0.5"‿("matrice 1000×16 : " ∾ (Ty mat) ∾ " d'un seul tenant (r
 Cap "A2"‿"0"‿"ni ordre ni taille de champs : un espace de noms n'a pas de disposition (les types de structure de •FFI ne servent qu'aux appels)"
 # A3 : booléens rangés à 1 bit, réinterprétation bit à bit
 b ← 1‿0‿1‿1‿0‿0‿0‿1
-Cap "A3"‿"0.5"‿("booléens rangés à 1 bit (" ∾ (Ty b) ∾ ") ; ⟨1,'u'⟩‿⟨8,'i'⟩ •bit._cast 8 bits → " ∾ (R ⟨1,'u'⟩‿⟨8,'i'⟩ •bit._cast b) ∾ " ; pas de champs de bits dans un enregistrement")
+Cap "A3"‿"0"‿("ni enregistrement compacté ni champ de bits ; booléens rangés à 1 bit (" ∾ (Ty b) ∾ ") et ⟨1,'u'⟩‿⟨8,'i'⟩ •bit._cast 8 bits → " ∾ (R ⟨1,'u'⟩‿⟨8,'i'⟩ •bit._cast b) ∾ ", sur des tableaux seulement, comme le BitArray de Julia (remarque sur BQN)")
 Cap "A4"‿"0"‿"aucun contrôle de l'alignement"
 Cap "A5"‿"0.5"‿("•bit._cast : 1.0 en f64 → deux i32 " ∾ (R ⟨64,'f'⟩‿⟨32,'i'⟩ •bit._cast ⟨1.0⟩) ∾ " (tableaux seulement ; ni union ni f32)")
 t16 ← ⍉ mat
-Cap "A6"‿"0.5"‿("⍉ fait passer la matrice 1000×16 (une particule par rangée) en 16×1000 (un champ par rangée, " ∾ (Ty t16) ∾ ") : AoS et SoA dans le même conteneur, sans champs nommés")
+Cap "A6"‿"0"‿("aucun conteneur SoA : ⍉ transpose la matrice 1000×16 en 16×1000 (" ∾ (Ty t16) ∾ ", une copie), comme la transposition de Fortran et de Julia (remarque sur BQN)")
 r3 ← 2‿16‿4 ⥊ 0.25
 Cap "A7"‿"0.5"‿("tableau de rang 3 (2×16×4, " ∾ (Ty r3) ∾ ") : sous-tableaux fixes en ligne, homogènes seulement")
 Cap "A8"‿"0.5"‿("stockage étroit choisi par l'implémentation : 1‿2‿3 " ∾ (Ty 1‿2‿3) ∾ ", 300‿1 " ∾ (Ty 300‿1) ∾ ", 70000‿1 " ∾ (Ty 70000‿1) ∾ ", 0.5‿1 " ∾ (Ty 0.5‿1) ∾ " ; •bit._cast force i8/i16/i32 ; pas de flottant 32 ou 16 bits")
@@ -46,7 +46,7 @@ f ← 1 ÷ 1 + ↕1000000
 d1 ← +´ f
 d2 ← •math.Sum f
 Cap "C4"‿"0.5"‿("+´ ordonnée " ∾ (R d1) ∾ " ; •math.Sum (somme vectorielle réassociée) " ∾ (R d2) ∾ " ; écart " ∾ (R d1 - d2) ∾ " ; pour la somme seulement")
-Cap "C5"‿"0"‿"ni threads ni boucle parallèle"
+Cap "C5"‿"0"‿"aucune construction qui demande plusieurs cœurs (CBQN n'en utilise qu'un) ; les primitives sur tableaux entiers relèvent du SIMD"
 Cap "D1"‿"0"‿"pas de threads (la bibliothèque système n'en a pas ; CBQN n'est pas réentrant)"
 Cap "D2"‿"0"‿"aucun atomique"
 Cap "D3"‿"0"‿"aucune aide de ligne de cache"
@@ -62,7 +62,7 @@ Cap "E7"‿"0"‿"ni calcul à la compilation ni génériques"
 r34 ← 3‿4‿5 ⥊ ↕60
 Cap "F1"‿"1"‿("tableaux multidimensionnels natifs, contigus en ordre des rangées (3×4×5 : " ∾ (Ty r34) ∾ ", (⟨1,2,3⟩⊑r) = " ∾ (R ⟨1,2,3⟩ ⊑ r34) ∾ ")")
 Cap "F2"‿"0"‿"aucun"
-Cap "F3"‿"0.5"‿("entiers exacts jusqu'à 2⋆53 (f64) ; enveloppement par modulo : (2⋆32)|¯1 = " ∾ (R (2⋆32) | ¯1) ∾ ", par •bit._cast 300 → i8 " ∾ (R ⟨16,'i'⟩‿⟨8,'i'⟩ •bit._cast ⟨300⟩) ∾ " ; pas de type entier de largeur fixe")
+Cap "F3"‿"0.5"‿("pas de type entier de largeur fixe : entiers exacts jusqu'à 2⋆53 (f64) ; opérations modulaires sur des tableaux par •bit : ⟨100,¯56⟩ 8•bit._add ⟨100,100⟩ = " ∾ (R ⟨100,¯56⟩ 8•bit._add ⟨100,100⟩) ∾ ", ⟨2e9⟩ 32•bit._add ⟨2e9⟩ = " ∾ (R ⟨2e9⟩ 32•bit._add ⟨2e9⟩) ∾ " ; enveloppement par modulo : (2⋆32)|¯1 = " ∾ (R (2⋆32) | ¯1) ∾ ", par •bit._cast 300 → i8 " ∾ (R ⟨16,'i'⟩‿⟨8,'i'⟩ •bit._cast ⟨300⟩))
 # F4 : •file.MapBytes projette le fichier ; •bit._cast le réinterprète sans le recopier
 mb0 ← Live @
 mp ← •file.MapBytes "/opt/msdata/k7_keys.u32"

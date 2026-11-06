@@ -198,6 +198,19 @@ def _lat_cols(procs):
 
 
 BRIDGE_SUS = []  # (langage, clé, temps, borne) : clés reliées écartées par le contrôle de la borne physique
+# Corrections des langages ajoutés (remarque sur BQN, docs/BQN.md 5.5) : rapports appariés appliqués après le pont,
+# {hôte: {langage: {"noyau|variante|paramètre": r}}}, hôte « main » (classement) ou « m3 » (réplication) ; « ratios_added »
+# de results/transfers.json. None : lus dans le fichier ; un dictionnaire : celui-là (les scripts de scénarios
+# rejouent ainsi l'état d'avant une correction).
+ADDED_RATIOS = None
+
+
+def _added_ratio(lang, key, host):
+    global ADDED_RATIOS
+    if ADDED_RATIOS is None:
+        path = os.path.join(ROOT, "results", "transfers.json")
+        ADDED_RATIOS = json.load(open(path)).get("ratios_added", {}) if os.path.exists(path) else {}
+    return ADDED_RATIOS.get("m3" if host == "m3" else "main", {}).get(lang, {}).get("|".join(key), 1.0)
 
 
 def bridge_added(data, lat, keys=None, latency=True, bounds=None, host="main", no_er=()):
@@ -224,7 +237,7 @@ def bridge_added(data, lat, keys=None, latency=True, bounds=None, host="main", n
                 procs, ref, wit = own.get(key), data.get("c", {}).get(key), cw.get(key)
                 if not procs or not ref or not wit:
                     continue
-                f = _gm_procs(ref) / _gm_procs(wit)
+                f = _gm_procs(ref) / _gm_procs(wit) * _added_ratio(lang, key, host)  # correction appariée éventuelle
                 new = [[t * f for t in p] for p in procs]
                 bound = (bounds if bounds is not None else BOUNDS_M3 if key[0] in ("k5", "k9") else BOUNDS).get(key)
                 if bound is not None and float(np.median([np.median(p) for p in new])) < 0.9 * bound:

@@ -59,7 +59,8 @@ Pondération des catégories, avec des capacités équipondérées à l'intérie
 * **C. SIMD et vectorisation (20 %)** : C1 types vectoriels portables ;
   C2 intrinsèques spécifiques à la cible ; C3 vectorisation automatique des boucles
   simples (vérifiée sur le désassemblage de K4/K9 `natural`) ; C4 contrôle de la
-  réassociation flottante ; C5 constructions de parallélisme de données.
+  réassociation flottante ; C5 constructions de parallélisme de données sur plusieurs cœurs (boucles et réductions
+  parallèles ; le SIMD relève de C1 à C4 ; précisé le 6 novembre, remarque sur BQN).
 * **D. Concurrence et modèle mémoire (15 %)** : D1 threads parallèles en mémoire
   partagée ; D2 atomiques avec ordres mémoire explicites ; D3 aide « ligne de cache »
   (constante ou type de bourrage) ; D4 affinité CPU dans la bibliothèque standard ;
@@ -1393,7 +1394,7 @@ Robustesse :
   FreePascal, qui y manquait), reproduction ; « les neuf mêmes restent derrière » corrigé en « les onze » (le compte
   n'avait pas suivi l'ajout de FreePascal). `docs/BQN.md` (section 4), `docs/FINDINGS.md`, `docs/NOSIMD.md` (4.22),
   `docs/CONFRONTATION.md`, `docs/CAPABILITIES.md` (régénéré : colonne de BQN).
-* 2026-11-06, 16:30 à 17:20 : **remarque sur BQN : vérification, errata et plan** (`docs/BQN.md`, sections 5.1 à
+* 2026-11-06, 16:30 à 16:53 : **remarque sur BQN : vérification, errata et plan** (`docs/BQN.md`, sections 5.1 à
   5.7, poussé avant les mesures). Machine 27 (nouvel hôte Emerald Rapids du même modèle, caractérisé). Vérifié dans
   les sources (CBQN 0.12.0 et sa branche `develop`, dépôt officiel du langage : `doc/`, `spec/`, `implementation/`) :
   84 commits sur `develop`, sans threads ni f32 ; vecteurs de 256 bits (`arch_defvw`) ; `•bit._add`, `_sub`, `_mul`,
@@ -1406,4 +1407,26 @@ Robustesse :
   sensibilité (R-blocs), comme les formes mieux écrites des autres langages. Copie `bench/bqn_rq` (et `bqn_er_rq`),
   validée ; outil `tools/measure_bqn_rq.py` (56 cellules × 7 passes) ; scénarios Avant, R-grille, R-K9, R-K7, R-E,
   R-blocs, R-C5, R-blocs-C5, R-K7map.
+* 2026-11-06, 16:53:17-17:19:15 : **mesures de la remarque sur BQN** (`tools/measure_bqn_rq.py`, machine 27) : 392
+  processus (56 cellules × 7), aucune somme de contrôle fausse, aucun processus refait, vol médian 0,20 % (1,97 % au
+  plus) ; témoins inchangés à 1,015 et 0,988. Pendant la campagne, seuls le report des rapports dans le pont
+  (`ratios_added`), la grille, la sonde, `analysis/bqn_remark.py`, les témoins des états actuels et des textes ont été
+  écrits, sans rien exécuter hors des vérifications de syntaxe.
+* 2026-11-06, 17:20 à 17:41 : **résultats de la remarque sur BQN, sorties régénérées** (`analysis/bqn_remark.py`,
+  puis la chaîne publiée et les états actuels). Contrôles : le scénario Avant reproduit B-E de
+  `results/bqn_check.json` à l'identique ; les états actuels reproduisent R-E à l'identique. Sonde de BQN relancée
+  (A3, A6 à 0 ; notes de C5 et F3) ; cinq divergences, les anciennes de C et C++. BQN **21e, 17,72 points**
+  [17,5–17,9] (− 0,93 : grille − 1,10, K7 naturel + 0,16, K9 + 0,01) ; les 23 autres gardent leurs scores, leurs rangs
+  espérés bougent de 0,04 au plus ; étages [14, 5, 5]. Rapports de la machine 27 : K7 naturel en idiome de la
+  documentation × 0,133 ; somme de contrôle de K9 hors chrono, rapports dans le bruit (0,94 à 1,00) ; formes en blocs
+  × 0,35 (Q1) à × 0,86 (Q6 `mt`) : R-blocs 19,72 points (plafond 17,45), toujours 21e ; R-blocs-C5 20,59.
+* 2026-11-06, 17:43 à 17:49 : **R-K7tab, ajouté après les résultats** (information, hors du classement) : B-K7tab
+  rejoué sur les données corrigées (K7 naturel de BQN relié par le facteur de la table plate du C : 3,7 s au lieu de
+  19,0 s publiés ; 17,89 points, 21e), pour vérifier une phrase du README. `analysis/bqn_remark.py` relancé : les neuf
+  autres scénarios et `results/transfers.json` sont identiques au bit près.
+* 2026-11-06, 17:30 à 17:55 : **README et documents après la remarque sur BQN**. README : tableau (17,7 ; 79 et
+  84 %), paragraphe de BQN (relu, errata, ce que mesure le rang, formes en blocs), limites (K7), relectures, bilan des
+  errata, machines, lectures, reproduction ; le K7 de Haskell redevient le plus lent de l'étude. `docs/BQN.md`
+  (sections 5.8 à 5.12), `docs/FINDINGS.md`, `docs/NATURAL.md` (K7 de BQN), `docs/NOSIMD.md` (4.23),
+  `docs/CONFRONTATION.md`, `docs/CAPABILITIES.md` (régénéré : A3, A6 de BQN ; définition de C5).
 
