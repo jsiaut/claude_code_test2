@@ -1,0 +1,4 @@
+#!/bin/sh
+# BQN, construction native de la machine 26 (CBQN 0.12.0, make o3n, Emerald Rapids, /opt/cbqn) : même source que
+# bench/bqn ; sert aux clés venues d'Emerald Rapids (K5, réplication), comme swift_er (docs/BQN.md, 3.2)
+exec /opt/cbqn/bin/BQN "$(dirname "$0")/../bqn/ms.bqn" "${MS_DATA:-/opt/msdata}" "${WARMUP:-3}" "$@"

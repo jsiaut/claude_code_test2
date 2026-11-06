@@ -11,9 +11,9 @@ sys.path.insert(0, os.path.join(ROOT, "analysis"))
 import hotloop  # noqa: E402
 
 LANGS = ["c", "cpp", "csharp", "java", "zig", "odin", "julia", "ada", "fortran", "js", "python", "haskell",
-         "c3", "d", "rust", "chapel", "nim", "mojo", "go", "ocaml", "lua", "swift", "fpc", "c_gcc", "fortran_flang", "luajit", "js_bun"]
+         "c3", "d", "rust", "chapel", "nim", "mojo", "go", "ocaml", "lua", "swift", "fpc", "bqn", "c_gcc", "fortran_flang", "luajit", "js_bun"]
 KERNELS = [("k4", "natural_unsorted", ""), ("k9", "natural", "")]
-JIT = {"java", "csharp", "js", "js_bun", "julia", "luajit"}
+JIT = {"java", "csharp", "js", "js_bun", "julia", "luajit", "bqn"}  # bqn : JIT de CBQN (docs/BQN.md, 3.2)
 
 
 def main():

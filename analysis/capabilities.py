@@ -474,6 +474,28 @@ MATRIX = {
         "F2": (0, "aucun"), "F3": (1, "Byte...QWord et ShortInt...Int64, modulaires sans {$Q+} (défaut, sonde)"),
         "F4": (0.5, "Fpmmap de l'unité BaseUnix (appel système propre à Unix) + pointeur typé (sonde) ; aucune projection portable dans les unités livrées, comme syscall.Mmap de Go ; erratum du 6/11, remarque sur FreePascal : 1 avant ; 1 en règle v2"),
     },
+    "bqn": {  # ajouté le 6/11 (docs/BQN.md) : CBQN 0.12.0, sonde probes/bqn, results/probes/bqn.txt
+        "A1": (0.5, "matrice n×16 de f64 d'un seul tenant (rangées homogènes en ligne, bench K1) ; espaces de noms en références ; pas d'enregistrement hétérogène en ligne (sonde)"),
+        "A2": (0, "aucun : un espace de noms n'a pas de disposition"), "A3": (0.5, "booléens rangés à 1 bit (bitarr) et •bit._cast u1 ; pas de champs de bits (sonde)"),
+        "A4": (0, "aucun"), "A5": (0.5, "•bit._cast entre i8/i16/i32/f64/caractères (tableaux seulement ; ni union ni f32, sonde)"),
+        "A6": (0.5, "⍉ fait passer une matrice d'une particule par rangée à un champ par rangée : AoS et SoA dans le même conteneur, sans champs nommés (sonde)"),
+        "A7": (0.5, "tableaux de rang 3 et plus : sous-tableaux fixes en ligne, homogènes seulement (sonde)"),
+        "A8": (0.5, "i8/i16/i32/bits choisis par l'implémentation, forçables par •bit._cast ; flottants f64 seulement (sonde)"),
+        "B1": (0.5, "comptage de références ; ramasse-miettes traçant automatique, désactivable seulement par la commande )gc disable du REPL (sonde, docs/commands.md)"),
+        "B2": (0, "aucun"), "B3": (0, "nombres jamais boxés, mais tout tableau sur le tas (sonde), comme JavaScript"),
+        "B4": (0, "chaque primitive alloue son résultat"), "B5": (0.5, "objets pointeurs de •FFI (Read, Write, Add, Cast ; malloc de la libc, sonde)"),
+        "C1": (0, "aucun type vectoriel"), "C2": (0, "aucune"), "C3": M,
+        "C4": (0.5, "+´ ordonnée ou •math.Sum, somme vectorielle réassociée (sonde) ; pour la somme seulement"),
+        "C5": (0, "ni threads ni boucle parallèle"),
+        "D1": (0, "pas de threads"), "D2": (0, "aucun"), "D3": (0, "aucune"), "D4": (0, "aucune (sched_setaffinity seulement par •FFI)"),
+        "D5": (0, "aucun"),
+        "E1": (0.5, "bytecode et JIT x86-64 actif par défaut ; code machine visible seulement par une option de construction (USE_PERF, sonde)"),
+        "E2": (0, "aucun"), "E3": (0, "aucun"), "E4": (0, "aucun"), "E5": (0, "aucun (valeurs immuables)"),
+        "E6": (0, "indices toujours vérifiés (sonde)"), "E7": (0, "aucun"),
+        "F1": (1, "tableaux multidimensionnels natifs et contigus (sonde, bench K9)"), "F2": (0, "aucun"),
+        "F3": (0.5, "entiers exacts jusqu'à 2⋆53 (f64) ; enveloppement par modulo, comme les masques de Python et de JavaScript (sonde)"),
+        "F4": (1, "•file.MapBytes + •bit._cast sans copie (i32slice, sonde)"),
+    },
 }
 
 

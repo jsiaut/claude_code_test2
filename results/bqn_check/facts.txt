@@ -1,0 +1,35 @@
+== 0. chaîne
+/opt/cbqn-cl/bin/BQN : CBQN 0.12.0 built with FFI, singeli X86_64 
+/opt/cbqn/bin/BQN : CBQN 0.12.0 built with FFI, singeli native X86_64 
+/opt/cbqn-o3/bin/BQN : CBQN 0.12.0 built with FFI, singeli X86_64 
+21c51ab61ba06d47542faecc0a416bdce8b97eb88870c4a393071dcfb8352453  /opt/cbqn-cl/bin/BQN
+9faa903c35e07b1c1c06d6c9e7551ec844396d735d35007760a8585d6a2bf600  /opt/cbqn/bin/BQN
+c120eb7d2d3de52b31af263d392e23a8119480be5d582e852879e752d9dd0ac7  /opt/cbqn-o3/bin/BQN
+/opt/cbqn-cl/bin/BQN : instructions à registres zmm 149, ymm 25411, xmm 10030 ; opérations sur les masques k 1115 ; vpcompressb/w (VBMI2) 0, gf2p8 (GFNI) 0
+/opt/cbqn/bin/BQN : instructions à registres zmm 556, ymm 27689, xmm 10863 ; opérations sur les masques k 1385 ; vpcompressb/w (VBMI2) 91, gf2p8 (GFNI) 14
+/opt/cbqn-o3/bin/BQN : instructions à registres zmm 0, ymm 0, xmm 29834 ; opérations sur les masques k 0 ; vpcompressb/w (VBMI2) 0, gf2p8 (GFNI) 0
+étiquette v0.12.0 : b4db324a99d6590d91b9b09bc36847f3254c1543 (2026-06-28 22:42:34 +0300)
+sous-module :  156b47caf895f6706811c5c34bbbbaf192b8018b build/bytecodeSubmodule (156b47c)
+sous-module : -5e3bd870699007b9536d29f60e3a2b0a68ce0a7a build/replxxSubmodule
+sous-module :  5187ed3aa22a2257b63c04a5498ec756fa6263cb build/singeliSubmodule (5187ed3)
+JIT : 14:    #define JIT_START 2 // number of calls for when to start JITting. -1: never JIT; 0: JIT everything, n: JIT after n non-JIT invocations; max ¯1+2⋆16
+GC : 475:#define ENABLE_GC 1      // enable garbage collection ; 72:`)gc disable` disables automatic garabage collection, and `)gc enable` enables it again.
+•math.Sum sur f64 : 207:      r = si_sum_f64(xv, ia);
+•bit._cast : 45:    else if (t=='f') { if (s!=64) goto badWidth; }
+allocateur : 24:  #define MM 1 ; 41:static u64 mm_round(usz sz) { 42-  return BSZ(LOG2(sz)); 
+options de construction : 25:(TL;DR: use `make o3n` for local builds on x86-64, but `make` is fine on other architectures)
+== 1. •bit._cast : largeurs refusées
+f32 : •bit._cast: Unsupported width 32 for type 'f'
+u32 : •bit._cast: Unsupported width 32 for type 'u'
+== 2. K5 : +´ ordonnée contre •math.Sum (65 536 produits scalaires de 2048)
++´ : 0.11198585599959188 s (0.8343596458404651 ns par élément), 509.0857434398008
+•math.Sum : 0.030167802000505617 s, 509.0857434398008
+produit seul (a × b) : 0.028599678000318818 s ; la somme +´ seule : 0.6212754398530205 ns par élément (chaîne d'additions)
+== 3. K2 : forme tacite contre bloc (4,2 M sauts, 16 Kio)
+⊑⟜a⍟n : 8.192333809693949 ns par saut ; {𝕩⊑a}⍟n : 25.478967619121597 ns par saut (3568, 3568)
+== 4. K9 : recopier le bord (une itération, 2048×2048)
+mise à jour structurelle (Inner s)˙⌾Inner : 1.8268867999995564 s ; rangées recollées (∾ et ∾˘) : 0.02367279200007033 s ; mêmes valeurs : 1
+== 5. K1 : place d'une matrice de 4 194 304 × 16 f64
+octets par particule : RSS 128.0009765625, tas vivant 255.99999237060547 (f64arr)
+== 6. •HashMap : coût par ligne (1 M lignes, Get puis Set d'un couple)
+•HashMap : 341.36255168924765 ns par ligne ; ⊐, /⁼ et ⊔ : 64.79759120936457 ns par ligne

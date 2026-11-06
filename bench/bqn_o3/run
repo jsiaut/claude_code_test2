@@ -1,0 +1,4 @@
+#!/bin/sh
+# Copie de sensibilité (docs/BQN.md, plan) : le source de bench/bqn exécuté par la construction par défaut de CBQN 0.12.0
+# (make o3 : -O3 sans -march=native, Singeli en x86-64 de base), installée dans /opt/cbqn-o3
+exec /opt/cbqn-o3/bin/BQN "$(dirname "$0")/../bqn/ms.bqn" "${MS_DATA:-/opt/msdata}" "${WARMUP:-3}" "$@"

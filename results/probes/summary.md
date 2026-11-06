@@ -7,6 +7,39 @@
 | ada | C1 | 0.5 | 0.5 |  | Machine_Attribute vector_type (extension GNAT) : Add =  3.00000E+00 |
 | ada | E5 | 1 | 1 |  | RM 6.2(12) exploitée par GNAT sur paramètres de type contraint : Y (1) =  7.00000E+00 |
 | ada | B4 | 0.5 | 0.5 |  | retour non contraint de 4 Mo par la pile secondaire (tas au-delà du morceau statique) :  5.00000000000000E+05 |
+| bqn | A1 | 0.5 | 0.5 |  | matrice 1000×16 : f64arr d'un seul tenant (rangées homogènes en ligne) ; liste d'espaces de noms : harr (référ |
+| bqn | A2 | 0 | 0 |  | ni ordre ni taille de champs : un espace de noms n'a pas de disposition (les types de structure de •FFI ne ser |
+| bqn | A3 | 0.5 | 0.5 |  | booléens rangés à 1 bit (bitarr) ; ⟨1,'u'⟩‿⟨8,'i'⟩ •bit._cast 8 bits → ⟨ -115 ⟩ ; pas de champs de bits dans u |
+| bqn | A4 | 0 | 0 |  | aucun contrôle de l'alignement |
+| bqn | A5 | 0.5 | 0.5 |  | •bit._cast : 1.0 en f64 → deux i32 ⟨ 0 1072693248 ⟩ (tableaux seulement ; ni union ni f32) |
+| bqn | A6 | 0.5 | 0.5 |  | ⍉ fait passer la matrice 1000×16 (une particule par rangée) en 16×1000 (un champ par rangée, f64arr) : AoS et  |
+| bqn | A7 | 0.5 | 0.5 |  | tableau de rang 3 (2×16×4, f64arr) : sous-tableaux fixes en ligne, homogènes seulement |
+| bqn | A8 | 0.5 | 0.5 |  | stockage étroit choisi par l'implémentation : 1‿2‿3 i8arr, 300‿1 i16arr, 70000‿1 i32arr, 0.5‿1 f64arr ; •bit._ |
+| bqn | B1 | 0.5 | 0.5 |  | comptage de références (•internal.Refc ↕1000 : 1) ; ramasse-miettes traçant automatique, désactivable seulemen |
+| bqn | B2 | 0 | 0 |  | aucun allocateur à choisir ni arène |
+| bqn | B3 | 0 | 0 |  | nombres jamais boxés (100 000 additions scalaires : tas vivant 128 octets de plus) ; tout tableau est sur le t |
+| bqn | B4 | 0 | 0 |  | chaque primitive alloue son résultat (sauf mise à jour en place d'un tableau non partagé) |
+| bqn | B5 | 0.5 | 0.5 |  | pointeurs par •FFI seulement : malloc, Write 123456, Read 123456 (objets pointeurs Read/Write/Add/Cast) |
+| bqn | C1 | 0 | 0 |  | aucun type vectoriel : les primitives travaillent sur des tableaux entiers |
+| bqn | C2 | 0 | 0 |  | aucune intrinsèque |
+| bqn | C4 | 0.5 | 0.5 |  | +´ ordonnée 14.392726722865772 ; •math.Sum (somme vectorielle réassociée) 14.392726722865621 ; écart 1.5099033 |
+| bqn | C5 | 0 | 0 |  | ni threads ni boucle parallèle |
+| bqn | D1 | 0 | 0 |  | pas de threads (la bibliothèque système n'en a pas ; CBQN n'est pas réentrant) |
+| bqn | D2 | 0 | 0 |  | aucun atomique |
+| bqn | D3 | 0 | 0 |  | aucune aide de ligne de cache |
+| bqn | D4 | 0 | 0 |  | pas d'affinité (sched_setaffinity seulement par •FFI vers la libc) |
+| bqn | D5 | 0 | 0 |  | ni barrière ni pause |
+| bqn | E1 | 0.5 | 0.5 |  | interprète de bytecode avec un JIT x86-64 actif par défaut (src/vm/vm.h : JIT_START 2, une fonction compilée a |
+| bqn | E2 | 0 | 0 |  | aucun |
+| bqn | E3 | 0 | 0 |  | aucun |
+| bqn | E4 | 0 | 0 |  | aucun |
+| bqn | E5 | 0 | 0 |  | aucune annotation (valeurs immuables) |
+| bqn | E6 | 0 | 0 |  | indices toujours vérifiés (5 ⊑ ↕3 : « 𝕨⊑𝕩: indexing out-of-bounds (𝕨≡5, 3≡≠𝕩) ») ; aucun moyen de les désactiv |
+| bqn | E7 | 0 | 0 |  | ni calcul à la compilation ni génériques |
+| bqn | F1 | 1 | 1 |  | tableaux multidimensionnels natifs, contigus en ordre des rangées (3×4×5 : i8arr, (⟨1,2,3⟩⊑r) = 33) |
+| bqn | F2 | 0 | 0 |  | aucun |
+| bqn | F3 | 0.5 | 0.5 |  | entiers exacts jusqu'à 2⋆53 (f64) ; enveloppement par modulo : (2⋆32)|¯1 = 4294967295, par •bit._cast 300 → i8 |
+| bqn | F4 | 1 | 1 |  | •file.MapBytes projette 64 Mio (c8slice, tas vivant + 128 o) ; •bit._cast en i32 sans copie (i32slice, tas + 6 |
 | c | A1 | 1 | 1 |  | tableau de struct contigu sizeof(arr)=64 (4x16) |
 | c | A2 | 1 | 1 |  | offsetof(S,b)=4 offsetof(S,c)=8 |
 | c | A3 | 1 | 0.5 | DIVERGENCE | bitfields sizeof(BF)=4 ; packed (extension) sizeof(P)=5 |

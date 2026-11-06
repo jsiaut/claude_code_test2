@@ -1353,4 +1353,21 @@ Robustesse :
   (README, `docs/FPC.md` 4.2, `docs/FINDINGS.md`) : 0,98 contre 0,97 pour C, sur le même code machine, est du bruit.
   `docs/FPC.md` (sections 5.8 à 5.12), `docs/FINDINGS.md`, `docs/NOSIMD.md` (4.21), `docs/CONFRONTATION.md`,
   `docs/CAPABILITIES.md` (régénéré : C2, E4 et F4 de FreePascal).
+* 2026-11-06, 13:00 à 13:50 : **ajout de BQN (CBQN), demandé par l'auteur ; chaîne, implémentation, grille, faits et
+  plan** (`docs/BQN.md`, sections 1 à 3, poussé avant les mesures). CBQN 0.12.0, la dernière version publiée (étiquette
+  `v0.12.0`, commit `b4db324a`), construit avec clang 23 en trois binaires : la construction que recommande le README
+  (`make o3n`) pour la cible de chaque hôte de données, Cascade Lake (`bench/bqn`, `target_from_cc=1`,
+  `-march=cascadelake` : Singeli sans VBMI2 ni GFNI) et native de la machine 26 (`bench/bqn_er`), plus la cible par
+  défaut (`bench/bqn_o3`, sensibilité). Premier langage de tableaux : code naturel en primitives (matrice n×16 pour K1,
+  `•HashMap` pour K7, listes imbriquées pour K8, décalages pour K9 ; espaces de noms et idiome tableau en variantes de
+  sensibilité) ; ni threads ni coroutines : K3 et `mt` en séquence, pas de K10. Cellules validées : 43 par binaire et
+  36 pour la cible par défaut. Faits relevés sans page web (`tools/bqn_check/facts.sh`) : ni f32 ni u32 (décodage exact
+  hors chrono, 128 o par particule) ; `+´` ordonnée plus rapide que le C naturel sur K5 (le C contracte en FMA) ;
+  `•math.Sum` réassociée ; mise à jour structurelle `⌾` 70 à 80 fois plus lente que le recollage des rangées ;
+  allocateur par blocs compagnons (le tas compte 256 o par particule, la mémoire physique 128) ; `•HashMap` à 300 à
+  480 ns par ligne. Grille (`probes/bqn`) : pilier C de 22,3 (v1, C3 = 0) et 22,8 (v2). Décisions fixées d'avance : le
+  pont du C de FreePascal, chaque clé prise au binaire BQN de la cible de ses données ; empreinte retenue à 128 o
+  (comme Nim) ; générateur propre (SEED + 2404), classe JIT, groupe « JIT ou VM » ; scénarios B-E (publié), B-hôte,
+  B-gcc, B-natif, B-o3, B-K1ns, B-K7arr, B-K8ns, B-fp, B-C3, cases basses et hautes ; outil `tools/measure_bqn.py`
+  (153 cellules × 7 passes, machine 26).
 
