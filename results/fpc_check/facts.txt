@@ -1,0 +1,103 @@
+== 1. chaîne
+3.2.2
+cible : x86_64-linux ; processeurs : ATHLON64 COREI COREAVX COREAVX2  ; FPU : SSE64 SSE3 SSSE3 SSE41 SSE42 AVX AVX2 
+fpc.cfg livré, mode release :
+#IFDEF RELEASE
+  -O2
+  -Xs
+  #WRITE Compiling Release Version
+options -O :  -O1 Level 1 optimizations (quick and debugger friendly); -O2 Level 2 optimizations (-O1 + quick optimizations); -O3 Level 3 optimizations (-O2 + slow optimizations); -O4 Level 4 optimizations (-O3 + optimizations which might have unexpected side effects);
+-O3 / -O4 : disposition d'un record et d'une classe {Byte; Int64; Byte; LongInt} (taille, décalages) et réduction
+-O3 : record 24 8 16 20 class 32 8 16 24 28  ; produit scalaire : 0 vfmadd, 1 vaddss
+-O4 : record 24 8 16 20 class 24 20 8 21 16  ; produit scalaire : 1 vfmadd, 0 vaddss
+== 2. -Sv ne change rien sans expression vectorielle (source du banc, -dSCALAR, avec et sans -Sv)
+sans -Sv 0dadbe4938110a80 ; avec -Sv 0dadbe4938110a80
+== 3. code produit du banc (bench/fpc, -al)
+-- K5 naturel (accumulateur sur la pile ; High(a) appelle fpc_dynarray_high) :
+	vmovss	_$MS$_Ld40,%xmm0
+	vmovss	%xmm0,(%rsp)
+	call	fpc_dynarray_high
+	vmovss	(%rbx,%rdx,4),%xmm0
+	vmulss	(%r12,%rdx,4),%xmm0,%xmm0
+	vaddss	(%rsp),%xmm0,%xmm0
+	vmovss	%xmm0,(%rsp)
+	vmovss	(%rsp),%xmm0
+-- K5 tuned scalaire (copie fpc_scal) : 8 vfmadd231ss, 16 vmovaps
+-- K5 tuned -Sv (msvec) : 8 mulps, 15 addps (encodage SSE classique), 16 rangements des accumulateurs sur la pile
+-- K3 (RMW puis écriture simple) :
+	call	SYSTEM_$$_INTERLOCKEDINCREMENT64$INT64$$INT64
+	addq	$1,(%r12)
+-- K4 naturel (un branchement par octet) :
+	addq	$1,%rdx
+	cmpb	$128,(%rbx,%rdx,1)
+	jnae	.Lj207
+	addq	%rcx,%r12
+-- K9 tuned (boucle intérieure) :
+instructions flottantes : 4
+-- K10 tuned, attente du producteur :
+.Lj3592:
+	addq	$1,%rax
+	jmp	.Lj3596
+	.balign 8,0x90
+.Lj3595:
+	movq	U_$P$MS_$$_SQ,%rdx
+	movq	128(%rdx),%rdi
+.Lj3596:
+== 4. RTL (system.o)
+0000000000000000 <SYSTEM_$$_READBARRIER>:
+   0:	lfence
+   3:	ret
+0000000000000000 <SYSTEM_$$_READWRITEBARRIER>:
+   0:	mfence
+   3:	ret
+0000000000000000 <SYSTEM_$$_WRITEBARRIER>:
+   0:	sfence
+   3:	ret
+0000000000000000 <SYSTEM_$$_INTERLOCKEDINCREMENT64$INT64$$INT64>:
+   0:	mov    %rdi,%rax
+   3:	mov    $0x1,%rdx
+   a:	xchg   %rax,%rdx
+   c:	lock xadd %rax,(%rdx)
+  11:	inc    %rax
+== 5. essais chronométrés (machine courante)
+-- q1_forms
+Q6a 45333132534 29.88 ms
+Q6b 45333132534 37.29 ms
+Q1n 3997084032331541 72.45 ms
+Q1a 3997084032331541 58.69 ms
+Q1d 3997084032331541 87.32 ms
+Q1b 3997084032331541 54.62 ms
+-- dict_lookup
+      16 keys: 30.3 ns/lookup
+    1024 keys: 33.3 ns/lookup
+   65536 keys: 63.1 ns/lookup
+ 1048576 keys: 151.4 ns/lookup
+-- dict_k7
+natural (Try+AddOrSet): 3.807 s, count 1048575, rss +65 MiB
+16M TryGetValue: 2.516 s
+16M AddOrSetValue (existing): 2.655 s
+16M ContainsKey: 2.822 s
+16M GetHashCode via comparer: 0.112 s 2723597153
+class values (Try + Add): 1.533 s, rss +80 MiB
+-- k5k9_forms (-Sv)
+K9V 2.095103199218750E+006 34.46 ms
+K9S 2.095103199218750E+006 23.76 ms
+K9S2 2.095103199218750E+006 25.63 ms
+K9V 2.095103199218750E+006 33.68 ms
+K5V8 509.0857 27.84 ms
+K5V4 509.0858 29.96 ms
+K5V8 509.0857 27.92 ms
+K5V4 509.0858 29.80 ms
+K5V8 509.0857 27.90 ms
+K5V4 509.0858 29.76 ms
+-- k1soa_forms (-Sv)
+SoAS 1049202.377017 7.88 ms
+SoAV 1049202.376981 5.89 ms
+SoAS 1049202.377017 5.64 ms
+SoAV 1049202.376981 3.73 ms
+SoAS 1049202.377017 5.18 ms
+SoAV 1049202.376981 3.70 ms
+SoAS 1049202.377017 5.02 ms
+SoAV 1049202.376981 3.69 ms
+SoAS 1049202.377017 5.22 ms
+SoAV 1049202.376981 3.67 ms

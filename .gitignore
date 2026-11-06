@@ -8,6 +8,7 @@ bench/*/bin/
 bench/*/obj/
 bench/*/dist-newstyle/
 bench/*/*.o
+bench/*/*.ppu
 bench/*/*.hi
 bench/*/*.cmx
 bench/*/*.cmi

@@ -1262,3 +1262,21 @@ Robustesse :
   reproduction ; au passage, le rang moyen d'Odin en règle v1 cité dans le paragraphe de C (2,74, resté de l'état
   d'avant l'ajout de Swift) est mis à jour. `docs/SWIFT.md` (5.4, 5.5), `docs/FINDINGS.md`, `docs/NOSIMD.md` (4.19),
   `docs/CONFRONTATION.md`, `docs/CAPABILITIES.md` (D4 et E4 de Swift), sonde de Swift (`results/probes/swift.txt`).
+* 2026-11-06, 07 h 47 : **machine 25**. La VM redémarre sur un hôte Emerald Rapids du même modèle que les machines 3,
+  11, 16 et 24 (modèle 207, 4 vCPU), mais plus lent : 2,76 à 2,83 GHz effectifs (3,13 à 3,43 sur la machine 24) ;
+  latence 21 ns à 2 Mio, 35 ns à 4 Mio, 129 ns à 32 Mio ; DRAM 14,8 Go/s (`results/hw/machine25/`) ; les 24 fichiers
+  d'entrée correspondent à `env/msdata.sha256`.
+* 2026-11-06, 07:50 à 08:55 : **ajout de FreePascal, demandé par l'auteur ; chaîne, implémentation, grille, faits et
+  plan** (`docs/FPC.md`, sections 1 à 3, poussé avant les mesures). Free Pascal 3.2.2, la dernière version publiée
+  (archive identique sur freepascal.org et SourceForge, SHA-256 `5adac308…`), dans `/opt/fpc` ; banc en `-O3` avec la
+  cible la plus haute que connaît FPC (`COREAVX2`, sans AVX-512) et le traitement vectoriel `-Sv` pour K1 `soa` et K5
+  seulement ; les 41 cellules et les 13 des copies (`bench/fpc_exp`, `bench/fpc_scal`, `bench/fpc_o2`) validées.
+  Faits relevés sans page web (`tools/fpc_check/facts.sh`) : aucune vectorisation automatique ; `-Sv` limité à 128 bits
+  (erreur interne pour 8 `Single`, opérandes à aligner sur 16 octets) ; accumulateur de K5 naturel sur la pile ;
+  `TDictionary` à 30 ns par recherche en cache et 200 ns sur 1 M de clés ; atomiques et barrières en procédures de la
+  RTL ; `-O4` réordonne les champs des classes. Grille (`probes/fpc`) : pilier C de 58,5 (v1, C3 = 0) et 60,5 (v2).
+  Décisions fixées d'avance : toutes les clés mesurées sur la machine 25 et reliées par le C dans la construction de
+  leurs données publiées (Cascade Lake pour les clés des machines 1, 11 et 16, native pour K5 et la réplication) ; le
+  pont des clés de la machine 1 traverse les modèles, contrôlé par un second témoin (`bench/c_gcc_cl`, gcc en cible
+  cascadelake, identique au binaire publié de `c_gcc`) et par un facteur d'hôte unique ; un générateur par langage
+  ajouté (Swift garde le sien) ; outil `tools/measure_fpc.py` (132 cellules × 7 passes).

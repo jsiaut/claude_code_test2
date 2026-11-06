@@ -1,0 +1,41 @@
+CAP;A1;1;array of record : SizeOf(TParticle) = 64 o, écart entre éléments 64 o (valeurs en ligne)
+CAP;A2;1;record : décalages a=0 b=8 c=16 (ordre déclaré, alignement naturel) ; {$PACKRECORDS C} : taille 12 o, b à 4 (disposition C)
+CAP;A3;1;packed record {Byte; LongWord} : 5 o ; bitpacked record {0..7; 0..31} : 1 o, champs relus 5 et 17
+CAP;A4;0.5;GetMem + Align(p, 64) : adresse mod 64 = 0 (à la main) ; {$CODEALIGN VARMIN=64} pour les variables globales ; pas d'alignement de type (run.sh)
+CAP;A5;1;record à variantes sans champ d'étiquette (union brute) : Single 1.0 = $3F800000, octets 0 0 128 63 ; absolute, transtypage de pointeur
+CAP;A6;0;aucun type SoA
+CAP;A7;1;record avec array[0..15] of Single : 64 o en ligne
+CAP;A8;1;Byte 1 SmallInt 2 Word 2 Single 4 ; intervalles bitpacked (A3) ; pas de flottant 16 bits
+CAP;B1;1;pas de ramasse-miettes : comptage de références des chaînes, tableaux dynamiques et interfaces (StringRefCount = 1)
+CAP;B2;0.5;SetMemoryManager (gestionnaire global remplaçable : 1 appel compté pour New) ; NewInstance/FreeInstance redéfinissables par classe (objet construit dans une arène : décalage 0, v = 7) ; pas d'allocateur passé aux conteneurs
+CAP;B3;1;records et tableaux statiques locaux sur la pile (distance à une variable locale : 1312 o ; au tas : TRUE)
+CAP;B4;0.5;allocations implicites : boucle sur un tableau 0, énumération d'un TDictionary 1 (objet énumérateur), concaténation de chaînes 1, exception 2
+CAP;B5;1;Pointer, pointeurs typés, arithmétique ({$pointermath}), GetMem/FreeMem (bench)
+CAP;C1;0.5;-Sv : opérations sur array[0..3] of Single (SSE 128 bits) : 2 6 12 20 ; expérimental : 8 Single = erreur interne, alignement de 16 o exigé, ni masque ni FMA ni conversion (run.sh)
+CAP;C2;0;aucune intrinsèque SSE/AVX : seulement des intrinsèques portables (FMASingle/FMADouble, Prefetch, PopCnt, BsfQWord…) ; l'assembleur en ligne est E2
+CAP;C5;0;aucune boucle parallèle ni réserve de tâches dans la RTL et les paquets livrés (mtprocs est un paquet de Lazarus)
+CAP;D1;1;BeginThread (unité cthreads) et TThread : 4 fils, 4000 incréments
+CAP;D2;0.5;InterLockedIncrement64 / CompareExchange64 / ExchangeAdd64 (RMW séquentiellement cohérents, appels de la RTL) : 10 ; ni ordre mémoire explicite ni lecture/écriture atomique
+CAP;D3;0;aucune constante, requête ni type de bourrage de ligne de cache dans la RTL (l'unité cpu ne détecte que des jeux d'instructions : AVXSupport, AVX2Support, FMASupport…)
+CAP;D4;0.5;Do_SysCall(syscall_nr_sched_setaffinity) de l'unité Syscall livrée : retour 0, masque relu 2, processeur courant (/proc/self/stat) 1 ; pas d'API d'affinité (ni TThread ni unité Linux)
+CAP;D5;0.5;ReadBarrier / WriteBarrier / ReadWriteBarrier (lfence, sfence, mfence dans des procédures de la RTL) ; ThreadSwitch (sched_yield) ; pas de pause (run.sh)
+CAP;E1;1;code natif, -al garde l'assembleur produit
+CAP;E2;1;blocs asm (syntaxe Intel ou AT&T, procédures assembler) : 42 ; AVX2 accepté, AVX-512 inconnu de l'assembleur de FPC 3.2.2 (octets bruts seulement, run.sh)
+CAP;E3;0;pas d'indication de branchement (Likely/Unlikely inconnus, run.sh)
+CAP;E4;1;Prefetch(x) du System (intrinsèque : prefetchnta, run.sh)
+CAP;E5;0;ni restrict ni garantie de non-aliasing
+CAP;E6;1;{$R+} / {$R-} locaux : indice 5 hors bornes détecté sous {$R+} : TRUE ; sans vérification ailleurs (défaut) : TRUE
+CAP;E7;0.5;génériques spécialisés à la compilation (specialize) : 7 2.5 ; expressions constantes (1219), pas d'évaluation de fonctions à la compilation
+CAP;F1;0.5;array[0..3, 0..7] of Double : 256 o contigus (écart entre lignes 64 o), bornes fixées à la compilation ; array of array : lignes séparées (écart 96 o)
+CAP;F2;0;aucun
+CAP;F3;1;Byte...QWord et ShortInt...Int64, arithmétique modulaire sans {$Q+} (défaut) : 0 -2147483648
+CAP;F4;1;Fpmmap (unité BaseUnix livrée) + pointeur typé : premier mot 3904868352, dernier 623554610
+NOTE;A4;« end align 64 » : Fatal: Syntax error, ";" expected but "identifier ALIGN" found ; {$CODEALIGN VARMIN=64} (variables globales, décalages mod 64) : 0 0 ; {$PACKRECORDS 64} : Error: Illegal record alignment specifier "64"
+NOTE;C1;-Sv sur array[0..7] of Single : Fatal: Internal error 200610072
+NOTE;C1;-Sv, opérandes à 4 o d'une frontière de 16 : Runtime error 216 at $000000000040112A (1 ; addps à opérande mémoire, encodage SSE classique)
+NOTE;C1;code de c := a^ + b^ :  vmovups (%rax),%xmm0; addps (%rdx),%xmm0; vmovups %xmm0,U_$P$C1_$$_C;
+CAP;C4;0;-OoFASTMATH (aussi {$OPTIMIZATION FASTMATH}) sur une réduction : 0 FMA sans l'option, 1 avec (contraction a*b+s) ; la chaîne reste scalaire et dans l'ordre : aucune réassociation
+NOTE;E2;vaddps ymm accepté ; zmm : Error: Unknown identifier "ZMM0" ; vaddps zmm0, zmm1, zmm2 en octets bruts (db) : 1 (exécuté)
+NOTE;E3;Likely : Error: Identifier not found "Likely"
+NOTE;E4;Prefetch(a[512]) :  prefetchnta (%rax)
+NOTE;D5;pause : aucune intrinsèque (Error: Identifier not found "CpuPause") ; seulement asm pause end (assembleur en ligne)

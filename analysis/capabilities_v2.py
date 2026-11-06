@@ -101,6 +101,8 @@ V2_OVERRIDES = {
     # Swift (erratum du 5/11, remarque sur Swift, docs/SWIFT.md 5.3) : le module Glibc livré est la liaison au système
     # de la bibliothèque standard, comme core.sys.linux pour D, std.os.linux pour Zig ou os pour Python
     ("swift", "D4"): (1, "sched_setaffinity / pthread_setaffinity_np du module Glibc livré (swiftc -Xcc -D_GNU_SOURCE)"),
+    # Free Pascal (ajouté le 6/11, docs/FPC.md)
+    ("fpc", "D4"): (1, "Do_SysCall(syscall_nr_sched_setaffinity) de l'unité Syscall livrée avec la RTL, comme syscall.RawSyscall en Go"),
 }
 
 # C3 (vectorisation automatique mesurée) sort du pilier C en v2 : double compte avec E et D1.
