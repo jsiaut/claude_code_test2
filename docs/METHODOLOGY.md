@@ -1309,3 +1309,20 @@ Robustesse :
   `docs/CAPABILITIES.md` (régénéré : colonne de FreePascal). Corrigé avant publication : une phrase du paragraphe de
   FreePascal le disait 2e pour les queues de latence de K8, alors qu'il est au niveau de Rust et de Fortran (D3 0,66) ;
   c'est sa note de hiérarchie mémoire (D4 0,98) qui est la meilleure de l'étude.
+* 2026-11-06, 10:58 : **machine 26**. La VM redémarre sur un nouvel hôte Emerald Rapids du même modèle (207, 4 vCPU) :
+  2,76 à 2,84 GHz effectifs, latence 18 ns à 2 Mio, 36 ns à 4 Mio, 138 ns à 32 Mio, DRAM 14,8 à 15,2 Go/s
+  (`results/hw/machine26/`), comme la machine 25 ; les 24 fichiers d'entrée correspondent à `env/msdata.sha256`.
+* 2026-11-06, 11:00 à 12:00 : **remarque sur FreePascal : vérification, errata et plan** (`docs/FPC.md`, sections 5.1
+  à 5.7, poussé avant les mesures). Chaînes installées depuis les archives officielles : 3.2.4-rc2 (`/opt/fpc-324rc2`,
+  le compilateur se nomme 3.2.4-rc1) et l'instantané de main 3.3.1-21612 du 4 novembre (`/opt/fpc-main`), celui du
+  relecteur. Faits (`tools/fpc_remark/facts.sh`) : exacts pour l'essentiel (AVX-512 et `TParallel.For` dans main,
+  `pause` dans `TThread.SpinWait` de main seulement, 502 intrinsèques SSE sans déclaration, `-Sv` cassé, x87 en
+  `-CfX86-64-V4`, K5 naturel 4 fois plus rapide avec `Length(a) - 1`) ; trois réserves : `end align 64` n'est
+  respecté ni sur la pile ni par `New`, `AtomicIncrement` reste un appel à la RTL sans ordre mémoire, et la 3.2.4-rc2
+  n'a pas « les mêmes temps » (`TDictionary` 1,6 à 3,6 fois plus rapide). K4 par masque : le gain (0,70) demande de lire
+  la valeur dans une variable locale. Errata de la grille de FreePascal : C2 ½ (assembleur en ligne, comme Zig), E4 ½
+  (`prefetchnta` seul), F4 ½ en v1 et 1 en v2 (comme Go) ; pilier 62,3 en v2 au lieu de 60,5. Copies (`bench/fpc_rq`,
+  source commun à symboles, qui redonne sans symbole le binaire publié) : `fpc_len`, `fpc_mieux`, `fpc_rc2`,
+  `fpc_main`, `fpc_main_mieux`, `fpc_main_scal`, `fpc_asm` et `fpc_main_asm` (information) ; outil
+  `tools/measure_fpc_rq.py` (124 cellules × 7 passes, machine 26) ; scénarios fixés (R-E publié, sensibilités
+  Length, noyaux mieux écrits, rc2, main, grille de main).

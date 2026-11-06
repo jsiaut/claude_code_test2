@@ -1,0 +1,184 @@
+== 1. chaînes
+/opt/fpc/lib/fpc/3.2.2/ppcx64 : 3.2.2 2021/05/16 3.2.2
+/opt/fpc-324rc2/lib/fpc/3.2.4/ppcx64 : 3.2.4 2026/08/16 3.2.4-rc1
+/opt/fpc-main/lib/fpc/3.3.1/ppcx64 : 3.3.1 2026/11/04 3.3.1-21612-gc58603b8dd
+-- processeurs (-ic), FPU (-if), optimisations (-io)
+3.2.2 : CPU ATHLON64 COREI COREAVX COREAVX2 
+    FPU SSE64 SSE3 SSSE3 SSE41 SSE42 AVX AVX2 
+    OPT REGVAR STACKFRAME PEEPHOLE LOOPUNROLL TAILREC CSE DFA USERBP ORDERFIELDS FASTMATH REMOVEEMPTYPROCS CONSTPROP 
+3.2.4 : CPU ATHLON64 COREI COREAVX COREAVX2 
+    FPU SSE64 SSE3 SSSE3 SSE41 SSE42 AVX AVX2 
+    OPT REGVAR STACKFRAME PEEPHOLE LOOPUNROLL TAILREC CSE DFA USERBP ORDERFIELDS FASTMATH REMOVEEMPTYPROCS CONSTPROP 
+3.3.1 : CPU ATHLON64 X86-64 X86-64-V1 COREI X86-64-V2 BOBCAT COREAVX JAGUAR PILEDRIVER EXCAVATOR COREAVX2 X86-64-V3 ZEN ZEN2 X86-64-V4 SKYLAKE-X ICELAKE ICELAKE-CLIENT ICELAKE-SERVER ZEN3 ZEN4 ZEN5 
+    FPU NONE SSE64 X86-64-V1 SSE3 SSSE3 SSE41 SSE42 X86-64-V2 AVX FMA AVX2 X86-64-V3 AVX512F X86-64-V4 
+    OPT REGVAR STACKFRAME PEEPHOLE LOOPUNROLL TAILREC CSE DFA STRENGTH USERBP ORDERFIELDS FASTMATH REMOVEEMPTYPROCS CONSTPROP USELOADMODIFYSTORE UNUSEDPARA FORLOOP 
+== 2. TThread.SpinWait (unité classes de la RTL)
+-- /opt/fpc/lib/fpc/3.2.2
+    cmp    $0x1,%edi
+    jb     16 <CLASSES$_$TTHREAD_$__$$_SPINWAIT$LONGWORD+0x16>
+    xor    %eax,%eax
+    nop
+    add    $0x1,%eax
+    addl   $0x1,0x0(%rip)        # 12 <CLASSES$_$TTHREAD_$__$$_SPINWAIT$LONGWORD+0x12>
+    cmp    %eax,%edi
+    ja     8 <CLASSES$_$TTHREAD_$__$$_SPINWAIT$LONGWORD+0x8>
+    ret
+-- /opt/fpc-324rc2/lib/fpc/3.2.4
+    cmp    $0x1,%edi
+    jb     16 <CLASSES$_$TTHREAD_$__$$_SPINWAIT$LONGWORD+0x16>
+    xor    %eax,%eax
+    nop
+    add    $0x1,%eax
+    addl   $0x1,0x0(%rip)        # 12 <CLASSES$_$TTHREAD_$__$$_SPINWAIT$LONGWORD+0x12>
+    cmp    %eax,%edi
+    ja     8 <CLASSES$_$TTHREAD_$__$$_SPINWAIT$LONGWORD+0x8>
+    ret
+-- /opt/fpc-main/lib/fpc/3.3.1
+    cmp    $0x1,%edi
+    jb     19 <CLASSES$_$TTHREAD_$__$$_SPINWAIT$LONGWORD+0x19>
+    xor    %eax,%eax
+    nopw   0x0(%rax,%rax,1)
+    add    $0x1,%eax
+    pause
+    cmp    %eax,%edi
+    ja     10 <CLASSES$_$TTHREAD_$__$$_SPINWAIT$LONGWORD+0x10>
+    ret
+== 3. assembleur en ligne AVX-512 (zmm)
+-- 322
+asm512.pas(6,14) Error: Unknown identifier "ZMM0"
+asm512.pas(6,14) Error: Assembler syntax error
+asm512.pas(6,20) Error: Unknown identifier "ZMM1"
+-- 324
+asm512.pas(6,14) Error: Unknown identifier "ZMM0"
+asm512.pas(6,14) Error: Assembler syntax error
+asm512.pas(6,20) Error: Unknown identifier "ZMM1"
+-- main
+ok
+    vaddps %zmm2,%zmm1,%zmm0
+    vfmadd231ps %zmm5,%zmm4,%zmm3
+== 4. alignement d'un type (« end align 64 »)
+-- 322
+align64.pas(5,29) Fatal: Syntax error, ";" expected but "identifier ALIGN" found
+-- 324
+align64.pas(5,29) Fatal: Syntax error, ";" expected but "identifier ALIGN" found
+-- main
+SizeOf(TA)=64 SizeOf(TB)=128 décalage de c=64
+globale mod 64 = 0 ; arr[1] mod 64 = 0 0
+-- main, pile et New (align2.pas, -O3 puis -O-) :
+pile : 10 sur 10 locaux TA non alignés sur 64
+New : 12 sur 16 non alignés sur 64
+pile : 8 sur 10 locaux TA non alignés sur 64
+New : 12 sur 16 non alignés sur 64
+== 5. atomiques et lecture volatile (main)
+1 5 TRUE
+-- ATOM_$$_INCX
+    push   %rax
+    movabs $0x43a870,%rdi
+    call   4020b0 <fpc_atomic_inc_64>
+    pop    %rcx
+    ret
+-- ATOM_$$_CASY
+    push   %rax
+    movabs $0x43a880,%rdi
+    xor    %edx,%edx
+    mov    $0x5,%esi
+    call   402090 <fpc_atomic_cmp_xchg_32>
+    pop    %rcx
+    ret
+-- ATOM_$$_READF
+    movabs 0x43a890,%al
+    ret
+-- fpc_atomic_inc_64
+    mov    $0x1,%rax
+    lock xadd %rax,(%rdi)
+    inc    %rax
+    ret
+-- procédures Atomic* de l'unité system (main), paramètre d'ordre mémoire :
+$fpc_atomic_add_16 $fpc_atomic_add_32 $fpc_atomic_add_64 $fpc_atomic_add_8 $fpc_atomic_cmp_xchg_16 $fpc_atomic_cmp_xchg_32 $fpc_atomic_cmp_xchg_64 $fpc_atomic_cmp_xchg_8 $fpc_atomic_dec_16 $fpc_atomic_dec_32 $fpc_atomic_dec_64 $fpc_atomic_dec_8 $fpc_atomic_inc_16 $fpc_atomic_inc_32 $fpc_atomic_inc_64 $fpc_atomic_inc_8 $fpc_atomic_sub_16 $fpc_atomic_sub_32 $fpc_atomic_sub_64 $fpc_atomic_sub_8 $fpc_atomic_xchg_16 $fpc_atomic_xchg_32 $fpc_atomic_xchg_64 $fpc_atomic_xchg_8 
+-- affinité (system, main) : FpSchedGetAffinity 
+== 6. intrinsèques x86 (main) : unité intrinsics, pause, Prefetch, Likely
+system : 518 constantes fpc_in_x86_* ; procédures x86 déclarées : fpc_x86_inportb fpc_x86_inportw fpc_x86_inportl fpc_x86_outportb fpc_x86_outportw fpc_x86_outportl fpc_x86_cli fpc_x86_sti fpc_x86_get_cs fpc_x86_get_ss fpc_x86_get_ds fpc_x86_get_es fpc_x86_get_fs fpc_x86_get_gs fpc_x86_pause 
+intrinsics : 517 constantes fpc_in_x86_* ; procédures x86 déclarées : fpc_x86_inportb fpc_x86_inportw fpc_x86_inportl fpc_x86_outportb fpc_x86_outportw fpc_x86_outportl fpc_x86_cli fpc_x86_sti fpc_x86_get_cs fpc_x86_get_ss fpc_x86_get_ds fpc_x86_get_es fpc_x86_get_fs fpc_x86_get_gs fpc_x86_pause 
+dont SSE/SSE2/MMX (après fpc_in_x86_pause) : 502
+-- HINTS_$$_SPIN
+    pause
+    ret
+-- HINTS_$$_PF$POINTER
+    prefetchnta (%rdi)
+    ret
+-- Prefetch, 322
+    mov    %rdi,%rax
+    prefetchnta (%rax)
+    ret
+-- Prefetch, 324
+    mov    %rdi,%rax
+    prefetchnta (%rax)
+    ret
+-- Likely, 322 :
+brhint.pas(7,6) Error: Identifier not found "Likely"
+brhint.pas(9) Fatal: There were 1 errors compiling module, stopping
+-- Likely, main :
+brhint.pas(7,6) Error: Identifier not found "Likely"
+brhint.pas(9) Fatal: There were 1 errors compiling module, stopping
+== 7. TParallel.For (System.Threading, paquet vcl-compat)
+/opt/fpc/lib/fpc/3.2.2 : 0 system.threading.ppu
+/opt/fpc-324rc2/lib/fpc/3.2.4 : 0 system.threading.ppu
+/opt/fpc-main/lib/fpc/3.3.1 : 1 system.threading.ppu
+passage 1 : fils distincts 1 ; durée 1280 ms (série : 1280 ms)
+passage 2 : fils distincts 8 ; durée 239 ms (série : 1280 ms)
+passage 3 : fils distincts 8 ; durée 236 ms (série : 1280 ms)
+passage 4 : fils distincts 8 ; durée 244 ms (série : 1280 ms)
+== 8. traitement vectoriel -Sv (main)
+-- source de bench/fpc (array[0..3] of Single) :
+msvec.pas(36,13) Error: Operator is not overloaded: "Array[0..3] Of Single" * "Array[0..3] Of Single"
+msvec.pas(36,31) Error: Operator is not overloaded: "Array[0..3] Of Single" * "Array[0..3] Of Single"
+-- __m128, -CfSSE64 :
+W=4 somme=5533.000 attendu=21840.000
+-- __m128-dM256, -CfSSE64 :
+vec.pas(13,16) Error: Incompatible types: got "__m256" expected "Int64"
+-- __m128, -CfAVX2 :
+W=4 somme=21840.000 attendu=21840.000
+-- __m128-dM256, -CfAVX2 :
+vec.pas(13,18) Error: Asm: [vmulps xmmreg0,ymmreg0,mem??] invalid combination of opcode and operands
+== 9. cible FPU X86-64-V4 (main) : code flottant d'un produit scalaire
+-CfAVX2 : résultat 499500.0 ; x87 : 0  ; AVX : 2
+-CfAVX512F : résultat 499500.0 ; x87 : 0  ; AVX : 2
+-CfX86-64-V4 : résultat 499500.0 ; x87 : 6  ; AVX : 0
+== 10. K5 naturel : borne High(a) ou Length(a) - 1 (bench/fpc_rq/ms.pas)
+-- 322 : 1 appel(s) ; accumulateur : vaddss (%rsp),%xmm0,%xmm0
+-- 322len : 0 appel(s) ; accumulateur : vaddss %xmm0,%xmm1,%xmm0
+-- main : 0 appel(s) ; accumulateur : vaddss %xmm0,%xmm1,%xmm0
+== 11. essais chronométrés (machine courante)
+-- K4 sans branchement, formes du masque (meilleure de 5 répétitions, 16 Mio)
+322 :
+                   A publié 0.01721 s  rapport 1.00  somme 1605908545
+    B v[i] and -(v[i] shr 7) 0.01790 s  rapport 1.04  somme 1605908545
+                   C x:QWord 0.01185 s  rapport 0.69  somme 1605908545
+                   D x:Int64 0.01197 s  rapport 0.70  somme 1605908545
+              E x:SizeInt 0- 0.01182 s  rapport 0.69  somme 1605908545
+          F pointeur x:QWord 0.00812 s  rapport 0.47  somme 1605908545
+                G x:LongWord 0.01206 s  rapport 0.70  somme 1605908545
+main :
+                   A publié 0.01477 s  rapport 1.00  somme 1605908545
+    B v[i] and -(v[i] shr 7) 0.01698 s  rapport 1.15  somme 1605908545
+                   C x:QWord 0.01172 s  rapport 0.79  somme 1605908545
+                   D x:Int64 0.01000 s  rapport 0.68  somme 1605908545
+              E x:SizeInt 0- 0.01185 s  rapport 0.80  somme 1605908545
+          F pointeur x:QWord 0.00799 s  rapport 0.54  somme 1605908545
+                G x:LongWord 0.01190 s  rapport 0.81  somme 1605908545
+-- TDictionary<LongWord, TAgg> : recherche (tools/fpc_check/src/dict_lookup.pas)
+322 :
+      16 keys: 28.6 ns/lookup
+    1024 keys: 34.8 ns/lookup
+   65536 keys: 62.2 ns/lookup
+ 1048576 keys: 191.0 ns/lookup
+324 :
+      16 keys: 17.6 ns/lookup
+    1024 keys: 20.4 ns/lookup
+   65536 keys: 29.5 ns/lookup
+ 1048576 keys: 46.1 ns/lookup
+main :
+      16 keys: 12.8 ns/lookup
+    1024 keys: 14.1 ns/lookup
+   65536 keys: 26.3 ns/lookup
+ 1048576 keys: 43.3 ns/lookup

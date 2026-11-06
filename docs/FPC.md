@@ -2,8 +2,8 @@
 
 L'auteur de l'étude m'a demandé le 6 novembre d'ajouter FreePascal au banc. Ce document décrit la chaîne et les choix
 d'implémentation, avec les faits relevés en écrivant le code (section 2). Il fixe le plan avant toute mesure de
-campagne (section 3), puis donne les résultats (section 4). Comme pour Swift, je n'ai consulté aucune page web pour les
-faits. Ils viennent de la chaîne installée (Free Pascal 3.2.2, ses unités, son `fpc.cfg`, l'aide de `fpc -h`), de
+campagne (section 3), puis donne les résultats (section 4) ; la section 5 traite la remarque d'un relecteur. Comme pour
+Swift, je n'ai consulté aucune page web pour les faits. Ils viennent de la chaîne installée (Free Pascal 3.2.2, ses unités, son `fpc.cfg`, l'aide de `fpc -h`), de
 sondes, du code machine produit et d'essais sur la machine 25. Seuls l'archive de la chaîne et la liste des versions
 (index de distribution de freepascal.org, fil des fichiers du projet sur SourceForge) ont été téléchargés.
 
@@ -350,3 +350,177 @@ par défaut (46,9, 12e) profite de la mémoire gérée à la main (empreinte, qu
 pas de la vitesse du code naturel : la somme conditionnelle de K4 (54 fois le C) et `TDictionary` (15 fois le C) le
 tirent vers le bas. Le rang résiste aux deux contrôles du pont entre modèles et à toutes les sensibilités du plan, à
 deux places près.
+
+## 5. Remarque sur FreePascal (6 novembre)
+
+Un relecteur a revu l'ajout le jour même. Cette section fixe la vérification (5.2), les errata (5.3), les copies et
+les mesures (5.4) et les scénarios (5.5) avant toute mesure de campagne ; les résultats suivront (5.8 et après).
+Comme pour l'ajout, aucune page web : les faits viennent des chaînes installées depuis les archives officielles, de
+leurs unités, du code machine produit et d'essais sur la machine 26 (`tools/fpc_remark/facts.sh`,
+`results/fpc_remark/facts.txt`). Seuls les archives et les index de distribution (`downloads.freepascal.org`) ont été
+téléchargés.
+
+### 5.1 La remarque
+
+« Oui sur le fond, avec des réserves » : la 16e place mesure honnêtement ce que donne Free Pascal 3.2.2 sans
+assembleur. Le relecteur a installé la 3.2.2 officielle (même SHA-256), la 3.2.4-rc2 et l'instantané de main du
+4 novembre (3.3.1-21612), régénéré les données (24 empreintes identiques), réécrit les noyaux avec les mêmes
+algorithmes sans lancer le code du dépôt, avec un témoin C (clang 18), mesuré sur un Emerald Rapids (5 ou 6 processus
+par cellule) et recalculé le score en estimations ponctuelles. Il confirme la version, ses rapports FreePascal / C
+(K4 naturel 44 contre 54 ici, K5 naturel 2,05 contre 2,07, K5 optimisé 8,2 contre 7,5 à 8,1, K7 naturel 13 contre 15,
+K8 1,35 et 1,13 contre 1,46 et 1,17, K9 2,6 et 2,2 contre 2,4 et 1,7, écarts qu'il attribue à clang 18) et les faits
+relevés. Ce qu'il corrigerait :
+1. **Grille** : C2 vaut ½ pour Zig, dont l'assembleur en ligne ne donne pas plus, et 0 pour FreePascal, dont
+   l'assembleur couvre AVX2 ; aligner (sens Zig : + 0,9 point). E4 (`prefetchnta` seul) et F4 en v1 (Go a ½ pour
+   `syscall.Mmap`) lui semblent un peu généreuses.
+2. **Trois noyaux optimisés mieux écrits** : K8 en arène itérative (× 0,44), K5 en `-Sv` par pointeurs avancés par
+   `Inc` (× 0,65), K4 par `s += v and -(v shr 7)` (× 0,66) ; ensemble + 3,4 points.
+3. **README** : la « meilleure note de hiérarchie mémoire » (D4 0,98 contre 0,97 pour C, sur le même code) est du
+   bruit ; K5 naturel écrit avec `Length(a) - 1`, tout aussi idiomatique, est 4 fois plus rapide.
+
+Ce que le classement ne dit pas, selon lui : le compilateur est celui d'une branche créée en 2018 ; la branche main
+apporte l'AVX-512 (assembleur et cibles), `record … end align 64`, `AtomicIncrement` et `Volatile`,
+`TThread.SpinWait` avec `pause`, `TParallel.For`, la réduction de force, et contient environ 500 intrinsèques SSE
+désactivées dans la RTL ; elle casse `-Sv` sur les tableaux simples (il faut `__m128`, avec un résultat faux en
+`-CfSSE64`), ses vecteurs de 256 bits ne s'assemblent pas et `-CfX86-64-V4` produit du x87. Mesuré sous main : le
+code naturel s'améliore (K5 × 4, Q6 × 1,8, `TDictionary` × 2,4), l'optimisé bouge de ± 10 %, avec deux reculs (K1
+`soa` en `-Sv` 2,3 fois plus lent, K9 naturel 1,2 fois). Le générateur LLVM n'est pas mesuré. La règle « pas
+d'assembleur » touche FreePascal plus que les autres : K5 en assembleur vaut 1,46 fois le C en AVX2 avec la 3.2.2 et
+1,03 fois en AVX-512 sous main, contre 7 à 8 fois en `-Sv`. Enfin, FreePascal est le seul langage que personne n'a
+relu. Sa table : publié 47,4 (16e) ; + C2 48,3 ; + 3 noyaux 50,8 ; les deux 51,7 ; main, même code 46,9 (17e) ; main
+et grille de main (C 69,5) 50,0 (16e) ; main, meilleures formes et grille de main 55,2 (15e, 0,3 devant C#). Résumé :
+classement pertinent à une ou deux places près, étage solide, ordre interne non ; publier une sensibilité « branche
+main » comme pour Zig 0.18-dev, préciser que la branche stable date de 2018 et ajouter les trois noyaux mieux écrits
+comme sensibilités.
+
+### 5.2 Vérification (avant le plan)
+
+**Chaînes.** Trois archives officielles, extraites a minima (compilateur, RTL, `rtl-objpas`, `rtl-generics`,
+`rtl-extra`, `rtl-unicode`, `rtl-console`, `fcl-base`, `fcl-process`, `pthreads`, `vcl-compat`), puis effacées faute
+de place, leurs sommes gardées ici :
+* 3.2.2, celle du banc (`5adac308…`, `/opt/fpc`) ;
+* 3.2.4-rc2 : `fpc-3.2.4-rc2.x86_64-linux.tar` (93 091 840 octets, SHA-256
+  `63226d9b4002477e6a0ba2b62474fb6a62e8bc58ea759d61a55c3263d1988463`) de `fpc/beta/3.2.4-rc2/x86_64-linux/`, dans
+  `/opt/fpc-324rc2`. L'index bêta date le répertoire 3.2.4-rc2 du 2026-09-06 (celui de la 3.2.4-rc1 du 2025-02-02) ; les
+  fichiers x86_64-linux sont du 2026-08-17 et le compilateur se nomme lui-même « 3.2.4-rc1 [2026/08/16] » (`-iVDW`) ;
+* main : `fpc-3.3.1.x86_64-linux.tar.gz` (100 572 845 octets, SHA-256
+  `901aca0e410fb2cc41becf7bb20d027efcccc424b20c3670345ed4fb173db569`) de `fpc/snapshot/trunk/x86_64-linux/`,
+  « 3.3.1-21612-gc58603b8dd » du 2026/11/04, la construction du relecteur, dans `/opt/fpc-main`.
+
+**Machine 26.** La VM a redémarré à 10:58 sur un nouvel hôte Emerald Rapids du même modèle (207, 4 vCPU) :
+2,76 à 2,84 GHz effectifs ; latence 18 ns à 2 Mio, 36 ns à 4 Mio, 138 ns à 32 Mio ; DRAM 14,8 à 15,2 Go/s
+(`results/hw/machine26/`), comme la machine 25 ; les 24 fichiers d'entrée correspondent à `env/msdata.sha256`.
+
+| Affirmation | Constat |
+|---|---|
+| 3.2.2, dernière version stable ; 3.2.4-rc2 en bêta depuis septembre 2026 ; mêmes cibles | **Exact** (index bêta ; listes `-ic`, `-if`, `-io` identiques). Le binaire x86_64-linux de la rc2 se nomme 3.2.4-rc1. |
+| rc2 : mêmes temps (0,95 à 1,07) | **Pas pour K7 naturel** : les recherches de `TDictionary` sont 1,6 à 3,6 fois plus rapides avec la rc2 (17,7 contre 28,7 ns en cache, 56 contre 200 ns sur 1 M de clés, `dict_lookup`) ; essai rapide de K7 naturel : 1,84 s contre 4,26 s. Les autres cellules de l'essai rapide sont proches. Mesuré en campagne (R-rc2). |
+| Branche 3.2 créée en août 2018 | Non vérifiable sans page web (listes fpc-devel). Ce qui se vérifie : 3.2.0-rc1 dans l'index bêta au 2020-03-29, compilateur 3.2.2 daté du 2021/05/16. |
+| Faits de la 3.2.2 (zmm inconnu, `-Sv` à 4 `Single`, aucune intrinsèque SIMD, `Prefetch` en `prefetchnta`, atomiques et barrières en procédures de la RTL, ni `pause`, K4 un saut par octet, `High(a)` appelle `fpc_dynarray_high`) | **Exacts** (2.4). `TThread.SpinWait` : boucle qui incrémente un compteur global, sans `pause`, en 3.2.2 comme en rc2 ; avec `pause` dans main. |
+| main : AVX-512 dans l'assembleur et les cibles | **Exact** : zmm assemblé (refusé par la 3.2.2 et la rc2) ; `-Cp` X86-64-V4, SKYLAKE-X, ICELAKE-SERVER, ZEN4, ZEN5 ; `-Cf` AVX512F, X86-64-V4. |
+| main : `record … end align 64` | **En partie** : taille 64, décalage dans un enregistrement, variables globales et éléments de tableau alignés ; **pas sur la pile** (7 à 10 locaux sur 10 mal alignés, en `-O3` comme en `-O-`) **ni par `New`** (12 sur 16). |
+| main : `AtomicIncrement` et `Volatile` | **Existent**, sans rien de neuf pour l'ordre mémoire : `AtomicIncrement` appelle `fpc_atomic_inc_64` de la RTL (`lock xadd`), aucune procédure atomique ne prend d'ordre ; `Volatile` est une lecture simple. |
+| main : `TParallel.For` | **Exact** (`System.Threading`, paquet `vcl-compat`, absent de la 3.2.2 et de la rc2) : 64 tâches sur 8 fils. Le premier appel d'un processus passe parfois sur le seul fil appelant (1 280 ms, comme en série), les suivants sur 8 fils (240 ms). |
+| main : réduction de force | STRENGTH figure dans les optimisations (`-io`, avec USELOADMODIFYSTORE, UNUSEDPARA, FORLOOP) ; effet non isolé. |
+| main : environ 500 intrinsèques SSE désactivées | **Exact** : 518 identifiants `fpc_in_x86_*` dans `system`, dont 502 SSE, SSE2 ou MMX sans procédure déclarée ; l'unité `intrinsics` ne déclare que 15 procédures x86 (ports, segments, `cli`/`sti`, `pause`). |
+| main : `-Sv` cassé sur les tableaux simples, `__m128` faux en `-CfSSE64`, 256 bits refusés, x87 en `-CfX86-64-V4` | **Exacts** : « Operator is not overloaded » sur la source du banc ; `__m128` : 5 533 au lieu de 21 840 en `-CfSSE64`, juste en `-CfAVX2` ; `__m256` : « vmulps xmmreg, ymmreg » refusé à l'assemblage ; `-CfX86-64-V4` : 6 instructions x87 et aucune AVX dans un produit scalaire. |
+| main : naturel K5 × 4, Q6 × 1,8, `TDictionary` × 2,4 ; optimisé ± 10 % ; K1 `soa` 2,3 fois plus lent, K9 naturel 1,2 | Essais rapides (3 à 10 répétitions) : K5 0,386 → 0,097 s (main développe `High` en ligne : plus d'appel, l'accumulateur reste en registre) ; Q6 0,137 → 0,077 s ; K7 4,26 → 1,88 s (la rc2 fait autant) ; K1 `soa` 1,12 à 1,26 fois plus lent (pas 2,3) ; K9 naturel 1,29 à 1,39. Mesurés en campagne. |
+| K5 en assembleur : 1,46 fois le C en AVX2, 1,03 en AVX-512 sous main, contre 7 à 8 en `-Sv` | **Exact à l'arrondi près** (essai, information) : 1,39 et 1,01 ; `-Sv` 8,0. |
+| Trois noyaux mieux écrits : K8 × 0,44, K5 × 0,65, K4 × 0,66 | K8 en arène itérative 0,43 ; K5 par pointeurs 0,67 ; K4 par masque : 0,70 à 0,75 quand la valeur est lue une fois dans une variable locale, 1,03 écrit sur `v[i]` directement (FPC relit et recalcule), 0,48 à 0,68 par un pointeur (même code machine dans un programme d'essai et dans le banc : placement du code). |
+| K5 naturel avec `Length(a) - 1` : 4 fois plus rapide | **Exact** : 0,386 → 0,094 s, sans appel, accumulateur en registre (section 10 de `results/fpc_remark/facts.txt`). Les autres boucles naturelles changent peu (0,9 à 1,1 dans l'essai rapide). |
+| C2 incohérent avec Zig | **Exact** : FreePascal est le seul langage noté avec un assembleur en ligne (E2 > 0) et C2 = 0. |
+| E4 généreux | **Exact** : `Prefetch` n'émet que `prefetchnta` (3.2.2, rc2, main), sans localité ni écriture ; les langages notés 1 ont ces choix (`_mm_prefetch`, `@prefetch`, `Sse.Prefetch0/1/2`, primops de GHC…). |
+| F4 v1 généreux | **Exact** : `Fpmmap` est un appel système d'Unix (unité `BaseUnix`), comme `syscall.Mmap` de Go (½ en v1, 1 en v2) ; aucune projection de fichier portable dans les unités livrées (recherche dans celles de la 3.2.2). |
+| README : D4 0,98 contre 0,97, du bruit | **Exact** : K2 a le même code machine que le C (rapports 1,00, 0,99, 0,98). |
+| Seul langage pas relu | **Exact** jusqu'ici : sa grille a été notée après la relecture à l'aveugle et personne ne l'avait revue. |
+| Générateur LLVM | Non mesuré ici non plus : l'instantané livre le générateur natif. |
+
+### 5.3 Errata (classement publié)
+
+Grille (`analysis/capabilities.py`, `analysis/capabilities_v2.py`), la règle des autres langages appliquée :
+* **C2 : 0 → ½** : assembleur en ligne jusqu'à AVX2 et FMA, sans intrinsèques, comme Zig ;
+* **E4 : 1 → ½** : `Prefetch` n'émet que `prefetchnta`, sans localité ni écriture ;
+* **F4 : 1 → ½ en v1** (`Fpmmap` de `BaseUnix`, appel système propre à Unix, comme `syscall.Mmap` de Go), **1 en v2**
+  (dérogation : unité livrée, comme Go).
+
+Pilier capacités : 58,5 → 58,5 en v1 (C2 + 2,0, E4 − 0,7, F4 − 1,25) ; **60,5 → 62,3 en v2** (C2 + 2,5, E4 − 0,7).
+Textes : la « meilleure note de hiérarchie mémoire » disparaît (README, 4.2, `docs/FINDINGS.md`) ; le README dira que
+K5 naturel tient à `High(a)` (avec `Length(a) - 1`, 4 fois plus vite), que la branche stable est celle des 3.2.0
+(2020) et 3.2.2 (2021) et ce que change la branche main. Les données publiées ne changent pas : le classement garde
+les mesures de la machine 25, le code naturel et les noyaux optimisés publiés (5.7).
+
+### 5.4 Copies et mesures (`tools/measure_fpc_rq.py`, machine 26)
+
+**Source commun** `bench/fpc_rq/ms.pas` et `msvec.pas` : celui du banc, dont le code ne change que sous des
+symboles : `LEN` (boucles naturelles bornées par `Length(x) - 1` : K1, K4, K5, K6 Q6 et Q1, K7), `MIEUX` (les trois
+noyaux de la remarque : K4 `x := v[i]; s := s + (x and -(x shr 7))`, K5 en `-Sv` par pointeurs avancés par `Inc`, K8
+en arène itérative, l'algorithme de `bench/c_k8it` ; plus la variante `k4 branchless_ptr`, le même masque parcouru par
+un pointeur), `M128` (type `__m128` de main dans `msvec`, accès aux voies par `PSingle`), `ASM` et `ASM512`
+(information, hors des règles du banc : K5 en assembleur en ligne, AVX2 + FMA et AVX-512, 8 accumulateurs). Sans
+symbole, il redonne exactement le binaire publié (SHA-256 `b890f0c3…`, vérifié).
+
+| Copie | Compilateur | Symboles | Cellules mesurées |
+|---|---|---|---|
+| `fpc` (publié) | 3.2.2 | — | les 29 du score |
+| `fpc_rc2` | 3.2.4-rc2 | source de `bench/fpc` | les 29 du score |
+| `fpc_main` | main 3.3.1-21612 | `M128` | les 29 du score |
+| `fpc_len` | 3.2.2 | `LEN` | 8 : K1 `natural` et `natural_shuffled`, K4 `natural_unsorted` et `natural_sorted`, K5 `natural`, K6 `natural` Q6 et Q1, K7 `natural` |
+| `fpc_mieux` | 3.2.2 | `MIEUX` | 4 : K4 `branchless_unsorted` et `branchless_ptr`, K5 `tuned`, K8 `tuned` |
+| `fpc_main_mieux` | main | `M128`, `LEN`, `MIEUX` | les 12 de `fpc_len` et `fpc_mieux` |
+| `fpc_main_scal` | main | `SCALAR` (sans `-Sv`) | K1 `soa`, K5 `tuned` |
+| `fpc_asm`, `fpc_main_asm` | 3.2.2, main | `ASM` ; `M128`, `ASM512` | K5 `tuned` (information) |
+| `c` (publié, Cascade Lake), `c_er` (natif) | clang 23 | — | témoins, information : K4 `natural_unsorted` et `branchless_unsorted`, K7 `natural`, K8 `natural` et `tuned`, K9 `natural` et `tuned` ; K5 `natural` et `tuned` (`c_er`) |
+
+Options de `bench/fpc` pour toutes les copies (`-O3 -CpCOREAVX2 -OpCOREAVX2 -CfAVX2`, `-Sv` sauf `fpc_main_scal`) :
+main garde la cible du banc, puisque `-CfX86-64-V4` donne du x87 et que ses vecteurs de 256 bits ne s'assemblent pas.
+124 cellules × 7 passes = 868 processus, répétitions de `results/calib.json` (celles de `fpc` pour toutes les
+constructions de FreePascal, `branchless_ptr` prenant celles de `branchless_unsorted`), échauffement 1, ordre tiré
+au hasard dans chaque passe (graine 20261106 + 2600), règle de vol du pilote ; sortie `results/raw_fpc_rq/`,
+étiquette `fpc_rq`. Les 124 cellules ont été validées une fois (sommes de contrôle justes). Pendant la campagne, seule
+l'analyse (`analysis/fpc_remark.py`) et les textes s'écrivent, sans rien exécuter hors de vérifications de syntaxe.
+
+### 5.5 Scénarios (`analysis/fpc_remark.py`, analyse globale de la v3 rejouée, mêmes tirages)
+
+Rapports r(copie / `fpc`) de la machine 26 (moyennes géométriques des médianes de processus, intervalles par
+bootstrap) appliqués aux données publiées de FreePascal (machine 25, reliée par le pont), cellule par cellule ; quand
+une copie change K8 naturel (rc2, main), ses latences sont multipliées par le rapport, colonne par colonne. C3 et
+empreinte inchangées (main n'a pas de vectoriseur : K5 naturel y reste scalaire ; disposition des records identique).
+
+| Scénario | Définition |
+|---|---|
+| Avant | grille d'avant la remarque (C2 0, E4 1, F4 1) ; doit reproduire F-E de `results/fpc_check.json` à l'identique |
+| R-C2 | Avant, C2 ½ (la première correction de la remarque, seule) |
+| **R-E (publié)** | les trois errata (5.3) |
+| R-len-K5 | R-E ; K5 `natural` × r(`fpc_len` / `fpc`) (la lecture de la remarque) |
+| R-len | R-E ; les 8 cellules de `fpc_len` |
+| R-mieux | R-E ; K4 `branchless_unsorted`, K5 `tuned`, K8 `tuned` × r(`fpc_mieux` / `fpc`) (formes de la remarque) |
+| R-mieux-ptr | R-mieux, K4 par `branchless_ptr` |
+| R-mieux-len | R-mieux et R-len |
+| R-rem-3, R-rem-C2-3 | Avant et R-mieux (« + 3 noyaux » de la remarque) ; Avant, C2 ½ et R-mieux (« les deux ») |
+| R-rc2 | R-E ; les 29 cellules × r(`fpc_rc2` / `fpc`) |
+| R-main | R-E ; les 29 cellules × r(`fpc_main` / `fpc`) (« main, même code ») |
+| R-main-grille | R-main, grille de main : R-E et C5 1 (`TParallel.For`), D5 1 (barrières et `pause`) ; A4 reste ½ (ni pile ni `New`), D2 ½ (aucun ordre explicite), C1 ½ (`__m128` seul, 128 bits) |
+| R-main-mieux | R-E ; chaque cellule × le plus petit des rapports mesurés sous main (`fpc_main` ; `fpc_main_mieux` sur ses 12 cellules, K4 par la plus rapide de ses deux formes ; `fpc_main_scal` sur K1 `soa` et K5 `tuned`) : les « meilleures formes » de la remarque ; le minimum de rapports bruités tire un peu vers le bas, le rapport le dira |
+| R-main-mieux-grille | R-main-mieux et grille de main (la lecture de la remarque à 55,2) |
+
+Information : FreePascal / C sur la machine 26 (témoins), à côté de la machine 25 et des rapports de la remarque ; K5
+en assembleur face au C natif ; rapports main / 3.2.2 et rc2 / 3.2.2 de chaque cellule. Avec les errata, le pilier
+capacités de la grille de main vaut 64,0 en v1 et 68,8 en v2 (la remarque : 69,5, sans les errata E4 et F4).
+
+### 5.6 Ce qui change ailleurs (après les mesures)
+
+Errata dans `analysis/capabilities.py` et `analysis/capabilities_v2.py`, puis la chaîne publiée régénérée
+(`analysis/analyze_v3.py`, graphiques, `analysis/capabilities_md.py`, figures du README, états actuels de la remarque
+sur C, de la sensibilité sans SIMD et de la confrontation) ; README (tableau, paragraphe de FreePascal, branche stable
+et branche main, D4, K5 naturel), `docs/FINDINGS.md`, journal de `docs/METHODOLOGY.md`, `docs/NOSIMD.md`,
+`docs/CONFRONTATION.md`, `docs/CAPABILITIES.md`, `env/toolchains.txt`.
+
+### 5.7 Ce que je ne fais pas
+
+* Changer le code naturel : `High(a)` reste (règle de `docs/NATURAL.md`, fixée avant les mesures ; c'est la forme de
+  la documentation pour un tableau dynamique) ; `Length(a) - 1` est une sensibilité. Ni les noyaux optimisés publiés :
+  les formes mieux écrites sont des sensibilités, comme pour C, Lua, Java, Go et les autres.
+* Classer la 3.2.4-rc2 ou main : le banc prend la dernière version publiée ; la rc2 est une bêta, main un instantané
+  de développement ; ce sont des sensibilités, comme Zig 0.18-dev.
+* Classer du code en assembleur (règle du banc) : K5 en assembleur reste une information.
+* Mesurer le générateur LLVM (absent de l'instantané).

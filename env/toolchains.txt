@@ -26,5 +26,7 @@ lua            Lua 5.5.1  Copyright (C) 1994-2026 Lua.org, PUC-Rio
 luajit         LuaJIT 2.1.1792588164 -- Copyright (C) 2005-2026 Mike Pall. https://luajit.org/
 swiftc         Swift version 6.4.2 (swift-6.4.2-RELEASE), LLVM de la chaîne (clang 21.0.0) ; ajouté le 5/11 (docs/SWIFT.md)
 fpc            Free Pascal Compiler version 3.2.2 [2021/05/16] for x86_64 (générateur de code propre à FPC) ; ajouté le 6/11 (docs/FPC.md)
+fpc-324rc2     Free Pascal Compiler version 3.2.4-rc1 [2026/08/16] for x86_64 (archive 3.2.4-rc2 de fpc/beta, /opt/fpc-324rc2) ; sensibilité de la remarque sur FreePascal (docs/FPC.md, 5)
+fpc-main       Free Pascal Compiler version 3.3.1-21612-gc58603b8dd [2026/11/04] for x86_64 (instantané de la branche main, /opt/fpc-main) ; sensibilité de la remarque sur FreePascal (docs/FPC.md, 5)
 kernel         Linux 6.18.44-fc-v180 #1 SMP PREEMPT_DYNAMIC @0 x86_64
 cpu            model name	: Intel(R) Xeon(R) Processor @ 2.80GHz
