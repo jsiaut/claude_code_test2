@@ -253,6 +253,12 @@ et C3 (`tools/c3_measure.py bqn` : K4 et K9 naturels, deux clés du binaire `bqn
 | B-cases-haut | B-E ; A8, B1, C4 et E1 = 1 (stockage étroit automatique ; libération immédiate par comptage de références ; réassociation demandée par `•math.Sum` ; JIT par défaut) |
 | B-tout-bas, B-tout-haut | B-cases-bas avec B-o3, B-K1ns, B-K8ns, B-fp et B-C3 ; B-cases-haut avec B-K7arr |
 
+**Ajouté pendant la campagne, avant tout résultat de BQN (hors plan, information)** : B-K7tab, K7 naturel relié par
+le facteur de K7 optimisé du C (sa table plate) au lieu de celui de sa table chaînée. `•HashMap` est une table à
+adressage ouvert (`src/builtins/search.c`, `hashmap_set` : charge gardée sous 7/8), comme le `TDictionary` de
+FreePascal, dont le K7 naturel s'était révélé sans doute trop pénalisé par le facteur de la table chaînée du C
+(F-K7tab, `docs/FPC.md` 4.4). B-E garde le pont du plan.
+
 Les rapports des copies et des variantes sont appliqués tels qu'ils sont mesurés, dans un sens ou dans l'autre (pas
 de min(1, r)) : ce sont d'autres lectures de la règle, pas des améliorations. Rapports : moyenne géométrique des
 médianes de processus, intervalle par bootstrap ; latences : médiane de toutes les répétitions, colonne par colonne.
