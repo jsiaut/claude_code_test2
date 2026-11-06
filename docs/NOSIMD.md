@@ -385,3 +385,14 @@ Recalculé avec les errata D4 et E4 de Swift et son pont par la machine 24 (tém
 devant), 13e en S-scalaire (48,3) et en S-symétrique (61,8), 12e en S-noyaux-scalaires (63,7, devant Julia, 13e),
 10e en S-importées (66,5). Les scores des 21 autres langages ne changent dans aucun scénario ; à la lettre, Go devance
 encore Java de 0,04 rang.
+
+### 4.20 Recalcul après l'ajout de FreePascal (6 novembre)
+
+Recalculé avec FreePascal (témoin égal au scénario F-E de `results/fpc_check.json`, `docs/FPC.md`). Ses variantes à
+vecteurs explicites, classe V, sont K1 `soa` et K5 tuned (traitement vectoriel de `-Sv`) ; les autres sont scalaires.
+FreePascal : 16e publié (47,4 points), 16e sans `mt` (47,8), 15e en S-scalaire et en S-scalaire-Mojo (42,7 points :
+devant C# au rang espéré, 15,33 contre 15,87, malgré un score plus bas que le sien, 43,0), 16e en S-symétrique (50,1),
+en S-noyaux-scalaires (48,1) et en S-importées (47,4).
+Les scores des 22 autres bougent de 0,008 point au plus (FreePascal devient la référence de K2 à 256 Kio dans une
+partie des tirages) ; ceux que FreePascal devance reculent d'un rang ; en S-scalaire, Java (16,95) devance désormais
+Go (16,98), à 0,03 rang près : FreePascal s'intercale entre eux dans une part différente des variantes.

@@ -462,6 +462,11 @@ Rejouée après la remarque sur Swift (5 novembre au soir, `docs/SWIFT.md`, 5 : 
 Emerald Rapids) : les rangs des 18 langages communs, les corrélations des quatre scénarios et les accords des tests 3
 et 4 ne changent pas ; les rangs espérés des 18 bougent de 0,18 au plus.
 
+Rejouée après l'ajout de FreePascal (6 novembre, `docs/FPC.md` ; FreePascal n'est pas dans l'autre étude) : les rangs
+des 18 langages communs, les corrélations des quatre scénarios et le test 4 ne changent pas ; les rangs espérés des 18
+(classement à 18) bougent de 0,0015 au plus, comme la part des variantes où C est premier dans le test 3 (0,483 à
+0,484 pour un poids de 0,15).
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

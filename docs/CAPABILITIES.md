@@ -3,48 +3,48 @@
 ● = 1 (présente, documentée, vérifiée) · ◐ = 0,5 (partielle : expérimentale, propre à un compilateur, livrée hors norme ou limitée) · ○ = 0 (absente, ou seulement par une bibliothèque tierce ou une FFI).
 C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en natural (`tools/c3_measure.py`). Les justifications et preuves de chaque cellule suivent le tableau.
 
-| Capacité | C | C++ | Rust | Zig | Odin | C3 | D | Nim | Ada | Fortran | Chapel | Mojo | Swift | Go | C# | Java | Julia | Haskell | OCaml | JS | Python | Lua |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| **A** (25 %) | | | | | | | | | | | | | | | | | | | | | | |
-| A1 agrégats valeurs en ligne dans les tableaux | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ |
-| A2 ordre/taille des champs, disposition C, offsetof | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ |
-| A3 disposition au bit près (packed, champs de bits) | ◐ | ◐ | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ○ | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ |
-| A4 alignement explicite >= 64 o | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ○ |
-| A5 unions et réinterprétation de bits | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ◐ | ● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ |
-| A6 SoA natif | ○ | ○ | ○ | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| A7 tableaux fixes en ligne dans les agrégats | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ |
-| A8 types numériques étroits de stockage | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ |
-| **B** (20 %) | | | | | | | | | | | | | | | | | | | | | | |
-| B1 pas de GC traçant imposé | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ● | ○ |
-| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
-| B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ● | ○ | ◐ | ◐ | ○ | ○ | ○ | ◐ |
-| B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ◐ |
-| B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ |
-| **C** (20 %) | | | | | | | | | | | | | | | | | | | | | | |
-| C1 types vectoriels portables | ◐ | ◐ | ◐ | ● | ● | ● | ● | ○ | ◐ | ○ | ○ | ● | ● | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
-| C2 intrinsèques de la cible | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
-| C3 auto-vectorisation (mesurée) | ● | ● | ◐ | ○ | ● | ● | ◐ | ◐ | ◐ | ● | ● | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
-| C4 contrôle de la réassociation flottante | ◐ | ● | ● | ● | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
-| C5 parallélisme de données | ◐ | ◐ | ○ | ○ | ○ | ○ | ● | ◐ | ○ | ● | ● | ○ | ● | ○ | ● | ● | ● | ◐ | ○ | ○ | ◐ | ○ |
-| **D** (15 %) | | | | | | | | | | | | | | | | | | | | | | |
-| D1 threads parallèles en mémoire partagée | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ○ |
-| D2 atomiques à ordres mémoire explicites | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ○ |
-| D3 aide ligne de cache | ◐ | ● | ○ | ● | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ◐ | ◐ | ○ | ● | ○ | ○ | ○ |
-| D4 affinité CPU | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ | ○ |
-| D5 barrières et indication d'attente active | ◐ | ◐ | ● | ◐ | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ● | ◐ | ○ | ● | ● | ◐ | ○ | ◐ | ◐ | ○ | ○ |
-| **E** (10 %) | | | | | | | | | | | | | | | | | | | | | | |
-| E1 code natif inspectable | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ○ | ○ |
-| E2 assembleur en ligne | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ● | ○ | ○ | ● | ○ | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
-| E3 indications de branchement | ◐ | ● | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ● | ◐ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| E4 préchargement explicite | ◐ | ◐ | ● | ● | ● | ● | ● | ◐ | ◐ | ○ | ◐ | ● | ◐ | ○ | ● | ○ | ◐ | ● | ○ | ○ | ○ | ○ |
-| E5 garanties de non-aliasing | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
-| E6 contrôle local des vérifications de bornes | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ● | ● | ● | ◐ | ◐ | ○ |
-| E7 calcul à la compilation + génériques monomorphisés | ◐ | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ | ● | ◐ | ○ | ○ | ○ | ○ |
-| **F** (10 %) | | | | | | | | | | | | | | | | | | | | | | |
-| F1 tableaux multidimensionnels contigus | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ● | ◐ | ● | ● | ● | ○ | ◐ | ○ |
-| F2 localité / distribution (PGAS, NUMA) | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
-| F3 entiers fixes signés et non signés modulaires | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ◐ |
-| F4 fichiers projetés + réinterprétation sans copie | ◐ | ◐ | ○ | ● | ◐ | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ◐ | ● | ● | ● | ○ | ● | ○ | ● | ○ |
+| Capacité | C | C++ | Rust | Zig | Odin | C3 | D | Nim | Ada | Fortran | Chapel | Mojo | Swift | FPC | Go | C# | Java | Julia | Haskell | OCaml | JS | Python | Lua |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **A** (25 %) | | | | | | | | | | | | | | | | | | | | | | | |
+| A1 agrégats valeurs en ligne dans les tableaux | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ |
+| A2 ordre/taille des champs, disposition C, offsetof | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ |
+| A3 disposition au bit près (packed, champs de bits) | ◐ | ◐ | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ |
+| A4 alignement explicite >= 64 o | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ○ |
+| A5 unions et réinterprétation de bits | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ |
+| A6 SoA natif | ○ | ○ | ○ | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| A7 tableaux fixes en ligne dans les agrégats | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ |
+| A8 types numériques étroits de stockage | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ○ |
+| **B** (20 %) | | | | | | | | | | | | | | | | | | | | | | | |
+| B1 pas de GC traçant imposé | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ● | ○ |
+| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
+| B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ◐ | ● | ○ | ◐ | ◐ | ○ | ○ | ○ | ◐ |
+| B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ◐ |
+| B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ |
+| **C** (20 %) | | | | | | | | | | | | | | | | | | | | | | | |
+| C1 types vectoriels portables | ◐ | ◐ | ◐ | ● | ● | ● | ● | ○ | ◐ | ○ | ○ | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
+| C2 intrinsèques de la cible | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ○ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| C3 auto-vectorisation (mesurée) | ● | ● | ◐ | ○ | ● | ● | ◐ | ◐ | ◐ | ● | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
+| C4 contrôle de la réassociation flottante | ◐ | ● | ● | ● | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ |
+| C5 parallélisme de données | ◐ | ◐ | ○ | ○ | ○ | ○ | ● | ◐ | ○ | ● | ● | ○ | ● | ○ | ○ | ● | ● | ● | ◐ | ○ | ○ | ◐ | ○ |
+| **D** (15 %) | | | | | | | | | | | | | | | | | | | | | | | |
+| D1 threads parallèles en mémoire partagée | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ○ |
+| D2 atomiques à ordres mémoire explicites | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ○ |
+| D3 aide ligne de cache | ◐ | ● | ○ | ● | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ◐ | ◐ | ○ | ● | ○ | ○ | ○ |
+| D4 affinité CPU | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ | ○ |
+| D5 barrières et indication d'attente active | ◐ | ◐ | ● | ◐ | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ○ | ● | ● | ◐ | ○ | ◐ | ◐ | ○ | ○ |
+| **E** (10 %) | | | | | | | | | | | | | | | | | | | | | | | |
+| E1 code natif inspectable | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ○ | ○ |
+| E2 assembleur en ligne | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ● | ○ | ○ | ● | ○ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| E3 indications de branchement | ◐ | ● | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ● | ◐ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| E4 préchargement explicite | ◐ | ◐ | ● | ● | ● | ● | ● | ◐ | ◐ | ○ | ◐ | ● | ◐ | ● | ○ | ● | ○ | ◐ | ● | ○ | ○ | ○ | ○ |
+| E5 garanties de non-aliasing | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| E6 contrôle local des vérifications de bornes | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ● | ● | ● | ◐ | ◐ | ○ |
+| E7 calcul à la compilation + génériques monomorphisés | ◐ | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ◐ | ○ | ● | ◐ | ○ | ○ | ○ | ○ |
+| **F** (10 %) | | | | | | | | | | | | | | | | | | | | | | | |
+| F1 tableaux multidimensionnels contigus | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ● | ● | ● | ○ | ◐ | ○ |
+| F2 localité / distribution (PGAS, NUMA) | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ |
+| F3 entiers fixes signés et non signés modulaires | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ◐ |
+| F4 fichiers projetés + réinterprétation sans copie | ◐ | ◐ | ○ | ● | ◐ | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ● | ◐ | ● | ● | ● | ○ | ● | ○ | ● | ○ |
 
 ## Justifications
 
@@ -164,6 +164,15 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 * **D** : D1 = 1 (Foundation.Thread (bench) et tâches de la bibliothèque standard) ; D2 = 1 (Synchronization.Atomic : .relaxed/.acquiring/.releasing/.sequentiallyConsistent (bench K3/K10)) ; D3 = 0.5 (sysconf(_SC_LEVEL1_DCACHE_LINESIZE) par le module Glibc livré : requête à l'exécution, ni constante ni type de bourrage (sonde)) ; D4 = 0.5 (sched_setaffinity, pthread_setaffinity_np, sched_getcpu du module Glibc livré, derrière _GNU_SOURCE (swiftc -Xcc -D_GNU_SOURCE, fil épinglé : sonde) ; erratum du 5/11, remarque sur Swift : 0 avant, la sonde ne définissait pas _GNU_SOURCE) ; D5 = 0.5 (atomicMemoryFence ; pause seulement par @_silgen_name("llvm.x86.sse2.pause"), attribut souligné (_mm_pause importée mais non liée, sonde))
 * **E** : E1 = 1 (natif, -emit-assembly / -emit-ir) ; E2 = 0 (aucun) ; E3 = 0.5 (_fastPath/_slowPath : publics mais soulignés (poids de branchement dans l'IR, sonde)) ; E4 = 0.5 (@_silgen_name("llvm.prefetch.p0") : attribut souligné, prefetchw émis (sonde) ; _m_prefetchw importée [readnone] et supprimée, _mm_prefetch macro refusée ; erratum du 5/11, remarque sur Swift : 0 avant, comme pour E3 et C2 ce qui est livré mais souligné vaut ½) ; E5 = 0.5 (exclusivité des inout (règle du langage, exploitée par l'optimiseur SIL) ; noalias dans l'IR sur les seuls inout de type pointeur, pas de restrict pour les pointeurs (sonde)) ; E6 = 1 (UnsafeBufferPointer sans vérification en -O (bench), -Ounchecked global) ; E7 = 0.5 (spécialisation garantie par @specialized (6.4, sans option) et @inline(always) (sonde) ; évaluation à la compilation expérimentale (@const sous -enable-experimental-feature CompileTimeValues ; macros : paquet swift-syntax))
 * **F** : F1 = 0.5 (InlineArray imbriqués de taille fixe seulement ; [[Double]] non contigu) ; F2 = 0 (aucun) ; F3 = 1 (UInt8...Int64, &+ &- &* (bench)) ; F4 = 1 (Data(contentsOf:options: .alwaysMapped) projeté (/proc/self/maps) + withUnsafeBytes/bindMemory (sonde))
+
+### FPC
+
+* **A** : A1 = 1 (array of record : valeurs en ligne, écart de 64 o entre éléments (sonde, bench K1)) ; A2 = 1 (record : ordre déclaré, alignement naturel (décalages 0, 8, 16) ; {$PACKRECORDS C} : disposition C (sonde)) ; A3 = 1 (packed record (5 o) et bitpacked record (champs de bits : 1 o) dans le langage (sonde)) ; A4 = 0.5 (GetMem + Align(p, 64) à la main (bench) ; {$CODEALIGN VARMIN=64} pour les variables globales ; pas d'alignement de type (« end align 64 » refusé, {$PACKRECORDS 64} illégal : sonde)) ; A5 = 1 (record à variantes sans champ d'étiquette (union brute), absolute, transtypage de pointeur (sonde)) ; A6 = 0 (aucun) ; A7 = 1 (array[0..15] of Single dans un record : 64 o en ligne (sonde)) ; A8 = 1 (Byte/SmallInt/Word/Single, intervalles bitpacked ; pas de flottant 16 bits)
+* **B** : B1 = 1 (pas de ramasse-miettes : comptage de références des chaînes, tableaux dynamiques et interfaces) ; B2 = 0.5 (SetMemoryManager (gestionnaire global remplaçable) et NewInstance/FreeInstance par classe (objet construit dans une arène : sonde) ; pas d'allocateur passé aux conteneurs (arène à la main, bench K8 tuned)) ; B3 = 1 (records et tableaux statiques locaux sur la pile (sonde)) ; B4 = 0.5 (allocations implicites : énumérateur d'un TDictionary, concaténation de chaînes, exceptions (comptées par le gestionnaire de mémoire, sonde)) ; B5 = 1 (Pointer, pointeurs typés et arithmétique ({$pointermath}), GetMem/FreeMem (bench))
+* **C** : C1 = 0.5 (-Sv : arithmétique sur array[0..3] of Single / array[0..1] of Double en SSE 128 bits (bench K1 soa, K5) ; expérimental : 8 Single = erreur interne 200610072, opérandes à aligner sur 16 o (erreur 216 sinon), ni masque, ni FMA, ni conversion (sonde)) ; C2 = 0 (aucune intrinsèque SSE/AVX : seulement des intrinsèques portables (FMASingle/FMADouble, Prefetch, PopCnt)) ; C3 = 0.0 (mesuré) ; C4 = 0 (-OoFASTMATH ne fait que contracter en FMA : la réduction reste scalaire et dans l'ordre (sonde)) ; C5 = 0 (aucune boucle parallèle ni réserve de tâches dans la RTL et les paquets livrés)
+* **D** : D1 = 1 (BeginThread (unité cthreads) et TThread (bench K3, K6, K9, K10)) ; D2 = 0.5 (InterLockedIncrement64/CompareExchange64/ExchangeAdd64 : RMW séquentiellement cohérents (lock xadd dans une procédure de la RTL) ; ni ordre mémoire explicite ni lecture/écriture atomique (bench K3, K10)) ; D3 = 0 (aucune constante, requête ni type de bourrage de ligne de cache dans la RTL) ; D4 = 0.5 (Do_SysCall(syscall_nr_sched_setaffinity) de l'unité Syscall livrée : fil épinglé (sonde) ; pas d'API d'affinité) ; D5 = 0.5 (ReadBarrier/WriteBarrier/ReadWriteBarrier (lfence, sfence, mfence dans des procédures de la RTL), ThreadSwitch ; pas de pause (seulement en assembleur en ligne))
+* **E** : E1 = 1 (natif, -al garde l'assembleur produit) ; E2 = 1 (blocs asm et procédures assembler (syntaxes Intel et AT&T) ; AVX2 accepté, AVX-512 inconnu de l'assembleur de FPC 3.2.2 (octets bruts seulement, sonde)) ; E3 = 0 (aucune (Likely/Unlikely inconnus en 3.2.2, sonde)) ; E4 = 1 (Prefetch(x) du System : prefetchnta (sonde, bench K7 tuned)) ; E5 = 0 (ni restrict ni garantie de non-aliasing) ; E6 = 1 ({$R+}/{$R-} locaux, sans vérification par défaut (sonde)) ; E7 = 0.5 (génériques spécialisés à la compilation (specialize, sonde) ; expressions constantes, pas d'évaluation de fonctions à la compilation)
+* **F** : F1 = 0.5 (array[0..M-1, 0..N-1] contigu, bornes fixées à la compilation (bench K9 natural) ; array of array non contigu) ; F2 = 0 (aucun) ; F3 = 1 (Byte...QWord et ShortInt...Int64, modulaires sans {$Q+} (défaut, sonde)) ; F4 = 1 (Fpmmap de l'unité BaseUnix livrée + pointeur typé (sonde))
 
 ### Go
 

@@ -2,7 +2,7 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/swift_remark.json, « R-E ».
+Témoin : écart maximal 0.0e+00 avec results/fpc_check.json, « F-E ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
@@ -10,38 +10,39 @@ Témoin : écart maximal 0.0e+00 avec results/swift_remark.json, « R-E ».
 |---|---|---|---|---|---|---|---|
 | C | 1 (80,0) | 1 (80,4) | 5 (63,8) | 5 (63,8) | 2 (80,7) | 1 (77,6) | 1 (80,0) |
 | Odin | 2 (74,0) | 2 (74,5) | 6 (59,1) | 6 (59,1) | 1 (77,8) | 2 (71,7) | 2 (74,0) |
-| C++ | 3 (77,1) | 3 (77,6) | 7 (62,4) | 7 (62,4) | 3 (80,5) | 3 (73,0) | 3 (77,1) |
+| C++ | 3 (77,1) | 3 (77,6) | 7 (62,3) | 7 (62,3) | 3 (80,5) | 3 (73,0) | 3 (77,1) |
 | Zig | 4 (72,3) | 4 (73,5) | 9 (58,7) | 9 (58,7) | 4 (74,9) | 8 (68,1) | 4 (72,3) |
 | C3 | 5 (71,6) | 5 (72,3) | 10 (55,9) | 10 (55,9) | 5 (74,9) | 4 (69,0) | 5 (71,6) |
 | Rust | 6 (70,0) | 7 (70,3) | 11 (56,3) | 11 (56,3) | 8 (69,8) | 7 (68,0) | 6 (70,0) |
 | Nim | 7 (69,3) | 9 (69,5) | 8 (58,1) | 8 (58,1) | 6 (71,0) | 6 (68,3) | 14 (56,9) |
 | D | 8 (72,7) | 6 (74,1) | 12 (57,5) | 12 (57,5) | 7 (72,8) | 9 (70,3) | 7 (72,7) |
-| Ada | 9 (71,1) | 8 (73,3) | 4 (64,9) | 4 (64,9) | 9 (70,6) | 5 (72,8) | 12 (61,8) |
+| Ada | 9 (71,1) | 8 (73,3) | 4 (64,8) | 4 (64,8) | 9 (70,6) | 5 (72,8) | 12 (61,8) |
 | Chapel | 10 (65,7) | 10 (65,2) | 1 (67,2) | 1 (67,2) | 11 (65,3) | 10 (63,8) | 8 (65,7) |
-| Swift | 11 (66,5) | 12 (66,4) | 13 (48,3) | 13 (48,3) | 13 (61,8) | 12 (63,7) | 10 (66,5) |
+| Swift | 11 (66,5) | 12 (66,4) | 13 (48,2) | 13 (48,2) | 13 (61,8) | 12 (63,6) | 10 (66,5) |
 | Fortran | 12 (65,4) | 11 (66,1) | 2 (68,0) | 2 (68,0) | 10 (70,0) | 11 (63,2) | 9 (65,4) |
 | Julia | 13 (62,4) | 13 (63,1) | 3 (64,8) | 3 (64,8) | 12 (67,3) | 13 (63,0) | 11 (62,4) |
 | Mojo | 14 (62,3) | 14 (63,2) | 14 (45,0) | 14 (44,9) | 14 (55,0) | 14 (57,7) | 13 (62,3) |
-| C# | 15 (54,9) | 15 (56,2) | 15 (43,0) | 15 (43,0) | 15 (53,1) | 15 (50,3) | 15 (54,9) |
-| Java | 16 (47,2) | 16 (48,3) | 17 (37,1) | 17 (37,1) | 16 (50,3) | 16 (45,2) | 16 (47,2) |
-| Go | 17 (45,4) | 17 (45,6) | 16 (37,5) | 16 (37,5) | 17 (46,5) | 17 (40,2) | 17 (45,4) |
-| Haskell | 18 (41,3) | 18 (41,8) | 18 (31,1) | 18 (31,1) | 18 (39,0) | 18 (37,7) | 18 (41,3) |
-| OCaml | 19 (23,9) | 19 (24,2) | 19 (24,7) | 19 (24,7) | 19 (28,0) | 19 (24,6) | 19 (23,9) |
-| JavaScript | 20 (15,6) | 20 (15,7) | 20 (16,0) | 20 (16,0) | 20 (19,9) | 20 (16,1) | 20 (15,6) |
-| Python | 21 (11,8) | 21 (11,8) | 21 (11,9) | 21 (11,9) | 21 (12,1) | 21 (11,9) | 21 (11,8) |
-| Lua | 22 (5,4) | 22 (5,5) | 22 (5,6) | 22 (5,6) | 22 (6,2) | 22 (5,7) | 22 (5,4) |
+| C# | 15 (54,9) | 15 (56,2) | 16 (43,0) | 16 (43,0) | 15 (53,1) | 15 (50,3) | 15 (54,9) |
+| FreePascal | 16 (47,4) | 16 (47,8) | 15 (42,7) | 15 (42,7) | 16 (50,1) | 16 (48,1) | 16 (47,4) |
+| Java | 17 (47,2) | 17 (48,3) | 17 (37,1) | 17 (37,1) | 17 (50,3) | 17 (45,2) | 17 (47,2) |
+| Go | 18 (45,4) | 18 (45,6) | 18 (37,5) | 18 (37,5) | 18 (46,5) | 18 (40,1) | 18 (45,4) |
+| Haskell | 19 (41,3) | 19 (41,8) | 19 (31,1) | 19 (31,1) | 19 (38,9) | 19 (37,7) | 19 (41,3) |
+| OCaml | 20 (23,9) | 20 (24,2) | 20 (24,7) | 20 (24,7) | 20 (28,0) | 20 (24,6) | 20 (23,9) |
+| JavaScript | 21 (15,6) | 21 (15,7) | 21 (16,0) | 21 (16,0) | 21 (19,9) | 21 (16,1) | 21 (15,6) |
+| Python | 22 (11,8) | 22 (11,8) | 22 (11,9) | 22 (11,9) | 22 (12,1) | 22 (11,9) | 22 (11,8) |
+| Lua | 23 (5,4) | 23 (5,5) | 23 (5,6) | 23 (5,6) | 23 (6,2) | 23 (5,7) | 23 (5,4) |
 
 ## Résumé par scénario
 
 | Scénario | Spearman / publié | 1er (part) | Places gagnées (+) ou perdues (−) par rapport au publié |
 |---|---|---|---|
 | Publié | 1,000 | C (49 %) | aucune |
-| Contrôle sans mt | 0,993 | C (48 %) | D +2, Nim -2, Ada +1, Fortran +1, Rust -1, Swift -1 |
-| S-scalaire | 0,745 | Chapel (46 %) | Julia +10, Fortran +10, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Swift -2, Java -1, Nim -1, Go +1 |
-| S-scalaire-Mojo | 0,745 | Chapel (46 %) | Julia +10, Fortran +10, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Swift -2, Java -1, Nim -1, Go +1 |
-| S-symétrique | 0,990 | Odin (29 %) | Fortran +2, Rust -2, Swift -2, C -1, Odin +1, Julia +1, D +1, Chapel -1, Nim +1 |
-| S-noyaux-scalaires | 0,979 | C (48 %) | Zig -4, Ada +4, Fortran +1, C3 +1, D -1, Rust -1, Nim +1, Swift -1 |
-| S-importées | 0,956 | C (50 %) | Nim -7, Ada -3, Fortran +3, Julia +2, Chapel +2, D +1, Mojo +1, Swift +1 |
+| Contrôle sans mt | 0,994 | C (48 %) | D +2, Nim -2, Ada +1, Fortran +1, Rust -1, Swift -1 |
+| S-scalaire | 0,777 | Chapel (46 %) | Julia +10, Fortran +10, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Swift -2, C# -1, Nim -1, FreePascal +1 |
+| S-scalaire-Mojo | 0,777 | Chapel (46 %) | Julia +10, Fortran +10, Chapel +9, Zig -5, Ada +5, C3 -5, Rust -5, C -4, C++ -4, Odin -4, D -4, Swift -2, C# -1, Nim -1, FreePascal +1 |
+| S-symétrique | 0,991 | Odin (29 %) | Fortran +2, Rust -2, Swift -2, C -1, Odin +1, Julia +1, D +1, Chapel -1, Nim +1 |
+| S-noyaux-scalaires | 0,981 | C (48 %) | Zig -4, Ada +4, Fortran +1, C3 +1, D -1, Rust -1, Nim +1, Swift -1 |
+| S-importées | 0,961 | C (50 %) | Nim -7, Ada -3, Fortran +3, Julia +2, Chapel +2, D +1, Mojo +1, Swift +1 |
 
 ## Plafond E par scénario
 
@@ -62,6 +63,7 @@ Témoin : écart maximal 0.0e+00 avec results/swift_remark.json, « R-E ».
 | Julia | 62,3 | 64,2 | 67,9 | 67,9 | 66,5 | 64,0 | 62,3 |
 | Mojo | 67,0 | 69,3 | 23,5 | 23,3 | 45,0 | 55,5 | 67,0 |
 | C# | 53,6 | 57,0 | 23,8 | 23,8 | 45,7 | 42,1 | 53,6 |
+| FreePascal | 36,3 | 37,1 | 24,4 | 24,4 | 41,0 | 38,1 | 36,3 |
 | Java | 56,5 | 59,4 | 31,0 | 31,0 | 59,5 | 51,6 | 56,5 |
 | Go | 44,5 | 45,1 | 24,6 | 24,6 | 42,6 | 31,5 | 44,5 |
 | Haskell | 46,2 | 47,5 | 20,8 | 20,8 | 38,1 | 37,2 | 46,2 |
@@ -99,6 +101,7 @@ Témoin : écart maximal 0.0e+00 avec results/swift_remark.json, « R-E ».
 | Julia | soa 8,0 | tuned 6,3 | tuned q6 21,4 | tuned q1 98,8 | natural 21,6 |
 | Mojo | aos 38,0 | natural 161,2 | natural q6 56,9 | natural q1 227,3 | natural 202,3 |
 | C# | aos 38,9 | natural 86,7 | natural q6 155,7 | natural q1 186,3 | natural 71,9 |
+| FreePascal | aos 45,7 | natural 327,2 | tuned q6 36,9 | tuned q1 83,3 | tuned 27,3 |
 | Java | aos 42,3 | natural 141,9 | natural q6 111,0 | natural q1 111,5 | natural 17,0 |
 | Go | aos 47,2 | natural 86,8 | natural q6 138,4 | tuned q1 86,3 | tuned 21,9 |
 | Haskell | aos 38,3 | natural 189,2 | tuned q6 60,2 | tuned q1 67,4 | natural 163,4 |

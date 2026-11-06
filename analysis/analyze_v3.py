@@ -33,6 +33,10 @@ JIT = {"java", "csharp", "js", "js_bun", "julia", "luajit"}
 INTERP = {"python", "python_ft", "lua"}
 
 
+# graines des générateurs des langages ajoutés (SEED + décalage) : Swift garde celle d'avant l'ajout de FreePascal
+ADDED_SEED = {"swift": 2402, "fpc": 2403}
+
+
 def klass(l):
     return "interp" if l in INTERP else ("jit" if l in JIT else "aot")
 
@@ -85,8 +89,9 @@ class Arrays3:
         self.idx = {l: i for i, l in enumerate(langs)}
         self.ranked = np.array([self.idx[l] for l in RANKED if l in self.idx])
         self.t, self.P = {}, {}
-        # langages ajoutés (docs/SWIFT.md 3.2) : générateur propre, pour que les tirages des autres ne changent pas
-        rng_add = np.random.default_rng(SEED + 2402)
+        # langages ajoutés (docs/SWIFT.md 3.2) : générateur propre, pour que les tirages des autres ne changent pas ; un
+        # par langage ajouté (docs/FPC.md 3.2), pour que l'ajout de FreePascal ne change pas non plus ceux de Swift
+        rng_add = {l: np.random.default_rng(SEED + ADDED_SEED[l]) for l in v2.ADDED}
         for key in sorted(needed_keys(e_meas, d1_meas)):
             mean = np.full((nb + 1, len(langs)), np.nan)
             mn = np.full((nb + 1, len(langs)), np.nan)
@@ -100,7 +105,7 @@ class Arrays3:
                 self.P[(l, key)] = len(y)
                 if nb:
                     pool = pools[(key[0], klass(l))]
-                    g = rng_add if l in v2.ADDED else rng
+                    g = rng_add[l] if l in v2.ADDED else rng
                     draws = y.mean() + pool[g.integers(0, len(pool), size=(nb, len(y)))]
                     mean[1:, j], mn[1:, j] = np.exp(draws.mean(axis=1)), np.exp(draws.min(axis=1))
             self.t[("mean", key)], self.t[("min", key)] = mean, mn
@@ -108,7 +113,7 @@ class Arrays3:
         for l in langs:
             lp = lat.get(l, {}).get(K8N)
             if lp and any(len(p) for p in lp):
-                self.lat[:, self.idx[l], :] = lat_rows(lp, nb, rng_add if l in v2.ADDED else rng)
+                self.lat[:, self.idx[l], :] = lat_rows(lp, nb, rng_add[l] if l in v2.ADDED else rng)
         # remesure de D2 et D4 (docs/CPP.md ; information, hors du classement publié), quand elle est chargée : clés à part,
         # tirées après tout le reste avec leur propre générateur et leurs propres réservoirs, pour que les tirages des
         # autres clés et des variantes ne changent pas

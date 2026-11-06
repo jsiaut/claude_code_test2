@@ -64,7 +64,7 @@ for key, b in BOUNDS.items():
 BACKEND = {
     "GCC": ["c_gcc", "cpp", "fortran", "ada"],
     "LLVM": ["c", "fortran_flang", "rust", "zig", "odin", "c3", "d", "nim", "chapel", "julia", "mojo", "haskell", "swift"],
-    "natif, autre": ["go", "ocaml"],
+    "natif, autre": ["go", "ocaml", "fpc"],
     "JIT ou VM": ["java", "csharp", "js", "js_bun", "luajit"],
     "interprète": ["python", "lua"],
 }
@@ -111,7 +111,8 @@ LAT_REPLACED = set()  # implémentations dont les latences de K8 naturel viennen
 
 # Langages ajoutés après la campagne, mesurés sur un autre hôte avec le C comme témoin et reliés aux données publiées
 # par le pont du C (docs/SWIFT.md, plan 3.2) : {langage: (répertoire de results, étiquette)}.
-ADDED = {"swift": ("raw_swift", "swift")}
+ADDED = {"swift": ("raw_swift", "swift"),
+         "fpc": ("raw_fpc", "fpc")}  # FreePascal (docs/FPC.md, plan 3.2) : toutes ses clés mesurées sur la machine 25
 # Remarque sur Swift (docs/SWIFT.md, plan 5.3) : les clés venues d'Emerald Rapids sont reliées par les rapports au C
 # mesurés sur la machine 24 (même modèle que les machines 3, 11 et 16), dans la construction qui a produit leurs données
 # publiées : {langage: {source: (répertoire, étiquette, implémentation du langage, implémentation du C)}}, source « k5 »
@@ -120,7 +121,11 @@ ADDED = {"swift": ("raw_swift", "swift")}
 ADDED_ER = {"swift": {"k5": ("raw_swift_er", "swift_er", "swift_er", "c_er"),
                       "k9": ("raw_swift_er", "swift_er", "swift", "c"),
                       "lat": ("raw_swift_er", "swift_er", "swift", "c"),
-                      "m3": ("raw_swift_er", "swift_er", "swift_er", "c_er")}}
+                      "m3": ("raw_swift_er", "swift_er", "swift_er", "c_er")},
+            # FreePascal (docs/FPC.md, plan 3.2) : un seul binaire ; K5 et la réplication reliés par le C natif de la
+            # machine 25 (construction de la machine 3), les autres clés par le C publié (défaut : campagne d'origine)
+            "fpc": {"k5": ("raw_fpc", "fpc", "fpc", "c_er"),
+                    "m3": ("raw_fpc", "fpc", "fpc", "c_er")}}
 BRIDGE_ER = True  # False : pont de la machine 23 seul (classement d'avant la remarque sur Swift, scénario « Avant »)
 _ADDED_CACHE = {}
 
@@ -151,7 +156,8 @@ def campaign_raw(sub, tag, impl, impl_c="c"):
 
 
 def added_raw(lang):
-    """Processus valides du langage ajouté et du témoin C de sa campagne d'origine (machine 23 pour Swift)."""
+    """Processus valides du langage ajouté et du témoin C de sa campagne d'origine (machine 23 pour Swift, 25 pour
+    FreePascal)."""
     sub, tag = ADDED[lang]
     return campaign_raw(sub, tag, lang, "c")
 
@@ -1138,7 +1144,7 @@ NAMES = {"c": "C", "cpp": "C++", "csharp": "C#", "java": "Java", "zig": "Zig", "
          "ada": "Ada", "fortran": "Fortran", "js": "JavaScript", "python": "Python", "haskell": "Haskell", "c3": "C3",
          "d": "D", "rust": "Rust", "chapel": "Chapel", "nim": "Nim", "mojo": "Mojo", "go": "Go", "ocaml": "OCaml",
          "lua": "Lua", "c_gcc": "C (gcc)", "fortran_flang": "Fortran (flang)", "luajit": "LuaJIT", "js_bun": "JS (Bun)",
-         "python_ft": "Python (sans GIL)", "swift": "Swift"}
+         "python_ft": "Python (sans GIL)", "swift": "Swift", "fpc": "FreePascal"}
 
 
 def fr(x, d=1):

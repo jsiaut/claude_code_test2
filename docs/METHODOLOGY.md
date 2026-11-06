@@ -1280,3 +1280,32 @@ Robustesse :
   pont des clés de la machine 1 traverse les modèles, contrôlé par un second témoin (`bench/c_gcc_cl`, gcc en cible
   cascadelake, identique au binaire publié de `c_gcc`) et par un facteur d'hôte unique ; un générateur par langage
   ajouté (Swift garde le sien) ; outil `tools/measure_fpc.py` (132 cellules × 7 passes).
+* 2026-11-06, 08:52:29-09:20:57 : **mesures de l'ajout de FreePascal** (`tools/measure_fpc.py`, machine 25) : 924
+  processus (132 cellules × 7), aucune somme de contrôle fausse, 14 processus refaits pour vol de temps, un gardé
+  au-dessus de 2 % (le C sur K3 `sw_padded`, 4,9 % après deux reprises), vol médian nul ; empreinte de K1 64,0 octets
+  par particule ; C3 = 0. Pendant la campagne, seule l'intégration à l'analyse a été écrite (pont et générateurs dans
+  `analysis/analyze_v2.py` et `analyze_v3.py`, `analysis/fpc_check.py`, états actuels), sans rien exécuter hors des
+  vérifications de syntaxe.
+* 2026-11-06, 09:21 à 09:51 : **résultats de l'ajout de FreePascal, sorties régénérées** (`analysis/fpc_check.py`, puis
+  la chaîne publiée : classement, réplication, graphiques, matrice, figures du README, états actuels). Contrôles : le
+  scénario Avant (FreePascal retiré) reproduit R-E de `results/swift_remark.json` à l'identique (écart 0) ; les états
+  actuels de la remarque sur C et de la sensibilité sans SIMD reproduisent F-E à l'identique. FreePascal / C sur la
+  machine 25 : 1,0 à 1,2 sur le code équivalent (K2, K1, K7 et K8 optimisés), 1,7 à 2,8 sur les noyaux SIMD du C
+  écrits en scalaire, 7,5 sur K5 optimisé (`-Sv`, 128 bits), 54 sur K4 naturel, 15 sur K7 naturel (`TDictionary`).
+  FreePascal **16e sur 23** (47,44 points, rang espéré 16,71, rang plausible 15 à 19, 2e étage) ; contrôle 60,5 (16e),
+  plafond 36,3 (19e), code par défaut 46,9 (12e). Sensibilités : 16e dans neuf scénarios sur treize, 17e ou 18e dans
+  les lectures défavorables, 15e sans pont (information) ; le second témoin (gcc) et un facteur d'hôte unique le laissent 16e. Hors plan, ajouté
+  après avoir vu les facteurs du pont : K7 naturel au facteur de la table plate du C (3,05 au lieu de 17,6), 47,62
+  points, 16e. Réplication : 16e sur la machine 3, par le pont ; accord et test nul (sur les 21 langages répliqués
+  indépendamment) inchangés ; étages [14, 5, 1, 3]. Les 22 autres gardent leurs scores (à 0,1 point près dans une
+  borne d'intervalle : FreePascal devient la référence de K2 à 256 Kio dans une partie des tirages) ; ceux qu'il devance
+  reculent d'un rang ; les rangs espérés de ceux qui le précèdent bougent de 0,18 au plus (C#). Sans SIMD explicite
+  (`docs/NOSIMD.md`, 4.20) : 16e, 15e en S-scalaire. Confrontation : rangs des 18 langages communs, corrélations et
+  accords inchangés.
+* 2026-11-06, 09:35 à 10:00 : **README et documents après l'ajout de FreePascal**. README : titre (23 langages), tableau
+  (FreePascal 16e, rangs et rangs plausibles des sept suivants), paragraphe de FreePascal, renumérotation, étages,
+  chaînes, machines, limites (pont entre modèles, relecture, version de chaîne), code par défaut de Swift désormais 16e,
+  reproduction ; `docs/FPC.md` (section 4), `docs/FINDINGS.md`, `docs/NOSIMD.md` (4.20), `docs/CONFRONTATION.md`,
+  `docs/CAPABILITIES.md` (régénéré : colonne de FreePascal). Corrigé avant publication : une phrase du paragraphe de
+  FreePascal le disait 2e pour les queues de latence de K8, alors qu'il est au niveau de Rust et de Fortran (D3 0,66) ;
+  c'est sa note de hiérarchie mémoire (D4 0,98) qui est la meilleure de l'étude.

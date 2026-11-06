@@ -915,3 +915,44 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   qu'à Cascade Lake (p99,9 2,29 fois le C contre 1,97, maximum 1,78 contre 1,14).
 * **Provenance** : recompilé sur la machine 24 par les options de `bench/c/build.sh`, le C est identique octet pour
   octet au binaire de la machine 3 ; compilé pour `cascadelake`, au binaire publié.
+
+## Ajout de FreePascal (6 novembre, machine 25, Emerald Rapids) — `docs/FPC.md`, `results/fpc_check/`
+
+* **Chaîne et mode** : Free Pascal 3.2.2 (mai 2021), la dernière version publiée ; générateur de code propre à FPC.
+  Le `fpc.cfg` livré définit un mode « release » (`-dRELEASE` : `-O2 -Xs`) ; le banc prend `-O3`, le plus haut niveau
+  que `fpc -h` ne dit pas risqué (`-O4` réordonne les champs des classes et contracte les réductions en FMA). Bornes et
+  débordements ne sont pas vérifiés par défaut. La cible la plus haute est `COREAVX2` : pas d'AVX-512, pas même dans
+  l'assembleur en ligne (registres zmm inconnus ; seulement en octets bruts).
+* **SIMD** : aucun vectoriseur (C3 mesurée : 0). Le seul SIMD sans assembleur est le traitement vectoriel de `-Sv`,
+  des opérateurs sur des tableaux de 4 `Single` ou de 2 `Double` traduits en SSE de 128 bits : erreur interne
+  200610072 pour 8 `Single`, opérandes en encodage SSE classique (alignement de 16 octets exigé, erreur d'exécution 216
+  sinon), vecteurs gardés en mémoire entre deux opérations, ni masque, ni FMA, ni conversion. Il divise K5 optimisé par
+  1,72 et K1 `soa` par 1,43, mais ralentit le stencil ; sans expression vectorielle, il ne change pas un octet du
+  binaire.
+* **Optimiseur** : l'accumulateur de K5 naturel reste sur la pile (la procédure appelle `fpc_dynarray_high` pour
+  `High(a)`) : 2,1 fois le C ; deux `vmovaps` par FMA scalaire ; les champs d'un record passé en paramètre sont relus et
+  les adresses recalculées à chaque accès (Q1 optimisé : 88 ms avec quatre tables et une procédure imbriquée `inline`,
+  plus lent que le naturel, 54 ms avec deux tables et des pointeurs ; K7 optimisé : 0,32 s dans une procédure à
+  variables gérées, 0,17 s dans une fonction à pointeurs) ; le stencil naturel recalcule l'adresse des trois lignes à
+  chaque point.
+* **Bibliothèque** : `TDictionary` coûte 30 ns par recherche même en cache, 200 à 225 ns sur 1 M de clés ; K7 naturel
+  (deux recherches par ligne, pas d'accès en place) : 15,4 fois le C ; en valeurs de classe, une recherche : 0,37 fois.
+  `New` / `Dispose` : 1,46 fois `malloc` ; nœuds de classe : 2,16 fois `New`. La RTL n'a ni file bloquante ni variable
+  de condition : la file naturelle de K10 (`TQueue`, section critique, événements) prend 2,2 fois celle du C.
+* **Concurrence** : `InterLocked*` sont des procédures de la RTL (`lock xadd` après un appel ; sans contention, K3
+  `rmw_padded` 1,52 fois le C) ; `ReadBarrier`, `WriteBarrier`, `ReadWriteBarrier` émettent `lfence`, `sfence`,
+  `mfence` ; ni `volatile`, ni atomique à ordre explicite, ni `pause` : K10 optimisé repose sur l'ordre TSO de x86-64
+  (0,64 fois le C, qui attend avec `pause`).
+* **Grille** (`probes/fpc`) : contrôle 60,5 en règle v2 (58,5 en v1) : disposition complète (records en ligne,
+  `{$PACKRECORDS C}`, `packed`, `bitpacked`, records à variantes), pointeurs, assembleur en ligne, `Prefetch`,
+  `{$R+}`/`{$R-}` locaux, génériques spécialisés ; ni intrinsèques, ni ordres mémoire, ni aide de ligne de cache, ni
+  indication de branchement, ni non-aliasing ; affinité par un appel système brut (½ en v1, 1 en v2).
+* **Classement** : 16e sur 23 (47,44 points ; rang espéré 16,71 ; 2e étage). Contrôle 16e, plafond 19e (36,3), code
+  par défaut 12e (46,9 : empreinte 1,0, queues de latence 0,66, hiérarchie mémoire 0,98, la meilleure de l'étude, mais
+  code naturel 0,050). C# le devance dans 82 % des variantes ; il devance Java dans 53 %.
+* **Pont entre modèles** : toutes ses clés viennent de la machine 25 ; les facteurs du C vont de 0,76 à 4,6 sur les clés
+  de la machine 1, 11,4 sur K3 `sw_packed` et 17,6 sur K7 naturel, et restent proches de 1 sur les clés venues du même
+  modèle (K5, K9). Le second témoin (gcc, 47,51 points), un facteur d'hôte unique (47,29) et, hors plan, K7 naturel au
+  facteur de la table plate du C (47,62) le laissent 16e ; la réplication aussi (machine 3, par le même pont).
+* **Sensibilités** : 16e dans neuf scénarios sur treize, 15e sans pont pour les clés de la machine 1 (information,
+  biaisé), 17e avec des cases plus basses, 18e sans `-Sv` (45,89) et avec toutes les lectures défavorables (43,28).

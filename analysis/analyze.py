@@ -14,7 +14,8 @@ from capabilities import MATRIX, CATEGORIES, M  # noqa: E402
 
 RANKED = ["c", "cpp", "csharp", "java", "zig", "odin", "julia", "ada", "fortran", "js", "python", "haskell",
           "c3", "d", "rust", "chapel", "nim", "mojo", "go", "ocaml", "lua",
-          "swift"]  # ajouté le 5/11 (docs/SWIFT.md) : en dernier, pour que les tirages des autres ne changent pas
+          "swift",  # ajouté le 5/11 (docs/SWIFT.md) : en dernier, pour que les tirages des autres ne changent pas
+          "fpc"]  # ajouté le 6/11 (docs/FPC.md) : en dernier, même raison
 ANNEX = {"c_gcc": "c", "fortran_flang": "fortran", "luajit": "lua", "js_bun": "js", "python_ft": "python"}
 N1 = 4194304
 WEIGHTS = {"C": 0.35, "E": 0.40, "D": 0.25}

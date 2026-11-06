@@ -1,6 +1,6 @@
 # Quels langages incarnent le mieux la *mechanical sympathy* ?
 
-*Classement mesuré de 22 langages, octobre et novembre 2026 (Swift ajouté le 5 novembre).*
+*Classement mesuré de 23 langages, octobre et novembre 2026 (Swift ajouté le 5 novembre, FreePascal le 6).*
 
 Un seul critère : la *mechanical sympathy* au sens large, c'est-à-dire la capacité d'un langage à faire écrire du
 code en accord avec le matériel : disposition des données, SIMD, hiérarchie mémoire, concurrence, allocation,
@@ -25,14 +25,15 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | 12 | **Fortran** | 65,4 | 6–14 | 72 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
 | 13 | **Julia** | 62,4 | 8–14 | 60 % | Le 2e code naturel, derrière Odin ; le plafond le plus bas des 14 premiers |
 | 14 | **Mojo** | 62,3 | 10–14 | 96 % | Le SIMD au cœur du langage ; ni vectoriseur de boucles, ni threads publics dans `std` |
-| 15 | **C#** | 54,9 | 14–17 | 88 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
-| 16 | **Java** | 47,2 | 15–18 | 56 % | Meilleur allocateur de petits objets ; pas de types valeur |
-| 17 | **Go** | 45,4 | 15–18 | 93 % | Structures par valeur ; ni vectoriseur, ni SIMD stable, atomiques séquentiellement cohérentes |
-| 18 | **Haskell** | 41,3 | 17–18 | 100 % | Peut descendre bas (FMA vectorielle, mémoire brute) ; code par défaut boxé, ramasse-miettes imposé |
-| 19 | **OCaml** | 23,9 | 19 | 100 % | Bonne allocation générationnelle ; pas de types valeur, ni flottant 32 bits de calcul, ni SIMD |
-| 20 | **JavaScript** | 15,6 | 20–21 | 91 % | Tableaux typés compilés, mais vérifiés à chaque accès ; objets en références, aucun SIMD |
-| 21 | **Python** | 11,8 | 20–22 | 58 % | CPython seul : environ 200 fois plus lent que le meilleur ; la hiérarchie mémoire disparaît derrière l'interpréteur |
-| 22 | **Lua** | 5,4 | 21–22 | — | PUC-Lua sans son API C : mieux que CPython sur les mesures, presque aucun levier dans sa bibliothèque |
+| 15 | **C#** | 54,9 | 14–17 | 82 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
+| 16 | **FreePascal** | 47,4 | 15–19 | 53 % | Records en ligne, `packed` et `bitpacked`, pointeurs, assembleur en ligne, mémoire gérée à la main ; ni vectoriseur, ni intrinsèques, SIMD expérimental limité à 128 bits |
+| 17 | **Java** | 47,2 | 15–19 | 56 % | Meilleur allocateur de petits objets ; pas de types valeur |
+| 18 | **Go** | 45,4 | 15–18 | 93 % | Structures par valeur ; ni vectoriseur, ni SIMD stable, atomiques séquentiellement cohérentes |
+| 19 | **Haskell** | 41,3 | 17–19 | 100 % | Peut descendre bas (FMA vectorielle, mémoire brute) ; code par défaut boxé, ramasse-miettes imposé |
+| 20 | **OCaml** | 23,9 | 20 | 100 % | Bonne allocation générationnelle ; pas de types valeur, ni flottant 32 bits de calcul, ni SIMD |
+| 21 | **JavaScript** | 15,6 | 21–22 | 91 % | Tableaux typés compilés, mais vérifiés à chaque accès ; objets en références, aucun SIMD |
+| 22 | **Python** | 11,8 | 21–23 | 58 % | CPython seul : environ 200 fois plus lent que le meilleur ; la hiérarchie mémoire disparaît derrière l'interpréteur |
+| 23 | **Lua** | 5,4 | 22–23 | — | PUC-Lua sans son API C : mieux que CPython sur les mesures, presque aucun levier dans sa bibliothèque |
 
 * **Score** (0–100) : 40 % de plafond mesuré (le meilleur code que le langage permet d'écrire pour la machine),
   25 % de code par défaut mesuré (le code qu'on écrit sans y penser) et 35 % de contrôle (les leviers qu'offrent le
@@ -160,6 +161,8 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   variantes, et sur les deux machines. Haskell devance OCaml, et OCaml JavaScript, dans plus de 99 % des variantes ;
   JavaScript ne devance plus Python que dans 91 % (95 % avant la correction du banc de Python), et les étages de la v3
   réunissent JavaScript, Python et Lua ; Go devance Haskell dans 93 % (100 % avant la correction du banc de Haskell).
+  FreePascal, ajouté le 6 novembre, entre dans l'étage de C#, Java, Go et Haskell : C# le devance dans 82 % des
+  variantes, et il devance Java dans 53 %, Go dans 62 % et Haskell dans 86 %.
   Ces variantes ne font varier ni l'effort d'implémentation ni le choix du code naturel : avec ses meilleures formes
   mesurées, une particule en `struct` et un JIT stabilisé, C# dépasse Mojo au score (62,0 à 63,3 points contre 61,9)
   et fait jeu égal avec lui au rang, 14e ou 15e ([`docs/CSHARP.md`](docs/CSHARP.md)).
@@ -316,7 +319,7 @@ coude à coude avec C++ et Odin ; sur un même hôte, ses noyaux optimisés pren
 C, sauf Q1 sur Cascade Lake (1,47 ; 1,33 à quatre fils), au niveau du C sur Emerald Rapids (1,03). Ce qui le retient :
 le contrôle (68, 13e), parce qu'il manque ce que les langages système offrent pour descendre plus bas (ni assembleur,
 ni alignement de type au-delà de 16 octets, ni réassociation ; préchargement, `pause` et intrinsèques ne passent que
-par un attribut souligné ou un module de Clang non documenté), et le code par défaut (42, 15e), parce que `-O` garde
+par un attribut souligné ou un module de Clang non documenté), et le code par défaut (42, 16e), parce que `-O` garde
 les vérifications de bornes et de débordement : la somme conditionnelle de K4 reste scalaire, avec un branchement par
 octet (29 fois le temps du C ; écrite avec `&+=`, elle est vectorisée et va au rythme du C), le stencil `[[Double]]`
 vérifie ses bornes à chaque lecture et l'unicité de sa ligne (copie sur écriture) à chaque écriture (3,0 fois le C sur
@@ -367,7 +370,23 @@ OSR : l'effet moyen est faible (moins d'un point), mais une méthode chargée de
 Toutes ces sensibilités cumulées le mettent devant Mojo au score (62 à 63 points) et à égalité avec lui au rang, 14e
 ou 15e ([`docs/CSHARP.md`](docs/CSHARP.md)).
 
-**16. Java.** Excellent modèle mémoire (`VarHandle`), JIT C2 efficace, et le meilleur allocateur de petits objets
+**16. FreePascal.** Ajouté le 6 novembre (Free Pascal 3.2.2, [`docs/FPC.md`](docs/FPC.md)). Un langage système compilé
+en natif, sans ramasse-miettes : records rangés en ligne dans les tableaux (64 octets par particule, comme C),
+`packed` et `bitpacked` pour la disposition au bit près, unions par records à variantes, pointeurs et arithmétique de
+pointeurs, assembleur en ligne. Son code par défaut en profite (47, 12e) : empreinte de C, queues de latence de K8 au
+niveau de Rust et de Fortran, et la meilleure note de hiérarchie mémoire de l'étude. Mais son plafond est le 19e
+(36) : FPC n'a pas de vectoriseur, sa cible s'arrête à AVX2 (ni AVX-512, ni même dans l'assembleur), et son seul SIMD
+sans assembleur est un traitement vectoriel expérimental de 128 bits (`-Sv`, erreur interne au-delà de 4 flottants),
+qui ramène K5 optimisé de 12,8 à 7,5 fois le temps du C ; les noyaux optimisés scalaires prennent 1,2 à 2,8 fois le
+temps du C, K4 11 fois. Son code naturel est lent : la somme conditionnelle de K4 garde un branchement par octet (54
+fois le C), `TDictionary` coûte 15 fois la table du C (30 ns par recherche même en cache), et l'optimiseur garde des
+variables en mémoire (l'accumulateur de K5 naturel, sur la pile : 2,1 fois le C). Son contrôle (60, 16e) a la
+disposition des langages système mais ni intrinsèques, ni atomiques à ordre explicite, ni aide de ligne de cache, ni
+indication de branchement. Il devance Java dans 53 % des variantes ; C# le devance dans 82 %. Toutes ses clés sont
+mesurées sur un Emerald Rapids et reliées aux données publiées par le C ; un second témoin, compilé par gcc, et un
+facteur d'hôte unique ne changent pas sa place, ni aucune des sensibilités du plan à plus de deux places près.
+
+**17. Java.** Excellent modèle mémoire (`VarHandle`), JIT C2 efficace, et le meilleur allocateur de petits objets
 de l'étude (K8 naturel, 301 ms). Pas de types valeur dans le JDK 27 : 78 octets par particule, parcours permuté 4,9
 fois plus lent ; la Vector API reste en incubation, et Valhalla (JDK 28) n'aplatit pas encore une structure de
 64 octets. Relu après coup : son K5 optimisé lisait ses vecteurs dans des tableaux du tas, qui commencent à 12 octets
@@ -379,7 +398,7 @@ place, devant Go dans 56 % des variantes depuis la correction de Go. Des version
 passe, K7 isolé de sa boucle de mesure, K8 itératif, réserve de fils) lui vaudraient 4 points de plus, et les cases
 discutables de la grille avec la règle de la libc encore 2,7 ([`docs/JAVA.md`](docs/JAVA.md)).
 
-**17. Go.** Les structures sont stockées par valeur dans les slices (64 octets, permutation sans effet). Mais ni
+**18. Go.** Les structures sont stockées par valeur dans les slices (64 octets, permutation sans effet). Mais ni
 vectoriseur, ni SIMD stable (K5 1,8 fois plus lent que C avec le SIMD expérimental, Emerald Rapids), et des écritures
 atomiques seulement séquentiellement cohérentes : l'écrivain unique de K3 est 6 fois plus lent qu'en C (358 contre
 58 à 70 ms). Relu après coup : son K5 optimisé passait d'AVX-512 à une réduction en SSE sans `ClearAVXUpperBits`,
@@ -392,7 +411,7 @@ Java (47,6 à 49,2 points) ([`docs/GO.md`](docs/GO.md)).
 
 ### À contre-courant par défaut
 
-**18. Haskell.** Il peut descendre bas (`UArray`, primops non boxées, SIMD et FMA vectorielle par LLVM, mémoire
+**19. Haskell.** Il peut descendre bas (`UArray`, primops non boxées, SIMD et FMA vectorielle par LLVM, mémoire
 brute) : son plafond (46,2) dépasse celui de Go. Mais le défaut va contre la machine : des structures boxées (une
 particule de 64 octets en occupe 96 dans une liste ; K7 avec `Data.IntMap`, faute de table de hachage livrée, en 89 s,
 le pire de l'étude ; un arbre de nœuds boxés sur K8), un ramasse-miettes imposé, des écritures atomiques
@@ -404,7 +423,7 @@ release annoncé (`-fno-omit-yields` découpait les boucles serrées : K4 nature
 FMA vectorielle de GHC, une arène de K8 qui allouait à chaque nœud et trois errata de la matrice : Haskell gagne 6,8
 points, sans changer de place, Go devant lui dans 93 % des variantes ([`docs/HASKELL.md`](docs/HASKELL.md)).
 
-**19. OCaml.** OCaml 5 apporte les domaines et `Atomic.make_contended`, et son allocation générationnelle est parmi
+**20. OCaml.** OCaml 5 apporte les domaines et `Atomic.make_contended`, et son allocation générationnelle est parmi
 les meilleures (K8 naturel, 334 ms). Mais il n'a ni types valeur ni flottant 32 bits de calcul (le format n'existe que
 pour stocker, dans un `Bigarray`) : une particule est un bloc du tas, ses 16 flottants de 8 octets à plat derrière un
 en-tête, plus le pointeur qui la désigne (144 octets au lieu de 64), et un parcours permuté coûte 7,0 fois plus. Il
@@ -418,7 +437,7 @@ et la case discutable n'y ajouteraient que 0,7 point ([`docs/OCAML.md`](docs/OCA
 
 ### La machine disparaît derrière le moteur
 
-**20. JavaScript.** V8 compile les boucles sur tableaux typés en code machine, mais en garde les vérifications : dans
+**21. JavaScript.** V8 compile les boucles sur tableaux typés en code machine, mais en garde les vérifications : dans
 K5, une vérification de bornes par accès et une de débordement par indice, une adresse recalculée avant chaque
 chargement et des accumulateurs sur la pile (K5 naturel 1,9 fois plus lent que le C scalaire de GCC). Les objets sont
 des références (416 octets par particule : chaque flottant dans un `HeapNumber`, Node n'activant pas la compression de
@@ -431,7 +450,7 @@ durée ramène à 1 ms (+ 1,7 point en sensibilité). La remarque sur JavaScript
 cases de 32 octets au lieu de 16) et trois errata de la matrice (E1, A4, E6) : JavaScript passe de 14,3 à 15,6 points,
 sans changer de place ([`docs/JAVASCRIPT.md`](docs/JAVASCRIPT.md)).
 
-**21. Python.** Le classement mesure CPython dans son build par défaut, avec sa seule bibliothèque standard : NumPy et
+**22. Python.** Le classement mesure CPython dans son build par défaut, avec sa seule bibliothèque standard : NumPy et
 les autres outils par lesquels on fait d'ordinaire calculer Python sont tiers, et exclus. Python est environ 200 fois
 plus lent que le meilleur langage, noyau par noyau, et l'interpréteur masque la hiérarchie mémoire elle-même : un saut
 dépendant coûte 49 ns en L1 comme en L2, au lieu de 1,6 et 4,4 ns. Une particule coûte 750 octets. Dans le build par
@@ -445,7 +464,7 @@ passe de 9,9 à 11,8 points, sans changer de place (son K8 naturel déclarait au
 sans effet visible) ; `gc.freeze()` supprimerait les pauses de 0,76 s de K8 naturel (+ 0,2 point en sensibilité)
 ([`docs/PYTHON.md`](docs/PYTHON.md)).
 
-**22. Lua.** Le classement mesure PUC-Lua 5.5 sans son API C, par laquelle Lua confie le bas niveau au C. Sur les deux
+**23. Lua.** Le classement mesure PUC-Lua 5.5 sans son API C, par laquelle Lua confie le bas niveau au C. Sur les deux
 piliers mesurés, Lua fait mieux que CPython (plafond 1,31 contre 0,59, code par défaut 10,0 contre 4,9) ; c'est le
 contrôle qui le place derrière Python : ni threads, ni SIMD, ni types valeur, ni mémoire brute dans sa bibliothèque
 standard, et une particule coûte 449 octets. Python ne le devance que dans 58 % des variantes. La remarque sur Lua a
@@ -526,13 +545,16 @@ du langage.
   ([`docs/NATURAL.md`](docs/NATURAL.md)), et `tuned`, le meilleur que je sache écrire pour la machine avec la seule
   bibliothèque standard. Toutes doivent rendre le même résultat, au bit près pour les entiers. Un temps sous la
   borne physique de la machine est rejeté.
-* **Chaînes de compilation** : les dernières versions stables au 28 octobre 2026, et Swift 6.4.2, ajouté le
-  5 novembre ([`env/toolchains.txt`](env/toolchains.txt)), compilation pour le CPU hôte, ni PGO ni LTO.
+* **Chaînes de compilation** : les dernières versions stables au 28 octobre 2026, Swift 6.4.2, ajouté le
+  5 novembre, et Free Pascal 3.2.2, ajouté le 6 ([`env/toolchains.txt`](env/toolchains.txt)), compilation pour le CPU
+  hôte, ni PGO ni LTO.
 * **Machines** : des VM Firecracker à 4 vCPU, un Xeon Cascade Lake (mesures de référence) et un Xeon Emerald Rapids
   (réplication complète) ; K5 et K9 viennent de deux Emerald Rapids (machines 3 et 16). Swift, ajouté après la
   campagne, est mesuré avec le C comme témoin et relié aux données publiées par le rapport des deux, clé par clé : sur
   un Cascade Lake du même modèle (machine 23) pour les noyaux de la machine 1, sur un Emerald Rapids (machine 24) pour
-  K5, K9 et les latences de K8 ([`docs/SWIFT.md`](docs/SWIFT.md)). Pas de compteurs matériels ;
+  K5, K9 et les latences de K8 ([`docs/SWIFT.md`](docs/SWIFT.md)). FreePascal, ajouté ensuite, est mesuré de même,
+  toutes ses clés sur un Emerald Rapids (machine 25), avec le C de la construction de chaque donnée publiée
+  ([`docs/FPC.md`](docs/FPC.md)). Pas de compteurs matériels ;
   les compteurs du noyau (appels système, défauts de page, uprobes) servent aux faits de mécanisme
   ([`docs/INSTRUMENTS_V3.md`](docs/INSTRUMENTS_V3.md)).
 * **Score** :
@@ -558,8 +580,14 @@ du langage.
   Emerald Rapids), et pas toujours de la même façon d'un hôte à l'autre du même modèle ; reliées par le facteur d'hôte
   des autres langages plutôt que par celui du C, les clés de la machine 1 le placeraient 12e. Sa réplication sur la
   machine 3 passe par le même pont et n'est pas indépendante.
+* FreePascal non plus, et toutes ses clés viennent d'un Emerald Rapids (machine 25) : celles de la machine 1 sont
+  reliées d'un modèle à l'autre. Un second témoin (le C compilé par gcc) et un facteur d'hôte unique pour toutes ces
+  clés ne changent pas sa place (16e) ; relié par le facteur de la table chaînée du C (17,6), son K7 naturel est sans
+  doute trop pénalisé (78 s, contre 13,6 s avec le facteur de la table plate du C ; même place). Sa réplication passe
+  par le même pont ([`docs/FPC.md`](docs/FPC.md), 4).
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Les 22 langages ont été relus après coup par des connaisseurs, Swift en dernier ; C l'a été alors que sa
+  l'autre. Les 22 premiers langages ont été relus après coup par des connaisseurs, Swift en dernier (FreePascal, ajouté
+  le 6 novembre, pas encore) ; C l'a été alors que sa
   référence est la seule implémentation mise au point, mesures à l'appui, avant le plan. Ada et Fortran y ont gagné
   deux places chacun, par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la
   boucle de mesure) ; D une place, par la correction de son Q1 optimisé et deux errata de la règle v1 ; Rust deux
@@ -618,7 +646,8 @@ du langage.
   3 points et la 4e place ; étendue à tous les langages dotés d'une FFI sans C, la 5e
   ([`docs/RUST.md`](docs/RUST.md)).
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
-* Une seule version de compilateur par langage, la dernière stable au 28 octobre (pour Swift, au 5 novembre), à
+* Une seule version de compilateur par langage, la dernière stable au 28 octobre (pour Swift, au 5 novembre ; pour
+  FreePascal, au 6 novembre : la 3.2.2, de mai 2021), à
   l'installation : Nim 2.4.0 est sorti le même jour, après les premières mesures, et son code machine est identique
   pour 20 des 21 fonctions des noyaux. Un réglage temporaire d'une chaîne peut coûter des rangs : Zig 0.17, dont le
   vectoriseur de boucles est désactivé, perd trois places en rang espéré par rapport à sa version de développement. Je
@@ -1041,6 +1070,26 @@ python3 tools/measure_swift_er.py          # remarque sur Swift : Swift et C sur
 
 ```bash
 python3 analysis/swift_remark.py           # errata, pont par Emerald Rapids, scénarios -> report_swift_remark.md
+```
+
+```bash
+bench/fpc/build.sh                         # FreePascal 3.2.2 : -O3, cible COREAVX2, -Sv (K1 soa et K5)
+```
+
+```bash
+probes/fpc/run.sh > results/probes/fpc.txt # sonde de la grille de FreePascal
+```
+
+```bash
+tools/fpc_check/facts.sh                   # ajout de FreePascal : faits vérifiés -> results/fpc_check/facts.txt
+```
+
+```bash
+python3 tools/measure_fpc.py               # FreePascal, trois témoins C, copies, machine 25 -> results/raw_fpc ; C3
+```
+
+```bash
+python3 analysis/fpc_check.py              # pont par le C, classement avec FreePascal, sensibilités -> report_fpc.md
 ```
 
 ```bash

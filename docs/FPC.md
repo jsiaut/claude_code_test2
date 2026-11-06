@@ -240,3 +240,113 @@ paragraphe de FreePascal), FINDINGS, METHODOLOGY (journal), `docs/NATURAL.md` (f
 * Pas d'assembleur en ligne dans le code optimisé (règle), pas de paquet de Lazarus, pas de branche de développement
   de FPC, pas de `-O4` (documenté comme pouvant avoir des effets de bord inattendus).
 * K10 est mesuré (information) et reste hors score ; pas de sensibilité sur sa file.
+
+## 4. Résultats (après les mesures)
+
+Mesures (`tools/measure_fpc.py`, machine 25, 08:52:29 à 09:20:57) : 924 processus (132 cellules × 7 passes), aucune
+somme de contrôle fausse ; 14 processus refaits pour vol de temps, un seul gardé au-dessus de 2 % (le C sur K3
+`sw_padded`, 4,9 % après deux reprises, règle du pilote) ; vol médian nul. Empreinte de K1 : 64,0 octets par
+particule, comme le C. C3 mesurée : 0 (boucles chaudes de K4 et de K9 naturels scalaires, 97 et 47 % des
+échantillons). Contrôle : le scénario Avant (FreePascal retiré) reproduit à l'identique le classement d'avant (R-E de
+`results/swift_remark.json`, écart 0). Sorties : `results/fpc_check.json`, `results/report_fpc.md`.
+
+### 4.1 FreePascal face au C, sur le même hôte (machine 25)
+
+Rapports FreePascal / C (moyennes géométriques des médianes de processus ; C de la construction des données publiées,
+natif pour K5) :
+
+| Groupe | Cellules (rapport) |
+|---|---|
+| Même code machine ou presque | K2 tuned 1,00 / 0,99 / 0,98 (16 Kio, 256 Kio, 8 Mio) ; K1 naturel 1,09 et mélangé 1,08 ; K1 `aos` 1,19 ; K3 `rmw_packed` 1,15, `sw_packed` 1,19, `sw_padded` 1,23 ; K7 tuned 1,17 ; K8 tuned 1,17 |
+| Appel de la RTL | K3 `rmw_padded` 1,52 : sans contention, l'appel à `InterLockedIncrement64` se voit (338 contre 222 ms) |
+| SIMD absent ou limité à 128 bits | K5 tuned 7,46 (vecteurs `-Sv` en mémoire contre AVX-512 ; 12,8 sans `-Sv`) ; K1 `soa` 1,46 ; Q6 tuned 1,73, Q1 tuned 2,59 ; K9 tuned 1,72 ; `mt` : Q6 2,01, Q1 2,77, K9 2,04 |
+| Vectorisation automatique absente | K4 sans branchement 11,2, naturel trié 12,1, naturel non trié 54,4 (un branchement par octet, mal prédit une fois sur deux ; le C vectorise) |
+| Code naturel | K5 2,07 (accumulateur sur la pile) ; Q6 2,54 (conditions évaluées en court-circuit) ; Q1 1,31 ; K9 2,41 ; K7 15,4 (`TDictionary`) ; K8 1,46 (gestionnaire de mémoire de la RTL ; latences p50 1,47, p99 1,36, p99,9 1,21, max 1,09) |
+| K10 (hors score) | naturel 2,21 (`TQueue`, section critique, événements) ; optimisé 0,64 (attente active sans `pause`, plus rapide ici que le C, qui attend avec `pause`) |
+
+### 4.2 Le pont et le classement publié (F-E)
+
+Facteurs du pont (C publié / C machine 25) : 0,76 à 4,6 sur les clés de la machine 1, sauf K3 `sw_packed` (11,4) et
+K7 naturel (17,6) ; la machine 1 était bien plus lente que la machine 25 sur le code lié à la mémoire et à
+l'allocation (K2 à 8 Mio : 3,9 ; K1 `soa` : 3,1 ; K7 tuned : 3,1). Sur les clés venues du même modèle, ils sont proches
+de 1 : K5 0,85 et 1,02, K9 1,02 à 1,10 ; latences de K8 naturel, colonne par colonne, 0,80 à 1,51. Le second témoin
+(`c_gcc_cl`) donne des facteurs voisins sur la plupart des clés (K7 naturel 17,4, K1 `soa` 3,0), pas sur toutes (K4
+0,95 à 1,29 contre 1,80 à 2,33 ; K1 naturel 1,67 contre 1,23 ; K8 naturel 1,82 contre 1,41).
+
+**Classement publié (F-E)** : FreePascal **16e** sur 23, **47,44 points** [46,5–48,2], rang espéré 16,71, rang
+plausible 15 à 19, 2e étage (avec C#, Go, Haskell et Java). Contrôle 60,5 (16e), plafond 36,3 [35,4–37,3] (19e : seuls
+OCaml, JavaScript, Lua et Python sont plus bas), code par défaut 46,9 (12e). Le code par défaut tient à ce que donne la
+mémoire gérée à la main (empreinte D2 1,0 ; queues de latence D3 0,66, au niveau de Rust et de Fortran ; hiérarchie
+mémoire D4 0,98, la meilleure de l'étude, devant C, 0,97), pas à la vitesse du code naturel (D1 0,050, au niveau de
+Haskell). Plafond par noyau : K1 0,64, K3 0,79,
+K4 0,09, K5 0,13, K6 0,39, K7 0,86, K8 0,35, K9 0,43. C# (15e, 54,9 points) le devance dans 82 % des variantes ;
+FreePascal devance Java (17e, 47,2) dans 53 %, Go dans 62 %, Haskell dans 86 %.
+
+Les 22 autres gardent leurs scores (FreePascal devient la référence de K2 dans une partie des tirages : la borne haute
+de l'intervalle de Zig passe de 74,0 à 73,9) ; ceux qu'il devance reculent d'un rang ; les rangs espérés de ceux qui le
+précèdent bougent de 0,18 au plus (C#).
+
+### 4.3 Sensibilités (plan 3.5)
+
+| Scénario | Score | Contrôle | Plafond | Code par défaut | Rang espéré | Place | Rang à 90 % |
+|---|---|---|---|---|---|---|---|
+| **F-E (publié)** | 47,44 | 60,5 | 36,33 | 46,9 | 16,71 | 16e | 15–19 |
+| F-direct (information) | 51,02 | 60,5 | 45,83 | 46,1 | 13,65 | 15e | 6–16 |
+| F-hôte | 47,29 | 60,5 | 39,43 | 41,4 | 15,92 | 16e | 14–18 |
+| F-gcc | 47,51 | 60,5 | 36,48 | 47,0 | 16,69 | 16e | 15–19 |
+| F-scal | 45,89 | 60,5 | 32,46 | 46,9 | 17,05 | 18e | 15–19 |
+| F-O2 | 47,45 | 60,5 | 36,33 | 47,0 | 16,71 | 16e | 15–19 |
+| F-K7cls | 47,54 | 60,5 | 36,33 | 47,3 | 16,65 | 16e | 15–19 |
+| F-K8cls | 46,30 | 60,5 | 36,33 | 42,4 | 16,83 | 16e | 15–19 |
+| F-K9dyn | 47,45 | 60,5 | 36,33 | 47,0 | 16,71 | 16e | 15–19 |
+| F-cases-bas | 45,96 | 56,3 | 36,33 | 46,9 | 16,98 | 17e | 15–19 |
+| F-cases-haut | 49,81 | 67,3 | 36,33 | 46,9 | 16,30 | 16e | 14–19 |
+| F-tout-bas | 43,28 | 56,3 | 32,46 | 42,4 | 17,41 | 18e | 15–19 |
+| F-tout-haut | 49,91 | 67,3 | 36,33 | 47,3 | 16,24 | 16e | 14–19 |
+
+* **Le pont entre modèles tient** : avec le second témoin (F-gcc), FreePascal a 47,51 points (+ 0,07) ; avec un seul
+  facteur d'hôte (1,494, F-hôte), 47,29 points et un rang espéré de 15,92 (devant Java dans 74 % des variantes), le
+  plafond monte et le code par défaut baisse. F-direct (15e) est biaisé : la machine 25 est plus rapide que la machine 1
+  pour presque tous les codes.
+* **Rapports des copies** (même hôte) : sans `-Sv`, K1 `soa` × 1,43 et K5 × 1,72 (F-scal : 18e) ; mode `RELEASE`
+  (`-O2`) : 0,95 à 1,02 sur les neuf cellules naturelles, aucune différence nette ; K7 en valeurs de classe : 0,365
+  (une recherche au lieu de deux) ; K8 en nœuds de classe : 2,16 (latences × 1,8 à 2,3) ; K9 en `array of array` :
+  0,92 (les deux formes recalculent l'adresse des trois lignes à chaque point ; le tableau de tableaux relit trois
+  pointeurs, le tableau statique refait trois décalages).
+* FreePascal reste 16e dans neuf scénarios sur treize, 15e en F-direct (information, biaisé), 17e ou 18e dans les
+  lectures défavorables (F-cases-bas, F-scal, F-tout-bas) ; il ne rattrape C# que dans F-direct.
+
+### 4.4 Hors plan : K7 naturel et la table du C (F-K7tab, information)
+
+Relié par le facteur de la table chaînée du C (17,6), K7 naturel de FreePascal vaut 78,4 s dans les données publiées,
+derrière Python (28,3 s), devant le seul Haskell (88,7 s) ; sur la machine 25, il prend 4,45 s, 15,4 fois le C. Comme
+pour Swift (R-K7), le facteur de la table chaînée, une allocation par entrée, est discutable pour `TDictionary`, une
+table plate. Relié par celui de la table plate du C (K7 optimisé, 3,05), K7 naturel vaut 13,6 s : 47,62 points, rang
+espéré 16,60, 16e. Ajouté après avoir vu les facteurs ; le classement garde la règle du plan.
+
+### 4.5 Réplication (machine 3)
+
+FreePascal entre dans la réplication par le pont du C natif (`c_er`) : 16e sur la machine 3 (45,2 points). Ce n'est pas
+une réplication indépendante pour lui. L'accord entre machines et le test nul, calculés sur les 21 langages répliqués
+indépendamment, ne changent pas ; étages [14, 5, 1, 3].
+
+### 4.6 Écarts au plan
+
+* F-K7tab, ajouté après avoir vu les facteurs du pont (4.4), comme R-K7 l'avait été pour Swift ; `analysis/fpc_check.py`
+  a donc tourné deux fois, avec les mêmes graines : les scénarios du plan sont identiques d'une exécution à l'autre.
+* Un processus gardé au-dessus de 2 % de vol de temps (le C sur K3 `sw_padded`, 4,9 %), selon la règle du pilote.
+* Pendant la campagne, seule l'intégration à l'analyse a été écrite (pont, générateurs, `analysis/fpc_check.py`) ; rien
+  n'a été exécuté hors de vérifications de syntaxe.
+
+### 4.7 Bilan
+
+FreePascal se classe **16e sur 23**, entre C# et Java, à côté des langages à ramasse-miettes alors qu'il compile en
+natif et gère sa mémoire à la main. Son contrôle (60,5) est celui d'un langage système privé de SIMD : disposition des
+données complète (records en ligne, `packed`, `bitpacked`, unions), pointeurs et assembleur en ligne, mais ni
+intrinsèques, ni atomiques à ordre explicite, ni aide de ligne de cache. Son plafond (36,3, 19e) est celui d'un
+compilateur scalaire : aucun vectoriseur, un traitement vectoriel expérimental limité à 128 bits, une cible qui
+s'arrête à AVX2 sur une machine AVX-512, et un optimiseur qui garde des variables en mémoire et factorise peu. Son code
+par défaut (46,9, 12e) profite de la mémoire gérée à la main (empreinte, queues de latence, hiérarchie mémoire) mais
+pas de la vitesse du code naturel : la somme conditionnelle de K4 (54 fois le C) et `TDictionary` (15 fois le C) le
+tirent vers le bas. Le rang résiste aux deux contrôles du pont entre modèles et à toutes les sensibilités du plan, à
+deux places près.
