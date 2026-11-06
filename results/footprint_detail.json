@@ -13,6 +13,20 @@
   "rss_bytes_per_particle": 64.0,
   "rss_p1_mib": 2.3
  },
+ "bqn": {
+  "D2a": 0.5,
+  "bytes_per_particle": 128.0,
+  "kind": "live",
+  "measured": 256.0,
+  "note": "l'allocateur par blocs compagnons de CBQN arrondit la matrice de 512 Mio (plus son en-t\u00eate) \u00e0 un bloc de 1 Gio, dont la moiti\u00e9 n'est jamais touch\u00e9e : le tas vivant compte 256 o, la m\u00e9moire physique de la structure est de 128 o (16 f64 ; RSS d'une matrice seule, results/bqn_check/facts.txt)",
+  "per_process": [
+   256.0,
+   256.0,
+   256.0
+  ],
+  "rss_bytes_per_particle": 866.01,
+  "rss_p1_mib": 357.1
+ },
  "c": {
   "D2a": 1.0,
   "bytes_per_particle": 64.02,

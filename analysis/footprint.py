@@ -22,6 +22,11 @@ STRUCTURAL = {
                   "8 Mio jamais touchés) : getOccupiedMem compte 66 o, la mémoire physique est de 64 o"),
     "mojo": (64.0, "l'allocateur du runtime Mojo (réservations de 1 Gio, libération par madvise) réutilise "
                    "environ 24 Mo du tampon de chargement libéré pour la liste : le RSS ne voit que 58 o"),
+    # BQN (docs/BQN.md, plan 3.1) : l'allocateur par blocs compagnons de CBQN (src/opt/mm_buddy.h, mm_round) loge la
+    # matrice de 512 Mio et son en-tête dans un bloc de 1 Gio ; mémoire physique de la structure : 16 f64
+    "bqn": (128.0, "l'allocateur par blocs compagnons de CBQN arrondit la matrice de 512 Mio (plus son en-tête) à un "
+                   "bloc de 1 Gio, dont la moitié n'est jamais touchée : le tas vivant compte 256 o, la mémoire "
+                   "physique de la structure est de 128 o (16 f64 ; RSS d'une matrice seule, results/bqn_check/facts.txt)"),
 }
 
 

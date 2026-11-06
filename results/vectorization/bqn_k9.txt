@@ -1,0 +1,18 @@
+27.8% des échantillons : BQN+0x50e2fc boucle=0x50e2e0-0x50e339 {'n': 15, 'packed': 4, 'wide': 4, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+    50e2e0: vmovupd ymm0,YMMWORD PTR [rsi+r11*2-0x60]
+    50e2e7: vmovupd ymm1,YMMWORD PTR [rsi+r11*2-0x40]
+    50e2ee: vaddpd ymm0,ymm0,YMMWORD PTR [rdx+r11*2-0x60]
+    50e2f5: vaddpd ymm1,ymm1,YMMWORD PTR [rdx+r11*2-0x40]
+    50e2fc: vmovupd YMMWORD PTR [rdi+r11*2-0x60],ymm0
+    50e303: vmovupd YMMWORD PTR [rdi+r11*2-0x40],ymm1
+    50e30a: vmovupd ymm0,YMMWORD PTR [rsi+r11*2-0x20]
+    50e311: vmovupd ymm1,YMMWORD PTR [rsi+r11*2]
+    50e317: vaddpd ymm0,ymm0,YMMWORD PTR [rdx+r11*2-0x20]
+    50e31e: vaddpd ymm1,ymm1,YMMWORD PTR [rdx+r11*2]
+    50e324: vmovupd YMMWORD PTR [rdi+r11*2-0x20],ymm0
+    50e32b: vmovupd YMMWORD PTR [rdi+r11*2],ymm1
+    50e331: add    r11,0x40
+    50e335: add    r10,0xfffffffffffffffe
+    50e339: jne    50e2e0 <si_dyarith_f70_arith_aa_0_add_f64_f64_f64+0x40>
+56.8% des échantillons : libc.so.6+0x1a19d2 boucle=0x1a1806-0x1a19f6 {'n': 99, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+6.2% des échantillons : BQN+0x50d394 boucle=0x50d380-0x50d408 {'n': 19, 'packed': 8, 'wide': 8, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}

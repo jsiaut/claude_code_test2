@@ -1,0 +1,17 @@
+52.2% des échantillons : BQN+0x4d39a0 boucle=0x4d3980-0x4d39bc {'n': 14, 'packed': 1, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': 'xmm'}
+    4d3980: movzx  r9d,BYTE PTR [rdi+rax*1]
+    4d3985: vmovq  xmm1,QWORD PTR [r9*8+0x5633d0]
+    4d398f: vpaddb xmm1,xmm1,xmm1
+    4d3993: vpor   xmm2,xmm1,xmm0
+    4d3997: vpunpcklbw xmm1,xmm1,xmm2
+    4d399b: vmovdqu xmm2,XMMWORD PTR [r8]
+    4d39a0: vpshufb xmm1,xmm2,xmm1
+    4d39a5: vmovdqu XMMWORD PTR [rdx],xmm1
+    4d39a9: popcnt r9d,r9d
+    4d39ae: lea    rdx,[rdx+r9*2]
+    4d39b2: inc    rax
+    4d39b5: add    r8,0x10
+    4d39b9: cmp    rdx,rcx
+    4d39bc: jb     4d3980 <si_slash_f4_slash_1_i16+0x20>
+24.5% des échantillons : BQN+0x503e0c boucle=0x503e00-0x503e61 {'n': 19, 'packed': 4, 'wide': 4, 'scalar_fp': 0, 'vectorized': True, 'width': 'ymm'}
+13.4% des échantillons : BQN+0x492c9e boucle=0x492c90-0x492cb7 {'n': 8, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
