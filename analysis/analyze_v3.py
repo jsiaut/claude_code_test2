@@ -29,12 +29,12 @@ SEED = 20261029 + 3
 NR = len(RANKED)
 WEIGHTS = {"C": 0.35, "E": 0.40, "D": 0.25}
 DW = {"D1": 0.5, "D2": 0.15, "D3": 0.15, "D4": 0.2}
-JIT = {"java", "csharp", "js", "js_bun", "julia", "luajit"}
+JIT = {"java", "csharp", "js", "js_bun", "julia", "luajit", "bqn"}  # bqn : JIT de CBQN (docs/BQN.md, 3.2)
 INTERP = {"python", "python_ft", "lua"}
 
 
 # graines des générateurs des langages ajoutés (SEED + décalage) : Swift garde celle d'avant l'ajout de FreePascal
-ADDED_SEED = {"swift": 2402, "fpc": 2403}
+ADDED_SEED = {"swift": 2402, "fpc": 2403, "bqn": 2404}
 
 
 def klass(l):

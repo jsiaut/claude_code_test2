@@ -1370,4 +1370,27 @@ Robustesse :
   (comme Nim) ; générateur propre (SEED + 2404), classe JIT, groupe « JIT ou VM » ; scénarios B-E (publié), B-hôte,
   B-gcc, B-natif, B-o3, B-K1ns, B-K7arr, B-K8ns, B-fp, B-C3, cases basses et hautes ; outil `tools/measure_bqn.py`
   (153 cellules × 7 passes, machine 26).
+* 2026-11-06, 13:47:26-15:11:40 : **mesures de l'ajout de BQN** (`tools/measure_bqn.py`, machine 26) : 1071 processus
+  (153 cellules × 7), aucune somme de contrôle fausse, 18 processus refaits pour vol de temps, aucun gardé au-dessus de
+  2 % (1,96 % au plus), vol médian 0,16 %. Empreinte : 256 o par particule au tas de CBQN, 128 retenus (taille de
+  structure, fixée au plan). C3 mesurée : ½ (stencil vectorisé ; boucle chaude de K4, le filtre par `vpshufb`, comptée
+  scalaire par la règle commune). Pendant la campagne, seuls l'intégration à l'analyse, `analysis/bqn_check.py` et les
+  témoins des états actuels ont été écrits, sans rien exécuter hors des vérifications de syntaxe ; le scénario
+  d'information B-K7tab (K7 naturel au facteur de la table plate du C, `•HashMap` étant une table à adressage ouvert)
+  a été déclaré et poussé à 13:52, avant tout résultat de BQN.
+* 2026-11-06, 15:12 à 15:40 : **résultats de l'ajout de BQN, sorties régénérées** (`analysis/bqn_check.py`, puis la
+  chaîne publiée : classement, réplication, graphiques, figures du README, matrice, états actuels de la remarque sur C,
+  de la sensibilité sans SIMD et de la confrontation). Contrôles : le scénario Avant (BQN retiré) reproduit R-E de
+  `results/fpc_remark.json` à l'identique ; les états actuels reproduisent B-E à l'identique. BQN **21e sur 24, 18,65
+  points** [18,5–18,8], rang plausible 20 à 22 (contrôle 22,8, plafond 12,45, code par défaut 22,7), entre OCaml (75 %)
+  et JavaScript (87 %) ; 21e dans tous les scénarios du plan (20e sans pont, information). Les 23 autres gardent leurs
+  scores ; JavaScript, Python et Lua reculent d'un rang, OCaml de 0,25 en rang espéré ; les étages passent de
+  [14, 5, 1, 3] à [14, 5, 5]. Machine 26 : BQN / C de 0,60 (K5 naturel) à 211 (K3 sans threads) ; binaire natif contre
+  cible Cascade Lake 0,85 à 1,10 ; construction par défaut 1,12 à 1,83 sur les noyaux de tableaux.
+* 2026-11-06, 15:40 à 16:10 : **README et documents après l'ajout de BQN**. README : titre (24 langages), tableau
+  (BQN 21e ; rangs plausibles et précédences du bas du tableau), étages, paragraphe de BQN, faits transversaux
+  (empreinte, SIMD explicite, vectorisation, concurrence), chaînes, machines, limites, lectures (dont l'ajout de
+  FreePascal, qui y manquait), reproduction ; « les neuf mêmes restent derrière » corrigé en « les onze » (le compte
+  n'avait pas suivi l'ajout de FreePascal). `docs/BQN.md` (section 4), `docs/FINDINGS.md`, `docs/NOSIMD.md` (4.22),
+  `docs/CONFRONTATION.md`, `docs/CAPABILITIES.md` (régénéré : colonne de BQN).
 

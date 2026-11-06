@@ -471,6 +471,11 @@ Rejouée après la remarque sur FreePascal (6 novembre, `docs/FPC.md`, 5 : errat
 rapport à 18 langages (`results/report_confrontation_current.md`) ne change pas ; seuls les rangs espérés du
 classement à 23 bougent, de 0,05 pour FreePascal et de 0,02 au plus pour les autres.
 
+Rejouée après l'ajout de BQN (6 novembre, `docs/BQN.md` ; BQN n'est pas dans l'autre étude) : le rapport à 18
+langages (`results/report_confrontation_current.md`), le juge à l'aveugle et les tests 3 et 4 ne changent pas ; les
+rangs espérés du classement à 18 bougent de 0,0024 au plus ; dans le classement à 24, JavaScript et Python reculent
+d'un rang, BQN s'intercalant devant eux.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

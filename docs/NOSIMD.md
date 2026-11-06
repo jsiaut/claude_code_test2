@@ -404,3 +404,15 @@ Recalculé avec les errata C2, E4 et F4 de FreePascal (témoin égal à R-E de `
 S-scalaire-Mojo (43,3), 16e en S-symétrique (50,7), en S-noyaux-scalaires (48,8) et en S-importées (48,1). Les 22
 autres ne changent ni de score ni de place ; leurs rangs espérés bougent de 0,02 au plus.
 
+
+### 4.22 Recalcul après l'ajout de BQN (6 novembre)
+
+Recalculé avec BQN (témoin égal au scénario B-E de `results/bqn_check.json`, écart 0, `docs/BQN.md`). BQN n'a pas de
+variante à vecteurs explicites : ses primitives sont vectorisées par l'implémentation, comme une bibliothèque, et son
+code optimisé n'emploie que des primitives et `•math.Sum` ; aucune de ses cellules ne change de classe. BQN : 21e dans
+toutes les lectures (18,6 points publié, 19,4 sans `mt`, 19,8 en S-scalaire et en S-scalaire-Mojo, 22,0 en
+S-symétrique, 20,0 en S-noyaux-scalaires, 18,6 en S-importées). Les scores des 23 autres ne changent pas, sauf en
+S-symétrique : chacun n'y garde que sa forme naturelle de Q6, et celle de BQN (des masques sur des colonnes entières,
+55,0 ms publiés) y devient la référence ; les scores baissent de 0,09 point au plus (C3, Odin, C++, C), sans changement
+de place. JavaScript, Python et Lua reculent d'un rang dans toutes les lectures, OCaml de 0,25 à 0,34 en rang espéré ;
+les autres bougent de 0,03 au plus.

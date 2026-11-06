@@ -1,6 +1,6 @@
 # Quels langages incarnent le mieux la *mechanical sympathy* ?
 
-*Classement mesuré de 23 langages, octobre et novembre 2026 (Swift ajouté le 5 novembre, FreePascal le 6).*
+*Classement mesuré de 24 langages, octobre et novembre 2026 (Swift ajouté le 5 novembre, FreePascal et BQN le 6).*
 
 Un seul critère : la *mechanical sympathy* au sens large, c'est-à-dire la capacité d'un langage à faire écrire du
 code en accord avec le matériel : disposition des données, SIMD, hiérarchie mémoire, concurrence, allocation,
@@ -30,10 +30,11 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | 17 | **Java** | 47,2 | 15–19 | 56 % | Meilleur allocateur de petits objets ; pas de types valeur |
 | 18 | **Go** | 45,4 | 15–18 | 93 % | Structures par valeur ; ni vectoriseur, ni SIMD stable, atomiques séquentiellement cohérentes |
 | 19 | **Haskell** | 41,3 | 17–19 | 100 % | Peut descendre bas (FMA vectorielle, mémoire brute) ; code par défaut boxé, ramasse-miettes imposé |
-| 20 | **OCaml** | 23,9 | 20 | 100 % | Bonne allocation générationnelle ; pas de types valeur, ni flottant 32 bits de calcul, ni SIMD |
-| 21 | **JavaScript** | 15,6 | 21–22 | 91 % | Tableaux typés compilés, mais vérifiés à chaque accès ; objets en références, aucun SIMD |
-| 22 | **Python** | 11,8 | 21–23 | 58 % | CPython seul : environ 200 fois plus lent que le meilleur ; la hiérarchie mémoire disparaît derrière l'interpréteur |
-| 23 | **Lua** | 5,4 | 22–23 | — | PUC-Lua sans son API C : mieux que CPython sur les mesures, presque aucun levier dans sa bibliothèque |
+| 20 | **OCaml** | 23,9 | 20–21 | 75 % | Bonne allocation générationnelle ; pas de types valeur, ni flottant 32 bits de calcul, ni SIMD |
+| 21 | **BQN** | 18,6 | 20–22 | 87 % | Langage de tableaux : primitives vectorisées dans CBQN, mais un coût fixe par appel ; ni threads, ni flottant 32 bits, ni disposition des enregistrements |
+| 22 | **JavaScript** | 15,6 | 21–23 | 91 % | Tableaux typés compilés, mais vérifiés à chaque accès ; objets en références, aucun SIMD |
+| 23 | **Python** | 11,8 | 22–24 | 58 % | CPython seul : environ 200 fois plus lent que le meilleur ; la hiérarchie mémoire disparaît derrière l'interpréteur |
+| 24 | **Lua** | 5,4 | 23–24 | — | PUC-Lua sans son API C : mieux que CPython sur les mesures, presque aucun levier dans sa bibliothèque |
 
 * **Score** (0–100) : 40 % de plafond mesuré (le meilleur code que le langage permet d'écrire pour la machine),
   25 % de code par défaut mesuré (le code qu'on écrit sans y penser) et 35 % de contrôle (les leviers qu'offrent le
@@ -159,8 +160,11 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 **Ce qui est sûr, et ce qui ne l'est pas.**
 * **Les grandes marches sont établies.** Les 14 premiers, Swift compris, devancent C# dans au moins 96 % des
   variantes, et sur les deux machines. Haskell devance OCaml, et OCaml JavaScript, dans plus de 99 % des variantes ;
-  JavaScript ne devance plus Python que dans 91 % (95 % avant la correction du banc de Python), et les étages de la v3
-  réunissent JavaScript, Python et Lua ; Go devance Haskell dans 93 % (100 % avant la correction du banc de Haskell).
+  JavaScript ne devance plus Python que dans 91 % (95 % avant la correction du banc de Python) ; Go devance Haskell
+  dans 93 % (100 % avant la correction du banc de Haskell). BQN, ajouté le 6 novembre, se place entre OCaml, qui le
+  devance dans 75 % des variantes, et JavaScript, qu'il devance dans 87 % : proche des deux, il relie les deux
+  derniers étages de la v3, qui n'en font plus qu'un, d'OCaml à Lua (étages [14, 5, 5], contre [14, 5, 1, 3] avant
+  lui).
   FreePascal, ajouté le 6 novembre, entre dans l'étage de C#, Java, Go et Haskell : C# le devance dans 82 % des
   variantes, et il devance Java dans 54 %, Go dans 64 % et Haskell dans 87 %.
   Ces variantes ne font varier ni l'effort d'implémentation ni le choix du code naturel : avec ses meilleures formes
@@ -422,7 +426,7 @@ Java (47,6 à 49,2 points) ([`docs/GO.md`](docs/GO.md)).
 **19. Haskell.** Il peut descendre bas (`UArray`, primops non boxées, SIMD et FMA vectorielle par LLVM, mémoire
 brute) : son plafond (46,2) dépasse celui de Go. Mais le défaut va contre la machine : des structures boxées (une
 particule de 64 octets en occupe 96 dans une liste ; K7 avec `Data.IntMap`, faute de table de hachage livrée, en 89 s,
-le pire de l'étude ; un arbre de nœuds boxés sur K8), un ramasse-miettes imposé, des écritures atomiques
+l'un des deux plus lents de l'étude avec celui de BQN ; un arbre de nœuds boxés sur K8), un ramasse-miettes imposé, des écritures atomiques
 séquentiellement cohérentes. Une boucle stricte sur un tableau non boxé va, elle, au rythme de C (K5 naturel : 187 ms
 contre 168 sur Emerald Rapids). Avec `+RTS -N4`, que l'étude donne à tous ses noyaux, le ramasse-miettes est
 parallèle même pour un noyau séquentiel : sur K8 naturel, des dizaines de milliers de `futex` par répétition, et un
@@ -443,9 +447,28 @@ par case, quand la convention en prend deux), et un erratum de la matrice (pas d
 passe de 24,0 à 23,9 points, sans changer de place ; ses formes plus poussées (masque de signe, arène par valeur, `floatarray`…)
 et la case discutable n'y ajouteraient que 0,7 point ([`docs/OCAML.md`](docs/OCAML.md)).
 
+### Des tableaux entiers, sans boucle ni thread
+
+**21. BQN.** Ajouté le 6 novembre (CBQN 0.12.0, [`docs/BQN.md`](docs/BQN.md)), pas encore relu. Le seul langage de
+tableaux de l'étude : le code s'écrit en primitives appliquées à des tableaux entiers, que CBQN exécute dans du C et du
+Singeli (un générateur de code SIMD) écrits à la main ; le coût se paie par appel de primitive, pas par élément. Quand
+un noyau tient en quelques primitives sur de grands tableaux, BQN approche le C, voire le dépasse (Emerald Rapids) : K5
+naturel 0,60 fois le C (le produit en vecteurs, puis une chaîne d'additions, contre la chaîne de FMA du C), Q6 naturel
+0,86 (des masques sur des colonnes entières, contre une boucle à conditions), K8 optimisé 0,66 (un arbre indexé
+construit niveau par niveau), K4 2 à 5 fois. Quand il faut une boucle, l'interprète domine : la table de hachage de sa
+bibliothèque, alimentée ligne à ligne (K7 naturel 28 fois le C), un arbre de nœuds (K8 naturel 9 fois), une chasse de
+pointeurs en cache (8 ns par saut). Il n'a ni threads ni coroutines : K3 et les variantes parallèles s'exécutent en
+séquence (K3 en écriture unique, 211 fois le C). Il n'a ni flottant 32 bits ni enregistrement à champs nommés en ligne :
+la particule naturelle est une rangée d'une matrice de f64 (128 octets) ; en espaces de noms à champs nommés, K1 naturel
+serait 3,5 fois plus lent (13 fois dans le désordre) et BQN perdrait 1,3 point. Son contrôle (22,8, 22e) est celui d'un
+langage de tableaux : tableaux multidimensionnels natifs, stockage étroit automatique (bits, entiers de 8 à 32 bits),
+projection de fichiers sans copie, mais ni disposition des données, ni SIMD explicite, ni atomiques. Toutes ses clés
+sont mesurées sur un Emerald Rapids et reliées par le C, comme FreePascal, avec CBQN construit pour la cible de chaque
+donnée publiée ; il reste 21e dans toutes les sensibilités du plan.
+
 ### La machine disparaît derrière le moteur
 
-**21. JavaScript.** V8 compile les boucles sur tableaux typés en code machine, mais en garde les vérifications : dans
+**22. JavaScript.** V8 compile les boucles sur tableaux typés en code machine, mais en garde les vérifications : dans
 K5, une vérification de bornes par accès et une de débordement par indice, une adresse recalculée avant chaque
 chargement et des accumulateurs sur la pile (K5 naturel 1,9 fois plus lent que le C scalaire de GCC). Les objets sont
 des références (416 octets par particule : chaque flottant dans un `HeapNumber`, Node n'activant pas la compression de
@@ -458,7 +481,7 @@ durée ramène à 1 ms (+ 1,7 point en sensibilité). La remarque sur JavaScript
 cases de 32 octets au lieu de 16) et trois errata de la matrice (E1, A4, E6) : JavaScript passe de 14,3 à 15,6 points,
 sans changer de place ([`docs/JAVASCRIPT.md`](docs/JAVASCRIPT.md)).
 
-**22. Python.** Le classement mesure CPython dans son build par défaut, avec sa seule bibliothèque standard : NumPy et
+**23. Python.** Le classement mesure CPython dans son build par défaut, avec sa seule bibliothèque standard : NumPy et
 les autres outils par lesquels on fait d'ordinaire calculer Python sont tiers, et exclus. Python est environ 200 fois
 plus lent que le meilleur langage, noyau par noyau, et l'interpréteur masque la hiérarchie mémoire elle-même : un saut
 dépendant coûte 49 ns en L1 comme en L2, au lieu de 1,6 et 4,4 ns. Une particule coûte 750 octets. Dans le build par
@@ -472,7 +495,7 @@ passe de 9,9 à 11,8 points, sans changer de place (son K8 naturel déclarait au
 sans effet visible) ; `gc.freeze()` supprimerait les pauses de 0,76 s de K8 naturel (+ 0,2 point en sensibilité)
 ([`docs/PYTHON.md`](docs/PYTHON.md)).
 
-**23. Lua.** Le classement mesure PUC-Lua 5.5 sans son API C, par laquelle Lua confie le bas niveau au C. Sur les deux
+**24. Lua.** Le classement mesure PUC-Lua 5.5 sans son API C, par laquelle Lua confie le bas niveau au C. Sur les deux
 piliers mesurés, Lua fait mieux que CPython (plafond 1,31 contre 0,59, code par défaut 10,0 contre 4,9) ; c'est le
 contrôle qui le place derrière Python : ni threads, ni SIMD, ni types valeur, ni mémoire brute dans sa bibliothèque
 standard, et une particule coûte 449 octets. Python ne le devance que dans 58 % des variantes. La remarque sur Lua a
@@ -486,16 +509,20 @@ Python avec la grille de Lua (11,1 points), et au niveau de JavaScript, devant l
 
 Les résultats les plus solides de l'étude : chacun isole une cause, avec ses conditions.
 
-1. **Les données d'abord.** Une particule de 64 octets en occupe 64 dans 15 langages, 78 en Java, 88 en C#, 144 en
-   OCaml, 416 en JavaScript et 750 en Python. Parcourir une collection de références dans le désordre coûte 4,7 à
-   7,0 fois plus (C#, Java, JavaScript, OCaml) ; avec des types valeur, l'ordre ne change rien.
+1. **Les données d'abord.** Une particule de 64 octets en occupe 64 dans 15 langages, 78 en Java, 88 en C#, 128 en
+   BQN (sans flottant 32 bits), 144 en OCaml, 416 en JavaScript et 750 en Python. Parcourir une collection de
+   références dans le désordre coûte 4,7 à 7,0 fois plus (C#, Java, JavaScript, OCaml) ; avec des types valeur,
+   l'ordre ne change rien.
 2. **Le SIMD explicite** divise le produit scalaire par 20 à 40 : 3,7 à 5,7 ms dans les langages compilés, en C# et
    en Java (Vector API, sur des données alignées hors tas), contre 77 à 166 ms pour la boucle naturelle en ordre strict
-   (Emerald Rapids). Go (expérimental, 7,2 ms) suit ; OCaml et JavaScript n'en ont pas.
+   (Emerald Rapids). Go (expérimental, 7,2 ms) suit ; OCaml, JavaScript et BQN n'en ont pas (la somme vectorielle de
+   la bibliothèque de BQN, `•math.Sum`, prend 33 ms).
 3. **La vectorisation automatique se vérifie sur le code exécuté.** Aucune des deux boucles naturelles testées n'est
    vectorisée en C#, Go, Mojo (dont le compilateur n'a pas de vectoriseur de boucles), Zig 0.17 (vectoriseur de boucles
    désactivé par l'équipe Zig, réactivé dans la version de développement), Swift, Haskell, OCaml, JavaScript, Lua et
-   Python.
+   Python. En BQN, les boucles chaudes sont celles des primitives, écrites à la main en Singeli : celle du stencil est
+   vectorisée, celle de K4 (le filtre, une compression par `vpshufb`) compte comme scalaire, la règle ne retenant que
+   l'arithmétique empaquetée.
    Les vérifications de bornes l'empêchent sur le stencil naturel en Ada (71 ms, contre 36 ms) ; en D (56 ms, sans
    vérifications) et en Rust (73 ms, scalaire même sans elles), c'est l'aliasing : ni LDC ni rustc ne transmettent de
    règle de type à LLVM, et les pointeurs de lignes sont relus après chaque écriture ; en Nim (71 ms), ce sont les deux,
@@ -521,7 +548,8 @@ Les résultats les plus solides de l'étude : chacun isole une cause, avec ses c
    fonction interne à chaque opération atomique : 26 fois C sous Node, 8 fois sous Bun. Dans le build par défaut de
    CPython, le verrou global sérialise les threads (sur K3, à peine plus d'un cœur sur quatre travaillait, pour 24 000
    `futex` par répétition, Emerald Rapids) ; des sous-interpréteurs, un verrou chacun, travaillent en parallèle et
-   font apparaître le faux partage que le verrou masquait (3,0 fois en écriture unique).
+   font apparaître le faux partage que le verrou masquait (3,0 fois en écriture unique). BQN n'a ni threads ni
+   atomiques : K3 s'y exécute en séquence (211 fois C en écriture unique, compteurs espacés).
 7. **Allocation.** Une arène divise K8 par 5 ou 6. Les allocateurs générationnels de Java et d'OCaml sont les
    meilleurs pour du code naturel (302 et 334 ms). Les ramasse-miettes laissent des queues (K8 remesuré sur Emerald
    Rapids) : pause de 89 ms en D, p99,9 à 30 fois la médiane en Julia, arrêt de 0,76 s en Python. Les runtimes font
@@ -554,8 +582,8 @@ du langage.
   bibliothèque standard. Toutes doivent rendre le même résultat, au bit près pour les entiers. Un temps sous la
   borne physique de la machine est rejeté.
 * **Chaînes de compilation** : les dernières versions stables au 28 octobre 2026, Swift 6.4.2, ajouté le
-  5 novembre, et Free Pascal 3.2.2, ajouté le 6 ([`env/toolchains.txt`](env/toolchains.txt)), compilation pour le CPU
-  hôte, ni PGO ni LTO.
+  5 novembre, Free Pascal 3.2.2 et CBQN 0.12.0 (BQN), ajoutés le 6 ([`env/toolchains.txt`](env/toolchains.txt)),
+  compilation pour le CPU hôte, ni PGO ni LTO.
 * **Machines** : des VM Firecracker à 4 vCPU, un Xeon Cascade Lake (mesures de référence) et un Xeon Emerald Rapids
   (réplication complète) ; K5 et K9 viennent de deux Emerald Rapids (machines 3 et 16). Swift, ajouté après la
   campagne, est mesuré avec le C comme témoin et relié aux données publiées par le rapport des deux, clé par clé : sur
@@ -563,7 +591,9 @@ du langage.
   K5, K9 et les latences de K8 ([`docs/SWIFT.md`](docs/SWIFT.md)). FreePascal, ajouté ensuite, est mesuré de même,
   toutes ses clés sur un Emerald Rapids (machine 25), avec le C de la construction de chaque donnée publiée
   ([`docs/FPC.md`](docs/FPC.md)) ; les sensibilités de sa remarque (3.2.4-rc2, branche main, formes mieux écrites)
-  le sont sur un autre hôte du même modèle (machine 26), par rapports au binaire publié. Pas de compteurs matériels ;
+  le sont sur un autre hôte du même modèle (machine 26), par rapports au binaire publié. BQN est mesuré de même, toutes
+  ses clés sur la machine 26, avec le C de la construction de chaque donnée publiée et CBQN construit pour la même
+  cible ([`docs/BQN.md`](docs/BQN.md)). Pas de compteurs matériels ;
   les compteurs du noyau (appels système, défauts de page, uprobes) servent aux faits de mécanisme
   ([`docs/INSTRUMENTS_V3.md`](docs/INSTRUMENTS_V3.md)).
 * **Score** :
@@ -594,8 +624,15 @@ du langage.
   clés ne changent pas sa place (16e) ; relié par le facteur de la table chaînée du C (17,6), son K7 naturel est sans
   doute trop pénalisé (78 s, contre 13,6 s avec le facteur de la table plate du C ; même place). Sa réplication passe
   par le même pont ([`docs/FPC.md`](docs/FPC.md), 4).
+* BQN non plus : toutes ses clés viennent d'un Emerald Rapids (machine 26), reliées par le C ; CBQN choisissant son
+  code à la construction, il y est construit pour la cible de chaque donnée publiée (Cascade Lake pour les clés de la
+  machine 1), ce qui retire les extensions qu'Emerald Rapids a en plus. Le second témoin et un facteur d'hôte unique
+  ne changent pas sa place (21e) ; relié par le facteur de la table chaînée du C (16,3), son K7 naturel (`•HashMap`,
+  une table à adressage ouvert) vaut 143 s, sans doute trop (27,6 s avec le facteur de la table plate du C ; même
+  place). Sa réplication passe par le même pont ([`docs/BQN.md`](docs/BQN.md), 4).
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Les 23 langages ont été relus après coup par des connaisseurs, Swift puis FreePascal en dernier ; C l'a été
+  l'autre. Les 23 premiers langages ont été relus après coup par des connaisseurs, Swift puis FreePascal en dernier ;
+  BQN, ajouté le 6 novembre, ne l'a pas encore été ; C l'a été
   alors que sa
   référence est la seule implémentation mise au point, mesures à l'appui, avant le plan. Ada et Fortran y ont gagné
   deux places chacun, par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la
@@ -658,7 +695,8 @@ du langage.
   ([`docs/RUST.md`](docs/RUST.md)).
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
 * Une seule version de compilateur par langage, la dernière stable au 28 octobre (pour Swift, au 5 novembre ; pour
-  FreePascal, au 6 novembre : la 3.2.2, de mai 2021, branche stable 3.2 ; la 3.2.4 n'est qu'en bêta), à
+  FreePascal, au 6 novembre : la 3.2.2, de mai 2021, branche stable 3.2 ; la 3.2.4 n'est qu'en bêta ; pour BQN, au 6
+  novembre : CBQN 0.12.0, de juin 2026), à
   l'installation : Nim 2.4.0 est sorti le même jour, après les premières mesures, et son code machine est identique
   pour 20 des 21 fonctions des noyaux. Un réglage temporaire d'une chaîne peut coûter des rangs : Zig 0.17, dont le
   vectoriseur de boucles est désactivé, perd trois places en rang espéré par rapport à sa version de développement. Je
@@ -690,7 +728,7 @@ du langage.
 * Ailleurs, le plafond admet le SIMD explicite (« toutes techniques »). Sans lui ([`docs/NOSIMD.md`](docs/NOSIMD.md)),
   onze langages restent en tête dans les trois lectures, les dix premiers du classement et Fortran ; Swift, dont
   toutes les variantes optimisées sont écrites avec ses types SIMD, et Julia se disputent la 12e place (Julia à la
-  lettre et à forme égale, Swift sans les noyaux vectorisables) ; les neuf mêmes restent derrière, de Mojo à Lua (Java
+  lettre et à forme égale, Swift sans les noyaux vectorisables) ; les onze mêmes restent derrière, de Mojo à Lua (Java
   devant Go, de peu, sauf à la lettre, où Go passe devant de 0,04 rang). C et Odin restent dans les six premiers, C++
   dans les sept. L'ordre en tête dépend du
   traitement des formes scalaires qui manquent : à la lettre, Chapel, Fortran et Julia passent devant, parce que dans
@@ -748,6 +786,13 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   [`results/report_swift.md`](results/report_swift.md) ; la remarque sur Swift (errata D4 et E4, pont mesuré sur un
   Emerald Rapids, Q1 et K5 selon le processeur, `UniqueBox` et `&+=` en sensibilité) : [`docs/SWIFT.md`](docs/SWIFT.md),
   section 5, et [`results/report_swift_remark.md`](results/report_swift_remark.md).
+* L'ajout de FreePascal (chaîne, faits relevés, grille, plan, pont par le C entre modèles, sensibilités) :
+  [`docs/FPC.md`](docs/FPC.md) et [`results/report_fpc.md`](results/report_fpc.md) ; la remarque sur FreePascal
+  (errata C2, E4 et F4, `Length`, formes mieux écrites, 3.2.4-rc2 et branche main) : [`docs/FPC.md`](docs/FPC.md),
+  section 5, et [`results/report_fpc_remark.md`](results/report_fpc_remark.md).
+* L'ajout de BQN (CBQN construit pour la cible de chaque donnée publiée, choix du code naturel d'un langage de
+  tableaux, faits relevés, grille, plan, pont par le C, sensibilités) : [`docs/BQN.md`](docs/BQN.md) et
+  [`results/report_bqn.md`](results/report_bqn.md).
 * La remarque sur Ada (piège de GNAT, errata, implémentation corrigée et remesurée) : [`docs/ADA.md`](docs/ADA.md)
   et [`results/report_ada.md`](results/report_ada.md).
 * La remarque sur D (Q1 corrigé, deux errata de la règle v1, cause du stencil naturel) :
@@ -1114,6 +1159,26 @@ python3 tools/measure_fpc_rq.py            # remarque sur FreePascal : copies et
 
 ```bash
 python3 analysis/fpc_remark.py             # errata, formes de la remarque, rc2, branche main -> report_fpc_remark.md
+```
+
+```bash
+bench/bqn/build.sh                         # BQN : CBQN 0.12.0, cible Cascade Lake (/opt/cbqn-cl) ; bqn_er, bqn_o3 de même
+```
+
+```bash
+probes/bqn/run.sh > results/probes/bqn.txt # sonde de la grille de BQN
+```
+
+```bash
+tools/bqn_check/facts.sh                   # ajout de BQN : faits vérifiés -> results/bqn_check/facts.txt
+```
+
+```bash
+python3 tools/measure_bqn.py               # BQN (trois constructions), trois témoins C, machine 26 -> results/raw_bqn ; C3
+```
+
+```bash
+python3 analysis/bqn_check.py              # pont par le C, classement avec BQN, sensibilités -> report_bqn.md
 ```
 
 ```bash

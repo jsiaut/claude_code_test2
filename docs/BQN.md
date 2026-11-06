@@ -2,7 +2,7 @@
 
 L'auteur de l'étude m'a demandé le 6 novembre d'ajouter BQN au banc, dans son implémentation CBQN. Ce document décrit
 la chaîne et les choix d'implémentation, avec les faits relevés en écrivant le code (section 2). Il fixe le plan avant
-toute mesure de campagne (section 3), puis donnera les résultats (section 4). Comme pour Swift et FreePascal, je n'ai
+toute mesure de campagne (section 3), puis donne les résultats (section 4). Comme pour Swift et FreePascal, je n'ai
 consulté aucune page web pour les faits. Ils viennent de la chaîne installée et de ses sources (dépôt de CBQN à
 l'étiquette v0.12.0 : `README.md`, `docs/`, `src/`), de sondes, du code machine des binaires et d'essais sur la
 machine 26. Seuls le dépôt de CBQN (avec ses sous-modules) et la liste de ses versions publiées (les étiquettes du
@@ -290,3 +290,125 @@ graphiques. Texte : README (24 langages, tableau, paragraphe de BQN), FINDINGS, 
   d'atteinte d'un programme).
 * K10 n'existe pas en BQN (ni threads ni coroutines) : rien n'est mesuré, comme pour les cellules absentes des autres
   langages.
+
+## 4. Résultats (après les mesures)
+
+Mesures (`tools/measure_bqn.py`, machine 26, calibration à 13:47:26, passes de 13:50:44 à 15:11:12) : 1071
+processus (153 cellules × 7 passes), aucune somme de contrôle fausse ; 18 processus refaits pour vol de temps, aucun
+gardé au-dessus de 2 % (1,96 % au plus), vol médian 0,16 %. Empreinte de K1 : 256 o par particule au tas de CBQN dans
+les trois processus, 128 o retenus (taille de structure, plan 3.1) ; le RSS monte de 866 o par particule, les
+intermédiaires du décodage des f32 restant dans le tas. C3 mesurée : ½. La boucle chaude de K9 naturel est vectorisée
+(registres ymm, 28 % des échantillons) ; celle de K4 naturel (52 %) est le filtre `/`, une compression Singeli par
+`vpshufb` sur une table de 256 motifs, 128 bits, que la règle de `analysis/hotloop.py` compte scalaire parce qu'elle
+ne retient que l'arithmétique empaquetée (une seule instruction, `vpaddb`) ; la comparaison `128 ≤ d` (25 %) est
+vectorisée, la somme `+´` des entiers de 16 bits (13 %, `sum_i16`) est scalaire.
+Contrôle : le scénario Avant (BQN retiré) reproduit à l'identique le classement d'avant (R-E de
+`results/fpc_remark.json`, écart 0). Sorties : `results/bqn_check.json`, `results/report_bqn.md`.
+
+### 4.1 BQN face au C, sur le même hôte (machine 26)
+
+Rapports BQN / C (moyennes géométriques des médianes de processus ; binaire de la cible Cascade Lake face au C
+publié, natif face au C natif pour K5) :
+
+| Groupe | Cellules (rapport) |
+|---|---|
+| Plus rapide que le C | K5 naturel 0,60 (le produit vectoriel puis la chaîne d'additions, contre la chaîne de FMA du C) ; Q6 naturel 0,86 (masques sur des colonnes entières, contre la boucle à conditions du C) ; K8 optimisé 0,66 (l'arbre indexé construit niveau par niveau, contre l'arène du C) |
+| Même ordre que le C | K3 `rmw_packed` 1,05 (le C y paie le partage de la ligne entre quatre fils) ; K2 à 8 Mio 1,24 ; Q6 optimisé 1,34 |
+| Coût d'une primitive interprétée | K2 à 16 Kio 4,47 et à 256 Kio 2,03 (8 ns par saut) |
+| Primitives contre boucle compilée | K1 naturel 3,87, `aos` 4,93, `soa` 12,4 (f64 contre f32, réduction AVX-512 du C) ; K4 naturel 3,01, trié 2,31, sans branchement 4,61 ; K5 optimisé 7,53 ; Q1 naturel 5,78 et optimisé 9,90 ; K7 optimisé 5,09 ; K9 naturel 19,4 (une matrice neuve par décalage), optimisé 6,60 |
+| Pas de threads | K3 `rmw_padded` 11,5, `sw_padded` 211 et `sw_packed` 190 (quatre fois 2^25 mises à jour interprétées à la suite, contre quatre fils) ; Q6 `mt` 4,50, Q1 `mt` 20,6 ; K9 `mt` 21,3 |
+| Structures naturelles | K7 naturel 28,0 (`•HashMap`) ; K8 naturel 9,43 (listes imbriquées ; latences p50 9,6, p99 9,9, p99,9 8,7, max 6,4) |
+
+Le binaire natif de la machine 26 ne change presque rien (natif / Cascade Lake : 0,85 à 1,10, le plus bas sur K2 à
+8 Mio, d'intervalle 0,61 à 1,00 ; K6 `tuned` et `mt`, où le binaire natif filtre par `vpcompress`, gagnent 6 à 9 % ;
+K3 perd 4 à 10 %).
+
+### 4.2 Le pont et le classement publié (B-E)
+
+Facteurs du pont (C publié / C machine 26) sur les clés de la machine 1 : 0,75 à 3,6, sauf K3 `sw_padded` (4,8),
+`sw_packed` (11,4) et K7 naturel (16,3), comme pour FreePascal. Sur les clés venues du même modèle, proches de 1 :
+K5 0,85 et 1,02, K9 0,99 à 1,14 ; latences de K8 naturel, colonne par colonne, 0,80 à 1,48. Le second témoin donne
+des facteurs voisins, sauf sur K4 (0,94 à 1,30 contre 1,79 à 2,47), K1 naturel (1,65 contre 1,23) et K8 naturel (1,78
+contre 1,42).
+
+**Classement publié (B-E)** : BQN **21e** sur 24, **18,65 points** [18,5–18,8], rang espéré 20,89, rang plausible 20
+à 22, 3e étage. Contrôle 22,8 (22e ; 24,3 en règle v1, avec C3 = ½), plafond 12,45 [12,1–12,8] (21e : devant
+JavaScript, 12,2, Lua et Python), code par défaut 22,7 (21e ; D1 0,038, empreinte D2 0,71, queues de latence D3 0,10,
+hiérarchie mémoire D4 0,43). Plafond par noyau : K1 0,08, K3 0,02, K4 0,23, K5 0,12, K6 0,15, K7 0,20, K8 0,61, K9
+0,07. OCaml (20e, 23,9 points) le devance dans 75 % des variantes ; BQN devance JavaScript (22e, 15,6) dans 87 %,
+Python dans 98 %, Lua dans toutes.
+
+Les 23 autres gardent leurs scores ; JavaScript, Python et Lua reculent d'un rang (rangs espérés + 0,87, + 0,98 et
++ 1,00), OCaml de 0,25 ; les autres bougent de 0,01 au plus. **Les étages changent** : BQN, placé entre OCaml et
+JavaScript et proche des deux, relie les deux derniers étages ; ils sont désormais trois, [14, 5, 5] au lieu de
+[14, 5, 1, 3], le dernier réunissant OCaml, BQN, JavaScript, Python et Lua.
+
+### 4.3 Sensibilités (plan 3.5)
+
+| Scénario | Score | Contrôle | Plafond | Code par défaut | Rang espéré | Place | Rang à 90 % |
+|---|---|---|---|---|---|---|---|
+| **B-E (publié)** | 18,65 | 22,8 | 12,45 | 22,7 | 20,89 | 21e | 20–22 |
+| B-direct (information) | 21,72 | 22,8 | 19,33 | 24,0 | 20,40 | 20e | 20–21 |
+| B-hôte | 19,01 | 22,8 | 14,32 | 21,2 | 20,76 | 21e | 20–22 |
+| B-gcc | 19,18 | 22,8 | 13,80 | 22,7 | 20,80 | 21e | 20–22 |
+| B-natif (information) | 18,90 | 22,8 | 12,55 | 23,5 | 20,84 | 21e | 20–22 |
+| B-o3 | 18,52 | 22,8 | 12,34 | 22,3 | 20,92 | 21e | 20–22 |
+| B-K1ns | 17,31 | 22,8 | 12,45 | 17,4 | 21,07 | 21e | 20–22 |
+| B-K7arr | 18,81 | 22,8 | 12,45 | 23,3 | 20,84 | 21e | 20–22 |
+| B-K8ns | 18,65 | 22,8 | 12,45 | 22,7 | 20,87 | 21e | 20–22 |
+| B-fp | 17,87 | 22,8 | 12,45 | 19,6 | 20,98 | 21e | 20–22 |
+| B-C3 | 18,65 | 22,8 | 12,45 | 22,7 | 20,93 | 21e | 20–22 |
+| B-cases-bas | 16,06 | 15,4 | 12,45 | 22,7 | 21,21 | 21e | 20–22 |
+| B-cases-haut | 21,02 | 29,6 | 12,45 | 22,7 | 20,67 | 21e | 20–22 |
+| B-tout-bas | 14,19 | 15,4 | 12,34 | 15,4 | 21,55 | 21e | 20–23 |
+| B-tout-haut | 21,18 | 29,6 | 12,45 | 23,3 | 20,63 | 21e | 20–22 |
+
+* **Le pont entre modèles tient** : avec le second témoin (B-gcc), BQN a 19,18 points (+ 0,53) ; avec un seul facteur
+  d'hôte (1,492, B-hôte), 19,01. B-direct (20e, devant OCaml dans 59 % des variantes) est biaisé, comme pour
+  FreePascal : la machine 26 est plus rapide que la machine 1 pour presque tous les codes. Le binaire natif (B-natif)
+  ajouterait 0,25 point.
+* **Rapports sur le même hôte** : la construction par défaut ralentit le code naturel de 1,12 à 1,83 sur les noyaux de
+  tableaux (K1 1,54 et 1,56, K4 1,83, K5 1,12, Q6 1,28, Q1 1,25), pas K7, K8 ni K9 (0,98 à 1,02) ; les espaces de noms
+  coûtent 3,49 sur K1 naturel et 13,3 sur K1 mélangé (des références : le parcours devient aléatoire), 1,19 sur K8
+  (latences × 1,12 à 1,20, maximum × 0,83) ; l'idiome tableau divise K7 naturel par 7,5 (0,134).
+* Les cases (B-cases-bas, B-cases-haut) déplacent le score de 2,6 points vers le bas et de 2,4 vers le haut ; le
+  pilier C de BQN tient à peu de cases (22,8), et chacune pèse. BQN reste **21e dans tous les scénarios du plan** ; dans
+  la lecture la plus défavorable (B-tout-bas, 14,19 points), il ne devance plus JavaScript que dans 47 % des variantes
+  (rang espéré 21,55).
+
+### 4.4 Hors plan : K7 naturel et la table du C (B-K7tab, information)
+
+Relié par le facteur de la table chaînée du C (16,3), K7 naturel de BQN vaut 142,9 s dans les données publiées, le
+temps le plus long de l'étude (Haskell 88,7 s, FreePascal 78,4 s, Python 28,3 s) ; sur la machine 26, il prend 8,76 s,
+28 fois le C. Relié par le facteur de la table plate du C (K7 optimisé, 3,15), il vaut 27,6 s : 18,77 points
+(+ 0,12), rang espéré 20,85, 21e. Ce scénario a été déclaré pendant la campagne, avant tout résultat de BQN (3.5) ; le
+classement garde la règle du plan. De même, K3 `sw_packed` est relié par un facteur de 11,4 (29,7 s publiés), qui
+traduit le faux partage du C sur la machine 1 et non un trait de BQN ; il n'entre pas dans le score (E ne retient que
+les dispositions espacées).
+
+### 4.5 Réplication (machine 3)
+
+BQN entre dans la réplication par le pont du C natif (`c_er`, binaire natif de BQN) : 21e sur la machine 3 (17,30
+points). Ce n'est pas une réplication indépendante pour lui. L'accord entre machines et le test nul, calculés sur les 21
+langages répliqués indépendamment, ne changent pas.
+
+### 4.6 Écarts au plan
+
+* B-K7tab, ajouté pendant la campagne, avant tout résultat de BQN (3.5, poussé à 13:52, deux minutes après le début
+  des passes) : information, hors du classement.
+* Aucun processus gardé au-dessus de 2 % de vol de temps ; aucun rejeté.
+* Pendant la campagne, seule l'intégration à l'analyse a été écrite (pont, générateur, `analysis/bqn_check.py`, témoins
+  des états actuels) ; rien n'a été exécuté hors de vérifications de syntaxe.
+
+### 4.7 Bilan
+
+BQN se classe **21e sur 24**, entre OCaml et JavaScript, dans le dernier étage. Son plafond (12,45) est celui d'un
+langage dont chaque primitive est rapide mais dont chaque appel coûte : là où un noyau tient en quelques primitives sur
+de grands tableaux, il approche le C ou le dépasse (K5 naturel, Q6 naturel, K8 optimisé, K4 à 2 à 3 fois) ; là où il
+faut une boucle (K2 à petite taille, K3, la table de hachage de K7, l'arbre de K8 naturel), l'interprète domine, et
+sans threads les variantes parallèles restent séquentielles. Son code par défaut (22,7) est pénalisé par les flottants
+64 bits (128 o par particule), les queues de latence du comptage de références et du ramasse-miettes (D3 0,10) et un
+coût fixe par primitive qui masque la hiérarchie mémoire aux petites tailles (D4 0,43). Son contrôle (22,8) est celui
+d'un langage de tableaux : tableaux multidimensionnels natifs, stockage étroit automatique, projection de fichiers sans
+copie, mais ni disposition des enregistrements, ni SIMD explicite, ni threads, ni atomiques. Le rang résiste aux deux
+contrôles du pont entre modèles et à toutes les sensibilités du plan.

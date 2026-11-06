@@ -985,3 +985,51 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
 * **Assembleur** (hors des règles du banc) : K5 optimisé en AVX2 avec la 3.2.2, 1,39 fois le C natif ; en AVX-512 sous
   main, 1,03 fois ; en `-Sv`, 7,7 fois : la règle « pas d'assembleur » coûte plus à FreePascal qu'aux langages dotés
   d'intrinsèques.
+
+## Ajout de BQN (6 novembre, machine 26, Emerald Rapids) — `docs/BQN.md`, `results/bqn_check/`
+
+* **Chaîne et construction** : CBQN 0.12.0 (juin 2026), la dernière version publiée, « A BQN implementation in C » :
+  bytecode, JIT x86-64 actif par défaut (une fonction compilée après deux appels), primitives en C et en Singeli, un
+  langage de génération de code SIMD. CBQN choisit son code à la construction : le README recommande `make o3n`
+  (`-march=native`), dont le binaire emploie sur Emerald Rapids des extensions qu'un Cascade Lake n'a pas (91
+  compressions `vpcompressb`/`vpcompressw` de VBMI2 pour le filtre `/`, 14 instructions GFNI). Le banc a donc deux
+  binaires, comme le C publié et Swift : la cible Cascade Lake (`target_from_cc=1`, `-march=cascadelake`) pour les clés
+  de la machine 1, K9 et les latences, la construction native pour K5 et la réplication ; elles diffèrent de 0,85 à
+  1,10 sur la machine 26. La cible par défaut (`make o3`, registres xmm seulement) ralentit les noyaux de tableaux de
+  1,12 à 1,83.
+* **Un langage de tableaux** : le code naturel s'écrit en primitives sur des tableaux entiers ; le coût se paie par
+  appel de primitive. Plus rapide que le C sur K5 naturel (0,60 : le produit en vecteurs, puis une chaîne d'additions à
+  moins de 2 cycles par élément, contre la chaîne de FMA de clang, à 4), Q6 naturel (0,86 : des masques sur des colonnes
+  entières, contre une boucle à conditions) et K8 optimisé (0,66 : l'arbre indexé construit niveau par niveau) ; 2 à 5
+  fois sur K1 naturel et `aos` et sur K4 (12 fois sur K1 `soa`, f64 contre f32) ; 8 ns par saut de K2 en cache (la latence de L1 est de 1,8 ns). `+´` est un pli ordonné ;
+  `•math.Sum`, réassociée et vectorielle, est la seule réduction à réassociation demandée (K5 optimisé 7,5 fois le C,
+  AVX-512).
+* **Types et mémoire** : ni f32 ni u32 (`•bit._cast` les refuse) : les fichiers f32 sont décodés en f64, et une
+  particule coûte 128 octets dans une matrice. Le tas de CBQN, par blocs compagnons, loge la matrice de 512 Mio dans un
+  bloc de 1 Gio (256 o par particule comptés, 128 touchés : 128 retenus, comme pour Nim). Comptage de références et
+  ramasse-miettes traçant automatique, que seul le REPL arrête ; valeurs immuables (le stencil naturel produit une
+  matrice neuve à chaque décalage : 19 fois le C) ; la mise à jour structurelle `⌾` du centre d'une matrice coûte 70 à
+  80 fois le recollage des rangées.
+* **Bibliothèque** : `•HashMap`, une table à adressage ouvert, coûte 300 à 480 ns par ligne alimentée une à une (K7
+  naturel 28 fois le C) ; l'idiome tableau (classement `⊐`, histogramme `/⁼`, regroupement `⊔`) en prend 60 à 65
+  (K7 × 0,134). Les espaces de noms, seule forme à champs nommés, sont des références : K1 en espaces de noms est 3,5
+  fois plus lent que la matrice, 13 fois dans le désordre ; K8 en espaces de noms, 1,19 fois les listes imbriquées.
+* **Concurrence** : ni threads, ni coroutines, ni atomiques : K3 et les variantes `mt` s'exécutent en séquence (K3
+  `sw_padded` 211 fois le C ; K9 `mt` 21 fois) ; pas de K10.
+* **Vectorisation mesurée** (C3) : ½. Les boucles chaudes sont celles des primitives : le stencil est vectorisé
+  (ymm) ; celle de K4 naturel est le filtre, une compression par `vpshufb` sur table (128 bits) que la règle compte
+  scalaire, faute d'arithmétique empaquetée ; la somme `+´` d'entiers de 16 bits qui suit est scalaire.
+* **Grille** (`probes/bqn`) : contrôle 22,8 en règle v2 (24,3 en v1 avec C3 = ½), 22e : tableaux multidimensionnels
+  natifs (F1), projection de fichiers sans copie (F4), stockage étroit automatique, `•bit._cast`, transposition AoS/SoA,
+  pointeurs de `•FFI` ; ni disposition des enregistrements, ni alignement, ni SIMD explicite, ni threads, ni atomiques,
+  ni annotations ; indices toujours vérifiés.
+* **Classement** : 21e sur 24 (18,65 points [18,5–18,8] ; rang espéré 20,89, rang plausible 20 à 22), entre OCaml (qui le
+  devance dans 75 % des variantes) et JavaScript (devancé dans 87 %). Plafond 12,45 (21e, devant JavaScript, 12,2),
+  code par défaut 22,7 (21e : code naturel 0,038, empreinte 0,71, queues de latence 0,10, hiérarchie mémoire 0,43). Les
+  étages passent de [14, 5, 1, 3] à [14, 5, 5] : BQN relie OCaml au dernier étage.
+* **Pont et sensibilités** : facteurs du C de 0,75 à 3,6 sur les clés de la machine 1, sauf K3 (4,8 et 11,4) et K7
+  naturel (16,3 : 143 s publiés ; 27,6 s au facteur de la table plate du C, hors plan) ; proches de 1 sur K5 et K9. 21e
+  dans tous les scénarios du plan (second témoin 19,18 points ; facteur d'hôte unique 19,01 ; binaire natif 18,90 ;
+  construction par défaut 18,52 ; espaces de noms pour K1 17,31 ; empreinte du tas 17,87 ; cases basses 16,06, hautes
+  21,02 ; toutes les lectures défavorables 14,19, où il ne devance plus JavaScript que dans 47 % des variantes) ; 20e
+  sans pont (information, biaisé).

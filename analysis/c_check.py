@@ -187,16 +187,16 @@ def main():
         print(f"{name} : C {p['c']['MS']:.2f} ({z['exp21']['c']:.2f}, {z['pos']}e, 1er {100 * z['first']['c']:.0f} %), "
               f"C++ {p['cpp']['MS']:.2f} ({z['exp21']['cpp']:.2f}), Odin {p['odin']['MS']:.2f} ({z['exp21']['odin']:.2f}) ; "
               f"tête : {', '.join(z['order21'][:4])}", flush=True)
-    # état actuel : le classement publié après la remarque sur FreePascal (results/fpc_remark.json, « R-E » ; avant
-    # elle, fpc_check.json, « F-E », swift_remark.json, « R-E »,
+    # état actuel : le classement publié après l'ajout de BQN (results/bqn_check.json, « B-E » ; avant lui,
+    # fpc_remark.json, « R-E », fpc_check.json, « F-E », swift_remark.json, « R-E »,
     # swift_check.json, « S-E », lua_check.json, « L-E », python_check.json, « P-E », js_check.json, « J-E », ocaml_check.json, « O-E », haskell_check.json, « H-E »,
     # go_check.json, « G-E »,
     # java_check.json, « J-E », et k9_check.json, « Publié »)
-    ref = (json.load(open(os.path.join(ROOT, "results", "fpc_remark.json")))["scenarios"]["R-E"] if current else
+    ref = (json.load(open(os.path.join(ROOT, "results", "bqn_check.json")))["scenarios"]["B-E"] if current else
            json.load(open(os.path.join(ROOT, "results", "cpp_check.json")))["scenarios"]["Publié"])
     av = out["scenarios"]["Publié" if current else "Avant"]
     out["check_before"] = max(max(abs(av["ms0"][l] - ref["ms0"][l]), abs(av["exp21"][l] - ref["exp21"][l])) for l in RANKED)
-    print(f"Contrôle : écart maximal du scénario {'Publié à results/fpc_remark.json (R-E)' if current else 'Avant au publié d avant la remarque'}"
+    print(f"Contrôle : écart maximal du scénario {'Publié à results/bqn_check.json (B-E)' if current else 'Avant au publié d avant la remarque'}"
           f" = {out['check_before']:.2e}")
     # frontière de K8 dans le publié : meilleur temps (moyenne géométrique) parmi les langages classés
     best = {l: min(gm(data[l][k]) for k in (K8N, K8T, ("k8", "tuned_alloc", "")) if k in data.get(l, {}))
@@ -218,7 +218,7 @@ def report(o, suffix=""):
     L = ["# Remarque sur C : rapports appariés et scénarios\n",
          "Plan : `docs/C.md`. Mesures : `results/raw_c/` (machine 16, 7 processus par cellule). Code : `analysis/c_check.py`.",
          "Processus rejetés : " + (str(len(o["bad"])) if o["bad"] else "aucun") + ".",
-         (f"Contrôle : le scénario Publié reproduit results/fpc_remark.json, R-E (écart maximal {o['check_before']:.1e}).\n"
+         (f"Contrôle : le scénario Publié reproduit results/bqn_check.json, B-E (écart maximal {o['check_before']:.1e}).\n"
           if o.get("current") else
           f"Contrôle : le scénario Avant reproduit le publié d'avant la remarque (écart maximal {o['check_before']:.1e}).\n"),
          "## Rapports appariés (même hôte)\n", "| Rapport | Clé | Ancien (ms) | Nouveau (ms) | Rapport | IC 95 % |",
@@ -239,7 +239,8 @@ def report(o, suffix=""):
           "mt, K9 mt et K8 naturel de Python corrigés et B1, F3 de Python à 1, ½ (docs/PYTHON.md), K3, K4, Q6 et K8 "
           "naturel de Lua corrigés et B3, B4 de Lua à ½ (docs/LUA.md), Swift ajouté (docs/SWIFT.md), puis D4 et E4 de "
           "Swift corrigés et son pont par la machine 24 (docs/SWIFT.md, 5), FreePascal ajouté (docs/FPC.md), puis C2, E4 "
-          "et F4 de FreePascal corrigés (docs/FPC.md, 5) ; Publié = results/fpc_remark.json (R-E).\n",
+          "et F4 de FreePascal corrigés (docs/FPC.md, 5), BQN ajouté (docs/BQN.md) ; Publié = results/bqn_check.json "
+          "(B-E).\n",
           "## Scénarios (analyse globale de la v3 rejouée, 20 000 variantes)\n",
           "| Scénario | Statut | C | C++ | Odin | Rang espéré de C | Place de C | C 1er | C devant C++ | C devant Odin | Tête |",
           "|---|---|---|---|---|---|---|---|---|---|---|"]
