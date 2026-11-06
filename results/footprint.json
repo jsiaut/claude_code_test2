@@ -9,6 +9,7 @@
  "d": 64.0,
  "fortran": 64.0,
  "fortran_flang": 64.03,
+ "fpc": 64.0,
  "go": 64.0,
  "haskell": 96.0,
  "java": 78.01,

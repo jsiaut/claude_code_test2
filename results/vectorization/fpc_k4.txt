@@ -1,0 +1,8 @@
+97.0% des échantillons : ms+0x402fc0 boucle=0x402fb8-0x402fcc {'n': 7, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    402fb8: add    rdx,0x1
+    402fbc: cmp    BYTE PTR [rbx+rdx*1],0x80
+    402fc0: jb     402fc9 <dlclose@plt+0x1f39>
+    402fc2: movzx  ecx,BYTE PTR [rbx+rdx*1]
+    402fc6: add    r12,rcx
+    402fc9: cmp    rax,rdx
+    402fcc: jg     402fb8 <dlclose@plt+0x1f28>

@@ -1914,6 +1914,161 @@
 "reps": 10,
 "t_cal": 0.042230313
 },
+"fpc|k10|natural|": {
+"procs": 7,
+"reps": 3,
+"t_cal": 1.956523459
+},
+"fpc|k10|tuned|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.087695146
+},
+"fpc|k1|aos|energy": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.03134723
+},
+"fpc|k1|natural_shuffled|energy": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.036495908
+},
+"fpc|k1|natural|energy": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.036349696
+},
+"fpc|k1|soa|energy": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.006061461
+},
+"fpc|k2|tuned|16384": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.007557206
+},
+"fpc|k2|tuned|262144": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.024077829
+},
+"fpc|k2|tuned|8388608": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.17899485
+},
+"fpc|k3|rmw_packed|": {
+"procs": 7,
+"reps": 3,
+"t_cal": 2.853236643
+},
+"fpc|k3|rmw_padded|": {
+"procs": 7,
+"reps": 9,
+"t_cal": 0.331722382
+},
+"fpc|k3|sw_packed|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.013874489
+},
+"fpc|k3|sw_padded|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.014703091
+},
+"fpc|k4|branchless_unsorted|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.018060378
+},
+"fpc|k4|natural_sorted|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.018402094
+},
+"fpc|k4|natural_unsorted|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.095200351
+},
+"fpc|k5|natural|": {
+"procs": 7,
+"reps": 7,
+"t_cal": 0.384311931
+},
+"fpc|k5|tuned|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.029261808
+},
+"fpc|k6|mt|q1": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.029691565
+},
+"fpc|k6|mt|q6": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.008126125
+},
+"fpc|k6|natural|q1": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.072777661
+},
+"fpc|k6|natural|q6": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.13826102
+},
+"fpc|k6|tuned|q1": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.061529203
+},
+"fpc|k6|tuned|q6": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.034446338
+},
+"fpc|k7|natural|": {
+"procs": 7,
+"reps": 3,
+"t_cal": 4.101964039
+},
+"fpc|k7|tuned|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.166733497
+},
+"fpc|k8|natural|": {
+"procs": 7,
+"reps": 3,
+"t_cal": 1.006135404
+},
+"fpc|k8|tuned|": {
+"procs": 7,
+"reps": 8,
+"t_cal": 0.337291565
+},
+"fpc|k9|mt|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.01341994
+},
+"fpc|k9|natural|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.054690229
+},
+"fpc|k9|tuned|": {
+"procs": 7,
+"reps": 10,
+"t_cal": 0.024554759
+},
 "go|k10|natural|": {
 "procs": 3,
 "reps": 5,

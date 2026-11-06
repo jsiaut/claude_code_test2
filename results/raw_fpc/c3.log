@@ -1,0 +1,2 @@
+fpc k4 scalaire 97.0% des échantillons : ms+0x402fc0 boucle=0x402fb8-0x402fcc {'n': 7, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+fpc k9 scalaire 46.7% des échantillons : ms+0x411cb6 boucle=0x411c80-0x411cf2 {'n': 26, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}

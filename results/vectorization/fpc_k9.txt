@@ -1,0 +1,29 @@
+46.7% des échantillons : ms+0x411cb6 boucle=0x411c80-0x411cf2 {'n': 26, 'packed': 0, 'wide': 0, 'scalar_fp': 4, 'vectorized': False, 'width': '-'}
+    411c80: add    ecx,0x1
+    411c83: mov    rdx,rdi
+    411c86: movsxd r8,eax
+    411c89: mov    r9,r8
+    411c8c: shl    r9,0xe
+    411c90: mov    r10d,ecx
+    411c93: lea    r11,[rdx+r9*1-0x4000]
+    411c9b: shl    r8,0xe
+    411c9f: mov    r9d,ecx
+    411ca2: lea    r8,[rdx+r8*1+0x4000]
+    411caa: vmovsd xmm0,QWORD PTR [r11+r10*8]
+    411cb0: vaddsd xmm0,xmm0,QWORD PTR [r8+r9*8]
+    411cb6: mov    r8d,eax
+    411cb9: shl    r8,0xe
+    411cbd: add    rdx,r8
+    411cc0: movsxd r8,ecx
+    411cc3: vaddsd xmm0,xmm0,QWORD PTR [rdx+r8*8-0x8]
+    411cca: vaddsd xmm0,xmm0,QWORD PTR [rdx+r8*8+0x8]
+    411cd1: vmulsd xmm0,xmm0,QWORD PTR ds:0x4c5870
+    411cda: mov    edx,eax
+    411cdc: shl    rdx,0xe
+    411ce0: mov    r8d,ecx
+    411ce3: add    rdx,rsi
+    411ce6: vmovsd QWORD PTR [rdx+r8*8],xmm0
+    411cec: cmp    ecx,0x7fe
+    411cf2: jl     411c80 <dlclose@plt+0x10bf0>
+22.0% des échantillons : ms+0x411f3a boucle=0x411ee8-0x411f4b {'n': 19, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}
+17.1% des échantillons : ms+0x412045 boucle=0x412018-0x41205a {'n': 11, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}

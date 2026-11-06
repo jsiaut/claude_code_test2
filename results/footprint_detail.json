@@ -139,6 +139,20 @@
   "rss_bytes_per_particle": 64.03,
   "rss_p1_mib": 2.8
  },
+ "fpc": {
+  "D2a": 1.0,
+  "bytes_per_particle": 64.0,
+  "kind": "rss",
+  "measured": 64.0,
+  "note": "",
+  "per_process": [
+   64.001,
+   64.001,
+   64.001
+  ],
+  "rss_bytes_per_particle": 64.0,
+  "rss_p1_mib": 2.7
+ },
  "go": {
   "D2a": 1.0,
   "bytes_per_particle": 64.0,

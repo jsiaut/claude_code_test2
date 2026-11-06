@@ -11,6 +11,7 @@
  "fortran_campagne": 0.5,
  "fortran_fix": 1.0,
  "fortran_flang": 1.0,
+ "fpc": 0.0,
  "go": 0.0,
  "haskell": 0.0,
  "java": 0.5,
