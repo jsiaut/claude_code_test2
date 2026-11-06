@@ -1,0 +1,56 @@
+fpc_len    k6   natural              q1         p0 n=10 med=0.072914s ok={True} rc=0 
+fpc_len    k4   natural_unsorted                p0 n=10 med=0.092087s ok={True} rc=0 
+fpc_len    k4   natural_sorted                  p0 n=10 med=0.016430s ok={True} rc=0 
+fpc_len    k5   natural                         p0 n=7 med=0.096703s ok={True} rc=0 
+fpc_len    k7   natural                         p0 n=3 med=4.123883s ok={True} rc=0 
+fpc_len    k1   natural_shuffled     energy     p0 n=10 med=0.036423s ok={True} rc=0 
+fpc_len    k6   natural              q6         p0 n=10 med=0.141962s ok={True} rc=0 
+fpc_len    k1   natural              energy     p0 n=10 med=0.036915s ok={True} rc=0 
+fpc_len    k6   natural              q6         p0 n=10 med=0.141974s ok={True} rc=0 
+fpc_len    k1   natural              energy     p0 n=10 med=0.035504s ok={True} rc=0 
+fpc_len    k7   natural                         p0 n=3 med=4.074476s ok={True} rc=0 
+fpc_len    k6   natural              q1         p0 n=10 med=0.073184s ok={True} rc=0 
+fpc_len    k5   natural                         p0 n=7 med=0.095100s ok={True} rc=0 
+fpc_len    k1   natural_shuffled     energy     p0 n=10 med=0.035421s ok={True} rc=0 
+fpc_len    k4   natural_unsorted                p0 n=10 med=0.091823s ok={True} rc=0 
+fpc_len    k4   natural_sorted                  p0 n=10 med=0.016549s ok={True} rc=0 
+fpc_len    k6   natural              q1         p0 n=10 med=0.075210s ok={True} rc=0 
+fpc_len    k4   natural_unsorted                p0 n=10 med=0.094038s ok={True} rc=0 
+fpc_len    k6   natural              q6         p0 n=10 med=0.141055s ok={True} rc=0 
+fpc_len    k5   natural                         p0 n=7 med=0.094790s ok={True} rc=0 
+fpc_len    k1   natural              energy     p0 n=10 med=0.034663s ok={True} rc=0 
+fpc_len    k1   natural_shuffled     energy     p0 n=10 med=0.035865s ok={True} rc=0 
+fpc_len    k7   natural                         p0 n=3 med=4.517456s ok={True} rc=0 
+fpc_len    k4   natural_sorted                  p0 n=10 med=0.016391s ok={True} rc=0 
+fpc_len    k7   natural                         p0 n=3 med=4.238487s ok={True} rc=0 
+fpc_len    k4   natural_unsorted                p0 n=10 med=0.091930s ok={True} rc=0 
+fpc_len    k6   natural              q6         p0 n=10 med=0.142040s ok={True} rc=0 
+fpc_len    k1   natural              energy     p0 n=10 med=0.034484s ok={True} rc=0 
+fpc_len    k5   natural                         p0 n=7 med=0.093393s ok={True} rc=0 
+fpc_len    k1   natural_shuffled     energy     p0 n=10 med=0.034306s ok={True} rc=0 
+fpc_len    k4   natural_sorted                  p0 n=10 med=0.016747s ok={True} rc=0 
+fpc_len    k6   natural              q1         p0 n=10 med=0.072793s ok={True} rc=0 
+fpc_len    k1   natural_shuffled     energy     p0 n=10 med=0.036453s ok={True} rc=0 
+fpc_len    k7   natural                         p0 n=3 med=4.179703s ok={True} rc=0 
+fpc_len    k5   natural                         p0 n=7 med=0.093912s ok={True} rc=0 
+fpc_len    k4   natural_sorted                  p0 n=10 med=0.016173s ok={True} rc=0 
+fpc_len    k4   natural_unsorted                p0 n=10 med=0.091671s ok={True} rc=0 
+fpc_len    k6   natural              q6         p0 n=10 med=0.145325s ok={True} rc=0 
+fpc_len    k1   natural              energy     p0 n=10 med=0.034088s ok={True} rc=0 
+fpc_len    k6   natural              q1         p0 n=10 med=0.072938s ok={True} rc=0 
+fpc_len    k6   natural              q1         p0 n=10 med=0.074378s ok={True} rc=0 
+fpc_len    k4   natural_sorted                  p0 n=10 med=0.016525s ok={True} rc=0 
+fpc_len    k5   natural                         p0 n=7 med=0.095633s ok={True} rc=0 
+fpc_len    k4   natural_unsorted                p0 n=10 med=0.094488s ok={True} rc=0 
+fpc_len    k7   natural                         p0 n=3 med=4.224498s ok={True} rc=0 
+fpc_len    k1   natural_shuffled     energy     p0 n=10 med=0.034918s ok={True} rc=0 
+fpc_len    k1   natural              energy     p0 n=10 med=0.035858s ok={True} rc=0 
+fpc_len    k6   natural              q6         p0 n=10 med=0.140717s ok={True} rc=0 
+fpc_len    k1   natural              energy     p0 n=10 med=0.034176s ok={True} rc=0 
+fpc_len    k4   natural_sorted                  p0 n=10 med=0.016475s ok={True} rc=0 
+fpc_len    k6   natural              q1         p0 n=10 med=0.073883s ok={True} rc=0 
+fpc_len    k5   natural                         p0 n=7 med=0.093746s ok={True} rc=0 
+fpc_len    k1   natural_shuffled     energy     p0 n=10 med=0.034024s ok={True} rc=0 
+fpc_len    k7   natural                         p0 n=3 med=4.320928s ok={True} rc=0 
+fpc_len    k6   natural              q6         p0 n=10 med=0.140677s ok={True} rc=0 
+fpc_len    k4   natural_unsorted                p0 n=10 med=0.091611s ok={True} rc=0 

@@ -103,6 +103,8 @@ V2_OVERRIDES = {
     ("swift", "D4"): (1, "sched_setaffinity / pthread_setaffinity_np du module Glibc livré (swiftc -Xcc -D_GNU_SOURCE)"),
     # Free Pascal (ajouté le 6/11, docs/FPC.md)
     ("fpc", "D4"): (1, "Do_SysCall(syscall_nr_sched_setaffinity) de l'unité Syscall livrée avec la RTL, comme syscall.RawSyscall en Go"),
+    # erratum v1 du 6/11 (remarque sur FreePascal, docs/FPC.md 5.3) : F4 à ½ en v1, comme Go, et 1 en v2 comme lui
+    ("fpc", "F4"): (1, "Fpmmap de l'unité BaseUnix livrée avec la RTL + pointeur typé, comme syscall.Mmap de Go"),
 }
 
 # C3 (vectorisation automatique mesurée) sort du pilier C en v2 : double compte avec E et D1.

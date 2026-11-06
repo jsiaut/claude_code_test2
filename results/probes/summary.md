@@ -108,6 +108,39 @@
 | fortran | A4 | 0.5 | 0.5 |  | directives OpenMP : allouable mod 128 = 0 ; locale mod 256 = 0 |
 | fortran | B2 | 0.5 | 0.5 |  | arène à la main (tableau de nœuds réutilisé), comme en C : 42 |
 | fortran | F2 | 0.5 | 0.5 |  | cotableaux sur un nœud (libcaf_shmem) : images 4, somme 10 |
+| fpc | A1 | 1 | 1 |  | array of record : SizeOf(TParticle) = 64 o, écart entre éléments 64 o (valeurs en ligne) |
+| fpc | A2 | 1 | 1 |  | record : décalages a=0 b=8 c=16 (ordre déclaré, alignement naturel) ; {$PACKRECORDS C} : taille 12 o, b à 4 (d |
+| fpc | A3 | 1 | 1 |  | packed record {Byte; LongWord} : 5 o ; bitpacked record {0..7; 0..31} : 1 o, champs relus 5 et 17 |
+| fpc | A4 | 0.5 | 0.5 |  | GetMem + Align(p, 64) : adresse mod 64 = 0 (à la main) ; {$CODEALIGN VARMIN=64} pour les variables globales ;  |
+| fpc | A5 | 1 | 1 |  | record à variantes sans champ d'étiquette (union brute) : Single 1.0 = $3F800000, octets 0 0 128 63 ; absolute |
+| fpc | A6 | 0 | 0 |  | aucun type SoA |
+| fpc | A7 | 1 | 1 |  | record avec array[0..15] of Single : 64 o en ligne |
+| fpc | A8 | 1 | 1 |  | Byte 1 SmallInt 2 Word 2 Single 4 ; intervalles bitpacked (A3) ; pas de flottant 16 bits |
+| fpc | B1 | 1 | 1 |  | pas de ramasse-miettes : comptage de références des chaînes, tableaux dynamiques et interfaces (StringRefCount |
+| fpc | B2 | 0.5 | 0.5 |  | SetMemoryManager (gestionnaire global remplaçable : 1 appel compté pour New) ; NewInstance/FreeInstance redéfi |
+| fpc | B3 | 1 | 1 |  | records et tableaux statiques locaux sur la pile (distance à une variable locale : 1312 o ; au tas : TRUE) |
+| fpc | B4 | 0.5 | 0.5 |  | allocations implicites : boucle sur un tableau 0, énumération d'un TDictionary 1 (objet énumérateur), concatén |
+| fpc | B5 | 1 | 1 |  | Pointer, pointeurs typés, arithmétique ({$pointermath}), GetMem/FreeMem (bench) |
+| fpc | C1 | 0.5 | 0.5 |  | -Sv : opérations sur array[0..3] of Single (SSE 128 bits) : 2 6 12 20 ; expérimental : 8 Single = erreur inter |
+| fpc | C2 | 0.5 | 0.5 |  | assembleur en ligne jusqu'à AVX2 et FMA (E2), sans intrinsèques SSE/AVX, comme Zig : seulement des intrinsèque |
+| fpc | C5 | 0 | 0 |  | aucune boucle parallèle ni réserve de tâches dans la RTL et les paquets livrés (mtprocs est un paquet de Lazar |
+| fpc | D1 | 1 | 1 |  | BeginThread (unité cthreads) et TThread : 4 fils, 4000 incréments |
+| fpc | D2 | 0.5 | 0.5 |  | InterLockedIncrement64 / CompareExchange64 / ExchangeAdd64 (RMW séquentiellement cohérents, appels de la RTL)  |
+| fpc | D3 | 0 | 0 |  | aucune constante, requête ni type de bourrage de ligne de cache dans la RTL (l'unité cpu ne détecte que des je |
+| fpc | D4 | 0.5 | 0.5 |  | Do_SysCall(syscall_nr_sched_setaffinity) de l'unité Syscall livrée : retour 0, masque relu 2, processeur coura |
+| fpc | D5 | 0.5 | 0.5 |  | ReadBarrier / WriteBarrier / ReadWriteBarrier (lfence, sfence, mfence dans des procédures de la RTL) ; ThreadS |
+| fpc | E1 | 1 | 1 |  | code natif, -al garde l'assembleur produit |
+| fpc | E2 | 1 | 1 |  | blocs asm (syntaxe Intel ou AT&T, procédures assembler) : 42 ; AVX2 accepté, AVX-512 inconnu de l'assembleur d |
+| fpc | E3 | 0 | 0 |  | pas d'indication de branchement (Likely/Unlikely inconnus, run.sh) |
+| fpc | E4 | 0.5 | 0.5 |  | Prefetch(x) du System (intrinsèque : prefetchnta seulement, sans localité ni écriture, run.sh) ; erratum du 6/ |
+| fpc | E5 | 0 | 0 |  | ni restrict ni garantie de non-aliasing |
+| fpc | E6 | 1 | 1 |  | {$R+} / {$R-} locaux : indice 5 hors bornes détecté sous {$R+} : TRUE ; sans vérification ailleurs (défaut) :  |
+| fpc | E7 | 0.5 | 0.5 |  | génériques spécialisés à la compilation (specialize) : 7 2.5 ; expressions constantes (1219), pas d'évaluation |
+| fpc | F1 | 0.5 | 0.5 |  | array[0..3, 0..7] of Double : 256 o contigus (écart entre lignes 64 o), bornes fixées à la compilation ; array |
+| fpc | F2 | 0 | 0 |  | aucun |
+| fpc | F3 | 1 | 1 |  | Byte...QWord et ShortInt...Int64, arithmétique modulaire sans {$Q+} (défaut) : 0 -2147483648 |
+| fpc | F4 | 0.5 | 0.5 |  | Fpmmap (unité BaseUnix livrée, appel système propre à Unix, comme syscall.Mmap de Go ; 1 en règle v2) + pointe |
+| fpc | C4 | 0 | 0 |  | -OoFASTMATH (aussi {$OPTIMIZATION FASTMATH}) sur une réduction : 0 FMA sans l'option, 1 avec (contraction a*b+ |
 | go | A2 | 1 | 1 |  | unsafe.Offsetof(S.C)=8 |
 | go | A5 | 0.5 | 0.5 |  | math.Float32bits(1)=0x3f800000 |
 | go | F4 | 0.5 | 0.5 |  | syscall.Mmap + unsafe.Slice : 0.4390046 <nil> |

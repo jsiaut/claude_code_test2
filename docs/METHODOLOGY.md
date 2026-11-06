@@ -1326,3 +1326,31 @@ Robustesse :
   `fpc_main`, `fpc_main_mieux`, `fpc_main_scal`, `fpc_asm` et `fpc_main_asm` (information) ; outil
   `tools/measure_fpc_rq.py` (124 cellules × 7 passes, machine 26) ; scénarios fixés (R-E publié, sensibilités
   Length, noyaux mieux écrits, rc2, main, grille de main).
+* 2026-11-06, 11:45:05-12:09:57 : **mesures de la remarque sur FreePascal** (`tools/measure_fpc_rq.py`, machine 26) :
+  868 processus (124 cellules × 7), aucune somme de contrôle fausse, 14 processus refaits pour vol de temps, aucun
+  gardé au-dessus de 2 % (1,93 % au plus), vol médian 0,08 %. Pendant la campagne, seuls l'analyse
+  (`analysis/fpc_remark.py`), les errata de la grille, la sonde et les témoins des états actuels ont été écrits, sans
+  rien exécuter hors des vérifications de syntaxe.
+* 2026-11-06, 12:10 à 12:50 : **résultats de la remarque sur FreePascal, sorties régénérées** (`analysis/fpc_remark.py`,
+  puis la chaîne publiée : classement, réplication, graphiques, matrice, figures du README, états actuels de la
+  remarque sur C, de la sensibilité sans SIMD et de la confrontation). Contrôles : le scénario Avant reproduit F-E de
+  `results/fpc_check.json` à l'identique ; les états actuels reproduisent le nouveau publié (R-E) à l'identique. Sonde de
+  FreePascal relancée (C2, E4, F4 à ½) ; le résumé des sondes contient désormais FreePascal, oublié à l'ajout ; cinq
+  divergences, les anciennes de C et C++. FreePascal **16e, 48,06 points** [47,1–48,8] (+ 0,62 par les errata ;
+  contrôle 62,3, 15e) ; les 22 autres gardent leurs scores, leurs rangs espérés bougent de 0,02 au plus ; étages [14, 5,
+  1, 3]. Machine 26 : rapports FreePascal / C comme sur la machine 25 (sauf K4 naturel, 62 contre 54) ; formes de la
+  remarque K4 × 0,75, K5 × 0,68, K8 × 0,38 (+ 3,3 points, 16e) ; `Length(a) - 1` : K5 naturel × 0,25, 0,51 fois le C,
+  qui fusionne la boucle en FMA (+ 0,15 point) ; 3.2.4-rc2 : K7 naturel × 0,40, le reste 0,95 à 1,08 (47,37 points) ;
+  main : naturel × 0,25 à 0,96, K1 `soa` × 1,35 et K9 naturel × 1,33 (47,62 ; 49,89 avec sa grille ; 54,92 et 15e avec
+  sa grille et ses meilleures formes, au score de C#). Les queues de latence de K8 (p99,9, max) sortent plus hautes avec
+  la rc2 et main ; hors plan, ajouté après les avoir vues, les mêmes scénarios sans elles : 48,31, 48,37 et 55,66
+  points. Une erreur de programmation (fusion de dictionnaires) a arrêté la première exécution avant tout scénario ;
+  l'analyse a tourné deux fois, avec les mêmes graines, pour les scénarios hors plan.
+* 2026-11-06, 12:45 à 13:00 : **README et documents après la remarque sur FreePascal**. README : tableau (48,1 ; devance
+  Java dans 54 %), étages, paragraphe de FreePascal (errata, `High` et `Length`, FMA du C, branche stable 3.2 et branche
+  main, formes mieux écrites), relecture des 23 langages, bilan des remarques, versions mesurées, machines, reproduction.
+  La phrase de l'ajout qui disait sa note de hiérarchie mémoire (D4 0,98) « la meilleure de l'étude » est corrigée
+  (README, `docs/FPC.md` 4.2, `docs/FINDINGS.md`) : 0,98 contre 0,97 pour C, sur le même code machine, est du bruit.
+  `docs/FPC.md` (sections 5.8 à 5.12), `docs/FINDINGS.md`, `docs/NOSIMD.md` (4.21), `docs/CONFRONTATION.md`,
+  `docs/CAPABILITIES.md` (régénéré : C2, E4 et F4 de FreePascal).
+

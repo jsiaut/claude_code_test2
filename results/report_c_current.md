@@ -2,7 +2,7 @@
 
 Plan : `docs/C.md`. Mesures : `results/raw_c/` (machine 16, 7 processus par cellule). Code : `analysis/c_check.py`.
 Processus rejetés : aucun.
-Contrôle : le scénario Publié reproduit results/fpc_check.json, F-E (écart maximal 0.0e+00).
+Contrôle : le scénario Publié reproduit results/fpc_remark.json, R-E (écart maximal 0.0e+00).
 
 ## Rapports appariés (même hôte)
 
@@ -20,7 +20,7 @@ Contrôle : le scénario Publié reproduit results/fpc_check.json, F-E (écart m
 | c_gcc_ref / c_ref | k8:natural (témoin) | 771,3 | 602,2 | 0,781 | 0,700–0,871 |
 
 Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0 ms avec la meilleure forme (S-K8).
-État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md), K5 et K1 soa de Java corrigés et F1 de Java à ½ (docs/JAVA.md), K5 et K9 de Go corrigés (docs/GO.md), options et K1, K5, K8 de Haskell corrigés et B2, B3, A7 de Haskell à ½ (docs/HASKELL.md), Q6, K1 aos, K7 et K8 d'OCaml corrigés et D5 d'OCaml à ½ (docs/OCAML.md), K7 de JavaScript corrigé et E1, A4, E6 de JavaScript à 1, ½, ½ (docs/JAVASCRIPT.md), K3, K6 mt, K9 mt et K8 naturel de Python corrigés et B1, F3 de Python à 1, ½ (docs/PYTHON.md), K3, K4, Q6 et K8 naturel de Lua corrigés et B3, B4 de Lua à ½ (docs/LUA.md), Swift ajouté (docs/SWIFT.md), puis D4 et E4 de Swift corrigés et son pont par la machine 24 (docs/SWIFT.md, 5), FreePascal ajouté (docs/FPC.md) ; Publié = results/fpc_check.json (F-E).
+État actuel : K9 au harnais commun pour toutes les implémentations (docs/K9.md), K5 et K1 soa de Java corrigés et F1 de Java à ½ (docs/JAVA.md), K5 et K9 de Go corrigés (docs/GO.md), options et K1, K5, K8 de Haskell corrigés et B2, B3, A7 de Haskell à ½ (docs/HASKELL.md), Q6, K1 aos, K7 et K8 d'OCaml corrigés et D5 d'OCaml à ½ (docs/OCAML.md), K7 de JavaScript corrigé et E1, A4, E6 de JavaScript à 1, ½, ½ (docs/JAVASCRIPT.md), K3, K6 mt, K9 mt et K8 naturel de Python corrigés et B1, F3 de Python à 1, ½ (docs/PYTHON.md), K3, K4, Q6 et K8 naturel de Lua corrigés et B3, B4 de Lua à ½ (docs/LUA.md), Swift ajouté (docs/SWIFT.md), puis D4 et E4 de Swift corrigés et son pont par la machine 24 (docs/SWIFT.md, 5), FreePascal ajouté (docs/FPC.md), puis C2, E4 et F4 de FreePascal corrigés (docs/FPC.md, 5) ; Publié = results/fpc_remark.json (R-E).
 
 ## Scénarios (analyse globale de la v3 rejouée, 20 000 variantes)
 
@@ -49,14 +49,14 @@ Frontière de K8 dans le publié : Ada, 107,7 ms ; K8 tuned de C 265,6 ms, 106,0
 | D | 72,65 | 78,9 → 78,9 | 7,43 → 7,43 | 1 % → 1 % |
 | Ada | 71,06 | 71,7 → 71,7 | 8,30 → 8,30 | 1 % → 1 % |
 | Chapel | 65,72 | 63,8 → 63,8 | 9,19 → 9,19 | 1 % → 1 % |
-| Swift | 66,45 | 64,1 → 64,1 | 10,70 → 10,70 | 0 % → 0 % |
+| Swift | 66,45 | 64,1 → 64,1 | 10,71 → 10,71 | 0 % → 0 % |
 | Fortran | 65,44 | 59,2 → 59,2 | 10,84 → 10,84 | 0 % → 0 % |
 | Julia | 62,36 | 68,9 → 68,9 | 12,26 → 12,26 | 0 % → 0 % |
 | Mojo | 62,29 | 66,0 → 66,0 | 13,01 → 13,01 | 0 % → 0 % |
-| C# | 54,88 | 65,8 → 65,8 | 15,28 → 15,28 | 0 % → 0 % |
-| FreePascal | 47,44 | 58,5 → 58,5 | 16,71 → 16,71 | 0 % → 0 % |
-| Java | 47,17 | 42,7 → 42,7 | 16,93 → 16,93 | 0 % → 0 % |
-| Go | 45,37 | 44,9 → 44,9 | 17,13 → 17,13 | 0 % → 0 % |
+| C# | 54,88 | 65,8 → 65,8 | 15,29 → 15,29 | 0 % → 0 % |
+| FreePascal | 48,06 | 58,5 → 58,5 | 16,66 → 16,66 | 0 % → 0 % |
+| Java | 47,17 | 42,7 → 42,7 | 16,95 → 16,95 | 0 % → 0 % |
+| Go | 45,37 | 44,9 → 44,9 | 17,15 → 17,15 | 0 % → 0 % |
 | Haskell | 41,27 | 38,9 → 38,9 | 18,68 → 18,68 | 0 % → 0 % |
 | OCaml | 23,92 | 23,2 → 23,2 | 20,02 → 20,02 | 0 % → 0 % |
 | JavaScript | 15,63 | 14,6 → 14,6 | 21,08 → 21,08 | 0 % → 0 % |

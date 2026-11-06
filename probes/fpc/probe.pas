@@ -253,8 +253,9 @@ begin
   WriteLn('CAP;C1;0.5;-Sv : opérations sur array[0..3] of Single (SSE 128 bits) : ', v3[0]:0:0, ' ', v3[1]:0:0, ' ',
     v3[2]:0:0, ' ', v3[3]:0:0, ' ; expérimental : 8 Single = erreur interne, alignement de 16 o exigé, ni masque ni ',
     'FMA ni conversion (run.sh)');
-  WriteLn('CAP;C2;0;aucune intrinsèque SSE/AVX : seulement des intrinsèques portables (FMASingle/FMADouble, Prefetch, ',
-    'PopCnt, BsfQWord…) ; l''assembleur en ligne est E2');
+  WriteLn('CAP;C2;0.5;assembleur en ligne jusqu''à AVX2 et FMA (E2), sans intrinsèques SSE/AVX, comme Zig : seulement ',
+    'des intrinsèques portables (FMASingle/FMADouble, Prefetch, PopCnt, BsfQWord…) ; erratum du 6/11, remarque sur ',
+    'FreePascal : 0 avant');
   WriteLn('CAP;C5;0;aucune boucle parallèle ni réserve de tâches dans la RTL et les paquets livrés (mtprocs est un ',
     'paquet de Lazarus)');
   { D1 }
@@ -298,7 +299,8 @@ begin
   WriteLn('CAP;E2;1;blocs asm (syntaxe Intel ou AT&T, procédures assembler) : ', AsmAnswer,
     ' ; AVX2 accepté, AVX-512 inconnu de l''assembleur de FPC 3.2.2 (octets bruts seulement, run.sh)');
   WriteLn('CAP;E3;0;pas d''indication de branchement (Likely/Unlikely inconnus, run.sh)');
-  WriteLn('CAP;E4;1;Prefetch(x) du System (intrinsèque : prefetchnta, run.sh)');
+  WriteLn('CAP;E4;0.5;Prefetch(x) du System (intrinsèque : prefetchnta seulement, sans localité ni écriture, run.sh) ; ',
+    'erratum du 6/11, remarque sur FreePascal : 1 avant');
   WriteLn('CAP;E5;0;ni restrict ni garantie de non-aliasing');
   WriteLn('CAP;E6;1;{$R+} / {$R-} locaux : indice 5 hors bornes détecté sous {$R+} : ', Checked(5),
     ' ; sans vérification ailleurs (défaut) : ', Unchecked(9));
@@ -322,8 +324,9 @@ begin
   { F4 }
   fd := FpOpen('/opt/msdata/k7_keys.u32', O_RDONLY);
   map := Fpmmap(nil, 1 shl 26, PROT_READ, MAP_PRIVATE, fd, 0);
-  WriteLn('CAP;F4;1;Fpmmap (unité BaseUnix livrée) + pointeur typé : premier mot ', map[0], ', dernier ',
-    map[(1 shl 24) - 1]);
+  WriteLn('CAP;F4;0.5;Fpmmap (unité BaseUnix livrée, appel système propre à Unix, comme syscall.Mmap de Go ; 1 en ',
+    'règle v2) + pointeur typé : premier mot ', map[0], ', dernier ', map[(1 shl 24) - 1], ' ; erratum du 6/11, ',
+    'remarque sur FreePascal : 1 avant');
   Fpmunmap(map, 1 shl 26);
   FpClose(fd);
 end.

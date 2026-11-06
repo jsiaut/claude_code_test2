@@ -2,7 +2,7 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/fpc_check.json, « F-E ».
+Témoin : écart maximal 0.0e+00 avec results/fpc_remark.json, « R-E ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
@@ -23,7 +23,7 @@ Témoin : écart maximal 0.0e+00 avec results/fpc_check.json, « F-E ».
 | Julia | 13 (62,4) | 13 (63,1) | 3 (64,8) | 3 (64,8) | 12 (67,3) | 13 (63,0) | 11 (62,4) |
 | Mojo | 14 (62,3) | 14 (63,2) | 14 (45,0) | 14 (44,9) | 14 (55,0) | 14 (57,7) | 13 (62,3) |
 | C# | 15 (54,9) | 15 (56,2) | 16 (43,0) | 16 (43,0) | 15 (53,1) | 15 (50,3) | 15 (54,9) |
-| FreePascal | 16 (47,4) | 16 (47,8) | 15 (42,7) | 15 (42,7) | 16 (50,1) | 16 (48,1) | 16 (47,4) |
+| FreePascal | 16 (48,1) | 16 (48,4) | 15 (43,3) | 15 (43,3) | 16 (50,7) | 16 (48,8) | 16 (48,1) |
 | Java | 17 (47,2) | 17 (48,3) | 17 (37,1) | 17 (37,1) | 17 (50,3) | 17 (45,2) | 17 (47,2) |
 | Go | 18 (45,4) | 18 (45,6) | 18 (37,5) | 18 (37,5) | 18 (46,5) | 18 (40,1) | 18 (45,4) |
 | Haskell | 19 (41,3) | 19 (41,8) | 19 (31,1) | 19 (31,1) | 19 (38,9) | 19 (37,7) | 19 (41,3) |

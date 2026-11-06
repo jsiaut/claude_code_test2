@@ -1,0 +1,203 @@
+fpc_main   k9   mt                              p0 n=10 med=0.009808s ok={True} rc=0 
+fpc_main   k4   branchless_unsorted             p0 n=10 med=0.015503s ok={True} rc=0 
+fpc_main   k6   tuned                q1         p0 n=10 med=0.046615s ok={True} rc=0 
+fpc_main   k8   natural                         p0 n=3 med=0.911556s ok={True} rc=0 
+fpc_main   k6   mt                   q1         p0 n=10 med=0.021587s ok={True} rc=0 
+fpc_main   k2   tuned                8388608    p0 n=10 med=0.162201s ok={True} rc=0 
+fpc_main   k6   natural              q6         p0 n=10 med=0.076394s ok={True} rc=0 
+fpc_main   k1   natural_shuffled     energy     p0 n=10 med=0.037644s ok={True} rc=0 
+fpc_main   k5   tuned                           p0 n=10 med=0.027483s ok={True} rc=0 
+fpc_main   k9   natural                         p0 n=10 med=0.041932s ok={True} rc=0 
+fpc_main   k1   soa                  energy     p0 n=10 med=0.004958s ok={True} rc=0 
+fpc_main   k6   mt                   q6         p0 n=10 med=0.012429s ok={True} rc=0 
+fpc_main   k7   natural                         p0 n=3 med=1.735835s ok={True} rc=0 
+fpc_main   k3   rmw_padded                      p0 n=9 med=0.314070s ok={True} rc=0 
+fpc_main   k1   aos                  energy     p0 n=10 med=0.030157s ok={True} rc=0 
+fpc_main   k6   tuned                q6         p0 n=10 med=0.028281s ok={True} rc=0 
+fpc_main   k3   rmw_packed                      p0 n=3 med=3.056383s ok={True} rc=0 
+fpc_main   k4   natural_unsorted                p0 n=10 med=0.081192s ok={True} rc=0 
+fpc_main   k3   sw_packed                       p0 n=10 med=0.014857s ok={True} rc=0 
+fpc_main   k7   tuned                           p0 n=10 med=0.164689s ok={True} rc=0 
+fpc_main   k1   natural              energy     p0 n=10 med=0.036375s ok={True} rc=0 
+fpc_main   k2   tuned                262144     p0 n=10 med=0.024402s ok={True} rc=0 
+fpc_main   k4   natural_sorted                  p0 n=10 med=0.011025s ok={True} rc=0 
+fpc_main   k2   tuned                16384      p0 n=10 med=0.007462s ok={True} rc=0 
+fpc_main   k5   natural                         p0 n=7 med=0.097104s ok={True} rc=0 
+fpc_main   k9   tuned                           p0 n=10 med=0.029797s ok={True} rc=0 
+fpc_main   k3   sw_padded                       p0 n=10 med=0.014107s ok={True} rc=0 
+fpc_main   k6   natural              q1         p0 n=10 med=0.070540s ok={True} rc=0 
+fpc_main   k8   tuned                           p0 n=8 med=0.343018s ok={True} rc=0 
+fpc_main   k3   rmw_padded                      p0 n=9 med=0.328719s ok={True} rc=0 
+fpc_main   k2   tuned                262144     p0 n=10 med=0.024032s ok={True} rc=0 
+fpc_main   k3   rmw_packed                      p0 n=3 med=2.904876s ok={True} rc=0 
+fpc_main   k1   natural_shuffled     energy     p0 n=10 med=0.039891s ok={True} rc=0 
+fpc_main   k3   sw_packed                       p0 n=10 med=0.014674s ok={True} rc=0 
+fpc_main   k3   sw_padded                       p0 n=10 med=0.013378s ok={True} rc=0 
+fpc_main   k4   natural_unsorted                p0 n=10 med=0.083859s ok={True} rc=0 
+fpc_main   k4   natural_sorted                  p0 n=10 med=0.010253s ok={True} rc=0 
+fpc_main   k6   tuned                q6         p0 n=10 med=0.029821s ok={True} rc=0 
+fpc_main   k6   mt                   q6         p0 n=10 med=0.007538s ok={True} rc=0 
+fpc_main   k1   soa                  energy     p0 n=10 med=0.005915s ok={True} rc=0 
+fpc_main   k5   natural                         p0 n=7 med=0.097411s ok={True} rc=0 
+fpc_main   k5   tuned                           p0 n=10 med=0.027260s ok={True} rc=0 
+fpc_main   k9   mt                              p0 n=10 med=0.009413s ok={True} rc=0 
+fpc_main   k6   natural              q6         p0 n=10 med=0.075469s ok={True} rc=0 
+fpc_main   k1   aos                  energy     p0 n=10 med=0.030178s ok={True} rc=0 
+fpc_main   k9   natural                         p0 n=10 med=0.056404s ok={True} rc=0 
+fpc_main   k1   natural              energy     p0 n=10 med=0.038452s ok={True} rc=0 
+fpc_main   k6   mt                   q1         p0 n=10 med=0.012576s ok={True} rc=0 
+fpc_main   k7   natural                         p0 n=3 med=1.747805s ok={True} rc=0 
+fpc_main   k2   tuned                16384      p0 n=10 med=0.007599s ok={True} rc=0 
+fpc_main   k4   branchless_unsorted             p0 n=10 med=0.018111s ok={True} rc=0 
+fpc_main   k6   tuned                q1         p0 n=10 med=0.046864s ok={True} rc=0 
+fpc_main   k6   natural              q1         p0 n=10 med=0.070549s ok={True} rc=0 
+fpc_main   k9   tuned                           p0 n=10 med=0.026254s ok={True} rc=0 
+fpc_main   k8   tuned                           p0 n=8 med=0.334391s ok={True} rc=0 
+fpc_main   k8   natural                         p0 n=3 med=0.891919s ok={True} rc=0 
+fpc_main   k7   tuned                           p0 n=10 med=0.154898s ok={True} rc=0 
+fpc_main   k2   tuned                8388608    p0 n=10 med=0.150737s ok={True} rc=0 
+fpc_main   k1   natural_shuffled     energy     p0 n=10 med=0.035204s ok={True} rc=0 
+fpc_main   k1   natural              energy     p0 n=10 med=0.036559s ok={True} rc=0 
+fpc_main   k2   tuned                16384      p0 n=10 med=0.007427s ok={True} rc=0 
+fpc_main   k5   tuned                           p0 n=10 med=0.027708s ok={True} rc=0 
+fpc_main   k9   natural                         p0 n=10 med=0.040875s ok={True} rc=0 
+fpc_main   k5   natural                         p0 n=7 med=0.095967s ok={True} rc=0 
+fpc_main   k1   soa                  energy     p0 n=10 med=0.005054s ok={True} rc=0 
+fpc_main   k6   tuned                q6         p0 n=10 med=0.028631s ok={True} rc=0 
+fpc_main   k2   tuned                8388608    p0 n=10 med=0.156978s ok={True} rc=0 
+fpc_main   k3   rmw_packed                      p0 n=3 med=2.950138s ok={True} rc=0 
+fpc_main   k4   branchless_unsorted             p0 n=10 med=0.015042s ok={True} rc=0 
+fpc_main   k6   natural              q1         p0 n=10 med=0.071851s ok={True} rc=0 
+fpc_main   k8   tuned                           p0 n=8 med=0.326975s ok={True} rc=0 
+fpc_main   k1   aos                  energy     p0 n=10 med=0.030223s ok={True} rc=0 
+fpc_main   k4   natural_sorted                  p0 n=10 med=0.009593s ok={True} rc=0 
+fpc_main   k3   rmw_padded                      p0 n=9 med=0.309656s ok={True} rc=0 
+fpc_main   k8   natural                         p0 n=3 med=0.876390s ok={True} rc=0 
+fpc_main   k2   tuned                262144     p0 n=10 med=0.023819s ok={True} rc=0 
+fpc_main   k7   natural                         p0 n=3 med=1.629641s ok={True} rc=0 
+fpc_main   k3   sw_padded                       p0 n=10 med=0.014776s ok={True} rc=0 
+fpc_main   k6   mt                   q6         p0 n=10 med=0.014370s ok={True} rc=0 
+fpc_main   k6   natural              q6         p0 n=10 med=0.078276s ok={True} rc=0 
+fpc_main   k9   mt                              p0 n=10 med=0.009945s ok={True} rc=0 
+fpc_main   k7   tuned                           p0 n=10 med=0.186242s ok={True} rc=0 
+fpc_main   k6   tuned                q1         p0 n=10 med=0.049064s ok={True} rc=0 
+fpc_main   k4   natural_unsorted                p0 n=10 med=0.084993s ok={True} rc=0 
+fpc_main   k6   mt                   q1         p0 n=10 med=0.012570s ok={True} rc=0 
+fpc_main   k3   sw_packed                       p0 n=10 med=0.016491s ok={True} rc=0 
+fpc_main   k9   tuned                           p0 n=10 med=0.024706s ok={True} rc=0 
+fpc_main   k8   natural                         p0 n=3 med=0.856471s ok={True} rc=0 
+fpc_main   k1   natural_shuffled     energy     p0 n=10 med=0.037549s ok={True} rc=0 
+fpc_main   k3   sw_padded                       p0 n=10 med=0.013726s ok={True} rc=0 
+fpc_main   k7   tuned                           p0 n=10 med=0.156299s ok={True} rc=0 
+fpc_main   k6   tuned                q1         p0 n=10 med=0.047911s ok={True} rc=0 
+fpc_main   k9   tuned                           p0 n=10 med=0.025245s ok={True} rc=0 
+fpc_main   k6   mt                   q6         p0 n=10 med=0.008071s ok={True} rc=0 
+fpc_main   k9   natural                         p0 n=10 med=0.040226s ok={True} rc=0 
+fpc_main   k4   branchless_unsorted             p0 n=10 med=0.015270s ok={True} rc=0 
+fpc_main   k4   natural_unsorted                p0 n=10 med=0.081913s ok={True} rc=0 
+fpc_main   k6   tuned                q6         p0 n=10 med=0.028920s ok={True} rc=0 
+fpc_main   k5   natural                         p0 n=7 med=0.096783s ok={True} rc=0 
+fpc_main   k6   natural              q1         p0 n=10 med=0.070096s ok={True} rc=0 
+fpc_main   k9   mt                              p0 n=10 med=0.009298s ok={True} rc=0 
+fpc_main   k1   aos                  energy     p0 n=10 med=0.030600s ok={True} rc=0 
+fpc_main   k2   tuned                16384      p0 n=10 med=0.007418s ok={True} rc=0 
+fpc_main   k5   tuned                           p0 n=10 med=0.027719s ok={True} rc=0 
+fpc_main   k6   natural              q6         p0 n=10 med=0.075199s ok={True} rc=0 
+fpc_main   k2   tuned                8388608    p0 n=10 med=0.157036s ok={True} rc=0 
+fpc_main   k4   natural_sorted                  p0 n=10 med=0.010844s ok={True} rc=0 
+fpc_main   k2   tuned                262144     p0 n=10 med=0.023789s ok={True} rc=0 
+fpc_main   k1   natural              energy     p0 n=10 med=0.036924s ok={True} rc=0 
+fpc_main   k3   rmw_packed                      p0 n=3 med=2.965264s ok={True} rc=0 
+fpc_main   k7   natural                         p0 n=3 med=1.841970s ok={True} rc=0 
+fpc_main   k6   mt                   q1         p0 n=10 med=0.016445s ok={True} rc=0 
+fpc_main   k1   soa                  energy     p0 n=10 med=0.005006s ok={True} rc=0 
+fpc_main   k3   sw_packed                       p0 n=10 med=0.014149s ok={True} rc=0 
+fpc_main   k3   rmw_padded                      p0 n=9 med=0.310381s ok={True} rc=0 
+fpc_main   k8   tuned                           p0 n=8 med=0.333809s ok={True} rc=0 
+fpc_main   k6   mt                   q6         p0 n=10 med=0.007533s ok={True} rc=0 
+fpc_main   k6   mt                   q1         p0 n=10 med=0.012269s ok={True} rc=0 
+fpc_main   k9   natural                         p0 n=10 med=0.042140s ok={True} rc=0 
+fpc_main   k1   natural_shuffled     energy     p0 n=10 med=0.037241s ok={True} rc=0 
+fpc_main   k8   tuned                           p0 n=8 med=0.342388s ok={True} rc=0 
+fpc_main   k6   natural              q6         p0 n=10 med=0.076553s ok={True} rc=0 
+fpc_main   k3   sw_packed                       p0 n=10 med=0.016609s ok={True} rc=0 
+fpc_main   k4   natural_unsorted                p0 n=10 med=0.081884s ok={True} rc=0 
+fpc_main   k6   tuned                q6         p0 n=10 med=0.028787s ok={True} rc=0 
+fpc_main   k3   rmw_packed                      p0 n=3 med=3.045930s ok={True} rc=0 
+fpc_main   k2   tuned                262144     p0 n=10 med=0.024404s ok={True} rc=0 
+fpc_main   k8   natural                         p0 n=3 med=0.881650s ok={True} rc=0 
+fpc_main   k4   branchless_unsorted             p0 n=10 med=0.016795s ok={True} rc=0 
+fpc_main   k4   natural_sorted                  p0 n=10 med=0.010928s ok={True} rc=0 
+fpc_main   k1   aos                  energy     p0 n=10 med=0.031078s ok={True} rc=0 
+fpc_main   k6   tuned                q1         p0 n=10 med=0.049632s ok={True} rc=0 
+fpc_main   k9   tuned                           p0 n=10 med=0.024747s ok={True} rc=0 
+fpc_main   k3   rmw_padded                      p0 n=9 med=0.316669s ok={True} rc=0 
+fpc_main   k9   mt                              p0 n=10 med=0.011333s ok={True} rc=0 
+fpc_main   k2   tuned                16384      p0 n=10 med=0.007437s ok={True} rc=0 
+fpc_main   k5   tuned                           p0 n=10 med=0.027627s ok={True} rc=0 
+fpc_main   k7   natural                         p0 n=3 med=1.512591s ok={True} rc=0 
+fpc_main   k6   natural              q1         p0 n=10 med=0.071675s ok={True} rc=0 
+fpc_main   k1   natural              energy     p0 n=10 med=0.037010s ok={True} rc=0 
+fpc_main   k5   natural                         p0 n=7 med=0.095145s ok={True} rc=0 
+fpc_main   k7   tuned                           p0 n=10 med=0.157185s ok={True} rc=0 
+fpc_main   k1   soa                  energy     p0 n=10 med=0.004861s ok={True} rc=0 
+fpc_main   k2   tuned                8388608    p0 n=10 med=0.156914s ok={True} rc=0 
+fpc_main   k3   sw_padded                       p0 n=10 med=0.014446s ok={True} rc=0 
+fpc_main   k4   natural_unsorted                p0 n=10 med=0.082646s ok={True} rc=0 
+fpc_main   k6   tuned                q1         p0 n=10 med=0.047835s ok={True} rc=0 
+fpc_main   k6   mt                   q1         p0 n=10 med=0.015832s ok={True} rc=0 
+fpc_main   k3   rmw_padded                      p0 n=9 med=0.307109s ok={True} rc=0 
+fpc_main   k1   natural_shuffled     energy     p0 n=10 med=0.036366s ok={True} rc=0 
+fpc_main   k3   sw_packed                       p0 n=10 med=0.020159s ok={True} rc=0 
+fpc_main   k7   natural                         p0 n=3 med=1.641899s ok={True} rc=0 
+fpc_main   k3   sw_padded                       p0 n=10 med=0.023594s ok={True} rc=0 
+fpc_main   k1   aos                  energy     p0 n=10 med=0.030850s ok={True} rc=0 
+fpc_main   k2   tuned                8388608    p0 n=10 med=0.167635s ok={True} rc=0 
+fpc_main   k1   soa                  energy     p0 n=10 med=0.004888s ok={True} rc=0 
+fpc_main   k6   mt                   q6         p0 n=10 med=0.010119s ok={True} rc=0 
+fpc_main   k1   natural              energy     p0 n=10 med=0.035818s ok={True} rc=0 
+fpc_main   k4   branchless_unsorted             p0 n=10 med=0.015068s ok={True} rc=0 
+fpc_main   k6   tuned                q6         p0 n=10 med=0.028154s ok={True} rc=0 
+fpc_main   k9   tuned                           p0 n=10 med=0.024629s ok={True} rc=0 
+fpc_main   k5   natural                         p0 n=7 med=0.094662s ok={True} rc=0 
+fpc_main   k9   natural                         p0 n=10 med=0.041667s ok={True} rc=0 
+fpc_main   k9   mt                              p0 n=10 med=0.010666s ok={True} rc=0 
+fpc_main   k2   tuned                16384      p0 n=10 med=0.007530s ok={True} rc=0 
+fpc_main   k6   natural              q1         p0 n=10 med=0.070168s ok={True} rc=0 
+fpc_main   k8   tuned                           p0 n=8 med=0.332802s ok={True} rc=0 
+fpc_main   k8   natural                         p0 n=3 med=0.880241s ok={True} rc=0 
+fpc_main   k4   natural_sorted                  p0 n=10 med=0.010356s ok={True} rc=0 
+fpc_main   k6   natural              q6         p0 n=10 med=0.077388s ok={True} rc=0 
+fpc_main   k2   tuned                262144     p0 n=10 med=0.024943s ok={True} rc=0 
+fpc_main   k7   tuned                           p0 n=10 med=0.157919s ok={True} rc=0 
+fpc_main   k5   tuned                           p0 n=10 med=0.027817s ok={True} rc=0 
+fpc_main   k3   rmw_packed                      p0 n=3 med=3.057342s ok={True} rc=0 
+fpc_main   k8   tuned                           p0 n=8 med=0.345686s ok={True} rc=0 
+fpc_main   k3   sw_packed                       p0 n=10 med=0.014257s ok={True} rc=0 
+fpc_main   k1   natural              energy     p0 n=10 med=0.038652s ok={True} rc=0 
+fpc_main   k4   branchless_unsorted             p0 n=10 med=0.015133s ok={True} rc=0 
+fpc_main   k1   soa                  energy     p0 n=10 med=0.004921s ok={True} rc=0 
+fpc_main   k6   tuned                q1         p0 n=10 med=0.047988s ok={True} rc=0 
+fpc_main   k6   tuned                q6         p0 n=10 med=0.028112s ok={True} rc=0 
+fpc_main   k3   rmw_padded                      p0 n=9 med=0.308290s ok={True} rc=0 
+fpc_main   k5   natural                         p0 n=7 med=0.095169s ok={True} rc=0 
+fpc_main   k6   mt                   q1         p0 n=10 med=0.017608s ok={True} rc=0 
+fpc_main   k6   natural              q1         p0 n=10 med=0.069186s ok={True} rc=0 
+fpc_main   k3   rmw_packed                      p0 n=3 med=3.107851s ok={True} rc=0 
+fpc_main   k2   tuned                8388608    p0 n=10 med=0.157117s ok={True} rc=0 
+fpc_main   k5   tuned                           p0 n=10 med=0.027591s ok={True} rc=0 
+fpc_main   k9   natural                         p0 n=10 med=0.043294s ok={True} rc=0 
+fpc_main   k6   natural              q6         p0 n=10 med=0.076623s ok={True} rc=0 
+fpc_main   k4   natural_sorted                  p0 n=10 med=0.012684s ok={True} rc=0 
+fpc_main   k8   natural                         p0 n=3 med=0.904164s ok={True} rc=0 
+fpc_main   k3   sw_padded                       p0 n=10 med=0.013274s ok={True} rc=0 
+fpc_main   k7   tuned                           p0 n=10 med=0.159352s ok={True} rc=0 
+fpc_main   k1   natural_shuffled     energy     p0 n=10 med=0.036066s ok={True} rc=0 
+fpc_main   k6   mt                   q6         p0 n=10 med=0.010700s ok={True} rc=0 
+fpc_main   k7   natural                         p0 n=3 med=1.700584s ok={True} rc=0 
+fpc_main   k2   tuned                16384      p0 n=10 med=0.007573s ok={True} rc=0 
+fpc_main   k4   natural_unsorted                p0 n=10 med=0.081525s ok={True} rc=0 
+fpc_main   k2   tuned                262144     p0 n=10 med=0.023958s ok={True} rc=0 
+fpc_main   k9   tuned                           p0 n=10 med=0.025359s ok={True} rc=0 
+fpc_main   k9   mt                              p0 n=10 med=0.011041s ok={True} rc=0 
+fpc_main   k1   aos                  energy     p0 n=10 med=0.031713s ok={True} rc=0 

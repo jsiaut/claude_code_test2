@@ -172,13 +172,14 @@ def main():
     pub = out["scenarios"].get("Publié")
     if pub:
         # témoin : le publié du 1er novembre au matin (results/nim_check.json, « Avant ») ; avec un suffixe (état actuel),
-        # le publié après l'ajout de FreePascal (results/fpc_check.json, « F-E » ; avant lui, swift_remark.json, « R-E »,
+        # le publié après la remarque sur FreePascal (results/fpc_remark.json, « R-E » ; avant elle, fpc_check.json,
+        # « F-E », swift_remark.json, « R-E »,
         # swift_check.json,
         # « S-E », lua_check.json, « L-E »,
         # python_check.json, « P-E »,
         # js_check.json, « J-E », ocaml_check.json, « O-E », haskell_check.json, « H-E », go_check.json, « G-E », java_check.json, « J-E »,
         # k9_check.json, c_check.json, cpp_check.json et odin_check.json, « Publié », et c3_check.json, « Errata »)
-        src = ("fpc_check.json", "F-E") if suffix else ("nim_check.json", "Avant")
+        src = ("fpc_remark.json", "R-E") if suffix else ("nim_check.json", "Avant")
         ref = json.load(open(os.path.join(ROOT, "results", src[0])))["scenarios"][src[1]]
         gap = max(max(abs(pub["ms0"][l] - ref["ms0"][l]), abs(pub["exp21"][l] - ref["exp21"][l])) for l in RANKED)
         out["check_published"] = {"max_gap": gap, "ok": gap < 1e-9, "ref": f"results/{src[0]}, « {src[1]} »"}

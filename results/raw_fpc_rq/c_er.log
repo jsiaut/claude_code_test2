@@ -1,0 +1,14 @@
+c_er       k5   natural                         p0 n=10 med=0.187968s ok={True} rc=0 
+c_er       k5   tuned                           p0 n=10 med=0.003468s ok={True} rc=0 
+c_er       k5   natural                         p0 n=10 med=0.188560s ok={True} rc=0 
+c_er       k5   tuned                           p0 n=10 med=0.005376s ok={True} rc=0 
+c_er       k5   natural                         p0 n=10 med=0.185313s ok={True} rc=0 
+c_er       k5   tuned                           p0 n=10 med=0.003518s ok={True} rc=0 
+c_er       k5   tuned                           p0 n=10 med=0.003721s ok={True} rc=0 
+c_er       k5   natural                         p0 n=10 med=0.184512s ok={True} rc=0 
+c_er       k5   tuned                           p0 n=10 med=0.003482s ok={True} rc=0 
+c_er       k5   natural                         p0 n=10 med=0.187045s ok={True} rc=0 
+c_er       k5   natural                         p0 n=10 med=0.184448s ok={True} rc=0 
+c_er       k5   tuned                           p0 n=10 med=0.003692s ok={True} rc=0 
+c_er       k5   natural                         p0 n=10 med=0.183877s ok={True} rc=0 
+c_er       k5   tuned                           p0 n=10 med=0.003488s ok={True} rc=0 

@@ -277,7 +277,7 @@ de 1 : K5 0,85 et 1,02, K9 1,02 à 1,10 ; latences de K8 naturel, colonne par co
 plausible 15 à 19, 2e étage (avec C#, Go, Haskell et Java). Contrôle 60,5 (16e), plafond 36,3 [35,4–37,3] (19e : seuls
 OCaml, JavaScript, Lua et Python sont plus bas), code par défaut 46,9 (12e). Le code par défaut tient à ce que donne la
 mémoire gérée à la main (empreinte D2 1,0 ; queues de latence D3 0,66, au niveau de Rust et de Fortran ; hiérarchie
-mémoire D4 0,98, la meilleure de l'étude, devant C, 0,97), pas à la vitesse du code naturel (D1 0,050, au niveau de
+mémoire D4 0,98, comme C, 0,97, sur le même code machine : l'écart est du bruit, 5.3), pas à la vitesse du code naturel (D1 0,050, au niveau de
 Haskell). Plafond par noyau : K1 0,64, K3 0,79,
 K4 0,09, K5 0,13, K6 0,39, K7 0,86, K8 0,35, K9 0,43. C# (15e, 54,9 points) le devance dans 82 % des variantes ;
 FreePascal devance Java (17e, 47,2) dans 53 %, Go dans 62 %, Haskell dans 86 %.
@@ -524,3 +524,89 @@ et branche main, D4, K5 naturel), `docs/FINDINGS.md`, journal de `docs/METHODOLO
   de développement ; ce sont des sensibilités, comme Zig 0.18-dev.
 * Classer du code en assembleur (règle du banc) : K5 en assembleur reste une information.
 * Mesurer le générateur LLVM (absent de l'instantané).
+
+### 5.8 Mesures (machine 26)
+
+`tools/measure_fpc_rq.py`, 11:45:05 à 12:09:57 : 868 processus (124 cellules × 7 passes), aucune somme de contrôle
+fausse ; 14 processus refaits pour vol de temps, aucun gardé au-dessus de 2 % (1,93 % au plus), vol médian 0,08 %.
+Contrôle : le scénario Avant (grille d'avant la remarque) reproduit F-E de `results/fpc_check.json` à l'identique
+(écart 0). Sorties : `results/fpc_remark.json`, `results/report_fpc_remark.md`. La sonde de FreePascal, relancée avec
+les errata, note C2 ½, E4 ½ et F4 ½ ; le contrôle des sondes (`analysis/check_probes.py`) ne garde que les cinq
+divergences connues de C et de C++ (règle v1), et son résumé contient désormais FreePascal, oublié à l'ajout.
+
+### 5.9 Ce que mesure la machine 26
+
+**FreePascal / C** (C de la construction des données publiées ; machine 26, machine 25, remarque) : K4 naturel 61,7,
+54,4 et 44 ; K5 naturel 2,07, 2,07 et 2,05 ; K5 optimisé 7,7, 7,5 et 8,2 ; K7 naturel 14,8, 15,4 et 13 ; K8 1,45 et
+1,17, 1,46 et 1,17, 1,35 et 1,13 ; K9 2,47 et 1,87, 2,41 et 1,72, 2,6 et 2,2. Les deux machines concordent, sauf K4
+naturel, dont les sauts mal prédits varient d'un hôte à l'autre ; les rapports plus bas de la remarque sur K4 et K7
+viennent sans doute de son témoin (clang 18), comme elle le dit.
+
+**Rapports au binaire publié** (même hôte ; intervalles dans `results/report_fpc_remark.md`) :
+
+| Copie | Ce qui change |
+|---|---|
+| Formes de la remarque (3.2.2) | K4 par masque 0,754 [0,685–0,884] (0,66 annoncé), par pointeur 0,711 ; K5 par pointeurs 0,677 (0,65) ; K8 en arène itérative 0,383 (0,44). Avec ces formes, K8 optimisé passe à 0,45 fois le C et K5 optimisé à 5,2 fois. |
+| `Length(a) - 1` (3.2.2) | K5 naturel 0,247 (4,05 fois plus rapide) : il passe à 0,51 fois le C, parce que clang fusionne `s += a[i] * b[i]` en une chaîne de `vfmadd` (4 cycles de latence par élément, 3,9 mesurés) quand FreePascal garde une addition séparée (2 cycles sur ce cœur, 2,0 mesurés) ; les autres boucles : 0,84 (K4 trié) à 1,02. |
+| 3.2.4-rc2 | 0,95 à 1,08 partout, sauf **K7 naturel 0,402** [0,383–0,424] (`TDictionary`), K4 naturel trié 0,89 et K3 `sw_padded` 0,82 (cellule bruitée) ; latences de K8 naturel : 0,97 à 1,06 jusqu'au p99, mais p99,9 × 1,64 et max × 1,58, très dispersés (intervalles jusqu'à × 2,2 et × 4,7). |
+| main, même code | Naturel : K5 0,251 (`High` développé en ligne), Q6 0,550, K7 0,390, K4 trié 0,550 et non trié 0,858, K8 0,879, Q1 0,963 ; optimisé : 0,83 (Q1) à 1,03 ; reculs : **K1 `soa` 1,353** [1,30–1,42] (2,3 annoncé), **K9 naturel 1,332** [1,25–1,47] (1,2 annoncé), `mt` de Q6 et de K9 1,09. Latences de K8 : p50 0,87, p99 0,94, mais max × 1,85. |
+| main, meilleures formes | K5 optimisé par pointeurs 0,425 (3,3 fois le C), K4 par pointeur 0,480, K8 itératif 0,400 ; sans `-Sv`, K1 `soa` 1,456 et K5 1,152 : le `-Sv` reste utile sous main. |
+| Assembleur (information) | K5 en AVX2 avec la 3.2.2 : 1,39 [1,20–1,58] fois le C natif ; en AVX-512 sous main : 1,03 [0,90–1,13] ; en `-Sv` : 7,67. |
+
+### 5.10 Le classement publié (R-E) et les scénarios
+
+| Scénario | Score | Contrôle | Plafond | Code par défaut | Rang espéré | Place | Rang à 90 % |
+|---|---|---|---|---|---|---|---|
+| Avant (= F-E) | 47,44 | 60,5 | 36,33 | 46,9 | 16,71 | 16e | 15–19 |
+| R-C2 | 48,31 | 63,0 | 36,33 | 46,9 | 16,58 | 16e | 15–19 |
+| **R-E (publié)** | **48,06** | 62,3 | 36,33 | 46,9 | 16,66 | 16e | 15–19 |
+| R-len-K5 | 48,20 | 62,3 | 36,33 | 47,5 | 16,58 | 16e | 15–19 |
+| R-len | 48,21 | 62,3 | 36,33 | 47,5 | 16,57 | 16e | 15–19 |
+| R-mieux | 51,35 | 62,3 | 44,55 | 46,9 | 15,91 | 16e | 14–18 |
+| R-mieux-ptr | 51,48 | 62,3 | 44,87 | 46,9 | 15,89 | 16e | 14–18 |
+| R-mieux-len | 51,50 | 62,3 | 44,55 | 47,5 | 15,82 | 16e | 14–18 |
+| R-rem-3 | 50,73 | 60,5 | 44,55 | 46,9 | 15,96 | 16e | 14–18 |
+| R-rem-C2-3 | 51,60 | 63,0 | 44,55 | 46,9 | 15,83 | 16e | 14–18 |
+| R-rc2 | 47,37 | 62,3 | 36,70 | 43,6 | 16,90 | 16e | 15–19 |
+| R-main | 47,62 | 62,3 | 36,39 | 45,1 | 16,78 | 16e | 15–19 |
+| R-main-grille | 49,89 | 68,8 | 36,39 | 45,1 | 16,42 | 16e | 14–19 |
+| R-main-mieux | 52,64 | 62,3 | 48,92 | 45,1 | 15,68 | 16e | 14–17 |
+| R-main-mieux-grille | 54,92 | 68,8 | 48,92 | 45,1 | 15,30 | **15e** | 13–17 |
+| *R-rc2-t (hors plan)* | 48,31 | 62,3 | 36,70 | 47,3 | 16,57 | 16e | 15–19 |
+| *R-main-t (hors plan)* | 48,37 | 62,3 | 36,39 | 48,1 | 16,48 | 16e | 14–19 |
+| *R-main-mieux-grille-t (hors plan)* | 55,66 | 68,8 | 48,92 | 48,1 | 14,95 | 15e | 12–17 |
+
+* **Publié (R-E)** : FreePascal **16e, 48,06 points** [47,1–48,8] (+ 0,62), rang espéré 16,66, rang plausible 15 à 19,
+  2e étage. C# le devance dans 82 % des variantes ; il devance Java dans 54 %, Go dans 64 %, Haskell dans 87 %. Les
+  scores des 22 autres ne changent pas ; leurs rangs espérés bougent de 0,02 au plus ; étages [14, 5, 1, 3] ; 16e
+  sur la machine 3 (réplication par le pont), comme avant.
+* **Les chiffres de la remarque se retrouvent** sur sa grille : C2 seul 48,31 (48,3), trois noyaux 50,73 (50,8), les
+  deux 51,60 (51,7), main et grille de main 49,89 (50,0), main, meilleures formes et grille de main 54,92 (55,2, 15e) ;
+  seul « main, même code » diffère (47,62 et 16e, contre 46,9 et 17e).
+* **Formes de la remarque** : + 3,3 points, toutes par le plafond (44,6 au lieu de 36,3) ; FreePascal reste 16e, C#
+  devant dans 63 % des variantes. `Length(a) - 1` ne vaut que + 0,15 : K5 naturel n'est qu'une des mesures du code
+  naturel (D1), et D1 compte peu dans le code par défaut de FreePascal, qui tient à sa mémoire (4.2).
+* **La 3.2.4-rc2 et main** gagnent sur le code naturel (D1) mais perdent sur les queues de latence de K8 (p99,9 et max,
+  D3) : 47,37 et 47,62 points. Sans transférer ces queues, très dispersées (hors plan, ajouté après les avoir vues),
+  48,31 et 48,37. Avec la grille de main et ses meilleures formes, FreePascal passe 15e (54,92 ; 55,66 sans les queues),
+  devant C# dans 62 % des variantes, au même score (C# 54,86).
+
+### 5.11 Écarts au plan
+
+* Hors plan, ajoutés après avoir vu les latences : R-rc2-t, R-main-t, R-main-mieux-grille-t (temps seuls, latences de
+  K8 naturel publiées gardées). `analysis/fpc_remark.py` a donc tourné deux fois, avec les mêmes graines : les
+  scénarios du plan sont identiques d'une exécution à l'autre.
+* Une erreur de programmation (fusion de dictionnaires à clés en tuples) a arrêté la toute première exécution avant le
+  premier scénario ; corrigée, sans effet sur les calculs.
+* La forme « K4 par un pointeur » valait 0,48 dans le programme d'essai de 5.2 et 0,71 dans le banc, pour le même code
+  machine (placement du code) ; le plan retenait le banc.
+
+### 5.12 Bilan
+
+La remarque tient. La grille avait trois cases trop généreuses ou incohérentes (C2, E4, F4) : corrigées, elles valent
++ 0,6 point, sans changer la place (16e, entre C# et Java). Ses trois noyaux optimisés mieux écrits valent + 3,3
+points, `Length(a) - 1` + 0,15 : des sensibilités, comme pour les autres langages. Deux réserves de fond : la
+3.2.4-rc2 n'a pas « les mêmes temps » (`TDictionary` y est 2,5 fois plus rapide), et le gain de main sur le code
+naturel est en partie repris par ses queues de latence. Le classement mesure Free Pascal 3.2.2, de la branche
+stable 3.2 (3.2.0 en 2020, 3.2.2 en 2021) : avec la branche main, sa grille et les meilleures formes mesurées,
+FreePascal passerait 15e, au niveau de C#, sans quitter son étage.

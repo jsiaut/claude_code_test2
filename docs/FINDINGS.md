@@ -948,7 +948,7 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   `{$R+}`/`{$R-}` locaux, génériques spécialisés ; ni intrinsèques, ni ordres mémoire, ni aide de ligne de cache, ni
   indication de branchement, ni non-aliasing ; affinité par un appel système brut (½ en v1, 1 en v2).
 * **Classement** : 16e sur 23 (47,44 points ; rang espéré 16,71 ; 2e étage). Contrôle 16e, plafond 19e (36,3), code
-  par défaut 12e (46,9 : empreinte 1,0, queues de latence 0,66, hiérarchie mémoire 0,98, la meilleure de l'étude, mais
+  par défaut 12e (46,9 : empreinte 1,0, queues de latence 0,66, hiérarchie mémoire 0,98, comme C sur le même code, mais
   code naturel 0,050). C# le devance dans 82 % des variantes ; il devance Java dans 53 %.
 * **Pont entre modèles** : toutes ses clés viennent de la machine 25 ; les facteurs du C vont de 0,76 à 4,6 sur les clés
   de la machine 1, 11,4 sur K3 `sw_packed` et 17,6 sur K7 naturel, et restent proches de 1 sur les clés venues du même
@@ -956,3 +956,32 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   facteur de la table plate du C (47,62) le laissent 16e ; la réplication aussi (machine 3, par le même pont).
 * **Sensibilités** : 16e dans neuf scénarios sur treize, 15e sans pont pour les clés de la machine 1 (information,
   biaisé), 17e avec des cases plus basses, 18e sans `-Sv` (45,89) et avec toutes les lectures défavorables (43,28).
+
+## Remarque sur FreePascal (6 novembre, machine 26, Emerald Rapids) — `docs/FPC.md`, section 5
+
+* **Errata de la grille** : C2 ½ (assembleur en ligne jusqu'à AVX2, sans intrinsèques : comme Zig ; FreePascal était le
+  seul langage noté avec un assembleur en ligne et C2 à 0), E4 ½ (`Prefetch` n'émet que `prefetchnta`, sans localité
+  ni écriture), F4 ½ en v1 et 1 en v2 (`Fpmmap`, appel système d'Unix, comme `syscall.Mmap` de Go). Contrôle 62,3 en
+  v2 (15e, devant Chapel), 58,5 en v1. FreePascal reste **16e, 48,06 points** [47,1–48,8] (+ 0,62) ; les scores des
+  22 autres ne changent pas.
+* **Faits de la remarque** (`results/fpc_remark/facts.txt`) : exacts pour l'essentiel. Branche main (instantané
+  3.3.1-21612 du 4 novembre) : AVX-512 dans l'assembleur et les cibles, `TParallel.For` (dont le premier appel passe
+  parfois sur le seul fil appelant), `pause` dans `TThread.SpinWait` et une procédure `fpc_x86_pause`, 502 intrinsèques
+  SSE déclarées sans procédure ; `-Sv` refusé sur les tableaux simples, `__m128` faux en `-CfSSE64`, vecteurs de 256
+  bits refusés à l'assemblage, x87 en `-CfX86-64-V4`. Trois réserves : `end align 64` n'est respecté ni sur la pile
+  ni par `New` ; `AtomicIncrement` reste un appel à la RTL sans ordre mémoire ; la 3.2.4-rc2 (qui se nomme 3.2.4-rc1)
+  n'a pas « les mêmes temps » : `TDictionary` y est 2,5 fois plus rapide sur K7 naturel.
+* **Code naturel et FMA** : `High(a)` est un appel en 3.2.2, ce qui garde l'accumulateur de K5 naturel sur la pile ;
+  avec `Length(a) - 1` (ou `High` développé en ligne par main), la boucle va 4 fois plus vite et passe à 0,51 fois le
+  C : clang fusionne `s += a[i] * b[i]` en une chaîne de `vfmadd` (4 cycles par élément) quand FreePascal garde une
+  addition séparée (2 cycles sur Emerald Rapids). Effet sur le score : + 0,15.
+* **Noyaux optimisés mieux écrits** : K4 par masque × 0,75 (le gain exige de lire la valeur dans une variable locale ;
+  écrit sur `v[i]`, × 1,03), par pointeur × 0,71 ; K5 en `-Sv` par pointeurs × 0,68 ; K8 en arène itérative × 0,38.
+  Ensemble + 3,3 points par le plafond (36,3 → 44,6) ; 16e, C# devant dans 63 % des variantes.
+* **Versions** : 3.2.4-rc2 47,37 points (16e) ; main, même code 47,62 (16e), avec sa grille (C5 et D5 à 1 ; contrôle
+  68,8) 49,89, avec ses meilleures formes 52,64 et les deux 54,92 (**15e**, au score de C#, devant lui dans 62 % des
+  variantes). Les queues de latence de K8 naturel (p99,9, max) sortent plus hautes avec la rc2 et main (× 1,6 à 1,9,
+  très dispersées) ; sans elles (hors plan), 48,31, 48,37 et 55,66 points.
+* **Assembleur** (hors des règles du banc) : K5 optimisé en AVX2 avec la 3.2.2, 1,39 fois le C natif ; en AVX-512 sous
+  main, 1,03 fois ; en `-Sv`, 7,7 fois : la règle « pas d'assembleur » coûte plus à FreePascal qu'aux langages dotés
+  d'intrinsèques.

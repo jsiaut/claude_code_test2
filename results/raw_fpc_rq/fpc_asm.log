@@ -1,0 +1,7 @@
+fpc_asm    k5   tuned                           p0 n=10 med=0.004969s ok={True} rc=0 
+fpc_asm    k5   tuned                           p0 n=10 med=0.005310s ok={True} rc=0 
+fpc_asm    k5   tuned                           p0 n=10 med=0.005064s ok={True} rc=0 
+fpc_asm    k5   tuned                           p0 n=10 med=0.007054s ok={True} rc=0 
+fpc_asm    k5   tuned                           p0 n=10 med=0.004959s ok={True} rc=0 
+fpc_asm    k5   tuned                           p0 n=10 med=0.004922s ok={True} rc=0 
+fpc_asm    k5   tuned                           p0 n=10 med=0.004983s ok={True} rc=0 

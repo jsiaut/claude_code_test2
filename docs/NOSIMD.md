@@ -396,3 +396,11 @@ en S-noyaux-scalaires (48,1) et en S-importées (47,4).
 Les scores des 22 autres bougent de 0,008 point au plus (FreePascal devient la référence de K2 à 256 Kio dans une
 partie des tirages) ; ceux que FreePascal devance reculent d'un rang ; en S-scalaire, Java (16,95) devance désormais
 Go (16,98), à 0,03 rang près : FreePascal s'intercale entre eux dans une part différente des variantes.
+
+### 4.21 Recalcul après la remarque sur FreePascal (6 novembre)
+
+Recalculé avec les errata C2, E4 et F4 de FreePascal (témoin égal à R-E de `results/fpc_remark.json`, écart 0,
+`docs/FPC.md`, 5). FreePascal : 16e publié (48,1 points), 16e sans `mt` (48,4), 15e en S-scalaire et en
+S-scalaire-Mojo (43,3), 16e en S-symétrique (50,7), en S-noyaux-scalaires (48,8) et en S-importées (48,1). Les 22
+autres ne changent ni de score ni de place ; leurs rangs espérés bougent de 0,02 au plus.
+

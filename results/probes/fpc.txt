@@ -12,7 +12,7 @@ CAP;B3;1;records et tableaux statiques locaux sur la pile (distance à une varia
 CAP;B4;0.5;allocations implicites : boucle sur un tableau 0, énumération d'un TDictionary 1 (objet énumérateur), concaténation de chaînes 1, exception 2
 CAP;B5;1;Pointer, pointeurs typés, arithmétique ({$pointermath}), GetMem/FreeMem (bench)
 CAP;C1;0.5;-Sv : opérations sur array[0..3] of Single (SSE 128 bits) : 2 6 12 20 ; expérimental : 8 Single = erreur interne, alignement de 16 o exigé, ni masque ni FMA ni conversion (run.sh)
-CAP;C2;0;aucune intrinsèque SSE/AVX : seulement des intrinsèques portables (FMASingle/FMADouble, Prefetch, PopCnt, BsfQWord…) ; l'assembleur en ligne est E2
+CAP;C2;0.5;assembleur en ligne jusqu'à AVX2 et FMA (E2), sans intrinsèques SSE/AVX, comme Zig : seulement des intrinsèques portables (FMASingle/FMADouble, Prefetch, PopCnt, BsfQWord…) ; erratum du 6/11, remarque sur FreePascal : 0 avant
 CAP;C5;0;aucune boucle parallèle ni réserve de tâches dans la RTL et les paquets livrés (mtprocs est un paquet de Lazarus)
 CAP;D1;1;BeginThread (unité cthreads) et TThread : 4 fils, 4000 incréments
 CAP;D2;0.5;InterLockedIncrement64 / CompareExchange64 / ExchangeAdd64 (RMW séquentiellement cohérents, appels de la RTL) : 10 ; ni ordre mémoire explicite ni lecture/écriture atomique
@@ -22,14 +22,14 @@ CAP;D5;0.5;ReadBarrier / WriteBarrier / ReadWriteBarrier (lfence, sfence, mfence
 CAP;E1;1;code natif, -al garde l'assembleur produit
 CAP;E2;1;blocs asm (syntaxe Intel ou AT&T, procédures assembler) : 42 ; AVX2 accepté, AVX-512 inconnu de l'assembleur de FPC 3.2.2 (octets bruts seulement, run.sh)
 CAP;E3;0;pas d'indication de branchement (Likely/Unlikely inconnus, run.sh)
-CAP;E4;1;Prefetch(x) du System (intrinsèque : prefetchnta, run.sh)
+CAP;E4;0.5;Prefetch(x) du System (intrinsèque : prefetchnta seulement, sans localité ni écriture, run.sh) ; erratum du 6/11, remarque sur FreePascal : 1 avant
 CAP;E5;0;ni restrict ni garantie de non-aliasing
 CAP;E6;1;{$R+} / {$R-} locaux : indice 5 hors bornes détecté sous {$R+} : TRUE ; sans vérification ailleurs (défaut) : TRUE
 CAP;E7;0.5;génériques spécialisés à la compilation (specialize) : 7 2.5 ; expressions constantes (1219), pas d'évaluation de fonctions à la compilation
 CAP;F1;0.5;array[0..3, 0..7] of Double : 256 o contigus (écart entre lignes 64 o), bornes fixées à la compilation ; array of array : lignes séparées (écart 96 o)
 CAP;F2;0;aucun
 CAP;F3;1;Byte...QWord et ShortInt...Int64, arithmétique modulaire sans {$Q+} (défaut) : 0 -2147483648
-CAP;F4;1;Fpmmap (unité BaseUnix livrée) + pointeur typé : premier mot 3904868352, dernier 623554610
+CAP;F4;0.5;Fpmmap (unité BaseUnix livrée, appel système propre à Unix, comme syscall.Mmap de Go ; 1 en règle v2) + pointeur typé : premier mot 3904868352, dernier 623554610 ; erratum du 6/11, remarque sur FreePascal : 1 avant
 NOTE;A4;« end align 64 » : Fatal: Syntax error, ";" expected but "identifier ALIGN" found ; {$CODEALIGN VARMIN=64} (variables globales, décalages mod 64) : 0 0 ; {$PACKRECORDS 64} : Error: Illegal record alignment specifier "64"
 NOTE;C1;-Sv sur array[0..7] of Single : Fatal: Internal error 200610072
 NOTE;C1;-Sv, opérandes à 4 o d'une frontière de 16 : Runtime error 216 at $000000000040112A (1 ; addps à opérande mémoire, encodage SSE classique)

@@ -467,6 +467,10 @@ des 18 langages communs, les corrélations des quatre scénarios et le test 4 ne
 (classement à 18) bougent de 0,0015 au plus, comme la part des variantes où C est premier dans le test 3 (0,483 à
 0,484 pour un poids de 0,15).
 
+Rejouée après la remarque sur FreePascal (6 novembre, `docs/FPC.md`, 5 : errata C2, E4 et F4 de FreePascal) : le
+rapport à 18 langages (`results/report_confrontation_current.md`) ne change pas ; seuls les rangs espérés du
+classement à 23 bougent, de 0,05 pour FreePascal et de 0,02 au plus pour les autres.
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

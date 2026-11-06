@@ -26,7 +26,7 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | 13 | **Julia** | 62,4 | 8–14 | 60 % | Le 2e code naturel, derrière Odin ; le plafond le plus bas des 14 premiers |
 | 14 | **Mojo** | 62,3 | 10–14 | 96 % | Le SIMD au cœur du langage ; ni vectoriseur de boucles, ni threads publics dans `std` |
 | 15 | **C#** | 54,9 | 14–17 | 82 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
-| 16 | **FreePascal** | 47,4 | 15–19 | 53 % | Records en ligne, `packed` et `bitpacked`, pointeurs, assembleur en ligne, mémoire gérée à la main ; ni vectoriseur, ni intrinsèques, SIMD expérimental limité à 128 bits |
+| 16 | **FreePascal** | 48,1 | 15–19 | 54 % | Records en ligne, `packed` et `bitpacked`, pointeurs, assembleur en ligne, mémoire gérée à la main ; ni vectoriseur, ni intrinsèques, SIMD expérimental limité à 128 bits (compilateur de la branche stable 3.2, de 2021) |
 | 17 | **Java** | 47,2 | 15–19 | 56 % | Meilleur allocateur de petits objets ; pas de types valeur |
 | 18 | **Go** | 45,4 | 15–18 | 93 % | Structures par valeur ; ni vectoriseur, ni SIMD stable, atomiques séquentiellement cohérentes |
 | 19 | **Haskell** | 41,3 | 17–19 | 100 % | Peut descendre bas (FMA vectorielle, mémoire brute) ; code par défaut boxé, ramasse-miettes imposé |
@@ -162,7 +162,7 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   JavaScript ne devance plus Python que dans 91 % (95 % avant la correction du banc de Python), et les étages de la v3
   réunissent JavaScript, Python et Lua ; Go devance Haskell dans 93 % (100 % avant la correction du banc de Haskell).
   FreePascal, ajouté le 6 novembre, entre dans l'étage de C#, Java, Go et Haskell : C# le devance dans 82 % des
-  variantes, et il devance Java dans 53 %, Go dans 62 % et Haskell dans 86 %.
+  variantes, et il devance Java dans 54 %, Go dans 64 % et Haskell dans 87 %.
   Ces variantes ne font varier ni l'effort d'implémentation ni le choix du code naturel : avec ses meilleures formes
   mesurées, une particule en `struct` et un JIT stabilisé, C# dépasse Mojo au score (62,0 à 63,3 points contre 61,9)
   et fait jeu égal avec lui au rang, 14e ou 15e ([`docs/CSHARP.md`](docs/CSHARP.md)).
@@ -370,21 +370,29 @@ OSR : l'effet moyen est faible (moins d'un point), mais une méthode chargée de
 Toutes ces sensibilités cumulées le mettent devant Mojo au score (62 à 63 points) et à égalité avec lui au rang, 14e
 ou 15e ([`docs/CSHARP.md`](docs/CSHARP.md)).
 
-**16. FreePascal.** Ajouté le 6 novembre (Free Pascal 3.2.2, [`docs/FPC.md`](docs/FPC.md)). Un langage système compilé
-en natif, sans ramasse-miettes : records rangés en ligne dans les tableaux (64 octets par particule, comme C),
-`packed` et `bitpacked` pour la disposition au bit près, unions par records à variantes, pointeurs et arithmétique de
-pointeurs, assembleur en ligne. Son code par défaut en profite (47, 12e) : empreinte de C, queues de latence de K8 au
-niveau de Rust et de Fortran, et la meilleure note de hiérarchie mémoire de l'étude. Mais son plafond est le 19e
-(36) : FPC n'a pas de vectoriseur, sa cible s'arrête à AVX2 (ni AVX-512, ni même dans l'assembleur), et son seul SIMD
-sans assembleur est un traitement vectoriel expérimental de 128 bits (`-Sv`, erreur interne au-delà de 4 flottants),
-qui ramène K5 optimisé de 12,8 à 7,5 fois le temps du C ; les noyaux optimisés scalaires prennent 1,2 à 2,8 fois le
-temps du C, K4 11 fois. Son code naturel est lent : la somme conditionnelle de K4 garde un branchement par octet (54
-fois le C), `TDictionary` coûte 15 fois la table du C (30 ns par recherche même en cache), et l'optimiseur garde des
-variables en mémoire (l'accumulateur de K5 naturel, sur la pile : 2,1 fois le C). Son contrôle (60, 16e) a la
-disposition des langages système mais ni intrinsèques, ni atomiques à ordre explicite, ni aide de ligne de cache, ni
-indication de branchement. Il devance Java dans 53 % des variantes ; C# le devance dans 82 %. Toutes ses clés sont
-mesurées sur un Emerald Rapids et reliées aux données publiées par le C ; un second témoin, compilé par gcc, et un
-facteur d'hôte unique ne changent pas sa place, ni aucune des sensibilités du plan à plus de deux places près.
+**16. FreePascal.** Ajouté le 6 novembre (Free Pascal 3.2.2, [`docs/FPC.md`](docs/FPC.md)), relu le jour même. Un
+langage système compilé en natif, sans ramasse-miettes : records rangés en ligne dans les tableaux (64 octets par
+particule, comme C), `packed` et `bitpacked` pour la disposition au bit près, unions par records à variantes, pointeurs
+et arithmétique de pointeurs, assembleur en ligne. Son code par défaut en profite (47, 12e) : empreinte de C, queues de
+latence de K8 au niveau de Rust et de Fortran, hiérarchie mémoire de C (0,98 contre 0,97 : le même code machine, l'écart
+est du bruit). Mais son plafond est le 19e (36) : FPC n'a pas de vectoriseur, sa cible s'arrête à AVX2 (ni AVX-512, ni
+même dans l'assembleur), et son seul SIMD sans assembleur est un traitement vectoriel expérimental de 128 bits (`-Sv`,
+erreur interne au-delà de 4 flottants), qui ramène K5 optimisé de 12,8 à 7,5 fois le temps du C ; les noyaux optimisés
+scalaires prennent 1,2 à 2,8 fois le temps du C, K4 11 fois. Son code naturel est lent : la somme conditionnelle de K4
+garde un branchement par octet (54 fois le C), `TDictionary` coûte 15 fois la table du C (30 ns par recherche même en
+cache), et l'accumulateur de K5 naturel reste sur la pile (2,1 fois le C), parce qu'en 3.2.2 `High(a)` est un appel ;
+écrite avec `Length(a) - 1`, tout aussi idiomatique, la boucle va 4 fois plus vite (0,5 fois le C, qui la fusionne en
+FMA), pour 0,15 point seulement. Son contrôle (62, 15e) a la disposition des langages système et un assembleur en ligne
+jusqu'à AVX2, mais ni intrinsèques, ni atomiques à ordre explicite, ni aide de ligne de cache, ni indication de
+branchement, et son `Prefetch` n'émet que `prefetchnta`. Il devance Java dans 54 % des variantes ; C# le devance dans
+82 %. Relu après coup : trois cases de sa grille corrigées (C2 à ½ comme Zig, E4 et F4 à ½ en v1 : + 0,6 point) ; trois
+noyaux optimisés mieux écrits (K4 par masque, K5 par pointeurs, K8 itératif) vaudraient 3,3 points, sans changer sa
+place. Le classement mesure la branche stable 3.2 (3.2.0 en 2020, 3.2.2 en 2021) : la 3.2.4-rc2 rend `TDictionary` 2,5
+fois plus rapide ; la branche main (AVX-512 dans l'assembleur, `TParallel.For`, `pause`, `High` en ligne) accélère le
+code naturel, ralentit K1 `soa` et K9 naturel et casse `-Sv` sur les tableaux simples ; avec sa grille et ses meilleures
+formes, FreePascal y passerait 15e, au score de C# (54,9 points). Toutes ses clés sont mesurées sur un Emerald Rapids
+et reliées aux données publiées par le C ; un second témoin, compilé par gcc, et un facteur d'hôte unique ne changent
+pas sa place, ni aucune des sensibilités du plan à plus de deux places près.
 
 **17. Java.** Excellent modèle mémoire (`VarHandle`), JIT C2 efficace, et le meilleur allocateur de petits objets
 de l'étude (K8 naturel, 301 ms). Pas de types valeur dans le JDK 27 : 78 octets par particule, parcours permuté 4,9
@@ -554,7 +562,8 @@ du langage.
   un Cascade Lake du même modèle (machine 23) pour les noyaux de la machine 1, sur un Emerald Rapids (machine 24) pour
   K5, K9 et les latences de K8 ([`docs/SWIFT.md`](docs/SWIFT.md)). FreePascal, ajouté ensuite, est mesuré de même,
   toutes ses clés sur un Emerald Rapids (machine 25), avec le C de la construction de chaque donnée publiée
-  ([`docs/FPC.md`](docs/FPC.md)). Pas de compteurs matériels ;
+  ([`docs/FPC.md`](docs/FPC.md)) ; les sensibilités de sa remarque (3.2.4-rc2, branche main, formes mieux écrites)
+  le sont sur un autre hôte du même modèle (machine 26), par rapports au binaire publié. Pas de compteurs matériels ;
   les compteurs du noyau (appels système, défauts de page, uprobes) servent aux faits de mécanisme
   ([`docs/INSTRUMENTS_V3.md`](docs/INSTRUMENTS_V3.md)).
 * **Score** :
@@ -586,13 +595,14 @@ du langage.
   doute trop pénalisé (78 s, contre 13,6 s avec le facteur de la table plate du C ; même place). Sa réplication passe
   par le même pont ([`docs/FPC.md`](docs/FPC.md), 4).
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Les 22 premiers langages ont été relus après coup par des connaisseurs, Swift en dernier (FreePascal, ajouté
-  le 6 novembre, pas encore) ; C l'a été alors que sa
+  l'autre. Les 23 langages ont été relus après coup par des connaisseurs, Swift puis FreePascal en dernier ; C l'a été
+  alors que sa
   référence est la seule implémentation mise au point, mesures à l'appui, avant le plan. Ada et Fortran y ont gagné
   deux places chacun, par la correction de mon banc (un piège de GNAT ; des noyaux que gfortran inlinait dans la
   boucle de mesure) ; D une place, par la correction de son Q1 optimisé et deux errata de la règle v1 ; Rust deux
   places (trois avant les errata de C3), surtout par la remesure des queues de latence de K8, qui a aussi déplacé Zig,
   C3, Nim et Ada ; Chapel une place par trois errata de la matrice ; Swift une place par deux errata de la matrice ;
+  FreePascal 0,6 point, sans changer de place, par trois errata de la matrice ;
   Mojo 2,7 points, Julia 1,8 point, C3 et Odin 0,9 point, mais aucune place, par des errata de la matrice (ceux de C3
   font passer Nim devant Rust, à égalité ; celui d'Odin le met à égalité avec C++) ; Zig trois places, mais par une
   version de compilateur que la règle exclut ; C++ a perdu la 2e place au profit d'Odin par un erratum de la règle v1,
@@ -618,7 +628,8 @@ du langage.
   les cases discutables : 20,6 points, OCaml devant lui dans 84 % des variantes) ; aucune à Python (Q6 en colonnes,
   `gc.freeze()` pour K8 naturel, le build sans GIL et les cases discutables : 13,3 points, JavaScript devant lui dans
   81 % des variantes) ; aucune à Lua (Q6 par tests imbriqués, K7 dans une seule table, K9, K1 et K2 retouchés et la
-  case discutable : 6,3 points, Python devant lui dans 51 % des variantes) ; à C++, le K4 de clang++ donnerait la 1re
+  case discutable : 6,3 points, Python devant lui dans 51 % des variantes) ; aucune à FreePascal (K4 par masque, K5
+  par pointeurs, K8 itératif : 51,4 points, C# devant lui dans 63 % des variantes) ; à C++, le K4 de clang++ donnerait la 1re
   place (80,3 points contre 80,0), et à C une arène de K8 écrite par itération 4,1 points (84,0) : la règle les garde
   hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine (Cascade Lake pour Ada et Fortran, Emerald Rapids
@@ -647,12 +658,13 @@ du langage.
   ([`docs/RUST.md`](docs/RUST.md)).
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
 * Une seule version de compilateur par langage, la dernière stable au 28 octobre (pour Swift, au 5 novembre ; pour
-  FreePascal, au 6 novembre : la 3.2.2, de mai 2021), à
+  FreePascal, au 6 novembre : la 3.2.2, de mai 2021, branche stable 3.2 ; la 3.2.4 n'est qu'en bêta), à
   l'installation : Nim 2.4.0 est sorti le même jour, après les premières mesures, et son code machine est identique
   pour 20 des 21 fonctions des noyaux. Un réglage temporaire d'une chaîne peut coûter des rangs : Zig 0.17, dont le
   vectoriseur de boucles est désactivé, perd trois places en rang espéré par rapport à sa version de développement. Je
-  n'ai mesuré deux versions que pour Zig et pour C# (.NET 11, en préversion : 0,99 fois les temps de .NET 10 en
-  moyenne, aucune place gagnée). D est compilé par LDC 1.43.0 construit depuis ses sources contre LLVM 21.1.8 ; le
+  n'ai mesuré plusieurs versions que pour Zig, pour C# (.NET 11, en préversion : 0,99 fois les temps de .NET 10 en
+  moyenne, aucune place gagnée) et pour FreePascal (3.2.4-rc2 : 16e ; branche main, sa grille et ses meilleures
+  formes : 15e, au score de C# ; [`docs/FPC.md`](docs/FPC.md), 5). D est compilé par LDC 1.43.0 construit depuis ses sources contre LLVM 21.1.8 ; le
   paquet officiel embarque LLVM 22.1.8, sans gain mesuré (D y perdrait une place). Et un seul compilateur par langage
   : Fortran est classé avec gfortran ; flang n'est mesuré qu'en annexe, ifx pas du tout. C++ est classé avec g++ 16,
   le seul à livrer `std::simd` : il y perd K4, que clang++ vectorise comme C (avec le K4 de clang++, C++ aurait 80,3
@@ -1090,6 +1102,18 @@ python3 tools/measure_fpc.py               # FreePascal, trois témoins C, copie
 
 ```bash
 python3 analysis/fpc_check.py              # pont par le C, classement avec FreePascal, sensibilités -> report_fpc.md
+```
+
+```bash
+tools/fpc_remark/facts.sh                  # remarque sur FreePascal : faits (3.2.2, 3.2.4-rc2, main) -> results/fpc_remark
+```
+
+```bash
+python3 tools/measure_fpc_rq.py            # remarque sur FreePascal : copies et témoins C, machine 26 -> results/raw_fpc_rq
+```
+
+```bash
+python3 analysis/fpc_remark.py             # errata, formes de la remarque, rc2, branche main -> report_fpc_remark.md
 ```
 
 ```bash

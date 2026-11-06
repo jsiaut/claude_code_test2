@@ -1,0 +1,14 @@
+fpc_main_scal k5   tuned                           p0 n=10 med=0.033633s ok={True} rc=0 
+fpc_main_scal k1   soa                  energy     p0 n=10 med=0.006191s ok={True} rc=0 
+fpc_main_scal k1   soa                  energy     p0 n=10 med=0.005279s ok={True} rc=0 
+fpc_main_scal k5   tuned                           p0 n=10 med=0.033757s ok={True} rc=0 
+fpc_main_scal k5   tuned                           p0 n=10 med=0.033099s ok={True} rc=0 
+fpc_main_scal k1   soa                  energy     p0 n=10 med=0.005200s ok={True} rc=0 
+fpc_main_scal k5   tuned                           p0 n=10 med=0.033417s ok={True} rc=0 
+fpc_main_scal k1   soa                  energy     p0 n=10 med=0.005872s ok={True} rc=0 
+fpc_main_scal k5   tuned                           p0 n=10 med=0.033118s ok={True} rc=0 
+fpc_main_scal k1   soa                  energy     p0 n=10 med=0.005075s ok={True} rc=0 
+fpc_main_scal k5   tuned                           p0 n=10 med=0.033426s ok={True} rc=0 
+fpc_main_scal k1   soa                  energy     p0 n=10 med=0.005555s ok={True} rc=0 
+fpc_main_scal k5   tuned                           p0 n=10 med=0.033138s ok={True} rc=0 
+fpc_main_scal k1   soa                  energy     p0 n=10 med=0.005150s ok={True} rc=0 
