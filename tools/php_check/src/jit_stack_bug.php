@@ -1,5 +1,6 @@
 <?php
-// PHP 8.5.12, JIT tracing (docs/PHP.md, 2.4) : deux écritures « $st[$sp++] = … » de suite dans une boucle interne,
+// PHP 8.5.12, JIT tracing (docs/PHP.md, 2.4 ; de même 8.4.27, 8.5.13RC1 et 8.6.0RC5, pas 8.3.36 : 5.2) :
+// deux écritures « $st[$sp++] = … » de suite dans une boucle interne,
 // relues par « $st[--$sp] », donnent un résultat faux : la construction en ordre préfixe d'un arbre complet de
 // profondeur 10 (2047 nœuds) ne s'arrête plus (garde à 5000 tours). Sans JIT, avec le JIT « function » ou avec une
 // pile à indices explicites, le résultat est juste.

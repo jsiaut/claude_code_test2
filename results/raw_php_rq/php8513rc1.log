@@ -1,0 +1,14 @@
+php8513rc1 k9   tuned                           p0 n=10 med=0.130838s ok={True} rc=0 
+php8513rc1 k9   natural                         p0 n=3 med=0.844740s ok={True} rc=0 
+php8513rc1 k9   natural                         p0 n=3 med=0.885834s ok={True} rc=0 
+php8513rc1 k9   tuned                           p0 n=10 med=0.143506s ok={True} rc=0 
+php8513rc1 k9   tuned                           p0 n=10 med=0.134665s ok={True} rc=0 
+php8513rc1 k9   natural                         p0 n=3 med=0.858965s ok={True} rc=0 
+php8513rc1 k9   tuned                           p0 n=10 med=0.131858s ok={True} rc=0 
+php8513rc1 k9   natural                         p0 n=3 med=0.906973s ok={True} rc=0 
+php8513rc1 k9   natural                         p0 n=3 med=0.882961s ok={True} rc=0 
+php8513rc1 k9   tuned                           p0 n=10 med=0.135768s ok={True} rc=0 
+php8513rc1 k9   tuned                           p0 n=10 med=0.130475s ok={True} rc=0 
+php8513rc1 k9   natural                         p0 n=3 med=0.875789s ok={True} rc=0 
+php8513rc1 k9   natural                         p0 n=3 med=0.924958s ok={True} rc=0 
+php8513rc1 k9   tuned                           p0 n=10 med=0.137636s ok={True} rc=0 

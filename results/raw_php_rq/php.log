@@ -1,0 +1,28 @@
+php        k1   natural_shuffled     energy     p0 n=3 med=1.271547s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.128742s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.512923s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.869202s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.196635s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.134215s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.530295s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.889567s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.894617s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.285757s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.130356s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.494581s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.139573s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.898201s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.123623s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.507454s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.221776s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.956510s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.141461s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.496360s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.145461s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.919269s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.086839s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.492592s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.964046s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.201281s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.522035s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.139029s ok={True} rc=0 

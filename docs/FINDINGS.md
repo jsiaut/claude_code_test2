@@ -1076,9 +1076,9 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   de K1 naturel, par le collecteur de cycles qui la parcourt (le harnais appelle les noyaux par leur nom) ; un `int` qui
   dépasse 2^63 devient un `float`, si bien qu'un hachage multiplicatif sur 32 bits passe en flottant.
 * **Ce que le JIT fait bien et mal** : K5 naturel au niveau du C (1,18 : deux chaînes bornées par la latence de
-  l'addition), K2 à 8 Mio aussi (la latence du cache domine) ; mais K4 naturel 103 fois le C, K9 naturel 70 fois (le JIT
-  rend les lectures d'un tableau de tableaux au gestionnaire `FETCH_DIM_R` de la machine virtuelle), K5 optimisé 50 fois
-  (ni SIMD ni réassociation). Sans JIT (la CLI par défaut), K5 naturel est 8,9 fois plus lent, Q6 et Q1 3,2 et 4,2 fois,
+  l'addition), K2 à 8 Mio aussi (la latence du cache domine) ; mais K4 naturel 103 fois le C, K9 naturel 70 fois (la
+  compilation de sa boucle échoue, et elle reste à l'interprète : corrigé par la remarque, voir plus bas), K5 optimisé
+  50 fois (ni SIMD ni réassociation). Sans JIT (la CLI par défaut), K5 naturel est 8,9 fois plus lent, Q6 et Q1 3,2 et 4,2 fois,
   K1, K7, K8 et K9 seulement 1,2 à 1,6 fois.
 * **Types et mémoire** : chaque valeur est un zval de 16 octets ; une particule de K1 coûte 352 octets en objet (712 en
   tableau associatif) ; le tableau de PHP est une table de hachage ordonnée, compacte (16 o par élément) quand ses clés
@@ -1112,3 +1112,32 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   relativement à la médiane ; PHP, lent mais régulier (max/p50 de 11,4, contre 20,0 pour Zig, le suivant), y devient la
   référence, ce qui baisse le D3 de tous. Avec sa latence maximale doublée, les quatre retrouvent exactement leurs
   rangs espérés d'avant PHP.
+
+## Remarque sur PHP (7 novembre, machine 29, Emerald Rapids) — `docs/PHP.md` (5), `results/php_remark/`
+
+* **Versions** : 8.3.36 et 8.4.27 (stables du 21 octobre), 8.5.13RC1 et 8.6.0RC5 (candidates du 5 novembre) construites
+  avec les options du banc, archives des listes officielles de php.net (SHA-256). En 8.3, `opcache.jit` vaut
+  « tracing » mais le tampon du JIT est nul : le JIT y est inactif par défaut lui aussi ; « disable » depuis 8.4.
+* **K9 naturel, une régression du JIT de 8.4** : la trace de la boucle intérieure du stencil échoue 16 fois sur « JIT
+  compilation error » (la génération de code échoue), puis passe en liste noire (`opcache.jit_blacklist_root_trace` =
+  16), et la boucle reste à l'interprète. Il faut lire deux autres lignes (`$a[$i-1][$j]` et `$a[$i+1][$j]`) puis
+  écrire `$b[$i][$j]` ; avec une seule autre ligne, ou en lectures seules, la boucle est compilée. Touchés : 8.4.27,
+  8.5.12, 8.5.13RC1, 8.6.0RC5 ; 8.3.36 compile toutes les formes, et fait le stencil naturel 3,4 fois plus vite
+  (0,292 [0,281–0,306]), mais la grille plate 12 % plus lentement. Mon explication d'origine (« le JIT rend les
+  lectures à l'interprète ») était fausse.
+* **K1 naturel, le collecteur de cycles** : `foreach` détruit l'ancienne valeur de sa variable par `i_zval_ptr_dtor`,
+  qui fait de chaque objet quitté, dont le compteur reste positif, une racine possible ; 8 à 9 passes par parcours (le
+  seuil part de 10 000 racines et monte de 10 000 après chaque passe qui libère moins de 100 valeurs) prennent 72 à
+  75 % du temps sans rien libérer. Écrite par indice (`$ps[$i]->vx`), la boucle passe par des valeurs temporaires,
+  libérées sans racine (`zval_ptr_dtor_nogc`) : 3,4 fois plus vite (3,1 fois dans le désordre) ; avec `gc_disable()`,
+  4,0 fois (4,3 fois). La même boucle en `for` avec `$p = $ps[$i]` est deux fois plus lente que `foreach`. Le
+  collecteur ne pèse sur aucun autre noyau naturel (K6 Q1, K7, K8 inchangés avec `zend.enable_gc=0`). Mon explication
+  d'origine (« limitée par la mémoire ») était incomplète.
+* **Bogue de pile du JIT tracing** : de 8.4.27 à 8.6.0RC5, pas en 8.3.36 ; juste dans toutes les versions avec le JIT
+  « function » ou sans JIT.
+* **Ce qui tient** : aucun code de la FFI dans le JIT jusqu'à 8.6.0RC5 (la PR 14491 de php-src n'est pas fusionnée) ;
+  ni fils, ni SIMD, ni `struct` dans les nouveautés de 8.6.0RC5 ; `node:ffi` (Node 26.12.1) n'a que des types
+  primitifs, sans `struct`. Non vérifiés : la date de 8.6.0, le gain de 20 fois de la PR 14491, GH-22115.
+* **Effet** : K1 naturel sans collecteur et K9 naturel compilé par 8.3 vaudraient 0,13 point (16,69, BQN toujours
+  1,03 point devant) ; la boucle par indice seule, − 0,02 (la pénalité de désordre grandit plus que le code naturel ne
+  gagne). PHP reste 22e dans tous les scénarios, à égalité de fait avec JavaScript ; aucun erratum.

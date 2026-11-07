@@ -14,14 +14,14 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | 1 | **C** | 80,0 | 1–6 | 69 % | Plafond le plus haut et l'un des trois meilleurs codes par défaut ; son contrôle est celui de GNU C (extensions de clang, intrinsèques d'Intel, OpenMP, glibc) |
 | 2 | **Odin** | 74,0 | 1–6 | 55 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, intrinsèques de LLVM, allocateurs explicites) ; allocateur généraliste lent |
 | 3 | **C++** | 77,1 | 1–8 | 65 % | Le plus de contrôle (`pmr`, atomiques, `std::simd` encore expérimental) ; derrière C surtout par K4, que g++ vectorise moins bien que clang |
-| 4 | **C3** | 71,6 | 2–9 | 46 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels, `asm` et `@noalias` incomplets |
+| 4 | **C3** | 71,6 | 2–9 | 46 % | À égalité de fait avec Zig. C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels, `asm` et `@noalias` incomplets |
 | 5 | **Zig** | 72,3 | 1–11 | 71 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (1er avec la version de développement) |
 | 6 | **Rust** | 70,0 | 3–10 | 53 % | 8e plafond et bon code naturel ; contrôle limité par sa bibliothèque standard (ni affinité, ni `mmap`, SIMD portable instable) |
-| 7 | **Nim** | 69,3 | 3–11 | 45 % | Les leviers de C par sa compilation vers C ; vérifications et aliasing non strict qui bloquent la vectorisation du stencil |
+| 7 | **Nim** | 69,3 | 3–11 | 45 % | À égalité de fait avec D. Les leviers de C par sa compilation vers C ; vérifications et aliasing non strict qui bloquent la vectorisation du stencil |
 | 8 | **D** | 72,7 | 3–12 | 64 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
 | 9 | **Ada** | 71,1 | 3–12 | 59 % | Disposition au bit près, 9e plafond ; vérifications coûteuses sur le code naturel |
 | 10 | **Chapel** | 65,7 | 4–13 | 69 % | 6e plafond grâce au parallélisme natif ; leviers bas niveau rares ou instables |
-| 11 | **Fortran** | 65,4 | 6–14 | 48 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
+| 11 | **Fortran** | 65,4 | 6–14 | 48 % | À égalité de fait avec Swift. Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
 | 12 | **Swift** | 66,5 | 6–14 | 64 % | 3e plafond, au coude à coude avec C++ et Odin (types SIMD et `InlineArray` dans la bibliothèque standard, comptage de références) ; vérifications de `-O` coûteuses sur le code naturel, ni assembleur ni alignement de type au-delà de 16 octets |
 | 13 | **Julia** | 62,4 | 8–14 | 63 % | Le 2e code naturel, derrière Odin ; le plafond le plus bas des 14 premiers |
 | 14 | **Mojo** | 62,3 | 10–14 | 96 % | Le SIMD au cœur du langage ; ni vectoriseur de boucles, ni threads publics dans `std` |
@@ -32,7 +32,7 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 | 19 | **Haskell** | 41,3 | 17–19 | 100 % | Peut descendre bas (FMA vectorielle, mémoire brute) ; code par défaut boxé, ramasse-miettes imposé |
 | 20 | **OCaml** | 23,9 | 20–22 | 81 % | Bonne allocation générationnelle ; pas de types valeur, ni flottant 32 bits de calcul, ni SIMD |
 | 21 | **BQN** | 17,7 | 20–23 | 84 % | Langage de tableaux : primitives vectorisées dans CBQN, mais un coût fixe par appel et aucune fusion ; ni threads, ni flottant 32 bits, ni disposition des enregistrements |
-| 22 | **PHP** | 16,6 | 20–23 | 43 % | Le contrôle d'un langage dynamique doté d'une FFI et de processus, au niveau de Python ; mais chaque valeur est un zval de 16 octets, chaque objet une référence, et le JIT tracing, livré, est inactif par défaut ; ni SIMD ni fils |
+| 22 | **PHP** | 16,6 | 20–23 | 43 % | À égalité de fait avec JavaScript. Le contrôle d'un langage dynamique doté d'une FFI et de processus, au niveau de Python ; mais chaque valeur est un zval de 16 octets, chaque objet une référence, et le JIT tracing, livré, est inactif par défaut ; ni SIMD ni fils |
 | 23 | **JavaScript** | 15,6 | 21–24 | 91 % | Tableaux typés compilés, mais vérifiés à chaque accès ; objets en références, aucun SIMD |
 | 24 | **Python** | 11,8 | 23–25 | 58 % | CPython seul : environ 200 fois plus lent que le meilleur ; la hiérarchie mémoire disparaît derrière l'interpréteur |
 | 25 | **Lua** | 5,4 | 24–25 | — | PUC-Lua sans son API C : mieux que CPython sur les mesures, presque aucun levier dans sa bibliothèque |
@@ -60,7 +60,8 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   dont les requêtes sont lentes mais régulières, y a la plus petite queue ; il devient la référence de ce critère, ce
   qui baisse la note de tous les autres et rebat les paires serrées ([`docs/PHP.md`](docs/PHP.md), 4.4).
 * **Rang plausible** : le rang dans 90 % des variantes. **Devance le suivant** : la part des variantes où le
-  langage passe devant celui de la ligne suivante.
+  langage passe devant celui de la ligne suivante. Sous 50 %, le rang moyen et le duel se contredisent : les deux
+  langages sont à égalité de fait (Nim et D, C3 et Zig, Fortran et Swift, PHP et JavaScript).
 * **Errata du 30 octobre au 5 novembre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de
   contrôle (aides de ligne de cache de C, de D et d'Odin, AVX-512 d'Odin, réductions parallèles de Nim), une remarque
   sur Zig une sixième (projection de fichiers), une remarque sur Ada trois autres (non-aliasing et types vectoriels
@@ -489,28 +490,38 @@ le C, comme FreePascal, avec CBQN construit pour la cible de chaque donnée publ
 
 ### La machine disparaît derrière le moteur
 
-**22. PHP.** Ajouté le 7 novembre (PHP 8.5.12, [`docs/PHP.md`](docs/PHP.md)). Le classement mesure la construction de
-production de php-src, avec les extensions livrées dont le banc a besoin (FFI, `pcntl`, `shmop`, `sysvsem`), OPcache et
-le JIT tracing activés, comme le recommande le manuel : la CLI n'active ni l'un ni l'autre par défaut, et sans eux PHP
-perdrait 0,3 point et passerait derrière JavaScript. Chaque valeur est un zval de 16 octets et chaque objet une
-référence : une particule de K1 occupe 352 octets au tas, et K1 naturel prend 17 fois le temps du C (38 fois dans le
-désordre). Le JIT compile bien les boucles simples sur des tableaux d'entiers ou de flottants (K5 naturel 1,18 fois le
-C, les deux bornés par la latence de l'addition flottante), mais l'écart s'ouvre dès que le C vectorise (K4 33 à 103
-fois, K5 optimisé 50 fois), et pour lire un tableau de tableaux (K9 naturel, 70 fois), il rend la main à l'interprète.
-Il n'a ni SIMD ni fils : les noyaux parallèles passent par des processus (`pcntl_fork`) et des segments de `shmop`,
-lus et écrits par copie, et K3 y mesure le coût des appels à `shmop` et à `sysvsem`, pas la cohérence des caches. Son
-contrôle (27,4, 21e) est presque celui de Python (29,7) : comme `ctypes`, la FFI donne les `struct`, les unions,
-l'alignement et les tableaux du C ; mais elle convertit en valeur PHP chaque donnée lue, et ses tableaux ne battent
-ceux de PHP que sur la chasse de pointeurs (K2). Les cases que seule la FFI lui donne, et celle des processus, mises à
-0, lui retireraient 4,6 points ; il resterait devant Python dans 83 % des variantes. Deux faits de la chaîne pèsent sur
-qui voudrait mesurer PHP : un script modifié depuis moins de 2 secondes échappe au JIT, et le JIT tracing de 8.5.12
-calcule faux une pile écrite par deux `$st[$sp++]` de suite (la construction d'un arbre ne s'arrête plus ; le K8
-optimisé écrit ses piles à indices explicites). Plafond (4,5) et code par défaut (20,7) le placent 23e, devant Lua et
-Python ; avec JavaScript, au profil inverse (presque deux fois moins de contrôle, 2,7 fois son plafond), il est à
-égalité de fait : un rang moyen à peine meilleur (22,32 contre 22,34), mais JavaScript le devance dans 57 % des
-variantes. Toutes ses clés sont mesurées sur un Emerald Rapids (machine 28) et reliées par le C ; pour K2 à 8 Mio, que
-cet hôte mesure dans deux régimes de cache selon le processus, le pont prend des médianes, une règle décidée après
-avoir vu les données (avec le calcul prévu, 16,6 points, 22e aussi).
+**22. PHP.** Ajouté le 7 novembre (PHP 8.5.12, [`docs/PHP.md`](docs/PHP.md)), relu le jour même. Le classement mesure
+la construction de production de php-src, avec les extensions livrées dont le banc a besoin (FFI, `pcntl`, `shmop`,
+`sysvsem`), OPcache et le JIT tracing activés, comme le recommande le manuel : la CLI n'active ni l'un ni l'autre par
+défaut, et sans eux PHP perdrait 0,3 point et passerait derrière JavaScript. Chaque valeur est un zval de 16 octets et
+chaque objet une référence : une particule de K1 occupe 352 octets au tas. K1 naturel prend 17 fois le temps du C (38
+fois dans le désordre), dont les trois quarts dans le collecteur de cycles : chaque objet que `foreach` quitte perd
+une référence sans tomber à zéro et devient une racine possible, que 8 à 9 passes par parcours examinent sans rien
+libérer ; écrite par indice (`$ps[$i]->vx`), la même boucle ne laisse aucune racine et va 3,4 fois plus vite. Le JIT
+compile bien les boucles simples sur des tableaux d'entiers ou de flottants (K5 naturel 1,18 fois le C, les deux
+bornés par la latence de l'addition flottante), mais l'écart s'ouvre dès que le C vectorise (K4 33 à 103 fois, K5
+optimisé 50 fois), et le stencil naturel (K9, 70 fois) reste à l'interprète : depuis 8.4, le JIT ne sait plus compiler
+une boucle qui écrit `$b[$i][$j]` après avoir lu deux autres lignes, et l'abandonne après 16 essais, quand celui de
+8.3 la compilait (3,4 fois plus vite). Il n'a ni SIMD ni fils : les noyaux parallèles passent par des processus
+(`pcntl_fork`) et des segments de `shmop`, lus et écrits par copie, et K3 y mesure le coût des appels à `shmop` et à
+`sysvsem`, pas la cohérence des caches. Son contrôle (27,4, 21e) est presque celui de Python (29,7) : comme `ctypes`,
+la FFI donne les `struct`, les unions, l'alignement et les tableaux du C ; mais elle convertit en valeur PHP chaque
+donnée lue, et ses tableaux ne battent ceux de PHP que sur la chasse de pointeurs (K2). Les cases que seule la FFI lui
+donne, et celle des processus, mises à 0, lui retireraient 4,6 points ; il resterait devant Python dans 83 % des
+variantes. Deux faits de la chaîne pèsent sur qui voudrait mesurer PHP : un script modifié depuis moins de 2 secondes
+échappe au JIT, et le JIT tracing, depuis 8.4, calcule faux une pile écrite par deux `$st[$sp++]` de suite (la
+construction d'un arbre ne s'arrête plus ; le K8 optimisé écrit ses piles à indices explicites) ; ce défaut et celui
+du stencil sont encore dans 8.6.0RC5. Plafond (4,5) et code par défaut (20,7) le placent 23e, devant Lua et Python ;
+avec JavaScript, au profil inverse (presque deux fois moins de contrôle, 2,7 fois son plafond), il est à égalité de
+fait : un rang moyen à peine meilleur (22,32 contre 22,34), mais JavaScript le devance dans 57 % des variantes. Toutes
+ses clés sont mesurées sur un Emerald Rapids (machine 28) et reliées par le C ; pour K2 à 8 Mio, que cet hôte mesure
+dans deux régimes de cache selon le processus, le pont prend des médianes, une règle décidée après avoir vu les
+données (avec le calcul prévu, 16,6 points, 22e aussi). Ce rang mesure ce qu'un programmeur PHP peut faire pour la
+machine, pas l'efficacité du moteur sur une application web ; sa latence d'allocation est d'ailleurs la plus régulière
+des 25, rapportée à sa médiane. La remarque sur PHP a corrigé mes deux explications de K1 et de K9, sans erreur de
+mesure ni erratum : sans collecteur sur K1 et avec le JIT de 8.3 sur K9, PHP gagnerait 0,13 point (BQN toujours 1,0
+point devant), et la boucle par indice ne lui en vaudrait aucun, sa pénalité de désordre grandissant d'autant
+([`docs/PHP.md`](docs/PHP.md), 5).
 
 **23. JavaScript.** V8 compile les boucles sur tableaux typés en code machine, mais en garde les vérifications : dans
 K5, une vérification de bornes par accès et une de débordement par indice, une adresse recalculée avant chaque
@@ -564,7 +575,7 @@ Les résultats les plus solides de l'étude : chacun isole une cause, avec ses c
 3. **La vectorisation automatique se vérifie sur le code exécuté.** Aucune des deux boucles naturelles testées n'est
    vectorisée en C#, Go, Mojo (dont le compilateur n'a pas de vectoriseur de boucles), Zig 0.17 (vectoriseur de boucles
    désactivé par l'équipe Zig, réactivé dans la version de développement), Swift, Haskell, OCaml, JavaScript, PHP
-   (dont le JIT rend les lectures du stencil à l'interprète), Lua et Python. En BQN, les boucles chaudes sont celles
+   (dont le JIT, depuis 8.4, échoue à compiler la boucle du stencil et la laisse à l'interprète), Lua et Python. En BQN, les boucles chaudes sont celles
    des primitives, écrites à la main en Singeli : celle du stencil est vectorisée, celle de K4 (le filtre, une
    compression par `vpshufb`) compte comme scalaire, la règle ne retenant que l'arithmétique empaquetée.
    Les vérifications de bornes l'empêchent sur le stencil naturel en Ada (71 ms, contre 36 ms) ; en D (56 ms, sans
@@ -598,7 +609,8 @@ Les résultats les plus solides de l'étude : chacun isole une cause, avec ses c
    appels système (409 fois C en écriture unique, compteurs espacés).
 7. **Allocation.** Une arène divise K8 par 5 ou 6. Les allocateurs générationnels de Java et d'OCaml sont les
    meilleurs pour du code naturel (302 et 334 ms). Les ramasse-miettes laissent des queues (K8 remesuré sur Emerald
-   Rapids) : pause de 89 ms en D, p99,9 à 30 fois la médiane en Julia, arrêt de 0,76 s en Python. Les runtimes font
+   Rapids) : pause de 89 ms en D, p99,9 à 30 fois la médiane en Julia, arrêt de 0,76 s en Python. En PHP, le collecteur
+   de cycles prend les trois quarts d'un simple parcours d'objets (K1 naturel), sans rien libérer. Les runtimes font
    des centaines à des dizaines de milliers d'appels système par répétition, le code compilé un ou deux.
 8. **Le système compte.** Odin, Lua et LuaJIT font un appel système à chaque lecture d'horloge (pour Odin, 32 768
    appels par répétition de K8, de l'ordre de 3 ms sur 1,9 s : moins de 1 %). Sur K7, Rust, Zig, Odin et flang rendent
@@ -690,8 +702,8 @@ du langage.
   de la hiérarchie mémoire (D4), et retirait 0,06 à 0,42 point à chacun des 24 autres (PHP : 16,6 points, 22e aussi).
   Sa réplication passe par le même pont ([`docs/PHP.md`](docs/PHP.md), 4).
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Les 24 premiers langages ont été relus après coup par des connaisseurs, Swift, FreePascal puis BQN en
-  dernier (PHP, ajouté le 7 novembre, ne l'a pas encore été) ;
+  l'autre. Les 25 langages ont été relus après coup par des connaisseurs, Swift, FreePascal, BQN puis PHP en
+  dernier ;
   C l'a été
   alors que sa
   référence est la seule implémentation mise au point, mesures à l'appui, avant le plan. Ada et Fortran y ont gagné
@@ -701,7 +713,8 @@ du langage.
   C3, Nim et Ada ; Chapel une place par trois errata de la matrice ; Swift une place par deux errata de la matrice ;
   FreePascal 0,6 point, sans changer de place, par trois errata de la matrice ; BQN a perdu 0,9 point, sans changer
   de place, par deux errata de la matrice (− 1,1) et deux corrections de son banc (K7 naturel en idiome de la
-  documentation, somme de contrôle de K9 hors chrono) ;
+  documentation, somme de contrôle de K9 hors chrono) ; PHP rien, sa remarque n'ayant relevé que deux erreurs
+  d'explication (K1 et K9 naturels) ;
   Mojo 2,7 points, Julia 1,8 point, C3 et Odin 0,9 point, mais aucune place, par des errata de la matrice (ceux de C3
   font passer Nim devant Rust, à égalité ; celui d'Odin le met à égalité avec C++) ; Zig quatre places, mais par une
   version de compilateur que la règle exclut ; C++ a perdu la 2e place au profit d'Odin par un erratum de la règle v1,
@@ -728,7 +741,8 @@ du langage.
   `gc.freeze()` pour K8 naturel, le build sans GIL et les cases discutables : 13,3 points, JavaScript devant lui dans
   81 % des variantes) ; aucune à Lua (Q6 par tests imbriqués, K7 dans une seule table, K9, K1 et K2 retouchés et la
   case discutable : 6,3 points, Python devant lui dans 51 % des variantes) ; aucune à FreePascal (K4 par masque, K5
-  par pointeurs, K8 itératif : 51,4 points, C# devant lui dans 63 % des variantes) ; à C++, le K4 de clang++ donnerait la 1re
+  par pointeurs, K8 itératif : 51,4 points, C# devant lui dans 63 % des variantes) ; aucune à PHP (K1 naturel sans
+  collecteur de cycles et K9 naturel compilé par le JIT de 8.3 : 16,7 points, BQN toujours 1,0 point devant) ; à C++, le K4 de clang++ donnerait la 1re
   place (80,3 points contre 80,0), et à C une arène de K8 écrite par itération 4,1 points (84,0) : la règle les garde
   hors du classement, mais l'effort d'implémentation compte.
 * Ces corrections ont été mesurées après coup sur une autre machine (Cascade Lake pour Ada et Fortran, Emerald Rapids
@@ -859,7 +873,10 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   [`results/report_bqn_remark.md`](results/report_bqn_remark.md).
 * L'ajout de PHP (OPcache et JIT tracing activés comme le recommande le manuel, choix du code naturel, faits relevés
   dont un bogue du JIT tracing, processus et mémoire partagée pour les variantes parallèles, grille, plan, pont par le
-  C, sensibilités) : [`docs/PHP.md`](docs/PHP.md) et [`results/report_php.md`](results/report_php.md).
+  C, sensibilités) : [`docs/PHP.md`](docs/PHP.md) et [`results/report_php.md`](results/report_php.md) ; la remarque
+  sur PHP (le collecteur de cycles dans K1 naturel, l'échec de compilation du stencil et le bogue de pile datés de 8.4,
+  reproductions pour php-src) : [`docs/PHP.md`](docs/PHP.md), section 5, et
+  [`results/report_php_remark.md`](results/report_php_remark.md).
 * La remarque sur Ada (piège de GNAT, errata, implémentation corrigée et remesurée) : [`docs/ADA.md`](docs/ADA.md)
   et [`results/report_ada.md`](results/report_ada.md).
 * La remarque sur D (Q1 corrigé, deux errata de la règle v1, cause du stencil naturel) :
@@ -1274,6 +1291,22 @@ python3 tools/measure_php.py               # PHP, CLI par défaut, trois témoin
 
 ```bash
 python3 analysis/php_check.py              # pont par le C, classement avec PHP, sensibilités -> report_php.md
+```
+
+```bash
+tools/php_remark/build.sh                  # remarque sur PHP : 8.3.36, 8.4.27, 8.5.13RC1, 8.6.0RC5 (options du banc)
+```
+
+```bash
+tools/php_remark/facts.sh > results/php_remark/facts.txt  # remarque sur PHP : sources et reproductions (K9, K1, pile)
+```
+
+```bash
+python3 tools/measure_php_rq.py            # remarque sur PHP : copie php_rq et autres versions, machine 29 -> raw_php_rq
+```
+
+```bash
+python3 analysis/php_remark.py             # remarque sur PHP : rapports et scénarios -> report_php_remark.md
 ```
 
 ```bash

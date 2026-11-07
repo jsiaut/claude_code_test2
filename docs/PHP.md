@@ -130,9 +130,12 @@ ceux du C viennent de la campagne de l'ajout de BQN sur la machine 26, du même 
 5. **La place des données** : une particule de K1 occupe 352 o au tas (`memory_get_usage`) : l'objet, 16 zvals de 16 o
    et son en-tête, plus le zval de la liste qui le désigne ; en tableau associatif à 16 clés, 712 o ; un tableau de PHP d'entiers ou de flottants prend
    16 o par élément, un `uint32_t[]` de la FFI 4 o.
-6. **K1 naturel** : 0,48 à 0,50 s, 117 ns par particule (C : 34 ms), alors que le même code tourne à 7,5 ns par
-   particule quand les objets tiennent en cache : la boucle est limitée par la mémoire (des objets de 352 o, et une
-   écriture du compteur de références de chaque objet).
+6. **K1 naturel** : 0,48 à 0,50 s, 117 ns par particule (C : 34 ms). *Corrigé après la remarque (5.2)* : j'écrivais
+   la boucle « limitée par la mémoire » ; elle l'est d'abord par le collecteur de cycles, comme le montrait déjà le
+   point 3. Chaque objet que `foreach` quitte perd une référence sans tomber à zéro et devient une racine possible ;
+   8 à 9 passes par parcours les examinent sans rien libérer, soit 72 à 75 % du temps. Sans passe (`gc_disable()`, ou
+   la boucle écrite par indice, `$ps[$i]->vx`, dont les valeurs temporaires ne laissent pas de racine), 0,13 à 0,15 s,
+   4 fois le C environ : restent la mémoire (des objets de 352 o) et l'interprète.
 7. **La FFI n'aide que K2** : à 16 Kio, 6,0 ns par saut contre 6,8 dans un tableau de PHP (C : 1,8 ns) ; à 8 Mio,
    38,5 contre 43,5 ns (C : 38 ns, la latence de la mémoire masque l'interprète). Partout ailleurs, les tableaux de la
    FFI sont plus lents que ceux de PHP : K1 `soa` 26 contre 6,1 ns par particule, K5 11,8 contre 1,55 ns par élément,
@@ -278,8 +281,11 @@ aucun gardé au-dessus de 2 % (1,82 % au plus), vol médian 0,19 %. Empreinte de
 Zend dans les trois processus (RSS : 345 o), retenus tels quels (D2a = 0,18). C3 mesurée : 0, après une correction de
 l'outil (4.2) : la boucle chaude de K4 naturel est du code du JIT, scalaire (vérification du type, comparaison,
 addition avec contrôle de débordement, test d'interruption de la machine virtuelle) ; celle de K9 naturel n'est pas du
-code du JIT mais le gestionnaire `ZEND_FETCH_DIM_R` de la machine virtuelle (`execute_ex`) : pour les lectures dans un
-tableau de tableaux, le JIT rend la main à l'interprète (`results/vectorization/php_k4.txt`, `php_k9.txt`).
+code du JIT mais le gestionnaire `ZEND_FETCH_DIM_R` de la machine virtuelle (`execute_ex`)
+(`results/vectorization/php_k4.txt`, `php_k9.txt`). *Corrigé après la remarque (5.2)* : j'en concluais que le JIT rend
+la main à l'interprète pour les lectures dans un tableau de tableaux ; en fait, la compilation de toute la boucle
+échoue (16 essais, puis liste noire), parce qu'elle écrit `$b[$i][$j]` après avoir lu deux autres lignes ; les
+lectures seules sont compilées. C'est une régression du JIT de 8.4 : celui de 8.3 compile ce stencil.
 
 ### 4.2 Écarts au plan
 
@@ -524,3 +530,94 @@ ne changent pas (aucune donnée ne change).
 * Revérifier avec 8.6.0 : elle n'est pas sortie ; 8.6.0RC5 se comporte comme 8.5.12 sur les deux défauts.
 * Changer la forme naturelle de K1 ou y couper le collecteur (5.3).
 * Refaire les variantes à plusieurs processus sous les autres versions : elles ne sont pas en cause.
+
+### 5.8 Mesures (machine 29)
+
+`tools/measure_php_rq.py`, de 13:51:38 à 14:03:00 : 119 processus (17 cellules × 7), aucune somme de contrôle fausse,
+aucun processus refait, vol de temps de 0,79 % au plus (médiane 0,20 %). Rapports à la cellule du banc publié (`php`,
+8.5.12) mesurée sur le même hôte, moyennes géométriques des médianes de processus, intervalles à 95 % par bootstrap
+(`results/report_php_remark.md`) :
+
+| Cellule | publié (ms) | cellule (ms) | rapport [IC à 95 %] |
+|---|---|---|---|
+| `php_rq` K1 `natural` (contrôle de la copie) | 507,9 | 510,5 | 1,005 [0,981–1,028] |
+| `php_rq` K1 `natural_idx` (par indice) | 507,9 | 147,5 | 0,290 [0,282–0,301] |
+| `php_rq` K1 `natural_idx_shuffled` | 1196,3 | 387,4 | 0,324 [0,309–0,341] |
+| `php_rq` K1 `natural_gcoff` (après `gc_disable()`) | 507,9 | 128,1 | 0,252 [0,245–0,260] |
+| `php_rq` K1 `natural_gcoff_shuffled` | 1196,3 | 277,9 | 0,232 [0,219–0,249] |
+| 8.3.36 K9 `natural` | 912,5 | 266,8 | 0,292 [0,281–0,306] |
+| 8.3.36 K9 `tuned` | 135,5 | 151,3 | 1,116 [1,089–1,147] |
+| 8.4.27 K9 `natural` | 912,5 | 904,0 | 0,991 [0,959–1,023] |
+| 8.4.27 K9 `tuned` | 135,5 | 133,9 | 0,988 [0,961–1,019] |
+| 8.5.13RC1 K9 `natural` | 912,5 | 882,5 | 0,967 [0,935–0,998] |
+| 8.5.13RC1 K9 `tuned` | 135,5 | 134,5 | 0,993 [0,962–1,028] |
+| 8.6.0RC5 K9 `natural` | 912,5 | 908,0 | 0,995 [0,964–1,028] |
+| 8.6.0RC5 K9 `tuned` | 135,5 | 131,8 | 0,973 [0,946–1,002] |
+
+* **K1** : écrite par indice, la boucle naturelle va 3,4 fois plus vite (3,1 fois dans le désordre) ; sans
+  collecteur, 4,0 fois (4,3 fois dans le désordre). La copie ne change rien au reste (contrôle : 1,005).
+* **K9** : le JIT de 8.3.36 fait le stencil naturel 3,4 fois plus vite que celui de 8.5.12 ; ceux de 8.4.27,
+  8.5.13RC1 et 8.6.0RC5 font comme 8.5.12 (0,97 à 0,99) : la régression date de 8.4 et n'est pas corrigée. Sur la
+  grille plate (K9 optimisé), c'est l'inverse : le JIT de 8.3 est 12 % plus lent.
+
+### 5.9 Scénarios (`analysis/php_remark.py`, `results/php_remark.json`)
+
+| Scénario | Statut | Score | Code par défaut (D1 ; D2) | Rang espéré | Place | Rang à 90 % | devant BQN | devant JavaScript | écart à BQN |
+|---|---|---|---|---|---|---|---|---|---|
+| **Avant (publié)** | contrôle | **16,56** | 20,7 (0,015 ; 0,293) | 22,32 | **22e** | 20–23 | 16 % | 43 % | 1,16 |
+| R-K1idx | sensibilité | 16,54 | 20,6 (0,018 ; 0,278) | 22,32 | 22e | 20–23 | 16 % | 43 % | 1,18 |
+| R-K1gc | information | 16,65 | 21,1 (0,018 ; 0,306) | 22,30 | 22e | 20–23 | 17 % | 44 % | 1,07 |
+| R-K9-83 | information | 16,60 | 20,9 (0,018 ; 0,293) | 22,31 | 22e | 20–23 | 17 % | 43 % | 1,12 |
+| R-tout | information | 16,69 | 21,3 (0,022 ; 0,306) | 22,28 | 22e | 20–23 | 18 % | 45 % | 1,03 |
+| R-tout-idx | information | 16,58 | 20,8 (0,022 ; 0,278) | 22,30 | 22e | 20–23 | 17 % | 44 % | 1,14 |
+
+* **Contrôle** : le scénario Avant reproduit P-E à l'identique (écart 0). Contrôle et plafond ne changent dans
+  aucun scénario (27,4 ; 4,50) : le plafond de K1 ne prend que les dispositions contiguës (`aos`, `soa`), et celui de
+  K9 garde la grille plate, plus rapide que le stencil même compilé par 8.3.
+* **R-K1idx** (sensibilité) coûte 0,02 point : le code naturel gagne (D1 de 0,015 à 0,018), mais la pénalité de
+  désordre grandit (D2 de 0,293 à 0,278), parce que la forme par indice accélère plus le parcours dans l'ordre (3,4 fois)
+  que dans le désordre (3,1 fois).
+* **R-tout**, la lecture de la remarque (le collecteur coupé, le stencil compilé par 8.3), vaut 0,13 point : son
+  estimation (« environ 0,1 point ») est juste, et BQN reste 1,03 point devant. PHP est 22e dans tous les scénarios,
+  à égalité de fait avec JavaScript (43 à 45 %), et les rangs espérés des autres bougent de 0,02 au plus.
+
+### 5.10 Ce que corrige la remarque, et ce qu'elle ne change pas
+
+* **Deux explications fausses**, corrigées (2.4, point 6 ; 4.1 ; README ; `FINDINGS.md`) : le temps de K1 naturel est
+  d'abord celui du collecteur de cycles (72 à 75 %), et le stencil naturel tombe à l'interprète parce que la
+  compilation de toute sa boucle échoue, pas parce que le JIT rendrait les lectures. La remarque situait le
+  déclencheur trop tôt : une seule autre ligne lue ne le provoque pas, il en faut deux.
+* **Deux défauts du JIT tracing, datés** : l'échec de compilation du stencil et le résultat faux de la pile datent
+  tous deux de 8.4, le premier JIT écrit sur le cadre IR ; 8.3.36 n'a ni l'un ni l'autre, 8.5.13RC1 et 8.6.0RC5 les
+  ont encore.
+* **Le classement publié ne change pas** : aucune erreur de mesure, aucun erratum de données ni de grille ; PHP reste
+  22e à 16,56 points. Le README présente désormais PHP et JavaScript, comme les trois autres paires dont le duel
+  contredit le rang moyen, à égalité de fait.
+
+### 5.11 Écarts au plan
+
+1. **Le rapport affiche en plus les parties D1 à D4 du code par défaut de PHP**, ajoutées après le premier calcul pour
+   expliquer R-K1idx ; les calculs sont inchangés (les deux sorties sont identiques).
+2. Aucun autre : cellules, répétitions, scénarios et règles comme fixés en 5.4 et 5.5.
+
+### 5.12 Pour php-src (reproductions, non signalées)
+
+Je ne signale pas ces défauts moi-même (5.7) ; de quoi le faire :
+* **Échec de compilation du JIT tracing sur un stencil** (performance) : `tools/php_remark/src/k9_jit.php`, forme
+  `tworows` (`$b[$i][$j] = $a[$i - 1][$j] + $a[$i + 1][$j];` dans deux boucles imbriquées, `$b` par référence ou par
+  valeur). Avec `php -d opcache.enable_cli=1 -d opcache.jit=tracing -d opcache.jit_debug=65536 k9_jit.php tworows 1`,
+  la trace de la boucle intérieure s'arrête 16 fois sur « abort (JIT compilation error) », puis est mise en liste
+  noire ; les formes `otherrow` et `mixed` (une seule autre ligne) sont compilées. Touchés : 8.4.27, 8.5.12,
+  8.5.13RC1, 8.6.0RC5 ; pas 8.3.36 (`opcache.jit_buffer_size=64M`), qui compile toutes les formes.
+* **Résultat faux du JIT tracing avec deux `$st[$sp++] = …` de suite** (exactitude) :
+  `tools/php_check/src/jit_stack_bug.php` construit un arbre complet de 2047 nœuds par une pile ; avec le JIT tracing,
+  la construction ne s'arrête plus (la garde rend −10 010) ; juste sans JIT, avec le JIT « function », avec une pile à
+  indices explicites, et en 8.3.36. Touchés : 8.4.27, 8.5.12, 8.5.13RC1, 8.6.0RC5.
+
+### 5.13 Bilan
+
+PHP reste **22e sur 25** (16,56 points), à égalité de fait avec JavaScript, comme le dit la remarque. Elle avait
+raison sur les deux explications : K1 naturel paie d'abord le collecteur de cycles, que chaque objet quitté par
+`foreach` alimente ; le stencil naturel tombe à l'interprète parce que le JIT de 8.4 et des versions suivantes ne sait
+pas compiler sa boucle, quand celui de 8.3 le faisait. Le bogue de pile date lui aussi de 8.4. Corrigés, ces deux
+noyaux vaudraient au plus 0,13 point : le rang de PHP tient à ce que le langage offre au programmeur, pas à ces défauts.

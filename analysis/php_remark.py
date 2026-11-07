@@ -23,6 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import analyze_v2 as v2  # noqa: E402
 import analyze_v3 as v3  # noqa: E402
 import php_check as pc  # noqa: E402
+import confrontation as cf  # noqa: E402
 from analyze_v2 import RANKED, ANNEX, ROOT, NAMES  # noqa: E402
 from fortran_check import ratio  # noqa: E402
 from python_check import kk, gm, f  # noqa: E402
@@ -53,6 +54,15 @@ def load_raw():
     return d, bad
 
 
+def run_parts(data, lat, langs, footprint, c3):
+    """pc.run sans changement de case, plus les parties D1 à D4 du code par défaut de PHP (estimation ponctuelle)."""
+    s = cf.scenario(data, lat, langs, footprint, c3, "main")
+    z = pc.summary(s, list(RANKED))
+    i = s["A"].idx[LANG]
+    z["Dk"] = {k: float(s["S0"][k][i]) for k in ("D1", "D2", "D3", "D4")}
+    return z
+
+
 def main():
     assert RANKED[-1] == LANG, "PHP doit être le dernier de RANKED (tirages isolés)"
     raw, bad = load_raw()
@@ -77,14 +87,14 @@ def main():
     plans = {"R-K1idx": idx, "R-K1gc": gco, "R-K9-83": k983, "R-tout": {**gco, **k983}, "R-tout-idx": {**idx, **k983}}
     out = {"bad": bad, "times_ms": times, "r": r,
            "factors": {n: {kk(k): v for k, v in fac.items()} for n, fac in plans.items()}, "scenarios": {}}
-    av = out["scenarios"]["Avant"] = pc.run(data, lat, langs, footprint, c3)
+    av = out["scenarios"]["Avant"] = run_parts(data, lat, langs, footprint, c3)
     ref = json.load(open(os.path.join(ROOT, "results", "php_check.json")))["scenarios"]["P-E"]
     out["check_before"] = max(max(abs(av["ms0"][l] - ref["ms0"][l]), abs(av["exp21"][l] - ref["exp21"][l]))
                               for l in RANKED)
     print(f"Contrôle : écart maximal du scénario Avant au publié (P-E) = {out['check_before']:.2e}", flush=True)
     out["shift"], out["shift_ms"] = {}, {}
     for name, fac in plans.items():
-        z = out["scenarios"][name] = pc.run(pc.scaled(data, fac), lat, langs, footprint, c3)
+        z = out["scenarios"][name] = run_parts(pc.scaled(data, fac), lat, langs, footprint, c3)
         out["shift"][name] = {l: z["exp21"][l] - av["exp21"][l] for l in RANKED if l != LANG}
         out["shift_ms"][name] = {l: z["ms0"][l] - av["ms0"][l] for l in RANKED if l != LANG}
         print(f"{name} : PHP {z['ms0'][LANG]:.2f} points, C {z['C'][LANG]:.1f}, E {z['E'][LANG]:.2f}, "

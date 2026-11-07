@@ -1497,3 +1497,18 @@ Robustesse :
   aucune donnée ni case de la grille ne change. Copie `bench/php_rq` (K1 par indice, `gc_disable()`), lanceurs
   `bench/php83`, `php84`, `php8513rc1`, `php86rc5` ; outil `tools/measure_php_rq.py` (17 cellules × 7 passes) ;
   scénarios Avant, R-K1idx, R-K1gc, R-K9-83, R-tout, R-tout-idx.
+* 2026-11-07, 13:51:38 à 14:03:00 : **mesures de la remarque sur PHP** (`tools/measure_php_rq.py`, machine 29) : 119
+  processus (17 cellules × 7), aucune somme de contrôle fausse, aucun processus refait, vol de temps de 0,79 % au plus
+  (médiane 0,20 %). Pendant la campagne, seul `analysis/php_remark.py` a été écrit (poussé à 13:52, avant tout
+  résultat), sans rien exécuter hors des vérifications de syntaxe.
+* 2026-11-07, 14:03 à 14:15 : **résultats de la remarque sur PHP, textes corrigés** (`analysis/php_remark.py`,
+  `results/report_php_remark.md`). Contrôle : le scénario Avant reproduit P-E à l'identique ; copie `php_rq` /
+  publié sur K1 naturel 1,005. K1 par indice 3,4 fois plus rapide, sans collecteur 4,0 fois ; K9 naturel sous 8.3.36
+  3,4 fois plus rapide, sous 8.4.27, 8.5.13RC1 et 8.6.0RC5 comme sous 8.5.12. Scénarios : R-K1idx − 0,02 point (D2
+  baisse plus que D1 ne monte), R-K1gc + 0,09, R-K9-83 + 0,04, R-tout + 0,13 (16,69 ; BQN 1,03 point devant) ; PHP
+  22e partout, à égalité de fait avec JavaScript. **Écart au plan** : le rapport affiche en plus les parties D1 à D4
+  de PHP, ajoutées après le premier calcul pour expliquer R-K1idx (calculs identiques, sorties comparées). Classement
+  publié inchangé : ni régénération des sorties publiées ni des états actuels. Textes : `docs/PHP.md` (2.4 point 6 et
+  4.1 corrigés, sections 5.8 à 5.13, reproductions pour php-src), README (paragraphe de PHP, égalités de fait dans le
+  tableau et sa légende, « Ce qui sépare vraiment les langages », points 3 et 7, relectures, bilan des remarques,
+  lectures, reproduction), `docs/FINDINGS.md`, `tools/php_check/src/jit_stack_bug.php` (versions touchées).
