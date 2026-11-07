@@ -11,7 +11,7 @@ from analyze import final_data, RANKED, ANNEX, E_MEASURES  # noqa: E402
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 NAMES = {"c": "C", "cpp": "C++", "csharp": "C#", "java": "Java", "zig": "Zig", "odin": "Odin", "julia": "Julia", "ada": "Ada",
          "fortran": "Fortran", "js": "JavaScript", "python": "Python", "haskell": "Haskell", "c3": "C3", "d": "D", "rust": "Rust",
-         "chapel": "Chapel", "nim": "Nim", "mojo": "Mojo", "go": "Go", "ocaml": "OCaml", "lua": "Lua", "swift": "Swift", "fpc": "FreePascal", "bqn": "BQN", "c_gcc": "C (gcc)",
+         "chapel": "Chapel", "nim": "Nim", "mojo": "Mojo", "go": "Go", "ocaml": "OCaml", "lua": "Lua", "swift": "Swift", "fpc": "FreePascal", "bqn": "BQN", "php": "PHP", "c_gcc": "C (gcc)",
          "fortran_flang": "Fortran (flang)", "luajit": "LuaJIT", "js_bun": "JavaScript (Bun)", "python_ft": "Python sans GIL"}
 F = lambda x, d=1: "—" if x is None else f"{x:.{d}f}".replace(".", ",")
 

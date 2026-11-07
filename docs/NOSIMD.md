@@ -426,3 +426,16 @@ aucune cellule ne change de classe. BQN reste 21e dans toutes les lectures, avec
 (17,7 points publié, 18,5 sans `mt`, 18,8 en S-scalaire et en S-scalaire-Mojo, 21,3 en S-symétrique, 19,1 en
 S-noyaux-scalaires, 17,7 en S-importées). Les scores des 23 autres ne changent pas ; aucun rang ne change, et les
 rangs espérés bougent de 0,05 au plus (OCaml).
+
+### 4.24 Recalcul après l'ajout de PHP (7 novembre)
+
+Recalculé avec PHP (témoin égal au scénario P-E de `results/php_check.json`, écart 0, `docs/PHP.md`). PHP n'a pas de
+variante à vecteurs explicites : ni SIMD dans le langage ni intrinsèques, et son JIT n'émet que du code scalaire
+(C3 = 0) ; aucune de ses cellules ne change de classe. PHP : 22e en publié (16,6 points), sans `mt` (16,6), en
+S-scalaire et en S-scalaire-Mojo (16,7) et en S-importées (16,6) ; 23e, derrière JavaScript, avec qui il est à égalité
+de fait, en S-symétrique (17,6) et en S-noyaux-scalaires (16,2). Les scores des 24 autres ne changent dans aucune
+lecture. Leurs rangs espérés bougent par la référence des queues de latence relatives, que PHP devient
+(`docs/PHP.md`, 4.4) : JavaScript, Python et Lua reculent d'un rang (+ 0,32 à + 1,00), BQN de 0,16 à 0,21 ; D et
+Julia avancent, Chapel, Swift et Zig reculent, de 0,10 à 0,24. Des paires à égalité de fait échangent leurs places :
+C3 et Zig, Fortran et Swift dans le publié, Julia et Chapel en S-symétrique, Julia et Swift en S-noyaux-scalaires ;
+aucune sans `mt`, en S-scalaire, en S-scalaire-Mojo ni en S-importées.

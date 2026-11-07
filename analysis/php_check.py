@@ -20,6 +20,9 @@ rejouée (mêmes tirages ; ceux de PHP isolés) pour chaque scénario du plan (3
   (P-cases-bas, P-défaut, P-K1arr, P-C3), P-tout-haut (P-cases-haut).
 * P-K7tab (information) : K7 naturel relié par le facteur de K7 optimisé du C (table plate) au lieu de celui de sa
   table chaînée.
+* Écart au plan, décidé après avoir vu les données (docs/PHP.md 4.2) : à K2 8 Mio, l'hôte est bimodal ; le pont de
+  cette clé prend la médiane des médianes de processus des deux côtés (analyze_v2.BRIDGE_MEDIAN), pour le témoin c comme
+  pour le second témoin de P-gcc. P-E-plan (information) : le pont du plan (moyennes géométriques) sur cette clé.
 Information : rapport PHP / C de chaque cellule sur la machine 28 (aux deux témoins) ; facteurs du pont par clé avec
 les deux témoins ; clés écartées par la borne physique.
 Sorties : results/php_check.json, results/report_php.md."""
@@ -130,9 +133,24 @@ def replaced(data, new):
     return d
 
 
+def robust(key, ref, wit, own):
+    """Facteur du pont d'une clé : G(référence) / G(témoin), ou, pour une clé de v2.BRIDGE_MEDIAN (hôte bimodal), le même
+    rapport recentré par les médianes des médianes de processus du témoin et de PHP (analyze_v2.bridge_added)."""
+    fct = gm(ref) / gm(wit)
+    if (LANG, key) in v2.BRIDGE_MEDIAN:
+        fct *= gm(wit) / v2._med_procs(wit) * v2._med_procs(own) / gm(own)
+    return fct
+
+
 def main():
     assert RANKED[-1] == LANG, "PHP doit être le dernier de RANKED (tirages isolés)"
     raw, rawlat, bad = load_raw()
+    # P-E-plan (information) : le pont du plan, moyennes géométriques partout
+    saved_bm = set(v2.BRIDGE_MEDIAN)
+    v2.BRIDGE_MEDIAN.clear()
+    data_plan, lat_plan, *_ = v2.dataset_main(transfers=True)
+    v2.align_lat(data_plan, lat_plan)
+    v2.BRIDGE_MEDIAN.update(saved_bm)
     data, lat, *_ = v2.dataset_main(transfers=True)
     v2.align_lat(data, lat)
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
@@ -151,9 +169,12 @@ def main():
         w = wit[k]
         b = {"witness": w, "c_pub_ms": 1e3 * gm(data["c"][k]), "c_28_ms": 1e3 * gm(raw[w][k]),
              "php_28_ms": 1e3 * gm(raw[LANG][k]), "php_pub_ms": 1e3 * gm(data[LANG][k]),
-             "factor": gm(data["c"][k]) / gm(raw[w][k])}
+             "factor": robust(k, data["c"][k], raw[w][k], raw[LANG][k]), "factor_plan": gm(data["c"][k]) / gm(raw[w][k])}
+        if (LANG, k) in v2.BRIDGE_MEDIAN:
+            b["c_28_med_ms"] = 1e3 * v2._med_procs(raw[w][k])
+            b["php_28_med_ms"] = 1e3 * v2._med_procs(raw[LANG][k])
         if k[0] in M1 and k in raw.get("c_gcc_cl", {}) and k in data.get("c_gcc", {}):
-            b["factor_gcc"] = gm(data["c_gcc"][k]) / gm(raw["c_gcc_cl"][k])
+            b["factor_gcc"] = robust(k, data["c_gcc"][k], raw["c_gcc_cl"][k], raw[LANG][k])
         bridge[kk(k)] = b
     lat_bridge = {"c_pub_us": (np.array(v2._lat_cols(lat["c"][K8N])) / 1e3).tolist(),
                   "c_28_us": (np.array(v2._lat_cols(rawlat["c"][K8N])) / 1e3).tolist(),
@@ -161,7 +182,7 @@ def main():
                   "php_pub_us": (np.array(v2._lat_cols(lat[LANG][K8N])) / 1e3).tolist()}
     # contrôles du pont entre modèles : P-direct, P-hôte, P-gcc (clés de la machine 1)
     m1 = [k for k in data[LANG] if k[0] in M1 and k in raw[LANG] and k in raw["c"]]
-    hf = float(np.median([gm(data["c"][k]) / gm(raw["c"][k]) for k in m1]))
+    hf = float(np.median([bridge[kk(k)]["factor"] for k in m1]))
     d_direct = replaced(data, {k: [list(p) for p in raw[LANG][k]] for k in m1})
     d_host = replaced(data, {k: [[t * hf for t in p] for p in raw[LANG][k]] for k in m1})
     d_gcc = replaced(data, {k: [[t * bridge[kk(k)]["factor_gcc"] for t in p] for p in raw[LANG][k]]
@@ -190,6 +211,7 @@ def main():
         "P-tout-bas": (scaled(data, low), lat, CASES_LOW, footprint, c3_0),
         "P-tout-haut": (data, lat, CASES_HIGH, footprint, c3),
         "P-K7tab": (scaled(data, {K7N: f7}), lat, None, footprint, c3),
+        "P-E-plan": (data_plan, lat_plan, None, footprint, c3),
     }
     k7_pub = {l: 1e3 * gm(data[l][K7N]) for l in RANKED if K7N in data.get(l, {})}
     out = {"bad": bad, "times_ms": times, "r_php_c": r_c, "r_php_c_er": r_er, "bridge": bridge,
@@ -241,8 +263,13 @@ def report(o):
                     if b else "— | — | — | — |"))
     lb = o["lat_bridge"]
     kf = o["k7_factors"]
+    k2 = o["bridge"].get("k2:tuned:8388608", {})
     L += ["", f"Facteur d'hôte unique de P-hôte (médiane des facteurs du C sur les clés de la machine 1) : "
           f"{f(o['host_factor'], 3)}.", "",
+          f"K2 à 8 Mio (hôte bimodal, écart au plan : docs/PHP.md 4.2) : médiane des médianes de processus du C "
+          f"{f(k2.get('c_28_med_ms'), 1)} ms (moyenne géométrique {f(k2.get('c_28_ms'), 1)} ms), de PHP "
+          f"{f(k2.get('php_28_med_ms'), 1)} ms (moyenne géométrique {f(k2.get('php_28_ms'), 1)} ms) ; facteur du pont "
+          f"{f(k2.get('factor'), 3)} (plan : {f(k2.get('factor_plan'), 3)}).", "",
           f"K7 naturel (P-K7tab, information) : facteur de la table chaînée du C {f(kf['natural'], 2)}, de sa table plate "
           f"(K7 optimisé) {f(kf['tuned'], 2)}. Temps publiés de K7 naturel (machine 1 ; PHP relié) : "
           + " ; ".join(f"{NAMES[l]} {f(t / 1e3, 2)} s" for l, t in sorted(o["k7_published_ms"].items(), key=lambda x: x[1])) + ".", "",

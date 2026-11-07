@@ -1,6 +1,6 @@
 # Quels langages incarnent le mieux la *mechanical sympathy* ?
 
-*Classement mesuré de 24 langages, octobre et novembre 2026 (Swift ajouté le 5 novembre, FreePascal et BQN le 6).*
+*Classement mesuré de 25 langages, octobre et novembre 2026 (Swift ajouté le 5 novembre, FreePascal et BQN le 6, PHP le 7).*
 
 Un seul critère : la *mechanical sympathy* au sens large, c'est-à-dire la capacité d'un langage à faire écrire du
 code en accord avec le matériel : disposition des données, SIMD, hiérarchie mémoire, concurrence, allocation,
@@ -13,43 +13,52 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
 |---|---|---|---|---|---|
 | 1 | **C** | 80,0 | 1–6 | 69 % | Plafond le plus haut et l'un des trois meilleurs codes par défaut ; son contrôle est celui de GNU C (extensions de clang, intrinsèques d'Intel, OpenMP, glibc) |
 | 2 | **Odin** | 74,0 | 1–6 | 55 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, intrinsèques de LLVM, allocateurs explicites) ; allocateur généraliste lent |
-| 3 | **C++** | 77,1 | 1–8 | 66 % | Le plus de contrôle (`pmr`, atomiques, `std::simd` encore expérimental) ; derrière C surtout par K4, que g++ vectorise moins bien que clang |
-| 4 | **Zig** | 72,3 | 1–11 | 55 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (1er avec la version de développement) |
-| 5 | **C3** | 71,6 | 2–9 | 74 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels, `asm` et `@noalias` incomplets |
+| 3 | **C++** | 77,1 | 1–8 | 65 % | Le plus de contrôle (`pmr`, atomiques, `std::simd` encore expérimental) ; derrière C surtout par K4, que g++ vectorise moins bien que clang |
+| 4 | **C3** | 71,6 | 2–9 | 46 % | C avec vecteurs natifs, 2e plafond ; ni SoA ni intrinsèques officiels, `asm` et `@noalias` incomplets |
+| 5 | **Zig** | 72,3 | 1–11 | 71 % | Tous les leviers du DOD ; en 0.17, son vectoriseur de boucles est désactivé par l'équipe Zig (1er avec la version de développement) |
 | 6 | **Rust** | 70,0 | 3–10 | 53 % | 8e plafond et bon code naturel ; contrôle limité par sa bibliothèque standard (ni affinité, ni `mmap`, SIMD portable instable) |
-| 7 | **Nim** | 69,3 | 3–11 | 48 % | Les leviers de C par sa compilation vers C ; vérifications et aliasing non strict qui bloquent la vectorisation du stencil |
-| 8 | **D** | 72,7 | 3–13 | 61 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
-| 9 | **Ada** | 71,1 | 3–12 | 58 % | Disposition au bit près, 9e plafond ; vérifications coûteuses sur le code naturel |
-| 10 | **Chapel** | 65,7 | 4–13 | 67 % | 6e plafond grâce au parallélisme natif ; leviers bas niveau rares ou instables |
-| 11 | **Swift** | 66,5 | 6–14 | 54 % | 3e plafond, au coude à coude avec C++ et Odin (types SIMD et `InlineArray` dans la bibliothèque standard, comptage de références) ; vérifications de `-O` coûteuses sur le code naturel, ni assembleur ni alignement de type au-delà de 16 octets |
-| 12 | **Fortran** | 65,4 | 6–14 | 72 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
-| 13 | **Julia** | 62,4 | 8–14 | 60 % | Le 2e code naturel, derrière Odin ; le plafond le plus bas des 14 premiers |
+| 7 | **Nim** | 69,3 | 3–11 | 45 % | Les leviers de C par sa compilation vers C ; vérifications et aliasing non strict qui bloquent la vectorisation du stencil |
+| 8 | **D** | 72,7 | 3–12 | 64 % | Le contrôle de C avec templates et CTFE ; ramasse-miettes par défaut |
+| 9 | **Ada** | 71,1 | 3–12 | 59 % | Disposition au bit près, 9e plafond ; vérifications coûteuses sur le code naturel |
+| 10 | **Chapel** | 65,7 | 4–13 | 69 % | 6e plafond grâce au parallélisme natif ; leviers bas niveau rares ou instables |
+| 11 | **Fortran** | 65,4 | 6–14 | 48 % | Natif du HPC (tableaux, `do concurrent`, OpenMP) ; ni SIMD explicite ni intrinsèques |
+| 12 | **Swift** | 66,5 | 6–14 | 64 % | 3e plafond, au coude à coude avec C++ et Odin (types SIMD et `InlineArray` dans la bibliothèque standard, comptage de références) ; vérifications de `-O` coûteuses sur le code naturel, ni assembleur ni alignement de type au-delà de 16 octets |
+| 13 | **Julia** | 62,4 | 8–14 | 63 % | Le 2e code naturel, derrière Odin ; le plafond le plus bas des 14 premiers |
 | 14 | **Mojo** | 62,3 | 10–14 | 96 % | Le SIMD au cœur du langage ; ni vectoriseur de boucles, ni threads publics dans `std` |
 | 15 | **C#** | 54,9 | 14–17 | 82 % | La boîte à outils la plus riche des langages à GC ; objets en références, JIT sans vectoriseur |
-| 16 | **FreePascal** | 48,1 | 15–19 | 54 % | Records en ligne, `packed` et `bitpacked`, pointeurs, assembleur en ligne, mémoire gérée à la main ; ni vectoriseur, ni intrinsèques, SIMD expérimental limité à 128 bits (compilateur de la branche stable 3.2, de 2021) |
+| 16 | **FreePascal** | 48,1 | 15–19 | 53 % | Records en ligne, `packed` et `bitpacked`, pointeurs, assembleur en ligne, mémoire gérée à la main ; ni vectoriseur, ni intrinsèques, SIMD expérimental limité à 128 bits (compilateur de la branche stable 3.2, de 2021) |
 | 17 | **Java** | 47,2 | 15–19 | 56 % | Meilleur allocateur de petits objets ; pas de types valeur |
 | 18 | **Go** | 45,4 | 15–18 | 93 % | Structures par valeur ; ni vectoriseur, ni SIMD stable, atomiques séquentiellement cohérentes |
 | 19 | **Haskell** | 41,3 | 17–19 | 100 % | Peut descendre bas (FMA vectorielle, mémoire brute) ; code par défaut boxé, ramasse-miettes imposé |
-| 20 | **OCaml** | 23,9 | 20–21 | 79 % | Bonne allocation générationnelle ; pas de types valeur, ni flottant 32 bits de calcul, ni SIMD |
-| 21 | **BQN** | 17,7 | 20–22 | 84 % | Langage de tableaux : primitives vectorisées dans CBQN, mais un coût fixe par appel et aucune fusion ; ni threads, ni flottant 32 bits, ni disposition des enregistrements |
-| 22 | **JavaScript** | 15,6 | 21–23 | 91 % | Tableaux typés compilés, mais vérifiés à chaque accès ; objets en références, aucun SIMD |
-| 23 | **Python** | 11,8 | 22–24 | 58 % | CPython seul : environ 200 fois plus lent que le meilleur ; la hiérarchie mémoire disparaît derrière l'interpréteur |
-| 24 | **Lua** | 5,4 | 23–24 | — | PUC-Lua sans son API C : mieux que CPython sur les mesures, presque aucun levier dans sa bibliothèque |
+| 20 | **OCaml** | 23,9 | 20–22 | 81 % | Bonne allocation générationnelle ; pas de types valeur, ni flottant 32 bits de calcul, ni SIMD |
+| 21 | **BQN** | 17,7 | 20–23 | 84 % | Langage de tableaux : primitives vectorisées dans CBQN, mais un coût fixe par appel et aucune fusion ; ni threads, ni flottant 32 bits, ni disposition des enregistrements |
+| 22 | **PHP** | 16,6 | 20–23 | 43 % | Le contrôle d'un langage dynamique doté d'une FFI et de processus, au niveau de Python ; mais chaque valeur est un zval de 16 octets, chaque objet une référence, et le JIT tracing, livré, est inactif par défaut ; ni SIMD ni fils |
+| 23 | **JavaScript** | 15,6 | 21–24 | 91 % | Tableaux typés compilés, mais vérifiés à chaque accès ; objets en références, aucun SIMD |
+| 24 | **Python** | 11,8 | 23–25 | 58 % | CPython seul : environ 200 fois plus lent que le meilleur ; la hiérarchie mémoire disparaît derrière l'interpréteur |
+| 25 | **Lua** | 5,4 | 24–25 | — | PUC-Lua sans son API C : mieux que CPython sur les mesures, presque aucun levier dans sa bibliothèque |
 
 * **Score** (0–100) : 40 % de plafond mesuré (le meilleur code que le langage permet d'écrire pour la machine),
   25 % de code par défaut mesuré (le code qu'on écrit sans y penser) et 35 % de contrôle (les leviers qu'offrent le
   langage et sa chaîne de compilation).
 * **Ordre** : le rang moyen sur 20 000 variantes de l'analyse, qui tirent au hasard les poids, les normalisations, le
-  jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf en trois endroits. D et Ada, 4e et
-  7e au score, ne sont que 8e et 9e : leur code par défaut est le plus lent (D) et l'un des plus lents (Ada) des neuf
-  premiers ; Zig, C3, Rust et Nim, moins bien notés que D, ont un meilleur rang moyen (Nim de justesse : il ne
-  devance D que dans 48 % des variantes), et Rust et Nim devancent Ada dans 65 et 63 % des variantes. En tête, Odin
-  devance C++, pourtant mieux noté (77,1 contre 74,0 points), dans 55 % des variantes (rang moyen 3,18 contre 3,81) :
+  jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf en quatre endroits. D et Ada, 4e
+  et 7e au score, ne sont que 8e et 9e : leur code par défaut est le plus lent (D) et l'un des plus lents (Ada) des
+  neuf premiers ; C3, Zig, Rust et Nim, moins bien notés que D, ont un meilleur rang moyen (Nim de justesse : il ne
+  devance D que dans 45 % des variantes), et Rust et Nim devancent Ada dans 65 et 62 % des variantes. En tête, Odin
+  devance C++, pourtant mieux noté (77,1 contre 74,0 points), dans 55 % des variantes (rang moyen 3,17 contre 3,79) :
   l'avance de C++ tient au contrôle, dont la grille v1, tirée dans la moitié des variantes, lui retire 5,6 points
   depuis les errata du 1er novembre (`std::simd` expérimental ; `<immintrin.h>` et `packed`, hors norme). Plus bas,
-  Swift, mieux noté que Chapel (66,5 contre 65,7 points), ne le devance que dans 33 % des variantes : son avance tient
-  elle aussi au contrôle, que la grille v1 ramène au niveau de celui de Chapel (64,1 contre 63,8), et son code par
-  défaut est plus lent (42,0 contre 49,1).
+  Swift, mieux noté que Chapel et Fortran (66,5 contre 65,7 et 65,4 points), ne devance Chapel que dans 32 % des
+  variantes : son avance tient elle aussi au contrôle, que la grille v1 ramène au niveau de celui de Chapel (64,1
+  contre 63,8), et son code par défaut est plus lent (41,9 contre 49,1). Enfin, deux paires sont à égalité de fait, et
+  le rang moyen y contredit le duel : C3 passe devant Zig, mieux noté (72,3 contre 71,6 points), au rang moyen (5,11
+  contre 5,14), mais ne le devance que dans 46 % des variantes ; Fortran passe devant Swift (10,85 contre 10,86), mais
+  ne le devance que dans 48 %. Le rang moyen compte tous les duels : C3 perd moins souvent que Zig face à ceux qui les
+  suivent (D, Rust, Chapel, Swift), Zig moins souvent face à C et Odin ; Fortran perd moins souvent que Swift face à
+  Julia, D et C3. Ces deux paires ont basculé à l'ajout de PHP, le 7 novembre (Zig était 4e, Swift 11e), sans qu'aucun
+  score change : dans la moitié des variantes, les queues de latence de K8 sont lues relativement à la médiane, et PHP,
+  dont les requêtes sont lentes mais régulières, y a la plus petite queue ; il devient la référence de ce critère, ce
+  qui baisse la note de tous les autres et rebat les paires serrées ([`docs/PHP.md`](docs/PHP.md), 4.4).
 * **Rang plausible** : le rang dans 90 % des variantes. **Devance le suivant** : la part des variantes où le
   langage passe devant celui de la ligne suivante.
 * **Errata du 30 octobre au 5 novembre** : un second juge à l'aveugle a trouvé cinq erreurs de fait dans ma matrice de
@@ -162,21 +171,23 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   variantes, et sur les deux machines. Haskell devance OCaml, et OCaml JavaScript, dans plus de 99 % des variantes ;
   JavaScript ne devance plus Python que dans 91 % (95 % avant la correction du banc de Python) ; Go devance Haskell
   dans 93 % (100 % avant la correction du banc de Haskell). BQN, ajouté le 6 novembre, se place entre OCaml, qui le
-  devance dans 79 % des variantes, et JavaScript, qu'il devance dans 84 % : proche des deux, il relie les deux
+  devance dans 81 % des variantes, et JavaScript, qu'il devance dans 83 % : proche des deux, il relie les deux
   derniers étages de la v3, qui n'en font plus qu'un, d'OCaml à Lua (étages [14, 5, 5], contre [14, 5, 1, 3] avant
-  lui).
+  lui). PHP, ajouté le 7 novembre, entre dans ce dernier étage (étages [14, 5, 6]) : BQN le devance dans 84 % des
+  variantes, et il devance Python dans 98 % ; avec JavaScript, il est à égalité de fait (meilleur rang moyen, 22,32
+  contre 22,34, mais JavaScript le devance dans 57 % des variantes).
   FreePascal, ajouté le 6 novembre, entre dans l'étage de C#, Java, Go et Haskell : C# le devance dans 82 % des
-  variantes, et il devance Java dans 54 %, Go dans 64 % et Haskell dans 87 %.
+  variantes, et il devance Java dans 53 %, Go dans 62 % et Haskell dans 86 %.
   Ces variantes ne font varier ni l'effort d'implémentation ni le choix du code naturel : avec ses meilleures formes
   mesurées, une particule en `struct` et un JIT stabilisé, C# dépasse Mojo au score (62,0 à 63,3 points contre 61,9)
   et fait jeu égal avec lui au rang, 14e ou 15e ([`docs/CSHARP.md`](docs/CSHARP.md)).
 * **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** Un langage y devance le suivant
-  dans 48 à 74 % des variantes. C ou C++ est premier dans 61 % des variantes (C 49 %, C++ 12 %), Odin dans 17 %, Zig
-  dans 10 %.
+  dans 45 à 71 % des variantes. C ou C++ est premier dans 62 % des variantes (C 50 %, C++ 12 %), Odin dans 18 %, Zig
+  dans 9 %.
 * **La 1re place de C dépend de choix de protocole.** Sous la règle « ISO seule » du « Banc de sympathie
   mécanique », qui ne compte ni les extensions de compilateur ni la glibc, C passe 5e et Odin 1er ; avec le contrôle
-  noté en règle v1 partout, Odin passe aussi devant C, de peu (rang moyen 2,77 contre 2,97). Avec le K4 de clang++
-  pour C++ (le même vectoriseur que C), C++ passe 1er (80,3 points contre 80,0 ; rang moyen 2,21 contre 2,55). Sur
+  noté en règle v1 partout, Odin passe aussi devant C, de peu (rang moyen 2,75 contre 2,96). Avec le K4 de clang++
+  pour C++ (le même vectoriseur que C), C++ passe 1er (80,3 points contre 80,0 ; rang moyen 2,17 contre 2,53). Sur
   Emerald Rapids, C++ est 1er. À l'inverse, l'arène de K8 de C, écrite de façon à faire passer son état par la
   mémoire, lui coûte 4 points : écrite par itération, elle le remet nettement en tête (84,0 points), même face au K4
   de clang++ pour C++ (80,2). Le classement garde les implémentations et le protocole fixés d'avance
@@ -186,13 +197,13 @@ par moi sur des machines Intel, sauf le pilier « contrôle », qui est un inven
   l'éditeur de liens (voir plus bas).
 * **La version du compilateur peut déplacer un langage.** Zig 0.16 et 0.17 désactivent le vectoriseur de boucles de
   LLVM, pour contourner un bug de LLVM qui compilait mal le compilateur Zig lui-même ; la version de développement
-  (0.18-dev) le réactive. Avec elle, et sans changer une ligne de code, Zig passe de 72,3 à 75,7 points et du 4e au
-  1er rang espéré (1er dans 48 % des variantes, C dans 34 %). Le classement garde la règle fixée d'avance, la dernière
+  (0.18-dev) le réactive. Avec elle, et sans changer une ligne de code, Zig passe de 72,3 à 75,7 points et du 5e au
+  1er rang espéré (1er dans 48 % des variantes, C dans 35 %). Le classement garde la règle fixée d'avance, la dernière
   version stable ([`docs/ZIG.md`](docs/ZIG.md)).
 * **Le plafond de K4 compte la vectorisation automatique.** La spécification n'admet pour K4 que deux formes
   scalaires : son plafond mesure ce que le compilateur fait d'une boucle scalaire, comme le code par défaut. Sans K4
-  dans le plafond, C++ passe 1er (80,1 points, rang moyen 2,47, 1er dans 37 % des variantes), devant C (79,2 ; 2,89)
-  et Zig (75,6 ; 2,93), au coude à coude ; Mojo est 13e. Le classement garde la spécification fixée d'avance
+  dans le plafond, C++ passe 1er (80,0 points, rang moyen 2,44, 1er dans 38 % des variantes), devant C (79,2 ; 2,87)
+  et Zig (75,6 ; 2,96), au coude à coude ; Mojo est 13e. Le classement garde la spécification fixée d'avance
   ([`docs/MOJO.md`](docs/MOJO.md)).
 * **Le contrôle pèse lourd, et il est jugé.** Il explique 74 % des écarts de score entre les 14 premiers. Sur les
   seules mesures (le plafond), la tête serait C, C3, Swift, C++, Odin, Chapel, D.
@@ -246,16 +257,7 @@ ne lui coûte que 0,25 point face à C, dont la table naturelle est lente aussi.
 
 ### Le peloton des langages compilés à types valeur
 
-**4. Zig.** Tous les leviers du DOD : `std.MultiArrayList` (SoA dans la bibliothèque standard), `@Vector`,
-`comptime`, allocateurs passés explicitement, aucune allocation cachée, et la latence d'allocation la plus régulière
-de l'étude (p99,9 égale à 3 fois la médiane sur K8, Emerald Rapids). Son plafond n'est que 12e (70), parce que Zig
-0.17 ne vectorise aucune des deux boucles naturelles mesurées. Ce n'est pas le langage : l'équipe Zig a désactivé le
-vectoriseur de boucles de LLVM en 0.16 et 0.17, pour contourner un bug de LLVM. La version de développement
-(0.18-dev), qui le réactive, vectorise les deux boucles sans changer une ligne de code ; Zig a alors le 8e plafond
-(78), le meilleur code naturel de l'étude, et passe 1er en rang espéré, devant C. Ses threads coûtent aussi trois fois
-plus cher à lancer que ceux de la glibc (environ 160 µs contre 50 par thread).
-
-**5. C3.** C avec des vecteurs natifs, des génériques par déclaration, des allocateurs et `@pool` : 2e plafond de
+**4. C3.** C avec des vecteurs natifs, des génériques par déclaration, des allocateurs et `@pool` : 2e plafond de
 l'étude (83,5), deux boucles naturelles vectorisées. Il lui manque le SoA, les intrinsèques officiels et un contrôle
 local de la réassociation flottante (seule une option globale, `--fp-math`, l'autorise) ; son assembleur en ligne ne
 couvre qu'un sous-ensemble du jeu x86, et son `@noalias`, expérimental, marque le mauvais paramètre. Son code naturel
@@ -266,7 +268,17 @@ entrée allouée par insertion (K7, 4 fois le meilleur). Sa latence d'allocation
 compilés sans ramasse-miettes (277 µs sur K8, Emerald Rapids) ; son maximum (2,2 ms) est au niveau de ceux d'Odin et
 de Mojo. Cinq errata de sa matrice, le 1er novembre, portent son contrôle de 73 à 76 sans changer sa place ; ni une
 réduction en arbre (K5), ni des fils lancés sans attente (K9), ni le pipeline O3 de LLVM ne lui en font gagner une
-([`docs/C3.md`](docs/C3.md)).
+([`docs/C3.md`](docs/C3.md)). L'ajout de PHP, sans changer son score, le fait passer devant Zig au rang moyen (5,11
+contre 5,14), à égalité de fait : Zig le devance encore dans 54 % des variantes (voir l'ordre, plus haut).
+
+**5. Zig.** Tous les leviers du DOD : `std.MultiArrayList` (SoA dans la bibliothèque standard), `@Vector`,
+`comptime`, allocateurs passés explicitement, aucune allocation cachée, et la latence d'allocation la plus régulière
+de l'étude (p99,9 égale à 3 fois la médiane sur K8, Emerald Rapids). Son plafond n'est que 12e (70), parce que Zig
+0.17 ne vectorise aucune des deux boucles naturelles mesurées. Ce n'est pas le langage : l'équipe Zig a désactivé le
+vectoriseur de boucles de LLVM en 0.16 et 0.17, pour contourner un bug de LLVM. La version de développement
+(0.18-dev), qui le réactive, vectorise les deux boucles sans changer une ligne de code ; Zig a alors le 8e plafond
+(78), le meilleur code naturel de l'étude, et passe 1er en rang espéré, devant C. Ses threads coûtent aussi trois fois
+plus cher à lancer que ceux de la glibc (environ 160 µs contre 50 par thread).
 
 **6. Rust.** 8e plafond (78) et un code naturel meilleur que celui de C, de C++ et de D : `repr(C)`, `repr(align)`,
 `std::arch` avec AVX-512 stable, flottants `algebraic_*` pour réassocier opération par opération, seule file standard
@@ -315,7 +327,15 @@ réassocier, `Allocators`, `foreach`) et des intrinsèques limitées aux fonctio
 ([`docs/CHAPEL.md`](docs/CHAPEL.md)). Ses threads ouvriers consomment 23 % de CPU en plus sur les noyaux à un thread.
 Ce qui le distingue le plus, la distribution sur plusieurs nœuds et le GPU, n'est pas mesuré ici.
 
-**11. Swift.** Ajouté le 5 novembre (Swift 6.4.2, [`docs/SWIFT.md`](docs/SWIFT.md)). Des structs rangées en ligne dans
+**11. Fortran.** Le langage natif du HPC : tableaux multidimensionnels contigus, syntaxe tableau, `do concurrent`,
+absence d'aliasing par règle du langage, OpenMP ; stencil excellent. Mais ni types SIMD, ni intrinsèques, ni
+génériques : tout dépend du vectoriseur. Sur K4, gfortran fait jeu égal avec GCC sur C (5,0 ms, contre 2,8 ms pour
+clang) ; sur K5 et K8, ses versions optimisées restent 1,2 à 1,4 fois plus lentes que celles du C de GCC. Mon banc
+laissait gfortran inliner ses noyaux dans la boucle de mesure, où K4 restait scalaire (13 ms) : corrigé, Fortran
+gagne deux places ([`docs/FORTRAN.md`](docs/FORTRAN.md)). Le classement mesure gfortran 16.2 ; flang, en annexe,
+vectorisait déjà K4 dans le banc d'origine, et ifx n'est pas mesuré.
+
+**12. Swift.** Ajouté le 5 novembre (Swift 6.4.2, [`docs/SWIFT.md`](docs/SWIFT.md)). Des structs rangées en ligne dans
 les tableaux (64 octets par particule), `InlineArray` de taille fixe, des types SIMD dans la bibliothèque standard
 (`SIMD16<Float>`, `addProduct` pour la FMA), des atomiques à ordres explicites (`Synchronization`), le comptage de
 références au lieu d'un ramasse-miettes traçant, et des pointeurs bruts pour le code optimisé : 3e plafond (80), au
@@ -331,23 +351,17 @@ Cascade Lake, 5,0 sur Emerald Rapids), et `Dictionary` (SipHash) et les nœuds e
 la table et l'allocateur du C. Sa bibliothèque SIMD a ses pièges : des conversions non inlinées, des comparaisons à un
 scalaire compilées voie par voie, et aucun accès aux bits d'un masque. Il est relié aux données publiées par le C
 mesuré au même moment, sur un Cascade Lake pour les noyaux de la machine 1 et sur un Emerald Rapids pour K5, K9 et les
-latences de K8. Relu après coup : deux errata de ma grille (affinité par le module Glibc, préchargement) le font
+latences de K8. Relu après coup : deux errata de ma grille (affinité par le module Glibc, préchargement) l'ont fait
 passer de la 12e à la 11e place, devant Fortran de peu (54 % des variantes) ; le pont mesuré sur Emerald Rapids ne
-change presque rien (− 0,08 point) ([`docs/SWIFT.md`](docs/SWIFT.md), 5).
-
-**12. Fortran.** Le langage natif du HPC : tableaux multidimensionnels contigus, syntaxe tableau, `do concurrent`,
-absence d'aliasing par règle du langage, OpenMP ; stencil excellent. Mais ni types SIMD, ni intrinsèques, ni
-génériques : tout dépend du vectoriseur. Sur K4, gfortran fait jeu égal avec GCC sur C (5,0 ms, contre 2,8 ms pour
-clang) ; sur K5 et K8, ses versions optimisées restent 1,2 à 1,4 fois plus lentes que celles du C de GCC. Mon banc
-laissait gfortran inliner ses noyaux dans la boucle de mesure, où K4 restait scalaire (13 ms) : corrigé, Fortran
-gagne deux places ([`docs/FORTRAN.md`](docs/FORTRAN.md)). Le classement mesure gfortran 16.2 ; flang, en annexe,
-vectorisait déjà K4 dans le banc d'origine, et ifx n'est pas mesuré.
+change presque rien (− 0,08 point) ([`docs/SWIFT.md`](docs/SWIFT.md), 5). L'ajout de PHP l'a ramené à la 12e place,
+sans changer son score : Fortran le précède d'un rang moyen à peine meilleur (10,85 contre 10,86), bien que Swift le
+devance encore dans 52 % des variantes (voir l'ordre, plus haut).
 
 **13. Julia.** Structures immuables stockées en ligne, fonctions spécialisées par types et JIT LLVM : les deux boucles
 naturelles sont vectorisées, et son code naturel est le 2e de l'étude, derrière celui d'Odin. Ce qui la place 13e,
 c'est d'abord son plafond (62, le plus bas des 14 premiers) : ses versions optimisées de K8, Q1, K5 et K7 restent loin
 des meilleures, en partie parce qu'elles sont moins travaillées que celles des autres langages ; réécrites comme le
-propose un relecteur, elles lui vaudraient 3 à 5 points, la 12e place, et la 11e avec K5 en 512 bits
+propose un relecteur, elles lui vaudraient 3 à 5 points et la 11e place, avec ou sans K5 en 512 bits
 ([`docs/JULIA.md`](docs/JULIA.md)). Son runtime pèse moins : sur K8, le ramasse-miettes porte bien la latence p99,9 à
 30 fois la médiane (Emerald Rapids), mais son code par défaut reste entre ceux de C3 et d'Ada. Sur la file de K10
 (hors score), le blocage que j'attribuais à l'ordonnanceur venait de mon code : une variable capturée faisait allouer,
@@ -475,7 +489,30 @@ le C, comme FreePascal, avec CBQN construit pour la cible de chaque donnée publ
 
 ### La machine disparaît derrière le moteur
 
-**22. JavaScript.** V8 compile les boucles sur tableaux typés en code machine, mais en garde les vérifications : dans
+**22. PHP.** Ajouté le 7 novembre (PHP 8.5.12, [`docs/PHP.md`](docs/PHP.md)). Le classement mesure la construction de
+production de php-src, avec les extensions livrées dont le banc a besoin (FFI, `pcntl`, `shmop`, `sysvsem`), OPcache et
+le JIT tracing activés, comme le recommande le manuel : la CLI n'active ni l'un ni l'autre par défaut, et sans eux PHP
+perdrait 0,3 point et passerait derrière JavaScript. Chaque valeur est un zval de 16 octets et chaque objet une
+référence : une particule de K1 occupe 352 octets au tas, et K1 naturel prend 17 fois le temps du C (38 fois dans le
+désordre). Le JIT compile bien les boucles simples sur des tableaux d'entiers ou de flottants (K5 naturel 1,18 fois le
+C, les deux bornés par la latence de l'addition flottante), mais l'écart s'ouvre dès que le C vectorise (K4 33 à 103
+fois, K5 optimisé 50 fois), et pour lire un tableau de tableaux (K9 naturel, 70 fois), il rend la main à l'interprète.
+Il n'a ni SIMD ni fils : les noyaux parallèles passent par des processus (`pcntl_fork`) et des segments de `shmop`,
+lus et écrits par copie, et K3 y mesure le coût des appels à `shmop` et à `sysvsem`, pas la cohérence des caches. Son
+contrôle (27,4, 21e) est presque celui de Python (29,7) : comme `ctypes`, la FFI donne les `struct`, les unions,
+l'alignement et les tableaux du C ; mais elle convertit en valeur PHP chaque donnée lue, et ses tableaux ne battent
+ceux de PHP que sur la chasse de pointeurs (K2). Les cases que seule la FFI lui donne, et celle des processus, mises à
+0, lui retireraient 4,6 points ; il resterait devant Python dans 83 % des variantes. Deux faits de la chaîne pèsent sur
+qui voudrait mesurer PHP : un script modifié depuis moins de 2 secondes échappe au JIT, et le JIT tracing de 8.5.12
+calcule faux une pile écrite par deux `$st[$sp++]` de suite (la construction d'un arbre ne s'arrête plus ; le K8
+optimisé écrit ses piles à indices explicites). Plafond (4,5) et code par défaut (20,7) le placent 23e, devant Lua et
+Python ; avec JavaScript, au profil inverse (presque deux fois moins de contrôle, 2,7 fois son plafond), il est à
+égalité de fait : un rang moyen à peine meilleur (22,32 contre 22,34), mais JavaScript le devance dans 57 % des
+variantes. Toutes ses clés sont mesurées sur un Emerald Rapids (machine 28) et reliées par le C ; pour K2 à 8 Mio, que
+cet hôte mesure dans deux régimes de cache selon le processus, le pont prend des médianes, une règle décidée après
+avoir vu les données (avec le calcul prévu, 16,6 points, 22e aussi).
+
+**23. JavaScript.** V8 compile les boucles sur tableaux typés en code machine, mais en garde les vérifications : dans
 K5, une vérification de bornes par accès et une de débordement par indice, une adresse recalculée avant chaque
 chargement et des accumulateurs sur la pile (K5 naturel 1,9 fois plus lent que le C scalaire de GCC). Les objets sont
 des références (416 octets par particule : chaque flottant dans un `HeapNumber`, Node n'activant pas la compression de
@@ -488,7 +525,7 @@ durée ramène à 1 ms (+ 1,7 point en sensibilité). La remarque sur JavaScript
 cases de 32 octets au lieu de 16) et trois errata de la matrice (E1, A4, E6) : JavaScript passe de 14,3 à 15,6 points,
 sans changer de place ([`docs/JAVASCRIPT.md`](docs/JAVASCRIPT.md)).
 
-**23. Python.** Le classement mesure CPython dans son build par défaut, avec sa seule bibliothèque standard : NumPy et
+**24. Python.** Le classement mesure CPython dans son build par défaut, avec sa seule bibliothèque standard : NumPy et
 les autres outils par lesquels on fait d'ordinaire calculer Python sont tiers, et exclus. Python est environ 200 fois
 plus lent que le meilleur langage, noyau par noyau, et l'interpréteur masque la hiérarchie mémoire elle-même : un saut
 dépendant coûte 49 ns en L1 comme en L2, au lieu de 1,6 et 4,4 ns. Une particule coûte 750 octets. Dans le build par
@@ -502,7 +539,7 @@ passe de 9,9 à 11,8 points, sans changer de place (son K8 naturel déclarait au
 sans effet visible) ; `gc.freeze()` supprimerait les pauses de 0,76 s de K8 naturel (+ 0,2 point en sensibilité)
 ([`docs/PYTHON.md`](docs/PYTHON.md)).
 
-**24. Lua.** Le classement mesure PUC-Lua 5.5 sans son API C, par laquelle Lua confie le bas niveau au C. Sur les deux
+**25. Lua.** Le classement mesure PUC-Lua 5.5 sans son API C, par laquelle Lua confie le bas niveau au C. Sur les deux
 piliers mesurés, Lua fait mieux que CPython (plafond 1,31 contre 0,59, code par défaut 10,0 contre 4,9) ; c'est le
 contrôle qui le place derrière Python : ni threads, ni SIMD, ni types valeur, ni mémoire brute dans sa bibliothèque
 standard, et une particule coûte 449 octets. Python ne le devance que dans 58 % des variantes. La remarque sur Lua a
@@ -517,19 +554,19 @@ Python avec la grille de Lua (11,1 points), et au niveau de JavaScript, devant l
 Les résultats les plus solides de l'étude : chacun isole une cause, avec ses conditions.
 
 1. **Les données d'abord.** Une particule de 64 octets en occupe 64 dans 15 langages, 78 en Java, 88 en C#, 128 en
-   BQN (sans flottant 32 bits), 144 en OCaml, 416 en JavaScript et 750 en Python. Parcourir une collection de
-   références dans le désordre coûte 4,7 à 7,0 fois plus (C#, Java, JavaScript, OCaml) ; avec des types valeur,
-   l'ordre ne change rien.
+   BQN (sans flottant 32 bits), 144 en OCaml, 352 en PHP, 416 en JavaScript et 750 en Python. Parcourir une
+   collection de références dans le désordre coûte 4,7 à 7,0 fois plus (C#, Java, JavaScript, OCaml) ; avec des types
+   valeur, l'ordre ne change rien.
 2. **Le SIMD explicite** divise le produit scalaire par 20 à 40 : 3,7 à 5,7 ms dans les langages compilés, en C# et
    en Java (Vector API, sur des données alignées hors tas), contre 77 à 166 ms pour la boucle naturelle en ordre strict
-   (Emerald Rapids). Go (expérimental, 7,2 ms) suit ; OCaml, JavaScript et BQN n'en ont pas (la somme vectorielle de
-   la bibliothèque de BQN, `•math.Sum`, prend 33 ms).
+   (Emerald Rapids). Go (expérimental, 7,2 ms) suit ; OCaml, JavaScript, BQN et PHP n'en ont pas (la somme
+   vectorielle de la bibliothèque de BQN, `•math.Sum`, prend 33 ms).
 3. **La vectorisation automatique se vérifie sur le code exécuté.** Aucune des deux boucles naturelles testées n'est
    vectorisée en C#, Go, Mojo (dont le compilateur n'a pas de vectoriseur de boucles), Zig 0.17 (vectoriseur de boucles
-   désactivé par l'équipe Zig, réactivé dans la version de développement), Swift, Haskell, OCaml, JavaScript, Lua et
-   Python. En BQN, les boucles chaudes sont celles des primitives, écrites à la main en Singeli : celle du stencil est
-   vectorisée, celle de K4 (le filtre, une compression par `vpshufb`) compte comme scalaire, la règle ne retenant que
-   l'arithmétique empaquetée.
+   désactivé par l'équipe Zig, réactivé dans la version de développement), Swift, Haskell, OCaml, JavaScript, PHP
+   (dont le JIT rend les lectures du stencil à l'interprète), Lua et Python. En BQN, les boucles chaudes sont celles
+   des primitives, écrites à la main en Singeli : celle du stencil est vectorisée, celle de K4 (le filtre, une
+   compression par `vpshufb`) compte comme scalaire, la règle ne retenant que l'arithmétique empaquetée.
    Les vérifications de bornes l'empêchent sur le stencil naturel en Ada (71 ms, contre 36 ms) ; en D (56 ms, sans
    vérifications) et en Rust (73 ms, scalaire même sans elles), c'est l'aliasing : ni LDC ni rustc ne transmettent de
    règle de type à LLVM, et les pointeurs de lignes sont relus après chaque écriture ; en Nim (71 ms), ce sont les deux,
@@ -556,7 +593,9 @@ Les résultats les plus solides de l'étude : chacun isole une cause, avec ses c
    CPython, le verrou global sérialise les threads (sur K3, à peine plus d'un cœur sur quatre travaillait, pour 24 000
    `futex` par répétition, Emerald Rapids) ; des sous-interpréteurs, un verrou chacun, travaillent en parallèle et
    font apparaître le faux partage que le verrou masquait (3,0 fois en écriture unique). BQN n'a ni threads ni
-   atomiques : K3 s'y exécute en séquence (211 fois C en écriture unique, compteurs espacés).
+   atomiques : K3 s'y exécute en séquence (211 fois C en écriture unique, compteurs espacés). PHP non plus : ses noyaux
+   parallèles passent par des processus, et K3 par des sémaphores System V et des copies de mémoire partagée, des
+   appels système (409 fois C en écriture unique, compteurs espacés).
 7. **Allocation.** Une arène divise K8 par 5 ou 6. Les allocateurs générationnels de Java et d'OCaml sont les
    meilleurs pour du code naturel (302 et 334 ms). Les ramasse-miettes laissent des queues (K8 remesuré sur Emerald
    Rapids) : pause de 89 ms en D, p99,9 à 30 fois la médiane en Julia, arrêt de 0,76 s en Python. Les runtimes font
@@ -589,7 +628,8 @@ du langage.
   bibliothèque standard. Toutes doivent rendre le même résultat, au bit près pour les entiers. Un temps sous la
   borne physique de la machine est rejeté.
 * **Chaînes de compilation** : les dernières versions stables au 28 octobre 2026, Swift 6.4.2, ajouté le
-  5 novembre, Free Pascal 3.2.2 et CBQN 0.12.0 (BQN), ajoutés le 6 ([`env/toolchains.txt`](env/toolchains.txt)),
+  5 novembre, Free Pascal 3.2.2 et CBQN 0.12.0 (BQN), ajoutés le 6, PHP 8.5.12, ajouté le 7
+  ([`env/toolchains.txt`](env/toolchains.txt)),
   compilation pour le CPU hôte, ni PGO ni LTO.
 * **Machines** : des VM Firecracker à 4 vCPU, un Xeon Cascade Lake (mesures de référence) et un Xeon Emerald Rapids
   (réplication complète) ; K5 et K9 viennent de deux Emerald Rapids (machines 3 et 16). Swift, ajouté après la
@@ -601,7 +641,9 @@ du langage.
   le sont sur un autre hôte du même modèle (machine 26), par rapports au binaire publié. BQN est mesuré de même, toutes
   ses clés sur la machine 26, avec le C de la construction de chaque donnée publiée et CBQN construit pour la même
   cible ; les corrections de sa remarque le sont sur la machine 27, par rapports au binaire publié
-  ([`docs/BQN.md`](docs/BQN.md)). Pas de compteurs matériels ;
+  ([`docs/BQN.md`](docs/BQN.md)). PHP est mesuré de même, toutes ses clés sur un Emerald Rapids (machine 28), avec le
+  C de la construction de chaque donnée publiée ; un seul binaire suffit, son JIT choisissant ses instructions à
+  l'exécution ([`docs/PHP.md`](docs/PHP.md)). Pas de compteurs matériels ;
   les compteurs du noyau (appels système, défauts de page, uprobes) servent aux faits de mécanisme
   ([`docs/INSTRUMENTS_V3.md`](docs/INSTRUMENTS_V3.md)).
 * **Score** :
@@ -638,8 +680,18 @@ du langage.
   ne changent pas sa place (21e) ; le facteur de K7 naturel (16,3, celui de la table chaînée du C) le pénalise sans
   doute (19,0 s publiés ; 3,7 s avec le facteur de la table plate, + 0,17 point, même place). Sa réplication passe
   par le même pont ([`docs/BQN.md`](docs/BQN.md), 4 et 5.9).
+* PHP non plus : toutes ses clés viennent d'un Emerald Rapids (machine 28), reliées par le C, d'un seul binaire (son
+  JIT choisit ses instructions à l'exécution, sans AVX-512 : le même code sur les deux modèles). Le facteur du pont de
+  K3 en écriture unique (4,7 compteurs espacés, 11,3 tassés) vient du faux partage du C sur Cascade Lake, pas du temps
+  de PHP, fait d'appels système ; le second témoin et un facteur d'hôte unique, qui écarte ce biais, ne changent pas
+  sa place (22e). Pour K2 à 8 Mio, que la machine 28 mesure dans deux régimes de cache selon le processus (vers 160
+  ou 520 ms), le pont prend la médiane des médianes de processus et non leur moyenne géométrique, une règle décidée
+  après avoir vu les données : le calcul prévu faisait de PHP le plus rapide des 25 à cette taille, donc la référence
+  de la hiérarchie mémoire (D4), et retirait 0,06 à 0,42 point à chacun des 24 autres (PHP : 16,6 points, 22e aussi).
+  Sa réplication passe par le même pont ([`docs/PHP.md`](docs/PHP.md), 4).
 * Des implémentations écrites par un seul auteur, sans relecture experte ; l'effort peut varier d'un langage à
-  l'autre. Les 24 langages ont été relus après coup par des connaisseurs, Swift, FreePascal puis BQN en dernier ;
+  l'autre. Les 24 premiers langages ont été relus après coup par des connaisseurs, Swift, FreePascal puis BQN en
+  dernier (PHP, ajouté le 7 novembre, ne l'a pas encore été) ;
   C l'a été
   alors que sa
   référence est la seule implémentation mise au point, mesures à l'appui, avant le plan. Ada et Fortran y ont gagné
@@ -651,7 +703,7 @@ du langage.
   de place, par deux errata de la matrice (− 1,1) et deux corrections de son banc (K7 naturel en idiome de la
   documentation, somme de contrôle de K9 hors chrono) ;
   Mojo 2,7 points, Julia 1,8 point, C3 et Odin 0,9 point, mais aucune place, par des errata de la matrice (ceux de C3
-  font passer Nim devant Rust, à égalité ; celui d'Odin le met à égalité avec C++) ; Zig trois places, mais par une
+  font passer Nim devant Rust, à égalité ; celui d'Odin le met à égalité avec C++) ; Zig quatre places, mais par une
   version de compilateur que la règle exclut ; C++ a perdu la 2e place au profit d'Odin par un erratum de la règle v1,
   et C et C++ chacun 3,6 points de contrôle en règle v1 par deux autres, relevés par la remarque sur C, sans changer
   de place (C reste 1er, mais ne l'est plus que dans 52 % des variantes, contre 57 %) ; Java 1,0 point, sans changer
@@ -664,8 +716,8 @@ du langage.
   de la matrice ; Python 1,9 point, sans changer de place, par la correction de ses noyaux parallèles et deux errata
   de la matrice ; Lua 1,5 point, sans changer de place, par la correction de K3, K4, Q6 et K8 naturel et deux errata
   de la matrice ; C# et Nim rien, leurs remarques ne relevant ni erratum ni erreur du banc. Des versions optimisées
-  mieux travaillées vaudraient une place à Nim (Q1 en intrinsèques), 0,8 point à Odin, déjà 2e (Q1 par popcount), une
-  place à Julia (deux avec K5 en 512 bits), aucune à Rust ni à C3 une par une et, cumulées avec un autre choix de code
+  mieux travaillées vaudraient une place à Nim (Q1 en intrinsèques), 0,8 point à Odin, déjà 2e (Q1 par popcount), deux
+  places à Julia (avec ou sans K5 en 512 bits), aucune à Rust ni à C3 une par une et, cumulées avec un autre choix de code
   naturel et un JIT stabilisé, 7 à 8 points à C#, assez pour dépasser Mojo au score ; 4 points à Java (Q1 en une
   passe, K7 isolé de sa boucle de mesure, K8 itératif), sans changer de place ; une place à Go (K9 en SIMD explicite,
   K8 itératif), qui passerait devant Java ; aucune à Haskell (`-N1` pour ses noyaux séquentiels et les cases
@@ -706,10 +758,10 @@ du langage.
 * Le pilier « contrôle » est jugé par un seul évaluateur ; c'est lui qui départage le plus le haut du tableau.
 * Une seule version de compilateur par langage, la dernière stable au 28 octobre (pour Swift, au 5 novembre ; pour
   FreePascal, au 6 novembre : la 3.2.2, de mai 2021, branche stable 3.2 ; la 3.2.4 n'est qu'en bêta ; pour BQN, au 6
-  novembre : CBQN 0.12.0, de juin 2026), à
+  novembre : CBQN 0.12.0, de juin 2026 ; pour PHP, au 7 novembre : la 8.5.12, du 21 octobre 2026), à
   l'installation : Nim 2.4.0 est sorti le même jour, après les premières mesures, et son code machine est identique
   pour 20 des 21 fonctions des noyaux. Un réglage temporaire d'une chaîne peut coûter des rangs : Zig 0.17, dont le
-  vectoriseur de boucles est désactivé, perd trois places en rang espéré par rapport à sa version de développement. Je
+  vectoriseur de boucles est désactivé, perd quatre places en rang espéré par rapport à sa version de développement. Je
   n'ai mesuré plusieurs versions que pour Zig, pour C# (.NET 11, en préversion : 0,99 fois les temps de .NET 10 en
   moyenne, aucune place gagnée) et pour FreePascal (3.2.4-rc2 : 16e ; branche main, sa grille et ses meilleures
   formes : 15e, au score de C# ; [`docs/FPC.md`](docs/FPC.md), 5). D est compilé par LDC 1.43.0 construit depuis ses sources contre LLVM 21.1.8 ; le
@@ -736,11 +788,11 @@ du langage.
   ([`docs/PYTHON.md`](docs/PYTHON.md)). PyPy n'est pas mesuré, contrairement à LuaJIT et à Bun.
 * Le plafond de K4 n'admet que des formes scalaires et compte donc la vectorisation automatique (voir plus haut).
 * Ailleurs, le plafond admet le SIMD explicite (« toutes techniques »). Sans lui ([`docs/NOSIMD.md`](docs/NOSIMD.md)),
-  onze langages restent en tête dans les trois lectures, les dix premiers du classement et Fortran ; Swift, dont
-  toutes les variantes optimisées sont écrites avec ses types SIMD, et Julia se disputent la 12e place (Julia à la
-  lettre et à forme égale, Swift sans les noyaux vectorisables) ; les onze mêmes restent derrière, de Mojo à Lua (Java
-  devant Go, de peu, sauf à la lettre, où Go passe devant de 0,04 rang). C et Odin restent dans les six premiers, C++
-  dans les sept. L'ordre en tête dépend du
+  onze langages restent en tête dans les trois lectures, les onze premiers du classement ; Julia complète ce groupe
+  de tête dans les trois, de 0,01 rang sans les noyaux vectorisables, où Swift, dont toutes les variantes optimisées
+  sont écrites avec ses types SIMD, le complétait avant l'ajout de PHP ; Swift est 13e dans les trois, et les douze
+  mêmes restent derrière, de Mojo à Lua (Java devant Go dans les trois, de 0,01 rang seulement à la lettre). C et Odin
+  restent dans les six premiers, C++ dans les sept. L'ordre en tête dépend du
   traitement des formes scalaires qui manquent : à la lettre, Chapel, Fortran et Julia passent devant, parce que dans
   K1 et K5 le SIMD des autres porte aussi la disposition SoA et la réassociation de la somme ; à forme égale pour
   tous, comme sans les noyaux vectorisables, C, Odin et C++ gardent les trois premières places (Odin 1er à forme
@@ -805,6 +857,9 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   [`results/report_bqn.md`](results/report_bqn.md) ; la remarque sur BQN (K7 naturel et somme de contrôle de K9
   corrigés, errata A3 et A6, formes en blocs en sensibilité) : [`docs/BQN.md`](docs/BQN.md), section 5, et
   [`results/report_bqn_remark.md`](results/report_bqn_remark.md).
+* L'ajout de PHP (OPcache et JIT tracing activés comme le recommande le manuel, choix du code naturel, faits relevés
+  dont un bogue du JIT tracing, processus et mémoire partagée pour les variantes parallèles, grille, plan, pont par le
+  C, sensibilités) : [`docs/PHP.md`](docs/PHP.md) et [`results/report_php.md`](results/report_php.md).
 * La remarque sur Ada (piège de GNAT, errata, implémentation corrigée et remesurée) : [`docs/ADA.md`](docs/ADA.md)
   et [`results/report_ada.md`](results/report_ada.md).
 * La remarque sur D (Q1 corrigé, deux errata de la règle v1, cause du stencil naturel) :
@@ -1199,6 +1254,26 @@ python3 tools/measure_bqn_rq.py            # remarque sur BQN : copie bqn_rq (bl
 
 ```bash
 python3 analysis/bqn_remark.py             # errata, formes en blocs, C5 ; transfers.json (ratios_added) -> report_bqn_remark.md
+```
+
+```bash
+bench/php/build.sh                         # PHP : 8.5.12 (/opt/php85), vérification syntaxique ; php_def de même
+```
+
+```bash
+probes/php/run.sh > results/probes/php.txt # sonde de la grille de PHP
+```
+
+```bash
+tools/php_check/facts.sh > results/php_check/facts.txt  # ajout de PHP : faits vérifiés et reproductions
+```
+
+```bash
+python3 tools/measure_php.py               # PHP, CLI par défaut, trois témoins C, machine 28 -> results/raw_php ; C3
+```
+
+```bash
+python3 analysis/php_check.py              # pont par le C, classement avec PHP, sensibilités -> report_php.md
 ```
 
 ```bash

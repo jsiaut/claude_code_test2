@@ -1444,3 +1444,41 @@ Robustesse :
   aucune divergence nouvelle) : pilier C 25,9 en v1 (C3 = 0), 27,4 en v2 (D4 à 1 comme Python). Validation de toutes
   les cellules, sommes justes. Outil `tools/measure_php.py` (122 cellules × 7 passes) ; scénarios Avant, P-E, P-direct,
   P-hôte, P-gcc, P-défaut, P-K1arr, P-C3, P-cases-bas et -haut, P-tout-bas et -haut, P-K7tab.
+* 2026-11-07, 08:16:26 à 10:01:29 : **mesures de l'ajout de PHP** (`tools/measure_php.py`, machine 28) : calibration
+  de 08:16:26 à 08:23:33, passes de 08:23:33 à 10:00:37, empreinte et C3 ensuite ; 854 processus (122 cellules × 7),
+  aucune somme de contrôle fausse, 13 processus refaits pour vol de temps (aucun gardé au-dessus de 2 % : 1,82 % au
+  plus, médiane 0,19 %). Empreinte de K1 : 352 o par particule. Pendant la campagne, seuls `analysis/php_check.py`
+  (poussé à 08:23:42, avant tout résultat) et des textes du README ont été écrits, et les statistiques de vol de temps
+  lues, sans calcul lourd. **Écart au plan** : la mesure de C3 s'est arrêtée sur une erreur, l'échantillonneur ne
+  reconnaissant pas le code du JIT d'OPcache (une projection partagée de `/dev/zero`, « /dev/zero (deleted) » dans
+  `/proc/<pid>/maps`) ; `tools/sampler.c` et `analysis/hotloop.py` corrigés (aucun autre profil publié n'a une telle
+  projection), les deux profils de PHP refaits à 10:02 et 10:03 : C3 = 0, la valeur par défaut, mais mesurée.
+* 2026-11-07, 10:05 à 10:44 : **résultats de l'ajout de PHP, sorties régénérées** (`analysis/php_check.py`, puis la
+  chaîne publiée et les états actuels de C et de NOSIMD). Contrôles : le scénario Avant reproduit R-E de
+  `results/bqn_remark.json` à l'identique ; les états actuels reproduisent P-E à l'identique. Premier calcul (10:11),
+  selon le plan : PHP 16,60 points, 22e ; mais sur K2 à 8 Mio, la machine 28 mesure dans deux régimes de cache selon le
+  processus (vers 160 ou 520 ms ; deux processus lents sur sept chez le témoin C, aucun chez PHP), et la moyenne
+  géométrique du pont faisait de PHP le plus rapide des 25 à cette taille (0,72 fois le C), donc la référence de D4 :
+  chacun des 24 autres perdait 0,06 à 0,42 point. **Écart au plan, décidé après avoir vu les données** : pour cette
+  seule clé, le facteur du pont prend la médiane des médianes de processus (`BRIDGE_MEDIAN`,
+  `analysis/analyze_v2.py` ; même règle pour le second témoin et la réplication) ; le calcul du plan reste un scénario
+  d'information (P-E-plan). Résultat (10:25) : PHP **22e, 16,56 points** [16,3–16,8], à égalité de fait avec
+  JavaScript (meilleur rang espéré, 22,32 contre 22,34, mais JavaScript devant dans 57 % des variantes) ; 22e ou 23e
+  dans tous les scénarios ; les 24 autres gardent leurs scores ; étages [14, 5, 6]. Vérifications (10:26 à 10:28) :
+  K2 à 8 Mio de PHP multiplié par 1,3, les rangs espérés des autres bougent encore (l'effet ne vient pas de K2) ;
+  latence maximale de PHP doublée, seuls ses voisins bougent (l'effet vient de D3).
+* 2026-11-07, 10:45 à 11:10 : **effet de PHP sur deux paires à égalité de fait, états actuels des remarques, README et
+  documents**. Le tableau du README, vérifié contre `results/summary_v3.json`, montrait onze écarts : C3 passe 4e
+  devant Zig (5,11 contre 5,14) et Fortran 11e devant Swift (10,85 contre 10,86), le duel direct penchant toujours de
+  l'autre côté (46 et 48 %). Cause vérifiée : dans la moitié des variantes, D3 lit les queues de latence de K8
+  relativement à la médiane, et PHP, lent mais régulier (max/p50 de 11,4), y devient la référence ; avec sa latence
+  maximale doublée, les quatre retrouvent exactement leurs rangs espérés d'avant PHP. Le plan l'admettait (3.6 : les
+  références suivent PHP) ; `docs/PHP.md` (4.4), qui disait ces rangs inchangés, est corrigé. Les états actuels des
+  remarques sur Zig, Mojo, C#, Julia, Rust et Nim, que les ajouts de FreePascal et de BQN n'avaient pas relancés,
+  sont régénérés à 25 langages (`.work/php/regen2.sh`) ; leurs chiffres cités par le README sont recalés (Zig 0.18-dev :
+  du 5e au 1er rang ; K4 hors du plafond : C++ 80,0 points ; Julia mieux écrite : 11e). README : tableau, ordre (quatre
+  écarts au score), ce qui est sûr, paragraphes de C3, de Zig, de Fortran et de Swift permutés et renumérotés,
+  paragraphe de PHP (22e), JavaScript, Python et Lua renumérotés, machines, limites (pont de PHP, K2 à 8 Mio),
+  versions, sensibilité sans SIMD explicite (Julia complète le groupe de tête dans les trois lectures ; Java devant Go
+  dans les trois). `docs/PHP.md` (section 4), `docs/FINDINGS.md`, `docs/NOSIMD.md` (4.24), `docs/CONFRONTATION.md`,
+  `docs/CAPABILITIES.md` (régénéré : colonne de PHP).

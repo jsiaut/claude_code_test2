@@ -481,6 +481,14 @@ rapport à 18 langages (`results/report_confrontation_current.md`) ne change pas
 classement à 24 bougent, de 0,08 à 0,10 pour BQN (toujours 21e), de 0,05 au plus pour OCaml, JavaScript et Python,
 et de moins de 0,001 pour les autres.
 
+Rejouée après l'ajout de PHP (7 novembre, `docs/PHP.md` ; PHP n'est pas dans l'autre étude) : le rapport à 18
+langages (`results/report_confrontation_current.md`) ne change pas, ni l'ordre des 18 dans aucun des quatre
+scénarios ; leurs rangs espérés bougent de 0,20 au plus (D, qui avance), parce que PHP devient, dans la moitié des
+variantes, la référence des queues de latence relatives (`docs/PHP.md`, 4.4). Dans le classement à 25, PHP est 22e
+dans les quatre scénarios, JavaScript, Python et Lua reculent d'un rang, et deux paires à égalité de fait échangent
+leurs places dans le scénario A (C3 et Zig, Fortran et Swift, comme dans le classement publié), une dans le scénario
+B (Ada passe 10e, devant Chapel).
+
 Autres faits relevés par le juge, sans changer ma note :
 
 * L'attribut `@(fast_math={.Allow_Reassoc})` d'Odin est documenté, mais le compilateur livré ne pose jamais le

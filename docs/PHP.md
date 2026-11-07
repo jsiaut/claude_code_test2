@@ -267,3 +267,130 @@ fait), graphiques. Texte : README (25 langages, tableau, paragraphe de PHP), FIN
   d'appel de fonction C par la FFI, pas de réglage du JIT au-delà de son activation (ni `jit_hot_loop`, ni
   `jit_buffer_size`), pas de `gc_disable` dans le code naturel.
 * K10 est implémenté et validé (Fibers) mais, comme pour BQN, n'est pas mesuré : il est hors score.
+
+## 4. Résultats (après les mesures)
+
+### 4.1 Mesures
+
+Mesures (`tools/measure_php.py`, machine 28, calibration de 08:16:26 à 08:23:33, passes de 08:23:33 à 10:00:37) :
+854 processus (122 cellules × 7 passes), aucune somme de contrôle fausse ; 13 processus refaits pour vol de temps,
+aucun gardé au-dessus de 2 % (1,82 % au plus), vol médian 0,19 %. Empreinte de K1 : 352,00 o par particule au tas de
+Zend dans les trois processus (RSS : 345 o), retenus tels quels (D2a = 0,18). C3 mesurée : 0, après une correction de
+l'outil (4.2) : la boucle chaude de K4 naturel est du code du JIT, scalaire (vérification du type, comparaison,
+addition avec contrôle de débordement, test d'interruption de la machine virtuelle) ; celle de K9 naturel n'est pas du
+code du JIT mais le gestionnaire `ZEND_FETCH_DIM_R` de la machine virtuelle (`execute_ex`) : pour les lectures dans un
+tableau de tableaux, le JIT rend la main à l'interprète (`results/vectorization/php_k4.txt`, `php_k9.txt`).
+
+### 4.2 Écarts au plan
+
+1. **C3, outil corrigé.** L'échantillonneur (`tools/sampler.c`) et `analysis/hotloop.py` ne copiaient le code des JIT
+   que dans les projections anonymes et la mémoire `/memfd:` de .NET ; OPcache écrit le code de son JIT dans une
+   mémoire partagée projetée depuis `/dev/zero`, que `/proc/<pid>/maps` nomme « /dev/zero (deleted) ». La mesure de la
+   campagne s'est donc arrêtée sur une erreur, notée scalaire par défaut. Les deux outils reconnaissent maintenant cette
+   projection (aucun autre langage n'en a : vérifié dans les 60 autres profils publiés) ; les deux profils de PHP ont été
+   refaits juste après la campagne (10:02 et 10:03). Résultat : 0, la même valeur, mais mesurée.
+2. **K2 à 8 Mio, pont robuste.** Sur cet hôte, le tableau de 8 Mio tient dans le L3 partagé avec les autres machines
+   virtuelles, et chaque processus tourne soit vers 160 ms, soit vers 520 ms (fait déjà relevé par la remarque sur
+   C++, `docs/CPP.md`). Le témoin `c` a eu deux processus lents sur sept (515 et 532 ms ; `c_er` deux, `c_gcc_cl` un, et un
+   intermédiaire à 244 ms), PHP aucun (156 à 168 ms). La moyenne géométrique du pont mêle les régimes : PHP sortait 1,4 fois plus rapide
+   que le C (0,72 [0,44–1,03]), le plus rapide des 25 langages à cette taille (453 ms reliés, contre 594 ms pour
+   Haskell), et chacun des 24 autres perdait 0,06 à 0,42 point par D4, dont la référence est le meilleur temps. Dans un
+   même régime, PHP et le C font la même chose (161 et 163 ms en médiane : une chasse de pointeurs que la latence du
+   cache borne). Décidé après avoir vu les données : pour cette seule clé, le facteur du pont prend la médiane des
+   médianes de processus du témoin et de PHP (`BRIDGE_MEDIAN` de `analysis/analyze_v2.py`, même règle pour le second
+   témoin de P-gcc et pour la réplication) : 3,835 au lieu de 2,810, PHP à 617 ms reliés. Le calcul du plan reste un
+   scénario d'information (P-E-plan : PHP 16,60 points, 22e). Pour BQN, relié depuis la machine 26 avec un processus
+   lent de chaque côté, la même règle déplacerait cette clé de 8 % : elle n'est pas appliquée, le mélange y étant
+   équilibré.
+3. **Aucun autre.** Cellules, répétitions, scénarios et règles comme fixés en 3.4 et 3.5.
+
+### 4.3 PHP face au C sur la machine 28, et le pont
+
+Rapports PHP / C (moyennes géométriques des médianes de processus, `results/report_php.md`) :
+
+| Noyau | Naturel | Optimisé et autres variantes |
+|---|---|---|
+| K1 | 17,2 (mélangé 38,1) | `aos` 5,1 ; `soa` 10,8 |
+| K2 | — | 3,3 à 16 Kio ; 1,25 à 256 Kio ; 1,0 à 8 Mio (médianes ; 0,72 en moyenne géométrique, 4.2) |
+| K3 | — | `rmw` 10,0 tassé, 97 espacé ; `sw` 1 066 tassé, 409 espacé |
+| K4 | 103 (trié 36) | `branchless` 33 |
+| K5 | 1,18 | 50 |
+| K6 | Q6 3,8 ; Q1 6,1 | `tuned` Q6 9,5, Q1 12,0 ; `mt` Q6 8,7, Q1 12,5 |
+| K7 | 12,3 | 8,0 |
+| K8 | 5,9 (latences : p50 231 µs, p99,9 836 µs, max 2,8 ms) | 2,5 |
+| K9 | 70 | 10,2 ; `mt` 13,5 |
+
+PHP est au niveau du C là où le C lui-même attend la mémoire ou une chaîne de dépendances : K5 naturel (1,18 : les deux
+sont bornés par la latence de l'addition flottante) et K2 à 256 Kio (1,25) et à 8 Mio (1,0). Dès que le C vectorise ou compte les cycles, l'écart
+s'ouvre : 33 à 103 fois sur K4, 50 sur K5 optimisé, 70 sur K9 naturel. Ses meilleures formes restent 2,5 (K8, arène
+itérative) à 13 fois le C. K3 mesure le coût des appels à `shmop` et à `sysvsem`, pas la cohérence des caches.
+
+Facteurs du pont (C publié / C de la machine 28) : 0,74 à 3,8 sur les clés de la machine 1, sauf K3 `sw` (4,7 espacé,
+11,3 tassé : le faux partage du C sur Cascade Lake, sans rapport avec PHP, dont le temps vient des appels) et K7 naturel
+(15,4, la table chaînée du C ; 3,1 pour sa table plate, P-K7tab) ; 0,85 à 1,15 pour K5 et K9 ; facteur d'hôte unique
+1,53 (P-hôte).
+
+### 4.4 Le classement publié (P-E) et les scénarios
+
+| Scénario | Score | Contrôle | Plafond | Code par défaut | Rang espéré | Place | Rang à 90 % | devant BQN | devant JavaScript |
+|---|---|---|---|---|---|---|---|---|---|
+| **P-E (publié)** | **16,56** | 27,4 | 4,50 | 20,7 | 22,32 | **22e** | 20–23 | 16 % | 43 % |
+| P-direct (information) | 17,74 | 27,4 | 8,02 | 19,8 | 21,79 | 22e | 20–23 | 33 % | 72 % |
+| P-hôte | 16,10 | 27,4 | 5,83 | 16,8 | 22,30 | 22e | 20–23 | 15 % | 46 % |
+| P-gcc | 16,65 | 27,4 | 4,64 | 20,9 | 22,30 | 22e | 20–23 | 17 % | 44 % |
+| P-défaut | 16,29 | 27,4 | 4,42 | 19,8 | 22,39 | 23e | 20–23 | 14 % | 39 % |
+| P-K1arr | 16,40 | 27,4 | 4,50 | 20,1 | 22,35 | 23e | 20–23 | 15 % | 41 % |
+| P-C3 | 16,56 | 27,4 | 4,50 | 20,7 | 22,32 | 22e | 20–23 | 16 % | 43 % |
+| P-cases-bas | 11,91 | 14,1 | 4,50 | 20,7 | 22,98 | 23e | 22–24 | 2 % | 14 % |
+| P-cases-haut | 18,39 | 32,6 | 4,50 | 20,7 | 22,07 | 22e | 20–23 | 26 % | 52 % |
+| P-tout-bas | 11,51 | 14,1 | 4,42 | 19,2 | 23,03 | 23e | 22–24 | 1 % | 12 % |
+| P-tout-haut | 18,39 | 32,6 | 4,50 | 20,7 | 22,07 | 22e | 20–23 | 26 % | 52 % |
+| P-K7tab (information) | 16,61 | 27,4 | 4,50 | 20,9 | 22,31 | 22e | 20–23 | 16 % | 43 % |
+| P-E-plan (information) | 16,60 | 27,4 | 4,50 | 20,9 | 22,29 | 22e | 20–23 | 17 % | 44 % |
+
+* **Classement publié (P-E)** : PHP est **22e sur 25, à 16,56 points** [16,3–16,8] (rang plausible 20 à 23), derrière
+  BQN (qui le devance dans 84 % des variantes) et à égalité de fait avec JavaScript : il passe devant lui au rang espéré
+  (22,32 contre 22,34) et par le score central (16,56 contre 15,6), mais JavaScript le devance dans 57 % des variantes.
+  Les deux langages ont des profils opposés : PHP a le double du contrôle de JavaScript (27,4 contre 14,6 : la FFI,
+  `pack`, les processus et la mémoire partagée), JavaScript trois fois son plafond (12,2 contre 4,5 : V8 compile mieux
+  que le JIT tracing de PHP les boucles sur tableaux). Selon le poids donné aux piliers, l'un ou l'autre passe devant.
+  Code par défaut 20,7 (code naturel 0,015 ; empreinte 0,29 ; queues de latence 0,23 ; hiérarchie mémoire 0,61). Plafond par noyau :
+  K8 0,16, K7 0,13, K1 0,09, K6 0,08, K9 0,07, K4 0,03, K5 0,02, K3 0,003.
+* **Sensibilités** : PHP reste 22e ou 23e dans toutes les lectures, entre BQN et Python. La CLI par défaut (sans OPcache
+  ni JIT) coûte 0,27 point : le JIT divise par 8,9 le temps de K5 naturel, par 3,2 et 4,2 celui de Q6 et Q1, mais
+  par 1,2 à 1,6 seulement celui des noyaux où dominent les tables, les objets et le ramasse-miettes (K1, K7, K8, K9) ;
+  les tableaux associatifs à la place des objets, 0,16 point (K1 1,9 fois plus lent, 2,5 fois dans le désordre). Les
+  cases que seule la FFI tient, mises à 0 avec D1, retirent 4,6 points (contrôle 14,1, à peu près celui de JavaScript) ; PHP reste
+  devant Python dans 83 % des variantes.
+* **Les 24 autres langages** gardent leurs scores (écart nul). Leurs rangs espérés bougent : JavaScript, Python et Lua
+  reculent d'un rang (+ 0,42, + 0,98, + 1,00), BQN de 0,21, OCaml de 0,08. Au milieu du classement, D (− 0,24), Swift
+  (+ 0,16), Julia (− 0,11), Chapel (+ 0,10), C3 (− 0,09), Zig (+ 0,08), Mojo et FreePascal (+ 0,07) bougent aussi, et
+  deux paires à égalité de fait échangent leurs places : C3 passe 4e devant Zig (rang espéré 5,11 contre 5,14 ; 5,20
+  contre 5,06 avant PHP) et Fortran 11e devant Swift (10,85 contre 10,86 ; 10,84 contre 10,70 avant). Dans les deux
+  paires, le duel direct penche toujours de l'autre côté : C3 ne devance Zig que dans 46 % des variantes (45 % avant),
+  Fortran Swift dans 48 % (46 % avant) ; le rang espéré somme les duels avec tous les autres, et C3 perd moins souvent
+  que Zig face à D, Rust, Chapel et Swift, Fortran moins souvent que Swift face à Julia, D et C3. Cet effet vient de
+  D3 : dans la moitié des variantes de l'analyse, les latences de K8 sont lues relativement à la médiane (p99,9/p50 et
+  max/p50), et PHP, dont les requêtes sont lentes mais régulières, a la plus petite queue relative (max/p50 de 11,4,
+  contre 20,0 pour Zig, le suivant) : il devient la référence de D3 dans ces variantes, ce qui baisse le D3 de tous et
+  rebat les paires serrées. Contrôle : avec la latence maximale de PHP doublée, seuls ses voisins bougent encore
+  (JavaScript, Python, Lua, BQN et OCaml, de plus de 0,05), et C3, Zig, Fortran et Swift retrouvent exactement leurs
+  rangs espérés d'avant PHP.
+* **Étages** : PHP rejoint le dernier étage, qui passe de cinq à six langages ([14, 5, 6]).
+
+### 4.5 Réplication (machine 3)
+
+PHP entre dans la réplication par le pont du C natif (`c_er`), avec la même règle pour K2 à 8 Mio : 22e sur la machine
+3 (15,76 points). Ce n'est pas une réplication indépendante pour lui. L'accord entre machines et le test nul, calculés
+sur les 21 langages répliqués indépendamment, ne changent pas.
+
+### 4.6 Bilan
+
+PHP est **22e sur 25** (16,56 points), dans le dernier étage, entre BQN et JavaScript, avec qui il est à égalité de
+fait. Sans changer aucun score, son ajout fait basculer deux paires à égalité de fait plus haut dans le classement (C3
+passe devant Zig, Fortran devant Swift), parce qu'il devient la référence des queues de latence relatives (4.4). Son contrôle est celui d'un langage dynamique qui a une FFI et des processus : au niveau de Python (27,4 contre
+29,7), plus haut que celui de JavaScript, de BQN et de Lua. Son plafond est bas : le JIT tracing compile bien les
+boucles simples sur des tableaux d'entiers et de flottants (K5 naturel au niveau du C), mais chaque valeur est un zval
+de 16 octets, chaque objet une référence de 352 octets par particule, sans SIMD, sans fils et sans tableau typé hors de
+la FFI. Deux faits de la chaîne pèsent sur qui voudrait mesurer PHP : la CLI n'active pas le JIT par défaut, et le JIT
+tracing de 8.5.12 calcule faux une forme courante de pile (2.4, point 2).

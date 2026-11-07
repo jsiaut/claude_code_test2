@@ -65,7 +65,7 @@ BACKEND = {
     "GCC": ["c_gcc", "cpp", "fortran", "ada"],
     "LLVM": ["c", "fortran_flang", "rust", "zig", "odin", "c3", "d", "nim", "chapel", "julia", "mojo", "haskell", "swift"],
     "natif, autre": ["go", "ocaml", "fpc"],
-    "JIT ou VM": ["java", "csharp", "js", "js_bun", "luajit", "bqn"],
+    "JIT ou VM": ["java", "csharp", "js", "js_bun", "luajit", "bqn", "php"],
     "interprète": ["python", "lua"],
 }
 
@@ -113,7 +113,8 @@ LAT_REPLACED = set()  # implémentations dont les latences de K8 naturel viennen
 # par le pont du C (docs/SWIFT.md, plan 3.2) : {langage: (répertoire de results, étiquette)}.
 ADDED = {"swift": ("raw_swift", "swift"),
          "fpc": ("raw_fpc", "fpc"),  # FreePascal (docs/FPC.md, plan 3.2) : toutes ses clés mesurées sur la machine 25
-         "bqn": ("raw_bqn", "bqn")}  # BQN (docs/BQN.md, plan 3.2) : toutes ses clés mesurées sur la machine 26
+         "bqn": ("raw_bqn", "bqn"),  # BQN (docs/BQN.md, plan 3.2) : toutes ses clés mesurées sur la machine 26
+         "php": ("raw_php", "php")}  # PHP (docs/PHP.md, plan 3.2) : toutes ses clés mesurées sur la machine 28
 # Remarque sur Swift (docs/SWIFT.md, plan 5.3) : les clés venues d'Emerald Rapids sont reliées par les rapports au C
 # mesurés sur la machine 24 (même modèle que les machines 3, 11 et 16), dans la construction qui a produit leurs données
 # publiées : {langage: {source: (répertoire, étiquette, implémentation du langage, implémentation du C)}}, source « k5 »
@@ -131,7 +132,11 @@ ADDED_ER = {"swift": {"k5": ("raw_swift_er", "swift_er", "swift_er", "c_er"),
             # les latences, témoin c (défaut : campagne d'origine) ; binaire natif de la machine 26 (bqn_er) pour K5 et
             # la réplication, témoin c_er
             "bqn": {"k5": ("raw_bqn", "bqn", "bqn_er", "c_er"),
-                    "m3": ("raw_bqn", "bqn", "bqn_er", "c_er")}}
+                    "m3": ("raw_bqn", "bqn", "bqn_er", "c_er")},
+            # PHP (docs/PHP.md, plan 3.2) : un seul binaire (le JIT choisit son code à l'exécution) ; K5 et la réplication
+            # reliés par le C natif de la machine 28, les autres clés par le C publié (défaut : campagne d'origine)
+            "php": {"k5": ("raw_php", "php", "php", "c_er"),
+                    "m3": ("raw_php", "php", "php", "c_er")}}
 BRIDGE_ER = True  # False : pont de la machine 23 seul (classement d'avant la remarque sur Swift, scénario « Avant »)
 _ADDED_CACHE = {}
 
@@ -191,6 +196,17 @@ def _gm_procs(procs):
     return math.exp(sum(math.log(float(np.median(p))) for p in procs) / len(procs))
 
 
+def _med_procs(procs):
+    return float(np.median([np.median(p) for p in procs]))
+
+
+# Clés du pont où l'hôte de mesure est bimodal (ajout de PHP, docs/PHP.md 4.2 ; fait relevé par la remarque sur C++,
+# docs/CPP.md : sur les Emerald Rapids, le tableau de K2 à 8 Mio tient dans le L3 partagé, et chaque processus y tourne
+# soit vers 160 ms, soit vers 520 ms) : le facteur y prend la médiane des médianes de processus, du côté du témoin comme
+# du langage relié, au lieu de la moyenne géométrique, qui dépend du mélange des deux régimes. {(langage, clé)}
+BRIDGE_MEDIAN = {("php", ("k2", "tuned", "8388608"))}
+
+
 def _lat_cols(procs):
     """Médiane de chaque colonne [p50, p90, p99, p99,9, max] sur toutes les répétitions de tous les processus."""
     rows = [row for p in procs for row in p]
@@ -238,6 +254,8 @@ def bridge_added(data, lat, keys=None, latency=True, bounds=None, host="main", n
                 if not procs or not ref or not wit:
                     continue
                 f = _gm_procs(ref) / _gm_procs(wit) * _added_ratio(lang, key, host)  # correction appariée éventuelle
+                if (lang, key) in BRIDGE_MEDIAN:  # hôte bimodal : valeur centrale robuste des deux côtés
+                    f *= _gm_procs(wit) / _med_procs(wit) * _med_procs(procs) / _gm_procs(procs)
                 new = [[t * f for t in p] for p in procs]
                 bound = (bounds if bounds is not None else BOUNDS_M3 if key[0] in ("k5", "k9") else BOUNDS).get(key)
                 if bound is not None and float(np.median([np.median(p) for p in new])) < 0.9 * bound:
@@ -1164,7 +1182,7 @@ NAMES = {"c": "C", "cpp": "C++", "csharp": "C#", "java": "Java", "zig": "Zig", "
          "d": "D", "rust": "Rust", "chapel": "Chapel", "nim": "Nim", "mojo": "Mojo", "go": "Go", "ocaml": "OCaml",
          "lua": "Lua", "c_gcc": "C (gcc)", "fortran_flang": "Fortran (flang)", "luajit": "LuaJIT", "js_bun": "JS (Bun)",
          "python_ft": "Python (sans GIL)", "swift": "Swift", "fpc": "FreePascal",
-         "bqn": "BQN"}
+         "bqn": "BQN", "php": "PHP"}
 
 
 def fr(x, d=1):

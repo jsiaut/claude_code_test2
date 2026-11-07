@@ -1060,3 +1060,55 @@ Rapports appariés réécriture standard / original, 7 processus de chaque côt�
   primitives, et chacune écrit un intermédiaire de la taille du tableau. Découpé en blocs, le code optimisé va 1,3 à
   2,9 fois plus vite (Q1 × 0,35, K4 sans branchement × 0,37, K1 `soa` × 0,46, K9 × 0,65) : plafond 17,45 au lieu de
   12,46, 19,72 points, toujours 21e ; avec C5 à ½, 20,59.
+
+## Ajout de PHP (7 novembre, machine 28, Emerald Rapids) — `docs/PHP.md`, `results/php_check/`
+
+* **Chaîne** : PHP 8.5.12 (21 octobre 2026), la dernière version stable, construit par le `./configure` de production
+  du README de php-src, avec les extensions livrées dont le banc a besoin (`pcntl`, `shmop`, `sysvsem`, `sysvshm`,
+  `ffi`) et `php.ini-production`. Machine virtuelle Zend, OPcache (compilé d'office depuis la 8.5) et un JIT sur le
+  cadre IR, en mode tracing. **La CLI n'active ni OPcache ni le JIT par défaut** ; le manuel recommande le JIT tracing,
+  que le banc active comme on passe `-O` à un compilateur. Un seul binaire : le JIT choisit ses instructions à
+  l'exécution, sans AVX-512.
+* **Pièges et défauts relevés** : OPcache ne met pas en cache un script modifié depuis moins de 2 secondes, et le JIT ne
+  s'y applique pas (13,5 contre 1,65 ns par élément pour le même produit scalaire) ; le JIT tracing de 8.5.12 calcule
+  faux deux `$st[$sp++] = …` de suite dans une boucle interne (reproduction : `tools/php_check/src/jit_stack_bug.php`),
+  d'où des piles à indices explicites dans l'arène de K8 ; une fermeture qui capture le tableau d'objets double le temps
+  de K1 naturel, par le collecteur de cycles qui la parcourt (le harnais appelle les noyaux par leur nom) ; un `int` qui
+  dépasse 2^63 devient un `float`, si bien qu'un hachage multiplicatif sur 32 bits passe en flottant.
+* **Ce que le JIT fait bien et mal** : K5 naturel au niveau du C (1,18 : deux chaînes bornées par la latence de
+  l'addition), K2 à 8 Mio aussi (la latence du cache domine) ; mais K4 naturel 103 fois le C, K9 naturel 70 fois (le JIT
+  rend les lectures d'un tableau de tableaux au gestionnaire `FETCH_DIM_R` de la machine virtuelle), K5 optimisé 50 fois
+  (ni SIMD ni réassociation). Sans JIT (la CLI par défaut), K5 naturel est 8,9 fois plus lent, Q6 et Q1 3,2 et 4,2 fois,
+  K1, K7, K8 et K9 seulement 1,2 à 1,6 fois.
+* **Types et mémoire** : chaque valeur est un zval de 16 octets ; une particule de K1 coûte 352 octets en objet (712 en
+  tableau associatif) ; le tableau de PHP est une table de hachage ordonnée, compacte (16 o par élément) quand ses clés
+  sont 0..n-1. La FFI livrée donne de vrais enregistrements de 64 o (K1 `aos`) et des tableaux typés (K2 : 4 o par
+  entier), mais chaque accès y convertit la donnée C : elle n'est plus rapide que pour K2. K7 : une table à adressage
+  ouvert écrite en PHP (1,0 à 1,2 s) bat la table native du langage (3,7 s avec un couple par clé, 2,1 s en deux
+  tableaux).
+* **Concurrence** : ni fils ni atomiques. Les processus de `pcntl` et la mémoire partagée de `shmop` donnent un vrai
+  parallélisme (K6 `mt` 3,2 à 3,8 fois plus rapide que `tuned`, K9 `mt` 2,4 fois), au prix de copies explicites : K3
+  `rmw` passe par des sémaphores System V (appels système, 97 fois le C espacé), `sw` par `shmop_read`/`shmop_write`
+  (409 fois le C espacé, 2,8 fois plus lent tassé qu'espacé : le faux partage se voit au travers des copies). K10 par des
+  Fibers (hors score).
+* **Vectorisation mesurée** (C3) : 0. La mesure a demandé une correction de l'outil : OPcache écrit le code de son JIT
+  dans une mémoire partagée projetée depuis `/dev/zero`, que l'échantillonneur ne reconnaissait pas comme du code de JIT.
+* **Grille** (`probes/php`) : contrôle 27,4 en règle v2 (25,9 en v1 avec C3 = 0), au niveau de Python (29,7) : la FFI
+  livrée (enregistrements, unions, alignement, pointeurs, tableaux multidimensionnels, types qui enveloppent),
+  `pack`/`unpack`, le comptage de références avec un collecteur de cycles désactivable, les processus et l'affinité de
+  `pcntl` ; ni SIMD, ni atomiques, ni projection de fichier, ni indications au compilateur.
+* **Pont** : facteurs du C de 0,74 à 3,8 sur les clés de la machine 1, sauf K3 `sw` (4,7 et 11,3 : le faux partage du C
+  sur Cascade Lake) et K7 naturel (15,4) ; K2 à 8 Mio, où l'hôte est bimodal (deux processus lents sur sept chez le
+  témoin, aucun chez PHP), est relié par les médianes (écart au plan : la moyenne géométrique faisait de PHP le plus
+  rapide des 25 langages à cette taille et retirait jusqu'à 0,42 point à chacun des autres).
+* **Classement** : 22e sur 25 (16,56 points [16,3–16,8] ; rang espéré 22,32, rang plausible 20 à 23), entre BQN (qui le
+  devance dans 84 % des variantes) et JavaScript, à égalité de fait avec lui (JavaScript devant dans 57 % des variantes,
+  derrière au rang espéré : 22,34). Plafond 4,50, code par défaut 20,7, contrôle 27,4 : le contrôle d'un langage qui a
+  une FFI et des processus, le plafond d'un JIT sans types valeur ni SIMD. 22e ou 23e dans tous les scénarios du plan ;
+  les 24 autres gardent leurs scores, et JavaScript, Python et Lua reculent d'un rang. Étages [14, 5, 6].
+* **Effet sur deux paires à égalité de fait** : C3 passe 4e devant Zig (rang espéré 5,11 contre 5,14) et Fortran 11e
+  devant Swift (10,85 contre 10,86), bien que le duel direct penche toujours de l'autre côté (C3 devant Zig dans 46 %
+  des variantes, Fortran devant Swift dans 48 %). Dans la moitié des variantes, les queues de latence de K8 sont lues
+  relativement à la médiane ; PHP, lent mais régulier (max/p50 de 11,4, contre 20,0 pour Zig, le suivant), y devient la
+  référence, ce qui baisse le D3 de tous. Avec sa latence maximale doublée, les quatre retrouvent exactement leurs
+  rangs espérés d'avant PHP.
