@@ -1,0 +1,8 @@
+#!/bin/sh
+# PHP 8.5.12 (/opt/php85, construit par le ./configure « production » du README de php-src : docs/PHP.md, 2.1), avec
+# php.ini-production. La CLI n'active ni OPcache ni le JIT par défaut : le banc les active (opcache.enable_cli=1,
+# opcache.jit=tracing, le mode que recommande le manuel), lève la limite de mémoire (128 Mo par défaut ; les données
+# de K1 et de K6 la dépassent) et met opcache.file_update_protection à 0 (sinon OPcache ne met pas en cache un script
+# modifié depuis moins de 2 s, et le JIT ne s'applique pas : docs/PHP.md, 2.4).
+exec /opt/php85/bin/php -d memory_limit=-1 -d opcache.enable_cli=1 -d opcache.jit=tracing \
+  -d opcache.file_update_protection=0 "$(dirname "$0")/ms.php" "$@"

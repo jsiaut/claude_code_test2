@@ -1,0 +1,4 @@
+#!/bin/sh
+# Sensibilité P-défaut (docs/PHP.md, 3.5) : le banc PHP exécuté par la CLI telle qu'elle est configurée par défaut
+# (php.ini-production : ni OPcache ni JIT pour la CLI) ; seule la limite de mémoire est levée (données de K1 et K6).
+exec /opt/php85/bin/php -d memory_limit=-1 "$(dirname "$0")/../php/ms.php" "$@"

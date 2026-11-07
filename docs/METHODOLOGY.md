@@ -1430,3 +1430,17 @@ Robustesse :
   (sections 5.8 à 5.12), `docs/FINDINGS.md`, `docs/NATURAL.md` (K7 de BQN), `docs/NOSIMD.md` (4.23),
   `docs/CONFRONTATION.md`, `docs/CAPABILITIES.md` (régénéré : A3, A6 de BQN ; définition de C5).
 
+* 2026-11-07, 07:00 à 08:20 : **ajout de PHP : chaîne, dix noyaux, grille, faits et plan** (`docs/PHP.md`, sections 1
+  à 3, poussé avant les mesures). Machine 28 (nouvel hôte Emerald Rapids du même modèle, caractérisé :
+  `results/hw/machine28` ; les 24 fichiers d'entrée vérifiés). PHP 8.5.12 (21 octobre 2026), la dernière version stable
+  de la liste officielle de php.net (la 8.6.0 en est à sa RC5), construit par le `./configure` de production du README de
+  php-src avec les extensions livrées `pcntl`, `shmop`, `sysvsem`, `sysvshm` et `ffi` ; `php.ini-production` ; le banc
+  active OPcache et le JIT tracing, que la CLI laisse inactifs par défaut et que le manuel recommande (la CLI par défaut
+  est une sensibilité, `bench/php_def`). Archive de Swift déjà installée supprimée de `/opt/dl` pour faire de la place
+  (son SHA-256 est gardé à côté). Faits : OPcache ne met pas en cache un script de moins de 2 s (le JIT ne s'y applique
+  pas : piège de mes premiers essais) ; un bogue du JIT tracing de 8.5.12 (deux `$st[$sp++]` de suite, reproduction dans
+  `tools/php_check/src`) ; une fermeture qui capture les données double le temps de K1 naturel par le collecteur de
+  cycles (harnais par nom de fonction) ; les entiers passent en flottant au-delà de 2^63. Grille (sonde `probes/php`,
+  aucune divergence nouvelle) : pilier C 25,9 en v1 (C3 = 0), 27,4 en v2 (D4 à 1 comme Python). Validation de toutes
+  les cellules, sommes justes. Outil `tools/measure_php.py` (122 cellules × 7 passes) ; scénarios Avant, P-E, P-direct,
+  P-hôte, P-gcc, P-défaut, P-K1arr, P-C3, P-cases-bas et -haut, P-tout-bas et -haut, P-K7tab.

@@ -497,6 +497,42 @@ MATRIX = {
         "F3": (0.5, "pas de type entier : entiers exacts jusqu'à 2⋆53 (f64) ; opérations modulaires de 8 à 64 bits sur des tableaux par •bit._add, _sub, _mul, _neg (spécification ; dans 0.12.0, absentes de sa documentation) et enveloppement par modulo, comme ctypes et les masques pour Python (sonde ; note complétée le 6/11, remarque sur BQN)"),
         "F4": (1, "•file.MapBytes + •bit._cast sans copie (i32slice, sonde)"),
     },
+    "php": {  # ajouté le 7/11 (docs/PHP.md) : PHP 8.5.12, extensions livrées avec php-src ; sonde probes/php, results/probes/php.txt
+        "A1": (0.5, "struct de la FFI (extension livrée avec php-src, --with-ffi) en tableaux : particle[n], 64 o par élément "
+                    "(sonde, bench K1 aos) ; objets et tableaux de PHP référencés, comme ctypes.Structure en Python"),
+        "A2": (0.5, "FFI : ordre et décalages des champs (FFI\\CType::getStructFieldOffset ; sonde) ; rien pour les classes"),
+        "A3": (0.5, "FFI : struct __attribute__((packed)) et champs de bits (sonde : 6 o) ; pack/unpack sur des chaînes"),
+        "A4": (0.5, "FFI : __attribute__((aligned(64))) (sonde) ; rien pour les valeurs de PHP"),
+        "A5": (0.5, "pack/unpack, unions de la FFI (sonde)"), "A6": (0, "aucun"),
+        "A7": (0.5, "tableaux fixes dans les struct de la FFI (sonde)"),
+        "A8": (0.5, "types étroits de la FFI pour le stockage (uint8_t, int16_t, float) ; valeurs de PHP en int et float de 64 bits"),
+        "B1": (1, "comptage de références ; le collecteur de cycles se désactive (gc_disable ; sonde), comme Python"),
+        "B2": (0, "aucun : le gestionnaire de mémoire de Zend est interne"),
+        "B3": (0, "nombres jamais boxés (dans le zval ; sonde : 0 octet), mais tableaux, objets et chaînes toujours sur "
+                  "le tas et pas de retour multiple sans tableau, comme JavaScript et BQN"),
+        "B4": (0.5, "l'arithmétique et les appels n'allouent pas (sonde) ; la copie sur écriture copie un tableau partagé à "
+                    "la première écriture, chaînes et tableaux allouent, comme Lua"),
+        "B5": (0.5, "pointeurs de la FFI (FFI::addr, arithmétique ; sonde), comme ctypes"),
+        "C1": (0, "aucun"), "C2": (0, "aucun"), "C3": M,
+        "C4": (0, "aucun : le JIT garde l'ordre, array_sum est séquentielle"),
+        "C5": (0, "aucune construction de parallélisme de données (processus à écrire à la main)"),
+        "D1": (0.5, "pas de threads : processus (pcntl_fork, extension livrée, CLI seulement) et segments System V partagés "
+                    "(shmop) lus et écrits par copie (sonde, bench K3, K6 et K9) ; Fibers sans parallélisme"),
+        "D2": (0, "aucun atomique (sysvsem n'a que des sémaphores)"), "D3": (0, "aucune"),
+        "D4": (0.5, "pcntl_setcpuaffinity (PHP 8.4), processus entier (sonde), comme os.sched_setaffinity en Python"),
+        "D5": (0, "aucun"),
+        "E1": (0.5, "JIT d'OPcache (moteur IR) livré mais inactif par défaut (opcache.enable_cli=0, opcache.jit=disable) ; "
+                    "listage du code machine seulement avec une construction --with-capstone (opcache.jit_debug=1), "
+                    "comme le USE_PERF de CBQN"),
+        "E2": (0, "aucun"), "E3": (0, "aucun"), "E4": (0, "aucun"), "E5": (0, "aucun"),
+        "E6": (0.5, "seulement par les pointeurs de la FFI (non vérifiés ; tableaux de la FFI vérifiés : sonde), comme ctypes"),
+        "E7": (0, "aucun"),
+        "F1": (0.5, "tableaux multidimensionnels contigus de la FFI (double[3][4] ; sonde) ; tableaux de PHP imbriqués"),
+        "F2": (0, "aucun"),
+        "F3": (0.5, "int de 64 bits signé dont le dépassement passe en float ; masques & 0xFFFFFFFF ; types de la FFI qui "
+                    "enveloppent (uint32_t ; sonde), comme ctypes"),
+        "F4": (0, "pas de projection de fichier (mmap seulement par la FFI vers la libc, comme node:ffi)"),
+    },
 }
 
 

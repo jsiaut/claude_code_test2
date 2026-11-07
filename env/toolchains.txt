@@ -31,5 +31,6 @@ fpc-main       Free Pascal Compiler version 3.3.1-21612-gc58603b8dd [2026/11/04]
 bqn            CBQN 0.12.0 built with FFI, singeli X86_64 (étiquette v0.12.0, b4db324a ; make o3 target_from_cc=1 f=-march=cascadelake, clang 23.1.5, /opt/cbqn-cl : cible Cascade Lake) ; ajouté le 6/11 (docs/BQN.md)
 bqn-er         CBQN 0.12.0 built with FFI, singeli native X86_64 (make o3n, construction native de la machine 26, /opt/cbqn) ; K5 et réplication de l'ajout de BQN (docs/BQN.md)
 bqn-o3         CBQN 0.12.0 built with FFI, singeli X86_64 (make o3, cible par défaut, /opt/cbqn-o3) ; sensibilité de l'ajout de BQN (docs/BQN.md)
+php            PHP 8.5.12 (cli) (NTS), Zend Engine v4.5.12, Zend OPcache v8.5.12 (archive php-8.5.12.tar.xz de php.net, ./configure --prefix=/opt/php85 --enable-pcntl --enable-shmop --enable-sysvsem --enable-sysvshm --with-ffi --disable-cgi --disable-phpdbg, gcc 13.3 -g -O2, php.ini-production) ; ajouté le 7/11 (docs/PHP.md)
 kernel         Linux 6.18.44-fc-v180 #1 SMP PREEMPT_DYNAMIC @0 x86_64
 cpu            model name	: Intel(R) Xeon(R) Processor @ 2.80GHz

@@ -1,0 +1,33 @@
+CAP;A1;0.5;FFI (extension livrée avec php-src, --with-ffi) : particle[1000] de 64 o par élément, en ligne ; les objets et les tableaux de PHP sont des références (zval de 16 o vers le tas)
+CAP;A2;0.5;FFI : struct S {char; double; int} : sizeof 24, offsets c=0 d=8 i=16 (FFI\CType::getStructFieldOffset) ; rien pour les classes de PHP
+CAP;A3;0.5;FFI : struct __attribute__((packed)) {char; int; champ de 3 bits} : sizeof 6 ; pack/unpack sur des chaînes
+CAP;A4;0.5;FFI : champ __attribute__((aligned(64))) : alignof(A64) = 64, adresse de a[1].v mod 64 = 0 (dépend de l'allocation ; FFI::new aligne sur le type)
+CAP;A5;0.5;pack('e', 1.0) / unpack('V2') : 0, 1072693248 ; union FFI double/uint32[2] : 0, 1072693248
+CAP;A6;0;aucun conteneur SoA (tableaux séparés écrits à la main)
+CAP;A7;0.5;FFI : struct {float f[16]; int n;} : sizeof 68 (tableau fixe en ligne)
+CAP;A8;0.5;FFI : uint8_t, int16_t, float pour le stockage (uint8_t ← 300 donne 44) ; les valeurs de PHP sont des int de 64 bits et des float de 64 bits
+CAP;B1;1;comptage de références (libération immédiate) ; le collecteur de cycles se désactive : gc_disable() → gc_enabled() = false, comme gc.disable de Python
+CAP;B2;0;aucun allocateur à choisir ni arène (le gestionnaire de mémoire de Zend est interne)
+CAP;B3;0;entiers et flottants jamais boxés (dans le zval : un million d'opérations, 0 octets de plus) ; tableaux, objets et chaînes toujours sur le tas, pas de retour multiple sans tableau
+CAP;B4;0.5;arithmétique et appels n'allouent pas (un million d'appels : 0 octets) ; la copie sur écriture copie un tableau partagé à la première écriture (2101328 octets pour 100 000 entiers), comme la croissance des tables de Lua
+CAP;B5;0.5;pointeurs par la FFI : FFI::addr, arithmétique (p + 1 pointe la particule suivante : vx = 2.5)
+CAP;C1;0;aucun type vectoriel
+CAP;C2;0;aucune intrinsèque
+CAP;C4;0;aucun contrôle de la réassociation (le JIT garde l'ordre ; aucune somme réassociée dans la bibliothèque : array_sum est séquentielle)
+CAP;C5;0;aucune construction de parallélisme de données ; seulement des processus (pcntl_fork) à écrire à la main
+CAP;D1;0.5;pas de threads : processus (pcntl_fork, extension livrée, CLI) et segment System V partagé (shmop) lu et écrit par copie : le fils écrit 42, le parent le lit ; Fibers sans parallélisme
+CAP;D2;0;aucun atomique (sysvsem : sémaphores, des verrous)
+CAP;D3;0;aucune aide de ligne de cache
+CAP;D4;0.5;pcntl_setcpuaffinity (PHP 8.4, processus entier) : true → [0] (avant : [0,1,2,3])
+CAP;D5;0;ni barrière ni pause
+CAP;E1;0.5;JIT d'OPcache (moteur IR) inactif par défaut (opcache.jit=disable, opcache.enable_cli=0) ; ici on=true, kind=5 ; le listage du code machine (opcache.jit_debug=1) exige une construction --with-capstone ; interfaces gdb et perf sans reconstruire
+CAP;E2;0;aucun
+CAP;E3;0;aucun
+CAP;E4;0;aucun
+CAP;E5;0;aucune annotation
+CAP;E6;0.5;seulement par les pointeurs de la FFI (non vérifiés) : int[4], indice 4 → FFI\Exception : C array index out of bounds ; par un pointeur int*, aucun contrôle (p[6] = 7) ; les tableaux de PHP rendent null et un avertissement hors des clés
+CAP;E7;0;ni génériques ni calcul à la compilation (constantes seulement)
+CAP;F1;0.5;tableaux multidimensionnels contigus par la FFI : double[3][4], g[2][3] = élément 11 du tableau aplati (5) ; les tableaux de PHP sont des tables de hachage imbriquées
+CAP;F2;0;aucun
+CAP;F3;0.5;int de 64 bits signé : le dépassement passe en float (PHP_INT_MAX + 1 = 9.223372036854776E+18, double) ; masques & 0xFFFFFFFF ; uint32_t de la FFI enveloppe (2^32 + 5 → 5), comme ctypes en Python
+CAP;F4;0;pas de projection de fichier (file_get_contents copie ; mmap seulement par la FFI vers la libc)

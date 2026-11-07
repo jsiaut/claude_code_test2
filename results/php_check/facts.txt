@@ -1,0 +1,71 @@
+== version et construction
+PHP 8.5.12 (cli) (built: Nov  7 2026 07:09:00) (NTS)
+Build System => Linux vm 6.18.44-fc-v310 #1 SMP @0 x86_64 x86_64 x86_64 GNU/Linux
+Configure Command => './configure' '--prefix=/opt/php85' '--enable-pcntl' '--enable-shmop' '--enable-sysvsem' '--enable-sysvshm' '--with-ffi' '--disable-cgi' '--disable-phpdbg'
+Loaded Configuration File => /opt/php85/lib/php.ini
+Thread Safety => disabled
+3cd23181780d40c0bf9b3e4edf8a7b45e808f52415ae216a2e1460624cd81677  /opt/php85/bin/php
+08bc2eba2a588654ade1357174aa646b761556c862dda0678345ee29ed481209  /opt/dl/php/php-8.5.12.tar.xz
+== liste officielle (php.net, releases/index.php?json, copiée dans /opt/dl/php/releases.json)
+8.5.12 21 Oct 2026 ['security'] ['08bc2eba2a588654ade1357174aa646b761556c862dda0678345ee29ed481209']
+8.4.27 21 Oct 2026 ['security'] ['dcf93923b0e38e0d5252b25b796520b5a47761a08b3488b6d0b5d1115764d3f0']
+8.3.36 21 Oct 2026 ['security'] ['dd54693aa334c5c4d72e9aee96b082c2473750a18a6c1d105789c93a3b1692fd']
+8.2.35 21 Oct 2026 ['security'] ['5737b98601fe5ab1b8c5db0c82ed3158acb9283ed3081ffe2faffb9ac81455e6']
+== réglages par défaut d'OPcache et de la FFI (sources)
+295: STD_PHP_INI_BOOLEAN("opcache.enable"             , "1", PHP_INI_ALL,    OnEnable,     enabled                             , zend_accel_globals, accel_globals)
+312: STD_PHP_INI_ENTRY("opcache.file_update_protection", "2"   , PHP_INI_ALL   , OnUpdateLong,                accel_directives.file_update_protection,    zend_accel_globals, accel_globals)
+324: STD_PHP_INI_BOOLEAN("opcache.enable_cli"             , "0"   , PHP_INI_SYSTEM, OnUpdateBool,              accel_directives.enable_cli,                zend_accel_globals, accel_globals)
+352: STD_PHP_INI_ENTRY("opcache.jit"                           , "disable",                    PHP_INI_ALL,    OnUpdateJit,      options,               zend_jit_globals, jit_globals)
+353: STD_PHP_INI_ENTRY("opcache.jit_buffer_size"               , ZEND_JIT_DEFAULT_BUFFER_SIZE, PHP_INI_SYSTEM, OnUpdateLong,     buffer_size,           zend_jit_globals, jit_globals)
+827: add_assoc_bool(&directives, "opcache.enable",              ZCG(enabled));
+828: add_assoc_bool(&directives, "opcache.enable_cli",          ZCG(accel_directives).enable_cli);
+870: add_assoc_long(&directives,   "opcache.file_update_protection",  ZCG(accel_directives).file_update_protection);
+884: add_assoc_string(&directives, "opcache.jit", JIT_G(options));
+885: add_assoc_long(&directives,   "opcache.jit_buffer_size", JIT_G(buffer_size));
+50:#define ZEND_JIT_DEFAULT_BUFFER_SIZE  "64M"
+5345: ZEND_INI_ENTRY_EX("ffi.enable", "preload", ZEND_INI_SYSTEM, OnUpdateFFIEnable, zend_ffi_enable_displayer_cb)
+- Opcache:
+  . The Opcache extension is now always built into the PHP binary and is always
+    loaded. The INI directives opcache.enable and opcache.enable_cli are still
+    honored.
+    The --enable-opcache/--disable-opcache configure flags have been removed,
+    and the build does not produce opcache.so or php_opcache.dll objects
+    anymore.
+    Using zend_extension=opcache.so or zend_extension=php_opcache.dll INI
+== documentation (php/doc-en, 124e1f5 2026-11-06 13:45:05 +0100)
+1173:      <literal>tracing</literal>/<literal>on</literal>: Use tracing JIT.
+1174-      Recommended for most users. Prior to PHP 8.4.0, this was the default
+1175-      value; as of PHP 8.4.0 the default is <literal>disable</literal>.
+101-  <title>Integer overflow</title>
+102-
+103-  <para>
+104-   If PHP encounters a number beyond the bounds of the <type>int</type>
+11:  An <type>array</type> in PHP is actually an ordered map. A map is a type that
+== drapeaux du JIT (IR) : extensions x86 reconnues
+990:# define IR_X86_SSE2     (1<<0)
+991:# define IR_X86_SSE3     (1<<1)
+992:# define IR_X86_SSSE3    (1<<2)
+993:# define IR_X86_SSE41    (1<<3)
+994:# define IR_X86_SSE42    (1<<4)
+995:# define IR_X86_AVX      (1<<5)
+996:# define IR_X86_AVX2     (1<<6)
+997:# define IR_X86_BMI1     (1<<7)
+998:# define IR_X86_CLDEMOTE (1<<8)
+== fonctions de la grille (stubs)
+/opt/src/php-8.5.12/ext/pcntl/pcntl.stub.php:1099:    function pcntl_getcpuaffinity(?int $process_id = null): array|false {}
+/opt/src/php-8.5.12/ext/pcntl/pcntl.stub.php:1100:    function pcntl_setcpuaffinity(?int $process_id = null, array $cpu_ids = []): bool {}
+/opt/src/php-8.5.12/Zend/zend_builtin_functions.stub.php:211:function gc_enable(): void {}
+/opt/src/php-8.5.12/Zend/zend_builtin_functions.stub.php:213:function gc_disable(): void {}
+== dépassement d'entier
+float(9.223372036854776E+18)
+float(1.8446744065119617E+19)
+== bogue du JIT tracing (src/jit_stack_bug.php)
+jit=tracing : $st[$sp++] -> -10010 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+jit=function : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+jit=disable : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+== script récent et OPcache (src/fichier_recent.php)
+âge du script 0 s : en cache false, 13.54 ns par élément
+âge du script 60 s : en cache true, 1.65 ns par élément
+== fermeture et collecteur de cycles (src/fermeture_gc.php, 2^22 particules)
+direct : 0.4991 s (dernière de 4) ; collecteur de cycles pendant les 4 : 36 passes, 1.377 s
+fermeture : 0.8918 s (dernière de 4) ; collecteur de cycles pendant les 4 : 36 passes, 2.644 s

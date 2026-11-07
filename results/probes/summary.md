@@ -222,6 +222,39 @@
 | odin | A5 | 1 | 1 |  | #raw_union 0x3f800000 transmute 0x3f800000 |
 | odin | E3 | 1 | 1 |  | intrinsics.expect : 2 |
 | odin | E4 | 1 | 1 |  | prefetch_read_data ; D5 cpu_relax |
+| php | A1 | 0.5 | 0.5 |  | FFI (extension livrée avec php-src, --with-ffi) : particle[1000] de 64 o par élément, en ligne ; les objets et |
+| php | A2 | 0.5 | 0.5 |  | FFI : struct S {char; double; int} : sizeof 24, offsets c=0 d=8 i=16 (FFI\CType::getStructFieldOffset) ; rien  |
+| php | A3 | 0.5 | 0.5 |  | FFI : struct __attribute__((packed)) {char; int; champ de 3 bits} : sizeof 6 ; pack/unpack sur des chaînes |
+| php | A4 | 0.5 | 0.5 |  | FFI : champ __attribute__((aligned(64))) : alignof(A64) = 64, adresse de a[1].v mod 64 = 0 (dépend de l'alloca |
+| php | A5 | 0.5 | 0.5 |  | pack('e', 1.0) / unpack('V2') : 0, 1072693248 ; union FFI double/uint32[2] : 0, 1072693248 |
+| php | A6 | 0 | 0 |  | aucun conteneur SoA (tableaux séparés écrits à la main) |
+| php | A7 | 0.5 | 0.5 |  | FFI : struct {float f[16]; int n;} : sizeof 68 (tableau fixe en ligne) |
+| php | A8 | 0.5 | 0.5 |  | FFI : uint8_t, int16_t, float pour le stockage (uint8_t ← 300 donne 44) ; les valeurs de PHP sont des int de 6 |
+| php | B1 | 1 | 1 |  | comptage de références (libération immédiate) ; le collecteur de cycles se désactive : gc_disable() → gc_enabl |
+| php | B2 | 0 | 0 |  | aucun allocateur à choisir ni arène (le gestionnaire de mémoire de Zend est interne) |
+| php | B3 | 0 | 0 |  | entiers et flottants jamais boxés (dans le zval : un million d'opérations, 0 octets de plus) ; tableaux, objet |
+| php | B4 | 0.5 | 0.5 |  | arithmétique et appels n'allouent pas (un million d'appels : 0 octets) ; la copie sur écriture copie un tablea |
+| php | B5 | 0.5 | 0.5 |  | pointeurs par la FFI : FFI::addr, arithmétique (p + 1 pointe la particule suivante : vx = 2.5) |
+| php | C1 | 0 | 0 |  | aucun type vectoriel |
+| php | C2 | 0 | 0 |  | aucune intrinsèque |
+| php | C4 | 0 | 0 |  | aucun contrôle de la réassociation (le JIT garde l'ordre ; aucune somme réassociée dans la bibliothèque : arra |
+| php | C5 | 0 | 0 |  | aucune construction de parallélisme de données ; seulement des processus (pcntl_fork) à écrire à la main |
+| php | D1 | 0.5 | 0.5 |  | pas de threads : processus (pcntl_fork, extension livrée, CLI) et segment System V partagé (shmop) lu et écrit |
+| php | D2 | 0 | 0 |  | aucun atomique (sysvsem : sémaphores, des verrous) |
+| php | D3 | 0 | 0 |  | aucune aide de ligne de cache |
+| php | D4 | 0.5 | 0.5 |  | pcntl_setcpuaffinity (PHP 8.4, processus entier) : true → [0] (avant : [0,1,2,3]) |
+| php | D5 | 0 | 0 |  | ni barrière ni pause |
+| php | E1 | 0.5 | 0.5 |  | JIT d'OPcache (moteur IR) inactif par défaut (opcache.jit=disable, opcache.enable_cli=0) ; ici on=true, kind=5 |
+| php | E2 | 0 | 0 |  | aucun |
+| php | E3 | 0 | 0 |  | aucun |
+| php | E4 | 0 | 0 |  | aucun |
+| php | E5 | 0 | 0 |  | aucune annotation |
+| php | E6 | 0.5 | 0.5 |  | seulement par les pointeurs de la FFI (non vérifiés) : int[4], indice 4 → FFI\Exception : C array index out of |
+| php | E7 | 0 | 0 |  | ni génériques ni calcul à la compilation (constantes seulement) |
+| php | F1 | 0.5 | 0.5 |  | tableaux multidimensionnels contigus par la FFI : double[3][4], g[2][3] = élément 11 du tableau aplati (5) ; l |
+| php | F2 | 0 | 0 |  | aucun |
+| php | F3 | 0.5 | 0.5 |  | int de 64 bits signé : le dépassement passe en float (PHP_INT_MAX + 1 = 9.223372036854776E+18, double) ; masqu |
+| php | F4 | 0 | 0 |  | pas de projection de fichier (file_get_contents copie ; mmap seulement par la FFI vers la libc) |
 | python | A2 | 0.5 | 0.5 |  | ctypes S.c.offset=8 |
 | python | A3 | 0.5 | 0.5 |  | ctypes _pack_=1 et champ de 3 bits : sizeof(P)=9 |
 | python | F4 | 1 | 1 |  | mmap + memoryview.cast('f') sans copie : 0.4390046000480652 |
