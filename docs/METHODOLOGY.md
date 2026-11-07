@@ -1482,3 +1482,18 @@ Robustesse :
   versions, sensibilité sans SIMD explicite (Julia complète le groupe de tête dans les trois lectures ; Java devant Go
   dans les trois). `docs/PHP.md` (section 4), `docs/FINDINGS.md`, `docs/NOSIMD.md` (4.24), `docs/CONFRONTATION.md`,
   `docs/CAPABILITIES.md` (régénéré : colonne de PHP).
+* 2026-11-07, 13:26 à 13:52 : **remarque sur PHP : vérification et plan** (`docs/PHP.md`, sections 5.1 à 5.7, poussé
+  avant les mesures). Machine 29 (nouvel hôte Emerald Rapids du même modèle, caractérisé : `results/hw/machine29` ;
+  les 24 fichiers d'entrée vérifiés). PHP 8.3.36, 8.4.27, 8.5.13RC1 et 8.6.0RC5 construits avec les options du banc,
+  depuis les archives des listes officielles de php.net (SHA-256 vérifiés ; `tools/php_remark/build.sh`). Vérifié dans
+  les sources et par reproductions (`tools/php_remark/facts.sh`, `results/php_remark/facts.txt`) : les réglages par
+  défaut (en 8.3, `opcache.jit` = « tracing » mais tampon nul) ; aucun code de la FFI dans le JIT jusqu'à 8.6.0RC5 (la
+  PR 14491 n'est pas fusionnée) ; rien sur les fils, le SIMD ou les `struct` dans `UPGRADING` de 8.6.0RC5 ; K9 naturel :
+  16 erreurs de compilation de la boucle, puis liste noire, de 8.4.27 à 8.6.0RC5, pas en 8.3.36 (le déclencheur : lire
+  **deux** autres lignes puis écrire `$b[$i][$j]`, pas une seule comme le dit la remarque) ; K1 naturel : 72 à 75 % du
+  temps dans le collecteur de cycles (8 à 9 passes par parcours), sans effet du collecteur sur K6, K7 et K8 ; le bogue
+  de pile de 8.4.27 à 8.6.0RC5, pas en 8.3.36 ; `node:ffi` sans `struct`. Non vérifiés (hors des sources) : la date de
+  8.6.0, le gain de 20 fois de la PR 14491, GH-22115, l'état du RFC Structs. Errata d'explication (2.4 point 6, 4.1) ;
+  aucune donnée ni case de la grille ne change. Copie `bench/php_rq` (K1 par indice, `gc_disable()`), lanceurs
+  `bench/php83`, `php84`, `php8513rc1`, `php86rc5` ; outil `tools/measure_php_rq.py` (17 cellules × 7 passes) ;
+  scénarios Avant, R-K1idx, R-K1gc, R-K9-83, R-tout, R-tout-idx.

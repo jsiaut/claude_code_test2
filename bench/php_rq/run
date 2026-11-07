@@ -1,0 +1,4 @@
+#!/bin/sh
+# Copie de la remarque sur PHP (docs/PHP.md, 5) : même binaire et mêmes options que bench/php/run.
+exec /opt/php85/bin/php -d memory_limit=-1 -d opcache.enable_cli=1 -d opcache.jit=tracing \
+  -d opcache.file_update_protection=0 "$(dirname "$0")/ms.php" "$@"

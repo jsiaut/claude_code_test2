@@ -1,0 +1,177 @@
+# tools/php_remark/facts.sh, 2026-11-07 13:42:57,  Intel(R) Xeon(R) Processor @ 2.10GHz, modèle  207
+== 1. Listes officielles (php.net : /releases/?json&version=…, /pre-release-builds.php?format=json)
+stable 8.3.36 21 Oct 2026
+stable 8.4.27 21 Oct 2026
+stable 8.5.12 21 Oct 2026
+candidate 8.4.28RC1 05 November 2026
+candidate 8.5.13RC1 05 November 2026
+candidate 8.6.0RC5 05 November 2026
+php-8.3.36.tar.xz: OK
+php-8.4.27.tar.xz: OK
+php-8.5.13RC1.tar.xz: OK
+php-8.6.0RC5.tar.xz: OK
+/opt/dl/php/php-8.5.12.tar.xz: OK
+== 2. Sources
+-- 8.3.36 : réglages par défaut (ext/opcache/zend_accelerator_module.c, jit/zend_jit.h)
+opcache.enable_cli = "0"
+opcache.jit = "tracing"
+opcache.jit_hot_loop = "64"
+opcache.jit_blacklist_root_trace = "16"
+ZEND_JIT_DEFAULT_BUFFER_SIZE  "0"
+   FFI dans le code du JIT (zend_jit*.c, zend_jit*.h) : 0 occurrence(s)
+-- 8.4.27 : réglages par défaut (ext/opcache/zend_accelerator_module.c, jit/zend_jit.h)
+opcache.enable_cli = "0"
+opcache.jit = "disable"
+opcache.jit_hot_loop = "64"
+opcache.jit_blacklist_root_trace = "16"
+ZEND_JIT_DEFAULT_BUFFER_SIZE  "64M"
+   FFI dans le code du JIT (zend_jit*.c, zend_jit*.h) : 0 occurrence(s)
+-- 8.5.12 : réglages par défaut (ext/opcache/zend_accelerator_module.c, jit/zend_jit.h)
+opcache.enable_cli = "0"
+opcache.jit = "disable"
+opcache.jit_hot_loop = "61"
+opcache.jit_blacklist_root_trace = "16"
+ZEND_JIT_DEFAULT_BUFFER_SIZE  "64M"
+   FFI dans le code du JIT (zend_jit*.c, zend_jit*.h) : 0 occurrence(s)
+-- 8.5.13RC1 : réglages par défaut (ext/opcache/zend_accelerator_module.c, jit/zend_jit.h)
+opcache.enable_cli = "0"
+opcache.jit = "disable"
+opcache.jit_hot_loop = "61"
+opcache.jit_blacklist_root_trace = "16"
+ZEND_JIT_DEFAULT_BUFFER_SIZE  "64M"
+   FFI dans le code du JIT (zend_jit*.c, zend_jit*.h) : 0 occurrence(s)
+-- 8.6.0RC5 : réglages par défaut (ext/opcache/zend_accelerator_module.c, jit/zend_jit.h)
+opcache.enable_cli = "0"
+opcache.jit = "disable"
+opcache.jit_hot_loop = "61"
+opcache.jit_blacklist_root_trace = "16"
+ZEND_JIT_DEFAULT_BUFFER_SIZE  "64M"
+   FFI dans le code du JIT (zend_jit*.c, zend_jit*.h) : 0 occurrence(s)
+-- 8.5.12 : arrêt d'une trace (jit/zend_jit_internal.h) et liste noire (jit/zend_jit_trace.c)
+_(COMPILER_ERROR,    "JIT compilation error") \
+if (cache_count[i] >= JIT_G(blacklist_root_trace) - 1) {
+-- 8.5.12 : collecteur de cycles (Zend/zend_gc.c, zend_variables.h)
+#define GC_THRESHOLD_DEFAULT (10000 + GC_FIRST_ROOT)
+#define GC_THRESHOLD_STEP    10000
+#define GC_THRESHOLD_MAX     1000000000
+#define GC_THRESHOLD_TRIGGER 100
+static zend_always_inline void zval_ptr_dtor_nogc(zval *zval_ptr)
+{
+	if (Z_REFCOUNTED_P(zval_ptr) && !Z_DELREF_P(zval_ptr)) {
+		rc_dtor_func(Z_COUNTED_P(zval_ptr));
+	}
+}
+static zend_always_inline void i_zval_ptr_dtor(zval *zval_ptr)
+{
+	if (Z_REFCOUNTED_P(zval_ptr)) {
+		zend_refcounted *ref = Z_COUNTED_P(zval_ptr);
+		if (!GC_DELREF(ref)) {
+			rc_dtor_func(ref);
+		} else {
+			gc_check_possible_root(ref);
+		}
+	}
+}
+-- 8.6.0RC5 : UPGRADING, section « New Features » : mentions de threads, SIMD, struct
+   0 thread, 0 SIMD, 0 struct ; RFC du cœur : readonly_property_defaults debugable-enums override_constants partial_function_application_v2 const_object_property_write duration_class 
+== 3. Reproductions (machine au repos)
+-- 8.3.36 (PHP 8.3.36)
+   pile : jit=tracing : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   pile : jit=function : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   pile : jit=disable : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   K9 natural : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.2720 0.3313 
+   K9 byval : erreurs de compilation 0, liste noire 0, traces compilées 10 ; s par répétition 0.4366 0.4126 
+   K9 reads : erreurs de compilation 0, liste noire 0, traces compilées 10 ; s par répétition 0.1990 0.1943 
+   K9 samerow : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1728 0.1673 
+   K9 otherrow : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1457 0.1374 
+   K9 mixed : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1769 0.1961 
+   K9 tworows : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1893 0.1719 
+   K9 nomul : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.2513 0.2553 
+   K1 8.3.36;foreach;seq;0;0.4893;1049202.377006;runs=9;collected=0;collector=0.3499;threshold=500001
+   K1 8.3.36;foreach;seq;1;0.5690;1049202.377006;runs=8;collected=0;collector=0.4120;threshold=580001
+   K1 8.3.36;foreach_gcoff;seq;0;0.1352;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.3.36;foreach_gcoff;seq;1;0.1348;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.3.36;index;seq;0;0.1540;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.3.36;index;seq;1;0.1552;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.3.36;index_var;seq;0;1.0562;1049202.377006;runs=9;collected=0;collector=0.8909;threshold=500001
+   K1 8.3.36;index_var;seq;1;1.1351;1049202.377006;runs=8;collected=0;collector=0.9809;threshold=580001
+-- 8.4.27 (PHP 8.4.27)
+   pile : jit=tracing : $st[$sp++] -> -10009 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   pile : jit=function : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   pile : jit=disable : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   K9 natural : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.9772 1.0125 
+   K9 byval : erreurs de compilation 16, liste noire 2, traces compilées 7 ; s par répétition 1.0743 1.2097 
+   K9 reads : erreurs de compilation 0, liste noire 0, traces compilées 10 ; s par répétition 0.1562 0.1608 
+   K9 samerow : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1510 0.1928 
+   K9 otherrow : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1272 0.1267 
+   K9 mixed : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1721 0.1519 
+   K9 tworows : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.5372 0.5993 
+   K9 nomul : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.8550 0.8486 
+   K1 8.4.27;foreach;seq;0;0.5004;1049202.377006;runs=9;collected=0;collector=0.3616;threshold=500001
+   K1 8.4.27;foreach;seq;1;0.5188;1049202.377006;runs=8;collected=0;collector=0.3794;threshold=580001
+   K1 8.4.27;foreach_gcoff;seq;0;0.1367;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.4.27;foreach_gcoff;seq;1;0.1381;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.4.27;index;seq;0;0.1552;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.4.27;index;seq;1;0.1634;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.4.27;index_var;seq;0;0.9461;1049202.377006;runs=9;collected=0;collector=0.8075;threshold=500001
+   K1 8.4.27;index_var;seq;1;1.0027;1049202.377006;runs=8;collected=0;collector=0.8469;threshold=580001
+-- 8.5.12 (PHP 8.5.12)
+   pile : jit=tracing : $st[$sp++] -> -10010 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   pile : jit=function : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   pile : jit=disable : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   K9 natural : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.9860 0.9857 
+   K9 byval : erreurs de compilation 16, liste noire 2, traces compilées 7 ; s par répétition 1.1729 1.1533 
+   K9 reads : erreurs de compilation 0, liste noire 0, traces compilées 10 ; s par répétition 0.1586 0.1605 
+   K9 samerow : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1503 0.1549 
+   K9 otherrow : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1311 0.1249 
+   K9 mixed : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1603 0.1581 
+   K9 tworows : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.6444 0.5671 
+   K9 nomul : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.9087 0.9111 
+   K1 8.5.12;foreach;seq;0;0.4874;1049202.377006;runs=9;collected=0;collector=0.3516;threshold=500001
+   K1 8.5.12;foreach;seq;1;0.5240;1049202.377006;runs=8;collected=0;collector=0.3820;threshold=580001
+   K1 8.5.12;foreach_gcoff;seq;0;0.1355;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.5.12;foreach_gcoff;seq;1;0.1320;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.5.12;index;seq;0;0.1564;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.5.12;index;seq;1;0.1474;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.5.12;index_var;seq;0;0.9596;1049202.377006;runs=9;collected=0;collector=0.8147;threshold=500001
+   K1 8.5.12;index_var;seq;1;0.9791;1049202.377006;runs=8;collected=0;collector=0.8379;threshold=580001
+-- 8.5.13RC1 (PHP 8.5.13RC1)
+   pile : jit=tracing : $st[$sp++] -> -10010 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   pile : jit=function : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   pile : jit=disable : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   K9 natural : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.9203 0.8560 
+   K9 byval : erreurs de compilation 16, liste noire 2, traces compilées 7 ; s par répétition 1.1324 1.0391 
+   K9 reads : erreurs de compilation 0, liste noire 0, traces compilées 10 ; s par répétition 0.1499 0.1523 
+   K9 samerow : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1537 0.1531 
+   K9 otherrow : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1342 0.1270 
+   K9 mixed : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1561 0.1529 
+   K9 tworows : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.5170 0.5175 
+   K9 nomul : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.8426 0.8567 
+   K1 8.5.13RC1;foreach;seq;0;0.5139;1049202.377006;runs=9;collected=0;collector=0.3747;threshold=500001
+   K1 8.5.13RC1;foreach;seq;1;0.5151;1049202.377006;runs=8;collected=0;collector=0.3775;threshold=580001
+   K1 8.5.13RC1;foreach_gcoff;seq;0;0.1287;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.5.13RC1;foreach_gcoff;seq;1;0.1308;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.5.13RC1;index;seq;0;0.1606;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.5.13RC1;index;seq;1;0.1641;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.5.13RC1;index_var;seq;0;0.9780;1049202.377006;runs=9;collected=0;collector=0.8275;threshold=500001
+   K1 8.5.13RC1;index_var;seq;1;0.9643;1049202.377006;runs=8;collected=0;collector=0.8219;threshold=580001
+-- 8.6.0RC5 (PHP 8.6.0RC5)
+   pile : jit=tracing : $st[$sp++] -> -10010 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   pile : jit=function : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   pile : jit=disable : $st[$sp++] -> 2047 noeuds ; indices explicites -> 2047 noeuds (attendu 2047)
+   K9 natural : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 1.0442 1.0249 
+   K9 byval : erreurs de compilation 16, liste noire 2, traces compilées 7 ; s par répétition 1.1138 1.1207 
+   K9 reads : erreurs de compilation 0, liste noire 0, traces compilées 10 ; s par répétition 0.1524 0.1501 
+   K9 samerow : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1591 0.1726 
+   K9 otherrow : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1268 0.1244 
+   K9 mixed : erreurs de compilation 0, liste noire 0, traces compilées 11 ; s par répétition 0.1576 0.1536 
+   K9 tworows : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.5420 0.5300 
+   K9 nomul : erreurs de compilation 16, liste noire 2, traces compilées 8 ; s par répétition 0.8353 1.0670 
+   K1 8.6.0RC5;foreach;seq;0;0.5518;1049202.377006;runs=9;collected=0;collector=0.4048;threshold=500001
+   K1 8.6.0RC5;foreach;seq;1;0.5418;1049202.377006;runs=8;collected=0;collector=0.4007;threshold=580001
+   K1 8.6.0RC5;foreach_gcoff;seq;0;0.1356;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.6.0RC5;foreach_gcoff;seq;1;0.1347;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.6.0RC5;index;seq;0;0.1473;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.6.0RC5;index;seq;1;0.1703;1049202.377006;runs=0;collected=0;collector=0.0000;threshold=290001
+   K1 8.6.0RC5;index_var;seq;0;0.9909;1049202.377006;runs=9;collected=0;collector=0.8454;threshold=500001
+   K1 8.6.0RC5;index_var;seq;1;0.9478;1049202.377006;runs=8;collected=0;collector=0.8117;threshold=580001

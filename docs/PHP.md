@@ -394,3 +394,133 @@ boucles simples sur des tableaux d'entiers et de flottants (K5 naturel au niveau
 de 16 octets, chaque objet une référence de 352 octets par particule, sans SIMD, sans fils et sans tableau typé hors de
 la FFI. Deux faits de la chaîne pèsent sur qui voudrait mesurer PHP : la CLI n'active pas le JIT par défaut, et le JIT
 tracing de 8.5.12 calcule faux une forme courante de pile (2.4, point 2).
+
+## 5. Remarque sur PHP (7 novembre)
+
+Un relecteur a compilé PHP 8.5.12 avec les options du banc, puis 8.5.13RC1 et 8.6.0RC5, et a comparé avec un PHP 8.3
+installé chez lui, en réécrivant lui-même les noyaux en cause (sa machine ne lui a pas permis de lancer `ms.php`). Ce
+qui suit vérifie ses affirmations dans les listes officielles de php.net et les sources des archives (SHA-256 des
+listes), sans page web, puis fixe le plan des mesures avant de mesurer.
+
+### 5.1 La remarque
+
+« La 22e place de PHP est justifiée, et elle est solide », mais deux explications du dépôt sont fausses ou
+incomplètes, et le bogue du JIT signalé est réel :
+1. **K9 naturel** : le JIT ne « rend » pas les lectures d'un tableau de tableaux à l'interprète ; la compilation de la
+   boucle échoue (« JIT compilation error ») 16 fois, puis la boucle est abandonnée à l'interprète. Écrire
+   `$b[$i][$j]` après avoir lu une autre ligne suffirait à le provoquer ; les lectures seules sont compilées. PHP 8.3
+   compile ce stencil (0,25 à 0,28 s, contre 0,87 à 0,94 s en 8.5.12) : une régression du JIT, toujours présente en
+   8.5.13RC1 et 8.6.0RC5.
+2. **K1 naturel** : « 17 fois le C, à cause des 352 octets et des références » est incomplet. Environ 70 % du temps
+   part dans le collecteur de cycles (42 passes pendant 5 parcours) : avec `gc_disable()`, 0,55 s devient 0,13 s
+   (environ 4 fois le C) ; écrit sans variable intermédiaire (`$ps[$i]->vx`), 0,15 s sans aucune passe. Mécanisme :
+   une racine possible est enregistrée quand un compteur de références baisse sans atteindre zéro, ce que `foreach`
+   fait à chaque objet ; la collecte se lance à 10 000 racines.
+3. **Le bogue de pile du JIT tracing** est confirmé en 8.5.12, 8.5.13RC1 et 8.6.0RC5, jamais en 8.3. Il serait d'une
+   famille connue (un autre bogue du même type, PR 22560 de php-src, échoue en 8.4 et 8.5, pas en 8.3 ; GH-22115).
+4. **Ce qui tient** : la version et les réglages (8.5.12 dernière stable, 8.6.0 prévue le 19 novembre ; OPcache et le
+   JIT tracing à activer) ; ni SIMD, ni fils, ni types valeur, des flottants tous en 64 bits, 352 octets par
+   particule ; aucun code pour la FFI dans le JIT de 8.5.12 et de 8.6.0RC5 (un travail de Dmitry Stogov, PR 14491,
+   montrait un gain de 20 fois, sans aboutir) ; 8.6 n'ajoute ni fils, ni SIMD, ni types valeur (RFC Structs à l'état
+   de brouillon) ; le code optimisé est proche du maximum permis par les règles.
+5. **Effet sur le score** : 9,6 points viennent du contrôle, 5,2 du code par défaut, 1,8 du plafond ; le code naturel
+   ne fait que 0,75 des 20,7 points du pilier ; K1 et K9 naturels 3,4 à 3,9 fois plus rapides vaudraient environ
+   0,1 point ; BQN resterait 1,1 point devant.
+6. **Pertinence** : la 22e place ne dit rien de PHP pour le web ; PHP devant JavaScript n'est pas établi (57 % des
+   variantes pour JavaScript), l'ordre tient au ½ que la FFI rapporte à PHP, défendable puisque `node:ffi` ne connaît
+   que des types primitifs ; le tableau devrait présenter les deux langages à égalité.
+7. **À faire** : corriger les paragraphes sur K1 et K9 (README, 2.4 et 4.1) ; signaler les deux défauts du JIT à
+   php-src ; garder la 22e place, à égalité avec JavaScript, et revérifier avec 8.6.0 le 19 novembre.
+
+### 5.2 Vérification (avant le plan ; `tools/php_remark/facts.sh`, `results/php_remark/facts.txt`)
+
+**Machine 29.** La VM a redémarré sur un nouvel hôte Emerald Rapids du même modèle (207, 4 vCPU) : 2,62 à 2,99 GHz
+effectifs ; latence 23 ns à 2 Mio, 36 ns à 4 Mio, 129 ns à 32 Mio ; DRAM 16,2 à 16,3 Go/s (`results/hw/machine29/`),
+comme la machine 28 ; les 24 fichiers d'entrée correspondent à `env/msdata.sha256`. **Versions** : 8.3.36 et 8.4.27
+(stables du 21 octobre) et 8.5.13RC1 et 8.6.0RC5 (candidates du 5 novembre), archives des listes officielles, SHA-256
+vérifiés, construites avec les options exactes du banc (`tools/php_remark/build.sh`, dans `/opt/php83`, `/opt/php84`,
+`/opt/php8513rc1`, `/opt/php86rc5`). En 8.3 et 8.4, OPcache est une extension partagée (`zend_extension=opcache`) ; en
+8.3, le tampon du JIT vaut 0 par défaut (`opcache.jit_buffer_size=64M` pour l'activer).
+
+| Affirmation | Constat |
+|---|---|
+| 8.5.12 dernière stable ; 8.6.0RC5 dernière candidate ; 8.6.0 le 19 novembre | **Exact** pour les versions : stables 8.5.12, 8.4.27, 8.3.36 du 21 octobre ; candidates 8.6.0RC5, 8.5.13RC1, 8.4.28RC1 du 5 novembre (listes officielles ; étiquettes de php-src jusqu'à `php-8.6.0RC5`). La date du 19 novembre n'est ni dans les listes ni dans les sources : **non vérifiée** |
+| La CLI n'active pas OPcache ; `opcache.jit` vaut « disable » depuis 8.4, « tracing » avant | **Exact** (`zend_accelerator_module.c`) : `opcache.enable_cli` = 0 partout ; 8.3.36 : `opcache.jit` = « tracing », mais `opcache.jit_buffer_size` = 0, donc le JIT y est inactif par défaut lui aussi ; 8.4.27 et suivantes : « disable », tampon de 64 Mio |
+| Le JIT de 8.5.12 et de 8.6.0RC5 n'a aucun code pour la FFI ; PR 14491 (Dmitry Stogov), gain de 20 fois, sans aboutir | **Exact pour le code** : aucune occurrence de la FFI dans `ext/opcache/jit/zend_jit*` de 8.3.36 à 8.6.0RC5. La PR 14491 existe dans php-src (`refs/pull/14491/head`, dernier commit de Dmitry Stogov du 13 novembre 2024, « Refactor information about FFI calls ») et son code n'est pas dans 8.6.0RC5. Le gain de 20 fois est dans la description de la PR, pas dans les sources : **non vérifié** |
+| 8.6 n'ajoute ni fils, ni SIMD, ni types valeur ; RFC Structs en brouillon | **Exact pour 8.6.0RC5** : la section « New Features » de `UPGRADING` ne cite ni thread, ni SIMD, ni struct (au cœur : application partielle de fonctions, valeurs par défaut des propriétés `readonly`, `#[\Override]` sur les constantes, `__debugInfo` des énumérations, écriture des propriétés d'objets constants ; ailleurs, `Time\Duration`, une API de scrutation des E/S). L'état du RFC Structs est sur le wiki : **non vérifié** |
+| K9 naturel : « JIT compilation error » 16 fois, puis la boucle reste à l'interprète ; lectures seules compilées | **Exact** : en 8.5.12 (`opcache.jit_debug`), la trace de la boucle intérieure de `k9_natural` s'arrête 16 fois sur « JIT compilation error » (`ZEND_JIT_TRACE_STOP_COMPILER_ERROR`, levé quand la génération de code échoue), puis est mise en liste noire (`opcache.jit_blacklist_root_trace` = 16) ; la même boucle en lectures seules est compilée (0,16 s par répétition, contre 0,99 s). **Mon texte (4.1) était faux** : j'attribuais l'interprète aux lectures |
+| Il suffit d'écrire `$b[$i][$j]` après avoir lu une autre ligne | **Inexact** : avec une seule autre ligne (`$b[$i][$j] = $a[$i-1][$j]`, seule ou avec la même ligne), la boucle est compilée dans toutes les versions ; il faut lire **deux** autres lignes (`$a[$i-1][$j] + $a[$i+1][$j]`) puis écrire `$b[$i][$j]`. `$b` par valeur échoue de même : la référence n'y est pour rien (`tools/php_remark/src/k9_jit.php`) |
+| PHP 8.3 compile ce stencil (0,25 à 0,28 s contre 0,87 à 0,94 s) ; régression toujours présente en 8.5.13RC1 et 8.6.0RC5 | **Exact, et elle date de 8.4** : 8.3.36 compile toutes les formes (K9 naturel 0,27 à 0,33 s par répétition) ; 8.4.27, 8.5.12, 8.5.13RC1 et 8.6.0RC5 échouent tous (0,86 à 1,04 s). Le JIT de 8.4 est celui du cadre IR, qui a remplacé celui de 8.3 (2.1) |
+| K1 naturel : environ 70 % du temps dans le collecteur de cycles ; `gc_disable()` : 0,13 s ; `$ps[$i]->vx` : 0,15 s sans passe | **Exact, et mon explication (2.4, point 6) était incomplète** : dans les cinq versions, 8 à 9 passes par parcours, 0,35 à 0,41 s de collecte sur 0,49 à 0,55 s (72 à 75 %, `gc_status()`), sans rien libérer ; `gc_disable()` : 0,13 à 0,14 s ; `$ps[$i]->vx` : 0,15 à 0,17 s, aucune passe. Dans le désordre : 1,26 à 1,30 s, 0,30 à 0,31 s sans collecteur. Mon propre point 3 de 2.4 montrait déjà ce coût ; le point 6 l'attribuait à tort à la mémoire. Fait nouveau : la même boucle en `for` avec une variable intermédiaire (`$p = $ps[$i]`) prend 0,95 à 1,1 s, dont 0,81 à 0,98 s de collecte |
+| Le mécanisme : une racine possible à chaque baisse d'un compteur qui n'atteint pas zéro ; collecte à 10 000 racines | **Exact** (`Zend/zend_variables.h`, `zend_gc.c` de 8.5.12) : `i_zval_ptr_dtor`, qui détruit l'ancienne valeur d'une variable, appelle `gc_check_possible_root` si le compteur reste positif ; une valeur temporaire est libérée par `zval_ptr_dtor_nogc`, sans racine (d'où la forme `$ps[$i]->vx`). Seuil initial 10 000 racines, relevé de 10 000 après chaque passe qui libère moins de 100 valeurs (500 000 à 580 000 pendant les essais) |
+| Le collecteur ne pèse que sur K1 | **Vérifié** : avec `zend.enable_gc=0`, K6 Q1, K7 et K8 naturels ne changent pas (dans le bruit) ; K1 naturel dans le désordre est 4,1 fois plus rapide |
+| Le bogue de pile : en 8.5.12, 8.5.13RC1, 8.6.0RC5, jamais en 8.3 | **Exact, et il date de 8.4** : faux avec le JIT tracing en 8.4.27, 8.5.12, 8.5.13RC1 et 8.6.0RC5 (la garde arrête la construction) ; juste en 8.3.36, et dans toutes les versions avec le JIT « function » ou sans JIT |
+| Famille connue : PR 22560, GH-22115 | **En partie** : la PR 22560 existe (`refs/pull/22560/head`, 2 juillet 2026, « JIT: Inline ZEND_BW_NOT » : le résultat d'un appel auxiliaire placé dans un emplacement de pile qui recouvrait une variable de boucle déversée, d'où un résultat faux) ; ses essais par branche ne sont pas dans les sources. GH-22115 n'est cité dans aucun `NEWS` de 8.4.27 à 8.6.0RC5 : **non vérifié**. Le `NEWS` de 8.5.13RC1 corrige plusieurs bogues du JIT tracing de cette famille (GH-24206 : « Tracing JIT loses loop-carried CV when its loop PHI is reloaded from memory »), sans corriger le mien |
+| Décomposition du score | **Exact** : 0,35 × 27,4 = 9,6 ; 0,25 × 20,7 = 5,2 ; 0,40 × 4,50 = 1,8 ; D1 = 0,015, soit 0,75 des 20,7 points du pilier D |
+| `node:ffi` ne connaît que des types primitifs | **Exact** (Node 26.12.1 du banc) : `require('node:ffi').types` ne contient que des types primitifs (entiers, flottants, pointeurs, chaînes, tampons), sans `struct` ; la FFI de PHP déclare des `struct`, des unions et des tableaux (`FFI::cdef`) |
+| PHP a la latence relative la plus régulière des 25 | **Exact** (4.4 : max/p50 de 11,4, le plus petit) |
+
+### 5.3 Ce que la remarque change, et ce qu'elle ne change pas
+
+* **Errata d'explication, sans effet sur les données** : 2.4, point 6 (K1 : le temps est d'abord celui du collecteur
+  de cycles) et 4.1 (K9 : la compilation de la boucle échoue, et ce n'est pas la lecture qui la fait échouer) ; les
+  mêmes phrases du README (paragraphe de PHP, « Ce qui sépare vraiment les langages », point 3) et de `FINDINGS.md`.
+* **Aucun erratum de données ni de grille** : le K1 naturel reste la boucle `foreach` (la forme idiomatique, le
+  collecteur actif comme le veut le réglage par défaut) ; le K9 naturel reste mesuré avec 8.5.12 (règle de la dernière
+  version stable, comme pour Zig 0.17) ; aucune case de la grille n'est en cause (la remarque juge défendable le ½ que
+  la FFI rapporte à PHP). La forme par indice de K1 est une autre écriture du code naturel : une sensibilité, comme
+  les formes mieux écrites des autres langages. `gc_disable()` n'est pas une variante admise : aucun langage du banc
+  ne coupe son ramasse-miettes dans le code chronométré ; c'est une information.
+* **Présentation** : le README dira qu'un « Devance le suivant » sous 50 % marque une égalité de fait (le rang moyen
+  contredit le duel) : Nim et D, C3 et Zig, Fortran et Swift, PHP et JavaScript ; la ligne de PHP le dira aussi.
+* **Les deux défauts du JIT** : reproductions minimales dans `tools/php_remark/src` (`k9_jit.php`, et
+  `tools/php_check/src/jit_stack_bug.php`), avec les versions touchées ; je ne les signale pas moi-même à php-src (ce
+  travail se fait dans ce dépôt seulement).
+
+### 5.4 Mesures (`tools/measure_php_rq.py`, machine 29)
+
+Cellules appariées sur la machine 29, 7 passes, toutes les cellules de chaque passe dans un ordre tiré au hasard
+(graine fixe), échauffement 3, répétitions de `results/calib.json`, règle de vol du pilote ; sortie
+`results/raw_php_rq/` (17 cellules, 119 processus) :
+* `php` (banc publié, 8.5.12) : K1 `natural` et `natural_shuffled`, K9 `natural` et `tuned` (témoins des rapports) ;
+* `php_rq` (copie `bench/php_rq/ms.php`, même binaire ; `diff` : une fonction et le choix du noyau) : K1 `natural`
+  (contrôle de la copie), `natural_idx` et `natural_idx_shuffled` (la boucle naturelle par indice, `$ps[$i]->vx`),
+  `natural_gcoff` et `natural_gcoff_shuffled` (la boucle naturelle après `gc_disable()`) ;
+* `php83`, `php84`, `php8513rc1`, `php86rc5` (le banc publié sous 8.3.36, 8.4.27, 8.5.13RC1 et 8.6.0RC5, options de
+  `bench/php/run`, plus `zend_extension=opcache` avant 8.5 et le tampon du JIT en 8.3) : K9 `natural` et `tuned`.
+Validation (une exécution par cellule) : sommes de contrôle justes partout.
+
+### 5.5 Scénarios (`analysis/php_remark.py`, analyse globale de la v3 rejouée, mêmes tirages)
+
+Rapports : moyenne géométrique des médianes de processus de la cellule sur celle du banc publié (`php`), intervalle
+par bootstrap ; ils multiplient les processus publiés de PHP (`raw_php` relié par le pont), comme pour les copies des
+autres langages.
+
+| Scénario | Statut | Contenu |
+|---|---|---|
+| Avant | contrôle | le classement publié ; doit reproduire P-E de `results/php_check.json` à l'identique |
+| R-K1idx | sensibilité | K1 `natural` × r(`natural_idx`), `natural_shuffled` × r(`natural_idx_shuffled`) : l'autre écriture naturelle |
+| R-K1gc | information | les mêmes avec `natural_gcoff` : le collecteur coupé |
+| R-K9-83 | information | K9 `natural` × r(`php83` / `php`) : le JIT de 8.3, que la règle de la dernière version exclut |
+| R-tout | information | R-K1gc et R-K9-83 ensemble : la lecture de la remarque (« environ 0,1 point ») |
+| R-tout-idx | information | R-K1idx et R-K9-83 ensemble |
+
+Pour chaque scénario : score de PHP, piliers, rang espéré, rang à 90 %, part des variantes où BQN le devance et où il
+devance JavaScript, écart de score à BQN. Information : les rapports K9 `natural` et `tuned` de 8.3.36, 8.4.27,
+8.5.13RC1 et 8.6.0RC5 à 8.5.12 ; le contrôle de la copie (`php_rq` / `php` sur K1 `natural`). Sorties :
+`results/php_remark.json`, `results/report_php_remark.md`. Le classement publié ne change pas (aucun erratum de
+données) : ni régénération des sorties publiées, ni des états actuels.
+
+### 5.6 Ce qui change ailleurs
+
+README (paragraphe de PHP, point 3 de « Ce qui sépare vraiment les langages », égalités de fait, relectures), `docs/PHP.md`
+(2.4, 4.1, section 5), `docs/FINDINGS.md`, `docs/METHODOLOGY.md` (journal). `CAPABILITIES.md`, NOSIMD et CONFRONTATION
+ne changent pas (aucune donnée ne change).
+
+### 5.7 Ce que je ne fais pas
+
+* Signaler les défauts du JIT à php-src : hors de ce dépôt ; les reproductions et les versions touchées sont prêtes
+  (5.3).
+* Revérifier avec 8.6.0 : elle n'est pas sortie ; 8.6.0RC5 se comporte comme 8.5.12 sur les deux défauts.
+* Changer la forme naturelle de K1 ou y couper le collecteur (5.3).
+* Refaire les variantes à plusieurs processus sous les autres versions : elles ne sont pas en cause.

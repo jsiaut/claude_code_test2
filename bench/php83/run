@@ -1,0 +1,6 @@
+#!/bin/sh
+# Remarque sur PHP (docs/PHP.md, 5), information : le banc publié (bench/php/ms.php) exécuté par PHP 8.3.36 (/opt/php83,
+# tools/php_remark/build.sh : mêmes options de construction que 8.5.12), avec les options de bench/php/run ; en plus :
+# -d zend_extension=opcache -d opcache.jit_buffer_size=64M (OPcache est une extension partagée avant 8.5, et le tampon du JIT est nul par défaut en 8.3).
+exec /opt/php83/bin/php -d zend_extension=opcache -d opcache.jit_buffer_size=64M -d memory_limit=-1 -d opcache.enable_cli=1 -d opcache.jit=tracing \
+  -d opcache.file_update_protection=0 "$(dirname "$0")/../php/ms.php" "$@"
