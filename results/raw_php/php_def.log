@@ -1,0 +1,63 @@
+php_def    k1   natural              energy     p0 n=5 med=0.648589s ok={True} rc=0 
+php_def    k6   natural              q6         p0 n=10 med=0.679283s ok={True} rc=0 
+php_def    k6   natural              q1         p0 n=9 med=1.627179s ok={True} rc=0 
+php_def    k7   natural                         p0 n=3 med=6.331513s ok={True} rc=0 
+php_def    k1   natural_shuffled     energy     p0 n=3 med=1.799064s ok={True} rc=0 
+php_def    k4   natural_unsorted                p0 n=10 med=0.259204s ok={True} rc=0 
+php_def    k5   natural                         p0 n=10 med=1.929886s ok={True} rc=0 
+php_def    k8   natural                         p0 n=3 med=6.003778s ok={True} rc=0 
+php_def    k9   natural                         p0 n=3 med=1.087427s ok={True} rc=0 
+php_def    k6   natural              q1         p0 n=9 med=1.430778s ok={True} rc=0 
+php_def    k6   natural              q6         p0 n=10 med=0.664534s ok={True} rc=0 
+php_def    k9   natural                         p0 n=3 med=1.134355s ok={True} rc=0 
+php_def    k1   natural_shuffled     energy     p0 n=3 med=1.981397s ok={True} rc=0 
+php_def    k8   natural                         p0 n=3 med=6.114483s ok={True} rc=0 
+php_def    k7   natural                         p0 n=3 med=6.869402s ok={True} rc=0 
+php_def    k4   natural_unsorted                p0 n=10 med=0.272117s ok={True} rc=0 
+php_def    k1   natural              energy     p0 n=5 med=0.608701s ok={True} rc=0 
+php_def    k5   natural                         p0 n=10 med=1.960265s ok={True} rc=0 
+php_def    k7   natural                         p0 n=3 med=6.193302s ok={True} rc=0 
+php_def    k1   natural              energy     p0 n=5 med=0.623387s ok={True} rc=0 
+php_def    k6   natural              q6         p0 n=10 med=0.681479s ok={True} rc=0 
+php_def    k5   natural                         p0 n=10 med=1.929354s ok={True} rc=0 
+php_def    k9   natural                         p0 n=3 med=1.107498s ok={True} rc=0 
+php_def    k8   natural                         p0 n=3 med=6.311987s ok={True} rc=0 
+php_def    k4   natural_unsorted                p0 n=10 med=0.266337s ok={True} rc=0 
+php_def    k6   natural              q1         p0 n=9 med=1.460135s ok={True} rc=0 
+php_def    k1   natural_shuffled     energy     p0 n=3 med=1.931594s ok={True} rc=0 
+php_def    k9   natural                         p0 n=3 med=1.155095s ok={True} rc=0 
+php_def    k4   natural_unsorted                p0 n=10 med=0.261857s ok={True} rc=0 
+php_def    k1   natural              energy     p0 n=5 med=0.625368s ok={True} rc=0 
+php_def    k8   natural                         p0 n=3 med=6.071005s ok={True} rc=0 
+php_def    k7   natural                         p0 n=3 med=6.454703s ok={True} rc=0 
+php_def    k5   natural                         p0 n=10 med=1.947697s ok={True} rc=0 
+php_def    k6   natural              q1         p0 n=9 med=1.438463s ok={True} rc=0 
+php_def    k1   natural_shuffled     energy     p0 n=3 med=1.914301s ok={True} rc=0 
+php_def    k6   natural              q6         p0 n=10 med=0.680945s ok={True} rc=0 
+php_def    k7   natural                         p0 n=3 med=6.802711s ok={True} rc=0 
+php_def    k4   natural_unsorted                p0 n=10 med=0.267502s ok={True} rc=0 
+php_def    k1   natural              energy     p0 n=5 med=0.699332s ok={True} rc=0 
+php_def    k9   natural                         p0 n=3 med=1.074521s ok={True} rc=0 
+php_def    k8   natural                         p0 n=3 med=6.347245s ok={True} rc=0 
+php_def    k6   natural              q1         p0 n=9 med=1.393958s ok={True} rc=0 
+php_def    k1   natural_shuffled     energy     p0 n=3 med=1.970362s ok={True} rc=0 
+php_def    k5   natural                         p0 n=10 med=1.939466s ok={True} rc=0 
+php_def    k6   natural              q6         p0 n=10 med=0.672321s ok={True} rc=0 
+php_def    k8   natural                         p0 n=3 med=6.127057s ok={True} rc=0 
+php_def    k1   natural_shuffled     energy     p0 n=3 med=1.820392s ok={True} rc=0 
+php_def    k4   natural_unsorted                p0 n=10 med=0.259664s ok={True} rc=0 
+php_def    k1   natural              energy     p0 n=5 med=0.605759s ok={True} rc=0 
+php_def    k7   natural                         p0 n=3 med=6.023662s ok={True} rc=0 
+php_def    k6   natural              q1         p0 n=9 med=1.367918s ok={True} rc=0 
+php_def    k9   natural                         p0 n=3 med=1.150140s ok={True} rc=0 
+php_def    k6   natural              q6         p0 n=10 med=0.655031s ok={True} rc=0 
+php_def    k5   natural                         p0 n=10 med=1.902522s ok={True} rc=0 
+php_def    k4   natural_unsorted                p0 n=10 med=0.258342s ok={True} rc=0 
+php_def    k9   natural                         p0 n=3 med=1.118223s ok={True} rc=0 
+php_def    k5   natural                         p0 n=10 med=1.887579s ok={True} rc=0 
+php_def    k7   natural                         p0 n=3 med=6.353137s ok={True} rc=0 
+php_def    k1   natural              energy     p0 n=5 med=0.643989s ok={True} rc=0 
+php_def    k8   natural                         p0 n=3 med=6.022367s ok={True} rc=0 
+php_def    k6   natural              q6         p0 n=10 med=0.681377s ok={True} rc=0 
+php_def    k1   natural_shuffled     energy     p0 n=3 med=2.085100s ok={True} rc=0 
+php_def    k6   natural              q1         p0 n=9 med=1.421446s ok={True} rc=0 

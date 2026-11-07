@@ -1,0 +1,63 @@
+26.2% des échantillons : php+0x758fa1 boucle=0x24d337-0x759077 {'n': 448, 'packed': 0, 'wide': 0, 'scalar_fp': 1, 'vectorized': False, 'width': '-'}
+    7589a1: cmp    BYTE PTR [rax+0x9],0x0
+    7589a5: je     7589b3 <execute_ex+0x4f33>
+    7589a7: mov    rdi,QWORD PTR [rax]
+    7589aa: sub    DWORD PTR [rdi],0x1
+    7589ad: je     75a52d <execute_ex+0x6aad>
+    7589b3: mov    r15,QWORD PTR [r14]
+    7589b6: add    r15,0x20
+    7589ba: jmp    QWORD PTR [r15]
+    7589bd: endbr64
+    7589c1: movsxd rax,DWORD PTR [r15+0xc]
+    7589c5: mov    QWORD PTR [r14],r15
+    7589c8: lea    rdx,[rbp-0x80]
+    7589cc: lea    rdi,[r14+0x8]
+    7589d0: mov    ecx,DWORD PTR [r15+0x10]
+    7589d4: add    rcx,QWORD PTR [r14+0x40]
+    7589d8: mov    rsi,QWORD PTR [r15+rax*1]
+    7589dc: call   750620 <zend_handle_named_arg>
+    7589e1: test   rax,rax
+    7589e4: je     75a53c <execute_ex+0x6abc>
+    7589ea: movsxd rdx,DWORD PTR [r15+0x8]
+    7589ee: add    r15,0x20
+    7589f2: add    rdx,r14
+    7589f5: mov    rcx,QWORD PTR [rdx]
+    7589f8: mov    edx,DWORD PTR [rdx+0x8]
+    7589fb: mov    QWORD PTR [rax],rcx
+    7589fe: mov    DWORD PTR [rax+0x8],edx
+    758a01: jmp    QWORD PTR [r15]
+    758a04: endbr64
+    758a08: movsxd rax,DWORD PTR [r15+0x8]
+    758a0c: mov    ecx,DWORD PTR [r15+0x14]
+    758a10: add    rax,r14
+    758a13: movzx  edx,BYTE PTR [rax+0x8]
+    758a17: bt     ecx,edx
+    758a1a: jb     759a18 <execute_ex+0x5f98>
+    758a20: xor    ebx,ebx
+    758a22: cmp    dl,0xa
+    758a25: je     759a00 <execute_ex+0x5f80>
+    758a2b: movsxd rax,DWORD PTR [r15+0x8]
+    758a2f: mov    QWORD PTR [r14],r15
+    758a32: add    rax,r14
+    758a35: cmp    BYTE PTR [rax+0x9],0x0
+    758a39: je     758a47 <execute_ex+0x4fc7>
+    758a3b: mov    rdi,QWORD PTR [rax]
+    758a3e: sub    DWORD PTR [rdi],0x1
+    758a41: je     75b529 <execute_ex+0x7aa9>
+    758a47: cmp    QWORD PTR [rip+0x1386911],0x0        # 1adf360 <executor_globals+0x3c0>
+    758a4f: jne    75a325 <execute_ex+0x68a5>
+    758a55: cmp    BYTE PTR [r15+0x1f],0x12
+    758a5a: jne    75daf0 <execute_ex+0xa070>
+    758a60: test   ebx,ebx
+    758a62: je     759e6b <execute_ex+0x63eb>
+    758a68: add    r15,0x40
+    758a6c: jmp    QWORD PTR [r15]
+    758a6f: endbr64
+    758a73: mov    eax,DWORD PTR [r15+0x14]
+    758a77: mov    rdx,QWORD PTR [r14+0x40]
+    758a7b: mov    rax,QWORD PTR [rdx+rax*1]
+    758a7f: test   rax,rax
+    758a82: je     75a7f1 <execute_ex+0x6d71>
+    758a88: test   al,0x1
+19.8% des échantillons : php+0x7580a6 boucle=0x24d469-0x75811b {'n': 413, 'packed': 0, 'wide': 0, 'scalar_fp': 2, 'vectorized': False, 'width': '-'}
+6.3% des échantillons : php+0x75accb boucle=0x75ac2a-0x75ada4 {'n': 92, 'packed': 0, 'wide': 0, 'scalar_fp': 2, 'vectorized': False, 'width': '-'}

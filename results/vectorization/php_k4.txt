@@ -1,0 +1,41 @@
+21.2% des échantillons : JIT 0x55da34a00a8a boucle=0x55da34a00a6a-0x55da34a00b04 {'n': 38, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+    55da34a00a6a: cmp    BYTE PTR [r14+0x78],0x4
+    55da34a00a6f: jne    0x55da34a0095c
+    55da34a00a75: mov    rax,QWORD PTR [r14+0x70]
+    55da34a00a79: cmp    rax,0x80
+    55da34a00a80: jl     0x55da34a00b30
+    55da34a00a86: add    rax,QWORD PTR [r14+0x60]
+    55da34a00a8a: jo     0x55da34a00964
+    55da34a00a90: mov    QWORD PTR [r14+0x60],rax
+    55da34a00a94: lea    rax,[rip+0x5ade743]        # 0x55da3a4df1de
+    55da34a00a9b: rex mov al,BYTE PTR [rax]
+    55da34a00a9e: rex test al,al
+    55da34a00aa1: jne    0x55da34a000b0
+    55da34a00aa7: mov    rax,QWORD PTR [r14+0x80]
+    55da34a00aae: mov    ecx,DWORD PTR [r14+0x8c]
+    55da34a00ab5: mov    edx,ecx
+    55da34a00ab7: shl    rdx,0x4
+    55da34a00abb: add    rdx,QWORD PTR [rax+0x10]
+    55da34a00abf: jmp    0x55da34a00a24
+    55da34a00ac4: mov    rdi,QWORD PTR [r14+0x70]
+    55da34a00ac8: cmp    BYTE PTR [rdx+0x8],0xa
+    55da34a00acc: jne    0x55da34a00ad5
+    55da34a00ace: mov    rax,QWORD PTR [rdx]
+    55da34a00ad1: lea    rdx,[rax+0x8]
+    55da34a00ad5: mov    rax,QWORD PTR [rdx]
+    55da34a00ad8: mov    QWORD PTR [r14+0x70],rax
+    55da34a00adc: mov    ecx,DWORD PTR [rdx+0x8]
+    55da34a00adf: mov    DWORD PTR [r14+0x78],ecx
+    55da34a00ae3: test   ch,ch
+    55da34a00ae5: je     0x55da34a00aea
+    55da34a00ae7: add    DWORD PTR [rax],0x1
+    55da34a00aea: sub    DWORD PTR [rdi],0x1
+    55da34a00aed: jne    0x55da34a00b0f
+    55da34a00aef: mov    QWORD PTR [r14],r15
+    55da34a00af2: call   0x55da391b9430
+    55da34a00af7: lea    rax,[rip+0x5ade862]        # 0x55da3a4df360
+    55da34a00afe: mov    rax,QWORD PTR [rax]
+    55da34a00b01: test   rax,rax
+    55da34a00b04: je     0x55da34a00a6a
+12.6% des échantillons : JIT 0x55da34a00a34 boucle=0x55da34a00a20-0x55da34a00a34 {'n': 6, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}
+12.5% des échantillons : JIT 0x55da34a00b34 boucle=0x55da34a00954-0x55da34a00b4f {'n': 157, 'packed': 0, 'wide': 0, 'scalar_fp': 0, 'vectorized': False, 'width': '-'}

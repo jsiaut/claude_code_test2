@@ -95,7 +95,9 @@ def parse_ips(prefix):
 
 
 def is_jit(path):
-    return path in ("", "?") or path.startswith("//anon") or path.startswith("/memfd:") or not path.startswith("/")
+    # « /dev/zero (deleted) » : mémoire partagée d'OPcache, où le JIT de PHP écrit son code (ajout de PHP, docs/PHP.md 4)
+    return (path in ("", "?") or path.startswith("//anon") or path.startswith("/memfd:") or path.startswith("/dev/zero")
+            or not path.startswith("/"))
 
 
 def main(prefix, cover=0.9, maxips=80):

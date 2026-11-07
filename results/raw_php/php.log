@@ -1,0 +1,217 @@
+php        k6   tuned                q6         p0 n=10 med=0.155600s ok={True} rc=0 
+php        k4   natural_sorted                  p0 n=10 med=0.056922s ok={True} rc=0 
+php        k1   soa                  energy     p0 n=10 med=0.031277s ok={True} rc=0 
+php        k2   tuned                16384      p0 n=10 med=0.026857s ok={True} rc=0 
+php        k5   natural                         p0 n=10 med=0.223334s ok={True} rc=0 
+php        k6   natural              q6         p0 n=10 med=0.216010s ok={True} rc=0 
+php        k2   tuned                262144     p0 n=10 med=0.031505s ok={True} rc=0 
+php        k3   sw_packed                       p0 n=2 med=14.656143s ok={True} rc=0 
+php        k8   natural                         p0 n=3 med=4.004281s ok={True} rc=0 
+php        k3   sw_padded                       p0 n=2 med=4.940073s ok={True} rc=0 
+php        k4   branchless_unsorted             p0 n=10 med=0.055190s ok={True} rc=0 
+php        k2   tuned                8388608    p0 n=10 med=0.161450s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.165768s ok={True} rc=0 
+php        k1   natural_arr          energy     p0 n=3 med=0.993893s ok={True} rc=0 
+php        k1   aos                  energy     p0 n=10 med=0.121820s ok={True} rc=0 
+php        k3   rmw_padded                      p0 n=2 med=22.580746s ok={True} rc=0 
+php        k8   tuned                           p0 n=4 med=0.718028s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.920657s ok={True} rc=0 
+php        k3   rmw_packed                      p0 n=2 med=25.225409s ok={True} rc=0 
+php        k9   mt                              p0 n=10 med=0.044185s ok={True} rc=0 
+php        k4   natural_unsorted                p0 n=10 med=0.160255s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.134411s ok={True} rc=0 
+php        k7   tuned                           p0 n=3 med=1.045357s ok={True} rc=0 
+php        k6   mt                   q6         p0 n=10 med=0.038933s ok={True} rc=0 
+php        k6   mt                   q1         p0 n=10 med=0.076671s ok={True} rc=0 
+php        k7   natural                         p0 n=3 med=3.962380s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.515174s ok={True} rc=0 
+php        k6   tuned                q1         p0 n=10 med=0.262634s ok={True} rc=0 
+php        k6   natural              q1         p0 n=9 med=0.337807s ok={True} rc=0 
+php        k1   natural_arr_shuffled energy     p0 n=3 med=2.852609s ok={True} rc=0 
+php        k5   tuned                           p0 n=10 med=0.197637s ok={True} rc=0 
+php        k2   tuned                8388608    p0 n=10 med=0.158110s ok={True} rc=0 
+php        k4   natural_sorted                  p0 n=10 med=0.058482s ok={True} rc=0 
+php        k6   mt                   q1         p0 n=10 med=0.081887s ok={True} rc=0 
+php        k3   rmw_packed                      p0 n=2 med=25.059192s ok={True} rc=0 
+php        k6   tuned                q1         p0 n=10 med=0.274535s ok={True} rc=0 
+php        k6   mt                   q6         p0 n=10 med=0.039847s ok={True} rc=0 
+php        k6   natural              q1         p0 n=9 med=0.330345s ok={True} rc=0 
+php        k2   tuned                16384      p0 n=10 med=0.024769s ok={True} rc=0 
+php        k7   natural                         p0 n=3 med=3.958218s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.554185s ok={True} rc=0 
+php        k1   aos                  energy     p0 n=10 med=0.134589s ok={True} rc=0 
+php        k8   tuned                           p0 n=4 med=0.690120s ok={True} rc=0 
+php        k5   tuned                           p0 n=10 med=0.192817s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.950586s ok={True} rc=0 
+php        k5   natural                         p0 n=10 med=0.216735s ok={True} rc=0 
+php        k9   mt                              p0 n=10 med=0.064722s ok={True} rc=0 
+php        k2   tuned                262144     p0 n=10 med=0.031050s ok={True} rc=0 
+php        k1   soa                  energy     p0 n=10 med=0.027511s ok={True} rc=0 
+php        k6   natural              q6         p0 n=10 med=0.212995s ok={True} rc=0 
+php        k3   rmw_padded                      p0 n=2 med=22.374038s ok={True} rc=0 
+php        k1   natural_arr          energy     p0 n=3 med=0.940206s ok={True} rc=0 
+php        k4   natural_unsorted                p0 n=10 med=0.174360s ok={True} rc=0 
+php        k4   branchless_unsorted             p0 n=10 med=0.053921s ok={True} rc=0 
+php        k3   sw_padded                       p0 n=2 med=5.660302s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.140581s ok={True} rc=0 
+php        k6   tuned                q6         p0 n=10 med=0.149938s ok={True} rc=0 
+php        k1   natural_arr_shuffled energy     p0 n=3 med=3.091777s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.216470s ok={True} rc=0 
+php        k3   sw_packed                       p0 n=2 med=14.911532s ok={True} rc=0 
+php        k7   tuned                           p0 n=3 med=1.272219s ok={True} rc=0 
+php        k8   natural                         p0 n=3 med=3.948106s ok={True} rc=0 
+php        k8   natural                         p0 n=3 med=4.154159s ok={True} rc=0 
+php        k4   natural_unsorted                p0 n=10 med=0.166263s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.151219s ok={True} rc=0 
+php        k3   rmw_packed                      p0 n=2 med=26.145543s ok={True} rc=0 
+php        k5   natural                         p0 n=10 med=0.218695s ok={True} rc=0 
+php        k3   sw_padded                       p0 n=2 med=5.324150s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.495412s ok={True} rc=0 
+php        k2   tuned                8388608    p0 n=10 med=0.158729s ok={True} rc=0 
+php        k1   aos                  energy     p0 n=10 med=0.118052s ok={True} rc=0 
+php        k4   natural_sorted                  p0 n=10 med=0.071836s ok={True} rc=0 
+php        k8   tuned                           p0 n=4 med=0.751312s ok={True} rc=0 
+php        k2   tuned                262144     p0 n=10 med=0.030102s ok={True} rc=0 
+php        k4   branchless_unsorted             p0 n=10 med=0.056262s ok={True} rc=0 
+php        k9   mt                              p0 n=10 med=0.067165s ok={True} rc=0 
+php        k6   natural              q6         p0 n=10 med=0.210504s ok={True} rc=0 
+php        k6   tuned                q1         p0 n=10 med=0.272348s ok={True} rc=0 
+php        k2   tuned                16384      p0 n=10 med=0.024804s ok={True} rc=0 
+php        k7   natural                         p0 n=3 med=3.934156s ok={True} rc=0 
+php        k3   sw_packed                       p0 n=2 med=15.796302s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.244268s ok={True} rc=0 
+php        k6   natural              q1         p0 n=9 med=0.345543s ok={True} rc=0 
+php        k1   soa                  energy     p0 n=10 med=0.028036s ok={True} rc=0 
+php        k6   mt                   q1         p0 n=10 med=0.110127s ok={True} rc=0 
+php        k6   tuned                q6         p0 n=10 med=0.149044s ok={True} rc=0 
+php        k5   tuned                           p0 n=10 med=0.269608s ok={True} rc=0 
+php        k7   tuned                           p0 n=3 med=1.201500s ok={True} rc=0 
+php        k1   natural_arr_shuffled energy     p0 n=3 med=3.013519s ok={True} rc=0 
+php        k3   rmw_padded                      p0 n=2 med=22.345158s ok={True} rc=0 
+php        k6   mt                   q6         p0 n=10 med=0.040758s ok={True} rc=0 
+php        k1   natural_arr          energy     p0 n=3 med=0.968625s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.982218s ok={True} rc=0 
+php        k6   natural              q1         p0 n=9 med=0.354181s ok={True} rc=0 
+php        k6   tuned                q1         p0 n=10 med=0.278418s ok={True} rc=0 
+php        k5   natural                         p0 n=10 med=0.213226s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.503454s ok={True} rc=0 
+php        k3   sw_padded                       p0 n=2 med=5.297241s ok={True} rc=0 
+php        k4   natural_unsorted                p0 n=10 med=0.175123s ok={True} rc=0 
+php        k7   natural                         p0 n=3 med=4.123603s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.156327s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=1.036471s ok={True} rc=0 
+php        k2   tuned                8388608    p0 n=10 med=0.167949s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.139670s ok={True} rc=0 
+php        k3   rmw_packed                      p0 n=2 med=25.116053s ok={True} rc=0 
+php        k9   mt                              p0 n=10 med=0.057844s ok={True} rc=0 
+php        k1   aos                  energy     p0 n=10 med=0.118230s ok={True} rc=0 
+php        k1   natural_arr          energy     p0 n=3 med=0.986808s ok={True} rc=0 
+php        k6   natural              q6         p0 n=10 med=0.208862s ok={True} rc=0 
+php        k4   natural_sorted                  p0 n=10 med=0.059914s ok={True} rc=0 
+php        k1   natural_arr_shuffled energy     p0 n=3 med=2.763339s ok={True} rc=0 
+php        k2   tuned                16384      p0 n=10 med=0.024390s ok={True} rc=0 
+php        k6   tuned                q6         p0 n=10 med=0.167319s ok={True} rc=0 
+php        k4   branchless_unsorted             p0 n=10 med=0.064050s ok={True} rc=0 
+php        k5   tuned                           p0 n=10 med=0.190846s ok={True} rc=0 
+php        k3   sw_packed                       p0 n=2 med=14.343347s ok={True} rc=0 
+php        k3   rmw_padded                      p0 n=2 med=22.577169s ok={True} rc=0 
+php        k1   soa                  energy     p0 n=10 med=0.026399s ok={True} rc=0 
+php        k8   natural                         p0 n=3 med=4.069854s ok={True} rc=0 
+php        k2   tuned                262144     p0 n=10 med=0.030277s ok={True} rc=0 
+php        k6   mt                   q6         p0 n=10 med=0.040318s ok={True} rc=0 
+php        k8   tuned                           p0 n=4 med=0.702988s ok={True} rc=0 
+php        k7   tuned                           p0 n=3 med=1.202025s ok={True} rc=0 
+php        k6   mt                   q1         p0 n=10 med=0.083865s ok={True} rc=0 
+php        k8   tuned                           p0 n=4 med=0.696715s ok={True} rc=0 
+php        k6   natural              q1         p0 n=9 med=0.356014s ok={True} rc=0 
+php        k5   natural                         p0 n=10 med=0.214412s ok={True} rc=0 
+php        k6   mt                   q6         p0 n=10 med=0.045770s ok={True} rc=0 
+php        k2   tuned                16384      p0 n=10 med=0.024444s ok={True} rc=0 
+php        k1   natural_arr          energy     p0 n=3 med=1.030154s ok={True} rc=0 
+php        k6   tuned                q6         p0 n=10 med=0.158220s ok={True} rc=0 
+php        k9   mt                              p0 n=10 med=0.074396s ok={True} rc=0 
+php        k7   natural                         p0 n=3 med=4.240392s ok={True} rc=0 
+php        k5   tuned                           p0 n=10 med=0.190443s ok={True} rc=0 
+php        k7   tuned                           p0 n=3 med=1.169650s ok={True} rc=0 
+php        k2   tuned                8388608    p0 n=10 med=0.164543s ok={True} rc=0 
+php        k8   natural                         p0 n=3 med=4.008142s ok={True} rc=0 
+php        k1   natural_arr_shuffled energy     p0 n=3 med=3.141358s ok={True} rc=0 
+php        k3   rmw_packed                      p0 n=2 med=25.470092s ok={True} rc=0 
+php        k4   natural_unsorted                p0 n=10 med=0.162296s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.148199s ok={True} rc=0 
+php        k6   mt                   q1         p0 n=10 med=0.103802s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.213722s ok={True} rc=0 
+php        k1   soa                  energy     p0 n=10 med=0.026714s ok={True} rc=0 
+php        k1   aos                  energy     p0 n=10 med=0.119321s ok={True} rc=0 
+php        k2   tuned                262144     p0 n=10 med=0.031728s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.938040s ok={True} rc=0 
+php        k4   natural_sorted                  p0 n=10 med=0.058145s ok={True} rc=0 
+php        k3   sw_padded                       p0 n=2 med=5.216242s ok={True} rc=0 
+php        k6   tuned                q1         p0 n=10 med=0.291514s ok={True} rc=0 
+php        k3   sw_packed                       p0 n=2 med=13.889935s ok={True} rc=0 
+php        k3   rmw_padded                      p0 n=2 med=22.337421s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.499234s ok={True} rc=0 
+php        k4   branchless_unsorted             p0 n=10 med=0.056289s ok={True} rc=0 
+php        k6   natural              q6         p0 n=10 med=0.203274s ok={True} rc=0 
+php        k2   tuned                262144     p0 n=10 med=0.030848s ok={True} rc=0 
+php        k6   mt                   q1         p0 n=10 med=0.071303s ok={True} rc=0 
+php        k4   branchless_unsorted             p0 n=10 med=0.053964s ok={True} rc=0 
+php        k3   sw_packed                       p0 n=2 med=15.152247s ok={True} rc=0 
+php        k7   tuned                           p0 n=3 med=1.002097s ok={True} rc=0 
+php        k8   tuned                           p0 n=4 med=0.740534s ok={True} rc=0 
+php        k8   natural                         p0 n=3 med=4.260870s ok={True} rc=0 
+php        k7   natural                         p0 n=3 med=4.033034s ok={True} rc=0 
+php        k5   tuned                           p0 n=10 med=0.191185s ok={True} rc=0 
+php        k3   rmw_padded                      p0 n=2 med=22.302114s ok={True} rc=0 
+php        k1   aos                  energy     p0 n=10 med=0.117833s ok={True} rc=0 
+php        k4   natural_unsorted                p0 n=10 med=0.163801s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.136963s ok={True} rc=0 
+php        k9   mt                              p0 n=10 med=0.062585s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.924378s ok={True} rc=0 
+php        k6   natural              q6         p0 n=10 med=0.202823s ok={True} rc=0 
+php        k4   natural_sorted                  p0 n=10 med=0.059927s ok={True} rc=0 
+php        k1   soa                  energy     p0 n=10 med=0.025873s ok={True} rc=0 
+php        k1   natural_arr_shuffled energy     p0 n=3 med=2.963590s ok={True} rc=0 
+php        k2   tuned                16384      p0 n=10 med=0.023996s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.517484s ok={True} rc=0 
+php        k3   sw_padded                       p0 n=2 med=5.081079s ok={True} rc=0 
+php        k6   mt                   q6         p0 n=10 med=0.043405s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.129434s ok={True} rc=0 
+php        k2   tuned                8388608    p0 n=10 med=0.163244s ok={True} rc=0 
+php        k6   natural              q1         p0 n=9 med=0.332672s ok={True} rc=0 
+php        k6   tuned                q6         p0 n=10 med=0.146614s ok={True} rc=0 
+php        k5   natural                         p0 n=10 med=0.215532s ok={True} rc=0 
+php        k1   natural_arr          energy     p0 n=3 med=0.985506s ok={True} rc=0 
+php        k3   rmw_packed                      p0 n=2 med=26.323120s ok={True} rc=0 
+php        k6   tuned                q1         p0 n=10 med=0.274131s ok={True} rc=0 
+php        k4   branchless_unsorted             p0 n=10 med=0.055244s ok={True} rc=0 
+php        k6   tuned                q1         p0 n=10 med=0.272959s ok={True} rc=0 
+php        k2   tuned                16384      p0 n=10 med=0.027909s ok={True} rc=0 
+php        k5   tuned                           p0 n=10 med=0.204753s ok={True} rc=0 
+php        k9   natural                         p0 n=3 med=0.937532s ok={True} rc=0 
+php        k1   soa                  energy     p0 n=10 med=0.027335s ok={True} rc=0 
+php        k6   natural              q6         p0 n=10 med=0.211149s ok={True} rc=0 
+php        k3   sw_packed                       p0 n=2 med=15.075557s ok={True} rc=0 
+php        k9   mt                              p0 n=10 med=0.067829s ok={True} rc=0 
+php        k9   tuned                           p0 n=10 med=0.147378s ok={True} rc=0 
+php        k1   natural_arr          energy     p0 n=3 med=1.019554s ok={True} rc=0 
+php        k2   tuned                262144     p0 n=10 med=0.030395s ok={True} rc=0 
+php        k6   mt                   q6         p0 n=10 med=0.042856s ok={True} rc=0 
+php        k3   rmw_packed                      p0 n=2 med=26.098772s ok={True} rc=0 
+php        k7   tuned                           p0 n=3 med=1.295632s ok={True} rc=0 
+php        k4   natural_sorted                  p0 n=10 med=0.060087s ok={True} rc=0 
+php        k1   natural              energy     p0 n=5 med=0.528710s ok={True} rc=0 
+php        k7   natural                         p0 n=3 med=4.384518s ok={True} rc=0 
+php        k6   mt                   q1         p0 n=10 med=0.092883s ok={True} rc=0 
+php        k5   natural                         p0 n=10 med=0.215597s ok={True} rc=0 
+php        k6   tuned                q6         p0 n=10 med=0.164605s ok={True} rc=0 
+php        k8   natural                         p0 n=3 med=4.098670s ok={True} rc=0 
+php        k1   natural_arr_shuffled energy     p0 n=3 med=3.401306s ok={True} rc=0 
+php        k6   natural              q1         p0 n=9 med=0.335330s ok={True} rc=0 
+php        k3   sw_padded                       p0 n=2 med=5.625254s ok={True} rc=0 
+php        k4   natural_unsorted                p0 n=10 med=0.169267s ok={True} rc=0 
+php        k3   rmw_padded                      p0 n=2 med=23.866824s ok={True} rc=0 
+php        k8   tuned                           p0 n=4 med=0.690740s ok={True} rc=0 
+php        k1   natural_shuffled     energy     p0 n=3 med=1.252133s ok={True} rc=0 
+php        k1   aos                  energy     p0 n=10 med=0.143880s ok={True} rc=0 
+php        k2   tuned                8388608    p0 n=10 med=0.156194s ok={True} rc=0 

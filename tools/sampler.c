@@ -85,9 +85,11 @@ static void drain(struct perf_event_mmap_page *mp) {
 }
 
 // code JIT : adresse sans projection connue, projection anonyme (« //anon ») ou mémoire partagée
-// anonyme (« /memfd:... », double projection du JIT de .NET)
+// anonyme (« /memfd:... », double projection du JIT de .NET ; « /dev/zero (deleted) », mémoire partagée
+// d'OPcache où le JIT de PHP écrit son code : ajout de PHP, docs/PHP.md 4)
 static int is_jit(const Map *m) {
     return !m || !m->name[0] || !strncmp(m->name, "//anon", 6) || !strncmp(m->name, "/memfd:", 7) ||
+           !strncmp(m->name, "/dev/zero", 9) ||
            (m->name[0] != '/' && m->name[0] != '[');
 }
 

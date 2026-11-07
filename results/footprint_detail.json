@@ -335,6 +335,20 @@
   "rss_bytes_per_particle": 64.0,
   "rss_p1_mib": 257.9
  },
+ "php": {
+  "D2a": 0.182,
+  "bytes_per_particle": 352.0,
+  "kind": "live",
+  "measured": 352.0,
+  "note": "",
+  "per_process": [
+   351.999,
+   351.999,
+   351.999
+  ],
+  "rss_bytes_per_particle": 345.11,
+  "rss_p1_mib": 276.0
+ },
  "python": {
   "D2a": 0.085,
   "bytes_per_particle": 749.65,
