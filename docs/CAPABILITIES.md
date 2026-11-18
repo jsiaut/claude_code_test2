@@ -1,15 +1,16 @@
 # Matrice de capacités (pilier C)
 
-● = 1 (présente, documentée, vérifiée) · ◐ = 0,5 (partielle : expérimentale, propre à un compilateur, livrée hors norme ou limitée) · ○ = 0 (absente, ou seulement par une bibliothèque tierce ou une FFI).
-C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en natural (`tools/c3_measure.py`). Les justifications et preuves de chaque cellule suivent le tableau.
+● = 1 (présente, documentée, vérifiée) · ◐ = 0,5 (partielle : expérimentale, propre à un compilateur, livrée hors norme ou limitée, ou seulement par les types C que définit une FFI livrée avec la chaîne) · ○ = 0 (absente, ou seulement par une bibliothèque tierce, ou en appelant par une FFI du code C non intrinsèque).
+**Une seule règle pour la libc et les FFI** (`analysis/capabilities_v2.py`) : compte ce que la chaîne livre, y compris les intrinsèques et builtins du compilateur que le langage importe par sa FFI (Nim, Chapel, C3, Odin) ; ne compte pas l'appel de code C ordinaire par une FFI (la libc pour Rust, JavaScript, PHP ou BQN), sauf pour C et C++, dont la libc est la bibliothèque système.
+Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que la règle v2 (score central) reclasse. C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en natural (`tools/c3_measure.py`). Les justifications et preuves de chaque cellule suivent le tableau ; l'état de preuve (sonde exécutée, mesure ou lecture des sources) est décompté à la fin.
 
 | Capacité | C | C++ | Rust | Zig | Odin | C3 | D | Nim | Ada | Fortran | Chapel | Mojo | Swift | FPC | Go | C# | Java | Julia | Haskell | OCaml | JS | Python | Lua | BQN | PHP |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | **A** (25 %) | | | | | | | | | | | | | | | | | | | | | | | | | |
 | A1 agrégats valeurs en ligne dans les tableaux | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ | ◐ | ◐ |
 | A2 ordre/taille des champs, disposition C, offsetof | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ◐ |
-| A3 disposition au bit près (packed, champs de bits) | ◐ | ◐ | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ◐ |
-| A4 alignement explicite >= 64 o | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ |
+| A3 disposition au bit près (packed, champs de bits) | ◐→● | ◐→● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ◐ |
+| A4 alignement explicite >= 64 o | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐→● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ |
 | A5 unions et réinterprétation de bits | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ |
 | A6 SoA natif | ○ | ○ | ○ | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
 | A7 tableaux fixes en ligne dans les agrégats | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ | ◐ | ◐ |
@@ -21,30 +22,30 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 | B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ | ◐ |
 | B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ○ | ◐ | ◐ |
 | **C** (20 %) | | | | | | | | | | | | | | | | | | | | | | | | | |
-| C1 types vectoriels portables | ◐ | ◐ | ◐ | ● | ● | ● | ● | ○ | ◐ | ○ | ○ | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ |
-| C2 intrinsèques de la cible | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ○ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| C1 types vectoriels portables | ◐→● | ◐→● | ◐ | ● | ● | ● | ● | ○ | ◐→● | ○ | ○ | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ |
+| C2 intrinsèques de la cible | ◐→● | ◐→● | ● | ◐ | ◐→● | ◐ | ◐→● | ◐→● | ◐→● | ○ | ◐ | ◐→● | ◐ | ◐ | ◐ | ● | ○ | ◐→● | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
 | C3 auto-vectorisation (mesurée) | ● | ● | ◐ | ○ | ● | ● | ◐ | ◐ | ◐ | ● | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ○ |
-| C4 contrôle de la réassociation flottante | ◐ | ● | ● | ● | ○ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ○ |
-| C5 parallélisme de données sur plusieurs cœurs | ◐ | ◐ | ○ | ○ | ○ | ○ | ● | ◐ | ○ | ● | ● | ○ | ● | ○ | ○ | ● | ● | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ |
+| C4 contrôle de la réassociation flottante | ◐→● | ● | ● | ● | ○ | ◐ | ◐→● | ◐ | ◐ | ◐→● | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ○ |
+| C5 parallélisme de données sur plusieurs cœurs | ◐→● | ◐→● | ○ | ○ | ○ | ○ | ● | ◐ | ○ | ● | ● | ○ | ● | ○ | ○ | ● | ● | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ |
 | **D** (15 %) | | | | | | | | | | | | | | | | | | | | | | | | | |
-| D1 threads parallèles en mémoire partagée | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ○ | ○ | ◐ |
-| D2 atomiques à ordres mémoire explicites | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
-| D3 aide ligne de cache | ◐ | ● | ○ | ● | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ◐ | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ |
-| D4 affinité CPU | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ● | ● | ◐ | ◐ | ○ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ | ○ | ○ | ◐ |
-| D5 barrières et indication d'attente active | ◐ | ◐ | ● | ◐ | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ○ | ● | ● | ◐ | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ |
+| D1 threads parallèles en mémoire partagée | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐→● | ● | ◐ | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ◐ | ○ | ○ | ◐ |
+| D2 atomiques à ordres mémoire explicites | ● | ● | ● | ● | ● | ● | ● | ● | ◐→● | ◐→● | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ○ | ○ | ○ | ○ |
+| D3 aide ligne de cache | ◐→● | ● | ○ | ● | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ◐ | ◐ | ○ | ● | ○ | ○ | ○ | ○ | ○ |
+| D4 affinité CPU | ◐→● | ◐→● | ○ | ◐→● | ◐→● | ◐ | ◐→● | ● | ● | ◐→● | ◐ | ○ | ◐→● | ◐→● | ◐→● | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐→● | ○ | ○ | ◐→● |
+| D5 barrières et indication d'attente active | ◐→● | ◐→● | ● | ◐ | ● | ◐ | ● | ● | ◐→● | ◐ | ◐ | ● | ◐ | ◐ | ○ | ● | ● | ◐→● | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ |
 | **E** (10 %) | | | | | | | | | | | | | | | | | | | | | | | | | |
 | E1 code natif inspectable | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ○ | ○ | ◐ | ◐ |
-| E2 assembleur en ligne | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ● | ○ | ○ | ● | ○ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| E3 indications de branchement | ◐ | ● | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ● | ◐ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| E4 préchargement explicite | ◐ | ◐ | ● | ● | ● | ● | ● | ◐ | ◐ | ○ | ◐ | ● | ◐ | ◐ | ○ | ● | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ | ○ |
-| E5 garanties de non-aliasing | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| E2 assembleur en ligne | ◐→● | ● | ● | ● | ● | ◐ | ● | ● | ● | ○ | ○ | ● | ○ | ● | ◐ | ○ | ○ | ◐→● | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| E3 indications de branchement | ◐→● | ● | ● | ● | ● | ● | ● | ● | ◐→● | ○ | ○ | ● | ◐ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
+| E4 préchargement explicite | ◐→● | ◐→● | ● | ● | ● | ● | ● | ◐→● | ◐→● | ○ | ◐ | ● | ◐ | ◐ | ○ | ● | ○ | ◐→● | ● | ○ | ○ | ○ | ○ | ○ | ○ |
+| E5 garanties de non-aliasing | ● | ◐→● | ● | ● | ● | ◐ | ◐→● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
 | E6 contrôle local des vérifications de bornes | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ● | ● | ● | ◐ | ◐ | ○ | ○ | ◐ |
 | E7 calcul à la compilation + génériques monomorphisés | ◐ | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ◐ | ○ | ● | ◐ | ○ | ○ | ○ | ○ | ○ | ○ |
 | **F** (10 %) | | | | | | | | | | | | | | | | | | | | | | | | | |
 | F1 tableaux multidimensionnels contigus | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ● | ● | ● | ○ | ◐ | ○ | ● | ◐ |
 | F2 localité / distribution (PGAS, NUMA) | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
 | F3 entiers fixes signés et non signés modulaires | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ |
-| F4 fichiers projetés + réinterprétation sans copie | ◐ | ◐ | ○ | ● | ◐ | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ◐ | ◐ | ● | ● | ● | ○ | ● | ○ | ● | ○ | ● | ○ |
+| F4 fichiers projetés + réinterprétation sans copie | ◐→● | ◐→● | ○ | ● | ◐→● | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ◐→● | ◐→● | ● | ● | ● | ○ | ● | ○ | ● | ○ | ● | ○ |
 
 ## Justifications
 
@@ -273,3 +274,35 @@ C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en na
 * **E** : E1 = 0.5 (JIT d'OPcache (moteur IR) livré mais inactif par défaut (opcache.enable_cli=0, opcache.jit=disable) ; listage du code machine seulement avec une construction --with-capstone (opcache.jit_debug=1), comme le USE_PERF de CBQN) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 0 (aucun) ; E5 = 0 (aucun) ; E6 = 0.5 (seulement par les pointeurs de la FFI (non vérifiés ; tableaux de la FFI vérifiés : sonde), comme ctypes) ; E7 = 0 (aucun)
 * **F** : F1 = 0.5 (tableaux multidimensionnels contigus de la FFI (double[3][4] ; sonde) ; tableaux de PHP imbriqués) ; F2 = 0 (aucun) ; F3 = 0.5 (int de 64 bits signé dont le dépassement passe en float ; masques & 0xFFFFFFFF ; types de la FFI qui enveloppent (uint32_t ; sonde), comme ctypes) ; F4 = 0 (pas de projection de fichier (mmap seulement par la FFI vers la libc, comme node:ffi))
 
+## État de preuve
+
+Case **sondée** : une ligne `CAP` d'une sonde exécutée (`results/probes/<langage>.txt`, confrontée à la matrice par `analysis/check_probes.py`) ; **mesurée** : C3 ; **lue** : justifiée par la lecture des sources ou de la documentation, citée ci-dessus (`docs/AUDIT3_RESPONSE.md`).
+
+| Langage | sondées | mesurées | lues |
+|---|---|---|---|
+| C | 33 | 1 | 0 |
+| C++ | 33 | 1 | 0 |
+| Rust | 8 | 1 | 25 |
+| Zig | 10 | 1 | 23 |
+| Odin | 5 | 1 | 28 |
+| C3 | 4 | 1 | 29 |
+| D | 8 | 1 | 25 |
+| Nim | 7 | 1 | 26 |
+| Ada | 7 | 1 | 26 |
+| Fortran | 7 | 1 | 26 |
+| Chapel | 9 | 1 | 24 |
+| Mojo | 7 | 1 | 26 |
+| Swift | 33 | 1 | 0 |
+| FPC | 33 | 1 | 0 |
+| Go | 4 | 1 | 29 |
+| C# | 4 | 1 | 29 |
+| Java | 5 | 1 | 28 |
+| Julia | 7 | 1 | 26 |
+| Haskell | 3 | 1 | 30 |
+| OCaml | 4 | 1 | 29 |
+| JS | 2 | 1 | 31 |
+| Python | 4 | 1 | 29 |
+| Lua | 2 | 1 | 31 |
+| BQN | 33 | 1 | 0 |
+| PHP | 33 | 1 | 0 |
+| **Total** | 305 | 25 | 520 (61 % des 850 cases) |

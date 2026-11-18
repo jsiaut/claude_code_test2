@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Génère docs/CAPABILITIES.md à partir de analysis/capabilities.py (et de results/vectorization.json)."""
-import json, os, sys
+"""Génère docs/CAPABILITIES.md à partir de analysis/capabilities.py, des reclassements de la règle v2
+(analysis/capabilities_v2.py), des sondes exécutées (results/probes/*.txt) et de results/vectorization.json."""
+import glob, json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "analysis"))
 from capabilities import MATRIX, CATEGORIES, LABELS, M  # noqa: E402
+from capabilities_v2 import V2_OVERRIDES  # noqa: E402
 
 ORDER = ["c", "cpp", "rust", "zig", "odin", "c3", "d", "nim", "ada", "fortran", "chapel", "mojo", "swift", "fpc", "go",
          "csharp", "java", "julia", "haskell", "ocaml", "js", "python", "lua", "bqn", "php"]
@@ -20,9 +22,17 @@ def main():
     sym = {1: "●", 0.5: "◐", 0: "○", 1.0: "●", 0.0: "○"}
     out = ["# Matrice de capacités (pilier C)", "",
            "● = 1 (présente, documentée, vérifiée) · ◐ = 0,5 (partielle : expérimentale, propre à un compilateur, "
-           "livrée hors norme ou limitée) · ○ = 0 (absente, ou seulement par une bibliothèque tierce ou une FFI).",
+           "livrée hors norme ou limitée, ou seulement par les types C que définit une FFI livrée avec la chaîne) · "
+           "○ = 0 (absente, ou seulement par une bibliothèque tierce, ou en appelant par une FFI du code C non "
+           "intrinsèque).",
+           "**Une seule règle pour la libc et les FFI** (`analysis/capabilities_v2.py`) : compte ce que la chaîne livre, "
+           "y compris les intrinsèques et builtins du compilateur que le langage importe par sa FFI (Nim, Chapel, C3, "
+           "Odin) ; ne compte pas l'appel de code C ordinaire par une FFI (la libc pour Rust, JavaScript, PHP ou BQN), "
+           "sauf pour C et C++, dont la libc est la bibliothèque système.",
+           "Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que la règle v2 (score central) reclasse. "
            "C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en natural "
-           "(`tools/c3_measure.py`). Les justifications et preuves de chaque cellule suivent le tableau.", "",
+           "(`tools/c3_measure.py`). Les justifications et preuves de chaque cellule suivent le tableau ; l'état de "
+           "preuve (sonde exécutée, mesure ou lecture des sources) est décompté à la fin.", "",
            "| Capacité | " + " | ".join(SHORT[l] for l in ORDER) + " |",
            "|---|" + "---|" * len(ORDER)]
     for cat, (w, caps) in CATEGORIES.items():
@@ -31,7 +41,11 @@ def main():
             cells = []
             for l in ORDER:
                 v = c3.get(l) if MATRIX[l][c] == M else MATRIX[l][c][0]
-                cells.append(sym.get(v, "?") if v is not None else "?")
+                s = sym.get(v, "?") if v is not None else "?"
+                o = V2_OVERRIDES.get((l, c))
+                if o and MATRIX[l][c] != M and o[0] != v:
+                    s += "→" + sym.get(o[0], "?")
+                cells.append(s)
             out.append(f"| {c} {LABELS[c]} | " + " | ".join(cells) + " |")
     out += ["", "## Justifications", ""]
     for l in ORDER:
@@ -48,6 +62,26 @@ def main():
                     items.append(f"{c} = {v} ({why})")
             out.append(f"* **{cat}** : " + " ; ".join(items))
         out.append("")
+    probed = {}
+    for fn in glob.glob(os.path.join(ROOT, "results", "probes", "*.txt")):
+        for line in open(fn, errors="replace"):
+            p = line.rstrip("\n").split(";", 3)
+            if len(p) == 4 and p[0] == "CAP":
+                probed.setdefault(os.path.basename(fn)[:-4], set()).add(p[1])
+    out += ["## État de preuve", "",
+            "Case **sondée** : une ligne `CAP` d'une sonde exécutée (`results/probes/<langage>.txt`, confrontée à la "
+            "matrice par `analysis/check_probes.py`) ; **mesurée** : C3 ; **lue** : justifiée par la lecture des "
+            "sources ou de la documentation, citée ci-dessus (`docs/AUDIT3_RESPONSE.md`).", "",
+            "| Langage | sondées | mesurées | lues |", "|---|---|---|---|"]
+    tot = [0, 0, 0]
+    for l in ORDER:
+        meas = {c for c, v in MATRIX[l].items() if v == M}
+        pr = (probed.get(l, set()) & set(MATRIX[l])) - meas
+        row = [len(pr), len(meas), len(MATRIX[l]) - len(pr) - len(meas)]
+        tot = [a + b for a, b in zip(tot, row)]
+        out.append(f"| {SHORT[l]} | {row[0]} | {row[1]} | {row[2]} |")
+    n = sum(tot)
+    out.append(f"| **Total** | {tot[0]} | {tot[1]} | {tot[2]} ({100 * tot[2] / n:.0f} % des {n} cases) |")
     open(os.path.join(ROOT, "docs", "CAPABILITIES.md"), "w").write("\n".join(out) + "\n")
     print("docs/CAPABILITIES.md écrit")
 

@@ -117,13 +117,16 @@ def noisy_r(base, prng, noise=0.10):
 
 
 # ------------------------------------------------------------------ scénarios
-def scenario(data, lat, langs, footprint, c3, crule, e_drop=(), e_meas=None, patch=None):
+def scenario(data, lat, langs, footprint, c3, crule, e_drop=(), e_meas=None, patch=None, wmap=None):
     """Rejoue l'analyse v3 (même graine, mêmes tirages) sur data, avec la règle crule : 'main' (v2/v1) ou 'R'.
     e_drop : noyaux de poids nul dans le plafond E (docs/MOJO.md, scénario sans K4) ; leurs références restent
     calculées, car le code par défaut D1 les partage. Vide par défaut : le calcul publié est inchangé.
     e_meas, patch (docs/NOSIMD.md) : mesures de E à la place de E_V2, et fonction appliquée aux temps simulés (A)
     après leur tirage ; les cellules sont chargées et tirées comme dans le calcul publié, donc les tirages ne changent
-    pas. Absents par défaut : le calcul publié est inchangé."""
+    pas. Absents par défaut : le calcul publié est inchangé.
+    wmap (docs/AUDIT3_RESPONSE.md, M-mesures) : fonction des poids C, E, D (tableau) vers les poids employés, appliquée
+    au score central (poids 0,35, 0,40, 0,25) et, après leur tirage, aux poids de chaque variante ; les tirages ne
+    changent pas. Absent par défaut : le calcul publié est inchangé."""
     rng = np.random.default_rng(v3.SEED)
     keys = sorted(needed_keys())
     pools = build_pools(data, langs, keys)
@@ -140,10 +143,11 @@ def scenario(data, lat, langs, footprint, c3, crule, e_drop=(), e_meas=None, pat
     if e_drop:
         kept = [k for k in A.e_meas if k not in e_drop]
         wE0 = {k: (1 / len(kept) if k in kept else 0.0) for k in A.e_meas}
-    S0 = scores3(A, 0, MAIN, C0, footprint, refs, wE=wE0)
+    wP0 = wmap(np.array([0.35, 0.40, 0.25])) if wmap else None
+    S0 = scores3(A, 0, MAIN, C0, footprint, refs, wE=wE0, wP=wP0)
     ms_boot = np.empty((B, len(langs)))
     for b in range(1, B + 1):
-        ms_boot[b - 1] = scores3(A, b, MAIN, C0, footprint, refs, wE=wE0)["MS"]
+        ms_boot[b - 1] = scores3(A, b, MAIN, C0, footprint, refs, wE=wE0, wP=wP0)["MS"]
     opts = {"est": ["mean", "min"], "enorm": ["frontier", "bounds"], "d3": ["abs", "rel"], "d4": ["best", "c"],
             "d1ref": ["tstar", "best_natural"], "agg": ["arith", "geo"], "crule": ["v2", "v1"]}
     kernels, cat_names = [k for k in A.e_meas if k not in e_drop], list(CATEGORIES)
@@ -156,7 +160,7 @@ def scenario(data, lat, langs, footprint, c3, crule, e_drop=(), e_meas=None, pat
         cfg = {k: v[int(rng.integers(len(v)))] for k, v in opts.items()}
         b = int(rng.integers(1, B + 1))
         wp = dirichlet(rng, 20 * np.array([0.35, 0.40, 0.25])) if rng.random() < 0.5 else dirichlet(rng, [1, 1, 1])
-        wP = {"C": wp[0], "E": wp[1], "D": wp[2]}
+        wP = wmap(wp) if wmap else {"C": wp[0], "E": wp[1], "D": wp[2]}
         wE = dict(zip(kernels, dirichlet(rng, 20 * np.full(len(kernels), 1 / len(kernels)))))
         wE.update({k: 0.0 for k in e_drop})
         wD = dict(zip(("D1", "D2", "D3", "D4"), dirichlet(rng, 20 * np.array([v3.DW[k] for k in ("D1", "D2", "D3", "D4")]))))

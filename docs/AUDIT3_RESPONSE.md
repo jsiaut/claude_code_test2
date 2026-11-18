@@ -77,6 +77,28 @@ Ces points changent ce que l'étude mesure ; je les chiffre, je ne les lance pas
 | 7 | Trois tailles par noyau (dans le cache, au bord, en mémoire) | Tailles en paramètres dans les 25 implémentations, générateurs et sommes attendues ; une campagne environ trois fois plus longue que la principale |
 | 9 | Le coût d'accès au plafond : lignes du code optimisé rapportées au naturel, blocs `unsafe`, intrinsèques propres à une architecture, cibles où le code compile | Une mesure statique des sources existantes, à définir d'avance ; elle peut se faire sans campagne |
 
+## 4. Résultats (après les calculs ; `results/report_audit3.md`)
+
+* **Contrôle** : le scénario Publié reproduit P-E à l'identique (écart 0).
+* **Sans la grille (M-mesures)**, les étages indicatifs gardent les mêmes langages : les 14 premiers, puis C#,
+  FreePascal, Java, Go et Haskell ; le dernier se scinde (OCaml, BQN, JavaScript et PHP, puis Lua, puis Python). Dans le
+  premier étage, C reste 1er (1er dans 58 % des variantes, contre 50 %) ; le contrôle porte C++ (3e au lieu de 5e), Zig
+  (5e au lieu de 9e) et D (8e au lieu de 12e), et retient Chapel (10e au lieu de 4e) et Fortran (11e au lieu de 8e).
+  C'est la mesure de ce que la grille décide : l'appartenance aux étages, non ; l'ordre du premier étage, en grande
+  partie.
+* **Substitutions** : C compilé par GCC resterait 1er (79,5 points, rang espéré 2,63 contre 2,20 avec clang) ; Fortran
+  par flang passerait 13e (61,0) ; Bun ferait passer JavaScript 22e, devant PHP (18,1) ; LuaJIT, avec la grille de Lua,
+  ferait passer Lua 24e, devant Python (11,3) ; CPython sans GIL ne change pas la place de Python (11,7, 24e ; 13 clés
+  mesurées sur 36).
+* **Variantes des remarques** : Zig 0.18-dev (75,7) et C++ avec le K4 de clang++ (80,3) seraient 1ers ; .NET 11 (55,5),
+  la CLI de PHP sans JIT (16,3, 23e) et le stencil de PHP compilé par 8.3 (16,6) ne changent pas ou presque leur place ;
+  Swift sans vérifications gagnait une place le 5 novembre (12e → 11e sur 22), FreePascal 3.2.4-rc2 et main aucune.
+* **Grille** : 305 cases sondées, 25 mesurées, 520 lues (61 %). La légende de `docs/CAPABILITIES.md` énonce désormais la
+  règle unique de la libc et des FFI, et le tableau marque les 54 cases que la règle v2 reclasse (« ◐→● »).
+* **Le classement publié ne change pas.** Le README montre désormais les étages dans son tableau, l'écart au plan v3, les
+  trois quantités séparées, le classement sans la grille, les variantes, la règle unique, l'état de preuve de la grille et
+  les conditions qui diffèrent d'une chaîne à l'autre.
+
 ## 5. Questions à l'auteur
 
 * Garder le classement de 1 à 25 en tête du README, ou revenir aux étages sans ordre interne du plan v3 (le classement

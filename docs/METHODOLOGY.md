@@ -1523,3 +1523,12 @@ Robustesse :
   (M-mesures), substitutions des cinq implémentations annexes, tableau des variantes des remarques, état de preuve de
   la grille, légende corrigée ; `analysis/audit3.py`. La v4 (deux pistes, conditions égales, code convergent, trois
   tailles, coût d'accès au plafond, une sonde par case) est chiffrée, pas lancée.
+* 2026-11-18 : **troisième remarque générale : calculs et textes** (`analysis/audit3.py`, `results/report_audit3.md`,
+  `docs/AUDIT3_RESPONSE.md` section 4). `analysis/confrontation.py` reçoit une option `wmap` (poids employés en fonction
+  des poids tirés), absente par défaut : le calcul publié est inchangé, et le scénario Publié de `audit3.py` reproduit
+  P-E à l'identique. Sans la grille (M-mesures), les étages gardent les mêmes langages ; dans le premier, C reste 1er
+  (58 % des variantes), Chapel passe 4e, C++ 5e, Zig 9e, D 12e. Substitutions : C par GCC 1er, Fortran par flang 13e,
+  Bun 22e, LuaJIT 24e, CPython sans GIL 24e. `analysis/capabilities_md.py` : légende réécrite (règle unique de la libc
+  et des FFI), cases reclassées par la règle v2 marquées, état de preuve par langage (305 sondées, 25 mesurées, 520
+  lues). README : écart au plan v3 dit, colonne « Étage », trois quantités séparées et classement sans la grille,
+  variantes hors classement, règle unique, état de preuve, conditions de compilation, tailles. Classement publié inchangé.
