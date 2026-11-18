@@ -1512,3 +1512,14 @@ Robustesse :
   4.1 corrigés, sections 5.8 à 5.13, reproductions pour php-src), README (paragraphe de PHP, égalités de fait dans le
   tableau et sa légende, « Ce qui sépare vraiment les langages », points 3 et 7, relectures, bilan des remarques,
   lectures, reproduction), `docs/FINDINGS.md`, `tools/php_check/src/jit_stack_bug.php` (versions touchées).
+* 2026-11-18 : **troisième remarque générale : vérification et plan** (`docs/AUDIT3_2026-11-18.md`, archivée telle
+  quelle ; `docs/AUDIT3_RESPONSE.md`, sections 0 à 3 et 5, poussées avant tout calcul). Vérifié : le plan v3 publiait
+  des étages sans ordre interne et faisait du score composite une sensibilité ; le classement de 1 à 25 est revenu le
+  30 octobre à la demande de l'auteur, un écart au plan que le README ne disait pas. 330 cases de la grille sur 850
+  (39 %) reposent sur une sonde ou une mesure ; 53 errata (6 %). La règle de la libc et des FFI est unique et écrite
+  (`analysis/capabilities_v2.py` : intrinsèques oui, code C non, sauf C et C++), mais la légende publiée la résume mal.
+  Faux : « trois tailles sans code nouveau » (les tailles sont des constantes dans chaque implémentation). Plan sans
+  remesure : colonne « Étage » et trois quantités séparées dans le README, classement sur les seules mesures
+  (M-mesures), substitutions des cinq implémentations annexes, tableau des variantes des remarques, état de preuve de
+  la grille, légende corrigée ; `analysis/audit3.py`. La v4 (deux pistes, conditions égales, code convergent, trois
+  tailles, coût d'accès au plafond, une sonde par case) est chiffrée, pas lancée.
