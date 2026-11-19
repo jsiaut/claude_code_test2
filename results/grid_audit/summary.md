@@ -27,10 +27,10 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | lua | 2 | 1 | 31 | 2 |  |
 | swift | 33 | 1 | 0 | 0 | exécutée 26, exécutée+recherche 1, exécutée+échec 1, recherche 3, échec+recherche 2 |
 | fpc | 33 | 1 | 0 | 0 | exécutée 26, recherche 4, échec 1, échec+recherche 2 |
-| bqn | 33 | 1 | 0 | 33 |  |
+| bqn | 33 | 1 | 0 | 0 | exécutée 10, recherche 17, échec 2, échec+recherche 4 |
 | php | 33 | 1 | 0 | 33 |  |
 
-Total : 589 sondées, 25 mesurées, 236 sans sonde, 94 déclaratives.
+Total : 589 sondées, 25 mesurées, 236 sans sonde, 61 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 

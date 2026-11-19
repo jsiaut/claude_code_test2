@@ -170,8 +170,11 @@
    "échec+recherche": 2
   },
   "bqn": {
-   "déclarative": 33,
+   "exécutée": 10,
    "sondée": 33,
+   "recherche": 17,
+   "échec+recherche": 4,
+   "échec": 2,
    "mesurée": 1
   },
   "php": {
@@ -181,17 +184,17 @@
   }
  },
  "total": {
-  "exécutée": 398,
+  "exécutée": 408,
   "sondée": 589,
-  "échec+recherche": 7,
+  "échec+recherche": 11,
   "mesurée": 25,
   "exécutée+échec": 14,
-  "recherche": 56,
+  "recherche": 73,
   "exécutée+recherche": 11,
-  "échec": 6,
+  "échec": 8,
   "exécutée+échec+recherche": 3,
   "sans sonde": 236,
-  "déclarative": 94
+  "déclarative": 61
  },
  "divergences": [
   [

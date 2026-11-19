@@ -1,33 +1,33 @@
-CAP;A1;0.5;matrice 1000×16 : f64arr d'un seul tenant (rangées homogènes en ligne) ; liste d'espaces de noms : harr (références) ; pas d'enregistrement hétérogène en ligne
-CAP;A2;0;ni ordre ni taille de champs : un espace de noms n'a pas de disposition (les types de structure de •FFI ne servent qu'aux appels)
-CAP;A3;0;ni enregistrement compacté ni champ de bits ; booléens rangés à 1 bit (bitarr) et ⟨1,'u'⟩‿⟨8,'i'⟩ •bit._cast 8 bits → ⟨ -115 ⟩, sur des tableaux seulement, comme le BitArray de Julia (remarque sur BQN)
-CAP;A4;0;aucun contrôle de l'alignement
-CAP;A5;0.5;•bit._cast : 1.0 en f64 → deux i32 ⟨ 0 1072693248 ⟩ (tableaux seulement ; ni union ni f32)
-CAP;A6;0;aucun conteneur SoA : ⍉ transpose la matrice 1000×16 en 16×1000 (f64arr, une copie), comme la transposition de Fortran et de Julia (remarque sur BQN)
-CAP;A7;0.5;tableau de rang 3 (2×16×4, f64arr) : sous-tableaux fixes en ligne, homogènes seulement
-CAP;A8;0.5;stockage étroit choisi par l'implémentation : 1‿2‿3 i8arr, 300‿1 i16arr, 70000‿1 i32arr, 0.5‿1 f64arr ; •bit._cast force i8/i16/i32 ; pas de flottant 32 ou 16 bits
-CAP;B1;0.5;comptage de références (•internal.Refc ↕1000 : 1) ; ramasse-miettes traçant automatique, désactivable seulement par la commande )gc disable du REPL (docs/commands.md)
-CAP;B2;0;aucun allocateur à choisir ni arène
-CAP;B3;0;nombres jamais boxés (100 000 additions scalaires : tas vivant 128 octets de plus) ; tout tableau est sur le tas
-CAP;B4;0;chaque primitive alloue son résultat (sauf mise à jour en place d'un tableau non partagé)
-CAP;B5;0.5;pointeurs par •FFI seulement : malloc, Write 123456, Read 123456 (objets pointeurs Read/Write/Add/Cast)
-CAP;C1;0;aucun type vectoriel : les primitives travaillent sur des tableaux entiers
-CAP;C2;0;aucune intrinsèque
-CAP;C4;0.5;+´ ordonnée 14.392726722865772 ; •math.Sum (somme vectorielle réassociée) 14.392726722865621 ; écart 1.509903313490213e-13 ; pour la somme seulement
-CAP;C5;0;aucune construction qui demande plusieurs cœurs (CBQN n'en utilise qu'un) ; les primitives sur tableaux entiers relèvent du SIMD
-CAP;D1;0;pas de threads (la bibliothèque système n'en a pas ; CBQN n'est pas réentrant)
-CAP;D2;0;aucun atomique
-CAP;D3;0;aucune aide de ligne de cache
-CAP;D4;0;pas d'affinité (sched_setaffinity seulement par •FFI vers la libc)
-CAP;D5;0;ni barrière ni pause
-CAP;E1;0.5;interprète de bytecode avec un JIT x86-64 actif par défaut (src/vm/vm.h : JIT_START 2, une fonction compilée après deux appels) ; code machine visible seulement avec une option de construction (USE_PERF)
-CAP;E2;0;aucun
-CAP;E3;0;aucun
-CAP;E4;0;aucun
-CAP;E5;0;aucune annotation (valeurs immuables)
-CAP;E6;0;indices toujours vérifiés (5 ⊑ ↕3 : « 𝕨⊑𝕩: indexing out-of-bounds (𝕨≡5, 3≡≠𝕩) ») ; aucun moyen de les désactiver
-CAP;E7;0;ni calcul à la compilation ni génériques
-CAP;F1;1;tableaux multidimensionnels natifs, contigus en ordre des rangées (3×4×5 : i8arr, (⟨1,2,3⟩⊑r) = 33)
-CAP;F2;0;aucun
-CAP;F3;0.5;pas de type entier de largeur fixe : entiers exacts jusqu'à 2⋆53 (f64) ; opérations modulaires sur des tableaux par •bit : ⟨100,¯56⟩ 8•bit._add ⟨100,100⟩ = ⟨ -56 44 ⟩, ⟨2e9⟩ 32•bit._add ⟨2e9⟩ = ⟨ -294967296 ⟩ ; enveloppement par modulo : (2⋆32)|¯1 = 4294967295, par •bit._cast 300 → i8 ⟨ 44 1 ⟩
-CAP;F4;1;•file.MapBytes projette 64 Mio (c8slice, tas vivant + 128 o) ; •bit._cast en i32 sans copie (i32slice, tas + 64 o) ; somme des clés 8580155258
+CAP;A1;0.5;[exécutée] matrice 1000×16 : f64arr d'un seul tenant (rangées homogènes en ligne) ; liste d'espaces de noms : harr (références) ; pas d'enregistrement hétérogène en ligne
+CAP;A2;0;[recherche] motif A2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_A2.txt) ; ni ordre ni taille de champs : un espace de noms n'a pas de disposition (les types de structure de •FFI ne servent qu'aux appels)
+CAP;A3;0;[échec] ni enregistrement compacté ni champ de bits ; booléens rangés à 1 bit (bitarr) et ⟨1,'u'⟩‿⟨8,'i'⟩ •bit._cast 8 bits → ⟨ -115 ⟩, sur des tableaux seulement, comme le BitArray de Julia (remarque sur BQN) ; [recherche] motif A3 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_A3.txt)
+CAP;A4;0;[recherche] motif A4 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_A4.txt) ; aucun contrôle de l'alignement
+CAP;A5;0.5;[exécutée] •bit._cast : 1.0 en f64 → deux i32 ⟨ 0 1072693248 ⟩ (tableaux seulement ; ni union ni f32)
+CAP;A6;0;[échec] aucun conteneur SoA : ⍉ transpose la matrice 1000×16 en 16×1000 (f64arr, une copie), comme la transposition de Fortran et de Julia (remarque sur BQN) ; [recherche] motif A6 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_A6.txt)
+CAP;A7;0.5;[exécutée] tableau de rang 3 (2×16×4, f64arr) : sous-tableaux fixes en ligne, homogènes seulement
+CAP;A8;0.5;[exécutée] stockage étroit choisi par l'implémentation : 1‿2‿3 i8arr, 300‿1 i16arr, 70000‿1 i32arr, 0.5‿1 f64arr ; •bit._cast force i8/i16/i32 ; pas de flottant 32 ou 16 bits
+CAP;B1;0.5;[exécutée] comptage de références (•internal.Refc ↕1000 : 1) ; ramasse-miettes traçant automatique, désactivable seulement par la commande )gc disable du REPL (docs/commands.md)
+CAP;B2;0;[recherche] motif B2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_B2.txt) ; aucun allocateur à choisir ni arène
+CAP;B3;0;[échec] nombres jamais boxés (100 000 additions scalaires : tas vivant 128 octets de plus) ; tout tableau est sur le tas ; [recherche] motif B3 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_B3.txt)
+CAP;B4;0;[échec] chaque primitive alloue son résultat (sauf mise à jour en place d'un tableau non partagé)
+CAP;B5;0.5;[exécutée] pointeurs par •FFI seulement : malloc, Write 123456, Read 123456 (objets pointeurs Read/Write/Add/Cast)
+CAP;C1;0;[recherche] motif C1 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_C1.txt) ; aucun type vectoriel : les primitives travaillent sur des tableaux entiers
+CAP;C2;0;[recherche] motif C2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_C2.txt) ; aucune intrinsèque
+CAP;C4;0.5;[exécutée] +´ ordonnée 14.392726722865772 ; •math.Sum (somme vectorielle réassociée) 14.392726722865621 ; écart 1.509903313490213e-13 ; pour la somme seulement
+CAP;C5;0;[recherche] motif C5 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_C5.txt) ; aucune construction qui demande plusieurs cœurs (CBQN n'en utilise qu'un) ; les primitives sur tableaux entiers relèvent du SIMD
+CAP;D1;0;[recherche] motif D1 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_D1.txt) ; pas de threads (la bibliothèque système n'en a pas ; CBQN n'est pas réentrant)
+CAP;D2;0;[recherche] motif D2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_D2.txt) ; aucun atomique
+CAP;D3;0;[recherche] motif D3 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_D3.txt) ; aucune aide de ligne de cache
+CAP;D4;0;[recherche] motif D4 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_D4.txt) ; pas d'affinité (sched_setaffinity seulement par •FFI vers la libc)
+CAP;D5;0;[recherche] motif D5 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_D5.txt) ; ni barrière ni pause
+CAP;E1;0.5;[recherche] symboles du JIT dans le binaire livré (nm) : compileAll evalJIT jit_enabled mmX_allocS (mémoire exécutable mmX) ; [échec] aucune option d'affichage du code produit (0 option jit/asm/perf dans --help ; il faut reconstruire avec USE_PERF) ; interprète de bytecode avec un JIT x86-64 actif par défaut (src/vm/vm.h : JIT_START 2, une fonction compilée après deux appels) ; code machine visible seulement avec une option de construction (USE_PERF)
+CAP;E2;0;[recherche] motif E2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_E2.txt) ; aucun
+CAP;E3;0;[recherche] motif E3 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_E3.txt) ; aucun
+CAP;E4;0;[recherche] motif E4 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_E4.txt) ; aucun
+CAP;E5;0;[recherche] motif E5 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_E5.txt) ; aucune annotation (valeurs immuables)
+CAP;E6;0;[échec] indices toujours vérifiés (5 ⊑ ↕3 : « 𝕨⊑𝕩: indexing out-of-bounds (𝕨≡5, 3≡≠𝕩) ») ; aucun moyen de les désactiver
+CAP;E7;0;[recherche] motif E7 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_E7.txt) ; ni calcul à la compilation ni génériques
+CAP;F1;1;[exécutée] tableaux multidimensionnels natifs, contigus en ordre des rangées (3×4×5 : i8arr, (⟨1,2,3⟩⊑r) = 33)
+CAP;F2;0;[recherche] motif F2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom (results/grid_audit/search/bqn_F2.txt) ; aucun
+CAP;F3;0.5;[exécutée] pas de type entier de largeur fixe : entiers exacts jusqu'à 2⋆53 (f64) ; opérations modulaires sur des tableaux par •bit : ⟨100,¯56⟩ 8•bit._add ⟨100,100⟩ = ⟨ -56 44 ⟩, ⟨2e9⟩ 32•bit._add ⟨2e9⟩ = ⟨ -294967296 ⟩ ; enveloppement par modulo : (2⋆32)|¯1 = 4294967295, par •bit._cast 300 → i8 ⟨ 44 1 ⟩
+CAP;F4;1;[exécutée] •file.MapBytes projette 64 Mio (c8slice, tas vivant + 128 o) ; •bit._cast en i32 sans copie (i32slice, tas + 64 o) ; somme des clés 8580155258

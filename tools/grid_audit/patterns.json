@@ -266,6 +266,12 @@
       "listing": "python3 tools/grid_audit/listings/fpc_symbols.py",
       "public": "\\((proc|type|const|var|prop|rec|obj|classref|enum|proctype)\\)$",
       "version": "/opt/fpc/bin/fpc -iV"
+    },
+    "bqn": {
+      "roots": [],
+      "listing": "/opt/cbqn-cl/bin/BQN tools/grid_audit/listings/bqn_sys.bqn",
+      "public": ".",
+      "version": "/opt/cbqn-cl/bin/BQN --version 2>&1 | head -1"
     }
   }
 }
