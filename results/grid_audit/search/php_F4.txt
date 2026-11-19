@@ -1,0 +1,11 @@
+# Recherche d'absence : php, case F4
+# Chaîne : 8.5.12
+# Motif : mmap|memory_?map|map_?view|memory_?mapped|mapped_?(file|byte)|madvise
+# Déclaration publique : .
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

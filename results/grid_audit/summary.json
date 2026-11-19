@@ -178,23 +178,25 @@
    "mesurée": 1
   },
   "php": {
-   "déclarative": 33,
+   "exécutée": 16,
    "sondée": 33,
+   "recherche": 13,
+   "échec+recherche": 4,
    "mesurée": 1
   }
  },
  "total": {
-  "exécutée": 408,
+  "exécutée": 424,
   "sondée": 589,
-  "échec+recherche": 11,
+  "échec+recherche": 15,
   "mesurée": 25,
   "exécutée+échec": 14,
-  "recherche": 73,
+  "recherche": 86,
   "exécutée+recherche": 11,
   "échec": 8,
   "exécutée+échec+recherche": 3,
   "sans sonde": 236,
-  "déclarative": 61
+  "déclarative": 28
  },
  "divergences": [
   [
@@ -213,13 +215,6 @@
   ],
   [
    "python",
-   "D4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "php",
    "D4",
    0.5,
    0.5,

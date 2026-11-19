@@ -1,0 +1,15 @@
+# Recherche d'absence : php, case D2
+# Chaîne : 8.5.12
+# Motif : acquire|release|relaxed|memory_?order|seq_?cst|acq_?rel|monotonic
+# Déclaration publique : .
+# 3 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:1231: constante PHP_RELEASE_VERSION (Core)
+<introspection>:2803: fonction sem_acquire
+<introspection>:2805: fonction sem_release
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    3 <introspection>

@@ -1,0 +1,14 @@
+# Recherche d'absence : php, case E5
+# Chaîne : 8.5.12
+# Motif : restrict|noalias|no_?alias
+# Déclaration publique : .
+# 2 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:1264: constante POSIX_PC_CHOWN_RESTRICTED (posix)
+<introspection>:3220: ini opcache.restrict_api
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    2 <introspection>

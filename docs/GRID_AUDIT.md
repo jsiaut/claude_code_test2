@@ -9,10 +9,11 @@ recherche d'absence). Ce document est rempli langage par langage ; les errata so
 
 * **Classes de preuve.** [exécutée] : un programme se sert de la capacité et imprime un fait observable (taille,
   décalage, adresse modulo, valeur, fil, instruction du code produit, attribut de l'IR) ; pour ½, la limite est montrée
-  aussi. [échec] : la forme canonique est tentée et le refus du compilateur est imprimé. [recherche] : les sources livrées
-  de la bibliothèque standard (ou la liste de ses API publiques) sont fouillées avec le motif de la case
-  (`tools/grid_audit/patterns.json`) ; chaque déclaration publique trouvée est examinée, et l'examen est écrit dans la
-  ligne de la sonde. C3 reste [mesurée].
+  aussi. [échec] : la forme canonique est tentée et le refus du compilateur (ou l'erreur à l'exécution) est imprimé, ou
+  le comportement contraire est mesuré (taille d'un agrégat sur le tas, ordre d'une somme gardé). [recherche] : les
+  sources livrées de la bibliothèque standard (ou la liste de ses API publiques) sont fouillées avec le motif de la
+  case (`tools/grid_audit/patterns.json`) ; chaque déclaration publique trouvée est examinée, et l'examen est écrit
+  dans la ligne de la sonde. C3 reste [mesurée].
 * **Note.** La sonde imprime la note de la règle v2 (score central) ; quand v1 diffère, la ligne le dit.
   `analysis/grid_audit.py` compare chaque ligne à la matrice et liste les divergences.
 * **Contre-épreuves.** Quand une capacité notée ½ ou 0 existe sous une forme exclue par la règle (canal instable,
@@ -217,6 +218,71 @@ la glibc, de clang et de libstdc++).
 * C4 de C++ : `std::reduce(std::execution::unseq, …)` autorise la réassociation, mais g++ 16 ne vectorise pas cette
   somme, même avec `-fopenmp-simd` ; `#pragma omp simd reduction(+:s)` la vectorise. C4 reste 1 (OpenMP, livré), le
   texte de la matrice (« std::reduce… ordre libre explicite ») est à préciser.
+
+### Swift (6.4.2, swiftc du banc : -swift-version 6 -O -target-cpu native)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (D4 vaut 1 en v2 par le module Glibc livré, ½ en
+v1). L'audit (`probes/swift/audit/` : programme exécuté, code produit, deux formes refusées, recherches dans les
+interfaces `.swiftinterface` livrées et dans les symboles de Foundation et de Dispatch extraits par
+`swift-symbolgraph-extract`) complète la première sonde (`base.sh`).
+* Faits notables : `withUnsafeTemporaryAllocation` sert un tampon sur la pile, à 944 octets d'une variable locale (B3) ;
+  un `[any Shape]` met une structure de 64 octets dans une boîte sur le tas sans allocation écrite (B4 ½) ;
+  `a[i]` garde deux pièges `ud2` en `-O`, `withUnsafeBufferPointer` aucun (E6) ; le module Clang non documenté
+  `_Builtin_intrinsics.intel` produit un `vaddps` pour `_mm512_add_ps`, mais les fonctions intégrées sans corps (pause,
+  préchargement) ne se lient pas et les macros à immédiat sont refusées (C2 ½) ; pause et préchargement ne passent que
+  par l'attribut souligné `@_silgen_name("llvm.…")` (D5 ½, E4 ½).
+* E5 ½ : l'exclusivité des `inout` est une règle du langage, exploitée par l'optimiseur SIL, mais l'IR de
+  `two(_:_:)` ne porte aucun `noalias`. D4 : comme en C, `sched_setaffinity` demande `_GNU_SOURCE` (`-Xcc
+  -D_GNU_SOURCE`).
+* Recherches : B2 trouve 399 déclarations publiques, 386 pour `region` (`Locale.Region`…), 13 `Deallocator` (rappel de
+  libération d'octets fournis par l'appelant) et `UnitArea.squareNanometers`, aucune interface d'allocateur (B2 reste
+  ½ par l'arène écrite sur `UnsafeMutableRawPointer.allocate`) ; F2 trouve 688 déclarations, toutes sur la locale de
+  texte ; C4 une seule, `URL.Template.Value.associativeList`. `asm(…)` : « cannot find 'asm' in scope » (E2).
+
+### FreePascal (3.2.2, options du banc : -O3 -CpCOREAVX2 -OpCOREAVX2 -CfAVX2)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (D4 et F4 valent 1 en v2 par les unités Syscall et
+BaseUnix livrées, ½ en v1). Recherches dans l'interface des unités livrées (RTL, `rtl-*`, `fcl-*`), lue par
+`ppudump` (`tools/grid_audit/listings/fpc_symbols.py`).
+* Faits notables : `bitpacked record` range deux intervalles dans un octet (A3) ; un record à variantes sans champ
+  d'étiquette est une union brute (A5) ; `NewInstance` redéfini construit un objet dans une arène (B2 ½ : pas
+  d'allocateur passé aux conteneurs) ; `-Sv` additionne des `array[0..3] of Single` en SSE, mais huit `Single`
+  provoquent une erreur interne (200610072) et un opérande non aligné sur 16 octets une erreur 216 (C1 ½) ;
+  l'assembleur en ligne accepte AVX2, pas AVX-512 (E2).
+* Contre-épreuves : `-OoFASTMATH` contracte `a*b+s` en FMA mais garde la chaîne scalaire et dans l'ordre (C4 0) ;
+  `axpy` sur des tampons qui se recouvrent rend le résultat de l'alias, sans règle qui permettrait de l'ignorer (E5 0) ;
+  `Likely` est un identificateur inconnu (E3 0).
+* F2 0 : la recherche trouve les numéros `syscall_nr_mbind`, `syscall_nr_set_mempolicy` et
+  `syscall_nr_get_mempolicy` de l'unité Syscall, pour `Do_SysCall` : appel système brut (section 3).
+
+### BQN (CBQN 0.12.0, binaire du banc)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2. La bibliothèque système se liste elle-même :
+recherches dans les 90 valeurs système et leurs membres (`•listSys`, `•ns.Keys`,
+`tools/grid_audit/listings/bqn_sys.bqn`).
+* Faits notables : une matrice 1000×16 est un seul bloc de `f64` (A1 ½, F1) ; `•math.Sum` réassocie la somme
+  (écart de 1,5e-13 avec `+´`, C4 ½) ; `•file.MapBytes` projette 64 Mio sans copie (F4).
+* Contre-épreuves : `⍉` copie la matrice au lieu d'offrir une vue SoA (A6 0) ; tout tableau est sur le tas, les nombres
+  ne sont jamais boxés (B3 0) ; chaque primitive alloue son résultat (B4 0) ; les indices sont toujours vérifiés,
+  sans moyen de les couper (E6 0).
+* E1 ½ : les symboles du compilateur à la volée sont dans le binaire (`nm`), mais aucune option n'affiche le code
+  produit : il faut reconstruire CBQN.
+
+### PHP (8.5.12, réglages du banc : OPcache, JIT tracing)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (D4 vaut 1 en v2 par l'extension pcntl livrée, ½
+en v1). L'API publique de la construction du banc se liste par introspection (`tools/grid_audit/listings/php_api.php` :
+7 090 noms, fonctions, classes et méthodes, constantes, directives ini et extensions) ; `probes/php/audit/` ajoute un
+programme exécuté et trois formes refusées.
+* Contre-épreuves : un petit agrégat de trois flottants coûte 216 octets de tas en tableau et 106 en objet à propriétés
+  typées (B3 0) ; la boucle compilée par le JIT et `array_sum` donnent la même somme au bit près, qu'une somme par
+  paires écrite à la main change de 6,3e-12 : l'ordre est gardé, rien ne permet de le relâcher (C4 0) ;
+  `asm("pause")` est un appel de fonction inconnue (E2 0) ; un générique est une erreur de syntaxe et un appel de
+  fonction dans une expression constante est refusé (E7 0).
+* Les dix noms trouvés par les recherches sont des faux positifs : `DNS_SOA` (A6) ; `PHP_RELEASE_VERSION`,
+  `sem_acquire` et `sem_release`, des sémaphores System V (D2) ; `realpath_cache_size`, fonction et directive (D3) ;
+  `PDO::ATTR_PREFETCH` et `Pdo\Sqlite::ATTR_PREFETCH` (E4) ; `POSIX_PC_CHOWN_RESTRICTED` et `opcache.restrict_api`
+  (E5).
 
 ## 3. Cases discutables
 

@@ -272,6 +272,12 @@
       "listing": "/opt/cbqn-cl/bin/BQN tools/grid_audit/listings/bqn_sys.bqn",
       "public": ".",
       "version": "/opt/cbqn-cl/bin/BQN --version 2>&1 | head -1"
+    },
+    "php": {
+      "roots": [],
+      "listing": "/opt/php85/bin/php -d memory_limit=-1 -d opcache.enable_cli=1 -d opcache.jit=tracing -d opcache.file_update_protection=0 tools/grid_audit/listings/php_api.php",
+      "public": ".",
+      "version": "/opt/php85/bin/php -r 'echo PHP_VERSION;'"
     }
   }
 }
