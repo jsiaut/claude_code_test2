@@ -1,0 +1,11 @@
+# Recherche d'absence : chapel, case C1
+# Chaîne : chapel
+# Motif : simd|vector(64|128|256|512)\b|\bvec[248]\b|float32x|int32x|@vector
+# Déclaration publique : ^\s*(@\w+\S*\s+)*(inline\s+|extern\s+|export\s+|override\s+|operator\s+)*(proc|iter|record|class|type|param|const|var|config|module|operator|enum|union)\b(?!.*\bprivate\b)
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

@@ -14,7 +14,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | nim | 33 | 1 | 0 | 0 | exécutée 27, exécutée+échec 1, exécutée+échec+recherche 1, recherche 4 |
 | ada | 33 | 1 | 0 | 0 | exécutée 28, exécutée+recherche 1, recherche 3, échec 1 |
 | fortran | 33 | 1 | 0 | 0 | exécutée 21, exécutée+recherche 2, exécutée+échec 2, recherche 7, échec+recherche 1 |
-| chapel | 9 | 1 | 24 | 9 |  |
+| chapel | 33 | 1 | 0 | 0 | exécutée 26, recherche 7 |
 | go | 4 | 1 | 29 | 4 |  |
 | mojo | 7 | 1 | 26 | 7 |  |
 | csharp | 4 | 1 | 29 | 4 |  |
@@ -30,7 +30,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | bqn | 33 | 1 | 0 | 33 |  |
 | php | 33 | 1 | 0 | 33 |  |
 
-Total : 513 sondées, 25 mesurées, 312 sans sonde, 249 déclaratives.
+Total : 537 sondées, 25 mesurées, 288 sans sonde, 240 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 

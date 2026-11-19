@@ -153,6 +153,20 @@ E5, trois échecs, dix recherches dans `gfortran.info` et `omp_lib.f90`).
   de la norme ; le motif cherche `_mm`, `avx`, `__builtin_ia32` et `sse` (aucun résultat). Un builtin lié par
   `bind(c)` reste un symbole externe non résolu.
 
+### Chapel (2.10.0, compilateur du banc, --fast, CHPL_COMM=none, qthreads)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2. Sondes : `probes/chapel/probe.chpl` et
+`probe_errata.chpl` (A2, A4, A5, B2, B3, C2, C4, E5 ; leurs IR, échecs et avertissements d'instabilité sont ceux de la
+remarque sur Chapel, `results/chapel_check/`), `probes/chapel/audit/` (`audit.chpl` exécuté avec `--memTrack`,
+procédures exportées désassemblées, une compilation `--fast --checks`, huit recherches dans `modules`).
+* Faits notables : un `forall` se répartit sur quatre fils et `+ reduce` réduit en parallèle (C5) ; un tableau local
+  `[0..<1000] real` alloue 8 200 octets sur le tas sans `new` (B4 ½) ; `blockDist` distribue un domaine (une seule locale
+  ici, `CHPL_COMM=none` ; F2) ; `proc pfib(param n) param` est évaluée à la compilation (une constante immédiate,
+  E7) ; avec `--checks`, `garr[i]` appelle `chpl_error` et `p[i]` sur un `c_ptr` non (E6).
+* D4 ½ : l'exécutif qthreads place lui-même ses fils sur les cœurs (processeurs 0 à 3), réglable par variables
+  d'environnement (`QT_WORKER_UNIT`), sans API pour épingler une tâche.
+* F4 0 : `ioHintSet.mmap` n'est qu'une indication de lecture du module IO ; aucune projection n'est rendue au programme.
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |

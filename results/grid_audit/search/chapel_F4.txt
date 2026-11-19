@@ -1,0 +1,30 @@
+# Recherche d'absence : chapel, case F4
+# Chaîne : chapel
+# Motif : mmap|memory_?map|map_?view|memory_?mapped|mapped_?(file|byte)|madvise
+# Déclaration publique : ^\s*(@\w+\S*\s+)*(inline\s+|extern\s+|export\s+|override\s+|operator\s+)*(proc|iter|record|class|type|param|const|var|config|module|operator|enum|union)\b(?!.*\bprivate\b)
+# 3 déclarations publiques, 13 mentions, 3 fichiers
+
+## Déclarations publiques
+modules/packages/NetCDF.chpl:115: extern const NC_MMAP : c_int;
+modules/standard/IO.chpl:792: extern const QIO_METHOD_MMAP:c_int;
+modules/standard/IO.chpl:1442: proc type mmap(useMmap = true) {
+
+## Mentions (au plus 12 lignes par fichier)
+modules/packages/TOML.chpl:121: commaPattern = '\\,',
+modules/packages/TOML.chpl:174: comma = new regex("("+TOML.commaPattern+")");
+modules/packages/TOML.chpl:1223: commas = "("+TOML.commaPattern+")",              // ,
+modules/standard/IO.chpl:1381: //  QIO_METHOD_MMAP,
+modules/standard/IO.chpl:1393: private const IOHINTS_MMAP:        c_int = QIO_METHOD_MMAP;
+modules/standard/IO.chpl:1394: private const IOHINTS_NOMMAP:      c_int = QIO_METHOD_PREADPWRITE;
+modules/standard/IO.chpl:1402: posix_madvise().
+modules/standard/IO.chpl:1436: Suggests whether or not 'mmap' should be used to access the file contents.
+modules/standard/IO.chpl:1438: * when ``useMmap`` is ``true``, suggests that 'mmap' should be used
+modules/standard/IO.chpl:1439: * when ``useMmap`` is ``false``, suggests that 'mmap' should not be used and 'pread'/'pwrite' should be used instead
+modules/standard/IO.chpl:1443: return if useMmap
+modules/standard/IO.chpl:1444: then new ioHintSet(IOHINTS_MMAP)
+modules/standard/IO.chpl:1445: else new ioHintSet(IOHINTS_NOMMAP);
+
+## Lignes trouvées, par fichier
+    1 modules/packages/NetCDF.chpl
+    3 modules/packages/TOML.chpl
+   12 modules/standard/IO.chpl

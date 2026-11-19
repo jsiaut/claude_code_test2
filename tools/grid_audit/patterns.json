@@ -171,6 +171,20 @@
         "C2": "\\b_mm|\\bavx|__builtin_ia32|\\bsse[0-9]"
       },
       "version": "/opt/gcc-16/bin/gfortran-16 --version | head -1"
+    },
+    "chapel": {
+      "roots": [
+        "/opt/src/chapel/modules"
+      ],
+      "ext": [
+        ".chpl"
+      ],
+      "exclude": [
+        "/test/"
+      ],
+      "strip": "/opt/src/chapel/",
+      "public": "^\\s*(@\\w+\\S*\\s+)*(inline\\s+|extern\\s+|export\\s+|override\\s+|operator\\s+)*(proc|iter|record|class|type|param|const|var|config|module|operator|enum|union)\\b(?!.*\\bprivate\\b)",
+      "version": "cat /opt/src/chapel/README.rst 2>/dev/null | grep -m1 -i 'version' || echo chapel"
     }
   }
 }

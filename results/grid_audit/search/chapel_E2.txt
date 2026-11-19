@@ -1,0 +1,13 @@
+# Recherche d'absence : chapel, case E2
+# Chaîne : chapel
+# Motif : \basm\b|inline_?asm|__asm|assembler
+# Déclaration publique : ^\s*(@\w+\S*\s+)*(inline\s+|extern\s+|export\s+|override\s+|operator\s+)*(proc|iter|record|class|type|param|const|var|config|module|operator|enum|union)\b(?!.*\bprivate\b)
+# 0 déclarations publiques, 1 mentions, 1 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+modules/packages/AtomicObjects.chpl:144: __asm__ __volatile__ ("lock; cmpxchg16b (%6);"
+
+## Lignes trouvées, par fichier
+    1 modules/packages/AtomicObjects.chpl

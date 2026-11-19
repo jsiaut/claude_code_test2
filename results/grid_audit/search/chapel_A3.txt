@@ -1,0 +1,60 @@
+# Recherche d'absence : chapel, case A3
+# Chaîne : chapel
+# Motif : packed|bit_?field|bit_?packed|bit_?size|bit_?offset|bitstruct
+# Déclaration publique : ^\s*(@\w+\S*\s+)*(inline\s+|extern\s+|export\s+|override\s+|operator\s+)*(proc|iter|record|class|type|param|const|var|config|module|operator|enum|union)\b(?!.*\bprivate\b)
+# 10 déclarations publiques, 30 mentions, 9 fichiers
+
+## Déclarations publiques
+modules/dists/StencilDist.chpl:60: config param stencilDistAllowPackedUpdateFluff = true;
+modules/dists/StencilDist.chpl:73: config const stencilDistPackedUpdateMinChunks = 1;
+modules/dists/StencilDist.chpl:2018: proc StencilArr._packedUpdate() {
+modules/dists/StencilDist.chpl:2084: proc StencilArr.shouldDoPackedUpdate() param : bool {
+modules/packages/HDF5.chpl:2689: extern const H5T_BITFIELD :H5T_class_t;
+modules/packages/LinearAlgebraJama.chpl:1698: proc getColumnPackedCopy () {
+modules/packages/LinearAlgebraJama.chpl:1710: proc getRowPackedCopy () {
+modules/packages/MPI.chpl:508: extern const MPI_PACKED : MPI_Datatype;
+modules/packages/NetCDF.chpl:119: extern const NC_64BIT_OFFSET : c_int;
+modules/packages/NetCDF.chpl:128: extern const NC_FORMAT_64BIT_OFFSET : c_int;
+
+## Mentions (au plus 12 lignes par fichier)
+modules/dists/StencilDist.chpl:66: // Instructs the _packedUpdate method to only perform the optimized buffer
+modules/dists/StencilDist.chpl:555: // TODO: use void type when packed update is disabled
+modules/dists/StencilDist.chpl:1992: // TODO: should we avoid doing the packed transfer for dense-ish regions?
+modules/dists/StencilDist.chpl:2001: // PUTs, whereas the packed method requires just one.
+modules/dists/StencilDist.chpl:2036: if numChunks >= stencilDistPackedUpdateMinChunks {
+modules/dists/StencilDist.chpl:2063: if S.sizeAs(int) != 0 && numChunks >= stencilDistPackedUpdateMinChunks {
+modules/dists/StencilDist.chpl:2085: return stencilDistAllowPackedUpdateFluff &&
+modules/dists/StencilDist.chpl:2106: if shouldDoPackedUpdate() && dom.dist.targetLocales.size > 1 {
+modules/dists/StencilDist.chpl:2107: this._packedUpdate();
+modules/packages/BLAS.chpl:168: - Support banded/packed matrix routines
+modules/packages/BLAS.chpl:1120: TODO -- Get packed array routines working
+modules/packages/BLAS.chpl:1154: TODO -- Get packed array routines working
+modules/packages/BLAS.chpl:1189: TODO -- Get packed array routines working
+modules/packages/BLAS.chpl:1262: TODO -- Get packed array routines working
+modules/packages/BLAS.chpl:1295: TODO -- Get packed array routines working
+modules/packages/BLAS.chpl:1328: TODO -- Get packed array routines working
+modules/packages/BLAS.chpl:1612: TODO -- Get packed array routines working
+modules/packages/LinearAlgebraJama.chpl:1622: /* Construct a matrix from a one-dimensional packed array
+modules/packages/LinearAlgebraJama.chpl:1623: vals One-dimensional array of doubles, packed by columns (ala Fortran).
+modules/packages/LinearAlgebraJama.chpl:1694: /* Make a one-dimensional column packed copy of the internal array.
+modules/packages/LinearAlgebraJama.chpl:1695: Matrix elements packed in a one-dimensional array by columns.
+modules/packages/LinearAlgebraJama.chpl:1706: /* Make a one-dimensional row packed copy of the internal array.
+modules/packages/LinearAlgebraJama.chpl:1707: Matrix elements packed in a one-dimensional array by rows.
+modules/packages/Python.chpl:943: // the second 4 bytes are a bitfield that determine the rest of the
+modules/packages/Python.chpl:944: // header format. if the bitfield is 0, the rest of the header is a
+modules/standard/GMP.chpl:152: // In practice the implementation is a dynamically-sized packed vector
+modules/standard/GMP.chpl:158: //       mp_limb_t* _mp_d;      // a packed vector of integers
+modules/standard/Sort/PartitioningUtility.chpl:156: // scan to compute packed offsets (to leave out zeros)
+modules/standard/Sort/PartitioningUtility.chpl:160: // store into the packed array
+modules/standard/Sort/PartitioningUtility.chpl:199: (if the locale indices can be packed)
+
+## Lignes trouvées, par fichier
+   13 modules/dists/StencilDist.chpl
+    8 modules/packages/BLAS.chpl
+    1 modules/packages/HDF5.chpl
+    8 modules/packages/LinearAlgebraJama.chpl
+    1 modules/packages/MPI.chpl
+    2 modules/packages/NetCDF.chpl
+    2 modules/packages/Python.chpl
+    2 modules/standard/GMP.chpl
+    3 modules/standard/Sort/PartitioningUtility.chpl

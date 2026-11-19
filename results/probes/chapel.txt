@@ -1,9 +1,34 @@
-CAP;A2;1;c_offsetof(S, "c")=8
-CAP;A4;0.5;allocate(alignment=64) -> adresse mod 64 = 0
-CAP;A5;0.5;(1.0: real(32)).transmute(uint(32)) = 1065353216
-CAP;D5;0.5;atomicFence
-CAP;B2;0.5;Allocators (instable) : bumpPtrMemPool + newWithAllocator, v = 7
-CAP;C2;0.5;_mm512_fmadd_ps importé de immintrin.h : somme = 96.0 (macros à immédiat et builtins : refusés)
-CAP;B3;0.5;c_array local (pile) : 3.0 ; tableaux Chapel sur le tas
-CAP;C4;0.5;@llvm.metadata(("llvm.loop.vectorize.enable", true)) par boucle (instable)
-CAP;E5;0.5;foreach (instable) : llvm.loop.parallel_accesses ; noalias automatique, a[0] = 2.0
+CAP;A2;1;[exécutée] c_offsetof(S, "c")=8
+CAP;A4;0.5;[exécutée] allocate(alignment=64) -> adresse mod 64 = 0
+CAP;A5;0.5;[exécutée] (1.0: real(32)).transmute(uint(32)) = 1065353216
+CAP;B2;0.5;[exécutée] Allocators (instable) : bumpPtrMemPool + newWithAllocator, v = 7 ; preuves de la remarque sur Chapel : results/chapel_check/probes.txt et ir.txt (tools/chapel_check/build.sh : avertissements --warn-unstable, IR, échecs)
+CAP;C2;0.5;[exécutée] _mm512_fmadd_ps importé de immintrin.h : somme = 96.0 (macros à immédiat et builtins : refusés) ; preuves de la remarque sur Chapel : results/chapel_check/probes.txt et ir.txt (tools/chapel_check/build.sh : avertissements --warn-unstable, IR, échecs)
+CAP;B3;0.5;[exécutée] c_array local (pile) : 3.0 ; tableaux Chapel sur le tas ; preuves de la remarque sur Chapel : results/chapel_check/probes.txt et ir.txt (tools/chapel_check/build.sh : avertissements --warn-unstable, IR, échecs)
+CAP;C4;0.5;[exécutée] @llvm.metadata(("llvm.loop.vectorize.enable", true)) par boucle (instable) ; preuves de la remarque sur Chapel : results/chapel_check/probes.txt et ir.txt (tools/chapel_check/build.sh : avertissements --warn-unstable, IR, échecs)
+CAP;E5;0.5;[exécutée] foreach (instable) : llvm.loop.parallel_accesses ; noalias automatique, a[0] = 2.0 ; preuves de la remarque sur Chapel : results/chapel_check/probes.txt et ir.txt (tools/chapel_check/build.sh : avertissements --warn-unstable, IR, échecs)
+CAP;A1;1;[exécutée] tableau de records : pas de 16 o = c_sizeof(Part) 16 ; records stockés en ligne dans le tableau
+CAP;A7;1;[exécutée] record (n: uint(32), a: 16*real(32)) : 68 o, c_offsetof(Inl, "a") = 4 (tuple homogène en ligne)
+CAP;A8;1;[exécutée] int(8)/int(16)/real(32) : 1/2/4 o ; [0..<1000] int(8) occupe 1000 o
+CAP;B1;1;[exécutée] pas de ramasse-miettes (owned, shared, unmanaged) : deinit(b) fin-portée deinit(a) ; destruction déterministe à la sortie de portée
+CAP;B4;0.5;[exécutée] memoryUsed (MemDiagnostics) : un tableau local [0..<1000] real alloue 8200 o sur le tas, sans new ni appel explicite ; les tâches (begin, coforall) allouent aussi leur pile
+CAP;B5;1;[exécutée] c_ptr(uint(32)) : p[3] = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7
+CAP;C5;1;[exécutée] forall sur 4 fils distincts (gettid), + reduce = 499999500000 (attendu 499999500000)
+CAP;D1;1;[exécutée] coforall : 4 tâches sur 4 fils distincts (gettid), somme 7998000 (attendu 7998000)
+CAP;F1;1;[exécutée] [1..n, 1..4] real(32) avec n = 3 connu à l'exécution : &M[2,1] - &M[1,4] = 4 o (contigu, par lignes) ; domaines et tranches multidimensionnels
+CAP;F2;1;[exécutée] blockDist.createDomain({1..100}) : tableau distribué sur 1 locale(s) (CHPL_COMM=none : une seule ici), propriétaire de B[100] = locale 0 ; locales, on, distributions Block, Cyclic, Stencil
+CAP;F3;1;[exécutée] max(uint(32)) + 1 = 0, uint(8) 250 + 10 = 4 (non signés enveloppants ; int(N) de largeur fixe)
+CAP;D2;1;[exécutée] atomic avec memoryOrder explicite, code produit : release = 1 mov et 0 xchg ; seqCst = 1 xchg ; fetchAdd relaxed = 1 instruction lock
+CAP;D4;0.5;[exécutée] coforall de 4 tâches : processeurs 0 1 2 3 (placement décidé par l'exécutif qthreads) ; variables de l'exécutif (QT_WORKER_UNIT, CHPL_RT_NUM_THREADS_PER_LOCALE, doc/rst/usingchapel/tasks.rst), pas d'API pour épingler une tâche
+CAP;D5;0.5;[exécutée] atomicFence : 1 barrière dans fence_it ; aucune indication pause (motif D5 : NOTE D5)
+CAP;E1;1;[exécutée] binaire natif par LLVM : objdump donne 268988 lignes ; --llvm-print-ir pour l'IR
+CAP;E4;0.5;[exécutée] prefetch du module package Prefetch : 1 prefetcht0 dans pf (module « package », hors des modules standard)
+CAP;E6;1;[exécutée] build --fast --checks : garr[i] = 3 appels à chpl_error (bornes) ; p[i] sur un c_ptr : 0 appel (contrôle par expression) ; --no-checks en global
+CAP;E7;1;[exécutée] proc pfib(param n) param, évaluée à la compilation : pfib(20) = 6765 ; gsum générique : 4.0 (real(32)), 3.75 (real(64)) ; dans le binaire, f20 = 1 constante immédiate et 0 appel
+CAP;A3;0;[recherche] motif A3 dans modules de Chapel 2.10.0 : 10 déclarations publiques (results/grid_audit/search/chapel_A3.txt) : mises à jour « packed » de StencilDist, copies « Packed » de LinearAlgebraJama, constantes HDF5, MPI et NetCDF ; ni record compacté ni champs de bits
+CAP;A6;0;[recherche] motif A6 dans modules de Chapel 2.10.0 : 0 déclaration publique, 0 mention (results/grid_audit/search/chapel_A6.txt)
+CAP;C1;0;[recherche] motif C1 dans modules de Chapel 2.10.0 : 0 déclaration publique, 0 mention (results/grid_audit/search/chapel_C1.txt) : aucun type vectoriel (les tuples ne sont vectorisés que par paires, bench)
+CAP;D3;0;[recherche] motif D3 dans modules de Chapel 2.10.0 : 14 déclarations publiques (results/grid_audit/search/chapel_D3.txt) : LocRADCache des distributions (faux positif de « dcache ») et cachePaddedLocales de CopyAggregation (arrondi du nombre de locales) ; aucune constante ni type de bourrage
+NOTE;D5;[recherche] motif D5 dans modules de Chapel 2.10.0 : 11 déclarations publiques (results/grid_audit/search/chapel_D5.txt)
+CAP;E2;0;[recherche] motif E2 dans modules de Chapel 2.10.0 : 0 déclaration publique, 1 mention (results/grid_audit/search/chapel_E2.txt) ; aucun assembleur en ligne
+CAP;E3;0;[recherche] motif E3 dans modules de Chapel 2.10.0 : 1 déclaration publique (results/grid_audit/search/chapel_E3.txt), un commentaire « likely unnecessary » ; aucune indication de branchement
+CAP;F4;0;[recherche] motif F4 dans modules de Chapel 2.10.0 : 3 déclarations publiques (results/grid_audit/search/chapel_F4.txt) : ioHintSet.mmap (indication de lecture de IO) et constantes QIO_METHOD_MMAP, NC_MMAP ; aucune projection rendue au programme

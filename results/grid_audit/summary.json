@@ -79,9 +79,9 @@
    "exécutée+échec": 2
   },
   "chapel": {
-   "sans sonde": 24,
-   "déclarative": 9,
-   "sondée": 9,
+   "exécutée": 26,
+   "sondée": 33,
+   "recherche": 7,
    "mesurée": 1
   },
   "go": {
@@ -166,17 +166,17 @@
   }
  },
  "total": {
-  "déclarative": 249,
-  "sondée": 513,
+  "déclarative": 240,
+  "sondée": 537,
   "mesurée": 25,
-  "exécutée": 207,
+  "exécutée": 233,
   "exécutée+recherche": 7,
-  "recherche": 30,
+  "recherche": 37,
   "exécutée+échec": 12,
   "échec": 4,
   "exécutée+échec+recherche": 3,
   "échec+recherche": 1,
-  "sans sonde": 312
+  "sans sonde": 288
  },
  "divergences": [
   [

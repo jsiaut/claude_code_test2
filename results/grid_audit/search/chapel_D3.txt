@@ -1,0 +1,40 @@
+# Recherche d'absence : chapel, case D3
+# Chaîne : chapel
+# Motif : cache_?line|cache_?padded|destructive_?interference|false_?sharing|contended|dcache|cache_?size
+# Déclaration publique : ^\s*(@\w+\S*\s+)*(inline\s+|extern\s+|export\s+|override\s+|operator\s+)*(proc|iter|record|class|type|param|const|var|config|module|operator|enum|union)\b(?!.*\bprivate\b)
+# 14 déclarations publiques, 8 mentions, 7 fichiers
+
+## Déclarations publiques
+modules/dists/BlockDist.chpl:569: var locRAD: unmanaged LocRADCache(eltType, rank, idxType, strides)?; // non-nil if doRADOpt=true
+modules/dists/BlockDist.chpl:1512: var tempLocRAD = new unmanaged LocRADCache(eltType, rank, idxType,
+modules/dists/CyclicDist.chpl:1064: var tempLocRAD = new unmanaged LocRADCache(eltType, rank, idxType,
+modules/dists/CyclicDist.chpl:1228: var locRAD: unmanaged LocRADCache(eltType, rank, idxType, strideKind.any)?; // non-nil if doRADOpt=true
+modules/dists/CyclicDist.chpl:1229: var locCyclicRAD: unmanaged LocCyclicRADCache(rank, idxType)?; // see below for why
+modules/dists/CyclicDist.chpl:1276: class LocCyclicRADCache /* : LocRADCache */ {
+modules/dists/StencilDist.chpl:549: var locRAD: unmanaged LocRADCache(eltType, rank, idxType, strides)?; // non-nil if doRADOpt=true
+modules/dists/StencilDist.chpl:1609: var tempLocRAD = new unmanaged LocRADCache(eltType, rank, idxType,
+modules/internal/DefaultRectangular.chpl:1005: class LocRADCache {
+modules/packages/CopyAggregation.chpl:376: const cachePaddedLocales = (numLocales + 7) & ~7;
+modules/packages/HDF5.chpl:1482: extern proc H5Pset_elink_file_cache_size(plist_id : hid_t, efc_size : c_uint) : herr_t;
+modules/packages/HDF5.chpl:1484: extern proc H5Pget_elink_file_cache_size(plist_id : hid_t, ref efc_size : c_uint) : herr_t;
+modules/standard/GPU.chpl:1283: extern const CHPL_GPU_ATTRIBUTE__L2_CACHE_SIZE : c_int;
+modules/standard/GPU.chpl:1371: proc l2CacheSize : int do return chpl_gpu_query_attribute(this.gpuId : c_int, CHPL_GPU_ATTRIBUTE__L2_CACHE_SIZE);
+
+## Mentions (au plus 12 lignes par fichier)
+modules/dists/BlockDist.chpl:1436: myLocArr.locRAD = new unmanaged LocRADCache(eltType, rank, idxType,
+modules/dists/CyclicDist.chpl:956: myLocArr.locRAD = new unmanaged LocRADCache(eltType, rank, idxType,
+modules/dists/CyclicDist.chpl:958: myLocArr.locCyclicRAD = new unmanaged LocCyclicRADCache(rank, idxType, dom.dist.startIdx, dom.dist.targetLocDom);
+modules/dists/CyclicDist.chpl:1070: myLocArr.locCyclicRAD = new unmanaged LocCyclicRADCache(rank, idxType, dom.dist.startIdx, dom.dist.targetLocDom);
+modules/dists/CyclicDist.chpl:1273: // NOTE: I'd rather have this be a subclass of LocRADCache, but I
+modules/dists/StencilDist.chpl:1510: myLocArr.locRAD = new unmanaged LocRADCache(eltType, rank, idxType,
+modules/packages/CopyAggregation.chpl:374: // Cacheline aligned and padded allocation to avoid false-sharing
+modules/packages/CopyAggregation.chpl:377: return allocate(int, cachePaddedLocales, alignment=64);
+
+## Lignes trouvées, par fichier
+    3 modules/dists/BlockDist.chpl
+    8 modules/dists/CyclicDist.chpl
+    3 modules/dists/StencilDist.chpl
+    1 modules/internal/DefaultRectangular.chpl
+    3 modules/packages/CopyAggregation.chpl
+    2 modules/packages/HDF5.chpl
+    2 modules/standard/GPU.chpl

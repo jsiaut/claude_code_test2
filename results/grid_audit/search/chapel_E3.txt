@@ -1,0 +1,147 @@
+# Recherche d'absence : chapel, case E3
+# Chaîne : chapel
+# Motif : \blikely|\bunlikely|\bexpect\b|branch_?hint|branch_?weight|\bcold\b|cold_?path|fast_?path|slow_?path
+# Déclaration publique : ^\s*(@\w+\S*\s+)*(inline\s+|extern\s+|export\s+|override\s+|operator\s+)*(proc|iter|record|class|type|param|const|var|config|module|operator|enum|union)\b(?!.*\bprivate\b)
+# 1 déclarations publiques, 91 mentions, 44 fichiers
+
+## Déclarations publiques
+modules/internal/ChapelDistribution.chpl:530: proc isSliceDomainView() param do return false; // likely unnecessary?
+
+## Mentions (au plus 12 lignes par fichier)
+modules/dists/BlockCycDist.chpl:645: // support? (esp. given how frequent this seems likely to be?)
+modules/dists/BlockDist.chpl:1211: // support? (esp. given how frequent this seems likely to be?)
+modules/dists/SparseBlockDist.chpl:189: // used the `addOn` argument, then we would expect a lexicographical sorting
+modules/dists/StencilDist.chpl:1174: // support? (esp. given how frequent this seems likely to be?)
+modules/internal/ChapelArray.chpl:42: // likely be on locale 0
+modules/internal/ChapelArray.chpl:1688: // assumes that we're likely to find a case of the IRV fast.
+modules/internal/ChapelArray.chpl:1693: // we're looking for is the IRV, so we'll likely bump into it
+modules/internal/ChapelArray.chpl:1708: // - if idxType is bool, then no b/c there's unlikely to be
+modules/internal/ChapelBase.chpl:2423: @unstable("enum-to-bool casts are likely to be deprecated in the future")
+modules/internal/ChapelBase.chpl:2433: @unstable("enum-to-float casts are likely to be deprecated in the future")
+modules/internal/ChapelBase.chpl:2621: @unstable("enum-to-float casts are likely to be deprecated in the future")
+modules/internal/ChapelBase.chpl:2645: @unstable("enum-to-float casts are likely to be deprecated in the future")
+modules/internal/ChapelBase.chpl:2792: // special case for records as a more likely occurrence
+modules/internal/ChapelBase.chpl:3065: // variable that making it `var` doesn't seem likely to thwart
+modules/internal/ChapelDomain.chpl:36: improve indexing performance, since the table will likely
+modules/internal/ChapelDomain.chpl:2296: only available for sparse domains. In the future, we expect that
+modules/internal/ChapelDomain.chpl:2302: addition should occur is unknown. We expect this to change in the
+modules/internal/ChapelDomain.chpl:2349: In the future, we expect that this method will be available for all
+modules/internal/ChapelDomain.chpl:2355: addition should occur is unknown. We expect this to change in the
+modules/internal/ChapelDomain.chpl:2849: // However, it is likely that DSI implementations will need to be
+modules/internal/ChapelIteratorSupport.chpl:36: be moved to a standard module and will likely require a ``use`` statement to
+modules/internal/ChapelLocale.chpl:215: Get the maximum task concurrency that one can expect to
+modules/internal/ChapelLocale.chpl:225: tasks than this is unlikely to improve performance.
+modules/internal/ChapelLocale.chpl:292: then creating more tasks is unlikely to decrease walltime.
+modules/internal/ChapelUnion.chpl:153: number of fields in the union. Each function should expect an argument of
+modules/internal/LocaleModelHelpSetup.chpl:219: // Cyclic (and likely other) distributions uses this variable to determine
+modules/internal/OwnedObject.chpl:59: // being used to instantiate _owned, so this check is likely redundant and
+modules/internal/OwnedObject.chpl:61: // are likely also redundant.
+modules/internal/SharedObject.chpl:139: // being used to instantiate _shared, so this check is likely redundant and
+modules/internal/SharedObject.chpl:141: // are likely also redundant.
+modules/internal/SharedObject.chpl:400: @unstable("The `weak` type is experimental; expect this method to change in the future.")
+modules/internal/localeModels/flat/LocaleModel.chpl:169: // We return numLocales for now, since we expect nodes to be
+modules/internal/localeModels/gpu/LocaleModel.chpl:401: // We return numLocales for now, since we expect nodes to be
+modules/packages/ArgumentParser.chpl:1007: we would expect command line arguments like this:
+modules/packages/ArgumentParser.chpl:1061: we would expect command line arguments like either of these:
+modules/packages/ArgumentParser.chpl:1139: we would expect command line arguments like either of these:
+modules/packages/ArgumentParser.chpl:1214: we would expect command line arguments like any of these:
+modules/packages/ArgumentParser.chpl:1310: We would expect command line arguments like this:
+modules/packages/ArgumentParser.chpl:1392: We would expect command line arguments like either of these:
+modules/packages/ArgumentParser.chpl:1515: We would expect command line arguments like this:
+modules/packages/ArgumentParser.chpl:1555: We would expect command line arguments like this:
+modules/packages/AtomicObjects.chpl:142: // well (or better) than this branch (I fully expect that it would).
+modules/packages/CopyAggregation.chpl:26: This module represents work in progress. The API is unstable and likely to
+modules/packages/LinearAlgebraJama.chpl:61: to moderate size applications, we fully expect software vendors to
+modules/packages/LinearAlgebraJama.chpl:68: intention to ignore these important problems. We expect that some of these
+modules/packages/LinearAlgebraJama.chpl:98: The current JAMA deals only with real matrices. We expect that future versions
+modules/packages/MPI.chpl:204: likely to be necessary if you run
+modules/packages/ParallelIO.chpl:941: Don't expect a header in the file
+modules/packages/PeekPoke.chpl:24: This module is unstable and the API is likely to change over time.
+modules/packages/Python.chpl:65: Running any Python code in parallel from Chapel will likely be no faster than
+modules/packages/Python.chpl:189: in undefined behavior, likely a segfault of some kind. You will frequently
+modules/packages/Socket.chpl:182: // We will use type methods for now but expect to add initializers (and possibly deprecate these ones) once [#8692](https://github.com/chapel-lang/chapel/issues
+modules/packages/SortedSet.chpl:529: /* Expect the loop in ^= to be more expensive than the loop in =,
+modules/packages/UnorderedAtomics.chpl:24: This module represents work in progress. The API is unstable and likely to
+modules/packages/UnorderedCopy.chpl:24: This module represents work in progress. The API is unstable and likely to
+modules/packages/ZMQ.chpl:1087: // assignment can likely be parallelized similarly, but was not
+modules/standard/AutoGpu.chpl:59: not compiled for the GPU. This is likely an issue, so the warning is emitted
+modules/standard/BigInteger.chpl:78: assignment operators is likely to provide comparable performance to an
+modules/standard/BigInteger.chpl:86: is likely to achieve better performance than:
+modules/standard/BigInteger.chpl:106: function.  This example is likely to work well on popular 64-bit
+modules/standard/BigInteger.chpl:1925: This is a probabilistic function and in an unlikely case may set
+modules/standard/Collectives.chpl:44: In the future, we expect to add more language-level support for a
+modules/standard/Collectives.chpl:49: to perform well at scale.  We expect performance at scale to improve as
+modules/standard/Errors.chpl:209: @unstable("`ArrayOomError` is unstable; expect this error to change in the future.")
+modules/standard/Errors.chpl:372: @unstable("`TaskErrors.first` is unstable; expect this method to change in the future.")
+modules/standard/GpuDiagnostics.chpl:77: * versions of `kernel_launch` are for convenience where we expect different
+modules/standard/HaltWrappers.chpl:82: // Halt wrappers for misc runtime time checks (where we expect these checks
+modules/standard/HaltWrappers.chpl:104: // Halt wrappers for runtime semantic checks (where we expect these to halt
+modules/standard/IO.chpl:863: be migrated into a new strategy, likely involving serializers/deserializers
+modules/standard/IO.chpl:2087: // Cause of bug likely involves the case when 'T' is nothing, and this
+modules/standard/IO.chpl:11824: // at this point this is unlikely to happen. So, just catch the error
+modules/standard/MemMove.chpl:106: compile-time error will be issued. The most likely cause is that the
+modules/standard/OS.chpl:244: necessarily expect to be able to use NS addresses with ARPA Internet
+modules/standard/Random.chpl:464: Elements with relatively larger weights are more likely to be sampled.
+modules/standard/Random.chpl:497: Elements with relatively larger weights are more likely to be sampled.
+modules/standard/Random.chpl:573: Indices with relatively larger weights are more likely to be sampled.
+modules/standard/Random.chpl:606: Indices with relatively larger weights are more likely to be sampled.
+modules/standard/Random.chpl:678: Values with relatively larger weights are more likely to be sampled.
+modules/standard/Random.chpl:711: Values with relatively larger weights are more likely to be sampled.
+modules/standard/Random.chpl:1104: Elements with relatively larger weights are more likely to be sampled.
+modules/standard/Random.chpl:1202: Indices with relatively larger weights are more likely to be sampled.
+modules/standard/Random.chpl:1317: Values with relatively larger weights are more likely to be sampled.
+modules/standard/Set.chpl:919: /* Expect the loop in ^= to be more expensive than the loop in =,
+modules/standard/Sort.chpl:186: appropriate for the algorithm and expect that they have consistent results.
+modules/standard/Subprocess.chpl:785: // something the user could respond to, the rest would likely only
+modules/standard/Subprocess.chpl:799: // the user should respond to, the rest would likely only occur as a
+modules/standard/Subprocess.chpl:815: // something the user could respond to, the rest would likely only
+modules/standard/Subprocess.chpl:832: // something the user could respond to, the rest would likely only
+modules/standard/WeakPointer.chpl:38: @unstable("The `weak` type is experimental; expect this API to change in the future")
+modules/standard/WeakPointer.chpl:88: @unstable("The `weak` type is experimental; expect this API to change in the future.")
+modules/standard/Sort/Partitioning.chpl:940: // Expect all locales to be involved.
+
+## Lignes trouvées, par fichier
+    1 modules/dists/BlockCycDist.chpl
+    1 modules/dists/BlockDist.chpl
+    1 modules/dists/SparseBlockDist.chpl
+    1 modules/dists/StencilDist.chpl
+    4 modules/internal/ChapelArray.chpl
+    6 modules/internal/ChapelBase.chpl
+    1 modules/internal/ChapelDistribution.chpl
+    6 modules/internal/ChapelDomain.chpl
+    1 modules/internal/ChapelIteratorSupport.chpl
+    3 modules/internal/ChapelLocale.chpl
+    1 modules/internal/ChapelUnion.chpl
+    1 modules/internal/LocaleModelHelpSetup.chpl
+    2 modules/internal/OwnedObject.chpl
+    3 modules/internal/SharedObject.chpl
+    1 modules/internal/localeModels/flat/LocaleModel.chpl
+    1 modules/internal/localeModels/gpu/LocaleModel.chpl
+    8 modules/packages/ArgumentParser.chpl
+    1 modules/packages/AtomicObjects.chpl
+    1 modules/packages/CopyAggregation.chpl
+    3 modules/packages/LinearAlgebraJama.chpl
+    1 modules/packages/MPI.chpl
+    1 modules/packages/ParallelIO.chpl
+    1 modules/packages/PeekPoke.chpl
+    2 modules/packages/Python.chpl
+    1 modules/packages/Socket.chpl
+    1 modules/packages/SortedSet.chpl
+    1 modules/packages/UnorderedAtomics.chpl
+    1 modules/packages/UnorderedCopy.chpl
+    1 modules/packages/ZMQ.chpl
+    1 modules/standard/AutoGpu.chpl
+    4 modules/standard/BigInteger.chpl
+    2 modules/standard/Collectives.chpl
+    2 modules/standard/Errors.chpl
+    1 modules/standard/GpuDiagnostics.chpl
+    2 modules/standard/HaltWrappers.chpl
+    3 modules/standard/IO.chpl
+    1 modules/standard/MemMove.chpl
+    1 modules/standard/OS.chpl
+    9 modules/standard/Random.chpl
+    1 modules/standard/Set.chpl
+    1 modules/standard/Sort.chpl
+    1 modules/standard/Sort/Partitioning.chpl
+    4 modules/standard/Subprocess.chpl
+    2 modules/standard/WeakPointer.chpl

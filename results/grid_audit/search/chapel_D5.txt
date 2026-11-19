@@ -1,0 +1,86 @@
+# Recherche d'absence : chapel, case D5
+# Chaîne : chapel
+# Motif : fence|spin_?loop|spin_?wait|on_?spin_?wait|\bpause\b|cpu_?relax|memory_?barrier|yield_?processor|spin_?hint
+# Déclaration publique : ^\s*(@\w+\S*\s+)*(inline\s+|extern\s+|export\s+|override\s+|operator\s+)*(proc|iter|record|class|type|param|const|var|config|module|operator|enum|union)\b(?!.*\bprivate\b)
+# 11 déclarations publiques, 52 mentions, 12 fichiers
+
+## Déclarations publiques
+modules/internal/Atomics.chpl:149: extern proc chpl_atomic_thread_fence(order:memory_order);
+modules/internal/Atomics.chpl:153: proc atomic_fence(order:memory_order = memory_order_seq_cst) {
+modules/internal/Atomics.chpl:161: inline proc atomicFence(param order: memoryOrder = memoryOrder.seqCst) {
+modules/internal/ChapelBase.chpl:2199: extern proc chpl_comm_unordered_task_fence(): void;
+modules/internal/ChapelBase.chpl:2207: proc chpl_after_forall_fence() {
+modules/internal/MemConsistency.chpl:136: extern proc chpl_rmem_consist_fence(order:memory_order);
+modules/internal/MemConsistency.chpl:137: proc chpl_rmem_consist_fence(param order:memoryOrder) {
+modules/packages/UnorderedAtomics.chpl:159: inline proc unorderedAtomicTaskFence(): void {
+modules/packages/UnorderedAtomics.chpl:162: extern proc chpl_comm_atomic_unordered_task_fence();
+modules/packages/UnorderedCopy.chpl:120: inline proc unorderedCopyTaskFence(): void {
+modules/packages/UnorderedCopy.chpl:121: extern proc chpl_gen_comm_getput_unordered_task_fence();
+
+## Mentions (au plus 12 lignes par fichier)
+modules/internal/Atomics.chpl:25: will add fences to methods in atomic types with order arguments e.g.::
+modules/internal/Atomics.chpl:40: memory fence for an 'on' statement is omitted for these functions
+modules/internal/Atomics.chpl:41: (since the maybe_release/maybe_acquire fence takes care of it).
+modules/internal/Atomics.chpl:48: waitFor methods also do not need the fences written here -
+modules/internal/Atomics.chpl:50: do need a thread fence after the loop of memoryOrder.relaxed
+modules/internal/Atomics.chpl:151: // non user-facing fence that is called by the compiler
+modules/internal/Atomics.chpl:154: chpl_atomic_thread_fence(order);
+modules/internal/Atomics.chpl:156: chpl_rmem_consist_fence(order);
+modules/internal/Atomics.chpl:159: /* An atomic fence that establishes an ordering of non-atomic and relaxed
+modules/internal/Atomics.chpl:162: atomic_fence(c_memory_order(order));
+modules/internal/Atomics.chpl:431: chpl_atomic_thread_fence(c_memory_order(order));
+modules/internal/Atomics.chpl:821: chpl_atomic_thread_fence(c_memory_order(order));
+modules/internal/AtomicsCommon.chpl:60: atomicFence(memoryOrder.acquire);
+modules/internal/ChapelBase.chpl:2157: pragma "no remote memory fence"
+modules/internal/ChapelBase.chpl:2165: // remote memory fence because of pragma "no remote memory fence"
+modules/internal/ChapelBase.chpl:2166: // above. So we do an acquire fence before it.
+modules/internal/ChapelBase.chpl:2167: chpl_rmem_consist_fence(memoryOrder.release);
+modules/internal/ChapelBase.chpl:2182: pragma "no remote memory fence"
+modules/internal/ChapelBase.chpl:2206: pragma "compiler added remote fence"
+modules/internal/ChapelBase.chpl:2208: chpl_comm_unordered_task_fence();
+modules/internal/MemConsistency.chpl:109: // These functions are memory consistency fences (ie acquire or
+modules/internal/MemConsistency.chpl:110: // release fences) for the remote data cache.
+modules/internal/MemConsistency.chpl:114: pragma "compiler added remote fence"
+modules/internal/MemConsistency.chpl:117: pragma "compiler added remote fence"
+modules/internal/MemConsistency.chpl:120: pragma "compiler added remote fence"
+modules/internal/MemConsistency.chpl:122: pragma "compiler added remote fence"
+modules/internal/MemConsistency.chpl:127: pragma "compiler added remote fence"
+modules/internal/MemConsistency.chpl:129: pragma "compiler added remote fence"
+modules/internal/MemConsistency.chpl:138: chpl_rmem_consist_fence(c_memory_order(order));
+modules/internal/comm/ofi/NetworkAtomics.chpl:131: chpl_atomic_thread_fence(c_memory_order(order));
+modules/internal/comm/ofi/NetworkAtomics.chpl:369: chpl_atomic_thread_fence(c_memory_order(order));
+modules/internal/comm/ugni/NetworkAtomics.chpl:131: chpl_atomic_thread_fence(c_memory_order(order));
+modules/internal/comm/ugni/NetworkAtomics.chpl:349: chpl_atomic_thread_fence(c_memory_order(order));
+modules/packages/Curl.chpl:576: // handle, pause it (i.e., return CURL_WRITE_PAUSE).
+modules/packages/Curl.chpl:598: //writeln("in buf_writer PAUSE");
+modules/packages/Curl.chpl:976: // otherwise return 0, pause the connection, so that
+modules/packages/DistributedBag.chpl:1130: // fence
+modules/packages/DistributedBag.chpl:1131: atomicFence();
+modules/packages/UnorderedAtomics.chpl:32: explicit :proc:`unorderedAtomicTaskFence()`, but they can provide a
+modules/packages/UnorderedAtomics.chpl:49: // no fence required, fenced at task termination
+modules/packages/UnorderedAtomics.chpl:58: fenced with :proc:`unorderedAtomicTaskFence()`.
+modules/packages/UnorderedAtomics.chpl:65: unorderedAtomicTaskFence();
+modules/packages/UnorderedAtomics.chpl:157: Fence any pending unordered atomics issued by the current task.
+modules/packages/UnorderedAtomics.chpl:163: chpl_comm_atomic_unordered_task_fence();
+modules/packages/UnorderedCopy.chpl:37: termination or an explicit :proc:`unorderedCopyTaskFence()`:
+modules/packages/UnorderedCopy.chpl:51: // no fence required, fenced at task/forall termination
+modules/packages/UnorderedCopy.chpl:59: that issued them terminates or an explicit :proc:`unorderedCopyTaskFence()`.
+modules/packages/UnorderedCopy.chpl:68: unorderedCopyTaskFence();
+modules/packages/UnorderedCopy.chpl:118: Fence any pending unordered copies issued by the current task.
+modules/packages/UnorderedCopy.chpl:122: chpl_gen_comm_getput_unordered_task_fence();
+modules/packages/VisualDebug.chpl:133: + "try using the [pause/tag]Vdebug() routines instead");
+modules/standard/GPU.chpl:177: Returns a handle that can be passed to `waitGpuComm` to pause execution
+
+## Lignes trouvées, par fichier
+   15 modules/internal/Atomics.chpl
+    1 modules/internal/AtomicsCommon.chpl
+    9 modules/internal/ChapelBase.chpl
+   11 modules/internal/MemConsistency.chpl
+    2 modules/internal/comm/ofi/NetworkAtomics.chpl
+    2 modules/internal/comm/ugni/NetworkAtomics.chpl
+    3 modules/packages/Curl.chpl
+    2 modules/packages/DistributedBag.chpl
+    8 modules/packages/UnorderedAtomics.chpl
+    8 modules/packages/UnorderedCopy.chpl
+    1 modules/packages/VisualDebug.chpl
+    1 modules/standard/GPU.chpl
