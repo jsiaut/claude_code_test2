@@ -165,7 +165,10 @@ réplication, comme `analysis/audit3.py`), et les langages dont le rang change d
 * bornes physiques de la machine 30 dans les quatre calculs (Hôte compris), mêmes volumes que celles du classement
   publié : bande passante sur 1 thread du plus petit volume mesuré qui contient les données (`hwprobe bw`) ; sur
   4 threads, 4 fois celle d'un quart du volume tant qu'il tient dans le L2 d'un cœur, STREAM sur 4 threads au-delà ;
-  pic FMA mesuré pour K5 (la plus grande des bornes de calcul et de bande passante) ; fréquence mesurée pour K3 ;
+  pic FMA mesuré pour K5 (calcul seul dans le L1, comme le classement publié ; au-delà, la plus grande des bornes de
+  calcul et de bande passante) ; fréquence mesurée pour K3 ; STREAM : la triad (sa figure de mérite ; la copie sur
+  4 threads donne 466 Go/s, valeur aberrante) ; `tools/hwprobe.c` compilé en `-O3` (en `-O2`, GCC 13.3 garde les
+  accumulateurs du test de pic en mémoire : 53 Gflop/s au lieu de 224) ;
 * calcul 2 : moyenne en logarithme sur les tailles de chaque cellule de E et de D1, de la part de K1 dans D2 et de D3
   (latences de K8) ; K3 et D4 (une seule taille) pris à la taille publiée ; les tirages des variantes sont ceux de
   « Hôte », les poids des tailles viennent d'un générateur à part ;

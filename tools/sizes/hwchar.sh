@@ -10,8 +10,8 @@ cd "$(dirname "$0")/../.."
 OUT=${1:-results/hw/machine30}
 mkdir -p "$OUT" /dev/shm/msbuild
 H=/dev/shm/msbuild/hwprobe
-gcc -O2 -march=native -pthread tools/hwprobe.c -o $H
-{ echo "# gcc -O2 -march=native -pthread tools/hwprobe.c ($(gcc --version | head -1)), $(date -u '+%Y-%m-%d %H:%M UTC')"
+gcc -O3 -march=native -pthread tools/hwprobe.c -o $H  # -O3 : en -O2, GCC 13 garde les accumulateurs de peak en mémoire
+{ echo "# gcc -O3 -march=native -pthread tools/hwprobe.c ($(gcc --version | head -1)), $(date -u '+%Y-%m-%d %H:%M UTC')"
   grep -m1 "model name" /proc/cpuinfo; grep -m1 -E "^model\s" /proc/cpuinfo; grep -m1 "stepping" /proc/cpuinfo
   grep -m1 "cpu MHz" /proc/cpuinfo; grep -m1 "cache size" /proc/cpuinfo; grep -m1 "microcode" /proc/cpuinfo
   nproc; free -b | head -2; uname -r; } > "$OUT/host.txt"

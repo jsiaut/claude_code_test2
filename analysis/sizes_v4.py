@@ -133,7 +133,8 @@ def campaign_keys(data):
 
 # ------------------------------------------------------------------ bornes physiques de la machine 30
 def hw_numbers():
-    """Bande passante en lecture sur 1 thread selon la taille (bw), STREAM sur 4 threads, pic FMA et fréquence."""
+    """Bande passante en lecture sur 1 thread selon la taille (bw), STREAM triad sur 4 threads, pic FMA et fréquence
+    (tools/hwprobe.c compilé en -O3 sur l'hôte, results/hw/machine30)."""
     bw = []
     for line in open(os.path.join(HW, "bw.txt")):
         m = re.match(r"bw:\s+(\d+) KiB\s+([\d.]+) GB/s", line)
@@ -141,9 +142,9 @@ def hw_numbers():
             bw.append((int(m.group(1)) * 1024, float(m.group(2)) * 1e9))
     stream4 = []
     for line in open(os.path.join(HW, "stream.txt")):
-        m = re.search(r"stream: T=(\d)\s+\w+\s+([\d.]+) GB/s", line)
-        if m and m.group(1) == "4":
-            stream4.append(float(m.group(2)) * 1e9)
+        m = re.search(r"stream: T=(\d)\s+(\w+)\s+([\d.]+) GB/s", line)
+        if m and m.group(1) == "4" and m.group(2) == "triad":  # triad : la figure de mérite de STREAM
+            stream4.append(float(m.group(3)) * 1e9)
     peak = []
     for line in open(os.path.join(HW, "peak.txt")):
         m = re.search(r"([\d.]+) GFLOP/s", line)
@@ -178,7 +179,8 @@ def ebounds(hw, pos):
         ("k1", 0): 16 * n1 / bw1(hw, 16 * n1),
         ("k3", 0): 2 ** 25 * 5 / hw["freq"],
         ("k4", 0): n4 / bw1(hw, n4),
-        ("k5", 0): max(2 * n5 * inner5 / hw["peak"], 8 * n5 * inner5 / bw1(hw, 8 * n5)),
+        # K5 : calcul seul dans le L1, comme EBOUND (2 x 2 x n x INNER / pic) ; au-delà, aussi la bande passante
+        ("k5", 0): max(4 * n5 * inner5 / hw["peak"], 0 if 8 * n5 <= 48 << 10 else 8 * n5 * inner5 / bw1(hw, 8 * n5)),
         ("k6", 0): 10 * n6 / bw1(hw, 10 * n6), ("k6", 1): 13 * n6 / bw1(hw, 13 * n6),
         ("k6", 2): 10 * n6 / bw4(hw, 10 * n6), ("k6", 3): 13 * n6 / bw4(hw, 13 * n6),
         ("k9", 0): 4 * g9 / bw1(hw, g9), ("k9", 1): 4 * g9 / bw4(hw, g9),
