@@ -147,6 +147,24 @@ Pour chaque calcul : scores, rangs espérés, rang plausible, étages indicatifs
 réplication, comme `analysis/audit3.py`), et les langages dont le rang change de plus de deux places entre « Hôte » et
 « Trois tailles ». Sorties : `results/sizes/`, `results/report_sizes.md`.
 
+### 8.1 Mise en œuvre (19 novembre, avant les mesures)
+
+`analysis/sizes_v4.py`, poussé avant la campagne et éprouvé sur des données synthétiques seulement. Choix de mise en
+œuvre de la section 8 :
+* une seule campagne : aucun langage n'y est relié par un pont, tous ont les mêmes réservoirs de résidus et le même
+  générateur (l'ajout de Swift, FreePascal, BQN et PHP par un pont du C ne s'applique pas) ;
+* bornes physiques de la machine 30 dans les quatre calculs (Hôte compris), mêmes volumes que celles du classement
+  publié : bande passante sur 1 thread du plus petit volume mesuré qui contient les données (`hwprobe bw`) ; sur
+  4 threads, 4 fois celle d'un quart du volume tant qu'il tient dans le L2 d'un cœur, STREAM sur 4 threads au-delà ;
+  pic FMA mesuré pour K5 (la plus grande des bornes de calcul et de bande passante) ; fréquence mesurée pour K3 ;
+* calcul 2 : moyenne en logarithme sur les tailles de chaque cellule de E et de D1, de la part de K1 dans D2 et de D3
+  (latences de K8) ; K3 et D4 (une seule taille) pris à la taille publiée ; les tirages des variantes sont ceux de
+  « Hôte », les poids des tailles viennent d'un générateur à part ;
+* calcul 3 : colonnes du tableau de la section 3 (pour K5 : 2^11, 2^15, 2^21) ; « Hôte » prend K5 à sa taille
+  publiée (2^11) ;
+* cellule manquante (section 6) : seulement pour les variantes communes à tous les langages ; une variante propre à
+  un langage (`extra_variants`) n'est pas donnée aux autres.
+
 ## 9. Publication
 
 Le classement de tête du README ne change pas au point 2 : les points 3 (conditions égales) et 4 (code optimisé
