@@ -1,0 +1,11 @@
+# Recherche d'absence : fortran, case C2
+# Chaîne : GNU Fortran (GCC) 16.2.0
+# Motif : \b_mm|\bavx|__builtin_ia32|\bsse[0-9]
+# Déclaration publique : ^\*\s|^[0-9]+\.[0-9]+(\.[0-9]+)?\s+\S|^'-f|^\s*(function|subroutine|integer|logical|interface|module)\b
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

@@ -154,6 +154,23 @@
       "strip": "/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/",
       "public": "^\\s*(procedure|function|type|subtype|package|generic|task|protected|pragma)\\b|^\\s*\\w+\\s*:\\s*constant\\b|^\\s*['*‘]",
       "version": "/opt/gcc-16/bin/gcc-16 --version | head -1"
+    },
+    "fortran": {
+      "roots": [
+        "/opt/gcc-16/share/info/gfortran.info",
+        "/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90"
+      ],
+      "ext": [
+        ".info",
+        ".f90"
+      ],
+      "exclude": [],
+      "strip": "/opt/gcc-16/",
+      "public": "^\\*\\s|^[0-9]+\\.[0-9]+(\\.[0-9]+)?\\s+\\S|^'-f|^\\s*(function|subroutine|integer|logical|interface|module)\\b",
+      "extra": {
+        "C2": "\\b_mm|\\bavx|__builtin_ia32|\\bsse[0-9]"
+      },
+      "version": "/opt/gcc-16/bin/gfortran-16 --version | head -1"
     }
   }
 }

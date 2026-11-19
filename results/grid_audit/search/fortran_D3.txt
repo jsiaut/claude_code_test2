@@ -1,0 +1,28 @@
+# Recherche d'absence : fortran, case D3
+# Chaîne : GNU Fortran (GCC) 16.2.0
+# Motif : cache_?line|cache_?padded|destructive_?interference|false_?sharing|contended|dcache|cache_?size
+# Déclaration publique : ^\*\s|^[0-9]+\.[0-9]+(\.[0-9]+)?\s+\S|^'-f|^\s*(function|subroutine|integer|logical|interface|module)\b
+# 0 déclarations publiques, 15 mentions, 2 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+/opt/gcc-16/share/info/gfortran.info:21315: ‘omp_lock_hint_uncontended’ (deprecated)
+/opt/gcc-16/share/info/gfortran.info:21316: ‘omp_lock_hint_contended’ (deprecated)
+/opt/gcc-16/share/info/gfortran.info:21320: ‘omp_sync_hint_uncontended’
+/opt/gcc-16/share/info/gfortran.info:21321: ‘omp_sync_hint_contended’
+/opt/gcc-16/share/info/gfortran.info:21350: ‘omp_atv_contended’
+/opt/gcc-16/share/info/gfortran.info:21351: ‘omp_atv_uncontended’
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:68: parameter :: omp_sync_hint_uncontended = 1
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:70: parameter :: omp_lock_hint_uncontended &
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:71: = omp_sync_hint_uncontended
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:73: parameter :: omp_sync_hint_contended = 2
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:75: parameter :: omp_lock_hint_contended &
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:76: = omp_sync_hint_contended
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:114: parameter :: omp_atv_contended = 3
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:116: parameter :: omp_atv_uncontended = 4
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:1059: !GCC$ ATTRIBUTES DEPRECATED :: omp_lock_hint_uncontended, omp_lock_hint_contended
+
+## Lignes trouvées, par fichier
+    9 /opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90
+    6 /opt/gcc-16/share/info/gfortran.info

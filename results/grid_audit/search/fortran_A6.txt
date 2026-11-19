@@ -1,0 +1,11 @@
+# Recherche d'absence : fortran, case A6
+# Chaîne : GNU Fortran (GCC) 16.2.0
+# Motif : \bsoa\b|_soa\b|\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array
+# Déclaration publique : ^\*\s|^[0-9]+\.[0-9]+(\.[0-9]+)?\s+\S|^'-f|^\s*(function|subroutine|integer|logical|interface|module)\b
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

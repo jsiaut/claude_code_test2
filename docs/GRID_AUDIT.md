@@ -136,6 +136,23 @@ dans le manuel de GNAT, `gnat_rm.info`).
   unimplemented » ; l'annexe E accepte `pragma Remote_Call_Interface`, mais « GNAT itself supports programs with only a
   single partition » : le PCS est dans PolyORB, produit séparé, sans `gnatdist` dans la chaîne (0 et 0).
 
+### Fortran (gfortran 16.2, compilateur du banc, -O3 -march=native -fopenmp)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (A4, C4, D1, D2 et D4 valent 1 en v2 par OpenMP,
+livré avec gfortran ; ½ en v1). Sondes : `probes/fortran/probe*.f90` (A3 à A5, B2, B5, C5, F2), `probes/fortran/audit/`
+(`audit.f90` exécuté sous `OMP_PLACES={1}`, module `cg` lu en assembleur avec et sans `-fcheck=bounds`, témoin C pour
+E5, trois échecs, dix recherches dans `gfortran.info` et `omp_lib.f90`).
+* Faits notables : `!$omp atomic write release` donne un `mov`, `seq_cst` un `xchg` (D2) ; `!$omp simd reduction`
+  vectorise une somme que la boucle ordinaire laisse en `vaddss` (C4) ; un tableau allouable `m(n, 4)` est contigu par
+  colonnes (F1) ; une section non contiguë passée à un argument de forme explicite crée un temporaire, que
+  `-fcheck=array-temps` signale à l'exécution (B4 ½) ; le type `unsigned` n'existe que sous `-funsigned` (F3 ½) ;
+  `template` est refusé (E7 ½).
+* E5 : la règle des arguments muets se voit dans le vectoriseur de GCC : la boucle Fortran est vectorisée sans
+  version pour alias, la même boucle en C sur deux pointeurs l'est avec une.
+* Motif propre à Fortran pour C2 (ajouté avant la recherche) : « intrinsic » désigne en Fortran toutes les procédures
+  de la norme ; le motif cherche `_mm`, `avx`, `__builtin_ia32` et `sse` (aucun résultat). Un builtin lié par
+  `bind(c)` reste un symbole externe non résolu.
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |

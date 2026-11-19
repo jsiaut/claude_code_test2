@@ -1,0 +1,24 @@
+# Recherche d'absence : fortran, case C1
+# Chaîne : GNU Fortran (GCC) 16.2.0
+# Motif : simd|vector(64|128|256|512)\b|\bvec[248]\b|float32x|int32x|@vector
+# Déclaration publique : ^\*\s|^[0-9]+\.[0-9]+(\.[0-9]+)?\s+\S|^'-f|^\s*(function|subroutine|integer|logical|interface|module)\b
+# 3 déclarations publiques, 9 mentions, 1 fichiers
+
+## Déclarations publiques
+/opt/gcc-16/share/info/gfortran.info:22920: * fopenmp-simd:                          Fortran Dialect Options.
+/opt/gcc-16/share/info/gfortran.info:24158: * OpenMP SIMD:                           Fortran Dialect Options.
+/opt/gcc-16/share/info/gfortran.info:24381: * SIMD:                                  Fortran Dialect Options.
+
+## Mentions (au plus 12 lignes par fichier)
+/opt/gcc-16/share/info/gfortran.info:426: -fopenmp-allocators -fopenmp-simd -freal-4-real-10 -freal-4-real-16
+/opt/gcc-16/share/info/gfortran.info:697: for ‘-pthread’.  ‘-fopenmp’ implies ‘-fopenmp-simd’ and
+/opt/gcc-16/share/info/gfortran.info:718: ‘-fopenmp-simd’
+/opt/gcc-16/share/info/gfortran.info:719: Enable handling of OpenMP's ‘simd’, ‘declare simd’, ‘declare
+/opt/gcc-16/share/info/gfortran.info:721: of combined or composite directives with ‘simd’ as constituent with
+/opt/gcc-16/share/info/gfortran.info:4945: ‘!GCC$ BUILTIN (B) attributes simd FLAGS IF('target')’
+/opt/gcc-16/share/info/gfortran.info:4953: !GCC$ builtin (sinf) attributes simd (notinbranch) if('x86_64')
+/opt/gcc-16/share/info/gfortran.info:4958: !GCC$ builtin (exp) attributes simd (notinbranch) if('fastmath')
+/opt/gcc-16/share/info/gfortran.info:4987: code it is recommended to consider OpenMP SIMD directives as potential
+
+## Lignes trouvées, par fichier
+   12 /opt/gcc-16/share/info/gfortran.info

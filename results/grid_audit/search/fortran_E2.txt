@@ -1,0 +1,15 @@
+# Recherche d'absence : fortran, case E2
+# Chaîne : GNU Fortran (GCC) 16.2.0
+# Motif : \basm\b|inline_?asm|__asm|assembler
+# Déclaration publique : ^\*\s|^[0-9]+\.[0-9]+(\.[0-9]+)?\s+\S|^'-f|^\s*(function|subroutine|integer|logical|interface|module)\b
+# 0 déclarations publiques, 3 mentions, 1 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+/opt/gcc-16/share/info/gfortran.info:193: backend library.  ‘f951’ "translates" the source code to assembler
+/opt/gcc-16/share/info/gfortran.info:214: file in the source code, and then calls the assembler and linker as
+/opt/gcc-16/share/info/gfortran.info:6782: A simple implementation could be ‘__asm__ __volatile__
+
+## Lignes trouvées, par fichier
+    3 /opt/gcc-16/share/info/gfortran.info

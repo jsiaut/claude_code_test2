@@ -1,7 +1,33 @@
-CAP;A5;1;TRANSFER(1.0) = 0x3F800000
-CAP;B5;1;c_loc + c_f_pointer :  2.0
-CAP;C5;1;do concurrent :   72.0
-CAP;A3;0.5;-fpack-derived (option globale) : storage_size(t) = 6 octets
-CAP;A4;0.5;directives OpenMP : allouable mod 128 = 0 ; locale mod 256 = 0
-CAP;B2;0.5;arène à la main (tableau de nœuds réutilisé), comme en C : 42
-CAP;F2;0.5;cotableaux sur un nœud (libcaf_shmem) : images 4, somme 10
+CAP;A5;1;[exécutée] TRANSFER(1.0) = 0x3F800000
+CAP;B5;1;[exécutée] c_loc + c_f_pointer :  2.0
+CAP;C5;1;[exécutée] do concurrent :   72.0
+CAP;A3;0.5;[exécutée] -fpack-derived (option globale) : storage_size(t) = 6 octets
+CAP;B2;0.5;[exécutée] arène à la main (tableau de nœuds réutilisé), comme en C : 42
+CAP;A4;1;[exécutée] directives OpenMP : allouable mod 128 = 0 ; locale mod 256 = 0 (directives OpenMP livrées avec gfortran ; ½ en v1)
+CAP;F2;0.5;[exécutée] cotableaux sur un nœud (libcaf_shmem) : images 4, somme 10
+CAP;A1;1;[exécutée] tableau de type dérivé bind(c) : pas de 16 o = storage_size/8 16 ; les composantes sont stockées en ligne dans le tableau
+CAP;A7;1;[exécutée] type (n : int32, a(16) : real32) : 68 o, a(1) à 4 o du début (tableau en ligne)
+CAP;A8;1;[exécutée] int8/int16/real32 (iso_fortran_env) : 1/2/4 o ; tableau de 1000 int8 : 1000 o
+CAP;B1;1;[exécutée] aucun ramasse-miettes : allouables libérés à la sortie de portée ou par deallocate ; 1 fil (Threads: de /proc/self/status, aucun fil de collecteur)
+CAP;B3;1;[exécutée] real loc(1024) local à une procédure à 1672 o d'une autre variable locale, à 140729629390080 o d'un allouable : sur la pile (tableaux locaux automatiques)
+CAP;D1;1;[exécutée] !$omp parallel (OpenMP livré avec gfortran) : 4 fils, 4 identifiants de fil (gettid) distincts, somme 7998000 (attendu 7998000) ; ½ en v1 (pas de fils dans la norme)
+CAP;F1;1;[exécutée] real, allocatable :: m(:,:), m(3, 4) alloué à l'exécution : m(2,1) - m(1,1) = 4 o, m(1,2) - m(3,1) = 4 o (contigu, par colonnes)
+CAP;A2;0.5;[exécutée] type bind(c) : disposition du C, décalage de z mesuré par c_loc = 8 o, de m = 12 o ; [recherche] motif A2 dans gfortran.info et omp_lib.f90 16.2.0 : 18 entrées (results/grid_audit/search/fortran_A2.txt), toutes sur bind(c) ; aucune fonction offsetof : décalages par arithmétique sur c_loc seulement, ordre garanti par bind(c) ou sequence
+CAP;A6;0;[recherche] motif A6 dans gfortran.info et omp_lib.f90 16.2.0 : 0 entrée, 0 mention (results/grid_audit/search/fortran_A6.txt)
+CAP;B4;0.5;[exécutée] -fcheck=array-temps : An array temporary was created for argument 'x' of procedure 's' (section non contiguë passée à un argument de forme explicite : copie implicite sur le tas ou la pile)
+CAP;C1;0;[recherche] motif C1 dans gfortran.info et omp_lib.f90 16.2.0 : 3 entrées (results/grid_audit/search/fortran_C1.txt) : options -fopenmp-simd et OpenMP SIMD ; aucun type vectoriel
+CAP;C2;0;[recherche] motif C2 propre à Fortran (« intrinsic » y désigne les procédures de la norme) dans gfortran.info et omp_lib.f90 16.2.0 : 0 entrée, 0 mention ; [échec] un builtin de GCC lié par bind(c) reste un symbole externe : undefined reference to `__builtin_ia32_pause'
+CAP;C4;1;[exécutée] !$omp simd reduction(+:s) (OpenMP livré), par boucle : 1 vaddps ymm/zmm dans sum_simd contre 15 vaddss dans sum_plain ; ½ en v1
+CAP;D2;1;[exécutée] !$omp atomic à clause d'ordre, code produit : write release = 1 mov et 0 xchg ; write seq_cst = 1 xchg ; capture relaxed = 1 instruction lock ; ½ en v1
+CAP;D3;0;[recherche] motif D3 dans gfortran.info et omp_lib.f90 16.2.0 : 0 entrée ; 15 mentions (results/grid_audit/search/fortran_D3.txt) : indications omp_sync_hint_contended et omp_atv_contended (contention des verrous et des allocateurs), pas de bourrage
+CAP;D4;1;[exécutée] fil OpenMP sous OMP_PLACES={1} OMP_PROC_BIND=true : sched_getcpu() = 1, omp_get_proc_bind() = true (variables OMP_PLACES et OMP_PROC_BIND d'OpenMP, livré) ; ½ en v1
+CAP;D5;0.5;[exécutée] !$omp flush : 1 barrière dans flushit ; [recherche] indication d'attente active : motif D5, 0 entrée, 1 mention (le sous-programme SLEEP) : pas de pause
+CAP;E1;1;[exécutée] gfortran -S : 478 lignes d'assembleur pour le module cg
+CAP;E2;0;[recherche] motif E2 dans gfortran.info 16.2.0 : 0 entrée ; 3 mentions (results/grid_audit/search/fortran_E2.txt) : l'assembleur du compilateur et un exemple en C ; aucun assembleur en ligne en Fortran
+CAP;E3;0;[recherche] motif E3 dans gfortran.info 16.2.0 : 0 entrée ; 10 mentions, toutes en prose (« likely », « expect ») ; aucune indication de branchement
+CAP;E4;0;[recherche] motif E4 dans gfortran.info et omp_lib.f90 16.2.0 : 0 entrée, 0 mention (results/grid_audit/search/fortran_E4.txt) ; aucun préchargement explicite
+CAP;E5;1;[exécutée] règle des arguments muets (pas d'alias) : axpy en Fortran : 1 boucle vectorisée, 0 version pour alias ; la même boucle en C sur deux pointeurs : 1 version pour alias (-fopt-info-vec)
+CAP;E6;1;[exécutée] a(i) sans option : 0 appel de vérification ; avec -fcheck=bounds (globale) : 2 appels au rapport d'erreur : vérifications absentes par défaut
+CAP;E7;0.5;[exécutée] expression constante product([(k, k = 1, 15)]) = 1307674368000, constante immédiate dans f15c (1) ; [échec] gabarits génériques (template, prévus après Fortran 2023) : Error: Unclassifiable statement at (1) ; interfaces génériques seulement (une procédure par type, écrite à la main)
+CAP;F3;0.5;[exécutée] type unsigned, extension de gfortran 15 sous -funsigned : unsigned 4294967295u + 1u = 0 ; [échec] sans l'option : Error: Unclassifiable statement at (1) ; entiers signés sans arithmétique modulaire (débordement interdit)
+CAP;F4;0;[recherche] motif F4 dans gfortran.info et omp_lib.f90 16.2.0 : 0 entrée, 0 mention (results/grid_audit/search/fortran_F4.txt) ; mmap seulement par bind(c) vers la libc (FFI)

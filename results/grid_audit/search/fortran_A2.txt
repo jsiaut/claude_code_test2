@@ -1,0 +1,53 @@
+# Recherche d'absence : fortran, case A2
+# Chaîne : GNU Fortran (GCC) 16.2.0
+# Motif : offset_?of|field_?offset|struct_?layout|layout_?kind|repr\(c\)|bind\(c\)
+# Déclaration publique : ^\*\s|^[0-9]+\.[0-9]+(\.[0-9]+)?\s+\S|^'-f|^\s*(function|subroutine|integer|logical|interface|module)\b
+# 18 déclarations publiques, 26 mentions, 2 fichiers
+
+## Déclarations publiques
+/opt/gcc-16/share/info/gfortran.info:4624: subroutine strncpy(dest, src, n) bind(C)
+/opt/gcc-16/share/info/gfortran.info:4818: function prototypes for ‘BIND(C)’ entities.  The same can be done for
+/opt/gcc-16/share/info/gfortran.info:10351: subroutine sub(a) bind(c)
+/opt/gcc-16/share/info/gfortran.info:19150: subroutine handler_print(signum) bind(C)
+/opt/gcc-16/share/info/gfortran.info:23836: * Generating C prototypes from Fortran BIND(C) enteties: Interoperability Options.
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:757: function omp_alloc (size, allocator) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:767: function omp_aligned_alloc (alignment, size, allocator) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:777: subroutine omp_free(ptr, allocator) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:786: function omp_calloc (nmemb, size, allocator) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:796: function omp_aligned_calloc (alignment, nmemb, size, allocator) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:806: function omp_realloc (ptr, size, allocator, free_allocator) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:817: function omp_target_alloc (size, device_num) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:826: subroutine omp_target_free (device_ptr, device_num) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:834: function omp_target_is_present (ptr, device_num) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:912: function omp_target_memset (ptr, val, count, device_num) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:946: function omp_target_disassociate_ptr (ptr, device_num) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:955: function omp_get_mapped_ptr (ptr, device_num) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:964: function omp_target_is_accessible (ptr, size, device_num) bind(c)
+
+## Mentions (au plus 12 lignes par fichier)
+/opt/gcc-16/share/info/gfortran.info:336: ‘BIND(C)’ functions.  See also *note Further Interoperability of
+/opt/gcc-16/share/info/gfortran.info:1741: information.  Also note that declaring symbols as ‘bind(C)’ is a
+/opt/gcc-16/share/info/gfortran.info:2150: This option generates C prototypes from ‘BIND(C)’ variable
+/opt/gcc-16/share/info/gfortran.info:2171: option does not generate prototypes for ‘BIND(C)’ procedures; use
+/opt/gcc-16/share/info/gfortran.info:2181: need.  For new development, use of the ‘BIND(C)’ features is
+/opt/gcc-16/share/info/gfortran.info:4421: side and ‘BIND(C)’ on the Fortran side, and follow the rules for
+/opt/gcc-16/share/info/gfortran.info:4449: that are interoperable with C (ISO/IEC 9899:1999).  The ‘BIND(C)’
+/opt/gcc-16/share/info/gfortran.info:4490: For compatibility of derived types with ‘struct’, use the ‘BIND(C)’
+/opt/gcc-16/share/info/gfortran.info:4495: TYPE, BIND(C) :: myType
+/opt/gcc-16/share/info/gfortran.info:4540: type(myType), bind(C) :: tp
+/opt/gcc-16/share/info/gfortran.info:4558: Subroutines and functions have to have the ‘BIND(C)’ attribute to be
+/opt/gcc-16/share/info/gfortran.info:4719: SUBROUTINE get_values (cproc) BIND(C)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:845: src_device_num) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:858: depobj_list) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:875: bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:896: depobj_list) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:923: depobj_count, depobj_list) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:936: device_offset, device_num) bind(c)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:974: ! OpenMP specification (c_int + VALUE + BIND(C) added) but usage
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:979: bind(C)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:986: property_id, ret_code) bind(C)
+/opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90:995: ret_code) bind(C)
+
+## Lignes trouvées, par fichier
+   23 /opt/gcc-16/lib/gcc/x86_64-pc-linux-gnu/16.2.0/finclude/omp_lib.f90
+   21 /opt/gcc-16/share/info/gfortran.info

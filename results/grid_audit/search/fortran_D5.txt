@@ -1,0 +1,13 @@
+# Recherche d'absence : fortran, case D5
+# Chaîne : GNU Fortran (GCC) 16.2.0
+# Motif : fence|spin_?loop|spin_?wait|on_?spin_?wait|\bpause\b|cpu_?relax|memory_?barrier|yield_?processor|spin_?hint
+# Déclaration publique : ^\*\s|^[0-9]+\.[0-9]+(\.[0-9]+)?\s+\S|^'-f|^\s*(function|subroutine|integer|logical|interface|module)\b
+# 0 déclarations publiques, 1 mentions, 1 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+/opt/gcc-16/share/info/gfortran.info:19439: Calling this subroutine causes the process to pause for SECONDS
+
+## Lignes trouvées, par fichier
+    1 /opt/gcc-16/share/info/gfortran.info

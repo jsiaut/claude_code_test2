@@ -70,10 +70,13 @@
    "échec": 1
   },
   "fortran": {
-   "sans sonde": 26,
-   "déclarative": 7,
-   "sondée": 7,
-   "mesurée": 1
+   "exécutée": 21,
+   "sondée": 33,
+   "exécutée+recherche": 2,
+   "recherche": 7,
+   "échec+recherche": 1,
+   "mesurée": 1,
+   "exécutée+échec": 2
   },
   "chapel": {
    "sans sonde": 24,
@@ -163,16 +166,17 @@
   }
  },
  "total": {
-  "déclarative": 256,
-  "sondée": 487,
+  "déclarative": 249,
+  "sondée": 513,
   "mesurée": 25,
-  "exécutée": 186,
-  "exécutée+recherche": 5,
-  "recherche": 23,
-  "exécutée+échec": 10,
+  "exécutée": 207,
+  "exécutée+recherche": 7,
+  "recherche": 30,
+  "exécutée+échec": 12,
   "échec": 4,
   "exécutée+échec+recherche": 3,
-  "sans sonde": 338
+  "échec+recherche": 1,
+  "sans sonde": 312
  },
  "divergences": [
   [
@@ -283,13 +287,6 @@
   [
    "cpp",
    "F4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "fortran",
-   "A4",
    0.5,
    0.5,
    1

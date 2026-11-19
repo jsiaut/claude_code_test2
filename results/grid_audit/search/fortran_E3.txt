@@ -1,0 +1,22 @@
+# Recherche d'absence : fortran, case E3
+# Chaîne : GNU Fortran (GCC) 16.2.0
+# Motif : \blikely|\bunlikely|\bexpect\b|branch_?hint|branch_?weight|\bcold\b|cold_?path|fast_?path|slow_?path
+# Déclaration publique : ^\*\s|^[0-9]+\.[0-9]+(\.[0-9]+)?\s+\S|^'-f|^\s*(function|subroutine|integer|logical|interface|module)\b
+# 0 déclarations publiques, 10 mentions, 1 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+/opt/gcc-16/share/info/gfortran.info:1089: not inherently erroneous but that are risky or suggest there is likely
+/opt/gcc-16/share/info/gfortran.info:1195: Warn about implicit conversions that are likely to change the value
+/opt/gcc-16/share/info/gfortran.info:1432: likely to be uninteresting in practice.
+/opt/gcc-16/share/info/gfortran.info:1865: Support for this option will likely be withdrawn in a future
+/opt/gcc-16/share/info/gfortran.info:1919: closely as possible.  Code compiled with this option is likely to
+/opt/gcc-16/share/info/gfortran.info:3161: interprets the sign bit as a user would expect.
+/opt/gcc-16/share/info/gfortran.info:5039: Even if you are doing mixed-language programming, it is very likely that
+/opt/gcc-16/share/info/gfortran.info:6108: Although returning ‘-1’ is valid, will this most likely crash the
+/opt/gcc-16/share/info/gfortran.info:11874: likely return 24.
+/opt/gcc-16/share/info/gfortran.info:22740: expect it from them.  So when you compare distributors, judge them
+
+## Lignes trouvées, par fichier
+   10 /opt/gcc-16/share/info/gfortran.info
