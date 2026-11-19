@@ -284,6 +284,72 @@ programme exécuté et trois formes refusées.
   `PDO::ATTR_PREFETCH` et `Pdo\Sqlite::ATTR_PREFETCH` (E4) ; `POSIX_PC_CHOWN_RESTRICTED` et `opcache.restrict_api`
   (E5).
 
+### C# (.NET 10.0.14, SDK 10.0.403 ; réglages du banc : JIT à niveaux, PGO dynamique)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2. La première sonde n'imprimait que quatre cas ;
+`probes/csharp/audit/` les reprend tous : programme exécuté (`Audit.cs`) dont le code machine des méthodes `Cg*` est
+lu par `DOTNET_JitDisasm`, trois formes refusées par `csc`, et recherches dans l'API publique du paquet de référence
+`Microsoft.NETCore.App.Ref` (38 383 noms, lus dans les métadonnées par `tools/grid_audit/listings/dotnet_api`).
+* Code machine : `Vector256.FusedMultiplyAdd` donne un `vfmadd213ps` sur ymm, `Avx512F.Add` un `vaddps` sur zmm,
+  `Interlocked.Increment` un `lock xadd`, `Volatile.Write` un `mov` simple, `X86Base.Pause` un `pause`,
+  `Sse.Prefetch0` un `prefetcht0` ; `a[i]` appelle `CORINFO_HELP_RNGCHKFAIL`, `Unsafe.Add` non (E6) ; un générique
+  a un corps par type valeur (int, double, float) et un corps partagé pour les références (E7 ½).
+* Contre-épreuves et limites : `a*b + a` sur `Vector512` reste `vmulps` + `vaddps` (pas de contraction, C4 0) ;
+  `Process.ProcessorAffinity` n'épingle sur Linux que le fil principal (`sched_setaffinity` sur le PID ; douze autres
+  fils du runtime restent libres) et `ProcessThread.ProcessorAffinity` lève `PlatformNotSupportedException` (D4 ½) ;
+  `GC.TryStartNoGCRegion` suspend le ramasse-miettes pour un budget borné, après quoi la région se termine (B1,
+  section 3).
+* Les noms trouvés par les recherches sont des faux positifs : `Regex.CacheSize` (D3), l'en-tête HTTP `Expect` (E3),
+  50 `Restriction`… (E5), `XmlEnumAttribute` et `DataTable.Locale` (F2).
+
+### Java (OpenJDK 27.0.1 ; réglages du banc : C2, G1, `--add-modules jdk.incubator.vector`)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2. `probes/java/audit/` : programme exécuté
+(`Audit.java`), contre-épreuves lancées dans des JVM à part (Epsilon, `@Contended`, `PrintAssembly`, `UseNUMA`),
+cinq formes refusées par `javac`, et recherches dans l'API exportée des modules système (48 847 noms,
+`tools/grid_audit/listings/JavaApi.java`). Sans hsdis, le code machine ne se lit pas (E1 ½) : les preuves sont des
+valeurs et des mesures.
+* Cas contraires mesurés : HotSpot place `class P {byte a; long b; int c;}` à a=20 b=8 c=16 (A2) ; un tableau
+  d'objets ne tient que des références de 4 o (A1) ; un `record` rendu par une méthode non incorporée coûte 16 o de
+  tas par appel, 0 une fois incorporé par l'analyse d'échappement (B3) ; un `ArrayList<Integer>` coûte 16 o de plus
+  par élément (B4) ; une boucle compilée par C2 garde l'ordre de la somme, la réduction de la Vector API non (C4 ½).
+* `@Contended` (annotation interne) écarte deux champs de 136 o avec `-XX:-RestrictContended` et l'export du paquet
+  interne, de 8 o sans (D3 ½) ; `sched_setaffinity` marche par l'API FFM vers la glibc, non comptée (D4 0).
+* Cases discutables (section 3) : B1 (collecteur Epsilon, expérimental), E6 (`sun.misc.Unsafe` lit hors d'un tableau
+  sans contrôle), F2 (`-XX:+UseNUMA`, coupée par l'ergonomie sur cet hôte).
+
+### Go (1.27.3 ; réglages du banc : GOAMD64=v4, GOEXPERIMENT=simd)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (D4 et F4 valent 1 en v2 par le paquet syscall
+livré, ½ en v1). `probes/go/audit/` : programme exécuté dont le code machine est lu par `go tool objdump`, paquets
+expérimentaux `arena` et `simd` construits avec et sans `GOEXPERIMENT`, une fonction dans l'assembleur de Go, huit
+formes refusées, et recherches dans la liste de l'API publique livrée avec la chaîne (`api/go1*.txt`).
+* Code machine : `atomic.Int32.Store` est un `XCHGL` (séquentiellement cohérent, D2 ½), la somme de `float64` une
+  suite d'`ADDSD` scalaires (C4 0), `s[i]` un `CMPQ` et un appel à `runtime.panicBounds` que `unsafe.Add` et
+  `-gcflags=-B` retirent (E6) ; un générique a un corps par forme GC, `*A` et `*B` partageant le même (E7 ½) ; le
+  paquet `simd` portable produit une version par largeur (simd128, simd256, simd512).
+* Contre-épreuves : `debug.SetGCPercent(-1)` arrête le ramasse-miettes (aucune collecte pour 256 Mio), mais rien n'est
+  rendu (B1, section 3) ; `internal/cpu.CacheLinePad`, `internal/runtime/sys.Prefetch` et `runtime.procyield` existent
+  mais ne s'importent pas (D3, E4, D5 : 0).
+* F2 : la recherche trouve les numéros `SYS_MBIND`, `SYS_SET_MEMPOLICY`… du paquet syscall (appel système brut,
+  section 3) ; `testing.B.RunParallel` (C5) parallélise des bancs d'essai, pas des données.
+
+### Haskell (GHC 9.14.1 ; réglages du banc : -O2 -fllvm -mavx512f -mfma -threaded)
+
+33 cases sondées (C3 mesurée), **une divergence** avec la matrice : A3 (section 4). `probes/haskell/audit/` : programme
+exécuté avec `+RTS -N4 -qa -T -s`, décalages de structures C calculés par `hsc2hs` (livré avec GHC), Template Haskell
+dans un module à part, code machine lu dans l'assembleur gardé (`-keep-s-files`), et recherches dans 219 229 lignes de
+« :browse » sur les 833 modules exposés des bibliothèques livrées (`tools/grid_audit/listings/haskell_api.sh`).
+* Faits notables : `fmaddFloatX16#` donne des `vfmadd…ps` sur zmm (C1 ½, primops propres à GHC) ; sept étincelles
+  sur huit converties en calculs parallèles, `Control.Parallel.Strategies` absent de la chaîne (C5 ½) ; `forkOn 2`
+  avec `-qa` fait tourner le fil sur le processeur 2 (D4 ½) ; un n-uplet non boxé rendu par une fonction NOINLINE
+  n'alloue rien, le n-uplet boxé 72 o par appel (B3 ½) ; `prefetchMutableByteArray3#` donne `prefetcht0` (E4).
+* Contre-épreuves : `+RTS --numa` répond « This GHC build was compiled without NUMA support » (F2 0, malgré les champs
+  `numa` de `GHC.RTS.Flags`) ; `mmap` marche par la FFI vers la glibc, non comptée (F4 0).
+* A3 : une instance `Storable` de 5 o range `{Word8; Word32}` à plat, le `Word32` non aligné, sur les décalages
+  d'une structure C `packed` que donne `hsc2hs` : c'est le mécanisme que la matrice compte pour A2 (½, « Storable
+  manuel »), il donne aussi la disposition compactée (sans champ de bits) ; la note devrait être ½, comme Rust et C#.
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |
@@ -294,3 +360,15 @@ programme exécuté et trois formes refusées.
 | Nim | E3 | 1 | `likely`/`unlikely` changent la disposition avec gcc 16 (compilateur C par défaut de Nim), pas avec clang 23 (celui du banc) | La chaîne livrée compile par gcc : la capacité marche telle que livrée | 0 si l'on note la configuration du banc (clang), où l'indication est perdue |
 | C | B2 | ½ | La glibc livre une arène (`obstack`, `<obstack.h>`) : deux blocs consécutifs, libérés d'un coup | Pas d'interface d'allocateur que la bibliothèque accepterait : ½ | 1 si une arène de la bibliothèque système suffit |
 | C, C++, Fortran | F2 | 0, 0, ½ | Le trait d'allocateur OpenMP `omp_atk_partition` (interleaved, nearest, blocked) est accepté par libomp et libgomp ; sur cet hôte à un seul nœud NUMA, aucune politique n'est posée | Effet invérifiable ici ; libgomp passe par libnuma, tierce | ½ si le trait d'OpenMP compte comme construction de localité |
+| C#, Java, Go | B1 | 0 | Le ramasse-miettes s'arrête : `GC.TryStartNoGCRegion` (C#, budget borné), collecteur Epsilon (Java, expérimental), `debug.SetGCPercent(-1)` (Go, stable) ; aucune collecte, mais rien n'est rendu | B1 compte la mémoire rendue sans ramasse-miettes traçant (comptage de références, propriété) : ici seule la collecte la rend | ½ si un ramasse-miettes qu'on peut arrêter n'est plus « imposé » |
+| Java | E6 | 0 | `sun.misc.Unsafe.getInt(tableau, décalage)` lit hors du tableau sans contrôle | Méthode de `jdk.unsupported`, dépréciée pour suppression, avertissement à la première utilisation : pas une construction du langage | ½ si une API non prise en charge mais livrée compte, comme une unité interne |
+| Java | F2 | 0 | `-XX:+UseNUMA` (allocation NUMA du collecteur) est acceptée, puis coupée par l'ergonomie sur cet hôte à un seul nœud ; HotSpot passe par libnuma | Option globale de la JVM, effet invérifiable ici, bibliothèque tierce | ½ si une option globale d'allocation NUMA compte |
+
+## 4. Divergences
+
+Une sonde contredit la note de la matrice ; l'erratum est appliqué avec les autres une fois toutes les sondes faites
+(docs/V4_PLAN.md 2.3).
+
+| Langage | Case | Matrice (v1, v2) | Sonde | Fait établi |
+|---|---|---|---|---|
+| Haskell | A3 | 0, 0 | ½ | Instance `Storable` compactée de 5 o (décalages de `hsc2hs`), tableau à plat, `Word32` non aligné relu ; même mécanisme que A2 (½) |
