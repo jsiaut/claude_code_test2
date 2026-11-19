@@ -1,0 +1,66 @@
+# Recherche d'absence : mojo, case B2
+# Chaîne : Mojo 1.2.0 (2016d0cd)
+# Motif : arena|allocator|alloc_?in\b|new_?in\b|bump|region|mem_?pool|memory_?pool
+# Déclaration publique : ^\s*(def|fn|struct|trait|comptime|alias)\s+[A-Za-z]
+# 1 déclarations publiques, 47 mentions, 14 fichiers
+
+## Déclarations publiques
+std/collections/string/_grapheme_break.mojo:69: comptime GBP_REGIONAL_INDICATOR: UInt8 = 6
+
+## Mentions (au plus 12 lignes par fichier)
+std/algorithm/backend/unswitch.mojo:296: left_tile_size: Tile size for the left boundary region.
+std/algorithm/backend/unswitch.mojo:297: right_tile_size: Tile size for the right boundary region.
+std/algorithm/backend/unswitch.mojo:316: # Left boundary region.
+std/algorithm/backend/unswitch.mojo:327: # Right boundary region.
+std/builtin/_coroutine.mojo:37: __mlir_region await_body(hdl: __mlir_type.`!co.routine`):
+std/builtin/_coroutine.mojo:41: __mlir_op.`co.suspend`[_region="await_body".value]()
+std/builtin/_startup.mojo:59: external_call["KGEN_CompilerRT_SetAsanAllocators", NoneType]()
+std/builtin/_startup.mojo:93: external_call["KGEN_CompilerRT_SetAsanAllocators", NoneType]()
+std/builtin/range.mojo:297: # pointer bumps and a bound the caller wrote as a literal still
+std/collections/dict.mojo:1253: # `DictKeyError`: a `try` region around the copy fences the optimizer
+std/collections/list.mojo:541: # which never came from the allocator, so it must not reach `dealloc`.
+std/collections/string/_grapheme_break.mojo:196: """Whether we have seen an odd number of consecutive Regional Indicators."""
+std/collections/string/_grapheme_break.mojo:258: if gbp == GBP_REGIONAL_INDICATOR:
+std/collections/string/_grapheme_break.mojo:351: if gbp == GBP_REGIONAL_INDICATOR and prev == GBP_REGIONAL_INDICATOR:
+std/io/io.mojo:172: # Explicitly free the buffer using free() instead of the Mojo allocator.
+std/memory/_poison.mojo:13: """Debug allocator poison pattern detection for uninitialized memory reads.
+std/memory/_poison.mojo:17: the debug allocator (`MODULAR_DEBUG_DEVICE_ALLOCATOR=uninitialized-poison`).
+std/memory/_poison.mojo:55: # - `float4_e2m1fn`: sub-byte; the byte-granularity allocator fill can't
+std/memory/_poison.mojo:64: # this module is written. The allocator does poison them, with a `0xCD`
+std/memory/_poison.mojo:132: t"{thread_idx.z}]: load matched debug allocator poison sentinel"
+std/memory/_poison.mojo:141: t" load matched debug allocator poison sentinel"
+std/memory/_poison.mojo:152: """Checks that a loaded SIMD value doesn't match debug allocator poison.
+std/memory/_poison.mojo:175: """Checks unmasked lanes of a SIMD value for debug allocator poison.
+std/memory/address_space.mojo:37: address spaces provide access to different memory regions with different
+std/memory/alloc.mojo:685: corrupt the allocator.
+std/memory/memory.mojo:255: overlapping memory regions, use `unsafe_memmove`.
+std/memory/memory.mojo:296: Unlike `unsafe_memcpy`, the memory regions are allowed to overlap.
+std/memory/memory.mojo:329: Unlike `memcpy`, the memory regions are allowed to overlap.
+std/memory/memory.mojo:583: `unsafe_destroy_n()` on the destination region first if it contains
+std/memory/memory.mojo:595: dest: Pointer to the destination memory region.
+std/memory/memory.mojo:596: src: Pointer to the source memory region. Must point to initialized
+std/memory/memory.mojo:602: - `dest` must point to a valid memory region with space for at least
+std/memory/memory.mojo:604: - `src` must point to a valid memory region containing at least `count`
+std/memory/memory.mojo:606: - If `overlapping=False`, the `src` and `dest` memory regions must **not**
+std/memory/memory.mojo:607: overlap. Overlapping regions with `overlapping=False` is undefined
+std/memory/memory.mojo:649: `unsafe_destroy_n()` on the destination region first if it contains
+std/memory/memory.mojo:661: dest: Pointer to the destination memory region.
+std/memory/owned_pointer.mojo:135: initially allocated with this `OwnedPointer`'s backing allocator.
+std/memory/owned_pointer.mojo:153: initially allocated with this `OwnedPointer`'s backing allocator.
+std/origin/__init__.mojo:256: API abstract over the precise interior region being referenced while
+
+## Lignes trouvées, par fichier
+    4 std/algorithm/backend/unswitch.mojo
+    2 std/builtin/_coroutine.mojo
+    2 std/builtin/_startup.mojo
+    1 std/builtin/range.mojo
+    1 std/collections/dict.mojo
+    1 std/collections/list.mojo
+    4 std/collections/string/_grapheme_break.mojo
+    1 std/io/io.mojo
+    8 std/memory/_poison.mojo
+    1 std/memory/address_space.mojo
+    1 std/memory/alloc.mojo
+   19 std/memory/memory.mojo
+    2 std/memory/owned_pointer.mojo
+    1 std/origin/__init__.mojo

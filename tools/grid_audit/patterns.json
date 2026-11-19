@@ -191,6 +191,21 @@
       "listing": "/opt/julia/bin/julia --startup-file=no tools/grid_audit/listings/julia_names.jl 2>/dev/null",
       "public": ".",
       "version": "/opt/julia/bin/julia --version"
+    },
+    "mojo": {
+      "roots": [
+        "/opt/src/modular/Mojo/stdlib/std"
+      ],
+      "ext": [
+        ".mojo"
+      ],
+      "exclude": [
+        "/test/",
+        "/_gpu/"
+      ],
+      "strip": "/opt/src/modular/Mojo/stdlib/",
+      "public": "^\\s*(def|fn|struct|trait|comptime|alias)\\s+[A-Za-z]",
+      "version": "/opt/mojo-venv/bin/mojo --version"
     }
   }
 }

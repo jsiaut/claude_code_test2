@@ -1,0 +1,29 @@
+# Recherche d'absence : mojo, case A3
+# Chaîne : Mojo 1.2.0 (2016d0cd)
+# Motif : packed|bit_?field|bit_?packed|bit_?size|bit_?offset|bitstruct
+# Déclaration publique : ^\s*(def|fn|struct|trait|comptime|alias)\s+[A-Za-z]
+# 0 déclarations publiques, 11 mentions, 7 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+std/simd.mojo:3412: var packed_mask = pack_bits(
+std/simd.mojo:3415: var count = pop_count(packed_mask)
+std/bit/__init__.mojo:23: functions, optimizing memory layouts, working with packed data structures, or
+std/collections/dict.mojo:1621: These can't yet be unpacked like Python dict items, but you can
+std/collections/dict.mojo:2373: These can't yet be unpacked like Python dict items, but you can
+std/memory/_poison.mojo:66: # many integer buffers: packed 4-bit weights and hashes can hold `0xCDCDCDCD`.
+std/memory/pointer.mojo:1381: smaller value (such as 1) if loading from packed/unaligned memory. The
+std/memory/pointer.mojo:1748: Specify `alignment` when writing to packed/unaligned memory. Requires a
+std/sys/_amdgpu.mojo:223: # We can only send 7 packed UInt64s per message
+std/sys/intrinsics.mojo:954: Returns a bitfield(Int32 or Int64) containing the result
+std/sys/intrinsics.mojo:965: A bitfield(Int32 or Int64) containing the result of its Bool argument in all active lanes.
+
+## Lignes trouvées, par fichier
+    1 std/bit/__init__.mojo
+    2 std/collections/dict.mojo
+    1 std/memory/_poison.mojo
+    2 std/memory/pointer.mojo
+    2 std/simd.mojo
+    1 std/sys/_amdgpu.mojo
+    2 std/sys/intrinsics.mojo

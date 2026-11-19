@@ -1,0 +1,11 @@
+# Recherche d'absence : mojo, case A6
+# Chaîne : Mojo 1.2.0 (2016d0cd)
+# Motif : \bsoa\b|_soa\b|\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array
+# Déclaration publique : ^\s*(def|fn|struct|trait|comptime|alias)\s+[A-Za-z]
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

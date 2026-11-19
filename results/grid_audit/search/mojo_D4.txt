@@ -1,0 +1,14 @@
+# Recherche d'absence : mojo, case D4
+# Chaîne : Mojo 1.2.0 (2016d0cd)
+# Motif : affinity|cpu_?set|pin_?(thread|cpu)|sched_?set|bind_?(thread|cpu)
+# Déclaration publique : ^\s*(def|fn|struct|trait|comptime|alias)\s+[A-Za-z]
+# 0 déclarations publiques, 2 mentions, 1 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+std/runtime/_asyncrt.mojo:149: """Run the coroutine as a task on the AsyncRT Runtime with a worker affinity hint.
+std/runtime/_asyncrt.mojo:152: so that callers can pin the task to a CPU worker with affinity for a
+
+## Lignes trouvées, par fichier
+    2 std/runtime/_asyncrt.mojo

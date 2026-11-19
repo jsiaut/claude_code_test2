@@ -1,0 +1,42 @@
+# Recherche d'absence : mojo, case C5
+# Chaîne : Mojo 1.2.0 (2016d0cd)
+# Motif : parallel|par_?iter|forall|pmap|thread_?pool|fork_?join|work_?steal|par_?map|domain_?pool
+# Déclaration publique : ^\s*(def|fn|struct|trait|comptime|alias)\s+[A-Za-z]
+# 1 déclarations publiques, 22 mentions, 8 fichiers
+
+## Déclarations publiques
+std/runtime/__init__.mojo:72: def parallelism_level() -> Int:
+
+## Mentions (au plus 12 lignes par fichier)
+std/simd.mojo:16: vectorized computation in Mojo. It enables efficient data-parallel operations
+std/simd.mojo:501: SIMD (Single Instruction, Multiple Data) is a fundamental parallel
+std/simd.mojo:504: in parallel using SIMD, delivering substantial performance improvements
+std/simd.mojo:559: - **Composable**: Seamlessly integrates with Mojo's parallelization features
+std/simd.mojo:4476: parallels `DType.write_to`, the other exhaustive per-`dtype` chain that must
+std/collections/_swisstable.mojo:92: Loads 16 control bytes at once and performs parallel matching using
+std/collections/bitset.mojo:511: multiple words in parallel using SIMD instructions when possible. It
+std/collections/type_dict.mojo:35: values: The mapped types, parallel to `keys`.
+std/collections/string/_grapheme_break.mojo:105: values_table: Comptime array of property values parallel to starts.
+std/random/philox.mojo:18: which is designed for parallel computing and works efficiently on both CPU and GPU. The Philox
+std/random/philox.mojo:55: The Philox algorithm is a counter-based random number generator designed for parallel
+std/runtime/__init__.mojo:17: host program, and `parallelism_level()`, for querying how many worker threads
+std/runtime/__init__.mojo:20: The async task primitives that back `parallelize()` and friends live in the
+std/runtime/__init__.mojo:33: The Mojo runtime manages the thread pool used by parallel APIs such as
+std/runtime/__init__.mojo:34: `parallelize()`. Programs with a Mojo `main()` function initialize the
+std/runtime/__init__.mojo:52: from max.algorithm import parallelize
+std/runtime/__init__.mojo:65: parallelize(fill, len)
+std/runtime/__init__.mojo:73: """Gets the parallelism level of the Runtime.
+std/runtime/__init__.mojo:80: "KGEN_CompilerRT_AsyncRT_ParallelismLevel",
+std/runtime/_asyncrt.mojo:16: `Task`, `RaisingTask`, `TaskGroup` — are the substrate that `parallelize()` is
+std/runtime/_asyncrt.mojo:502: TaskGroup manages a collection of coroutines that can be executed in parallel.
+std/runtime/_asyncrt.mojo:554: # Only sync_parallelize() uses this to pass desired_worker_id
+
+## Lignes trouvées, par fichier
+    1 std/collections/_swisstable.mojo
+    1 std/collections/bitset.mojo
+    1 std/collections/string/_grapheme_break.mojo
+    1 std/collections/type_dict.mojo
+    2 std/random/philox.mojo
+    9 std/runtime/__init__.mojo
+    3 std/runtime/_asyncrt.mojo
+    5 std/simd.mojo

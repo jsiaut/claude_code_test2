@@ -186,6 +186,19 @@ dans la liste des noms publics de Base, Core et des bibliothèques standard, obt
 * D4 ½ : `JULIA_EXCLUSIVE=1` épingle les quatre fils sur les CPU 0 à 3 ; le seul nom public d'affinité,
   `Base.setcpuaffinity`, vise une commande lancée.
 
+### Mojo (1.2.0, mojo build par défaut comme au banc ; bibliothèque standard de modular 26.7.0)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (C2 vaut 1 en v2 par `llvm_intrinsic`, ½ en v1).
+Sondes : `probes/mojo/probe.mojo` et `probe_errata.mojo` (A4, A5, C4, D2, D5, E3, E5), `probes/mojo/audit/` (`audit.mojo`
+exécuté, `codegen.mojo` et `checks.mojo` désassemblés, neuf recherches dans `std`).
+* Faits notables : `reflect[Part].field_offset` donne les décalages à la compilation (A2) ; une fonction à structures,
+  SIMD et fermeture capturante ne contient aucun appel, donc aucune allocation (B4) ; `l[i]` sur une `List` appelle
+  `_debug_assert_fail` (assertions actives par défaut) et `unsafe_get` non (E6) ; `comptime F60 = fib(60)` est une
+  constante immédiate (E7).
+* D1 ½ : il n'y a pas d'API publique de fils ; `create_task` du module privé `std.runtime._asyncrt` fait tourner
+  quatre tâches sur quatre fils. D4 0 : seul `_create_task(desired_worker_id)` existe, « intentionally not part of the
+  public API », et vise un travailleur, pas un CPU. C5 0 : `parallelize` est dans `max.algorithm`, hors de `std`.
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |

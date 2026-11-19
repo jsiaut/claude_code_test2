@@ -1,8 +1,36 @@
-CAP;D2;1;Atomic.fetch_add[ordering=RELAXED]
-CAP;A5;1;bitcast[DType.uint32] = 1065353216 ; unions : probe_errata.mojo
-CAP;E3;1;likely
-CAP;A4;1;@align(64) : align_of = 64 , somme des adresses mod 64 (64 sur la pile, 50 sur le tas) = 0
-CAP;A5;1;UnsafeUnion[Float32, UInt32] : size_of = 4 , bits de 1.0f = 1065353216
-CAP;C4;0.5;fma[FastMathFlag.REASSOC] = 7.0 (seule opération qui prend le drapeau)
-CAP;D5;1;fence() et SpinWaiter.wait() exécutés (pause dans le runtime à partir du 4e appel)
-CAP;E5;1;Pointer.unsafe_as_noalias() : 7
+NOTE;D2;[exécutée] Atomic.fetch_add[ordering=RELAXED]
+NOTE;E3;[exécutée] likely
+CAP;A4;1;[exécutée] @align(64) : align_of = 64 , somme des adresses mod 64 (64 sur la pile, 50 sur le tas) = 0
+CAP;A5;1;[exécutée] UnsafeUnion[Float32, UInt32] : size_of = 4 , bits de 1.0f = 1065353216
+CAP;C4;0.5;[exécutée] fma[FastMathFlag.REASSOC] = 7.0 (seule opération qui prend le drapeau)
+CAP;D5;1;[exécutée] fence() et SpinWaiter.wait() exécutés (pause dans le runtime à partir du 4e appel)
+CAP;E5;1;[exécutée] Pointer.unsafe_as_noalias() : 7
+CAP;A1;1;[exécutée] List[Part] : pas de 16 o = size_of[Part]() 16 ; les 4 premiers octets du tampon sont le Float32 x en ligne : 0 0 128 63
+CAP;A2;1;[exécutée] reflect[Part].field_offset (à la compilation) : z à 8 o, m à 12 o ; ordre déclaré
+CAP;A7;1;[exécutée] struct (n: UInt32, a: Array[Float32, 16]) : 68 o, field_offset de a = 4 (tableau en ligne)
+CAP;A8;1;[exécutée] UInt8/Int16/Float16/Float32 : 1 / 2 / 2 / 4 o ; List[UInt8](capacity=1000) : capacité 1000 o
+CAP;B1;1;[exécutée] pas de ramasse-miettes (propriété) : del(b) fin-portée del(a) ; destruction au dernier usage (ASAP), déterministe
+CAP;B3;1;[exécutée] Array[Float32, 1024] local à 112 o d'une autre variable locale, à 52140098627336 o du tas : sur la pile
+CAP;B5;1;[exécutée] UnsafePointer[UInt32] : (p + 3)[] = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7
+CAP;C1;1;[exécutée] SIMD[DType.float32, 8] : (a + a)[7] = 16.0 , a.reduce_add() = 36.0 ; type vectoriel du langage
+CAP;D1;0.5;[exécutée] create_task de std.runtime._asyncrt (module privé, souligné ; aucune API publique de fils) : 4 tâches sur 4 fils distincts (gettid), somme 7998000 (attendu 7998000)
+CAP;E2;1;[exécutée] inlined_assembly["leaq 1($1), $0"] : 41 -> 42
+CAP;F3;1;[exécutée] UInt32.MAX + 1 = 0 , UInt8(250) + 10 = 4 , Int32.MAX + 1 = -2147483648 (entiers à largeur fixe enveloppants)
+CAP;B2;0.5;[exécutée] unsafe_alloc et free (std.memory.alloc) : allocation et libération à la main ; [recherche] interface d'allocateur : NOTE B2
+CAP;B4;1;[exécutée] noalloc (structures, SIMD, fermeture capturante, boucle) : 0 appel dans le code produit, donc aucune allocation ; seules les tâches async allouent (remarque sur Mojo)
+CAP;C2;1;[exécutée] llvm_intrinsic["llvm.x86.avx512.pternlog.d.512"] : 12 ^ 10 ^ 1 = 7, 1 vpternlogd dans tern (llvm_intrinsic de std.sys) ; ½ en v1
+CAP;D2;1;[exécutée] Atomic.store et fetch_add à Ordering explicite (std.atomic), code produit : RELEASE = 1 mov et 0 xchg ; SEQUENTIAL = 1 xchg ; fetch_add RELAXED = 1 instruction lock
+CAP;E1;1;[exécutée] binaire natif par LLVM : objdump donne 2460 lignes
+CAP;E3;1;[exécutée] unlikely (std.sys.intrinsics) : disposition [ je ret call ret ] contre [ jne call ret ] sans indication (appel sorti du chemin chaud)
+CAP;E4;1;[exécutée] prefetch[PrefetchOptions().for_read().high_locality()] : 1 prefetcht0 dans pf
+CAP;E6;1;[exécutée] l[i] sur une List : 1 appel à _debug_assert_fail (assertions actives par défaut) ; l.unsafe_get(i) : 0 appel ; -D ASSERT=none en global
+CAP;E7;1;[exécutée] comptime F60 = fib(60) = 1548008755920 ; gsum[DType.float32] = 4.0 , gsum[DType.float64] = 3.75 ; dans le binaire, fib60 = 1 constante immédiate et 0 appel
+CAP;A3;0;[recherche] motif A3 dans std de Mojo 1.2.0 : 0 déclaration publique ; 11 mentions (pack_bits, données « packed » non alignées, résultat « bitfield » d'une intrinsèque GPU) ; ni struct compactée ni champs de bits
+CAP;A6;0;[recherche] motif A6 dans std de Mojo 1.2.0 : 0 déclaration publique, 0 mention (results/grid_audit/search/mojo_A6.txt)
+NOTE;B2;[recherche] motif B2 dans std de Mojo 1.2.0 : 1 déclaration publique (results/grid_audit/search/mojo_B2.txt) : GBP_REGIONAL_INDICATOR, faux positif ; aucune interface d'allocateur ni arène
+CAP;C5;0;[recherche] motif C5 dans std de Mojo 1.2.0 : 1 déclaration publique (results/grid_audit/search/mojo_C5.txt) : parallelism_level (nombre de travailleurs) ; parallelize est dans max.algorithm (exemple de std/runtime/__init__.mojo), hors de std
+CAP;D3;0;[recherche] motif D3 dans std de Mojo 1.2.0 : 0 déclaration publique ; 2 mentions (étiquettes ReadDCache de prefetch)
+CAP;D4;0;[recherche] motif D4 dans std de Mojo 1.2.0 : 0 déclaration publique ; 2 mentions : _create_task(desired_worker_id), « intentionally not part of the public API », indication de travailleur et non de CPU
+CAP;F1;0.5;[recherche] motif F1 dans std de Mojo 1.2.0 : 0 déclaration publique (results/grid_audit/search/mojo_F1.txt) : aucun tableau multidimensionnel en std (LayoutTensor est dans MAX) ; Array[Array[T, N], M] fixe seulement
+CAP;F2;0;[recherche] motif F2 dans std de Mojo 1.2.0 : 2 déclarations publiques (results/grid_audit/search/mojo_F2.txt) : SIMD.interleave et deinterleave, faux positifs
+CAP;F4;0;[recherche] motif F4 dans std de Mojo 1.2.0 : 0 déclaration publique, 0 mention (results/grid_audit/search/mojo_F4.txt)

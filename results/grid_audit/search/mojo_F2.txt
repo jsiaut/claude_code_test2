@@ -1,0 +1,43 @@
+# Recherche d'absence : mojo, case F2
+# Chaîne : Mojo 1.2.0 (2016d0cd)
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^\s*(def|fn|struct|trait|comptime|alias)\s+[A-Za-z]
+# 2 déclarations publiques, 22 mentions, 8 fichiers
+
+## Déclarations publiques
+std/simd.mojo:3030: def interleave(self, other: Self) -> SIMD[Self.dtype, Int(Self.length) * 2]:
+std/simd.mojo:3067: def deinterleave(
+
+## Mentions (au plus 12 lignes par fichier)
+std/simd.mojo:3044: "llvm.vector.interleave2",
+std/simd.mojo:3091: "llvm.vector.deinterleave2",
+std/collections/string/codepoint.mojo:402: This currently only respects the default "C" locale, i.e. returns True
+std/collections/string/codepoint.mojo:415: This currently only respects the default "C" locale, i.e. returns True
+std/collections/string/codepoint.mojo:493: [POSIX locale][1].
+std/collections/string/codepoint.mojo:495: The POSIX locale is also known as the C locale.
+std/collections/string/codepoint.mojo:499: This only respects the default "C" locale, i.e. returns True only if the
+std/collections/string/iterators.mojo:723: can be interleaved freely.
+std/collections/string/string_span.mojo:1050: return self._interleave(new)
+std/collections/string/string_span.mojo:1085: def _interleave(self, val: StringSpan) -> String:
+std/collections/string/string_span.mojo:2255: # TODO: the _unicode module does not support locale sensitive conversions yet.
+std/collections/string/string_span.mojo:2266: # TODO: the _unicode module does not support locale sensitive conversions yet.
+std/complex/complex.mojo:83: out self, *, from_interleaved: SIMD[Self.dtype, 2 * Self.length]
+std/complex/complex.mojo:88: from_interleaved: An interleaved vector of complex values e.g.
+std/complex/complex.mojo:92: self.re, self.im = rebind[T](from_interleaved.deinterleave())
+std/complex/complex.mojo:95: out self, *, from_deinterleaved: SIMD[Self.dtype, 2 * Self.length]
+std/complex/complex.mojo:100: from_deinterleaved: A deinterleaved vector of complex values e.g.
+std/complex/complex.mojo:104: self.re = rebind[T](from_deinterleaved.slice[Self.length]())
+std/complex/complex.mojo:106: from_deinterleaved.slice[Self.length, offset=Self.length]()
+std/format/_utils.mojo:566: var nibbles = (bytes >> 4).interleave(bytes & 0xF)
+std/random/philox.mojo:266: cos(v_1)*s_1)` — sin/cos interleaved per pair, matching the
+std/runtime/_asyncrt.mojo:158: reason to pin to a specific worker (e.g. NUMA-aware GPU collective dispatch).
+
+## Lignes trouvées, par fichier
+    5 std/collections/string/codepoint.mojo
+    1 std/collections/string/iterators.mojo
+    4 std/collections/string/string_span.mojo
+    7 std/complex/complex.mojo
+    1 std/format/_utils.mojo
+    1 std/random/philox.mojo
+    1 std/runtime/_asyncrt.mojo
+    4 std/simd.mojo

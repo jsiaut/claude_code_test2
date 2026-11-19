@@ -1,0 +1,14 @@
+# Recherche d'absence : mojo, case D3
+# Chaîne : Mojo 1.2.0 (2016d0cd)
+# Motif : cache_?line|cache_?padded|destructive_?interference|false_?sharing|contended|dcache|cache_?size
+# Déclaration publique : ^\s*(def|fn|struct|trait|comptime|alias)\s+[A-Za-z]
+# 0 déclarations publiques, 2 mentions, 1 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+std/sys/intrinsics.mojo:360: prefetched data will be used. Possible tags are: `ReadICache`, `ReadDCache`
+std/sys/intrinsics.mojo:361: and `WriteDCache`.
+
+## Lignes trouvées, par fichier
+    2 std/sys/intrinsics.mojo

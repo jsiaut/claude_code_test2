@@ -1,0 +1,19 @@
+# Recherche d'absence : mojo, case F1
+# Chaîne : Mojo 1.2.0 (2016d0cd)
+# Motif : ndarray|multi_?dim|md_?span|mdarray|array2d|\bmatrix\b
+# Déclaration publique : ^\s*(def|fn|struct|trait|comptime|alias)\s+[A-Za-z]
+# 0 déclarations publiques, 6 mentions, 2 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+std/python/numpy.mojo:118: A 1-D NumPy `ndarray` of dtype `dtype` and length `len(data)`.
+std/python/numpy.mojo:189: A NumPy `ndarray` of dtype `dtype` and shape `shape`.
+std/python/numpy.mojo:366: array: A 1-D, C-contiguous NumPy `ndarray` whose dtype matches `dtype`.
+std/python/numpy.mojo:442: array: A C-contiguous NumPy `ndarray` of `rank` dimensions whose dtype
+std/sys/info.mojo:551: """Returns True if the target has the Neon int8 matrix multiplication
+std/sys/info.mojo:555: True if the target support the Neon int8 matrix multiplication
+
+## Lignes trouvées, par fichier
+    4 std/python/numpy.mojo
+    2 std/sys/info.mojo
