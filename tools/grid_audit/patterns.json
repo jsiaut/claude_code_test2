@@ -54,6 +54,22 @@
       "public": "^\\s*pub\\s+(unsafe\\s+|const\\s+|extern\\s+\"[^\"]*\"\\s+|async\\s+|safe\\s+)*(fn|struct|enum|trait|type|const|static|mod|union|macro|use)\\b|^\\s*pub\\s+macro\\b|^\\s*macro_rules!",
       "version": "rustc --version",
       "strip": "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/"
+    },
+    "zig": {
+      "roots": [
+        "/opt/zig/lib/std"
+      ],
+      "ext": [
+        ".zig"
+      ],
+      "exclude": [
+        "/testing/",
+        "_test.zig",
+        "/test/"
+      ],
+      "strip": "/opt/zig/lib/",
+      "public": "^\\s*pub\\s+(inline\\s+|extern\\s+|export\\s+|noinline\\s+)*(fn|const|var)\\b",
+      "version": "/opt/zig/zig version"
     }
   }
 }

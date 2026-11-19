@@ -1,0 +1,103 @@
+# Recherche d'absence : zig, case F2
+# Chaîne : 0.17.0
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^\s*pub\s+(inline\s+|extern\s+|export\s+|noinline\s+)*(fn|const|var)\b
+# 9 déclarations publiques, 192 mentions, 21 fichiers
+
+## Déclarations publiques
+std/enums.zig:88: pub fn directEnumArrayLen(comptime E: type, comptime max_unused_slots: comptime_int) comptime_int {
+std/enums.zig:126: pub fn directEnumArray(
+std/enums.zig:161: pub fn directEnumArrayDefault(
+std/enums.zig:848: pub const Entry = EnumArray(E, CountSize).Entry;
+std/enums.zig:849: pub const Iterator = EnumArray(E, CountSize).Iterator;
+std/enums.zig:1069: pub fn EnumArray(comptime E: type, comptime V: type) type {
+std/std.zig:16: pub const EnumArray = enums.EnumArray;
+std/os/linux/bpf.zig:219: pub const BPF_F_NUMA_NODE = 0x4;
+std/os/linux/bpf/helpers.zig:58: pub const get_numa_node_id: *align(1) const fn () c_long = @ptrFromInt(42);
+
+## Mentions (au plus 12 lignes par fichier)
+std/c.zig:11454: /// - https://git.musl-libc.org/cgit/musl/tree/include/locale.h?id=ab31e9d6a0fa7c5c408856c89df2dfb12c344039#n18
+std/c.zig:11455: /// - https://sourceware.org/git/?p=glibc.git;a=blob;f=locale/bits/locale.h;h=0fcbb66114be5fef0577dc9047256eb508c45919;hb=c90cfce849d010474e8cccf3e5bff49a2c8b14
+std/c.zig:11473: pub extern "c" fn setlocale(category: LC, locale: ?[*:0]const u8) ?[*:0]const u8;
+std/enums.zig:131: ) [directEnumArrayLen(E, max_unused_slots)]Data {
+std/enums.zig:132: return directEnumArrayDefault(E, Data, null, max_unused_slots, init_values);
+std/enums.zig:135: test directEnumArray {
+std/enums.zig:139: const array = directEnumArray(E, bool, 4, .{
+std/enums.zig:167: ) [directEnumArrayLen(E, max_unused_slots)]Data {
+std/enums.zig:168: const len = comptime directEnumArrayLen(E, max_unused_slots);
+std/enums.zig:178: test directEnumArrayDefault {
+std/enums.zig:182: const array = directEnumArrayDefault(E, bool, false, 4, .{
+std/enums.zig:193: test "directEnumArrayDefault slice" {
+std/enums.zig:197: const array = directEnumArrayDefault(E, []const u8, "default", 4, .{
+std/enums.zig:478: /// Consider using EnumArray instead if the map will remain full.
+std/enums.zig:487: /// Consider using EnumArray instead if the map will remain full.
+std/heap.zig:662: // gnumach/*/include/mach/*/vm_param.h
+std/heap.zig:826: // gnumach/*/include/mach/*/vm_param.h
+std/Target/aarch64.zig:119: max_interleave_factor_4,
+std/Target/aarch64.zig:935: result[@backingInt(Feature.max_interleave_factor_4)] = .{
+std/Target/aarch64.zig:936: .llvm_name = "max-interleave-factor-4",
+std/Target/aarch64.zig:937: .description = "Set the MaxInterleaveFactor to 4 (from the default 2)",
+std/Target/aarch64.zig:1033: .max_interleave_factor_4,
+std/Target/aarch64.zig:2037: .max_interleave_factor_4,
+std/Target/aarch64.zig:2062: .max_interleave_factor_4,
+std/Target/aarch64.zig:2088: .max_interleave_factor_4,
+std/Target/aarch64.zig:2117: .max_interleave_factor_4,
+std/Target/aarch64.zig:2148: .max_interleave_factor_4,
+std/Target/aarch64.zig:2282: .max_interleave_factor_4,
+std/Target/aarch64.zig:2317: .max_interleave_factor_4,
+std/crypto/blake3.zig:413: // Special interleaved pattern for Vec4
+std/crypto/codecs/asn1/Oid.zig:161: const EnumToOid = std.EnumArray(Enum, []const u8);
+std/debug/Dwarf.zig:296: const num_sections = std.enums.directEnumArrayLen(Section.Id, 0);
+std/debug/ElfFile.zig:370: const Array = std.enums.EnumArray(Section.Id, ?Section);
+std/debug/cpu_context.zig:1732: regs: std.enums.EnumArray(GprName, Gpr),
+std/debug/cpu_context.zig:1780: gprs: std.enums.EnumArray(GprName, Gpr),
+std/debug/cpu_context.zig:1848: gprs: std.enums.EnumArray(GprName, Gpr),
+std/os/linux.zig:4626: numa: bool = false,
+std/os/windows.zig:559: NumaNode = 53,
+std/os/windows.zig:2104: NumaNode: ULONG,
+std/os/windows.zig:3484: NumaNode,
+std/os/linux/bpf.zig:218: /// flag for BPF_MAP_CREATE command. Specify numa node during map creation
+std/os/linux/bpf.zig:297: get_numa_node_id,
+std/os/linux/bpf.zig:1317: /// numa node (effective only if MapCreateFlags.numa_node is set)
+std/os/linux/bpf.zig:1318: numa_node: u32,
+std/os/linux/syscalls.zig:276: mbind = 274,
+std/os/linux/syscalls.zig:277: get_mempolicy = 275,
+std/os/linux/syscalls.zig:278: set_mempolicy = 276,
+std/os/linux/syscalls.zig:444: set_mempolicy_home_node = 450,
+std/os/linux/syscalls.zig:706: mbind = 237,
+std/os/linux/syscalls.zig:707: set_mempolicy = 238,
+std/os/linux/syscalls.zig:708: get_mempolicy = 239,
+std/os/linux/syscalls.zig:832: set_mempolicy_home_node = 450,
+std/os/linux/syscalls.zig:1064: mbind = 1073742061,
+std/os/linux/syscalls.zig:1065: set_mempolicy = 1073742062,
+std/os/linux/syscalls.zig:1066: get_mempolicy = 1073742063,
+std/os/linux/syscalls.zig:1173: set_mempolicy_home_node = 1073742274,
+std/os/windows/nls.zig:7: /// This corresponds to the uppercase table within the locale-independent
+std/zig/LibCDirs.zig:127: "os/game",              "os/interface",            "os/kernel",               "os/locale",
+std/zig/Parse.zig:1536: const operTable = std.enums.directEnumArrayDefault(Token.Tag, OperInfo, .{ .prec = -1, .tag = Node.Tag.root }, 0, .{
+std/zig/Zir.zig:1644: break :list std.enums.directEnumArray(Tag, Data.FieldEnum, 0, .{
+std/zig/llvm/BitcodeReader.zig:309: .{ .encoding = .{ .array = 5 } }, // numabbrevops
+std/zig/llvm/Builder.zig:3830: const signatures = std.enums.EnumArray(Intrinsic, Signature).init(.{
+
+## Lignes trouvées, par fichier
+   38 std/Target/aarch64.zig
+    3 std/c.zig
+    1 std/crypto/blake3.zig
+    1 std/crypto/codecs/asn1/Oid.zig
+    1 std/debug/Dwarf.zig
+    1 std/debug/ElfFile.zig
+    3 std/debug/cpu_context.zig
+   22 std/enums.zig
+    2 std/heap.zig
+    1 std/os/linux.zig
+    5 std/os/linux/bpf.zig
+    1 std/os/linux/bpf/helpers.zig
+  112 std/os/linux/syscalls.zig
+    3 std/os/windows.zig
+    1 std/os/windows/nls.zig
+    1 std/std.zig
+    1 std/zig/LibCDirs.zig
+    1 std/zig/Parse.zig
+    1 std/zig/Zir.zig
+    1 std/zig/llvm/BitcodeReader.zig
+    1 std/zig/llvm/Builder.zig

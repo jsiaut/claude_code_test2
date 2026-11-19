@@ -1,0 +1,644 @@
+# Recherche d'absence : zig, case C2
+# Chaîne : 0.17.0
+# Motif : \bavx|\bsse|_mm(256|512)?_|\bx86|intrinsic
+# Déclaration publique : ^\s*pub\s+(inline\s+|extern\s+|export\s+|noinline\s+)*(fn|const|var)\b
+# 68 déclarations publiques, 1415 mentions, 89 fichiers
+
+## Déclarations publiques
+std/Target.zig:801: pub const x86 = @import("Target/x86.zig");
+std/c.zig:10736: pub const SSE = 1 << 11;
+std/c.zig:10737: pub const SSE2 = 1 << 12;
+std/c.zig:10739: pub const SSE3 = 1 << 14;
+std/c.zig:10748: pub const SSE4_1 = 1 << 23;
+std/c.zig:10749: pub const SSE4_2 = 1 << 24;
+std/c.zig:10754: pub const AVX = 1 << 29;
+std/c.zig:10764: pub const AVX2 = 1 << 5;
+std/c.zig:10767: pub const AVX512F = 1 << 8;
+std/c.zig:10768: pub const AVX512DQ = 1 << 9;
+std/c.zig:10769: pub const AVX512IFMA = 1 << 10;
+std/c.zig:10770: pub const AVX512PF = 1 << 11;
+std/c.zig:10771: pub const AVX512ER = 1 << 12;
+std/c.zig:10772: pub const AVX512CD = 1 << 13;
+std/c.zig:10773: pub const AVX512BW = 1 << 14;
+std/c.zig:10774: pub const AVX512VL = 1 << 15;
+std/c.zig:10775: pub const AVX512VBMI = 1 << 16;
+std/c.zig:10776: pub const AVX512VPOPCDQ = 1 << 17;
+std/c.zig:10777: pub const AVX512_4NNIW = 1 << 18;
+std/c.zig:10778: pub const AVX512_4FMAPS = 1 << 19;
+std/c.zig:10785: pub const AVX512_VNNI = 1 << 26;
+std/elf.zig:532: pub const SHT_X86_64_UNWIND = @backingInt(std.elf.SHT.X86_64_UNWIND);
+std/elf.zig:721: pub const X86_64_UNWIND: SHT = @fromBackingInt(@intCast(0x70000001));
+std/lang.zig:405: pub const X86RegparmOptions = struct {
+std/Target/x86.zig:4760: pub const x86_64: CpuModel = .{
+std/Target/x86.zig:4779: pub const x86_64_v2: CpuModel = .{
+std/Target/x86.zig:4804: pub const x86_64_v3: CpuModel = .{
+std/Target/x86.zig:4839: pub const x86_64_v4: CpuModel = .{
+std/debug/cpu_context.zig:1742: pub inline fn current() X86_16 {
+std/debug/cpu_context.zig:1759: pub fn getFp(ctx: *const X86_16) usize {
+std/debug/cpu_context.zig:1762: pub fn getPc(ctx: *const X86_16) usize {
+std/debug/cpu_context.zig:1767: pub fn dwarfRegisterBytes(ctx: *X86_16, register_num: u16) DwarfRegisterError![]u8 {
+std/debug/cpu_context.zig:1794: pub inline fn current() X86 {
+std/debug/cpu_context.zig:1814: pub fn getFp(ctx: *const X86) usize {
+std/debug/cpu_context.zig:1817: pub fn getPc(ctx: *const X86) usize {
+std/debug/cpu_context.zig:1821: pub fn dwarfRegisterBytes(ctx: *X86, register_num: u16) DwarfRegisterError![]u8 {
+std/debug/cpu_context.zig:1864: pub inline fn current() X86_64 {
+std/debug/cpu_context.zig:1891: pub fn getFp(ctx: *const X86_64) usize {
+std/debug/cpu_context.zig:1895: pub fn getPc(ctx: *const X86_64) usize {
+std/debug/cpu_context.zig:1900: pub fn dwarfRegisterBytes(ctx: *X86_64, register_num: u16) DwarfRegisterError![]u8 {
+std/hash/crc.zig:789: pub const @"CRC-32/ISCSI" = if (builtin.cpu.hasAll(.x86, &.{ .@"64bit", .crc32 }))
+std/os/linux.zig:9049: pub const SIOCGSTAMP = if (native_arch == .x86_64 or @sizeOf(timeval) == 8) SIOCGSTAMP_OLD else SIOCGSTAMP_NEW;
+std/os/linux.zig:9055: pub const SIOCGSTAMPNS = if (native_arch == .x86_64 or @sizeOf(timespec) == 8) SIOCGSTAMPNS_OLD else SIOCGSTAMPNS_NEW;
+std/os/linux.zig:10017: pub const SET_MM_START_CODE = 1;
+std/os/linux.zig:10018: pub const SET_MM_END_CODE = 2;
+std/os/linux.zig:10019: pub const SET_MM_START_DATA = 3;
+std/os/linux.zig:10020: pub const SET_MM_END_DATA = 4;
+std/os/linux.zig:10021: pub const SET_MM_START_STACK = 5;
+std/os/linux.zig:10022: pub const SET_MM_START_BRK = 6;
+std/os/linux.zig:10023: pub const SET_MM_BRK = 7;
+std/os/linux.zig:10024: pub const SET_MM_ARG_START = 8;
+std/os/linux.zig:10025: pub const SET_MM_ARG_END = 9;
+std/os/linux.zig:10026: pub const SET_MM_ENV_START = 10;
+std/os/linux.zig:10027: pub const SET_MM_ENV_END = 11;
+std/os/linux.zig:10028: pub const SET_MM_AUXV = 12;
+std/os/linux.zig:10029: pub const SET_MM_EXE_FILE = 13;
+std/os/linux.zig:10030: pub const SET_MM_MAP = 14;
+std/os/linux.zig:10031: pub const SET_MM_MAP_SIZE = 15;
+std/os/linux.zig:10055: pub const prctl_mm_map = extern struct {
+std/os/linux/syscalls.zig:4: pub const X86 = enum(usize) {
+std/zig/llvm/Builder.zig:2839: pub const x86 = struct {
+std/zig/llvm/Builder.zig:2848: pub const x86_64 = x86;
+std/zig/llvm/Builder.zig:3619: pub const Intrinsic = enum {
+std/zig/llvm/Builder.zig:7261: pub fn callIntrinsic(
+std/zig/llvm/Builder.zig:7282: pub fn callIntrinsicAssumeCold(self: *WipFunction) Allocator.Error!Value {
+std/zig/llvm/Builder.zig:10351: pub fn getIntrinsic(
+std/zig/llvm/Builder.zig:10556: pub fn x86_fp80Const(self: *Builder, val: f80) Allocator.Error!Constant {
+std/zig/llvm/Builder.zig:10561: pub fn x86_fp80Value(self: *Builder, value: f80) Allocator.Error!Value {
+
+## Mentions (au plus 12 lignes par fichier)
+std/Target.zig:481: .x86,
+std/Target.zig:1126: .x86_16, .x86 => .@"386",
+std/Target.zig:1127: .x86_64 => .X86_64,
+std/Target.zig:1157: .x86 => .I386,
+std/Target.zig:1158: .x86_64 => .AMD64,
+std/Target.zig:1201: .x86_16,
+std/Target.zig:1418: x86_16,
+std/Target.zig:1419: x86,
+std/Target.zig:1420: x86_64,
+std/Target.zig:1459: x86,
+std/Target.zig:1499: .x86_16, .x86, .x86_64 => .x86,
+std/Target.zig:1508: .x86_16, .x86, .x86_64 => true,
+std/Thread.zig:1168: .x86 => asm volatile (
+std/Thread.zig:1178: .x86_64 => asm volatile (switch (target.abi) {
+std/Thread.zig:1511: // Prepare the TLS segment and prepare a user_desc struct when needed on x86
+std/Thread.zig:1513: var user_desc: if (target.cpu.arch == .x86) linux.user_desc else void = undefined;
+std/Thread.zig:1514: if (target.cpu.arch == .x86) {
+std/atomic.zig:360: .x86,
+std/atomic.zig:361: .x86_64,
+std/atomic.zig:432: // x86_64: Starting from Intel's Sandy Bridge, the spatial prefetcher pulls in pairs of 64-byte cache lines at a time.
+std/atomic.zig:442: .x86_64,
+std/atomic.zig:499: // Other x86 and WASM platforms have 64-byte cache lines.
+std/c.zig:4458: // https://github.com/DragonFlyBSD/DragonFlyBSD/blob/d1f4fb943c73e2b61ddabff6aa48ce7551db72f4/sys/cpu/x86_64/include/alignbytes.h#L35
+std/c.zig:4460: .x86_64 => @sizeOf(c_long),
+std/c.zig:4469: .x86 => @sizeOf(c_int),
+std/c.zig:4471: .x86_64 => @sizeOf(c_long),
+std/c.zig:7248: .freebsd, .haiku => if (native_arch == .x86) c_int else c_longlong,
+std/c.zig:8168: .x86_64 => if (native_abi == .gnux32) 32 else 40,
+std/c.zig:8305: .aarch64, .aarch64_be, .m68k, .sparc, .sparc64, .x86, .x86_64 => u8,
+std/c.zig:8380: .x86, .x86_64 => u32,
+std/c.zig:8392: .x86, .x86_64 => u8,
+std/c.zig:9951: .powerpc64, .powerpc64le, .x86, .x86_64 => 2048,
+std/c.zig:10596: .x86_64 => private.@"fstat$INODE64",
+std/c.zig:10606: .x86_64 => private.@"fstatat$INODE64",
+std/coff.zig:1051: // JK: we used to check for architecture here and throw an error if not x86 or derivative.
+std/coff.zig:1830: /// This supports the x86 relative branch and call instructions.
+std/debug.zig:1605: if (native_os == .linux and native_arch == .x86_64) {
+std/debug.zig:1606: // x86_64 doesn't have a full 64-bit virtual address space.
+std/elf.zig:531: /// Deprecated, use `@intFromEnum(std.elf.SHT.X86_64_UNWIND)`
+std/elf.zig:1959: /// Advanced Micro Devices X86-64 processor
+std/elf.zig:1960: X86_64 = 62,
+std/elf.zig:2513: X86_64: packed struct(u4) {
+std/elf.zig:2603: /// AMD x86-64 relocations.
+std/heap.zig:569: .x86_64 => 4 << 10,
+std/heap.zig:575: .x86, .x86_64 => 4 << 10,
+std/heap.zig:592: .x86, .x86_64 => 4 << 10,
+std/heap.zig:602: .x86, .x86_64 => 4 << 10,
+std/heap.zig:617: .x86, .x86_64 => 4 << 10,
+std/heap.zig:624: .x86, .x86_64 => 4 << 10,
+std/heap.zig:636: .x86, .x86_64 => 4 << 10,
+std/heap.zig:642: .x86_64 => 4 << 10,
+std/heap.zig:658: .x86, .x86_64 => 4 << 10,
+std/heap.zig:663: .x86, .x86_64 => 4 << 10,
+std/heap.zig:669: .x86, .x86_64 => 4 << 10,
+std/heap.zig:684: .x86, .x86_64 => 4 << 10,
+std/lang.zig:90: /// A slightly more detailed explanation can be found in (for example) the [System V Application Binary Interface (x86_64)](https://github.com/hjl-tools/x86-psA
+std/lang.zig:170: .x86_64 => .{ .x86_64_win = .{} },
+std/lang.zig:171: .x86 => .{ .x86_stdcall = .{} },
+std/lang.zig:203: // Calling conventions for the `x86_64` architecture.
+std/lang.zig:204: x86_64_sysv: CommonOptions,
+std/lang.zig:205: x86_64_x32: CommonOptions,
+std/lang.zig:206: x86_64_win: CommonOptions,
+std/lang.zig:207: x86_64_regcall_v3_sysv: CommonOptions,
+std/lang.zig:208: x86_64_regcall_v4_win: CommonOptions,
+std/lang.zig:209: x86_64_vectorcall: CommonOptions,
+std/lang.zig:210: x86_64_interrupt: CommonOptions,
+std/lang.zig:211: x86_64_preserve_none: CommonOptions,
+std/macho.zig:1189: /// x86_64 kexts
+std/macho.zig:1266: /// When this bit is set, the OS will run the main executable with a non-executable heap even on platforms (e.g. x86) that don't require it. Only used in MH_EXE
+std/macho.zig:1531: /// used with x86 code stubs written on by dyld
+std/macho.zig:1620: X86_64_RELOC_UNSIGNED = 0,
+std/macho.zig:1623: X86_64_RELOC_SIGNED,
+std/macho.zig:1626: X86_64_RELOC_BRANCH,
+std/macho.zig:1629: X86_64_RELOC_GOT_LOAD,
+std/macho.zig:1632: X86_64_RELOC_GOT,
+std/macho.zig:1634: /// must be followed by a X86_64_RELOC_UNSIGNED
+std/macho.zig:1635: X86_64_RELOC_SUBTRACTOR,
+std/macho.zig:1638: X86_64_RELOC_SIGNED_1,
+std/macho.zig:1641: X86_64_RELOC_SIGNED_2,
+std/math.zig:464: if (builtin.os.tag == .windows and builtin.cpu.arch == .x86 and builtin.abi == .msvc) {
+std/math.zig:1390: if (builtin.zig_backend == .stage2_x86_64 and !comptime builtin.cpu.has(.x86, .fma)) return error.SkipZigTest; // https://github.com/ziglang/zig/issues/17884
+std/pdb.zig:121: ssearch = 5,
+std/pie.zig:28: .x86 => R_386_RELATIVE,
+std/pie.zig:29: .x86_64 => R_AMD64_RELATIVE,
+std/pie.zig:57: .x86 => asm volatile (
+std/pie.zig:66: .x86_64 => asm volatile (
+std/posix.zig:1279: /// PR_SET_MM/PR_SET_MM_EXE_FILE
+std/posix.zig:1281: /// Can only occur with PR_SET_MM/PR_SET_MM_EXE_FILE
+std/simd.zig:18: if (T == bool and cpu.has(.x86, .prefer_mask_registers)) return 64;
+std/simd.zig:19: if (builtin.zig_backend != .stage2_x86_64 and cpu.has(.x86, .avx512f) and !cpu.hasAny(.x86, &.{ .prefer_256_bit, .prefer_128_bit })) break :blk 512;
+std/simd.zig:20: if (cpu.hasAny(.x86, &.{ .prefer_256_bit, .avx2 }) and !cpu.has(.x86, .prefer_128_bit)) break :blk 256;
+std/simd.zig:21: if (cpu.has(.x86, .sse)) break :blk 128;
+std/simd.zig:22: if (cpu.hasAny(.x86, &.{ .mmx, .@"3dnow" })) break :blk 64;
+std/simd.zig:92: comptime var cpu = std.Target.Cpu.baseline(std.Target.Cpu.Arch.x86_64, builtin.os);
+std/simd.zig:93: comptime cpu.features.addFeature(@backingInt(std.Target.x86.Feature.avx512f));
+std/simd.zig:94: comptime cpu.features.populateDependencies(&std.Target.x86.all_features);
+std/start.zig:166: // TODO set Top of Stack on non x86_64-plan9
+std/start.zig:167: if (native_os == .plan9 and native_arch == .x86_64) {
+std/start.zig:201: .x86 => ".cfi_undefined %%eip",
+std/start.zig:202: .x86_64 => ".cfi_undefined %%rip",
+std/start.zig:249: .x86_64 =>
+std/start.zig:255: .x86 =>
+std/std.zig:132: signal_stack_size: ?u64 = 1 << 18, // 1<<17 observed to be sufficient for stack tracing with self-hosted x86_64 backend
+std/valgrind.zig:86: .x86 => asm volatile (
+std/valgrind.zig:94: .x86_64 => asm volatile (
+std/Build/Configuration.zig:1350: /// add SHF_X86_64_LARGE. Fatal error if target is not x86_64
+std/Build/Configuration.zig:2356: x86_16,
+std/Build/Configuration.zig:2357: x86,
+std/Build/Configuration.zig:2358: x86_64,
+std/Build/Cache/DepTokenizer.zig:721: \\c:\foo.o: "C:\Program Files (x86)\Microsoft Visual Studio\foo.c"
+std/Build/Cache/DepTokenizer.zig:722: \\c:\foo2.o: "C:\Program Files (x86)\Microsoft Visual Studio\foo2.c" \
+std/Build/Cache/DepTokenizer.zig:723: \\  "C:\Program Files (x86)\Microsoft Visual Studio\foo1.h" \
+std/Build/Cache/DepTokenizer.zig:724: \\  "C:\Program Files (x86)\Microsoft Visual Studio\foo2.h"
+std/Build/Cache/DepTokenizer.zig:727: \\prereq = {"C:\\Program Files (x86)\\Microsoft Visual Studio\\foo.c"}
+std/Build/Cache/DepTokenizer.zig:729: \\prereq = {"C:\\Program Files (x86)\\Microsoft Visual Studio\\foo2.c"}
+std/Build/Cache/DepTokenizer.zig:730: \\prereq = {"C:\\Program Files (x86)\\Microsoft Visual Studio\\foo1.h"}
+std/Build/Cache/DepTokenizer.zig:731: \\prereq = {"C:\\Program Files (x86)\\Microsoft Visual Studio\\foo2.h"}
+std/Build/Cache/DepTokenizer.zig:739: \\  "C:\Program Files (x86)\Windows Kits\10\\Include\10.0.17763.0\ucrt\stdio.h" \
+std/Build/Cache/DepTokenizer.zig:740: \\  "C:\Program Files (x86)\Windows Kits\10\\Include\10.0.17763.0\ucrt\corecrt.h" \
+std/Build/Cache/DepTokenizer.zig:741: \\  "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.21.27702\lib\x64\\..\..\include\vcruntime.h" \
+std/Build/Cache/DepTokenizer.zig:742: \\  "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.21.27702\lib\x64\\..\..\include\sal.h" \
+std/Io/Dispatch.zig:563: .x86_64 => .{
+std/Io/Dispatch.zig:607: .x86_64 => asm volatile (
+std/Io/Dispatch.zig:1009: .x86_64 => asm volatile (
+std/Io/Dispatch.zig:1077: .x86_64 => .{
+std/Io/Dispatch.zig:1353: .x86_64 => asm volatile (
+std/Io/Dispatch.zig:1417: .x86_64 => .{
+std/Io/Kqueue.zig:203: .x86_64 => .{
+std/Io/Kqueue.zig:543: .x86_64 => asm volatile (
+std/Io/Kqueue.zig:561: .x86_64 => asm volatile (
+std/Io/Kqueue.zig:699: .x86_64 => .{
+std/Io/Reader.zig:2297: try testing.expectEqual(67831258924174241363439488509570048548, testLeb128(u128, "\xA4\xC4\xD7\xE9\x8C\xD2\x86\x80\xBC\xAC\xE5\xAB\xB4\xA2\xD1\xE9\x87\x66"));
+std/Io/Threaded.zig:448: .aarch64, .x86, .x86_64 => 16,
+std/Io/Threaded.zig:17202: \\x86_64-windows-gnu
+std/Io/Threaded.zig:17215: \\"C:\Program Files\zig\zig.exe" run .\src\main.zig -target x86_64-windows-gnu -O safe -- --emoji=🗿 "--eval=new Regex(\"Dwayne \\\"The Rock\\\" Johnson\")"
+std/Io/Uring.zig:879: .x86_64 => .{
+std/Io/Uring.zig:1123: .x86_64 => asm volatile (
+std/Io/Uring.zig:1404: .x86_64 => asm volatile (
+std/Io/Uring.zig:1475: .x86_64 => .{
+std/Io/Uring.zig:1770: .x86_64 => asm volatile (
+std/Io/Uring.zig:1839: .x86_64 => .{
+std/Io/Writer.zig:2096: try testLeb128Encoding(u64, 18321125691115744902, "\x86\xDD\xF2\x81\xF2\xD7\xED\xA0\xFE\x01");
+std/Io/fiber.zig:2: .aarch64, .riscv64, .x86_64 => true,
+std/Io/fiber.zig:18: .x86_64 => extern struct {
+std/Io/fiber.zig:244: .x86_64 => asm volatile (
+std/Target/Query.zig:655: .arch_os_abi = "x86_64-linux-gnu",
+std/Target/Query.zig:656: .cpu_features = "x86_64-sse-sse2-avx-cx8",
+std/Target/Query.zig:662: try std.testing.expect(target.cpu.arch == .x86_64);
+std/Target/Query.zig:663: try std.testing.expect(!target.cpu.has(.x86, .sse));
+std/Target/Query.zig:664: try std.testing.expect(!target.cpu.has(.x86, .avx));
+std/Target/Query.zig:665: try std.testing.expect(!target.cpu.has(.x86, .cx8));
+std/Target/Query.zig:666: try std.testing.expect(target.cpu.has(.x86, .cmov));
+std/Target/Query.zig:667: try std.testing.expect(target.cpu.has(.x86, .fxsr));
+std/Target/Query.zig:669: try std.testing.expect(target.cpu.hasAny(.x86, &.{ .sse, .avx, .cmov }));
+std/Target/Query.zig:670: try std.testing.expect(!target.cpu.hasAny(.x86, &.{ .sse, .avx }));
+std/Target/Query.zig:671: try std.testing.expect(target.cpu.hasAll(.x86, &.{ .mmx, .x87 }));
+std/Target/Query.zig:672: try std.testing.expect(!target.cpu.hasAll(.x86, &.{ .mmx, .x87, .sse }));
+std/Target/riscv.zig:490: .description = "Experimental intrinsics",
+std/Target/x86.zig:25: avx,
+std/Target/x86.zig:26: avx10_1,
+std/Target/x86.zig:27: avx10_2,
+std/Target/x86.zig:28: avx2,
+std/Target/x86.zig:29: avx512bf16,
+std/Target/x86.zig:30: avx512bitalg,
+std/Target/x86.zig:31: avx512bw,
+std/Target/x86.zig:32: avx512cd,
+std/Target/x86.zig:33: avx512dq,
+std/Target/x86.zig:34: avx512er,
+std/Target/x86.zig:35: avx512f,
+std/Target/x86.zig:36: avx512fp16,
+std/c/darwin.zig:300: .x86_64 => 13,
+std/c/illumos.zig:108: /// information about the x86 FPU.
+std/c/openbsd.zig:272: .x86 => 12,
+std/crypto/aegis.zig:10: //! On high-end Intel CPUs with AVX-512 support, AEGIS-128X4 and AEGIS-256X4 are the fastest options.
+std/crypto/aes.zig:5: const has_aesni = builtin.cpu.has(.x86, .aes);
+std/crypto/aes.zig:6: const has_avx = builtin.cpu.has(.x86, .avx);
+std/crypto/aes.zig:9: const impl = if (builtin.cpu.arch == .x86_64 and has_aesni and has_avx) impl: {
+std/crypto/aes.zig:17: /// `true` if AES is backed by hardware (AES-NI on x86_64, ARM Crypto Extensions on AArch64).
+std/crypto/aes.zig:20: (builtin.cpu.arch == .x86_64 and has_aesni and has_avx) or
+std/crypto/aes_ocb.zig:104: const has_aesni = builtin.cpu.has(.x86, .aes);
+std/crypto/aes_ocb.zig:106: const wb: usize = if ((builtin.cpu.arch == .x86_64 and has_aesni) or (builtin.cpu.arch == .aarch64 and has_armaes))
+std/crypto/aes_ocb.zig:107: 4 // empirically what works best on x86_64 and aarch64 with AES-NI/ARM Crypto
+std/crypto/chacha20.zig:501: .x86_64 => {
+std/crypto/chacha20.zig:502: if (builtin.zig_backend != .stage2_x86_64 and builtin.cpu.has(.x86, .avx512f)) return ChaChaVecImpl(rounds_nb, 4);
+std/crypto/chacha20.zig:503: if (builtin.cpu.has(.x86, .avx2)) return ChaChaVecImpl(rounds_nb, 2);
+std/crypto/ghash_polyval.zig:44: const mul_algorithm = if (builtin.cpu.arch == .x86) .karatsuba else .schoolbook;
+std/crypto/ghash_polyval.zig:91: // Carryless multiplication of two 64-bit integers for x86_64.
+std/crypto/ghash_polyval.zig:287: const has_pclmul = builtin.cpu.has(.x86, .pclmul);
+std/crypto/ghash_polyval.zig:288: const has_avx = builtin.cpu.has(.x86, .avx);
+std/crypto/ghash_polyval.zig:291: const clmul = if (builtin.cpu.arch == .x86_64 and builtin.zig_backend != .stage2_c and has_pclmul and has_avx) impl: {
+std/crypto/ml_kem.zig:1181: .x86_64, .x86 => u32, // Generates better code on Intel CPUs
+std/crypto/salsa20.zig:304: const SalsaImpl = if (builtin.cpu.arch == .x86_64)
+std/crypto/sha2.zig:240: .x86_64 => if (builtin.zig_backend != .stage2_c and comptime builtin.cpu.hasAll(.x86, &.{ .sha, .avx2 })) {
+std/crypto/siphash.zig:262: "\xfb\xe5\x0e\x86\xbc\x8f\x1e\x75".*,
+std/crypto/siphash.zig:336: "\x14\xee\xca\x33\x8b\x20\x86\x13\x48\x5e\xa0\x30\x8f\xd7\xa1\x5e".*,
+std/crypto/siphash.zig:356: "\x9c\x0b\x53\xb4\xb3\xc3\x07\xe8\x7e\xae\xe0\x86\x78\x14\x1f\x66".*,
+std/crypto/siphash.zig:380: "\xa5\x90\xd3\xee\x4f\xbf\x04\xe3\x24\x7e\x0d\x27\xf2\x86\x42\x3f".*,
+std/crypto/aes/aesni.zig:6: const has_vaes = builtin.cpu.arch == .x86_64 and builtin.cpu.has(.x86, .vaes);
+std/crypto/aes/aesni.zig:7: const has_avx512f = builtin.cpu.arch == .x86_64 and builtin.zig_backend != .stage2_x86_64 and builtin.cpu.has(.x86, .avx512f);
+std/crypto/aes/aesni.zig:112: const cpu = std.Target.x86.cpu;
+std/crypto/pcurves/p256/p256_64.zig:273: var x86: u64 = undefined;
+std/crypto/pcurves/p256/p256_64.zig:275: mulxU64(&x86, &x87, x2, (arg2[2]));
+std/crypto/pcurves/p256/p256_64.zig:287: addcarryxU64(&x94, &x95, x93, x89, x86);
+std/crypto/pcurves/p256/p256_64.zig:565: var x86: u64 = undefined;
+std/crypto/pcurves/p256/p256_64.zig:567: mulxU64(&x86, &x87, x2, (arg1[2]));
+std/crypto/pcurves/p256/p256_64.zig:579: addcarryxU64(&x94, &x95, x93, x89, x86);
+std/crypto/pcurves/p256/p256_64.zig:1000: var x86: u1 = undefined;
+std/crypto/pcurves/p256/p256_64.zig:1001: subborrowxU64(&x85, &x86, x84, @as(u64, 0x0), @as(u64, 0x0));
+std/crypto/pcurves/p256/p256_64.zig:1003: cmovznzU64(&x87, x86, x77, x70);
+std/crypto/pcurves/p256/p256_64.zig:1005: cmovznzU64(&x88, x86, x79, x72);
+std/crypto/pcurves/p256/p256_64.zig:1007: cmovznzU64(&x89, x86, x81, x74);
+std/crypto/pcurves/p256/p256_64.zig:1009: cmovznzU64(&x90, x86, x83, x76);
+std/crypto/pcurves/p256/p256_scalar_64.zig:274: var x86: u64 = undefined;
+std/crypto/pcurves/p256/p256_scalar_64.zig:276: addcarryxU64(&x86, &x87, x85, x77, x74);
+std/crypto/pcurves/p256/p256_scalar_64.zig:289: addcarryxU64(&x95, &x96, x94, x68, x86);
+std/crypto/pcurves/p256/p256_scalar_64.zig:614: var x86: u64 = undefined;
+std/crypto/pcurves/p256/p256_scalar_64.zig:616: addcarryxU64(&x86, &x87, x85, x77, x74);
+std/crypto/pcurves/p256/p256_scalar_64.zig:629: addcarryxU64(&x95, &x96, x94, x68, x86);
+std/crypto/pcurves/p256/p256_scalar_64.zig:1097: var x86: u64 = undefined;
+std/crypto/pcurves/p256/p256_scalar_64.zig:1099: addcarryxU64(&x86, &x87, 0x0, x80, (arg1[3]));
+std/crypto/pcurves/p256/p256_scalar_64.zig:1108: mulxU64(&x92, &x93, x86, 0xccd1c8aaee00bc4f);
+std/crypto/pcurves/p256/p256_scalar_64.zig:1132: addcarryxU64(&x108, &x109, 0x0, x86, x100);
+std/crypto/pcurves/p256/p256_scalar_64.zig:1308: var x86: u1 = undefined;
+std/crypto/pcurves/p256/p256_scalar_64.zig:1309: addcarryxU64(&x85, &x86, x84, x61, x77);
+std/crypto/pcurves/p384/p384_64.zig:242: var x86: u1 = undefined;
+std/crypto/pcurves/p384/p384_64.zig:243: addcarryxU64(&x85, &x86, x84, x76, x73);
+std/crypto/pcurves/p384/p384_64.zig:246: addcarryxU64(&x87, &x88, x86, x74, x71);
+std/crypto/pcurves/p384/p384_64.zig:962: var x86: u1 = undefined;
+std/crypto/pcurves/p384/p384_64.zig:963: addcarryxU64(&x85, &x86, x84, x76, x73);
+std/crypto/pcurves/p384/p384_64.zig:966: addcarryxU64(&x87, &x88, x86, x74, x71);
+std/crypto/pcurves/p384/p384_64.zig:1872: var x86: u64 = undefined;
+std/crypto/pcurves/p384/p384_64.zig:1874: addcarryxU64(&x86, &x87, x85, x50, x74);
+std/crypto/pcurves/p384/p384_64.zig:1892: addcarryxU64(&x98, &x99, x97, x86, 0x0);
+std/crypto/pcurves/p384/p384_64.zig:2354: var x86: u1 = undefined;
+std/crypto/pcurves/p384/p384_64.zig:2355: addcarryxU64(&x85, &x86, x84, x57, x75);
+std/crypto/pcurves/p384/p384_64.zig:2358: addcarryxU64(&x87, &x88, x86, x59, @as(u64, x76));
+std/crypto/pcurves/p384/p384_scalar_64.zig:242: var x86: u1 = undefined;
+std/crypto/pcurves/p384/p384_scalar_64.zig:243: addcarryxU64(&x85, &x86, x84, x76, x73);
+std/crypto/pcurves/p384/p384_scalar_64.zig:246: addcarryxU64(&x87, &x88, x86, x74, x71);
+std/crypto/pcurves/p384/p384_scalar_64.zig:962: var x86: u1 = undefined;
+std/crypto/pcurves/p384/p384_scalar_64.zig:963: addcarryxU64(&x85, &x86, x84, x76, x73);
+std/crypto/pcurves/p384/p384_scalar_64.zig:966: addcarryxU64(&x87, &x88, x86, x74, x71);
+std/crypto/pcurves/p384/p384_scalar_64.zig:1872: var x86: u64 = undefined;
+std/crypto/pcurves/p384/p384_scalar_64.zig:1874: addcarryxU64(&x86, &x87, x85, x50, x74);
+std/crypto/pcurves/p384/p384_scalar_64.zig:1892: addcarryxU64(&x98, &x99, x97, x86, 0x0);
+std/crypto/pcurves/p384/p384_scalar_64.zig:2354: var x86: u1 = undefined;
+std/crypto/pcurves/p384/p384_scalar_64.zig:2355: addcarryxU64(&x85, &x86, x84, x72, x69);
+std/crypto/pcurves/p384/p384_scalar_64.zig:2358: addcarryxU64(&x87, &x88, x86, x70, x67);
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:243: var x86: u64 = undefined;
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:245: addcarryxU64(&x86, &x87, x85, x77, x74);
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:258: addcarryxU64(&x95, &x96, x94, x68, x86);
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:583: var x86: u64 = undefined;
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:585: addcarryxU64(&x86, &x87, x85, x77, x74);
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:598: addcarryxU64(&x95, &x96, x94, x68, x86);
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:1066: var x86: u64 = undefined;
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:1068: addcarryxU64(&x86, &x87, 0x0, x62, x78);
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:1297: var x86: u64 = undefined;
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:1298: mulxU64(&x85, &x86, x77, 0xd838091dd2253531);
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:1857: var x86: u64 = undefined;
+std/crypto/pcurves/secp256k1/secp256k1_64.zig:1859: addcarryxU64(&x86, &x87, x85, x25, x78);
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:243: var x86: u64 = undefined;
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:245: addcarryxU64(&x86, &x87, x85, x77, x74);
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:258: addcarryxU64(&x95, &x96, x94, x68, x86);
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:583: var x86: u64 = undefined;
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:585: addcarryxU64(&x86, &x87, x85, x77, x74);
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:598: addcarryxU64(&x95, &x96, x94, x68, x86);
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:1066: var x86: u64 = undefined;
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:1068: addcarryxU64(&x86, &x87, 0x0, x62, x78);
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:1297: var x86: u1 = undefined;
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:1298: addcarryxU64(&x85, &x86, x84, x61, x77);
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:1301: addcarryxU64(&x87, &x88, x86, x63, x79);
+std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig:1917: var x86: u64 = undefined;
+std/crypto/tls/Client.zig:1635: /// on x86_64-linux Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz:
+std/crypto/tls/Client.zig:1644: /// on x86_64-linux Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz:
+std/debug/Dwarf.zig:1502: /// Returns the DWARF register number for an x86_64 register number found in compact unwind info
+std/debug/Dwarf.zig:1536: .x86 => 8,
+std/debug/Dwarf.zig:1537: .x86_64 => 16,
+std/debug/Dwarf.zig:1562: .x86 => 5,
+std/debug/Dwarf.zig:1563: .x86_64 => 6,
+std/debug/Dwarf.zig:1588: .x86 => 4,
+std/debug/Dwarf.zig:1589: .x86_64 => 7,
+std/debug/MachOFile.zig:35: .x86_64, .aarch64 => {},
+std/debug/MachOFile.zig:628: // for both ARM64 macOS and x86_64 macOS.
+std/debug/MachOFile.zig:644: .x86_64 => macho.CPU_TYPE_X86_64,
+std/debug/cpu_context.zig:25: .x86_16 => X86_16,
+std/debug/cpu_context.zig:26: .x86 => X86,
+std/debug/cpu_context.zig:27: .x86_64 => X86_64,
+std/debug/cpu_context.zig:159: .x86 => .{ .gprs = .init(.{
+std/debug/cpu_context.zig:170: .x86_64 => .{ .gprs = .init(.{
+std/debug/cpu_context.zig:195: .x86 => .{ .gprs = .init(.{
+std/debug/cpu_context.zig:206: .x86_64 => .{ .gprs = .init(.{
+std/debug/cpu_context.zig:1731: const X86_16 = struct {
+std/debug/cpu_context.zig:1743: var ctx: X86_16 = undefined;
+std/debug/cpu_context.zig:1766: // NOTE: There doesn't seem to be any standard for DWARF x86-16 so we'll just reuse the ones for x86.
+std/debug/cpu_context.zig:1779: const X86 = struct {
+std/debug/cpu_context.zig:1782: /// The first 8 registers here intentionally match the order of registers in the x86 instruction
+std/debug/SelfInfo/Elf.zig:123: .x86,
+std/debug/SelfInfo/Elf.zig:124: .x86_64,
+std/debug/SelfInfo/Elf.zig:127: .x86,
+std/debug/SelfInfo/Elf.zig:128: .x86_64,
+std/debug/SelfInfo/Elf.zig:152: .x86,
+std/debug/SelfInfo/Elf.zig:153: .x86_64,
+std/debug/SelfInfo/Elf.zig:157: .x86_64,
+std/debug/SelfInfo/Elf.zig:162: .x86_64,
+std/debug/SelfInfo/Elf.zig:168: .x86,
+std/debug/SelfInfo/Elf.zig:169: .x86_64,
+std/debug/SelfInfo/Elf.zig:183: .x86,
+std/debug/SelfInfo/Elf.zig:184: .x86_64,
+std/debug/SelfInfo/MachO.zig:298: .x86_64 => switch (encoding.mode.x86_64) {
+std/debug/SelfInfo/MachO.zig:301: const frame = encoding.value.x86_64.frame;
+std/debug/SelfInfo/MachO.zig:333: const frameless = encoding.value.x86_64.frameless;
+std/debug/SelfInfo/MachO.zig:337: if (encoding.mode.x86_64 == .STACK_IMMD) {
+std/debug/SelfInfo/MachO.zig:402: const rules = try context.computeRules(gpa, dwarf, unwind.vmaddr_slide, encoding.value.x86_64.dwarf);
+std/debug/SelfInfo/Windows.zig:72: // On x86, `RtlVirtualUnwind` does not exist. We could in theory use `RtlCaptureStackBackTrace`
+std/debug/SelfInfo/Windows.zig:73: // instead, but on x86, it turns out that function is just... doing FP unwinding with esp! It's
+std/debug/SelfInfo/Windows.zig:77: // > x86 doesn't have what most architectures would consider an "unwinder" in the sense of
+std/debug/SelfInfo/Windows.zig:80: // > assumes that EBP-based frames are in use and walks an EBP-based frame chain on x86 - not
+std/debug/SelfInfo/Windows.zig:81: // > all x86 code is written with EBP-based frames so while even though we generally build the
+std/debug/SelfInfo/Windows.zig:92: // Anyway, the point is, the only stack walking primitive on x86-windows is FP unwinding. We
+std/debug/SelfInfo/Windows.zig:95: .x86 => false,
+std/debug/SelfInfo/Windows.zig:105: .x86_64 => std.mem.zeroInit(windows.CONTEXT, .{
+std/fmt/float.zig:1526: if (T == f80 and builtin.target.os.tag == .windows and builtin.target.cpu.arch == .x86_64) return;
+std/fmt/parse_float/convert_fast.zig:112: // TODO: x86 (no SSE/SSE2) requires x87 FPU to be setup correctly with fldcw
+std/hash/crc/Crc32c.zig:1: //! Implements CRC-32C (Castagnoli) using the SSE4.2 Intel CRC32 instruction.
+std/lang/assembly.zig:2: .x86_16, .x86, .x86_64 => packed struct {
+std/math/acos.zig:99: // a vectorization on x86_64. The vectorization
+std/os/linux.zig:58: .x86 => @import("linux/x86.zig"),
+std/os/linux.zig:59: .x86_64 => switch (builtin.abi) {
+std/os/linux.zig:61: else => @import("linux/x86_64.zig"),
+std/os/linux.zig:159: .x86 => syscalls.X86,
+std/os/linux.zig:160: .x86_64 => switch (builtin.abi) {
+std/os/linux.zig:176: .x86_64, .x86 => packed struct(u32) {
+std/os/linux.zig:390: .x86_64 => packed struct(u32) {
+std/os/linux.zig:413: .x86, .riscv32, .riscv64, .loongarch32, .loongarch64 => packed struct(u32) {
+std/os/linux.zig:945: .x86, .x86_64 => struct {
+std/os/linux.zig:2786: if (native_arch == .x86) {
+std/os/linux.zig:2793: if (native_arch == .x86) {
+std/os/linux.zig:2800: if (native_arch == .x86) {
+std/os/plan9.zig:11: .x86_64 => @import("plan9/x86_64.zig"),
+std/os/uefi.zig:74: .x86_64 => .{ .x86_64_win = .{} },
+std/os/windows.zig:3672: .x86 => {
+std/os/windows.zig:3681: .x86_64 => {
+std/os/windows.zig:3708: .x86 => {
+std/os/windows.zig:3715: .x86_64 => {
+std/os/windows.zig:4603: .x86 => extern struct {
+std/os/windows.zig:4614: else => @compileError("FLOATING_SAVE_AREA only defined on x86"),
+std/os/windows.zig:4618: .x86_64 => extern struct {
+std/os/windows.zig:4622: else => @compileError("M128A only defined on x86_64"),
+std/os/windows.zig:4626: .x86_64 => extern struct {
+std/os/windows.zig:4644: else => @compileError("XMM_SAVE_AREA32 only defined on x86_64"),
+std/os/windows.zig:4666: .x86 => extern struct {
+std/os/windows.zig:4697: .x86_64 => extern struct {
+std/os/linux/bpf.zig:113: /// SGT is signed '>', GT in x86
+std/os/linux/bpf.zig:116: /// SGE is signed '>=', GE in x86
+std/os/linux/bpf.zig:164: /// necessary on some arches, for example x86_64, arm64 etc, whose JIT back-ends
+std/os/linux/bpf.zig:167: /// x86_64 on which testsuites are frequently exercised.
+std/os/linux/syscalls.zig:74: ssetmask = 69,
+std/os/linux/syscalls.zig:1868: ssetmask = 200,
+std/os/linux/syscalls.zig:2295: ssetmask = 200,
+std/os/linux/syscalls.zig:2581: ssetmask = 69,
+std/os/linux/syscalls.zig:3033: ssetmask = 4069,
+std/os/linux/syscalls.zig:4252: ssetmask = 69,
+std/os/linux/syscalls.zig:4707: ssetmask = 69,
+std/os/linux/syscalls.zig:9455: ssetmask = 69,
+std/os/linux/syscalls.zig:9865: ssetmask = 69,
+std/os/linux/syscalls.zig:10245: ssetmask = 69,
+std/os/linux/syscalls.zig:10693: ssetmask = 69,
+std/os/linux/tls.zig:104: .x86,
+std/os/linux/tls.zig:105: .x86_64,
+std/os/linux/tls.zig:214: /// Only used on the 32-bit x86 architecture (not x86_64, nor x32).
+std/os/linux/tls.zig:225: .x86 => {
+std/os/linux/tls.zig:251: .x86_64 => {
+std/os/linux/tls.zig:459: .x86 => asm (
+std/os/linux/tls.zig:463: .x86_64 => switch (@sizeOf(usize)) {
+std/os/linux/tls.zig:731: .x86_64 => extern struct { module: u64, offset: u64 }, // Even for x32...
+std/os/uefi/protocol/block_io.zig:109: /// The intrinsic block size of the device. If the media changes, then this
+std/os/windows/ntdll.zig:218: /// and targeting x86-windows.
+std/os/windows/ntstatus.zig:183: /// An exception status code that is used by the Win32 x86 emulation subsystem.
+std/os/windows/ntstatus.zig:185: /// An exception status code that is used by the Win32 x86 emulation subsystem.
+std/os/windows/ntstatus.zig:187: /// An exception status code that is used by the Win32 x86 emulation subsystem.
+std/os/windows/ntstatus.zig:189: /// An exception status code that is used by the Win32 x86 emulation subsystem.
+std/os/windows/ntstatus.zig:191: /// An exception status code that is used by the Win32 x86 emulation subsystem.
+std/os/windows/ntstatus.zig:193: /// An exception status code that is used by the Win32 x86 emulation subsystem.
+std/os/windows/ntstatus.zig:195: /// An exception status code that is used by the Win32 x86 emulation subsystem.
+std/os/windows/ntstatus.zig:207: /// An exception status code that is used by the Win32 x86 emulation subsystem.
+std/os/windows/ntstatus.zig:914: UNEXPECTED_MM_CREATE_ERR = 0xC00000EA,
+std/os/windows/ntstatus.zig:917: UNEXPECTED_MM_MAP_ERROR = 0xC00000EB,
+std/os/windows/ntstatus.zig:920: UNEXPECTED_MM_EXTEND_ERR = 0xC00000EC,
+std/os/windows/ntstatus.zig:1523: /// An internal error occurred in the Win32 x86 emulation subsystem.
+std/os/windows/tls.zig:12: if (builtin.cpu.arch == .x86 and !builtin.abi.isGnu() and builtin.zig_backend != .stage2_c) {
+std/os/windows/win32error.zig:546: UNEXPECTED_MM_CREATE_ERR = 556,
+std/os/windows/win32error.zig:549: UNEXPECTED_MM_MAP_ERROR = 557,
+std/os/windows/win32error.zig:552: UNEXPECTED_MM_EXTEND_ERR = 558,
+std/process/Args.zig:540: \\"C:\Program Files\zig\zig.exe" run .\src\main.zig -target x86_64-windows-gnu -O safe -- --emoji=🗿 --eval="new Regex(\"Dwayne \\\"The Rock\\\" Johnson\")"
+std/process/Args.zig:550: \\x86_64-windows-gnu
+std/zig/AstGen.zig:2896: .disable_intrinsics,
+std/zig/AstGen.zig:9218: .disable_intrinsics      => return rvalue(gz, ri, try gz.addNodeExtended(.disable_intrinsics,      node), node),
+std/zig/AstRlAnnotate.zig:860: .disable_intrinsics,
+std/zig/BuiltinFn.zig:17: disable_intrinsics,
+std/zig/BuiltinFn.zig:266: "@disableIntrinsics",
+std/zig/BuiltinFn.zig:268: .tag = .disable_intrinsics,
+std/zig/LibCInstallation.zig:427: .x86 => "x86",
+std/zig/LibCInstallation.zig:428: .x86_64 => "x64",
+std/zig/LibCInstallation.zig:494: .x86 => "x86",
+std/zig/LibCInstallation.zig:495: .x86_64 => "x64",
+std/zig/WindowsSdk.zig:638: .x86 => "OptionId.DesktopCPPx86",
+std/zig/WindowsSdk.zig:639: .x86_64 => "OptionId.DesktopCPPx64",
+std/zig/WindowsSdk.zig:914: .x86 => "x86",
+std/zig/WindowsSdk.zig:915: .x86_64 => "x64",
+std/zig/WindowsSdk.zig:1078: .x86 => "x86",
+std/zig/WindowsSdk.zig:1079: .x86_64 => "x64",
+std/zig/WindowsSdk.zig:1109: try list.appendSlice(VS140COMNTOOLS); // C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools
+std/zig/WindowsSdk.zig:1112: list.shrinkRetainingCapacity(list.items.len - "\\Common7\\Tools".len); // C:\Program Files (x86)\Microsoft Visual Studio 14.0
+std/zig/WindowsSdk.zig:1145: .x86 => "", //x86 is in the root of the Lib folder
+std/zig/WindowsSdk.zig:1146: .x86_64 => "amd64",
+std/zig/Zir.zig:1634: .disable_intrinsics,
+std/zig/Zir.zig:2048: /// Implement builtin `@disableIntrinsics`. `operand` is `src_node: i32`.
+std/zig/Zir.zig:2049: disable_intrinsics,
+std/zig/Zir.zig:4412: .disable_intrinsics,
+std/zig/system.zig:51: if (host_cpu_arch == .x86_64 and candidate.cpu.arch == .x86)
+std/zig/system.zig:85: .x86_64 => return .rosetta,
+std/zig/system.zig:96: .x86,
+std/zig/system.zig:97: .x86_64,
+std/zig/system.zig:102: .x86 => "qemu-i386",
+std/zig/system.zig:103: .x86_64 => switch (candidate.abi) {
+std/zig/system.zig:105: else => "qemu-x86_64",
+std/zig/system.zig:176: .x86 => host_cpu_arch.isX86(),
+std/zig/system.zig:177: .x86_64 => host_cpu_arch == .x86_64,
+std/zig/system.zig:374: // For x86, we need to populate some CPU feature flags depending on architecture
+std/zig/system.zig:376: //  * 16bit_mode => if the arch is x86_16
+std/zig/system.zig:377: //  * 32bit_mode => if the arch is x86
+std/zig/target.zig:107: .{ .arch = .x86, .os = .freebsd, .abi = .none },
+std/zig/target.zig:108: .{ .arch = .x86, .os = .linux, .abi = .gnu, .glibc_triple = "i686-linux-gnu" },
+std/zig/target.zig:109: .{ .arch = .x86, .os = .linux, .abi = .musl },
+std/zig/target.zig:110: .{ .arch = .x86, .os = .netbsd, .abi = .none },
+std/zig/target.zig:111: .{ .arch = .x86, .os = .openbsd, .abi = .none },
+std/zig/target.zig:112: .{ .arch = .x86, .os = .windows, .abi = .gnu },
+std/zig/target.zig:113: .{ .arch = .x86_64, .os = .freebsd, .abi = .none, .os_ver = .{ .major = 5, .minor = 1, .patch = 0 } },
+std/zig/target.zig:114: .{ .arch = .x86_64, .os = .linux, .abi = .gnu, .os_ver = .{ .major = 2, .minor = 6, .patch = 4 } },
+std/zig/target.zig:115: .{ .arch = .x86_64, .os = .linux, .abi = .gnux32, .os_ver = .{ .major = 3, .minor = 4, .patch = 0 }, .glibc_triple = "x86_64-linux-gnu-x32" },
+std/zig/target.zig:116: .{ .arch = .x86_64, .os = .linux, .abi = .musl, .os_ver = .{ .major = 2, .minor = 6, .patch = 4 } },
+std/zig/target.zig:117: .{ .arch = .x86_64, .os = .linux, .abi = .muslx32, .os_ver = .{ .major = 3, .minor = 4, .patch = 0 } },
+std/zig/target.zig:118: .{ .arch = .x86_64, .os = .maccatalyst, .abi = .none, .os_ver = .{ .major = 10, .minor = 15, .patch = 0 } },
+std/zig/tokenizer.zig:1262: try testTokenize("//\xc2\x86", &.{});
+std/zig/llvm/Builder.zig:135: .x86 => "i386",
+std/zig/llvm/Builder.zig:136: .x86_64 => "x86_64",
+std/zig/llvm/Builder.zig:166: .x86_16,
+std/zig/llvm/Builder.zig:512: .x86 => if (target.os.tag == .windows or target.os.tag == .uefi) switch (target.abi) {
+std/zig/llvm/Builder.zig:537: .x86_64 => if (target.os.tag.isDarwin() or target.ofmt == .macho)
+std/zig/llvm/Builder.zig:579: .x86_16,
+std/zig/llvm/Builder.zig:975: x86_fp80,
+std/zig/llvm/Builder.zig:977: x86_amx,
+std/zig/llvm/Builder.zig:978: x86_mmx,
+std/zig/llvm/Builder.zig:1024: x86_fp80 = @backingInt(Code.X86_FP80),
+std/zig/llvm/Builder.zig:1026: x86_amx = @backingInt(Code.X86_AMX),
+std/zig/llvm/Builder.zig:1027: x86_mmx = @backingInt(Code.X86_MMX),
+std/zig/llvm/ir.zig:2078: /// X86 LONG DOUBLE
+std/zig/llvm/ir.zig:2079: X86_FP80 = 13,
+std/zig/llvm/ir.zig:2088: /// X86 MMX
+std/zig/llvm/ir.zig:2089: X86_MMX = 17,
+std/zig/llvm/ir.zig:2106: /// X86 AMX
+std/zig/llvm/ir.zig:2107: X86_AMX = 24,
+std/zig/system/NativePaths.zig:176: // libz.so.1 is in /lib/x86_64-linux-gnu (added here)
+std/zig/system/x86.zig:8: sse: bool,
+std/zig/system/x86.zig:9: avx: bool,
+std/zig/system/x86.zig:30: fn setFeature(cpu: *Target.Cpu, feature: Target.x86.Feature, enabled: bool) void {
+std/zig/system/x86.zig:83: if (cpu.has(.x86, .@"64bit") and !Target.x86.featureSetHas(m.features, .@"64bit")) break :b;
+std/zig/system/x86.zig:103: 3 => &Target.x86.cpu.i386,
+std/zig/system/x86.zig:104: 4 => &Target.x86.cpu.i486,
+std/zig/system/x86.zig:105: 5 => if (cpu.has(.x86, .mmx))
+std/zig/system/x86.zig:106: &Target.x86.cpu.pentium_mmx
+std/zig/system/x86.zig:108: &Target.x86.cpu.pentium,
+std/zig/system/x86.zig:110: 0x01 => &Target.x86.cpu.pentiumpro,
+std/zig/system/x86.zig:111: 0x03, 0x05, 0x06 => &Target.x86.cpu.pentium2,
+std/zig/system/x86.zig:112: 0x07, 0x08, 0x0a, 0x0b => &Target.x86.cpu.pentium3,
+std/zon/parse.zig:3459: if (builtin.cpu.arch == .x86) return error.SkipZigTest;
+
+## Lignes trouvées, par fichier
+   36 std/Build/Cache/DepTokenizer.zig
+    4 std/Build/Configuration.zig
+    6 std/Io/Dispatch.zig
+    4 std/Io/Kqueue.zig
+    1 std/Io/Reader.zig
+    3 std/Io/Threaded.zig
+    6 std/Io/Uring.zig
+    1 std/Io/Writer.zig
+    3 std/Io/fiber.zig
+  111 std/Target.zig
+   16 std/Target/Query.zig
+    1 std/Target/riscv.zig
+  444 std/Target/x86.zig
+    5 std/Thread.zig
+    5 std/atomic.zig
+   36 std/c.zig
+    1 std/c/darwin.zig
+    1 std/c/illumos.zig
+    1 std/c/openbsd.zig
+    2 std/coff.zig
+    1 std/crypto/aegis.zig
+    5 std/crypto/aes.zig
+    3 std/crypto/aes/aesni.zig
+    3 std/crypto/aes_ocb.zig
+    3 std/crypto/chacha20.zig
+    5 std/crypto/ghash_polyval.zig
+    1 std/crypto/ml_kem.zig
+   19 std/crypto/pcurves/p256/p256_64.zig
+   17 std/crypto/pcurves/p256/p256_scalar_64.zig
+   20 std/crypto/pcurves/p384/p384_64.zig
+   20 std/crypto/pcurves/p384/p384_scalar_64.zig
+   14 std/crypto/pcurves/secp256k1/secp256k1_64.zig
+   15 std/crypto/pcurves/secp256k1/secp256k1_scalar_64.zig
+    1 std/crypto/salsa20.zig
+    1 std/crypto/sha2.zig
+    4 std/crypto/siphash.zig
+    2 std/crypto/tls/Client.zig
+    2 std/debug.zig
+    7 std/debug/Dwarf.zig
+    3 std/debug/MachOFile.zig
+   14 std/debug/SelfInfo/Elf.zig
+    5 std/debug/SelfInfo/MachO.zig
+    8 std/debug/SelfInfo/Windows.zig
+   57 std/debug/cpu_context.zig
+    7 std/elf.zig
+    1 std/fmt/float.zig
+    1 std/fmt/parse_float/convert_fast.zig
+    1 std/hash/crc.zig
+    1 std/hash/crc/Crc32c.zig
+   29 std/heap.zig
+   36 std/lang.zig
+    1 std/lang/assembly.zig
+   17 std/macho.zig
+    2 std/math.zig
+    1 std/math/acos.zig
+   52 std/os/linux.zig
+    4 std/os/linux/bpf.zig
+   12 std/os/linux/syscalls.zig
+    8 std/os/linux/tls.zig
+    1 std/os/plan9.zig
+    1 std/os/uefi.zig
+    1 std/os/uefi/protocol/block_io.zig
+   29 std/os/windows.zig
+    1 std/os/windows/ntdll.zig
+   13 std/os/windows/ntstatus.zig
+    1 std/os/windows/tls.zig
+    3 std/os/windows/win32error.zig
+    1 std/pdb.zig
+    4 std/pie.zig
+    2 std/posix.zig
+    2 std/process/Args.zig
+    8 std/simd.zig
+    6 std/start.zig
+    1 std/std.zig
+    2 std/valgrind.zig
+    2 std/zig/AstGen.zig
+    1 std/zig/AstRlAnnotate.zig
+    3 std/zig/BuiltinFn.zig
+    4 std/zig/LibCInstallation.zig
+   10 std/zig/WindowsSdk.zig
+    4 std/zig/Zir.zig
+   76 std/zig/llvm/Builder.zig
+    6 std/zig/llvm/ir.zig
+   18 std/zig/system.zig
+    1 std/zig/system/NativePaths.zig
+  168 std/zig/system/x86.zig
+   22 std/zig/target.zig
+    1 std/zig/tokenizer.zig
+    1 std/zon/parse.zig

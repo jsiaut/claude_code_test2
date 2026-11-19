@@ -7,7 +7,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | c | 33 | 1 | 0 | 33 |  |
 | cpp | 33 | 1 | 0 | 33 |  |
 | rust | 33 | 1 | 0 | 0 | exécutée 23, exécutée+recherche 1, exécutée+échec 2, recherche 6, échec 1 |
-| zig | 10 | 1 | 23 | 10 |  |
+| zig | 33 | 1 | 0 | 0 | exécutée 28, exécutée+recherche 1, exécutée+échec 2, recherche 2 |
 | odin | 5 | 1 | 28 | 5 |  |
 | c3 | 4 | 1 | 29 | 4 |  |
 | d | 8 | 1 | 25 | 8 |  |
@@ -30,7 +30,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | bqn | 33 | 1 | 0 | 33 |  |
 | php | 33 | 1 | 0 | 33 |  |
 
-Total : 330 sondées, 25 mesurées, 495 sans sonde, 297 déclaratives.
+Total : 353 sondées, 25 mesurées, 472 sans sonde, 287 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 

@@ -1,0 +1,72 @@
+# Recherche d'absence : zig, case F1
+# Chaîne : 0.17.0
+# Motif : ndarray|multi_?dim|md_?span|mdarray|array2d|\bmatrix\b
+# Déclaration publique : ^\s*pub\s+(inline\s+|extern\s+|export\s+|noinline\s+)*(fn|const|var)\b
+# 1 déclarations publiques, 57 mentions, 10 fichiers
+
+## Déclarations publiques
+std/json/Stringify.zig:99: pub fn endArray(self: *Stringify) Error!void {
+
+## Mentions (au plus 12 lignes par fichier)
+std/Target/aarch64.zig:625: .description = "Enable Armv9.7-A Advanced SIMD half-precision matrix multiply-accumulate to single-precision",
+std/Target/aarch64.zig:633: .description = "Enable Armv9.7-A non-widening half-precision matrix multiply-accumulate",
+std/Target/aarch64.zig:641: .description = "Enable Matrix Multiply FP32 Extension",
+std/Target/aarch64.zig:648: .description = "Enable Matrix Multiply FP64 Extension",
+std/Target/aarch64.zig:655: .description = "Enable Armv9.6-A FP8 to Half-Precision Matrix Multiplication",
+std/Target/aarch64.zig:662: .description = "Enable Armv9.6-A FP8 to Single-Precision Matrix Multiplication",
+std/Target/aarch64.zig:860: .description = "Enable Matrix Multiply Int8 Extension",
+std/Target/aarch64.zig:1322: .description = "Enable Scalable Matrix Extension (SME)",
+std/Target/aarch64.zig:1330: .description = "Enable Scalable Matrix Extension 2 (SME2) instructions",
+std/Target/aarch64.zig:1337: .description = "Enable Scalable Matrix Extension 2.1 instructions",
+std/Target/aarch64.zig:1344: .description = "Enable Armv9.6-A Scalable Matrix Extension 2.2 instructions",
+std/Target/aarch64.zig:1351: .description = "Enable Armv9.7-A Scalable Matrix Extension 2.3 instructions",
+std/Target/arm.zig:778: .description = "Enable Matrix Multiply Int8 Extension",
+std/Target/riscv.zig:1902: .description = "'XSfvfwmaccqqq' (SiFive Matrix Multiply Accumulate Instruction (4-by-4))",
+std/Target/riscv.zig:1910: .description = "'XSfvqmaccdod' (SiFive Int8 Matrix Multiplication Instructions (2-by-8 and 8-by-2))",
+std/Target/riscv.zig:1918: .description = "'XSfvqmaccqoq' (SiFive Int8 Matrix Multiplication Instructions (4-by-8 and 8-by-4))",
+std/Target/spirv.zig:91: matrix,
+std/Target/spirv.zig:875: result[@backingInt(Feature.matrix)] = .{
+std/Target/spirv.zig:877: .description = "Enable matrix capability",
+std/crypto/ml_dsa.zig:134: // Matrix dimensions
+std/crypto/ml_dsa.zig:135: k: u8, // Height of matrix A
+std/crypto/ml_dsa.zig:136: l: u8, // Width of matrix A
+std/crypto/ml_dsa.zig:620: // Matrix of k x l polynomials
+std/crypto/ml_dsa.zig:630: /// Expand matrix A from seed rho using SHAKE-128
+std/crypto/ml_dsa.zig:647: /// Multiply matrix by vector in NTT domain and return result in regular domain.
+std/crypto/ml_dsa.zig:659: /// Multiply matrix by vector in NTT domain and return result in NTT domain.
+std/crypto/ml_dsa.zig:1494: rho: [32]u8, // Seed for matrix A
+std/crypto/ml_dsa.zig:1530: rho: [32]u8, // Seed for matrix A
+std/crypto/ml_kem.zig:41: //! * _A_ a uniformly sampled k by k matrix over R _and_
+std/crypto/ml_kem.zig:95: //   its large matrix A in both the public key and the private key. In Go we
+std/crypto/ml_kem.zig:130: // Width and height of the matrix A.
+std/crypto/ml_kem.zig:426: rho: [32]u8, // ρ, the seed for the matrix A
+std/crypto/ml_kem.zig:1392: // A matrix of k vectors
+std/crypto/aes/bitsliced.zig:428: /// Precompute the `mixColumns` inverse matrix
+std/hash/crc/Crc32c.zig:48: /// as a linear transformation in GF(2), i.e, a matrix.
+std/hash/crc/Crc32c.zig:50: /// We build up this matrix via repeated squaring:
+std/hash/crc/Crc32c.zig:106: /// Computes `mat * vec` over `GF(2)`, where `mat` is a 32x32 binary matrix and `vec`
+std/hash/crc/Crc32c.zig:113: /// the final CRC state, by XORing (adding) rows of the matrix where `vec` has 1s.
+std/hash/crc/Crc32c.zig:126: /// Computes the square of a matrix in GF(2), i.e `dst = dst x src`.
+std/json/Stringify.zig:15: //!  <array> = beginArray ( <value> )* endArray
+std/json/Stringify.zig:239: try w.endArray();
+std/json/Stringify.zig:481: try self.endArray();
+std/json/Stringify.zig:515: try self.endArray();
+std/json/Stringify.zig:743: try w.endArray();
+std/json/Stringify.zig:965: try jws.endArray();
+std/os/windows.zig:5730: /// This Arm processor implements the SVE I8MM (Int8 matrix multiply) instructions (FEAT_I8MM).
+std/os/windows.zig:5733: /// This Arm processor implements the SVE F32MM (FP32 matrix multiply) instructions (FEAT_F32MM).
+std/os/windows.zig:5736: /// This Arm processor implements the SVE F64MM (FP64 matrix multiply) instructions (FEAT_F64MM).
+std/os/windows.zig:5754: /// This Arm processor implements the I8MM (Int8 matrix multiply) NEON instructions (FEAT_I8MM).
+std/os/windows.zig:5766: /// This Arm processor implements the SME (Scalable Matrix Extension) instructions (FEAT_SME).
+
+## Lignes trouvées, par fichier
+   19 std/Target/aarch64.zig
+    1 std/Target/arm.zig
+    3 std/Target/riscv.zig
+    3 std/Target/spirv.zig
+    1 std/crypto/aes/bitsliced.zig
+    9 std/crypto/ml_dsa.zig
+    5 std/crypto/ml_kem.zig
+    5 std/hash/crc/Crc32c.zig
+    7 std/json/Stringify.zig
+    5 std/os/windows.zig

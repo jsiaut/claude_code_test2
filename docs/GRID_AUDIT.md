@@ -37,8 +37,23 @@ recherche d'absence). Ce document est rempli langage par langage ; les errata so
   `libc` du sysroot (`#![feature(rustc_private)]`), `sched_setaffinity` (fil épinglé sur le CPU 1) et `mmap` d'un
   fichier relu comme `&[f32]` sans copie (D4, F4).
 
+### Zig (0.17.0, compilateur du banc)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (D4 vaut 1 en v2, ½ en v1). Sondes :
+`probes/zig/probe.zig` et `probe_f4.zig` (A2 à A5, D3, F4), `probes/zig/audit/` (`audit.zig` exécuté, `codegen.zig`
+lu en assembleur et en IR, en ReleaseFast et en ReleaseSafe pour E6, deux échecs, quatre recherches dans `lib/std`).
+* Faits notables : `std.MultiArrayList` range chaque champ dans son propre tableau (A6) ; `@setFloatMode(.optimized)`
+  pose `fadd fast` sur la seule portée visée (C4), mais aucune somme n'est vectorisée en 0.17, son vectoriseur de
+  boucles étant coupé ; `@branchHint(.unlikely)` pose des poids 1:2000 et sort l'appel du chemin chaud, alors que
+  `@branchHint(.cold)` n'a aucun effet visible en ReleaseFast (ni poids, ni déplacement) ; `@setRuntimeSafety(false)`
+  retire la panique `outOfBounds` d'une fonction compilée en ReleaseSafe (E6) ; `@fence` n'existe plus (D5 ½).
+* Contre-épreuve (C2) : une fonction externe nommée `@"llvm.x86.avx512.pternlog.d.512"` appelle l'intrinsèque de
+  LLVM (un `vpternlogd` dans le code produit), comme le `foreign` d'Odin ; mais ni le manuel de Zig (`langref.html`,
+  qui ne parle d'intrinsèques que pour Wasm) ni sa bibliothèque ne l'emploient : C2 reste ½ (section 3).
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |
 |---|---|---|---|---|---|
 | Rust | D4, F4 | 0 | `sched_setaffinity` et `mmap` marchent par le crate `libc` du sysroot, sur nightly avec `#![feature(rustc_private)]` | Le crate n'est pas dans l'API publique de `std` : c'est une FFI vers la glibc, du code non intrinsèque (0) | ½ si on le lit comme une unité interne livrée, accessible sur le canal instable |
+| Zig | C2 | ½ | Un `extern fn` au nom d'une intrinsèque de LLVM produit l'instruction (`vpternlogd`) | Mécanisme ni documenté ni employé par la bibliothèque livrée : la règle v2 ne compte que le « mécanisme d'import d'intrinsèques du langage » (½ par l'assembleur en ligne) | 1, comme Odin, dont la bibliothèque livrée emploie le même mécanisme |

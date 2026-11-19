@@ -1,0 +1,154 @@
+# Recherche d'absence : zig, case C5
+# Chaîne : 0.17.0
+# Motif : parallel|par_?iter|forall|pmap|thread_?pool|fork_?join|work_?steal|par_?map|domain_?pool
+# Déclaration publique : ^\s*pub\s+(inline\s+|extern\s+|export\s+|noinline\s+)*(fn|const|var)\b
+# 15 déclarations publiques, 145 mentions, 20 fichiers
+
+## Déclarations publiques
+std/crypto/benchmark.zig:74: pub fn benchmarkHashParallel(comptime Hash: anytype, comptime bytes: comptime_int, allocator: mem.Allocator, io: std.Io) !u64 {
+std/crypto/blake3.zig:993: pub fn hashParallel(b: []const u8, out: []u8, options: Options, allocator: Allocator, io: Io) error{ OutOfMemory, Canceled }!void {
+std/crypto/kangarootwelve.zig:1259: pub fn hashParallel(message: []const u8, out: []u8, options: Options, allocator: Allocator, io: Io) !void {
+std/crypto/aes/aesni.zig:111: pub const parallel = struct {
+std/crypto/aes/aesni.zig:115: pub const optimal_parallel_blocks = switch (builtin.cpu.model) {
+std/crypto/aes/aesni.zig:126: pub fn encryptParallel(comptime count: usize, blocks: [count]Block, round_keys: [count]Block) [count]Block {
+std/crypto/aes/aesni.zig:136: pub fn decryptParallel(comptime count: usize, blocks: [count]Block, round_keys: [count]Block) [count]Block {
+std/crypto/aes/armcrypto.zig:114: pub const parallel = struct {
+std/crypto/aes/armcrypto.zig:116: pub const optimal_parallel_blocks = 6;
+std/crypto/aes/armcrypto.zig:119: pub fn encryptParallel(comptime count: usize, blocks: [count]Block, round_keys: [count]Block) [count]Block {
+std/crypto/aes/armcrypto.zig:129: pub fn decryptParallel(comptime count: usize, blocks: [count]Block, round_keys: [count]Block) [count]Block {
+std/crypto/aes/soft.zig:292: pub const parallel = struct {
+std/crypto/aes/soft.zig:294: pub const optimal_parallel_blocks = if (protected) bitsliced.width else 1;
+std/crypto/aes/soft.zig:297: pub fn encryptParallel(comptime count: usize, blocks: [count]Block, round_keys: [count]Block) [count]Block {
+std/crypto/aes/soft.zig:307: pub fn decryptParallel(comptime count: usize, blocks: [count]Block, round_keys: [count]Block) [count]Block {
+
+## Mentions (au plus 12 lignes par fichier)
+std/Target/amdgcn.zig:627: .description = "Support DPP (Data Parallel Primitives) extension",
+std/Target/amdgcn.zig:632: .description = "Support DPP8 (Data Parallel Primitives) extension",
+std/Target/amdgcn.zig:637: .description = "Support DPP (Data Parallel Primitives) extension in DP ALU",
+std/Target/spirv.zig:75: image_mipmap,
+std/Target/spirv.zig:759: result[@backingInt(Feature.image_mipmap)] = .{
+std/Target/spirv.zig:761: .description = "Enable image_mipmap capability",
+std/c/darwin.zig:787: purgeable_volatile_pmap: mach_vm_size_t,
+std/crypto/aegis.zig:8: //! hardware support for parallelizable AES block encryption.
+std/crypto/aes_gcm_siv.zig:54: // AES-128-GCM-SIV: Process 4 blocks in parallel
+std/crypto/aes_gcm_siv.zig:64: // Encrypt all 4 blocks in parallel
+std/crypto/aes_gcm_siv.zig:73: // AES-256-GCM-SIV: Process 6 blocks in parallel
+std/crypto/aes_gcm_siv.zig:83: // Encrypt all 6 blocks in parallel
+std/crypto/aes_ocb.zig:109: Aes.block.parallel.optimal_parallel_blocks;
+std/crypto/argon2.zig:62: /// Parallelism degree, which defines the number of independent tasks,
+std/crypto/benchmark.zig:40: const parallel_hashes = [_]Crypto{
+std/crypto/benchmark.zig:41: Crypto{ .ty = crypto.hash.Blake3, .name = "blake3-parallel" },
+std/crypto/benchmark.zig:42: Crypto{ .ty = crypto.hash.sha3.KT128, .name = "kt128-parallel" },
+std/crypto/benchmark.zig:81: try Hash.hashParallel(data, &final, .{}, allocator, io);
+std/crypto/benchmark.zig:552: inline for (parallel_hashes) |H| {
+std/crypto/benchmark.zig:554: const throughput = try benchmarkHashParallel(H.ty, mode(128 * MiB), arena, io);
+std/crypto/blake3.zig:21: /// Threshold for switching to parallel processing.
+std/crypto/blake3.zig:24: const parallel_threshold = 3 * 1024 * 1024;
+std/crypto/blake3.zig:581: fn compressChunksParallel(input: []const u8, key: [8]u32, chunk_counter: u64, flags: Flags, out: []u8) usize {
+std/crypto/blake3.zig:609: fn compressParentsParallel(child_chaining_values: []const u8, num_chaining_values: usize, key: [8]u32, flags: Flags, out: []u8) usize {
+std/crypto/blake3.zig:630: return compressChunksParallel(input, key, chunk_counter, flags, out);
+std/crypto/blake3.zig:653: return compressParentsParallel(&cv_array, num_chaining_values, key, flags, out);
+std/crypto/blake3.zig:663: num_cvs = compressParentsParallel(&cv_array, num_cvs, key, flags, &out_array);
+std/crypto/blake3.zig:694: const num_cvs = compressChunksParallel(
+std/crypto/blake3.zig:766: fn buildMerkleTreeLayerParallel(
+std/crypto/blake3.zig:776: // Tree layers shrink quickly, so only parallelize the first few large layers
+std/crypto/blake3.zig:994: if (b.len < parallel_threshold) {
+std/crypto/blake3.zig:1013: // Process chunks in parallel
+std/crypto/kangarootwelve.zig:21: // Multi-threading threshold: inputs larger than this will use parallel processing.
+std/crypto/kangarootwelve.zig:295: /// Add lanes from data to N states in parallel with stride using SIMD
+std/crypto/kangarootwelve.zig:527: /// Process N leaves (8KiB chunks) in parallel - generic version
+std/crypto/kangarootwelve.zig:592: /// Helper function to process N leaves in parallel, reducing code duplication
+std/crypto/kangarootwelve.zig:961: /// Creates a public API type with hash and hashParallel methods for a specific variant.
+std/crypto/kangarootwelve.zig:1256: /// Hash with automatic parallelization for large inputs (>2MB).
+std/crypto/kangarootwelve.zig:1313: test "KT128 sequential and parallel produce same output for small inputs" {
+std/crypto/kangarootwelve.zig:1341: // Hash with parallel method
+std/crypto/kangarootwelve.zig:1342: try KT128.hashParallel(input, &output_par, .{}, allocator, io);
+std/crypto/kangarootwelve.zig:1349: test "KT128 sequential and parallel produce same output for large inputs" {
+std/crypto/kangarootwelve.zig:1361: // Test with input sizes above the 2MB threshold to trigger parallel processing.
+std/crypto/kangarootwelve.zig:1381: // Hash with parallel method
+std/crypto/ml_kem.zig:90: //    - Use SIMD to compute keccak in parallel.
+std/crypto/modes.zig:44: const parallel_count = BlockCipher.block.parallel.optimal_parallel_blocks;
+std/crypto/modes.zig:45: const wide_block_length = parallel_count * block_length;
+std/crypto/modes.zig:48: var counters: [parallel_count * block_length]u8 = undefined;
+std/crypto/modes.zig:49: inline for (0..parallel_count) |j| {
+std/crypto/modes.zig:54: inline while (j < parallel_count) : (j += 1) {
+std/crypto/modes.zig:57: cnt_val +%= parallel_count;
+std/crypto/modes.zig:58: block_cipher.xorWide(parallel_count, dst[i .. i + wide_block_length][0..wide_block_length], src[i .. i + wide_block_length][0..wide_block_length], counters);
+std/crypto/modes.zig:64: inline for (0..parallel_count) |j| {
+std/crypto/modes.zig:70: block_cipher.encryptWide(parallel_count, &keystream, &counters);
+std/crypto/aes/aesni.zig:110: /// Perform operations on multiple blocks in parallel.
+std/crypto/aes/aesni.zig:114: /// The recommended number of AES encryption/decryption to perform in parallel for the chosen implementation.
+std/crypto/aes/aesni.zig:125: /// Encrypt multiple blocks in parallel, each their own round key.
+std/crypto/aes/aesni.zig:135: /// Decrypt multiple blocks in parallel, each their own round key.
+std/crypto/aes/aesni.zig:145: /// Encrypt multiple blocks in parallel with the same round key.
+std/crypto/aes/aesni.zig:155: /// Decrypt multiple blocks in parallel with the same round key.
+std/crypto/aes/aesni.zig:165: /// Encrypt multiple blocks in parallel with the same last round key.
+std/crypto/aes/aesni.zig:175: /// Decrypt multiple blocks in parallel with the same last round key.
+std/crypto/aes/aesni.zig:188: /// All operations are performed in parallel, using SIMD instructions when available.
+std/crypto/aes/aesni.zig:465: /// Encrypt multiple blocks, possibly leveraging parallelization.
+std/crypto/aes/aesni.zig:475: ts = Block.parallel.encryptWide(count, ts, round_keys[i]);
+std/crypto/aes/aesni.zig:477: ts = Block.parallel.encryptLastWide(count, ts, round_keys[i]);
+std/crypto/aes/armcrypto.zig:113: /// Perform operations on multiple blocks in parallel.
+std/crypto/aes/armcrypto.zig:115: /// The recommended number of AES encryption/decryption to perform in parallel for the chosen implementation.
+std/crypto/aes/armcrypto.zig:118: /// Encrypt multiple blocks in parallel, each their own round key.
+std/crypto/aes/armcrypto.zig:128: /// Decrypt multiple blocks in parallel, each their own round key.
+std/crypto/aes/armcrypto.zig:138: /// Encrypt multiple blocks in parallel with the same round key.
+std/crypto/aes/armcrypto.zig:148: /// Decrypt multiple blocks in parallel with the same round key.
+std/crypto/aes/armcrypto.zig:158: /// Encrypt multiple blocks in parallel with the same last round key.
+std/crypto/aes/armcrypto.zig:168: /// Decrypt multiple blocks in parallel with the same last round key.
+std/crypto/aes/armcrypto.zig:181: /// All operations are performed in parallel, using SIMD instructions when available.
+std/crypto/aes/armcrypto.zig:474: /// Encrypt multiple blocks, possibly leveraging parallelization.
+std/crypto/aes/armcrypto.zig:484: ts = Block.parallel.encryptWide(count, ts, round_keys[i]);
+std/crypto/aes/armcrypto.zig:486: ts = Block.parallel.encryptLastWide(count, ts, round_keys[i]);
+std/crypto/aes/soft.zig:291: /// Perform operations on multiple blocks in parallel.
+std/crypto/aes/soft.zig:293: /// The recommended number of AES encryption/decryption to perform in parallel for the chosen implementation.
+std/crypto/aes/soft.zig:296: /// Encrypt multiple blocks in parallel, each their own round key.
+std/crypto/aes/soft.zig:306: /// Decrypt multiple blocks in parallel, each their own round key.
+std/crypto/aes/soft.zig:316: /// Encrypt multiple blocks in parallel with the same round key.
+std/crypto/aes/soft.zig:326: /// Decrypt multiple blocks in parallel with the same round key.
+std/crypto/aes/soft.zig:336: /// Encrypt multiple blocks in parallel with the same last round key.
+std/crypto/aes/soft.zig:346: /// Decrypt multiple blocks in parallel with the same last round key.
+std/crypto/aes/soft.zig:359: /// All operations are performed in parallel, using SIMD instructions when available.
+std/crypto/aes/soft.zig:619: /// Encrypt multiple blocks, possibly leveraging parallelization.
+std/crypto/aes/soft.zig:630: /// Encrypt+XOR multiple blocks, possibly leveraging parallelization.
+std/crypto/aes/soft.zig:681: /// Decrypt multiple blocks, possibly leveraging parallelization.
+std/os/windows.zig:2210: PARALLEL_PORT = 0x00000016,
+std/os/linux/IoUring.zig:346: /// operations execute in parallel and completions are unordered. Therefore, an application that
+std/os/windows/ntstatus.zig:116: /// A threadpool worker thread entered a callback at thread affinity %p and exited at affinity %p.
+std/os/windows/ntstatus.zig:2103: THREADPOOL_HANDLE_EXCEPTION = 0xC000070A,
+std/os/windows/ntstatus.zig:2105: THREADPOOL_SET_EVENT_ON_COMPLETION_FAILED = 0xC000070B,
+std/os/windows/ntstatus.zig:2107: THREADPOOL_RELEASE_SEMAPHORE_ON_COMPLETION_FAILED = 0xC000070C,
+std/os/windows/ntstatus.zig:2109: THREADPOOL_RELEASE_MUTEX_ON_COMPLETION_FAILED = 0xC000070D,
+std/os/windows/ntstatus.zig:2111: THREADPOOL_FREE_LIBRARY_ON_COMPLETION_FAILED = 0xC000070E,
+std/os/windows/ntstatus.zig:2113: THREADPOOL_RELEASED_DURING_OPERATION = 0xC000070F,
+std/os/windows/ntstatus.zig:2138: /// A threadpool worker thread entered a callback at thread base priority 0x%x and exited at priority 0x%x.
+std/os/windows/ntstatus.zig:2142: /// Possibly, a threadpool worker thread was specified.
+std/os/windows/ntstatus.zig:2144: /// A threadpool worker thread entered a callback, which left transaction state.
+std/os/windows/ntstatus.zig:2147: /// A threadpool worker thread entered a callback, which left the loader lock held.
+std/os/windows/ntstatus.zig:2150: /// A threadpool worker thread entered a callback, which left with preferred languages set.
+std/zig/llvm/ir.zig:88: //@"llvm.mem.parallel_loop_access" = 10,
+std/zon/parse.zig:222: mipmaps: bool = true,
+std/zon/parse.zig:229: \\    .mipmaps = false,
+std/zon/parse.zig:249: .mipmaps = false,
+
+## Lignes trouvées, par fichier
+    3 std/Target/amdgcn.zig
+    3 std/Target/spirv.zig
+    1 std/c/darwin.zig
+    1 std/crypto/aegis.zig
+   22 std/crypto/aes/aesni.zig
+   22 std/crypto/aes/armcrypto.zig
+   16 std/crypto/aes/soft.zig
+    4 std/crypto/aes_gcm_siv.zig
+    1 std/crypto/aes_ocb.zig
+    1 std/crypto/argon2.zig
+    7 std/crypto/benchmark.zig
+   21 std/crypto/blake3.zig
+   29 std/crypto/kangarootwelve.zig
+    1 std/crypto/ml_kem.zig
+    9 std/crypto/modes.zig
+    1 std/os/linux/IoUring.zig
+    1 std/os/windows.zig
+   13 std/os/windows/ntstatus.zig
+    1 std/zig/llvm/ir.zig
+    3 std/zon/parse.zig

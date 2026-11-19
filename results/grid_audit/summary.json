@@ -20,10 +20,12 @@
    "mesurée": 1
   },
   "zig": {
-   "sans sonde": 23,
-   "déclarative": 10,
-   "sondée": 10,
-   "mesurée": 1
+   "exécutée": 28,
+   "sondée": 33,
+   "exécutée+recherche": 1,
+   "mesurée": 1,
+   "recherche": 2,
+   "exécutée+échec": 2
   },
   "odin": {
    "sans sonde": 28,
@@ -149,15 +151,15 @@
   }
  },
  "total": {
-  "déclarative": 297,
-  "sondée": 330,
+  "déclarative": 287,
+  "sondée": 353,
   "mesurée": 25,
-  "exécutée": 23,
-  "exécutée+recherche": 1,
-  "recherche": 6,
-  "exécutée+échec": 2,
+  "exécutée": 51,
+  "exécutée+recherche": 2,
+  "recherche": 8,
+  "exécutée+échec": 4,
   "échec": 1,
-  "sans sonde": 495
+  "sans sonde": 472
  },
  "divergences": [
   [

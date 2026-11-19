@@ -1,11 +1,36 @@
-CAP;A2;1;@offsetOf(S, "c")=8
-CAP;A3;1;packed struct u3/u5/u8 : @bitSizeOf=16
-CAP;A4;1;align(64) : @alignOf(L)=64
-CAP;A5;1;extern union 0x3f800000 @bitCast 0x3f800000
-CAP;C4;1;@setFloatMode(.optimized) par portée : 2016
-CAP;E3;1;@branchHint(.likely) : 2
-CAP;E4;1;@prefetch
-CAP;D3;1;std.atomic.cache_line=128
-CAP;D5;0.5;spinLoopHint ; pas de @fence
-INFO;F4;std.posix.mmap (liaison POSIX) + bytesAsSlice : 0.4390046
-CAP;F4;1;std.Io.File.MemoryMap + bytesAsSlice : 0.4390046, projection dans /proc/self/maps : true
+CAP;A2;1;[exécutée] @offsetOf(S, "c")=8
+CAP;A3;1;[exécutée] packed struct u3/u5/u8 : @bitSizeOf=16
+CAP;A4;1;[exécutée] align(64) : @alignOf(L)=64
+CAP;A5;1;[exécutée] extern union 0x3f800000 @bitCast 0x3f800000
+CAP;D3;1;[exécutée] std.atomic.cache_line=128
+CAP;F4;1;[exécutée] std.Io.File.MemoryMap + bytesAsSlice : 0.4390046, projection dans /proc/self/maps : true
+CAP;A1;1;[exécutée] []Part : pas de 16 o = @sizeOf(Part) 16 ; les 4 premiers octets du tampon sont le f32 x en ligne : 0000803f
+CAP;A6;1;[exécutée] std.MultiArrayList(Part) : items(.x) au pas de 4 o ; items(.y) commence 632 o après items(.x) (un tableau par champ) ; xs[99] = 99
+CAP;A7;1;[exécutée] extern struct { n: u32, a: [16]f32 } : 68 o, @offsetOf(Inl, "a") = 4 (tableau en ligne)
+CAP;A8;1;[exécutée] u8/i16/f16/f32 : 1/2/2/4 o ; []u8 de 1000 éléments : 1000 o, []i16 : 2000 o
+CAP;B1;1;[exécutée] aucune collecte : mémoire rendue par free/defer explicites ; 1 fil dans /proc/self/task (aucun fil de collecteur)
+CAP;B2;1;[exécutée] std.mem.Allocator passé en argument : FixedBufferAllocator (tampon de pile) -> bloc dans le tampon = true ; ArenaAllocator -> ArrayList de 1000 éléments libérée d'un coup par arena.deinit()
+CAP;B3;1;[exécutée] [4096]u8 local à 7743 o d'une autre variable locale, à 471642116432 o du tas : sur la pile
+CAP;B4;1;[exécutée] allocateur compteur : tri, formatage dans un tampon, boucles et tranches -> 0 allocation (255.0 32640) ; seule l'API qui reçoit l'allocateur alloue : 1 ; ArrayList exige l'allocateur à chaque append (std 0.17)
+CAP;B5;1;[exécutée] [*]u32 : mp[3] = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7
+CAP;C1;1;[exécutée] @Vector(8, f32) : (a + a)[7] = 16, @reduce(.Add, a) = 36, @shuffle et @select dans le langage
+CAP;D1;1;[exécutée] std.Thread.spawn : 4 fils, 4 identifiants de fil distincts, somme 7998000 (attendu 7998000)
+CAP;E2;1;[exécutée] asm volatile (syntaxe AT&T, contraintes de registres) : leaq 1(x) avec x = 41 -> 42
+CAP;D4;1;[exécutée] std.os.linux.sched_setaffinity (bibliothèque standard ; ½ en v1, liaison propre à Linux) : fil épinglé, getcpu = 1
+CAP;F3;1;[exécutée] maxInt(u32) +% 1 = 0, maxInt(i32) +% 1 = -2147483648, 250 +% 10 (u8) = 4, entiers de toute largeur (u3, i7) ; + déborde en mode sûr
+CAP;D2;1;[exécutée] @atomicStore/@atomicRmw à ordre explicite, code produit : .release = 2 mov et 0 xchg ; .seq_cst = 1 xchg ; .monotonic (fetch_add) = 1 instruction lock
+CAP;D5;0.5;[exécutée] std.atomic.spinLoopHint : 1 pause dans spin ; [échec] @fence : error: invalid builtin function: '@fence' (retiré du langage ; barrière seulement par une opération atomique seq_cst ou par asm)
+CAP;C4;1;[exécutée] @setFloatMode(.optimized) par portée : 9 fadd fast dans l'IR de sum_opt contre 0 dans sum_plain (9 fadd stricts) ; pas de réduction vectorielle en 0.17 (0 vaddps ymm/zmm), le vectoriseur de boucles étant coupé
+CAP;E1;1;[exécutée] -femit-asm : 5589 lignes d'assembleur, 18 instructions flottantes dans axpy
+CAP;E3;1;[exécutée] @branchHint(.unlikely) : poids i32 1, i32 2000 dans l'IR ; disposition [ je ret call ret ] contre [ jne call ret ] sans indication (appel sorti du chemin chaud)
+NOTE;E3;[exécutée] @branchHint(.cold) sans effet visible en ReleaseFast -mcpu native : 0 poids, disposition [ jne call ret ] comme sans indication
+CAP;E4;1;[exécutée] @prefetch : 1 prefetcht0 dans pf
+CAP;E5;1;[exécutée] paramètres noalias : 2 attributs noalias dans l'IR de axpy
+CAP;E6;1;[exécutée] en ReleaseSafe, s[i] : 1 appel à la panique outOfBounds ; sous @setRuntimeSafety(false) : 0 (contrôle par portée)
+CAP;E7;1;[exécutée] comptime fib(60) = 1548008755920 ; gsum(f32) = 4, gsum(f64) = 3.75 ; dans l'asm, fib60 = 1 constante immédiate et 0 appel ; gsum instanciée en 2 fonctions (f32 et f64)
+CAP;F1;0.5;[exécutée] [3][4]f32 contigu : &m[1][0] - &m[0][3] = 4 o, @sizeOf = 48 o ; [échec] [n][3]f32 avec n connu à l'exécution : error: unable to resolve comptime value
+NOTE;C2;[exécutée] extern fn @"llvm.x86.avx512.pternlog.d.512" (nom d'intrinsèque LLVM déclaré comme fonction externe, mécanisme que Zig ne documente pas et que sa bibliothèque n'emploie pas) : 12 ^ 10 ^ 1 = 7 ; 1 vpternlogd
+CAP;C2;0.5;[recherche] motif C2 dans lib/std 0.17.0 : 68 déclarations publiques (results/grid_audit/search/zig_C2.txt) : bits de fonctionnalités CPUID (std/c.zig, std/Target/x86.zig), contextes de registres du débogueur, constantes ELF et Linux, constructeur d'IR LLVM du compilateur (std/zig/llvm), sélection d'un CRC ; aucune fonction intrinsèque ; [exécutée] asm volatile (E2) donne accès aux instructions de la cible (d'où ½) ; contre-épreuve : NOTE C2
+CAP;C5;0;[recherche] motif C5 dans lib/std 0.17.0 : 15 déclarations publiques (results/grid_audit/search/zig_C5.txt) : hachages parallèles de std.crypto (blake3, kangarootwelve) et blocs AES entrelacés ; aucune boucle ni réduction parallèle ; std.Io.Group (async, concurrent) lance des tâches, du parallélisme de tâches comme std.Thread (D1)
+NOTE;F1;[recherche] motif F1 dans lib/std 0.17.0 : 1 déclaration publique (results/grid_audit/search/zig_F1.txt) : Stringify.endArray, faux positif ; aucun type multidimensionnel
+CAP;F2;0;[recherche] motif F2 dans lib/std 0.17.0 : 9 déclarations publiques (results/grid_audit/search/zig_F2.txt) : EnumArray (faux positif de « numa »), BPF_F_NUMA_NODE et l'assistant get_numa_node_id de eBPF (programmes BPF du noyau) ; aucune construction de localité ou de distribution pour la mémoire ou les fils du programme
