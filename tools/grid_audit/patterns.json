@@ -260,6 +260,12 @@
       "public": "\\b(public|open)\\b| : ",
       "version": "/opt/swift/usr/bin/swiftc --version 2>&1 | head -1",
       "listing": "sh tools/grid_audit/listings/swift_symbols.sh"
+    },
+    "fpc": {
+      "roots": [],
+      "listing": "python3 tools/grid_audit/listings/fpc_symbols.py",
+      "public": "\\((proc|type|const|var|prop|rec|obj|classref|enum|proctype)\\)$",
+      "version": "/opt/fpc/bin/fpc -iV"
     }
   }
 }

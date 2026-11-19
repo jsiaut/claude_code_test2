@@ -26,11 +26,11 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | python | 4 | 1 | 29 | 4 |  |
 | lua | 2 | 1 | 31 | 2 |  |
 | swift | 33 | 1 | 0 | 0 | exécutée 26, exécutée+recherche 1, exécutée+échec 1, recherche 3, échec+recherche 2 |
-| fpc | 33 | 1 | 0 | 33 |  |
+| fpc | 33 | 1 | 0 | 0 | exécutée 26, recherche 4, échec 1, échec+recherche 2 |
 | bqn | 33 | 1 | 0 | 33 |  |
 | php | 33 | 1 | 0 | 33 |  |
 
-Total : 589 sondées, 25 mesurées, 236 sans sonde, 127 déclaratives.
+Total : 589 sondées, 25 mesurées, 236 sans sonde, 94 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 
@@ -39,6 +39,4 @@ Total : 589 sondées, 25 mesurées, 236 sans sonde, 127 déclaratives.
 | go | D4 | 0.5 | 0.5 | 1 | syscall brut sched_setaffinity errno=0 |
 | go | F4 | 0.5 | 0.5 | 1 | syscall.Mmap + unsafe.Slice : 0.4390046 <nil> |
 | python | D4 | 0.5 | 0.5 | 1 | os.sched_setaffinity -> {0} |
-| fpc | D4 | 0.5 | 0.5 | 1 | Do_SysCall(syscall_nr_sched_setaffinity) de l'unité Syscall livrée : retour 0, masque relu 2, processeur courant (/proc/self/stat) 1 ; pas d'API d'affinité (ni  |
-| fpc | F4 | 0.5 | 0.5 | 1 | Fpmmap (unité BaseUnix livrée, appel système propre à Unix, comme syscall.Mmap de Go ; 1 en règle v2) + pointeur typé : premier mot 3904868352, dernier 62355461 |
 | php | D4 | 0.5 | 0.5 | 1 | pcntl_setcpuaffinity (PHP 8.4, processus entier) : true → [0] (avant : [0,1,2,3]) |

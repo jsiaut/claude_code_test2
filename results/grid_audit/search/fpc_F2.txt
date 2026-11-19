@@ -1,0 +1,28 @@
+# Recherche d'absence : fpc, case F2
+# Chaîne : 3.2.2
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : \((proc|type|const|var|prop|rec|obj|classref|enum|proctype)\)$
+# 4 déclarations publiques, 16 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:31205: fpbarcode.be2of5interleaved (const)
+<introspection>:83733: syscall.syscall_nr_mbind (const)
+<introspection>:83734: syscall.syscall_nr_set_mempolicy (const)
+<introspection>:83735: syscall.syscall_nr_get_mempolicy (const)
+
+## Mentions (au plus 12 lignes par fichier)
+<introspection>:8486: DB.TParamBinding (array)
+<introspection>:8509: DB.ParamBinding (param)
+<introspection>:10653: dbf_lang.Locale (param)
+<introspection>:11713: dbf_wtil.Locale (param)
+<introspection>:21306: IBConnection.ParamBinding (field)
+<introspection>:22279: mysql40conn.ParamBinding (field)
+<introspection>:22587: mysql41conn.ParamBinding (field)
+<introspection>:22895: mysql50conn.ParamBinding (field)
+<introspection>:23202: mysql51conn.ParamBinding (field)
+<introspection>:23509: mysql55conn.ParamBinding (field)
+<introspection>:23816: mysql56conn.ParamBinding (field)
+<introspection>:24123: mysql57conn.ParamBinding (field)
+
+## Lignes trouvées, par fichier
+   20 <introspection>

@@ -1,0 +1,14 @@
+# Recherche d'absence : fpc, case C5
+# Chaîne : 3.2.2
+# Motif : parallel|par_?iter|forall|pmap|thread_?pool|fork_?join|work_?steal|par_?map|domain_?pool
+# Déclaration publique : \((proc|type|const|var|prop|rec|obj|classref|enum|proctype)\)$
+# 2 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:89214: unixcp.UnixCpMapLimit (const)
+<introspection>:89215: unixcp.UnixCpMap (var)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    2 <introspection>

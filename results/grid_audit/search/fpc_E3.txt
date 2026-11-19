@@ -1,0 +1,14 @@
+# Recherche d'absence : fpc, case E3
+# Chaîne : 3.2.2
+# Motif : \blikely|\bunlikely|\bexpect\b|branch_?hint|branch_?weight|\bcold\b|cold_?path|fast_?path|slow_?path
+# Déclaration publique : \((proc|type|const|var|prop|rec|obj|classref|enum|proctype)\)$
+# 2 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:19411: fpsqlparser.Expect (proc)
+<introspection>:36622: jsparser.Expect (proc)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    2 <introspection>

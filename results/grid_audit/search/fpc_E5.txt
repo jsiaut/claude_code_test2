@@ -1,0 +1,16 @@
+# Recherche d'absence : fpc, case E5
+# Chaîne : 3.2.2
+# Motif : restrict|noalias|no_?alias
+# Déclaration publique : \((proc|type|const|var|prop|rec|obj|classref|enum|proctype)\)$
+# 3 déclarations publiques, 1 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:49789: fpreport.bmUnrestricted (const)
+<introspection>:60738: sdo_xsdparser.dmRestriction (const)
+<introspection>:60882: xsd_consts.s_restriction (var)
+
+## Mentions (au plus 12 lignes par fichier)
+<introspection>:60776: sdo_xsdparser.FRestrictionNode (field)
+
+## Lignes trouvées, par fichier
+    4 <introspection>

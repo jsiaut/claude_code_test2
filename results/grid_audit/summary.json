@@ -162,9 +162,12 @@
    "exécutée+échec": 1
   },
   "fpc": {
-   "déclarative": 33,
+   "exécutée": 26,
    "sondée": 33,
-   "mesurée": 1
+   "recherche": 4,
+   "mesurée": 1,
+   "échec": 1,
+   "échec+recherche": 2
   },
   "bqn": {
    "déclarative": 33,
@@ -178,17 +181,17 @@
   }
  },
  "total": {
-  "exécutée": 372,
+  "exécutée": 398,
   "sondée": 589,
-  "échec+recherche": 5,
+  "échec+recherche": 7,
   "mesurée": 25,
   "exécutée+échec": 14,
-  "recherche": 52,
+  "recherche": 56,
   "exécutée+recherche": 11,
-  "échec": 5,
+  "échec": 6,
   "exécutée+échec+recherche": 3,
   "sans sonde": 236,
-  "déclarative": 127
+  "déclarative": 94
  },
  "divergences": [
   [
@@ -208,20 +211,6 @@
   [
    "python",
    "D4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "fpc",
-   "D4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "fpc",
-   "F4",
    0.5,
    0.5,
    1
