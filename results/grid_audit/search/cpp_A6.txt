@@ -1,0 +1,11 @@
+# Recherche d'absence : cpp, case A6
+# Chaîne : g++-16 (GCC) 16.2.0
+# Motif : \bsoa\b|_soa\b|\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array
+# Déclaration publique : ^\s*#\s*define\s+\w|^\s*(template\s*<.*>\s*)?(class|struct|union|enum|using|typedef|inline\s+constexpr|constexpr)\b|^\s*(extern\s+)?[A-Za-z_][\w:<> \*&]*[\s\*&]\w+\s*\(
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

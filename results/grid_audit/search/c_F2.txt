@@ -1,0 +1,109 @@
+# Recherche d'absence : c, case F2
+# Chaîne : Ubuntu clang version 23.1.5 (++20261023090852+395ba2c4d274-1~exp1~20261023090919.90)
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^\s*#\s*define\s+\w|^\s*(typedef|struct|union|enum)\b|^\s*(extern\s+)?(static\s+)?(__inline\w*\s+)?[A-Za-z_][\w \*]*[\s\*]\w+\s*\(
+# 14 déclarations publiques, 83 mentions, 12 fichiers
+
+## Déclarations publiques
+lib/llvm-23/lib/clang/23/include/hexagon_protos.h:6485: #define Q6_P_deinterleave_P __builtin_HEXAGON_S2_deinterleave
+lib/llvm-23/lib/clang/23/include/hexagon_protos.h:6566: #define Q6_P_interleave_P __builtin_HEXAGON_S2_interleave
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1503: #define __sanitizer_syscall_pre_set_mempolicy(mode, nmask, maxnode)            \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1506: #define __sanitizer_syscall_post_set_mempolicy(res, mode, nmask, maxnode)      \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1525: #define __sanitizer_syscall_pre_mbind(start, len, mode, nmask, maxnode, flags) \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1529: #define __sanitizer_syscall_post_mbind(res, start, len, mode, nmask, maxnode,  \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1534: #define __sanitizer_syscall_pre_get_mempolicy(policy, nmask, maxnode, addr,    \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1539: #define __sanitizer_syscall_post_get_mempolicy(res, policy, nmask, maxnode,    \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:2880: void __sanitizer_syscall_pre_impl_set_mempolicy(long mode, long nmask,
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:2882: void __sanitizer_syscall_post_impl_set_mempolicy(long res, long mode,
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:2895: void __sanitizer_syscall_pre_impl_mbind(long start, long len, long mode,
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:2897: void __sanitizer_syscall_post_impl_mbind(long res, long start, long len,
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:2900: void __sanitizer_syscall_pre_impl_get_mempolicy(long policy, long nmask,
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:2903: void __sanitizer_syscall_post_impl_get_mempolicy(long res, long policy,
+
+## Mentions (au plus 12 lignes par fichier)
+lib/llvm-23/lib/clang/23/include/avx2intrin.h:2617: /// Unpacks and interleaves 8-bit integers from parts of the 256-bit integer
+lib/llvm-23/lib/clang/23/include/avx2intrin.h:2650: /// Unpacks and interleaves 16-bit integers from parts of the 256-bit vectors
+lib/llvm-23/lib/clang/23/include/avx2intrin.h:2684: /// Unpacks and interleaves 32-bit integers from parts of the 256-bit vectors
+lib/llvm-23/lib/clang/23/include/avx2intrin.h:2717: /// Unpacks and interleaves 64-bit integers from parts of the 256-bit vectors
+lib/llvm-23/lib/clang/23/include/avx2intrin.h:2746: /// Unpacks and interleaves 8-bit integers from parts of the 256-bit integer
+lib/llvm-23/lib/clang/23/include/avx2intrin.h:2779: /// Unpacks and interleaves 16-bit integers from parts of the 256-bit vectors
+lib/llvm-23/lib/clang/23/include/avx2intrin.h:2813: /// Unpacks and interleaves 32-bit integers from parts of the 256-bit vectors
+lib/llvm-23/lib/clang/23/include/avx2intrin.h:2846: /// Unpacks and interleaves 64-bit integers from parts of the 256-bit vectors
+lib/llvm-23/lib/clang/23/include/avx512fintrin.h:3852: /* Unpack and Interleave */
+lib/llvm-23/lib/clang/23/include/avxintrin.h:2404: /* Unpack and Interleave */
+lib/llvm-23/lib/clang/23/include/avxintrin.h:2406: ///    [4 x double] and interleaves them into a 256-bit vector of [4 x double].
+lib/llvm-23/lib/clang/23/include/avxintrin.h:2420: /// \returns A 256-bit vector of [4 x double] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/avxintrin.h:2427: ///    [4 x double] and interleaves them into a 256-bit vector of [4 x double].
+lib/llvm-23/lib/clang/23/include/avxintrin.h:2441: /// \returns A 256-bit vector of [4 x double] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/avxintrin.h:2448: ///    two 256-bit vectors of [8 x float] and interleaves them into a 256-bit
+lib/llvm-23/lib/clang/23/include/avxintrin.h:2467: /// \returns A 256-bit vector of [8 x float] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/avxintrin.h:2474: ///    two 256-bit vectors of [8 x float] and interleaves them into a 256-bit
+lib/llvm-23/lib/clang/23/include/avxintrin.h:2493: /// \returns A 256-bit vector of [8 x float] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/avxintrin.h:4604: ///    from the two parameters are interleaved: \n
+lib/llvm-23/lib/clang/23/include/avxintrin.h:4611: /// \returns A 256-bit vector of [8 x float] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/avxintrin.h:4642: ///    from the two parameters are interleaved: \n
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4389: ///    of [16 x i8] and interleaves them into a 128-bit vector of [16 x i8].
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4416: /// \returns A 128-bit vector of [16 x i8] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4425: ///    [8 x i16] and interleaves them into a 128-bit vector of [8 x i16].
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4444: /// \returns A 128-bit vector of [8 x i16] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4452: ///    [4 x i32] and interleaves them into a 128-bit vector of [4 x i32].
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4467: /// \returns A 128-bit vector of [4 x i32] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4475: ///    [2 x i64] and interleaves them into a 128-bit vector of [2 x i64].
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4488: /// \returns A 128-bit vector of [2 x i64] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4495: ///    [16 x i8] and interleaves them into a 128-bit vector of [16 x i8].
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4522: /// \returns A 128-bit vector of [16 x i8] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4531: ///    vectors of [8 x i16] and interleaves them into a 128-bit vector of
+lib/llvm-23/lib/clang/23/include/emmintrin.h:4551: /// \returns A 128-bit vector of [8 x i16] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/hexagon_protos.h:6479: Assembly Syntax:       Rdd32=deinterleave(Rss32)
+lib/llvm-23/lib/clang/23/include/hexagon_protos.h:6480: C Intrinsic Prototype: Word64 Q6_P_deinterleave_P(Word64 Rss)
+lib/llvm-23/lib/clang/23/include/hexagon_protos.h:6560: Assembly Syntax:       Rdd32=interleave(Rss32)
+lib/llvm-23/lib/clang/23/include/hexagon_protos.h:6561: C Intrinsic Prototype: Word64 Q6_P_interleave_P(Word64 Rss)
+lib/llvm-23/lib/clang/23/include/mmintrin.h:205: ///    and interleaves them into a 64-bit integer vector of [8 x i8].
+lib/llvm-23/lib/clang/23/include/mmintrin.h:223: /// \returns A 64-bit integer vector of [8 x i8] containing the interleaved
+lib/llvm-23/lib/clang/23/include/mmintrin.h:232: ///    [4 x i16] and interleaves them into a 64-bit integer vector of [4 x i16].
+lib/llvm-23/lib/clang/23/include/mmintrin.h:246: /// \returns A 64-bit integer vector of [4 x i16] containing the interleaved
+lib/llvm-23/lib/clang/23/include/mmintrin.h:254: ///    [2 x i32] and interleaves them into a 64-bit integer vector of [2 x i32].
+lib/llvm-23/lib/clang/23/include/mmintrin.h:266: /// \returns A 64-bit integer vector of [2 x i32] containing the interleaved
+lib/llvm-23/lib/clang/23/include/mmintrin.h:274: ///    and interleaves them into a 64-bit integer vector of [8 x i8].
+lib/llvm-23/lib/clang/23/include/mmintrin.h:292: /// \returns A 64-bit integer vector of [8 x i8] containing the interleaved
+lib/llvm-23/lib/clang/23/include/mmintrin.h:301: ///    [4 x i16] and interleaves them into a 64-bit integer vector of [4 x i16].
+lib/llvm-23/lib/clang/23/include/mmintrin.h:315: /// \returns A 64-bit integer vector of [4 x i16] containing the interleaved
+lib/llvm-23/lib/clang/23/include/mmintrin.h:323: ///    [2 x i32] and interleaves them into a 64-bit integer vector of [2 x i32].
+lib/llvm-23/lib/clang/23/include/mmintrin.h:335: /// \returns A 64-bit integer vector of [2 x i32] containing the interleaved
+lib/llvm-23/lib/clang/23/include/omp.h:370: omp_atv_interleaved = 18,
+lib/llvm-23/lib/clang/23/include/xmmintrin.h:2738: ///    [4 x float] and interleaves them into a 128-bit vector of [4 x float].
+lib/llvm-23/lib/clang/23/include/xmmintrin.h:2752: /// \returns A 128-bit vector of [4 x float] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/xmmintrin.h:2759: ///    [4 x float] and interleaves them into a 128-bit vector of [4 x float].
+lib/llvm-23/lib/clang/23/include/xmmintrin.h:2773: /// \returns A 128-bit vector of [4 x float] containing the interleaved values.
+lib/llvm-23/lib/clang/23/include/ppc_wrappers/mmintrin.h:226: /* Interleave the four 8-bit values from the high half of M1 with the four
+lib/llvm-23/lib/clang/23/include/ppc_wrappers/mmintrin.h:263: /* Interleave the two 16-bit values from the high half of M1 with the two
+lib/llvm-23/lib/clang/23/include/ppc_wrappers/mmintrin.h:286: /* Interleave the 32-bit value from the high half of M1 with the 32-bit
+lib/llvm-23/lib/clang/23/include/ppc_wrappers/mmintrin.h:307: /* Interleave the four 8-bit values from the low half of M1 with the four
+lib/llvm-23/lib/clang/23/include/ppc_wrappers/mmintrin.h:343: /* Interleave the two 16-bit values from the low half of M1 with the two
+lib/llvm-23/lib/clang/23/include/ppc_wrappers/mmintrin.h:367: /* Interleave the 32-bit value from the low half of M1 with the 32-bit
+lib/llvm-23/lib/clang/23/include/ppc_wrappers/xmmintrin.h:1234: /* Selects and interleaves the upper two SPFP values from A and B.  */
+lib/llvm-23/lib/clang/23/include/ppc_wrappers/xmmintrin.h:1241: /* Selects and interleaves the lower two SPFP values from A and B.  */
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1504: __sanitizer_syscall_pre_impl_set_mempolicy((long)(mode), (long)(nmask),      \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1507: __sanitizer_syscall_post_impl_set_mempolicy(res, (long)(mode),               \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1526: __sanitizer_syscall_pre_impl_mbind((long)(start), (long)(len), (long)(mode), \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1531: __sanitizer_syscall_post_impl_mbind(res, (long)(start), (long)(len),         \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1536: __sanitizer_syscall_pre_impl_get_mempolicy((long)(policy), (long)(nmask),    \
+lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h:1541: __sanitizer_syscall_post_impl_get_mempolicy(res, (long)(policy),             \
+lib/llvm-23/lib/clang/23/include/zos_wrappers/locale.h:1: /*===----------------------------- locale.h ---------------------------------===
+lib/llvm-23/lib/clang/23/include/zos_wrappers/locale.h:12: #if __has_include_next(<locale.h>)
+lib/llvm-23/lib/clang/23/include/zos_wrappers/locale.h:13: #include_next <locale.h>
+lib/llvm-23/lib/clang/23/include/zos_wrappers/locale.h:18: #endif /* __has_include_next(<locale.h>) */
+
+## Lignes trouvées, par fichier
+    8 lib/llvm-23/lib/clang/23/include/avx2intrin.h
+    1 lib/llvm-23/lib/clang/23/include/avx512fintrin.h
+   15 lib/llvm-23/lib/clang/23/include/avxintrin.h
+   20 lib/llvm-23/lib/clang/23/include/emmintrin.h
+    6 lib/llvm-23/lib/clang/23/include/hexagon_protos.h
+   12 lib/llvm-23/lib/clang/23/include/mmintrin.h
+    1 lib/llvm-23/lib/clang/23/include/omp.h
+    6 lib/llvm-23/lib/clang/23/include/ppc_wrappers/mmintrin.h
+    2 lib/llvm-23/lib/clang/23/include/ppc_wrappers/xmmintrin.h
+   18 lib/llvm-23/lib/clang/23/include/sanitizer/linux_syscall_hooks.h
+    4 lib/llvm-23/lib/clang/23/include/xmmintrin.h
+    4 lib/llvm-23/lib/clang/23/include/zos_wrappers/locale.h

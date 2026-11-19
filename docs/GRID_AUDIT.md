@@ -199,6 +199,25 @@ exécuté, `codegen.mojo` et `checks.mojo` désassemblés, neuf recherches dans 
   quatre tâches sur quatre fils. D4 0 : seul `_create_task(desired_worker_id)` existe, « intentionally not part of the
   public API », et vise un travailleur, pas un CPU. C5 0 : `parallelize` est dans `max.algorithm`, hors de `std`.
 
+### C (clang 23.1.5, glibc 2.39 ; options du banc) et C++ (g++ 16.2, libstdc++)
+
+33 cases sondées chacun (C3 mesurée), aucune divergence avec la matrice v2. Les premières sondes (`probe.c`,
+`probe.cpp`) imprimaient surtout des lignes déclaratives et les notes v1 ; l'audit les remplace (`probes/c/audit/`,
+`probes/cpp/audit/` : programme exécuté, code produit lu en assembleur et en IR, échecs, recherches dans les en-têtes de
+la glibc, de clang et de libstdc++).
+* C : `mallinfo2` ne voit aucune allocation pour `qsort`, des copies de structures, des littéraux composés et un
+  `snprintf` dans un tampon de pile (B4) ; un tableau `float (*m)[cols]` aux deux dimensions connues à l'exécution est
+  contigu (F1, types à dimension variable du C99) ; `constexpr` refuse un appel de fonction (E7 ½) ;
+  `__attribute__((soa))` est un attribut inconnu (A6). B2 reste ½, mais la glibc livre une arène, `obstack` : le texte
+  « arènes à écrire soi-même » est à corriger (section 3).
+* C++ : une capture de 64 octets fait allouer `std::function`, un `throw std::runtime_error` alloue son message, rien
+  pour `std::sort` ou une lambda (B4 ½) ; `std::pmr::monotonic_buffer_resource` sur un tampon de pile sert un
+  `std::pmr::vector` (B2) ; `std::mdspan` aux dimensions connues à l'exécution (F1) ; `[[likely]]` ramène l'appel dans
+  le chemin chaud ; `__restrict__` supprime la version pour alias du vectoriseur.
+* C4 de C++ : `std::reduce(std::execution::unseq, …)` autorise la réassociation, mais g++ 16 ne vectorise pas cette
+  somme, même avec `-fopenmp-simd` ; `#pragma omp simd reduction(+:s)` la vectorise. C4 reste 1 (OpenMP, livré), le
+  texte de la matrice (« std::reduce… ordre libre explicite ») est à préciser.
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |
@@ -207,3 +226,5 @@ exécuté, `codegen.mojo` et `checks.mojo` désassemblés, neuf recherches dans 
 | Zig | C2 | ½ | Un `extern fn` au nom d'une intrinsèque de LLVM produit l'instruction (`vpternlogd`) | Mécanisme ni documenté ni employé par la bibliothèque livrée : la règle v2 ne compte que le « mécanisme d'import d'intrinsèques du langage » (½ par l'assembleur en ligne) | 1, comme Odin, dont la bibliothèque livrée emploie le même mécanisme |
 | Odin, et tout langage dont la bibliothèque livre un appel système brut (C, C++, Go, Zig, FreePascal…) | F2 | 0 | `mbind` par appel système brut pose une politique NUMA (`MPOL_BIND` relu par `get_mempolicy`, sonde d'Odin) | F2 compte les constructions de localité et de distribution ; un numéro d'appel système n'en est pas une (C : « libnuma hors standard ») | ½ si l'appel système brut compte, comme il compte pour D4 (Go, FreePascal) |
 | Nim | E3 | 1 | `likely`/`unlikely` changent la disposition avec gcc 16 (compilateur C par défaut de Nim), pas avec clang 23 (celui du banc) | La chaîne livrée compile par gcc : la capacité marche telle que livrée | 0 si l'on note la configuration du banc (clang), où l'indication est perdue |
+| C | B2 | ½ | La glibc livre une arène (`obstack`, `<obstack.h>`) : deux blocs consécutifs, libérés d'un coup | Pas d'interface d'allocateur que la bibliothèque accepterait : ½ | 1 si une arène de la bibliothèque système suffit |
+| C, C++, Fortran | F2 | 0, 0, ½ | Le trait d'allocateur OpenMP `omp_atk_partition` (interleaved, nearest, blocked) est accepté par libomp et libgomp ; sur cet hôte à un seul nœud NUMA, aucune politique n'est posée | Effet invérifiable ici ; libgomp passe par libnuma, tierce | ½ si le trait d'OpenMP compte comme construction de localité |

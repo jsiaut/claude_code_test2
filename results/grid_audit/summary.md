@@ -4,8 +4,8 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 
 | Langage | Sondées | Mesurées | Sans sonde | Déclaratives | Classes |
 |---|---|---|---|---|---|
-| c | 33 | 1 | 0 | 33 |  |
-| cpp | 33 | 1 | 0 | 33 |  |
+| c | 33 | 1 | 0 | 0 | exécutée 30, exécutée+échec 1, recherche 1, échec+recherche 1 |
+| cpp | 33 | 1 | 0 | 0 | exécutée 31, recherche 1, échec+recherche 1 |
 | rust | 33 | 1 | 0 | 0 | exécutée 23, exécutée+recherche 1, exécutée+échec 2, recherche 6, échec 1 |
 | zig | 33 | 1 | 0 | 0 | exécutée 28, exécutée+recherche 1, exécutée+échec 2, recherche 2 |
 | odin | 33 | 1 | 0 | 0 | exécutée 28, exécutée+échec 2, recherche 2, échec 1 |
@@ -30,28 +30,12 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | bqn | 33 | 1 | 0 | 33 |  |
 | php | 33 | 1 | 0 | 33 |  |
 
-Total : 589 sondées, 25 mesurées, 236 sans sonde, 226 déclaratives.
+Total : 589 sondées, 25 mesurées, 236 sans sonde, 160 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 
 | Langage | Case | Sonde | v1 | v2 | Preuve |
 |---|---|---|---|---|---|
-| c | C1 | 0.5 | 0.5 | 1 | types vectoriels portables par extension (vector_size) : 3 ; pas dans le standard C |
-| c | C4 | 0.5 | 0.5 | 1 | réassociation : options -ffast-math/-fassociative-math, #pragma clang fp reassociate (extension) ; pas de contrôle standard |
-| c | C5 | 0.5 | 0.5 | 1 | OpenMP, livré avec clang et gcc mais hors norme ISO C : parallel for simd reduction = 499500 |
-| c | D3 | 0.5 | 0.5 | 1 | __GCC_DESTRUCTIVE_SIZE=64 (macro prédéfinie par clang et gcc), sysconf(_SC_LEVEL1_DCACHE_LINESIZE)=64 (glibc) ; pas de constante ISO |
-| c | D4 | 0.5 | 0.5 | 1 | affinité via POSIX/Linux sched_setaffinity (pas dans le standard C) rc=0 |
-| c | D5 | 0.5 | 0.5 | 1 | atomic_thread_fence standard ; pause via intrinsèque _mm_pause |
-| c | E2 | 0.5 | 0.5 | 1 | assembleur en ligne par extension gcc/clang (__asm__) : 2 |
-| c | E3 | 0.5 | 0.5 | 1 | __builtin_expect (extension) ; [[likely]] n'existe qu'en C++ |
-| c | E4 | 0.5 | 0.5 | 1 | __builtin_prefetch (extension) ou _mm_prefetch (intrinsèque) |
-| c | F4 | 0.5 | 0.5 | 1 | mmap POSIX (pas dans le standard C) puis réinterprétation par cast : 0.439005 |
-| cpp | C5 | 0.5 | 0.5 | 1 | std::execution::par_unseq compile, mais libstdc++ l'exécute en série sans TBB, bibliothèque tierce (backend SERIAL) |
-| cpp | D4 | 0.5 | 0.5 | 1 | pas d'affinité dans la bibliothèque standard ; sched_setaffinity de la libc, livrée avec la chaîne |
-| cpp | D5 | 0.5 | 0.5 | 1 | std::atomic_thread_fence, std::barrier ; pause seulement par intrinsèque |
-| cpp | E4 | 0.5 | 0.5 | 1 | __builtin_prefetch (extension) |
-| cpp | E5 | 0.5 | 0.5 | 1 | __restrict__ (extension, pas dans la norme C++) |
-| cpp | F4 | 0.5 | 0.5 | 1 | mmap POSIX + std::start_lifetime_as (C++23) : 0.439005 |
 | go | D4 | 0.5 | 0.5 | 1 | syscall brut sched_setaffinity errno=0 |
 | go | F4 | 0.5 | 0.5 | 1 | syscall.Mmap + unsafe.Slice : 0.4390046 <nil> |
 | python | D4 | 0.5 | 0.5 | 1 | os.sched_setaffinity -> {0} |

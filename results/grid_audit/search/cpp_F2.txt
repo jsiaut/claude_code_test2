@@ -1,0 +1,68 @@
+# Recherche d'absence : cpp, case F2
+# Chaîne : g++-16 (GCC) 16.2.0
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^\s*#\s*define\s+\w|^\s*(template\s*<.*>\s*)?(class|struct|union|enum|using|typedef|inline\s+constexpr|constexpr)\b|^\s*(extern\s+)?[A-Za-z_][\w:<> \*&]*[\s\*&]\w+\s*\(
+# 2 déclarations publiques, 69 mentions, 11 fichiers
+
+## Déclarations publiques
+format:4987: std::locale locale() { return _M_loc.value(); }
+streambuf:220: locale __tmp(this->getloc());
+
+## Mentions (au plus 12 lignes par fichier)
+clocale:29: *  This is the C++ version of the Standard C Library header @c locale.h,
+clocale:47: #include <locale.h>
+clocale:49: // Get rid of those macros defined in <locale.h> in lieu of real functions.
+format:50: #include <locale>
+format:1254: // A lightweight optional<locale>.
+format:1260: _Optional_locale(const locale& __loc) noexcept
+format:1280: _M_loc.~locale();
+format:1292: ~_Optional_locale() { if (_M_hasval) _M_loc.~locale(); }
+format:1295: operator=(locale&& __loc) noexcept
+format:1307: const locale&
+format:1322: std::locale _M_loc;
+format:1739: auto& __np = std::use_facet<numpunct<_CharT>>(__fc.locale());
+format:1816: const auto& __l = __fc.locale();
+format:2330: auto __s = _M_localize(__str, __expc, __offset, __fc.locale());
+format:2364: // Locale-specific format.
+fstream:477: imbue(const locale& __loc);
+iomanip:53: #include <locale>
+ios:45: #include <bits/localefwd.h>	// For class locale
+istream:172: *  These functions use the stream's current locale (specifically, the
+istream:221: *  These functions use the stream's current locale (specifically, the
+istream:330: *  These functions use the stream's current locale (specifically, the
+istream:821: *     characters from the stream.  The currently imbued locale is
+istream:898: *  - the next character is whitespace according to the current locale
+istream:1066: *  The current locale is used to distinguish whitespace characters.
+locale:1: // Locale support -*- C++ -*-
+locale:29: /** @file include/locale
+regex:43: #include <locale>
+streambuf:200: /// Current locale setting.
+streambuf:201: locale 			_M_buf_locale;
+streambuf:212: *  @param  __loc  The new locale.
+streambuf:213: *  @return  The previous locale.
+streambuf:217: locale
+streambuf:218: pubimbue(const locale& __loc)
+streambuf:227: *  @brief  Locale access.
+streambuf:228: *  @return  The current locale in effect.
+streambuf:231: *  is returned.  Otherwise the global locale in effect at the time
+streambuf:234: locale
+streambuf:475: _M_buf_locale(locale())
+streambuf:579: *  @param  __loc  A new locale.
+ext/codecvt_specializations.h:1: // Locale support (codecvt) -*- C++ -*-
+ext/codecvt_specializations.h:41: #include <locale>
+ext/codecvt_specializations.h:247: static locale::id 		id;
+ext/codecvt_specializations.h:294: locale::id
+ext/enc_filebuf.h:35: #include <locale>
+
+## Lignes trouvées, par fichier
+    3 clocale
+    4 ext/codecvt_specializations.h
+    1 ext/enc_filebuf.h
+   35 format
+    1 fstream
+    1 iomanip
+    1 ios
+    6 istream
+    2 locale
+    1 regex
+   16 streambuf

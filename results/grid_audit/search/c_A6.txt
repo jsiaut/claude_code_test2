@@ -1,0 +1,11 @@
+# Recherche d'absence : c, case A6
+# Chaîne : Ubuntu clang version 23.1.5 (++20261023090852+395ba2c4d274-1~exp1~20261023090919.90)
+# Motif : \bsoa\b|_soa\b|\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array
+# Déclaration publique : ^\s*#\s*define\s+\w|^\s*(typedef|struct|union|enum)\b|^\s*(extern\s+)?(static\s+)?(__inline\w*\s+)?[A-Za-z_][\w \*]*[\s\*]\w+\s*\(
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

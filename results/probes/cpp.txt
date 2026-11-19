@@ -1,34 +1,33 @@
-CAP;A1;1;std::vector<S> de valeurs contiguës : &v[1]-&v[0]=16 o
-CAP;A2;1;offsetof(S,c)=8 (types à disposition standard)
-CAP;A3;1;champs de bits sizeof(BF)=4 ; packed par attribut gnu sizeof(P)=5
-CAP;A4;1;alignas(64) + new aligné C++17 : 0
-CAP;A5;1;std::bit_cast<uint32_t>(1.0f)=0x3f800000 ; unions
-CAP;A6;0;pas de SoA standard (la réflexion C++26 permettrait de l'écrire)
-CAP;A7;1;std::array en ligne sizeof(In)=68
-CAP;A8;1;types étroits
-CAP;B1;1;pas de GC
-CAP;B2;1;std::pmr (monotonic_buffer_resource, pools) + concept Allocator
-CAP;B3;1;objets et std::array sur la pile
-CAP;B4;0.5;pas d'allocation cachée par le langage, mais std::function, exceptions et coroutines peuvent allouer
-CAP;B5;1;pointeurs bruts
-CAP;C1;1;std::simd (C++26) : reduce=32
-CAP;C2;1;intrinsèques <immintrin.h> : 16
-CAP;C3;1;auto-vectorisation -O3
-CAP;C4;1;réassociation permise dans la norme : std::reduce/transform_reduce (ordre non spécifié) et std::simd::reduce
-CAP;C5;0.5;std::execution::par_unseq compile, mais libstdc++ l'exécute en série sans TBB, bibliothèque tierce (backend SERIAL)
-CAP;D1;1;std::thread/jthread
-CAP;D2;1;std::memory_order relaxed/acquire/release/seq_cst
-CAP;D3;1;std::hardware_destructive_interference_size=64
-CAP;D4;0.5;pas d'affinité dans la bibliothèque standard ; sched_setaffinity de la libc, livrée avec la chaîne
-CAP;D5;0.5;std::atomic_thread_fence, std::barrier ; pause seulement par intrinsèque
-CAP;E1;1;natif
-CAP;E2;1;déclaration asm, dans la norme C++ ([dcl.asm], sens défini par l'implémentation) : 2
-CAP;E3;1;[[likely]]/[[unlikely]] (C++20)
-CAP;E4;0.5;__builtin_prefetch (extension)
-CAP;E5;0.5;__restrict__ (extension, pas dans la norme C++)
-CAP;E6;1;pas de vérification de bornes par défaut ; .at() les ajoute
-CAP;E7;1;templates monomorphisés + consteval : 49 42
-CAP;F1;1;std::mdspan (C++23), dispositions layout_right/left/stride : 3
-CAP;F2;0;pas de localité/distribution
-CAP;F3;1;entiers non signés modulaires (w=0)
-CAP;F4;0.5;mmap POSIX + std::start_lifetime_as (C++23) : 0.439005
+CAP;A1;1;[exécutée] std::vector<Part> : pas de 16 o = sizeof(Part) 16 ; les 4 premiers octets du tampon sont le float x en ligne : 00 00 80 3f
+CAP;A2;1;[exécutée] ordre déclaré gardé : (u8, double, u8) occupe 24 o, offsetof(b) = 8, offsetof(c) = 16
+CAP;A3;1;[exécutée] champs de bits (norme) : sizeof(BF) = 4, x = 5, y = 17 ; __attribute__((packed)) : sizeof(Pk) = 5 ; ½ en v1
+CAP;A4;1;[exécutée] alignas(64) : alignof(Line) = 64, new Line[4] (new aligné, C++17) à 0 mod 64
+CAP;A5;1;[exécutée] std::bit_cast<std::uint32_t>(1.0f) = 0x3f800000
+CAP;A7;1;[exécutée] struct { uint32_t n; std::array<float, 16> a; } : 68 o, offsetof(a) = 4 (tableau en ligne)
+CAP;A8;1;[exécutée] uint8_t/int16_t/std::float16_t/float : 1/2/2/4 o ; std::vector<uint8_t>(1000) : 1000 o
+CAP;B1;1;[exécutée] aucun ramasse-miettes : destructeurs et delete explicites ; 1 fil (Threads: de /proc/self/status)
+CAP;B2;1;[exécutée] std::pmr::monotonic_buffer_resource sur un tampon de pile, passé à std::pmr::vector : tampon dans l'arène = 1, 200 éléments
+CAP;B3;1;[exécutée] char local[4096] à 4721 o d'une autre variable locale, à 140732016630272 o du tas : sur la pile
+CAP;B4;0.5;[exécutée] operator new compté : std::function à capture de 64 o -> 1 allocation ; throw std::runtime_error -> 1 (message) ; std::sort, std::array, lambda -> 0 (1 126) : allocations cachées de certaines constructions
+CAP;B5;1;[exécutée] uint32_t * : mp[3] = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7
+CAP;C5;1;[exécutée] OpenMP (livré avec g++, -fopenmp) : parallel for sur 4 fils distincts (gettid), reduction(+) = 499999500000 ; std::execution::par_unseq reste série sans TBB (½ en v1)
+CAP;D1;1;[exécutée] std::jthread : 4 fils, 4 identifiants distincts (gettid), somme 7998000 (attendu 7998000)
+CAP;D3;1;[exécutée] std::hardware_destructive_interference_size = 64
+CAP;D4;1;[exécutée] sched_setaffinity de la glibc (bibliothèque système de la plateforme) : retour 0, sched_getcpu() = 1 ; ½ en v1
+CAP;E2;1;[exécutée] déclaration asm (norme ; forme étendue de g++) : 41 -> 42
+CAP;F1;1;[exécutée] std::mdspan (C++23) de 3 x 4 connus à l'exécution : &m[1, 0] - &m[0, cols-1] = 4 o (contigu, layout_right)
+CAP;F3;1;[exécutée] UINT32_MAX + 1 = 0, uint8_t(250 + 10) = 4 (non signés modulaires ; débordement signé indéfini)
+CAP;F4;1;[exécutée] mmap (POSIX, glibc) + std::start_lifetime_as_array (C++23) : 1.5 2.5 3.5 4.5 ; ½ en v1
+CAP;C1;1;[exécutée] vector_size(32) (extension documentée de g++) : 1 vaddps dans vadd ; std::simd de C++26 reste expérimental dans GCC 16 (bench K1, K5, K6) ; ½ en v1
+CAP;C2;1;[exécutée] _mm512_ternarylogic_epi32 (<immintrin.h> livré avec g++) : 1 vpternlogd dans tern ; ½ en v1
+CAP;C4;1;[exécutée] #pragma omp simd reduction(+:s) (OpenMP SIMD, livré, -fopenmp-simd), par boucle : 1 vaddps ymm/zmm contre 15 vaddss pour la boucle ordinaire ; std::reduce(std::execution::unseq, …) autorise la réassociation, mais g++ 16 ne la vectorise pas (0 vaddps ymm/zmm) : texte de la matrice à préciser
+CAP;D2;1;[exécutée] std::atomic à memory_order explicite, code produit : release = 1 mov et 0 xchg ; seq_cst = 1 xchg ; fetch_add relaxed = 1 instruction lock
+CAP;D5;1;[exécutée] std::atomic_thread_fence et _mm_pause : 1 pause (rep nop) et 1 barrière dans spin ; ½ en v1
+CAP;E1;1;[exécutée] g++ -S : 825 lignes d'assembleur
+CAP;E3;1;[exécutée] [[likely]] (C++20) : disposition [ jne call ret ret ] contre [ je ret call ret ] sans indication (appel ramené dans le chemin chaud ; g++ sort déjà l'appel du chemin chaud sans indication, [[unlikely]] donne [ je ret call ret ])
+CAP;E4;1;[exécutée] __builtin_prefetch : 1 prefetcht0 dans pf ; ½ en v1
+CAP;E5;1;[exécutée] __restrict__ (extension documentée de g++) : axpy_r « 1 boucle vectorisée », 0 version pour alias ; sans : 1 version pour alias (-fopt-info-vec) ; ½ en v1
+CAP;E6;1;[exécutée] v[i] : 0 appel ; v.at(i) : 1 appel à __throw_out_of_range_fmt (dans idx_at.cold) : contrôle par expression ; vérifications absentes par défaut
+CAP;E7;1;[exécutée] consteval fib(60) = 1548008755920 ; gsum<float> = 4.0, gsum<double> = 3.75 ; dans l'asm, fib60 = 1 constante immédiate ; gsum instanciée en 2 fonctions (float et double)
+CAP;A6;0;[échec] __attribute__((soa)) : error: 'soa' attribute directive ignored [-Werror=attributes] ; [recherche] motif A6 dans les en-têtes de libstdc++ 16.2.0 et de la glibc : 0 déclaration, 0 mention
+CAP;F2;0;[recherche] motif F2 dans les en-têtes de libstdc++ 16.2.0 et de la glibc : 2 déclarations (results/grid_audit/search/cpp_F2.txt) : std::locale, faux positifs ; aucune construction de localité ni de distribution (même constat que C, NOTE F2 de C pour le trait de partition d'OpenMP)

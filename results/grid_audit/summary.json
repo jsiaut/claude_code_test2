@@ -1,14 +1,19 @@
 {
  "langs": {
   "c": {
-   "déclarative": 33,
+   "exécutée": 30,
    "sondée": 33,
-   "mesurée": 1
+   "échec+recherche": 1,
+   "mesurée": 1,
+   "exécutée+échec": 1,
+   "recherche": 1
   },
   "cpp": {
-   "déclarative": 33,
+   "exécutée": 31,
    "sondée": 33,
-   "mesurée": 1
+   "échec+recherche": 1,
+   "mesurée": 1,
+   "recherche": 1
   },
   "rust": {
    "exécutée": 23,
@@ -169,131 +174,19 @@
   }
  },
  "total": {
-  "déclarative": 226,
+  "exécutée": 346,
   "sondée": 589,
+  "échec+recherche": 3,
   "mesurée": 25,
-  "exécutée": 285,
+  "exécutée+échec": 13,
+  "recherche": 49,
   "exécutée+recherche": 10,
-  "recherche": 47,
-  "exécutée+échec": 12,
   "échec": 5,
   "exécutée+échec+recherche": 3,
-  "échec+recherche": 1,
-  "sans sonde": 236
+  "sans sonde": 236,
+  "déclarative": 160
  },
  "divergences": [
-  [
-   "c",
-   "C1",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "c",
-   "C4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "c",
-   "C5",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "c",
-   "D3",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "c",
-   "D4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "c",
-   "D5",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "c",
-   "E2",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "c",
-   "E3",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "c",
-   "E4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "c",
-   "F4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "cpp",
-   "C5",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "cpp",
-   "D4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "cpp",
-   "D5",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "cpp",
-   "E4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "cpp",
-   "E5",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "cpp",
-   "F4",
-   0.5,
-   0.5,
-   1
-  ],
   [
    "go",
    "D4",

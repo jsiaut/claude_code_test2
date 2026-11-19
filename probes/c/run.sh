@@ -1,2 +1,4 @@
 #!/bin/sh
-cd "$(dirname "$0")" && mkdir -p bin && clang-23 -std=c23 -O2 -march=native -pthread -fopenmp -o bin/probe probe.c && bin/probe
+# Sonde de C : audit de la grille (audit/, docs/V4_PLAN.md 2.1), qui remplace la première sonde (probe.c, conservée).
+# Sortie : results/probes/c.txt
+exec sh "$(dirname "$0")/audit/run.sh"

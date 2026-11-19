@@ -1,34 +1,34 @@
-CAP;A1;1;tableau de struct contigu sizeof(arr)=64 (4x16)
-CAP;A2;1;offsetof(S,b)=4 offsetof(S,c)=8
-CAP;A3;1;bitfields sizeof(BF)=4 ; packed (extension) sizeof(P)=5
-CAP;A4;1;alignas(64) alignof(L)=64, aligned_alloc % 64=0
-CAP;A5;1;union f32->u32 = 0x3f800000
-CAP;A6;0;pas de SoA dans le langage ni la bibliothèque standard
-CAP;A7;1;sizeof(In)=68 (float[16] en ligne)
-CAP;A8;1;uint8_t/int16_t/float stockés à leur taille : 1 2 4
-CAP;B1;1;pas de ramasse-miettes
-CAP;B2;0.5;malloc/free seulement ; arènes à écrire soi-même (pas d'interface d'allocateur standard)
-CAP;B3;1;tableau sur la pile (1024 o) et VLA
-CAP;B4;1;aucune allocation implicite du langage
-CAP;B5;1;pointeurs bruts, mmap anonyme 0x7f3a61090000
-CAP;C1;0.5;types vectoriels portables par extension (vector_size) : 3 ; pas dans le standard C
-CAP;C2;1;intrinsèques AVX-512 <immintrin.h> : 32
-CAP;C3;1;auto-vectorisation clang/gcc -O3 (vérifiée sur K4/K9 natural)
-CAP;C4;0.5;réassociation : options -ffast-math/-fassociative-math, #pragma clang fp reassociate (extension) ; pas de contrôle standard
-CAP;C5;0.5;OpenMP, livré avec clang et gcc mais hors norme ISO C : parallel for simd reduction = 499500
-CAP;D1;1;threads <threads.h>/pthreads
-CAP;D2;1;<stdatomic.h> memory_order_relaxed/acquire/release/seq_cst : 1
-CAP;D3;0.5;__GCC_DESTRUCTIVE_SIZE=64 (macro prédéfinie par clang et gcc), sysconf(_SC_LEVEL1_DCACHE_LINESIZE)=64 (glibc) ; pas de constante ISO
-CAP;D4;0.5;affinité via POSIX/Linux sched_setaffinity (pas dans le standard C) rc=0
-CAP;D5;0.5;atomic_thread_fence standard ; pause via intrinsèque _mm_pause
-CAP;E1;1;compilation native, objdump/-S
-CAP;E2;0.5;assembleur en ligne par extension gcc/clang (__asm__) : 2
-CAP;E3;0.5;__builtin_expect (extension) ; [[likely]] n'existe qu'en C++
-CAP;E4;0.5;__builtin_prefetch (extension) ou _mm_prefetch (intrinsèque)
-CAP;E5;1;restrict (C99)
-CAP;E6;1;pas de vérification de bornes (rien à désactiver)
-CAP;E7;0.5;constexpr C23 et _Generic, mais ni génériques monomorphisés ni calcul arbitraire à la compilation : 64
-CAP;F1;1;tableaux 2D C99 contigus en ligne (VLA/pointeur vers tableau) : 3
-CAP;F2;0;pas de construction de localité/distribution (libnuma hors standard)
-CAP;F3;1;uint32_t modulaire (w=0) ; débordement signé indéfini
-CAP;F4;0.5;mmap POSIX (pas dans le standard C) puis réinterprétation par cast : 0.439005
+CAP;A1;1;[exécutée] Part v[8] : pas de 16 o = sizeof(Part) 16 ; les 4 premiers octets sont le float x en ligne : 00 00 80 3f
+CAP;A2;1;[exécutée] ordre déclaré gardé : (u8, double, u8) occupe 24 o, offsetof(b) = 8, offsetof(c) = 16
+CAP;A3;1;[exécutée] champs de bits (norme) : sizeof(BF) = 4, x = 5, y = 17 ; __attribute__((packed)) : sizeof(Pk) = 5 ; ½ en v1
+CAP;A4;1;[exécutée] alignas(64) : alignof(Line) = 64, Line[] au pas de 64 o, aligned_alloc à 0 mod 64
+CAP;A5;1;[exécutée] union float/uint32 : 0x3f800000 ; memcpy de réinterprétation identique
+CAP;A7;1;[exécutée] struct { uint32_t n; float a[16]; } : 68 o, offsetof(a) = 4 (tableau en ligne)
+CAP;A8;1;[exécutée] uint8_t/int16_t/_Float16/float : 1/2/2/4 o ; uint8_t[1000] occupe 1000 o
+CAP;B1;1;[exécutée] aucun ramasse-miettes : malloc/free explicites ; 1 fil (Threads: de /proc/self/status)
+CAP;B3;1;[exécutée] char local[4096] à 21783 o d'une autre variable locale, à 46599761949072 o du tas ; VLA float[4] sur la pile (16 o de local)
+CAP;B4;1;[exécutée] mallinfo2 : tri qsort, copies de structures, littéraux composés, snprintf dans un tampon de pile -> 0 o alloués (255.0 6.0) ; seule malloc alloue
+CAP;B5;1;[exécutée] uint32_t * : mp[3] = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7
+CAP;C1;1;[exécutée] vector_size(32) (extension documentée de clang et gcc) : (a + a)[7] = 16 ; ½ en v1
+CAP;C5;1;[exécutée] OpenMP (livré avec clang et gcc, -fopenmp) : parallel for sur 4 fils distincts (gettid), reduction(+) = 499999500000 ; ½ en v1
+CAP;D1;1;[exécutée] <threads.h> (C11) : 4 fils, 4 identifiants distincts (gettid), somme 7998000 (attendu 7998000)
+CAP;D3;1;[exécutée] __GCC_DESTRUCTIVE_SIZE = 64 (macro prédéfinie par clang et gcc), sysconf(_SC_LEVEL1_DCACHE_LINESIZE) = 64 (glibc) ; ½ en v1
+CAP;D4;1;[exécutée] sched_setaffinity de la glibc (bibliothèque système de la plateforme) : retour 0, sched_getcpu() = 1 ; ½ en v1
+CAP;E2;1;[exécutée] __asm__ ("addq $1, %0" : "+r"(x)) : 41 -> 42 ; ½ en v1
+CAP;F1;1;[exécutée] float (*m)[cols] = malloc(sizeof(float[rows][cols])), 3 x 4 connus à l'exécution (types à dimension variable, C99) : &m[1][0] - &m[0][cols-1] = 4 o (contigu, par lignes)
+CAP;F3;1;[exécutée] UINT32_MAX + 1 = 0, (uint8_t)(250 + 10) = 4 (non signés modulaires ; débordement signé indéfini, -fwrapv pour l'envelopper)
+CAP;F4;1;[exécutée] mmap (POSIX, glibc) puis réinterprétation par conversion de pointeur : 1.5 2.5 3.5 4.5 ; ½ en v1
+CAP;B2;0.5;[exécutée] obstack de la glibc (arène, <obstack.h>) : deux blocs consécutifs à 400 o d'écart, libérés d'un coup par obstack_free ; aucune interface d'allocateur (malloc et free seulement, pas d'allocateur passé aux fonctions de la bibliothèque) ; texte de la matrice à préciser (« arènes à écrire soi-même » : obstack existe)
+CAP;C2;1;[exécutée] _mm512_ternarylogic_epi32 (<immintrin.h> livré avec clang) : 1 vpternlogd dans tern ; ½ en v1
+CAP;C4;1;[exécutée] #pragma clang fp reassociate(on), par bloc : 7 vaddps ymm/zmm dans sum_reassoc contre 9 vaddss dans sum_plain ; ½ en v1
+CAP;D2;1;[exécutée] <stdatomic.h> à memory_order explicite, code produit : release = 1 mov et 0 xchg ; seq_cst = 1 xchg ; fetch_add relaxed = 1 instruction lock
+CAP;D5;1;[exécutée] atomic_thread_fence (C11) et _mm_pause : 1 pause et 1 barrière dans spin ; ½ en v1
+CAP;E1;1;[exécutée] clang -S : 420 lignes d'assembleur, 6 instructions vectorielles flottantes dans axpy
+CAP;E3;1;[exécutée] __builtin_expect(x == 7, 0) : disposition [ je retq callq retq ] contre [ jne callq retq ] sans indication ; ½ en v1
+CAP;E4;1;[exécutée] __builtin_prefetch : 1 prefetcht0 dans pf ; ½ en v1
+CAP;E5;1;[exécutée] restrict (C99) : 2 attributs noalias dans l'IR de axpy
+CAP;E6;1;[exécutée] a[i] : 0 appel de vérification (aucune vérification de bornes dans le langage)
+CAP;E7;0.5;[exécutée] constexpr int K = 12 * 12 = 144 (C23) ; _Generic choisit float puis double (sélection, pas d'instanciation) ; [échec] constexpr initialisé par un appel de fonction : error: constexpr variable 'F' must be initialized by a constant expression : ni calcul arbitraire à la compilation ni génériques instanciés
+CAP;A6;0;[échec] __attribute__((soa)) : error: unknown attribute 'soa' ignored [-Werror,-Wunknown-attributes] ; [recherche] motif A6 dans les en-têtes de la glibc (clang 23.1.5, 2.39) et de clang : 0 déclaration, 0 mention
+CAP;F2;0;[recherche] motif F2 dans les en-têtes de la glibc et de clang (clang 23.1.5, 2.39) : 14 déclarations (results/grid_audit/search/c_F2.txt) : crochets de traçage des appels système mbind et set_mempolicy du sanitiseur, intrinsèques Hexagon d'entrelacement ; pas de mbind dans la glibc (libnuma, tierce, n'a pas ses en-têtes ici) ; le trait OpenMP omp_atk_partition (interleaved) est accepté, sans politique visible sur cet hôte à un nœud (NOTE F2)
+NOTE;F2;[exécutée] omp_init_allocator(omp_default_mem_space, {omp_atk_partition, omp_atv_interleaved}) avec libomp de clang : get_mempolicy=0 mode=0 (3 = MPOL_INTERLEAVE)

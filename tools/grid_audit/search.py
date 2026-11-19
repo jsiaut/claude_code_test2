@@ -31,7 +31,10 @@ def lines_of(lc):
     def keep(name):
         return (not exts or name.endswith(exts)) and not any(e in name for e in excl)
 
-    for r in lc.get("roots", []):
+    roots = list(lc.get("roots", []))
+    if "rootlist" in lc:   # commande qui imprime une liste de fichiers (par exemple les en-têtes d'un paquet)
+        roots += subprocess.run(lc["rootlist"], shell=True, capture_output=True, text=True).stdout.split()
+    for r in roots:
         r = os.path.expandvars(r)
         if r.endswith(".zip"):
             with zipfile.ZipFile(r) as z:

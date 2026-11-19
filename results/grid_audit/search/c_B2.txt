@@ -1,0 +1,253 @@
+# Recherche d'absence : c, case B2
+# Chaîne : Ubuntu clang version 23.1.5 (++20261023090852+395ba2c4d274-1~exp1~20261023090919.90)
+# Motif : arena|allocator|alloc_?in\b|new_?in\b|bump|region|mem_?pool|memory_?pool
+# Déclaration publique : ^\s*#\s*define\s+\w|^\s*(typedef|struct|union|enum)\b|^\s*(extern\s+)?(static\s+)?(__inline\w*\s+)?[A-Za-z_][\w \*]*[\s\*]\w+\s*\(
+# 50 déclarations publiques, 235 mentions, 28 fichiers
+
+## Déclarations publiques
+lib/llvm-23/lib/clang/23/include/__clang_hip_libdevice_declares.h:217: __device__ void __asan_poison_memory_region(const void *addr,
+lib/llvm-23/lib/clang/23/include/__clang_hip_libdevice_declares.h:219: __device__ void __asan_unpoison_memory_region(const void *addr,
+lib/llvm-23/lib/clang/23/include/__clang_hip_libdevice_declares.h:222: __device__ void *__asan_region_is_poisoned(void *beg, __SIZE_TYPE__ size);
+lib/llvm-23/lib/clang/23/include/__clang_hip_libdevice_declares.h:225: #define ASAN_POISON_MEMORY_REGION(addr, size)                                  \
+lib/llvm-23/lib/clang/23/include/__clang_hip_libdevice_declares.h:227: #define ASAN_UNPOISON_MEMORY_REGION(addr, size)                                \
+lib/llvm-23/lib/clang/23/include/__clang_hip_libdevice_declares.h:230: #define ASAN_POISON_MEMORY_REGION(addr, size) ((void)(addr), (void)(size))
+lib/llvm-23/lib/clang/23/include/__clang_hip_libdevice_declares.h:231: #define ASAN_UNPOISON_MEMORY_REGION(addr, size) ((void)(addr), (void)(size))
+lib/llvm-23/lib/clang/23/include/omp-tools.h:313: typedef enum ompt_sync_region_t {
+lib/llvm-23/lib/clang/23/include/omp-tools.h:956: typedef void (*ompt_callback_sync_region_t) (
+lib/llvm-23/lib/clang/23/include/omp-tools.h:964: typedef struct ompt_record_sync_region_t {
+lib/llvm-23/lib/clang/23/include/omp.h:390: typedef omp_uintptr_t omp_allocator_handle_t;
+lib/llvm-23/lib/clang/23/include/omp.h:417: typedef enum omp_allocator_handle_t : omp_uintptr_t
+lib/llvm-23/lib/clang/23/include/omp.h:419: typedef enum omp_allocator_handle_t
+lib/llvm-23/lib/clang/23/include/omp.h:455: extern omp_allocator_handle_t __KAI_KMPC_CONVENTION omp_init_allocator(omp_memspace_handle_t m,
+lib/llvm-23/lib/clang/23/include/omp.h:457: extern void __KAI_KMPC_CONVENTION omp_destroy_allocator(omp_allocator_handle_t allocator);
+lib/llvm-23/lib/clang/23/include/omp.h:459: extern void __KAI_KMPC_CONVENTION omp_set_default_allocator(omp_allocator_handle_t a);
+lib/llvm-23/lib/clang/23/include/omp.h:460: extern omp_allocator_handle_t __KAI_KMPC_CONVENTION omp_get_default_allocator(void);
+lib/llvm-23/lib/clang/23/include/omp.h:462: extern void *__KAI_KMPC_CONVENTION omp_alloc(size_t size, omp_allocator_handle_t a = omp_null_allocator);
+lib/llvm-23/lib/clang/23/include/omp.h:472: extern void __KAI_KMPC_CONVENTION omp_free(void * ptr, omp_allocator_handle_t a = omp_null_allocator);
+lib/llvm-23/lib/clang/23/include/omp.h:479: extern void *__KAI_KMPC_CONVENTION omp_alloc(size_t size, omp_allocator_handle_t a);
+lib/llvm-23/lib/clang/23/include/omp.h:482: extern void *__KAI_KMPC_CONVENTION omp_calloc(size_t nmemb, size_t size, omp_allocator_handle_t a);
+lib/llvm-23/lib/clang/23/include/omp.h:485: extern void *__KAI_KMPC_CONVENTION omp_realloc(void *ptr, size_t size, omp_allocator_handle_t allocator,
+lib/llvm-23/lib/clang/23/include/omp.h:487: extern void __KAI_KMPC_CONVENTION omp_free(void *ptr, omp_allocator_handle_t a);
+lib/llvm-23/lib/clang/23/include/omp.h:501: extern omp_allocator_handle_t omp_get_devices_allocator(int ndevs, const int *devs, omp_memspace_handle_t memspace);
+lib/llvm-23/lib/clang/23/include/omp.h:502: extern omp_allocator_handle_t omp_get_device_allocator(int dev, omp_memspace_handle_t memspace);
+lib/llvm-23/lib/clang/23/include/omp.h:503: extern omp_allocator_handle_t omp_get_devices_and_host_allocator(int ndevs, const int *devs, omp_memspace_handle_t memspace);
+lib/llvm-23/lib/clang/23/include/omp.h:504: extern omp_allocator_handle_t omp_get_device_and_host_allocator(int dev, omp_memspace_handle_t memspace);
+lib/llvm-23/lib/clang/23/include/omp.h:505: extern omp_allocator_handle_t omp_get_devices_all_allocator(omp_memspace_handle_t memspace);
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:331: static void ompt_multiplex_callback_sync_region(ompt_sync_region_t kind,
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:348: static void ompt_multiplex_callback_sync_region_wait(
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:866: static void ompt_multiplex_callback_reduction(ompt_sync_region_t kind,
+lib/llvm-23/lib/clang/23/include/ompt.h:313: typedef enum ompt_sync_region_t {
+lib/llvm-23/lib/clang/23/include/ompt.h:956: typedef void (*ompt_callback_sync_region_t) (
+lib/llvm-23/lib/clang/23/include/ompt.h:964: typedef struct ompt_record_sync_region_t {
+lib/llvm-23/lib/clang/23/include/unwind.h:257: _Unwind_Ptr _Unwind_GetRegionStart(struct _Unwind_Context *);
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:12: #define SANITIZER_ALLOCATOR_INTERFACE_H
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:101: void SANITIZER_CDECL __sanitizer_purge_allocator(void);
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:34: void SANITIZER_CDECL __asan_poison_memory_region(void const volatile *addr,
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:49: void SANITIZER_CDECL __asan_unpoison_memory_region(void const volatile *addr,
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:55: #define ASAN_DEFINE_REGION_MACROS
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:58: #define ASAN_DEFINE_REGION_MACROS
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:69: #define ASAN_POISON_MEMORY_REGION(addr, size)                                  \
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:79: #define ASAN_UNPOISON_MEMORY_REGION(addr, size)                                \
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:82: #define ASAN_POISON_MEMORY_REGION(addr, size) ((void)(addr), (void)(size))
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:83: #define ASAN_UNPOISON_MEMORY_REGION(addr, size) ((void)(addr), (void)(size))
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:107: void *SANITIZER_CDECL __asan_region_is_poisoned(void *beg, size_t size);
+lib/llvm-23/lib/clang/23/include/sanitizer/hwasan_interface.h:35: void SANITIZER_CDECL __hwasan_enable_allocator_tagging(void);
+lib/llvm-23/lib/clang/23/include/sanitizer/hwasan_interface.h:36: void SANITIZER_CDECL __hwasan_disable_allocator_tagging(void);
+lib/llvm-23/lib/clang/23/include/sanitizer/lsan_interface.h:40: void SANITIZER_CDECL __lsan_register_root_region(const void *p, size_t size);
+lib/llvm-23/lib/clang/23/include/sanitizer/lsan_interface.h:41: void SANITIZER_CDECL __lsan_unregister_root_region(const void *p, size_t size);
+
+## Mentions (au plus 12 lignes par fichier)
+lib/llvm-23/lib/clang/23/include/ISO_Fortran_binding.h:157: * allocator used to managed memory of the data hold by the descriptor. */ \
+lib/llvm-23/lib/clang/23/include/__clang_cuda_cmath.h:87: //        of the variants inside the inner region and avoid the clash.
+lib/llvm-23/lib/clang/23/include/__clang_hip_cmath.h:83: //        of the variants inside the inner region and avoid the clash.
+lib/llvm-23/lib/clang/23/include/__clang_hip_libdevice_declares.h:226: __asan_poison_memory_region((addr), (size))
+lib/llvm-23/lib/clang/23/include/__clang_hip_libdevice_declares.h:228: __asan_unpoison_memory_region((addr), (size))
+lib/llvm-23/lib/clang/23/include/__clang_hip_math.h:516: #pragma omp allocate(__tmp) allocator(omp_thread_mem_alloc)
+lib/llvm-23/lib/clang/23/include/__clang_hip_math.h:598: #pragma omp allocate(__tmp) allocator(omp_thread_mem_alloc)
+lib/llvm-23/lib/clang/23/include/__clang_hip_math.h:659: #pragma omp allocate(__tmp) allocator(omp_thread_mem_alloc)
+lib/llvm-23/lib/clang/23/include/__clang_hip_math.h:673: #pragma omp allocate(__tmp) allocator(omp_thread_mem_alloc)
+lib/llvm-23/lib/clang/23/include/__clang_hip_math.h:916: #pragma omp allocate(__tmp) allocator(omp_thread_mem_alloc)
+lib/llvm-23/lib/clang/23/include/__clang_hip_math.h:1006: #pragma omp allocate(__tmp) allocator(omp_thread_mem_alloc)
+lib/llvm-23/lib/clang/23/include/__clang_hip_math.h:1069: #pragma omp allocate(__tmp) allocator(omp_thread_mem_alloc)
+lib/llvm-23/lib/clang/23/include/__clang_hip_math.h:1079: #pragma omp allocate(__tmp) allocator(omp_thread_mem_alloc)
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:36: unsigned idau_region : 8;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:37: unsigned idau_region_valid : 1;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:47: unsigned sau_region_valid : 1;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:51: unsigned mpu_region_valid : 1;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:53: unsigned sau_region : 8;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:57: unsigned mpu_region : 8;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:60: unsigned mpu_region : 8;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:62: unsigned sau_region : 8;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:66: unsigned mpu_region_valid : 1;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:68: unsigned sau_region_valid : 1;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:78: unsigned idau_region_valid : 1;
+lib/llvm-23/lib/clang/23/include/arm_cmse.h:79: unsigned idau_region : 8;
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:20: ///    memory region pointed to by the input parameter \a __p.
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:27: ///    A pointer to a 512-byte memory region. The beginning of this memory
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:28: ///    region should be aligned on a 16-byte boundary.
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:36: ///    memory region pointed to by the input parameter \a __p. The contents of
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:37: ///    this memory region should have been written to by a previous \c _fxsave
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:45: ///    A pointer to a 512-byte memory region. The beginning of this memory
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:46: ///    region should be aligned on a 16-byte boundary.
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:55: ///    memory region pointed to by the input parameter \a __p.
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:62: ///    A pointer to a 512-byte memory region. The beginning of this memory
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:63: ///    region should be aligned on a 16-byte boundary.
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:71: ///    memory region pointed to by the input parameter \a __p. The contents of
+lib/llvm-23/lib/clang/23/include/fxsrintrin.h:72: ///    this memory region should have been written to by a previous \c _fxsave
+lib/llvm-23/lib/clang/23/include/omp-tools.h:81: /* implicit barrier at the end of parallel region */\
+lib/llvm-23/lib/clang/23/include/omp-tools.h:101: macro (ompt_state_wait_target, 0x080)        /* waiting for target region */                 \
+lib/llvm-23/lib/clang/23/include/omp-tools.h:134: macro (ompt_callback_sync_region_wait,  ompt_callback_sync_region_t,       16) /* sync region wait begin or end   */ \
+lib/llvm-23/lib/clang/23/include/omp-tools.h:145: macro (ompt_callback_sync_region,       ompt_callback_sync_region_t,       23) /* sync region begin or end        */ \
+lib/llvm-23/lib/clang/23/include/omp-tools.h:157: macro (ompt_callback_cancel,            ompt_callback_cancel_t,            30) /* cancel innermost binding region */ \
+lib/llvm-23/lib/clang/23/include/omp-tools.h:159: macro (ompt_callback_reduction,         ompt_callback_sync_region_t,       31) /* reduction                       */ \
+lib/llvm-23/lib/clang/23/include/omp-tools.h:241: ompt_callback_sync_region_wait             = 16,
+lib/llvm-23/lib/clang/23/include/omp-tools.h:249: ompt_callback_sync_region                  = 23,
+lib/llvm-23/lib/clang/23/include/omp-tools.h:314: ompt_sync_region_barrier                DEPRECATED_51 = 1,
+lib/llvm-23/lib/clang/23/include/omp-tools.h:315: ompt_sync_region_barrier_implicit       DEPRECATED_51 = 2,
+lib/llvm-23/lib/clang/23/include/omp-tools.h:316: ompt_sync_region_barrier_explicit       = 3,
+lib/llvm-23/lib/clang/23/include/omp-tools.h:317: ompt_sync_region_barrier_implementation = 4,
+lib/llvm-23/lib/clang/23/include/omp.h:366: omp_atv_allocator_fb = 14,
+lib/llvm-23/lib/clang/23/include/omp.h:391: extern __KMP_IMP omp_allocator_handle_t const omp_null_allocator;
+lib/llvm-23/lib/clang/23/include/omp.h:392: extern __KMP_IMP omp_allocator_handle_t const omp_default_mem_alloc;
+lib/llvm-23/lib/clang/23/include/omp.h:393: extern __KMP_IMP omp_allocator_handle_t const omp_large_cap_mem_alloc;
+lib/llvm-23/lib/clang/23/include/omp.h:394: extern __KMP_IMP omp_allocator_handle_t const omp_const_mem_alloc;
+lib/llvm-23/lib/clang/23/include/omp.h:395: extern __KMP_IMP omp_allocator_handle_t const omp_high_bw_mem_alloc;
+lib/llvm-23/lib/clang/23/include/omp.h:396: extern __KMP_IMP omp_allocator_handle_t const omp_low_lat_mem_alloc;
+lib/llvm-23/lib/clang/23/include/omp.h:397: extern __KMP_IMP omp_allocator_handle_t const omp_cgroup_mem_alloc;
+lib/llvm-23/lib/clang/23/include/omp.h:398: extern __KMP_IMP omp_allocator_handle_t const omp_pteam_mem_alloc;
+lib/llvm-23/lib/clang/23/include/omp.h:399: extern __KMP_IMP omp_allocator_handle_t const omp_thread_mem_alloc;
+lib/llvm-23/lib/clang/23/include/omp.h:400: extern __KMP_IMP omp_allocator_handle_t const llvm_omp_target_host_mem_alloc;
+lib/llvm-23/lib/clang/23/include/omp.h:401: extern __KMP_IMP omp_allocator_handle_t const llvm_omp_target_shared_mem_alloc;
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:138: macro(callback_sync_region_wait, ompt_callback_sync_region_t, 16);           \
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:145: macro(callback_sync_region, ompt_callback_sync_region_t, 23);                \
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:153: macro(callback_reduction, ompt_callback_sync_region_t, 31);                  \
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:336: if (ompt_multiplex_own_callbacks.ompt_callback_sync_region) {
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:337: ompt_multiplex_own_callbacks.ompt_callback_sync_region(
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:341: if (ompt_multiplex_client_callbacks.ompt_callback_sync_region) {
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:342: ompt_multiplex_client_callbacks.ompt_callback_sync_region(
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:349: ompt_sync_region_t kind, ompt_scope_endpoint_t endpoint,
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:352: if (ompt_multiplex_own_callbacks.ompt_callback_sync_region_wait) {
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:353: ompt_multiplex_own_callbacks.ompt_callback_sync_region_wait(
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:357: if (ompt_multiplex_client_callbacks.ompt_callback_sync_region_wait) {
+lib/llvm-23/lib/clang/23/include/ompt-multiplex.h:358: ompt_multiplex_client_callbacks.ompt_callback_sync_region_wait(
+lib/llvm-23/lib/clang/23/include/ompt.h:81: /* implicit barrier at the end of parallel region */\
+lib/llvm-23/lib/clang/23/include/ompt.h:101: macro (ompt_state_wait_target, 0x080)        /* waiting for target region */                 \
+lib/llvm-23/lib/clang/23/include/ompt.h:134: macro (ompt_callback_sync_region_wait,  ompt_callback_sync_region_t,       16) /* sync region wait begin or end   */ \
+lib/llvm-23/lib/clang/23/include/ompt.h:145: macro (ompt_callback_sync_region,       ompt_callback_sync_region_t,       23) /* sync region begin or end        */ \
+lib/llvm-23/lib/clang/23/include/ompt.h:157: macro (ompt_callback_cancel,            ompt_callback_cancel_t,            30) /* cancel innermost binding region */ \
+lib/llvm-23/lib/clang/23/include/ompt.h:159: macro (ompt_callback_reduction,         ompt_callback_sync_region_t,       31) /* reduction                       */ \
+lib/llvm-23/lib/clang/23/include/ompt.h:241: ompt_callback_sync_region_wait             = 16,
+lib/llvm-23/lib/clang/23/include/ompt.h:249: ompt_callback_sync_region                  = 23,
+lib/llvm-23/lib/clang/23/include/ompt.h:314: ompt_sync_region_barrier                DEPRECATED_51 = 1,
+lib/llvm-23/lib/clang/23/include/ompt.h:315: ompt_sync_region_barrier_implicit       DEPRECATED_51 = 2,
+lib/llvm-23/lib/clang/23/include/ompt.h:316: ompt_sync_region_barrier_explicit       = 3,
+lib/llvm-23/lib/clang/23/include/ompt.h:317: ompt_sync_region_barrier_implementation = 4,
+lib/llvm-23/lib/clang/23/include/tsxldtrkintrin.h:21: /// Marks the start of an TSX (RTM) suspend load address tracking region. If
+lib/llvm-23/lib/clang/23/include/tsxldtrkintrin.h:22: ///    this intrinsic is used inside a transactional region, subsequent loads
+lib/llvm-23/lib/clang/23/include/tsxldtrkintrin.h:24: ///    suspend load address tracking region it will cause transaction abort.
+lib/llvm-23/lib/clang/23/include/tsxldtrkintrin.h:25: ///    If it's used outside of a transactional region it behaves like a NOP.
+lib/llvm-23/lib/clang/23/include/tsxldtrkintrin.h:37: /// Marks the end of an TSX (RTM) suspend load address tracking region. If this
+lib/llvm-23/lib/clang/23/include/tsxldtrkintrin.h:38: ///    intrinsic is used inside a suspend load address tracking region it will
+lib/llvm-23/lib/clang/23/include/tsxldtrkintrin.h:39: ///    end the suspend region and all following load addresses will be added to
+lib/llvm-23/lib/clang/23/include/tsxldtrkintrin.h:41: ///    not in a suspend region it will cause transaction abort. If it's used
+lib/llvm-23/lib/clang/23/include/tsxldtrkintrin.h:42: ///    outside of a transactional region it behaves like a NOP.
+lib/llvm-23/lib/clang/23/include/uintrintrin.h:35: ///    executed inside a transactional region; the abort loads EAX as it would
+lib/llvm-23/lib/clang/23/include/uintrintrin.h:56: ///    executed inside a transactional region; the abort loads EAX as it would
+lib/llvm-23/lib/clang/23/include/uintrintrin.h:73: ///    regardless of CPL and inside a transactional region. Can be executed only
+lib/llvm-23/lib/clang/23/include/xtestintrin.h:18: * HLE region. */
+lib/llvm-23/lib/clang/23/include/openmp_wrappers/complex.h:1: /*===-- complex --- OpenMP complex wrapper for target regions --------- c++ -===
+lib/llvm-23/lib/clang/23/include/openmp_wrappers/complex_cmath.h:10: // OpenMP target offload regions.
+lib/llvm-23/lib/clang/23/include/profile/instr_prof_interface.h:60: * data from user selected hot regions. The use model is
+lib/llvm-23/lib/clang/23/include/profile/instr_prof_interface.h:62: *      ... hot region 1
+lib/llvm-23/lib/clang/23/include/profile/instr_prof_interface.h:66: *      ... hot region 2
+lib/llvm-23/lib/clang/23/include/profile/instr_prof_interface.h:72: *  for different regions before dumping to avoid profile write clobbering.
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:1: //===-- allocator_interface.h ---------------------------------------------===//
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:9: // Public interface header for allocator used in sanitizers (ASan/TSan/MSan).
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:11: #ifndef SANITIZER_ALLOCATOR_INTERFACE_H
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:20: /* Returns the estimated number of bytes that will be reserved by allocator
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:21: for request of "size" bytes. If allocator can't allocate that much
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:26: /* Returns true if p was returned by the allocator and
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:46: /* Number of bytes, mmaped by the allocator to fulfill allocation requests.
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:47: Generally, for request of X bytes, allocator can reserve and add to free
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:49: All these chunks count toward the heap size. Currently, allocator never
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:54: /* Number of bytes, mmaped by the allocator, which can be used to fulfill
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:96: /* Drains allocator quarantines (calling thread's and global ones), returns
+lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h:97: freed memory back to OS and releases other non-essential internal allocator
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:21: /// Marks a memory region (<c>[addr, addr+size)</c>) as unaddressable.
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:24: /// code is forbidden from accessing addresses in this region until it is
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:25: /// unpoisoned. This function is not guaranteed to poison the entire region -
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:26: /// it could poison only a subregion of <c>[addr, addr+size)</c> due to ASan
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:30: /// unpoison memory in the same memory region simultaneously.
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:32: /// \param addr Start of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:33: /// \param size Size of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:37: /// Marks a memory region (<c>[addr, addr+size)</c>) as addressable.
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:40: /// addresses in this region is allowed until this region is poisoned again.
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:41: /// This function could unpoison a super-region of <c>[addr, addr+size)</c> due
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:45: /// poison or unpoison memory in the same memory region simultaneously.
+lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h:47: /// \param addr Start of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:117: /// in a contiguous region of memory. The container owns the region of memory
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:139: /// and therefore the function can be used for any allocator.
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:155: /// \param beg Beginning of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:156: /// \param end End of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:157: /// \param old_mid Old middle of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:158: /// \param new_mid New middle of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:175: /// in a contiguous region of memory. The container owns the region of memory
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:192: /// \param storage_beg Beginning of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:193: /// \param storage_end End of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:194: /// \param old_container_beg Old beginning of used region.
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:195: /// \param old_container_end End of used region.
+lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h:196: /// \param new_container_beg New beginning of used region.
+lib/llvm-23/lib/clang/23/include/sanitizer/hwasan_interface.h:38: // Mark region of memory with the given tag. Both address and size need to be
+lib/llvm-23/lib/clang/23/include/sanitizer/lsan_interface.h:29: // Memory regions registered through this interface will be treated as sources
+lib/llvm-23/lib/clang/23/include/sanitizer/lsan_interface.h:33: // - __lsan_unregister_root_region() must be called with the same pointer and
+lib/llvm-23/lib/clang/23/include/sanitizer/lsan_interface.h:34: // size that have earlier been passed to __lsan_register_root_region()
+lib/llvm-23/lib/clang/23/include/sanitizer/lsan_interface.h:35: // - LSan will skip any inaccessible memory when scanning a root region. E.g.,
+lib/llvm-23/lib/clang/23/include/sanitizer/lsan_interface.h:36: // if you map memory within a larger region that you have mprotect'ed, you can
+lib/llvm-23/lib/clang/23/include/sanitizer/lsan_interface.h:37: // register the entire large region.
+lib/llvm-23/lib/clang/23/include/sanitizer/lsan_interface.h:39: // intended to be used for a small number of relatively static regions.
+lib/llvm-23/lib/clang/23/include/sanitizer/memprof_interface.h:21: /// Records access to a memory region (<c>[addr, addr+size)</c>).
+lib/llvm-23/lib/clang/23/include/sanitizer/memprof_interface.h:25: /// \param addr Start of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/memprof_interface.h:26: /// \param size Size of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/msan_interface.h:40: /* Make memory region fully initialized (without changing its contents). */
+lib/llvm-23/lib/clang/23/include/sanitizer/msan_interface.h:50: /* Make memory region fully uninitialized (without changing its contents).
+lib/llvm-23/lib/clang/23/include/sanitizer/msan_interface.h:55: /* Make memory region partially uninitialized (without changing its contents).
+lib/llvm-23/lib/clang/23/include/sanitizer/msan_interface.h:93: /* Tell MSan about newly allocated memory (ex.: custom allocator).
+lib/llvm-23/lib/clang/23/include/sanitizer/msan_interface.h:116: copy. Source and destination regions can overlap. */
+lib/llvm-23/lib/clang/23/include/sanitizer/scudo_interface.h:30: // This function outputs various allocator statistics for both the Primary
+lib/llvm-23/lib/clang/23/include/sanitizer/scudo_interface.h:31: // and Secondary allocators, including memory usage, number of allocations
+lib/llvm-23/lib/clang/23/include/sanitizer/tsan_interface.h:119: // Annotate start/end of a region of code where lock/unlock/signal operation
+lib/llvm-23/lib/clang/23/include/sanitizer/tsan_interface.h:125: // __tsan_mutex_pre/post_signal regions.
+lib/llvm-23/lib/clang/23/include/sanitizer/tysan_interface.h:23: /// Marks a memory region (<c>[addr, addr+size)</c>) as not yet having a type.
+lib/llvm-23/lib/clang/23/include/sanitizer/tysan_interface.h:25: /// TySan will take the next read/write to the memory region to be the correct
+lib/llvm-23/lib/clang/23/include/sanitizer/tysan_interface.h:28: /// \param addr Start of memory region.
+lib/llvm-23/lib/clang/23/include/sanitizer/tysan_interface.h:29: /// \param size Size of memory region.
+
+## Lignes trouvées, par fichier
+    1 lib/llvm-23/lib/clang/23/include/ISO_Fortran_binding.h
+    1 lib/llvm-23/lib/clang/23/include/__clang_cuda_cmath.h
+    1 lib/llvm-23/lib/clang/23/include/__clang_hip_cmath.h
+    9 lib/llvm-23/lib/clang/23/include/__clang_hip_libdevice_declares.h
+    8 lib/llvm-23/lib/clang/23/include/__clang_hip_math.h
+   13 lib/llvm-23/lib/clang/23/include/arm_cmse.h
+   14 lib/llvm-23/lib/clang/23/include/fxsrintrin.h
+   26 lib/llvm-23/lib/clang/23/include/omp-tools.h
+   43 lib/llvm-23/lib/clang/23/include/omp.h
+   15 lib/llvm-23/lib/clang/23/include/ompt-multiplex.h
+   26 lib/llvm-23/lib/clang/23/include/ompt.h
+    1 lib/llvm-23/lib/clang/23/include/openmp_wrappers/complex.h
+    1 lib/llvm-23/lib/clang/23/include/openmp_wrappers/complex_cmath.h
+    4 lib/llvm-23/lib/clang/23/include/profile/instr_prof_interface.h
+   14 lib/llvm-23/lib/clang/23/include/sanitizer/allocator_interface.h
+   39 lib/llvm-23/lib/clang/23/include/sanitizer/asan_interface.h
+   27 lib/llvm-23/lib/clang/23/include/sanitizer/common_interface_defs.h
+    3 lib/llvm-23/lib/clang/23/include/sanitizer/hwasan_interface.h
+    9 lib/llvm-23/lib/clang/23/include/sanitizer/lsan_interface.h
+    3 lib/llvm-23/lib/clang/23/include/sanitizer/memprof_interface.h
+    5 lib/llvm-23/lib/clang/23/include/sanitizer/msan_interface.h
+    2 lib/llvm-23/lib/clang/23/include/sanitizer/scudo_interface.h
+    2 lib/llvm-23/lib/clang/23/include/sanitizer/tsan_interface.h
+    4 lib/llvm-23/lib/clang/23/include/sanitizer/tysan_interface.h
+    9 lib/llvm-23/lib/clang/23/include/tsxldtrkintrin.h
+    3 lib/llvm-23/lib/clang/23/include/uintrintrin.h
+    1 lib/llvm-23/lib/clang/23/include/unwind.h
+    1 lib/llvm-23/lib/clang/23/include/xtestintrin.h

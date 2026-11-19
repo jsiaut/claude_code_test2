@@ -1,2 +1,4 @@
 #!/bin/sh
-cd "$(dirname "$0")" && mkdir -p bin && /opt/gcc-16/bin/g++-16 -std=c++26 -O2 -march=native -pthread -Wno-interference-size -o bin/probe probe.cpp && bin/probe
+# Sonde de C++ : audit de la grille (audit/, docs/V4_PLAN.md 2.1), qui remplace la première sonde (probe.cpp, conservée).
+# Sortie : results/probes/cpp.txt
+exec sh "$(dirname "$0")/audit/run.sh"

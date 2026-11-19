@@ -206,6 +206,42 @@
       "strip": "/opt/src/modular/Mojo/stdlib/",
       "public": "^\\s*(def|fn|struct|trait|comptime|alias)\\s+[A-Za-z]",
       "version": "/opt/mojo-venv/bin/mojo --version"
+    },
+    "c": {
+      "roots": [
+        "/usr/lib/llvm-23/lib/clang/23/include"
+      ],
+      "rootlist": "dpkg -L libc6-dev | grep -E '^/usr/include/.*\\\\.h$'",
+      "ext": [
+        ".h"
+      ],
+      "exclude": [],
+      "strip": "/usr/",
+      "public": "^\\s*#\\s*define\\s+\\w|^\\s*(typedef|struct|union|enum)\\b|^\\s*(extern\\s+)?(static\\s+)?(__inline\\w*\\s+)?[A-Za-z_][\\w \\*]*[\\s\\*]\\w+\\s*\\(",
+      "version": "clang-23 --version | head -1; ldd --version | head -1"
+    },
+    "cpp": {
+      "roots": [
+        "/opt/gcc-16/include/c++/16.2.0"
+      ],
+      "rootlist": "dpkg -L libc6-dev | grep -E '^/usr/include/.*\\\\.h$'",
+      "ext": [
+        ""
+      ],
+      "exclude": [
+        "/bits/",
+        "/debug/",
+        "/pstl/",
+        "/profile/",
+        "/ext/pb_ds/",
+        "/tr1/",
+        "/tr2/",
+        "/backward/",
+        "/experimental/"
+      ],
+      "strip": "/opt/gcc-16/include/c++/16.2.0/",
+      "public": "^\\s*#\\s*define\\s+\\w|^\\s*(template\\s*<.*>\\s*)?(class|struct|union|enum|using|typedef|inline\\s+constexpr|constexpr)\\b|^\\s*(extern\\s+)?[A-Za-z_][\\w:<> \\*&]*[\\s\\*&]\\w+\\s*\\(",
+      "version": "/opt/gcc-16/bin/g++-16 --version | head -1"
     }
   }
 }
