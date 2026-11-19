@@ -121,6 +121,25 @@
       "strip": "/opt/ldc/include/d/",
       "public": "^\\s*(?!//|/\\*|\\*|private\\b|package\\b|import\\b|return\\b|assert\\b|static assert|version\\b|debug\\b|if\\b|else\\b|foreach\\b|for\\b|while\\b|unittest\\b|[{}])\\S",
       "version": "/opt/ldc/bin/ldc2 --version | head -1"
+    },
+    "nim": {
+      "roots": [
+        "/opt/nim/lib"
+      ],
+      "ext": [
+        ".nim"
+      ],
+      "exclude": [
+        "/tests/",
+        "/test/",
+        "/nimhcr",
+        "/js/",
+        "/windows/",
+        "/genode"
+      ],
+      "strip": "/opt/nim/lib/",
+      "public": "^\\s*(proc|func|template|macro|iterator|method|converter)\\s+`?[\\w=+\\-*/<>!$%^&|.\\[\\]]+`?\\*|^\\s*(type\\s+|const\\s+|var\\s+|let\\s+)?`?\\w+`?\\*\\s*[:=\\[({]",
+      "version": "/opt/nim/bin/nim --version | head -1"
     }
   }
 }

@@ -1,0 +1,11 @@
+# Recherche d'absence : nim, case A6
+# Chaîne : Nim Compiler Version 2.2.12 [Linux: amd64]
+# Motif : \bsoa\b|_soa\b|\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array
+# Déclaration publique : ^\s*(proc|func|template|macro|iterator|method|converter)\s+`?[\w=+\-*/<>!$%^&|.\[\]]+`?\*|^\s*(type\s+|const\s+|var\s+|let\s+)?`?\w+`?\*\s*[:=\[({]
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

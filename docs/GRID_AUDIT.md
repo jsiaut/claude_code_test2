@@ -100,6 +100,25 @@ assembleur et en IR, avec et sans `-boundscheck=on`, deux échecs, trois recherc
 * Erreur de sonde corrigée en cours de route : des fermetures créées dans une boucle `foreach` partagent leur
   contexte (le défaut de capture que la matrice cite en B4) ; la sonde des fils passe donc par une fonction.
 
+### Nim (2.2.12, C compilé par clang 23 comme au banc ; gcc 16 pour une contre-épreuve)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (C2 et E4 valent 1 en v2, ½ en v1). Sondes :
+`probes/nim/probe.nim` (A2 à A5, F4), `probes/nim/audit/` (`audit.nim` exécuté avec `-d:nimAllocStats`,
+`codegen.nim` désassemblé et son C relu, `fastsum.nim` compilé avec `-ffast-math` par `{.localPassC.}`, trois essais
+OpenMP, les régions, les indications sous deux compilateurs C, cinq recherches dans `lib`).
+* Faits notables : `=destroy` s'exécute à la sortie de portée sous ORC (B1) ; une fermeture, un ajout à une chaîne et
+  un littéral `@[1, 2, 3]` allouent (1, 2 et 1 allocations comptées, B4 ½) ; `{.noalias.}` devient `NIM_NOALIAS`
+  (`restrict`) dans le C ; `const F60 = fib(60)` est calculé par la VM du compilateur.
+* B2 : sous `--mm:orc`, mode du banc et défaut de Nim 2, il n'y a qu'`alloc`/`dealloc` ; le mode `--mm:regions`, livré
+  (`advopt.txt`), fournit des régions (`withRegion(MemRegion)`), que `--mm:orc` ignore : ½ (option globale seulement).
+* C5 : l'itérateur `||` répartit une boucle sur quatre fils, mais seulement si les vérifications sont coupées dans le
+  corps (sinon le C généré saute hors du bloc OpenMP et ne compile pas), et une réduction ne compile qu'avec une
+  variable au nom C fixé (`{.exportc.}`) : ½ (sous-ensemble). Le texte de la matrice (« une réduction ne compile pas
+  en -d:release ») est à préciser.
+* E3 : `likely`/`unlikely` passent par une variable `NIM_BOOL` avant le test ; gcc 16, compilateur C par défaut de Nim
+  (`config/nim.cfg`), en tient compte (`likely` ramène l'appel dans le chemin chaud), clang 23, celui du banc, non
+  (même code avec `likely` et `unlikely`) : la note dépend du compilateur C (section 3).
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |
@@ -107,3 +126,4 @@ assembleur et en IR, avec et sans `-boundscheck=on`, deux échecs, trois recherc
 | Rust | D4, F4 | 0 | `sched_setaffinity` et `mmap` marchent par le crate `libc` du sysroot, sur nightly avec `#![feature(rustc_private)]` | Le crate n'est pas dans l'API publique de `std` : c'est une FFI vers la glibc, du code non intrinsèque (0) | ½ si on le lit comme une unité interne livrée, accessible sur le canal instable |
 | Zig | C2 | ½ | Un `extern fn` au nom d'une intrinsèque de LLVM produit l'instruction (`vpternlogd`) | Mécanisme ni documenté ni employé par la bibliothèque livrée : la règle v2 ne compte que le « mécanisme d'import d'intrinsèques du langage » (½ par l'assembleur en ligne) | 1, comme Odin, dont la bibliothèque livrée emploie le même mécanisme |
 | Odin, et tout langage dont la bibliothèque livre un appel système brut (C, C++, Go, Zig, FreePascal…) | F2 | 0 | `mbind` par appel système brut pose une politique NUMA (`MPOL_BIND` relu par `get_mempolicy`, sonde d'Odin) | F2 compte les constructions de localité et de distribution ; un numéro d'appel système n'en est pas une (C : « libnuma hors standard ») | ½ si l'appel système brut compte, comme il compte pour D4 (Go, FreePascal) |
+| Nim | E3 | 1 | `likely`/`unlikely` changent la disposition avec gcc 16 (compilateur C par défaut de Nim), pas avec clang 23 (celui du banc) | La chaîne livrée compile par gcc : la capacité marche telle que livrée | 0 si l'on note la configuration du banc (clang), où l'indication est perdue |

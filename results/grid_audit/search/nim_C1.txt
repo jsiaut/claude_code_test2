@@ -1,0 +1,21 @@
+# Recherche d'absence : nim, case C1
+# Chaîne : Nim Compiler Version 2.2.12 [Linux: amd64]
+# Motif : simd|vector(64|128|256|512)\b|\bvec[248]\b|float32x|int32x|@vector
+# Déclaration publique : ^\s*(proc|func|template|macro|iterator|method|converter)\s+`?[\w=+\-*/<>!$%^&|.\[\]]+`?\*|^\s*(type\s+|const\s+|var\s+|let\s+)?`?\w+`?\*\s*[:=\[({]
+# 0 déclarations publiques, 8 mentions, 2 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+core/macros.nim:320: Vec4[T] = Vec[4, T]
+core/macros.nim:321: Vec4f = Vec4[float32]
+core/macros.nim:323: var b: Vec4[float32]
+core/macros.nim:328: doAssert(dumpTypeInst(b) == "Vec4[float32]")
+core/macros.nim:343: Vec4[T] = Vec[4, T]
+core/macros.nim:344: Vec4f = Vec4[float32]
+core/macros.nim:346: var b: Vec4[float32]
+pure/htmlparser.nim:1615: of "simdot": Rune(0x02A6A)
+
+## Lignes trouvées, par fichier
+    7 core/macros.nim
+    1 pure/htmlparser.nim

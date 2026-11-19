@@ -1,0 +1,15 @@
+# Recherche d'absence : nim, case F1
+# Chaîne : Nim Compiler Version 2.2.12 [Linux: amd64]
+# Motif : ndarray|multi_?dim|md_?span|mdarray|array2d|\bmatrix\b
+# Déclaration publique : ^\s*(proc|func|template|macro|iterator|method|converter)\s+`?[\w=+\-*/<>!$%^&|.\[\]]+`?\*|^\s*(type\s+|const\s+|var\s+|let\s+)?`?\w+`?\*\s*[:=\[({]
+# 0 déclarations publiques, 3 mentions, 1 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+system/alloc.nim:63: # size of chunks in last matrix bin
+system/alloc.nim:171: matrix: array[RealFli, array[MaxSli, PBigChunk]]
+system/alloc.nim:277: template mat(): untyped = a.matrix[fl][sl]
+
+## Lignes trouvées, par fichier
+    3 system/alloc.nim

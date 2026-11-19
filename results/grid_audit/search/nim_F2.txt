@@ -1,0 +1,58 @@
+# Recherche d'absence : nim, case F2
+# Chaîne : Nim Compiler Version 2.2.12 [Linux: amd64]
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^\s*(proc|func|template|macro|iterator|method|converter)\s+`?[\w=+\-*/<>!$%^&|.\[\]]+`?\*|^\s*(type\s+|const\s+|var\s+|let\s+)?`?\w+`?\*\s*[:=\[({]
+# 14 déclarations publiques, 18 mentions, 15 fichiers
+
+## Déclarations publiques
+posix/posix.nim:271: proc localeconv*(): ptr Lconv {.importc, header: "<locale.h>".}
+posix/posix_haiku.nim:100: Lconv* {.importc: "struct lconv", header: "<locale.h>", final,
+posix/posix_linux_amd64.nim:87: Lconv* {.importc: "struct lconv", header: "<locale.h>", final,
+posix/posix_macos_amd64.nim:84: Lconv* {.importc: "struct lconv", header: "<locale.h>", final,
+posix/posix_nintendoswitch.nim:75: Lconv* {.importc: "struct lconv", header: "<locale.h>", final,
+posix/posix_openbsd_amd64.nim:84: Lconv* {.importc: "struct lconv", header: "<locale.h>", final,
+posix/posix_other.nim:103: Lconv* {.importc: "struct lconv", header: "<locale.h>", final,
+posix/posix_other_consts.nim:270: var LC_ALL* {.importc: "LC_ALL", header: "<locale.h>".}: cint
+posix/posix_other_consts.nim:271: var LC_COLLATE* {.importc: "LC_COLLATE", header: "<locale.h>".}: cint
+posix/posix_other_consts.nim:272: var LC_CTYPE* {.importc: "LC_CTYPE", header: "<locale.h>".}: cint
+posix/posix_other_consts.nim:273: var LC_MESSAGES* {.importc: "LC_MESSAGES", header: "<locale.h>".}: cint
+posix/posix_other_consts.nim:274: var LC_MONETARY* {.importc: "LC_MONETARY", header: "<locale.h>".}: cint
+posix/posix_other_consts.nim:275: var LC_NUMERIC* {.importc: "LC_NUMERIC", header: "<locale.h>".}: cint
+posix/posix_other_consts.nim:276: var LC_TIME* {.importc: "LC_TIME", header: "<locale.h>".}: cint
+
+## Mentions (au plus 12 lignes par fichier)
+packages/docutils/rst.nim:933: proc addFootnoteNumAuto(p: var RstParser, label: string) =
+packages/docutils/rst.nim:3131: addFootnoteNumAuto(p, name)
+posix/posix.nim:273: importc, header: "<locale.h>", sideEffect.}
+posix/posix_freertos_consts.nim:115: # # <locale.h>
+posix/posix_freertos_consts.nim:116: # var LC_ALL* {.importc: "LC_ALL", header: "<locale.h>".}: cint
+posix/posix_freertos_consts.nim:117: # var LC_COLLATE* {.importc: "LC_COLLATE", header: "<locale.h>".}: cint
+posix/posix_freertos_consts.nim:118: # var LC_CTYPE* {.importc: "LC_CTYPE", header: "<locale.h>".}: cint
+posix/posix_freertos_consts.nim:119: # var LC_MESSAGES* {.importc: "LC_MESSAGES", header: "<locale.h>".}: cint
+posix/posix_freertos_consts.nim:120: # var LC_MONETARY* {.importc: "LC_MONETARY", header: "<locale.h>".}: cint
+posix/posix_freertos_consts.nim:121: # var LC_NUMERIC* {.importc: "LC_NUMERIC", header: "<locale.h>".}: cint
+posix/posix_freertos_consts.nim:122: # var LC_TIME* {.importc: "LC_TIME", header: "<locale.h>".}: cint
+posix/posix_linux_amd64_consts.nim:266: # <locale.h>
+posix/posix_nintendoswitch_consts.nim:194: # <locale.h>
+posix/posix_other_consts.nim:269: # <locale.h>
+pure/htmlgen.nim:652: result = xmlCheckedTag(e, "mfrac", "mathbackground mathcolor href linethickness numalign" & commonAttr)
+pure/osproc.nim:97: ##   # Note: outp may have an interleave of text from the nim compile
+pure/strutils.nim:2545: # Depending on the locale either dot or comma is produced,
+pure/strutils.nim:2568: # Depending on the locale either dot or comma is produced,
+
+## Lignes trouvées, par fichier
+    2 packages/docutils/rst.nim
+    2 posix/posix.nim
+    8 posix/posix_freertos_consts.nim
+    1 posix/posix_haiku.nim
+    1 posix/posix_linux_amd64.nim
+    1 posix/posix_linux_amd64_consts.nim
+    1 posix/posix_macos_amd64.nim
+    1 posix/posix_nintendoswitch.nim
+    1 posix/posix_nintendoswitch_consts.nim
+    1 posix/posix_openbsd_amd64.nim
+    1 posix/posix_other.nim
+    8 posix/posix_other_consts.nim
+    1 pure/htmlgen.nim
+    1 pure/osproc.nim
+    2 pure/strutils.nim

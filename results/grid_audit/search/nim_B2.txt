@@ -1,0 +1,201 @@
+# Recherche d'absence : nim, case B2
+# Chaîne : Nim Compiler Version 2.2.12 [Linux: amd64]
+# Motif : arena|allocator|alloc_?in\b|new_?in\b|bump|region|mem_?pool|memory_?pool
+# Déclaration publique : ^\s*(proc|func|template|macro|iterator|method|converter)\s+`?[\w=+\-*/<>!$%^&|.\[\]]+`?\*|^\s*(type\s+|const\s+|var\s+|let\s+)?`?\w+`?\*\s*[:=\[({]
+# 21 déclarations publiques, 368 mentions, 32 fichiers
+
+## Déclarations publiques
+posix/posix_haiku.nim:406: iov_base*: pointer ## Base address of a memory region for input or output.
+posix/posix_linux_amd64.nim:448: iov_base*: pointer ## Base address of a memory region for input or output.
+posix/posix_macos_amd64.nim:420: iov_base*: pointer ## Base address of a memory region for input or output.
+posix/posix_nintendoswitch.nim:373: iov_base*: pointer ## Base address of a memory region for input or output.
+posix/posix_openbsd_amd64.nim:404: iov_base*: pointer ## Base address of a memory region for input or output.
+posix/posix_other.nim:488: iov_base*: pointer ## Base address of a memory region for input or output.
+system/alloc.nim:1454: proc getMemCounters*(): (int, int) = getMemCounters(allocator)
+system/gc_regions.nim:74: MemRegion* = object
+system/gc_regions.nim:96: template withRegion*(r: var MemRegion; body: untyped) =
+system/gc_regions.nim:224: proc deallocAll*(r: var MemRegion) =
+system/gc_regions.nim:228: proc obstackPtr*(r: MemRegion): StackPtr =
+system/gc_regions.nim:236: proc setObstackPtr*(r: var MemRegion; sp: StackPtr) =
+system/gc_regions.nim:251: proc obstackPtr*(): StackPtr = tlRegion.obstackPtr()
+system/gc_regions.nim:252: proc setObstackPtr*(sp: StackPtr) = tlRegion.setObstackPtr(sp)
+system/gc_regions.nim:253: proc deallocAll*() = tlRegion.deallocAll()
+system/gc_regions.nim:264: template withScratchRegion*(body: untyped) =
+system/gc_regions.nim:274: proc joinRegion*(dest: var MemRegion; src: MemRegion) =
+system/gc_regions.nim:286: proc isOnHeap*(r: MemRegion; p: pointer): bool =
+system/gc_regions.nim:428: proc getOccupiedMem*(r: MemRegion): int =
+system/gc_regions.nim:430: proc getFreeMem*(r: MemRegion): int = r.remaining
+system/gc_regions.nim:431: proc getTotalMem*(r: MemRegion): int =
+
+## Mentions (au plus 12 lignes par fichier)
+system.nim:1162: hasDefaultAllocator =
+system.nim:1164: not (defined(useNimRtl) or defined(useMalloc) or defined(gcRegions) or
+system.nim:1166: hasThreadLocalAllocator =
+system.nim:1167: hasDefaultAllocator and hasThreadSupport and defined(gcDestructors)
+system.nim:1169: when hasThreadLocalAllocator:
+system.nim:1171: proc initThreadAllocator() {.gcsafe, raises: [].}
+system.nim:1172: proc releaseThreadAllocator() {.gcsafe, raises: [].}
+system.nim:2175: when not defined(gcRegions) and not usesDestructors:
+system.nim:2344: when hasThreadLocalAllocator:
+system.nim:2345: initThreadAllocator()
+posix/posix.nim:204: fst_offset,                 ## IN: start of the region
+posix/posix.nim:205: fst_length,               ## IN: size of the region
+pure/htmlparser.nim:1083: of "bump", "HumpDownHump", "Bumpeq": Rune(0x0224E)
+pure/htmlparser.nim:1084: of "bumpe", "HumpEqual", "bumpeq": Rune(0x0224F)
+pure/htmlparser.nim:1677: of "bumpE": Rune(0x02AAE)
+pure/httpclient.nim:840: # -REGION- Content-Length
+pure/httpclient.nim:857: # -REGION- Connection: Close
+pure/lexbase.nim:67: # "moveMem" handles overlapping regions
+pure/memfiles.nim:219: ## unmaps the memory region `(p, <p+size)` of the mapped file `f`.
+system/alloc.nim:10: # Low level allocator for Nim. Has been designed to support the GC.
+system/alloc.nim:43: dealloc -> rawDealloc -> chunk.owner == regionOwner(a) -------> This thread owns the chunk ------> The current chunk is active    -> Chunk is completely unused 
+system/alloc.nim:66: usesRegionHandles = hasThreadSupport and defined(gcDestructors)
+system/alloc.nim:67: # Deliberately *not* `hasThreadLocalAllocator`: this selects the chunk
+system/alloc.nim:69: # the RTL it links against. Whether this module owns a thread local region
+system/alloc.nim:70: # is the separate question that `hasThreadLocalAllocator` answers.
+system/alloc.nim:125: when usesRegionHandles:
+system/alloc.nim:126: owner: ptr RegionHandle
+system/alloc.nim:128: owner: ptr MemRegion
+system/alloc.nim:156: MemRegion = object
+system/alloc.nim:157: when usesRegionHandles:
+system/alloc.nim:160: regionHandle: ptr RegionHandle
+system/arc.nim:95: # Forward declarations for native allocator alignment (implemented in alloc.nim).
+system/arc.nim:316: elif not hasThreadLocalAllocator:
+system/avltree.nim:54: proc add(a: var MemRegion, t: var PAvlNode, key, upperBound: int) {.gcsafe.} =
+system/avltree.nim:73: proc del(a: var MemRegion, t: var PAvlNode, x: int) {.gcsafe.} =
+system/channels_builtin.nim:109: ## allocator will use thread-local, GC-managed memory. Thus it is generally
+system/channels_builtin.nim:156: region: MemRegion
+system/channels_builtin.nim:176: deallocOsPages(c.region)
+system/channels_builtin.nim:218: var ns = cast[NimString](alloc(t.region, GenericSeqSize + ss.len+1))
+system/channels_builtin.nim:230: dealloc(t.region, s2)
+system/channels_builtin.nim:243: x[] = alloc0(t.region, align(GenericSeqSize, mt.base.align) +% seq.len *% mt.base.size)
+system/channels_builtin.nim:256: if mode != mStore: dealloc(t.region, s2)
+system/channels_builtin.nim:288: let a = alloc0(t.region, size+sizeof(pointer))
+system/channels_builtin.nim:297: dealloc(t.region, s)
+system/channels_builtin.nim:308: var n = cast[pbytes](alloc0(q.region, cap*2*typ.size))
+system/channels_builtin.nim:321: dealloc(q.region, q.data)
+system/coro_detection.nim:5: defined(nogc) or defined(gcRegions) or defined(gcMarkAndSweep):
+system/excpt.nim:11: # use the heap (and nor exceptions) do not include the GC or memory allocator.
+system/excpt.nim:698: # memory allocator - less frequently than on windows but still.
+system/gc.nim:141: region: MemRegion        # garbage collected region
+system/gc.nim:153: instantiateForRegion(gch.region)
+system/gc.nim:233: gcAssert(isAllocatedPtr(gch.region, c), "incRef: interiorPtr")
+system/gc.nim:249: gcAssert(isAllocatedPtr(gch.region, c), "decRef: interiorPtr")
+system/gc.nim:278: sysAssert(allocInv(gch.region), "begin nimGCunrefNoCycle")
+system/gc.nim:280: sysAssert(allocInv(gch.region), "end nimGCunrefNoCycle 5")
+system/gc.nim:308: gcAssert(interiorAllocatedPtr(gch.region, dest) == nil,
+system/gc.nim:377: gcAssert(isAllocatedPtr(gch.region, cell), "forAllChildren: pointer not part of the heap")
+system/gc.nim:441: sysAssert(allocInv(gch.region), "injected")
+system/gc.nim:458: sysAssert(allocInv(gch.region), "rawNewObj begin")
+system/gc.nim:464: var res = cast[PCell](rawAlloc(gch.region, size + sizeof(Cell), alignment))
+system/gc.nim:476: sysAssert(isAllocatedPtr(gch.region, res), "newObj: 3")
+system/gc_common.nim:445: for x in allObjects(gch.region):
+system/gc_common.nim:450: let x = allObjectsAsProc(gch.region, addr spaceIter)
+system/gc_common.nim:454: deallocOsPages(gch.region)
+system/gc_common.nim:455: zeroMem(addr gch.region, sizeof(gch.region))
+system/gc_ms.nim:72: region: MemRegion        # garbage collected region
+system/gc_ms.nim:86: instantiateForRegion(gch.region)
+system/gc_ms.nim:270: var res = cast[PCell](rawAlloc(gch.region, size + sizeof(Cell)))
+system/gc_ms.nim:330: var res = cast[PCell](rawAlloc(gch.region, newsize + sizeof(Cell)))
+system/gc_ms.nim:413: when reallyDealloc: rawDealloc(gch.region, c)
+system/gc_ms.nim:424: for x in allObjects(gch.region):
+system/gc_ms.nim:452: var objStart = cast[PCell](interiorAllocatedPtr(gch.region, p))
+system/gc_ms.nim:465: prepareForInteriorPointerChecking(gch.region)
+system/gc_ms.nim:476: sysAssert(allocInv(gch.region), "collectCT: end")
+system/gc_ms.nim:479: let fmem = getFreeMem(gch.region)
+system/gc_ms.nim:480: if (getOccupiedMem(gch.region) >= gch.cycleThreshold or
+system/gc_regions.nim:70: bump: pointer
+system/gc_regions.nim:76: bump: pointer
+system/gc_regions.nim:87: # instead for a 'region' field so that they can grow
+system/gc_regions.nim:90: region: ptr MemRegion
+system/gc_regions.nim:93: tlRegion {.threadvar.}: MemRegion
+system/gc_regions.nim:94: #  tempStrRegion {.threadvar.}: MemRegion  # not yet used
+system/gc_regions.nim:97: let oldRegion = tlRegion
+system/gc_regions.nim:98: tlRegion = r
+system/gc_regions.nim:102: r = tlRegion
+system/gc_regions.nim:103: tlRegion = oldRegion
+system/gc_regions.nim:113: proc allocSlowPath(r: var MemRegion; size: int) =
+system/gc_regions.nim:145: r.bump = fresh +! sizeof(BaseChunk)
+system/memalloc.nim:14: ## regions may not overlap. Like any procedure dealing with raw
+system/memalloc.nim:23: ## regions may overlap, `moveMem` handles this case appropriately
+system/memalloc.nim:63: # Allocator statistics for memory leak tests
+system/mmdisp.nim:75: when not defined(gcRegions):
+system/mmdisp.nim:82: when defined(gcRegions):
+system/mmdisp.nim:84: include "system/gc_regions"
+system/mmdisp.nim:87: var allocator {.rtlThreadVar.}: MemRegion
+system/mmdisp.nim:88: instantiateForRegion(allocator)
+system/mmdisp.nim:100: when defined(gcRegions):
+system/osalloc.nim:201: bumpPointer = cast[int](addr theHeap)
+system/osalloc.nim:204: if size+bumpPointer < cast[int](addr theHeap) + sizeof(theHeap):
+system/osalloc.nim:205: result = cast[pointer](bumpPointer)
+system/osalloc.nim:206: inc bumpPointer, size
+system/osalloc.nim:211: if size+bumpPointer < cast[int](addr theHeap) + sizeof(theHeap):
+system/osalloc.nim:212: result = cast[pointer](bumpPointer)
+system/osalloc.nim:213: inc bumpPointer, size
+system/osalloc.nim:216: if bumpPointer-size == cast[int](p):
+system/osalloc.nim:217: dec bumpPointer, size
+system/repr.nim:169: #                  region: Allocator
+system/sysstr.nim:37: elif defined(gcRegions):
+system/sysstr.nim:136: when declared(newObjRC1) and not defined(gcRegions):
+system/sysstr.nim:333: not defined(gcRegions):
+system/threadimpl.nim:3: when not defined(boehmgc) and not hasSharedHeap and not defined(gogc) and not defined(gcRegions):
+system/threadimpl.nim:22: when hasThreadLocalAllocator and not emulatedThreadVars:
+system/threadimpl.nim:24: initThreadAllocator()
+system/threadimpl.nim:27: releaseThreadAllocator()
+system/threadimpl.nim:89: when hasThreadLocalAllocator:
+system/threadimpl.nim:90: initThreadAllocator()
+system/threadimpl.nim:93: elif not defined(nogc) and not defined(gogc) and not defined(gcRegions) and not usesDestructors:
+system/threadimpl.nim:105: when hasThreadLocalAllocator:
+system/threadimpl.nim:106: releaseThreadAllocator()
+system/mm/boehm.nim:127: MemRegion = object
+system/mm/boehm.nim:129: proc alloc(r: var MemRegion, size: int): pointer =
+system/mm/boehm.nim:132: proc alloc0(r: var MemRegion, size: int): pointer =
+system/mm/boehm.nim:135: proc dealloc(r: var MemRegion, p: pointer) = boehmDealloc(p)
+system/mm/boehm.nim:136: proc deallocOsPages(r: var MemRegion) {.inline.} = discard
+system/mm/go.nim:145: MemRegion = object
+system/mm/go.nim:147: proc alloc(r: var MemRegion, size: int): pointer =
+system/mm/go.nim:149: proc alloc0(r: var MemRegion, size: int): pointer =
+system/mm/go.nim:151: proc dealloc(r: var MemRegion, p: pointer) = dealloc(p)
+system/mm/go.nim:152: proc deallocOsPages(r: var MemRegion) {.inline.} = discard
+system/mm/malloc.nim:31: # The shared allocators map on the regular ones
+system/mm/malloc.nim:85: MemRegion = object
+system/mm/malloc.nim:87: proc alloc(r: var MemRegion, size: int): pointer =
+system/mm/malloc.nim:89: proc alloc0(r: var MemRegion, size: int): pointer =
+system/mm/malloc.nim:91: proc dealloc(r: var MemRegion, p: pointer) = dealloc(p)
+system/mm/malloc.nim:92: proc deallocOsPages(r: var MemRegion) = discard
+system/mm/none.nim:42: var allocator {.rtlThreadVar.}: MemRegion
+system/mm/none.nim:43: instantiateForRegion(allocator)
+
+## Lignes trouvées, par fichier
+    2 posix/posix.nim
+    1 posix/posix_haiku.nim
+    1 posix/posix_linux_amd64.nim
+    1 posix/posix_macos_amd64.nim
+    1 posix/posix_nintendoswitch.nim
+    1 posix/posix_openbsd_amd64.nim
+    1 posix/posix_other.nim
+    3 pure/htmlparser.nim
+    2 pure/httpclient.nim
+    1 pure/lexbase.nim
+    1 pure/memfiles.nim
+   10 system.nim
+  171 system/alloc.nim
+    2 system/arc.nim
+    2 system/avltree.nim
+   11 system/channels_builtin.nim
+    1 system/coro_detection.nim
+    2 system/excpt.nim
+   45 system/gc.nim
+    4 system/gc_common.nim
+   11 system/gc_ms.nim
+   66 system/gc_regions.nim
+    3 system/memalloc.nim
+    5 system/mm/boehm.nim
+    5 system/mm/go.nim
+    6 system/mm/malloc.nim
+    2 system/mm/none.nim
+    6 system/mmdisp.nim
+    9 system/osalloc.nim
+    1 system/repr.nim
+    3 system/sysstr.nim
+    9 system/threadimpl.nim

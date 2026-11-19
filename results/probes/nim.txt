@@ -1,7 +1,34 @@
-CAP;A2;1;offsetOf(S, c)=8
-CAP;A3;1;packed sizeof(P)=5 ; bitsize sizeof(BF)=4
-CAP;A4;1;align(64) alignof(L)=64
-CAP;A5;1;union 0x3F800000
-CAP;F4;1;std/memfiles : 0.4390046
-CAP;D5;1;cpuRelax + fence
-CAP;E3;1;likely/unlikely
+CAP;A2;1;[exécutée] offsetOf(S, c)=8
+CAP;A3;1;[exécutée] packed sizeof(P)=5 ; bitsize sizeof(BF)=4
+CAP;A4;1;[exécutée] align(64) alignof(L)=64
+CAP;A5;1;[exécutée] union 0x3F800000
+CAP;F4;1;[exécutée] std/memfiles : 0.4390046
+CAP;A1;1;[exécutée] seq[Part] : pas de 16 o = sizeof(Part) 16 ; les 4 premiers octets du tampon sont le float32 x en ligne : 00 00 80 3F
+CAP;A7;1;[exécutée] object (n: uint32, a: array[16, float32]) : 68 o, offsetOf(Inl, a) = 4 (tableau en ligne)
+CAP;A8;1;[exécutée] uint8/int16/float32 : 1/2/4 o ; seq[uint8] de 1000 éléments : 1000 o, seq[int16] : 2000 o
+CAP;B1;1;[exécutée] ORC/ARC, destruction déterministe : destroy(b) fin-portée destroy(a) ; 1 fil dans /proc/self/task (aucun fil de collecteur ; le collecteur de cycles d'ORC ne parcourt que les types cycliques, --mm:arc le retire)
+CAP;B3;1;[exécutée] array[4096, uint8] local à 1841 o d'une autre variable locale, à 752851953176 o du tas : sur la pile
+CAP;B4;0.5;[exécutée] getAllocStats (-d:nimAllocStats) : fermeture qui capture (allocCount: 1, deallocCount: 0), ajout à une chaîne (allocCount: 2, deallocCount: 0), littéral de seq @[1, 2, 3] (allocCount: 1, deallocCount: 0) (ab9, 3) : allocations implicites
+CAP;B5;1;[exécutée] ptr UncheckedArray[uint32] : mp[3] = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7
+CAP;D1;1;[exécutée] std/typedthreads : 4 fils, 4 identifiants de fil (getThreadId) distincts, somme 7998000 (attendu 7998000)
+CAP;E2;1;[exécutée] instruction asm (assembleur étendu de GCC, variables Nim entre accents graves) : 41 -> 42
+CAP;F3;1;[exécutée] high(uint32) + 1 = 0, high(int32) +% 1 = -2147483648, 250'u8 + 10 = 4 (non signés modulaires ; +% pour les signés, qui sinon lèvent OverflowDefect)
+CAP;B2;0.5;[exécutée] alloc0/dealloc du tas de Nim : bloc de 400 o, q[99] = 7 ; aucune interface d'allocateur sous --mm:orc (NOTE B2 : régions sous --mm:regions seulement)
+NOTE;B2;[exécutée] withRegion(MemRegion) sous --mm:regions, mode mémoire global livré (advopt.txt) : seq allouée dans la région, s[0] = 1 ; [échec] sous --mm:orc, celui du banc : Error: undeclared identifier: 'MemRegion'
+CAP;C2;1;[exécutée] importc de _mm512_ternarylogic_epi32 depuis immintrin.h, compilé par clang 23 : tern(1) = 12 ^ 10 ^ 1 = 7, 1 vpternlogd ; ½ en v1
+CAP;C4;0.5;[exécutée] {.localPassC: "-ffast-math".} sur le module fastsum : 7 vaddps ymm/zmm dans sum_fast contre 0 dans sum_plain du module principal (9 vaddss) : par module ou globalement (--passC), pas par opération
+CAP;C5;0.5;[exécutée] for i in ||(0, 3999) avec -fopenmp, vérifications coupées dans le corps : 4 fils distincts (gettid) ; [échec] le même corps avec les vérifications de -d:release : error: use of undeclared label 'LA1_' (le saut d'erreur sort du bloc OpenMP) ; réduction(+:s) sur une variable Nim : error: use of undeclared identifier 's' (nom C décoré), qui marche avec {.exportc: "s".} : 499999500000 ; sous-ensemble du langage
+CAP;D2;1;[exécutée] std/atomics à MemoryOrder explicite, code produit : moRelease = 1 mov et 0 xchg ; moSequentiallyConsistent = 1 xchg ; fetchAdd moRelaxed = 1 instruction lock
+CAP;D4;1;[exécutée] Thread.pinToCpu(t, 1) : sched_getcpu() dans le fil = 1 (std/typedthreads)
+CAP;D5;1;[exécutée] cpuRelax (std/sysatomics) et fence(moSequentiallyConsistent) : 1 pause et 1 barrière dans spin
+CAP;E1;1;[exécutée] binaire natif par le C : objdump donne 8888 lignes, 10 instructions vectorielles flottantes dans axpy ; le C généré reste lisible (nimcache)
+CAP;E3;1;[exécutée] likely/unlikely (module system, __builtin_expect dans le C généré) : avec gcc 16, compilateur C par défaut de Nim, likely [ jne call ret ret ] contre [ je ret call ret ] sans indication (appel ramené dans le chemin chaud) ; avec clang 23, celui du banc, likely [ jne call ret ret ] = unlikely [ jne call ret ret ] : sans effet (le résultat passe par une variable NIM_BOOL) ; section 3 de docs/GRID_AUDIT.md
+CAP;E4;1;[exécutée] importc de __builtin_prefetch : 1 prefetcht0 dans pf ; ½ en v1
+CAP;E5;1;[exécutée] paramètres {.noalias.} : 2 NIM_NOALIAS (restrict) dans le prototype C de axpy
+CAP;E6;1;[exécutée] a[i] sur une seq : 1 appel à raiseIndexError ; sous {.push boundChecks: off.} : 0
+CAP;E7;1;[exécutée] const F60 = fib(60) évalué par la VM du compilateur = 1548008755920 ; gsum[float32] = 4.0, gsum[float64] = 3.75 ; dans le binaire, fib60 = 1 constante immédiate et 0 appel ; gsum instanciée en 2 fonctions (float32 et float64)
+CAP;A6;0;[recherche] motif A6 dans lib de Nim 2.2.12 : 0 déclaration publique, 0 mention (results/grid_audit/search/nim_A6.txt)
+CAP;C1;0;[recherche] motif C1 dans lib de Nim 2.2.12 : 0 déclaration publique, 8 mentions (results/grid_audit/search/nim_C1.txt) : aucun type vectoriel
+CAP;D3;0;[recherche] motif D3 dans lib de Nim 2.2.12 : 2 déclarations publiques (results/grid_audit/search/nim_D3.txt) : SSL_CTRL_SET_SESS_CACHE_SIZE et SSL_CTRL_GET_SESS_CACHE_SIZE (OpenSSL), faux positifs ; aucune constante ni type de bourrage
+CAP;F1;0.5;[exécutée] array[3, array[4, float32]] contigu : &m[1][0] - &m[0][3] = 4 o, sizeof = 48 o ; [échec] array[n, array[3, float32]] avec n connu à l'exécution : Error: cannot evaluate at compile time: n ; [recherche] motif F1 : 0 déclaration publique (results/grid_audit/search/nim_F1.txt)
+CAP;F2;0;[recherche] motif F2 dans lib de Nim 2.2.12 : 14 déclarations publiques (results/grid_audit/search/nim_F2.txt) : liaisons de locale.h (Lconv, LC_*), faux positifs ; aucune construction NUMA ni de distribution

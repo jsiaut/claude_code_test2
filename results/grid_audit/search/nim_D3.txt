@@ -1,0 +1,18 @@
+# Recherche d'absence : nim, case D3
+# Chaîne : Nim Compiler Version 2.2.12 [Linux: amd64]
+# Motif : cache_?line|cache_?padded|destructive_?interference|false_?sharing|contended|dcache|cache_?size
+# Déclaration publique : ^\s*(proc|func|template|macro|iterator|method|converter)\s+`?[\w=+\-*/<>!$%^&|.\[\]]+`?\*|^\s*(type\s+|const\s+|var\s+|let\s+)?`?\w+`?\*\s*[:=\[({]
+# 2 déclarations publiques, 3 mentions, 2 fichiers
+
+## Déclarations publiques
+wrappers/openssl.nim:198: SSL_CTRL_SET_SESS_CACHE_SIZE* = 42
+wrappers/openssl.nim:199: SSL_CTRL_GET_SESS_CACHE_SIZE* = 43
+
+## Mentions (au plus 12 lignes par fichier)
+pure/concurrency/threadpool.nim:59: const CacheLineSize = 64 # true for most archs
+pure/concurrency/threadpool.nim:65: left {.align(CacheLineSize).}: int
+pure/concurrency/threadpool.nim:66: interest {.align(CacheLineSize).} : bool # whether the master is interested in the "all done" event
+
+## Lignes trouvées, par fichier
+    3 pure/concurrency/threadpool.nim
+    2 wrappers/openssl.nim
