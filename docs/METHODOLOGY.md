@@ -1538,3 +1538,29 @@ Robustesse :
   Point 1 détaillé : norme de preuve en trois classes ([exécutée] pour 1 et ½, [échec] ou [recherche] pour 0), motifs
   de recherche fixés d'avance, ordre par étage, errata appliqués ensemble par la règle écrite (v1 et v2), une seule
   régénération des sorties publiées à la fin.
+* 2026-11-19, 07:39 à 09:45 : **v4, point 1 : une sonde par case de la grille** (`docs/GRID_AUDIT.md`,
+  `probes/<langage>/audit/`, `tools/grid_audit/`, `analysis/grid_audit.py`). Outil de recherche d'absence et motifs
+  fixés d'avance, un par case ; listes de l'API publique par introspection pour les chaînes qui ne livrent pas leurs
+  sources (métadonnées du paquet de référence de .NET, modules exportés du JDK, `api/go1*.txt`, `:browse` de GHCi,
+  objet global et modules de Node, modules en C de CPython, valeurs système de BQN, `ppudump` de FreePascal, symboles
+  de Swift, introspection de PHP et de Lua). Les 25 langages dans l'ordre du plan, chacun poussé dès qu'il est sondé :
+  825 cases sondées et 25 mesurées (C3), aucune seulement lue (520 avant) ; 582 preuves [exécutée], 109 [échec], 239
+  [recherche], dont 161 seules. Une divergence : A3 de Haskell (une instance `Storable` compactée de 5 octets, sur les
+  décalages d'une structure C `packed` donnés par `hsc2hs`, le mécanisme que la matrice compte déjà ½ en A2 ; 0 dans la
+  matrice). Onze cases discutables listées avec la lecture de la règle et l'autre note possible (Rust D4 et F4 ; Zig
+  C2 ; F2 par appel système brut ; Nim E3 ; C B2 ; C et C++ F2 par OpenMP ; B1 de C#, Java, Go et Lua ; E6 et F2 de
+  Java). Écarts au plan : fichiers `tests.rs` de Rust exclus après la première recherche ; `analysis/check_probes.py`
+  compare désormais à la note v2, que les sondes impriment.
+* 2026-11-19, 09:47 à 10:20 : **audit de la grille : erratum et régénération unique** (`analysis/grid_audit_errata.py`,
+  puis la chaîne publiée : classement, matrice, graphiques, figures du README, états actuels des remarques, troisième
+  remarque). Contrôles : le scénario Avant reproduit P-E de `results/php_check.json` à l'identique ; Après reproduit le
+  nouveau publié (`results/summary_v3.json`) à l'identique ; les états actuels (`audit3.py`, `c_check.py --current`,
+  `nosimd_check.py --suffix=_current`, `confrontation_current.py`) reproduisent Après à l'identique. Haskell **19e,
+  41,82 points** (+ 0,55 ; contrôle v2 39,9 → 41,5) ; les 24 autres gardent leurs scores, leurs rangs espérés bougent de
+  0,03 au plus (Zig 5,14 → 5,13) ; Go devance Haskell dans 91 % des variantes (93 %) ; étages [14, 5, 6]. Cases
+  discutables, l'autre note une à la fois : aucune ne change les étages ni les trois premières places ; Zig passe 4e
+  (C3 5e) si C2 vaut 1, si l'appel système brut compte pour F2 ou si Rust a ½ en D4 et F4 ; Nim 8e (D 7e) si E3 vaut 0 ;
+  toutes ensemble, Java passe aussi devant FreePascal. Textes de la matrice précisés sans changer de note (C B2,
+  C++ C4, Nim C5, Julia B4). `analysis/capabilities_md.py` : état de preuve par classe. README : en-tête, Haskell
+  (tableau, contrôle, paragraphe), Go devant Haskell, rang moyen de Zig, état de preuve de la grille, errata, liens et
+  commandes de reproduction.

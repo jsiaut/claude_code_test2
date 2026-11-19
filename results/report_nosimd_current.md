@@ -2,7 +2,7 @@
 
 Plan : docs/NOSIMD.md (sections 2 et 3, poussées avant les calculs). Le classement publié ne change pas.
 
-Témoin : écart maximal 0.0e+00 avec results/php_check.json, « P-E ».
+Témoin : écart maximal 0.0e+00 avec results/grid_audit/errata.json, « Après ».
 
 ## Rang (position par rang espéré) et score ponctuel
 
@@ -24,9 +24,9 @@ Témoin : écart maximal 0.0e+00 avec results/php_check.json, « P-E ».
 | Mojo | 14 (62,3) | 14 (63,2) | 14 (45,0) | 14 (44,9) | 14 (55,0) | 14 (57,7) | 13 (62,3) |
 | C# | 15 (54,9) | 15 (56,2) | 16 (43,0) | 16 (43,0) | 15 (53,1) | 15 (50,3) | 15 (54,9) |
 | FreePascal | 16 (48,1) | 16 (48,4) | 15 (43,3) | 15 (43,3) | 16 (50,7) | 16 (48,8) | 16 (48,1) |
-| Java | 17 (47,2) | 17 (48,3) | 17 (37,1) | 17 (37,1) | 17 (50,2) | 17 (45,2) | 17 (47,2) |
-| Go | 18 (45,4) | 18 (45,6) | 18 (37,5) | 18 (37,5) | 18 (46,5) | 18 (40,1) | 18 (45,4) |
-| Haskell | 19 (41,3) | 19 (41,8) | 19 (31,1) | 19 (31,1) | 19 (38,9) | 19 (37,7) | 19 (41,3) |
+| Java | 17 (47,2) | 17 (48,3) | 18 (37,1) | 18 (37,1) | 17 (50,2) | 17 (45,2) | 17 (47,2) |
+| Go | 18 (45,4) | 18 (45,6) | 17 (37,5) | 17 (37,5) | 18 (46,5) | 18 (40,1) | 18 (45,4) |
+| Haskell | 19 (41,8) | 19 (42,3) | 19 (31,7) | 19 (31,7) | 19 (39,5) | 19 (38,2) | 19 (41,8) |
 | OCaml | 20 (23,9) | 20 (24,2) | 20 (24,7) | 20 (24,7) | 20 (27,9) | 20 (24,6) | 20 (23,9) |
 | BQN | 21 (17,7) | 21 (18,5) | 21 (18,8) | 21 (18,8) | 21 (21,3) | 21 (19,1) | 21 (17,7) |
 | PHP | 22 (16,6) | 22 (16,6) | 22 (16,7) | 22 (16,7) | 23 (17,6) | 23 (16,2) | 22 (16,6) |
@@ -40,8 +40,8 @@ Témoin : écart maximal 0.0e+00 avec results/php_check.json, « P-E ».
 |---|---|---|---|
 | Publié | 1,000 | C (50 %) | aucune |
 | Contrôle sans mt | 0,995 | C (48 %) | D +2, Nim -2, Zig +1, Ada +1, C3 -1, Rust -1 |
-| S-scalaire | 0,834 | Chapel (45 %) | Julia +10, Fortran +9, Chapel +9, C3 -6, Ada +5, Rust -5, C -4, C++ -4, Zig -4, Odin -4, D -4, C# -1, Nim -1, Swift -1, FreePascal +1 |
-| S-scalaire-Mojo | 0,834 | Chapel (45 %) | Julia +10, Fortran +9, Chapel +9, C3 -6, Ada +5, Rust -5, C -4, C++ -4, Zig -4, Odin -4, D -4, C# -1, Nim -1, Swift -1, FreePascal +1 |
+| S-scalaire | 0,833 | Chapel (45 %) | Julia +10, Fortran +9, Chapel +9, C3 -6, Ada +5, Rust -5, C -4, C++ -4, Zig -4, Odin -4, D -4, C# -1, Java -1, Nim -1, Go +1, Swift -1, FreePascal +1 |
+| S-scalaire-Mojo | 0,833 | Chapel (45 %) | Julia +10, Fortran +9, Chapel +9, C3 -6, Ada +5, Rust -5, C -4, C++ -4, Zig -4, Odin -4, D -4, C# -1, Java -1, Nim -1, Go +1, Swift -1, FreePascal +1 |
 | S-symétrique | 0,992 | Odin (30 %) | Julia +2, Rust -2, Chapel -2, C -1, Zig +1, Odin +1, Fortran +1, JavaScript +1, C3 -1, D +1, Nim +1, Swift -1, PHP -1 |
 | S-noyaux-scalaires | 0,988 | C (48 %) | Ada +4, Zig -3, Julia +1, JavaScript +1, D -1, Rust -1, Nim +1, Swift -1, PHP -1 |
 | S-importées | 0,970 | C (51 %) | Nim -7, Ada -3, Julia +2, Fortran +2, Chapel +2, Swift +2, Zig +1, C3 -1, D +1, Mojo +1 |

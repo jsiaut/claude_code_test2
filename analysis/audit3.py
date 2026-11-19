@@ -2,7 +2,8 @@
 """Troisième remarque générale (plan : docs/AUDIT3_RESPONSE.md, sections 1 et 2, poussées avant ce calcul).
 
 Sans remesure, sur les données du classement publié (analyse globale de la v3 rejouée, mêmes tirages) :
-* Publié : contrôle, doit reproduire P-E de results/php_check.json ;
+* Publié : contrôle, doit reproduire le publié, Après de results/grid_audit/errata.json (P-E de results/php_check.json
+  avant l'audit de la grille) ;
 * M-mesures : poids du contrôle nul au centre et dans chaque variante (plafond et code par défaut renormalisés) ;
   étages indicatifs par la règle v3 sans sa condition de réplication (paires ordonnées dans au moins 95 % des tirages) ;
 * substitutions : les clés mesurées par chaque implémentation en annexe remplacent celles de la chaîne classée (même
@@ -108,9 +109,9 @@ def main():
     langs = [l for l in RANKED + list(ANNEX) if l in data]
     out = {"scenarios": {}}
     pub = out["scenarios"]["Publié"] = run(data, lat, langs, footprint, c3)
-    ref = json.load(open(os.path.join(ROOT, "results", "php_check.json")))["scenarios"]["P-E"]
+    ref = json.load(open(os.path.join(ROOT, "results", "grid_audit", "errata.json")))["scenarios"]["Après"]
     out["check"] = max(max(abs(pub["ms0"][l] - ref["ms0"][l]), abs(pub["exp21"][l] - ref["exp21"][l])) for l in RANKED)
-    print(f"Contrôle : écart maximal du scénario Publié à P-E = {out['check']:.2e}", flush=True)
+    print(f"Contrôle : écart maximal du scénario Publié à Après (errata.json) = {out['check']:.2e}", flush=True)
     mm = out["scenarios"]["M-mesures"] = run(data, lat, langs, footprint, c3, wmap=measures_only)
     print("M-mesures : " + ", ".join(f"{i + 1}. {NAMES[l]} ({mm['exp21'][l]:.2f})" for i, l in enumerate(mm["order21"])),
           flush=True)
@@ -149,7 +150,7 @@ def report(o):
     q = o["quantites"]
     L = ["# Troisième remarque générale : les mesures et la grille, séparément\n",
          "Plan : `docs/AUDIT3_RESPONSE.md`. Code : `analysis/audit3.py`. Aucune mesure nouvelle.",
-         f"Contrôle : le scénario Publié reproduit P-E de `results/php_check.json` (écart maximal {o['check']:.1e}).\n",
+         f"Contrôle : le scénario Publié reproduit Après de `results/grid_audit/errata.json` (écart maximal {o['check']:.1e}).\n",
          "## Les trois quantités du plan v3, et le classement sur les seules mesures\n",
          "Plafond E et code naturel D1 (sur 100, référence fixe) ; contrôle C, règle v2 (v1 entre parenthèses) ; rang de "
          "chaque quantité parmi les 25. M-mesures : poids du contrôle nul, au centre et dans les 20 000 variantes.\n",

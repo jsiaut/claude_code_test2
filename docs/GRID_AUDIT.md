@@ -3,7 +3,9 @@
 *Plan : `docs/V4_PLAN.md`, section 2, poussé avant tout travail. Outils : `tools/grid_audit/` (motifs de recherche fixés
 d'avance, `search.py`), `analysis/grid_audit.py` (confrontation des sondes à la matrice v1 et v2, classes de preuve).
 Sorties : `results/probes/<langage>.txt`, `results/grid_audit/summary.md`, `results/grid_audit/search/` (détail de chaque
-recherche d'absence). Ce document est rempli langage par langage ; les errata sont appliqués ensemble à la fin.*
+recherche d'absence), `results/grid_audit/errata.json` et `report_errata.md` (errata et sensibilité :
+`analysis/grid_audit_errata.py`). Les 25 langages sont sondés ; l'erratum a été appliqué une fois toutes les sondes
+faites, avec une seule régénération des sorties publiées (sections 4 et 5).*
 
 ## 1. Méthode
 
@@ -21,7 +23,10 @@ recherche d'absence). Ce document est rempli langage par langage ; les errata so
   Une case où la règle elle-même hésite est listée en section 3 avec l'effet des deux notes.
 * **Écarts au plan.** (1) Après la première recherche (Rust), les fichiers `tests.rs` ont été ajoutés aux exclusions de
   Rust (modules de test, pas des API publiques) et le détail des recherches liste désormais les lignes de mention ; les
-  motifs des cases n'ont pas changé.
+  motifs des cases n'ont pas changé. (2) `analysis/check_probes.py` compare désormais chaque ligne à la note v2, que
+  les sondes impriment (plan, 2.1), et non plus à la note v1. (3) Les scripts d'état actuel (`analysis/audit3.py`,
+  `c_check.py --current`, `nosimd_check.py --suffix=_current`) prennent pour référence le publié d'après l'audit
+  (`results/grid_audit/errata.json`, « Après ») au lieu de P-E de `results/php_check.json`.
 
 ## 2. Résultats par langage
 
@@ -415,11 +420,60 @@ bibliothèque standard (`tools/grid_audit/listings/lua_api.lua`), sans aucun ré
 | Java | E6 | 0 | `sun.misc.Unsafe.getInt(tableau, décalage)` lit hors du tableau sans contrôle | Méthode de `jdk.unsupported`, dépréciée pour suppression, avertissement à la première utilisation : pas une construction du langage | ½ si une API non prise en charge mais livrée compte, comme une unité interne |
 | Java | F2 | 0 | `-XX:+UseNUMA` (allocation NUMA du collecteur) est acceptée, puis coupée par l'ergonomie sur cet hôte à un seul nœud ; HotSpot passe par libnuma | Option globale de la JVM, effet invérifiable ici, bibliothèque tierce | ½ si une option globale d'allocation NUMA compte |
 
-## 4. Divergences
+### Effet de l'autre note
 
-Une sonde contredit la note de la matrice ; l'erratum est appliqué avec les autres une fois toutes les sondes faites
-(docs/V4_PLAN.md 2.3).
+Calcul : `analysis/grid_audit_errata.py`, sur le classement corrigé (section 4), une case discutable à la fois puis
+toutes ensemble (`results/grid_audit/report_errata.md`). Les places sont celles du rang espéré, comme au README.
+
+| Autre note | Scores | Places | Étages |
+|---|---|---|---|
+| Rust D4 et F4 à ½ | Rust 69,95 → 70,91 | Rust 6e ; C3 et Zig échangent les 4e et 5e places | [14, 5, 6] |
+| Zig C2 à 1 | Zig 72,30 → 73,18 | Zig 5e → 4e, C3 4e → 5e | [14, 5, 6] |
+| F2 à ½ par appel système brut (Odin, C, C++, Go, Zig, FreePascal) | + 0,44 chacun | Zig 5e → 4e, C3 4e → 5e | [14, 5, 6] |
+| Nim E3 à 0 | Nim 69,30 → 68,80 | Nim 7e → 8e, D 8e → 7e ; Swift et Fortran échangent les 11e et 12e places | [14, 5, 6] |
+| C B2 à 1 | C 79,96 → 80,66 | aucune | [14, 5, 6] |
+| C et C++ F2 à ½ (OpenMP) | + 0,44 chacun | aucune | [14, 5, 6] |
+| B1 à ½ (C#, Java, Go, Lua) | + 0,70 chacun | aucune | [14, 5, 6] |
+| Java E6 à ½ | Java 47,17 → 47,42 | aucune | [14, 5, 6] |
+| Java F2 à ½ | Java 47,17 → 47,61 | aucune | [14, 5, 6] |
+| Toutes ensemble | de − 0,50 (Nim) à + 1,39 (Java) | Zig 4e, C3 5e ; Nim 8e, D 7e ; Java 16e, FreePascal 17e | [14, 5, 6] |
+
+Aucune case discutable ne change les étages ni les trois premières places ; quatre déplacent une place dans le premier
+étage (entre C3 et Zig, deux langages séparés de 0,02 en rang espéré, et entre Nim et D), la réunion de toutes en
+déplace une dans le deuxième (Java et FreePascal).
+
+## 4. Divergences et errata
+
+Une seule sonde contredit la note de la matrice. L'erratum a été appliqué une fois toutes les sondes faites
+(docs/V4_PLAN.md 2.3), dans `analysis/capabilities.py`, avec une seule régénération des sorties publiées (classement,
+matrice, graphiques, figures du README, états actuels) ; le scénario Avant de `analysis/grid_audit_errata.py`
+reproduit le publié d'avant (P-E de `results/php_check.json`) au bit près.
 
 | Langage | Case | Matrice (v1, v2) | Sonde | Fait établi |
 |---|---|---|---|---|
 | Haskell | A3 | 0, 0 | ½ | Instance `Storable` compactée de 5 o (décalages de `hsc2hs`), tableau à plat, `Word32` non aligné relu ; même mécanisme que A2 (½) |
+
+Effet : Haskell 41,27 → 41,82 points (+ 0,55), 19e inchangé (rang espéré 18,68 → 18,62) ; les 24 autres gardent leurs
+scores, leurs rangs espérés bougent de 0,03 au plus ; étages [14, 5, 6] inchangés.
+
+Corrections de texte, sans changer de note : C B2 (l'`obstack` de la glibc est une arène livrée), C++ C4 (OpenMP
+vectorise la réduction réassociée ; g++ 16 n'exploite pas `std::reduce(unseq)`), Nim C5 (conditions de l'itérateur
+`||` et de sa réduction, texte de la règle v2), Julia B4 (une petite union n'alloue plus).
+
+## 5. État de la preuve
+
+| | Cases |
+|---|---|
+| Sondées (une ligne `CAP` exécutée) | 825 |
+| dont [exécutée] (fait observable produit par un programme) | 582 |
+| dont [échec] (forme refusée ou comportement contraire mesuré) | 109 |
+| dont [recherche] (fouille des sources livrées ou de l'API publique) | 239 |
+| dont [recherche] seule | 161 |
+| Mesurées (C3) | 25 |
+| Lues seulement | 0 (520 avant l'audit) |
+
+Une case peut porter plusieurs classes. Les 161 cases prouvées par la seule recherche sont des absences d'API (D3, E3,
+E4, E5, F2 pour la plupart) : la recherche montre qu'aucun nom public ne correspond au motif, ou que chaque nom trouvé
+est un faux positif ; elle ne prouve pas l'absence d'une construction que le motif ne décrirait pas. Détail par
+langage : `results/grid_audit/summary.md` et `docs/CAPABILITIES.md`, section « État de preuve ».
+

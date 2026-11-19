@@ -69,7 +69,7 @@ V2_OVERRIDES = {
     ("d", "E5"): (1, "@restrict (ldc.attributes)"),
     # Nim (backend clang)
     ("nim", "C2"): (1, "importc des intrinsèques de <immintrin.h> du compilateur C de la chaîne"),
-    ("nim", "C5"): (0.5, "itérateur || du module system (OpenMP) : une réduction ne compile pas en -d:release ; erratum du 30/10, juge à l'aveugle"),
+    ("nim", "C5"): (0.5, "itérateur || du module system (OpenMP) : réparti sur plusieurs fils si le corps coupe les vérifications, réduction seulement par une variable au nom C fixé ({.exportc.}) (sonde) ; erratum du 30/10, juge à l'aveugle ; texte précisé le 19/11, audit de la grille"),
     ("nim", "E4"): (1, "importc de __builtin_prefetch"),
     # Ada (GNAT 16)
     ("ada", "C1"): (1, "Machine_Attribute vector_type : types vectoriels GCC, extension documentée de GNAT (corrigé le 30/10)"),

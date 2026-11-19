@@ -9,7 +9,7 @@ Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que l
 | **A** (25 %) | | | | | | | | | | | | | | | | | | | | | | | | | |
 | A1 agrégats valeurs en ligne dans les tableaux | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ | ◐ | ◐ |
 | A2 ordre/taille des champs, disposition C, offsetof | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ◐ | ○ | ○ | ◐ |
-| A3 disposition au bit près (packed, champs de bits) | ◐→● | ◐→● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ○ | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ | ◐ |
+| A3 disposition au bit près (packed, champs de bits) | ◐→● | ◐→● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ○ | ◐ | ◐ | ○ | ◐ | ○ | ○ | ◐ | ○ | ○ | ◐ |
 | A4 alignement explicite >= 64 o | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐→● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ◐ | ○ | ○ | ◐ |
 | A5 unions et réinterprétation de bits | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ |
 | A6 SoA natif | ○ | ○ | ○ | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
@@ -52,7 +52,7 @@ Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que l
 ### C
 
 * **A** : A1 = 1 (tableaux de struct (sonde)) ; A2 = 1 (offsetof (sonde)) ; A3 = 0.5 (champs de bits standard (disposition propre à l'implémentation) ; packed seulement par attribut, extension (sonde) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2) ; A4 = 1 (alignas, aligned_alloc (sonde)) ; A5 = 1 (union, memcpy (sonde)) ; A6 = 0 (aucun) ; A7 = 1 (float v[16] dans struct (sonde)) ; A8 = 1 (stdint.h)
-* **B** : B1 = 1 (pas de GC) ; B2 = 0.5 (malloc seulement ; arènes à la main (bench K8 tuned)) ; B3 = 1 (tableaux sur la pile, VLA) ; B4 = 1 (aucune allocation implicite) ; B5 = 1 (pointeurs)
+* **B** : B1 = 1 (pas de GC) ; B2 = 0.5 (malloc seulement ; obstack de la glibc, arène livrée sans interface d'allocateur que la bibliothèque accepte (sonde) ; arènes à la main (bench K8 tuned) ; texte précisé le 19/11, audit de la grille) ; B3 = 1 (tableaux sur la pile, VLA) ; B4 = 1 (aucune allocation implicite) ; B5 = 1 (pointeurs)
 * **C** : C1 = 0.5 (vector_size : extension gcc/clang (sonde)) ; C2 = 0.5 (immintrin.h (bench K5/K1/K6) : livré avec clang et gcc, hors norme ISO, comme _mm_prefetch (E4) et _mm_pause (D5) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2) ; C3 = 1.0 (mesuré) ; C4 = 0.5 (-ffast-math, #pragma clang fp reassociate (extensions)) ; C5 = 0.5 (OpenMP (livré avec gcc/clang, hors norme C))
 * **D** : D1 = 1 (threads.h / pthreads) ; D2 = 1 (stdatomic.h memory_order_*) ; D3 = 0.5 (__GCC_DESTRUCTIVE_SIZE prédéfini par clang et gcc ; sysconf (glibc) ; corrigé le 30/10, juge à l'aveugle) ; D4 = 0.5 (sched_setaffinity (glibc, hors ISO C) (sonde)) ; D5 = 0.5 (atomic_thread_fence ; pause seulement par intrinsèque)
 * **E** : E1 = 1 (natif) ; E2 = 0.5 (__asm__ extension gcc/clang (sonde)) ; E3 = 0.5 (__builtin_expect (extension)) ; E4 = 0.5 (__builtin_prefetch / _mm_prefetch) ; E5 = 1 (restrict (C99)) ; E6 = 1 (aucune vérification de bornes) ; E7 = 0.5 (constexpr C23 limité, _Generic, pas de génériques)
@@ -62,7 +62,7 @@ Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que l
 
 * **A** : A1 = 1 (std::vector<struct> (bench)) ; A2 = 1 (offsetof, disposition standard (sonde)) ; A3 = 0.5 (champs de bits ; packed seulement par attribut, extension (sonde) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2) ; A4 = 1 (alignas + new aligné C++17 (sonde)) ; A5 = 1 (std::bit_cast, unions (sonde)) ; A6 = 0 (aucun en bibliothèque standard) ; A7 = 1 (std::array en ligne) ; A8 = 1 (cstdint)
 * **B** : B1 = 1 (pas de GC) ; B2 = 1 (std::pmr, concept Allocator (bench K8 tuned_alloc)) ; B3 = 1 (objets sur la pile) ; B4 = 0.5 (std::function, exceptions, coroutines peuvent allouer) ; B5 = 1 (pointeurs)
-* **C** : C1 = 0.5 (std::simd C++26 (bench K1/K5/K6) : « highly experimental » dans GCC 16, __cpp_lib_simd non défini, x86 seulement, absent de libc++ 23 ; vector_size : extension gcc/clang (corrigé le 1/11, remarque sur C++)) ; C2 = 0.5 (immintrin.h : livré avec g++ et clang++, hors norme ISO, comme _mm_prefetch (E4) et _mm_pause (D5) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2) ; C3 = 1.0 (mesuré) ; C4 = 1 (std::reduce/transform_reduce et std::simd::reduce : ordre libre explicite) ; C5 = 0.5 (std::execution::par_unseq : série sans TBB tiers (libstdc++ : backend SERIAL, src c++config.h))
+* **C** : C1 = 0.5 (std::simd C++26 (bench K1/K5/K6) : « highly experimental » dans GCC 16, __cpp_lib_simd non défini, x86 seulement, absent de libc++ 23 ; vector_size : extension gcc/clang (corrigé le 1/11, remarque sur C++)) ; C2 = 0.5 (immintrin.h : livré avec g++ et clang++, hors norme ISO, comme _mm_prefetch (E4) et _mm_pause (D5) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2) ; C3 = 1.0 (mesuré) ; C4 = 1 (OpenMP livré : #pragma omp simd reduction vectorise une somme réassociée (sonde) ; std::reduce(unseq) et std::simd::reduce autorisent la réassociation, que g++ 16 n'exploite pas pour std::reduce ; texte précisé le 19/11, audit de la grille) ; C5 = 0.5 (std::execution::par_unseq : série sans TBB tiers (libstdc++ : backend SERIAL, src c++config.h))
 * **D** : D1 = 1 (std::jthread) ; D2 = 1 (std::memory_order) ; D3 = 1 (std::hardware_destructive_interference_size (sonde : 64)) ; D4 = 0.5 (pas en bibliothèque standard ; sched_setaffinity de la libc) ; D5 = 0.5 (atomic_thread_fence, std::barrier ; pause seulement par intrinsèque)
 * **E** : E1 = 1 (natif) ; E2 = 1 (déclaration asm (norme, sens défini par l'implémentation) (sonde)) ; E3 = 1 ([[likely]]/[[unlikely]] C++20 (sonde)) ; E4 = 0.5 (__builtin_prefetch (extension)) ; E5 = 0.5 (__restrict__ (extension)) ; E6 = 1 (pas de vérification par défaut) ; E7 = 1 (templates + consteval (sonde))
 * **F** : F1 = 1 (std::mdspan C++23 (sonde)) ; F2 = 0 (aucun) ; F3 = 1 (non signés modulaires) ; F4 = 0.5 (mmap POSIX + start_lifetime_as (sonde))
@@ -205,7 +205,7 @@ Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que l
 ### Julia
 
 * **A** : A1 = 1 (Vector{Particle} isbits en ligne (bench)) ; A2 = 1 (ordre déclaré, fieldoffset (src)) ; A3 = 0 (aucun) ; A4 = 0.5 (tableaux alignés par l'implémentation ; pas d'attribut) ; A5 = 1 (reinterpret pour tout type isbits) ; A6 = 0 (StructArrays est tiers) ; A7 = 1 (NTuple{16,Float32}) ; A8 = 1 (UInt8/Float32)
-* **B** : B1 = 0 (GC imposé) ; B2 = 0.5 (Libc.malloc/free et unsafe_wrap : arènes à la main (sonde ; erratum du 30/10)) ; B3 = 0.5 (structs isbits et tuples sur la pile ; tableaux sur le tas) ; B4 = 0.5 (instabilité de type et fermetures (Core.Box) allouent (bench : capture)) ; B5 = 1 (Ptr, unsafe_load, Libc.malloc)
+* **B** : B1 = 0 (GC imposé) ; B2 = 0.5 (Libc.malloc/free et unsafe_wrap : arènes à la main (sonde ; erratum du 30/10)) ; B3 = 0.5 (structs isbits et tuples sur la pile ; tableaux sur le tas) ; B4 = 0.5 (fermetures rendues (Core.Box pour une variable réaffectée) et instabilité de type large (Vector{Any}) allouent ; une petite union n'alloue plus (sonde) ; texte précisé le 19/11, audit de la grille) ; B5 = 1 (Ptr, unsafe_load, Libc.malloc)
 * **C** : C1 = 0.5 (VecElement + llvmcall seulement (SIMD.jl tiers)) ; C2 = 0.5 (llvmcall vers intrinsèques LLVM) ; C3 = 1.0 (mesuré) ; C4 = 1 (@simd, @fastmath) ; C5 = 1 (Threads.@threads, @spawn)
 * **D** : D1 = 1 (threads) ; D2 = 1 (@atomic :monotonic/:acquire/:release (src)) ; D3 = 0.5 (Threads.PaddedSpinLock (1.13) : une ligne de cache, propre aux verrous (sonde ; erratum du 30/10)) ; D4 = 0.5 (JULIA_EXCLUSIVE=1 (épinglage global)) ; D5 = 0.5 (Threads.atomic_fence ; pause interne seulement)
 * **E** : E1 = 1 (@code_native) ; E2 = 0.5 (llvmcall (IR LLVM pouvant contenir asm)) ; E3 = 0 (aucun) ; E4 = 0.5 (llvmcall) ; E5 = 0.5 (Base.Experimental.@aliasscope / Const (expérimental) (src)) ; E6 = 1 (@inbounds) ; E7 = 1 (spécialisation par méthode + @generated)
@@ -213,7 +213,7 @@ Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que l
 
 ### Haskell
 
-* **A** : A1 = 0.5 (pas de tableau d'enregistrements non boxés dans le langage ; tableaux Storable (base, Foreign.Marshal.Array)) ; A2 = 0.5 (Storable manuel (base)) ; A3 = 0 (aucun) ; A4 = 0.5 (allocaBytesAligned, tableaux épinglés alignés) ; A5 = 0.5 (castWord32ToFloat, unsafeCoerce#) ; A6 = 0 (aucun) ; A7 = 0.5 (pas de tableau fixe dans un enregistrement du langage ; Storable manuel (base) : enregistrement de 72 o à 16 flottants en ligne, rangé à plat dans un tableau (sonde ; erratum du 3/11, remarque sur Haskell : même mécanisme que A1 et A2)) ; A8 = 1 (Word8/Int16/Float (UArray))
+* **A** : A1 = 0.5 (pas de tableau d'enregistrements non boxés dans le langage ; tableaux Storable (base, Foreign.Marshal.Array)) ; A2 = 0.5 (Storable manuel (base)) ; A3 = 0.5 (Storable manuel non aligné : enregistrement compacté de 5 o sur les décalages d'une struct packed calculés par hsc2hs (sonde), comme A2 ; pas de champ de bits ; erratum du 19/11, audit de la grille) ; A4 = 0.5 (allocaBytesAligned, tableaux épinglés alignés) ; A5 = 0.5 (castWord32ToFloat, unsafeCoerce#) ; A6 = 0 (aucun) ; A7 = 0.5 (pas de tableau fixe dans un enregistrement du langage ; Storable manuel (base) : enregistrement de 72 o à 16 flottants en ligne, rangé à plat dans un tableau (sonde ; erratum du 3/11, remarque sur Haskell : même mécanisme que A1 et A2)) ; A8 = 1 (Word8/Int16/Float (UArray))
 * **B** : B1 = 0 (GC imposé) ; B2 = 0.5 (mallocBytes/free et Foreign.Marshal.Pool (régions libérées d'un bloc) dans base : arènes à la main (bench K8 tuned) ; pas d'allocateur d'objets du tas (sonde ; erratum du 3/11, remarque sur Haskell)) ; B3 = 0.5 (n-uplets et valeurs non boxés (Int#, FloatX16#, (# , #)) jamais sur le tas, garanti par le type ; enregistrements et tableaux sur le tas (sonde ; erratum du 3/11, remarque sur Haskell)) ; B4 = 0 (paresse, thunks, boxing omniprésents (bench : partage)) ; B5 = 1 (Foreign.Ptr, mallocBytes, peek/poke)
 * **C** : C1 = 0.5 (primops SIMD (GHC.Exts) ; NCG faux en 9.14.1, LLVM requis (bench)) ; C2 = 0 (aucun) ; C3 = 0.0 (mesuré) ; C4 = 0 (aucun) ; C5 = 0.5 (par# (ghc-prim) ; parallel/strategies non livrés)
 * **D** : D1 = 1 (RTS threadé, forkOn) ; D2 = 0.5 (IORef/MVar/STM, primops atomiques séquentiellement cohérents) ; D3 = 0 (aucune) ; D4 = 0.5 (forkOn + RTS -qa) ; D5 = 0 (aucun)
@@ -276,33 +276,33 @@ Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que l
 
 ## État de preuve
 
-Case **sondée** : une ligne `CAP` d'une sonde exécutée (`results/probes/<langage>.txt`, confrontée à la matrice par `analysis/check_probes.py`) ; **mesurée** : C3 ; **lue** : justifiée par la lecture des sources ou de la documentation, citée ci-dessus (`docs/AUDIT3_RESPONSE.md`).
+Case **sondée** : une ligne `CAP` d'une sonde exécutée (`results/probes/<langage>.txt`), confrontée à la matrice par `analysis/grid_audit.py` ; **mesurée** : C3 ; **lue** : justifiée par la seule lecture des sources ou de la documentation. Depuis l'audit de la grille (v4, point 1 : `docs/V4_PLAN.md`, `docs/GRID_AUDIT.md`), chaque preuve porte sa classe : **[exécutée]** (un programme se sert de la capacité et imprime un fait observable), **[échec]** (forme canonique refusée, ou comportement contraire mesuré), **[recherche]** (fouille des sources livrées ou de l'API publique avec un motif fixé d'avance, chaque résultat examiné). Une case peut porter plusieurs classes.
 
-| Langage | sondées | mesurées | lues |
-|---|---|---|---|
-| C | 33 | 1 | 0 |
-| C++ | 33 | 1 | 0 |
-| Rust | 8 | 1 | 25 |
-| Zig | 10 | 1 | 23 |
-| Odin | 5 | 1 | 28 |
-| C3 | 4 | 1 | 29 |
-| D | 8 | 1 | 25 |
-| Nim | 7 | 1 | 26 |
-| Ada | 7 | 1 | 26 |
-| Fortran | 7 | 1 | 26 |
-| Chapel | 9 | 1 | 24 |
-| Mojo | 7 | 1 | 26 |
-| Swift | 33 | 1 | 0 |
-| FPC | 33 | 1 | 0 |
-| Go | 4 | 1 | 29 |
-| C# | 4 | 1 | 29 |
-| Java | 5 | 1 | 28 |
-| Julia | 7 | 1 | 26 |
-| Haskell | 3 | 1 | 30 |
-| OCaml | 4 | 1 | 29 |
-| JS | 2 | 1 | 31 |
-| Python | 4 | 1 | 29 |
-| Lua | 2 | 1 | 31 |
-| BQN | 33 | 1 | 0 |
-| PHP | 33 | 1 | 0 |
-| **Total** | 305 | 25 | 520 (61 % des 850 cases) |
+| Langage | sondées | [exécutée] | [échec] | [recherche] | mesurées | lues |
+|---|---|---|---|---|---|---|
+| C | 33 | 31 | 2 | 2 | 1 | 0 |
+| C++ | 33 | 31 | 1 | 2 | 1 | 0 |
+| Rust | 33 | 26 | 3 | 7 | 1 | 0 |
+| Zig | 33 | 31 | 2 | 3 | 1 | 0 |
+| Odin | 33 | 30 | 3 | 2 | 1 | 0 |
+| C3 | 33 | 28 | 4 | 7 | 1 | 0 |
+| D | 33 | 31 | 2 | 3 | 1 | 0 |
+| Nim | 33 | 29 | 2 | 5 | 1 | 0 |
+| Ada | 33 | 29 | 1 | 4 | 1 | 0 |
+| Fortran | 33 | 25 | 3 | 10 | 1 | 0 |
+| Chapel | 33 | 26 | 0 | 7 | 1 | 0 |
+| Mojo | 33 | 25 | 0 | 9 | 1 | 0 |
+| Swift | 33 | 28 | 3 | 6 | 1 | 0 |
+| FPC | 33 | 26 | 3 | 6 | 1 | 0 |
+| Go | 33 | 22 | 11 | 11 | 1 | 0 |
+| C# | 33 | 25 | 6 | 8 | 1 | 0 |
+| Java | 33 | 20 | 10 | 13 | 1 | 0 |
+| Julia | 33 | 30 | 1 | 4 | 1 | 0 |
+| Haskell | 33 | 21 | 6 | 11 | 1 | 0 |
+| OCaml | 33 | 12 | 12 | 20 | 1 | 0 |
+| JS | 33 | 10 | 9 | 20 | 1 | 0 |
+| Python | 33 | 16 | 5 | 15 | 1 | 0 |
+| Lua | 33 | 4 | 10 | 26 | 1 | 0 |
+| BQN | 33 | 10 | 6 | 21 | 1 | 0 |
+| PHP | 33 | 16 | 4 | 17 | 1 | 0 |
+| **Total** | 825 | 582 | 109 | 239 | 25 | 0 (0 % des 850 cases) |

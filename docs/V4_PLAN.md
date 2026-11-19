@@ -9,10 +9,10 @@ poussé avant tout travail ; chaque point reçoit son plan détaillé, poussé a
 L'ordre suit ce que chaque point peut changer dans le résultat publié, et à quel point ce résultat repose aujourd'hui sur
 une hypothèse non vérifiée.
 
-1. **Une sonde par case de la grille.** Le contrôle explique 74 % des écarts de score entre les 14 premiers et décide de
-   l'ordre du premier étage (sans lui, Chapel passe de la 10e à la 4e place, C++ de la 3e à la 5e) ; or 520 de ses 850
-   cases ne reposent que sur une lecture, et 56 des cases « sondées » à 0 ne sont qu'imprimées par une sonde, sans
-   preuve exécutée. 6 % des cases ont déjà été corrigées.
+1. **Une sonde par case de la grille** (fait le 19 novembre : `docs/GRID_AUDIT.md`). Le contrôle explique 74 % des
+   écarts de score entre les 14 premiers et décide de l'ordre du premier étage (sans lui, Chapel passe de la 10e à la 4e
+   place, C++ de la 3e à la 5e) ; or 520 de ses 850 cases ne reposent que sur une lecture, et 56 des cases « sondées » à
+   0 ne sont qu'imprimées par une sonde, sans preuve exécutée. 6 % des cases ont déjà été corrigées.
 2. **Trois tailles par noyau.** Toutes les mesures reposent sur une seule taille par noyau, sauf K2, où le rapport de
    Python au C varie de 1,1 à 30 selon la taille. C'est l'hypothèse non testée qui touche le plus de cases mesurées :
    tous les langages, tous les noyaux.

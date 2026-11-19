@@ -36,4 +36,3 @@ Total : 825 sondées, 25 mesurées, 0 sans sonde, 0 déclaratives.
 
 | Langage | Case | Sonde | v1 | v2 | Preuve |
 |---|---|---|---|---|---|
-| haskell | A3 | 0.5 | 0 | 0 | [exécutée] struct __attribute__((packed)) {uint8_t; uint32_t} : taille 5, b à 1 (hsc2hs) ; instance Storable de 5 o : tableau de 1000 éléments à plat, élément 1 |

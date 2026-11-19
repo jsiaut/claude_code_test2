@@ -42,7 +42,7 @@ MATRIX = {
         "A1": (1, "tableaux de struct (sonde)"), "A2": (1, "offsetof (sonde)"),
         "A3": (0.5, "champs de bits standard (disposition propre à l'implémentation) ; packed seulement par attribut, extension (sonde) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2"), "A4": (1, "alignas, aligned_alloc (sonde)"),
         "A5": (1, "union, memcpy (sonde)"), "A6": (0, "aucun"), "A7": (1, "float v[16] dans struct (sonde)"),
-        "A8": (1, "stdint.h"), "B1": (1, "pas de GC"), "B2": (0.5, "malloc seulement ; arènes à la main (bench K8 tuned)"),
+        "A8": (1, "stdint.h"), "B1": (1, "pas de GC"), "B2": (0.5, "malloc seulement ; obstack de la glibc, arène livrée sans interface d'allocateur que la bibliothèque accepte (sonde) ; arènes à la main (bench K8 tuned) ; texte précisé le 19/11, audit de la grille"),
         "B3": (1, "tableaux sur la pile, VLA"), "B4": (1, "aucune allocation implicite"), "B5": (1, "pointeurs"),
         "C1": (0.5, "vector_size : extension gcc/clang (sonde)"), "C2": (0.5, "immintrin.h (bench K5/K1/K6) : livré avec clang et gcc, hors norme ISO, comme _mm_prefetch (E4) et _mm_pause (D5) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2"),
         "C3": M, "C4": (0.5, "-ffast-math, #pragma clang fp reassociate (extensions)"),
@@ -65,7 +65,7 @@ MATRIX = {
         "B2": (1, "std::pmr, concept Allocator (bench K8 tuned_alloc)"), "B3": (1, "objets sur la pile"),
         "B4": (0.5, "std::function, exceptions, coroutines peuvent allouer"), "B5": (1, "pointeurs"),
         "C1": (0.5, "std::simd C++26 (bench K1/K5/K6) : « highly experimental » dans GCC 16, __cpp_lib_simd non défini, x86 seulement, absent de libc++ 23 ; vector_size : extension gcc/clang (corrigé le 1/11, remarque sur C++)"), "C2": (0.5, "immintrin.h : livré avec g++ et clang++, hors norme ISO, comme _mm_prefetch (E4) et _mm_pause (D5) ; erratum v1 du 1/11, remarque sur C ; 1 en règle v2"), "C3": M,
-        "C4": (1, "std::reduce/transform_reduce et std::simd::reduce : ordre libre explicite"),
+        "C4": (1, "OpenMP livré : #pragma omp simd reduction vectorise une somme réassociée (sonde) ; std::reduce(unseq) et std::simd::reduce autorisent la réassociation, que g++ 16 n'exploite pas pour std::reduce ; texte précisé le 19/11, audit de la grille"),
         "C5": (0.5, "std::execution::par_unseq : série sans TBB tiers (libstdc++ : backend SERIAL, src c++config.h)"),
         "D1": (1, "std::jthread"), "D2": (1, "std::memory_order"),
         "D3": (1, "std::hardware_destructive_interference_size (sonde : 64)"),
@@ -305,7 +305,7 @@ MATRIX = {
         "A5": (1, "reinterpret pour tout type isbits"), "A6": (0, "StructArrays est tiers"), "A7": (1, "NTuple{16,Float32}"),
         "A8": (1, "UInt8/Float32"), "B1": (0, "GC imposé"), "B2": (0.5, "Libc.malloc/free et unsafe_wrap : arènes à la main (sonde ; erratum du 30/10)"),
         "B3": (0.5, "structs isbits et tuples sur la pile ; tableaux sur le tas"),
-        "B4": (0.5, "instabilité de type et fermetures (Core.Box) allouent (bench : capture)"),
+        "B4": (0.5, "fermetures rendues (Core.Box pour une variable réaffectée) et instabilité de type large (Vector{Any}) allouent ; une petite union n'alloue plus (sonde) ; texte précisé le 19/11, audit de la grille"),
         "B5": (1, "Ptr, unsafe_load, Libc.malloc"), "C1": (0.5, "VecElement + llvmcall seulement (SIMD.jl tiers)"),
         "C2": (0.5, "llvmcall vers intrinsèques LLVM"), "C3": M, "C4": (1, "@simd, @fastmath"),
         "C5": (1, "Threads.@threads, @spawn"), "D1": (1, "threads"), "D2": (1, "@atomic :monotonic/:acquire/:release (src)"),
@@ -319,7 +319,7 @@ MATRIX = {
     "haskell": {
         "A1": (0.5, "pas de tableau d'enregistrements non boxés dans le langage ; tableaux Storable (base, Foreign.Marshal.Array)"),
         "A2": (0.5, "Storable manuel (base)"),
-        "A3": (0, "aucun"), "A4": (0.5, "allocaBytesAligned, tableaux épinglés alignés"), "A5": (0.5, "castWord32ToFloat, unsafeCoerce#"),
+        "A3": (0.5, "Storable manuel non aligné : enregistrement compacté de 5 o sur les décalages d'une struct packed calculés par hsc2hs (sonde), comme A2 ; pas de champ de bits ; erratum du 19/11, audit de la grille"), "A4": (0.5, "allocaBytesAligned, tableaux épinglés alignés"), "A5": (0.5, "castWord32ToFloat, unsafeCoerce#"),
         "A6": (0, "aucun"),
         "A7": (0.5, "pas de tableau fixe dans un enregistrement du langage ; Storable manuel (base) : enregistrement de "
                     "72 o à 16 flottants en ligne, rangé à plat dans un tableau (sonde ; erratum du 3/11, remarque sur "

@@ -62,26 +62,36 @@ def main():
                     items.append(f"{c} = {v} ({why})")
             out.append(f"* **{cat}** : " + " ; ".join(items))
         out.append("")
-    probed = {}
+    probed, tags = {}, {}
     for fn in glob.glob(os.path.join(ROOT, "results", "probes", "*.txt")):
         for line in open(fn, errors="replace"):
             p = line.rstrip("\n").split(";", 3)
             if len(p) == 4 and p[0] == "CAP":
-                probed.setdefault(os.path.basename(fn)[:-4], set()).add(p[1])
+                lang = os.path.basename(fn)[:-4]
+                probed.setdefault(lang, set()).add(p[1])
+                for t in ("exécutée", "échec", "recherche"):
+                    if f"[{t}]" in p[3]:
+                        tags.setdefault(lang, {}).setdefault(t, set()).add(p[1])
     out += ["## État de preuve", "",
-            "Case **sondée** : une ligne `CAP` d'une sonde exécutée (`results/probes/<langage>.txt`, confrontée à la "
-            "matrice par `analysis/check_probes.py`) ; **mesurée** : C3 ; **lue** : justifiée par la lecture des "
-            "sources ou de la documentation, citée ci-dessus (`docs/AUDIT3_RESPONSE.md`).", "",
-            "| Langage | sondées | mesurées | lues |", "|---|---|---|---|"]
-    tot = [0, 0, 0]
+            "Case **sondée** : une ligne `CAP` d'une sonde exécutée (`results/probes/<langage>.txt`), confrontée à la "
+            "matrice par `analysis/grid_audit.py` ; **mesurée** : C3 ; **lue** : justifiée par la seule lecture des "
+            "sources ou de la documentation. Depuis l'audit de la grille (v4, point 1 : `docs/V4_PLAN.md`, "
+            "`docs/GRID_AUDIT.md`), chaque preuve porte sa classe : **[exécutée]** (un programme se sert de la capacité "
+            "et imprime un fait observable), **[échec]** (forme canonique refusée, ou comportement contraire mesuré), "
+            "**[recherche]** (fouille des sources livrées ou de l'API publique avec un motif fixé d'avance, chaque "
+            "résultat examiné). Une case peut porter plusieurs classes.", "",
+            "| Langage | sondées | [exécutée] | [échec] | [recherche] | mesurées | lues |", "|---|---|---|---|---|---|---|"]
+    tot = [0] * 6
     for l in ORDER:
         meas = {c for c, v in MATRIX[l].items() if v == M}
         pr = (probed.get(l, set()) & set(MATRIX[l])) - meas
-        row = [len(pr), len(meas), len(MATRIX[l]) - len(pr) - len(meas)]
+        tg = tags.get(l, {})
+        row = [len(pr), len(tg.get("exécutée", set()) & pr), len(tg.get("échec", set()) & pr),
+               len(tg.get("recherche", set()) & pr), len(meas), len(MATRIX[l]) - len(pr) - len(meas)]
         tot = [a + b for a, b in zip(tot, row)]
-        out.append(f"| {SHORT[l]} | {row[0]} | {row[1]} | {row[2]} |")
-    n = sum(tot)
-    out.append(f"| **Total** | {tot[0]} | {tot[1]} | {tot[2]} ({100 * tot[2] / n:.0f} % des {n} cases) |")
+        out.append(f"| {SHORT[l]} | " + " | ".join(str(x) for x in row) + " |")
+    n = len(ORDER) * len(MATRIX[ORDER[0]])
+    out.append(f"| **Total** | {tot[0]} | {tot[1]} | {tot[2]} | {tot[3]} | {tot[4]} | {tot[5]} ({100 * tot[5] / n:.0f} % des {n} cases) |")
     open(os.path.join(ROOT, "docs", "CAPABILITIES.md"), "w").write("\n".join(out) + "\n")
     print("docs/CAPABILITIES.md écrit")
 

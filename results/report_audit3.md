@@ -1,7 +1,7 @@
 # Troisième remarque générale : les mesures et la grille, séparément
 
 Plan : `docs/AUDIT3_RESPONSE.md`. Code : `analysis/audit3.py`. Aucune mesure nouvelle.
-Contrôle : le scénario Publié reproduit P-E de `results/php_check.json` (écart maximal 0.0e+00).
+Contrôle : le scénario Publié reproduit Après de `results/grid_audit/errata.json` (écart maximal 0.0e+00).
 
 ## Les trois quantités du plan v3, et le classement sur les seules mesures
 
@@ -27,7 +27,7 @@ Plafond E et code naturel D1 (sur 100, référence fixe) ; contrôle C, règle v
 | 16 | 2 | FreePascal | 36,3 (19) | 5,0 (21) | 62,3 (58,5) (15) | 17,69 | 18 | 15–19 |
 | 17 | 2 | Java | 56,5 (15) | 12,1 (14) | 42,7 (42,7) (18) | 15,76 | 15 | 15–18 |
 | 18 | 2 | Go | 44,5 (18) | 12,3 (13) | 48,7 (44,9) (17) | 16,61 | 17 | 15–18 |
-| 19 | 2 | Haskell | 46,2 (17) | 5,9 (19) | 39,9 (38,9) (19) | 18,13 | 19 | 17–19 |
+| 19 | 2 | Haskell | 46,2 (17) | 5,9 (19) | 41,5 (40,5) (19) | 18,13 | 19 | 17–19 |
 | 20 | 3 | OCaml | 19,4 (20) | 7,0 (18) | 23,2 (23,2) (22) | 20,22 | 20 | 20–21 |
 | 21 | 3 | BQN | 12,5 (21) | 5,1 (20) | 19,7 (21,2) (23) | 21,08 | 21 | 20–22 |
 | 22 | 3 | PHP | 4,5 (23) | 1,5 (23) | 27,4 (25,9) (21) | 22,79 | 23 | 22–23 |
@@ -67,27 +67,27 @@ Plafond E et code naturel D1 (sur 100, référence fixe) ; contrôle C, règle v
 |---|---|---|---|---|
 | C | 33 | 1 | 0 |  |
 | C++ | 33 | 1 | 0 |  |
-| C# | 4 | 1 | 29 | A1, A3, A4, A6, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D3, D4, D5, E1, E2, E3, E4, E5, E6, E7, F1, F2, F3 |
-| Java | 5 | 1 | 28 | A2, A5, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D3, D4, D5, E1, E2, E3, E4, E5, E6, E7, F1, F2, F3 |
-| Zig | 10 | 1 | 23 | A1, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C5, D1, D2, D4, E1, E2, E5, E6, E7, F1, F2, F3 |
-| Odin | 5 | 1 | 28 | A1, A4, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D3, D4, D5, E1, E2, E5, E6, E7, F1, F2, F3, F4 |
-| Julia | 7 | 1 | 26 | A1, A3, A4, A6, A7, A8, B1, B3, B4, B5, C1, C2, C4, C5, D1, D2, D4, E1, E2, E4, E5, E6, E7, F1, F2, F3 |
-| Ada | 7 | 1 | 26 | A1, A4, A6, A7, A8, B1, B2, B3, B5, C2, C4, C5, D1, D2, D3, D5, E1, E2, E3, E4, E6, E7, F1, F2, F3, F4 |
-| Fortran | 7 | 1 | 26 | A1, A2, A6, A7, A8, B1, B3, B4, C1, C2, C4, D1, D2, D3, D4, D5, E1, E2, E3, E4, E5, E6, E7, F1, F3, F4 |
-| JavaScript | 2 | 1 | 31 | A1, A2, A3, A4, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D3, D4, E1, E2, E3, E4, E5, E6, E7, F1, F2, F3, F4 |
-| Python | 4 | 1 | 29 | A1, A4, A5, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D3, D5, E1, E2, E3, E4, E5, E6, E7, F1, F2, F3 |
-| Haskell | 3 | 1 | 30 | A1, A2, A3, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D3, D4, D5, E1, E2, E3, E5, E6, E7, F1, F2, F3, F4 |
-| C3 | 4 | 1 | 29 | A1, A4, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D3, D4, D5, E1, E2, E4, E5, E6, E7, F1, F2, F3, F4 |
-| D | 8 | 1 | 25 | A1, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D3, D4, E1, E2, E5, E6, E7, F1, F2, F3 |
-| Rust | 8 | 1 | 25 | A1, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C5, D1, D2, D3, D4, D5, E1, E5, E6, E7, F1, F2, F3, F4 |
-| Chapel | 9 | 1 | 24 | A1, A3, A6, A7, A8, B1, B4, B5, C1, C5, D1, D2, D3, D4, E1, E2, E3, E4, E6, E7, F1, F2, F3, F4 |
-| Nim | 7 | 1 | 26 | A1, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D3, D4, E1, E2, E4, E5, E6, E7, F1, F2, F3 |
-| Mojo | 7 | 1 | 26 | A1, A2, A3, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C5, D1, D3, D4, E1, E2, E4, E6, E7, F1, F2, F3, F4 |
-| Go | 4 | 1 | 29 | A1, A3, A4, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D3, D5, E1, E2, E3, E4, E5, E6, E7, F1, F2, F3 |
-| OCaml | 4 | 1 | 29 | A1, A2, A3, A4, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D4, D5, E1, E2, E3, E4, E5, E6, E7, F2, F3 |
-| Lua | 2 | 1 | 31 | A1, A2, A3, A4, A6, A7, A8, B1, B2, B3, B4, B5, C1, C2, C4, C5, D1, D2, D3, D4, D5, E1, E2, E3, E4, E5, E6, E7, F1, F2, F4 |
+| C# | 33 | 1 | 0 |  |
+| Java | 33 | 1 | 0 |  |
+| Zig | 33 | 1 | 0 |  |
+| Odin | 33 | 1 | 0 |  |
+| Julia | 33 | 1 | 0 |  |
+| Ada | 33 | 1 | 0 |  |
+| Fortran | 33 | 1 | 0 |  |
+| JavaScript | 33 | 1 | 0 |  |
+| Python | 33 | 1 | 0 |  |
+| Haskell | 33 | 1 | 0 |  |
+| C3 | 33 | 1 | 0 |  |
+| D | 33 | 1 | 0 |  |
+| Rust | 33 | 1 | 0 |  |
+| Chapel | 33 | 1 | 0 |  |
+| Nim | 33 | 1 | 0 |  |
+| Mojo | 33 | 1 | 0 |  |
+| Go | 33 | 1 | 0 |  |
+| OCaml | 33 | 1 | 0 |  |
+| Lua | 33 | 1 | 0 |  |
 | Swift | 33 | 1 | 0 |  |
 | FreePascal | 33 | 1 | 0 |  |
 | BQN | 33 | 1 | 0 |  |
 | PHP | 33 | 1 | 0 |  |
-| **Total** | 305 | 25 | 520 | 38,8 % sondées ou mesurées |
+| **Total** | 825 | 25 | 0 | 100,0 % sondées ou mesurées |
