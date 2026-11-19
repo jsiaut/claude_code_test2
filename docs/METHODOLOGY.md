@@ -1532,3 +1532,9 @@ Robustesse :
   et des FFI), cases reclassées par la règle v2 marquées, état de preuve par langage (305 sondées, 25 mesurées, 520
   lues). README : écart au plan v3 dit, colonne « Étage », trois quantités séparées et classement sans la grille,
   variantes hors classement, règle unique, état de preuve, conditions de compilation, tailles. Classement publié inchangé.
+* 2026-11-19 : **v4 : plan** (`docs/V4_PLAN.md`, poussé avant tout travail). Décision de l'auteur : le classement de 1
+  à 25 reste en tête du README ; les points de la v4 sont traités dans l'ordre de pertinence : une sonde par case de la
+  grille, trois tailles par noyau, conditions égales, code optimisé convergent, coût d'accès au plafond, piste ouverte.
+  Point 1 détaillé : norme de preuve en trois classes ([exécutée] pour 1 et ½, [échec] ou [recherche] pour 0), motifs
+  de recherche fixés d'avance, ordre par étage, errata appliqués ensemble par la règle écrite (v1 et v2), une seule
+  régénération des sorties publiées à la fin.
