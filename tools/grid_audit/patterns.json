@@ -185,6 +185,12 @@
       "strip": "/opt/src/chapel/",
       "public": "^\\s*(@\\w+\\S*\\s+)*(inline\\s+|extern\\s+|export\\s+|override\\s+|operator\\s+)*(proc|iter|record|class|type|param|const|var|config|module|operator|enum|union)\\b(?!.*\\bprivate\\b)",
       "version": "cat /opt/src/chapel/README.rst 2>/dev/null | grep -m1 -i 'version' || echo chapel"
+    },
+    "julia": {
+      "roots": [],
+      "listing": "/opt/julia/bin/julia --startup-file=no tools/grid_audit/listings/julia_names.jl 2>/dev/null",
+      "public": ".",
+      "version": "/opt/julia/bin/julia --version"
     }
   }
 }

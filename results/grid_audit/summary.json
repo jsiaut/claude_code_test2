@@ -109,10 +109,12 @@
    "mesurée": 1
   },
   "julia": {
-   "sans sonde": 26,
-   "déclarative": 7,
-   "sondée": 7,
-   "mesurée": 1
+   "exécutée": 28,
+   "sondée": 33,
+   "recherche": 2,
+   "exécutée+recherche": 2,
+   "mesurée": 1,
+   "échec": 1
   },
   "haskell": {
    "sans sonde": 30,
@@ -166,17 +168,17 @@
   }
  },
  "total": {
-  "déclarative": 240,
-  "sondée": 537,
+  "déclarative": 233,
+  "sondée": 563,
   "mesurée": 25,
-  "exécutée": 233,
-  "exécutée+recherche": 7,
-  "recherche": 37,
+  "exécutée": 261,
+  "exécutée+recherche": 9,
+  "recherche": 39,
   "exécutée+échec": 12,
-  "échec": 4,
+  "échec": 5,
   "exécutée+échec+recherche": 3,
   "échec+recherche": 1,
-  "sans sonde": 288
+  "sans sonde": 262
  },
  "divergences": [
   [
@@ -301,13 +303,6 @@
   [
    "go",
    "F4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "julia",
-   "D5",
    0.5,
    0.5,
    1

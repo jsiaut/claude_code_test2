@@ -19,7 +19,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | mojo | 7 | 1 | 26 | 7 |  |
 | csharp | 4 | 1 | 29 | 4 |  |
 | java | 5 | 1 | 28 | 5 |  |
-| julia | 7 | 1 | 26 | 7 |  |
+| julia | 33 | 1 | 0 | 0 | exécutée 28, exécutée+recherche 2, recherche 2, échec 1 |
 | haskell | 3 | 1 | 30 | 3 |  |
 | ocaml | 4 | 1 | 29 | 4 |  |
 | js | 2 | 1 | 31 | 2 |  |
@@ -30,7 +30,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | bqn | 33 | 1 | 0 | 33 |  |
 | php | 33 | 1 | 0 | 33 |  |
 
-Total : 537 sondées, 25 mesurées, 288 sans sonde, 240 déclaratives.
+Total : 563 sondées, 25 mesurées, 262 sans sonde, 233 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 
@@ -54,7 +54,6 @@ Total : 537 sondées, 25 mesurées, 288 sans sonde, 240 déclaratives.
 | cpp | F4 | 0.5 | 0.5 | 1 | mmap POSIX + std::start_lifetime_as (C++23) : 0.439005 |
 | go | D4 | 0.5 | 0.5 | 1 | syscall brut sched_setaffinity errno=0 |
 | go | F4 | 0.5 | 0.5 | 1 | syscall.Mmap + unsafe.Slice : 0.4390046 <nil> |
-| julia | D5 | 0.5 | 0.5 | 1 | Threads.atomic_fence ; pause par ccall llvmcall : true (règle v2 : 1) |
 | python | D4 | 0.5 | 0.5 | 1 | os.sched_setaffinity -> {0} |
 | swift | D4 | 0.5 | 0.5 | 1 | sched_setaffinity du module Glibc livré avec swiftc -Xcc -D_GNU_SOURCE : fil épinglé sur le CPU 1, sched_getcpu() = 1 (sans l'option : cannot find 'sched_setaff |
 | fpc | D4 | 0.5 | 0.5 | 1 | Do_SysCall(syscall_nr_sched_setaffinity) de l'unité Syscall livrée : retour 0, masque relu 2, processeur courant (/proc/self/stat) 1 ; pas d'API d'affinité (ni  |

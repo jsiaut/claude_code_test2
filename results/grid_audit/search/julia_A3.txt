@@ -1,0 +1,11 @@
+# Recherche d'absence : julia, case A3
+# Chaîne : julia version 1.13.3
+# Motif : packed|bit_?field|bit_?packed|bit_?size|bit_?offset|bitstruct
+# Déclaration publique : .
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

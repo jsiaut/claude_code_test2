@@ -167,6 +167,25 @@ procédures exportées désassemblées, une compilation `--fast --checks`, huit 
   d'environnement (`QT_WORKER_UNIT`), sans API pour épingler une tâche.
 * F4 0 : `ioHintSet.mmap` n'est qu'une indication de lecture du module IO ; aucune projection n'est rendue au programme.
 
+### Julia (1.13.3, julia du banc, -O3, 4 fils)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (C2, D5, E2 et E4 valent 1 en v2 par `llvmcall`,
+½ en v1). Sondes : `probes/julia/probe.jl` et `probe_errata.jl` (A2, A5, B2, D3, E3, F4), `probes/julia/audit/`
+(`audit.jl` exécuté avec `@code_native` et `@code_llvm`, `d4.jl` sous `JULIA_EXCLUSIVE=1`, `e3.jl`, quatre recherches
+dans la liste des noms publics de Base, Core et des bibliothèques standard, obtenue par introspection :
+`tools/grid_audit/listings/julia_names.jl`).
+* Julia 1.13 exige pour `llvmcall` une intrinsèque la forme « module complet + point d'entrée » ; sous cette forme,
+  `pternlog`, `pause`, `prefetch` et l'assembleur en ligne de l'IR passent (C2, D5, E2, E4), mais `llvm.expect` est
+  perdu (aucun poids dans l'IR : E3 reste 0).
+* Allocations, mesurées par appel avec résultats conservés (Julia 1.12+ supprime une allocation dont le résultat est
+  jeté, ce qui fausse `@allocated`) : tuple et struct isbits 0 octet, petit tableau 80 (B3 ½) ; fermeture rendue 16
+  octets, 32 avec une variable réaffectée (`Core.Box`), somme sur un `Vector{Any}` 15 504, mais une instabilité réduite
+  à une petite union n'alloue plus (B4 ½ ; le texte de la matrice est à préciser).
+* `@aliasscope`/`Const` retire les contrôles de recouvrement de la copie documentée (0 contre 5), pas ceux d'une mise à
+  jour `y[i] += Const(x)[i]` (5) : effet partiel, module expérimental (E5 ½).
+* D4 ½ : `JULIA_EXCLUSIVE=1` épingle les quatre fils sur les CPU 0 à 3 ; le seul nom public d'affinité,
+  `Base.setcpuaffinity`, vise une commande lancée.
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |

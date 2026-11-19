@@ -1,0 +1,13 @@
+# Recherche d'absence : julia, case D4
+# Chaîne : julia version 1.13.3
+# Motif : affinity|cpu_?set|pin_?(thread|cpu)|sched_?set|bind_?(thread|cpu)
+# Déclaration publique : .
+# 1 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:1355: Base.setcpuaffinity
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    1 <introspection>
