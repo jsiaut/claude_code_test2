@@ -171,9 +171,11 @@
    "mesurée": 1
   },
   "lua": {
-   "sans sonde": 31,
-   "déclarative": 2,
-   "sondée": 2,
+   "échec": 3,
+   "sondée": 33,
+   "recherche": 19,
+   "exécutée": 4,
+   "échec+recherche": 7,
    "mesurée": 1
   },
   "swift": {
@@ -210,17 +212,15 @@
   }
  },
  "total": {
-  "exécutée": 532,
-  "sondée": 794,
-  "échec+recherche": 48,
+  "exécutée": 536,
+  "sondée": 825,
+  "échec+recherche": 55,
   "mesurée": 25,
   "exécutée+échec": 23,
-  "recherche": 142,
+  "recherche": 161,
   "exécutée+recherche": 19,
-  "échec": 24,
-  "exécutée+échec+recherche": 4,
-  "sans sonde": 31,
-  "déclarative": 2
+  "échec": 27,
+  "exécutée+échec+recherche": 4
  },
  "divergences": [
   [

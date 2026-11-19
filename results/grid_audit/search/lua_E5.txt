@@ -1,0 +1,11 @@
+# Recherche d'absence : lua, case E5
+# Chaîne : Lua 5.5.1  Copyright (C) 1994-2026 Lua.org, PUC-Rio
+# Motif : restrict|noalias|no_?alias
+# Déclaration publique : .
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

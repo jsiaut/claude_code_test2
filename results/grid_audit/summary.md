@@ -24,13 +24,13 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | ocaml | 33 | 1 | 0 | 0 | exécutée 10, exécutée+recherche 2, recherche 9, échec 3, échec+recherche 9 |
 | js | 33 | 1 | 0 | 0 | exécutée 9, exécutée+recherche 1, recherche 14, échec 4, échec+recherche 5 |
 | python | 33 | 1 | 0 | 0 | exécutée 16, recherche 12, échec 2, échec+recherche 3 |
-| lua | 2 | 1 | 31 | 2 |  |
+| lua | 33 | 1 | 0 | 0 | exécutée 4, recherche 19, échec 3, échec+recherche 7 |
 | swift | 33 | 1 | 0 | 0 | exécutée 26, exécutée+recherche 1, exécutée+échec 1, recherche 3, échec+recherche 2 |
 | fpc | 33 | 1 | 0 | 0 | exécutée 26, recherche 4, échec 1, échec+recherche 2 |
 | bqn | 33 | 1 | 0 | 0 | exécutée 10, recherche 17, échec 2, échec+recherche 4 |
 | php | 33 | 1 | 0 | 0 | exécutée 16, recherche 13, échec+recherche 4 |
 
-Total : 794 sondées, 25 mesurées, 31 sans sonde, 2 déclaratives.
+Total : 825 sondées, 25 mesurées, 0 sans sonde, 0 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 
