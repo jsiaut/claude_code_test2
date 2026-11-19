@@ -145,10 +145,13 @@
    "exécutée+recherche": 1
   },
   "ocaml": {
-   "sans sonde": 29,
-   "déclarative": 4,
-   "sondée": 4,
-   "mesurée": 1
+   "échec": 3,
+   "sondée": 33,
+   "échec+recherche": 9,
+   "recherche": 9,
+   "exécutée": 10,
+   "mesurée": 1,
+   "exécutée+recherche": 2
   },
   "js": {
    "sans sonde": 31,
@@ -202,17 +205,17 @@
   }
  },
  "total": {
-  "exécutée": 497,
-  "sondée": 705,
-  "échec+recherche": 31,
+  "exécutée": 507,
+  "sondée": 734,
+  "échec+recherche": 40,
   "mesurée": 25,
   "exécutée+échec": 23,
-  "recherche": 107,
-  "exécutée+recherche": 16,
-  "échec": 15,
+  "recherche": 116,
+  "exécutée+recherche": 18,
+  "échec": 18,
   "exécutée+échec+recherche": 4,
-  "sans sonde": 120,
-  "déclarative": 12
+  "sans sonde": 91,
+  "déclarative": 8
  },
  "divergences": [
   [

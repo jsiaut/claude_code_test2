@@ -1,0 +1,74 @@
+# Recherche d'absence : ocaml, case D2
+# Chaîne : 5.5.2
+# Motif : acquire|release|relaxed|memory_?order|seq_?cst|acq_?rel|monotonic
+# Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
+# 12 déclarations publiques, 42 mentions, 12 fichiers
+
+## Déclarations publiques
+gc.mli:420: val finalise_release : unit -> unit
+semaphore.mli:56: val release : t -> unit
+semaphore.mli:66: val acquire : t -> unit
+semaphore.mli:71: val try_acquire : t -> bool
+semaphore.mli:74: and [try_acquire s] returns [true].
+semaphore.mli:97: and "acquire" waits until the value is 1 and sets it to 0.
+semaphore.mli:122: val release : t -> unit
+semaphore.mli:128: val acquire : t -> unit
+semaphore.mli:134: val try_acquire : t -> bool
+semaphore.mli:137: and [try_acquire s] returns [true].
+sys.mli:444: type ocaml_release_info = {
+sys.mli:452: val ocaml_release : ocaml_release_info
+
+## Mentions (au plus 12 lignes par fichier)
+condition.mli:101: that is able to acquire the mutex [m] and alter the data structure {i D}.
+gc.mli:375: unless it calls [finalise_release]).
+gc.mli:421: (** A finalisation function may call [finalise_release] to tell the
+lazy.mli:155: is moderately expensive, or acquires resources. The library
+map.mli:201: (** [find_first f m], where [f] is a monotonically increasing function,
+map.mli:213: (** [find_first_opt f m], where [f] is a monotonically increasing
+map.mli:219: (** [find_last f m], where [f] is a monotonically decreasing function,
+map.mli:225: (** [find_last_opt f m], where [f] is a monotonically decreasing
+moreLabels.mli:880: (** [find_first ~f m], where [f] is a monotonically increasing function,
+moreLabels.mli:892: (** [find_first_opt ~f m], where [f] is a monotonically increasing
+moreLabels.mli:898: (** [find_last ~f m], where [f] is a monotonically decreasing function,
+moreLabels.mli:904: (** [find_last_opt ~f m], where [f] is a monotonically decreasing
+moreLabels.mli:1206: (** [find_first ~f s], where [f] is a monotonically increasing function,
+moreLabels.mli:1218: (** [find_first_opt ~f s], where [f] is a monotonically increasing
+moreLabels.mli:1225: (** [find_last ~f s], where [f] is a monotonically decreasing function,
+moreLabels.mli:1231: (** [find_last_opt ~f s], where [f] is a monotonically decreasing
+semaphore.mli:35: - "release" (also called "V", "post", "up", and "signal"), which
+semaphore.mli:38: - "acquire" (also called "P", "wait", "down", and "pend"), which
+semaphore.mli:57: (** [release s] increments the value of semaphore [s].
+semaphore.mli:67: (** [acquire s] blocks the calling thread until the value of semaphore [s]
+semaphore.mli:72: (** [try_acquire s] immediately returns [false] if the value of semaphore [s]
+semaphore.mli:80: {!release} and {!acquire} operations.  Hence, the [get_value]
+semaphore.mli:96: The "release" operation of a binary semaphore sets its value to 1,
+semaphore.mli:101: thread that locked it) is too restrictive.  The "acquire" operation
+semaphore.mli:102: corresponds to locking the mutex, and the "release" operation to
+semaphore.mli:103: unlocking it, but "release" can be performed in a thread different
+semaphore.mli:104: than the one that performed the "acquire".  Likewise, it is safe
+semaphore.mli:105: to release a binary semaphore that is already available.
+set.mli:166: (** [find_first f s], where [f] is a monotonically increasing function,
+set.mli:178: (** [find_first_opt f s], where [f] is a monotonically increasing
+set.mli:185: (** [find_last f s], where [f] is a monotonically decreasing function,
+set.mli:191: (** [find_last_opt f s], where [f] is a monotonically decreasing
+stdlib.mli:1257: included for backward compatibility with earlier releases of
+sys.mli:453: (** [ocaml_release] is the version of OCaml.
+runtime_events/runtime_events.mli:461: | EV_COMPACT_RELEASE
+unix/unix.mli:1138: other processes acquire read locks on it.
+unix/unix.mli:1151: acquired on the specified region, without actually putting a lock.
+unix/unixLabels.mli:1138: other processes acquire read locks on it.
+unix/unixLabels.mli:1151: acquired on the specified region, without actually putting a lock.
+
+## Lignes trouvées, par fichier
+    1 condition.mli
+    3 gc.mli
+    1 lazy.mli
+    4 map.mli
+    8 moreLabels.mli
+    1 runtime_events/runtime_events.mli
+   24 semaphore.mli
+    4 set.mli
+    1 stdlib.mli
+    3 sys.mli
+    2 unix/unix.mli
+    2 unix/unixLabels.mli

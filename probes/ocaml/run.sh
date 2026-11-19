@@ -1,2 +1,4 @@
 #!/bin/sh
-cd "$(dirname "$0")" && mkdir -p bin && /opt/ocaml/bin/ocamlfind ocamlopt -package unix -linkpkg probe.ml -o bin/probe 2>/dev/null || /opt/ocaml/bin/ocamlopt -I +unix unix.cmxa probe.ml -o bin/probe && bin/probe
+# Sonde d'OCaml : audit de la grille (audit/, docs/V4_PLAN.md 2.1), qui reprend les cas de la première sonde
+# (base.sh). Sortie : results/probes/ocaml.txt
+cd "$(dirname "$0")" && sh audit/run.sh

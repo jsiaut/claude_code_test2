@@ -1,0 +1,27 @@
+# Recherche d'absence : ocaml, case C5
+# Chaîne : 5.5.2
+# Motif : parallel|par_?iter|forall|pmap|thread_?pool|fork_?join|work_?steal|par_?map|domain_?pool
+# Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
+# 0 déclarations publiques, 9 mentions, 7 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+domain.mli:21: See 'Parallel programming' chapter in the manual.
+domain.mli:34: (** [spawn f] creates a new domain that runs in parallel with the
+format.mli:48: domains in parallel without synchronization. This may result in
+format.mli:995: parallel on several output devices.
+gc.mli:558: parallel. In this case, callback functions must be re-entrant.
+lazy.mli:204: thunk in parallel on the same domain:
+threads/thread.mli:37: See also {!Domain.spawn} if you want parallel execution instead.
+unix/unix.mli:918: runs the given command in parallel with the program.
+unix/unixLabels.mli:918: runs the given command in parallel with the program.
+
+## Lignes trouvées, par fichier
+    2 domain.mli
+    2 format.mli
+    1 gc.mli
+    1 lazy.mli
+    1 threads/thread.mli
+    1 unix/unix.mli
+    1 unix/unixLabels.mli

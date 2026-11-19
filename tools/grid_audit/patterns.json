@@ -310,6 +310,23 @@
       "listing": "sh tools/grid_audit/listings/haskell_api.sh",
       "public": ".",
       "version": "/opt/ghc/bin/ghc --version"
+    },
+    "ocaml": {
+      "roots": [
+        "/opt/ocaml/lib/ocaml"
+      ],
+      "ext": [
+        ".mli"
+      ],
+      "exclude": [
+        "/compiler-libs/",
+        "/ocamldoc/",
+        "/caml/",
+        "/camlinternal"
+      ],
+      "strip": "/opt/ocaml/lib/ocaml/",
+      "public": "^\\s*(val|external|type|and|module|exception|class)\\b",
+      "version": "/opt/ocaml/bin/ocamlopt -version"
     }
   }
 }

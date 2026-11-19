@@ -1,0 +1,11 @@
+# Recherche d'absence : ocaml, case C2
+# Chaîne : 5.5.2
+# Motif : \bavx|\bsse|_mm(256|512)?_|\bx86|intrinsic
+# Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
