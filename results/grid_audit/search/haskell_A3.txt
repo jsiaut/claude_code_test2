@@ -1,0 +1,100 @@
+# Recherche d'absence : haskell, case A3
+# Chaîne : The Glorious Glasgow Haskell Compilation System, version 9.14.1
+# Motif : packed|bit_?field|bit_?packed|bit_?size|bit_?offset|bitstruct
+# Déclaration publique : .
+# 88 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:6262: Data.Bits:   GHC.Internal.Bits.bitSizeMaybe :: a -> Maybe Int
+<introspection>:6263: Data.Bits:   GHC.Internal.Bits.bitSize :: a -> Int
+<introspection>:6273: Data.Bits:               (shift | shiftL, shiftR), (rotate | rotateL, rotateR), bitSize,
+<introspection>:6274: Data.Bits:               bitSizeMaybe, isSigned, testBit, bit, popCount #-}
+<introspection>:6278: Data.Bits:   GHC.Internal.Bits.finiteBitSize :: b -> Int
+<introspection>:6281: Data.Bits:   {-# MINIMAL finiteBitSize #-}
+<introspection>:45367: Foreign:   GHC.Internal.Bits.bitSizeMaybe :: a -> Maybe Int
+<introspection>:45368: Foreign:   GHC.Internal.Bits.bitSize :: a -> Int
+<introspection>:45378: Foreign:               (shift | shiftL, shiftR), (rotate | rotateL, rotateR), bitSize,
+<introspection>:45379: Foreign:               bitSizeMaybe, isSigned, testBit, bit, popCount #-}
+<introspection>:45390: Foreign:   GHC.Internal.Bits.finiteBitSize :: b -> Int
+<introspection>:45393: Foreign:   {-# MINIMAL finiteBitSize #-}
+<introspection>:47329: Foreign.Safe:   GHC.Internal.Bits.bitSizeMaybe :: a -> Maybe Int
+<introspection>:47330: Foreign.Safe:   GHC.Internal.Bits.bitSize :: a -> Int
+<introspection>:47340: Foreign.Safe:               (shift | shiftL, shiftR), (rotate | rotateL, rotateR), bitSize,
+<introspection>:47341: Foreign.Safe:               bitSizeMaybe, isSigned, testBit, bit, popCount #-}
+<introspection>:47352: Foreign.Safe:   GHC.Internal.Bits.finiteBitSize :: b -> Int
+<introspection>:47355: Foreign.Safe:   {-# MINIMAL finiteBitSize #-}
+<introspection>:54417: GHC.Bits:   GHC.Internal.Bits.bitSizeMaybe :: a -> Maybe Int
+<introspection>:54418: GHC.Bits:   GHC.Internal.Bits.bitSize :: a -> Int
+<introspection>:54428: GHC.Bits:               (shift | shiftL, shiftR), (rotate | rotateL, rotateR), bitSize,
+<introspection>:54429: GHC.Bits:               bitSizeMaybe, isSigned, testBit, bit, popCount #-}
+<introspection>:54433: GHC.Bits:   GHC.Internal.Bits.finiteBitSize :: b -> Int
+<introspection>:54436: GHC.Bits:   {-# MINIMAL finiteBitSize #-}
+<introspection>:67065: GHC.Generics:                                   GHC.Internal.Generics.SourceUnpackedness
+<introspection>:67091: GHC.Generics:   GHC.Internal.Generics.selSourceUnpackedness :: forall k1
+<introspection>:67094: GHC.Generics:                                                  t s f a -> GHC.Internal.Generics.SourceUnpackedness
+<introspection>:67103: GHC.Generics:   {-# MINIMAL selName, selSourceUnpackedness, selSourceStrictness,
+<introspection>:67110: GHC.Generics: type GHC.Internal.Generics.SourceUnpackedness :: *
+<introspection>:67111: GHC.Generics: data GHC.Internal.Generics.SourceUnpackedness
+<introspection>:67112: GHC.Generics:   = GHC.Internal.Generics.NoSourceUnpackedness
+<introspection>:78866: GHC.Internal.Bits:   GHC.Internal.Bits.bitSizeMaybe :: a -> Maybe Int
+<introspection>:78867: GHC.Internal.Bits:   GHC.Internal.Bits.bitSize :: a -> Int
+<introspection>:78877: GHC.Internal.Bits:               (shift | shiftL, shiftR), (rotate | rotateL, rotateR), bitSize,
+<introspection>:78878: GHC.Internal.Bits:               bitSizeMaybe, isSigned, testBit, bit, popCount #-}
+<introspection>:78882: GHC.Internal.Bits:   GHC.Internal.Bits.finiteBitSize :: b -> Int
+<introspection>:78885: GHC.Internal.Bits:   {-# MINIMAL finiteBitSize #-}
+<introspection>:84029: GHC.Internal.Data.Bits:   GHC.Internal.Bits.bitSizeMaybe :: a -> Maybe Int
+<introspection>:84030: GHC.Internal.Data.Bits:   GHC.Internal.Bits.bitSize :: a -> Int
+<introspection>:84040: GHC.Internal.Data.Bits:               (shift | shiftL, shiftR), (rotate | rotateL, rotateR), bitSize,
+<introspection>:84041: GHC.Internal.Data.Bits:               bitSizeMaybe, isSigned, testBit, bit, popCount #-}
+<introspection>:84045: GHC.Internal.Data.Bits:   GHC.Internal.Bits.finiteBitSize :: b -> Int
+<introspection>:84048: GHC.Internal.Data.Bits:   {-# MINIMAL finiteBitSize #-}
+<introspection>:94438: GHC.Internal.Generics:                                   GHC.Internal.Generics.SourceUnpackedness
+<introspection>:94464: GHC.Internal.Generics:   GHC.Internal.Generics.selSourceUnpackedness :: forall k1
+<introspection>:94467: GHC.Internal.Generics:                                                  t s f a -> GHC.Internal.Generics.SourceUnpackedness
+<introspection>:94476: GHC.Internal.Generics:   {-# MINIMAL selName, selSourceUnpackedness, selSourceStrictness,
+<introspection>:94483: GHC.Internal.Generics: type GHC.Internal.Generics.SourceUnpackedness :: *
+<introspection>:94484: GHC.Internal.Generics: data GHC.Internal.Generics.SourceUnpackedness
+<introspection>:94485: GHC.Internal.Generics:   = GHC.Internal.Generics.NoSourceUnpackedness
+<introspection>:108960: GHC.Internal.TH.Lib: type GHC.Internal.TH.Lib.SourceUnpackednessQ :: *
+<introspection>:108961: GHC.Internal.TH.Lib: type GHC.Internal.TH.Lib.SourceUnpackednessQ =
+<introspection>:108962: GHC.Internal.TH.Lib:   GHC.Internal.TH.Syntax.Q GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:109033: GHC.Internal.TH.Lib:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:109552: GHC.Internal.TH.Lib: GHC.Internal.TH.Lib.noSourceUnpackedness ::
+<introspection>:109554: GHC.Internal.TH.Lib:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:109802: GHC.Internal.TH.Lib:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:109808: GHC.Internal.TH.Lib:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:110048: GHC.Internal.TH.Syntax:   = GHC.Internal.TH.Syntax.Bang GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:110626: GHC.Internal.TH.Syntax: type GHC.Internal.TH.Syntax.SourceUnpackedness :: *
+<introspection>:110627: GHC.Internal.TH.Syntax: data GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:110628: GHC.Internal.TH.Syntax:   = GHC.Internal.TH.Syntax.NoSourceUnpackedness
+<introspection>:172979: Language.Haskell.TH:   = GHC.Internal.TH.Syntax.Bang GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:173686: Language.Haskell.TH: type GHC.Internal.TH.Syntax.SourceUnpackedness :: *
+<introspection>:173687: Language.Haskell.TH: data GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:173688: Language.Haskell.TH:   = GHC.Internal.TH.Syntax.NoSourceUnpackedness
+<introspection>:173691: Language.Haskell.TH: type GHC.Internal.TH.Lib.SourceUnpackednessQ :: *
+<introspection>:173692: Language.Haskell.TH: type GHC.Internal.TH.Lib.SourceUnpackednessQ =
+<introspection>:173693: Language.Haskell.TH:   GHC.Internal.TH.Syntax.Q GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:173869: Language.Haskell.TH:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:174430: Language.Haskell.TH: GHC.Internal.TH.Lib.noSourceUnpackedness ::
+<introspection>:174432: Language.Haskell.TH:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:174733: Language.Haskell.TH:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:174739: Language.Haskell.TH:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:174908: Language.Haskell.TH: Language.Haskell.TH.Lib.unpacked ::
+<introspection>:175313: Language.Haskell.TH.Lib: Language.Haskell.TH.Lib.unpacked ::
+<introspection>:175415: Language.Haskell.TH.Lib: type GHC.Internal.TH.Lib.SourceUnpackednessQ :: *
+<introspection>:175416: Language.Haskell.TH.Lib: type GHC.Internal.TH.Lib.SourceUnpackednessQ =
+<introspection>:175417: Language.Haskell.TH.Lib:   GHC.Internal.TH.Syntax.Q GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:175488: Language.Haskell.TH.Lib:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:175875: Language.Haskell.TH.Lib: GHC.Internal.TH.Lib.noSourceUnpackedness ::
+<introspection>:175877: Language.Haskell.TH.Lib:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:176086: Language.Haskell.TH.Lib:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:176092: Language.Haskell.TH.Lib:   m GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:177036: Language.Haskell.TH.Syntax:   = GHC.Internal.TH.Syntax.Bang GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:177771: Language.Haskell.TH.Syntax: type GHC.Internal.TH.Syntax.SourceUnpackedness :: *
+<introspection>:177772: Language.Haskell.TH.Syntax: data GHC.Internal.TH.Syntax.SourceUnpackedness
+<introspection>:177773: Language.Haskell.TH.Syntax:   = GHC.Internal.TH.Syntax.NoSourceUnpackedness
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   88 <introspection>

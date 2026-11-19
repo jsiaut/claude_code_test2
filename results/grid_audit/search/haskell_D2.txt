@@ -1,0 +1,49 @@
+# Recherche d'absence : haskell, case D2
+# Chaîne : The Glorious Glasgow Haskell Compilation System, version 9.14.1
+# Motif : acquire|release|relaxed|memory_?order|seq_?cst|acq_?rel|monotonic
+# Déclaration publique : .
+# 37 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:11125: Data.IntMap: Data.IntMap.Internal.mapKeysMonotonic ::
+<introspection>:11635: Data.IntMap.Internal: Data.IntMap.Internal.mapKeysMonotonic ::
+<introspection>:12144: Data.IntMap.Lazy: Data.IntMap.Internal.mapKeysMonotonic ::
+<introspection>:12774: Data.IntMap.Strict: Data.IntMap.Internal.mapKeysMonotonic ::
+<introspection>:13274: Data.IntMap.Strict.Internal: Data.IntMap.Internal.mapKeysMonotonic ::
+<introspection>:13481: Data.IntSet: Data.IntSet.Internal.mapMonotonic ::
+<introspection>:13679: Data.IntSet.Internal: Data.IntSet.Internal.mapMonotonic ::
+<introspection>:14420: Data.Map: Data.Map.Internal.mapKeysMonotonic ::
+<introspection>:14961: Data.Map.Internal: Data.Map.Internal.mapKeysMonotonic ::
+<introspection>:15443: Data.Map.Lazy: Data.Map.Internal.mapKeysMonotonic ::
+<introspection>:16020: Data.Map.Strict: Data.Map.Internal.mapKeysMonotonic ::
+<introspection>:16554: Data.Map.Strict.Internal: Data.Map.Internal.mapKeysMonotonic ::
+<introspection>:17623: Data.Set: Data.Set.Internal.mapMonotonic ::
+<introspection>:17806: Data.Set.Internal: Data.Set.Internal.mapMonotonic ::
+<introspection>:58574: GHC.Clock: GHC.Internal.Clock.getMonotonicTime :: IO Double
+<introspection>:58575: GHC.Clock: GHC.Internal.Clock.getMonotonicTimeNSec ::
+<introspection>:67951: GHC.IO.FD: GHC.Internal.IO.FD.release :: GHC.Internal.IO.FD.FD -> IO ()
+<introspection>:83023: GHC.Internal.Clock: GHC.Internal.Clock.getMonotonicTime :: IO Double
+<introspection>:83024: GHC.Internal.Clock: GHC.Internal.Clock.getMonotonicTimeNSec ::
+<introspection>:95702: GHC.Internal.IO.FD: GHC.Internal.IO.FD.release :: GHC.Internal.IO.FD.FD -> IO ()
+<introspection>:96676: GHC.Internal.LanguageExtensions:   | GHC.Internal.LanguageExtensions.RelaxedPolyRec
+<introspection>:96769: GHC.Internal.LanguageExtensions:   | GHC.Internal.LanguageExtensions.RelaxedLayout
+<introspection>:110968: GHC.Internal.TH.Syntax:   | GHC.Internal.LanguageExtensions.RelaxedPolyRec
+<introspection>:111061: GHC.Internal.TH.Syntax:   | GHC.Internal.LanguageExtensions.RelaxedLayout
+<introspection>:173254: Language.Haskell.TH:   | GHC.Internal.LanguageExtensions.RelaxedPolyRec
+<introspection>:173347: Language.Haskell.TH:   | GHC.Internal.LanguageExtensions.RelaxedLayout
+<introspection>:174985: Language.Haskell.TH.LanguageExtensions:   | GHC.Internal.LanguageExtensions.RelaxedPolyRec
+<introspection>:175078: Language.Haskell.TH.LanguageExtensions:   | GHC.Internal.LanguageExtensions.RelaxedLayout
+<introspection>:177279: Language.Haskell.TH.Syntax:   | GHC.Internal.LanguageExtensions.RelaxedPolyRec
+<introspection>:177372: Language.Haskell.TH.Syntax:   | GHC.Internal.LanguageExtensions.RelaxedLayout
+<introspection>:207652: System.Posix:                                   System.Posix.Unistd.release :: String,
+<introspection>:208967: System.Posix.ByteString:                                   System.Posix.Unistd.release :: String,
+<introspection>:212713: System.Posix.PosixString:                                   System.Posix.Unistd.release :: String,
+<introspection>:214938: System.Posix.Unistd:                                   System.Posix.Unistd.release :: String,
+<introspection>:215439: System.Semaphore:   = System.Semaphore.AbstractSem {System.Semaphore.acquireSem :: IO
+<introspection>:215441: System.Semaphore:                                   System.Semaphore.releaseSem :: IO ()}
+<introspection>:215469: System.Semaphore: System.Semaphore.releaseSemaphore ::
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   37 <introspection>

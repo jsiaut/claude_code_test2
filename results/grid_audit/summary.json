@@ -135,10 +135,14 @@
    "échec": 1
   },
   "haskell": {
-   "sans sonde": 30,
-   "déclarative": 3,
-   "sondée": 3,
-   "mesurée": 1
+   "exécutée": 19,
+   "sondée": 33,
+   "recherche": 7,
+   "échec": 2,
+   "mesurée": 1,
+   "échec+recherche": 3,
+   "exécutée+échec": 1,
+   "exécutée+recherche": 1
   },
   "ocaml": {
    "sans sonde": 29,
@@ -198,19 +202,26 @@
   }
  },
  "total": {
-  "exécutée": 478,
-  "sondée": 675,
-  "échec+recherche": 28,
+  "exécutée": 497,
+  "sondée": 705,
+  "échec+recherche": 31,
   "mesurée": 25,
-  "exécutée+échec": 22,
-  "recherche": 100,
-  "exécutée+recherche": 15,
-  "échec": 13,
+  "exécutée+échec": 23,
+  "recherche": 107,
+  "exécutée+recherche": 16,
+  "échec": 15,
   "exécutée+échec+recherche": 4,
-  "sans sonde": 150,
-  "déclarative": 15
+  "sans sonde": 120,
+  "déclarative": 12
  },
  "divergences": [
+  [
+   "haskell",
+   "A3",
+   0.5,
+   0,
+   0
+  ],
   [
    "python",
    "D4",

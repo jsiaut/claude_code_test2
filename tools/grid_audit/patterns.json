@@ -304,6 +304,12 @@
       ],
       "public": "^pkg ",
       "version": "/opt/go127/bin/go version"
+    },
+    "haskell": {
+      "roots": [],
+      "listing": "sh tools/grid_audit/listings/haskell_api.sh",
+      "public": ".",
+      "version": "/opt/ghc/bin/ghc --version"
     }
   }
 }

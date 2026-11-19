@@ -1,0 +1,16 @@
+# Recherche d'absence : haskell, case E3
+# Chaîne : The Glorious Glasgow Haskell Compilation System, version 9.14.1
+# Motif : \blikely|\bunlikely|\bexpect\b|branch_?hint|branch_?weight|\bcold\b|cold_?path|fast_?path|slow_?path
+# Déclaration publique : .
+# 4 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:111375: GHC.Internal.Text.Read.Lex: GHC.Internal.Text.Read.Lex.expect ::
+<introspection>:216091: Text.Parsec.Error:   | Text.Parsec.Error.Expect !String
+<introspection>:217076: Text.ParserCombinators.Parsec.Error:   | Text.Parsec.Error.Expect !String
+<introspection>:218867: Text.Read.Lex: GHC.Internal.Text.Read.Lex.expect ::
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    4 <introspection>

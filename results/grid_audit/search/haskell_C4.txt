@@ -1,0 +1,18 @@
+# Recherche d'absence : haskell, case C4
+# Chaîne : The Glorious Glasgow Haskell Compilation System, version 9.14.1
+# Motif : fast_?math|reassoc|algebraic|fp_?contract|float_?mode|relaxed_?math|associative
+# Déclaration publique : .
+# 6 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:66955: GHC.Generics:   = GHC.Internal.Generics.LeftAssociative
+<introspection>:66956: GHC.Generics:   | GHC.Internal.Generics.RightAssociative
+<introspection>:66957: GHC.Generics:   | GHC.Internal.Generics.NotAssociative
+<introspection>:94328: GHC.Internal.Generics:   = GHC.Internal.Generics.LeftAssociative
+<introspection>:94329: GHC.Internal.Generics:   | GHC.Internal.Generics.RightAssociative
+<introspection>:94330: GHC.Internal.Generics:   | GHC.Internal.Generics.NotAssociative
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    6 <introspection>

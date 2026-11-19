@@ -1,0 +1,18 @@
+# Recherche d'absence : haskell, case F4
+# Chaîne : The Glorious Glasgow Haskell Compilation System, version 9.14.1
+# Motif : mmap|memory_?map|map_?view|memory_?mapped|mapped_?(file|byte)|madvise
+# Déclaration publique : .
+# 6 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:7247: Data.ByteString.Builder.Prim: Data.ByteString.Builder.Prim.primMapByteStringBounded ::
+<introspection>:7252: Data.ByteString.Builder.Prim: Data.ByteString.Builder.Prim.primMapByteStringFixed ::
+<introspection>:7257: Data.ByteString.Builder.Prim: Data.ByteString.Builder.Prim.primMapLazyByteStringBounded ::
+<introspection>:7262: Data.ByteString.Builder.Prim: Data.ByteString.Builder.Prim.primMapLazyByteStringFixed ::
+<introspection>:7267: Data.ByteString.Builder.Prim: Data.ByteString.Builder.Prim.primMapListBounded ::
+<introspection>:7270: Data.ByteString.Builder.Prim: Data.ByteString.Builder.Prim.primMapListFixed ::
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    6 <introspection>

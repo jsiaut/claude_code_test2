@@ -1,2 +1,4 @@
 #!/bin/sh
-cd "$(dirname "$0")" && mkdir -p bin && /opt/ghc/bin/ghc -O2 -outputdir bin -o bin/probe Probe.hs >/dev/null && bin/probe
+# Sonde de Haskell : audit de la grille (audit/, docs/V4_PLAN.md 2.1), qui reprend les cas de la première sonde
+# (base.sh). Sortie : results/probes/haskell.txt
+cd "$(dirname "$0")" && sh audit/run.sh

@@ -1,0 +1,92 @@
+# Recherche d'absence : haskell, case F2
+# Chaîne : The Glorious Glasgow Haskell Compilation System, version 9.14.1
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : .
+# 80 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:2482: Control.Monad.ST.Lazy.Unsafe: GHC.Internal.Control.Monad.ST.Lazy.Imp.unsafeInterleaveST ::
+<introspection>:2507: Control.Monad.ST.Unsafe: GHC.Internal.ST.unsafeDupableInterleaveST ::
+<introspection>:2510: Control.Monad.ST.Unsafe: GHC.Internal.ST.unsafeInterleaveST ::
+<introspection>:26109: Data.Text.Internal.Unsafe: Data.Text.Internal.Unsafe.inlineInterleaveST ::
+<introspection>:26687: Data.Text.Unsafe: Data.Text.Internal.Unsafe.inlineInterleaveST ::
+<introspection>:26783: Data.Time:                                                                     -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:26788: Data.Time:                                                                -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:26794: Data.Time:   time-1.15:Data.Time.Format.Parse.Class.buildTime :: time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:26804: Data.Time: type time-1.15:Data.Time.Format.Locale.TimeLocale :: *
+<introspection>:26805: Data.Time: data time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:26806: Data.Time:   = time-1.15:Data.Time.Format.Locale.TimeLocale {time-1.15:Data.Time.Format.Locale.wDays :: [(String,
+<introspection>:26808: Data.Time:                                                   time-1.15:Data.Time.Format.Locale.months :: [(String,
+<introspection>:26810: Data.Time:                                                   time-1.15:Data.Time.Format.Locale.amPm :: (String,
+<introspection>:26812: Data.Time:                                                   time-1.15:Data.Time.Format.Locale.dateTimeFmt :: String,
+<introspection>:26813: Data.Time:                                                   time-1.15:Data.Time.Format.Locale.dateFmt :: String,
+<introspection>:26814: Data.Time:                                                   time-1.15:Data.Time.Format.Locale.timeFmt :: String,
+<introspection>:26815: Data.Time:                                                   time-1.15:Data.Time.Format.Locale.time12Fmt :: String,
+<introspection>:26816: Data.Time:                                                   time-1.15:Data.Time.Format.Locale.knownTimeZones :: [time-1.15:Data.Time.LocalTime.Internal.TimeZone.TimeZone]}
+<introspection>:26924: Data.Time: time-1.15:Data.Time.Format.Locale.defaultTimeLocale ::
+<introspection>:26925: Data.Time:   time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:26973: Data.Time:   time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27004: Data.Time: time-1.15:Data.Time.Format.Locale.iso8601DateFormat ::
+<introspection>:27039: Data.Time:   -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27047: Data.Time:   -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27053: Data.Time:   -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27082: Data.Time:   -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27088: Data.Time:   -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27091: Data.Time: time-1.15:Data.Time.Format.Locale.rfc822DateFormat :: String
+<introspection>:27836: Data.Time.Format:                                                                     -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27841: Data.Time.Format:                                                                -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27847: Data.Time.Format:   time-1.15:Data.Time.Format.Parse.Class.buildTime :: time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27850: Data.Time.Format: type time-1.15:Data.Time.Format.Locale.TimeLocale :: *
+<introspection>:27851: Data.Time.Format: data time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27852: Data.Time.Format:   = time-1.15:Data.Time.Format.Locale.TimeLocale {time-1.15:Data.Time.Format.Locale.wDays :: [(String,
+<introspection>:27854: Data.Time.Format:                                                   time-1.15:Data.Time.Format.Locale.months :: [(String,
+<introspection>:27856: Data.Time.Format:                                                   time-1.15:Data.Time.Format.Locale.amPm :: (String,
+<introspection>:27858: Data.Time.Format:                                                   time-1.15:Data.Time.Format.Locale.dateTimeFmt :: String,
+<introspection>:27859: Data.Time.Format:                                                   time-1.15:Data.Time.Format.Locale.dateFmt :: String,
+<introspection>:27860: Data.Time.Format:                                                   time-1.15:Data.Time.Format.Locale.timeFmt :: String,
+<introspection>:27861: Data.Time.Format:                                                   time-1.15:Data.Time.Format.Locale.time12Fmt :: String,
+<introspection>:27862: Data.Time.Format:                                                   time-1.15:Data.Time.Format.Locale.knownTimeZones :: [time-1.15:Data.Time.LocalTime.Internal.TimeZone.TimeZone]}
+<introspection>:27863: Data.Time.Format: time-1.15:Data.Time.Format.Locale.defaultTimeLocale ::
+<introspection>:27864: Data.Time.Format:   time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27867: Data.Time.Format:   time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27869: Data.Time.Format: time-1.15:Data.Time.Format.Locale.iso8601DateFormat ::
+<introspection>:27875: Data.Time.Format:   -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27883: Data.Time.Format:   -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27889: Data.Time.Format:   -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27896: Data.Time.Format:   -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27902: Data.Time.Format:   -> time-1.15:Data.Time.Format.Locale.TimeLocale
+<introspection>:27905: Data.Time.Format: time-1.15:Data.Time.Format.Locale.rfc822DateFormat :: String
+<introspection>:67224: GHC.IO: GHC.Internal.IO.Unsafe.unsafeDupableInterleaveIO :: IO a -> IO a
+<introspection>:67227: GHC.IO: GHC.Internal.IO.Unsafe.unsafeInterleaveIO :: IO a -> IO a
+<introspection>:68639: GHC.IO.Unsafe: GHC.Internal.IO.Unsafe.unsafeDupableInterleaveIO :: IO a -> IO a
+<introspection>:68641: GHC.IO.Unsafe: GHC.Internal.IO.Unsafe.unsafeInterleaveIO :: IO a -> IO a
+<introspection>:83922: GHC.Internal.Control.Monad.ST.Imp: GHC.Internal.ST.unsafeDupableInterleaveST ::
+<introspection>:83925: GHC.Internal.Control.Monad.ST.Imp: GHC.Internal.ST.unsafeInterleaveST ::
+<introspection>:83978: GHC.Internal.Control.Monad.ST.Lazy.Imp: GHC.Internal.Control.Monad.ST.Lazy.Imp.unsafeInterleaveST ::
+<introspection>:94978: GHC.Internal.IO: GHC.Internal.IO.Unsafe.unsafeDupableInterleaveIO :: IO a -> IO a
+<introspection>:94980: GHC.Internal.IO: GHC.Internal.IO.Unsafe.unsafeInterleaveIO :: IO a -> IO a
+<introspection>:96390: GHC.Internal.IO.Unsafe: GHC.Internal.IO.Unsafe.unsafeDupableInterleaveIO :: IO a -> IO a
+<introspection>:96392: GHC.Internal.IO.Unsafe: GHC.Internal.IO.Unsafe.unsafeInterleaveIO :: IO a -> IO a
+<introspection>:107171: GHC.Internal.RTS.Flags:                                     GHC.Internal.RTS.Flags.numa :: Bool,
+<introspection>:107172: GHC.Internal.RTS.Flags:                                     GHC.Internal.RTS.Flags.numaMask :: Word}
+<introspection>:107451: GHC.Internal.ST: GHC.Internal.ST.unsafeDupableInterleaveST ::
+<introspection>:107453: GHC.Internal.ST: GHC.Internal.ST.unsafeInterleaveST ::
+<introspection>:109310: GHC.Internal.TH.Lib: GHC.Internal.TH.Lib.implicitParamBindD ::
+<introspection>:110189: GHC.Internal.TH.Syntax:   | GHC.Internal.TH.Syntax.ImplicitParamBindD String
+<introspection>:151787: GHC.RTS.Flags:                            GHC.RTS.Flags.numa :: Bool,
+<introspection>:151788: GHC.RTS.Flags:                            GHC.RTS.Flags.numaMask :: Word}
+<introspection>:151975: GHC.RTS.Flags.Experimental:                                     GHC.Internal.RTS.Flags.numa :: Bool,
+<introspection>:151976: GHC.RTS.Flags.Experimental:                                     GHC.Internal.RTS.Flags.numaMask :: Word}
+<introspection>:152258: GHC.ST: GHC.Internal.ST.unsafeDupableInterleaveST ::
+<introspection>:152260: GHC.ST: GHC.Internal.ST.unsafeInterleaveST ::
+<introspection>:173133: Language.Haskell.TH:   | GHC.Internal.TH.Syntax.ImplicitParamBindD String
+<introspection>:174169: Language.Haskell.TH: GHC.Internal.TH.Lib.implicitParamBindD ::
+<introspection>:175686: Language.Haskell.TH.Lib: GHC.Internal.TH.Lib.implicitParamBindD ::
+<introspection>:176761: Language.Haskell.TH.QuasiQuoter:   | GHC.Internal.TH.Syntax.ImplicitParamBindD String
+<introspection>:177177: Language.Haskell.TH.Syntax:   | GHC.Internal.TH.Syntax.ImplicitParamBindD String
+<introspection>:204125: System.IO.Unsafe: GHC.Internal.IO.Unsafe.unsafeInterleaveIO :: IO a -> IO a
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   80 <introspection>

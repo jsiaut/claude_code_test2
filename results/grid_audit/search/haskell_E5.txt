@@ -1,0 +1,33 @@
+# Recherche d'absence : haskell, case E5
+# Chaîne : The Glorious Glasgow Haskell Compilation System, version 9.14.1
+# Motif : restrict|noalias|no_?alias
+# Déclaration publique : .
+# 21 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:11182: Data.IntMap: Data.IntMap.Internal.restrictKeys ::
+<introspection>:11739: Data.IntMap.Internal: Data.IntMap.Internal.restrictKeys ::
+<introspection>:12201: Data.IntMap.Lazy: Data.IntMap.Internal.restrictKeys ::
+<introspection>:12831: Data.IntMap.Strict: Data.IntMap.Internal.restrictKeys ::
+<introspection>:13309: Data.IntMap.Strict.Internal: Data.IntMap.Internal.restrictKeys ::
+<introspection>:14469: Data.Map: Data.Map.Internal.restrictKeys ::
+<introspection>:15046: Data.Map.Internal: Data.Map.Internal.restrictKeys ::
+<introspection>:15492: Data.Map.Lazy: Data.Map.Internal.restrictKeys ::
+<introspection>:16069: Data.Map.Strict: Data.Map.Internal.restrictKeys ::
+<introspection>:16600: Data.Map.Strict.Internal: Data.Map.Internal.restrictKeys ::
+<introspection>:96673: GHC.Internal.LanguageExtensions:   | GHC.Internal.LanguageExtensions.MonomorphismRestriction
+<introspection>:110965: GHC.Internal.TH.Syntax:   | GHC.Internal.LanguageExtensions.MonomorphismRestriction
+<introspection>:173251: Language.Haskell.TH:   | GHC.Internal.LanguageExtensions.MonomorphismRestriction
+<introspection>:174982: Language.Haskell.TH.LanguageExtensions:   | GHC.Internal.LanguageExtensions.MonomorphismRestriction
+<introspection>:177276: Language.Haskell.TH.Syntax:   | GHC.Internal.LanguageExtensions.MonomorphismRestriction
+<introspection>:207516: System.Posix:   | unix-2.8.8.0:System.Posix.Files.Common.SetOwnerAndGroupIsRestricted
+<introspection>:208828: System.Posix.ByteString:   | unix-2.8.8.0:System.Posix.Files.Common.SetOwnerAndGroupIsRestricted
+<introspection>:210589: System.Posix.Files:   | unix-2.8.8.0:System.Posix.Files.Common.SetOwnerAndGroupIsRestricted
+<introspection>:210968: System.Posix.Files.ByteString:   | unix-2.8.8.0:System.Posix.Files.Common.SetOwnerAndGroupIsRestricted
+<introspection>:211345: System.Posix.Files.PosixString:   | unix-2.8.8.0:System.Posix.Files.Common.SetOwnerAndGroupIsRestricted
+<introspection>:212582: System.Posix.PosixString:   | unix-2.8.8.0:System.Posix.Files.Common.SetOwnerAndGroupIsRestricted
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   21 <introspection>

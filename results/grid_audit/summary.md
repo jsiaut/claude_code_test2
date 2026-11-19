@@ -20,7 +20,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | csharp | 33 | 1 | 0 | 0 | exécutée 22, exécutée+recherche 1, exécutée+échec 2, recherche 4, échec 1, échec+recherche 3 |
 | java | 33 | 1 | 0 | 0 | exécutée 14, exécutée+recherche 3, exécutée+échec 3, recherche 6, échec 3, échec+recherche 4 |
 | julia | 33 | 1 | 0 | 0 | exécutée 28, exécutée+recherche 2, recherche 2, échec 1 |
-| haskell | 3 | 1 | 30 | 3 |  |
+| haskell | 33 | 1 | 0 | 0 | exécutée 19, exécutée+recherche 1, exécutée+échec 1, recherche 7, échec 2, échec+recherche 3 |
 | ocaml | 4 | 1 | 29 | 4 |  |
 | js | 2 | 1 | 31 | 2 |  |
 | python | 4 | 1 | 29 | 4 |  |
@@ -30,10 +30,11 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | bqn | 33 | 1 | 0 | 0 | exécutée 10, recherche 17, échec 2, échec+recherche 4 |
 | php | 33 | 1 | 0 | 0 | exécutée 16, recherche 13, échec+recherche 4 |
 
-Total : 675 sondées, 25 mesurées, 150 sans sonde, 15 déclaratives.
+Total : 705 sondées, 25 mesurées, 120 sans sonde, 12 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 
 | Langage | Case | Sonde | v1 | v2 | Preuve |
 |---|---|---|---|---|---|
+| haskell | A3 | 0.5 | 0 | 0 | [exécutée] struct __attribute__((packed)) {uint8_t; uint32_t} : taille 5, b à 1 (hsc2hs) ; instance Storable de 5 o : tableau de 1000 éléments à plat, élément 1 |
 | python | D4 | 0.5 | 0.5 | 1 | os.sched_setaffinity -> {0} |
