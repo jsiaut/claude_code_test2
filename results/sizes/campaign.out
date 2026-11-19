@@ -2483,3 +2483,113 @@ p1 k1:small d/new natural energy n=10000 med=1.78e-05s ok=['True'] oom=False rc=
 p1 k1:small d/new aos energy n=10000 med=1.93e-05s ok=['True'] oom=False rc=0
 p1 k1:small d/new soa energy n=10000 med=2.3e-06s ok=['True'] oom=False rc=0
 p1 k1:small d/new natural_shuffled energy n=10000 med=1.72e-05s ok=['True'] oom=False rc=0
+p1 k1:small go/new natural energy n=10000 med=0.00571406s ok=['True'] oom=False rc=0
+p1 k1:small go/new aos energy n=10000 med=0.00378615s ok=['True'] oom=False rc=0
+p1 k1:small go/new soa energy n=10000 med=4.2715e-06s ok=['True'] oom=False rc=0
+p1 k1:small go/new natural_shuffled energy n=10000 med=0.00571231s ok=['True'] oom=False rc=0
+p1 k1:small fpc/new natural energy n=10000 med=3.4407e-05s ok=['True'] oom=False rc=0
+p1 k1:small fpc/new aos energy n=10000 med=1.38985e-05s ok=['True'] oom=False rc=0
+p1 k1:small fpc/new soa energy n=10000 med=9.947e-06s ok=['True'] oom=False rc=0
+p1 k1:small fpc/new natural_shuffled energy n=10000 med=3.5089e-05s ok=['True'] oom=False rc=0
+p1 k1:small ocaml/new natural energy n=10000 med=8.0109e-05s ok=['True'] oom=False rc=0
+p1 k1:small ocaml/new aos energy n=3958 med=0.000595093s ok=['True'] oom=False rc=0
+p1 k1:small ocaml/new soa energy n=10000 med=2.0027e-05s ok=['True'] oom=False rc=0
+p1 k1:small ocaml/new natural_shuffled energy n=10000 med=0.000171065s ok=['True'] oom=False rc=0
+p1 k1:small csharp/new natural energy n=10000 med=4.26e-05s ok=['True'] oom=False rc=0
+p1 k1:small csharp/new aos energy n=10000 med=1.61e-05s ok=['True'] oom=False rc=0
+p1 k1:small csharp/new soa energy n=10000 med=2.6e-06s ok=['True'] oom=False rc=0
+p1 k1:small csharp/new natural_shuffled energy n=10000 med=4.45e-05s ok=['True'] oom=False rc=0
+p1 k1:small nim/new natural energy n=10000 med=1.56365e-05s ok=['True'] oom=False rc=0
+p1 k1:small nim/new aos energy n=10000 med=1.0614e-05s ok=['True'] oom=False rc=0
+p1 k1:small nim/new soa energy n=10000 med=2.104e-06s ok=['True'] oom=False rc=0
+p1 k1:small nim/new natural_shuffled energy n=10000 med=1.9073e-05s ok=['True'] oom=False rc=0
+p1 k1:small haskell/new natural energy n=10000 med=7.07915e-05s ok=['True'] oom=False rc=0
+p1 k1:small haskell/new aos energy n=10000 med=1.4684e-05s ok=['True'] oom=False rc=0
+p1 k1:small haskell/new soa energy n=10000 med=1.0107e-05s ok=['True'] oom=False rc=0
+p1 k1:small haskell/new natural_shuffled energy n=10000 med=6.35255e-05s ok=['True'] oom=False rc=0
+p1 k1:small chapel/new natural energy n=10000 med=1.5e-05s ok=['True'] oom=False rc=0
+p1 k1:small chapel/new aos energy n=10000 med=1.1e-05s ok=['True'] oom=False rc=0
+p1 k1:small chapel/new soa energy n=10000 med=3e-06s ok=['True'] oom=False rc=0
+p1 k1:small chapel/new natural_shuffled energy n=10000 med=1.5e-05s ok=['True'] oom=False rc=0
+p1 k1:small java/new natural energy n=2517 med=2.507e-05s ok=['True'] oom=False rc=0
+p1 k1:small java/new aos energy n=4658 med=1.53845e-05s ok=['True'] oom=False rc=0
+p1 k1:small java/new soa energy n=429 med=1.3894e-05s ok=['True'] oom=False rc=0
+p1 k1:small java/new natural_shuffled energy n=2263 med=3.1972e-05s ok=['True'] oom=False rc=0
+p1 k1:small lua/new natural energy n=3355 med=0.000934s ok=['True'] oom=False rc=0
+p1 k1:small lua/new aos energy n=4559 med=0.000654s ok=['True'] oom=False rc=0
+p1 k1:small lua/new soa energy n=6578 med=0.00045s ok=['True'] oom=False rc=0
+p1 k1:small lua/new natural_shuffled energy n=1020 med=0.001912s ok=['True'] oom=False rc=0
+p1 k1:small python/new natural energy n=2558 med=0.00118755s ok=['True'] oom=False rc=0
+p1 k1:small python/new aos energy n=1593 med=0.00186184s ok=['True'] oom=False rc=0
+p1 k1:small python/new soa energy n=1721 med=0.00174565s ok=['True'] oom=False rc=0
+p1 k1:small python/new natural_shuffled energy n=1208 med=0.00206217s ok=['True'] oom=False rc=0
+p1 k1:small odin/new natural energy n=10000 med=1.7314e-05s ok=['True'] oom=False rc=0
+p1 k1:small odin/new aos energy n=10000 med=1.9194e-05s ok=['True'] oom=False rc=0
+p1 k1:small odin/new soa energy n=10000 med=3.616e-06s ok=['True'] oom=False rc=0
+p1 k1:small odin/new natural_shuffled energy n=10000 med=1.7805e-05s ok=['True'] oom=False rc=0
+p1 k1:small fortran/new natural energy n=10000 med=2.7333e-05s ok=['True'] oom=False rc=0
+p1 k1:small fortran/new aos energy n=10000 med=1.4414e-05s ok=['True'] oom=False rc=0
+p1 k1:small fortran/new soa energy n=10000 med=2.468e-06s ok=['True'] oom=False rc=0
+p1 k1:small fortran/new natural_shuffled energy n=10000 med=2.7334e-05s ok=['True'] oom=False rc=0
+p1 k1:small mojo/new natural energy n=10000 med=1.6956e-05s ok=['True'] oom=False rc=0
+p1 k1:small mojo/new aos energy n=10000 med=1.6542e-05s ok=['True'] oom=False rc=0
+p1 k1:small mojo/new soa energy n=10000 med=2.457e-06s ok=['True'] oom=False rc=0
+p1 k1:small mojo/new natural_shuffled energy n=10000 med=1.6938e-05s ok=['True'] oom=False rc=0
+p1 k1:small zig/new natural energy n=10000 med=1.719e-05s ok=['True'] oom=False rc=0
+p1 k1:small zig/new aos energy n=10000 med=1.7942e-05s ok=['True'] oom=False rc=0
+p1 k1:small zig/new soa energy n=10000 med=2.095e-06s ok=['True'] oom=False rc=0
+p1 k1:small zig/new natural_shuffled energy n=10000 med=2.11945e-05s ok=['True'] oom=False rc=0
+p1 k1:small swift/new natural energy n=10000 med=1.7317e-05s ok=['True'] oom=False rc=0
+p1 k1:small swift/new aos energy n=10000 med=1.9472e-05s ok=['True'] oom=False rc=0
+p1 k1:small swift/new soa energy n=10000 med=2.423e-06s ok=['True'] oom=False rc=0
+p1 k1:small swift/new natural_shuffled energy n=10000 med=1.7045e-05s ok=['True'] oom=False rc=0
+p1 k1:small js/new natural energy n=4630 med=0.000237582s ok=['True'] oom=False rc=0
+p1 k1:small js/new aos energy n=10000 med=2.9831e-05s ok=['True'] oom=False rc=0
+p1 k1:small js/new soa energy n=10000 med=4.0517e-05s ok=['True'] oom=False rc=0
+p1 k1:small js/new natural_shuffled energy n=4554 med=0.00024184s ok=['True'] oom=False rc=0
+p1 k1:small cpp/new natural energy n=10000 med=2.7367e-05s ok=['True'] oom=False rc=0
+p1 k1:small cpp/new aos energy n=10000 med=2.27985e-05s ok=['True'] oom=False rc=0
+p1 k1:small cpp/new soa energy n=10000 med=2.336e-06s ok=['True'] oom=False rc=0
+p1 k1:small cpp/new natural_shuffled energy n=10000 med=2.6683e-05s ok=['True'] oom=False rc=0
+p1 k1:small php/new natural energy n=9403 med=0.00020642s ok=['True'] oom=False rc=0
+p1 k1:small php/new aos energy n=6624 med=0.000316313s ok=['True'] oom=False rc=0
+p1 k1:small php/new soa energy n=10000 med=6.3067e-05s ok=['True'] oom=False rc=0
+p1 k1:small php/new natural_shuffled energy n=3152 med=0.000360058s ok=['True'] oom=False rc=0
+p1 k1:small php/new natural_arr energy n=4700 med=0.000583037s ok=['True'] oom=False rc=0
+p1 k1:small php/new natural_arr_shuffled energy n=1857 med=0.00112166s ok=['True'] oom=False rc=0
+p1 k1:small julia/new natural energy n=10000 med=1.7315e-05s ok=['True'] oom=False rc=0
+p1 k1:small julia/new aos energy n=10000 med=1.2773e-05s ok=['True'] oom=False rc=0
+p1 k1:small julia/new soa energy n=10000 med=3.42e-06s ok=['True'] oom=False rc=0
+p1 k1:small julia/new natural_shuffled energy n=10000 med=1.694e-05s ok=['True'] oom=False rc=0
+p1 k1:small c3/new natural energy n=10000 med=1.3974e-05s ok=['True'] oom=False rc=0
+p1 k1:small c3/new aos energy n=10000 med=1.4127e-05s ok=['True'] oom=False rc=0
+p1 k1:small c3/new soa energy n=10000 med=2.607e-06s ok=['True'] oom=False rc=0
+p1 k1:small c3/new natural_shuffled energy n=10000 med=1.4392e-05s ok=['True'] oom=False rc=0
+p1 k1:small rust/new natural energy n=10000 med=1.9198e-05s ok=['True'] oom=False rc=0
+p1 k1:small rust/new aos energy n=10000 med=1.5594e-05s ok=['True'] oom=False rc=0
+p1 k1:small rust/new soa energy n=10000 med=2.214e-06s ok=['True'] oom=False rc=0
+p1 k1:small rust/new natural_shuffled energy n=10000 med=1.7917e-05s ok=['True'] oom=False rc=0
+p1 k1:small bqn/new natural energy n=10000 med=0.000133135s ok=['True'] oom=False rc=0
+p1 k1:small bqn/new aos energy n=10000 med=0.00012624s ok=['True'] oom=False rc=0
+p1 k1:small bqn/new soa energy n=10000 med=2.0337e-05s ok=['True'] oom=False rc=0
+p1 k1:small bqn/new natural_shuffled energy n=10000 med=0.000128906s ok=['True'] oom=False rc=0
+p1 k1:small bqn/new natural_ns energy n=2689 med=0.00106355s ok=['True'] oom=False rc=0
+p1 k1:small bqn/new natural_ns_shuffled energy n=335 med=0.00176894s ok=['True'] oom=False rc=0
+p1 k1:small ada/new natural energy n=10000 med=2.7433e-05s ok=['True'] oom=False rc=0
+p1 k1:small ada/new aos energy n=10000 med=2.317e-05s ok=['True'] oom=False rc=0
+p1 k1:small ada/new soa energy n=10000 med=2.627e-06s ok=['True'] oom=False rc=0
+p1 k1:small ada/new natural_shuffled energy n=10000 med=2.7338e-05s ok=['True'] oom=False rc=0
+p1 k1:small c/new natural energy n=10000 med=1.8976e-05s ok=['True'] oom=False rc=0
+p1 k1:small c/new aos energy n=10000 med=1.0193e-05s ok=['True'] oom=False rc=0
+p1 k1:small c/new soa energy n=10000 med=2.109e-06s ok=['True'] oom=False rc=0
+p1 k1:small c/new natural_shuffled energy n=10000 med=1.6842e-05s ok=['True'] oom=False rc=0
+2026-11-19T21:04:03 passe 1 groupe 3/24 k1:small 104 processus 217s
+p1 k5:l3 zig/new natural  n=36 med=0.077497s ok=['True'] oom=False rc=0
+p1 k5:l3 zig/new tuned  n=68 med=0.0358373s ok=['True'] oom=False rc=0
+p1 k5:l3 rust/new natural  n=35 med=0.0846927s ok=['True'] oom=False rc=0
+p1 k5:l3 rust/new tuned  n=75 med=0.0370692s ok=['True'] oom=False rc=0
+p1 k5:l3 chapel/new natural  n=21 med=0.1393s ok=['True'] oom=False rc=0
+p1 k5:l3 chapel/new tuned  n=76 med=0.0374105s ok=['True'] oom=False rc=0
+p1 k5:l3 php/new natural  n=12 med=0.258456s ok=['True'] oom=False rc=0
+p1 k5:l3 php/new tuned  n=12 med=0.198256s ok=['True'] oom=False rc=0
+p1 k5:l3 go/new natural  n=34 med=0.0724807s ok=['True'] oom=False rc=0
