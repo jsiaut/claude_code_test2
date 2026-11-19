@@ -1,0 +1,11 @@
+# Recherche d'absence : java, case E7
+# Chaîne : openjdk version "27.0.1.0.3" 2026-10-25
+# Motif : comptime|constexpr|const_?fn|static_?if|ctfe|compile_?time|@generated|specializ
+# Déclaration publique : .
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

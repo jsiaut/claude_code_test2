@@ -1,0 +1,15 @@
+# Recherche d'absence : java, case C2
+# Chaîne : openjdk version "27.0.1.0.3" 2026-10-25
+# Motif : \bavx|\bsse|_mm(256|512)?_|\bx86|intrinsic
+# Déclaration publique : .
+# 3 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:16509: méthode java.lang.classfile.instruction.ConstantInstruction$IntrinsicConstantInstruction.typeKind
+<introspection>:16514: méthode java.lang.classfile.instruction.ConstantInstruction.ofIntrinsic
+<introspection>:45132: type java.lang.classfile.instruction.ConstantInstruction$IntrinsicConstantInstruction (java.base)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    3 <introspection>

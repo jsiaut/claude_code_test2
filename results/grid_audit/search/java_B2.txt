@@ -1,0 +1,152 @@
+# Recherche d'absence : java, case B2
+# Chaîne : openjdk version "27.0.1.0.3" 2026-10-25
+# Motif : arena|allocator|alloc_?in\b|new_?in\b|bump|region|mem_?pool|memory_?pool
+# Déclaration publique : .
+# 140 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:3373: champ java.lang.management.ManagementFactory.MEMORY_POOL_MXBEAN_DOMAIN_TYPE
+<introspection>:4663: champ javax.imageio.IIOParam.sourceRegion
+<introspection>:7121: champ javax.swing.plaf.nimbus.AbstractRegionPainter$PaintContext$CacheMode.FIXED_SIZES
+<introspection>:7122: champ javax.swing.plaf.nimbus.AbstractRegionPainter$PaintContext$CacheMode.NINE_SQUARE_SCALE
+<introspection>:7123: champ javax.swing.plaf.nimbus.AbstractRegionPainter$PaintContext$CacheMode.NO_CACHING
+<introspection>:7136: champ javax.swing.plaf.synth.Region.ARROW_BUTTON
+<introspection>:7137: champ javax.swing.plaf.synth.Region.BUTTON
+<introspection>:7138: champ javax.swing.plaf.synth.Region.CHECK_BOX
+<introspection>:7139: champ javax.swing.plaf.synth.Region.CHECK_BOX_MENU_ITEM
+<introspection>:7140: champ javax.swing.plaf.synth.Region.COLOR_CHOOSER
+<introspection>:7141: champ javax.swing.plaf.synth.Region.COMBO_BOX
+<introspection>:7142: champ javax.swing.plaf.synth.Region.DESKTOP_ICON
+<introspection>:7143: champ javax.swing.plaf.synth.Region.DESKTOP_PANE
+<introspection>:7144: champ javax.swing.plaf.synth.Region.EDITOR_PANE
+<introspection>:7145: champ javax.swing.plaf.synth.Region.FILE_CHOOSER
+<introspection>:7146: champ javax.swing.plaf.synth.Region.FORMATTED_TEXT_FIELD
+<introspection>:7147: champ javax.swing.plaf.synth.Region.INTERNAL_FRAME
+<introspection>:7148: champ javax.swing.plaf.synth.Region.INTERNAL_FRAME_TITLE_PANE
+<introspection>:7149: champ javax.swing.plaf.synth.Region.LABEL
+<introspection>:7150: champ javax.swing.plaf.synth.Region.LIST
+<introspection>:7151: champ javax.swing.plaf.synth.Region.MENU
+<introspection>:7152: champ javax.swing.plaf.synth.Region.MENU_BAR
+<introspection>:7153: champ javax.swing.plaf.synth.Region.MENU_ITEM
+<introspection>:7154: champ javax.swing.plaf.synth.Region.MENU_ITEM_ACCELERATOR
+<introspection>:7155: champ javax.swing.plaf.synth.Region.OPTION_PANE
+<introspection>:7156: champ javax.swing.plaf.synth.Region.PANEL
+<introspection>:7157: champ javax.swing.plaf.synth.Region.PASSWORD_FIELD
+<introspection>:7158: champ javax.swing.plaf.synth.Region.POPUP_MENU
+<introspection>:7159: champ javax.swing.plaf.synth.Region.POPUP_MENU_SEPARATOR
+<introspection>:7160: champ javax.swing.plaf.synth.Region.PROGRESS_BAR
+<introspection>:7161: champ javax.swing.plaf.synth.Region.RADIO_BUTTON
+<introspection>:7162: champ javax.swing.plaf.synth.Region.RADIO_BUTTON_MENU_ITEM
+<introspection>:7163: champ javax.swing.plaf.synth.Region.ROOT_PANE
+<introspection>:7164: champ javax.swing.plaf.synth.Region.SCROLL_BAR
+<introspection>:7165: champ javax.swing.plaf.synth.Region.SCROLL_BAR_THUMB
+<introspection>:7166: champ javax.swing.plaf.synth.Region.SCROLL_BAR_TRACK
+<introspection>:7167: champ javax.swing.plaf.synth.Region.SCROLL_PANE
+<introspection>:7168: champ javax.swing.plaf.synth.Region.SEPARATOR
+<introspection>:7169: champ javax.swing.plaf.synth.Region.SLIDER
+<introspection>:7170: champ javax.swing.plaf.synth.Region.SLIDER_THUMB
+<introspection>:7171: champ javax.swing.plaf.synth.Region.SLIDER_TRACK
+<introspection>:7172: champ javax.swing.plaf.synth.Region.SPINNER
+<introspection>:7173: champ javax.swing.plaf.synth.Region.SPLIT_PANE
+<introspection>:7174: champ javax.swing.plaf.synth.Region.SPLIT_PANE_DIVIDER
+<introspection>:7175: champ javax.swing.plaf.synth.Region.TABBED_PANE
+<introspection>:7176: champ javax.swing.plaf.synth.Region.TABBED_PANE_CONTENT
+<introspection>:7177: champ javax.swing.plaf.synth.Region.TABBED_PANE_TAB
+<introspection>:7178: champ javax.swing.plaf.synth.Region.TABBED_PANE_TAB_AREA
+<introspection>:7179: champ javax.swing.plaf.synth.Region.TABLE
+<introspection>:7180: champ javax.swing.plaf.synth.Region.TABLE_HEADER
+<introspection>:7181: champ javax.swing.plaf.synth.Region.TEXT_AREA
+<introspection>:7182: champ javax.swing.plaf.synth.Region.TEXT_FIELD
+<introspection>:7183: champ javax.swing.plaf.synth.Region.TEXT_PANE
+<introspection>:7184: champ javax.swing.plaf.synth.Region.TOGGLE_BUTTON
+<introspection>:7185: champ javax.swing.plaf.synth.Region.TOOL_BAR
+<introspection>:7186: champ javax.swing.plaf.synth.Region.TOOL_BAR_CONTENT
+<introspection>:7187: champ javax.swing.plaf.synth.Region.TOOL_BAR_DRAG_WINDOW
+<introspection>:7188: champ javax.swing.plaf.synth.Region.TOOL_BAR_SEPARATOR
+<introspection>:7189: champ javax.swing.plaf.synth.Region.TOOL_TIP
+<introspection>:7190: champ javax.swing.plaf.synth.Region.TREE
+<introspection>:7191: champ javax.swing.plaf.synth.Region.TREE_CELL
+<introspection>:7192: champ javax.swing.plaf.synth.Region.VIEWPORT
+<introspection>:7978: champ javax.xml.stream.XMLInputFactory.ALLOCATOR
+<introspection>:15439: méthode java.lang.String.regionMatches
+<introspection>:16693: méthode java.lang.foreign.Arena.allocate
+<introspection>:16694: méthode java.lang.foreign.Arena.close
+<introspection>:16695: méthode java.lang.foreign.Arena.global
+<introspection>:16696: méthode java.lang.foreign.Arena.ofAuto
+<introspection>:16697: méthode java.lang.foreign.Arena.ofConfined
+<introspection>:16698: méthode java.lang.foreign.Arena.ofShared
+<introspection>:16699: méthode java.lang.foreign.Arena.scope
+<introspection>:16788: méthode java.lang.foreign.SegmentAllocator.allocate
+<introspection>:16789: méthode java.lang.foreign.SegmentAllocator.allocateFrom
+<introspection>:16790: méthode java.lang.foreign.SegmentAllocator.prefixAllocator
+<introspection>:16791: méthode java.lang.foreign.SegmentAllocator.slicingAllocator
+<introspection>:17139: méthode java.lang.management.ManagementFactory.getMemoryPoolMXBeans
+<introspection>:17155: méthode java.lang.management.MemoryManagerMXBean.getMemoryPoolNames
+<introspection>:17162: méthode java.lang.management.MemoryPoolMXBean.getCollectionUsage
+<introspection>:17163: méthode java.lang.management.MemoryPoolMXBean.getCollectionUsageThreshold
+<introspection>:17164: méthode java.lang.management.MemoryPoolMXBean.getCollectionUsageThresholdCount
+<introspection>:17165: méthode java.lang.management.MemoryPoolMXBean.getMemoryManagerNames
+<introspection>:17166: méthode java.lang.management.MemoryPoolMXBean.getName
+<introspection>:17167: méthode java.lang.management.MemoryPoolMXBean.getPeakUsage
+<introspection>:17168: méthode java.lang.management.MemoryPoolMXBean.getType
+<introspection>:17169: méthode java.lang.management.MemoryPoolMXBean.getUsage
+<introspection>:17170: méthode java.lang.management.MemoryPoolMXBean.getUsageThreshold
+<introspection>:17171: méthode java.lang.management.MemoryPoolMXBean.getUsageThresholdCount
+<introspection>:17172: méthode java.lang.management.MemoryPoolMXBean.isCollectionUsageThresholdExceeded
+<introspection>:17173: méthode java.lang.management.MemoryPoolMXBean.isCollectionUsageThresholdSupported
+<introspection>:17174: méthode java.lang.management.MemoryPoolMXBean.isUsageThresholdExceeded
+<introspection>:17175: méthode java.lang.management.MemoryPoolMXBean.isUsageThresholdSupported
+<introspection>:17176: méthode java.lang.management.MemoryPoolMXBean.isValid
+<introspection>:17177: méthode java.lang.management.MemoryPoolMXBean.resetPeakUsage
+<introspection>:17178: méthode java.lang.management.MemoryPoolMXBean.setCollectionUsageThreshold
+<introspection>:17179: méthode java.lang.management.MemoryPoolMXBean.setUsageThreshold
+<introspection>:22242: méthode java.time.format.DateTimeFormatterBuilder.appendZoneRegionId
+<introspection>:23196: méthode java.util.Locale$Builder.setRegion
+<introspection>:25688: méthode java.util.regex.Matcher.region
+<introspection>:25689: méthode java.util.regex.Matcher.regionEnd
+<introspection>:25690: méthode java.util.regex.Matcher.regionStart
+<introspection>:26575: méthode javax.imageio.IIOParam.getSourceRegion
+<introspection>:26585: méthode javax.imageio.IIOParam.setSourceRegion
+<introspection>:26634: méthode javax.imageio.ImageReader.computeRegions
+<introspection>:26651: méthode javax.imageio.ImageReader.getSourceRegion
+<introspection>:33957: méthode javax.swing.RepaintManager.addDirtyRegion
+<introspection>:33960: méthode javax.swing.RepaintManager.getDirtyRegion
+<introspection>:33968: méthode javax.swing.RepaintManager.paintDirtyRegions
+<introspection>:37144: méthode javax.swing.plaf.nimbus.AbstractRegionPainter$PaintContext$CacheMode.valueOf
+<introspection>:37145: méthode javax.swing.plaf.nimbus.AbstractRegionPainter$PaintContext$CacheMode.values
+<introspection>:37146: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.configureGraphics
+<introspection>:37147: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.decodeAnchorX
+<introspection>:37148: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.decodeAnchorY
+<introspection>:37149: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.decodeColor
+<introspection>:37150: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.decodeGradient
+<introspection>:37151: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.decodeRadialGradient
+<introspection>:37152: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.decodeX
+<introspection>:37153: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.decodeY
+<introspection>:37154: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.doPaint
+<introspection>:37155: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.getComponentColor
+<introspection>:37156: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.getExtendedCacheKeys
+<introspection>:37157: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.getPaintContext
+<introspection>:37158: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.paint
+<introspection>:37185: méthode javax.swing.plaf.synth.Region.getName
+<introspection>:37186: méthode javax.swing.plaf.synth.Region.isSubregion
+<introspection>:37187: méthode javax.swing.plaf.synth.Region.toString
+<introspection>:37243: méthode javax.swing.plaf.synth.SynthContext.getRegion
+<introspection>:37334: méthode javax.swing.plaf.synth.SynthLookAndFeel.getRegion
+<introspection>:39659: méthode javax.swing.tree.DefaultTreeCellEditor.inHitRegion
+<introspection>:40476: méthode javax.xml.stream.XMLInputFactory.getEventAllocator
+<introspection>:40484: méthode javax.xml.stream.XMLInputFactory.setEventAllocator
+<introspection>:40676: méthode javax.xml.stream.util.XMLEventAllocator.allocate
+<introspection>:40677: méthode javax.xml.stream.util.XMLEventAllocator.newInstance
+<introspection>:45176: type java.lang.foreign.Arena (java.base)
+<introspection>:45186: type java.lang.foreign.SegmentAllocator (java.base)
+<introspection>:45241: type java.lang.management.MemoryPoolMXBean (java.management)
+<introspection>:47986: type javax.swing.plaf.nimbus.AbstractRegionPainter (java.desktop)
+<introspection>:47987: type javax.swing.plaf.nimbus.AbstractRegionPainter$PaintContext (java.desktop)
+<introspection>:47988: type javax.swing.plaf.nimbus.AbstractRegionPainter$PaintContext$CacheMode (java.desktop)
+<introspection>:47993: type javax.swing.plaf.synth.Region (java.desktop)
+<introspection>:48397: type javax.xml.stream.util.XMLEventAllocator (java.xml)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+  140 <introspection>

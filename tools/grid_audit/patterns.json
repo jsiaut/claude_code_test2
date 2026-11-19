@@ -284,6 +284,12 @@
       "listing": "[ -f tools/grid_audit/listings/dotnet_api/bin/out/dotnet_api.dll ] || /opt/dotnet/dotnet build tools/grid_audit/listings/dotnet_api -c Release --nologo -v q -o tools/grid_audit/listings/dotnet_api/bin/out >/dev/null 2>&1; /opt/dotnet/dotnet tools/grid_audit/listings/dotnet_api/bin/out/dotnet_api.dll /opt/dotnet/packs/Microsoft.NETCore.App.Ref/10.0.14/ref/net10.0",
       "public": ".",
       "version": "/opt/dotnet/dotnet --list-runtimes | grep NETCore.App | cut -d' ' -f1,2"
+    },
+    "java": {
+      "roots": [],
+      "listing": "unset JAVA_TOOL_OPTIONS; /opt/jdk27/bin/java -Dstdout.encoding=UTF-8 --add-modules ALL-SYSTEM tools/grid_audit/listings/JavaApi.java 2>/dev/null",
+      "public": ".",
+      "version": "unset JAVA_TOOL_OPTIONS; /opt/jdk27/bin/java -version 2>&1 | head -1"
     }
   }
 }

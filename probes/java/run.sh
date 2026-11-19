@@ -1,2 +1,4 @@
 #!/bin/sh
-cd "$(dirname "$0")" && unset JAVA_TOOL_OPTIONS && mkdir -p bin && /opt/jdk27/bin/javac -d bin Probe.java && /opt/jdk27/bin/java -Dstdout.encoding=UTF-8 -cp bin Probe
+# Sonde de Java : audit de la grille (audit/, docs/V4_PLAN.md 2.1), qui reprend les cas de la première sonde
+# (base.sh). Sortie : results/probes/java.txt
+cd "$(dirname "$0")" && sh audit/run.sh

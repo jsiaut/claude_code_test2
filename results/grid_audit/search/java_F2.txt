@@ -1,0 +1,130 @@
+# Recherche d'absence : java, case F2
+# Chaîne : openjdk version "27.0.1.0.3" 2026-10-25
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : .
+# 118 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:100: champ com.sun.nio.sctp.SctpStandardSocketOptions.SCTP_FRAGMENT_INTERLEAVE
+<introspection>:1964: champ java.beans.beancontext.BeanContextSupport.locale
+<introspection>:4303: champ java.util.Locale$Category.DISPLAY
+<introspection>:4304: champ java.util.Locale$Category.FORMAT
+<introspection>:4305: champ java.util.Locale$FilteringMode.AUTOSELECT_FILTERING
+<introspection>:4306: champ java.util.Locale$FilteringMode.EXTENDED_FILTERING
+<introspection>:4307: champ java.util.Locale$FilteringMode.IGNORE_EXTENDED_RANGES
+<introspection>:4308: champ java.util.Locale$FilteringMode.MAP_EXTENDED_RANGES
+<introspection>:4309: champ java.util.Locale$FilteringMode.REJECT_EXTENDED_RANGES
+<introspection>:4310: champ java.util.Locale$IsoCountryCode.PART1_ALPHA2
+<introspection>:4311: champ java.util.Locale$IsoCountryCode.PART1_ALPHA3
+<introspection>:4312: champ java.util.Locale$IsoCountryCode.PART3
+<introspection>:4313: champ java.util.Locale$LanguageRange.MAX_WEIGHT
+<introspection>:4314: champ java.util.Locale$LanguageRange.MIN_WEIGHT
+<introspection>:4315: champ java.util.Locale.CANADA
+<introspection>:4316: champ java.util.Locale.CANADA_FRENCH
+<introspection>:4317: champ java.util.Locale.CHINA
+<introspection>:4318: champ java.util.Locale.CHINESE
+<introspection>:4319: champ java.util.Locale.ENGLISH
+<introspection>:4320: champ java.util.Locale.FRANCE
+<introspection>:4321: champ java.util.Locale.FRENCH
+<introspection>:4322: champ java.util.Locale.GERMAN
+<introspection>:4323: champ java.util.Locale.GERMANY
+<introspection>:4324: champ java.util.Locale.ITALIAN
+<introspection>:4325: champ java.util.Locale.ITALY
+<introspection>:4326: champ java.util.Locale.JAPAN
+<introspection>:4327: champ java.util.Locale.JAPANESE
+<introspection>:4328: champ java.util.Locale.KOREA
+<introspection>:4329: champ java.util.Locale.KOREAN
+<introspection>:4330: champ java.util.Locale.PRC
+<introspection>:4331: champ java.util.Locale.PRIVATE_USE_EXTENSION
+<introspection>:4332: champ java.util.Locale.ROOT
+<introspection>:4333: champ java.util.Locale.SIMPLIFIED_CHINESE
+<introspection>:4334: champ java.util.Locale.TAIWAN
+<introspection>:4335: champ java.util.Locale.TRADITIONAL_CHINESE
+<introspection>:4336: champ java.util.Locale.UK
+<introspection>:4337: champ java.util.Locale.UNICODE_LOCALE_EXTENSION
+<introspection>:4338: champ java.util.Locale.US
+<introspection>:4677: champ javax.imageio.ImageReader.locale
+<introspection>:4699: champ javax.imageio.ImageWriteParam.locale
+<introspection>:4709: champ javax.imageio.ImageWriter.locale
+<introspection>:13494: méthode java.awt.image.PixelInterleavedSampleModel.createCompatibleSampleModel
+<introspection>:13495: méthode java.awt.image.PixelInterleavedSampleModel.createSubsetSampleModel
+<introspection>:13496: méthode java.awt.image.PixelInterleavedSampleModel.hashCode
+<introspection>:13506: méthode java.awt.image.Raster.createInterleavedRaster
+<introspection>:22923: méthode java.util.Formatter.locale
+<introspection>:23187: méthode java.util.Locale$Builder.addUnicodeLocaleAttribute
+<introspection>:23188: méthode java.util.Locale$Builder.build
+<introspection>:23189: méthode java.util.Locale$Builder.clear
+<introspection>:23190: méthode java.util.Locale$Builder.clearExtensions
+<introspection>:23191: méthode java.util.Locale$Builder.removeUnicodeLocaleAttribute
+<introspection>:23192: méthode java.util.Locale$Builder.setExtension
+<introspection>:23193: méthode java.util.Locale$Builder.setLanguage
+<introspection>:23194: méthode java.util.Locale$Builder.setLanguageTag
+<introspection>:23195: méthode java.util.Locale$Builder.setLocale
+<introspection>:23196: méthode java.util.Locale$Builder.setRegion
+<introspection>:23197: méthode java.util.Locale$Builder.setScript
+<introspection>:23198: méthode java.util.Locale$Builder.setUnicodeLocaleKeyword
+<introspection>:23199: méthode java.util.Locale$Builder.setVariant
+<introspection>:23200: méthode java.util.Locale$Category.valueOf
+<introspection>:23201: méthode java.util.Locale$Category.values
+<introspection>:23202: méthode java.util.Locale$FilteringMode.valueOf
+<introspection>:23203: méthode java.util.Locale$FilteringMode.values
+<introspection>:23204: méthode java.util.Locale$IsoCountryCode.valueOf
+<introspection>:23205: méthode java.util.Locale$IsoCountryCode.values
+<introspection>:23206: méthode java.util.Locale$LanguageRange.equals
+<introspection>:23207: méthode java.util.Locale$LanguageRange.getRange
+<introspection>:23208: méthode java.util.Locale$LanguageRange.getWeight
+<introspection>:23209: méthode java.util.Locale$LanguageRange.hashCode
+<introspection>:23210: méthode java.util.Locale$LanguageRange.mapEquivalents
+<introspection>:23211: méthode java.util.Locale$LanguageRange.parse
+<introspection>:23212: méthode java.util.Locale$LanguageRange.toString
+<introspection>:23213: méthode java.util.Locale.availableLocales
+<introspection>:23214: méthode java.util.Locale.caseFoldLanguageTag
+<introspection>:23215: méthode java.util.Locale.clone
+<introspection>:23216: méthode java.util.Locale.equals
+<introspection>:23217: méthode java.util.Locale.filter
+<introspection>:23218: méthode java.util.Locale.filterTags
+<introspection>:23219: méthode java.util.Locale.forLanguageTag
+<introspection>:23220: méthode java.util.Locale.getAvailableLocales
+<introspection>:23221: méthode java.util.Locale.getCountry
+<introspection>:23222: méthode java.util.Locale.getDefault
+<introspection>:23223: méthode java.util.Locale.getDisplayCountry
+<introspection>:23224: méthode java.util.Locale.getDisplayLanguage
+<introspection>:23225: méthode java.util.Locale.getDisplayName
+<introspection>:23226: méthode java.util.Locale.getDisplayScript
+<introspection>:23227: méthode java.util.Locale.getDisplayVariant
+<introspection>:23228: méthode java.util.Locale.getExtension
+<introspection>:23229: méthode java.util.Locale.getExtensionKeys
+<introspection>:23230: méthode java.util.Locale.getISO3Country
+<introspection>:23231: méthode java.util.Locale.getISO3Language
+<introspection>:23232: méthode java.util.Locale.getISOCountries
+<introspection>:23233: méthode java.util.Locale.getISOLanguages
+<introspection>:23234: méthode java.util.Locale.getLanguage
+<introspection>:23235: méthode java.util.Locale.getScript
+<introspection>:23236: méthode java.util.Locale.getUnicodeLocaleAttributes
+<introspection>:23237: méthode java.util.Locale.getUnicodeLocaleKeys
+<introspection>:23238: méthode java.util.Locale.getUnicodeLocaleType
+<introspection>:23239: méthode java.util.Locale.getVariant
+<introspection>:23240: méthode java.util.Locale.hasExtensions
+<introspection>:23241: méthode java.util.Locale.hashCode
+<introspection>:23242: méthode java.util.Locale.lookup
+<introspection>:23243: méthode java.util.Locale.lookupTag
+<introspection>:23244: méthode java.util.Locale.of
+<introspection>:23245: méthode java.util.Locale.setDefault
+<introspection>:23246: méthode java.util.Locale.stripExtensions
+<introspection>:23247: méthode java.util.Locale.toLanguageTag
+<introspection>:23248: méthode java.util.Locale.toString
+<introspection>:23550: méthode java.util.Scanner.locale
+<introspection>:26706: méthode javax.imageio.ImageTypeSpecifier.createInterleaved
+<introspection>:41985: méthode jdk.jshell.tool.JavaShellToolBuilder.locale
+<introspection>:44621: type java.awt.image.PixelInterleavedSampleModel (java.desktop)
+<introspection>:46069: type java.util.Locale (java.base)
+<introspection>:46070: type java.util.Locale$Builder (java.base)
+<introspection>:46071: type java.util.Locale$Category (java.base)
+<introspection>:46072: type java.util.Locale$FilteringMode (java.base)
+<introspection>:46073: type java.util.Locale$IsoCountryCode (java.base)
+<introspection>:46074: type java.util.Locale$LanguageRange (java.base)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+  118 <introspection>

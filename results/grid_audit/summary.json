@@ -113,9 +113,13 @@
    "échec+recherche": 3
   },
   "java": {
-   "déclarative": 5,
-   "sondée": 5,
-   "sans sonde": 28,
+   "exécutée+échec": 3,
+   "sondée": 33,
+   "exécutée": 14,
+   "recherche": 6,
+   "échec": 3,
+   "exécutée+recherche": 3,
+   "échec+recherche": 4,
    "mesurée": 1
   },
   "julia": {
@@ -190,17 +194,17 @@
   }
  },
  "total": {
-  "exécutée": 446,
-  "sondée": 618,
-  "échec+recherche": 18,
+  "exécutée": 460,
+  "sondée": 646,
+  "échec+recherche": 22,
   "mesurée": 25,
-  "exécutée+échec": 16,
-  "recherche": 90,
-  "exécutée+recherche": 12,
-  "échec": 9,
+  "exécutée+échec": 19,
+  "recherche": 96,
+  "exécutée+recherche": 15,
+  "échec": 12,
   "exécutée+échec+recherche": 3,
-  "sans sonde": 207,
-  "déclarative": 24
+  "sans sonde": 179,
+  "déclarative": 19
  },
  "divergences": [
   [

@@ -1,0 +1,40 @@
+# Recherche d'absence : java, case D3
+# Chaîne : openjdk version "27.0.1.0.3" 2026-10-25
+# Motif : cache_?line|cache_?padded|destructive_?interference|false_?sharing|contended|dcache|cache_?size
+# Déclaration publique : .
+# 28 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:7039: champ javax.swing.plaf.basic.BasicTreeUI.validCachedPreferredSize
+<introspection>:8833: méthode com.sun.jdi.ThreadReference.currentContendedMonitor
+<introspection>:8871: méthode com.sun.jdi.VirtualMachine.canGetCurrentContendedMonitor
+<introspection>:8985: méthode com.sun.jdi.event.MonitorContendedEnterEvent.monitor
+<introspection>:8986: méthode com.sun.jdi.event.MonitorContendedEnterEvent.thread
+<introspection>:8987: méthode com.sun.jdi.event.MonitorContendedEnteredEvent.monitor
+<introspection>:8988: méthode com.sun.jdi.event.MonitorContendedEnteredEvent.thread
+<introspection>:9030: méthode com.sun.jdi.request.EventRequestManager.createMonitorContendedEnterRequest
+<introspection>:9031: méthode com.sun.jdi.request.EventRequestManager.createMonitorContendedEnteredRequest
+<introspection>:9045: méthode com.sun.jdi.request.EventRequestManager.monitorContendedEnterRequests
+<introspection>:9046: méthode com.sun.jdi.request.EventRequestManager.monitorContendedEnteredRequests
+<introspection>:9068: méthode com.sun.jdi.request.MonitorContendedEnterRequest.addClassExclusionFilter
+<introspection>:9069: méthode com.sun.jdi.request.MonitorContendedEnterRequest.addClassFilter
+<introspection>:9070: méthode com.sun.jdi.request.MonitorContendedEnterRequest.addInstanceFilter
+<introspection>:9071: méthode com.sun.jdi.request.MonitorContendedEnterRequest.addThreadFilter
+<introspection>:9072: méthode com.sun.jdi.request.MonitorContendedEnteredRequest.addClassExclusionFilter
+<introspection>:9073: méthode com.sun.jdi.request.MonitorContendedEnteredRequest.addClassFilter
+<introspection>:9074: méthode com.sun.jdi.request.MonitorContendedEnteredRequest.addInstanceFilter
+<introspection>:9075: méthode com.sun.jdi.request.MonitorContendedEnteredRequest.addThreadFilter
+<introspection>:25103: méthode java.util.concurrent.locks.AbstractQueuedLongSynchronizer.hasContended
+<introspection>:25142: méthode java.util.concurrent.locks.AbstractQueuedSynchronizer.hasContended
+<introspection>:29279: méthode javax.net.ssl.SSLSessionContext.getSessionCacheSize
+<introspection>:29281: méthode javax.net.ssl.SSLSessionContext.setSessionCacheSize
+<introspection>:37156: méthode javax.swing.plaf.nimbus.AbstractRegionPainter.getExtendedCacheKeys
+<introspection>:43961: type com.sun.jdi.event.MonitorContendedEnterEvent (jdk.jdi)
+<introspection>:43962: type com.sun.jdi.event.MonitorContendedEnteredEvent (jdk.jdi)
+<introspection>:43984: type com.sun.jdi.request.MonitorContendedEnterRequest (jdk.jdi)
+<introspection>:43985: type com.sun.jdi.request.MonitorContendedEnteredRequest (jdk.jdi)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   28 <introspection>

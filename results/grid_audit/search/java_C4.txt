@@ -1,0 +1,14 @@
+# Recherche d'absence : java, case C4
+# Chaîne : openjdk version "27.0.1.0.3" 2026-10-25
+# Motif : fast_?math|reassoc|algebraic|fp_?contract|float_?mode|relaxed_?math|associative
+# Déclaration publique : .
+# 2 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:41411: méthode jdk.incubator.vector.VectorOperators$Operator.isAssociative
+<introspection>:48492: type jdk.incubator.vector.VectorOperators$Associative (jdk.incubator.vector)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    2 <introspection>

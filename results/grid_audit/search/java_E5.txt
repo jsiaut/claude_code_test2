@@ -1,0 +1,16 @@
+# Recherche d'absence : java, case E5
+# Chaîne : openjdk version "27.0.1.0.3" 2026-10-25
+# Motif : restrict|noalias|no_?alias
+# Déclaration publique : .
+# 4 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:3836: champ java.sql.DatabaseMetaData.importedKeyRestrict
+<introspection>:3921: champ java.sql.PseudoColumnUsage.NO_USAGE_RESTRICTIONS
+<introspection>:8385: champ org.w3c.dom.TypeInfo.DERIVATION_RESTRICTION
+<introspection>:8884: méthode com.sun.jdi.VirtualMachine.canUnrestrictedlyRedefineClasses
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    4 <introspection>
