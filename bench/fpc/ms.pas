@@ -9,7 +9,7 @@
   K1 soa et K5 tuned prennent leur version scalaire. }
 program ms;
 
-{$mode objfpc}{$H+}
+{$mode objfpc}{$H+}{$macro on}{$I sizes.inc} { tailles de la construction (v4, point 2) : sizes.inc, écrit par build.sh }
 {$pointermath on}
 {$inline on}
 
@@ -142,7 +142,7 @@ end;
 
 { ------------------------------------------------------------------ K1 }
 const
-  N1 = 1 shl 22;
+  N1 = MS_N1;
 
 type
   { enregistrement naturel : record (type valeur), rangé en ligne dans un tableau dynamique ; champs dans l'ordre
@@ -421,7 +421,7 @@ end;
 
 { ------------------------------------------------------------------ K4 }
 const
-  N4 = 1 shl 24;
+  N4 = MS_N4;
 
 function K4Natural(const v: TArrU8): QWord;
 var
@@ -485,7 +485,7 @@ end;
 
 { ------------------------------------------------------------------ K5 }
 const
-  INNER5 = 1 shl 16;
+  INNER5 = MS_INNER5;
 
 function K5Natural(const a, b: TArrS): Single;
 var
@@ -559,7 +559,7 @@ end;
 
 { ------------------------------------------------------------------ K6 }
 const
-  N6 = 1 shl 24;
+  N6 = MS_N6;
 
 type
   { colonnes naturelles : tableaux dynamiques }
@@ -809,8 +809,8 @@ end;
 
 { ------------------------------------------------------------------ K7 }
 const
-  N7 = 1 shl 24;
-  LOG7 = 21;
+  N7 = MS_N7;
+  LOG7 = MS_K7_LOG2 + 1;
   CAP7 = 1 shl LOG7;
   BATCH7 = 16;
 
@@ -1093,7 +1093,7 @@ end;
 procedure RunK8(const v: string; reps: Integer);
 const
   Q = 16384;
-  D = 10;
+  D = MS_K8_REQ;
 var
   tuned: Boolean;
   cnt, lsum, total, c, s: Int64;
@@ -1114,10 +1114,10 @@ begin
   cls := v = 'natural_cls';
   {$endif}
   cnt := 0;
-  longlived := TBuild(20, cnt);
+  longlived := TBuild(MS_K8_LONG, cnt);
   lsum := TSum(longlived);
   SetLength(lat, Q);
-  GetMem(arena, SizeOf(TANode) * 2047);
+  GetMem(arena, SizeOf(TANode) * ((2 shl D) - 1));
   for r := -Warmup to reps - 1 do
   begin
     total := 0;
@@ -1165,7 +1165,7 @@ end;
 
 { ------------------------------------------------------------------ K9 }
 const
-  M9 = 2048;
+  M9 = MS_M9;
   IT9 = 4;
 
 type

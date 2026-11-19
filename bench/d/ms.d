@@ -2,7 +2,7 @@
 import core.atomic;
 import core.memory : GC;
 import core.simd;
-import core.stdc.stdlib : aligned_alloc, free, malloc;
+import core.stdc.stdlib : aligned_alloc, free, malloc; mixin(import("sizes.inc"));
 import core.thread;
 import core.time : MonoTime;
 import ldc.attributes : llvmFastMathFlag;
@@ -39,7 +39,7 @@ void result(string k, string v, string p, int rep, double sec, string chk) {
 double secs(MonoTime t0) { return (MonoTime.currTime - t0).total!"nsecs" * 1e-9; }
 
 // ------------------------------------------------------------------ K1
-enum N1 = 1 << 22;
+enum N1 = SIZE_N1;
 struct Particle {
     float x, y, z, vx, vy, vz, ax, ay, az, mass, charge, radius, temp, pressure, energy, density;
 }
@@ -194,7 +194,7 @@ void runK4(string v, int reps) {
 }
 
 // ------------------------------------------------------------------ K5
-enum INNER5 = 1 << 16;
+enum INNER5 = SIZE_INNER5;
 pragma(inline, false) float k5Natural(const float[] a, const float[] b) {
     float s = 0;
     foreach (i; 0 .. a.length) s += a[i] * b[i];
@@ -232,7 +232,7 @@ void runK5(string v, int reps) {
 }
 
 // ------------------------------------------------------------------ K6
-enum N6 = 1 << 24;
+enum N6 = SIZE_N6;
 struct Cols { int[] sd, pr; ubyte[] q, d, t, rf, ls; }
 alias Q1Acc = long[5][6];
 pragma(inline, false) long q6Natural(const ref Cols c, size_t lo, size_t hi) {
@@ -328,7 +328,7 @@ void runK7(string v, int reps) {
             nk = m.length;
             foreach (k, e; m) ws += e.sum * ((k & 1023) + 1);
         } else {
-            enum LOG = 21, CAP = 1 << LOG;
+            enum LOG = SIZE_K7_LOG2 + 1, CAP = 1 << LOG;
             auto t0 = MonoTime.currTime;
             auto tab = cast(Slot*) aligned_alloc(64, CAP * Slot.sizeof);
             tab[0 .. CAP] = Slot.init;
@@ -374,17 +374,17 @@ void runK8(string v, int reps) {
     enum Q = 16384;
     bool tuned = v == "tuned";
     long c0 = 0;
-    keep = tBuild(20, c0);
+    keep = tBuild(SIZE_K8_LONG, c0);
     long lsum = tSum(keep);
     auto lat = new long[Q];
-    auto arena = cast(ANode*) malloc(ANode.sizeof * 2047);
+    auto arena = cast(ANode*) malloc(ANode.sizeof * ((2 << SIZE_K8_REQ) - 1));
     foreach (r; -WARMUP .. reps) {
         long total = 0;
         auto t0 = MonoTime.currTime;
         foreach (q; 0 .. Q) {
             auto a = MonoTime.currTime;
             long c = q, s;
-            if (tuned) { int top = 0; s = aSum(arena, aBuild(arena, top, 10, c)); } else s = tSum(tBuild(10, c));
+            if (tuned) { int top = 0; s = aSum(arena, aBuild(arena, top, SIZE_K8_REQ, c)); } else s = tSum(tBuild(SIZE_K8_REQ, c));
             total += s;
             lat[q] = (MonoTime.currTime - a).total!"nsecs";
         }
@@ -398,7 +398,7 @@ void runK8(string v, int reps) {
 }
 
 // ------------------------------------------------------------------ K9
-enum M9 = 2048;
+enum M9 = SIZE_M9;
 double k9Init(size_t i, size_t j) { return ((i * 31 + j * 17) % 1024) / 1024.0; }
 pragma(inline, false) void k9Natural(double[][] a, double[][] b) {
     foreach (i; 1 .. M9 - 1) foreach (j; 1 .. M9 - 1) b[i][j] = 0.25 * (((a[i - 1][j] + a[i + 1][j]) + a[i][j - 1]) + a[i][j + 1]);
@@ -516,3 +516,8 @@ void main(string[] args) {
         default: break;
     }
 }
+
+// ------------------------------------------------------------------ tailles
+// v4, point 2 (docs/V4_SIZES.md) : sizes.inc, écrit par build.sh à partir des variables MS_* (sans elles, les valeurs
+// publiées), est inséré à la compilation (import de chaîne, -J.) par le mixin ajouté au bout de la ligne de
+// core.stdc.stdlib, en tête de fichier, pour ne pas décaler les numéros de ligne.

@@ -1,8 +1,8 @@
-{-# LANGUAGE BangPatterns, MagicHash, UnboxedTuples, ScopedTypeVariables #-}
+{-# LANGUAGE BangPatterns, MagicHash, UnboxedTuples, ScopedTypeVariables, CPP #-}
 -- Implémentation Haskell (GHC 9.14.1, paquets livrés avec GHC seulement :
 -- base, ghc-prim, bytestring, array, containers). Voir docs/SPEC.md.
 module Main (main) where
-
+#include "sizes.h"
 import Control.Concurrent
 import Control.Monad
 import Data.Bits
@@ -64,7 +64,7 @@ bench k v p warm reps act = forM_ [-warm .. reps - 1] $ \r -> do
 
 -- ------------------------------------------------------------------ K1
 n1 :: Int
-n1 = 1 `shiftL` 22
+n1 = MS_N1
 
 -- enregistrement à champs stricts (GHC « déballe » les petits champs stricts)
 data Particle = Particle { px, py, pz, pvx, pvy, pvz, pax, pay, paz, pmass, pcharge, pradius, ptemp, ppressure, penergy, pdensity :: !Float }
@@ -237,10 +237,10 @@ runK4 v warm reps = do
 
 -- ------------------------------------------------------------------ K5
 inner5 :: Int
-inner5 = 1 `shiftL` 16
+inner5 = MS_INNER5; k5Hi = MS_N5 - 1 :: Int  -- k5Hi : pas de macro après une apostrophe (cpp traditionnel)
 
 k5Natural :: UArray Int Float -> UArray Int Float -> Float
-k5Natural a b = foldl' (\s i -> s + a ! i * b ! i) 0 [0 .. 2047]
+k5Natural a b = foldl' (\s i -> s + a ! i * b ! i) 0 [0 .. k5Hi]
 
 k5Tuned :: Ptr Float -> Ptr Float -> Int -> Float
 k5Tuned (Ptr a) (Ptr b) (I# n) = go 0# z z z z
@@ -268,13 +268,13 @@ runK5 v warm reps = do
     then withBuf bb $ \pb -> bench "k5" v "2048x65536" warm reps $ do
       let loop :: Int -> Float -> IO Float
           loop 0 d = return d
-          loop k _ = do Buf fa _ <- readIORef ref; d <- unsafeWithForeignPtr fa $ \pa -> return $! k5Tuned pa pb 2048; loop (k - 1) d
+          loop k _ = do Buf fa _ <- readIORef ref; d <- unsafeWithForeignPtr fa $ \pa -> return $! k5Tuned pa pb MS_N5; loop (k - 1) d
       printf "%.4f" <$> loop inner5 0
     else do
-      la <- withBuf ba $ \p -> forM [0 .. 2047] (peekElemOff p)
-      lb <- withBuf bb $ \p -> forM [0 .. 2047] (peekElemOff p)
-      aref <- newIORef (listArray (0, 2047) la :: UArray Int Float)
-      let ub = listArray (0, 2047) lb :: UArray Int Float
+      la <- withBuf ba $ \p -> forM [0 .. MS_N5 - 1] (peekElemOff p)
+      lb <- withBuf bb $ \p -> forM [0 .. MS_N5 - 1] (peekElemOff p)
+      aref <- newIORef (listArray (0, MS_N5 - 1) la :: UArray Int Float)
+      let ub = listArray (0, MS_N5 - 1) lb :: UArray Int Float
       bench "k5" v "2048x65536" warm reps $ do
         let loop :: Int -> Float -> IO Float
             loop 0 d = return d
@@ -283,7 +283,7 @@ runK5 v warm reps = do
 
 -- ------------------------------------------------------------------ K6
 n6 :: Int
-n6 = 1 `shiftL` 24
+n6 = MS_N6
 
 data Cols = Cols { csd, cpr :: !(Ptr Int32), cq, cd, ct, crf, cls :: !(Ptr Word8) }
 
@@ -376,7 +376,7 @@ runK7 v warm reps = do
   kB <- loadBuf "k7_keys.u32" :: IO (Buf Word32)
   vB <- loadBuf "k7_vals.u32" :: IO (Buf Word32)
   withBuf kB $ \keys -> withBuf vB $ \vals -> forM_ [-warm .. reps - 1] $ \r -> do
-    let n = 1 `shiftL` 24 :: Int
+    let n = MS_N7 :: Int
     (chk, dt) <-
       if v == "natural"
         then do
@@ -392,7 +392,7 @@ runK7 v warm reps = do
           let ws = IM.foldlWithKey' (\a k (_, s) -> a + s * ((k .&. 1023) + 1)) 0 m
           return (show (IM.size m) ++ ":" ++ show ws, dt)
         else do
-          let logc = 21 :: Int; cap = 1 `shiftL` logc :: Int
+          let logc = MS_K7_LOG2 + 1 :: Int; cap = 1 `shiftL` logc :: Int
           (tab, dt) <- timed $ do
             fp <- mallocPlainForeignPtrAlignedBytes (cap * 16) 64 :: IO (ForeignPtr Word8)
             unsafeWithForeignPtr fp $ \t -> do
@@ -461,9 +461,9 @@ aSum av al ar i
 runK8 :: String -> Int -> Int -> IO ()
 runK8 v warm reps = do
   let q = 16384 :: Int
-      (keep, _) = tBuild 20 0
+      (keep, _) = tBuild MS_K8_LONG 0
       !lsum = tSum keep
-  fv <- mallocForeignPtrArray 2047; fl <- mallocForeignPtrArray 2047; fr <- mallocForeignPtrArray 2047
+  fv <- mallocForeignPtrArray ((2 `shiftL` MS_K8_REQ) - 1); fl <- mallocForeignPtrArray ((2 `shiftL` MS_K8_REQ) - 1); fr <- mallocForeignPtrArray ((2 `shiftL` MS_K8_REQ) - 1)
   top <- newIORef 0
   unsafeWithForeignPtr fv $ \av -> unsafeWithForeignPtr fl $ \al -> unsafeWithForeignPtr fr $ \ar ->
     forM_ [-warm .. reps - 1] $ \r -> do
@@ -471,8 +471,8 @@ runK8 v warm reps = do
       (total, lat) <- foldM (\(!tot, ls) qq -> do
         a <- getMonotonicTimeNSec
         !s <- if v == "tuned"
-          then do writeIORef top 0; (root, _) <- aBuild av al ar top 10 qq; aSum av al ar root
-          else return $! tSum (fst (tBuild 10 qq))
+          then do writeIORef top 0; (root, _) <- aBuild av al ar top MS_K8_REQ qq; aSum av al ar root
+          else return $! tSum (fst (tBuild MS_K8_REQ qq))
         b <- getMonotonicTimeNSec
         return (tot + s, (b - a) : ls)) (0, []) [0 .. q - 1]
       t1 <- getMonotonicTimeNSec
@@ -484,7 +484,7 @@ runK8 v warm reps = do
 
 -- ------------------------------------------------------------------ K9
 m9 :: Int
-m9 = 2048
+m9 = MS_M9
 
 k9Init :: Int -> Int -> Double
 k9Init i j = fromIntegral ((i * 31 + j * 17) `mod` 1024) / 1024

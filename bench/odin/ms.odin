@@ -35,7 +35,7 @@ result :: proc(k, v, p: string, rep: int, sec: f64, chk: string) {
 secs :: proc(t0: time.Tick) -> f64 {return time.duration_seconds(time.tick_since(t0))}
 
 // ------------------------------------------------------------------ K1
-N1 :: 1 << 22
+N1 :: #config(MS_N1, 1 << 22)
 Particle :: struct {
 	x, y, z, vx, vy, vz, ax, ay, az, mass, charge, radius, temp, pressure, energy, density: f32,
 }
@@ -212,7 +212,7 @@ run_k4 :: proc(v: string, reps: int) {
 }
 
 // ------------------------------------------------------------------ K5
-INNER5 :: 1 << 16
+INNER5 :: #config(MS_INNER5, 1 << 16)
 k5_natural :: proc(a, b: []f32) -> f32 {
 	s: f32
 	for i in 0 ..< len(a) do s += a[i] * b[i]
@@ -248,7 +248,7 @@ run_k5 :: proc(v: string, reps: int) {
 }
 
 // ------------------------------------------------------------------ K6
-N6 :: 1 << 24
+N6 :: #config(MS_N6, 1 << 24)
 Cols :: struct {
 	sd, pr:          []i32,
 	q, d, t, rf, ls: []u8,
@@ -392,7 +392,7 @@ run_k7 :: proc(v: string, reps: int) {
 			for k, e in m do ws += e.sum * u64((k & 1023) + 1)
 			delete(m)
 		} else {
-			LOG :: 21
+			LOG :: K7_LOG2 + 1
 			CAP :: 1 << LOG
 			t0 := time.tick_now()
 			tab, _ := mem.make_aligned([]Slot, CAP, 64)
@@ -437,7 +437,7 @@ ANode :: struct {
 	v:    i64,
 	l, r: i32,
 }
-a_build :: proc(a: ^[2047]ANode, top: ^i32, d: int, c: ^i64) -> i32 #no_bounds_check {
+a_build :: proc(a: ^[K8_NODES]ANode, top: ^i32, d: int, c: ^i64) -> i32 #no_bounds_check {
 	i := top^
 	top^ += 1
 	a[i] = {c^, -1, -1}
@@ -445,13 +445,13 @@ a_build :: proc(a: ^[2047]ANode, top: ^i32, d: int, c: ^i64) -> i32 #no_bounds_c
 	if d > 0 {l := a_build(a, top, d - 1, c); a[i].l = l; a[i].r = a_build(a, top, d - 1, c)}
 	return i
 }
-a_sum :: proc(a: ^[2047]ANode, i: i32) -> i64 #no_bounds_check {return i < 0 ? 0 : a[i].v + a_sum(a, a[i].l) + a_sum(a, a[i].r)}
+a_sum :: proc(a: ^[K8_NODES]ANode, i: i32) -> i64 #no_bounds_check {return i < 0 ? 0 : a[i].v + a_sum(a, a[i].l) + a_sum(a, a[i].r)}
 run_k8 :: proc(v: string, reps: int) {
 	Q :: 16384
 	tuned, talloc := v == "tuned", v == "tuned_alloc"
-	arena := new([2047]ANode)
+	arena := new([K8_NODES]ANode)
 	c0: i64
-	keep := t_build(20, &c0)
+	keep := t_build(K8_LONG, &c0)
 	lsum := t_sum(keep)
 	lat := make([]i64, Q)
 	for r := -WARMUP; r < reps; r += 1 {
@@ -463,15 +463,15 @@ run_k8 :: proc(v: string, reps: int) {
 			s: i64
 			if tuned { // nœuds compacts indexés dans un tableau réutilisé (DOD)
 				top: i32 = 0
-				s = a_sum(arena, a_build(arena, &top, 10, &c))
+				s = a_sum(arena, a_build(arena, &top, K8_REQ, &c))
 			} else if talloc {
 				// arène : idiome Odin « par trame » -> allocateur temporaire du contexte,
 				// libéré en bloc (l'arène vmem.Arena, protégée par mutex, est 2x plus lente : mesuré)
 				context.allocator = context.temp_allocator
-				s = t_sum(t_build(10, &c))
+				s = t_sum(t_build(K8_REQ, &c))
 				free_all(context.temp_allocator)
 			} else {
-				t := t_build(10, &c)
+				t := t_build(K8_REQ, &c)
 				s = t_sum(t)
 				t_free(t)
 			}
@@ -489,7 +489,7 @@ run_k8 :: proc(v: string, reps: int) {
 }
 
 // ------------------------------------------------------------------ K9
-M9 :: 2048
+M9 :: #config(MS_M9, 2048)
 k9_init :: proc(i, j: int) -> f64 {return f64((i * 31 + j * 17) % 1024) / 1024.0}
 // naturel : tableau 2D de taille fixe (contigu)
 k9_natural :: proc(a, b: ^[M9][M9]f64) {
@@ -642,3 +642,11 @@ main :: proc() {
 	case "k10": run_k10(v, reps)
 	}
 }
+
+// ------------------------------------------------------------------ tailles
+// v4, point 2 (docs/V4_SIZES.md) : constantes redéfinissables à la construction (-define:MS_…=…, build.sh) ; sans
+// elles, les valeurs publiées. En fin de fichier pour ne pas décaler les numéros de ligne.
+K7_LOG2 :: #config(MS_K7_LOG2, 20)
+K8_LONG :: #config(MS_K8_LONG, 20)
+K8_REQ :: #config(MS_K8_REQ, 10)
+K8_NODES :: (2 << K8_REQ) - 1

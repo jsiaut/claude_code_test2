@@ -39,7 +39,7 @@ static unsafe class Ms
     }
 
     // ------------------------------------------------------------------ K1
-    const int N1 = 1 << 22;
+    const int N1 = Sizes.N1;
     // naturel : classe (les directives .NET recommandent une classe au-delà de 16 octets)
     sealed class Particle
     {
@@ -208,7 +208,7 @@ static unsafe class Ms
     }
 
     // ------------------------------------------------------------------ K5
-    const int INNER5 = 1 << 16;
+    const int INNER5 = Sizes.INNER5;
     [MethodImpl(MethodImplOptions.NoInlining)]
     static float K5Natural(float[] a, float[] b) { float s = 0; for (int i = 0; i < a.Length; i++) s += a[i] * b[i]; return s; }
     [MethodImpl(MethodImplOptions.NoInlining)]
@@ -238,7 +238,7 @@ static unsafe class Ms
     }
 
     // ------------------------------------------------------------------ K6
-    const int N6 = 1 << 24;
+    const int N6 = Sizes.N6;
     static int[] sd = null!, pr = null!; static byte[] q = null!, d = null!, t = null!, rf = null!, ls = null!;
     [MethodImpl(MethodImplOptions.NoInlining)]
     static long Q6Natural(int lo, int hi)
@@ -382,7 +382,7 @@ static unsafe class Ms
             }
             else
             {
-                const int LOG = 21, CAP = 1 << LOG, B = 16;
+                const int LOG = Sizes.K7_LOG2 + 1, CAP = 1 << LOG, B = 16;
                 long t0 = Stopwatch.GetTimestamp();
                 var tab = new Slot[CAP];
                 Span<uint> h = stackalloc uint[B];
@@ -412,7 +412,7 @@ static unsafe class Ms
     static Node TBuild(int dp) { var n = new Node { V = cnt8++ }; if (dp > 0) { n.L = TBuild(dp - 1); n.R = TBuild(dp - 1); } return n; }
     static long TSum(Node? n) => n == null ? 0 : n.V + TSum(n.L) + TSum(n.R);
     struct ANode { public long V; public int L, R; }
-    static readonly ANode[] arena = new ANode[2047]; static int top;
+    static readonly ANode[] arena = new ANode[(2 << Sizes.K8_REQ) - 1]; static int top;
     static int ABuild(int dp)
     {
         int i = top++; arena[i].V = cnt8++; arena[i].L = arena[i].R = -1;
@@ -424,7 +424,7 @@ static unsafe class Ms
     static void RunK8(string v, int reps)
     {
         const int Q = 16384;
-        cnt8 = 0; keep = TBuild(20); long lsum = TSum(keep);
+        cnt8 = 0; keep = TBuild(Sizes.K8_LONG); long lsum = TSum(keep);
         var lat = new long[Q];
         bool tuned = v == "tuned";
         for (int r = -Warmup; r < reps; r++)
@@ -435,7 +435,7 @@ static unsafe class Ms
             {
                 long a = Stopwatch.GetTimestamp();
                 cnt8 = qq;
-                long s = tuned ? (top = 0) + ASum(ABuild(10)) : TSum(TBuild(10));
+                long s = tuned ? (top = 0) + ASum(ABuild(Sizes.K8_REQ)) : TSum(TBuild(Sizes.K8_REQ));
                 total += s;
                 lat[qq] = (long)Stopwatch.GetElapsedTime(a).TotalNanoseconds;
             }
@@ -451,7 +451,7 @@ static unsafe class Ms
     }
 
     // ------------------------------------------------------------------ K9
-    const int M9 = 2048;
+    const int M9 = Sizes.M9;
     static double K9Init(int i, int j) => ((i * 31 + j * 17) % 1024) / 1024.0;
     [MethodImpl(MethodImplOptions.NoInlining)]
     static void K9Natural(double[,] inp, double[,] outp)

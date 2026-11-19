@@ -227,7 +227,7 @@ fn run_k4(v: &str, reps: i32) {
 }
 
 // ------------------------------------------------------------------ K5
-const INNER5: usize = 1 << 16;
+const INNER5: usize = size_or(option_env!("MS_INNER5"), 1 << 16);
 #[inline(never)]
 fn k5_natural(a: &[f32], b: &[f32]) -> f32 {
     a.iter().zip(b).map(|(x, y)| x * y).sum()
@@ -264,7 +264,7 @@ fn run_k5(v: &str, reps: i32) {
 }
 
 // ------------------------------------------------------------------ K6
-const N6: usize = 1 << 24;
+const N6: usize = size_or(option_env!("MS_N6"), 1 << 24);
 struct Cols { sd: Vec<i32>, pr: Vec<i32>, q: Vec<u8>, d: Vec<u8>, t: Vec<u8>, rf: Vec<u8>, ls: Vec<u8> }
 type Q1Acc = [[i64; 5]; 6];
 
@@ -417,7 +417,7 @@ fn run_k7(v: &str, reps: i32) {
             nk = m.len() as u64;
             ws = m.iter().map(|(&k, &(_, s))| s * ((k & 1023) as u64 + 1)).sum::<u64>();
         } else {
-            const LOG: u32 = 21;
+            const LOG: u32 = size_or(option_env!("MS_K7_LOG2"), 20) as u32 + 1;
             const CAP: usize = 1 << LOG;
             let t0 = Instant::now();
             let mut tab = vec![Slot7::default(); CAP];
@@ -481,10 +481,10 @@ fn run_k8(v: &str, reps: i32) {
     const Q: usize = 16384;
     let tuned = v == "tuned";
     let mut c0 = 0i64;
-    let long = t_build(20, &mut c0);
+    let long = t_build(K8_LONG, &mut c0);
     let lsum = t_sum(&long);
     let mut lat = vec![0u64; Q];
-    let mut arena: Vec<ANode> = Vec::with_capacity(2047);
+    let mut arena: Vec<ANode> = Vec::with_capacity((2 << K8_REQ) - 1);
     for r in -warmup()..reps {
         let mut total = 0i64;
         let t0 = Instant::now();
@@ -493,10 +493,10 @@ fn run_k8(v: &str, reps: i32) {
             let mut c = q as i64;
             let s = if tuned {
                 arena.clear(); // réutilise la capacité : aucune allocation
-                let root = a_build(&mut arena, 10, &mut c);
+                let root = a_build(&mut arena, K8_REQ, &mut c);
                 a_sum(&arena, root)
             } else {
-                let t = t_build(10, &mut c);
+                let t = t_build(K8_REQ, &mut c);
                 t_sum(&t) // libéré à la sortie de portée
             };
             total += s;
@@ -513,7 +513,7 @@ fn run_k8(v: &str, reps: i32) {
 }
 
 // ------------------------------------------------------------------ K9
-const M9: usize = 2048;
+const M9: usize = size_or(option_env!("MS_M9"), 2048);
 fn k9_init(i: usize, j: usize) -> f64 {
     ((i * 31 + j * 17) % 1024) as f64 / 1024.0
 }
@@ -677,3 +677,24 @@ fn main() {
         _ => panic!("kernel inconnu"),
     }
 }
+
+// ------------------------------------------------------------------ tailles
+// v4, point 2 (docs/V4_SIZES.md) : constantes de compilation, redéfinissables à la construction par les variables
+// MS_* (option_env!) ; sans elles, les valeurs publiées. Placées en fin de fichier pour que les numéros de ligne
+// des messages de panique, donc le binaire publié, ne changent pas.
+const fn size_or(v: Option<&str>, d: usize) -> usize {
+    match v {
+        None => d,
+        Some(s) => {
+            let b = s.as_bytes();
+            let (mut i, mut n) = (0, 0usize);
+            while i < b.len() {
+                n = n * 10 + (b[i] - b'0') as usize;
+                i += 1;
+            }
+            n
+        }
+    }
+}
+const K8_LONG: u32 = size_or(option_env!("MS_K8_LONG"), 20) as u32;
+const K8_REQ: u32 = size_or(option_env!("MS_K8_REQ"), 10) as u32;

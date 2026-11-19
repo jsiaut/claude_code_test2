@@ -8,10 +8,12 @@ cd "$(dirname "$0")"
 export CHPL_HOME=/opt/src/chapel CHPL_LLVM=system CHPL_LLVM_CONFIG=/usr/bin/llvm-config-22 CHPL_TARGET_CPU=native
 export CHPL_COMM=none CHPL_RE2=none CHPL_GMP=none CHPL_UNWIND=none CHPL_LIB_PIC=none
 CHPL=$CHPL_HOME/bin/linux64-x86_64/chpl
-$CHPL --fast ms.chpl -o ms_nat
+# Tailles redéfinissables (v4, point 2 : docs/V4_SIZES.md) ; sans variable MS_*, les binaires publiés
+DEFS=$(env | grep -E '^MS_(N1|INNER5|N6|N7|K7_LOG2|K8_LONG|K8_REQ|M9)=' | sed 's/^/-s/' | tr '\n' ' ')
+$CHPL --fast $DEFS ms.chpl -o ms_nat
 # chpl ne transmet pas -mprefer-vector-width à son générateur LLVM (vérifié : binaire inchangé) ;
 # on retire la préférence 256 bits du CPU cible via un attribut de cible clang.
 V512='-Xclang -target-feature -Xclang -prefer-256-bit'
-$CHPL --fast --ccflags "$V512" ms.chpl -o ms_tuned
+$CHPL --fast $DEFS --ccflags "$V512" ms.chpl -o ms_tuned
 # réductions flottantes réassociables (k1 aos/soa, k5 tuned) : en plus --no-ieee-float (global dans chpl)
-$CHPL --fast --no-ieee-float --ccflags "$V512" ms.chpl -o ms_fm
+$CHPL --fast $DEFS --no-ieee-float --ccflags "$V512" ms.chpl -o ms_fm

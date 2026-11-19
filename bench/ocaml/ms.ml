@@ -24,7 +24,7 @@ let bench k v p reps f =
   done
 
 (* ------------------------------------------------------------------ K1 *)
-let n1 = 1 lsl 22
+let n1 = MS_N1
 
 (* enregistrement uniquement flottant : OCaml le stocke « à plat » (16 doubles), mais un
    tableau d'enregistrements reste un tableau de pointeurs *)
@@ -170,7 +170,7 @@ let run_k4 v reps =
   bench "k4" v "16M" reps (fun () -> string_of_int (f d))
 
 (* ------------------------------------------------------------------ K5 *)
-let inner5 = 1 lsl 16
+let inner5 = MS_INNER5
 
 let[@inline never] k5_natural (a : (float, float32_elt, c_layout) Array1.t) (b : (float, float32_elt, c_layout) Array1.t) =
   let s = ref 0.0 in
@@ -197,7 +197,7 @@ let run_k5 v reps =
     Printf.sprintf "%.4f" !d)
 
 (* ------------------------------------------------------------------ K6 *)
-let n6 = 1 lsl 24
+let n6 = MS_N6
 
 type cols = { sd : (int32, int32_elt, c_layout) Array1.t; pr : (int32, int32_elt, c_layout) Array1.t;
               q : (int, int8_unsigned_elt, c_layout) Array1.t; d : (int, int8_unsigned_elt, c_layout) Array1.t;
@@ -283,7 +283,7 @@ let run_k7 v reps =
         let dt = now () -. t0 in
         (Hashtbl.length h, Hashtbl.fold (fun k e s -> s + (e.sum * ((k land 1023) + 1))) h 0, dt)
       end else begin
-        let logc = 21 in
+        let logc = MS_K7_LOG in
         let cap = 1 lsl logc in
         let t0 = now () in
         (* AoS manuel dans un int array : [clé; compteur; somme] par case *)
@@ -320,7 +320,7 @@ let rec t_build d c = if d = 0 then (Node (!c, Leaf, Leaf) |> fun n -> incr c; n
 let rec t_sum = function Leaf -> 0 | Node (v, l, r) -> v + t_sum l + t_sum r
 
 (* arène : tableaux d'entiers réutilisés, nœuds indexés *)
-let av = Array.make 2047 0 and al = Array.make 2047 0 and ar = Array.make 2047 0
+let av = Array.make MS_K8_NODES 0 and al = Array.make MS_K8_NODES 0 and ar = Array.make MS_K8_NODES 0
 
 let rec a_build top d c =
   let i = !top in
@@ -338,7 +338,7 @@ let rec a_sum i = if i < 0 then 0 else Array.unsafe_get av i + a_sum (Array.unsa
 
 let run_k8 v reps =
   let q = 16384 in
-  let keep = t_build 20 (ref 0) in
+  let keep = t_build MS_K8_LONG (ref 0) in
   let lsum = t_sum keep in
   let lat = Array.make q 0.0 in
   for r = -warmup to reps - 1 do
@@ -347,7 +347,7 @@ let run_k8 v reps =
     for qq = 0 to q - 1 do
       let a = now () in
       let c = ref qq in
-      let s = if v = "tuned" then a_sum (a_build (ref 0) 10 c) else t_sum (t_build 10 c) in
+      let s = if v = "tuned" then a_sum (a_build (ref 0) MS_K8_REQ c) else t_sum (t_build MS_K8_REQ c) in
       total := !total + s;
       lat.(qq) <- (now () -. a) *. 1e9
     done;
@@ -361,7 +361,7 @@ let run_k8 v reps =
   ignore (Sys.opaque_identity keep)
 
 (* ------------------------------------------------------------------ K9 *)
-let m9 = 2048
+let m9 = MS_M9
 let k9_init i j = float_of_int (((i * 31) + (j * 17)) mod 1024) /. 1024.0
 
 (* naturel : float array array (chaque ligne est un tableau de flottants « à plat ») *)

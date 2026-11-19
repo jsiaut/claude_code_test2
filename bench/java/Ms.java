@@ -43,7 +43,7 @@ public class Ms {
     static final VectorSpecies<Byte> BS = ByteVector.SPECIES_128;
 
     // ------------------------------------------------------------------ K1
-    static final int N1 = 1 << 22;
+    static final int N1 = Sizes.N1;
     // type enregistrement par défaut de Java moderne : record (objet sur le tas)
     record Particle(float x, float y, float z, float vx, float vy, float vz, float ax, float ay, float az,
                     float mass, float charge, float radius, float temp, float pressure, float energy, float density) {}
@@ -179,7 +179,7 @@ public class Ms {
     }
 
     // ------------------------------------------------------------------ K5
-    static final int INNER5 = 1 << 16;
+    static final int INNER5 = Sizes.INNER5;
     static float k5Natural(float[] a, float[] b) { float s = 0; for (int i = 0; i < a.length; i++) s += a[i] * b[i]; return s; }
     static float k5Tuned(float[] a, float[] b) {
         FloatVector s0 = FloatVector.zero(FS), s1 = s0, s2 = s0, s3 = s0;
@@ -204,7 +204,7 @@ public class Ms {
     }
 
     // ------------------------------------------------------------------ K6
-    static final int N6 = 1 << 24;
+    static final int N6 = Sizes.N6;
     static int[] sd, pr; static byte[] q, d, t, rf, ls;
     static long q6Natural(int lo, int hi) {
         long s = 0;
@@ -318,7 +318,7 @@ public class Ms {
                 nk = m.size();
                 for (var e : m.entrySet()) ws += e.getValue().sum * ((e.getKey() & 1023) + 1);
             } else {
-                final int LOG = 21, CAP = 1 << LOG;
+                final int LOG = Sizes.K7_LOG2 + 1, CAP = 1 << LOG;
                 long t0 = System.nanoTime();
                 // AoS manuel dans un long[] : [clé<<32 | compteur, somme] = 16 o par case, comme en C
                 long[] tab = new long[2 * CAP];
@@ -346,7 +346,7 @@ public class Ms {
     static Node tBuild(int dpt) { Node n = new Node(); n.v = cnt8++; if (dpt > 0) { n.l = tBuild(dpt - 1); n.r = tBuild(dpt - 1); } return n; }
     static long tSum(Node n) { return n == null ? 0 : n.v + tSum(n.l) + tSum(n.r); }
     // arène SoA indexée, réutilisée à chaque requête
-    static final long[] av = new long[2047]; static final int[] al = new int[2047], ar = new int[2047]; static int top;
+    static final long[] av = new long[(2 << Sizes.K8_REQ) - 1]; static final int[] al = new int[(2 << Sizes.K8_REQ) - 1], ar = new int[(2 << Sizes.K8_REQ) - 1]; static int top;
     static int aBuild(int dpt) {
         int i = top++; av[i] = cnt8++; al[i] = ar[i] = -1;
         if (dpt > 0) { al[i] = aBuild(dpt - 1); ar[i] = aBuild(dpt - 1); }
@@ -356,7 +356,7 @@ public class Ms {
     static Node keep;
     static void runK8(String v, int reps) {
         final int Q = 16384;
-        cnt8 = 0; keep = tBuild(20); long lsum = tSum(keep);
+        cnt8 = 0; keep = tBuild(Sizes.K8_LONG); long lsum = tSum(keep);
         long[] lat = new long[Q];
         boolean tuned = v.equals("tuned");
         for (int r = -warmup(); r < reps; r++) {
@@ -366,7 +366,7 @@ public class Ms {
                 long a = System.nanoTime();
                 cnt8 = qq;
                 long s;
-                if (tuned) { top = 0; s = aSum(aBuild(10)); } else s = tSum(tBuild(10));
+                if (tuned) { top = 0; s = aSum(aBuild(Sizes.K8_REQ)); } else s = tSum(tBuild(Sizes.K8_REQ));
                 total += s;
                 lat[qq] = System.nanoTime() - a;
             }
@@ -380,7 +380,7 @@ public class Ms {
     }
 
     // ------------------------------------------------------------------ K9
-    static final int M9 = 2048;
+    static final int M9 = Sizes.M9;
     static double k9Init(int i, int j) { return ((i * 31 + j * 17) % 1024) / 1024.0; }
     static void k9Natural(double[][] in, double[][] out) {
         for (int i = 1; i < M9 - 1; i++)

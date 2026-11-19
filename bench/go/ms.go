@@ -58,7 +58,7 @@ func bench(k, v, p string, reps int, f func() string) {
 }
 
 // ------------------------------------------------------------------ K1
-const N1 = 1 << 22
+const N1 = sizeN1
 
 type Particle struct {
 	X, Y, Z, Vx, Vy, Vz, Ax, Ay, Az, Mass, Charge, Radius, Temp, Pressure, Energy, Density float32
@@ -289,7 +289,7 @@ func runK4(v string, reps int) {
 }
 
 // ------------------------------------------------------------------ K5
-const INNER5 = 1 << 16
+const INNER5 = sizeInner5
 
 //go:noinline
 func k5Natural(a, b []float32) float32 {
@@ -339,7 +339,7 @@ func runK5(v string, reps int) {
 }
 
 // ------------------------------------------------------------------ K6
-const N6 = 1 << 24
+const N6 = sizeN6
 
 type Cols struct {
 	sd, pr          []int32
@@ -514,7 +514,7 @@ func runK7(v string, reps int) {
 				ws += e.sum * uint64(k&1023+1)
 			}
 		} else {
-			const LOG = 21
+			const LOG = sizeK7Log2 + 1
 			const CAP = 1 << LOG
 			t0 := time.Now()
 			tab := make([]slot, CAP)
@@ -593,10 +593,10 @@ var keepAlive *Node
 func runK8(v string, reps int) {
 	const Q = 16384
 	c0 := int64(0)
-	keepAlive = tBuild(20, &c0)
+	keepAlive = tBuild(sizeK8Long, &c0)
 	lsum := tSum(keepAlive)
 	lat := make([]int64, Q)
-	arena := make([]ANode, 0, 2047)
+	arena := make([]ANode, 0, (2<<sizeK8Req)-1)
 	for r := -warmup(); r < reps; r++ {
 		total := int64(0)
 		t0 := time.Now()
@@ -606,10 +606,10 @@ func runK8(v string, reps int) {
 			var s int64
 			if v == "tuned" {
 				arena = arena[:0]
-				root := aBuild(&arena, 10, &c)
+				root := aBuild(&arena, sizeK8Req, &c)
 				s = aSum(arena, root)
 			} else {
-				s = tSum(tBuild(10, &c))
+				s = tSum(tBuild(sizeK8Req, &c))
 			}
 			total += s
 			lat[q] = int64(time.Since(a))
@@ -624,7 +624,7 @@ func runK8(v string, reps int) {
 }
 
 // ------------------------------------------------------------------ K9
-const M9 = 2048
+const M9 = sizeM9
 
 func k9Init(i, j int) float64 { return float64((i*31+j*17)%1024) / 1024.0 }
 

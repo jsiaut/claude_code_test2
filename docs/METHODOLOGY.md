@@ -1564,3 +1564,19 @@ Robustesse :
   C++ C4, Nim C5, Julia B4). `analysis/capabilities_md.py` : état de preuve par classe. README : en-tête, Haskell
   (tableau, contrôle, paragraphe), Go devant Haskell, rang moyen de Zig, état de preuve de la grille, errata, liens et
   commandes de reproduction.
+* 2026-11-19, 10:25 à 11:40 : **v4, point 2 : tailles redéfinissables, écart au plan** (`docs/V4_SIZES.md`, 4.1 ;
+  `tools/sizes/`). Écart, avant toute mesure : les tailles ne sont pas lues dans l'environnement, ce qui aurait changé
+  le code mesuré même à la taille publiée, mais restent des constantes de compilation, redéfinissables à la
+  construction (19 langages compilés, un mécanisme par langage, aucune ligne décalée) ; les 6 langages interprétés ou
+  à JIT gardent leur source publié, et la copie d'un jeu de tailles en remplace les seules constantes de taille
+  (`tools/sizes/patches.py`). Contrôle avant mesure, chaque binaire publié reconstruit sur la machine 30 contre celui
+  du source d'origine : identiques octet pour octet pour C, C++, Rust, D, Fortran, Mojo, FreePascal, OCaml ; segments
+  chargés identiques pour Zig, Nim, Haskell, Ada, Swift, C3 ; IL de C# et bytecode de Java identiques une fois les
+  références résolues ; instructions identiques mais disposées autrement pour Odin, Chapel et Go, seuls langages qui
+  gardent le contrôle des anciens binaires. `MS_K7_LOG2` et `MS_K7_NB` remplacent `MS_K7_KEYS`. Mojo fixe le
+  répertoire de ses données à la compilation : vues de liens par jeu. Campagne : ordre aléatoire par groupes (noyau,
+  taille), puis par langages dans chaque groupe, pour qu'une seule taille d'un seul noyau occupe `/dev/shm`. Erreurs
+  trouvées par la validation et corrigées avant toute mesure : un appel `P_Build (10, C)` d'Ada (variante
+  tuned_alloc) avait échappé au remplacement ; Mojo lisait ses données au chemin publié ; les bornes de K5 de Haskell
+  étaient écrites en dur (2047). Constat de construction : le cache `nimcache` de Nim gardait des objets compilés sur
+  un autre hôte ; toutes les constructions de la campagne partent de sources propres, sur la machine 30.

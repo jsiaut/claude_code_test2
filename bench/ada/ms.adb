@@ -107,7 +107,7 @@ procedure Ms is
    Sink : Float := 0.0 with Volatile;
 
    ---------------------------------------------------------------- K1
-   N1 : constant := 4_194_304;
+   N1 : constant := $MS_N1;
    type Particle is record
       X, Y, Z, Vx, Vy, Vz, Ax, Ay, Az, Mass, Charge, Radius, Temp, Pressure, Energy, Density : Float;
    end record;
@@ -454,7 +454,7 @@ procedure Ms is
    begin
       for R in -Warm .. Reps - 1 loop
          T0 := Now;
-         for It in 1 .. 65_536 loop
+         for It in 1 .. $MS_INNER5 loop
             A (0) := A (0) + Zero;  --  écriture opaque : empêche de sortir le calcul de la boucle
             D := (if V = "tuned" then K5_Tuned (A.all, B.all) else K5_Natural (A.all, B.all));
             Sink := D;
@@ -467,7 +467,7 @@ procedure Ms is
    end Run_K5;
 
    ---------------------------------------------------------------- K6
-   N6 : constant := 16_777_216;
+   N6 : constant := $MS_N6;
    type Cols6 is record
       Sd, Pr : I32_Acc;
       Q, D, T, Rf, Ls : U8_Acc;
@@ -641,7 +641,7 @@ procedure Ms is
    end Run_K6;
 
    ---------------------------------------------------------------- K7
-   N7 : constant := 16_777_216;
+   N7 : constant := $MS_N7;
    type Agg is record
       Count : Unsigned_32 := 0;
       Sum   : Unsigned_64 := 0;
@@ -691,7 +691,7 @@ procedure Ms is
          else  --  adressage ouvert, sondage linéaire, hachage de Fibonacci, lots préchargés
             declare
                pragma Suppress (All_Checks);
-               LOG   : constant := 21;
+               LOG   : constant := $MS_K7_LOG2 + 1;
                CAP   : constant := 2 ** LOG;
                BATCH : constant := 16;
                Tab   : Slot_Acc;
@@ -767,7 +767,7 @@ procedure Ms is
       V    : Integer_64;
       L, R : Integer_32;
    end record;
-   Arena : array (0 .. 2046) of ANode;
+   Arena : array (0 .. 2 * 2 ** $MS_K8_REQ - 2) of ANode;
    function A_Build (Top : in out Integer_32; D : Natural; C : in out Integer_64) return Integer_32 is
       pragma Suppress (All_Checks);
       I : constant Integer_32 := Top;
@@ -794,7 +794,7 @@ procedure Ms is
 
    --  tuned_alloc : pool de stockage utilisateur (System.Storage_Pools), allocation par incrément
    type Bump_Pool is new Root_Storage_Pool with record
-      Buf : Storage_Array (1 .. 65_536);
+      Buf : Storage_Array (1 .. 64 * 2 ** $MS_K8_REQ);
       Top : Storage_Offset := 0;
    end record;
    overriding procedure Allocate (Pool : in out Bump_Pool; Addr : out Address; Size : Storage_Count;
@@ -836,7 +836,7 @@ procedure Ms is
       type Lat_Arr is array (0 .. Q - 1) of Integer_64;
       Lat : Lat_Arr;
       Cnt : Integer_64 := 0;
-      Keep : Node_Ptr := T_Build (20, Cnt);
+      Keep : Node_Ptr := T_Build ($MS_K8_LONG, Cnt);
       LSum : constant Integer_64 := T_Sum (Keep);
       Total, C, S, A : Integer_64;
       T0, T1 : Long_Float;
@@ -876,16 +876,16 @@ procedure Ms is
             if V = "tuned" then
                declare
                   Top  : Integer_32 := 0;
-                  Root : constant Integer_32 := A_Build (Top, 10, C);
+                  Root : constant Integer_32 := A_Build (Top, $MS_K8_REQ, C);
                begin
                   S := A_Sum (Root);
                end;
             elsif V = "tuned_alloc" then
                Pool.Top := 0;  --  libération en bloc
-               S := P_Sum (P_Build (10, C));
+               S := P_Sum (P_Build ($MS_K8_REQ, C));
             else
                declare
-                  Tr : Node_Ptr := T_Build (10, C);
+                  Tr : Node_Ptr := T_Build ($MS_K8_REQ, C);
                begin
                   S := T_Sum (Tr);
                   T_Free (Tr);
@@ -906,7 +906,7 @@ procedure Ms is
    end Run_K8;
 
    ---------------------------------------------------------------- K9
-   M9 : constant := 2048;
+   M9 : constant := $MS_M9;
    type Grid is array (Natural range <>, Natural range <>) of Long_Float with Alignment => 64;
    type Grid_Acc is access Grid;
    procedure K9_Init (G : out Grid) is

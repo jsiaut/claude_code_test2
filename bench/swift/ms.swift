@@ -81,7 +81,7 @@ func runThreads(_ n: Int, _ body: @escaping @Sendable (Int) -> Void) {
 }
 
 // ------------------------------------------------------------------ K1
-let N1 = 1 << 22
+let N1 = SIZE_N1
 /// Enregistrement naturel : struct (type valeur, recommandé par défaut), rangé en ligne dans un Array.
 /// L'ordre des champs d'une struct Swift n'est pas garanti : construction champ par champ.
 struct Particle {
@@ -285,7 +285,7 @@ func runK4(_ v: String, _ reps: Int) {
 }
 
 // ------------------------------------------------------------------ K5
-let INNER5 = 1 << 16
+let INNER5 = SIZE_INNER5
 let sink = Atomic<UInt32>(0)
 @inline(never) func k5Natural(_ a: [Float], _ b: [Float]) -> Float {
     var s: Float = 0
@@ -322,7 +322,7 @@ func runK5(_ v: String, _ reps: Int) {
 }
 
 // ------------------------------------------------------------------ K6
-let N6 = 1 << 24
+let N6 = SIZE_N6
 /// Colonnes naturelles : Array
 struct Cols {
     let sd, pr: [Int32]
@@ -495,7 +495,7 @@ func runK6(_ v: String, _ reps: Int, _ p: String) {
 }
 
 // ------------------------------------------------------------------ K7
-let N7 = 1 << 24
+let N7 = SIZE_N7
 struct Agg {
     var count: UInt32 = 0
     var sum: UInt64 = 0
@@ -525,7 +525,7 @@ func runK7(_ v: String, _ reps: Int) {
                 ws += a.sum * UInt64((k & 1023) + 1)
             }
         } else {  // adressage ouvert, sondage linéaire, hachage de Fibonacci (pas de préchargement logiciel en Swift)
-            let LOG: UInt32 = 21, CAP = 1 << 21
+            let LOG = UInt32(SIZE_K7_LOG2 + 1), CAP = 1 << (SIZE_K7_LOG2 + 1)
             let t0 = nowNs()
             let tab = alignedBuffer(CAP, Slot.self)
             tab.initialize(repeating: Slot(key: 0, count: 0, sum: 0), count: CAP)
@@ -601,10 +601,10 @@ func runK8(_ v: String, _ reps: Int) {
     let Q = 16384
     let tuned = v == "tuned"
     var c0: Int64 = 0
-    let keep = tBuild(20, &c0)
+    let keep = tBuild(SIZE_K8_LONG, &c0)
     let lsum = tSum(keep)
     var lat = [UInt64](repeating: 0, count: Q)
-    let arena = UnsafeMutablePointer<ANode>.allocate(capacity: 2047)
+    let arena = UnsafeMutablePointer<ANode>.allocate(capacity: (2 << SIZE_K8_REQ) - 1)
     for r in -warmup..<reps {
         var total: Int64 = 0
         let t0 = nowNs()
@@ -614,9 +614,9 @@ func runK8(_ v: String, _ reps: Int) {
             let s: Int64
             if tuned {
                 var top: Int32 = 0
-                s = aSum(arena, aBuild(arena, &top, 10, &c))
+                s = aSum(arena, aBuild(arena, &top, SIZE_K8_REQ, &c))
             } else {
-                let t = tBuild(10, &c)
+                let t = tBuild(SIZE_K8_REQ, &c)
                 s = tSum(t)
             }  // l'arbre naturel est libéré ici (fin de la dernière utilisation : décomptes ARC), dans le chrono
             total += s
@@ -634,7 +634,7 @@ func runK8(_ v: String, _ reps: Int) {
 }
 
 // ------------------------------------------------------------------ K9
-let M9 = 2048
+let M9 = SIZE_M9
 @inline(__always) func k9Init(_ i: Int, _ j: Int) -> Double { Double((i * 31 + j * 17) % 1024) / 1024.0 }
 /// Naturel : tableau 2D par défaut, [[Double]]
 @inline(never) func k9Natural(_ inp: [[Double]], _ out: inout [[Double]]) {

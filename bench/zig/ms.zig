@@ -41,7 +41,7 @@ fn fmt(comptime f: []const u8, args: anytype) []const u8 {
 }
 
 // ------------------------------------------------------------------ K1
-const N1 = 1 << 22;
+const N1 = sizes.N1;
 const Particle = struct {
     x: f32, y: f32, z: f32, vx: f32, vy: f32, vz: f32, ax: f32, ay: f32, az: f32,
     mass: f32, charge: f32, radius: f32, temp: f32, pressure: f32, energy: f32, density: f32,
@@ -226,7 +226,7 @@ fn runK4(v: []const u8, reps: i32) void {
 }
 
 // ------------------------------------------------------------------ K5
-const INNER5 = 1 << 16;
+const INNER5 = sizes.INNER5;
 noinline fn k5Natural(a: []const f32, b: []const f32) f32 {
     var s: f32 = 0;
     for (a, b) |x, y| s += x * y;
@@ -263,7 +263,7 @@ fn runK5(v: []const u8, reps: i32) void {
 }
 
 // ------------------------------------------------------------------ K6
-const N6 = 1 << 24;
+const N6 = sizes.N6;
 const Cols = struct { sd: []align(64) i32, pr: []align(64) i32, q: []align(64) u8, d: []align(64) u8, t: []align(64) u8, rf: []align(64) u8, ls: []align(64) u8 };
 const Q1Acc = [6][5]i64;
 noinline fn q6Natural(c: *const Cols, lo: usize, hi: usize) i64 {
@@ -415,7 +415,7 @@ fn runK7(v: []const u8, reps: i32) void {
             while (it.next()) |e| ws += e.value_ptr.sum * ((e.key_ptr.* & 1023) + 1);
             m.deinit();
         } else {
-            const LOG = 21;
+            const LOG = sizes.K7_LOG2 + 1;
             const CAP = 1 << LOG;
             const t0 = nowNs();
             const tab = gpa.alignedAlloc(Slot, .@"64", CAP) catch @panic("oom");
@@ -468,7 +468,7 @@ fn tFree(a: Allocator, n: ?*Node) void {
     a.destroy(x);
 }
 const ANode = struct { v: i64, l: i32, r: i32 };
-fn aBuild(a: *[2047]ANode, top: *i32, d: u32, c: *i64) i32 {
+fn aBuild(a: *[(2 << sizes.K8_REQ) - 1]ANode, top: *i32, d: u32, c: *i64) i32 {
     const i = top.*;
     top.* += 1;
     a[@intCast(i)] = .{ .v = c.*, .l = -1, .r = -1 };
@@ -481,7 +481,7 @@ fn aBuild(a: *[2047]ANode, top: *i32, d: u32, c: *i64) i32 {
     }
     return i;
 }
-fn aSum(a: *const [2047]ANode, i: i32) i64 {
+fn aSum(a: *const [(2 << sizes.K8_REQ) - 1]ANode, i: i32) i64 {
     if (i < 0) return 0;
     const n = a[@intCast(i)];
     return n.v + aSum(a, n.l) + aSum(a, n.r);
@@ -490,9 +490,9 @@ fn runK8(v: []const u8, reps: i32) void {
     const Q = 16384;
     const tuned = std.mem.eql(u8, v, "tuned");
     const talloc = std.mem.eql(u8, v, "tuned_alloc");
-    const nodes = gpa.create([2047]ANode) catch @panic("oom");
+    const nodes = gpa.create([(2 << sizes.K8_REQ) - 1]ANode) catch @panic("oom");
     var c0: i64 = 0;
-    const keep = tBuild(gpa, 20, &c0);
+    const keep = tBuild(gpa, sizes.K8_LONG, &c0);
     const lsum = tSum(keep);
     const lat = gpa.alloc(u64, Q) catch @panic("oom");
     var arena = std.heap.ArenaAllocator.init(gpa);
@@ -506,12 +506,12 @@ fn runK8(v: []const u8, reps: i32) void {
             var s: i64 = undefined;
             if (tuned) { // nœuds compacts indexés dans un tableau réutilisé (DOD)
                 var top: i32 = 0;
-                s = aSum(nodes, aBuild(nodes, &top, 10, &c));
+                s = aSum(nodes, aBuild(nodes, &top, sizes.K8_REQ, &c));
             } else if (talloc) { // arène : libération en bloc, capacité conservée -> plus d'appel système
-                s = tSum(tBuild(arena.allocator(), 10, &c));
+                s = tSum(tBuild(arena.allocator(), sizes.K8_REQ, &c));
                 _ = arena.reset(.retain_capacity);
             } else {
-                const t = tBuild(gpa, 10, &c);
+                const t = tBuild(gpa, sizes.K8_REQ, &c);
                 s = tSum(t);
                 tFree(gpa, t);
             }
@@ -530,7 +530,7 @@ fn runK8(v: []const u8, reps: i32) void {
 }
 
 // ------------------------------------------------------------------ K9
-const M9 = 2048;
+const M9 = sizes.M9;
 fn k9Init(i: usize, j: usize) f64 {
     return @as(f64, @floatFromInt((i * 31 + j * 17) % 1024)) / 1024.0;
 }
@@ -704,3 +704,8 @@ pub fn main(init: std.process.Init) !void {
     else if (std.mem.eql(u8, k, "k9")) runK9(v, reps)
     else if (std.mem.eql(u8, k, "k10")) runK10(v, reps);
 }
+
+// ------------------------------------------------------------------ tailles
+// v4, point 2 (docs/V4_SIZES.md) : sizes.zig, écrit par build.sh à partir des variables MS_* (sans elles, les valeurs
+// publiées) ; importé en fin de fichier pour ne pas décaler les numéros de ligne.
+const sizes = @import("sizes.zig");

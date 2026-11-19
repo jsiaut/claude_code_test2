@@ -28,7 +28,7 @@ fn void result(String k, String v, String p, int rep, double sec, String chk)
 fn double secs(Clock t0) => (double)t0.to_now() * 1e-9;
 
 // ------------------------------------------------------------------ K1
-const N1 = 1 << 22;
+const N1 = SIZE_N1;
 struct Particle
 {
 	float x, y, z, vx, vy, vz, ax, ay, az, mass, charge, radius, temp, pressure, energy, density;
@@ -241,7 +241,7 @@ fn void run_k4(String v, int reps)
 }
 
 // ------------------------------------------------------------------ K5
-const INNER5 = 1 << 16;
+const INNER5 = SIZE_INNER5;
 fn float k5_natural(float[] a, float[] b) @noinline
 {
 	float s;
@@ -281,7 +281,7 @@ fn void run_k5(String v, int reps)
 }
 
 // ------------------------------------------------------------------ K6
-const N6 = 1 << 24;
+const N6 = SIZE_N6;
 struct Cols { int[] sd; int[] pr; char[] q; char[] d; char[] t; char[] rf; char[] ls; }
 alias Q1Acc = long[5][6];
 fn long q6_natural(Cols* c, usz lo, usz hi) @noinline
@@ -453,7 +453,7 @@ fn void run_k7(String v, int reps)
 		}
 		else
 		{
-			const LOG = 21;
+			const LOG = SIZE_K7_LOG2 + 1;
 			const CAP = 1 << LOG;
 			Clock t0 = clock::now();
 			Slot* tab = alloc::calloc_aligned(mem, CAP * Slot::size, 64)!!;
@@ -511,10 +511,10 @@ fn void run_k8(String v, int reps)
 	bool tuned = v == "tuned";
 	bool talloc = v == "tuned_alloc";
 	long c0;
-	Node* keep = t_build(mem, 20, &c0);
+	Node* keep = t_build(mem, SIZE_K8_LONG, &c0);
 	long lsum = t_sum(keep);
 	ulong[] lat = mem::new_array(ulong, Q);
-	ANode* arena = mem::new_array(ANode, 2047).ptr;
+	ANode* arena = mem::new_array(ANode, (2 << SIZE_K8_REQ) - 1).ptr;
 	for (int r = -g_warmup; r < reps; r++)
 	{
 		long total;
@@ -527,18 +527,18 @@ fn void run_k8(String v, int reps)
 			if (tuned)
 			{
 				int top = 0;
-				s = a_sum(arena, a_build(arena, &top, 10, &c));
+				s = a_sum(arena, a_build(arena, &top, SIZE_K8_REQ, &c));
 			}
 			else if (talloc)
 			{
 				@pool() // allocateur temporaire de C3 : arène libérée en bloc à la fin de la portée
 				{
-					s = t_sum(t_build(tmem, 10, &c));
+					s = t_sum(t_build(tmem, SIZE_K8_REQ, &c));
 				};
 			}
 			else
 			{
-				Node* t = t_build(mem, 10, &c);
+				Node* t = t_build(mem, SIZE_K8_REQ, &c);
 				s = t_sum(t);
 				t_free(t);
 			}
@@ -557,7 +557,7 @@ fn void run_k8(String v, int reps)
 }
 
 // ------------------------------------------------------------------ K9
-const M9 = 2048;
+const M9 = SIZE_M9;
 fn double k9_init(usz i, usz j) => (double)((i * 31 + j * 17) % 1024) / 1024.0;
 alias Grid = double[M9][M9];
 // naturel : tableau 2D de taille fixe (contigu)

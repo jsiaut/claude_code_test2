@@ -45,7 +45,7 @@ proc prefetchw(p: pointer) {.importc: "__builtin_prefetch", header: "<stddef.h>"
 proc cpuRelax() {.importc: "_mm_pause", header: "<immintrin.h>".}
 
 # ------------------------------------------------------------------ K1
-const N1 = 1 shl 22
+const N1 {.intdefine: "MS_N1".} = 1 shl 22 # tailles redéfinissables (-d:MS_…=…) : v4, point 2, docs/V4_SIZES.md
 type Particle = object
   x, y, z, vx, vy, vz, ax, ay, az, mass, charge, radius, temp, pressure, energy, density: float32
 
@@ -193,7 +193,7 @@ proc runK4(v: string, reps: int) =
     if r >= 0: result("k4", v, "16M", r, dt, $s)
 
 # ------------------------------------------------------------------ K5
-const INNER5 = 1 shl 16
+const INNER5 {.intdefine: "MS_INNER5".} = 1 shl 16
 proc k5Natural(a, b: ptr UncheckedArray[float32], n: int): float32 {.noinline.} =
   for i in 0 ..< n: result += a[i] * b[i]
 proc k5Tuned(a, b: ptr UncheckedArray[float32], n: int): float32 {.noinline.} =
@@ -225,7 +225,7 @@ proc runK5(v: string, reps: int) =
     if r >= 0: result("k5", v, "2048x65536", r, dt, &"{d:.4f}")
 
 # ------------------------------------------------------------------ K6
-const N6 = 1 shl 24
+const N6 {.intdefine: "MS_N6".} = 1 shl 24
 type
   Cols = object
     sd, pr: ptr UncheckedArray[int32]
@@ -335,7 +335,7 @@ proc runK7(v: string, reps: int) =
       nk = uint64(m.len)
       for k, e in m: ws += e.sum * uint64((k and 1023) + 1)
     else:
-      const LOG = 21
+      const K7LOG2 {.intdefine: "MS_K7_LOG2".} = 20; const LOG = K7LOG2 + 1
       const CAP = 1 shl LOG
       let t0 = getMonoTime()
       let tab = cast[ptr UncheckedArray[Slot]](aligned_alloc(64, csize_t(CAP * sizeof(Slot))))
@@ -363,7 +363,7 @@ proc runK7(v: string, reps: int) =
       cfree(tab)
     if r >= 0: result("k7", v, "16M/1M", r, dt, &"{nk}:{ws}")
 
-# ------------------------------------------------------------------ K8
+const K8LONG {.intdefine: "MS_K8_LONG".} = 20; const K8REQ {.intdefine: "MS_K8_REQ".} = 10; const K8NODES = (2 shl K8REQ) - 1 # -- K8
 type
   Node = ref object # référence gérée (ARC/ORC : comptage de références déterministe)
     v: int64
@@ -379,7 +379,7 @@ proc tBuild(d: int, c: var int64): Node =
     result.r = tBuild(d - 1, c)
 proc tSum(n: Node): int64 = (if n.isNil: 0 else: n.v + tSum(n.l) + tSum(n.r))
 {.push boundChecks: off.}
-proc aBuild(a: var array[2047, ANode], top: var int32, d: int, c: var int64): int32 =
+proc aBuild(a: var array[K8NODES, ANode], top: var int32, d: int, c: var int64): int32 =
   result = top
   inc top
   a[result] = ANode(v: c, l: -1, r: -1)
@@ -388,16 +388,16 @@ proc aBuild(a: var array[2047, ANode], top: var int32, d: int, c: var int64): in
     let l = aBuild(a, top, d - 1, c)
     a[result].l = l
     a[result].r = aBuild(a, top, d - 1, c)
-proc aSum(a: array[2047, ANode], i: int32): int64 = (if i < 0: 0 else: a[i].v + aSum(a, a[i].l) + aSum(a, a[i].r))
+proc aSum(a: array[K8NODES, ANode], i: int32): int64 = (if i < 0: 0 else: a[i].v + aSum(a, a[i].l) + aSum(a, a[i].r))
 {.pop.}
 proc runK8(v: string, reps: int) =
   const Q = 16384
   let tuned = v == "tuned"
   var c0 = 0'i64
-  let keep = tBuild(20, c0)
+  let keep = tBuild(K8LONG, c0)
   let lsum = tSum(keep)
   var lat = newSeq[int64](Q)
-  var arena = new array[2047, ANode]
+  var arena = new array[K8NODES, ANode]
   for r in -WARMUP ..< reps:
     var total = 0'i64
     let t0 = getMonoTime()
@@ -407,9 +407,9 @@ proc runK8(v: string, reps: int) =
       var s: int64
       if tuned:
         var top = 0'i32
-        s = aSum(arena[], aBuild(arena[], top, 10, c))
+        s = aSum(arena[], aBuild(arena[], top, K8REQ, c))
       else:
-        s = tSum(tBuild(10, c)) # l'arbre est libéré dès qu'il n'est plus référencé
+        s = tSum(tBuild(K8REQ, c)) # l'arbre est libéré dès qu'il n'est plus référencé
       total += s
       lat[q] = (getMonoTime() - a).inNanoseconds
     let dt = secs(t0)
@@ -419,7 +419,7 @@ proc runK8(v: string, reps: int) =
       echo &"LAT;{v};{lat[Q div 2]};{lat[Q * 9 div 10]};{lat[Q * 99 div 100]};{lat[Q * 999 div 1000]};{lat[Q - 1]}"
 
 # ------------------------------------------------------------------ K9
-const M9 = 2048
+const M9 {.intdefine: "MS_M9".} = 2048
 proc k9Init(i, j: int): float = float((i * 31 + j * 17) mod 1024) / 1024.0
 proc k9Natural(a: seq[seq[float]], b: var seq[seq[float]]) {.noinline.} =
   for i in 1 ..< M9 - 1:

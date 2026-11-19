@@ -39,6 +39,41 @@ static void *load(const char *name, size_t *bytes) {
     if (bytes) *bytes = n;
     return p;
 }
+// Tailles (v4, point 2 : docs/V4_SIZES.md) : constantes de compilation, redéfinissables à la construction
+// (-DMS_N1=…) ; sans redéfinition, les valeurs publiées, et le binaire publié inchangé.
+#ifndef MS_N1
+#define MS_N1 (1 << 22)
+#endif
+#ifndef MS_N4
+#define MS_N4 (1 << 24)
+#endif
+#ifndef MS_N5
+#define MS_N5 2048
+#endif
+#ifndef MS_INNER5
+#define MS_INNER5 (1 << 16)
+#endif
+#ifndef MS_N6
+#define MS_N6 (1 << 24)
+#endif
+#ifndef MS_N7
+#define MS_N7 (1 << 24)
+#endif
+#ifndef MS_K7_LOG2
+#define MS_K7_LOG2 20
+#endif
+#ifndef MS_K7_NB
+#define MS_K7_NB 1048573
+#endif
+#ifndef MS_K8_LONG
+#define MS_K8_LONG 20
+#endif
+#ifndef MS_K8_REQ
+#define MS_K8_REQ 10
+#endif
+#ifndef MS_M9
+#define MS_M9 2048
+#endif
 static int warmup_count(void) {
     const char *w = getenv("WARMUP");
     return w ? atoi(w) : 1;
@@ -52,7 +87,7 @@ static void result(const char *k, const char *v, const char *p, int rep, double 
 #define KEEP(x) __asm__ volatile("" : : "g"(x) : "memory")
 
 // ------------------------------------------------------------------ K1
-enum { N1 = 1 << 22 };
+enum { N1 = MS_N1 };
 typedef struct {
     float x, y, z, vx, vy, vz, ax, ay, az, mass, charge, radius, temp, pressure, energy, density;
 } Particle;
@@ -209,7 +244,7 @@ static void run_k3(const char *variant, int reps) {
 }
 
 // ------------------------------------------------------------------ K4
-enum { N4 = 1 << 24 };
+enum { N4 = MS_N4 };
 __attribute__((noinline)) static uint64_t k4_natural(const uint8_t *v, size_t n) {
     uint64_t s = 0;
     for (size_t i = 0; i < n; i++)
@@ -241,7 +276,7 @@ static void run_k4(const char *variant, int reps) {
 }
 
 // ------------------------------------------------------------------ K5
-enum { N5 = 2048, INNER5 = 1 << 16 };
+enum { N5 = MS_N5, INNER5 = MS_INNER5 };
 __attribute__((noinline)) static float k5_natural(const float *a, const float *b, int n) {
     float s = 0;
     for (int i = 0; i < n; i++) s += a[i] * b[i];
@@ -276,7 +311,7 @@ static void run_k5(const char *variant, int reps) {
 }
 
 // ------------------------------------------------------------------ K6
-enum { N6 = 1 << 24 };
+enum { N6 = MS_N6 };
 typedef struct { int32_t *sd, *pr; uint8_t *q, *d, *t, *rf, *ls; } Cols;
 typedef struct { int64_t a[6][5]; } Q1Acc;  // count, qty, price, disc_price, charge
 
@@ -397,7 +432,7 @@ static void run_k6(const char *variant, int reps, const char *param) {
 }
 
 // ------------------------------------------------------------------ K7
-enum { N7 = 1 << 24 };
+enum { N7 = MS_N7 };
 // Naturel en C (pas de table standard) : chaînage séparé à la K&R, un malloc par entrée.
 typedef struct Node7 { uint32_t key; uint32_t count; uint64_t sum; struct Node7 *next; } Node7;
 typedef struct { uint32_t key, count; uint64_t sum; } Slot7;  // 16 octets, 4 par ligne
@@ -412,7 +447,7 @@ static void run_k7(const char *variant, int reps) {
         uint64_t nk = 0, ws = 0;
         double t0, t1;
         if (!strcmp(variant, "natural")) {
-            enum { NB = 1048573 };  // nombre premier de seaux
+            enum { NB = MS_K7_NB };  // nombre premier de seaux (le plus grand sous le nombre de clés)
             t0 = now();
             Node7 **tab = calloc(NB, sizeof *tab);
             for (size_t i = 0; i < N7; i++) {
@@ -428,7 +463,7 @@ static void run_k7(const char *variant, int reps) {
                 for (Node7 *p = tab[b], *nx; p; p = nx) { nx = p->next; nk++; ws += p->sum * ((p->key & 1023) + 1); free(p); }
             free(tab);
         } else {  // tuned : adressage ouvert, sondage linéaire, hachage de Fibonacci, lots préchargés
-            enum { LOG = 21, CAP = 1 << LOG, BATCH = 16 };
+            enum { LOG = MS_K7_LOG2 + 1, CAP = 1 << LOG, BATCH = 16 };
             t0 = now();
             Slot7 *tab = aligned_alloc(64, CAP * sizeof(Slot7));
             memset(tab, 0, CAP * sizeof(Slot7));
@@ -482,13 +517,13 @@ static int cmpu64(const void *x, const void *y) {
     return (a > b) - (a < b);
 }
 static void run_k8(const char *variant, int reps) {
-    enum { Q = 16384, D = 10 };
+    enum { Q = 16384, D = MS_K8_REQ };
     int tuned = !strcmp(variant, "tuned");
     int64_t cnt = 0;
-    Node8 *longlived = t8_build(20, &cnt);
+    Node8 *longlived = t8_build(MS_K8_LONG, &cnt);
     int64_t lsum = t8_sum(longlived);
     uint64_t *lat = malloc(Q * sizeof *lat);
-    ANode *arena = malloc(sizeof(ANode) * 2047);
+    ANode *arena = malloc(sizeof(ANode) * ((2 << D) - 1));
     char chk[64];
     for (int r = -warmup_count(); r < reps; r++) {
         int64_t total = 0;
@@ -514,7 +549,7 @@ static void run_k8(const char *variant, int reps) {
 }
 
 // ------------------------------------------------------------------ K9
-enum { M9 = 2048, IT9 = 4 };
+enum { M9 = MS_M9, IT9 = 4 };
 static void k9_init(double *g) {
     for (int i = 0; i < M9; i++)
         for (int j = 0; j < M9; j++) g[(size_t)i * M9 + j] = (double)((i * 31 + j * 17) % 1024) / 1024.0;

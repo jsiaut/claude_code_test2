@@ -36,3 +36,6 @@ tools/grid_audit/listings/*/bin/
 tools/grid_audit/listings/*/obj/
 probes/*/*/obj/
 probes/haskell/audit/*_hsc.[ch]
+
+# v4, point 2 : générateur de données compilé à la demande (tools/sizes/sizes.py)
+tools/sizes/gendata

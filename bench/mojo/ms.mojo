@@ -2,7 +2,7 @@
 # Note : Mojo 1.2 n'expose aucune API publique de threads CPU ; parallelize() est dans MAX.
 # Les noyaux multi-threads utilisent donc std.runtime._asyncrt (privé, mais livré avec std).
 from std.time import perf_counter_ns
-from std.sys import argv, size_of
+from std.sys import argv, size_of; from std.sys.defines import get_defined_int, get_defined_string  # tailles : -D MS_…=… (v4, point 2)
 from std.os import getenv
 from std.memory.alloc import unsafe_alloc
 from std.memory import unsafe_memcpy, unsafe_memset_zero, OwnedPointer
@@ -13,7 +13,7 @@ from std.runtime._asyncrt import create_task
 from std.benchmark import black_box
 from std.utils.lock import BlockingSpinLock
 
-comptime DATA = "/opt/msdata/"
+comptime DATA = get_defined_string["MS_DATA_DIR", "/opt/msdata/"]()  # répertoire des données, fixé à la compilation
 
 struct Col[dtype: DType](ImplicitlyCopyable):
     var p: Pointer[Scalar[Self.dtype], MutUntrackedOrigin]
@@ -42,7 +42,7 @@ def secs(t0: Int) -> Float64:
     return Float64(perf_counter_ns() - t0) * 1e-9
 
 # ------------------------------------------------------------------ K1
-comptime N1 = 1 << 22
+comptime N1 = get_defined_int["MS_N1", 1 << 22]()
 
 @fieldwise_init
 struct Particle(Copyable, Movable):
@@ -232,7 +232,7 @@ def run_k4(v: String, reps: Int, warmup: Int) raises:
             result("k4", v, "16M", r, dt, String(s))
 
 # ------------------------------------------------------------------ K5
-comptime INNER5 = 1 << 16
+comptime INNER5 = get_defined_int["MS_INNER5", 1 << 16]()
 
 @inline(.never)
 def k5_natural(a: Col[DType.float32], b: Col[DType.float32]) -> Float32:
@@ -269,7 +269,7 @@ def run_k5(v: String, reps: Int, warmup: Int) raises:
             result("k5", v, "2048x65536", r, dt, String(d))
 
 # ------------------------------------------------------------------ K6
-comptime N6 = 1 << 24
+comptime N6 = get_defined_int["MS_N6", 1 << 24]()
 
 @fieldwise_init
 struct Cols(ImplicitlyCopyable):
@@ -434,7 +434,7 @@ def run_k7(v: String, reps: Int, warmup: Int) raises:
             for item in m.items():
                 ws += item.value.sum * UInt64((item.key & 1023) + 1)
         else:
-            comptime LOG = 21
+            comptime LOG = get_defined_int["MS_K7_LOG2", 20]() + 1
             comptime CAP = 1 << LOG
             var t0 = perf_counter_ns()
             var tab = unsafe_alloc[Slot](CAP, alignment=64)
@@ -443,7 +443,7 @@ def run_k7(v: String, reps: Int, warmup: Int) raises:
             while i < keys.n:
                 var h = Array[UInt32, 16](fill=0)
                 comptime for b in range(16):
-                    h[b] = (keys[i + b] * 0x9E3779B1) >> (32 - LOG)
+                    h[b] = (keys[i + b] * 0x9E3779B1) >> UInt32(32 - LOG)
                     prefetch[PrefetchOptions().for_write().high_locality()]((tab + Int(h[b])).unsafe_bitcast[UInt8]())
                 comptime for b in range(16):
                     var k = keys[i + b]
@@ -524,13 +524,13 @@ def a_sum(a: Pointer[ANode, MutUntrackedOrigin], i: Int32) -> Int64:
     return n.v + a_sum(a, n.l) + a_sum(a, n.r)
 
 def run_k8(v: String, reps: Int, warmup: Int) raises:
-    comptime Q = 16384
+    comptime Q = 16384; comptime K8_LONG = get_defined_int["MS_K8_LONG", 20](); comptime K8_REQ = get_defined_int["MS_K8_REQ", 10]()
     var tuned = v == "tuned"
     var c0: Int64 = 0
-    var keep = t_build(20, c0)
+    var keep = t_build(K8_LONG, c0)
     var lsum = t_sum(keep)
     var lat = List[Int](length=Q, fill=0)
-    var arena = unsafe_alloc[ANode](2047, alignment=64)
+    var arena = unsafe_alloc[ANode]((2 << K8_REQ) - 1, alignment=64)
     for r in range(-warmup, reps):
         var total: Int64 = 0
         var t0 = perf_counter_ns()
@@ -540,9 +540,9 @@ def run_k8(v: String, reps: Int, warmup: Int) raises:
             var s: Int64
             if tuned:
                 var top: Int32 = 0
-                s = a_sum(arena, a_build(arena, top, 10, c))
+                s = a_sum(arena, a_build(arena, top, K8_REQ, c))
             else:
-                var t = t_build(10, c)
+                var t = t_build(K8_REQ, c)
                 s = t_sum(t)
                 t_free(t)
             total += s
@@ -554,7 +554,7 @@ def run_k8(v: String, reps: Int, warmup: Int) raises:
             print("LAT;", v, ";", lat[Q // 2], ";", lat[Q * 9 // 10], ";", lat[Q * 99 // 100], ";", lat[Q * 999 // 1000], ";", lat[Q - 1], sep="")
 
 # ------------------------------------------------------------------ K9
-comptime M9 = 2048
+comptime M9 = get_defined_int["MS_M9", 2048]()
 
 def k9_init(i: Int, j: Int) -> Float64:
     return Float64((i * 31 + j * 17) % 1024) / 1024.0

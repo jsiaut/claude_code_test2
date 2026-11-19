@@ -59,6 +59,48 @@ données, la valeur des clés et leur répartition gardent la même loi à chaqu
 * Validation : les sommes de contrôle de chaque taille sont calculées par l'implémentation C ; chaque implémentation
   doit les reproduire (tolérances de la spécification) à chaque taille, un processus par cellule, avant la campagne.
 
+### 4.1 Écart au plan (19 novembre, 11 h 15, avant toute mesure)
+
+Lire les tailles dans l'environnement, comme prévu ci-dessus, change le code mesuré, même à la taille publiée : une
+borne de boucle, une taille de tableau ou de pile connue à la compilation devient une valeur lue à l'exécution, que le
+compilateur ne replie plus (en PHP, une constante `define()` n'est plus substituée par OPcache). Le contrôle par les
+anciens binaires aurait mesuré cet effet sans l'éviter. Le code a donc été changé autrement :
+
+* **Langages compilés (19)** : les tailles restent des constantes de compilation, redéfinissables à la construction et
+  aux valeurs publiées par défaut ; une construction par jeu de tailles (petit, grand : `tools/sizes/sizes.py`), dans
+  `/dev/shm/msbuild`. Mécanisme par langage : macros (`-D`) en C et C++ ; `option_env!` lu par une fonction constante
+  en Rust ; fichier de constantes écrit par `build.sh` en Zig, C3, Swift, Go, C#, Java et Fortran (module) ; import de
+  chaîne (`-J`) en D ; `#config` en Odin ; `intdefine` en Nim ; préprocesseur intégré de GNAT (`-gnateD`) en Ada ;
+  `config param` (`-s`) en Chapel ; `get_defined_int` (`-D`) en Mojo ; macros d'un fichier inclus en FreePascal ;
+  préprocesseur C de GHC en Haskell ; préprocesseur `-pp` en OCaml. Les ajouts sont placés de façon à ne décaler
+  aucune ligne (les numéros de ligne entrent dans plusieurs binaires).
+* **Langages interprétés ou à JIT sans construction (6)** : Python, Lua, PHP, BQN, JavaScript et Julia gardent leur
+  source publié intact ; la copie d'un jeu de tailles remplace les seules constantes de taille par celles du jeu
+  (`tools/sizes/patches.py`, chaque motif vérifié par son nombre d'occurrences).
+* **Contrôle, fait avant les mesures** : chaque binaire publié reconstruit sur la machine 30 à partir du nouveau
+  source est comparé à celui que donne le source d'origine. Identiques octet pour octet : C, C++, Rust, D, Fortran,
+  Mojo, FreePascal, OCaml. Segments chargés identiques, seules diffèrent les tables de symboles, l'identifiant de
+  construction ou une somme de contrôle du source : Zig, Nim, Haskell, Ada, Swift (dont l'empreinte de module change à
+  chaque construction), C3 (code et données identiques, ordre des symboles dynamiques changé). Code intermédiaire
+  identique une fois les références résolues : C# (IL des 77 méthodes) et Java (bytecode ; le pool de constantes
+  gagne deux entrées). Instructions identiques mais disposées autrement : Odin (une fonction de K10 placée ailleurs),
+  Chapel (deux entrées de tables de méthodes virtuelles échangées), Go (descripteurs de types décalés de 16 octets).
+  Le contrôle de la section 4 (anciens binaires mesurés à la taille publiée, au plus 5 % d'écart par cellule) est
+  gardé pour ces trois langages, sur les dix noyaux ; ailleurs, le code mesuré à la taille publiée est le code
+  publié, et le contrôle n'aurait rien à mesurer.
+* **Paramètres** : `MS_K7_LOG2` (logarithme du nombre de clés, d'où la taille de la table de la variante tuned) et
+  `MS_K7_NB` (plus grand nombre premier inférieur au nombre de clés, seaux de la table du naturel en C) remplacent
+  `MS_K7_KEYS` ; `MS_N5` n'est employé que là où le code fixe n = 2048 (C, C++, Haskell), ailleurs n suit le fichier
+  de données. Les étiquettes de taille imprimées (« 16M », « 2048x65536 ») font partie du binaire publié et ne changent
+  pas ; le pilote enregistre la taille.
+* **Mojo** fixe le répertoire des données à la compilation (`/opt/msdata/`) : ses constructions de taille reçoivent un
+  répertoire de liens propre au jeu (`/dev/shm/ms_view_<jeu>`), le binaire publié restant identique.
+* **Campagne (section 7)** : pour que les données d'une seule taille d'un seul noyau occupent `/dev/shm` à la fois
+  (jusqu'à 1 Gio), l'ordre aléatoire porte sur les groupes (noyau, taille), puis sur les langages dans chaque groupe,
+  avec une graine fixée et différente à chaque passe. Les comparaisons du calcul 2 de la section 8 se font entre
+  langages à une même taille d'un même noyau, donc à l'intérieur d'un groupe. Les blocs de contrôle d'Odin, de Chapel et
+  de Go sont dans les groupes de la taille publiée, à côté des nouveaux binaires.
+
 ## 5. Hôte
 
 Caractérisation de la machine 30 avant la campagne (`tools/hwprobe.c`, `results/hw/machine30`) : latences, bandes

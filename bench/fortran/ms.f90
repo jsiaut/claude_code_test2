@@ -5,7 +5,7 @@
 ! pointeurs pour les structures chaînées. « tuned » : directives OpenMP SIMD (réduction,
 ! simdlen), sections alignées sur 64 o, accumulateurs multiples, OpenMP pour le parallélisme.
 module harness
-  use iso_fortran_env
+  use iso_fortran_env; use ms_sizes  ! tailles de la construction (sizes.f90, écrit par build.sh : v4, point 2)
   use iso_c_binding
   implicit none
   integer :: warm = 1
@@ -116,7 +116,7 @@ module k1m
   use harness
   use tuned
   implicit none
-  integer, parameter :: N1 = 4194304
+  integer, parameter :: N1 = SIZE_N1
 contains
   real(real64) function k1_natural(ps) result(e)
     type(particle), intent(in) :: ps(:)
@@ -333,7 +333,7 @@ contains
     do r = -warm, reps - 1
       d = 0
       t0 = now()
-      do it = 1, 65536
+      do it = 1, SIZE_INNER5
         a(1) = a(1) + vzero  ! écriture opaque : le compilateur ne peut pas sortir le calcul de la boucle
         if (v == "tuned") then
           d = k5_tuned(a, b)
@@ -355,7 +355,7 @@ module k6m
   use tuned
   use omp_lib
   implicit none
-  integer, parameter :: N6 = 16777216
+  integer, parameter :: N6 = SIZE_N6
   integer(int32), allocatable :: sd(:), pr(:)
   integer(int8), allocatable :: q(:), d(:), t(:), rf(:), ls(:)
 contains
@@ -440,7 +440,7 @@ end module
 module k7m
   use harness
   implicit none
-  integer, parameter :: N7 = 16777216
+  integer, parameter :: N7 = SIZE_N7
   type :: hnode
     integer(int64) :: key, cnt, sum
     type(hnode), pointer :: next => null()
@@ -460,7 +460,7 @@ contains
     type(bucket), allocatable :: tab(:)
     type(slot), allocatable :: st(:)
     type(hnode), pointer :: p, nx
-    integer, parameter :: NB = 1048573, LOG = 21, CAP = 2**LOG, BATCH = 16
+    integer, parameter :: NB = SIZE_K7_NB, LOG = SIZE_K7_LOG2 + 1, CAP = 2**LOG, BATCH = 16
     integer(int64) :: nk, ws, k
     integer :: r, i, b, s, h(BATCH)
     integer(int32) :: k0(BATCH), touch
@@ -642,9 +642,9 @@ contains
     integer(int32) :: top, root
     integer :: r, qq
     real(real64) :: t0, t1
-    allocate (av(0:2046), al(0:2046), ar(0:2046))
+    allocate (av(0:2*2**SIZE_K8_REQ - 2), al(0:2*2**SIZE_K8_REQ - 2), ar(0:2*2**SIZE_K8_REQ - 2))
     cnt = 0
-    keep => t_build(20, cnt)
+    keep => t_build(SIZE_K8_LONG, cnt)
     lsum = t_sum(keep)
     do r = -warm, reps - 1
       total = 0
@@ -654,10 +654,10 @@ contains
         c = qq
         if (v == "tuned") then
           top = 0
-          root = a_build(top, 10, c)
+          root = a_build(top, SIZE_K8_REQ, c)
           s = a_sum(root)
         else
-          tr => t_build(10, c)
+          tr => t_build(SIZE_K8_REQ, c)
           s = t_sum(tr)
           call t_free(tr)
         end if
@@ -681,7 +681,7 @@ module k9m
   use harness
   use tuned
   implicit none
-  integer, parameter :: M9 = 2048, IT9 = 4
+  integer, parameter :: M9 = SIZE_M9, IT9 = 4
 contains
   subroutine k9_init(g)
     real(real64), intent(out) :: g(0:M9 - 1, 0:M9 - 1)

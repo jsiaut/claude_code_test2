@@ -26,6 +26,36 @@
 #include <unordered_map>
 #include <vector>
 
+// Tailles (v4, point 2 : docs/V4_SIZES.md) : constantes de compilation, redéfinissables à la construction
+// (-DMS_N1=…) ; sans redéfinition, les valeurs publiées, et le binaire publié inchangé.
+#ifndef MS_N1
+#define MS_N1 (1 << 22)
+#endif
+#ifndef MS_N5
+#define MS_N5 2048
+#endif
+#ifndef MS_INNER5
+#define MS_INNER5 (1 << 16)
+#endif
+#ifndef MS_N6
+#define MS_N6 (1 << 24)
+#endif
+#ifndef MS_N7
+#define MS_N7 (1 << 24)
+#endif
+#ifndef MS_K7_LOG2
+#define MS_K7_LOG2 20
+#endif
+#ifndef MS_K8_LONG
+#define MS_K8_LONG 20
+#endif
+#ifndef MS_K8_REQ
+#define MS_K8_REQ 10
+#endif
+#ifndef MS_M9
+#define MS_M9 2048
+#endif
+
 namespace ss = std::simd;
 using std::size_t;
 
@@ -69,7 +99,7 @@ template <class T> static void opaque(T &x) { asm volatile("" : "+r"(x) : : "mem
 template <class T> static void keep(const T &x) { asm volatile("" : : "g"(x) : "memory"); }
 
 // ------------------------------------------------------------------ K1
-constexpr size_t N1 = 1 << 22;
+constexpr size_t N1 = MS_N1;
 struct Particle { float x, y, z, vx, vy, vz, ax, ay, az, mass, charge, radius, temp, pressure, energy, density; };
 static_assert(sizeof(Particle) == 64);
 
@@ -245,7 +275,7 @@ static void run_k4(std::string_view v, int reps) {
 }
 
 // ------------------------------------------------------------------ K5
-constexpr int N5 = 2048, INNER5 = 1 << 16;
+constexpr int N5 = MS_N5, INNER5 = MS_INNER5;
 [[gnu::noinline]] static float k5_natural(const float *a, const float *b, int n) {
     float s = 0;
     for (int i = 0; i < n; i++) s += a[i] * b[i];
@@ -281,7 +311,7 @@ static void run_k5(std::string_view v, int reps) {
 }
 
 // ------------------------------------------------------------------ K6
-constexpr size_t N6 = 1 << 24;
+constexpr size_t N6 = MS_N6;
 struct Cols {
     avec<int32_t> sd, pr;
     avec<uint8_t> q, d, t, rf, ls;
@@ -398,7 +428,7 @@ static void run_k6(std::string_view v, int reps, std::string_view p) {
 }
 
 // ------------------------------------------------------------------ K7
-constexpr size_t N7 = 1 << 24;
+constexpr size_t N7 = MS_N7;
 struct Agg { uint32_t count = 0; uint64_t sum = 0; };
 struct Slot7 { uint32_t key, count; uint64_t sum; };  // 16 octets, 4 par ligne
 static void run_k7(std::string_view v, int reps) {
@@ -417,7 +447,7 @@ static void run_k7(std::string_view v, int reps) {
             t1 = now();
             for (const auto &[k, e] : m) { nk++; ws += e.sum * ((k & 1023) + 1); }
         } else {  // adressage ouvert, sondage linéaire, hachage de Fibonacci, lots préchargés
-            constexpr int LOG = 21, BATCH = 16;
+            constexpr int LOG = MS_K7_LOG2 + 1, BATCH = 16;
             constexpr uint32_t CAP = 1u << LOG;
             t0 = now();
             avec<Slot7> tab(CAP);  // value-initialisée (mise à zéro)
@@ -473,13 +503,13 @@ static PNode *p8_build(std::pmr::polymorphic_allocator<PNode> &al, int depth, in
 }
 static int64_t p8_sum(const PNode *n) { return n ? n->v + p8_sum(n->l) + p8_sum(n->r) : 0; }
 static void run_k8(std::string_view v, int reps) {
-    constexpr int Q = 16384, D = 10;
+    constexpr int Q = 16384, D = MS_K8_REQ;
     int64_t cnt = 0;
-    auto longlived = t8_build(20, cnt);
+    auto longlived = t8_build(MS_K8_LONG, cnt);
     const int64_t lsum = t8_sum(longlived.get());
     std::vector<uint64_t> lat(Q);
-    std::vector<ANode> arena(2047);
-    alignas(64) static std::byte buf[2047 * sizeof(PNode) + 4096];
+    std::vector<ANode> arena((2 << D) - 1);
+    alignas(64) static std::byte buf[((2 << D) - 1) * sizeof(PNode) + 4096];
     std::pmr::monotonic_buffer_resource mono(buf, sizeof buf, std::pmr::null_memory_resource());
     std::pmr::polymorphic_allocator<PNode> al(&mono);
     for (int r = -warmup_count(); r < reps; r++) {
@@ -506,7 +536,7 @@ static void run_k8(std::string_view v, int reps) {
 }
 
 // ------------------------------------------------------------------ K9
-constexpr int M9 = 2048, IT9 = 4;
+constexpr int M9 = MS_M9, IT9 = 4;
 static double k9_init(int i, int j) { return (double)((i * 31 + j * 17) % 1024) / 1024.0; }
 // naturel : std::vector<std::vector<double>>
 [[gnu::noinline]] static void k9_natural(const std::vector<std::vector<double>> &in, std::vector<std::vector<double>> &out) {

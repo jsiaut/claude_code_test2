@@ -26,7 +26,7 @@ proc loadArr(name: string, type t) {
 }
 
 // ------------------------------------------------------------------ K1
-const N1 = 4194304;
+config param MS_N1 = 4194304, MS_INNER5 = 65536, MS_N6 = 16777216, MS_N7 = 16777216, MS_K7_LOG2 = 20, MS_K8_LONG = 20, MS_K8_REQ = 10, MS_M9 = 2048; const N1 = MS_N1;
 record Particle {
   var x, y, z, vx, vy, vz, ax, ay, az, mass, charge, radius, temp, pressure, energy, density: real(32);
 }
@@ -185,7 +185,7 @@ proc runK5(v: string, reps: int) {
   var d: real(32);
   for r in -warm..<reps {
     sw.clear(); sw.start();
-    for 1..65536 {
+    for 1..MS_INNER5 {
       a[0] += zero;  // écriture opaque : le compilateur ne peut pas sortir le calcul de la boucle
       d = if v == "tuned" then k5Tuned(a, b) else k5Natural(a, b);
       sink.write(d, memoryOrder.relaxed);
@@ -196,7 +196,7 @@ proc runK5(v: string, reps: int) {
 }
 
 // ------------------------------------------------------------------ K6
-const N6 = 16777216;
+const N6 = MS_N6;
 proc q6Natural(const ref sd: [] int(32), const ref d: [] uint(8), const ref q: [] uint(8), const ref pr: [] int(32),
                lo: int, hi: int): int {
   var s = 0;
@@ -294,7 +294,7 @@ proc runK6(v: string, reps: int, p: string) {
 }
 
 // ------------------------------------------------------------------ K7
-const N7 = 16777216;
+const N7 = MS_N7;
 record Agg { var count: uint(32); var sum: uint; }
 record Slot { var key, count: uint(32); var sum: uint; }  // 16 octets, 4 par ligne
 proc runK7(v: string, reps: int) {
@@ -316,7 +316,7 @@ proc runK7(v: string, reps: int) {
       sw.stop();
       for (k, e) in zip(m.keys(), m.values()) { nk += 1; ws += e.sum * ((k & 1023) + 1); }
     } else {  // adressage ouvert, sondage linéaire, hachage de Fibonacci, lots préchargés
-      param LOG = 21, CAP = 1 << LOG, BATCH = 16;
+      param LOG = MS_K7_LOG2 + 1, CAP = 1 << LOG, BATCH = 16;
       sw.clear(); sw.start();
       var tab: [0..<CAP] Slot;
       var h: BATCH * int;
@@ -370,10 +370,10 @@ proc aSum(const ref a: [] ANode, i: int(32)): int {
 proc runK8(v: string, reps: int) {
   param Q = 16384;
   var cnt = 0;
-  const keep = tBuild(20, cnt);
+  const keep = tBuild(MS_K8_LONG, cnt);
   const lsum = tSum(keep.borrow());
   var lat: [0..<Q] int;
-  var arena: [0..<2047] ANode;
+  var arena: [0..<(2 << MS_K8_REQ) - 1] ANode;
   var sw, sq: stopwatch;
   for r in -warm..<reps {
     var total = 0;
@@ -383,10 +383,10 @@ proc runK8(v: string, reps: int) {
       var c = qq, s: int;
       if v == "tuned" {
         var top: int(32) = 0;
-        const root = aBuild(arena, top, 10, c);
+        const root = aBuild(arena, top, MS_K8_REQ, c);
         s = aSum(arena, root);
       } else {
-        const t = tBuild(10, c);
+        const t = tBuild(MS_K8_REQ, c);
         s = tSum(t.borrow());
       }  // l'arbre owned est libéré ici (désinitialisation récursive)
       total += s;
@@ -403,7 +403,7 @@ proc runK8(v: string, reps: int) {
 }
 
 // ------------------------------------------------------------------ K9
-const M9 = 2048;
+const M9 = MS_M9;
 proc k9Init(ref g: [] real) {
   for (i, j) in g.domain do g[i, j] = ((i * 31 + j * 17) % 1024): real / 1024.0;
 }
@@ -518,3 +518,8 @@ proc main(args: [] string) {
     otherwise do halt("kernel inconnu ", k);
   }
 }
+
+// ------------------------------------------------------------------ tailles
+// v4, point 2 (docs/V4_SIZES.md) : les tailles sont des paramètres de compilation redéfinissables (chpl -sMS_N1=…,
+// build.sh), aux valeurs publiées par défaut, déclarés sur la ligne de N1 (Chapel veut la déclaration avant l'usage)
+// pour ne pas décaler les numéros de ligne.
