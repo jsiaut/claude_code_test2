@@ -1,0 +1,28 @@
+# Recherche d'absence : python, case C1
+# Chaîne : Python 3.15.2
+# Motif : simd|vector(64|128|256|512)\b|\bvec[248]\b|float32x|int32x|@vector
+# Déclaration publique : ^(def|class|async def) [A-Za-z]|^    (def|async def) [a-z]\w*\(self|^[A-Z][A-Z0-9_]+\s*=|^<introspection>|^[a-z_]+\.[A-Za-z]
+# 0 déclarations publiques, 13 mentions, 4 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+_sysconfigdata__linux_x86_64-linux-gnu.py:685: 'LIBHACL_BLAKE2_SIMD128_CFLAGS': '-msse -msse2 -msse3 -msse4.1 -msse4.2 -DHACL_CAN_COMPILE_VEC128',
+_sysconfigdata__linux_x86_64-linux-gnu.py:686: 'LIBHACL_BLAKE2_SIMD128_OBJS': 'Modules/_hacl/Hacl_Hash_Blake2s_Simd128.o',
+_sysconfigdata__linux_x86_64-linux-gnu.py:687: 'LIBHACL_BLAKE2_SIMD256_CFLAGS': '-mavx2 -DHACL_CAN_COMPILE_VEC256',
+_sysconfigdata__linux_x86_64-linux-gnu.py:688: 'LIBHACL_BLAKE2_SIMD256_OBJS': 'Modules/_hacl/Hacl_Hash_Blake2b_Simd256.o',
+_sysconfigdata__x86_64-linux-gnu.py:685: 'LIBHACL_BLAKE2_SIMD128_CFLAGS': '-msse -msse2 -msse3 -msse4.1 -msse4.2 -DHACL_CAN_COMPILE_VEC128',
+_sysconfigdata__x86_64-linux-gnu.py:686: 'LIBHACL_BLAKE2_SIMD128_OBJS': 'Modules/_hacl/Hacl_Hash_Blake2s_Simd128.o',
+_sysconfigdata__x86_64-linux-gnu.py:687: 'LIBHACL_BLAKE2_SIMD256_CFLAGS': '-mavx2 -DHACL_CAN_COMPILE_VEC256',
+_sysconfigdata__x86_64-linux-gnu.py:688: 'LIBHACL_BLAKE2_SIMD256_OBJS': 'Modules/_hacl/Hacl_Hash_Blake2b_Simd256.o',
+_sysconfigdata_t_x86_64-linux-gnu.py:686: 'LIBHACL_BLAKE2_SIMD128_CFLAGS': '-msse -msse2 -msse3 -msse4.1 -msse4.2 -DHACL_CAN_COMPILE_VEC128',
+_sysconfigdata_t_x86_64-linux-gnu.py:687: 'LIBHACL_BLAKE2_SIMD128_OBJS': 'Modules/_hacl/Hacl_Hash_Blake2s_Simd128.o',
+_sysconfigdata_t_x86_64-linux-gnu.py:688: 'LIBHACL_BLAKE2_SIMD256_CFLAGS': '-mavx2 -DHACL_CAN_COMPILE_VEC256',
+_sysconfigdata_t_x86_64-linux-gnu.py:689: 'LIBHACL_BLAKE2_SIMD256_OBJS': 'Modules/_hacl/Hacl_Hash_Blake2b_Simd256.o',
+html/entities.py:2035: 'simdot;': '\u2a6a',
+
+## Lignes trouvées, par fichier
+    4 _sysconfigdata__linux_x86_64-linux-gnu.py
+    4 _sysconfigdata__x86_64-linux-gnu.py
+    4 _sysconfigdata_t_x86_64-linux-gnu.py
+    1 html/entities.py

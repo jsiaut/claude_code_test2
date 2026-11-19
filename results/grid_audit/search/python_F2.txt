@@ -1,0 +1,175 @@
+# Recherche d'absence : python, case F2
+# Chaîne : Python 3.15.2
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^(def|class|async def) [A-Za-z]|^    (def|async def) [a-z]\w*\(self|^[A-Z][A-Z0-9_]+\s*=|^<introspection>|^[a-z_]+\.[A-Za-z]
+# 7 déclarations publiques, 218 mentions, 30 fichiers
+
+## Déclarations publiques
+_ast_unparse.py:62: def interleave(self, inter, f, seq):
+locale.py:609: def setlocale(category, locale=None):
+re/_constants.py:213: SRE_FLAG_LOCALE = 4 # honour system locale
+re/_constants.py:216: SRE_FLAG_UNICODE = 32 # use unicode "locale"
+re/_constants.py:219: SRE_FLAG_ASCII = 256 # use ascii "locale"
+xml/sax/saxutils.py:314: def setLocale(self, locale):
+xml/sax/xmlreader.py:66: def setLocale(self, locale):
+
+## Mentions (au plus 12 lignes par fichier)
+_ast_unparse.py:82: self.interleave(lambda: self.write(", "), traverser, items)
+_ast_unparse.py:222: self.interleave(
+_ast_unparse.py:243: self.interleave(lambda: self.write(", "), self.traverse, node.names)
+_ast_unparse.py:251: self.interleave(lambda: self.write(", "), self.traverse, node.names)
+_ast_unparse.py:296: self.interleave(lambda: self.write(", "), self.traverse, node.targets)
+_ast_unparse.py:307: self.interleave(lambda: self.write(", "), self.write, node.names)
+_ast_unparse.py:311: self.interleave(lambda: self.write(", "), self.write, node.names)
+_ast_unparse.py:443: self.interleave(lambda: self.write(", "), self.traverse, type_params)
+_ast_unparse.py:522: self.interleave(lambda: self.write(", "), self.traverse, node.items)
+_ast_unparse.py:528: self.interleave(lambda: self.write(", "), self.traverse, node.items)
+_ast_unparse.py:719: self.interleave(lambda: self.write(", "), self.traverse, node.elts)
+_ast_unparse.py:778: self.interleave(lambda: self.write(", "), self.traverse, node.elts)
+_pydatetime.py:1111: # strftime("%c", ...) is locale specific.
+_pydecimal.py:6253: # The locale module is only needed for the 'n' format specifier.  The
+_pydecimal.py:6255: # don't care too much if locale isn't present.
+_pydecimal.py:6257: import locale as _locale
+_pydecimal.py:6382: #   (3) list of positive integers + [locale.CHAR_MAX], or
+_pyio.py:47: (i.e. "locale" or "utf-8" depends on UTF-8 mode).
+_pyio.py:60: encoding = "locale"
+_pyio.py:2062: decoded or encoded with. It defaults to locale.getencoding().
+_pyio.py:2095: if encoding == "locale":
+_pyio.py:2228: if encoding == "locale":
+_pyio.py:2337: import locale
+_pyio.py:2339: # Importing locale may fail if Python is being built
+_pyio.py:2342: return locale.getencoding()
+_strptime.py:4: LocaleTime -- Discovers and stores locale-specific time information
+_strptime.py:9: _getlang -- Figure out what language is being used for the locale
+_strptime.py:15: import locale
+_strptime.py:31: return locale.getlocale(locale.LC_TIME)
+_strptime.py:69: """Stores and handles locale-specific information related to time.
+_strptime.py:92: The locale language is set at the offset and then checked again before
+_strptime.py:94: mix of information from more than one locale.  This would most likely
+_strptime.py:95: happen when using threads where one thread calls a locale-dependent
+_strptime.py:96: function while another thread changes the locale while the function in
+_strptime.py:98: locks to prevent changing the locale while locale-dependent code is
+_strptime.py:115: raise ValueError("locale changed during initialization")
+_strptime.py:230: # Must deal with possible lack of locale info
+calendar.py:11: import locale as _locale
+calendar.py:95: # fresh on each call, in case the user changes locale between calls.
+calendar.py:621: def __init__(self, locale):
+calendar.py:622: self.locale = locale
+calendar.py:627: _locale.setlocale(_locale.LC_TIME, self.locale)
+calendar.py:634: locale = _locale.setlocale(_locale.LC_TIME, None)
+calendar.py:635: if locale == "C":
+calendar.py:637: # The LC_TIME locale does not seem to be configured:
+calendar.py:638: # get the user preferred locale.
+calendar.py:639: locale = _locale.setlocale(_locale.LC_TIME, None)
+calendar.py:640: return locale
+calendar.py:645: This class can be passed a locale name in the constructor and will return
+fileinput.py:317: encoding = self._encoding or "locale"
+fileinput.py:403: encoding = "locale"
+gettext.py:58: _default_localedir = os.path.join(sys.base_prefix, 'share', 'locale')
+gettext.py:236: import locale
+gettext.py:237: loc = locale.normalize(loc)
+gettext.py:241: # split up the locale into its base components
+gettext.py:520: mofile_lp = os.path.join("/usr/share/locale-langpack", lang,
+gettext.py:523: # first look into the standard locale dir, then into the
+gettext.py:524: # langpack locale dir
+gettext.py:586: # a mapping b/w domains and locale directories
+locale.py:1: """Locale support module.
+locale.py:3: The module provides low-level access to the C lib's locale APIs and adds high
+locale.py:4: level number formatting APIs as well as a locale aliasing engine to complement
+locale.py:7: The aliasing engine includes support for many commonly used locale names and
+locale.py:9: also includes default encodings for all supported locale names.
+locale.py:22: # If this fails, fall back on a basic 'C' locale emulation.
+locale.py:34: Compares two strings according to the locale.
+locale.py:40: Returns a string that behaves for cmp locale-aware.
+locale.py:50: # Locale emulation
+locale.py:64: Returns numeric and monetary locale-specific parameters.
+locale.py:66: # 'C' locale default values
+locale.py:88: Activates/queries locale processing.
+netrc.py:91: with open(file, encoding="locale") as fp:
+platform.py:306: encoding="locale",
+platform.py:688: # "file" output is locale dependent: force the usage of the C locale
+platform.py:700: # With the C locale, the output should be mostly ASCII-compatible.
+site.py:57: lazy import locale
+site.py:223: # locale encoding for backward compatibility.
+site.py:225: ".pth files decoded to locale encoding as a fallback",
+site.py:229: content = raw_content.decode(locale.getencoding())
+site.py:230: _trace(f"Using fallback encoding {locale.getencoding()!r}")
+ssl.py:1515: in ``"%b %d %H:%M:%S %Y %Z"`` strptime format (C locale).
+subprocess.py:46: import locale
+subprocess.py:499: return locale.getencoding()
+subprocess.py:570: decoded according to locale encoding, or by "encoding" if set. Text mode
+subprocess.py:652: according to locale encoding, or by "encoding" if set. Text mode is
+subprocess.py:774: return a 2-tuple (status, output). The locale encoding is used
+subprocess.py:1364: according to locale encoding, or by "encoding" if set. Text mode
+textwrap.py:105: # XXX this is not locale- or charset-aware -- string.lowercase
+asyncio/base_events.py:161: def _interleave_addrinfos(addrinfos, first_address_family_count=1):
+asyncio/base_events.py:162: """Interleave list of addrinfo tuples by family."""
+asyncio/base_events.py:1072: happy_eyeballs_delay=None, interleave=None,
+asyncio/base_events.py:1115: if happy_eyeballs_delay is not None and interleave is None:
+asyncio/base_events.py:1116: # If using happy eyeballs, default to interleave addresses by family
+asyncio/base_events.py:1117: interleave = 1
+asyncio/base_events.py:1140: if interleave:
+asyncio/base_events.py:1141: infos = _interleave_addrinfos(infos, interleave)
+asyncio/events.py:358: happy_eyeballs_delay=None, interleave=None):
+curses/textpad.py:67: # represent a non-ASCII 8-bit-locale character on a wide build.
+curses/textpad.py:113: # an int byte through the locale on a wide build.
+email/charset.py:241: # str because its .lower() is locale insensitive.  If the argument
+email/utils.py:255: # Note: we cannot use strftime() because that honors the locale and RFC
+logging/handlers.py:993: mapping by lowercasing the logging level name because of locale-
+profiling/sampling/_format_utils.py:1: import locale
+profiling/sampling/_format_utils.py:5: return locale.format_string(f'%.{decimals}f', value, grouping=True)
+profiling/sampling/cli.py:5: import locale
+profiling/sampling/cli.py:1007: # Set locale for number formatting, restore on exit
+profiling/sampling/cli.py:1008: old_locale = locale.setlocale(locale.LC_ALL, None)
+profiling/sampling/cli.py:1009: locale.setlocale(locale.LC_ALL, "")
+profiling/sampling/cli.py:1013: locale.setlocale(locale.LC_ALL, old_locale)
+profiling/sampling/heatmap_collector.py:8: import locale
+re/__init__.py:82: With LOCALE, it will match the set [0-9_] plus characters defined
+re/__init__.py:83: as letters for the current locale.
+re/__init__.py:111: L  LOCALE      Make \w, \W, \b, \B, dependent on the current locale.
+re/__init__.py:137: "ASCII", "IGNORECASE", "LOCALE", "MULTILINE", "DOTALL", "VERBOSE",
+re/__init__.py:145: ASCII = A = _compiler.SRE_FLAG_ASCII # assume ascii "locale"
+re/__init__.py:147: LOCALE = L = _compiler.SRE_FLAG_LOCALE # assume current 8-bit locale
+re/__init__.py:148: UNICODE = U = _compiler.SRE_FLAG_UNICODE # assume unicode "locale"
+re/_compiler.py:258: if fixup: # IGNORECASE and not LOCALE
+re/_compiler.py:270: if fixup: # IGNORECASE and not LOCALE
+re/_compiler.py:301: if fixup: # IGNORECASE and not LOCALE
+re/_parser.py:950: raise ValueError("cannot use LOCALE flag with a str pattern")
+re/_parser.py:959: raise ValueError("ASCII and LOCALE flags are incompatible")
+xml/sax/saxutils.py:315: self._parent.setLocale(locale)
+xml/sax/xmlreader.py:67: """Allow an application to set the locale for errors and warnings.
+xml/sax/xmlreader.py:70: and warnings; if they cannot support the requested locale,
+xml/sax/xmlreader.py:72: request a locale change in the middle of a parse."""
+xml/sax/xmlreader.py:73: raise SAXNotSupportedException("Locale support not implemented")
+
+## Lignes trouvées, par fichier
+   20 _ast_unparse.py
+    1 _pydatetime.py
+    4 _pydecimal.py
+    8 _pyio.py
+   15 _strptime.py
+    8 asyncio/base_events.py
+    1 asyncio/events.py
+   36 calendar.py
+    2 curses/textpad.py
+    1 email/charset.py
+    1 email/utils.py
+    2 fileinput.py
+    8 gettext.py
+   70 locale.py
+    1 logging/handlers.py
+    1 netrc.py
+    3 platform.py
+    2 profiling/sampling/_format_utils.py
+    5 profiling/sampling/cli.py
+    1 profiling/sampling/heatmap_collector.py
+    7 re/__init__.py
+    3 re/_compiler.py
+    3 re/_constants.py
+    2 re/_parser.py
+    5 site.py
+    1 ssl.py
+    6 subprocess.py
+    1 textwrap.py
+    2 xml/sax/saxutils.py
+    5 xml/sax/xmlreader.py

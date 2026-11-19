@@ -1,0 +1,110 @@
+# Recherche d'absence : python, case E7
+# Chaîne : Python 3.15.2
+# Motif : comptime|constexpr|const_?fn|static_?if|ctfe|compile_?time|@generated|specializ
+# Déclaration publique : ^(def|class|async def) [A-Za-z]|^    (def|async def) [a-z]\w*\(self|^[A-Z][A-Z0-9_]+\s*=|^<introspection>|^[a-z_]+\.[A-Za-z]
+# 2 déclarations publiques, 80 mentions, 27 fichiers
+
+## Déclarations publiques
+<introspection>:2635: _opcode.ENABLE_SPECIALIZATION
+<introspection>:2641: _opcode.get_specialization_stats
+
+## Mentions (au plus 12 lignes par fichier)
+_opcode_metadata.py:5: _specializations = frozendict(
+_opcode_metadata.py:135: _specialized_opmap = frozendict(
+bdb.py:273: For all the events, specialized functions (see the dispatch_*()
+dis.py:18: _specializations,
+dis.py:19: _specialized_opmap,
+dis.py:63: for name, op in _specialized_opmap.items():
+dis.py:70: specialized: base for base, family in _specializations.items() for specialized in family
+dis.py:397: """Numeric code for the base operation if operation is specialized.
+dis.py:405: """Human readable name for the base operation if operation is specialized.
+dis.py:1156: parser.add_argument('-S', '--specialized', action='store_true',
+dis.py:1157: help='show specialized bytecode')
+dis.py:1168: dis(code, show_caches=args.show_caches, adaptive=args.specialized,
+doctest.py:378: A specialized version of the python debugger that redirects stdout
+inspect.py:243: Member descriptors are specialized descriptors defined in extension
+inspect.py:251: Member descriptors are specialized descriptors defined in extension
+inspect.py:260: getset descriptors are specialized descriptors defined in extension
+inspect.py:268: getset descriptors are specialized descriptors defined in extension
+opcode.py:16: from _opcode_metadata import (_specializations, _specialized_opmap, opmap,  # noqa: F401
+opcode.py:21: for m in (opmap, _specialized_opmap):
+tempfile.py:761: """Temporary file wrapper, specialized to switch from BytesIO
+typing.py:325: def _check_generic_specialization(cls, arguments):
+typing.py:343: # specialized in this call are parameters with default values.
+typing.py:1205: _check_generic_specialization(cls, args)
+weakref.py:278: """Specialized reference that includes a key corresponding to the value.
+collections/__init__.py:1: '''This module implements specialized container datatypes providing
+concurrent/futures/process.py:722: Specialized implementation of itertools.chain.from_iterable.
+email/_header_value_parser.py:2724: # mantype and subtype specialized TokenLists here.  Probably not worth it.
+email/headerregistry.py:586: specialized classes is copied in to the registry when the factory is
+email/headerregistry.py:597: """Register cls as the specialized class for handling "name" headers.
+email/headerregistry.py:609: Creates a header instance by creating a specialized class for parsing
+email/headerregistry.py:611: base_class with a specialized class from the registry or the
+email/policy.py:109: the specialized header class that would be used to construct a header
+email/mime/base.py:5: """Base class for MIME specializations."""
+email/mime/base.py:15: """Base class for MIME specializations."""
+importlib/metadata/_adapters.py:22: Specialized Message subclass to handle metadata naturally.
+json/__init__.py:57: Specializing JSON object decoding::
+json/__init__.py:72: Specializing JSON object encoding::
+logging/__init__.py:604: default as described above. Allow for specialized date formatting with
+logging/__init__.py:688: This method is provided as an extension point for specialized
+logging/__init__.py:1638: specialized LogRecords.
+profiling/sampling/cli.py:412: "(shows which bytecode instructions are executing, including specializations).",
+profiling/sampling/gecko_collector.py:507: # Use formatted opcode name (with base opcode for specialized ones)
+profiling/sampling/gecko_collector.py:518: "is_specialized": opcode_info["is_specialized"],
+profiling/sampling/gecko_collector.py:801: {"key": "is_specialized", "label": "Specialized", "format": "string"},
+profiling/sampling/heatmap_collector.py:556: 'is_specialized': info['is_specialized'],
+profiling/sampling/heatmap_collector.py:871: # Calculate specialization percentage
+profiling/sampling/heatmap_collector.py:873: specialized_samples = sum(d['samples'] for d in bytecode_data if d['is_specialized'])
+profiling/sampling/heatmap_collector.py:874: spec_pct = int(100 * specialized_samples / total_samples) if total_samples > 0 else 0
+profiling/sampling/heatmap_collector.py:904: # Specialization color for toggle mode (green gradient based on spec %)
+profiling/sampling/heatmap_collector.py:907: spec_color = self._format_specialization_color(spec_pct)
+profiling/sampling/heatmap_collector.py:1018: def _format_specialization_color(self, spec_pct: int) -> str:
+profiling/sampling/heatmap_collector.py:1019: """Format specialization color based on percentage.
+profiling/sampling/opcode_utils.py:3: This module provides utilities to get opcode names and detect specialization
+profiling/sampling/opcode_utils.py:6: source line, including Python's adaptive specialization optimizations.
+profiling/sampling/opcode_utils.py:12: # This includes both standard opcodes and specialized variants (Python 3.11+)
+profiling/sampling/opcode_utils.py:14: if hasattr(opcode, "_specialized_opmap"):
+profiling/sampling/opcode_utils.py:15: for name, op in opcode._specialized_opmap.items():
+profiling/sampling/opcode_utils.py:18: # Build deopt mapping: specialized opcode number -> base opcode number
+profiling/sampling/opcode_utils.py:19: # Python 3.11+ uses adaptive specialization where generic opcodes like
+profiling/sampling/opcode_utils.py:20: # LOAD_ATTR can be replaced at runtime with specialized variants like
+profiling/sampling/opcode_utils.py:23: if hasattr(opcode, "_specializations") and hasattr(
+profiling/sampling/opcode_utils.py:24: opcode, "_specialized_opmap"
+profiling/sampling/opcode_utils.py:26: for base_name, variant_names in opcode._specializations.items():
+profiling/sampling/opcode_utils.py:30: variant_opcode = opcode._specialized_opmap.get(variant_name)
+profiling/sampling/live_collector/widgets.py:1067: is_specialized = opcode_info["is_specialized"]
+profiling/sampling/live_collector/widgets.py:1077: # Specialized opcodes shown in magenta, base opcodes in yellow
+profiling/sampling/live_collector/widgets.py:1078: name_color = color_magenta if is_specialized else color_yellow
+xml/dom/__init__.py:64: Exceptions with specific codes are specializations of this class."""
+xmlrpc/server.py:600: This specialization of SimpleXMLRPCServer allows the user to create
+zipfile/_path/__init__.py:318: specialized type. If the caller wishes to retain the
+
+## Lignes trouvées, par fichier
+    2 <introspection>
+    2 _opcode_metadata.py
+    1 bdb.py
+    1 collections/__init__.py
+    1 concurrent/futures/process.py
+    9 dis.py
+    1 doctest.py
+    1 email/_header_value_parser.py
+    4 email/headerregistry.py
+    2 email/mime/base.py
+    1 email/policy.py
+    1 importlib/metadata/_adapters.py
+    4 inspect.py
+    2 json/__init__.py
+    3 logging/__init__.py
+    2 opcode.py
+    1 profiling/sampling/cli.py
+    3 profiling/sampling/gecko_collector.py
+    8 profiling/sampling/heatmap_collector.py
+    3 profiling/sampling/live_collector/widgets.py
+   22 profiling/sampling/opcode_utils.py
+    1 tempfile.py
+    3 typing.py
+    1 weakref.py
+    1 xml/dom/__init__.py
+    1 xmlrpc/server.py
+    1 zipfile/_path/__init__.py

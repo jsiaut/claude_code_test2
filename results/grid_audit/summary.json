@@ -163,9 +163,11 @@
    "exécutée+recherche": 1
   },
   "python": {
-   "sans sonde": 29,
-   "déclarative": 4,
-   "sondée": 4,
+   "exécutée": 16,
+   "sondée": 33,
+   "recherche": 12,
+   "échec+recherche": 3,
+   "échec": 2,
    "mesurée": 1
   },
   "lua": {
@@ -208,17 +210,17 @@
   }
  },
  "total": {
-  "exécutée": 516,
-  "sondée": 765,
-  "échec+recherche": 45,
+  "exécutée": 532,
+  "sondée": 794,
+  "échec+recherche": 48,
   "mesurée": 25,
   "exécutée+échec": 23,
-  "recherche": 130,
+  "recherche": 142,
   "exécutée+recherche": 19,
-  "échec": 22,
+  "échec": 24,
   "exécutée+échec+recherche": 4,
-  "sans sonde": 60,
-  "déclarative": 6
+  "sans sonde": 31,
+  "déclarative": 2
  },
  "divergences": [
   [
@@ -227,13 +229,6 @@
    0.5,
    0,
    0
-  ],
-  [
-   "python",
-   "D4",
-   0.5,
-   0.5,
-   1
   ]
  ]
 }

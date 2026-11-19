@@ -1,2 +1,4 @@
 #!/bin/sh
-python3.15 "$(dirname "$0")/probe.py"
+# Sonde de Python : audit de la grille (audit/, docs/V4_PLAN.md 2.1), qui reprend les cas de la première sonde
+# (base.sh). Sortie : results/probes/python.txt
+cd "$(dirname "$0")" && sh audit/run.sh

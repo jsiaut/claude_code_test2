@@ -1,0 +1,31 @@
+# Recherche d'absence : python, case D5
+# Chaîne : Python 3.15.2
+# Motif : fence|spin_?loop|spin_?wait|on_?spin_?wait|\bpause\b|cpu_?relax|memory_?barrier|yield_?processor|spin_?hint
+# Déclaration publique : ^(def|class|async def) [A-Za-z]|^    (def|async def) [a-z]\w*\(self|^[A-Z][A-Z0-9_]+\s*=|^<introspection>|^[a-z_]+\.[A-Za-z]
+# 1 déclarations publiques, 9 mentions, 10 fichiers
+
+## Déclarations publiques
+<introspection>:3048: _signal.pause
+
+## Mentions (au plus 12 lignes par fichier)
+_pyrepl/terminfo.py:57: "hook", "pause", "wait", "u0", "u1", "u2", "u3", "u4", "u5", "u6", "u7",
+asyncio/base_events.py:1356: # Pause early so that "ssl_protocol.data_received()" doesn't
+asyncio/proactor_events.py:231: # since the protocol can decide to pause reading again.
+asyncio/protocols.py:40: Pause and resume calls are paired -- pause_writing() is called
+asyncio/sslproto.py:131: """Pause the receiving end.
+asyncio/transports.py:56: """Pause the receiving end.
+profiling/sampling/sample.py:20: """Context manager to pause/resume threads around sampling if blocking is True."""
+profiling/sampling/live_collector/__init__.py:62: │ │    - nsamples  %  time          │ │ s: sort, p: pause
+profiling/sampling/live_collector/collector.py:183: self.paused = False  # Pause UI updates (profiling continues)
+
+## Lignes trouvées, par fichier
+    1 <introspection>
+    1 _pyrepl/terminfo.py
+    1 asyncio/base_events.py
+    1 asyncio/proactor_events.py
+    1 asyncio/protocols.py
+    1 asyncio/sslproto.py
+    1 asyncio/transports.py
+    1 profiling/sampling/live_collector/__init__.py
+    1 profiling/sampling/live_collector/collector.py
+    1 profiling/sampling/sample.py

@@ -333,6 +333,31 @@
       "listing": "/opt/node26/bin/node tools/grid_audit/listings/node_api.js 2>/dev/null",
       "public": ".",
       "version": "/opt/node26/bin/node --version"
+    },
+    "python": {
+      "roots": [
+        "/usr/lib/python3.15"
+      ],
+      "ext": [
+        ".py"
+      ],
+      "exclude": [
+        "/test/",
+        "/tests/",
+        "/idlelib/",
+        "/tkinter/",
+        "/turtledemo/",
+        "/site-packages/",
+        "/dist-packages/",
+        "/__pycache__/",
+        "/ensurepip/",
+        "/pydoc_data/",
+        "/__phello__/"
+      ],
+      "strip": "/usr/lib/python3.15/",
+      "listing": "python3.15 tools/grid_audit/listings/python_cmods.py",
+      "public": "^(def|class|async def) [A-Za-z]|^    (def|async def) [a-z]\\w*\\(self|^[A-Z][A-Z0-9_]+\\s*=|^<introspection>|^[a-z_]+\\.[A-Za-z]",
+      "version": "python3.15 --version"
     }
   }
 }

@@ -1,0 +1,156 @@
+# Recherche d'absence : python, case C2
+# Chaîne : Python 3.15.2
+# Motif : \bavx|\bsse|_mm(256|512)?_|\bx86|intrinsic
+# Déclaration publique : ^(def|class|async def) [A-Za-z]|^    (def|async def) [a-z]\w*\(self|^[A-Z][A-Z0-9_]+\s*=|^<introspection>|^[a-z_]+\.[A-Za-z]
+# 5 déclarations publiques, 119 mentions, 45 fichiers
+
+## Déclarations publiques
+dis.py:47: CALL_INTRINSIC_1 = opmap['CALL_INTRINSIC_1']
+dis.py:48: CALL_INTRINSIC_2 = opmap['CALL_INTRINSIC_2']
+pickle.py:156: TUPLE2         = b'\x86'  # build 2-tuple from two topmost stack items
+<introspection>:2637: _opcode.get_intrinsic1_descs
+<introspection>:2638: _opcode.get_intrinsic2_descs
+
+## Mentions (au plus 12 lignes par fichier)
+_opcode_metadata.py:284: CALL_INTRINSIC_1=51,
+_opcode_metadata.py:285: CALL_INTRINSIC_2=52,
+_osx_support.py:549: elif archs == ('arm64', 'x86_64'):
+_osx_support.py:553: elif archs == ('i386', 'x86_64'):
+_osx_support.py:555: elif archs == ('i386', 'ppc', 'x86_64'):
+_osx_support.py:557: elif archs == ('ppc64', 'x86_64'):
+_osx_support.py:559: elif archs == ('i386', 'ppc', 'ppc64', 'x86_64'):
+_osx_support.py:570: machine = 'x86_64'
+_pydatetime.py:409: def _parse_hh_mm_ss_ff(tstr):
+_pydatetime.py:465: time_comps = _parse_hh_mm_ss_ff(timestr)
+_pydatetime.py:497: tz_comps = _parse_hh_mm_ss_ff(tzstr)
+_sysconfigdata__linux_x86_64-linux-gnu.py:14: 'AR': 'x86_64-linux-gnu-gcc-ar',
+_sysconfigdata__linux_x86_64-linux-gnu.py:22: 'BLDSHARED': 'x86_64-linux-gnu-gcc -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions     -g -fwrapv -O2   ',
+_sysconfigdata__linux_x86_64-linux-gnu.py:26: 'BUILD_GNU_TYPE': 'x86_64-pc-linux-gnu',
+_sysconfigdata__linux_x86_64-linux-gnu.py:29: 'CC': 'x86_64-linux-gnu-gcc',
+_sysconfigdata__linux_x86_64-linux-gnu.py:46: 'CONFIG_ARGS': "'--enable-shared' '--prefix=/usr' '--libdir=/usr/lib/x86_64-linux-gnu' '--enable-ipv6' '--enable-loadable-sqlite-extensions' '--with-dbmliborder
+_sysconfigdata__linux_x86_64-linux-gnu.py:55: 'CXX': 'x86_64-linux-gnu-g++',
+_sysconfigdata__linux_x86_64-linux-gnu.py:56: 'DESTDIRS': '/usr /usr/lib/x86_64-linux-gnu /usr/lib/python3.15 /usr/lib/python3.15/lib-dynload',
+_sysconfigdata__linux_x86_64-linux-gnu.py:85: 'EXT_SUFFIX': '.cpython-315-x86_64-linux-gnu.so',
+_sysconfigdata__linux_x86_64-linux-gnu.py:646: 'HOST_GNU_TYPE': 'x86_64-pc-linux-gnu',
+_sysconfigdata__linux_x86_64-linux-gnu.py:667: 'LDCXXSHARED': 'x86_64-linux-gnu-g++ -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions     -g -fwrapv -O2   ',
+_sysconfigdata__linux_x86_64-linux-gnu.py:672: 'LDSHARED': 'x86_64-linux-gnu-gcc -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions     -g -fwrapv -O2   ',
+_sysconfigdata__linux_x86_64-linux-gnu.py:676: 'LIBDIR': '/usr/lib/x86_64-linux-gnu',
+_sysconfigdata__x86_64-linux-gnu.py:14: 'AR': 'x86_64-linux-gnu-gcc-ar',
+_sysconfigdata__x86_64-linux-gnu.py:22: 'BLDSHARED': 'x86_64-linux-gnu-gcc -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions     -g -fwrapv -O2   ',
+_sysconfigdata__x86_64-linux-gnu.py:26: 'BUILD_GNU_TYPE': 'x86_64-pc-linux-gnu',
+_sysconfigdata__x86_64-linux-gnu.py:29: 'CC': 'x86_64-linux-gnu-gcc',
+_sysconfigdata__x86_64-linux-gnu.py:46: 'CONFIG_ARGS': "'--enable-shared' '--prefix=/usr' '--libdir=/usr/lib/x86_64-linux-gnu' '--enable-ipv6' '--enable-loadable-sqlite-extensions' '--with-dbmliborder
+_sysconfigdata__x86_64-linux-gnu.py:55: 'CXX': 'x86_64-linux-gnu-g++',
+_sysconfigdata__x86_64-linux-gnu.py:56: 'DESTDIRS': '/usr /usr/lib/x86_64-linux-gnu /usr/lib/python3.15 /usr/lib/python3.15/lib-dynload',
+_sysconfigdata__x86_64-linux-gnu.py:85: 'EXT_SUFFIX': '.cpython-315-x86_64-linux-gnu.so',
+_sysconfigdata__x86_64-linux-gnu.py:646: 'HOST_GNU_TYPE': 'x86_64-pc-linux-gnu',
+_sysconfigdata__x86_64-linux-gnu.py:667: 'LDCXXSHARED': 'x86_64-linux-gnu-g++ -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions     -g -fwrapv -O2   ',
+_sysconfigdata__x86_64-linux-gnu.py:672: 'LDSHARED': 'x86_64-linux-gnu-gcc -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions     -g -fwrapv -O2   ',
+_sysconfigdata__x86_64-linux-gnu.py:676: 'LIBDIR': '/usr/lib/x86_64-linux-gnu',
+_sysconfigdata_t_x86_64-linux-gnu.py:14: 'AR': 'x86_64-linux-gnu-gcc-ar',
+_sysconfigdata_t_x86_64-linux-gnu.py:22: 'BLDSHARED': 'x86_64-linux-gnu-gcc -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions     -g -fwrapv -O2   ',
+_sysconfigdata_t_x86_64-linux-gnu.py:26: 'BUILD_GNU_TYPE': 'x86_64-pc-linux-gnu',
+_sysconfigdata_t_x86_64-linux-gnu.py:29: 'CC': 'x86_64-linux-gnu-gcc',
+_sysconfigdata_t_x86_64-linux-gnu.py:46: 'CONFIG_ARGS': "'--prefix=/usr' '--libdir=/usr/lib/x86_64-linux-gnu' '--enable-ipv6' '--enable-loadable-sqlite-extensions' '--with-dbmliborder=bdb:gdbm' '--with
+_sysconfigdata_t_x86_64-linux-gnu.py:55: 'CXX': 'x86_64-linux-gnu-g++',
+_sysconfigdata_t_x86_64-linux-gnu.py:56: 'DESTDIRS': '/usr /usr/lib/x86_64-linux-gnu /usr/lib/python3.15 /usr/lib/python3.15/lib-dynload',
+_sysconfigdata_t_x86_64-linux-gnu.py:86: 'EXT_SUFFIX': '.cpython-315t-x86_64-linux-gnu.so',
+_sysconfigdata_t_x86_64-linux-gnu.py:647: 'HOST_GNU_TYPE': 'x86_64-pc-linux-gnu',
+_sysconfigdata_t_x86_64-linux-gnu.py:668: 'LDCXXSHARED': 'x86_64-linux-gnu-g++ -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions     -g -fwrapv -O2   ',
+_sysconfigdata_t_x86_64-linux-gnu.py:673: 'LDSHARED': 'x86_64-linux-gnu-gcc -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions     -g -fwrapv -O2   ',
+_sysconfigdata_t_x86_64-linux-gnu.py:677: 'LIBDIR': '/usr/lib/x86_64-linux-gnu',
+configparser.py:7: Intrinsic defaults can be specified by passing them into the
+configparser.py:24: dictionary or intrinsic defaults. The keys must be strings, the values
+dis.py:15: _intrinsic_1_descs,
+dis.py:16: _intrinsic_2_descs,
+dis.py:640: elif deop == CALL_INTRINSIC_1:
+dis.py:641: argrepr = _intrinsic_1_descs[arg]
+dis.py:642: elif deop == CALL_INTRINSIC_2:
+dis.py:643: argrepr = _intrinsic_2_descs[arg]
+opcode.py:39: _intrinsic_1_descs = _opcode.get_intrinsic1_descs()
+opcode.py:40: _intrinsic_2_descs = _opcode.get_intrinsic2_descs()
+operator.py:4: This module exports a set of functions corresponding to the intrinsic
+pickletools.py:1606: code='\x86',
+platform.py:805: arch = ['x86', 'MIPS', 'Alpha', 'PowerPC', None,
+webbrowser.py:521: edge64 = os.path.join(os.environ.get("PROGRAMFILES(x86)", "C:\\Program Files (x86)"),
+ctypes/_layout.py:62: #   See https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html#index-mms-bitfields
+ctypes/util.py:398: 'x86_64-64': 'libc6,x86-64',
+encodings/cp037.py:54: '\x86'     #  0x06 -> CONTROL
+encodings/cp1006.py:182: '\x86'     #  0x86 -> <control>
+encodings/cp1026.py:54: '\x86'     #  0x06 -> CONTROL
+encodings/cp1140.py:54: '\x86'     #  0x06 -> CONTROL
+encodings/cp273.py:54: '\x86'      #  0x06 -> START OF SELECTED AREA (SSA)
+encodings/cp424.py:54: '\x86'     #  0x06 -> REQUIRED NEW LINE
+encodings/cp500.py:54: '\x86'     #  0x06 -> CONTROL
+encodings/cp720.py:184: '\x86'
+encodings/cp875.py:54: '\x86'     #  0x06 -> CONTROL
+encodings/hp_roman8.py:189: '\x86'     #  0x86 -> <control>
+encodings/iso8859_1.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_10.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_11.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_13.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_14.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_15.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_16.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_2.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_3.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_4.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_5.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_6.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_7.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_8.py:182: '\x86'     #  0x86 -> <control>
+encodings/iso8859_9.py:182: '\x86'     #  0x86 -> <control>
+encodings/tis_620.py:182: '\x86'     #  0x86 -> <control>
+html/entities.py:2092: 'ssetmn;': '\u2216',
+sysconfig/__init__.py:696: linux-x86_64
+sysconfig/__init__.py:703: - win-amd64 (64-bit Windows on AMD64, aka x86_64, Intel64, and EM64T)
+sysconfig/__init__.py:709: - linux-x86_64
+sysconfig/__init__.py:756: "i686": "x86",
+sysconfig/__init__.py:757: "x86_64": "x86_64",
+
+## Lignes trouvées, par fichier
+    2 <introspection>
+    2 _opcode_metadata.py
+    6 _osx_support.py
+    3 _pydatetime.py
+   20 _sysconfigdata__linux_x86_64-linux-gnu.py
+   20 _sysconfigdata__x86_64-linux-gnu.py
+   20 _sysconfigdata_t_x86_64-linux-gnu.py
+    2 configparser.py
+    1 ctypes/_layout.py
+    1 ctypes/util.py
+    8 dis.py
+    1 encodings/cp037.py
+    1 encodings/cp1006.py
+    1 encodings/cp1026.py
+    1 encodings/cp1140.py
+    1 encodings/cp273.py
+    1 encodings/cp424.py
+    1 encodings/cp500.py
+    1 encodings/cp720.py
+    1 encodings/cp875.py
+    1 encodings/hp_roman8.py
+    1 encodings/iso8859_1.py
+    1 encodings/iso8859_10.py
+    1 encodings/iso8859_11.py
+    1 encodings/iso8859_13.py
+    1 encodings/iso8859_14.py
+    1 encodings/iso8859_15.py
+    1 encodings/iso8859_16.py
+    1 encodings/iso8859_2.py
+    1 encodings/iso8859_3.py
+    1 encodings/iso8859_4.py
+    1 encodings/iso8859_5.py
+    1 encodings/iso8859_6.py
+    1 encodings/iso8859_7.py
+    1 encodings/iso8859_8.py
+    1 encodings/iso8859_9.py
+    1 encodings/tis_620.py
+    1 html/entities.py
+    2 opcode.py
+    1 operator.py
+    1 pickle.py
+    1 pickletools.py
+    1 platform.py
+    5 sysconfig/__init__.py
+    1 webbrowser.py
