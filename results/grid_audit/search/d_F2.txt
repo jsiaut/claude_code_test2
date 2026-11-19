@@ -1,0 +1,290 @@
+# Recherche d'absence : d, case F2
+# Chaîne : LDC - the LLVM D compiler (1.43.0):
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^\s*(?!//|/\*|\*|private\b|package\b|import\b|return\b|assert\b|static assert|version\b|debug\b|if\b|else\b|foreach\b|for\b|while\b|unittest\b|[{}])\S
+# 185 déclarations publiques, 63 mentions, 45 fichiers
+
+## Déclarations publiques
+core/stdc/inttypes.d:353: enum _cstr SCNuMAX      = SCNu64;
+core/stdc/inttypes.d:403: enum _cstr SCNuMAX      = SCNu32;
+core/stdc/locale.d:15: module core.stdc.locale;
+core/stdc/locale.d:362: @system char*  setlocale(int category, const scope char* locale);
+core/stdc/time.d:39: @system time_t  mktime(scope tm* timeptr); // @system: MT-Safe env locale
+core/stdc/time.d:45: @system char*   asctime(const scope tm* timeptr); // @system: MT-Unsafe race:asctime locale
+core/stdc/time.d:48: @system char*   ctime(const scope time_t* timer); // @system: MT-Unsafe race:tmbuf race:asctime env locale
+core/stdc/time.d:51: @system tm*     gmtime(const scope time_t* timer); // @system: MT-Unsafe race:tmbuf env locale
+core/stdc/time.d:54: @system tm*     localtime(const scope time_t* timer); // @system: MT-Unsafe race:tmbuf env locale
+core/stdc/time.d:56: @system size_t  strftime(scope char* s, size_t maxsize, const scope char* format, const scope tm* timeptr); // @system: MT-Safe env locale
+core/stdc/time.d:65: @system time_t  mktime(scope tm* timeptr); // @system: MT-Safe env locale
+core/stdc/time.d:71: @system char*   asctime(const scope tm* timeptr); // @system: MT-Unsafe race:asctime locale
+core/stdc/time.d:74: @system char*   ctime(const scope time_t* timer); // @system: MT-Unsafe race:tmbuf race:asctime env locale
+core/stdc/time.d:77: @system tm*     gmtime(const scope time_t* timer); // @system: MT-Unsafe race:tmbuf env locale
+core/stdc/time.d:80: @system tm*     localtime(const scope time_t* timer); // @system: MT-Unsafe race:tmbuf env locale
+core/stdc/time.d:82: @system size_t  strftime(scope char* s, size_t maxsize, const scope char* format, const scope tm* timeptr); // @system: MT-Safe env locale
+core/sync/rwmutex.d:220: ++m_numActiveReaders;
+core/sync/rwmutex.d:265: ++m_numActiveReaders;
+core/sync/rwmutex.d:294: ++m_numActiveReaders;
+core/sync/rwmutex.d:316: ++m_numActiveReaders;
+core/sync/rwmutex.d:392: ++m_numActiveWriters;
+core/sync/rwmutex.d:452: ++m_numActiveWriters;
+core/sync/rwmutex.d:481: ++m_numActiveWriters;
+core/sync/rwmutex.d:503: ++m_numActiveWriters;
+core/sync/rwmutex.d:519: m_numActiveReaders > 0 )
+core/sync/rwmutex.d:553: int         m_numActiveReaders;
+core/sync/rwmutex.d:555: int         m_numActiveWriters;
+core/sys/linux/link.d:198: extern uintptr_t la_symbind32(Elf32_Sym* __sym, uint __ndx,
+core/sys/linux/link.d:201: extern uintptr_t la_symbind64(Elf64_Sym* __sym, uint __ndx,
+core/sys/posix/locale.d:11: module core.sys.posix.locale;
+core/sys/posix/locale.d:114: locale_t duplocale(locale_t locale);
+core/sys/posix/locale.d:116: void     freelocale(locale_t locale);
+core/sys/posix/locale.d:120: locale_t newlocale(int mask, const char* locale, locale_t base);
+core/sys/posix/locale.d:125: char*    setlocale(int category, const char* locale);
+core/sys/posix/locale.d:130: char*    setlocale(int category, const char* locale);
+core/sys/posix/locale.d:133: locale_t uselocale (locale_t locale);
+core/sys/posix/locale.d:220: locale_t duplocale(locale_t locale);
+core/sys/posix/locale.d:222: void     freelocale(locale_t locale);
+core/sys/posix/locale.d:226: locale_t newlocale(int mask, const char* locale, locale_t base);
+core/sys/posix/locale.d:228: char*    setlocale(int category, const char* locale);
+core/sys/posix/locale.d:230: locale_t uselocale (locale_t locale);
+core/sys/posix/locale.d:296: locale_t duplocale(locale_t locale);
+core/sys/posix/locale.d:298: void     freelocale(locale_t locale);
+core/sys/posix/locale.d:302: locale_t newlocale(int mask, const char* locale, locale_t base);
+core/sys/posix/locale.d:304: char*    setlocale(int category, const char* locale);
+core/sys/posix/locale.d:306: locale_t uselocale (locale_t locale);
+core/sys/posix/locale.d:372: locale_t duplocale(locale_t locale);
+core/sys/posix/locale.d:374: void     freelocale(locale_t locale);
+core/sys/posix/locale.d:378: locale_t newlocale(int mask, const char* locale, locale_t base);
+core/sys/posix/locale.d:380: char*    setlocale(int category, const char* locale);
+core/sys/posix/locale.d:382: locale_t uselocale (locale_t locale);
+core/sys/posix/locale.d:447: locale_t duplocale(locale_t locale);
+core/sys/posix/locale.d:449: void     freelocale(locale_t locale);
+core/sys/posix/locale.d:453: locale_t newlocale(int mask, const char* locale, locale_t base);
+core/sys/posix/locale.d:455: char*    setlocale(int category, const char* locale);
+core/sys/posix/locale.d:457: locale_t uselocale (locale_t locale);
+core/sys/posix/locale.d:523: locale_t duplocale(locale_t locale);
+core/sys/posix/locale.d:525: void     freelocale(locale_t locale);
+core/sys/posix/locale.d:529: locale_t newlocale(int mask, const char* locale, locale_t base);
+core/sys/posix/locale.d:531: char*    setlocale(int category, const char* locale);
+core/sys/posix/locale.d:533: locale_t uselocale (locale_t locale);
+core/sys/posix/string.d:23: public import core.sys.posix.locale : locale_t;
+core/sys/posix/string.d:39: int    strcoll_l(scope const char* s1, scope const char* s2, locale_t locale);
+core/sys/posix/string.d:49: size_t strxfrm_l(char* s1, scope const char* s2, size_t n, locale_t locale);
+core/sys/posix/strings.d:22: public import core.sys.posix.locale : locale_t;
+core/sys/posix/strings.d:29: int strcasecmp_l(scope const char* s1, scope const char* s2, scope locale_t locale);
+core/sys/posix/strings.d:33: int strncasecmp_l(scope const char* s1, const char* s2, size_t n, locale_t locale);
+core/sys/solaris/link.d:142: uintptr_t la_symbind64(Elf64_Sym*, uint, uintptr_t*, uintptr_t*, uint*, const scope char*);
+core/sys/solaris/link.d:149: uintptr_t la_symbind32(Elf32_Sym*, uint, uintptr_t*, uintptr_t*, uint*);
+core/sys/windows/bcrypt.d:844: NTSTATUS BCryptEnumAlgorithms(ULONG dwAlgOperations, scope ULONG* pAlgCount, scope BCRYPT_ALGORITHM_IDENTIFIER** ppAlgList, ULONG dwFlags);
+core/sys/windows/ipexport.d:95: LONG                    NumAdapters;
+core/sys/windows/ipexport.d:103: ULONG     NumAdapters;
+core/sys/windows/iprtrmib.d:205: DWORD dwNumAddr;
+core/sys/windows/iprtrmib.d:251: DWORD dwNumAddrs;
+core/sys/windows/lmchdev.d:30: enum CHARDEVQ_NUMAHEAD_PARMNUM = 5;
+core/sys/windows/lmchdev.d:59: DWORD cq1_numahead;
+core/sys/windows/lmserver.d:54: DWORD  sv402_numadmin;
+core/sys/windows/lmserver.d:89: DWORD  sv403_numadmin;
+core/sys/windows/lmserver.d:758: enum SV_NUMADMIN_PARMNUM=406;
+core/sys/windows/lmwksta.d:37: WKSTA_NUMALERTS_PARMNUM,
+core/sys/windows/mciavi.d:32: MCIERR_AVI_NOTINTERLEAVED,
+core/sys/windows/mmsystem.d:1535: UINT wNumAxes;
+core/sys/windows/mmsystem.d:1563: UINT wNumAxes;
+core/sys/windows/msacm.d:136: MMRESULT acmFormatEnumA(HACMDRIVER had, LPACMFORMATDETAILSA pafd,
+core/sys/windows/msacm.d:145: MMRESULT acmFormatTagEnumA(HACMDRIVER had, LPACMFORMATTAGDETAILSA paftd,
+core/sys/windows/msacm.d:166: alias acmFormatEnum = acmFormatEnumA;
+core/sys/windows/msacm.d:168: alias acmFormatTagEnum = acmFormatTagEnumA;
+core/sys/windows/nddeapi.d:126: UINT NDdeShareEnumA(LPSTR, UINT, PBYTE, DWORD, PDWORD, PDWORD);
+core/sys/windows/nddeapi.d:132: UINT NDdeTrustedShareEnumA(LPSTR, UINT, PBYTE, DWORD, PDWORD, PDWORD);
+core/sys/windows/nddeapi.d:155: alias NDdeShareEnum = NDdeShareEnumA;
+core/sys/windows/nddeapi.d:163: alias NDdeTrustedShareEnum = NDdeTrustedShareEnumA;
+core/sys/windows/objbase.d:52: enum STG_LAYOUT_INTERLEAVED = 1;
+core/sys/windows/objidl.d:189: LCID locale;
+core/sys/windows/objidl.d:737: HRESULT EnumAdvise(IEnumSTATDATA*);
+core/sys/windows/objidl.d:1232: HRESULT IDataAdviseHolder_EnumAdvise_Proxy(IDataAdviseHolder, IEnumSTATDATA*);
+core/sys/windows/objidl.d:1233: void IDataAdviseHolder_EnumAdvise_Stub(IRpcStubBuffer, IRpcChannelBuffer, PRPC_MESSAGE, PDWORD);
+core/sys/windows/oleidl.d:148: HRESULT EnumAdvise(LPENUMSTATDATA*);
+core/sys/windows/oleidl.d:211: HRESULT EnumAdvise(LPENUMSTATDATA*);
+core/sys/windows/ras.d:894: DWORD RasEnumAutodialAddressesA(LPSTR*, LPDWORD, LPDWORD);
+core/sys/windows/ras.d:895: DWORD RasEnumAutodialAddressesW(LPWSTR*, LPDWORD, LPDWORD);
+core/sys/windows/ras.d:964: alias RasEnumAutodialAddresses = RasEnumAutodialAddressesW;
+core/sys/windows/ras.d:1010: alias RasEnumAutodialAddresses = RasEnumAutodialAddressesA;
+core/sys/windows/shlobj.d:888: interface IFileSystemBindData : IUnknown {
+core/sys/windows/uuid.d:180: const IID CLSID_ComBinding = {0x00000328, 0x0000, 0x0000, [0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46]};
+core/sys/windows/uuid.d:425: const IID CLSID_EnumAdapterInfo = {0x6F9942CA, 0xC1B1, 0x4AB5, [0x93, 0xDA, 0x60, 0x58, 0x99, 0x1D, 0xC8, 0xF3]};
+core/sys/windows/uuid.d:699: const IID CLSID_SharingManagerEnumApplicationDe = {0x46C166AE, 0x3108, 0x11D4, [0x93, 0x48, 0x00, 0xC0, 0x4F, 0x8E, 0xEB, 0x71]};
+core/sys/windows/uuid.d:2434: const IID IID_IEnumACDGroup = {0x5AFC3157, 0x4BCC, 0x11D1, [0xBF, 0x80, 0x00, 0x80, 0x5F, 0xC1, 0x47, 0xD3]};
+core/sys/windows/uuid.d:2435: const IID IID_IEnumACString = {0x8E74C210, 0xCF9D, 0x4EAF, [0xA4, 0x03, 0x73, 0x56, 0x42, 0x8F, 0x0A, 0x5A]};
+core/sys/windows/uuid.d:2436: const IID IID_IEnumAdapterInfo = {0xA23F9D11, 0x714C, 0x41FE, [0x84, 0x71, 0xFF, 0xB1, 0x9B, 0xC2, 0x84, 0x54]};
+core/sys/windows/uuid.d:2437: const IID IID_IEnumAddress = {0x1666FCA1, 0x9363, 0x11D0, [0x83, 0x5C, 0x00, 0xAA, 0x00, 0x3C, 0xCA, 0xBD]};
+core/sys/windows/uuid.d:2438: const IID IID_IEnumAgent = {0x5AFC314D, 0x4BCC, 0x11D1, [0xBF, 0x80, 0x00, 0x80, 0x5F, 0xC1, 0x47, 0xD3]};
+core/sys/windows/uuid.d:2439: const IID IID_IEnumAgentHandler = {0x587E8C28, 0x9802, 0x11D1, [0xA0, 0xA4, 0x00, 0x80, 0x5F, 0xC1, 0x47, 0xD3]};
+core/sys/windows/uuid.d:2440: const IID IID_IEnumAgentSession = {0x5AFC314E, 0x4BCC, 0x11D1, [0xBF, 0x80, 0x00, 0x80, 0x5F, 0xC1, 0x47, 0xD3]};
+core/sys/windows/uuid.d:2554: const IID IID_IFileSystemBindData = {0x01E18D10, 0x4D8B, 0x11D2, [0x85, 0x5D, 0x00, 0x60, 0x08, 0x05, 0x93, 0x67]};
+core/sys/windows/vfw.d:808: AVIF_ISINTERLEAVED  = 0x00000100,
+core/sys/windows/vfw.d:973: AVIFILEINFO_ISINTERLEAVED   = 0x00000100,
+core/sys/windows/vfw.d:1000: DWORD   dwInterleaveEvery;
+core/sys/windows/vfw.d:1005: AVICOMPRESSF_INTERLEAVE = 0x00000001,
+core/sys/windows/vfw.d:2225: UINT        wNumAudioAllocated;
+core/sys/windows/vfw.d:2239: UINT    wNumAudioRequested;
+core/sys/windows/wincrypt.d:221: PP_ENUMALGS = 1,
+core/sys/windows/wincrypt.d:237: PP_ENUMALGS_EX  = 22,
+core/sys/windows/wincrypt.d:786: struct PROV_ENUMALGS {
+core/sys/windows/wingdi.d:3808: enum MM_MAX_NUMAXES = 16;
+core/sys/windows/wingdi.d:3812: DWORD dvNumAxes;
+core/sys/windows/wingdi.d:3813: LONG[MM_MAX_NUMAXES] dvValues;
+core/sys/windows/wingdi.d:3850: DWORD axlNumAxes;
+core/sys/windows/wingdi.d:3851: AXISINFOA[MM_MAX_NUMAXES] axlAxisInfo;
+core/sys/windows/wingdi.d:3857: DWORD axlNumAxes;
+core/sys/windows/wingdi.d:3858: AXISINFOW[MM_MAX_NUMAXES] axlAxisInfo;
+core/sys/windows/winnetwk.d:337: DWORD WNetOpenEnumA(DWORD, DWORD, DWORD, LPNETRESOURCEA, LPHANDLE);
+core/sys/windows/winnetwk.d:418: alias WNetOpenEnum = WNetOpenEnumA;
+std/process.d:4046: int numArgs;
+std/process.d:4047: auto args = CommandLineToArgvW(lpCommandLine, &numArgs);
+std/traits.d:8965: @Tag enum MyEnumA;
+std/typecons.d:2290: template Interleave(A...)
+std/typecons.d:2302: Interleave!(A[1..$]).and!(B[1..$]));
+std/experimental/allocator/building_blocks/stats_collector.d:35: numAllocate = 1u << 1,
+std/experimental/allocator/building_blocks/stats_collector.d:41: numAllocateOK = 1u << 2,
+std/experimental/allocator/building_blocks/stats_collector.d:83: numAlignedAllocate = 1u << 10,
+std/experimental/allocator/building_blocks/stats_collector.d:89: numAlignedAllocateOk = 1u << 11,
+std/experimental/allocator/building_blocks/stats_collector.d:93: numAll = (1u << 12) - 1,
+std/experimental/allocator/building_blocks/stats_collector.d:149: bytesAll = ((1u << 20) - 1) & ~numAll,
+std/experimental/allocator/building_blocks/stats_collector.d:224: @property ulong numAllocate() const;
+std/experimental/allocator/building_blocks/stats_collector.d:226: @property ulong numAllocateOK() const;
+std/experimental/allocator/building_blocks/stats_collector.d:242: @property ulong numAlignedAllocate() const;
+std/experimental/allocator/building_blocks/stats_collector.d:244: @property ulong numAlignedAllocateOk() const;
+std/experimental/allocator/building_blocks/stats_collector.d:276: "numAllocate",
+std/experimental/allocator/building_blocks/stats_collector.d:277: "numAllocateOK",
+std/experimental/allocator/building_blocks/stats_collector.d:285: "numAlignedAllocate",
+std/experimental/allocator/building_blocks/stats_collector.d:286: "numAlignedAllocateOk",
+std/experimental/allocator/building_blocks/stats_collector.d:325: Forwards to `parent.allocate`. Affects per instance: `numAllocate`,
+std/experimental/allocator/building_blocks/stats_collector.d:326: `bytesUsed`, `bytesAllocated`, `bytesSlack`, `numAllocateOK`,
+std/experimental/allocator/building_blocks/stats_collector.d:327: and `bytesHighTide`. Affects per call: `numAllocate`, $(D
+std/experimental/allocator/building_blocks/stats_collector.d:328: numAllocateOK), and `bytesAllocated`.
+std/experimental/allocator/building_blocks/stats_collector.d:331: & (Options.numAllocate | Options.numAllocateOK
+std/experimental/allocator/building_blocks/stats_collector.d:352: up!"numAllocate";
+std/experimental/allocator/building_blocks/stats_collector.d:353: add!"numAllocateOK"(result.length == bytes); // allocating 0 bytes is OK
+std/experimental/allocator/building_blocks/stats_collector.d:354: addPerCall!(f, n, "numAllocate", "numAllocateOK", "bytesAllocated")
+std/experimental/allocator/building_blocks/stats_collector.d:368: & (Options.numAllocate | Options.numAllocateOK
+std/experimental/allocator/building_blocks/stats_collector.d:394: Forwards to `parent.alignedAllocate`. Affects per instance: `numAlignedAllocate`,
+std/experimental/allocator/building_blocks/stats_collector.d:395: `bytesUsed`, `bytesAllocated`, `bytesSlack`, `numAlignedAllocateOk`,
+std/experimental/allocator/building_blocks/stats_collector.d:396: and `bytesHighTide`. Affects per call: `numAlignedAllocate`, `numAlignedAllocateOk`,
+std/experimental/allocator/building_blocks/stats_collector.d:400: & (Options.numAlignedAllocate | Options.numAlignedAllocateOk
+std/experimental/allocator/building_blocks/stats_collector.d:416: up!"numAlignedAllocate";
+std/experimental/allocator/building_blocks/stats_collector.d:420: up!"numAlignedAllocateOk";
+std/experimental/allocator/building_blocks/stats_collector.d:430: add!"numAlignedAllocateOk"(result.length == bytes); // allocating 0 bytes is OK
+std/experimental/allocator/building_blocks/stats_collector.d:432: addPerCall!(f, n, "numAlignedAllocate", "numAlignedAllocateOk", "bytesAllocated")
+std/experimental/allocator/building_blocks/stats_collector.d:642: static if ((flags & e) && e != Options.numAll
+std/experimental/allocator/building_blocks/stats_collector.d:668: $(D mymodule.d(655): [numAllocate:21, numAllocateOK:21, bytesAllocated:324202]).
+std/format/read.d:746: const numArgsFilled = .formattedRead(forward!r, fmt, args.expand);
+std/format/read.d:747: enforceFmt(numArgsFilled == Args.length, "Failed reading into all format arguments");
+std/format/read.d:787: const numArgsFilled = .formattedRead!fmt(forward!r, args.expand);
+std/format/read.d:788: enforceFmt(numArgsFilled == Args.length, "Failed reading into all format arguments");
+std/net/curl.d:4418: progressfunction, debugdata, debugfunction, interleavedata,
+std/net/curl.d:4419: interleavefunction, chunk_data, chunk_bgn_function,
+std/range/package.d:2577: auto interleave(R, E)(R range, E element)
+ldc/attributes.d:52: int numArgIdx = int.min;
+etc/c/curl.d:1243: interleavedata = 10_195,
+etc/c/curl.d:1245: interleavefunction = 20_196,
+etc/c/sqlite3.d:1214: int sqlite3_value_frombind(sqlite3_value*);
+etc/c/odbc/odbc32.d:241: nothrow @nogc SQLRETURN SQLColAttributeW(SQLHSTMT hstmt, SQLUSMALLINT iCol, SQLUSMALLINT iField, SQLPOINTER pCharAttr, SQLSMALLINT cbDescMax, SQLSMALLINT* pcbCharAttr, SQLPOINTER pNumAttr);
+etc/c/odbc/odbc32.d:280: nothrow @nogc SQLRETURN SQLColAttributeA(SQLHSTMT hstmt, SQLSMALLINT iCol, SQLSMALLINT iField, SQLPOINTER pCharAttr, SQLSMALLINT cbCharAttrMax, SQLSMALLINT* pcbCharAttr, SQLPOINTER pNumAttr);
+etc/c/odbc/odbc64.d:244: nothrow @nogc SQLRETURN SQLColAttributeW(SQLHSTMT hstmt, SQLUSMALLINT iCol, SQLUSMALLINT iField, SQLPOINTER pCharAttr, SQLSMALLINT cbDescMax, SQLSMALLINT* pcbCharAttr, SQLLEN* pNumAttr);
+etc/c/odbc/odbc64.d:283: nothrow @nogc SQLRETURN SQLColAttributeA(SQLHSTMT hstmt, SQLSMALLINT iCol, SQLSMALLINT iField, SQLPOINTER pCharAttr, SQLSMALLINT cbCharAttrMax, SQLSMALLINT* pcbCharAttr, SQLLEN* pNumAttr);
+
+## Mentions (au plus 12 lignes par fichier)
+core/stdc/locale.d:36: // ...Windows Kits\10\Include\10.0.14393.0\ucrt\locale.h
+core/sync/rwmutex.d:237: if ( --m_numActiveReaders < 1 )
+core/sync/rwmutex.d:332: if ( m_numActiveWriters > 0 )
+core/sync/rwmutex.d:410: if ( --m_numActiveWriters < 1 )
+core/sync/rwmutex.d:518: if ( m_numActiveWriters > 0 ||
+core/sys/posix/locale.d:2: * D header file for POSIX's <locale.h>.
+core/sys/posix/locale.d:4: * See_Also:  https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/locale.h.html
+core/sys/posix/locale.d:113: /// Duplicate existing locale
+core/sys/posix/locale.d:115: /// Free an allocated locale
+core/sys/posix/locale.d:119: /// Create a new locale
+core/sys/posix/locale.d:132: /// Set the per-thread locale
+core/sys/posix/locale.d:219: /// Duplicate existing locale
+core/sys/posix/locale.d:221: /// Free an allocated locale
+core/sys/posix/locale.d:225: /// Create a new locale
+core/sys/posix/locale.d:229: /// Set the per-thread locale
+core/sys/posix/locale.d:295: /// Duplicate existing locale
+core/sys/posix/locale.d:297: /// Free an allocated locale
+core/sys/posix/string.d:22: /// Exposes `locale_t` as defined in `core.sys.posix.locale` (`<locale.h>`)
+core/sys/posix/string.d:48: /// Transform a string under locale
+core/sys/posix/strings.d:28: /// Compare two strings ignoring case, with the specified locale
+core/sys/posix/strings.d:32: /// Compare two strings ignoring case, with the specified locale, up to n characters
+std/numeric.d:3559: // This loop is unrolled and the two iterations are interleaved
+std/process.d:4049: return args[0 .. numArgs]
+std/stdio.d:3887: import core.stdc.locale : LC_CTYPE, setlocale;
+std/typecons.d:2287: // Interleave(a, b).and(c, d) == (a, c, b, d)
+std/typecons.d:2305: return Tuple!(Interleave!(Args).and!(Names))(args);
+std/datetime/timezone.d:243: //assert(tz.stdName == stdName);  //Locale-dependent
+std/datetime/timezone.d:244: //assert(tz.dstName == dstName);  //Locale-dependent
+std/datetime/timezone.d:306: //assert(leapTZ.stdName == stdName);  //Locale-dependent
+std/datetime/timezone.d:307: //assert(leapTZ.dstName == dstName);  //Locale-dependent
+std/experimental/allocator/building_blocks/stats_collector.d:795: assert(a.numAllocate == 1);
+std/experimental/allocator/building_blocks/stats_collector.d:799: assert(a.numAllocate == 2);
+std/experimental/allocator/building_blocks/stats_collector.d:803: assert(a.numAllocate == 3);
+std/experimental/allocator/building_blocks/stats_collector.d:813: assert(a.numAllocate == a.numDeallocate);
+std/experimental/allocator/building_blocks/stats_collector.d:876: assert(a.numAlignedAllocate == 1);
+std/experimental/allocator/building_blocks/stats_collector.d:877: assert(a.numAlignedAllocateOk == 1);
+std/experimental/allocator/building_blocks/stats_collector.d:883: assert(a.numAlignedAllocate == 2);
+std/experimental/allocator/building_blocks/stats_collector.d:884: assert(a.numAlignedAllocateOk == 2);
+std/experimental/allocator/building_blocks/stats_collector.d:889: assert(a.numAlignedAllocate == 3);
+std/experimental/allocator/building_blocks/stats_collector.d:890: assert(a.numAlignedAllocateOk == 3);
+std/experimental/allocator/building_blocks/stats_collector.d:895: assert(a.numAlignedAllocate == 4);
+std/experimental/allocator/building_blocks/stats_collector.d:896: assert(a.numAlignedAllocateOk == 3);
+std/range/package.d:2570: * roundRobin can be used to create "interleave" functionality which inserts
+std/range/package.d:2591: assert(interleave([1, 2, 3], 0).equal([1, 0, 2, 0, 3]));
+std/windows/syserror.d:222: // can't test the entire message, as it depends on Windows locale
+ldc/attributes.d:15: * certain number of allocated bytes. `sizeArgIdx` and `numArgIdx` specify
+ldc/attributes.d:19: *   bytes = arg[sizeArgIdx] * (numArgIdx < 0) ? arg[numArgIdx] : 1
+ldc/attributes.d:51: /// If numArgIdx < 0, there is no argument specifying the element count
+etc/c/curl.d:1242: /** The stream to pass to INTERLEAVEFUNCTION. */
+
+## Lignes trouvées, par fichier
+    2 core/stdc/inttypes.d
+    3 core/stdc/locale.d
+   12 core/stdc/time.d
+   15 core/sync/rwmutex.d
+    2 core/sys/linux/link.d
+   58 core/sys/posix/locale.d
+    5 core/sys/posix/string.d
+    5 core/sys/posix/strings.d
+    2 core/sys/solaris/link.d
+    1 core/sys/windows/bcrypt.d
+    2 core/sys/windows/ipexport.d
+    2 core/sys/windows/iprtrmib.d
+    2 core/sys/windows/lmchdev.d
+    3 core/sys/windows/lmserver.d
+    1 core/sys/windows/lmwksta.d
+    1 core/sys/windows/mciavi.d
+    2 core/sys/windows/mmsystem.d
+    4 core/sys/windows/msacm.d
+    4 core/sys/windows/nddeapi.d
+    1 core/sys/windows/objbase.d
+    4 core/sys/windows/objidl.d
+    2 core/sys/windows/oleidl.d
+    4 core/sys/windows/ras.d
+    1 core/sys/windows/shlobj.d
+   11 core/sys/windows/uuid.d
+    6 core/sys/windows/vfw.d
+    3 core/sys/windows/wincrypt.d
+    7 core/sys/windows/wingdi.d
+    2 core/sys/windows/winnetwk.d
+    3 etc/c/curl.d
+    2 etc/c/odbc/odbc32.d
+    2 etc/c/odbc/odbc64.d
+    1 etc/c/sqlite3.d
+    4 ldc/attributes.d
+    4 std/datetime/timezone.d
+   45 std/experimental/allocator/building_blocks/stats_collector.d
+    4 std/format/read.d
+    2 std/net/curl.d
+    1 std/numeric.d
+    3 std/process.d
+    3 std/range/package.d
+    1 std/stdio.d
+    1 std/traits.d
+    4 std/typecons.d
+    1 std/windows/syserror.d

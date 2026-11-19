@@ -1,9 +1,36 @@
-CAP;A2;1;S.c.offsetof=8
-CAP;A3;1;align(1) P.sizeof=5 ; bitfields BF.sizeof=1
-CAP;A4;1;align(64) L.alignof=64
-CAP;A5;1;union 0x3f800000
-CAP;F4;1;std.mmfile + cast : 0.439005
-CAP;D5;1;core.atomic.pause + atomicFence
-CAP;E3;1;core.builtins.likely/unlikely (druntime) : somme 499500
-CAP;E4;1;core.simd.prefetch!(false, 3) (druntime) : prefetcht0, somme 499500
-CAP;A3;1;champs de bits natifs sans -preview : NativeBF.sizeof=4 a=5 b=17
+CAP;A2;1;[exécutée] S.c.offsetof=8
+CAP;A4;1;[exécutée] align(64) L.alignof=64
+CAP;A5;1;[exécutée] union 0x3f800000
+CAP;F4;1;[exécutée] std.mmfile + cast : 0.439005
+NOTE;A3;[exécutée] align(1) P.sizeof=5 ; bitfields BF.sizeof=1
+CAP;A3;1;[exécutée] champs de bits natifs sans -preview : NativeBF.sizeof=4 a=5 b=17
+CAP;A1;1;[exécutée] Part[] : pas de 16 o = Part.sizeof 16 ; les 4 premiers octets du tampon sont le float x en ligne : 00 00 80 3f
+CAP;A7;1;[exécutée] struct { uint n; float[16] a; } : 68 o, Inl.a.offsetof = 4 (tableau en ligne)
+CAP;A8;1;[exécutée] ubyte/short/float : 1/2/4 o ; ubyte[] de 1000 éléments : 1000 o, short[] : 2000 o
+CAP;B2;0.5;[exécutée] std.experimental.allocator : Region sur un tampon de pile -> bloc dans le tampon = true ; module expérimental (std.experimental), hors du GC par défaut
+CAP;B3;1;[exécutée] float[1024] local à 476 o d'une autre variable locale, à 256700812792 o du tas : sur la pile ; struct et tableaux statiques sont des valeurs
+CAP;B4;0.5;[exécutée] octets alloués par le GC, mesurés par GC.stats : fermeture rendue par une fonction 16 o, littéral de tableau [1, 2, 3] rendu 16 o, concaténation ~= 32 o (ab9) : allocations cachées du langage ; @nogc les interdit (NOTE B4)
+CAP;B5;1;[exécutée] uint* : mp[3] = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7
+CAP;C1;1;[exécutée] core.simd float8 : (a + a)[7] = 16, opérateurs vectoriels du langage
+CAP;C5;1;[exécutée] std.parallelism : foreach parallèle sur 3 fils distincts (gettid), taskPool.reduce = 499999500000 (attendu 499999500000)
+CAP;D1;1;[exécutée] core.thread : 4 fils, 4 identifiants de fil (gettid) distincts, somme 7998000 (attendu 7998000)
+CAP;D3;1;[exécutée] std.parallelism.cacheLineSize = 64, core.cpuid.dataCaches()[0].lineSize = 64
+CAP;D4;1;[exécutée] core.sys.linux.sched.sched_setaffinity (liaison livrée avec druntime ; ½ en v1) : retour 0, sched_getcpu = 1
+CAP;E2;1;[exécutée] asm { mov EAX, 41; add EAX, 1; mov ex, EAX; } (assembleur en ligne du langage) : 42
+CAP;F3;1;[exécutée] uint.max + 1 = 0, int.max + 1 = -2147483648, ubyte 250 + 10 = 4 (arithmétique modulaire définie)
+CAP;B1;0.5;[exécutée] new et tableaux dynamiques passent par le ramasse-miettes de druntime : 100 collectes pendant 200 allocations de 1 Mio (GC.profileStats) ; [échec] new dans une fonction @nogc : Error: allocating with `new` causes a GC allocation in `@nogc` function `f` : le GC est le défaut, évitable par @nogc ou -betterC
+NOTE;B4;[échec] les mêmes constructions dans une fonction @nogc sont refusées à la compilation (fail_nogc.d)
+CAP;C2;1;[exécutée] ldc.gccbuiltins_x86.__builtin_ia32_pternlogd512 : 12 ^ 10 ^ 1 = 7 ; 1 vpternlogd dans tern (module ldc.gccbuiltins_x86, livré avec LDC ; ½ en v1)
+CAP;C4;1;[exécutée] @fastmath (ldc.attributes), par fonction : 9 fadd fast (vectorisés) dans sum_fast contre 0 dans sum_plain (9 fadd stricts) ; ½ en v1
+CAP;D2;1;[exécutée] core.atomic à MemoryOrder explicite, code produit : rel = 1 mov et 0 xchg ; seq = 1 xchg ; atomicFetchAdd raw = 1 instruction lock
+CAP;D5;1;[exécutée] core.atomic.pause et atomicFence : 1 pause et 1 barrière dans spin
+CAP;E1;1;[exécutée] -output-s : 928 lignes d'assembleur, 10 instructions vectorielles flottantes dans axpy
+CAP;E3;1;[exécutée] core.builtins.expect(x == 7, false) : disposition [ je retq callq retq ] contre [ jne callq retq ] sans indication, 1 poids dans l'IR ; NOTE E3
+NOTE;E3;[exécutée] core.builtins.unlikely(x == 10), enveloppe inline de expect : 0 poids, disposition [ jne callq retq ] comme sans indication (l'indication est perdue sous LDC -O3)
+CAP;E4;1;[exécutée] core.simd.prefetch!(false, 3) : 1 prefetcht0 dans pf
+CAP;E5;1;[exécutée] @restrict (ldc.attributes) : 2 attributs noalias dans l'IR de axpy ; ½ en v1
+CAP;E6;1;[exécutée] avec -boundscheck=on, a[i] : 1 appel à _d_arraybounds_index ; a.ptr[i] : 0 (contrôle par expression ; -boundscheck=off|safeonly en global)
+CAP;E7;1;[exécutée] enum F60 = fib(60) évalué par CTFE = 1548008755920 ; gsum!float = 4, gsum!double = 3.75 ; dans l'asm, fib60 = 1 constante immédiate et 0 appel ; gsum instanciée en 2 fonctions (float et double)
+CAP;A6;0;[recherche] motif A6 dans druntime, Phobos et ldc de LDC 1.43.0 : 0 ligne de code, 0 mention (results/grid_audit/search/d_A6.txt)
+CAP;F1;0.5;[exécutée] float[4][3] contigu : &m[1][0] - &m[0][3] = 4 o, sizeof = 48 o ; new float[4][](5) : &r[1][0] - &r[0][3] = 4 o ; [échec] float[n][3] avec n connu à l'exécution : Error: variable `n` cannot be read at compile time ; [recherche] motif F1 : 57 lignes de code (results/grid_audit/search/d_F1.txt) : tableaux de tableaux (double[][]) et makeMultidimensionalArray de std.experimental.allocator, qui alloue chaque ligne à part ; aucun tableau multidimensionnel contigu de taille dynamique
+CAP;F2;0;[recherche] motif F2 dans druntime, Phobos et ldc de LDC 1.43.0 : 185 lignes de code (results/grid_audit/search/d_F2.txt) : fonctions de locale du C, SCNuMAX, compteurs num*, la_symbind de l'éditeur de liens, constantes d'entrelacement de Windows ; aucune liaison mbind, set_mempolicy ou NUMA

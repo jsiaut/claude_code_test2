@@ -1,0 +1,11 @@
+# Recherche d'absence : d, case A6
+# Chaîne : LDC - the LLVM D compiler (1.43.0):
+# Motif : \bsoa\b|_soa\b|\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array
+# Déclaration publique : ^\s*(?!//|/\*|\*|private\b|package\b|import\b|return\b|assert\b|static assert|version\b|debug\b|if\b|else\b|foreach\b|for\b|while\b|unittest\b|[{}])\S
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

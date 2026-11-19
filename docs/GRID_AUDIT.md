@@ -83,6 +83,23 @@ remarque sur C3, sept recherches dans `lib/std`).
   n'existe qu'en option globale (`--fp-math=relaxed` : 9 `fadd reassoc` vectorisés contre 9 stricts ; C4 ½).
 * D3 : la bibliothèque ne livre que les clés sysctl `HW_CACHELINE` de macOS, rien sous Linux (0).
 
+### D (LDC 1.43.0, compilateur du banc, -O3 -mcpu=native)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (C2, C4, D4 et E5 valent 1 en v2, ½ en v1). Sondes :
+`probes/d/probe.d` et `probe_errata.d` (A2 à A5, F4), `probes/d/audit/` (`audit.d` exécuté, `codegen.d` lu en
+assembleur et en IR, avec et sans `-boundscheck=on`, deux échecs, trois recherches dans druntime, Phobos et `ldc`).
+* Faits notables : 200 allocations de 1 Mio déclenchent 100 collectes du ramasse-miettes, et `new` est refusé dans une
+  fonction `@nogc` (B1 ½) ; une fermeture rendue par une fonction, un littéral de tableau rendu et une concaténation
+  `~=` allouent sur le tas du GC (16, 16 et 32 octets, B4 ½), mais LDC supprime ces allocations quand rien ne
+  s'échappe ; `Region` de `std.experimental.allocator` sert un tampon de pile (B2 ½, module expérimental) ;
+  `std.parallelism` répartit un `foreach` sur quatre fils et réduit en parallèle (C5) ; `enum F60 = fib(60)` est
+  calculé par CTFE (une constante immédiate) ; `new float[4][](5)` donne des lignes contiguës, mais la dimension
+  intérieure reste fixée à la compilation (F1 ½).
+* `core.builtins.expect(cond, false)` pose des poids et sort l'appel du chemin chaud, mais `core.builtins.unlikely`,
+  son enveloppe `inline`, perd l'indication sous LDC -O3 (ni poids, ni déplacement) : E3 reste 1 par `expect`.
+* Erreur de sonde corrigée en cours de route : des fermetures créées dans une boucle `foreach` partagent leur
+  contexte (le défaut de capture que la matrice cite en B4) ; la sonde des fils passe donc par une fonction.
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |

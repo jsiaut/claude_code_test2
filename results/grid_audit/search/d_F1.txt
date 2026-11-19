@@ -1,0 +1,102 @@
+# Recherche d'absence : d, case F1
+# Chaîne : LDC - the LLVM D compiler (1.43.0):
+# Motif : ndarray|multi_?dim|md_?span|mdarray|array2d|\bmatrix\b
+# Déclaration publique : ^\s*(?!//|/\*|\*|private\b|package\b|import\b|return\b|assert\b|static assert|version\b|debug\b|if\b|else\b|foreach\b|for\b|while\b|unittest\b|[{}])\S
+# 57 déclarations publiques, 26 mentions, 8 fichiers
+
+## Déclarations publiques
+core/gc/gcinterface.d:232: bool expandArrayUsed(void[] slice, size_t newUsed, bool atomic = false) nothrow @safe;
+std/array.d:966: element will be immediately initialized. `T` may be a multidimensional
+std/array.d:1018: double[][] matrix = uninitializedArray!(double[][])(42, 31);
+std/array.d:1078: double[][] matrix = minimallyInitializedArray!(double[][])(42);
+std/parallelism.d:2262: double[][] matrix;
+std/parallelism.d:2268: matrix ~= to!(double[])(ls);
+std/parallelism.d:2459: double[][] matrix;
+std/parallelism.d:2465: matrix ~= to!(double[])(ls);
+std/parallelism.d:4801: real[][] matrix = new real[][](1000, 1000);
+std/parallelism.d:4806: matrix[i][j] = i * j;
+std/parallelism.d:4821: real[][] sqrtMatrix = poolInstance.amap!parallelSqrt(matrix);
+std/parallelism.d:4836: "Success doing matrix stuff that involves nested pool use.");
+std/algorithm/comparison.d:1299: auto cIns = j == 0 ? CostType.max : matrix(i,j - 1);
+std/algorithm/comparison.d:1300: auto cDel = i == 0 ? CostType.max : matrix(i - 1,j);
+std/algorithm/comparison.d:1303: : matrix(i - 1,j - 1);
+std/algorithm/comparison.d:1307: result ~= matrix(i - 1,j - 1) == matrix(i,j)
+std/algorithm/comparison.d:1339: ref CostType matrix(size_t row, size_t col) { return _matrix[row * cols + col]; }
+std/algorithm/comparison.d:1346: ~ " of matrix elements");
+std/algorithm/comparison.d:1355: ~ " number of bytes of matrix");
+std/algorithm/comparison.d:1373: matrix(r,0) = r * _deletionIncrement;
+std/algorithm/comparison.d:1375: matrix(0,c) = c * _insertionIncrement;
+std/algorithm/comparison.d:1400: auto cSub = matrix(i - 1,j - 1)
+std/algorithm/comparison.d:1403: auto cIns = matrix(i,j - 1) + _insertionIncrement;
+std/algorithm/comparison.d:1404: auto cDel = matrix(i - 1,j) + _deletionIncrement;
+std/algorithm/comparison.d:1408: matrix(i,j) = cSub;
+std/algorithm/comparison.d:1411: matrix(i,j) = cIns;
+std/algorithm/comparison.d:1414: matrix(i,j) = cDel;
+std/container/package.d:51: Array!int secondArray = originalArray;
+std/container/package.d:59: secondArray = originalArray.dup;
+std/container/package.d:60: secondArray[0] = 1;
+std/experimental/allocator/package.d:15: $(LREF makeMultidimensionalArray)
+std/experimental/allocator/package.d:19: $(LREF disposeMultidimensionalArray)
+std/experimental/allocator/package.d:22: $(LREF expandArray)
+std/experimental/allocator/package.d:65: theAllocator.expandArray(arr, 2, 0.0);
+std/experimental/allocator/package.d:132: $(LREF expandArray), and $(LREF shrinkArray). These use by default D's garbage
+std/experimental/allocator/package.d:2149: bool expandArray(T, Allocator)(auto ref Allocator alloc, ref T[] array,
+std/experimental/allocator/package.d:2176: bool expandArray(T, Allocator)(auto ref Allocator alloc, ref T[] array,
+std/experimental/allocator/package.d:2205: bool expandArray(T, Allocator, R)(auto ref Allocator alloc, ref T[] array,
+std/experimental/allocator/package.d:2538: Allocates a multidimensional array of elements of type T.
+std/experimental/allocator/package.d:2542: T = element type of an element of the multidimensional arrat
+std/experimental/allocator/package.d:2549: auto makeMultidimensionalArray(T, Allocator, size_t N)(auto ref Allocator alloc, size_t[N] lengths...)
+std/experimental/allocator/package.d:2557: alias E = typeof(makeMultidimensionalArray!(T, Allocator, N - 1)(alloc, lengths[1 .. $]));
+std/experimental/allocator/package.d:2560: e = makeMultidimensionalArray!(T, Allocator, N - 1)(alloc, lengths[1 .. $]);
+std/experimental/allocator/package.d:2570: auto mArray = Mallocator.instance.makeMultidimensionalArray!int(2, 3, 6);
+std/experimental/allocator/package.d:2575: Mallocator.instance.disposeMultidimensionalArray(mArray);
+std/experimental/allocator/package.d:2588: Destroys and then deallocates a multidimensional array, assuming it was
+std/experimental/allocator/package.d:2589: created with makeMultidimensionalArray and the same allocator was used.
+std/experimental/allocator/package.d:2592: T = element type of an element of the multidimensional array
+std/experimental/allocator/package.d:2594: array = the multidimensional array that is to be deallocated
+std/experimental/allocator/package.d:2596: void disposeMultidimensionalArray(T, Allocator)(auto ref Allocator alloc, auto ref T[] array)
+std/experimental/allocator/package.d:2601: disposeMultidimensionalArray(alloc, e);
+std/experimental/allocator/package.d:2658: auto mArray = allocator.makeMultidimensionalArray!int(2, 3, 5, 6, 7, 2);
+std/experimental/allocator/package.d:2660: allocator.disposeMultidimensionalArray(mArray);
+std/experimental/allocator/package.d:3332: theAllocator.expandArray(arr, 2, 0.0);
+std/experimental/allocator/typed.d:328: bool expandArray(T)(ref T[] array, size_t delta)
+std/experimental/allocator/typed.d:333: bool expandArray(T)(T[] array, size_t delta, auto ref T init)
+std/experimental/allocator/typed.d:338: bool expandArray(T, R)(ref T[] array, R range)
+
+## Mentions (au plus 12 lignes par fichier)
+std/array.d:1019: assert(matrix.length == 42);
+std/array.d:1020: assert(matrix[0].length == 31);
+std/array.d:1079: assert(matrix.length == 42);
+std/array.d:1080: foreach (elem; matrix)
+std/parallelism.d:2261: // into a matrix of doubles.
+std/parallelism.d:2458: // into a matrix of doubles.
+std/parallelism.d:4802: foreach (i; poolInstance.parallel( iota(0, matrix.length) ))
+std/parallelism.d:4804: foreach (j; poolInstance.parallel( iota(0, matrix[0].length) ))
+std/parallelism.d:4842: // matrix.
+std/sumtype.d:2121: * in a multidimensional static array.
+std/sumtype.d:2189: * multidimensional static array is multiplied by to calculate the
+std/algorithm/comparison.d:1420: return matrix(slen,tlen);
+std/container/package.d:52: assert(equal(originalArray[], secondArray[]));
+std/container/package.d:56: assert(secondArray[0] == 12);
+std/container/package.d:58: // secondArray now refers to an independent copy of originalArray
+std/experimental/allocator/package.d:2167: assert(alloc.expandArray(arr, 3));
+std/experimental/allocator/package.d:2196: assert(alloc.expandArray(arr, 3, 1));
+std/experimental/allocator/package.d:2268: assert(theAllocator.expandArray(arr, 2));
+std/experimental/allocator/package.d:2271: assert(theAllocator.expandArray(arr, only(4, 5)));
+std/experimental/allocator/package.d:2282: assert(theAllocator.expandArray(arr, r));
+std/experimental/allocator/package.d:2297: assert(alloc.expandArray(arr, forwardRange));
+std/experimental/allocator/package.d:2304: assert(alloc.expandArray(arr, inputRange));
+std/experimental/allocator/typed.d:330: return .expandArray(allocatorFor!(T[]), array, delta);
+std/experimental/allocator/typed.d:335: return .expandArray(allocatorFor!(T[]), array, delta, init);
+std/experimental/allocator/typed.d:341: return .expandArray(allocatorFor!(T[]), array, range);
+std/experimental/allocator/typed.d:426: assert(a.expandArray(arr, 3));
+
+## Lignes trouvées, par fichier
+    1 core/gc/gcinterface.d
+   16 std/algorithm/comparison.d
+    7 std/array.d
+    6 std/container/package.d
+   31 std/experimental/allocator/package.d
+    7 std/experimental/allocator/typed.d
+   13 std/parallelism.d
+    2 std/sumtype.d

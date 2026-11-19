@@ -102,6 +102,25 @@
       "strip": "/opt/src/c3c/lib/",
       "public": "^\\s*(fn|macro|struct|union|enum|bitstruct|typedef|alias|const|faultdef|interface|attrdef|extern\\s+fn)\\b(?!.*@private)(?!.*@local)",
       "version": "/opt/src/c3c/build/c3c --version | head -1"
+    },
+    "d": {
+      "roots": [
+        "/opt/ldc/include/d/core",
+        "/opt/ldc/include/d/std",
+        "/opt/ldc/include/d/ldc",
+        "/opt/ldc/include/d/etc"
+      ],
+      "ext": [
+        ".d",
+        ".di"
+      ],
+      "exclude": [
+        "/internal/",
+        "/test/"
+      ],
+      "strip": "/opt/ldc/include/d/",
+      "public": "^\\s*(?!//|/\\*|\\*|private\\b|package\\b|import\\b|return\\b|assert\\b|static assert|version\\b|debug\\b|if\\b|else\\b|foreach\\b|for\\b|while\\b|unittest\\b|[{}])\\S",
+      "version": "/opt/ldc/bin/ldc2 --version | head -1"
     }
   }
 }
