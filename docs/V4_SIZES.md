@@ -85,8 +85,8 @@ sans le plafond de dix répétitions à la petite taille, où une répétition p
 (jusqu'à 10 000) ; échauffement d'au moins une seconde pour les langages à JIT (au moins trois répétitions), pour que
 la compilation à la volée soit faite avant les répétitions mesurées. La statistique d'une cellule reste la médiane
 par processus, puis la combinaison des processus de la méthode v3. Les anciens binaires à la taille publiée
-(section 4) sont des blocs de plus, mélangés aux autres. Le vol de temps de la machine virtuelle est noté pour chaque processus ; un processus qui en a plus de 5 % est
-refait une fois.
+(section 4) sont des blocs de plus, mélangés aux autres. Le vol de temps de la machine virtuelle est noté pour chaque
+processus ; un processus qui en a plus de 5 % est refait une fois.
 
 ## 8. Analyse, fixée avant les mesures
 
