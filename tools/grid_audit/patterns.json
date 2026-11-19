@@ -1,0 +1,47 @@
+{
+  "_doc": "Audit de la grille (docs/V4_PLAN.md 2.1). caps : un motif par case, le même pour tous les langages, insensible à la casse, fixé le 19 novembre 2026 avant toute recherche. langs : racines des sources livrées (ou commande d'introspection qui imprime une API publique par ligne), extensions, exclusions (tests, exemples), motif d'une déclaration publique, commande de version ; chaque langage est ajouté avant ses recherches. extra : motif propre à un langage, ajouté avant sa recherche et justifié dans docs/GRID_AUDIT.md.",
+  "caps": {
+    "A2": "offset_?of|field_?offset|struct_?layout|layout_?kind|repr\\(c\\)|bind\\(c\\)",
+    "A3": "packed|bit_?field|bit_?packed|bit_?size|bit_?offset|bitstruct",
+    "A4": "align",
+    "A5": "\\bunion\\b|bit_?cast|reinterpret|transmute|to_?bits|from_?bits|float_?to_?(raw_?)?int_?bits|int_?bits_?to_?float|unsafe_?coerce|cast_?word",
+    "A6": "\\bsoa\\b|_soa\\b|\\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array",
+    "A7": "inline_?array|fixed_?array|fixed_?buffer|static_?array",
+    "A8": "int8|uint8|int16|uint16|float16|float32|bfloat|half_?float|\\bf16\\b|\\bf32\\b",
+    "B1": "\\bgc\\b|garbage|collect",
+    "B2": "arena|allocator|alloc_?in\\b|new_?in\\b|bump|region|mem_?pool|memory_?pool",
+    "B3": "stack_?alloc|alloca\\b|on_?stack",
+    "B5": "pointer|\\bptr\\b|unsafe_?pointer|\\bpeek|\\bpoke|raw_?mem",
+    "C1": "simd|vector(64|128|256|512)\\b|\\bvec[248]\\b|float32x|int32x|@vector",
+    "C2": "\\bavx|\\bsse|_mm(256|512)?_|\\bx86|intrinsic",
+    "C4": "fast_?math|reassoc|algebraic|fp_?contract|float_?mode|relaxed_?math|associative",
+    "C5": "parallel|par_?iter|forall|pmap|thread_?pool|fork_?join|work_?steal|par_?map|domain_?pool",
+    "D1": "thread|\\bdomain|worker|pthread|spawn",
+    "D2": "acquire|release|relaxed|memory_?order|seq_?cst|acq_?rel|monotonic",
+    "D3": "cache_?line|cache_?padded|destructive_?interference|false_?sharing|contended|dcache|cache_?size",
+    "D4": "affinity|cpu_?set|pin_?(thread|cpu)|sched_?set|bind_?(thread|cpu)",
+    "D5": "fence|spin_?loop|spin_?wait|on_?spin_?wait|\\bpause\\b|cpu_?relax|memory_?barrier|yield_?processor|spin_?hint",
+    "E1": "disassembl|print_?assembly|jit_?disasm|emit_?asm|code_?native|llvm_?ir",
+    "E2": "\\basm\\b|inline_?asm|__asm|assembler",
+    "E3": "\\blikely|\\bunlikely|\\bexpect\\b|branch_?hint|branch_?weight|\\bcold\\b|cold_?path|fast_?path|slow_?path",
+    "E4": "prefetch",
+    "E5": "restrict|noalias|no_?alias",
+    "E6": "unchecked|unsafe_?get|unsafe_?index|bounds_?check|inbounds|unsafe_?at\\b|unsafe_?load|unsafe_?store|unsafe_?read|unsafe_?write",
+    "E7": "comptime|constexpr|const_?fn|static_?if|ctfe|compile_?time|@generated|specializ",
+    "F1": "ndarray|multi_?dim|md_?span|mdarray|array2d|\\bmatrix\\b",
+    "F2": "numa|mbind|mem_?policy|\\blocale\\b|pgas|first_?touch|interleave",
+    "F3": "wrapping|wrap_?around|modular|\\buint|\\bunsigned|\\bword(8|16|32|64)\\b",
+    "F4": "mmap|memory_?map|map_?view|memory_?mapped|mapped_?(file|byte)|madvise"
+  },
+  "langs": {
+    "rust": {
+      "roots": ["/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src",
+                "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src",
+                "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src"],
+      "ext": [".rs"],
+      "exclude": ["/tests/", "/benches/", "/sys/", "/sys_common/", "/sync/mpmc/"],
+      "public": "^\\s*pub\\s+(unsafe\\s+|const\\s+|extern\\s+\"[^\"]*\"\\s+|async\\s+|safe\\s+)*(fn|struct|enum|trait|type|const|static|mod|union|macro|use)\\b|^\\s*pub\\s+macro\\b|^\\s*macro_rules!",
+      "version": "rustc --version"
+    }
+  }
+}
