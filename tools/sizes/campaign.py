@@ -106,7 +106,12 @@ def oom_victim():
 
 
 def tree_rss_kb(pgid):
-    total = 0
+    """Somme et plus grand VmRSS des processus du groupe. La règle de la section 6 porte sur un processus (« un
+    processus qui dépasse 13 Gio ») : la sentinelle compare le plus grand. La somme, enregistrée pour information,
+    compte plusieurs fois les pages partagées en copie sur écriture entre un processus et ceux qu'il crée par fork
+    (variantes mt de PHP) ; c'est elle que comparait la première version de la sentinelle (écart 4.1). Le manque réel
+    de mémoire reste arrêté par la limite du groupe de processus, dont le noyau tue le processus (« que le noyau tue »)."""
+    total = top = 0
     for p in os.listdir("/proc"):
         if not p.isdigit():
             continue
@@ -115,10 +120,12 @@ def tree_rss_kb(pgid):
                 continue
             for line in open(f"/proc/{p}/status"):
                 if line.startswith("VmRSS:"):
-                    total += int(line.split()[1])
+                    v = int(line.split()[1])
+                    total += v
+                    top = max(top, v)
         except (OSError, ProcessLookupError):
             pass
-    return total
+    return total, top
 
 
 def run_one(lang, build, kernel, size, variant, param, reps, warmup, timeout):
@@ -129,7 +136,7 @@ def run_one(lang, build, kernel, size, variant, param, reps, warmup, timeout):
         env.pop(k, None)
     env["WARMUP"] = str(warmup)
     s0, t0 = D.steal_ticks(), time.time()
-    box = {"rss": 0, "oom": False, "timeout": False}
+    box = {"rss": 0, "top": 0, "oom": False, "timeout": False}
     with tempfile.TemporaryFile() as fo, tempfile.TemporaryFile() as fe:
         proc = subprocess.Popen(cmd, stdout=fo, stderr=fe, env=env, cwd=d, start_new_session=True,
                                 preexec_fn=oom_victim)
@@ -137,9 +144,9 @@ def run_one(lang, build, kernel, size, variant, param, reps, warmup, timeout):
 
         def watch():
             while not stop.wait(0.2):
-                rss = tree_rss_kb(proc.pid)
-                box["rss"] = max(box["rss"], rss)
-                if rss > MEM_CAP_KB:
+                rss, top = tree_rss_kb(proc.pid)
+                box["rss"], box["top"] = max(box["rss"], rss), max(box["top"], top)
+                if top > MEM_CAP_KB:
                     box["oom"] = True
                     os.killpg(proc.pid, signal.SIGKILL)
                     return
@@ -163,7 +170,7 @@ def run_one(lang, build, kernel, size, variant, param, reps, warmup, timeout):
     wall = time.time() - t0
     rec = {"lang": lang, "build": build, "kernel": kernel, "size": size, "variant": variant, "param": param,
            "reps": [], "lat": [], "meta": {}, "returncode": rc, "wall": wall, "steal_ticks": D.steal_ticks() - s0,
-           "stderr": err.decode(errors="replace")[-2000:], "maxrss_kb": ru.ru_maxrss, "tree_rss_kb": box["rss"],
+           "stderr": err.decode(errors="replace")[-2000:], "maxrss_kb": ru.ru_maxrss, "tree_rss_kb": box["rss"], "proc_rss_kb": box["top"],
            "oom": box["oom"], "timeout": box["timeout"], "utime": ru.ru_utime, "stime": ru.ru_stime,
            "warmup": warmup, "reps_asked": reps}
     for line in out.decode(errors="replace").splitlines():
@@ -275,7 +282,7 @@ def main():
         gl = [g for g in groups() if gsel is None or f"{g[0]}:{g[1]}" in gsel]
         rnd = random.Random(20261119 + p)
         rnd.shuffle(gl)
-        log(f"passe {p} : {len(gl)} groupes ; processeur : {model}")
+        (print if a.dry else log)(f"passe {p} : {len(gl)} groupes ; processeur : {model}")
         for gi, (kernel, size) in enumerate(gl):
             blocks = [(l, "new") for l in langs]
             if size == "pub":

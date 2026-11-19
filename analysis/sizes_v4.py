@@ -70,9 +70,15 @@ def load_campaign():
             ok = (not r.get("failed_calibration") and r.get("returncode") == 0 and not r.get("oom")
                   and not r.get("timeout") and r.get("n", 0) > 0 and r.get("oks") == ["True"])
             if not ok:
+                # hors mémoire : la sentinelle du pilote (13 Gio) ou la limite du groupe de contrôle (13,35 Gio), dont
+                # le noyau tue le processus par SIGKILL (code -9) sans que le pilote ait dépassé sa durée (4.1)
+                fc = r.get("failed_calibration") or {}
+                rc = r.get("returncode", fc.get("returncode"))
+                to = bool(r.get("timeout") or fc.get("timeout"))
                 failures.append({"lang": r["lang"], "build": r["build"], "size": r["size"], "key": key,
-                                 "pass": r.get("pass"), "oom": r.get("oom") or (r.get("failed_calibration") or {}).get("oom"),
-                                 "timeout": r.get("timeout"), "returncode": r.get("returncode"), "oks": r.get("oks")})
+                                 "pass": r.get("pass"), "oom": bool(r.get("oom") or fc.get("oom") or (rc == -9 and not to)),
+                                 "timeout": to, "returncode": rc, "oks": r.get("oks"),
+                                 "absent": r["lang"] == "bqn" and key[0] == "k10"})
                 continue
             if r.get("steal_frac", 0) > 0.05:
                 steal.append((r["lang"], r["size"], key, r["steal_frac"]))
@@ -106,10 +112,11 @@ def position_data(data, lat, pos, build="new"):
 def fill_missing(d, langs, keys):
     """Section 6 : une cellule manquante prend le temps admissible le plus lent des autres langages. Seules les
     variantes communes (tools/driver.py, PLAN) sont concernées : une variante propre à un langage (extra_variants)
-    n'existe pas pour les autres, qui ne la reçoivent pas."""
+    n'existe pas pour les autres, qui ne la reçoivent pas. Et seules les cellules du score (needed_keys, comme en
+    v3) : K10, hors score depuis la v2, n'est pas rempli (BQN n'a pas de K10 : ni threads ni coroutines)."""
     sys.path.insert(0, os.path.join(ROOT, "tools"))
     from driver import PLAN
-    common = {(k, v, q) for k, lst in PLAN.items() for v, q in lst}
+    common = {(k, v, q) for k, lst in PLAN.items() for v, q in lst} & needed_keys()
     filled = []
     for key in sorted(k for k in keys if k in common):
         have = [l for l in langs if d.get(l, {}).get(key)]
@@ -427,8 +434,16 @@ def report(o):
           "| Cellule | nouveau / ancien |", "|---|---|"]
     for k, v in sorted(o["control"].items()):
         L.append(f"| {k} | {v['ratio']:.3f}{' **> 5 %**' if v['over5'] else ''} |")
-    L += ["", f"Processus écartés (échec, mémoire, durée, contrôle) : {len(o['failures'])} ; vol de temps > 5 % "
-          f"après reprise : {len(o['steal_over_5pct'])}.", ""]
+    fl = o["failures"]
+    cells = lambda sel: sorted({(f["lang"], f["key"][0], f["size"], f["key"][1], f["key"][2]) for f in fl if sel(f)})
+    absent, oom = cells(lambda f: f["absent"]), cells(lambda f: f["oom"] and not f["absent"])
+    other = cells(lambda f: not f["oom"] and not f["absent"])
+    fmt = lambda lst: ", ".join(f"{NAMES.get(l, l)} {k} {z} {v}{' ' + q if q else ''}" for l, k, z, v, q in lst) or "aucune"
+    L += ["", f"Processus écartés : {len(fl)} (toutes passes) ; vol de temps > 5 % après reprise : "
+          f"{len(o['steal_over_5pct'])}.", "",
+          f"* hors mémoire ({len(oom)} cellules) : {fmt(oom)}",
+          f"* absentes par conception, hors score (K10 de BQN : ni threads ni coroutines) : {fmt(absent)}",
+          f"* autres échecs ({len(other)} cellules) : {fmt(other)}", ""]
     open(os.path.join(ROOT, "results", "report_sizes.md"), "w").write("\n".join(L) + "\n")
 
 

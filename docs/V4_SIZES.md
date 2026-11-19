@@ -139,6 +139,27 @@ par processus, puis la combinaison des processus de la méthode v3. Les anciens 
 (section 4) sont des blocs de plus, mélangés aux autres. Le vol de temps de la machine virtuelle est noté pour chaque
 processus ; un processus qui en a plus de 5 % est refait une fois.
 
+### 7.1 Constats de la passe 0 (19 novembre, 20 h 45, pendant la passe 1, avant toute analyse)
+
+* **Sentinelle de mémoire.** La première version de la sentinelle du pilote (`tools/sizes/campaign.py`) comparait à
+  13 Gio la somme des VmRSS du groupe de processus mesuré. Cette somme compte autant de fois qu'il y a de processus
+  les pages partagées en copie sur écriture : les variantes `mt` de PHP créent quatre processus par `pcntl_fork`, qui
+  partagent les colonnes de K6. À la grande taille, K6 `mt` de PHP (Q1 et Q6), passé à la validation (sans sentinelle,
+  sous la limite du groupe), a ainsi été arrêté dès l'étalonnage de la passe 0. La règle de la section 6 porte sur un
+  processus : la sentinelle compare désormais le plus grand VmRSS du groupe (la somme reste enregistrée). Le pilote en
+  cours garde l'ancienne sentinelle ; ces deux cellules seront remesurées après la passe 2, aux trois passes, avec la
+  nouvelle (`tools/sizes/requeue.py`, puis `campaign.py --langs php --groups k6:large`), donc hors de l'ordre
+  aléatoire ; les enregistrements écartés sont gardés (`results/sizes/discarded`). Aucune autre cellule n'a été arrêtée
+  par la sentinelle : les autres cellules « hors mémoire » de la passe 0 (Python, BQN et PHP, K1 et K4 à la grande
+  taille, les mêmes que la validation) sont des processus tués par le noyau à la limite du groupe (code -9).
+* **K10 de BQN** : absent par conception (ni threads ni coroutines, `docs/BQN.md`), il apparaît comme un échec
+  d'étalonnage (code 1). K10 étant hors score depuis la v2, l'analyse ne le remplit pas et le classe à part
+  (`analysis/sizes_v4.py`) ; seules les cellules du score reçoivent le temps le plus lent des autres langages.
+* **Incident** : à 18 h 34, une exécution à blanc du pilote (`--dry`, pour compter les blocs restants) a écrit une
+  ligne d'en-tête « passe 0 » dans le journal de campagne ; elle n'a lancé aucune mesure et a duré moins d'une seconde,
+  pendant un processus de PHP (K7 naturel, grande taille, passe 0). La ligne a été retirée du journal ; le mode à blanc
+  n'écrit plus dans le journal.
+
 ## 8. Analyse, fixée avant les mesures
 
 La méthode v3 (même graine, 20 000 variantes, mêmes poids, grille v2 corrigée par le point 1), appliquée aux seules
