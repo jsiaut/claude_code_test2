@@ -6,7 +6,7 @@
 cd "$(dirname "$0")" && mkdir -p bin/s bin/fail
 G=/opt/ghc/bin
 FL="-O2 -fllvm -mavx512f -mfma -mbmi2 -fno-full-laziness -threaded -rtsopts"
-$G/hsc2hs Layout.hsc -o bin/Layout.hs
+$G/hsc2hs Layout.hsc -o bin/Layout.hs && rm -f Layout_hsc.c Layout_hsc.h
 $G/ghc $FL -keep-s-files -outputdir bin -o bin/audit Audit.hs bin/Layout.hs Comptime.hs > bin/build.log 2>&1
 mv -f Audit.s Comptime.s bin/s/ 2>/dev/null; mv -f bin/Layout.s bin/s/ 2>/dev/null
 bin/audit +RTS -N4 -qa -T -s -RTS > bin/audit.out 2> bin/rts.txt

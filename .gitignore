@@ -35,3 +35,4 @@ probes/*/*/bin/
 tools/grid_audit/listings/*/bin/
 tools/grid_audit/listings/*/obj/
 probes/*/*/obj/
+probes/haskell/audit/*_hsc.[ch]
