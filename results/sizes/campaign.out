@@ -1699,3 +1699,54 @@ p0 k5:l3 julia/new tuned  n=71 med=0.0369563s ok=['True'] oom=False rc=0
 p0 k5:l3 c/new natural  n=21 med=0.147162s ok=['True'] oom=False rc=0
 p0 k5:l3 c/new tuned  n=67 med=0.0438411s ok=['True'] oom=False rc=0
 p0 k5:l3 rust/new natural  n=35 med=0.0861909s ok=['True'] oom=False rc=0
+p0 k5:l3 rust/new tuned  n=75 med=0.0397048s ok=['True'] oom=False rc=0
+p0 k5:l3 swift/new natural  n=36 med=0.0816548s ok=['True'] oom=False rc=0
+p0 k5:l3 swift/new tuned  n=79 med=0.03568s ok=['True'] oom=False rc=0
+p0 k5:l3 cpp/new natural  n=41 med=0.0787249s ok=['True'] oom=False rc=0
+p0 k5:l3 cpp/new tuned  n=80 med=0.0373512s ok=['True'] oom=False rc=0
+p0 k5:l3 ada/new natural  n=37 med=0.0789701s ok=['True'] oom=False rc=0
+p0 k5:l3 ada/new tuned  n=72 med=0.040625s ok=['True'] oom=False rc=0
+p0 k5:l3 ocaml/new natural  n=16 med=0.179358s ok=['True'] oom=False rc=0
+p0 k5:l3 ocaml/new tuned  n=35 med=0.0847979s ok=['True'] oom=False rc=0
+p0 k5:l3 chapel/new natural  n=21 med=0.144304s ok=['True'] oom=False rc=0
+p0 k5:l3 chapel/new tuned  n=76 med=0.039736s ok=['True'] oom=False rc=0
+p0 k5:l3 js/new natural  n=25 med=0.153645s ok=['True'] oom=False rc=0
+p0 k5:l3 js/new tuned  n=23 med=0.10783s ok=['True'] oom=False rc=0
+p0 k5:l3 haskell/new natural  n=9 med=0.304844s ok=['True'] oom=False rc=0
+p0 k5:l3 haskell/new tuned  n=71 med=0.0364942s ok=['True'] oom=False rc=0
+p0 k5:l3 d/new natural  n=35 med=0.0812547s ok=['True'] oom=False rc=0
+p0 k5:l3 d/new tuned  n=76 med=0.0394206s ok=['True'] oom=False rc=0
+p0 k5:l3 lua/new natural  n=3 med=1.39047s ok=['True'] oom=False rc=0
+p0 k5:l3 lua/new tuned  n=3 med=1.38503s ok=['True'] oom=False rc=0
+p0 k5:l3 bqn/new natural  n=15 med=0.194036s ok=['True'] oom=False rc=0
+p0 k5:l3 bqn/new tuned  n=18 med=0.178893s ok=['True'] oom=False rc=0
+p0 k5:l3 zig/new natural  n=36 med=0.0822674s ok=['True'] oom=False rc=0
+p0 k5:l3 zig/new tuned  n=68 med=0.0429935s ok=['True'] oom=False rc=0
+p0 k5:l3 java/new natural  n=23 med=0.13232s ok=['True'] oom=False rc=0
+p0 k5:l3 java/new tuned  n=67 med=0.0383606s ok=['True'] oom=False rc=0
+p0 k5:l3 c3/new natural  n=33 med=0.0720928s ok=['True'] oom=False rc=0
+p0 k5:l3 c3/new tuned  n=72 med=0.0398618s ok=['True'] oom=False rc=0
+p0 k5:l3 fpc/new natural  n=10 med=0.288728s ok=['True'] oom=False rc=0
+p0 k5:l3 fpc/new tuned  n=65 med=0.0433841s ok=['True'] oom=False rc=0
+p0 k5:l3 odin/new natural  n=36 med=0.0843182s ok=['True'] oom=False rc=0
+p0 k5:l3 odin/new tuned  n=67 med=0.0416165s ok=['True'] oom=False rc=0
+p0 k5:l3 mojo/new natural  n=20 med=0.145841s ok=['True'] oom=False rc=0
+p0 k5:l3 mojo/new tuned  n=66 med=0.0433861s ok=['True'] oom=False rc=0
+p0 k5:l3 fortran/new natural  n=35 med=0.0829463s ok=['True'] oom=False rc=0
+p0 k5:l3 fortran/new tuned  n=71 med=0.0396751s ok=['True'] oom=False rc=0
+p0 k5:l3 nim/new natural  n=41 med=0.0802065s ok=['True'] oom=False rc=0
+p0 k5:l3 nim/new tuned  n=76 med=0.0400244s ok=['True'] oom=False rc=0
+p0 k5:l3 python/new natural  n=3 med=6.08151s ok=['True'] oom=False rc=0
+p0 k5:l3 python/new tuned  n=3 med=2.15491s ok=['True'] oom=False rc=0
+p0 k5:l3 csharp/new natural  n=31 med=0.0899199s ok=['True'] oom=False rc=0
+p0 k5:l3 csharp/new tuned  n=65 med=0.0347341s ok=['True'] oom=False rc=0
+p0 k5:l3 php/new natural  n=12 med=0.287117s ok=['True'] oom=False rc=0
+p0 k5:l3 php/new tuned  n=12 med=0.2383s ok=['True'] oom=False rc=0
+2026-11-19T19:28:29 passe 0 groupe 18/24 k5:l3 50 processus 242s
+p0 k1:small haskell/new natural energy n=10000 med=7.47415e-05s ok=['True'] oom=False rc=0
+p0 k1:small haskell/new aos energy n=10000 med=1.46745e-05s ok=['True'] oom=False rc=0
+p0 k1:small haskell/new soa energy n=10000 med=1.0169e-05s ok=['True'] oom=False rc=0
+p0 k1:small haskell/new natural_shuffled energy n=10000 med=6.27905e-05s ok=['True'] oom=False rc=0
+p0 k1:small julia/new natural energy n=10000 med=1.7378e-05s ok=['True'] oom=False rc=0
+p0 k1:small julia/new aos energy n=10000 med=1.2758e-05s ok=['True'] oom=False rc=0
+p0 k1:small julia/new soa energy n=10000 med=3.422e-06s ok=['True'] oom=False rc=0
