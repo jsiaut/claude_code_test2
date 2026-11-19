@@ -93,6 +93,15 @@ anciens binaires aurait mesuré cet effet sans l'éviter. Le code a donc été c
   `MS_K7_KEYS` ; `MS_N5` n'est employé que là où le code fixe n = 2048 (C, C++, Haskell), ailleurs n suit le fichier
   de données. Les étiquettes de taille imprimées (« 16M », « 2048x65536 ») font partie du binaire publié et ne changent
   pas ; le pilote enregistre la taille.
+* **Sommes de contrôle au-delà de 2^53** : à la grande taille, celle de Q1 (K6) vaut 1,6·10^16. BQN et JavaScript,
+  dont les nombres sont des doubles, la rendent à l'arrondi près (…010, …012, …016 au lieu de …014), alors que chaque
+  agrégat, sous 2^53, est exact. Règle, pour tous les langages : une somme de contrôle entière supérieure à 2^53 se
+  compare à 10^-15 près en valeur relative (quelques unités du dernier rang d'un double) ; en dessous, l'égalité reste
+  exacte. Les tolérances de la spécification (K1, K5, K9) ne changent pas.
+* **Mémoire** : la limite du groupe de processus de la machine (13,35 Gio, page cache et `/dev/shm` compris) est
+  atteinte avant le plafond de 13 Gio de la section 6 ; le processus mesuré est désigné premier tué, et la cellule
+  devient « hors mémoire » (« que le noyau tue »). La validation en trouve à la grande taille : Python (K1 naturel et
+  naturel mélangé), BQN (K1, toutes variantes), PHP (K1 `natural_arr` et `natural_arr_shuffled`, K4 `natural_sorted`).
 * **Mojo** fixe le répertoire des données à la compilation (`/opt/msdata/`) : ses constructions de taille reçoivent un
   répertoire de liens propre au jeu (`/dev/shm/ms_view_<jeu>`), le binaire publié restant identique.
 * **Campagne (section 7)** : pour que les données d'une seule taille d'un seul noyau occupent `/dev/shm` à la fois

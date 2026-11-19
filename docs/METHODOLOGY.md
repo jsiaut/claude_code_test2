@@ -1579,4 +1579,9 @@ Robustesse :
   trouvées par la validation et corrigées avant toute mesure : un appel `P_Build (10, C)` d'Ada (variante
   tuned_alloc) avait échappé au remplacement ; Mojo lisait ses données au chemin publié ; les bornes de K5 de Haskell
   étaient écrites en dur (2047). Constat de construction : le cache `nimcache` de Nim gardait des objets compilés sur
-  un autre hôte ; toutes les constructions de la campagne partent de sources propres, sur la machine 30.
+  un autre hôte ; toutes les constructions de la campagne partent de sources propres, sur la machine 30. Validation
+  (avant la campagne) : sommes de contrôle de chaque variante, variantes propres comprises, aux trois tailles, égales
+  à celles du C, sauf deux cas réglés avant toute mesure (`docs/V4_SIZES.md`, 4.1) : la somme de Q1 à la grande taille
+  dépasse 2^53, et BQN et JavaScript, dont les nombres sont des doubles, la rendent à l'arrondi près (règle : au-delà
+  de 2^53, écart relatif d'au plus 10^-15) ; des processus tués par la limite de mémoire du groupe (13,35 Gio) à la
+  grande taille (Python, BQN, PHP), qui rendent leurs cellules « hors mémoire » selon la section 6.

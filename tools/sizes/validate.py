@@ -28,6 +28,22 @@ def env_for(lang, kernel, size):
     return env
 
 
+def checksum_ok(kernel, got, exp):
+    """Tolérance de la spécification (TOL), égalité exacte sinon ; une somme de contrôle entière au-delà de 2^53 se
+    compare à l'arrondi d'un double près (écart relatif d'au plus 1e-15) : un langage dont les nombres sont des doubles
+    (BQN) ne la représente pas exactement (docs/V4_SIZES.md, 4.1)."""
+    try:
+        if kernel in TOL:
+            return abs(float(got) - float(exp)) <= TOL[kernel] * abs(float(exp))
+        if got.strip() == exp:
+            return True
+        if ":" not in exp and abs(float(exp)) > 2.0 ** 53:
+            return abs(float(got) - float(exp)) <= 1e-15 * abs(float(exp))
+        return False
+    except ValueError:
+        return False
+
+
 def extra_variants(lang):
     """Variantes propres à un langage (bench/<langage>/extra_variants, comme tools/driver.py)."""
     extra = {}
@@ -62,10 +78,7 @@ def main():
                     except Exception as e:  # noqa: BLE001
                         got = f"ERREUR {type(e).__name__} {err}"
                     e = EXP[key]
-                    try:
-                        ok = abs(float(got) - float(e)) <= TOL[k] * abs(float(e)) if k in TOL else got == e
-                    except ValueError:
-                        ok = False
+                    ok = checksum_ok(k, got, e)
                     bad[lang] += not ok
                     print(f"{lang} {key} {v} {got} {'OK' if ok else 'ATTENDU ' + e}", flush=True)
             if size not in ("pub",):

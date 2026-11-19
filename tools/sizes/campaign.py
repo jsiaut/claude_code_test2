@@ -23,7 +23,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import sizes as S  # noqa: E402
 import build as B  # noqa: E402
-from validate import extra_variants  # noqa: E402
+from validate import extra_variants, checksum_ok  # noqa: E402
 
 ROOT = S.ROOT
 sys.path.insert(0, os.path.join(ROOT, "tools"))
@@ -92,12 +92,7 @@ def check(kernel, size, param, chk):
     exp = EXP_SIZES.get(f"{kernel}:{size}" + (f":{param}" if kernel == "k6" else ""))
     if exp is None:
         return None
-    if kernel in D.TOL:
-        try:
-            return abs(float(chk) - float(exp)) <= D.TOL[kernel] * abs(float(exp))
-        except ValueError:
-            return False
-    return chk.strip() == exp
+    return checksum_ok(kernel, chk, exp)
 
 
 def oom_victim():
