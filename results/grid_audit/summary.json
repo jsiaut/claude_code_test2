@@ -153,9 +153,13 @@
    "mesurée": 1
   },
   "swift": {
-   "déclarative": 33,
+   "exécutée": 26,
    "sondée": 33,
-   "mesurée": 1
+   "échec+recherche": 2,
+   "recherche": 3,
+   "exécutée+recherche": 1,
+   "mesurée": 1,
+   "exécutée+échec": 1
   },
   "fpc": {
    "déclarative": 33,
@@ -174,17 +178,17 @@
   }
  },
  "total": {
-  "exécutée": 346,
+  "exécutée": 372,
   "sondée": 589,
-  "échec+recherche": 3,
+  "échec+recherche": 5,
   "mesurée": 25,
-  "exécutée+échec": 13,
-  "recherche": 49,
-  "exécutée+recherche": 10,
+  "exécutée+échec": 14,
+  "recherche": 52,
+  "exécutée+recherche": 11,
   "échec": 5,
   "exécutée+échec+recherche": 3,
   "sans sonde": 236,
-  "déclarative": 160
+  "déclarative": 127
  },
  "divergences": [
   [
@@ -203,13 +207,6 @@
   ],
   [
    "python",
-   "D4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "swift",
    "D4",
    0.5,
    0.5,

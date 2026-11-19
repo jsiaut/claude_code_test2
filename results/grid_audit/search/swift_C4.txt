@@ -1,0 +1,13 @@
+# Recherche d'absence : swift, case C4
+# Chaîne : Swift version 6.4.2 (swift-6.4.2-RELEASE)
+# Motif : fast_?math|reassoc|algebraic|fp_?contract|float_?mode|relaxed_?math|associative
+# Déclaration publique : \b(public|open)\b| : 
+# 1 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:11296: FoundationEssentials : URL.Template.Value.associativeList(_:)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    1 <introspection>

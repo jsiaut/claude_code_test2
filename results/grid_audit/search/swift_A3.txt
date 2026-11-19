@@ -1,0 +1,24 @@
+# Recherche d'absence : swift, case A3
+# Chaîne : Swift version 6.4.2 (swift-6.4.2-RELEASE)
+# Motif : packed|bit_?field|bit_?packed|bit_?size|bit_?offset|bitstruct
+# Déclaration publique : \b(public|open)\b| : 
+# 0 déclarations publiques, 13 mentions, 1 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32499: internal var bitOffset: Swift::UInt8
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32500: @inlinable internal init(bitOffset: Swift::UInt8) { self.bitOffset = bitOffset }
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32502: return lhs.bitOffset == rhs.bitOffset
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32505: return lhs.bitOffset < rhs.bitOffset
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32509: @inline(__always) get { return Index(bitOffset: 0) }
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32512: @inline(__always) get { return Index(bitOffset: _bitCount) }
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32515: return Index(bitOffset: i.bitOffset &+ _elementWidth)
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32524: return Element(truncatingIfNeeded: _storage &>> i.bitOffset)
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32530: return Index(bitOffset: i.bitOffset &- _elementWidth)
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32536: let x = Int(i.bitOffset) &+ n &* Element.bitWidth
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32537: return Index(bitOffset: UInt8(truncatingIfNeeded: x))
+Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface:32540: return (Int(j.bitOffset) &- Int(i.bitOffset)) / Element.bitWidth
+
+## Lignes trouvées, par fichier
+   13 Swift.swiftmodule/x86_64-unknown-linux-gnu.swiftinterface

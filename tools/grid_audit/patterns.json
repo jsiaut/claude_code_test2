@@ -242,6 +242,24 @@
       "strip": "/opt/gcc-16/include/c++/16.2.0/",
       "public": "^\\s*#\\s*define\\s+\\w|^\\s*(template\\s*<.*>\\s*)?(class|struct|union|enum|using|typedef|inline\\s+constexpr|constexpr)\\b|^\\s*(extern\\s+)?[A-Za-z_][\\w:<> \\*&]*[\\s\\*&]\\w+\\s*\\(",
       "version": "/opt/gcc-16/bin/g++-16 --version | head -1"
+    },
+    "swift": {
+      "roots": [
+        "/opt/swift/usr/lib/swift/linux"
+      ],
+      "ext": [
+        ".swiftinterface"
+      ],
+      "exclude": [
+        "private.swiftinterface",
+        "/Testing.",
+        "/XCTest.",
+        "/_Test"
+      ],
+      "strip": "/opt/swift/usr/lib/swift/linux/",
+      "public": "\\b(public|open)\\b| : ",
+      "version": "/opt/swift/usr/bin/swiftc --version 2>&1 | head -1",
+      "listing": "sh tools/grid_audit/listings/swift_symbols.sh"
     }
   }
 }

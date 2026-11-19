@@ -1,0 +1,11 @@
+# Recherche d'absence : swift, case A6
+# Chaîne : Swift version 6.4.2 (swift-6.4.2-RELEASE)
+# Motif : \bsoa\b|_soa\b|\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array
+# Déclaration publique : \b(public|open)\b| : 
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

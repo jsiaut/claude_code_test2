@@ -1,0 +1,11 @@
+# Recherche d'absence : swift, case E2
+# Chaîne : Swift version 6.4.2 (swift-6.4.2-RELEASE)
+# Motif : \basm\b|inline_?asm|__asm|assembler
+# Déclaration publique : \b(public|open)\b| : 
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
