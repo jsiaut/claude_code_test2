@@ -51,9 +51,25 @@ lu en assembleur et en IR, en ReleaseFast et en ReleaseSafe pour E6, deux échec
   LLVM (un `vpternlogd` dans le code produit), comme le `foreign` d'Odin ; mais ni le manuel de Zig (`langref.html`,
   qui ne parle d'intrinsèques que pour Wasm) ni sa bibliothèque ne l'emploient : C2 reste ½ (section 3).
 
+### Odin (dev-2026-10:84bc3fc, compilateur du banc)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (C2, D4 et F4 valent 1 en v2, ½ en v1). Sondes :
+`probes/odin/probe.odin` (A2, A3, A5), `probes/odin/audit/` (`main/audit.odin` exécuté, `codegen/codegen.odin` lu en
+assembleur et en IR, deux échecs, cinq recherches dans `core` et `base`).
+* Faits notables : `#soa[]Part` range chaque champ dans son propre tableau (A6) ; `context.allocator` remplacé par une
+  arène sur un tampon de pile reçoit les `make` et les `append` (B2) ; l'assembleur en ligne est désormais fait de
+  « procédures assembleur » (`asm(a: i64, b: i64) -> (r: i64) { mov r, a; add r, b; }`) ; `intrinsics.expect` sort
+  l'appel du chemin chaud (E3) ; une procédure polymorphe est instanciée par type, mais `F60 :: fib(60)` est refusé
+  (« not a compile-time known constant ») : pas d'exécution à la compilation (E7 ½).
+* `@(fast_math = {...})` est accepté avec tous ses drapeaux, mais l'IR n'en porte aucun (le défaut relevé par la
+  remarque sur Odin, corrigé après dev-2026-10) : C4 reste 0, prouvé par l'échec.
+* Contre-épreuve (F2) : `linux.syscall(SYS_mbind, …)` pose une politique `MPOL_BIND` relue par `get_mempolicy` ;
+  `core:sys/linux` ne livre que les numéros d'appels système, sans procédure dédiée (section 3).
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |
 |---|---|---|---|---|---|
 | Rust | D4, F4 | 0 | `sched_setaffinity` et `mmap` marchent par le crate `libc` du sysroot, sur nightly avec `#![feature(rustc_private)]` | Le crate n'est pas dans l'API publique de `std` : c'est une FFI vers la glibc, du code non intrinsèque (0) | ½ si on le lit comme une unité interne livrée, accessible sur le canal instable |
 | Zig | C2 | ½ | Un `extern fn` au nom d'une intrinsèque de LLVM produit l'instruction (`vpternlogd`) | Mécanisme ni documenté ni employé par la bibliothèque livrée : la règle v2 ne compte que le « mécanisme d'import d'intrinsèques du langage » (½ par l'assembleur en ligne) | 1, comme Odin, dont la bibliothèque livrée emploie le même mécanisme |
+| Odin, et tout langage dont la bibliothèque livre un appel système brut (C, C++, Go, Zig, FreePascal…) | F2 | 0 | `mbind` par appel système brut pose une politique NUMA (`MPOL_BIND` relu par `get_mempolicy`, sonde d'Odin) | F2 compte les constructions de localité et de distribution ; un numéro d'appel système n'en est pas une (C : « libnuma hors standard ») | ½ si l'appel système brut compte, comme il compte pour D4 (Go, FreePascal) |

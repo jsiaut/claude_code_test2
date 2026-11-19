@@ -1,0 +1,179 @@
+# Recherche d'absence : odin, case F2
+# Chaîne : /opt/src/odin/odin version dev-2026-10:84bc3fc
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^[A-Za-z_][A-Za-z0-9_]*\s*::
+# 35 déclarations publiques, 166 mentions, 40 fichiers
+
+## Déclarations publiques
+core/crypto/_aes/ct64/ct64.odin:213: interleave_in :: proc "contextless" (w0, w1, w2, w3: u32) -> (q0, q1: u64) #no_bounds_check {
+core/crypto/_aes/ct64/ct64.odin:237: interleave_out :: proc "contextless" (q0, q1: u64) -> (w0, w1, w2, w3: u32) {
+core/crypto/_aes/ct64/helpers.odin:7: load_interleaved :: proc "contextless" (src: []byte) -> (u64, u64) #no_bounds_check {
+core/crypto/_aes/ct64/helpers.odin:15: store_interleaved :: proc "contextless" (dst: []byte, a0, a1: u64) #no_bounds_check {
+core/crypto/_aes/ct64/helpers.odin:24: xor_interleaved :: #force_inline proc "contextless" (a0, a1, b0, b1: u64) -> (u64, u64) {
+core/crypto/_aes/ct64/helpers.odin:29: and_interleaved :: #force_inline proc "contextless" (a0, a1, b0, b1: u64) -> (u64, u64) {
+core/simd/simd.odin:2904: interleave   :: intrinsics.simd_interleave
+core/simd/simd.odin:2905: deinterleave :: intrinsics.simd_deinterleave
+core/sys/darwin/Foundation/NSNumber.odin:152: Number_descriptionWithLocale :: proc "c" (self: ^Number, locale: ^Object) -> ^String {
+core/sys/linux/syscall_amd64.odin:246: SYS_mbind                   :: uintptr(237)
+core/sys/linux/syscall_amd64.odin:247: SYS_set_mempolicy           :: uintptr(238)
+core/sys/linux/syscall_amd64.odin:248: SYS_get_mempolicy           :: uintptr(239)
+core/sys/linux/syscall_amd64.odin:370: SYS_set_mempolicy_home_node :: uintptr(450)
+core/sys/linux/syscall_arm32.odin:338: SYS_mbind                       :: uintptr(319)
+core/sys/linux/syscall_arm32.odin:339: SYS_get_mempolicy               :: uintptr(320)
+core/sys/linux/syscall_arm32.odin:340: SYS_set_mempolicy               :: uintptr(321)
+core/sys/linux/syscall_arm32.odin:468: SYS_set_mempolicy_home_node     :: uintptr(450)
+core/sys/linux/syscall_arm64.odin:246: SYS_mbind                        :: uintptr(235)
+core/sys/linux/syscall_arm64.odin:247: SYS_get_mempolicy                :: uintptr(236)
+core/sys/linux/syscall_arm64.odin:248: SYS_set_mempolicy                :: uintptr(237)
+core/sys/linux/syscall_arm64.odin:317: SYS_set_mempolicy_home_node      :: uintptr(450)
+core/sys/linux/syscall_i386.odin:287: SYS_mbind                        :: uintptr(274)
+core/sys/linux/syscall_i386.odin:288: SYS_get_mempolicy                :: uintptr(275)
+core/sys/linux/syscall_i386.odin:289: SYS_set_mempolicy                :: uintptr(276)
+core/sys/linux/syscall_i386.odin:456: SYS_set_mempolicy_home_node      :: uintptr(450)
+core/sys/linux/syscall_riscv64.odin:242: SYS_mbind                        :: uintptr(235)
+core/sys/linux/syscall_riscv64.odin:243: SYS_get_mempolicy                :: uintptr(236)
+core/sys/linux/syscall_riscv64.odin:244: SYS_set_mempolicy                :: uintptr(237)
+core/sys/linux/syscall_riscv64.odin:333: SYS_set_mempolicy_home_node      :: uintptr(450)
+core/sys/windows/gdi32.odin:307: MM_MAX_NUMAXES :: 16
+core/sys/windows/kernel32.odin:1157: NUMA_NO_PREFERRED_NODE :: 0xffffffff
+core/sys/windows/kernel32.odin:1319: NumaNode :: struct {
+core/sys/windows/window_messages.odin:295: WM_POINTERLEAVE                   :: 0x024a
+base/intrinsics/intrinsics.odin:381: simd_interleave   :: proc(a, ..#simd[LANES/N]T)       -> #simd[LANES]T where N >= 1 ---
+base/intrinsics/intrinsics.odin:382: simd_deinterleave :: proc(a: #simd[LANES]T, $N: uint) -> (..#simd[LANES/N]T) where N >= 1, LANES % N == 0 --- // returns N multiple vectors
+
+## Mentions (au plus 12 lignes par fichier)
+core/c/libc/locale.odin:13: // locale.h - category macros
+core/c/libc/locale.odin:19: locale.
+core/c/libc/locale.odin:28: Selects the appropriate piece of the global locale, as specified by the category and locale arguments,
+core/c/libc/locale.odin:29: and can be used to change or query the entire global locale or portions thereof.
+core/c/libc/locale.odin:31: Returns: the current locale if `locale` is `nil`, the set locale otherwise
+core/c/libc/locale.odin:36: setlocale :: proc(category: Locale_Category, locale: cstring) -> cstring ---
+core/crypto/_aes/ct64/ct64_keysched.odin:80: q[0], q[4] = interleave_in(skey[i], skey[i+1], skey[i+2], skey[i+3])
+core/crypto/_aes/ct64/helpers.odin:12: return interleave_in(w0, w1, w2, w3)
+core/crypto/_aes/ct64/helpers.odin:16: w0, w1, w2, w3 := interleave_out(a0, a1)
+core/crypto/_aes/ct64/helpers.odin:36: q[0], q[4] = #force_inline load_interleaved(src)
+core/crypto/_aes/ct64/helpers.odin:44: #force_inline store_interleaved(dst, q[0], q[4])
+core/crypto/_aes/ct64/helpers.odin:52: q[i], q[i + 4] = #force_inline load_interleaved(s)
+core/crypto/_aes/ct64/helpers.odin:67: #force_inline store_interleaved(d, q[i], q[i + 4])
+core/crypto/aegis/aegis_impl_ct64.odin:8: // round function.  The intermediate state is stored in interleaved
+core/crypto/aegis/aegis_impl_ct64.odin:38: key_0, key_1 := aes.load_interleaved(ctx._key[:16])
+core/crypto/aegis/aegis_impl_ct64.odin:39: iv_0, iv_1 := aes.load_interleaved(iv)
+core/crypto/aegis/aegis_impl_ct64.odin:41: st.s0_0, st.s0_1 = aes.xor_interleaved(key_0, key_1, iv_0, iv_1)
+core/crypto/aegis/aegis_impl_ct64.odin:42: st.s1_0, st.s1_1 = aes.load_interleaved(_C1[:])
+core/crypto/aegis/aegis_impl_ct64.odin:43: st.s2_0, st.s2_1 = aes.load_interleaved(_C0[:])
+core/crypto/aegis/aegis_impl_ct64.odin:46: st.s5_0, st.s5_1 = aes.xor_interleaved(key_0, key_1, st.s2_0, st.s2_1)
+core/crypto/aegis/aegis_impl_ct64.odin:47: st.s6_0, st.s6_1 = aes.xor_interleaved(key_0, key_1, st.s1_0, st.s1_1)
+core/crypto/aegis/aegis_impl_ct64.odin:55: k0_0, k0_1 := aes.load_interleaved(ctx._key[:16])
+core/crypto/aegis/aegis_impl_ct64.odin:56: k1_0, k1_1 := aes.load_interleaved(ctx._key[16:])
+core/crypto/aegis/aegis_impl_ct64.odin:57: n0_0, n0_1 := aes.load_interleaved(iv[:16])
+core/crypto/aegis/aegis_impl_ct64.odin:58: n1_0, n1_1 := aes.load_interleaved(iv[16:])
+core/crypto/aes/aes_gcm_hw.odin:147: // performant to interleave (stitch) the two operations together.
+core/crypto/deoxysii/deoxysii_impl_ct64.odin:58: q_0, q_1 := aes.load_interleaved(tmp[:])
+core/crypto/deoxysii/deoxysii_impl_ct64.odin:91: q_stk[j], q_stk[j+4] = aes.load_interleaved(dst[:])
+core/crypto/deoxysii/deoxysii_impl_ct64.odin:105: aes.store_interleaved(dst[i*BLOCK_SIZE:], q_b[i], q_b[i+4])
+core/crypto/deoxysii/deoxysii_impl_ct64.odin:129: st.q_b[i], st.q_b[i + 4] = aes.load_interleaved(src)
+core/crypto/deoxysii/deoxysii_impl_ct64.odin:168: st.q_b[0], st.q_b[4] = aes.load_interleaved(dst)
+core/rexcode/ir/spirv/operand_kinds.odin:1233: RowBlockedInterleavedARM    = 4202,
+core/rexcode/ir/spirv/operand_kinds.odin:1234: ColumnBlockedInterleavedARM = 4203,
+core/rexcode/isa/arm32/mnemonics.odin:434: // Predication block (then/else interleaved)
+core/rexcode/isa/arm32/mnemonics.odin:508: VLD20,   VLD21,                        // 2-vector interleaved (halves)
+core/rexcode/isa/arm32/mnemonics.odin:509: VLD40,   VLD41,   VLD42,   VLD43,      // 4-vector interleaved (quarters)
+core/rexcode/isa/arm32/tablegen/encoding_table.odin:2376: // ---- VTRN / VUZP / VZIP (interleave / deinterleave) ----
+core/rexcode/isa/arm32/tablegen/encoding_table.odin:3609: // Interleaved load/store -- 2-vector
+core/rexcode/isa/arm32/tools/verify_against_llvm.odin:11: // stream interleaves disassembly lines (tab-prefixed) with warning lines
+core/rexcode/isa/arm64/mnemonics.odin:534: //   06 LDZI    load Z interleaved
+core/rexcode/isa/arm64/mnemonics.odin:535: //   07 STZI    store Z interleaved
+core/rexcode/isa/mos6502/mnemonics.odin:127: TIA,              // transfer increment-alternate   (interleaved)
+core/rexcode/isa/mos6502/mnemonics.odin:128: TAI,              // transfer alternate-increment   (interleaved)
+core/simd/x86/avx.odin:1143: // Unpacks and interleave double-precision (64-bit) floating-point elements
+core/simd/x86/avx.odin:1150: // Unpacks and interleave single-precision (32-bit) floating-point elements
+core/simd/x86/avx.odin:1157: // Unpacks and interleave double-precision (64-bit) floating-point elements
+core/simd/x86/avx.odin:1164: // Unpacks and interleave single-precision (32-bit) floating-point elements
+core/sys/darwin/Foundation/NSNumber.odin:153: return msgSend(^String, self, "descriptionWithLocale:", locale)
+core/sys/darwin/Security/SecBase.odin:345: UnsupportedNumAttributes = -67863, // The number of attributes is not supported.
+core/sys/freebsd/types.odin:1392: INTERLEAVE                    = 0x7c, /* Interleave channel */
+core/sys/info/cpu_windows.odin:30: case .RelationNumaNode:      logical  += int(intrinsics.count_ones(info.ProcessorMask))
+core/sys/linux/sys.odin:2829: // TODO(flysand): mbind
+core/sys/linux/sys.odin:2831: // TODO(flysand): set_mempolicy
+core/sys/linux/sys.odin:2833: // TODO(flysand): get_mempolicy
+core/sys/linux/sys.odin:3184: Determine CPU and NUMA node on which the calling thread is running.
+core/sys/linux/sys.odin:3420: // TODO(flysand): set_mempolicy_home_node
+core/sys/posix/langinfo.odin:17: cultural area defined in the current locale.
+core/sys/posix/langinfo.odin:290: // Some depend on locale.h contants (bits/locale.h to be precise).
+core/sys/posix/string.odin:18: Map the error number to a locale-dependent error message string and put it in the buffer.
+core/sys/posix/string_libc.odin:18: Map the error number to a locale-dependent error message string.
+core/sys/unix/syscalls_linux.odin:256: SYS_mbind : uintptr : 237
+core/sys/unix/syscalls_linux.odin:257: SYS_set_mempolicy : uintptr : 238
+core/sys/unix/syscalls_linux.odin:258: SYS_get_mempolicy : uintptr : 239
+core/sys/unix/syscalls_linux.odin:613: SYS_mbind : uintptr : 235
+core/sys/unix/syscalls_linux.odin:614: SYS_get_mempolicy : uintptr : 236
+core/sys/unix/syscalls_linux.odin:615: SYS_set_mempolicy : uintptr : 237
+core/sys/unix/syscalls_linux.odin:952: SYS_mbind : uintptr : 274
+core/sys/unix/syscalls_linux.odin:953: SYS_get_mempolicy : uintptr : 275
+core/sys/unix/syscalls_linux.odin:954: SYS_set_mempolicy : uintptr : 276
+core/sys/unix/syscalls_linux.odin:1392: SYS_mbind : uintptr : 319
+core/sys/unix/syscalls_linux.odin:1393: SYS_get_mempolicy : uintptr : 320
+core/sys/unix/syscalls_linux.odin:1394: SYS_set_mempolicy : uintptr : 321
+core/sys/wasm/js/events.odin:146: .Pointer_Leave        = "pointerleave",
+core/sys/wasm/js/events_all_targets.odin:136: .Pointer_Leave        = "pointerleave",
+core/sys/windows/gdi32.odin:310: dvNumAxes:  DWORD,
+core/sys/windows/gdi32.odin:311: dvValues:   [MM_MAX_NUMAXES]LONG,
+core/sys/windows/kernel32.odin:534: LCIDToLocaleName           :: proc(Locale: LCID, lpName: LPWSTR, cchName: INT, dwFlags: DWORD) -> INT ---
+core/sys/windows/kernel32.odin:965: CreateFileMappingNumaW :: proc(
+core/sys/windows/kernel32.odin:1023: AllocateUserPhysicalPagesNuma :: proc(
+core/sys/windows/kernel32.odin:1029: VirtualAllocExNuma :: proc(
+core/sys/windows/kernel32.odin:1139: MapViewOfFileNuma2 :: proc(
+core/sys/windows/kernel32.odin:1168: return MapViewOfFileNuma2(
+core/sys/windows/kernel32.odin:1176: NUMA_NO_PREFERRED_NODE,
+core/sys/windows/kernel32.odin:1211: MemExtendedParameterNumaNode,
+core/sys/windows/kernel32.odin:1291: RelationNumaNode,
+core/sys/windows/kernel32.odin:1296: RelationNumaNodeEx,
+core/sys/windows/kernel32.odin:1328: NumaNode:      NumaNode         `raw_union_tag:"Relationship=RelationNumaNode"`,
+core/sys/windows/ntdll.odin:168: FileNumaNodeInformation                      = 53,
+core/sys/windows/winerror.odin:5536: // The locale specific resource for the desired message is not present.
+core/sys/windows/winerror.odin:5576: // Locale installation failed.
+core/sys/windows/winnls.odin:9: LOCALE_NAME_SYSTEM_DEFAULT : wstring = "!x-sys-default-locale"
+core/testing/runner.odin:799: // It'll be purely by luck if the output is interleaved properly,
+base/runtime/random_generator_chacha8_ref.odin:91: // Interleave 4 blocks
+
+## Lignes trouvées, par fichier
+    2 base/intrinsics/intrinsics.odin
+    1 base/runtime/random_generator_chacha8_ref.odin
+    6 core/c/libc/locale.odin
+    2 core/crypto/_aes/ct64/ct64.odin
+    1 core/crypto/_aes/ct64/ct64_keysched.odin
+   10 core/crypto/_aes/ct64/helpers.odin
+   81 core/crypto/aegis/aegis_impl_ct64.odin
+    1 core/crypto/aes/aes_gcm_hw.odin
+    5 core/crypto/deoxysii/deoxysii_impl_ct64.odin
+    2 core/rexcode/ir/spirv/operand_kinds.odin
+    3 core/rexcode/isa/arm32/mnemonics.odin
+    2 core/rexcode/isa/arm32/tablegen/encoding_table.odin
+    1 core/rexcode/isa/arm32/tools/verify_against_llvm.odin
+    2 core/rexcode/isa/arm64/mnemonics.odin
+    2 core/rexcode/isa/mos6502/mnemonics.odin
+    2 core/simd/simd.odin
+    4 core/simd/x86/avx.odin
+    2 core/sys/darwin/Foundation/NSNumber.odin
+    1 core/sys/darwin/Security/SecBase.odin
+    1 core/sys/freebsd/types.odin
+    1 core/sys/info/cpu_windows.odin
+    5 core/sys/linux/sys.odin
+    4 core/sys/linux/syscall_amd64.odin
+    4 core/sys/linux/syscall_arm32.odin
+    4 core/sys/linux/syscall_arm64.odin
+    4 core/sys/linux/syscall_i386.odin
+    4 core/sys/linux/syscall_riscv64.odin
+    2 core/sys/posix/langinfo.odin
+    1 core/sys/posix/string.odin
+    1 core/sys/posix/string_libc.odin
+   16 core/sys/unix/syscalls_linux.odin
+    1 core/sys/wasm/js/events.odin
+    1 core/sys/wasm/js/events_all_targets.odin
+    3 core/sys/windows/gdi32.odin
+   13 core/sys/windows/kernel32.odin
+    1 core/sys/windows/ntdll.odin
+    1 core/sys/windows/window_messages.odin
+    2 core/sys/windows/winerror.odin
+    1 core/sys/windows/winnls.odin
+    1 core/testing/runner.odin

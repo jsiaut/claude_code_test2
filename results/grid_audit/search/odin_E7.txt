@@ -1,0 +1,56 @@
+# Recherche d'absence : odin, case E7
+# Chaîne : /opt/src/odin/odin version dev-2026-10:84bc3fc
+# Motif : comptime|constexpr|const_?fn|static_?if|ctfe|compile_?time|@generated|specializ
+# Déclaration publique : ^[A-Za-z_][A-Za-z0-9_]*\s*::
+# 4 déclarations publiques, 30 mentions, 13 fichiers
+
+## Déclarations publiques
+base/builtin/builtin.odin:40: ODIN_COMPILE_TIMESTAMP          :: ODIN_COMPILE_TIMESTAMP
+base/intrinsics/intrinsics.odin:195: type_is_specialization_of :: proc($T, $S: typeid) -> bool ---
+base/intrinsics/intrinsics.odin:228: type_is_specialized_polymorphic_record   :: proc($T: typeid) -> bool ---
+base/intrinsics/intrinsics.odin:229: type_is_unspecialized_polymorphic_record :: proc($T: typeid) -> bool ---
+
+## Mentions (au plus 12 lignes par fichier)
+core/crypto/_weierstrass/point.odin:17: WARNING: The point addition and doubling formulas are specialized for
+core/crypto/aead/low_level.odin:133: // Directly specialize the union by setting the type ID (save a copy).
+core/crypto/hash/low_level.odin:158: // Directly specialize the union by setting the type ID (save a copy).
+core/odin/ast/ast.odin:700: specialization: ^Expr, // possibly nil
+core/odin/ast/ast.odin:719: specialization: ^Expr, // possibly nil
+core/odin/ast/clone.odin:292: r.specialization = clone(r.specialization)
+core/odin/ast/clone.odin:299: r.specialization = clone(r.specialization)
+core/odin/ast/walk.odin:345: if n.specialization != nil {
+core/odin/ast/walk.odin:346: walk(v, n.specialization)
+core/odin/ast/walk.odin:354: if n.specialization != nil {
+core/odin/ast/walk.odin:355: walk(v, n.specialization)
+core/odin/doc-format/doc_format.odin:240: // .Generic                      - <1 type:   0=specialization
+core/odin/parser/parser.odin:1756: if n.specialization == nil {
+core/odin/parser/parser.odin:1759: error(p, ident.expr.pos, "expected a polymorphic identifier without an specialization")
+core/odin/parser/parser.odin:1876: specialization: ^ast.Expr
+core/odin/parser/parser.odin:1879: specialization = parse_type(p)
+core/odin/parser/parser.odin:1880: end = specialization.end
+core/odin/parser/parser.odin:1885: ti.specialization = specialization
+core/odin/parser/parser.odin:1998: if ti, ok := tt.derived.(^ast.Typeid_Type); ok && ti.specialization != nil {
+core/odin/parser/parser.odin:1999: error(p, tt.pos, "specialization of typeid is not allowed without polymorphic names")
+core/odin/parser/parser.odin:2210: is_generic = e.specialization != nil
+core/odin/parser/parser.odin:2629: specialization: ^ast.Expr
+core/odin/parser/parser.odin:2631: specialization = parse_type(p)
+core/odin/parser/parser.odin:2632: end = specialization.end
+core/rexcode/isa/arm32/tablegen/encoding_table.odin:3419: // ---- MVE shifts (specialized) ---------------------------------------------
+core/text/regex/optimizer/doc.odin:51: - Introduce specialized opcodes for certain classes of repetition.
+base/builtin/builtin.odin:38: This is compatible with the `time.Time` type, i.e. `time.Time{_nsec=ODIN_COMPILE_TIMESTAMP}`
+base/runtime/core_builtin_soa.odin:449: // element store lowering, specialized for E.
+
+## Lignes trouvées, par fichier
+    2 base/builtin/builtin.odin
+    3 base/intrinsics/intrinsics.odin
+    1 base/runtime/core_builtin_soa.odin
+    1 core/crypto/_weierstrass/point.odin
+    1 core/crypto/aead/low_level.odin
+    1 core/crypto/hash/low_level.odin
+    2 core/odin/ast/ast.odin
+    2 core/odin/ast/clone.odin
+    4 core/odin/ast/walk.odin
+    1 core/odin/doc-format/doc_format.odin
+   14 core/odin/parser/parser.odin
+    1 core/rexcode/isa/arm32/tablegen/encoding_table.odin
+    1 core/text/regex/optimizer/doc.odin

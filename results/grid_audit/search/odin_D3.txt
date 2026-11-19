@@ -1,0 +1,44 @@
+# Recherche d'absence : odin, case D3
+# Chaîne : /opt/src/odin/odin version dev-2026-10:84bc3fc
+# Motif : cache_?line|cache_?padded|destructive_?interference|false_?sharing|contended|dcache|cache_?size
+# Déclaration publique : ^[A-Za-z_][A-Za-z0-9_]*\s*::
+# 4 déclarations publiques, 23 mentions, 6 fichiers
+
+## Déclarations publiques
+core/sys/windows/comctl32.odin:881: LVN_ODCACHEHINT     :: (LVN_FIRST-13)
+base/runtime/core.odin:306: MAP_CACHE_LINE_LOG2 :: 6
+base/runtime/core.odin:309: MAP_CACHE_LINE_SIZE :: 1 << MAP_CACHE_LINE_LOG2
+base/runtime/core.odin:342: Map_Cell :: struct($T: typeid) #align(MAP_CACHE_LINE_SIZE) {
+
+## Mentions (au plus 12 lignes par fichier)
+core/rexcode/ir/spirv/encoding_table.odin:4938: .LoadCacheControl,
+core/rexcode/ir/spirv/operand_kinds.odin:63: LoadCacheControl,
+core/rexcode/ir/spirv/operand_kinds.odin:711: CacheSizeALTERA                             = 5900,
+core/sys/windows/kernel32.odin:955: GetSystemFileCacheSize :: proc(
+core/sys/windows/kernel32.odin:956: lpMinimumFileCacheSize: PSIZE_T,
+core/sys/windows/kernel32.odin:957: lpMaximumFileCacheSize: PSIZE_T,
+core/sys/windows/kernel32.odin:960: SetSystemFileCacheSize :: proc(
+core/sys/windows/kernel32.odin:961: MinimumFileCacheSize: SIZE_T,
+core/sys/windows/kernel32.odin:962: MaximumFileCacheSize: SIZE_T,
+base/runtime/core.odin:315: #assert(MAP_CACHE_LINE_SIZE >= 64)
+base/runtime/core.odin:318: // aligned by align_of(T) and such that align_of(Map_Cell(T)) % MAP_CACHE_LINE_SIZE == 0
+base/runtime/core.odin:324: // an array of Map_Cell(T) will be padded to stay a multiple of MAP_CACHE_LINE_SIZE.
+base/runtime/core.odin:343: data: [MAP_CACHE_LINE_SIZE / size_of(T) when 0 < size_of(T) && size_of(T) < MAP_CACHE_LINE_SIZE else 1]T,
+base/runtime/dynamic_map_internal.odin:37: // internal padding to round to MAP_CACHE_LINE_SIZE. One other benefit to storing
+base/runtime/dynamic_map_internal.odin:57: #assert(MAP_CACHE_LINE_SIZE == 64)
+base/runtime/dynamic_map_internal.odin:59: // ceil(2^64 / N) for each N = MAP_CACHE_LINE_SIZE / size_of(T) > 1
+base/runtime/dynamic_map_internal.odin:61: MAP_CELL_RECIPROCALS := [MAP_CACHE_LINE_SIZE+1]u64{
+base/runtime/dynamic_map_internal.odin:107: #assert(N <= MAP_CACHE_LINE_SIZE)
+base/runtime/dynamic_map_internal.odin:129: #assert(SHIFT <= MAP_CACHE_LINE_LOG2)
+base/runtime/dynamic_map_internal.odin:134: // range [1, CACHE_LINE_SIZE) and not a power of two.
+base/runtime/dynamic_map_internal.odin:272: CACHE_MASK :: MAP_CACHE_LINE_SIZE - 1
+base/runtime/dynamic_map_internal.odin:308: CACHE_MASK :: MAP_CACHE_LINE_SIZE - 1
+base/runtime/dynamic_map_internal.odin:312: data := mem_alloc_non_zeroed(int(size), MAP_CACHE_LINE_SIZE, allocator, loc) or_return
+
+## Lignes trouvées, par fichier
+    7 base/runtime/core.odin
+   10 base/runtime/dynamic_map_internal.odin
+    1 core/rexcode/ir/spirv/encoding_table.odin
+    2 core/rexcode/ir/spirv/operand_kinds.odin
+    1 core/sys/windows/comctl32.odin
+    6 core/sys/windows/kernel32.odin

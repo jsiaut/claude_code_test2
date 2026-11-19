@@ -1,0 +1,133 @@
+# Recherche d'absence : odin, case C5
+# Chaîne : /opt/src/odin/odin version dev-2026-10:84bc3fc
+# Motif : parallel|par_?iter|forall|pmap|thread_?pool|fork_?join|work_?steal|par_?map|domain_?pool
+# Déclaration publique : ^[A-Za-z_][A-Za-z0-9_]*\s*::
+# 4 déclarations publiques, 90 mentions, 36 fichiers
+
+## Déclarations publiques
+core/crypto/argon2id/argon2id.odin:21: MIN_PARALLELISM :: 1
+core/crypto/argon2id/argon2id.odin:23: MAX_PARALLELISM :: (1 << 24) - 1
+core/sys/windows/ntdll.odin:111: SL_NO_CURSOR_UPDATE_QUERY      :: 0x00000010 // File systems maintain per-FileObject directory cursor information. When multiple threads do queries using the same FileObject, access to the per-FileObj
+core/sys/windows/types.odin:5061: WSAEALREADY            :: 10037 // Already connecting in parallel.
+
+## Mentions (au plus 12 lignes par fichier)
+core/crypto/_aes/ct64/ct64_dec.odin:41: // process four blocks in parallel.
+core/crypto/argon2id/argon2id.odin:20: // MIN_PARALLELISM is the minimum allowed parallelism.
+core/crypto/argon2id/argon2id.odin:22: // MAX_PARALLELISM is the maximum allowed parallelism.
+core/crypto/argon2id/argon2id.odin:50: parallelism = 4,
+core/crypto/argon2id/argon2id.odin:59: parallelism = 4,
+core/crypto/argon2id/argon2id.odin:73: parallelism = 1,
+core/crypto/argon2id/argon2id.odin:82: parallelism = 1,
+core/crypto/argon2id/argon2id.odin:89: parallelism: u32,  // p
+core/crypto/argon2id/argon2id.odin:124: p, t, m := parameters.parallelism, parameters.passes, u64(parameters.memory_size)
+core/crypto/argon2id/argon2id.odin:125: if p < MIN_PARALLELISM || p > MAX_PARALLELISM {
+core/crypto/argon2id/argon2id.odin:126: panic("crypto/argon2id: invalid parallelism")
+core/crypto/argon2id/argon2id.odin:245: // Each segment can be processed in parallel, as long as
+core/crypto/argon2id/argon2id.odin:524: // same running time on CPUs thanks to parallelism and pipelining.
+core/encoding/entity/generated.odin:296: case "DoubleVerticalBar":               // PARALLEL TO
+core/encoding/entity/generated.odin:406: case "ForAll":                          // FOR ALL
+core/encoding/entity/generated.odin:790: case "NotDoubleVerticalBar":            // NOT PARALLEL TO
+core/encoding/entity/generated.odin:2388: case "epar":                            // EQUAL AND PARALLEL TO
+core/encoding/entity/generated.odin:2390: case "eparsl":                          // EQUALS SIGN AND SLANTED PARALLEL
+core/encoding/entity/generated.odin:2422: case "eqvparsl":                        // IDENTICAL TO AND SLANTED PARALLEL
+core/encoding/entity/generated.odin:2486: case "fltns":                           // WHITE PARALLELOGRAM
+core/encoding/entity/generated.odin:2492: case "forall":                          // FOR ALL
+core/encoding/entity/generated.odin:3442: case "nhpar":                           // PARALLEL WITH HORIZONTAL STROKE
+core/encoding/entity/generated.odin:3514: case "npar":                            // NOT PARALLEL TO
+core/encoding/entity/generated.odin:3516: case "nparallel":                       // NOT PARALLEL TO
+core/encoding/entity/generated.odin:3566: case "nshortparallel":                  // NOT PARALLEL TO
+core/math/math_lgamma.odin:300: p1 := lgamT[0] + w*(lgamT[3]+w*(lgamT[6]+w*(lgamT[9]+w*lgamT[12]))) // parallel comp
+core/rexcode/doc.odin:217: ir/                 # shared IR core (parallels isa/; see docs/ir_design.md)
+core/rexcode/ir/module.odin:90: // Operation  (the leaf -- parallels isa.Instruction)
+core/rexcode/ir/module.odin:120: // Containers  (no ISA parallel -- the structured-module concession)
+core/rexcode/ir/print.odin:6: // PRINTER FRAMEWORK  (shared scaffolding -- parallels isa.print)
+core/rexcode/ir/refs.odin:24: // defined per-IR (parallel to each arch's reloc.odin), not here.
+core/rexcode/ir/status.odin:9: // Parallels isa.status. The `Error` struct shape is intentionally identical to
+core/rexcode/ir/spirv/decoder.odin:53: opaque_info:  [dynamic]Opaque_Info,   // parallel to types; set for OPAQUE
+core/rexcode/ir/spirv/decoder.odin:115: append(&d.opaque_info, Opaque_Info{})   // stay parallel; filled for OPAQUE
+core/rexcode/ir/spirv/module.odin:51: // their own. These parallel the ir core arrays and hold each entity's wire
+core/rexcode/ir/spirv/module.odin:54: type_ids:     []Id,   // parallel to base.types
+core/rexcode/ir/spirv/module.odin:55: global_ids:   []Id,   // parallel to base.globals
+core/rexcode/ir/spirv/module.odin:56: function_ids: []Id,   // parallel to base.functions
+core/rexcode/ir/spirv/module.odin:70: // Pipe / ...). Parallel to base.types; the entry is meaningful only where
+core/rexcode/ir/spirv/operand_kinds.odin:922: ImageMipmap                                 = 15,
+core/rexcode/ir/spirv/reloc.odin:14: // surfaced as a `Relocation` the way each arch surfaces its own (parallel to an
+core/rexcode/ir/wasm/module.odin:30: //     `ir.Module.types`, WASM keeps its value-typed signatures in the parallel
+core/rexcode/ir/wasm/module.odin:110: // --- side tables parallel to the ir core arrays ---
+core/rexcode/ir/wasm/module.odin:112: // parallel to base.functions since ir.Function has no locals slot.
+core/rexcode/isa/arm32/tablegen/encoding_table.odin:442: // ARMv6 signed parallel arithmetic (8-bit and 16-bit lanes)
+core/rexcode/isa/arm32/tablegen/encoding_table.odin:478: // ARMv6 saturating parallel arithmetic (op family 0110 0010)
+core/rexcode/isa/arm32/tablegen/encoding_table.odin:531: // ARMv6 unsigned parallel arithmetic (op family 0110 0101)
+core/rexcode/isa/arm32/tools/dump_verify_input.odin:10: // bytes plus a parallel meta file. The filled bytes have safe non-zero
+core/rexcode/isa/mips/decoder.odin:11: // Fixed-width 4-byte decoding pipeline. Two passes (parallel to x86):
+core/rexcode/isa/mips/decoder.odin:35: // Per-decoded-instruction metadata (parallel to []Instruction).
+core/rexcode/isa/mips/encoder.odin:13: // Two-pass design (parallel to the x86 encoder):
+core/rexcode/isa/mips/mnemonics.odin:290: // Parallel arithmetic (byte/halfword/word lanes)
+core/rexcode/isa/mips/mnemonics.odin:298: // Parallel shifts
+core/rexcode/isa/mips/mnemonics.odin:304: // Parallel logical
+core/rexcode/isa/mips/mnemonics.odin:307: // Parallel compare
+core/rexcode/isa/mips/mnemonics.odin:311: // Parallel multiply / divide
+core/rexcode/isa/mips/tablegen/encoding_table.odin:633: // PLZCW (parallel leading-zero count).
+core/rexcode/isa/mips/tablegen/encoding_table.odin:636: // Top-level parallel shifts by immediate (SPECIAL2 funct 0x34/36/37/3C/3E/3F).
+core/rexcode/isa/mos6502/tools/dump_verify_input.odin:10: // entry, plus a parallel meta file (mnemonic name + CPU tier + length).
+core/rexcode/isa/mos6502/tools/dump_verify_input.odin:14: //   /tmp/rexcode_mos6502_meta.txt   parallel meta
+core/rexcode/isa/mos65816/tools/dump_verify_input.odin:9: // Iterates ENCODING_TABLE and emits THREE parallel files:
+core/rexcode/isa/mos65816/tools/dump_verify_input.odin:13: //   /tmp/rexcode_mos65816_meta.txt   parallel meta: mn opcode length
+core/rexcode/isa/ppc/mnemonics.odin:945: PDEPD,      PEXTD,                              // parallel bit deposit/extract
+core/rexcode/isa/ppc/tools/dump_verify_input.odin:10: // bytes plus a parallel meta file. Each line is one entry's bytes in BIG-
+core/rexcode/isa/ppc/tools/dump_verify_input.odin:21: // Parallel meta files keep the row-to-mnemonic mapping.
+core/rexcode/isa/ppc_vle/tools/dump_verify_input.odin:12: //   /tmp/rexcode_ppc_vle_meta.txt   parallel meta: mnemonic, bits, mask, ilen
+core/rexcode/isa/rsp/tools/dump_verify_input.odin:12: //   /tmp/rexcode_rsp_meta.txt   parallel meta: mnemonic, bits, mask
+core/rexcode/isa/x86/decoder.odin:25: // in a parallel array at the same index as the corresponding Instruction.
+core/rexcode/isa/x86/decoder.odin:1299: //   inst_info     - Output buffer for per-instruction metadata (parallel to instructions)
+core/rexcode/isa/x86/decoder.odin:1311: //   - inst_info[0..n] contains parallel metadata (offsets, prefix info, etc.)
+core/rexcode/isa/x86/encoder.odin:14: // - Trivially parallelizable: encode() is pure, no shared state
+core/rexcode/isa/x86/encoder.odin:284: // Slot roles (parallel array enc.enc[i]) gathered in the same pass.
+core/rexcode/isa/x86/encoder_recipe.odin:129: // ENCODE_RECIPES (parallel to ENCODE_FORMS) is generated, not built here: the
+core/rexcode/isa/x86/encoding_types.odin:39: //   1. Implement a 16-bit ModRM decode table parallel to MODRM_TABLE.
+core/simd/simd.odin:1766: often be better parallelized.
+core/simd/simd.odin:1814: product for floats, as it can often be better parallelized.
+core/simd/simd.odin:1955: often be better parallelized.
+core/sys/darwin/mach_darwin.odin:658: * VM_FLAGS_NO_PMAP_CHECK
+core/sys/darwin/mach_darwin.odin:660: *	Do not check that there is no stale pmap mapping for the new VM region.
+core/sys/freebsd/types.odin:1302: PARA                          = 0x22, /* parallel-port */
+core/sys/freebsd/types.odin:1398: A12MPPSWITCH                  = 0x82, /* Avalon Parallel Processor */
+core/sys/linux/uring/ops.odin:58: The two operations execute in parallel, so the fsync may complete before the write is issued to the storage.
+
+## Lignes trouvées, par fichier
+    1 core/crypto/_aes/ct64/ct64_dec.odin
+   14 core/crypto/argon2id/argon2id.odin
+   20 core/encoding/entity/generated.odin
+    1 core/math/math_lgamma.odin
+    1 core/rexcode/doc.odin
+    2 core/rexcode/ir/module.odin
+    1 core/rexcode/ir/print.odin
+    1 core/rexcode/ir/refs.odin
+    2 core/rexcode/ir/spirv/decoder.odin
+    5 core/rexcode/ir/spirv/module.odin
+    1 core/rexcode/ir/spirv/operand_kinds.odin
+    1 core/rexcode/ir/spirv/reloc.odin
+    1 core/rexcode/ir/status.odin
+    3 core/rexcode/ir/wasm/module.odin
+    3 core/rexcode/isa/arm32/tablegen/encoding_table.odin
+    1 core/rexcode/isa/arm32/tools/dump_verify_input.odin
+    2 core/rexcode/isa/mips/decoder.odin
+    1 core/rexcode/isa/mips/encoder.odin
+    5 core/rexcode/isa/mips/mnemonics.odin
+    2 core/rexcode/isa/mips/tablegen/encoding_table.odin
+    2 core/rexcode/isa/mos6502/tools/dump_verify_input.odin
+    2 core/rexcode/isa/mos65816/tools/dump_verify_input.odin
+    1 core/rexcode/isa/ppc/mnemonics.odin
+    2 core/rexcode/isa/ppc/tools/dump_verify_input.odin
+    1 core/rexcode/isa/ppc_vle/tools/dump_verify_input.odin
+    1 core/rexcode/isa/rsp/tools/dump_verify_input.odin
+    3 core/rexcode/isa/x86/decoder.odin
+    2 core/rexcode/isa/x86/encoder.odin
+    1 core/rexcode/isa/x86/encoder_recipe.odin
+    1 core/rexcode/isa/x86/encoding_types.odin
+    3 core/simd/simd.odin
+    2 core/sys/darwin/mach_darwin.odin
+    2 core/sys/freebsd/types.odin
+    1 core/sys/linux/uring/ops.odin
+    1 core/sys/windows/ntdll.odin
+    1 core/sys/windows/types.odin

@@ -1,0 +1,41 @@
+# Recherche d'absence : odin, case C4
+# Chaîne : /opt/src/odin/odin version dev-2026-10:84bc3fc
+# Motif : fast_?math|reassoc|algebraic|fp_?contract|float_?mode|relaxed_?math|associative
+# Déclaration publique : ^[A-Za-z_][A-Za-z0-9_]*\s*::
+# 5 déclarations publiques, 18 mentions, 7 fichiers
+
+## Déclarations publiques
+core/rexcode/ir/spirv/operand_kinds.odin:107: FP_Fast_Math_Mode :: bit_set[FP_Fast_Math_Mode_Bit; u32]
+core/rexcode/ir/spirv/operand_kinds.odin:108: FP_Fast_Math_Mode_Bit :: enum u32 {
+base/runtime/core.odin:27: Fast_Math_Flag :: enum u8 {
+base/runtime/core.odin:37: Fast_Math_Flag  :: intrinsics.Fast_Math_Flag
+base/runtime/core.odin:40: Fast_Math_Flags :: intrinsics.Fast_Math_Flags
+
+## Mentions (au plus 12 lignes par fichier)
+core/debug/pe/symbol.odin:37: ASSOCIATIVE  = 5,
+core/math/big/prime.odin:119: Henri Cohen: "A Course in Computational Algebraic Number Theory"
+core/math/big/prime.odin:122: title={A course in computational algebraic number theory},
+core/rexcode/ir/spirv/encoding_table.odin:4868: .FPFastMathMode,
+core/rexcode/ir/spirv/operand_kinds.odin:15: FPFastMathMode,
+core/rexcode/ir/spirv/operand_kinds.odin:115: AllowReassoc   = 17,
+core/rexcode/ir/spirv/operand_kinds.odin:366: FPFastMathDefault                   = 6028,
+core/rexcode/ir/spirv/operand_kinds.odin:636: FPFastMathMode                              = 40,
+core/rexcode/ir/spirv/operand_kinds.odin:1129: FPFastMathModeINTEL                         = 5837,
+core/simd/simd.odin:1769: floating-point computation, as floating-point addition is not associative, that
+core/simd/simd.odin:1818: associative, that is `(a*b)*c` may not be equal to `a*(b*c)`.
+core/simd/simd.odin:1859: floating-point computation, as floating-point addition is not associative,
+core/simd/simd.odin:1882: floating-point computation, as floating-point multiplication is not associative,
+core/simd/simd.odin:1910: floating-point computation, as floating-point addition is not associative, that
+core/simd/simd.odin:1959: associative, that is `(a*b)*c` may not be equal to `a*(b*c)`.
+core/sys/windows/winerror.odin:5504: // A step operation must involve either a node test or, in the case of a predicate, an algebraic expression against which to test each node in the node set iden
+base/runtime/core.odin:28: Allow_Reassoc    = 0,
+base/runtime/core.odin:39: // Fast_Math_Flags :: distinct bit_set[Fast_Math_Flag; u32]
+
+## Lignes trouvées, par fichier
+    5 base/runtime/core.odin
+    1 core/debug/pe/symbol.odin
+    2 core/math/big/prime.odin
+    1 core/rexcode/ir/spirv/encoding_table.odin
+    7 core/rexcode/ir/spirv/operand_kinds.odin
+    6 core/simd/simd.odin
+    1 core/sys/windows/winerror.odin

@@ -1,0 +1,360 @@
+# Recherche d'absence : odin, case F1
+# Chaîne : /opt/src/odin/odin version dev-2026-10:84bc3fc
+# Motif : ndarray|multi_?dim|md_?span|mdarray|array2d|\bmatrix\b
+# Déclaration publique : ^[A-Za-z_][A-Za-z0-9_]*\s*::
+# 238 déclarations publiques, 79 mentions, 32 fichiers
+
+## Déclarations publiques
+core/math/linalg/general.odin:204: identity_matrix :: proc "contextless" ($T: typeid/matrix[$N, N]$E) -> T #no_bounds_check {
+core/math/linalg/general.odin:216: matrix_mul :: proc "contextless" (a, b: $M/matrix[$N, N]$E) -> (c: M)
+core/math/linalg/general.odin:222: matrix_comp_mul :: proc "contextless" (a, b: $M/matrix[$I, $J]$E) -> (c: M)
+core/math/linalg/general.odin:228: matrix_mul_differ :: proc "contextless" (a: $A/matrix[$I, $J]$E, b: $B/matrix[J, $K]E) -> (c: matrix[I, K]E)
+core/math/linalg/general.odin:235: matrix_mul_vector :: proc "contextless" (a: $A/matrix[$I, $J]$E, b: $B/[J]E) -> (c: B)
+core/math/linalg/general.odin:277: matrix_to_ptr :: proc "contextless" (m: ^$A/matrix[$I, $J]$E) -> ^E where IS_NUMERIC(E), I > 0, J > 0 #no_bounds_check {
+core/math/linalg/general.odin:366: matrix_cast :: proc "contextless" (v: $A/matrix[$M, $N]$T, $Elem_Type: typeid) -> (w: matrix[M, N]Elem_Type) #no_bounds_check {
+core/math/linalg/general.odin:459: hermitian_adjoint :: proc "contextless" (m: $M/matrix[$N, N]$T) -> M where intrinsics.type_is_complex(T), N >= 1 #no_bounds_check {
+core/math/linalg/general.odin:464: trace :: proc "contextless" (m: $M/matrix[$N, N]$T) -> (trace: T) #no_bounds_check {
+core/math/linalg/general.odin:472: matrix_minor :: proc "contextless" (m: $M/matrix[$N, N]$T, #any_int row, column: int) -> (minor: T) where N > 1 #no_bounds_check {
+core/math/linalg/general.odin:488: matrix1x1_determinant :: proc "contextless" (m: $M/matrix[1, 1]$T) -> (det: T) #no_bounds_check {
+core/math/linalg/general.odin:493: matrix2x2_determinant :: proc "contextless" (m: $M/matrix[2, 2]$T) -> (det: T) #no_bounds_check {
+core/math/linalg/general.odin:497: matrix3x3_determinant :: proc "contextless" (m: $M/matrix[3, 3]$T) -> (det: T) #no_bounds_check {
+core/math/linalg/general.odin:504: matrix4x4_determinant :: proc "contextless" (m: $M/matrix[4, 4]$T) -> (det: T) #no_bounds_check {
+core/math/linalg/general.odin:524: matrix5x5_determinant :: proc "contextless" (m: $M/matrix[5, 5]$T) -> (det: T) #no_bounds_check {
+core/math/linalg/general.odin:529: matrix6x6_determinant :: proc "contextless" (m: $M/matrix[6, 6]$T) -> (det: T) #no_bounds_check {
+core/math/linalg/general.odin:534: matrix7x7_determinant :: proc "contextless" (m: $M/matrix[7, 7]$T) -> (det: T) #no_bounds_check {
+core/math/linalg/general.odin:539: matrix8x8_determinant :: proc "contextless" (m: $M/matrix[8, 8]$T) -> (det: T) #no_bounds_check {
+core/math/linalg/general.odin:544: matrix_determinant_generic :: proc "contextless" (a: $M/matrix[$N, N]$T) -> T #no_bounds_check {
+core/math/linalg/general.odin:597: matrix1x1_adjugate :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:603: matrix2x2_adjugate :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:612: matrix3x3_adjugate :: proc "contextless" (m: $M/matrix[3, 3]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:626: matrix4x4_adjugate :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:665: matrix5x5_adjugate :: proc "contextless" (x: $M/matrix[5, 5]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:670: matrix6x6_adjugate :: proc "contextless" (x: $M/matrix[6, 6]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:675: matrix7x7_adjugate :: proc "contextless" (x: $M/matrix[7, 7]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:680: matrix8x8_adjugate :: proc "contextless" (x: $M/matrix[8, 8]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:685: matrix_adjugate_general :: proc "contextless" (x: $M/matrix[$N, N]$T) -> (y: M) where N >= 2 #no_bounds_check {
+core/math/linalg/general.odin:718: matrix1x1_cofactor :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:724: matrix2x2_cofactor :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:733: matrix3x3_cofactor :: proc "contextless" (m: $M/matrix[3, 3]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:748: matrix4x4_cofactor :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:788: matrix5x5_cofactor :: proc "contextless" (x: $M/matrix[5, 5]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:793: matrix6x6_cofactor :: proc "contextless" (x: $M/matrix[6, 6]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:798: matrix7x7_cofactor :: proc "contextless" (x: $M/matrix[7, 7]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:803: matrix8x8_cofactor :: proc "contextless" (x: $M/matrix[8, 8]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:808: matrix_cofactor_general :: proc "contextless" (x: $M/matrix[$N, N]$T) -> (y: M) where N >= 2 #no_bounds_check {
+core/math/linalg/general.odin:840: matrix1x1_inverse_transpose :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:846: matrix2x2_inverse_transpose :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:864: matrix3x3_inverse_transpose :: proc "contextless" (x: $M/matrix[3, 3]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:885: matrix4x4_inverse_transpose :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:909: matrix5x5_inverse_transpose :: proc "contextless" (x: $M/matrix[5, 5]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:915: matrix6x6_inverse_transpose :: proc "contextless" (x: $M/matrix[6, 6]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:921: matrix7x7_inverse_transpose :: proc "contextless" (x: $M/matrix[7, 7]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:927: matrix8x8_inverse_transpose :: proc "contextless" (x: $M/matrix[8, 8]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:933: matrix1x1_inverse :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:939: matrix2x2_inverse :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:957: matrix3x3_inverse :: proc "contextless" (x: $M/matrix[3, 3]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:978: matrix4x4_inverse :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:1002: matrix5x5_inverse :: proc "contextless" (x: $M/matrix[5, 5]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:1008: matrix6x6_inverse :: proc "contextless" (x: $M/matrix[6, 6]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:1014: matrix7x7_inverse :: proc "contextless" (x: $M/matrix[7, 7]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:1020: matrix8x8_inverse :: proc "contextless" (x: $M/matrix[8, 8]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/general.odin:1033: matrix_inverse_gauss_jordan :: proc "contextless" (A: $M/matrix[$N, N]$T) -> (b: M, non_singular: bool) #no_bounds_check {
+core/math/linalg/general.odin:1089: matrix_inverse_lu_decomposition :: proc "contextless" (A: $M/matrix[$N, N]$T) -> (b: M, non_singular: bool) #no_bounds_check {
+core/math/linalg/general.odin:1186: matrix_pseudo_inverse :: proc "contextless" (A: $M/matrix[$R, $C]$T) -> (B: matrix[C, R]T, not_singular: bool) #no_bounds_check {
+core/math/linalg/specific.odin:14: Matrix1x1f16 :: matrix[1, 1]f16
+core/math/linalg/specific.odin:15: Matrix1x2f16 :: matrix[1, 2]f16
+core/math/linalg/specific.odin:16: Matrix1x3f16 :: matrix[1, 3]f16
+core/math/linalg/specific.odin:17: Matrix1x4f16 :: matrix[1, 4]f16
+core/math/linalg/specific.odin:19: Matrix2x1f16 :: matrix[2, 1]f16
+core/math/linalg/specific.odin:20: Matrix2x2f16 :: matrix[2, 2]f16
+core/math/linalg/specific.odin:21: Matrix2x3f16 :: matrix[2, 3]f16
+core/math/linalg/specific.odin:22: Matrix2x4f16 :: matrix[2, 4]f16
+core/math/linalg/specific.odin:24: Matrix3x1f16 :: matrix[3, 1]f16
+core/math/linalg/specific.odin:25: Matrix3x2f16 :: matrix[3, 2]f16
+core/math/linalg/specific.odin:26: Matrix3x3f16 :: matrix[3, 3]f16
+core/math/linalg/specific.odin:27: Matrix3x4f16 :: matrix[3, 4]f16
+core/math/linalg/specific.odin:29: Matrix4x1f16 :: matrix[4, 1]f16
+core/math/linalg/specific.odin:30: Matrix4x2f16 :: matrix[4, 2]f16
+core/math/linalg/specific.odin:31: Matrix4x3f16 :: matrix[4, 3]f16
+core/math/linalg/specific.odin:32: Matrix4x4f16 :: matrix[4, 4]f16
+core/math/linalg/specific.odin:43: Matrix1x1f32 :: matrix[1, 1]f32
+core/math/linalg/specific.odin:44: Matrix1x2f32 :: matrix[1, 2]f32
+core/math/linalg/specific.odin:45: Matrix1x3f32 :: matrix[1, 3]f32
+core/math/linalg/specific.odin:46: Matrix1x4f32 :: matrix[1, 4]f32
+core/math/linalg/specific.odin:48: Matrix2x1f32 :: matrix[2, 1]f32
+core/math/linalg/specific.odin:49: Matrix2x2f32 :: matrix[2, 2]f32
+core/math/linalg/specific.odin:50: Matrix2x3f32 :: matrix[2, 3]f32
+core/math/linalg/specific.odin:51: Matrix2x4f32 :: matrix[2, 4]f32
+core/math/linalg/specific.odin:53: Matrix3x1f32 :: matrix[3, 1]f32
+core/math/linalg/specific.odin:54: Matrix3x2f32 :: matrix[3, 2]f32
+core/math/linalg/specific.odin:55: Matrix3x3f32 :: matrix[3, 3]f32
+core/math/linalg/specific.odin:56: Matrix3x4f32 :: matrix[3, 4]f32
+core/math/linalg/specific.odin:58: Matrix4x1f32 :: matrix[4, 1]f32
+core/math/linalg/specific.odin:59: Matrix4x2f32 :: matrix[4, 2]f32
+core/math/linalg/specific.odin:60: Matrix4x3f32 :: matrix[4, 3]f32
+core/math/linalg/specific.odin:61: Matrix4x4f32 :: matrix[4, 4]f32
+core/math/linalg/specific.odin:72: Matrix1x1f64 :: matrix[1, 1]f64
+core/math/linalg/specific.odin:73: Matrix1x2f64 :: matrix[1, 2]f64
+core/math/linalg/specific.odin:74: Matrix1x3f64 :: matrix[1, 3]f64
+core/math/linalg/specific.odin:75: Matrix1x4f64 :: matrix[1, 4]f64
+core/math/linalg/specific.odin:77: Matrix2x1f64 :: matrix[2, 1]f64
+core/math/linalg/specific.odin:78: Matrix2x2f64 :: matrix[2, 2]f64
+core/math/linalg/specific.odin:79: Matrix2x3f64 :: matrix[2, 3]f64
+core/math/linalg/specific.odin:80: Matrix2x4f64 :: matrix[2, 4]f64
+core/math/linalg/specific.odin:82: Matrix3x1f64 :: matrix[3, 1]f64
+core/math/linalg/specific.odin:83: Matrix3x2f64 :: matrix[3, 2]f64
+core/math/linalg/specific.odin:84: Matrix3x3f64 :: matrix[3, 3]f64
+core/math/linalg/specific.odin:85: Matrix3x4f64 :: matrix[3, 4]f64
+core/math/linalg/specific.odin:87: Matrix4x1f64 :: matrix[4, 1]f64
+core/math/linalg/specific.odin:88: Matrix4x2f64 :: matrix[4, 2]f64
+core/math/linalg/specific.odin:89: Matrix4x3f64 :: matrix[4, 3]f64
+core/math/linalg/specific.odin:90: Matrix4x4f64 :: matrix[4, 4]f64
+core/math/linalg/specific.odin:2790: matrix3_gram_schmidt :: proc "contextless" (m: matrix[3, 3]$E, $A, $B, $C: int) -> (r: matrix[3, 3]E)
+core/math/linalg/glsl/linalg_glsl.odin:25: mat2 :: matrix[2, 2]f32
+core/math/linalg/glsl/linalg_glsl.odin:26: mat3 :: matrix[3, 3]f32
+core/math/linalg/glsl/linalg_glsl.odin:27: mat4 :: matrix[4, 4]f32
+core/math/linalg/glsl/linalg_glsl.odin:36: mat3x2 :: matrix[2, 3]f32
+core/math/linalg/glsl/linalg_glsl.odin:37: mat4x2 :: matrix[2, 4]f32
+core/math/linalg/glsl/linalg_glsl.odin:38: mat2x3 :: matrix[3, 2]f32
+core/math/linalg/glsl/linalg_glsl.odin:39: mat4x3 :: matrix[3, 4]f32
+core/math/linalg/glsl/linalg_glsl.odin:40: mat2x4 :: matrix[4, 2]f32
+core/math/linalg/glsl/linalg_glsl.odin:41: mat3x4 :: matrix[4, 3]f32
+core/math/linalg/glsl/linalg_glsl.odin:63: dmat2 :: matrix[2, 2]f64
+core/math/linalg/glsl/linalg_glsl.odin:64: dmat3 :: matrix[3, 3]f64
+core/math/linalg/glsl/linalg_glsl.odin:65: dmat4 :: matrix[4, 4]f64
+core/math/linalg/glsl/linalg_glsl.odin:70: dmat3x2 :: matrix[2, 3]f64
+core/math/linalg/glsl/linalg_glsl.odin:71: dmat4x2 :: matrix[2, 4]f64
+core/math/linalg/glsl/linalg_glsl.odin:72: dmat2x3 :: matrix[3, 2]f64
+core/math/linalg/glsl/linalg_glsl.odin:73: dmat4x3 :: matrix[3, 4]f64
+core/math/linalg/glsl/linalg_glsl.odin:74: dmat2x4 :: matrix[4, 2]f64
+core/math/linalg/glsl/linalg_glsl.odin:75: dmat3x4 :: matrix[4, 3]f64
+core/math/linalg/glsl/linalg_glsl.odin:1908: hermitian_adjoint :: proc "contextless" (m: $M/matrix[$N, N]$T) -> M where intrinsics.type_is_complex(T), N >= 1 {
+core/math/linalg/glsl/linalg_glsl.odin:1913: trace :: proc "contextless" (m: $M/matrix[$N, N]$T) -> (trace: T) {
+core/math/linalg/glsl/linalg_glsl.odin:1921: matrix_minor :: proc "contextless" (m: $M/matrix[$N, N]$T, #any_int row, column: int) -> (minor: T) where N > 1 {
+core/math/linalg/glsl/linalg_glsl.odin:1937: determinant_matrix1x1 :: proc "contextless" (m: $M/matrix[1, 1]$T) -> (det: T) {
+core/math/linalg/glsl/linalg_glsl.odin:1942: determinant_matrix2x2 :: proc "contextless" (m: $M/matrix[2, 2]$T) -> (det: T) {
+core/math/linalg/glsl/linalg_glsl.odin:1946: determinant_matrix3x3 :: proc "contextless" (m: $M/matrix[3, 3]$T) -> (det: T) {
+core/math/linalg/glsl/linalg_glsl.odin:1953: determinant_matrix4x4 :: proc "contextless" (m: $M/matrix[4, 4]$T) -> (det: T) {
+core/math/linalg/glsl/linalg_glsl.odin:1965: adjugate_matrix1x1 :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:1971: adjugate_matrix2x2 :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:1980: adjugate_matrix3x3 :: proc "contextless" (m: $M/matrix[3, 3]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:1994: adjugate_matrix4x4 :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:2006: cofactor_matrix1x1 :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:2012: cofactor_matrix2x2 :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:2021: cofactor_matrix3x3 :: proc "contextless" (m: $M/matrix[3, 3]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:2036: cofactor_matrix4x4 :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:2047: inverse_transpose_matrix1x1 :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:2053: inverse_transpose_matrix2x2 :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:2071: inverse_transpose_matrix3x3 :: proc "contextless" (x: $M/matrix[3, 3]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/glsl/linalg_glsl.odin:2092: inverse_transpose_matrix4x4 :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/glsl/linalg_glsl.odin:2116: inverse_matrix1x1 :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:2122: inverse_matrix2x2 :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) {
+core/math/linalg/glsl/linalg_glsl.odin:2140: inverse_matrix3x3 :: proc "contextless" (x: $M/matrix[3, 3]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/glsl/linalg_glsl.odin:2161: inverse_matrix4x4 :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/hlsl/linalg_hlsl.odin:32: float1x1 :: matrix[1, 1]float
+core/math/linalg/hlsl/linalg_hlsl.odin:33: float2x2 :: matrix[2, 2]float
+core/math/linalg/hlsl/linalg_hlsl.odin:34: float3x3 :: matrix[3, 3]float
+core/math/linalg/hlsl/linalg_hlsl.odin:35: float4x4 :: matrix[4, 4]float
+core/math/linalg/hlsl/linalg_hlsl.odin:37: float1x2 :: matrix[1, 2]float
+core/math/linalg/hlsl/linalg_hlsl.odin:38: float1x3 :: matrix[1, 3]float
+core/math/linalg/hlsl/linalg_hlsl.odin:39: float1x4 :: matrix[1, 4]float
+core/math/linalg/hlsl/linalg_hlsl.odin:40: float2x1 :: matrix[2, 1]float
+core/math/linalg/hlsl/linalg_hlsl.odin:41: float2x3 :: matrix[2, 3]float
+core/math/linalg/hlsl/linalg_hlsl.odin:42: float2x4 :: matrix[2, 4]float
+core/math/linalg/hlsl/linalg_hlsl.odin:43: float3x1 :: matrix[3, 1]float
+core/math/linalg/hlsl/linalg_hlsl.odin:44: float3x2 :: matrix[3, 2]float
+core/math/linalg/hlsl/linalg_hlsl.odin:45: float3x4 :: matrix[3, 4]float
+core/math/linalg/hlsl/linalg_hlsl.odin:46: float4x1 :: matrix[4, 1]float
+core/math/linalg/hlsl/linalg_hlsl.odin:47: float4x2 :: matrix[4, 2]float
+core/math/linalg/hlsl/linalg_hlsl.odin:48: float4x3 :: matrix[4, 3]float
+core/math/linalg/hlsl/linalg_hlsl.odin:56: half1x1 :: matrix[1, 1]half
+core/math/linalg/hlsl/linalg_hlsl.odin:57: half2x2 :: matrix[2, 2]half
+core/math/linalg/hlsl/linalg_hlsl.odin:58: half3x3 :: matrix[3, 3]half
+core/math/linalg/hlsl/linalg_hlsl.odin:59: half4x4 :: matrix[4, 4]half
+core/math/linalg/hlsl/linalg_hlsl.odin:61: half1x2 :: matrix[1, 2]half
+core/math/linalg/hlsl/linalg_hlsl.odin:62: half1x3 :: matrix[1, 3]half
+core/math/linalg/hlsl/linalg_hlsl.odin:63: half1x4 :: matrix[1, 4]half
+core/math/linalg/hlsl/linalg_hlsl.odin:64: half2x1 :: matrix[2, 1]half
+core/math/linalg/hlsl/linalg_hlsl.odin:65: half2x3 :: matrix[2, 3]half
+core/math/linalg/hlsl/linalg_hlsl.odin:66: half2x4 :: matrix[2, 4]half
+core/math/linalg/hlsl/linalg_hlsl.odin:67: half3x1 :: matrix[3, 1]half
+core/math/linalg/hlsl/linalg_hlsl.odin:68: half3x2 :: matrix[3, 2]half
+core/math/linalg/hlsl/linalg_hlsl.odin:69: half3x4 :: matrix[3, 4]half
+core/math/linalg/hlsl/linalg_hlsl.odin:70: half4x1 :: matrix[4, 1]half
+core/math/linalg/hlsl/linalg_hlsl.odin:71: half4x2 :: matrix[4, 2]half
+core/math/linalg/hlsl/linalg_hlsl.odin:72: half4x3 :: matrix[4, 3]half
+core/math/linalg/hlsl/linalg_hlsl.odin:92: double1x1 :: matrix[1, 1]double
+core/math/linalg/hlsl/linalg_hlsl.odin:93: double2x2 :: matrix[2, 2]double
+core/math/linalg/hlsl/linalg_hlsl.odin:94: double3x3 :: matrix[3, 3]double
+core/math/linalg/hlsl/linalg_hlsl.odin:95: double4x4 :: matrix[4, 4]double
+core/math/linalg/hlsl/linalg_hlsl.odin:97: double1x2 :: matrix[1, 2]double
+core/math/linalg/hlsl/linalg_hlsl.odin:98: double1x3 :: matrix[1, 3]double
+core/math/linalg/hlsl/linalg_hlsl.odin:99: double1x4 :: matrix[1, 4]double
+core/math/linalg/hlsl/linalg_hlsl.odin:100: double2x1 :: matrix[2, 1]double
+core/math/linalg/hlsl/linalg_hlsl.odin:101: double2x3 :: matrix[2, 3]double
+core/math/linalg/hlsl/linalg_hlsl.odin:102: double2x4 :: matrix[2, 4]double
+core/math/linalg/hlsl/linalg_hlsl.odin:103: double3x1 :: matrix[3, 1]double
+core/math/linalg/hlsl/linalg_hlsl.odin:104: double3x2 :: matrix[3, 2]double
+core/math/linalg/hlsl/linalg_hlsl.odin:105: double3x4 :: matrix[3, 4]double
+core/math/linalg/hlsl/linalg_hlsl.odin:106: double4x1 :: matrix[4, 1]double
+core/math/linalg/hlsl/linalg_hlsl.odin:107: double4x2 :: matrix[4, 2]double
+core/math/linalg/hlsl/linalg_hlsl.odin:108: double4x3 :: matrix[4, 3]double
+core/math/linalg/hlsl/linalg_hlsl.odin:115: int1x1 :: matrix[1, 1]int
+core/math/linalg/hlsl/linalg_hlsl.odin:116: int2x2 :: matrix[2, 2]int
+core/math/linalg/hlsl/linalg_hlsl.odin:117: int3x3 :: matrix[3, 3]int
+core/math/linalg/hlsl/linalg_hlsl.odin:118: int4x4 :: matrix[4, 4]int
+core/math/linalg/hlsl/linalg_hlsl.odin:120: int1x2 :: matrix[1, 2]int
+core/math/linalg/hlsl/linalg_hlsl.odin:121: int1x3 :: matrix[1, 3]int
+core/math/linalg/hlsl/linalg_hlsl.odin:122: int1x4 :: matrix[1, 4]int
+core/math/linalg/hlsl/linalg_hlsl.odin:123: int2x1 :: matrix[2, 1]int
+core/math/linalg/hlsl/linalg_hlsl.odin:124: int2x3 :: matrix[2, 3]int
+core/math/linalg/hlsl/linalg_hlsl.odin:125: int2x4 :: matrix[2, 4]int
+core/math/linalg/hlsl/linalg_hlsl.odin:126: int3x1 :: matrix[3, 1]int
+core/math/linalg/hlsl/linalg_hlsl.odin:127: int3x2 :: matrix[3, 2]int
+core/math/linalg/hlsl/linalg_hlsl.odin:128: int3x4 :: matrix[3, 4]int
+core/math/linalg/hlsl/linalg_hlsl.odin:129: int4x1 :: matrix[4, 1]int
+core/math/linalg/hlsl/linalg_hlsl.odin:130: int4x2 :: matrix[4, 2]int
+core/math/linalg/hlsl/linalg_hlsl.odin:131: int4x3 :: matrix[4, 3]int
+core/math/linalg/hlsl/linalg_hlsl.odin:2006: hermitian_adjoint :: proc "contextless" (m: $M/matrix[$N, N]$T) -> M where intrinsics.type_is_complex(T), N >= 1 {
+core/math/linalg/hlsl/linalg_hlsl.odin:2011: trace :: proc "contextless" (m: $M/matrix[$N, N]$T) -> (trace: T) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2019: matrix_minor :: proc "contextless" (m: $M/matrix[$N, N]$T, #any_int row, column: int) -> (minor: T) where N > 1 {
+core/math/linalg/hlsl/linalg_hlsl.odin:2035: determinant_matrix1x1 :: proc "contextless" (m: $M/matrix[1, 1]$T) -> (det: T) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2040: determinant_matrix2x2 :: proc "contextless" (m: $M/matrix[2, 2]$T) -> (det: T) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2044: determinant_matrix3x3 :: proc "contextless" (m: $M/matrix[3, 3]$T) -> (det: T) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2051: determinant_matrix4x4 :: proc "contextless" (m: $M/matrix[4, 4]$T) -> (det: T) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2063: adjugate_matrix1x1 :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2069: adjugate_matrix2x2 :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2078: adjugate_matrix3x3 :: proc "contextless" (m: $M/matrix[3, 3]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2092: adjugate_matrix4x4 :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2104: cofactor_matrix1x1 :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2110: cofactor_matrix2x2 :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2119: cofactor_matrix3x3 :: proc "contextless" (m: $M/matrix[3, 3]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2134: cofactor_matrix4x4 :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2145: inverse_transpose_matrix1x1 :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2151: inverse_transpose_matrix2x2 :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2169: inverse_transpose_matrix3x3 :: proc "contextless" (x: $M/matrix[3, 3]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/hlsl/linalg_hlsl.odin:2190: inverse_transpose_matrix4x4 :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/hlsl/linalg_hlsl.odin:2214: inverse_matrix1x1 :: proc "contextless" (x: $M/matrix[1, 1]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2220: inverse_matrix2x2 :: proc "contextless" (x: $M/matrix[2, 2]$T) -> (y: M) {
+core/math/linalg/hlsl/linalg_hlsl.odin:2238: inverse_matrix3x3 :: proc "contextless" (x: $M/matrix[3, 3]$T) -> (y: M) #no_bounds_check {
+core/math/linalg/hlsl/linalg_hlsl.odin:2259: inverse_matrix4x4 :: proc "contextless" (x: $M/matrix[4, 4]$T) -> (y: M) #no_bounds_check {
+core/rexcode/isa/mips/registers.odin:25: REG_VFPU  :: 0x0800    // PSP Allegrex VFPU (matrix-organised)
+base/intrinsics/intrinsics.odin:12: transpose        :: proc(m: $T/matrix[$R, $C]$E)    -> matrix[C, R]E ---
+base/intrinsics/intrinsics.odin:13: outer_product    :: proc(a: $A/[$X]$E, b: $B/[$Y]E) -> matrix[X, Y]E ---
+base/intrinsics/intrinsics.odin:14: hadamard_product :: proc(a, b: $T/matrix[$R, $C]$E) -> T ---
+base/intrinsics/intrinsics.odin:15: matrix_flatten   :: proc(m: $T/matrix[$R, $C]$E)    -> [R*C]E ---
+
+## Mentions (au plus 12 lignes par fichier)
+core/crypto/_mldsa/dsa_internal.odin:126: // Expand matrix
+core/crypto/_mldsa/dsa_internal.odin:134: // Matrix-vector multiplication
+core/crypto/_mldsa/dsa_internal.odin:236: // Expand matrix and transform vectors
+core/crypto/_mldsa/dsa_internal.odin:250: // Matrix-vector multiplication
+core/crypto/_mldsa/dsa_internal.odin:359: // Matrix-vector multiplication; compute Az - c2^dt1
+core/crypto/argon2id/argon2id.odin:141: // For p lanes, the memory is organized in a matrix B[i][j] of
+core/crypto/argon2id/argon2id.odin:549: //    16-byte inputs S_0, S_1, ... , S_7 are viewed as a 4x4 matrix of
+core/crypto/argon2id/argon2id.odin:557: //                      Figure 17: Matrix Element Labeling
+core/crypto/argon2id/argon2id.odin:571: //                   Figure 18: Feeding Matrix Elements to GB
+core/crypto/argon2id/argon2id.odin:601: //    matrix of 16-byte registers R_0, R_1, ... , R_63.  Then P is first
+core/encoding/entity/generated.odin:2696: case "hercon":                          // HERMITIAN CONJUGATE MATRIX
+core/fmt/fmt.odin:2845: // Formats a matrix as a string
+core/fmt/fmt.odin:2849: // - v: The matrix value to be formatted.
+core/fmt/fmt.odin:2851: // - info: A runtime.Type_Info_Matrix struct containing matrix type information.
+core/fmt/fmt.odin:2857: io.write_string(fi.writer, "matrix", &fi.n)
+core/math/linalg/general.odin:474: cut_down: matrix[K, K]T
+core/math/linalg/general.odin:689: minor: matrix[N - 1, N - 1]T
+core/math/linalg/general.odin:706: // Adjugate is the transpose of the cofactor matrix
+core/math/linalg/general.odin:812: minor: matrix[N - 1, N - 1]T
+core/math/linalg/glsl/linalg_glsl.odin:34: // Odin: matrix[R, C]f32
+core/math/linalg/glsl/linalg_glsl.odin:1372: /// Matrix Utilities
+core/math/linalg/glsl/linalg_glsl.odin:1374: @(require_results) identity :: proc "c" ($M: typeid/matrix[$N, N]$T) -> M { return 1 }
+core/math/linalg/glsl/linalg_glsl.odin:1923: cut_down: matrix[K, K]T
+core/math/linalg/hlsl/linalg_hlsl.odin:2021: cut_down: matrix[K, K]T
+core/odin/doc-format/doc_format.odin:194: Matrix                       = 23,
+core/odin/doc-format/doc_format.odin:228: // .Matrix                       - 2   count: 0=row_count, 1=column_count
+core/odin/doc-format/doc_format.odin:257: // .Matrix                       - 1 type:    0=element
+core/odin/parser/parser.odin:2993: case .Matrix:
+core/odin/parser/parser.odin:2994: tok := expect_token(p, .Matrix)
+core/odin/parser/parser.odin:3320: case .Colon, .Comma/*matrix index*/:
+core/odin/parser/parser.odin:3334: error(p, p.curr_tok.pos, "matrix index expressions require both row and column indices")
+core/odin/tokenizer/token.odin:157: Matrix,      // matrix
+core/odin/tokenizer/token.odin:292: "matrix",
+core/reflect/reflect.odin:68: Matrix,
+core/reflect/reflect.odin:105: case Type_Info_Matrix:                       return .Matrix
+core/reflect/types.odin:809: io.write_string(w, "matrix[",               &n) or_return
+core/rexcode/doc.odin:164: luajit build.lua --list          # ISA x task availability matrix for this platform
+core/rexcode/ir/spirv/module.odin:69: // model structurally (OpTypeImage / Sampler / SampledImage / Matrix / Event /
+core/rexcode/ir/spirv/operand_kinds.odin:907: Matrix                                      = 0,
+core/rexcode/ir/spirv/tablegen/gen.odin:462: "context", "distinct", "bit_set", "matrix", "or_else", "or_return",
+core/rexcode/isa/arm32/mnemonics.odin:332: // -- FHM (FEAT_FHM) FP16 matrix mul/acc ----------------------------------
+core/rexcode/isa/arm32/mnemonics.odin:339: // -- I8MM (FEAT_I8MM, ARMv8.6) integer matrix multiply + mixed-sign dot --
+core/rexcode/isa/arm32/mnemonics.odin:340: VSMMLA,                                // signed-signed 8x8 matrix mul
+core/rexcode/isa/arm32/tablegen/encoding_table.odin:2926: // FEAT_I8MM (ARMv8.6) -- integer matrix multiply + mixed-sign dot product
+core/rexcode/isa/arm64/encoding_types.odin:66: SME,          // Scalable Matrix Extension
+core/rexcode/isa/arm64/encoding_types.odin:67: AMX,          // Apple Matrix Extension (undocumented A13+/M1+ coprocessor)
+core/rexcode/isa/arm64/mnemonics.odin:385: // SME (Scalable Matrix Extension)
+core/rexcode/isa/arm64/mnemonics.odin:549: //   21 MATINT  integer matrix ops
+core/rexcode/isa/arm64/mnemonics.odin:550: //   22 MATFP   FP matrix ops
+core/rexcode/isa/arm64/tablegen/cpp-compiler/cpp-gen.odin:752: //    matrix/tile class, so they fall through to Unknown here (still
+core/rexcode/isa/mips/encoding_types.odin:124: VFPU_M_P, VFPU_M_T, VFPU_M_Q,    // matrix forms
+core/rexcode/isa/mips/mnemonics.odin:536: // Matrix ops
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1082: // matrix forms, and lookup-table generators. Operand encoding uses
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1348: // §18 VFPU matrix-vector ops
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1351: // VMMUL md, ms, mt -- matrix multiply (vd = vs * vt)
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1356: // VTFM[N] vd, ms, vt -- transform a vector by a matrix (vd = ms * vt)
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1378: // VMSCL md, ms, vt[.s] -- scalar-times-matrix
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1385: // §19 VFPU matrix-unary (matrix-move family)
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1389: // at bits 22:16 picks the matrix function:
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1390: //   VMMOV  = 0xF3800000   (matrix copy md = ms)
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1391: //   VMIDT  = 0xF3830000   (identity matrix)
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1392: //   VMZERO = 0xF3860000   (zero matrix)
+core/rexcode/isa/mips/tablegen/encoding_table.odin:1393: //   VMONE  = 0xF3870000   (all-ones matrix)
+core/rexcode/isa/mos65816/tablegen/encoding_table.odin:9: // Covers every defined opcode in the W65C816S official opcode matrix.
+core/sys/info/cpu_arm.odin:18: i8mm,          // Advanced SIMD int8 matrix multiplication instructions.
+core/sys/orca/orca.odin:170: // A 2-by-3 matrix.
+core/sys/orca/orca.odin:184: // Transforms a vector by an affine transformation represented as a 2x3 matrix.
+core/sys/orca/orca.odin:188: // Invert an affine transform represented as a 2x3 matrix.
+core/sys/orca/orca.odin:190: // Return a 2x3 matrix representing a rotation.
+core/sys/orca/orca.odin:192: // Return a 2x3 matrix representing a translation.
+core/sys/orca/orca.odin:194: // Return a 2x3 matrix representing a scale.
+core/sys/orca/orca.odin:1686: // Push a matrix on the transform stack.
+core/sys/orca/orca.odin:1688: // Multiply a matrix with the top of the transform stack, and push the result on the top of the stack.
+core/sys/orca/orca.odin:1690: // Pop a matrix from the transform stack.
+core/sys/orca/orca.odin:1692: // Get the top matrix of the transform stack.
+base/intrinsics/intrinsics.odin:11: // Matrix Related Procedures
+base/runtime/error_checks.odin:123: print_string(" Matrix indices [")
+base/runtime/print.odin:518: print_string("matrix[")
+base/runtime/print.odin:939: write_string    (i, buf, "matrix[")              or_return
+
+## Lignes trouvées, par fichier
+    5 base/intrinsics/intrinsics.odin
+    1 base/runtime/error_checks.odin
+    2 base/runtime/print.odin
+    5 core/crypto/_mldsa/dsa_internal.odin
+    5 core/crypto/argon2id/argon2id.odin
+    1 core/encoding/entity/generated.odin
+    4 core/fmt/fmt.odin
+   60 core/math/linalg/general.odin
+   45 core/math/linalg/glsl/linalg_glsl.odin
+   88 core/math/linalg/hlsl/linalg_hlsl.odin
+   49 core/math/linalg/specific.odin
+    3 core/odin/doc-format/doc_format.odin
+    4 core/odin/parser/parser.odin
+    2 core/odin/tokenizer/token.odin
+    2 core/reflect/reflect.odin
+    1 core/reflect/types.odin
+    1 core/rexcode/doc.odin
+    1 core/rexcode/ir/spirv/module.odin
+    1 core/rexcode/ir/spirv/operand_kinds.odin
+    1 core/rexcode/ir/spirv/tablegen/gen.odin
+    3 core/rexcode/isa/arm32/mnemonics.odin
+    1 core/rexcode/isa/arm32/tablegen/encoding_table.odin
+    2 core/rexcode/isa/arm64/encoding_types.odin
+    3 core/rexcode/isa/arm64/mnemonics.odin
+    1 core/rexcode/isa/arm64/tablegen/cpp-compiler/cpp-gen.odin
+    1 core/rexcode/isa/mips/encoding_types.odin
+    1 core/rexcode/isa/mips/mnemonics.odin
+    1 core/rexcode/isa/mips/registers.odin
+   11 core/rexcode/isa/mips/tablegen/encoding_table.odin
+    1 core/rexcode/isa/mos65816/tablegen/encoding_table.odin
+    1 core/sys/info/cpu_arm.odin
+   10 core/sys/orca/orca.odin

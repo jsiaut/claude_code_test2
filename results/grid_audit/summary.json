@@ -28,10 +28,12 @@
    "exécutée+échec": 2
   },
   "odin": {
-   "sans sonde": 28,
-   "déclarative": 5,
-   "sondée": 5,
-   "mesurée": 1
+   "exécutée": 28,
+   "sondée": 33,
+   "mesurée": 1,
+   "échec": 1,
+   "recherche": 2,
+   "exécutée+échec": 2
   },
   "c3": {
    "sans sonde": 29,
@@ -151,15 +153,15 @@
   }
  },
  "total": {
-  "déclarative": 287,
-  "sondée": 353,
+  "déclarative": 282,
+  "sondée": 381,
   "mesurée": 25,
-  "exécutée": 51,
+  "exécutée": 79,
   "exécutée+recherche": 2,
-  "recherche": 8,
-  "exécutée+échec": 4,
-  "échec": 1,
-  "sans sonde": 472
+  "recherche": 10,
+  "exécutée+échec": 6,
+  "échec": 2,
+  "sans sonde": 444
  },
  "divergences": [
   [

@@ -70,6 +70,23 @@
       "strip": "/opt/zig/lib/",
       "public": "^\\s*pub\\s+(inline\\s+|extern\\s+|export\\s+|noinline\\s+)*(fn|const|var)\\b",
       "version": "/opt/zig/zig version"
+    },
+    "odin": {
+      "roots": [
+        "/opt/src/odin/core",
+        "/opt/src/odin/base"
+      ],
+      "ext": [
+        ".odin"
+      ],
+      "exclude": [
+        "/tests/",
+        "/example",
+        "_test.odin"
+      ],
+      "strip": "/opt/src/odin/",
+      "public": "^[A-Za-z_][A-Za-z0-9_]*\\s*::",
+      "version": "/opt/src/odin/odin version"
     }
   }
 }

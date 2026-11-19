@@ -1,5 +1,37 @@
-CAP;A2;1;offset_of(S, c)=8
-CAP;A3;1;#packed size_of(P)=5 ; bit_field size_of(BF)=2
-CAP;A5;1;#raw_union 0x3f800000 transmute 0x3f800000
-CAP;E3;1;intrinsics.expect : 2
-CAP;E4;1;prefetch_read_data ; D5 cpu_relax
+CAP;A2;1;[exécutée] offset_of(S, c)=8
+CAP;A3;1;[exécutée] #packed size_of(P)=5 ; bit_field size_of(BF)=2
+CAP;A5;1;[exécutée] #raw_union 0x3f800000 transmute 0x3f800000
+CAP;A1;1;[exécutée] []Part : pas de 16 o = size_of(Part) 16 ; les 4 premiers octets du tampon sont le f32 x en ligne : [0, 0, 80, 3f]
+CAP;A4;1;[exécutée] struct #align(64) : align_of = 64, new(Line) à 0 mod 64, []Line : pas 64 o, éléments à 0 mod 64
+CAP;A6;1;[exécutée] #soa[]Part : &soa[1].x - &soa[0].x = 4 o ; soa.y commence 400 o après soa.x (un tableau par champ) ; soa[99].x = 99
+CAP;A7;1;[exécutée] struct { n: u32, a: [16]f32 } : 68 o, offset_of(Inl, a) = 4 (tableau en ligne)
+CAP;A8;1;[exécutée] u8/i16/f16/f32 : 1/2/2/4 o ; []u8 de 1000 éléments : 1000 o, []i16 : 2000 o
+CAP;B1;1;[exécutée] aucune collecte : mémoire rendue par free/delete explicites ; 1 fil dans /proc/self/task (aucun fil de collecteur)
+CAP;B2;1;[exécutée] context.allocator remplacé par mem.arena_allocator sur un tampon de pile : make et append y allouent (bloc dans le tampon = true, 2816 o consommés)
+CAP;B3;1;[exécutée] [4096]u8 local à 4138 o d'une autre variable locale, à 46123243176512 o du tas : sur la pile
+CAP;B4;1;[exécutée] allocateur traceur dans le contexte : tri, formatage dans un tampon, tranches, procédures -> 0 allocation (255.0 32640) ; append sur [dynamic] alloue par context.allocator (documenté) : 1
+CAP;B5;1;[exécutée] [^]u32 : mp[3] = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7
+CAP;C1;1;[exécutée] #simd[8]f32 : (a + a)[7] = 16, simd.reduce_add_ordered(a) = 36, simd.shuffle et simd.select dans core:simd
+CAP;D1;1;[exécutée] core:thread : 4 fils, 4 identifiants de fil (gettid) distincts, somme 7998000 (attendu 7998000)
+CAP;D4;1;[exécutée] core:sys/linux.sched_setaffinity (livré avec le compilateur ; ½ en v1, appel système brut) : retour 0 NONE, getcpu = 1
+NOTE;F2;[exécutée] linux.syscall(SYS_mbind, MPOL_BIND, nœud 0) sur une zone de 1 Mio (mmap NONE) : retour 0 ; get_mempolicy(MPOL_F_ADDR) : retour 0, mode 2 (2 = MPOL_BIND) ; numéros d'appels système seulement, sans procédure dédiée
+CAP;E2;1;[exécutée] procédure assembleur add64 :: asm(a: i64, b: i64) -> (r: i64) { mov r, a; add r, b; } : add64(41, 1) = 42
+CAP;F3;1;[exécutée] max(u32) + 1 = 0, max(i32) + 1 = -2147483648, u8 250 + 10 = 4 (débordement défini, sans piège)
+CAP;F4;1;[exécutée] core:mem/virtual.map_file_from_path (portable) + slice.reinterpret : [1.5, 2.5, 3.5, 4.5] (erreur None), adresse projetée = adresse lue : true ; ½ en v1
+CAP;C2;1;[exécutée] intrinsèque de LLVM importée par foreign _ et @(link_name = "llvm.x86.avx512.pternlog.d.512"), #const pour l'immédiat (mécanisme de core:simd/x86, livré) : 1 vpternlogd dans tern ; ½ en v1
+CAP;C4;0;[échec] @(fast_math = {.Allow_Reassoc}) et le jeu complet de drapeaux sont acceptés, mais l'IR de sum_fast porte 0 fadd réassociable et 1 fadd strict, comme sum_plain ; aucune option globale (odin build -help) : pas de contrôle de la réassociation dans dev-2026-10:84bc3fc
+CAP;D2;1;[exécutée] intrinsics.atomic_*_explicit, code produit : .Release = 1 mov et 0 xchg ; .Seq_Cst = 1 xchg ; atomic_add .Relaxed = 1 instruction lock
+CAP;D3;0.5;[exécutée] base:runtime.MAP_CACHE_LINE_SIZE = 64, constante publique de base:runtime, mais propre aux cellules des tables (Map_Cell #align(MAP_CACHE_LINE_SIZE)) ; aucun type de bourrage général (NOTE D3)
+CAP;D5;1;[exécutée] intrinsics.cpu_relax et atomic_thread_fence(.Seq_Cst) : 1 pause et 1 barrière dans spin
+CAP;E1;1;[exécutée] -build-mode:asm : 3021 lignes d'assembleur, 12 instructions flottantes dans axpy
+CAP;E3;1;[exécutée] intrinsics.expect(x == 7, false) : disposition [ je retq callq retq ] contre [ jne callq retq ] sans indication (appel sorti du chemin chaud)
+CAP;E4;1;[exécutée] intrinsics.prefetch_read_data : 1 prefetcht0 dans pf
+CAP;E5;1;[exécutée] paramètres #no_alias : 2 attributs noalias dans l'IR de axpy
+CAP;E6;1;[exécutée] s[i] : 1 appel à runtime.bounds_check_error ; #no_bounds_check : 0
+CAP;E7;0.5;[exécutée] procédures polymorphes monomorphisées : gsum(f32) = 4, gsum(f64) = 3.75, 2 fonctions gsum distinctes (f32, f64) dans l'asm ; [échec] exécution à la compilation : Error: 'fib(60)' is not a compile-time known constant
+CAP;F1;0.5;[exécutée] [3][4]f32 contigu : &m[1][0] - &m[0][3] = 4 o, size_of = 48 o ; matrix[4, 4]f32 : 64 o ; [échec] [n][3]f32 avec n connu à l'exécution : Error: Array count must be a constant integer ; matrix[R, C] et les procédures de core:math/linalg sont de taille fixe
+NOTE;C4;[recherche] motif C4 dans core et base dev-2026-10:84bc3fc : 5 déclarations publiques (results/grid_audit/search/odin_C4.txt) : Fast_Math_Flag et Fast_Math_Flags de base:runtime (les drapeaux de l'attribut), FP_Fast_Math_Mode de l'IR SPIR-V de core:rexcode
+CAP;C5;0;[recherche] motif C5 dans core et base dev-2026-10:84bc3fc : 4 déclarations publiques (results/grid_audit/search/odin_C5.txt) : constantes d'argon2id et de Windows ; core:thread.Pool (thread_pool.odin) est une réserve de tâches, sans boucle ni réduction parallèle
+NOTE;D3;[recherche] motif D3 dans core et base dev-2026-10:84bc3fc : 4 déclarations publiques (results/grid_audit/search/odin_D3.txt) : MAP_CACHE_LINE_LOG2, MAP_CACHE_LINE_SIZE et Map_Cell de base:runtime, une constante de comctl32 ; aucun type de bourrage général
+NOTE;F1;[recherche] motif F1 dans core et base dev-2026-10:84bc3fc : 238 déclarations publiques (results/grid_audit/search/odin_F1.txt), presque toutes de core:math/linalg sur matrix[N, M] de taille fixe ; aucun tableau multidimensionnel de taille dynamique
+CAP;F2;0;[recherche] motif F2 dans core et base dev-2026-10:84bc3fc : 35 déclarations publiques (results/grid_audit/search/odin_F2.txt) : entrelacements de l'AES et de core:simd, une locale de Foundation, et les numéros d'appels système SYS_mbind, SYS_set_mempolicy, SYS_get_mempolicy de core:sys/linux, sans procédure dédiée ; la politique NUMA passe par linux.syscall (NOTE F2 : section 3 de docs/GRID_AUDIT.md)
