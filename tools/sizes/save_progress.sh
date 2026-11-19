@@ -2,6 +2,10 @@
 # v4, point 2 : enregistre l'état de la campagne en cours (mesures brutes, calibration, journaux) dans le dépôt et le
 # pousse, pour qu'une interruption de la machine ne perde rien ; la campagne reprend où elle s'est arrêtée.
 cd "$(dirname "$0")/../.."
+W=results/sizes/work
+mkdir -p results/sizes/raw
+[ -d $W/raw ] && cp $W/raw/*.jsonl results/sizes/raw/ 2>/dev/null
+for f in calib.json campaign.log campaign.out; do [ -f $W/$f ] && cp $W/$f results/sizes/$f; done
 git add results/sizes
 git diff --cached --quiet && exit 0
 n=$(cat results/sizes/raw/*.jsonl 2>/dev/null | wc -l)

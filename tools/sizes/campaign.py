@@ -12,8 +12,8 @@ données d'une taille non publiée sont produites au début de leur groupe et ef
 * Vol de temps de la machine virtuelle supérieur à 5 % du temps disponible : processus refait une fois.
 * Contrôle de l'écart 4.1 : Odin, Chapel et Go sont aussi mesurés à la taille publiée avec leurs anciens binaires
   (source publié, commit OLD_COMMIT), construits dans /dev/shm/msbuild/<langage>/old.
-Sortie : results/sizes/raw/<langage>.jsonl (une ligne par processus), results/sizes/calib.json,
-results/sizes/campaign.log. Reprise : un processus déjà enregistré (passe, langage, construction, noyau, taille,
+Sortie : results/sizes/work/raw/<langage>.jsonl (une ligne par processus), results/sizes/work/calib.json,
+results/sizes/work/campaign.log ; tools/sizes/save_progress.sh les recopie dans results/sizes et les pousse. Reprise : un processus déjà enregistré (passe, langage, construction, noyau, taille,
 variante, paramètre) n'est pas refait.
 
 Usage : campaign.py [--passes 0,1,2] [--langs c,rust,...] [--groups k1:small,k2:pub,...] [--dry]"""
@@ -38,9 +38,12 @@ SIZED = ["k1", "k4", "k5", "k6", "k7", "k8", "k9"]
 SINGLE = ["k2", "k3", "k10"]
 MEM_CAP_KB = 13 * 1024 * 1024
 EXP_SIZES = json.load(open(os.path.join(ROOT, "results", "sizes", "expected.json")))
-RAW = os.path.join(ROOT, "results", "sizes", "raw")
-CALIB = os.path.join(ROOT, "results", "sizes", "calib.json")
-LOG = os.path.join(ROOT, "results", "sizes", "campaign.log")
+# écriture dans results/sizes/work (ignoré par git) ; tools/sizes/save_progress.sh en recopie l'état dans
+# results/sizes (raw, calib.json, campaign.log), suivi par git, et le pousse
+WORK = os.path.join(ROOT, "results", "sizes", "work")
+RAW = os.path.join(WORK, "raw")
+CALIB = os.path.join(WORK, "calib.json")
+LOG = os.path.join(WORK, "campaign.log")
 
 
 def log(msg):
