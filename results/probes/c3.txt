@@ -1,5 +1,35 @@
-Program linked to executable './bin/probe'.
-CAP;A2;1;$reflect(Sx.c).offset=8
-CAP;A3;1;@packed P.sizeof=5 ; bitstruct BF.sizeof=2
-CAP;A5;1;union 0x3f800000 bitcast 0x3f800000
-CAP;E3;1;@likely : 2
+CAP;A2;1;[exécutée] $reflect(Sx.c).offset=8
+CAP;A3;1;[exécutée] @packed P.sizeof=5 ; bitstruct BF.sizeof=2
+CAP;A5;1;[exécutée] union 0x3f800000 bitcast 0x3f800000
+CAP;A1;1;[exécutée] Part[] : pas de 16 o = Part::size 16 ; les 4 premiers octets du tampon sont le float x en ligne : 00 00 80 3f
+CAP;A4;1;[exécutée] struct @align(64) : Line::alignment = 64, mem::new_aligned(Line) à 0 mod 64 (mem::new refusé à la compilation pour un type sur-aligné), Line[] : pas 64 o, éléments à 0 mod 64
+CAP;A7;1;[exécutée] struct { uint n; float[16] a; } : 68 o, $reflect(Inl.a).offset = 4 (tableau en ligne)
+CAP;A8;1;[exécutée] char/short/float16/float : 1/2/2/4 o ; char[] de 1000 éléments : 1000 o, short[] : 2000 o
+CAP;B1;1;[exécutée] aucune collecte : mémoire rendue par free explicite ou par @pool ; 1 fil (Threads: de /proc/self/status, aucun fil de collecteur)
+CAP;B2;1;[exécutée] interface Allocator : ArenaAllocator sur un tampon de pile -> bloc dans le tampon = true, 816 o consommés ; @pool() (arène temporaire libérée en fin de portée, bench K8)
+CAP;B3;1;[exécutée] char[4096] local à 3658 o d'une autre variable locale, à 46490076182608 o du tas : sur la pile
+CAP;B4;1;[exécutée] allocateur traceur : tri, formatage dans un tampon de pile, tranches, macros -> 0 allocation (255.0 32640.000000) ; seule l'API qui reçoit un allocateur alloue : 1
+CAP;B5;1;[exécutée] uint* : mp[3] = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7
+CAP;C1;1;[exécutée] float[<8>] : (a + a)[7] = 16.000000, a.sum() = 36.000000, swizzle et comparaisons vectorielles dans le langage
+CAP;D1;1;[exécutée] std::thread : 4 fils, 4 identifiants de fil (gettid) distincts, somme 7998000 (attendu 7998000)
+CAP;D4;0.5;[exécutée] @syscall(203, …) : numéro d'appel système écrit à la main (aucune constante ni enveloppe dans std) : retour 0, getcpu = 1
+CAP;F3;1;[exécutée] uint::max + 1 = 0, int::max + 1 = -2147483648, (char)250 + 10 = 4 (débordement défini, enveloppant)
+CAP;F4;1;[exécutée] std::io::file::mmap_open (portable) + réinterprétation sans copie : 1.500000 2.500000 3.500000 4.500000, adresse projetée = adresse lue : true
+CAP;C2;0.5;[échec] intrinsèques de LLVM par extern @cname, mécanisme que la bibliothèque livrée n'emploie pas : llvm.x86.sse2.pause lié (1 pause dans relax), llvm.x86.bmi.pext.32 non reconnu (2 références non résolues à l'édition de liens), llvm.x86.avx512.pternlog.d.512 (Cannot select: intrinsic : les vecteurs passent par l'ABI C) ; les builtins $$ sont génériques
+CAP;C4;0.5;[exécutée] option globale --fp-math=relaxed : 9 fadd reassoc (vectorisés) dans sum_plain contre 0 sans l'option (9 fadd stricts) ; [recherche] contrôle local : NOTE C4
+CAP;D2;1;[exécutée] Atomic{ulong} à AtomicOrdering explicite, code produit : RELEASE = 1 mov et 0 xchg ; SEQ_CONSISTENT = 1 xchg ; add RELAXED = 1 instruction lock
+CAP;D5;0.5;[exécutée] thread::fence(SEQ_CONSISTENT) : 1 barrière et 0 pause dans spin ; [recherche] indication d'attente active : NOTE D5 (pause seulement par extern @cname vers llvm.x86.sse2.pause, voir C2)
+CAP;E1;1;[exécutée] --emit-asm : 135564 lignes d'assembleur, 12 instructions flottantes dans axpy
+CAP;E2;0.5;[exécutée] bloc asm { addl ex, 1; } : 41 -> 42 ; bloc asm avec vaddps sur zmm : accepté ; [échec] vfmadd231ps : refusé (error: Unknown instruction for the current target) ; pause : refusé (error: Unknown instruction for the current target) ; mfence : refusé (error: Unknown instruction for the current target) ; vmovaps depuis la mémoire : refusé (error: Unknown instruction for the current target) ; asm("pause") en chaîne : accepté, sans opérandes
+CAP;E3;1;[exécutée] @unlikely(x == 7) : disposition [ je retq callq retq ] contre [ jne callq retq ] sans indication (appel sorti du chemin chaud)
+CAP;E4;1;[exécutée] @prefetch(p, VERY_NEAR) : 1 prefetcht0 dans pf
+CAP;E5;0.5;[exécutée] @noalias : sur le 1er paramètre (axpy), noalias posé sur %0 (1) ; [échec] sur le 2e paramètre (axpy2), noalias posé encore sur %0 (1) et pas sur %1 (0) : attribut expérimental, mal placé
+CAP;E6;1;[exécutée] en -O1 (mode sûr), a[i] : 1 comparaison à la longueur et 1 appels à la panique (bornes, alignement) ; a.ptr[i] : 0 comparaison à la longueur, seul le contrôle d'alignement reste (1 appel) : contrôle des bornes par expression ; -O3 retire toutes les vérifications
+CAP;E7;1;[exécutée] macro @fib(60) déroulée par $for à la compilation = 1548008755920 ; gsum <float> = 4.000000, gsum <double> = 3.750000 ; dans l'asm, fib60 = 1 constante immédiate et 0 appel ; gsum instanciée en 2 fonctions (float et double)
+CAP;A6;0;[recherche] motif A6 dans lib/std 0.8.5_1 : 0 déclaration publique, 0 mention (results/grid_audit/search/c3_A6.txt)
+NOTE;C4;[recherche] motif C4 dans lib/std 0.8.5_1 : 0 déclaration publique, 0 mention (results/grid_audit/search/c3_C4.txt) : ni attribut ni macro de réassociation locale
+CAP;C5;0;[recherche] motif C5 dans lib/std 0.8.5_1 : 41 déclarations publiques (results/grid_audit/search/c3_C5.txt) : ParallelHash de std::crypto::keccak (hachage à plusieurs fils) et FixedThreadPool (déprécié), une réserve de tâches ; aucune boucle ni réduction parallèle
+CAP;D3;0;[recherche] motif D3 dans lib/std 0.8.5_1 : 10 déclarations publiques (results/grid_audit/search/c3_D3.txt) : clés sysctl HW_CACHELINE et HW_L*CACHESIZE de macOS (std::os::darwin, std::threads::os) ; rien sous Linux, plate-forme de l'étude, ni type de bourrage
+NOTE;D5;[recherche] motif D5 dans lib/std 0.8.5_1 : 1 déclaration publique (results/grid_audit/search/c3_D5.txt) : thread::fence ; aucune indication pause
+CAP;F1;0.5;[exécutée] float[4][3] contigu : &m[1][0] - &m[0][3] = 4 o, sizeof = 48 o ; Slice2d de std::core::array, vue 2D sur un tableau fixe ; [échec] float[n][3] avec n connu à l'exécution : error: Expected a constant value as length ; [recherche] motif F1 : 1 déclaration publique (CFMutableArray.appendArray, faux positif)
+CAP;F2;0;[recherche] motif F2 dans lib/std 0.8.5_1 : 1 déclaration publique (results/grid_audit/search/c3_F2.txt) : xkb_compose_table_new_from_locale (Wayland), faux positif

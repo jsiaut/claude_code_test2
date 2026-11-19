@@ -1,0 +1,25 @@
+# Recherche d'absence : c3, case F2
+# Chaîne : C3 Compiler Version:       0.8.5_1
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^\s*(fn|macro|struct|union|enum|bitstruct|typedef|alias|const|faultdef|interface|attrdef|extern\s+fn)\b(?!.*@private)(?!.*@local)
+# 1 déclarations publiques, 7 mentions, 6 fichiers
+
+## Déclarations publiques
+std/gfx/private/gfx_wayland_bindings.c3:339: extern fn XkbComposeTable* xkb_compose_table_new_from_locale(XkbContext* ctx, ZString locale, int flags);
+
+## Mentions (au plus 12 lignes par fichier)
+std/core/private/main_stub.c3:56: // By default windows uses an OEM codepage that differs based on locale
+std/gfx/private/gfx_wasm.c3:807: char[32] locale;
+std/gfx/private/gfx_wayland.c3:1517: String locale = env::tget_var("LC_ALL") ?? env::tget_var("LC_CTYPE") ?? env::tget_var("LANG") ?? "C";
+std/gfx/private/gfx_wayland.c3:1519: XkbComposeTable* compose_table = xkb_compose_table_new_from_locale(ctx.xkb_context, (ZString)locale, XKB_COMPOSE_COMPILE_NO_FLAGS);
+std/os/win32/dxgi.c3:63: void* enumAdapters;
+std/os/win32/winnt.c3:7: NUMA_NODE,
+std/os/win32/winnt.c3:35: <* If type is NUMA_NODE *>
+
+## Lignes trouvées, par fichier
+    1 std/core/private/main_stub.c3
+    1 std/gfx/private/gfx_wasm.c3
+    2 std/gfx/private/gfx_wayland.c3
+    1 std/gfx/private/gfx_wayland_bindings.c3
+    1 std/os/win32/dxgi.c3
+    2 std/os/win32/winnt.c3

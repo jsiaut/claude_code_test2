@@ -1,0 +1,11 @@
+# Recherche d'absence : c3, case A6
+# Chaîne : C3 Compiler Version:       0.8.5_1
+# Motif : \bsoa\b|_soa\b|\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array
+# Déclaration publique : ^\s*(fn|macro|struct|union|enum|bitstruct|typedef|alias|const|faultdef|interface|attrdef|extern\s+fn)\b(?!.*@private)(?!.*@local)
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

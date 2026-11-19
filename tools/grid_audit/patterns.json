@@ -87,6 +87,21 @@
       "strip": "/opt/src/odin/",
       "public": "^[A-Za-z_][A-Za-z0-9_]*\\s*::",
       "version": "/opt/src/odin/odin version"
+    },
+    "c3": {
+      "roots": [
+        "/opt/src/c3c/lib/std"
+      ],
+      "ext": [
+        ".c3"
+      ],
+      "exclude": [
+        "/test/",
+        "_test.c3"
+      ],
+      "strip": "/opt/src/c3c/lib/",
+      "public": "^\\s*(fn|macro|struct|union|enum|bitstruct|typedef|alias|const|faultdef|interface|attrdef|extern\\s+fn)\\b(?!.*@private)(?!.*@local)",
+      "version": "/opt/src/c3c/build/c3c --version | head -1"
     }
   }
 }

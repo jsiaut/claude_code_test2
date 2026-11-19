@@ -1,0 +1,29 @@
+# Recherche d'absence : c3, case F1
+# Chaîne : C3 Compiler Version:       0.8.5_1
+# Motif : ndarray|multi_?dim|md_?span|mdarray|array2d|\bmatrix\b
+# Déclaration publique : ^\s*(fn|macro|struct|union|enum|bitstruct|typedef|alias|const|faultdef|interface|attrdef|extern\s+fn)\b(?!.*@private)(?!.*@local)
+# 1 déclarations publiques, 11 mentions, 6 fichiers
+
+## Déclarations publiques
+std/os/darwin/cf_array.c3:16: extern fn void CFMutableArray.appendArray(&self, CFArrayRef otherArray, CFRange otherRange) @cname("CFArrayAppendArray");
+
+## Mentions (au plus 12 lignes par fichier)
+std/crypto/argon2.c3:363: // For p lanes, the memory is organized in a matrix B[i][j] of blocks with p rows (lanes) and q = m' / p columns.
+std/crypto/rc4.c3:20: // Init the state matrix
+std/math/math.c3:6: import std::math::matrix;
+std/math/matrix.c3:3: // Predefined matrix types
+std/math/matrix.c3:17: The generic matrix module, for float or double based matrix definitions.
+std/math/matrix.c3:19: @require Real::kind == FLOAT : "A matrix must use a floating type"
+std/math/matrix.c3:21: module std::math::matrix <Real>;
+std/math/matrix.c3:369: Rotate the matrix (assuming RH system)
+std/math/matrix.c3:372: @param axis : "The axis around which to rotate the matrix"
+std/math/matrix.c3:374: @return "The resulting rotated matrix"
+std/math/quaternion.c3:15: import std::math::vector, std::math::matrix, std::io;
+
+## Lignes trouvées, par fichier
+    1 std/crypto/argon2.c3
+    1 std/crypto/rc4.c3
+    1 std/math/math.c3
+    7 std/math/matrix.c3
+    1 std/math/quaternion.c3
+    1 std/os/darwin/cf_array.c3

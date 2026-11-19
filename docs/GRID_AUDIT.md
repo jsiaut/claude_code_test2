@@ -66,6 +66,23 @@ assembleur et en IR, deux échecs, cinq recherches dans `core` et `base`).
 * Contre-épreuve (F2) : `linux.syscall(SYS_mbind, …)` pose une politique `MPOL_BIND` relue par `get_mempolicy` ;
   `core:sys/linux` ne livre que les numéros d'appels système, sans procédure dédiée (section 3).
 
+### C3 (0.8.5_1, compilateur du banc, `--x86cpu=native`)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (F4 vaut 1 en v1 comme en v2). Sondes :
+`probes/c3/probe.c3` (A2, A3, A5), `probes/c3/audit/` (`audit.c3` exécuté, `codegen.c3` lu en assembleur et en IR, en
+-O3, en -O1 pour E6 et avec `--fp-math=relaxed` pour C4, deux contre-épreuves de C2, les sept essais d'assembleur de la
+remarque sur C3, sept recherches dans `lib/std`).
+* Faits notables : `mem::new` est refusé à la compilation pour un type sur-aligné (`new_aligned` l'alloue à 0 mod 64) ;
+  une macro à boucle `$for` calcule fib(60) à la compilation (une constante immédiate dans l'asm) et `gsum{float}`,
+  `gsum{double}` donnent deux fonctions (E7) ; `@unlikely` sort l'appel du chemin chaud ; en mode sûr, `a.ptr[i]`
+  retire la comparaison à la longueur mais garde le contrôle d'alignement.
+* Défauts reproduits : `@noalias` sur le 2e paramètre pose `noalias` sur le 1er (E5 ½) ; les blocs `asm` refusent
+  `vfmadd231ps`, `pause`, `mfence` et un `vmovaps` depuis la mémoire, mais acceptent `vaddps` entre registres (E2 ½) ;
+  `extern … @cname("llvm.…")` lie `llvm.x86.sse2.pause` mais laisse `llvm.x86.bmi.pext.32` non résolu et fait échouer
+  `llvm.x86.avx512.pternlog.d.512` (« Cannot select »), les vecteurs passant par l'ABI C (C2 ½) ; la réassociation
+  n'existe qu'en option globale (`--fp-math=relaxed` : 9 `fadd reassoc` vectorisés contre 9 stricts ; C4 ½).
+* D3 : la bibliothèque ne livre que les clés sysctl `HW_CACHELINE` de macOS, rien sous Linux (0).
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |

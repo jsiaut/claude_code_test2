@@ -1,0 +1,133 @@
+# Recherche d'absence : c3, case C5
+# Chaîne : C3 Compiler Version:       0.8.5_1
+# Motif : parallel|par_?iter|forall|pmap|thread_?pool|fork_?join|work_?steal|par_?map|domain_?pool
+# Déclaration publique : ^\s*(fn|macro|struct|union|enum|bitstruct|typedef|alias|const|faultdef|interface|attrdef|extern\s+fn)\b(?!.*@private)(?!.*@local)
+# 41 déclarations publiques, 93 mentions, 13 fichiers
+
+## Déclarations publiques
+std/crypto/keccak/parallel_hash.c3:32: struct ParallelHash <SECURITY_LEVEL> @mustinit
+std/crypto/keccak/parallel_hash.c3:183: struct ParallelHashXOF <SECURITY_LEVEL> @mustinit
+std/crypto/keccak/parallel_hash.c3:196: macro void ParallelHashXOF.init(&self, Allocator allocator, sz block_size = MAX_BLOCK_SIZE >> 3, sz threads = 0, String customizer = "")
+std/crypto/keccak/parallel_hash.c3:203: macro void ParallelHashXOF.tinit(&self, sz block_size = MAX_BLOCK_SIZE >> 3, String customizer = "", sz threads = 0)
+std/crypto/keccak/parallel_hash.c3:214: fn void ParallelHash.init(&self, Allocator allocator, sz block_size = MAX_BLOCK_SIZE >> 3, sz threads = 0, String customizer = "")
+std/crypto/keccak/parallel_hash.c3:235: macro void ParallelHash.tinit(&self, sz block_size = MAX_BLOCK_SIZE >> 3, String customizer = "", sz threads = 0)
+std/crypto/keccak/parallel_hash.c3:244: fn void ParallelHash.update(&self, char[] data, bool sequential = false)
+std/crypto/keccak/parallel_hash.c3:376: fn void ParallelHash.final(&self, char[] out)
+std/crypto/keccak/parallel_hash.c3:394: fn void ParallelHash.squeeze(&self, char[] out)
+std/threads/fixed_pool.c3:8: alias ThreadPoolFn = fn void(any[] args);
+std/threads/fixed_pool.c3:10: struct FixedThreadPool @deprecated
+std/threads/fixed_pool.c3:39: fn void? FixedThreadPool.init(&self, sz threads, sz queue_size = 0, ThreadSettings thread_settings = {})
+std/threads/fixed_pool.c3:67: fn void FixedThreadPool.join(&self)
+std/threads/fixed_pool.c3:87: fn void? FixedThreadPool.destroy(&self)
+std/threads/fixed_pool.c3:96: fn void FixedThreadPool.stop_and_destroy(&self)
+std/threads/fixed_pool.c3:135: fn void? FixedThreadPool.push(&self, ThreadPoolFn func, args...)
+std/threads/pool.c3:4: alias ThreadPool @feat(OLD_THREADPOOL) = ThreadPoolOld;
+std/threads/pool.c3:5: struct ThreadPoolOld @deprecated
+std/threads/pool.c3:34: fn void? ThreadPoolOld.init(&self, ThreadSettings thread_settings = {})
+std/threads/pool.c3:52: fn void ThreadPoolOld.join(&self)
+std/threads/pool.c3:69: fn void ThreadPoolOld.destroy(&self)
+std/threads/pool.c3:78: fn void ThreadPoolOld.stop_and_destroy(&self)
+std/threads/pool.c3:113: fn void ThreadPoolOld.push(&self, ThreadFn func, void* arg)
+std/threads/threadpool.c3:6: alias ThreadPoolTaskFn = fn void(void* arg);
+std/threads/threadpool.c3:8: struct ThreadPool
+std/threads/threadpool.c3:33: enum ThreadPoolState
+std/threads/threadpool.c3:55: fn void? ThreadPool.init(&self, Allocator allocator, int max_threads, sz queue_capacity = 0, Duration keep_alive = time::MIN, ThreadSettings thread_settings = {})
+std/threads/threadpool.c3:92: fn void? ThreadPool.prewarm(&self, int count)
+std/threads/threadpool.c3:116: fn void? ThreadPool.add_task(&self, ThreadPoolTaskFn task_fn, void* arg)
+std/threads/threadpool.c3:144: fn void? ThreadPool.try_add_task(&self, ThreadPoolTaskFn task_fn, void* arg)
+std/threads/threadpool.c3:160: fn void ThreadPool.destroy(&self) => _thread_pool_shutdown(self, false);
+std/threads/threadpool.c3:167: fn void ThreadPool.destroy_now(&self) => _thread_pool_shutdown(self, true);
+std/threads/threadpool.c3:174: fn sz ThreadPool.queue_count(&self)
+std/threads/threadpool.c3:187: fn int ThreadPool.busy_count(&self)
+std/threads/threadpool.c3:200: fn int ThreadPool.worker_count(&self)
+std/threads/event/event_thread.c3:102: struct EventThreadPool
+std/threads/event/event_thread.c3:117: fn void EventThreadPool.notify_thread_start(&self, EventThread* thread)
+std/threads/event/event_thread.c3:131: fn void EventThreadPool.notify_thread_end(&self, EventThread* thread)
+std/threads/event/event_thread.c3:151: fn void EventThreadPool.notify_user_shutdown(&self, EventThread* thread)
+std/threads/event/event_thread.c3:176: fn EventThreadPool* EventThreadPool.init(&self, int size, String name, Allocator allocator, void* monitor_context)
+std/threads/event/event_thread.c3:204: fn void EventThreadPool.destroy(&self)
+
+## Mentions (au plus 12 lignes par fichier)
+std/_nolibc/math_nolibc/__cosdf.c3:27: /* Try to optimize for parallel evaluation as in __tandf.c. */
+std/_nolibc/math_nolibc/__tandf.c3:33: * opportunities for parallel evaluation.  The chosen splitting is
+std/crypto/aes.c3:447: // Parallel path for 4 blocks
+std/crypto/aes.c3:556: // Parallel path for 4 blocks
+std/crypto/argon2.c3:19: <* Whether calls to Argon2 hashing will use parallelization with OS threads. *>
+std/crypto/argon2.c3:55: *  Degree of parallelism p determines how many independent (but
+std/crypto/argon2.c3:117: .lanes = 1,   // no parallelism
+std/crypto/argon2.c3:332: @require options.lanes > 0 && options.lanes < int::max : "Parallelism (p) must be greater than 0 and less than 2^31."
+std/crypto/argon2.c3:396: // NOTE: A ThreadPool instance could have been used here, but that requires a compile-time constant to determine its size,
+std/crypto/argon2.c3:615: INVALID_PARALLELISM,
+std/crypto/argon2.c3:621: MISSING_PARALLELISM
+std/crypto/argon2.c3:663: foreach (c : value) if (!ascii::NUMBER_SET.contains(c)) return INVALID_PARALLELISM~;
+std/crypto/argon2.c3:664: result.lanes = (value.to_uint() ?? INVALID_PARALLELISM~)!;
+std/crypto/argon2.c3:665: if (result.lanes < 1 || result.lanes > char::max) return INVALID_PARALLELISM~;
+std/crypto/argon2.c3:721: if (!seen.p) return MISSING_PARALLELISM~;
+std/crypto/keccak/nist.c3:19: PARALLEL_HASH {"ParallelHash"},
+std/crypto/keccak/parallel_hash.c3:7: module std::crypto::parallel_hash;
+std/crypto/keccak/parallel_hash.c3:28: Define all context items necessary to do a ParallelHash operation, wrapping the cSHAKE construct.
+std/crypto/keccak/parallel_hash.c3:59: Generate and return an XOF ParallelHash hash of the specified `$outlen_bytes` length.
+std/crypto/keccak/parallel_hash.c3:66: @param threads : "How many lanes should be used for parallel processing. If set to 0, defaults to the amount of CPU cores available."
+std/crypto/keccak/parallel_hash.c3:83: <* An alias for ParallelHash's `xof` that implicitly uses the temp allocator for internal memory management. *>
+std/crypto/keccak/parallel_hash.c3:89: Generate an XOF ParallelHash hash of `into.len` bytes and store the result in the `into` slice.
+std/crypto/keccak/parallel_hash.c3:96: @param threads : "How many lanes should be used for parallel processing. If set to 0, defaults to the amount of CPU cores available."
+std/crypto/keccak/parallel_hash.c3:106: ParallelHashXOF{$security_level} c;
+std/crypto/keccak/parallel_hash.c3:112: <* An alias for ParallelHash's `xof_into` that implicitly uses the temp allocator for internal memory management. *>
+std/crypto/keccak/parallel_hash.c3:118: Generate and return an non-XOF-variant ParallelHash hash of the specified `$outlen_bytes` length.
+std/crypto/keccak/parallel_hash.c3:125: @param threads : "How many lanes should be used for parallel processing. If set to 0, defaults to the amount of CPU cores available."
+std/crypto/keccak/parallel_hash.c3:142: <* An alias for ParallelHash's `hash` that implicitly uses the temp allocator for internal memory management. *>
+std/encoding/regex.c3:1: <* POSIX Regex engine based on musl libc (parallel TNFA scheme).
+std/encoding/regex.c3:3134: fn void? tre_tnfa_run_parallel(Tnfa* tnfa, ZString string, TagId* match_tags, ExecFlags eflags, RegOff* match_end_ofs) @local
+std/encoding/regex.c3:3329: // Ensure target string is null-terminated for backtrack and parallel execution
+std/encoding/regex.c3:3347: tre_tnfa_run_parallel(tnfa, string_nt, match_tags, eflags, &match_end_ofs)!;
+std/hash/blake3.c3:44: The maximum possible degree of parallelization based on the current architecture.
+std/hash/blake3.c3:669: while (num_cvs > 2) num_cvs = compress_parents_parallel(cv_array[..], num_cvs, key, flags, &out_array);
+std/hash/blake3.c3:677: if (input.len <= (sz)@simd_degree() * CHUNK_SIZE) return compress_chunks_parallel(input, key, chunk_counter, flags, out);
+std/hash/blake3.c3:698: return compress_parents_parallel(cv_array[..], left_n + right_n, key, flags, out);
+std/hash/blake3.c3:701: fn sz compress_parents_parallel(char[] child_chaining_values, sz num_chaining_values, uint[] key, char flags, char* out) @local
+std/hash/blake3.c3:722: fn sz compress_chunks_parallel(char[] input, uint[] key, long chunk_counter, char flags, char* out) @local
+std/math/quaternion.c3:187: Create a quaternion transform from `from` to `to`, assuming they are not parallel and that they are
+std/math/quaternion.c3:200: Create a quaternion transform from `from` to `to`, assuming they are not parallel.
+std/threads/fixed_pool.c3:3: module std::thread::threadpool @feat(POSIX, WIN32);
+std/threads/fixed_pool.c3:30: ThreadPoolFn func;
+std/threads/fixed_pool.c3:35: @require !self.initialized : "ThreadPool must not be already initialized"
+std/threads/fixed_pool.c3:89: return @_fixed_thread_pool_shutdown(self, self.stop_now);
+std/threads/fixed_pool.c3:98: @_fixed_thread_pool_shutdown(self, self.stop);
+std/threads/fixed_pool.c3:101: macro void @_fixed_thread_pool_shutdown(FixedThreadPool* self, #stop) @private
+std/threads/fixed_pool.c3:159: FixedThreadPool* self = self_arg;
+std/threads/pool.c3:32: @require !self.initialized : "ThreadPool must not be already initialized"
+std/threads/pool.c3:71: @_threadPool_shutdown(self, self.stop_now);
+std/threads/pool.c3:80: @_threadPool_shutdown(self, self.stop);
+std/threads/pool.c3:83: macro void @_threadPool_shutdown(ThreadPoolOld* self, #stop) @private
+std/threads/pool.c3:133: ThreadPoolOld* self = arg;
+std/threads/threadpool.c3:1: module std::thread @feat(!OLD_THREADPOOL);
+std/threads/threadpool.c3:29: ThreadPoolState state;
+std/threads/threadpool.c3:41: Initialize a ThreadPool. Workers are not spawned until the first submission.
+std/threads/threadpool.c3:49: @require self.state == NO_INIT : "ThreadPool was already initialized"
+std/threads/threadpool.c3:90: @require self.state != NO_INIT : "ThreadPool is not initialized"
+std/threads/threadpool.c3:98: _thread_pool_spawn_worker_in_lock(self)!;
+std/threads/threadpool.c3:114: @require self.state != NO_INIT : "ThreadPool is not initialized"
+std/threads/threadpool.c3:128: return _thread_pool_wake_or_spawn_in_lock(self);
+std/threads/threadpool.c3:142: @require self.state != NO_INIT : "ThreadPool is not initialized"
+std/threads/threadpool.c3:152: return _thread_pool_wake_or_spawn_in_lock(self);
+std/threads/threadpool.c3:172: @require self.state != NO_INIT : "ThreadPool is not initialized"
+std/threads/threadpool.c3:185: @require self.state != NO_INIT : "ThreadPool is not initialized"
+std/threads/event/event_thread.c3:35: EventThreadPool* pool;
+std/threads/event/event_thread.c3:67: EventThreadPool* pool = thread.pool;
+std/threads/event/event_thread.c3:153: // monitor.notifyThreadPoolShutdown(this);
+std/threads/event/event_thread.c3:160: fn void remove_all_pool_threads(EventThreadPool* pool) @local
+
+## Lignes trouvées, par fichier
+    1 std/_nolibc/math_nolibc/__cosdf.c3
+    1 std/_nolibc/math_nolibc/__tandf.c3
+    2 std/crypto/aes.c3
+   11 std/crypto/argon2.c3
+    1 std/crypto/keccak/nist.c3
+   36 std/crypto/keccak/parallel_hash.c3
+    4 std/encoding/regex.c3
+    6 std/hash/blake3.c3
+    2 std/math/quaternion.c3
+   10 std/threads/event/event_thread.c3
+   14 std/threads/fixed_pool.c3
+   12 std/threads/pool.c3
+   34 std/threads/threadpool.c3

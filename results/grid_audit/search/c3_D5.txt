@@ -1,0 +1,35 @@
+# Recherche d'absence : c3, case D5
+# Chaîne : C3 Compiler Version:       0.8.5_1
+# Motif : fence|spin_?loop|spin_?wait|on_?spin_?wait|\bpause\b|cpu_?relax|memory_?barrier|yield_?processor|spin_?hint
+# Déclaration publique : ^\s*(fn|macro|struct|union|enum|bitstruct|typedef|alias|const|faultdef|interface|attrdef|extern\s+fn)\b(?!.*@private)(?!.*@local)
+# 1 déclarations publiques, 13 mentions, 10 fichiers
+
+## Déclarations publiques
+std/threads/thread.c3:67: macro void fence(AtomicOrdering $ordering) @safemacro
+
+## Mentions (au plus 12 lignes par fichier)
+std/_compiler_rt/atomic_rt.c3:13: ACQUIRE_RELEASE,    // Barrier fence to load/store
+std/core/mem.c3:274: ACQUIRE_RELEASE,    // Barrier fence to load/store
+std/core/refcount.c3:69: thread::fence(ACQUIRE);
+std/core/refcount.c3:132: thread::fence(ACQUIRE);
+std/gfx/gfx.c3:575: PAUSE           = 192,
+std/gfx/private/gfx_private.c3:217: [118] = INSERT,           [119] = DELETE,           [128] = PAUSE,
+std/gfx/private/gfx_wasm.c3:392: [DomKey.VK_PRINTSCREEN] = PRINT_SCREEN,    [DomKey.VK_PAUSE] = PAUSE,                 [DomKey.VK_F13] = F13,
+std/gfx/private/gfx_wayland.c3:970: case XKB_KEY_PAUSE:         return PAUSE;
+std/gfx/private/gfx_win32.c3:1033: [0x149] = PAGE_UP,       [0x045] = PAUSE,         [0x039] = SPACE,
+std/gfx/private/gfx_win32.c3:1093: case 0x2C: return PRINT_SCREEN; case 0x13: return PAUSE;
+std/gfx/private/gfx_win32.c3:1296: // workaround for half-second pause when starting to move window
+std/gfx/private/gfx_x11.c3:1311: case XK_PAUSE: return PAUSE;
+std/threads/thread.c3:69: $$fence($ordering.ordinal);
+
+## Lignes trouvées, par fichier
+    1 std/_compiler_rt/atomic_rt.c3
+    1 std/core/mem.c3
+    2 std/core/refcount.c3
+    1 std/gfx/gfx.c3
+    1 std/gfx/private/gfx_private.c3
+    1 std/gfx/private/gfx_wasm.c3
+    1 std/gfx/private/gfx_wayland.c3
+    3 std/gfx/private/gfx_win32.c3
+    1 std/gfx/private/gfx_x11.c3
+    2 std/threads/thread.c3

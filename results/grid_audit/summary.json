@@ -36,10 +36,14 @@
    "exécutée+échec": 2
   },
   "c3": {
-   "sans sonde": 29,
-   "déclarative": 4,
-   "sondée": 4,
-   "mesurée": 1
+   "exécutée": 23,
+   "sondée": 33,
+   "recherche": 4,
+   "échec": 1,
+   "mesurée": 1,
+   "exécutée+recherche": 2,
+   "exécutée+échec": 2,
+   "exécutée+échec+recherche": 1
   },
   "d": {
    "sans sonde": 25,
@@ -153,15 +157,16 @@
   }
  },
  "total": {
-  "déclarative": 282,
-  "sondée": 381,
+  "déclarative": 278,
+  "sondée": 410,
   "mesurée": 25,
-  "exécutée": 79,
-  "exécutée+recherche": 2,
-  "recherche": 10,
-  "exécutée+échec": 6,
-  "échec": 2,
-  "sans sonde": 444
+  "exécutée": 102,
+  "exécutée+recherche": 4,
+  "recherche": 14,
+  "exécutée+échec": 8,
+  "échec": 3,
+  "exécutée+échec+recherche": 1,
+  "sans sonde": 415
  },
  "divergences": [
   [

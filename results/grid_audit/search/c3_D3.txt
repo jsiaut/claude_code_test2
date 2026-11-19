@@ -1,0 +1,23 @@
+# Recherche d'absence : c3, case D3
+# Chaîne : C3 Compiler Version:       0.8.5_1
+# Motif : cache_?line|cache_?padded|destructive_?interference|false_?sharing|contended|dcache|cache_?size
+# Déclaration publique : ^\s*(fn|macro|struct|union|enum|bitstruct|typedef|alias|const|faultdef|interface|attrdef|extern\s+fn)\b(?!.*@private)(?!.*@local)
+# 10 déclarations publiques, 0 mentions, 2 fichiers
+
+## Déclarations publiques
+std/os/darwin/darwin.c3:30: const HW_CACHELINE		= 16; /* int: Cache Line Size in Bytes */
+std/os/darwin/darwin.c3:31: const HW_L1ICACHESIZE	= 17; /* int: L1 I Cache Size in Bytes */
+std/os/darwin/darwin.c3:32: const HW_L1DCACHESIZE	= 18; /* int: L1 D Cache Size in Bytes */
+std/os/darwin/darwin.c3:34: const HW_L2CACHESIZE	= 20; /* int: L2 Cache Size in Bytes */
+std/os/darwin/darwin.c3:36: const HW_L3CACHESIZE	= 22; /* int: L3 Cache Size in Bytes */
+std/threads/os/cpu.c3:32: const HW_CACHELINE		= 16; /* int: Cache Line Size in Bytes */
+std/threads/os/cpu.c3:33: const HW_L1ICACHESIZE	= 17; /* int: L1 I Cache Size in Bytes */
+std/threads/os/cpu.c3:34: const HW_L1DCACHESIZE	= 18; /* int: L1 D Cache Size in Bytes */
+std/threads/os/cpu.c3:36: const HW_L2CACHESIZE	= 20; /* int: L2 Cache Size in Bytes */
+std/threads/os/cpu.c3:38: const HW_L3CACHESIZE	= 22; /* int: L3 Cache Size in Bytes */
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    5 std/os/darwin/darwin.c3
+    5 std/threads/os/cpu.c3
