@@ -350,6 +350,57 @@ dans un module à part, code machine lu dans l'assembleur gardé (`-keep-s-files
   d'une structure C `packed` que donne `hsc2hs` : c'est le mécanisme que la matrice compte pour A2 (½, « Storable
   manuel »), il donne aussi la disposition compactée (sans champ de bits) ; la note devrait être ½, comme Rust et C#.
 
+### OCaml (5.5.2 + flambda ; réglages du banc : ocamlopt -O3, unix et bigarray)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2. `probes/ocaml/audit/` : programme exécuté (mots
+atteignables par `Obj.reachable_words`, mots alloués par `Gc.minor_words`), code machine lu dans l'assembleur (`-S`) et
+dans le runtime (`objdump`), trois formes refusées, recherches dans les 74 interfaces `.mli` livrées (bibliothèque
+standard, unix, str, threads, runtime_events ; sans compiler-libs).
+* Cas contraires mesurés (cases à 0) : un tableau de 1000 enregistrements de quatre flottants occupe 6 mots par élément
+  (pointeur et bloc séparé), un `Float.Array` 1 (A1) ; `{char; int32; float}` prend un mot par champ et range l'int32
+  à part (A2) ; un n-uplet rendu par une fonction non incorporée coûte 3 mots, 0 une fois incorporé par flambda (B3) ;
+  une somme polymorphe alloue 4 mots par élément, la boucle monomorphe 0, et l'assembleur ne contient qu'un corps de
+  `poly_sum` (B4, E7).
+* Positifs : `Atomic.make_contended` occupe une ligne de cache (7 mots et l'en-tête : 64 o, D3) ; `Domain.cpu_relax`
+  exécute un `pause` du runtime (D5 ½) ; `-unsafe` retire la comparaison et l'appel à `caml_ml_array_bound_error`
+  (E6) ; `Unix.map_file` projette le fichier (F4).
+
+### JavaScript (Node 26.12.1, V8 ; réglages du banc : --expose-gc)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2. `probes/js/audit/` : programme exécuté (octets
+alloués lus dans `v8.getHeapStatistics().total_allocated_bytes`, collectes par `PerformanceObserver`), code machine de
+TurboFan (`--print-opt-code`), une forme refusée, recherches dans 12 301 noms de l'objet global et des modules
+intégrés (`tools/grid_audit/listings/node_api.js` ; accesseurs nommés sans être appelés, variables d'environnement
+exclues).
+* Cas contraires mesurés : 128 o de tas par objet `{x, y, z, w}` (A1), 40 o par objet qui s'échappe et 0,1 o par
+  objet resté local, l'analyse d'échappement le supprimant (B3), 96 o par fermeture, 16 o par flottant rangé dans un
+  tableau générique (B4) ; un objet passé à un `Worker` est copié (D1 ½).
+* `node:ffi`, expérimental et actif par défaut, donne les ½ de A4, B5 et E6 (pointeur brut, lecture hors tampon sans
+  contrôle) ; `sched_setaffinity` et `mmap` de la glibc par `node:ffi` marchent, non comptés (D4, F4 : 0).
+
+### Python (3.15.2, CPython avec GIL)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (D4 vaut 1 en v2, ½ en v1). `probes/python/audit/`
+: programme exécuté, une forme refusée, recherches dans les sources `.py` livrées (sans les tests) et dans les noms
+publics des modules écrits en C (`tools/grid_audit/listings/python_cmods.py`, modules de test de CPython exclus).
+* `ctypes` donne les ½ de la catégorie A (dispositions C, `_pack_` et champ de bits, union, tableau fixe) ;
+  `_align_ = 64` règle l'alignement déclaré mais pas celui du tampon alloué (adresse à 48 mod 64), d'où la
+  sur-allocation (A4 ½).
+* Le GIL de la construction par défaut : quatre calculs prennent 0,32 s en série comme sur quatre fils, 0,12 s sur
+  quatre sous-interpréteurs (`InterpreterPoolExecutor`, D1 ½) ; le JIT expérimental est absent de cette construction
+  (`sys._jit.is_available()` faux, E1 0) ; `sum()` compense l'erreur et `math.fsum` est exacte, aucune option
+  n'autorise la réassociation (C4 0).
+
+### Lua (5.5.1, interpréteur de référence)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2. `probes/lua/audit/` : programme exécuté (mémoire
+lue par `collectgarbage("count")`), bytecode listé par `luac -l`, une forme refusée, recherches dans les 160 noms de la
+bibliothèque standard (`tools/grid_audit/listings/lua_api.lua`), sans aucun résultat.
+* Un million d'appels qui rendent deux valeurs n'allouent rien (B3 ½) ; une fermeture coûte 80 o, une table `{i}` 61 o
+  (B4 ½) ; quatre coroutines alternent sur un seul fil (D1 0).
+* `string.pack('<BI4')` range un enregistrement compacté de 5 o, dans une chaîne immuable : même lecture que A8 (0) ;
+  `collectgarbage("stop")` arrête le ramasse-miettes, et rien n'est rendu (B1, section 3).
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |
@@ -360,7 +411,7 @@ dans un module à part, code machine lu dans l'assembleur gardé (`-keep-s-files
 | Nim | E3 | 1 | `likely`/`unlikely` changent la disposition avec gcc 16 (compilateur C par défaut de Nim), pas avec clang 23 (celui du banc) | La chaîne livrée compile par gcc : la capacité marche telle que livrée | 0 si l'on note la configuration du banc (clang), où l'indication est perdue |
 | C | B2 | ½ | La glibc livre une arène (`obstack`, `<obstack.h>`) : deux blocs consécutifs, libérés d'un coup | Pas d'interface d'allocateur que la bibliothèque accepterait : ½ | 1 si une arène de la bibliothèque système suffit |
 | C, C++, Fortran | F2 | 0, 0, ½ | Le trait d'allocateur OpenMP `omp_atk_partition` (interleaved, nearest, blocked) est accepté par libomp et libgomp ; sur cet hôte à un seul nœud NUMA, aucune politique n'est posée | Effet invérifiable ici ; libgomp passe par libnuma, tierce | ½ si le trait d'OpenMP compte comme construction de localité |
-| C#, Java, Go | B1 | 0 | Le ramasse-miettes s'arrête : `GC.TryStartNoGCRegion` (C#, budget borné), collecteur Epsilon (Java, expérimental), `debug.SetGCPercent(-1)` (Go, stable) ; aucune collecte, mais rien n'est rendu | B1 compte la mémoire rendue sans ramasse-miettes traçant (comptage de références, propriété) : ici seule la collecte la rend | ½ si un ramasse-miettes qu'on peut arrêter n'est plus « imposé » |
+| C#, Java, Go, Lua | B1 | 0 | Le ramasse-miettes s'arrête : `GC.TryStartNoGCRegion` (C#, budget borné), collecteur Epsilon (Java, expérimental), `debug.SetGCPercent(-1)` (Go, stable), `collectgarbage("stop")` (Lua, stable) ; aucune collecte, mais rien n'est rendu | B1 compte la mémoire rendue sans ramasse-miettes traçant (comptage de références, propriété) : ici seule la collecte la rend | ½ si un ramasse-miettes qu'on peut arrêter n'est plus « imposé » |
 | Java | E6 | 0 | `sun.misc.Unsafe.getInt(tableau, décalage)` lit hors du tableau sans contrôle | Méthode de `jdk.unsupported`, dépréciée pour suppression, avertissement à la première utilisation : pas une construction du langage | ½ si une API non prise en charge mais livrée compte, comme une unité interne |
 | Java | F2 | 0 | `-XX:+UseNUMA` (allocation NUMA du collecteur) est acceptée, puis coupée par l'ergonomie sur cet hôte à un seul nœud ; HotSpot passe par libnuma | Option globale de la JVM, effet invérifiable ici, bibliothèque tierce | ½ si une option globale d'allocation NUMA compte |
 
