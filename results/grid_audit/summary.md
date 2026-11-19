@@ -12,7 +12,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | c3 | 33 | 1 | 0 | 0 | exécutée 23, exécutée+recherche 2, exécutée+échec 2, exécutée+échec+recherche 1, recherche 4, échec 1 |
 | d | 33 | 1 | 0 | 0 | exécutée 29, exécutée+échec 1, exécutée+échec+recherche 1, recherche 2 |
 | nim | 33 | 1 | 0 | 0 | exécutée 27, exécutée+échec 1, exécutée+échec+recherche 1, recherche 4 |
-| ada | 7 | 1 | 26 | 7 |  |
+| ada | 33 | 1 | 0 | 0 | exécutée 28, exécutée+recherche 1, recherche 3, échec 1 |
 | fortran | 7 | 1 | 26 | 7 |  |
 | chapel | 9 | 1 | 24 | 9 |  |
 | go | 4 | 1 | 29 | 4 |  |
@@ -30,7 +30,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | bqn | 33 | 1 | 0 | 33 |  |
 | php | 33 | 1 | 0 | 33 |  |
 
-Total : 461 sondées, 25 mesurées, 364 sans sonde, 263 déclaratives.
+Total : 487 sondées, 25 mesurées, 338 sans sonde, 256 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 
@@ -52,7 +52,6 @@ Total : 461 sondées, 25 mesurées, 364 sans sonde, 263 déclaratives.
 | cpp | E4 | 0.5 | 0.5 | 1 | __builtin_prefetch (extension) |
 | cpp | E5 | 0.5 | 0.5 | 1 | __restrict__ (extension, pas dans la norme C++) |
 | cpp | F4 | 0.5 | 0.5 | 1 | mmap POSIX + std::start_lifetime_as (C++23) : 0.439005 |
-| ada | C1 | 0.5 | 0.5 | 1 | Machine_Attribute vector_type (extension GNAT) : Add =  3.00000E+00 |
 | fortran | A4 | 0.5 | 0.5 | 1 | directives OpenMP : allouable mod 128 = 0 ; locale mod 256 = 0 |
 | go | D4 | 0.5 | 0.5 | 1 | syscall brut sched_setaffinity errno=0 |
 | go | F4 | 0.5 | 0.5 | 1 | syscall.Mmap + unsafe.Slice : 0.4390046 <nil> |

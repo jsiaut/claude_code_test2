@@ -1,0 +1,37 @@
+# Recherche d'absence : ada, case F2
+# Chaîne : gcc-16 (GCC) 16.2.0
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^\s*(procedure|function|type|subtype|package|generic|task|protected|pragma)\b|^\s*\w+\s*:\s*constant\b|^\s*['*‘]
+# 0 déclarations publiques, 20 mentions, 6 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+adainclude/a-locale.ads:22: --  A locale identifies a geopolitical place or region and its associated
+adainclude/a-locale.ads:24: --  related characteristics. The active locale is the locale associated with
+adainclude/a-locale.ads:43: --  Returns the code of the language associated with the active locale. If
+adainclude/a-locale.ads:44: --  the Language_Code associated with the active locale cannot be determined
+adainclude/a-locale.ads:48: --  Returns the code of the country associated with the active locale. If
+adainclude/a-locale.ads:49: --  the Country_Code associated with the active locale cannot be determined
+adainclude/a-wichun.ads:204: --  case letter, otherwise U is returned unchanged. The folding is locale
+adainclude/a-wichun.ads:211: --  case letter, otherwise U is returned unchanged. The folding is locale
+adainclude/a-zchuni.ads:202: --  case letter, otherwise U is returned unchanged. The folding is locale
+adainclude/a-zchuni.ads:210: --  case letter, otherwise U is returned unchanged. The folding is locale
+adainclude/g-calend.ads:101: --  utilizes the time zone and DST bias of the locale (equivalent to Clock).
+adainclude/g-calend.ads:127: --  locale (equivalent to Clock). Due to this simplified behavior, the
+adainclude/g-catiio.ads:59: --          %p   locale's AM or PM
+adainclude/g-catiio.ads:70: --          %a   locale's abbreviated weekday name (Sun..Sat)
+adainclude/g-catiio.ads:71: --          %A   locale's    full   weekday   name,    variable   length
+adainclude/g-catiio.ads:73: --          %b   locale's abbreviated month name (Jan..Dec)
+adainclude/g-catiio.ads:74: --          %B   locale's    full    month    name,   variable    length
+adainclude/g-catiio.ads:76: --          %c   locale's date and time (Sat Nov 04 12:02:33 EST 1989)
+adainclude/g-catiio.ads:87: --          %x   locale's date representation (mm/dd/yy)
+/opt/gcc-16/share/info/gnat_rm.info:18197: and Country) about the current locale.
+
+## Lignes trouvées, par fichier
+    1 /opt/gcc-16/share/info/gnat_rm.info
+    6 adainclude/a-locale.ads
+    2 adainclude/a-wichun.ads
+    2 adainclude/a-zchuni.ads
+    2 adainclude/g-calend.ads
+    7 adainclude/g-catiio.ads

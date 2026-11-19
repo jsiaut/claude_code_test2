@@ -1,0 +1,37 @@
+# Recherche d'absence : ada, case C4
+# Chaîne : gcc-16 (GCC) 16.2.0
+# Motif : fast_?math|reassoc|algebraic|fp_?contract|float_?mode|relaxed_?math|associative
+# Déclaration publique : ^\s*(procedure|function|type|subtype|package|generic|task|protected|pragma)\b|^\s*\w+\s*:\s*constant\b|^\s*['*‘]
+# 12 déclarations publiques, 17 mentions, 2 fichiers
+
+## Déclarations publiques
+adainclude/g-gfmafu.ads:34: generic package GNAT.Generic_Fast_Math_Functions
+/opt/gcc-16/share/info/gnat_rm.info:146: * Pragma Fast_Math::
+/opt/gcc-16/share/info/gnat_rm.info:390: * Attribute Fast_Math::
+/opt/gcc-16/share/info/gnat_rm.info:770: * GNAT.Generic_Fast_Math_Functions (g-gfmafu.ads): GNAT Generic_Fast_Math_Functions g-gfmafu ads.
+/opt/gcc-16/share/info/gnat_rm.info:1272: * Pragma Fast_Math::
+/opt/gcc-16/share/info/gnat_rm.info:3632: pragma Fast_Math;
+/opt/gcc-16/share/info/gnat_rm.info:9750: * Attribute Fast_Math::
+/opt/gcc-16/share/info/gnat_rm.info:10194: ‘Standard'Fast_Math’ (‘Standard’ is the only allowed prefix) yields a
+/opt/gcc-16/share/info/gnat_rm.info:20028: * GNAT.Generic_Fast_Math_Functions (g-gfmafu.ads): GNAT Generic_Fast_Math_Functions g-gfmafu ads.
+/opt/gcc-16/share/info/gnat_rm.info:30067: * Fast_Math:                             Attribute Fast_Math.
+/opt/gcc-16/share/info/gnat_rm.info:30206: * GNAT.Generic_Fast_Math_Functions (g-gfmafu.ads): GNAT Generic_Fast_Math_Functions g-gfmafu ads.
+/opt/gcc-16/share/info/gnat_rm.info:30485: * Mathematical functions:                GNAT Generic_Fast_Math_Functions g-gfmafu ads.
+
+## Mentions (au plus 12 lignes par fichier)
+/opt/gcc-16/share/info/gnat_rm.info:3552: File: gnat_rm.info,  Node: Pragma External_Name_Casing,  Next: Pragma Fast_Math,  Prev: Pragma External,  Up: Implementation Defined Pragmas
+/opt/gcc-16/share/info/gnat_rm.info:3625: File: gnat_rm.info,  Node: Pragma Fast_Math,  Next: Pragma Favor_Top_Level,  Prev: Pragma External_Name_Casing,  Up: Implementation Defined Pragmas
+/opt/gcc-16/share/info/gnat_rm.info:3627: 2.69 Pragma Fast_Math
+/opt/gcc-16/share/info/gnat_rm.info:3644: by scaling, but in Fast_Math mode such cases will simply result in
+/opt/gcc-16/share/info/gnat_rm.info:3651: File: gnat_rm.info,  Node: Pragma Favor_Top_Level,  Next: Pragma Finalize_Storage_Only,  Prev: Pragma Fast_Math,  Up: Implementation Defined Pragmas
+/opt/gcc-16/share/info/gnat_rm.info:10179: File: gnat_rm.info,  Node: Attribute Epsilon,  Next: Attribute Fast_Math,  Prev: Attribute Enum_Val,  Up: Implementation Defined Attributes
+/opt/gcc-16/share/info/gnat_rm.info:10189: File: gnat_rm.info,  Node: Attribute Fast_Math,  Next: Attribute Finalization_Size,  Prev: Attribute Epsilon,  Up: Implementation Defined Attributes
+/opt/gcc-16/share/info/gnat_rm.info:10191: 4.24 Attribute Fast_Math
+/opt/gcc-16/share/info/gnat_rm.info:10195: static Boolean value that is True if pragma ‘Fast_Math’ is active, and
+/opt/gcc-16/share/info/gnat_rm.info:10199: File: gnat_rm.info,  Node: Attribute Finalization_Size,  Next: Attribute Fixed_Value,  Prev: Attribute Fast_Math,  Up: Implementation Defined Attributes
+/opt/gcc-16/share/info/gnat_rm.info:20862: File: gnat_rm.info,  Node: GNAT Formatted_String g-forstr ads,  Next: GNAT Generic_Fast_Math_Functions g-gfmafu ads,  Prev: GNAT Float_Control g-flocon ads,  Up
+/opt/gcc-16/share/info/gnat_rm.info:20874: File: gnat_rm.info,  Node: GNAT Generic_Fast_Math_Functions g-gfmafu ads,  Next: GNAT Heap_Sort g-heasor ads,  Prev: GNAT Formatted_String g-forstr ads,  Up: Th
+
+## Lignes trouvées, par fichier
+   28 /opt/gcc-16/share/info/gnat_rm.info
+    1 adainclude/g-gfmafu.ads

@@ -62,10 +62,12 @@
    "exécutée+échec+recherche": 1
   },
   "ada": {
-   "sans sonde": 26,
-   "déclarative": 7,
-   "sondée": 7,
-   "mesurée": 1
+   "exécutée": 28,
+   "sondée": 33,
+   "recherche": 3,
+   "mesurée": 1,
+   "exécutée+recherche": 1,
+   "échec": 1
   },
   "fortran": {
    "sans sonde": 26,
@@ -161,16 +163,16 @@
   }
  },
  "total": {
-  "déclarative": 263,
-  "sondée": 461,
+  "déclarative": 256,
+  "sondée": 487,
   "mesurée": 25,
-  "exécutée": 158,
-  "exécutée+recherche": 4,
-  "recherche": 20,
+  "exécutée": 186,
+  "exécutée+recherche": 5,
+  "recherche": 23,
   "exécutée+échec": 10,
-  "échec": 3,
+  "échec": 4,
   "exécutée+échec+recherche": 3,
-  "sans sonde": 364
+  "sans sonde": 338
  },
  "divergences": [
   [
@@ -281,13 +283,6 @@
   [
    "cpp",
    "F4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "ada",
-   "C1",
    0.5,
    0.5,
    1

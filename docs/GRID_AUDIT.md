@@ -119,6 +119,23 @@ OpenMP, les régions, les indications sous deux compilateurs C, cinq recherches 
   (`config/nim.cfg`), en tient compte (`likely` ramène l'appel dans le chemin chaud), clang 23, celui du banc, non
   (même code avec `likely` et `unlikely`) : la note dépend du compilateur C (section 3).
 
+### Ada (GNAT 16.2, compilateur du banc, -O3 -march=native)
+
+33 cases sondées (C3 mesurée), aucune divergence avec la matrice v2 (C1, C2, D2, D5, E3 et E4 valent 1 en v2, ½ en
+v1). Sondes : `probes/ada/probe.adb` et `probe_errata.adb` (A2, A3, A5, B4, C1, D4, E5), `probes/ada/audit/` (`audit.adb`
+exécuté, paquetage `Cg` lu en assembleur avec et sans `-ffast-math`, deux échecs, quatre recherches dans `adainclude` et
+dans le manuel de GNAT, `gnat_rm.info`).
+* Faits notables : un pool de stockage utilisateur attaché au type d'accès reçoit les `new` (B2) ; un tableau
+  `(Positive range <>, Positive range <>)` aux bornes connues à l'exécution est contigu, par lignes, ou par colonnes
+  avec `Convention => Fortran` (F1) ; une fonction d'expression `with Static` donne une constante immédiate (E7) ;
+  `GNAT.Branch_Prediction.Likely`, unité livrée, ramène l'appel dans le chemin chaud (E3) ; `System.Mmap` projette un
+  fichier, mais GNAT avertit lui-même qu'il s'agit d'une « internal GNAT unit » (F4 ½).
+* C4 : `pragma Fast_Math` existe, mais c'est un pragma de configuration qui ne touche que la multiplication complexe ;
+  la réassociation passe par l'option globale `-ffast-math` (½).
+* C5 et F2 : `parallel for` ne compile pas (« missing ":" ») et le manuel note les itérateurs parallèles « Feature
+  unimplemented » ; l'annexe E accepte `pragma Remote_Call_Interface`, mais « GNAT itself supports programs with only a
+  single partition » : le PCS est dans PolyORB, produit séparé, sans `gnatdist` dans la chaîne (0 et 0).
+
 ## 3. Cases discutables
 
 | Langage | Case | Note | Fait établi | Lecture de la règle | Autre note possible |

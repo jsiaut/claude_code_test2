@@ -1,7 +1,34 @@
-CAP;A2;1;S.C'Position = 8
-CAP;A3;1;clause de représentation au bit près : BF'Size = 8
-CAP;A5;1;Unchecked_Conversion 0x 1065353216 ; Unchecked_Union UU'Size = 32
-CAP;D4;1;aspect CPU => 1 sur une tâche ; CPU disponibles = 4
-CAP;C1;0.5;Machine_Attribute vector_type (extension GNAT) : Add =  3.00000E+00
-CAP;E5;1;RM 6.2(12) exploitée par GNAT sur paramètres de type contraint : Y (1) =  7.00000E+00
-CAP;B4;0.5;retour non contraint de 4 Mo par la pile secondaire (tas au-delà du morceau statique) :  5.00000000000000E+05
+CAP;A2;1;[exécutée] S.C'Position = 8
+CAP;A3;1;[exécutée] clause de représentation au bit près : BF'Size = 8
+CAP;A5;1;[exécutée] Unchecked_Conversion 0x 1065353216 ; Unchecked_Union UU'Size = 32
+CAP;D4;1;[exécutée] aspect CPU => 1 sur une tâche ; CPU disponibles = 4
+CAP;E5;1;[exécutée] RM 6.2(12) exploitée par GNAT sur paramètres de type contraint : Y (1) =  7.00000E+00
+CAP;B4;0.5;[exécutée] retour non contraint de 4 Mo par la pile secondaire (tas au-delà du morceau statique) :  5.00000000000000E+05
+CAP;C1;1;[exécutée] Machine_Attribute vector_type (extension GNAT) : Add =  3.00000E+00 ; ½ en v1 (règle v2 : extension documentée de GNAT)
+CAP;A1;1;[exécutée] tableau de Part : pas de 16 o = Part'Object_Size/8 16 ; les 4 premiers octets sont le Float X en ligne : 0 0 128 63
+CAP;A4;1;[exécutée] aspect Alignment => 64 : Line'Alignment = 64, new Line à 0 mod 64, tableau de Line : pas 64 o, éléments à 0 mod 64
+CAP;A7;1;[exécutée] record (N : Unsigned_32; A : array (1 .. 16) of Float) : 68 o, I.A'Position = 4 (tableau en ligne)
+CAP;A8;1;[exécutée] Unsigned_8/Integer_16/Float : 1 / 2 / 4 o ; un array (1 .. 1000) of Unsigned_8 occupe 1000 o
+CAP;B1;1;[exécutée] aucun ramasse-miettes : mémoire rendue par Unchecked_Deallocation ou par la portée ; 1 fil (Threads: de /proc/self/status, aucun fil de collecteur)
+CAP;B2;1;[exécutée] pool de stockage utilisateur (System.Storage_Pools) attaché au type d'accès : new y alloue, bloc dans le tampon = TRUE, 16 o consommés ; P1.V + P2.V = 15 ; sous-pools en System.Storage_Pools.Subpools
+CAP;B3;1;[exécutée] Storage_Array (1 .. 4096) local à 848 o d'une autre variable locale, à 140735727204880 o du tas : sur la pile
+CAP;B5;1;[exécutée] System.Address + Storage_Offset et Address_To_Access_Conversions : écriture à +12 -> Buf (4) = 42 ; à +16 -> Buf (5) = 7
+CAP;D1;1;[exécutée] tâches Ada : 4 tâches, 4 identifiants de fil (gettid) distincts, somme 7998000 (attendu 7998000)
+CAP;E2;1;[exécutée] System.Machine_Code.Asm ("addl $1, %0") : 41 -> 42
+CAP;F1;1;[exécutée] array (Positive range <>, Positive range <>) of Float, bornes connues à l'exécution ( 3 x 4) : M (2, 1)'Address - M (1, 4)'Address = 4 o (ligne par ligne) ; avec Convention => Fortran, C (2, 1) - C (1, 1) = 4 o (colonne par colonne)
+CAP;F3;1;[exécutée] type modulaire mod 256 : 250 + 10 = 4 ; Unsigned_32'Last + 1 = 0 ; Integer'Last + 1 lève Constraint_Error : TRUE (signés vérifiés, modulaires enveloppants)
+CAP;F4;0.5;[exécutée] System.Mmap (unité interne de GNAT, s-mmap.ads) + réinterprétation par adresse : 1.50000E+00 4.50000E+00 ; projeté (Is_Mutable = FALSE)
+CAP;C2;1;[exécutée] __builtin_ia32_pternlogd512_mask importé (convention Intrinsic) sur un type vectoriel (Machine_Attribute vector_type) : 1 vpternlogd dans tern ; ½ en v1
+CAP;C4;0.5;[exécutée] option globale -ffast-math : 1 vaddps ymm/zmm (somme vectorisée) contre 15 vaddss sans l'option ; [recherche] contrôle local : NOTE C4
+CAP;D2;1;[exécutée] builtins __atomic_* à ordre explicite importés (Intrinsic), code produit : Release = 1 mov et 0 xchg ; Seq_Cst = 1 xchg ; fetch_add Relaxed = 1 instruction lock ; ½ en v1 (Ada standard : seq_cst seulement)
+CAP;D5;1;[exécutée] __atomic_thread_fence et __builtin_ia32_pause importés : 1 pause (rep nop) et 1 barrière dans spin ; ½ en v1
+CAP;E1;1;[exécutée] gcc-16 -S : 262 lignes d'assembleur pour le paquetage Cg
+CAP;E3;1;[exécutée] GNAT.Branch_Prediction.Likely (unité livrée, __builtin_likely) : disposition [ jne call ret ret ] contre [ je ret call ret ] sans indication (appel ramené dans le chemin chaud) ; ½ en v1
+CAP;E4;1;[exécutée] __builtin_prefetch importé : 1 prefetcht0 dans pf ; ½ en v1
+CAP;E6;1;[exécutée] A (I) : 1 appel au contrôle d'indice (__gnat_rcheck_CE_Index_Check) ; sous pragma Suppress (Index_Check) : 0
+CAP;E7;1;[exécutée] fonction d'expression statique Sq (1234) en nombre nommé = 1522756 ; Gsum instanciée pour Float : 4.00000E+00, pour Long_Float : 3.75000000000000E+00 ; dans l'asm, sq_const = 1 constante immédiate et 0 appel
+NOTE;C4;[recherche] motif C4 dans adainclude et le manuel de GNAT (gnat_rm.info) 16.2.0 : 12 entrées (results/grid_audit/search/ada_C4.txt) : GNAT.Generic_Fast_Math_Functions (fonctions élémentaires) et pragma Fast_Math, pragma de configuration qui ne touche que la multiplication complexe ; aucun contrôle local de la réassociation
+CAP;A6;0;[recherche] motif A6 dans adainclude et gnat_rm.info 16.2.0 : 0 entrée, 0 mention (results/grid_audit/search/ada_A6.txt)
+CAP;C5;0;[échec] boucle parallel for d'Ada 2022 : error: missing ":" ; le manuel de GNAT note « Feature unimplemented » pour les morceaux des itérateurs et réductions parallèles
+CAP;D3;0;[recherche] motif D3 dans adainclude et gnat_rm.info 16.2.0 : 0 entrée, 0 mention (results/grid_audit/search/ada_D3.txt)
+CAP;F2;0;[recherche] motif F2 dans adainclude et gnat_rm.info 16.2.0 : 0 entrée, 20 mentions (results/grid_audit/search/ada_F2.txt) ; annexe E : pragma Remote_Call_Interface accepté (fail_rci compile), mais « GNAT itself supports programs with only a single partition » (gnat_rm.info, 10.2(24)) : le PCS est dans PolyORB, produit séparé, et gnatdist est absent de la chaîne (0 binaire)
