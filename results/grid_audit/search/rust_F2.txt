@@ -1,0 +1,61 @@
+# Recherche d'absence : rust, case F2
+# Chaîne : rustc 1.99.1 (58cf8f9c3 2026-10-13)
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^\s*pub\s+(unsafe\s+|const\s+|extern\s+"[^"]*"\s+|async\s+|safe\s+)*(fn|struct|enum|trait|type|const|static|mod|union|macro|use)\b|^\s*pub\s+macro\b|^\s*macro_rules!
+# 0 déclarations publiques, 38 mentions, 16 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+std/src/fs.rs:1812: /// different processes or threads does not interleave. The amount of data accepted a
+std/src/io/pipe.rs:19: ///   writes (above a target-specific threshold) may have their data interleaved.
+std/src/thread/functions.rs:622: /// does not expose information on NUMA regions, does not account for
+core/src/tuple.rs:188: // The values are interleaved, so the macro invocation for
+core/src/array/mod.rs:535: /// whereas the latter interleaves the calls (`fgfgfgfg`).
+core/src/ascii/ascii_char.rs:1041: /// wide use. For instance, [the POSIX locale][pct] includes
+core/src/char/methods.rs:1322: /// is independent of context and language. See [below](#notes-on-context-and-locale)
+core/src/char/methods.rs:1365: /// # Notes on context and locale
+core/src/char/methods.rs:1369: /// If you need to handle locale-depedendent casing in your code, consider using
+core/src/char/methods.rs:1451: /// is independent of context and language. See [below](#note-on-locale)
+core/src/char/methods.rs:1565: /// # Note on locale
+core/src/char/methods.rs:1567: /// As stated above, this method is locale-insensitive.
+core/src/char/methods.rs:1568: /// If you need locale support, consider using an external crate,
+core/src/char/methods.rs:1571: /// locale-dependent casing issue follows (there are others):
+core/src/char/methods.rs:1628: /// is independent of context and language. See [below](#note-on-locale)
+core/src/char/methods.rs:1677: /// # Note on locale
+core/src/char/methods.rs:1679: /// As stated above, this method is locale-insensitive.
+core/src/char/methods.rs:1680: /// If you need locale support, consider using an external crate,
+core/src/fmt/mod.rs:1136: /// "invariant" culture and "undefined" locale, or it could mean that the type
+core/src/fmt/mod.rs:1137: /// display is designed for a specific culture/locale, such as developer logs.
+core/src/num/mod.rs:1120: /// wide use. For instance, [the POSIX locale][pct] includes
+core/src/ptr/mod.rs:33: //!   interleaved.
+core/src/str/mod.rs:2879: /// In addition, this method is independent of language/locale,
+core/src/str/traits.rs:14: /// "alphabetical" order, which varies by language and locale. Sorting strings according to
+core/src/str/traits.rs:15: /// culturally-accepted standards requires locale-specific data that is outside the scope of
+core/src/str/traits.rs:42: /// "alphabetical" order, which varies by language and locale. Comparing strings according to
+core/src/str/traits.rs:43: /// culturally-accepted standards requires locale-specific data that is outside the scope of
+alloc/src/fmt.rs:316: //! depends on the operating system's locale setting. The format functions
+alloc/src/fmt.rs:317: //! provided by Rust's standard library do not have any concept of locale and
+alloc/src/fmt.rs:322: //! locale uses a decimal separator other than a dot.
+alloc/src/str.rs:390: /// casing of Greek sigma. However, like that method, it does not handle locale-specific
+alloc/src/str.rs:483: /// casing of Greek sigma. However, like that method, it does not handle locale-specific
+alloc/src/task.rs:240: /// **Note:** This example trades correctness for simplicity. A real world example would interleave
+alloc/src/vec/in_place_collect.rs:34: //! reference to the iterator for the duration of the iteration that means we can't interleave
+
+## Lignes trouvées, par fichier
+    3 alloc/src/fmt.rs
+    2 alloc/src/str.rs
+    1 alloc/src/task.rs
+    1 alloc/src/vec/in_place_collect.rs
+    1 core/src/array/mod.rs
+    1 core/src/ascii/ascii_char.rs
+   16 core/src/char/methods.rs
+    2 core/src/fmt/mod.rs
+    1 core/src/num/mod.rs
+    1 core/src/ptr/mod.rs
+    1 core/src/str/mod.rs
+    4 core/src/str/traits.rs
+    1 core/src/tuple.rs
+    1 std/src/fs.rs
+    1 std/src/io/pipe.rs
+    1 std/src/thread/functions.rs

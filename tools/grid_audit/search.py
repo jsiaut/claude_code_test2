@@ -26,6 +26,7 @@ CFG = json.load(open(os.path.join(HERE, "patterns.json")))
 def lines_of(lc):
     exts = tuple(lc.get("ext", []))
     excl = lc.get("exclude", [])
+    strip = lc.get("strip", "")
 
     def keep(name):
         return (not exts or name.endswith(exts)) and not any(e in name for e in excl)
@@ -47,8 +48,9 @@ def lines_of(lc):
                 for f in sorted(files):
                     p = os.path.join(d, f)
                     if keep(p):
+                        q = p[len(strip):] if strip and p.startswith(strip) else p
                         for i, t in enumerate(open(p, errors="replace").read().splitlines(), 1):
-                            yield p, i, t
+                            yield q, i, t
     if "listing" in lc:
         out = subprocess.run(lc["listing"], shell=True, capture_output=True, text=True, cwd=ROOT).stdout
         for i, t in enumerate(out.splitlines(), 1):
@@ -78,8 +80,15 @@ def main():
             f.write(f"# {len(pubs)} déclarations publiques, {len(h) - len(pubs)} mentions, {len(files)} fichiers\n\n")
             f.write("## Déclarations publiques\n")
             for path, i, t, _ in pubs:
-                f.write(f"{os.path.relpath(path, '/') if path.startswith('/') else path}:{i}: {t[:200]}\n")
-            f.write("\n## Mentions, par fichier\n")
+                f.write(f"{path}:{i}: {t[:200]}\n")
+            f.write("\n## Mentions (au plus 12 lignes par fichier)\n")
+            shown = collections.Counter()
+            for path, i, t, ispub in h:
+                if not ispub:
+                    shown[path] += 1
+                    if shown[path] <= 12:
+                        f.write(f"{path}:{i}: {t[:160]}\n")
+            f.write("\n## Lignes trouvées, par fichier\n")
             for path, n in sorted(files.items()):
                 f.write(f"{n:5d} {path}\n")
         print(f"SEARCH;{c};{len(pubs)};{len(h) - len(pubs)};{len(files)};{out}")

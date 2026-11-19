@@ -1,0 +1,11 @@
+# Recherche d'absence : rust, case A6
+# Chaîne : rustc 1.99.1 (58cf8f9c3 2026-10-13)
+# Motif : \bsoa\b|_soa\b|\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array
+# Déclaration publique : ^\s*pub\s+(unsafe\s+|const\s+|extern\s+"[^"]*"\s+|async\s+|safe\s+)*(fn|struct|enum|trait|type|const|static|mod|union|macro|use)\b|^\s*pub\s+macro\b|^\s*macro_rules!
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

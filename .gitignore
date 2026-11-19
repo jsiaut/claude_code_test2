@@ -31,3 +31,4 @@ bench/*/layout/
 bench/java_std/classes/
 tools/*/*/obj/
 tools/*/*/bin/
+probes/*/*/bin/

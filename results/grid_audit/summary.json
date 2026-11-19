@@ -1,0 +1,346 @@
+{
+ "langs": {
+  "c": {
+   "déclarative": 33,
+   "sondée": 33,
+   "mesurée": 1
+  },
+  "cpp": {
+   "déclarative": 33,
+   "sondée": 33,
+   "mesurée": 1
+  },
+  "rust": {
+   "exécutée": 23,
+   "sondée": 33,
+   "exécutée+recherche": 1,
+   "recherche": 6,
+   "exécutée+échec": 2,
+   "échec": 1,
+   "mesurée": 1
+  },
+  "zig": {
+   "sans sonde": 23,
+   "déclarative": 10,
+   "sondée": 10,
+   "mesurée": 1
+  },
+  "odin": {
+   "sans sonde": 28,
+   "déclarative": 5,
+   "sondée": 5,
+   "mesurée": 1
+  },
+  "c3": {
+   "sans sonde": 29,
+   "déclarative": 4,
+   "sondée": 4,
+   "mesurée": 1
+  },
+  "d": {
+   "sans sonde": 25,
+   "déclarative": 8,
+   "sondée": 8,
+   "mesurée": 1
+  },
+  "nim": {
+   "sans sonde": 26,
+   "déclarative": 7,
+   "sondée": 7,
+   "mesurée": 1
+  },
+  "ada": {
+   "sans sonde": 26,
+   "déclarative": 7,
+   "sondée": 7,
+   "mesurée": 1
+  },
+  "fortran": {
+   "sans sonde": 26,
+   "déclarative": 7,
+   "sondée": 7,
+   "mesurée": 1
+  },
+  "chapel": {
+   "sans sonde": 24,
+   "déclarative": 9,
+   "sondée": 9,
+   "mesurée": 1
+  },
+  "go": {
+   "sans sonde": 29,
+   "déclarative": 4,
+   "sondée": 4,
+   "mesurée": 1
+  },
+  "mojo": {
+   "sans sonde": 26,
+   "déclarative": 7,
+   "sondée": 7,
+   "mesurée": 1
+  },
+  "csharp": {
+   "sans sonde": 29,
+   "déclarative": 4,
+   "sondée": 4,
+   "mesurée": 1
+  },
+  "java": {
+   "déclarative": 5,
+   "sondée": 5,
+   "sans sonde": 28,
+   "mesurée": 1
+  },
+  "julia": {
+   "sans sonde": 26,
+   "déclarative": 7,
+   "sondée": 7,
+   "mesurée": 1
+  },
+  "haskell": {
+   "sans sonde": 30,
+   "déclarative": 3,
+   "sondée": 3,
+   "mesurée": 1
+  },
+  "ocaml": {
+   "sans sonde": 29,
+   "déclarative": 4,
+   "sondée": 4,
+   "mesurée": 1
+  },
+  "js": {
+   "sans sonde": 31,
+   "déclarative": 2,
+   "sondée": 2,
+   "mesurée": 1
+  },
+  "python": {
+   "sans sonde": 29,
+   "déclarative": 4,
+   "sondée": 4,
+   "mesurée": 1
+  },
+  "lua": {
+   "sans sonde": 31,
+   "déclarative": 2,
+   "sondée": 2,
+   "mesurée": 1
+  },
+  "swift": {
+   "déclarative": 33,
+   "sondée": 33,
+   "mesurée": 1
+  },
+  "fpc": {
+   "déclarative": 33,
+   "sondée": 33,
+   "mesurée": 1
+  },
+  "bqn": {
+   "déclarative": 33,
+   "sondée": 33,
+   "mesurée": 1
+  },
+  "php": {
+   "déclarative": 33,
+   "sondée": 33,
+   "mesurée": 1
+  }
+ },
+ "total": {
+  "déclarative": 297,
+  "sondée": 330,
+  "mesurée": 25,
+  "exécutée": 23,
+  "exécutée+recherche": 1,
+  "recherche": 6,
+  "exécutée+échec": 2,
+  "échec": 1,
+  "sans sonde": 495
+ },
+ "divergences": [
+  [
+   "c",
+   "C1",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "c",
+   "C4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "c",
+   "C5",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "c",
+   "D3",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "c",
+   "D4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "c",
+   "D5",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "c",
+   "E2",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "c",
+   "E3",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "c",
+   "E4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "c",
+   "F4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "cpp",
+   "C5",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "cpp",
+   "D4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "cpp",
+   "D5",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "cpp",
+   "E4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "cpp",
+   "E5",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "cpp",
+   "F4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "ada",
+   "C1",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "fortran",
+   "A4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "go",
+   "D4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "go",
+   "F4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "julia",
+   "D5",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "python",
+   "D4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "swift",
+   "D4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "fpc",
+   "D4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "fpc",
+   "F4",
+   0.5,
+   0.5,
+   1
+  ],
+  [
+   "php",
+   "D4",
+   0.5,
+   0.5,
+   1
+  ]
+ ]
+}

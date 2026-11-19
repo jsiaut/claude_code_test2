@@ -1,0 +1,89 @@
+# Recherche d'absence : rust, case A3
+# Chaîne : rustc 1.99.1 (58cf8f9c3 2026-10-13)
+# Motif : packed|bit_?field|bit_?packed|bit_?size|bit_?offset|bitstruct
+# Déclaration publique : ^\s*pub\s+(unsafe\s+|const\s+|extern\s+"[^"]*"\s+|async\s+|safe\s+)*(fn|struct|enum|trait|type|const|static|mod|union|macro|use)\b|^\s*pub\s+macro\b|^\s*macro_rules!
+# 2 déclarations publiques, 81 mentions, 17 fichiers
+
+## Déclarations publiques
+core/src/alloc/layout.rs:532: pub const fn repeat_packed(&self, n: usize) -> Result<Self, LayoutError> {
+core/src/alloc/layout.rs:550: pub const fn extend_packed(&self, next: Self) -> Result<Self, LayoutError> {
+
+## Mentions (au plus 12 lignes par fichier)
+std/src/os/xous/services/log.rs:8: /// `usize` with 5678 packed into it.
+core/src/keyword_docs.rs:1204: /// - `ref` indicates that you want a reference to an unpacked value. It is not
+core/src/pin.rs:630: //! Moreover, if your type is [`#[repr(packed)]`][packed], the compiler will automatically
+core/src/pin.rs:633: //! pinning with a [`#[repr(packed)]`][packed] type.
+core/src/pin.rs:807: //!     As a consequence, the struct *must not* be [`#[repr(packed)]`][packed].
+core/src/pin.rs:901: //! [packed]: https://doc.rust-lang.org/nomicon/other-reprs.html#reprpacked
+core/src/primitive_docs.rs:573: /// unaligned field. This might be necessary if packed structs or uninitialized
+core/src/primitive_docs.rs:578: /// #[repr(C, packed)]
+core/src/primitive_docs.rs:1869: ///     `packed` representation modifiers.
+core/src/alloc/layout.rs:439: let Ok(repeated) = padded.repeat_packed(k) else {
+core/src/alloc/layout.rs:442: repeated.extend_packed(*self)
+core/src/alloc/layout.rs:445: self.repeat_packed(0)
+core/src/alloc/layout.rs:520: /// Note that, unlike `repeat`, `repeat_packed` does not guarantee
+core/src/alloc/layout.rs:524: /// `repeat_packed` is used to allocate an array, it is not
+core/src/intrinsics/simd/mod.rs:599: /// Each element is truncated to a single bit and packed into the result.
+core/src/intrinsics/simd/mod.rs:602: /// contiguous list of bits. The bitmask is always packed on the least-significant side of the
+core/src/io/error.rs:3: // On 64-bit platforms, `io::Error` may use a bit-packed representation to
+core/src/io/error.rs:8: // Therefore, the packed representation is explicitly disabled for UEFI
+core/src/io/error.rs:9: // targets, and the unpacked representation must be used instead.
+core/src/io/error.rs:12: path = "error/repr_bitpacked.rs"
+core/src/io/error.rs:16: path = "error/repr_unpacked.rs"
+core/src/io/error.rs:150: // higher already. We include it just because repr_bitpacked.rs's encoding
+core/src/io/error.rs:156: // whatever cfg we're using to enable the `repr_bitpacked` code, since only the
+core/src/io/error.rs:161: // if `error/repr_bitpacked.rs` is in use — for the unpacked repr it doesn't
+core/src/io/error.rs:581: // repr_bitpacked's encoding requires it. In practice it almost certainly be
+core/src/io/error.rs:710: #[allow(dead_code, reason = "only used for unpacked representation")]
+core/src/io/error.rs:718: #[allow(dead_code, reason = "only used for unpacked representation")]
+core/src/io/error.rs:1065: #[allow(dead_code, reason = "only used for packed representation")]
+core/src/io/error/repr_bitpacked.rs:1: //! This is a densely packed error representation which is used on targets with
+core/src/io/error/repr_bitpacked.rs:4: //! (Note that `bitpacked` vs `unpacked` here has no relationship to
+core/src/io/error/repr_bitpacked.rs:5: //! `#[repr(packed)]`, it just refers to attempting to use any available bits in
+core/src/io/error/repr_bitpacked.rs:8: //! Conceptually, it stores the same data as the "unpacked" equivalent we use on
+core/src/io/error/repr_bitpacked.rs:11: //! `repr_unpacked::Repr`, e.g. `super::ErrorData<Box<Custom>>`):
+core/src/io/error/repr_bitpacked.rs:294: // just use `repr_unpacked.rs` there instead (unless the fix is easy).
+core/src/io/error/repr_unpacked.rs:1: //! This is a fairly simple unpacked error representation that's used on
+core/src/io/error/repr_unpacked.rs:2: //! non-64bit targets, where the packed 64 bit representation wouldn't work, and
+core/src/mem/manually_drop.rs:237: /// packed struct, the destructor will be called in-place without moving the
+core/src/mem/mod.rs:1114: /// #[repr(packed)]
+core/src/num/int_macros.rs:2420: // SAFETY: the masking by the bitsize of the type ensures that we do not shift
+core/src/num/int_macros.rs:2457: // SAFETY: the masking by the bitsize of the type ensures that we do not shift
+core/src/num/uint_macros.rs:746: /// Returns an integer with the bit locations specified by `mask` packed
+core/src/num/uint_macros.rs:2901: // SAFETY: the masking by the bitsize of the type ensures that we do not shift
+core/src/num/uint_macros.rs:2945: // SAFETY: the masking by the bitsize of the type ensures that we do not shift
+core/src/ops/unsize.rs:102: ///   - The definition for `Self` must not be `#[repr(packed)]` or `#[repr(C)]`.
+core/src/ptr/mod.rs:758: /// * It can be used to drop [pinned] data when `T` is not `repr(packed)`
+core/src/ptr/mod.rs:762: /// location first using [`ptr::read_unaligned`]. For packed structs, this move is
+core/src/ptr/mod.rs:763: /// done automatically by the compiler. This means the fields of packed structs
+core/src/ptr/mod.rs:1779: /// ## On `packed` structs
+core/src/ptr/mod.rs:1782: /// an expression such as `&packed.unaligned as *const FieldType` creates an
+core/src/ptr/mod.rs:1786: /// As a result, using `&packed.unaligned as *const FieldType` causes immediate
+core/src/ptr/mod.rs:1795: /// #[repr(packed, C)]
+core/src/ptr/mod.rs:1796: /// struct Packed {
+core/src/ptr/mod.rs:1801: /// let packed = Packed {
+core/src/ptr/mod.rs:1807: /// // In contrast to `&packed.unaligned as *const _`, this has no undefined behavior.
+core/src/ptr/mod.rs:1808: /// let unaligned = &raw const packed.unaligned;
+core/src/ptr/mod.rs:1814: /// Accessing unaligned fields directly with e.g. `packed.unaligned` is safe however.
+alloc/src/collections/btree/node.rs:257: /// Unpack a node reference that was packed as `NodeRef::parent`.
+alloc/src/raw_vec/mod.rs:898: // which lets us use the much-simpler `repeat_packed`.
+alloc/src/raw_vec/mod.rs:901: elem_layout.repeat_packed(cap).map_err(const |_| CapacityOverflow.into())
+
+## Lignes trouvées, par fichier
+    1 alloc/src/collections/btree/node.rs
+    2 alloc/src/raw_vec/mod.rs
+    7 core/src/alloc/layout.rs
+    2 core/src/intrinsics/simd/mod.rs
+   12 core/src/io/error.rs
+    6 core/src/io/error/repr_bitpacked.rs
+    2 core/src/io/error/repr_unpacked.rs
+    1 core/src/keyword_docs.rs
+    1 core/src/mem/manually_drop.rs
+    1 core/src/mem/mod.rs
+    2 core/src/num/int_macros.rs
+    3 core/src/num/uint_macros.rs
+    1 core/src/ops/unsize.rs
+    4 core/src/pin.rs
+    3 core/src/primitive_docs.rs
+   34 core/src/ptr/mod.rs
+    1 std/src/os/xous/services/log.rs

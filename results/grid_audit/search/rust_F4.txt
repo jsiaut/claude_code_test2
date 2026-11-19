@@ -1,0 +1,18 @@
+# Recherche d'absence : rust, case F4
+# Chaîne : rustc 1.99.1 (58cf8f9c3 2026-10-13)
+# Motif : mmap|memory_?map|map_?view|memory_?mapped|mapped_?(file|byte)|madvise
+# Déclaration publique : ^\s*pub\s+(unsafe\s+|const\s+|extern\s+"[^"]*"\s+|async\s+|safe\s+)*(fn|struct|enum|trait|type|const|static|mod|union|macro|use)\b|^\s*pub\s+macro\b|^\s*macro_rules!
+# 0 déclarations publiques, 5 mentions, 2 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+std/src/os/unix/io/mod.rs:52: //! `BorrowedFd` values may also be used with `mmap`, since `mmap` uses the
+std/src/os/unix/io/mod.rs:55: //! mapping. That said, `mmap` is unsafe for other reasons: it operates on raw
+std/src/os/unix/io/mod.rs:60: //! system call. Consequently, code using `mmap` and presenting a safe API must
+core/src/ptr/mod.rs:161: //! directly invoking page table operations of the operating system, e.g. via `mmap`, are allowed to
+core/src/ptr/mod.rs:165: //! change their size, even if they use `mmap` under the hood.
+
+## Lignes trouvées, par fichier
+    2 core/src/ptr/mod.rs
+    3 std/src/os/unix/io/mod.rs

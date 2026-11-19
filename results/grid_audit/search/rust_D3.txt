@@ -1,0 +1,13 @@
+# Recherche d'absence : rust, case D3
+# Chaîne : rustc 1.99.1 (58cf8f9c3 2026-10-13)
+# Motif : cache_?line|cache_?padded|destructive_?interference|false_?sharing|contended|dcache|cache_?size
+# Déclaration publique : ^\s*pub\s+(unsafe\s+|const\s+|extern\s+"[^"]*"\s+|async\s+|safe\s+)*(fn|struct|enum|trait|type|const|static|mod|union|macro|use)\b|^\s*pub\s+macro\b|^\s*macro_rules!
+# 0 déclarations publiques, 1 mentions, 1 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+alloc/src/sync.rs:2895: // Acquire load, which could improve performance in highly-contended
+
+## Lignes trouvées, par fichier
+    1 alloc/src/sync.rs

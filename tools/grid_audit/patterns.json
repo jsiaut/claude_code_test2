@@ -35,13 +35,25 @@
   },
   "langs": {
     "rust": {
-      "roots": ["/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src",
-                "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src",
-                "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src"],
-      "ext": [".rs"],
-      "exclude": ["/tests/", "/benches/", "/sys/", "/sys_common/", "/sync/mpmc/"],
+      "roots": [
+        "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src",
+        "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src",
+        "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src"
+      ],
+      "ext": [
+        ".rs"
+      ],
+      "exclude": [
+        "/tests/",
+        "/benches/",
+        "tests.rs",
+        "/sys/",
+        "/sys_common/",
+        "/sync/mpmc/"
+      ],
       "public": "^\\s*pub\\s+(unsafe\\s+|const\\s+|extern\\s+\"[^\"]*\"\\s+|async\\s+|safe\\s+)*(fn|struct|enum|trait|type|const|static|mod|union|macro|use)\\b|^\\s*pub\\s+macro\\b|^\\s*macro_rules!",
-      "version": "rustc --version"
+      "version": "rustc --version",
+      "strip": "/root/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/"
     }
   }
 }

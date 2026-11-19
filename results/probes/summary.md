@@ -259,14 +259,39 @@
 | python | A3 | 0.5 | 0.5 |  | ctypes _pack_=1 et champ de 3 bits : sizeof(P)=9 |
 | python | F4 | 1 | 1 |  | mmap + memoryview.cast('f') sans copie : 0.4390046000480652 |
 | python | D4 | 0.5 | 0.5 |  | os.sched_setaffinity -> {0} |
-| rust | A2 | 1 | 1 |  | offset_of!(S, c)=8 (repr(C)) |
-| rust | A3 | 0.5 | 0.5 |  | repr(packed) size_of::<P>()=5 |
-| rust | A4 | 1 | 1 |  | repr(align(64)) align_of::<L>()=64 |
-| rust | A5 | 1 | 1 |  | union 0x3f800000 to_bits 0x3f800000 |
-| rust | C4 | 1 | 1 |  | f32::algebraic_add stable : 64 |
-| rust | E2 | 1 | 1 |  | asm! stable : 2 |
-| rust | E3 | 1 | 1 |  | std::hint::cold_path stable |
-| rust | E4 | 1 | 1 |  | _mm_prefetch (std::arch) |
+| rust | A5 | 1 | 1 |  | [exécutée] union 0x3f800000 to_bits 0x3f800000 |
+| rust | E2 | 1 | 1 |  | [exécutée] asm! stable : 2 |
+| rust | A1 | 1 | 1 |  | [exécutée] Vec<Part> : pas de 16 o = size_of::<Part>() 16 ; les 4 premiers octets du tampon sont le f32 x en l |
+| rust | A2 | 1 | 1 |  | [exécutée] repr(Rust) réordonne (u8, f64, u8) : 16 o ; repr(C) garde l'ordre : 24 o, offset_of!(ReordC, b) = 8 |
+| rust | A4 | 1 | 1 |  | [exécutée] repr(align(64)) : align_of = 64, Box à 0 mod 64, Vec<Line> : pas 64 o, éléments à 0 mod 64 |
+| rust | A7 | 1 | 1 |  | [exécutée] struct Inl { n: u32, a: [f32; 16] } : 68 o, offset_of!(Inl, a) = 4 (tableau en ligne) |
+| rust | A8 | 1 | 1 |  | [exécutée] u8/i16/f32 : 1/2/4 o ; Vec<u8> de 1000 éléments : 1000 o de capacité, Vec<i16> : 2000 o |
+| rust | B1 | 1 | 1 |  | [exécutée] destruction déterministe sans collecteur : drop(b) fin-portée drop(a) ; 1 fil dans /proc/self/task  |
+| rust | B3 | 1 | 1 |  | [exécutée] [u8; 4096] local à 1379 o d'une autre variable locale, à 46313353387560 o du tas : sur la pile |
+| rust | B4 | 1 | 1 |  | [exécutée] allocateur global compteur : 0 allocation attendue pour fermetures, itérateurs, objets dyn par réfé |
+| rust | B5 | 1 | 1 |  | [exécutée] *mut u32 : *p.add(3) = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7 |
+| rust | C2 | 1 | 1 |  | [exécutée] std::arch::x86_64 : is_x86_feature_detected!("avx512f") = true ; _mm512_add_ps -> 56 |
+| rust | D1 | 1 | 1 |  | [exécutée] std::thread::scope : 4 fils, 4 identifiants distincts, somme 7998000 (attendu 7998000) |
+| rust | F3 | 1 | 1 |  | [exécutée] u32::MAX.wrapping_add(1) = 0, i32::MAX.wrapping_add(1) = -2147483648, Wrapping(250u8) + Wrapping(10 |
+| rust | D2 | 1 | 1 |  | [exécutée] Ordering explicite, code produit : store(Release) = 1 mov et 0 xchg/mfence ; store(SeqCst) = 1 xchg |
+| rust | D5 | 1 | 1 |  | [exécutée] std::hint::spin_loop et atomic::fence(SeqCst) : 1 pause et 1 barrière (mfence ou lock or) dans spin |
+| rust | C4 | 1 | 1 |  | [exécutée] f32::algebraic_add (stable depuis 1.98), par opération : somme d'un &[f32] en 7 vaddps sur ymm/zmm  |
+| rust | E1 | 1 | 1 |  | [exécutée] rustc --emit asm : 526 lignes d'assembleur lisibles, dont 10 instructions vectorielles flottantes d |
+| rust | E3 | 1 | 1 |  | [exécutée] std::hint::cold_path (stable depuis 1.95) : 1 poids de branchement dans l'IR de hinted ; 2 métadonn |
+| rust | E4 | 1 | 1 |  | [exécutée] _mm_prefetch::<_MM_HINT_T0> (std::arch, stable) : 1 prefetcht0 dans pf |
+| rust | E5 | 1 | 1 |  | [exécutée] &mut [f32] et &[f32] : 2 attributs noalias sur les paramètres de axpy dans l'IR |
+| rust | E6 | 1 | 1 |  | [exécutée] a[i] : 1 appel à panic_bounds_check ; get_unchecked : 0 |
+| rust | E7 | 1 | 1 |  | [exécutée] const fn fib(60) = 1548008755920 ; gsum::<f32> = 4, gsum::<f64> = 3.75 ; dans l'asm, fib60 = 1 cons |
+| rust | B2 | 0.5 | 0.5 |  | [exécutée] #[global_allocator] stable (allocateur compteur de la sonde) ; [échec] Vec::new_in sur stable : err |
+| rust | C1 | 0.5 | 0.5 |  | [échec] std::simd sur stable : error[E0658]: use of unstable library feature `portable_simd` ; portable_simd r |
+| rust | F1 | 0.5 | 0.5 |  | [exécutée] [[f32; 4]; 3] contigu : &m[1][0] - &m[0][3] = 4 o, size_of = 48 o ; [échec] tableau 2D de dimension |
+| rust | A3 | 0.5 | 0.5 |  | [exécutée] repr(packed) : size_of::<P>() = 5 (probe.rs) ; [recherche] motif A3 dans std/core/alloc 1.99.1 : 2  |
+| rust | A6 | 0 | 0 |  | [recherche] motif A6 dans std/core/alloc 1.99.1 : 0 déclaration publique, 0 mention (results/grid_audit/search |
+| rust | C5 | 0 | 0 |  | [recherche] motif C5 dans std/core/alloc 1.99.1 : 2 déclarations publiques (results/grid_audit/search/rust_C5. |
+| rust | D3 | 0 | 0 |  | [recherche] motif D3 dans std/core/alloc 1.99.1 : 0 déclaration publique, 1 mention en commentaire (results/gr |
+| rust | D4 | 0 | 0 |  | [recherche] motif D4 dans std/core/alloc 1.99.1 : 0 déclaration publique ; 4 mentions, toutes dans la document |
+| rust | F2 | 0 | 0 |  | [recherche] motif F2 dans std/core/alloc 1.99.1 : 0 déclaration publique ; 38 mentions (locale de texte, « int |
+| rust | F4 | 0 | 0 |  | [recherche] motif F4 dans std/core/alloc 1.99.1 : 0 déclaration publique ; 5 mentions en commentaire (Borrowed |
 | swift | A1 | 1 | 1 |  | [P] contigu : stride 64 o, écart entre éléments 64 o |
 | swift | A2 | 1 | 1 |  | MemoryLayout.offset(of:) a=0 c=8 b=16 : ordre déclaré gardé (docs/ABI/TypeLayout.rst), sans attribut de dispos |
 | swift | A3 | 0 | 0 |  | {UInt8, UInt32} : size 8 o (bourrage imposé) ; ni packed ni champs de bits hors struct C importée |

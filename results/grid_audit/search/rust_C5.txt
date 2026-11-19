@@ -1,0 +1,50 @@
+# Recherche d'absence : rust, case C5
+# Chaîne : rustc 1.99.1 (58cf8f9c3 2026-10-13)
+# Motif : parallel|par_?iter|forall|pmap|thread_?pool|fork_?join|work_?steal|par_?map|domain_?pool
+# Déclaration publique : ^\s*pub\s+(unsafe\s+|const\s+|extern\s+"[^"]*"\s+|async\s+|safe\s+)*(fn|struct|enum|trait|type|const|static|mod|union|macro|use)\b|^\s*pub\s+macro\b|^\s*macro_rules!
+# 2 déclarations publiques, 36 mentions, 9 fichiers
+
+## Déclarations publiques
+std/src/thread/functions.rs:694: pub fn available_parallelism() -> io::Result<NonZero<usize>> {
+std/src/thread/mod.rs:187: pub use functions::available_parallelism;
+
+## Mentions (au plus 12 lignes par fichier)
+std/src/sync/once_lock.rs:94: ///     for _ in 0..thread::available_parallelism().unwrap().get() {
+std/src/sync/poison/rwlock.rs:65: /// // Multiple readers can access in parallel.
+std/src/thread/functions.rs:606: /// Returns an estimate of the default amount of parallelism a program should use.
+std/src/thread/functions.rs:608: /// Parallelism is a resource. A given machine provides a certain capacity for
+std/src/thread/functions.rs:609: /// parallelism, i.e., a bound on the number of computations it can perform
+std/src/thread/functions.rs:614: /// restrict the amount of parallelism made available to programs in them. This
+std/src/thread/functions.rs:621: /// the default amount of parallelism the program should use. Among other things it
+std/src/thread/functions.rs:625: /// query the amount of available parallelism.
+std/src/thread/functions.rs:635: /// approximation of the actual amount of parallelism available at any given
+std/src/thread/functions.rs:637: /// parallelism available to the program, you may wish to use
+std/src/thread/functions.rs:639: /// apply to `available_parallelism`:
+std/src/thread/functions.rs:642: /// - It may undercount the amount of parallelism available on systems with more
+std/src/thread/functions.rs:650: /// - It may overcount the amount of parallelism available on systems limited by
+std/src/thread/functions.rs:654: /// - It may overcount the amount of parallelism available when limited by a
+std/src/thread/mod.rs:186: #[stable(feature = "available_parallelism", since = "1.59.0")]
+core/src/future/join.rs:123: // of the futures, to allow parallelizing the waits.
+core/src/str/pattern.rs:734: ($a:lifetime, $t:ty, $pmap:expr, $smap:expr) => {
+core/src/str/pattern.rs:739: ($smap)(($pmap)(self).into_searcher(haystack))
+core/src/str/pattern.rs:744: ($pmap)(self).is_contained_in(haystack)
+core/src/str/pattern.rs:749: ($pmap)(self).is_prefix_of(haystack)
+core/src/str/pattern.rs:754: ($pmap)(self).strip_prefix_of(haystack)
+core/src/str/pattern.rs:762: ($pmap)(self).is_suffix_of(haystack)
+core/src/str/pattern.rs:770: ($pmap)(self).strip_suffix_of(haystack)
+core/src/sync/sync_view.rs:74: /// ## Parallels with a mutex
+core/src/sync/sync_view.rs:78: /// for any value. This is a parallel with the fact that
+alloc/src/slice.rs:274: /// The current implementation is based on [instruction-parallel-network sort][ipnsort] by Lukas
+alloc/src/sync.rs:1099: /// For instance, if two threads execute such an expression in parallel,
+alloc/src/sync.rs:1229: /// // Drop the clones in parallel
+
+## Lignes trouvées, par fichier
+    1 alloc/src/slice.rs
+    2 alloc/src/sync.rs
+    1 core/src/future/join.rs
+    7 core/src/str/pattern.rs
+    2 core/src/sync/sync_view.rs
+    1 std/src/sync/once_lock.rs
+    1 std/src/sync/poison/rwlock.rs
+   21 std/src/thread/functions.rs
+    2 std/src/thread/mod.rs

@@ -1,8 +1,38 @@
-CAP;A2;1;offset_of!(S, c)=8 (repr(C))
-CAP;A3;0.5;repr(packed) size_of::<P>()=5
-CAP;A4;1;repr(align(64)) align_of::<L>()=64
-CAP;A5;1;union 0x3f800000 to_bits 0x3f800000
-CAP;C4;1;f32::algebraic_add stable : 64
-CAP;E2;1;asm! stable : 2
-CAP;E3;1;std::hint::cold_path stable
-CAP;E4;1;_mm_prefetch (std::arch)
+CAP;A5;1;[exécutée] union 0x3f800000 to_bits 0x3f800000
+CAP;E2;1;[exécutée] asm! stable : 2
+CAP;A1;1;[exécutée] Vec<Part> : pas de 16 o = size_of::<Part>() 16 ; les 4 premiers octets du tampon sont le f32 x en ligne : [00, 00, 80, 3f]
+CAP;A2;1;[exécutée] repr(Rust) réordonne (u8, f64, u8) : 16 o ; repr(C) garde l'ordre : 24 o, offset_of!(ReordC, b) = 8, offset_of!(ReordC, c) = 16
+CAP;A4;1;[exécutée] repr(align(64)) : align_of = 64, Box à 0 mod 64, Vec<Line> : pas 64 o, éléments à 0 mod 64
+CAP;A7;1;[exécutée] struct Inl { n: u32, a: [f32; 16] } : 68 o, offset_of!(Inl, a) = 4 (tableau en ligne)
+CAP;A8;1;[exécutée] u8/i16/f32 : 1/2/4 o ; Vec<u8> de 1000 éléments : 1000 o de capacité, Vec<i16> : 2000 o
+CAP;B1;1;[exécutée] destruction déterministe sans collecteur : drop(b) fin-portée drop(a) ; 1 fil dans /proc/self/task (aucun fil de collecteur)
+CAP;B3;1;[exécutée] [u8; 4096] local à 1379 o d'une autre variable locale, à 46536737999112 o du tas : sur la pile
+CAP;B4;1;[exécutée] allocateur global compteur : 0 allocation attendue pour fermetures, itérateurs, objets dyn par référence, tri sur place, formatage dans un tampon de pile : 0 allocation(s) (97902.0 13.0) ; Vec explicite : 1 ; slice::sort sur 100 000 f32 (tri stable, tampon auxiliaire documenté) : 1
+CAP;B5;1;[exécutée] *mut u32 : *p.add(3) = 42 -> buf[3] = 42 ; écriture par décalage d'octets -> buf[4] = 7
+CAP;C2;1;[exécutée] std::arch::x86_64 : is_x86_feature_detected!("avx512f") = true ; _mm512_add_ps -> 56
+CAP;D1;1;[exécutée] std::thread::scope : 4 fils, 4 identifiants distincts, somme 7998000 (attendu 7998000)
+CAP;F3;1;[exécutée] u32::MAX.wrapping_add(1) = 0, i32::MAX.wrapping_add(1) = -2147483648, Wrapping(250u8) + Wrapping(10) = 4, u64::MAX.wrapping_mul(3) = 18446744073709551613
+CAP;D2;1;[exécutée] Ordering explicite, code produit : store(Release) = 1 mov et 0 xchg/mfence ; store(SeqCst) = 1 xchg ; fetch_add(Relaxed) = 1 instruction lock
+CAP;D5;1;[exécutée] std::hint::spin_loop et atomic::fence(SeqCst) : 1 pause et 1 barrière (mfence ou lock or) dans spin()
+CAP;C4;1;[exécutée] f32::algebraic_add (stable depuis 1.98), par opération : somme d'un &[f32] en 7 vaddps sur ymm/zmm (réassociée, vectorisée) contre 0 pour la somme ordinaire (9 vaddss en chaîne)
+CAP;E1;1;[exécutée] rustc --emit asm : 526 lignes d'assembleur lisibles, dont 10 instructions vectorielles flottantes dans axpy
+CAP;E3;1;[exécutée] std::hint::cold_path (stable depuis 1.95) : 1 poids de branchement dans l'IR de hinted ; 2 métadonnées branch_weights
+CAP;E4;1;[exécutée] _mm_prefetch::<_MM_HINT_T0> (std::arch, stable) : 1 prefetcht0 dans pf
+CAP;E5;1;[exécutée] &mut [f32] et &[f32] : 2 attributs noalias sur les paramètres de axpy dans l'IR
+CAP;E6;1;[exécutée] a[i] : 1 appel à panic_bounds_check ; get_unchecked : 0
+CAP;E7;1;[exécutée] const fn fib(60) = 1548008755920 ; gsum::<f32> = 4, gsum::<f64> = 3.75 ; dans l'asm, fib60 = 1 constante immédiate et 0 appel ; gsum monomorphisée en 2 fonctions (f32 et f64)
+CAP;B2;0.5;[exécutée] #[global_allocator] stable (allocateur compteur de la sonde) ; [échec] Vec::new_in sur stable : error[E0658]: use of unstable library feature `allocator_api` ; allocator_api reste instable (nightly ci-dessous)
+CAP;C1;0.5;[échec] std::simd sur stable : error[E0658]: use of unstable library feature `portable_simd` ; portable_simd reste instable (nightly ci-dessous)
+CAP;F1;0.5;[exécutée] [[f32; 4]; 3] contigu : &m[1][0] - &m[0][3] = 4 o, size_of = 48 o ; [échec] tableau 2D de dimension connue à l'exécution : error[E0435]: attempt to use a non-constant value in a constant ; aucun type multidimensionnel en std (pas de motif F1 public : NOTE F1)
+NOTE;B2;[exécutée, nightly 1.101.0-nightly] Vec::with_capacity_in(&arena) : tampon dans l'arène = true, 800 o consommés
+NOTE;C1;[exécutée, nightly 1.101.0-nightly] std::simd::f32x8 : (a + a)[7] = 16, somme réduite = 36
+NOTE;D4;[exécutée, nightly 1.101.0-nightly] extern crate libc (crate du sysroot, #![feature(rustc_private)]) : sched_setaffinity = 0, sched_getcpu() = 1
+NOTE;F4;[exécutée, nightly 1.101.0-nightly] libc::mmap (crate du sysroot, rustc_private) + from_raw_parts : [1.5, 2.5, 3.5, 4.5], adresse projetée = adresse lue : true
+CAP;A3;0.5;[exécutée] repr(packed) : size_of::<P>() = 5 (probe.rs) ; [recherche] motif A3 dans std/core/alloc 1.99.1 : 2 déclarations publiques (results/grid_audit/search/rust_A3.txt), Layout::repeat_packed et extend_packed (calcul de disposition sans bourrage), aucune de champs de bits
+CAP;A6;0;[recherche] motif A6 dans std/core/alloc 1.99.1 : 0 déclaration publique, 0 mention (results/grid_audit/search/rust_A6.txt)
+CAP;C5;0;[recherche] motif C5 dans std/core/alloc 1.99.1 : 2 déclarations publiques (results/grid_audit/search/rust_C5.txt) : available_parallelism et sa réexportation, qui comptent les cœurs ; aucune boucle ni réduction parallèle (std::thread::scope relève de D1)
+CAP;D3;0;[recherche] motif D3 dans std/core/alloc 1.99.1 : 0 déclaration publique, 1 mention en commentaire (results/grid_audit/search/rust_D3.txt)
+CAP;D4;0;[recherche] motif D4 dans std/core/alloc 1.99.1 : 0 déclaration publique ; 4 mentions, toutes dans la documentation de available_parallelism (results/grid_audit/search/rust_D4.txt) ; le crate libc du sysroot n'est atteint que par #![feature(rustc_private)] sur nightly (NOTE D4)
+NOTE;F1;[recherche] motif F1 dans std/core/alloc 1.99.1 : 0 déclaration publique (results/grid_audit/search/rust_F1.txt)
+CAP;F2;0;[recherche] motif F2 dans std/core/alloc 1.99.1 : 0 déclaration publique ; 38 mentions (locale de texte, « interleave », « does not expose information on NUMA regions ») (results/grid_audit/search/rust_F2.txt)
+CAP;F4;0;[recherche] motif F4 dans std/core/alloc 1.99.1 : 0 déclaration publique ; 5 mentions en commentaire (BorrowedFd et mmap, provenance des pointeurs) (results/grid_audit/search/rust_F4.txt) ; mmap seulement par le crate libc du sysroot sur nightly (NOTE F4) ou une FFI
