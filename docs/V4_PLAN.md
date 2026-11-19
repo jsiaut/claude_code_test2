@@ -74,6 +74,9 @@ preuve par classe), puis les sorties publiées régénérées si des errata chan
 
 ## 3. Points 2 à 6
 
+Point 2 : plan détaillé dans `docs/V4_SIZES.md` (19 novembre, poussé avant tout changement de code et toute mesure).
+
+
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
 une fois le point précédent terminé. Machine : l'hôte actuel est un Xeon Granite Rapids (modèle 173), une troisième
 micro-architecture ; les campagnes y seront appariées à un témoin C, comme les précédentes, et le choix de l'hôte sera
