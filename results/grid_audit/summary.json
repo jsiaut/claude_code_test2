@@ -103,10 +103,14 @@
    "mesurée": 1
   },
   "csharp": {
-   "sans sonde": 29,
-   "déclarative": 4,
-   "sondée": 4,
-   "mesurée": 1
+   "exécutée": 22,
+   "sondée": 33,
+   "exécutée+échec": 2,
+   "recherche": 4,
+   "échec": 1,
+   "exécutée+recherche": 1,
+   "mesurée": 1,
+   "échec+recherche": 3
   },
   "java": {
    "déclarative": 5,
@@ -186,17 +190,17 @@
   }
  },
  "total": {
-  "exécutée": 424,
-  "sondée": 589,
-  "échec+recherche": 15,
+  "exécutée": 446,
+  "sondée": 618,
+  "échec+recherche": 18,
   "mesurée": 25,
-  "exécutée+échec": 14,
-  "recherche": 86,
-  "exécutée+recherche": 11,
-  "échec": 8,
+  "exécutée+échec": 16,
+  "recherche": 90,
+  "exécutée+recherche": 12,
+  "échec": 9,
   "exécutée+échec+recherche": 3,
-  "sans sonde": 236,
-  "déclarative": 28
+  "sans sonde": 207,
+  "déclarative": 24
  },
  "divergences": [
   [

@@ -1,0 +1,21 @@
+# Recherche d'absence : csharp, case F2
+# Chaîne : Microsoft.NETCore.App 10.0.14
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : .
+# 9 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:3628: champ System.Reflection.BindingFlags.OptionalParamBinding
+<introspection>:27145: propriété System.Data.DataSet.Locale
+<introspection>:27164: propriété System.Data.DataTable.Locale
+<introspection>:33711: propriété System.Xml.Serialization.SoapEnumAttribute.Name
+<introspection>:33780: propriété System.Xml.Serialization.XmlEnumAttribute.Name
+<introspection>:34869: type System.ComponentModel.InvalidEnumArgumentException (System.ComponentModel.Primitives)
+<introspection>:36679: type System.Runtime.CompilerServices.ScopelessEnumAttribute (System.Runtime.CompilerServices.VisualC)
+<introspection>:38098: type System.Xml.Serialization.SoapEnumAttribute (System.Xml.XmlSerializer)
+<introspection>:38123: type System.Xml.Serialization.XmlEnumAttribute (System.Xml.ReaderWriter)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    9 <introspection>

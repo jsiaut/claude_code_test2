@@ -1,0 +1,15 @@
+# Recherche d'absence : csharp, case E3
+# Chaîne : Microsoft.NETCore.App 10.0.14
+# Motif : \blikely|\bunlikely|\bexpect\b|branch_?hint|branch_?weight|\bcold\b|cold_?path|fast_?path|slow_?path
+# Déclaration publique : .
+# 3 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:2412: champ System.Net.HttpRequestHeader.Expect
+<introspection>:29024: propriété System.Net.Http.Headers.HttpRequestHeaders.Expect
+<introspection>:29295: propriété System.Net.HttpWebRequest.Expect
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    3 <introspection>

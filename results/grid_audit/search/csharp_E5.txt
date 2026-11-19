@@ -1,0 +1,62 @@
+# Recherche d'absence : csharp, case E5
+# Chaîne : Microsoft.NETCore.App 10.0.14
+# Motif : restrict|noalias|no_?alias
+# Déclaration publique : .
+# 50 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:850: champ System.Data.Common.DbMetaDataCollectionNames.Restrictions
+<introspection>:880: champ System.Data.Common.DbMetaDataColumnNames.NumberOfRestrictions
+<introspection>:1023: champ System.Data.KeyRestrictionBehavior.AllowOnly
+<introspection>:1024: champ System.Data.KeyRestrictionBehavior.PreventUsage
+<introspection>:1025: champ System.Data.KeyRestrictionBehavior.value__
+<introspection>:1666: champ System.Dynamic.BindingRestrictions.Empty
+<introspection>:1784: champ System.Formats.Asn1.UniversalTagNumber.UnrestrictedCharacterString
+<introspection>:3236: champ System.Net.Sockets.IPProtectionLevel.EdgeRestricted
+<introspection>:3237: champ System.Net.Sockets.IPProtectionLevel.Restricted
+<introspection>:3238: champ System.Net.Sockets.IPProtectionLevel.Unrestricted
+<introspection>:5033: champ System.Runtime.InteropServices.ComTypes.FUNCFLAGS.FUNCFLAG_FRESTRICTED
+<introspection>:5054: champ System.Runtime.InteropServices.ComTypes.IMPLTYPEFLAGS.IMPLTYPEFLAG_FRESTRICTED
+<introspection>:5065: champ System.Runtime.InteropServices.ComTypes.LIBFLAGS.LIBFLAG_FRESTRICTED
+<introspection>:5144: champ System.Runtime.InteropServices.ComTypes.TYPEFLAGS.TYPEFLAG_FRESTRICTED
+<introspection>:5181: champ System.Runtime.InteropServices.ComTypes.VARFLAGS.VARFLAG_FRESTRICTED
+<introspection>:5309: champ System.Runtime.InteropServices.TypeLibFuncFlags.FRestricted
+<introspection>:5326: champ System.Runtime.InteropServices.TypeLibTypeFlags.FRestricted
+<introspection>:5339: champ System.Runtime.InteropServices.TypeLibVarFlags.FRestricted
+<introspection>:6210: champ System.Security.Permissions.PermissionState.Unrestricted
+<introspection>:6319: champ System.Security.Principal.WellKnownSidType.RestrictedCodeSid
+<introspection>:6359: champ System.Security.Principal.WellKnownSidType.WinWriteRestrictedCodeSid
+<introspection>:6907: champ System.Xml.Schema.XmlSchemaDerivationMethod.Restriction
+<introspection>:6916: champ System.Xml.Schema.XmlSchemaInference+InferenceOption.Restricted
+<introspection>:11915: méthode System.Dynamic.BindingRestrictions.Combine
+<introspection>:11916: méthode System.Dynamic.BindingRestrictions.GetExpressionRestriction
+<introspection>:11917: méthode System.Dynamic.BindingRestrictions.GetInstanceRestriction
+<introspection>:11918: méthode System.Dynamic.BindingRestrictions.GetTypeRestriction
+<introspection>:11919: méthode System.Dynamic.BindingRestrictions.Merge
+<introspection>:11920: méthode System.Dynamic.BindingRestrictions.ToExpression
+<introspection>:15117: méthode System.Net.WebHeaderCollection.IsRestricted
+<introspection>:23050: méthode System.Security.PermissionSet.IsUnrestricted
+<introspection>:28086: propriété System.Dynamic.DynamicMetaObject.Restrictions
+<introspection>:32324: propriété System.Security.Permissions.SecurityAttribute.Unrestricted
+<introspection>:33549: propriété System.Xml.Schema.XmlSchemaComplexContentRestriction.AnyAttribute
+<introspection>:33550: propriété System.Xml.Schema.XmlSchemaComplexContentRestriction.Attributes
+<introspection>:33551: propriété System.Xml.Schema.XmlSchemaComplexContentRestriction.BaseTypeName
+<introspection>:33552: propriété System.Xml.Schema.XmlSchemaComplexContentRestriction.Particle
+<introspection>:33661: propriété System.Xml.Schema.XmlSchemaSimpleContentRestriction.AnyAttribute
+<introspection>:33662: propriété System.Xml.Schema.XmlSchemaSimpleContentRestriction.Attributes
+<introspection>:33663: propriété System.Xml.Schema.XmlSchemaSimpleContentRestriction.BaseType
+<introspection>:33664: propriété System.Xml.Schema.XmlSchemaSimpleContentRestriction.BaseTypeName
+<introspection>:33665: propriété System.Xml.Schema.XmlSchemaSimpleContentRestriction.Facets
+<introspection>:33670: propriété System.Xml.Schema.XmlSchemaSimpleTypeRestriction.BaseType
+<introspection>:33671: propriété System.Xml.Schema.XmlSchemaSimpleTypeRestriction.BaseTypeName
+<introspection>:33672: propriété System.Xml.Schema.XmlSchemaSimpleTypeRestriction.Facets
+<introspection>:35072: type System.Data.KeyRestrictionBehavior (System.Data.Common)
+<introspection>:35358: type System.Dynamic.BindingRestrictions (System.Linq.Expressions)
+<introspection>:38019: type System.Xml.Schema.XmlSchemaComplexContentRestriction (System.Xml.ReaderWriter)
+<introspection>:38068: type System.Xml.Schema.XmlSchemaSimpleContentRestriction (System.Xml.ReaderWriter)
+<introspection>:38072: type System.Xml.Schema.XmlSchemaSimpleTypeRestriction (System.Xml.ReaderWriter)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   50 <introspection>

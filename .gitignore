@@ -32,3 +32,6 @@ bench/java_std/classes/
 tools/*/*/obj/
 tools/*/*/bin/
 probes/*/*/bin/
+tools/grid_audit/listings/*/bin/
+tools/grid_audit/listings/*/obj/
+probes/*/*/obj/

@@ -1,0 +1,77 @@
+# Recherche d'absence : csharp, case B2
+# Chaîne : Microsoft.NETCore.App 10.0.14
+# Motif : arena|allocator|alloc_?in\b|new_?in\b|bump|region|mem_?pool|memory_?pool
+# Déclaration publique : .
+# 65 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:4121: champ System.Reflection.Metadata.ExceptionRegionKind.Catch
+<introspection>:4122: champ System.Reflection.Metadata.ExceptionRegionKind.Fault
+<introspection>:4123: champ System.Reflection.Metadata.ExceptionRegionKind.Filter
+<introspection>:4124: champ System.Reflection.Metadata.ExceptionRegionKind.Finally
+<introspection>:4125: champ System.Reflection.Metadata.ExceptionRegionKind.value__
+<introspection>:4587: champ System.Reflection.MethodImportAttributes.ThrowOnUnmappableCharEnable
+<introspection>:4906: champ System.Runtime.GCLatencyMode.NoGCRegion
+<introspection>:7860: méthode System.Buffers.MemoryPool`1.Dispose
+<introspection>:7861: méthode System.Buffers.MemoryPool`1.Rent
+<introspection>:12197: méthode System.GC.EndNoGCRegion
+<introspection>:12209: méthode System.GC.RegisterNoGCRegionCallback
+<introspection>:12212: méthode System.GC.TryStartNoGCRegion
+<introspection>:12448: méthode System.Globalization.RegionInfo.Equals
+<introspection>:12449: méthode System.Globalization.RegionInfo.GetHashCode
+<introspection>:12450: méthode System.Globalization.RegionInfo.ToString
+<introspection>:16965: méthode System.Reflection.Metadata.Ecma335.ControlFlowBuilder.AddCatchRegion
+<introspection>:16966: méthode System.Reflection.Metadata.Ecma335.ControlFlowBuilder.AddFaultRegion
+<introspection>:16967: méthode System.Reflection.Metadata.Ecma335.ControlFlowBuilder.AddFilterRegion
+<introspection>:16968: méthode System.Reflection.Metadata.Ecma335.ControlFlowBuilder.AddFinallyRegion
+<introspection>:16992: méthode System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder.Add
+<introspection>:16993: méthode System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder.AddCatch
+<introspection>:16994: méthode System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder.AddFault
+<introspection>:16995: méthode System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder.AddFilter
+<introspection>:16996: méthode System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder.AddFinally
+<introspection>:16997: méthode System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder.IsSmallExceptionRegion
+<introspection>:16998: méthode System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder.IsSmallRegionCount
+<introspection>:17973: méthode System.Runtime.CompilerServices.RuntimeHelpers.PrepareConstrainedRegions
+<introspection>:17974: méthode System.Runtime.CompilerServices.RuntimeHelpers.PrepareConstrainedRegionsNoOP
+<introspection>:18162: méthode System.Runtime.InteropServices.ComTypes.IStream.LockRegion
+<introspection>:18168: méthode System.Runtime.InteropServices.ComTypes.IStream.UnlockRegion
+<introspection>:22871: méthode System.Security.Cryptography.X509Certificates.X500DistinguishedNameBuilder.AddCountryOrRegion
+<introspection>:24253: méthode System.Threading.Thread.BeginCriticalRegion
+<introspection>:24256: méthode System.Threading.Thread.EndCriticalRegion
+<introspection>:26091: propriété System.Buffers.MemoryPool`1.MaxBufferSize
+<introspection>:26092: propriété System.Buffers.MemoryPool`1.Shared
+<introspection>:28352: propriété System.Globalization.RegionInfo.CurrencyEnglishName
+<introspection>:28353: propriété System.Globalization.RegionInfo.CurrencyNativeName
+<introspection>:28354: propriété System.Globalization.RegionInfo.CurrencySymbol
+<introspection>:28355: propriété System.Globalization.RegionInfo.CurrentRegion
+<introspection>:28356: propriété System.Globalization.RegionInfo.DisplayName
+<introspection>:28357: propriété System.Globalization.RegionInfo.EnglishName
+<introspection>:28358: propriété System.Globalization.RegionInfo.GeoId
+<introspection>:28359: propriété System.Globalization.RegionInfo.ISOCurrencySymbol
+<introspection>:28360: propriété System.Globalization.RegionInfo.IsMetric
+<introspection>:28361: propriété System.Globalization.RegionInfo.Name
+<introspection>:28362: propriété System.Globalization.RegionInfo.NativeName
+<introspection>:28363: propriété System.Globalization.RegionInfo.ThreeLetterISORegionName
+<introspection>:28364: propriété System.Globalization.RegionInfo.ThreeLetterWindowsRegionName
+<introspection>:28365: propriété System.Globalization.RegionInfo.TwoLetterISORegionName
+<introspection>:30568: propriété System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder.Builder
+<introspection>:30569: propriété System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder.HasSmallFormat
+<introspection>:30588: propriété System.Reflection.Metadata.Ecma335.MethodBodyStreamEncoder+MethodBody.ExceptionRegions
+<introspection>:30620: propriété System.Reflection.Metadata.ExceptionRegion.CatchType
+<introspection>:30621: propriété System.Reflection.Metadata.ExceptionRegion.FilterOffset
+<introspection>:30622: propriété System.Reflection.Metadata.ExceptionRegion.HandlerLength
+<introspection>:30623: propriété System.Reflection.Metadata.ExceptionRegion.HandlerOffset
+<introspection>:30624: propriété System.Reflection.Metadata.ExceptionRegion.Kind
+<introspection>:30625: propriété System.Reflection.Metadata.ExceptionRegion.TryLength
+<introspection>:30626: propriété System.Reflection.Metadata.ExceptionRegion.TryOffset
+<introspection>:30741: propriété System.Reflection.Metadata.MethodBodyBlock.ExceptionRegions
+<introspection>:34442: type System.Buffers.MemoryPool`1 (System.Memory)
+<introspection>:35473: type System.Globalization.RegionInfo (System.Runtime)
+<introspection>:36271: type System.Reflection.Metadata.Ecma335.ExceptionRegionEncoder (System.Reflection.Metadata)
+<introspection>:36314: type System.Reflection.Metadata.ExceptionRegion (System.Reflection.Metadata)
+<introspection>:36315: type System.Reflection.Metadata.ExceptionRegionKind (System.Reflection.Metadata)
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   65 <introspection>

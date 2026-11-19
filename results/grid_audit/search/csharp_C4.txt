@@ -1,0 +1,11 @@
+# Recherche d'absence : csharp, case C4
+# Chaîne : Microsoft.NETCore.App 10.0.14
+# Motif : fast_?math|reassoc|algebraic|fp_?contract|float_?mode|relaxed_?math|associative
+# Déclaration publique : .
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

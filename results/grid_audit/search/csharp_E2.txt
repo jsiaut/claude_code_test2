@@ -1,0 +1,11 @@
+# Recherche d'absence : csharp, case E2
+# Chaîne : Microsoft.NETCore.App 10.0.14
+# Motif : \basm\b|inline_?asm|__asm|assembler
+# Déclaration publique : .
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

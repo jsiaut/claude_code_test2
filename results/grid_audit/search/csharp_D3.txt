@@ -1,0 +1,13 @@
+# Recherche d'absence : csharp, case D3
+# Chaîne : Microsoft.NETCore.App 10.0.14
+# Motif : cache_?line|cache_?padded|destructive_?interference|false_?sharing|contended|dcache|cache_?size
+# Déclaration publique : .
+# 1 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:32776: propriété System.Text.RegularExpressions.Regex.CacheSize
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    1 <introspection>
