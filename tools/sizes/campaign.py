@@ -100,6 +100,13 @@ def check(kernel, size, param, chk):
     return chk.strip() == exp
 
 
+def oom_victim():
+    """Dans le processus mesuré, avant exec : premier tué en cas de manque de mémoire du groupe de processus (la limite
+    du groupe, page cache et /dev/shm compris, est atteinte avant 13 Gio : section 6, « que le noyau tue »)."""
+    with open("/proc/self/oom_score_adj", "w") as f:
+        f.write("1000")
+
+
 def tree_rss_kb(pgid):
     total = 0
     for p in os.listdir("/proc"):
@@ -126,7 +133,8 @@ def run_one(lang, build, kernel, size, variant, param, reps, warmup, timeout):
     s0, t0 = D.steal_ticks(), time.time()
     box = {"rss": 0, "oom": False, "timeout": False}
     with tempfile.TemporaryFile() as fo, tempfile.TemporaryFile() as fe:
-        proc = subprocess.Popen(cmd, stdout=fo, stderr=fe, env=env, cwd=d, start_new_session=True)
+        proc = subprocess.Popen(cmd, stdout=fo, stderr=fe, env=env, cwd=d, start_new_session=True,
+                                preexec_fn=oom_victim)
         stop = threading.Event()
 
         def watch():
@@ -252,6 +260,11 @@ def main():
     gsel = set(a.groups.split(",")) if a.groups else None
     os.makedirs(RAW, exist_ok=True)
     model = cpu_model()
+    try:  # le pilote, pas la victime (baisser demande un droit que le bac à sable peut refuser)
+        with open("/proc/self/oom_score_adj", "w") as f:
+            f.write("-900")
+    except OSError:
+        pass
     if not a.dry:  # toutes les constructions avant la première mesure (aucune compilation pendant un groupe)
         for lang in langs:
             for name in S.SETS:
