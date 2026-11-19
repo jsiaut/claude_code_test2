@@ -1,0 +1,17 @@
+# Recherche d'absence : js, case C1
+# Chaîne : v26.12.1
+# Motif : simd|vector(64|128|256|512)\b|\bvec[248]\b|float32x|int32x|@vector
+# Déclaration publique : .
+# 5 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:9459: module process.config.variables.node_shared_simdjson
+<introspection>:9460: module process.config.variables.node_shared_simdutf
+<introspection>:9511: module process.config.variables.v8_enable_wasm_simd256_revec
+<introspection>:10040: module process.versions.simdjson
+<introspection>:10041: module process.versions.simdutf
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    5 <introspection>

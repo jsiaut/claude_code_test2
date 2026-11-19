@@ -327,6 +327,12 @@
       "strip": "/opt/ocaml/lib/ocaml/",
       "public": "^\\s*(val|external|type|and|module|exception|class)\\b",
       "version": "/opt/ocaml/bin/ocamlopt -version"
+    },
+    "js": {
+      "roots": [],
+      "listing": "/opt/node26/bin/node tools/grid_audit/listings/node_api.js 2>/dev/null",
+      "public": ".",
+      "version": "/opt/node26/bin/node --version"
     }
   }
 }

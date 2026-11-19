@@ -1,0 +1,11 @@
+# Recherche d'absence : js, case A7
+# Chaîne : v26.12.1
+# Motif : inline_?array|fixed_?array|fixed_?buffer|static_?array
+# Déclaration publique : .
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

@@ -1,0 +1,22 @@
+# Recherche d'absence : js, case A3
+# Chaîne : v26.12.1
+# Motif : packed|bit_?field|bit_?packed|bit_?size|bit_?offset|bitstruct
+# Déclaration publique : .
+# 10 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:7719: module http2.getPackedSettings
+<introspection>:7720: module http2.getPackedSettings.prototype.constructor
+<introspection>:7721: module http2.getPackedSettings.prototype.constructor.length
+<introspection>:7722: module http2.getPackedSettings.prototype.constructor.name
+<introspection>:7723: module http2.getPackedSettings.prototype.constructor.prototype
+<introspection>:7724: module http2.getUnpackedSettings
+<introspection>:7725: module http2.getUnpackedSettings.prototype.constructor
+<introspection>:7726: module http2.getUnpackedSettings.prototype.constructor.length
+<introspection>:7727: module http2.getUnpackedSettings.prototype.constructor.name
+<introspection>:7728: module http2.getUnpackedSettings.prototype.constructor.prototype
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   10 <introspection>

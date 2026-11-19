@@ -1,0 +1,11 @@
+# Recherche d'absence : js, case D4
+# Chaîne : v26.12.1
+# Motif : affinity|cpu_?set|pin_?(thread|cpu)|sched_?set|bind_?(thread|cpu)
+# Déclaration publique : .
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

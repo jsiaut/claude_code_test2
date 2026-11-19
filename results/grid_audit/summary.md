@@ -22,7 +22,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | julia | 33 | 1 | 0 | 0 | exécutée 28, exécutée+recherche 2, recherche 2, échec 1 |
 | haskell | 33 | 1 | 0 | 0 | exécutée 19, exécutée+recherche 1, exécutée+échec 1, recherche 7, échec 2, échec+recherche 3 |
 | ocaml | 33 | 1 | 0 | 0 | exécutée 10, exécutée+recherche 2, recherche 9, échec 3, échec+recherche 9 |
-| js | 2 | 1 | 31 | 2 |  |
+| js | 33 | 1 | 0 | 0 | exécutée 9, exécutée+recherche 1, recherche 14, échec 4, échec+recherche 5 |
 | python | 4 | 1 | 29 | 4 |  |
 | lua | 2 | 1 | 31 | 2 |  |
 | swift | 33 | 1 | 0 | 0 | exécutée 26, exécutée+recherche 1, exécutée+échec 1, recherche 3, échec+recherche 2 |
@@ -30,7 +30,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | bqn | 33 | 1 | 0 | 0 | exécutée 10, recherche 17, échec 2, échec+recherche 4 |
 | php | 33 | 1 | 0 | 0 | exécutée 16, recherche 13, échec+recherche 4 |
 
-Total : 734 sondées, 25 mesurées, 91 sans sonde, 8 déclaratives.
+Total : 765 sondées, 25 mesurées, 60 sans sonde, 6 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 

@@ -154,10 +154,13 @@
    "exécutée+recherche": 2
   },
   "js": {
-   "sans sonde": 31,
-   "déclarative": 2,
-   "sondée": 2,
-   "mesurée": 1
+   "échec": 4,
+   "sondée": 33,
+   "recherche": 14,
+   "exécutée": 9,
+   "échec+recherche": 5,
+   "mesurée": 1,
+   "exécutée+recherche": 1
   },
   "python": {
    "sans sonde": 29,
@@ -205,17 +208,17 @@
   }
  },
  "total": {
-  "exécutée": 507,
-  "sondée": 734,
-  "échec+recherche": 40,
+  "exécutée": 516,
+  "sondée": 765,
+  "échec+recherche": 45,
   "mesurée": 25,
   "exécutée+échec": 23,
-  "recherche": 116,
-  "exécutée+recherche": 18,
-  "échec": 18,
+  "recherche": 130,
+  "exécutée+recherche": 19,
+  "échec": 22,
   "exécutée+échec+recherche": 4,
-  "sans sonde": 91,
-  "déclarative": 8
+  "sans sonde": 60,
+  "déclarative": 6
  },
  "divergences": [
   [

@@ -1,0 +1,38 @@
+# Recherche d'absence : js, case F2
+# Chaîne : v26.12.1
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : .
+# 26 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+<introspection>:989: globalThis.Intl.Locale
+<introspection>:990: globalThis.Intl.Locale.length
+<introspection>:991: globalThis.Intl.Locale.name
+<introspection>:992: globalThis.Intl.Locale.prototype
+<introspection>:993: globalThis.Intl.Locale.prototype.baseName
+<introspection>:994: globalThis.Intl.Locale.prototype.calendar
+<introspection>:995: globalThis.Intl.Locale.prototype.caseFirst
+<introspection>:996: globalThis.Intl.Locale.prototype.collation
+<introspection>:997: globalThis.Intl.Locale.prototype.constructor
+<introspection>:998: globalThis.Intl.Locale.prototype.firstDayOfWeek
+<introspection>:999: globalThis.Intl.Locale.prototype.getCalendars
+<introspection>:1000: globalThis.Intl.Locale.prototype.getCollations
+<introspection>:1001: globalThis.Intl.Locale.prototype.getHourCycles
+<introspection>:1002: globalThis.Intl.Locale.prototype.getNumberingSystems
+<introspection>:1003: globalThis.Intl.Locale.prototype.getTextInfo
+<introspection>:1004: globalThis.Intl.Locale.prototype.getTimeZones
+<introspection>:1005: globalThis.Intl.Locale.prototype.getWeekInfo
+<introspection>:1006: globalThis.Intl.Locale.prototype.hourCycle
+<introspection>:1007: globalThis.Intl.Locale.prototype.language
+<introspection>:1008: globalThis.Intl.Locale.prototype.maximize
+<introspection>:1009: globalThis.Intl.Locale.prototype.minimize
+<introspection>:1010: globalThis.Intl.Locale.prototype.numberingSystem
+<introspection>:1011: globalThis.Intl.Locale.prototype.numeric
+<introspection>:1012: globalThis.Intl.Locale.prototype.region
+<introspection>:1013: globalThis.Intl.Locale.prototype.script
+<introspection>:1014: globalThis.Intl.Locale.prototype.toString
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   26 <introspection>

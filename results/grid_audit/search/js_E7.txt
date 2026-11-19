@@ -1,0 +1,11 @@
+# Recherche d'absence : js, case E7
+# Chaîne : v26.12.1
+# Motif : comptime|constexpr|const_?fn|static_?if|ctfe|compile_?time|@generated|specializ
+# Déclaration publique : .
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
