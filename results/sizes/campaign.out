@@ -86,3 +86,299 @@ p0 k5:l2 c3/new natural  n=43 med=0.0699327s ok=['True'] oom=False rc=0
 p0 k5:l2 c3/new tuned  n=469 med=0.00643279s ok=['True'] oom=False rc=0
 p0 k5:l2 bqn/new natural  n=31 med=0.0950362s ok=['True'] oom=False rc=0
 p0 k5:l2 bqn/new tuned  n=90 med=0.0323238s ok=['True'] oom=False rc=0
+2026-11-19T12:56:42 constructions prêtes
+2026-11-19T12:56:42 passe 0 : 24 groupes ; processeur : 6/173/1 Intel(R) Xeon(R) Processor @ 2.30GHz
+p0 k5:l2 ada/new natural  n=42 med=0.0704504s ok=['True'] oom=False rc=0
+p0 k5:l2 ada/new tuned  n=485 med=0.00627554s ok=['True'] oom=False rc=0
+p0 k5:l2 js/new natural  n=27 med=0.104253s ok=['True'] oom=False rc=0
+p0 k5:l2 js/new tuned  n=28 med=0.107432s ok=['True'] oom=False rc=0
+p0 k5:l2 odin/new natural  n=41 med=0.0709633s ok=['True'] oom=False rc=0
+p0 k5:l2 odin/new tuned  n=480 med=0.00627716s ok=['True'] oom=False rc=0
+p0 k5:l2 go/new natural  n=41 med=0.0702033s ok=['True'] oom=False rc=0
+p0 k5:l2 go/new tuned  n=408 med=0.00761665s ok=['True'] oom=False rc=0
+p0 k5:l2 haskell/new natural  n=10 med=0.282261s ok=['True'] oom=False rc=0
+p0 k5:l2 haskell/new tuned  n=446 med=0.00653443s ok=['True'] oom=False rc=0
+p0 k5:l2 swift/new natural  n=42 med=0.0709679s ok=['True'] oom=False rc=0
+p0 k5:l2 swift/new tuned  n=481 med=0.00638714s ok=['True'] oom=False rc=0
+p0 k5:l2 chapel/new natural  n=20 med=0.141344s ok=['True'] oom=False rc=0
+p0 k5:l2 chapel/new tuned  n=467 med=0.006465s ok=['True'] oom=False rc=0
+p0 k5:l2 d/new natural  n=42 med=0.0701413s ok=['True'] oom=False rc=0
+p0 k5:l2 d/new tuned  n=481 med=0.0062621s ok=['True'] oom=False rc=0
+p0 k5:l2 julia/new natural  n=42 med=0.071841s ok=['True'] oom=False rc=0
+p0 k5:l2 julia/new tuned  n=443 med=0.00676167s ok=['True'] oom=False rc=0
+p0 k5:l2 lua/new natural  n=3 med=1.31446s ok=['True'] oom=False rc=0
+p0 k5:l2 lua/new tuned  n=3 med=1.31344s ok=['True'] oom=False rc=0
+p0 k5:l2 zig/new natural  n=42 med=0.070201s ok=['True'] oom=False rc=0
+p0 k5:l2 zig/new tuned  n=468 med=0.00646702s ok=['True'] oom=False rc=0
+p0 k5:l2 rust/new natural  n=42 med=0.0704339s ok=['True'] oom=False rc=0
+p0 k5:l2 rust/new tuned  n=466 med=0.00642442s ok=['True'] oom=False rc=0
+p0 k5:l2 c/new natural  n=20 med=0.141858s ok=['True'] oom=False rc=0
+p0 k5:l2 c/new tuned  n=434 med=0.00642841s ok=['True'] oom=False rc=0
+p0 k5:l2 mojo/new natural  n=20 med=0.140975s ok=['True'] oom=False rc=0
+p0 k5:l2 mojo/new tuned  n=478 med=0.00636484s ok=['True'] oom=False rc=0
+p0 k5:l2 nim/new natural  n=42 med=0.0701646s ok=['True'] oom=False rc=0
+p0 k5:l2 nim/new tuned  n=480 med=0.00634059s ok=['True'] oom=False rc=0
+p0 k5:l2 python/new natural  n=3 med=5.64683s ok=['True'] oom=False rc=0
+p0 k5:l2 python/new tuned  n=3 med=2.13841s ok=['True'] oom=False rc=0
+p0 k5:l2 php/new natural  n=15 med=0.179744s ok=['True'] oom=False rc=0
+p0 k5:l2 php/new tuned  n=18 med=0.15203s ok=['True'] oom=False rc=0
+p0 k5:l2 cpp/new natural  n=42 med=0.0701679s ok=['True'] oom=False rc=0
+p0 k5:l2 cpp/new tuned  n=475 med=0.00625391s ok=['True'] oom=False rc=0
+p0 k5:l2 fortran/new natural  n=40 med=0.0711719s ok=['True'] oom=False rc=0
+p0 k5:l2 fortran/new tuned  n=449 med=0.00680638s ok=['True'] oom=False rc=0
+p0 k5:l2 java/new natural  n=23 med=0.126087s ok=['True'] oom=False rc=0
+p0 k5:l2 java/new tuned  n=302 med=0.0103439s ok=['True'] oom=False rc=0
+2026-11-19T12:59:58 passe 0 groupe 2/24 k5:l2 40 processus 196s
+p0 k1:pub mojo/new natural energy n=103 med=0.0302912s ok=['True'] oom=False rc=0
+p0 k1:pub mojo/new aos energy n=120 med=0.028194s ok=['True'] oom=False rc=0
+p0 k1:pub mojo/new soa energy n=667 med=0.00284241s ok=['True'] oom=False rc=0
+p0 k1:pub mojo/new natural_shuffled energy n=114 med=0.0289711s ok=['True'] oom=False rc=0
+p0 k1:pub cpp/new natural energy n=101 med=0.0304011s ok=['True'] oom=False rc=0
+p0 k1:pub cpp/new aos energy n=103 med=0.0261864s ok=['True'] oom=False rc=0
+p0 k1:pub cpp/new soa energy n=672 med=0.00268549s ok=['True'] oom=False rc=0
+p0 k1:pub cpp/new natural_shuffled energy n=93 med=0.0294347s ok=['True'] oom=False rc=0
+p0 k1:pub bqn/new natural energy n=21 med=0.10918s ok=['True'] oom=False rc=0
+p0 k1:pub bqn/new aos energy n=24 med=0.13024s ok=['True'] oom=False rc=0
+p0 k1:pub bqn/new soa energy n=73 med=0.0363059s ok=['True'] oom=False rc=0
+p0 k1:pub bqn/new natural_shuffled energy n=23 med=0.126342s ok=['True'] oom=False rc=0
+p0 k1:pub bqn/new natural_ns energy n=9 med=0.330228s ok=['True'] oom=False rc=0
+p0 k1:pub bqn/new natural_ns_shuffled energy n=3 med=1.80459s ok=['True'] oom=False rc=0
+p0 k1:pub julia/new natural energy n=105 med=0.0300077s ok=['True'] oom=False rc=0
+p0 k1:pub julia/new aos energy n=123 med=0.0233374s ok=['True'] oom=False rc=0
+p0 k1:pub julia/new soa energy n=735 med=0.00267667s ok=['True'] oom=False rc=0
+p0 k1:pub julia/new natural_shuffled energy n=121 med=0.0284317s ok=['True'] oom=False rc=0
+p0 k1:pub python/new natural energy n=5 med=0.528199s ok=['True'] oom=False rc=0
+p0 k1:pub python/new aos energy n=4 med=0.614919s ok=['True'] oom=False rc=0
+p0 k1:pub python/new soa energy n=6 med=0.473812s ok=['True'] oom=False rc=0
+p0 k1:pub python/new natural_shuffled energy n=3 med=1.67312s ok=['True'] oom=False rc=0
+p0 k1:pub haskell/new natural energy n=45 med=0.088626s ok=['True'] oom=False rc=0
+p0 k1:pub haskell/new aos energy n=98 med=0.0250193s ok=['True'] oom=False rc=0
+p0 k1:pub haskell/new soa energy n=564 med=0.00291971s ok=['True'] oom=False rc=0
+p0 k1:pub haskell/new natural_shuffled energy n=23 med=0.103516s ok=['True'] oom=False rc=0
+p0 k1:pub zig/new natural energy n=103 med=0.0259392s ok=['True'] oom=False rc=0
+p0 k1:pub zig/new aos energy n=104 med=0.0255139s ok=['True'] oom=False rc=0
+p0 k1:pub zig/new soa energy n=696 med=0.00323711s ok=['True'] oom=False rc=0
+p0 k1:pub zig/new natural_shuffled energy n=101 med=0.0292883s ok=['True'] oom=False rc=0
+p0 k1:pub odin/old natural energy n=106 med=0.0273732s ok=['True'] oom=False rc=0
+p0 k1:pub odin/old aos energy n=101 med=0.029554s ok=['True'] oom=False rc=0
+p0 k1:pub odin/old soa energy n=594 med=0.00333894s ok=['True'] oom=False rc=0
+p0 k1:pub odin/old natural_shuffled energy n=108 med=0.0276215s ok=['True'] oom=False rc=0
+p0 k1:pub d/new natural energy n=112 med=0.028055s ok=['True'] oom=False rc=0
+p0 k1:pub d/new aos energy n=94 med=0.0299766s ok=['True'] oom=False rc=0
+p0 k1:pub d/new soa energy n=567 med=0.0032435s ok=['True'] oom=False rc=0
+p0 k1:pub d/new natural_shuffled energy n=104 med=0.0294631s ok=['True'] oom=False rc=0
+p0 k1:pub swift/new natural energy n=113 med=0.0272101s ok=['True'] oom=False rc=0
+p0 k1:pub swift/new aos energy n=93 med=0.028949s ok=['True'] oom=False rc=0
+p0 k1:pub swift/new soa energy n=597 med=0.00281291s ok=['True'] oom=False rc=0
+p0 k1:pub swift/new natural_shuffled energy n=103 med=0.0265087s ok=['True'] oom=False rc=0
+p0 k1:pub ada/new natural energy n=113 med=0.0254888s ok=['True'] oom=False rc=0
+p0 k1:pub ada/new aos energy n=106 med=0.0285783s ok=['True'] oom=False rc=0
+p0 k1:pub ada/new soa energy n=595 med=0.00255128s ok=['True'] oom=False rc=0
+p0 k1:pub ada/new natural_shuffled energy n=117 med=0.0277573s ok=['True'] oom=False rc=0
+p0 k1:pub lua/new natural energy n=7 med=0.357144s ok=['True'] oom=False rc=0
+p0 k1:pub lua/new aos energy n=15 med=0.193916s ok=['True'] oom=False rc=0
+p0 k1:pub lua/new soa energy n=25 med=0.117471s ok=['True'] oom=False rc=0
+p0 k1:pub lua/new natural_shuffled energy n=3 med=1.02971s ok=['True'] oom=False rc=0
+p0 k1:pub fortran/new natural energy n=115 med=0.025171s ok=['True'] oom=False rc=0
+p0 k1:pub fortran/new aos energy n=110 med=0.0271105s ok=['True'] oom=False rc=0
+p0 k1:pub fortran/new soa energy n=578 med=0.00265591s ok=['True'] oom=False rc=0
+p0 k1:pub fortran/new natural_shuffled energy n=104 med=0.0286874s ok=['True'] oom=False rc=0
+p0 k1:pub java/new natural energy n=86 med=0.0353389s ok=['True'] oom=False rc=0
+p0 k1:pub java/new aos energy n=99 med=0.0269088s ok=['True'] oom=False rc=0
+p0 k1:pub java/new soa energy n=566 med=0.00275439s ok=['True'] oom=False rc=0
+p0 k1:pub java/new natural_shuffled energy n=27 med=0.109015s ok=['True'] oom=False rc=0
+p0 k1:pub ocaml/new natural energy n=51 med=0.066731s ok=['True'] oom=False rc=0
+p0 k1:pub ocaml/new aos energy n=16 med=0.179384s ok=['True'] oom=False rc=0
+p0 k1:pub ocaml/new soa energy n=410 med=0.0053575s ok=['True'] oom=False rc=0
+p0 k1:pub ocaml/new natural_shuffled energy n=16 med=0.172642s ok=['True'] oom=False rc=0
+p0 k1:pub go/old natural energy n=3 med=1.51665s ok=['True'] oom=False rc=0
+p0 k1:pub go/old aos energy n=12 med=1.02144s ok=['True'] oom=False rc=0
+p0 k1:pub go/old soa energy n=587 med=0.00265653s ok=['True'] oom=False rc=0
+p0 k1:pub go/old natural_shuffled energy n=3 med=1.50416s ok=['True'] oom=False rc=0
+p0 k1:pub odin/new natural energy n=105 med=0.0296987s ok=['True'] oom=False rc=0
+p0 k1:pub odin/new aos energy n=99 med=0.0289178s ok=['True'] oom=False rc=0
+p0 k1:pub odin/new soa energy n=511 med=0.0040372s ok=['True'] oom=False rc=0
+p0 k1:pub odin/new natural_shuffled energy n=103 med=0.0282589s ok=['True'] oom=False rc=0
+p0 k1:pub php/new natural energy n=5 med=0.502218s ok=['True'] oom=False rc=0
+p0 k1:pub php/new aos energy n=24 med=0.131855s ok=['True'] oom=False rc=0
+p0 k1:pub php/new soa energy n=103 med=0.0288936s ok=['True'] oom=False rc=0
+p0 k1:pub php/new natural_shuffled energy n=3 med=1.28021s ok=['True'] oom=False rc=0
+p0 k1:pub php/new natural_arr energy n=3 med=1.06388s ok=['True'] oom=False rc=0
+p0 k1:pub php/new natural_arr_shuffled energy n=3 med=2.88938s ok=['True'] oom=False rc=0
+p0 k1:pub rust/new natural energy n=107 med=0.0303003s ok=['True'] oom=False rc=0
+p0 k1:pub rust/new aos energy n=107 med=0.0285734s ok=['True'] oom=False rc=0
+p0 k1:pub rust/new soa energy n=660 med=0.0027282s ok=['True'] oom=False rc=0
+p0 k1:pub rust/new natural_shuffled energy n=96 med=0.0280811s ok=['True'] oom=False rc=0
+p0 k1:pub chapel/new natural energy n=103 med=0.027463s ok=['True'] oom=False rc=0
+p0 k1:pub chapel/new aos energy n=128 med=0.020197s ok=['True'] oom=False rc=0
+p0 k1:pub chapel/new soa energy n=696 med=0.002377s ok=['True'] oom=False rc=0
+p0 k1:pub chapel/new natural_shuffled energy n=119 med=0.028862s ok=['True'] oom=False rc=0
+p0 k1:pub c/new natural energy n=101 med=0.0294914s ok=['True'] oom=False rc=0
+p0 k1:pub c/new aos energy n=102 med=0.0271204s ok=['True'] oom=False rc=0
+p0 k1:pub c/new soa energy n=543 med=0.0029683s ok=['True'] oom=False rc=0
+p0 k1:pub c/new natural_shuffled energy n=98 med=0.0265884s ok=['True'] oom=False rc=0
+p0 k1:pub js/new natural energy n=17 med=0.16961s ok=['True'] oom=False rc=0
+p0 k1:pub js/new aos energy n=78 med=0.0437959s ok=['True'] oom=False rc=0
+p0 k1:pub js/new soa energy n=246 med=0.0113015s ok=['True'] oom=False rc=0
+p0 k1:pub js/new natural_shuffled energy n=6 med=0.476038s ok=['True'] oom=False rc=0
+p0 k1:pub c3/new natural energy n=100 med=0.0292482s ok=['True'] oom=False rc=0
+p0 k1:pub c3/new aos energy n=110 med=0.0278037s ok=['True'] oom=False rc=0
+p0 k1:pub c3/new soa energy n=581 med=0.00230096s ok=['True'] oom=False rc=0
+p0 k1:pub c3/new natural_shuffled energy n=109 med=0.026073s ok=['True'] oom=False rc=0
+p0 k1:pub csharp/new natural energy n=84 med=0.0335872s ok=['True'] oom=False rc=0
+p0 k1:pub csharp/new aos energy n=122 med=0.0269095s ok=['True'] oom=False rc=0
+p0 k1:pub csharp/new soa energy n=924 med=0.00282675s ok=['True'] oom=False rc=0
+p0 k1:pub csharp/new natural_shuffled energy n=29 med=0.101086s ok=['True'] oom=False rc=0
+p0 k1:pub chapel/old natural energy n=105 med=0.028831s ok=['True'] oom=False rc=0
+p0 k1:pub chapel/old aos energy n=133 med=0.018995s ok=['True'] oom=False rc=0
+p0 k1:pub chapel/old soa energy n=552 med=0.002719s ok=['True'] oom=False rc=0
+p0 k1:pub chapel/old natural_shuffled energy n=104 med=0.0291975s ok=['True'] oom=False rc=0
+p0 k1:pub nim/new natural energy n=92 med=0.0264954s ok=['True'] oom=False rc=0
+p0 k1:pub nim/new aos energy n=101 med=0.0291053s ok=['True'] oom=False rc=0
+p0 k1:pub nim/new soa energy n=528 med=0.00245127s ok=['True'] oom=False rc=0
+p0 k1:pub nim/new natural_shuffled energy n=98 med=0.0303868s ok=['True'] oom=False rc=0
+p0 k1:pub fpc/new natural energy n=95 med=0.0298752s ok=['True'] oom=False rc=0
+p0 k1:pub fpc/new aos energy n=111 med=0.0267892s ok=['True'] oom=False rc=0
+p0 k1:pub fpc/new soa energy n=513 med=0.00319538s ok=['True'] oom=False rc=0
+p0 k1:pub fpc/new natural_shuffled energy n=101 med=0.0311293s ok=['True'] oom=False rc=0
+p0 k1:pub go/new natural energy n=3 med=1.49477s ok=['True'] oom=False rc=0
+p0 k1:pub go/new aos energy n=3 med=0.756557s ok=['True'] oom=False rc=0
+p0 k1:pub go/new soa energy n=550 med=0.00283298s ok=['True'] oom=False rc=0
+p0 k1:pub go/new natural_shuffled energy n=3 med=1.47761s ok=['True'] oom=False rc=0
+2026-11-19T13:12:32 passe 0 groupe 3/24 k1:pub 116 processus 753s
+p0 k10:pub rust/new natural  n=31 med=0.0558338s ok=['True'] oom=False rc=0
+p0 k10:pub rust/new tuned  n=213 med=0.0143462s ok=['True'] oom=False rc=0
+p0 k10:pub c3/new natural  n=3 med=0.71109s ok=['True'] oom=False rc=0
+p0 k10:pub c3/new tuned  n=23 med=0.0562504s ok=['True'] oom=False rc=0
+p0 k10:pub haskell/new natural  n=10 med=0.544993s ok=['True'] oom=False rc=0
+p0 k10:pub haskell/new tuned  n=13 med=0.321081s ok=['True'] oom=False rc=0
+p0 k10:pub d/new natural  n=3 med=2.28786s ok=['True'] oom=False rc=0
+p0 k10:pub d/new tuned  n=56 med=0.0523538s ok=['True'] oom=False rc=0
+p0 k10:pub zig/new natural  n=5 med=0.533039s ok=['True'] oom=False rc=0
+p0 k10:pub zig/new tuned  n=39 med=0.0759157s ok=['True'] oom=False rc=0
+p0 k10:pub go/old natural  n=8 med=0.369558s ok=['True'] oom=False rc=0
+p0 k10:pub go/old tuned  n=4 med=0.78269s ok=['True'] oom=False rc=0
+p0 k10:pub cpp/new natural  n=4 med=0.964522s ok=['True'] oom=False rc=0
+p0 k10:pub cpp/new tuned  n=250 med=0.013573s ok=['True'] oom=False rc=0
+p0 k10:pub ada/new natural  n=3 med=2.81826s ok=['True'] oom=False rc=0
+p0 k10:pub ada/new tuned  n=75 med=0.0206673s ok=['True'] oom=False rc=0
+p0 k10:pub bqn/new natural  n=0 med=nans ok=None oom=None rc=None
+p0 k10:pub bqn/new tuned  n=0 med=nans ok=None oom=None rc=None
+p0 k10:pub csharp/new natural  n=3 med=3.89264s ok=['True'] oom=False rc=0
+p0 k10:pub csharp/new tuned  n=159 med=0.0317823s ok=['True'] oom=False rc=0
+p0 k10:pub mojo/new natural  n=3 med=2.17544s ok=['True'] oom=False rc=0
+p0 k10:pub mojo/new tuned  n=65 med=0.0652976s ok=['True'] oom=False rc=0
+p0 k10:pub odin/new natural  n=3 med=1.58096s ok=['True'] oom=False rc=0
+p0 k10:pub odin/new tuned  n=58 med=0.0224394s ok=['True'] oom=False rc=0
+p0 k10:pub chapel/old natural  n=3 med=2.02759s ok=['True'] oom=False rc=0
+p0 k10:pub chapel/old tuned  n=420 med=0.0102915s ok=['True'] oom=False rc=0
+p0 k10:pub go/new natural  n=9 med=0.373863s ok=['True'] oom=False rc=0
+p0 k10:pub go/new tuned  n=4 med=0.836511s ok=['True'] oom=False rc=0
+p0 k10:pub c/new natural  n=3 med=0.947912s ok=['True'] oom=False rc=0
+p0 k10:pub c/new tuned  n=33 med=0.0566316s ok=['True'] oom=False rc=0
+p0 k10:pub lua/new natural  n=8 med=0.334537s ok=['True'] oom=False rc=0
+p0 k10:pub lua/new tuned  n=16 med=0.179424s ok=['True'] oom=False rc=0
+p0 k10:pub js/new natural  n=3 med=9.07556s ok=['True'] oom=False rc=0
+p0 k10:pub js/new tuned  n=12 med=0.183843s ok=['True'] oom=False rc=0
+p0 k10:pub swift/new natural  n=3 med=13.7062s ok=['True'] oom=False rc=0
+p0 k10:pub swift/new tuned  n=25 med=0.0726506s ok=['True'] oom=False rc=0
+p0 k10:pub php/new natural  n=11 med=0.269718s ok=['True'] oom=False rc=0
+p0 k10:pub php/new tuned  n=29 med=0.0996852s ok=['True'] oom=False rc=0
+p0 k10:pub nim/new natural  n=3 med=0.746885s ok=['True'] oom=False rc=0
+p0 k10:pub nim/new tuned  n=64 med=0.0508042s ok=['True'] oom=False rc=0
+p0 k10:pub java/new natural  n=5 med=0.474466s ok=['True'] oom=False rc=0
+p0 k10:pub java/new tuned  n=272 med=0.0175097s ok=['True'] oom=False rc=0
+p0 k10:pub odin/old natural  n=3 med=1.8204s ok=['True'] oom=False rc=0
+p0 k10:pub odin/old tuned  n=190 med=0.0256904s ok=['True'] oom=False rc=0
+p0 k10:pub fpc/new natural  n=3 med=1.23229s ok=['True'] oom=False rc=0
+p0 k10:pub fpc/new tuned  n=163 med=0.0152456s ok=['True'] oom=False rc=0
+p0 k10:pub julia/new natural  n=4 med=0.703835s ok=['True'] oom=False rc=0
+p0 k10:pub julia/new tuned  n=8 med=0.34619s ok=['True'] oom=False rc=0
+p0 k10:pub chapel/new natural  n=3 med=1.82681s ok=['True'] oom=False rc=0
+p0 k10:pub chapel/new tuned  n=261 med=0.012183s ok=['True'] oom=False rc=0
+p0 k10:pub python/new natural  n=3 med=3.35141s ok=['True'] oom=False rc=0
+p0 k10:pub python/new tuned  n=3 med=2.64549s ok=['True'] oom=False rc=0
+p0 k10:pub ocaml/new natural  n=3 med=1.25807s ok=['True'] oom=False rc=0
+p0 k10:pub ocaml/new tuned  n=12 med=0.322532s ok=['True'] oom=False rc=0
+p0 k10:pub fortran/new natural  n=3 med=1.52449s ok=['True'] oom=False rc=0
+p0 k10:pub fortran/new tuned  n=238 med=0.0130124s ok=['True'] oom=False rc=0
+2026-11-19T13:21:25 passe 0 groupe 4/24 k10:pub 56 processus 534s
+p0 k9:large ocaml/new natural  n=3 med=0.782377s ok=['True'] oom=False rc=0
+p0 k9:large ocaml/new tuned  n=3 med=0.764795s ok=['True'] oom=False rc=0
+p0 k9:large ocaml/new mt  n=12 med=0.240653s ok=['True'] oom=False rc=0
+p0 k9:large python/new natural  n=3 med=18.2658s ok=['True'] oom=False rc=0
+p0 k9:large python/new tuned  n=3 med=19.1723s ok=['True'] oom=False rc=0
+p0 k9:large python/new mt  n=3 med=21.8258s ok=['True'] oom=False rc=0
+p0 k9:large haskell/new natural  n=3 med=2.5537s ok=['True'] oom=False rc=0
+p0 k9:large haskell/new tuned  n=7 med=0.38868s ok=['True'] oom=False rc=0
+p0 k9:large haskell/new mt  n=22 med=0.128212s ok=['True'] oom=False rc=0
+p0 k9:large mojo/new natural  n=3 med=2.12345s ok=['True'] oom=False rc=0
+p0 k9:large mojo/new tuned  n=7 med=0.395095s ok=['True'] oom=False rc=0
+p0 k9:large mojo/new mt  n=27 med=0.121465s ok=['True'] oom=False rc=0
+p0 k9:large c3/new natural  n=8 med=0.409519s ok=['True'] oom=False rc=0
+p0 k9:large c3/new tuned  n=6 med=0.403201s ok=['True'] oom=False rc=0
+p0 k9:large c3/new mt  n=23 med=0.137119s ok=['True'] oom=False rc=0
+p0 k9:large bqn/new natural  n=3 med=5.22979s ok=['True'] oom=False rc=0
+p0 k9:large bqn/new tuned  n=3 med=2.3273s ok=['True'] oom=False rc=0
+p0 k9:large bqn/new mt  n=3 med=2.44034s ok=['True'] oom=False rc=0
+p0 k9:large lua/new natural  n=3 med=6.449s ok=['True'] oom=False rc=0
+p0 k9:large lua/new tuned  n=3 med=8.71262s ok=['True'] oom=False rc=0
+p0 k9:large lua/new mt  n=3 med=8.68981s ok=['True'] oom=False rc=0
+p0 k9:large d/new natural  n=5 med=0.512004s ok=['True'] oom=False rc=0
+p0 k9:large d/new tuned  n=7 med=0.429803s ok=['True'] oom=False rc=0
+p0 k9:large d/new mt  n=16 med=0.13327s ok=['True'] oom=False rc=0
+p0 k9:large rust/new natural  n=4 med=0.619349s ok=['True'] oom=False rc=0
+p0 k9:large rust/new tuned  n=7 med=0.415256s ok=['True'] oom=False rc=0
+p0 k9:large rust/new mt  n=23 med=0.136939s ok=['True'] oom=False rc=0
+p0 k9:large ada/new natural  n=4 med=0.662944s ok=['True'] oom=False rc=0
+p0 k9:large ada/new tuned  n=5 med=0.529839s ok=['True'] oom=False rc=0
+p0 k9:large ada/new mt  n=19 med=0.171155s ok=['True'] oom=False rc=0
+p0 k9:large fpc/new natural  n=4 med=0.641164s ok=['True'] oom=False rc=0
+p0 k9:large fpc/new tuned  n=5 med=0.528992s ok=['True'] oom=False rc=0
+p0 k9:large fpc/new mt  n=16 med=0.178178s ok=['True'] oom=False rc=0
+p0 k9:large fortran/new natural  n=6 med=0.425579s ok=['True'] oom=False rc=0
+p0 k9:large fortran/new tuned  n=7 med=0.384591s ok=['True'] oom=False rc=0
+p0 k9:large fortran/new mt  n=26 med=0.118419s ok=['True'] oom=False rc=0
+p0 k9:large go/new natural  n=3 med=0.732327s ok=['True'] oom=False rc=0
+p0 k9:large go/new tuned  n=5 med=0.515748s ok=['True'] oom=False rc=0
+p0 k9:large go/new mt  n=17 med=0.151462s ok=['True'] oom=False rc=0
+p0 k9:large php/new natural  n=3 med=10.912s ok=['True'] oom=False rc=0
+p0 k9:large php/new tuned  n=3 med=1.91159s ok=['True'] oom=False rc=0
+p0 k9:large php/new mt  n=4 med=0.673172s ok=['True'] oom=False rc=0
+p0 k9:large cpp/new natural  n=7 med=0.370072s ok=['True'] oom=False rc=0
+p0 k9:large cpp/new tuned  n=7 med=0.412344s ok=['True'] oom=False rc=0
+p0 k9:large cpp/new mt  n=21 med=0.133979s ok=['True'] oom=False rc=0
+p0 k9:large zig/new natural  n=5 med=0.546213s ok=['True'] oom=False rc=0
+p0 k9:large zig/new tuned  n=6 med=0.383262s ok=['True'] oom=False rc=0
+p0 k9:large zig/new mt  n=22 med=0.136605s ok=['True'] oom=False rc=0
+p0 k9:large nim/new natural  n=4 med=0.608378s ok=['True'] oom=False rc=0
+p0 k9:large nim/new tuned  n=7 med=0.42504s ok=['True'] oom=False rc=0
+p0 k9:large nim/new mt  n=22 med=0.130128s ok=['True'] oom=False rc=0
+p0 k9:large js/new natural  n=3 med=1.4025s ok=['True'] oom=False rc=0
+p0 k9:large js/new tuned  n=3 med=0.862923s ok=['True'] oom=False rc=0
+p0 k9:large js/new mt  n=11 med=0.255666s ok=['True'] oom=False rc=0
+p0 k9:large swift/new natural  n=3 med=0.917122s ok=['True'] oom=False rc=0
+p0 k9:large swift/new tuned  n=7 med=0.36005s ok=['True'] oom=False rc=0
+p0 k9:large swift/new mt  n=25 med=0.121056s ok=['True'] oom=False rc=0
+p0 k9:large chapel/new natural  n=7 med=0.377549s ok=['True'] oom=False rc=0
+p0 k9:large chapel/new tuned  n=7 med=0.336352s ok=['True'] oom=False rc=0
+p0 k9:large chapel/new mt  n=26 med=0.122651s ok=['True'] oom=False rc=0
+p0 k9:large csharp/new natural  n=3 med=1.12569s ok=['True'] oom=False rc=0
+p0 k9:large csharp/new tuned  n=7 med=0.332265s ok=['True'] oom=False rc=0
+p0 k9:large csharp/new mt  n=27 med=0.127139s ok=['True'] oom=False rc=0
+p0 k9:large julia/new natural  n=7 med=0.394621s ok=['True'] oom=False rc=0
+p0 k9:large julia/new tuned  n=7 med=0.395248s ok=['True'] oom=False rc=0
+p0 k9:large julia/new mt  n=26 med=0.119434s ok=['True'] oom=False rc=0
+p0 k9:large odin/new natural  n=8 med=0.400937s ok=['True'] oom=False rc=0
+p0 k9:large odin/new tuned  n=9 med=0.38919s ok=['True'] oom=False rc=0
+p0 k9:large odin/new mt  n=24 med=0.118497s ok=['True'] oom=False rc=0
+p0 k9:large c/new natural  n=7 med=0.384338s ok=['True'] oom=False rc=0
+p0 k9:large c/new tuned  n=7 med=0.386156s ok=['True'] oom=False rc=0
+p0 k9:large c/new mt  n=24 med=0.120773s ok=['True'] oom=False rc=0
+p0 k9:large java/new natural  n=6 med=0.399104s ok=['True'] oom=False rc=0
+p0 k9:large java/new tuned  n=6 med=0.497023s ok=['True'] oom=False rc=0
+p0 k9:large java/new mt  n=22 med=0.133782s ok=['True'] oom=False rc=0
+2026-11-19T13:56:01 passe 0 groupe 5/24 k9:large 75 processus 2075s
+p0 k4:small rust/new natural_unsorted  n=10000 med=6.7316e-05s ok=['True'] oom=False rc=0
+p0 k4:small rust/new natural_sorted  n=10000 med=6.7721e-05s ok=['True'] oom=False rc=0
+p0 k4:small rust/new branchless_unsorted  n=10000 med=7.3038e-05s ok=['True'] oom=False rc=0
