@@ -1,0 +1,21 @@
+# Recherche d'absence : go, case D5
+# Chaîne : go version go1.27.3 linux/amd64
+# Motif : fence|spin_?loop|spin_?wait|on_?spin_?wait|\bpause\b|cpu_?relax|memory_?barrier|yield_?processor|spin_?hint
+# Déclaration publique : ^pkg 
+# 7 déclarations publiques, 0 mentions, 3 fichiers
+
+## Déclarations publiques
+/opt/go127/api/go1.1.txt:2602: pkg runtime/debug, type GCStats struct, Pause []time.Duration
+/opt/go127/api/go1.2.txt:12020: pkg syscall (linux-arm-cgo), func Pause() error
+/opt/go127/api/go1.txt:18966: pkg syscall (linux-386), func Pause() error
+/opt/go127/api/go1.txt:21155: pkg syscall (linux-386-cgo), func Pause() error
+/opt/go127/api/go1.txt:23310: pkg syscall (linux-amd64), func Pause() error
+/opt/go127/api/go1.txt:25481: pkg syscall (linux-amd64-cgo), func Pause() error
+/opt/go127/api/go1.txt:27706: pkg syscall (linux-arm), func Pause() error
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    1 /opt/go127/api/go1.1.txt
+    1 /opt/go127/api/go1.2.txt
+    5 /opt/go127/api/go1.txt

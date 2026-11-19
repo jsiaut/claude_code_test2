@@ -1,0 +1,33 @@
+# Recherche d'absence : go, case A3
+# Chaîne : go version go1.27.3 linux/amd64
+# Motif : packed|bit_?field|bit_?packed|bit_?size|bit_?offset|bitstruct
+# Déclaration publique : ^pkg 
+# 18 déclarations publiques, 0 mentions, 4 fichiers
+
+## Déclarations publiques
+/opt/go127/api/go1.1.txt:193: pkg debug/dwarf, const AttrBitOffset = 12
+/opt/go127/api/go1.1.txt:194: pkg debug/dwarf, const AttrBitSize = 13
+/opt/go127/api/go1.1.txt:289: pkg debug/dwarf, const TagPackedType = 45
+/opt/go127/api/go1.14.txt:51: pkg debug/dwarf, const AttrDataBitOffset = 107
+/opt/go127/api/go1.14.txt:52: pkg debug/dwarf, const AttrDataBitOffset Attr
+/opt/go127/api/go1.14.txt:109: pkg debug/dwarf, const AttrStringLengthBitSize = 111
+/opt/go127/api/go1.14.txt:110: pkg debug/dwarf, const AttrStringLengthBitSize Attr
+/opt/go127/api/go1.18.txt:11: pkg debug/dwarf, type BasicType struct, DataBitOffset int64
+/opt/go127/api/go1.18.txt:12: pkg debug/dwarf, type StructField struct, DataBitOffset int64
+/opt/go127/api/go1.txt:435: pkg crypto/elliptic, type CurveParams struct, BitSize int
+/opt/go127/api/go1.txt:826: pkg debug/dwarf, const AttrBitOffset Attr
+/opt/go127/api/go1.txt:827: pkg debug/dwarf, const AttrBitSize Attr
+/opt/go127/api/go1.txt:922: pkg debug/dwarf, const TagPackedType Tag
+/opt/go127/api/go1.txt:1029: pkg debug/dwarf, type ArrayType struct, StrideBitSize int64
+/opt/go127/api/go1.txt:1034: pkg debug/dwarf, type BasicType struct, BitOffset int64
+/opt/go127/api/go1.txt:1035: pkg debug/dwarf, type BasicType struct, BitSize int64
+/opt/go127/api/go1.txt:1086: pkg debug/dwarf, type StructField struct, BitOffset int64
+/opt/go127/api/go1.txt:1087: pkg debug/dwarf, type StructField struct, BitSize int64
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    3 /opt/go127/api/go1.1.txt
+    4 /opt/go127/api/go1.14.txt
+    2 /opt/go127/api/go1.18.txt
+    9 /opt/go127/api/go1.txt

@@ -1,0 +1,132 @@
+# Recherche d'absence : go, case F2
+# Chaîne : go version go1.27.3 linux/amd64
+# Motif : numa|mbind|mem_?policy|\blocale\b|pgas|first_?touch|interleave
+# Déclaration publique : ^pkg 
+# 113 déclarations publiques, 0 mentions, 8 fichiers
+
+## Déclarations publiques
+/opt/go127/api/go1.1.txt:10198: pkg syscall (freebsd-386), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:12173: pkg syscall (freebsd-386-cgo), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:14135: pkg syscall (freebsd-amd64), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:16111: pkg syscall (freebsd-amd64-cgo), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:17978: pkg syscall (freebsd-arm), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:19855: pkg syscall (freebsd-arm-cgo), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:22501: pkg syscall (linux-386), const SYS_GET_MEMPOLICY = 275
+/opt/go127/api/go1.1.txt:22541: pkg syscall (linux-386), const SYS_MBIND = 274
+/opt/go127/api/go1.1.txt:22662: pkg syscall (linux-386), const SYS_SET_MEMPOLICY = 276
+/opt/go127/api/go1.1.txt:24392: pkg syscall (linux-386-cgo), const SYS_GET_MEMPOLICY = 275
+/opt/go127/api/go1.1.txt:24432: pkg syscall (linux-386-cgo), const SYS_MBIND = 274
+/opt/go127/api/go1.1.txt:24553: pkg syscall (linux-386-cgo), const SYS_SET_MEMPOLICY = 276
+/opt/go127/api/go1.1.txt:26275: pkg syscall (linux-amd64), const SYS_GET_MEMPOLICY = 239
+/opt/go127/api/go1.1.txt:26309: pkg syscall (linux-amd64), const SYS_MBIND = 237
+/opt/go127/api/go1.1.txt:26424: pkg syscall (linux-amd64), const SYS_SET_MEMPOLICY = 238
+/opt/go127/api/go1.1.txt:28132: pkg syscall (linux-amd64-cgo), const SYS_GET_MEMPOLICY = 239
+/opt/go127/api/go1.1.txt:28166: pkg syscall (linux-amd64-cgo), const SYS_MBIND = 237
+/opt/go127/api/go1.1.txt:28281: pkg syscall (linux-amd64-cgo), const SYS_SET_MEMPOLICY = 238
+/opt/go127/api/go1.1.txt:30011: pkg syscall (linux-arm), const SYS_GET_MEMPOLICY = 320
+/opt/go127/api/go1.1.txt:30045: pkg syscall (linux-arm), const SYS_MBIND = 319
+/opt/go127/api/go1.1.txt:30179: pkg syscall (linux-arm), const SYS_SET_MEMPOLICY = 321
+/opt/go127/api/go1.1.txt:31907: pkg syscall (linux-arm-cgo), const SYS_GET_MEMPOLICY = 320
+/opt/go127/api/go1.1.txt:31941: pkg syscall (linux-arm-cgo), const SYS_MBIND = 319
+/opt/go127/api/go1.1.txt:32075: pkg syscall (linux-arm-cgo), const SYS_SET_MEMPOLICY = 321
+/opt/go127/api/go1.1.txt:33093: pkg syscall (netbsd-386), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:34838: pkg syscall (netbsd-386-cgo), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:36573: pkg syscall (netbsd-amd64), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:38308: pkg syscall (netbsd-amd64-cgo), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:40043: pkg syscall (netbsd-arm), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:41777: pkg syscall (netbsd-arm-cgo), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:43388: pkg syscall (openbsd-386), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:44956: pkg syscall (openbsd-386-cgo), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:46530: pkg syscall (openbsd-amd64), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.1.txt:48104: pkg syscall (openbsd-amd64-cgo), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.13.txt:1710: pkg syscall (netbsd-arm64-cgo), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.13.txt:1711: pkg syscall (netbsd-arm64-cgo), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.13.txt:5592: pkg syscall (netbsd-arm64), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.13.txt:5593: pkg syscall (netbsd-arm64), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.14.txt:1646: pkg syscall (freebsd-arm64), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.14.txt:1647: pkg syscall (freebsd-arm64), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.14.txt:3632: pkg syscall (freebsd-arm64), const SYS_NUMA_GETAFFINITY = 548
+/opt/go127/api/go1.14.txt:3633: pkg syscall (freebsd-arm64), const SYS_NUMA_GETAFFINITY ideal-int
+/opt/go127/api/go1.14.txt:3634: pkg syscall (freebsd-arm64), const SYS_NUMA_SETAFFINITY = 549
+/opt/go127/api/go1.14.txt:3635: pkg syscall (freebsd-arm64), const SYS_NUMA_SETAFFINITY ideal-int
+/opt/go127/api/go1.14.txt:5919: pkg syscall (freebsd-arm64-cgo), const IFT_INTERLEAVE = 124
+/opt/go127/api/go1.14.txt:5920: pkg syscall (freebsd-arm64-cgo), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.14.txt:7905: pkg syscall (freebsd-arm64-cgo), const SYS_NUMA_GETAFFINITY = 548
+/opt/go127/api/go1.14.txt:7906: pkg syscall (freebsd-arm64-cgo), const SYS_NUMA_GETAFFINITY ideal-int
+/opt/go127/api/go1.14.txt:7907: pkg syscall (freebsd-arm64-cgo), const SYS_NUMA_SETAFFINITY = 549
+/opt/go127/api/go1.14.txt:7908: pkg syscall (freebsd-arm64-cgo), const SYS_NUMA_SETAFFINITY ideal-int
+/opt/go127/api/go1.16.txt:190: pkg debug/elf, const PT_GNU_MBIND_HI = 1685386580
+/opt/go127/api/go1.16.txt:191: pkg debug/elf, const PT_GNU_MBIND_HI ProgType
+/opt/go127/api/go1.16.txt:192: pkg debug/elf, const PT_GNU_MBIND_LO = 1685382485
+/opt/go127/api/go1.16.txt:193: pkg debug/elf, const PT_GNU_MBIND_LO ProgType
+/opt/go127/api/go1.2.txt:1483: pkg syscall (freebsd-386-cgo), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:3710: pkg syscall (freebsd-amd64-cgo), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:5916: pkg syscall (freebsd-arm), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:8131: pkg syscall (freebsd-arm-cgo), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:11503: pkg syscall (linux-arm-cgo), const SYS_GET_MEMPOLICY ideal-int
+/opt/go127/api/go1.2.txt:11537: pkg syscall (linux-arm-cgo), const SYS_MBIND ideal-int
+/opt/go127/api/go1.2.txt:11671: pkg syscall (linux-arm-cgo), const SYS_SET_MEMPOLICY ideal-int
+/opt/go127/api/go1.2.txt:13142: pkg syscall (netbsd-386), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:15180: pkg syscall (netbsd-386-cgo), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:17208: pkg syscall (netbsd-amd64), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:19243: pkg syscall (netbsd-amd64-cgo), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:21278: pkg syscall (netbsd-arm), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:23305: pkg syscall (netbsd-arm-cgo), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:25209: pkg syscall (openbsd-386), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:27101: pkg syscall (openbsd-386-cgo), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:28999: pkg syscall (openbsd-amd64), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.2.txt:30905: pkg syscall (openbsd-amd64-cgo), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.20.txt:1903: pkg syscall (freebsd-riscv64), const IFT_INTERLEAVE = 124 #53466
+/opt/go127/api/go1.20.txt:1904: pkg syscall (freebsd-riscv64), const IFT_INTERLEAVE ideal-int #53466
+/opt/go127/api/go1.20.txt:3770: pkg syscall (freebsd-riscv64), const SYS_NUMA_GETAFFINITY = 548 #53466
+/opt/go127/api/go1.20.txt:3771: pkg syscall (freebsd-riscv64), const SYS_NUMA_GETAFFINITY ideal-int #53466
+/opt/go127/api/go1.20.txt:3772: pkg syscall (freebsd-riscv64), const SYS_NUMA_SETAFFINITY = 549 #53466
+/opt/go127/api/go1.20.txt:3773: pkg syscall (freebsd-riscv64), const SYS_NUMA_SETAFFINITY ideal-int #53466
+/opt/go127/api/go1.20.txt:6173: pkg syscall (freebsd-riscv64-cgo), const IFT_INTERLEAVE = 124 #53466
+/opt/go127/api/go1.20.txt:6174: pkg syscall (freebsd-riscv64-cgo), const IFT_INTERLEAVE ideal-int #53466
+/opt/go127/api/go1.20.txt:8040: pkg syscall (freebsd-riscv64-cgo), const SYS_NUMA_GETAFFINITY = 548 #53466
+/opt/go127/api/go1.20.txt:8041: pkg syscall (freebsd-riscv64-cgo), const SYS_NUMA_GETAFFINITY ideal-int #53466
+/opt/go127/api/go1.20.txt:8042: pkg syscall (freebsd-riscv64-cgo), const SYS_NUMA_SETAFFINITY = 549 #53466
+/opt/go127/api/go1.20.txt:8043: pkg syscall (freebsd-riscv64-cgo), const SYS_NUMA_SETAFFINITY ideal-int #53466
+/opt/go127/api/go1.21.txt:299: pkg log/slog, method (Record) NumAttrs() int #56345
+/opt/go127/api/go1.txt:1568: pkg debug/elf, const STB_GLOBAL SymBind
+/opt/go127/api/go1.txt:1569: pkg debug/elf, const STB_HIOS SymBind
+/opt/go127/api/go1.txt:1570: pkg debug/elf, const STB_HIPROC SymBind
+/opt/go127/api/go1.txt:1571: pkg debug/elf, const STB_LOCAL SymBind
+/opt/go127/api/go1.txt:1572: pkg debug/elf, const STB_LOOS SymBind
+/opt/go127/api/go1.txt:1573: pkg debug/elf, const STB_LOPROC SymBind
+/opt/go127/api/go1.txt:1574: pkg debug/elf, const STB_WEAK SymBind
+/opt/go127/api/go1.txt:1600: pkg debug/elf, func ST_BIND(uint8) SymBind
+/opt/go127/api/go1.txt:1601: pkg debug/elf, func ST_INFO(SymBind, SymType) uint8
+/opt/go127/api/go1.txt:1653: pkg debug/elf, method (SymBind) GoString() string
+/opt/go127/api/go1.txt:1654: pkg debug/elf, method (SymBind) String() string
+/opt/go127/api/go1.txt:1829: pkg debug/elf, type SymBind int
+/opt/go127/api/go1.txt:13715: pkg syscall (freebsd-386), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.txt:15691: pkg syscall (freebsd-amd64), const IFT_INTERLEAVE ideal-int
+/opt/go127/api/go1.txt:18473: pkg syscall (linux-386), const SYS_GET_MEMPOLICY ideal-int
+/opt/go127/api/go1.txt:18513: pkg syscall (linux-386), const SYS_MBIND ideal-int
+/opt/go127/api/go1.txt:18634: pkg syscall (linux-386), const SYS_SET_MEMPOLICY ideal-int
+/opt/go127/api/go1.txt:20662: pkg syscall (linux-386-cgo), const SYS_GET_MEMPOLICY ideal-int
+/opt/go127/api/go1.txt:20702: pkg syscall (linux-386-cgo), const SYS_MBIND ideal-int
+/opt/go127/api/go1.txt:20823: pkg syscall (linux-386-cgo), const SYS_SET_MEMPOLICY ideal-int
+/opt/go127/api/go1.txt:22843: pkg syscall (linux-amd64), const SYS_GET_MEMPOLICY ideal-int
+/opt/go127/api/go1.txt:22877: pkg syscall (linux-amd64), const SYS_MBIND ideal-int
+/opt/go127/api/go1.txt:22992: pkg syscall (linux-amd64), const SYS_SET_MEMPOLICY ideal-int
+/opt/go127/api/go1.txt:25014: pkg syscall (linux-amd64-cgo), const SYS_GET_MEMPOLICY ideal-int
+/opt/go127/api/go1.txt:25048: pkg syscall (linux-amd64-cgo), const SYS_MBIND ideal-int
+/opt/go127/api/go1.txt:25163: pkg syscall (linux-amd64-cgo), const SYS_SET_MEMPOLICY ideal-int
+/opt/go127/api/go1.txt:27207: pkg syscall (linux-arm), const SYS_GET_MEMPOLICY ideal-int
+/opt/go127/api/go1.txt:27241: pkg syscall (linux-arm), const SYS_MBIND ideal-int
+/opt/go127/api/go1.txt:27375: pkg syscall (linux-arm), const SYS_SET_MEMPOLICY ideal-int
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   34 /opt/go127/api/go1.1.txt
+    4 /opt/go127/api/go1.13.txt
+   12 /opt/go127/api/go1.14.txt
+    4 /opt/go127/api/go1.16.txt
+   17 /opt/go127/api/go1.2.txt
+   12 /opt/go127/api/go1.20.txt
+    1 /opt/go127/api/go1.21.txt
+   29 /opt/go127/api/go1.txt

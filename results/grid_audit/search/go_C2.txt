@@ -1,0 +1,32 @@
+# Recherche d'absence : go, case C2
+# Chaîne : go version go1.27.3 linux/amd64
+# Motif : \bavx|\bsse|_mm(256|512)?_|\bx86|intrinsic
+# Déclaration publique : ^pkg 
+# 20 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+/opt/go127/api/go1.10.txt:512: pkg debug/macho, const X86_64_RELOC_BRANCH = 2
+/opt/go127/api/go1.10.txt:513: pkg debug/macho, const X86_64_RELOC_BRANCH RelocTypeX86_64
+/opt/go127/api/go1.10.txt:514: pkg debug/macho, const X86_64_RELOC_GOT = 4
+/opt/go127/api/go1.10.txt:515: pkg debug/macho, const X86_64_RELOC_GOT RelocTypeX86_64
+/opt/go127/api/go1.10.txt:516: pkg debug/macho, const X86_64_RELOC_GOT_LOAD = 3
+/opt/go127/api/go1.10.txt:517: pkg debug/macho, const X86_64_RELOC_GOT_LOAD RelocTypeX86_64
+/opt/go127/api/go1.10.txt:518: pkg debug/macho, const X86_64_RELOC_SIGNED = 1
+/opt/go127/api/go1.10.txt:519: pkg debug/macho, const X86_64_RELOC_SIGNED RelocTypeX86_64
+/opt/go127/api/go1.10.txt:520: pkg debug/macho, const X86_64_RELOC_SIGNED_1 = 6
+/opt/go127/api/go1.10.txt:521: pkg debug/macho, const X86_64_RELOC_SIGNED_1 RelocTypeX86_64
+/opt/go127/api/go1.10.txt:522: pkg debug/macho, const X86_64_RELOC_SIGNED_2 = 7
+/opt/go127/api/go1.10.txt:523: pkg debug/macho, const X86_64_RELOC_SIGNED_2 RelocTypeX86_64
+/opt/go127/api/go1.10.txt:524: pkg debug/macho, const X86_64_RELOC_SIGNED_4 = 8
+/opt/go127/api/go1.10.txt:525: pkg debug/macho, const X86_64_RELOC_SIGNED_4 RelocTypeX86_64
+/opt/go127/api/go1.10.txt:526: pkg debug/macho, const X86_64_RELOC_SUBTRACTOR = 5
+/opt/go127/api/go1.10.txt:527: pkg debug/macho, const X86_64_RELOC_SUBTRACTOR RelocTypeX86_64
+/opt/go127/api/go1.10.txt:528: pkg debug/macho, const X86_64_RELOC_TLV = 9
+/opt/go127/api/go1.10.txt:529: pkg debug/macho, const X86_64_RELOC_TLV RelocTypeX86_64
+/opt/go127/api/go1.10.txt:530: pkg debug/macho, const X86_64_RELOC_UNSIGNED = 0
+/opt/go127/api/go1.10.txt:531: pkg debug/macho, const X86_64_RELOC_UNSIGNED RelocTypeX86_64
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   20 /opt/go127/api/go1.10.txt

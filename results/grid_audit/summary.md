@@ -15,7 +15,7 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | ada | 33 | 1 | 0 | 0 | exécutée 28, exécutée+recherche 1, recherche 3, échec 1 |
 | fortran | 33 | 1 | 0 | 0 | exécutée 21, exécutée+recherche 2, exécutée+échec 2, recherche 7, échec+recherche 1 |
 | chapel | 33 | 1 | 0 | 0 | exécutée 26, recherche 7 |
-| go | 4 | 1 | 29 | 4 |  |
+| go | 33 | 1 | 0 | 0 | exécutée 18, exécutée+échec 3, exécutée+échec+recherche 1, recherche 4, échec 1, échec+recherche 6 |
 | mojo | 33 | 1 | 0 | 0 | exécutée 24, exécutée+recherche 1, recherche 8 |
 | csharp | 33 | 1 | 0 | 0 | exécutée 22, exécutée+recherche 1, exécutée+échec 2, recherche 4, échec 1, échec+recherche 3 |
 | java | 33 | 1 | 0 | 0 | exécutée 14, exécutée+recherche 3, exécutée+échec 3, recherche 6, échec 3, échec+recherche 4 |
@@ -30,12 +30,10 @@ Produit par `analysis/grid_audit.py`. Une case est « sondée » si une ligne CA
 | bqn | 33 | 1 | 0 | 0 | exécutée 10, recherche 17, échec 2, échec+recherche 4 |
 | php | 33 | 1 | 0 | 0 | exécutée 16, recherche 13, échec+recherche 4 |
 
-Total : 646 sondées, 25 mesurées, 179 sans sonde, 19 déclaratives.
+Total : 675 sondées, 25 mesurées, 150 sans sonde, 15 déclaratives.
 
 ## Divergences (sonde contre matrice v2)
 
 | Langage | Case | Sonde | v1 | v2 | Preuve |
 |---|---|---|---|---|---|
-| go | D4 | 0.5 | 0.5 | 1 | syscall brut sched_setaffinity errno=0 |
-| go | F4 | 0.5 | 0.5 | 1 | syscall.Mmap + unsafe.Slice : 0.4390046 <nil> |
 | python | D4 | 0.5 | 0.5 | 1 | os.sched_setaffinity -> {0} |

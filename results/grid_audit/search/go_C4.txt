@@ -1,0 +1,14 @@
+# Recherche d'absence : go, case C4
+# Chaîne : go version go1.27.3 linux/amd64
+# Motif : fast_?math|reassoc|algebraic|fp_?contract|float_?mode|relaxed_?math|associative
+# Déclaration publique : ^pkg 
+# 2 déclarations publiques, 0 mentions, 1 fichiers
+
+## Déclarations publiques
+/opt/go127/api/go1.19.txt:119: pkg debug/pe, const IMAGE_COMDAT_SELECT_ASSOCIATIVE = 5 #51868
+/opt/go127/api/go1.19.txt:120: pkg debug/pe, const IMAGE_COMDAT_SELECT_ASSOCIATIVE ideal-int #51868
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    2 /opt/go127/api/go1.19.txt

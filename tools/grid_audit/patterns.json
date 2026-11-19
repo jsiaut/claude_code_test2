@@ -290,6 +290,20 @@
       "listing": "unset JAVA_TOOL_OPTIONS; /opt/jdk27/bin/java -Dstdout.encoding=UTF-8 --add-modules ALL-SYSTEM tools/grid_audit/listings/JavaApi.java 2>/dev/null",
       "public": ".",
       "version": "unset JAVA_TOOL_OPTIONS; /opt/jdk27/bin/java -version 2>&1 | head -1"
+    },
+    "go": {
+      "roots": [
+        "/opt/go127/api"
+      ],
+      "ext": [
+        ".txt"
+      ],
+      "exclude": [
+        "except.txt",
+        "README"
+      ],
+      "public": "^pkg ",
+      "version": "/opt/go127/bin/go version"
     }
   }
 }

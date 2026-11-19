@@ -1,0 +1,17 @@
+# Recherche d'absence : go, case A6
+# Chaîne : go version go1.27.3 linux/amd64
+# Motif : \bsoa\b|_soa\b|\bsoa_|struct_?of_?arrays|multi_?array_?list|struct_?array
+# Déclaration publique : ^pkg 
+# 4 déclarations publiques, 0 mentions, 2 fichiers
+
+## Déclarations publiques
+/opt/go127/api/go1.1.txt:49146: pkg syscall (windows-386), const DNS_TYPE_SOA = 6
+/opt/go127/api/go1.1.txt:49736: pkg syscall (windows-amd64), const DNS_TYPE_SOA = 6
+/opt/go127/api/go1.txt:28194: pkg syscall (windows-386), const DNS_TYPE_SOA ideal-int
+/opt/go127/api/go1.txt:29123: pkg syscall (windows-amd64), const DNS_TYPE_SOA ideal-int
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+    2 /opt/go127/api/go1.1.txt
+    2 /opt/go127/api/go1.txt

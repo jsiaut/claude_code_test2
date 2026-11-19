@@ -1,0 +1,11 @@
+# Recherche d'absence : go, case E2
+# Chaîne : go version go1.27.3 linux/amd64
+# Motif : \basm\b|inline_?asm|__asm|assembler
+# Déclaration publique : ^pkg 
+# 0 déclarations publiques, 0 mentions, 0 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier

@@ -90,10 +90,14 @@
    "mesurée": 1
   },
   "go": {
-   "sans sonde": 29,
-   "déclarative": 4,
-   "sondée": 4,
-   "mesurée": 1
+   "exécutée": 18,
+   "sondée": 33,
+   "échec+recherche": 6,
+   "exécutée+échec": 3,
+   "recherche": 4,
+   "échec": 1,
+   "mesurée": 1,
+   "exécutée+échec+recherche": 1
   },
   "mojo": {
    "exécutée": 24,
@@ -194,33 +198,19 @@
   }
  },
  "total": {
-  "exécutée": 460,
-  "sondée": 646,
-  "échec+recherche": 22,
+  "exécutée": 478,
+  "sondée": 675,
+  "échec+recherche": 28,
   "mesurée": 25,
-  "exécutée+échec": 19,
-  "recherche": 96,
+  "exécutée+échec": 22,
+  "recherche": 100,
   "exécutée+recherche": 15,
-  "échec": 12,
-  "exécutée+échec+recherche": 3,
-  "sans sonde": 179,
-  "déclarative": 19
+  "échec": 13,
+  "exécutée+échec+recherche": 4,
+  "sans sonde": 150,
+  "déclarative": 15
  },
  "divergences": [
-  [
-   "go",
-   "D4",
-   0.5,
-   0.5,
-   1
-  ],
-  [
-   "go",
-   "F4",
-   0.5,
-   0.5,
-   1
-  ],
   [
    "python",
    "D4",

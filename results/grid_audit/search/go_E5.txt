@@ -1,0 +1,55 @@
+# Recherche d'absence : go, case E5
+# Chaîne : go version go1.27.3 linux/amd64
+# Motif : restrict|noalias|no_?alias
+# Déclaration publique : ^pkg 
+# 42 déclarations publiques, 0 mentions, 2 fichiers
+
+## Déclarations publiques
+/opt/go127/api/go1.1.txt:294: pkg debug/dwarf, const TagRestrictType = 55
+/opt/go127/api/go1.1.txt:3767: pkg syscall (darwin-386), const SO_RESTRICTIONS = 4225
+/opt/go127/api/go1.1.txt:3768: pkg syscall (darwin-386), const SO_RESTRICT_DENYIN = 1
+/opt/go127/api/go1.1.txt:3769: pkg syscall (darwin-386), const SO_RESTRICT_DENYOUT = 2
+/opt/go127/api/go1.1.txt:3770: pkg syscall (darwin-386), const SO_RESTRICT_DENYSET = 2147483648
+/opt/go127/api/go1.1.txt:5465: pkg syscall (darwin-386-cgo), const SO_RESTRICTIONS = 4225
+/opt/go127/api/go1.1.txt:5466: pkg syscall (darwin-386-cgo), const SO_RESTRICT_DENYIN = 1
+/opt/go127/api/go1.1.txt:5467: pkg syscall (darwin-386-cgo), const SO_RESTRICT_DENYOUT = 2
+/opt/go127/api/go1.1.txt:5468: pkg syscall (darwin-386-cgo), const SO_RESTRICT_DENYSET = 2147483648
+/opt/go127/api/go1.1.txt:7163: pkg syscall (darwin-amd64), const SO_RESTRICTIONS = 4225
+/opt/go127/api/go1.1.txt:7164: pkg syscall (darwin-amd64), const SO_RESTRICT_DENYIN = 1
+/opt/go127/api/go1.1.txt:7165: pkg syscall (darwin-amd64), const SO_RESTRICT_DENYOUT = 2
+/opt/go127/api/go1.1.txt:7166: pkg syscall (darwin-amd64), const SO_RESTRICT_DENYSET = 2147483648
+/opt/go127/api/go1.1.txt:8862: pkg syscall (darwin-amd64-cgo), const SO_RESTRICTIONS = 4225
+/opt/go127/api/go1.1.txt:8863: pkg syscall (darwin-amd64-cgo), const SO_RESTRICT_DENYIN = 1
+/opt/go127/api/go1.1.txt:8864: pkg syscall (darwin-amd64-cgo), const SO_RESTRICT_DENYOUT = 2
+/opt/go127/api/go1.1.txt:8865: pkg syscall (darwin-amd64-cgo), const SO_RESTRICT_DENYSET = 2147483648
+/opt/go127/api/go1.1.txt:49564: pkg syscall (windows-386), const TokenHasRestrictions = 21
+/opt/go127/api/go1.1.txt:49574: pkg syscall (windows-386), const TokenRestrictedSids = 11
+/opt/go127/api/go1.1.txt:50154: pkg syscall (windows-amd64), const TokenHasRestrictions = 21
+/opt/go127/api/go1.1.txt:50164: pkg syscall (windows-amd64), const TokenRestrictedSids = 11
+/opt/go127/api/go1.txt:927: pkg debug/dwarf, const TagRestrictType Tag
+/opt/go127/api/go1.txt:6808: pkg syscall (darwin-386), const SO_RESTRICTIONS ideal-int
+/opt/go127/api/go1.txt:6809: pkg syscall (darwin-386), const SO_RESTRICT_DENYIN ideal-int
+/opt/go127/api/go1.txt:6810: pkg syscall (darwin-386), const SO_RESTRICT_DENYOUT ideal-int
+/opt/go127/api/go1.txt:6811: pkg syscall (darwin-386), const SO_RESTRICT_DENYSET ideal-int
+/opt/go127/api/go1.txt:8630: pkg syscall (darwin-386-cgo), const SO_RESTRICTIONS ideal-int
+/opt/go127/api/go1.txt:8631: pkg syscall (darwin-386-cgo), const SO_RESTRICT_DENYIN ideal-int
+/opt/go127/api/go1.txt:8632: pkg syscall (darwin-386-cgo), const SO_RESTRICT_DENYOUT ideal-int
+/opt/go127/api/go1.txt:8633: pkg syscall (darwin-386-cgo), const SO_RESTRICT_DENYSET ideal-int
+/opt/go127/api/go1.txt:10452: pkg syscall (darwin-amd64), const SO_RESTRICTIONS ideal-int
+/opt/go127/api/go1.txt:10453: pkg syscall (darwin-amd64), const SO_RESTRICT_DENYIN ideal-int
+/opt/go127/api/go1.txt:10454: pkg syscall (darwin-amd64), const SO_RESTRICT_DENYOUT ideal-int
+/opt/go127/api/go1.txt:10455: pkg syscall (darwin-amd64), const SO_RESTRICT_DENYSET ideal-int
+/opt/go127/api/go1.txt:12281: pkg syscall (darwin-amd64-cgo), const SO_RESTRICTIONS ideal-int
+/opt/go127/api/go1.txt:12282: pkg syscall (darwin-amd64-cgo), const SO_RESTRICT_DENYIN ideal-int
+/opt/go127/api/go1.txt:12283: pkg syscall (darwin-amd64-cgo), const SO_RESTRICT_DENYOUT ideal-int
+/opt/go127/api/go1.txt:12284: pkg syscall (darwin-amd64-cgo), const SO_RESTRICT_DENYSET ideal-int
+/opt/go127/api/go1.txt:28483: pkg syscall (windows-386), const TokenHasRestrictions ideal-int
+/opt/go127/api/go1.txt:28493: pkg syscall (windows-386), const TokenRestrictedSids ideal-int
+/opt/go127/api/go1.txt:29412: pkg syscall (windows-amd64), const TokenHasRestrictions ideal-int
+/opt/go127/api/go1.txt:29422: pkg syscall (windows-amd64), const TokenRestrictedSids ideal-int
+
+## Mentions (au plus 12 lignes par fichier)
+
+## Lignes trouvées, par fichier
+   21 /opt/go127/api/go1.1.txt
+   21 /opt/go127/api/go1.txt

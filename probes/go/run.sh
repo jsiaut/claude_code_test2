@@ -1,2 +1,4 @@
 #!/bin/sh
-cd "$(dirname "$0")" && mkdir -p bin && /opt/go127/bin/go run probe.go
+# Sonde de Go : audit de la grille (audit/, docs/V4_PLAN.md 2.1), qui reprend les cas de la première sonde (base.sh).
+# Sortie : results/probes/go.txt
+cd "$(dirname "$0")" && sh audit/run.sh
