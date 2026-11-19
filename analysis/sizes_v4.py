@@ -60,11 +60,14 @@ CONTROL = ["odin", "chapel", "go"]
 def load_campaign():
     """{(construction, taille): {langage: {clé: [processus]}}}, latences de K8 de même, et inventaire des échecs.
     Un processus est retenu s'il a fini sans erreur, sans dépassement de mémoire ni de durée, et si toutes ses
-    sommes de contrôle sont justes ; il est représenté par la médiane de ses répétitions (statistique de la v3)."""
+    sommes de contrôle sont justes ; il est représenté par la médiane de ses répétitions (statistique de la v3).
+    Compte aussi les enregistrements par modèle de processeur et par passe (section 5 : un seul modèle attendu)."""
     data, lat, failures, steal = defaultdict(lambda: defaultdict(dict)), defaultdict(lambda: defaultdict(dict)), [], []
+    models = defaultdict(lambda: defaultdict(int))
     for f in sorted(glob.glob(os.path.join(RAW, "*.jsonl"))):
         for line in open(f):
             r = json.loads(line)
+            models[r.get("cpu_model", "?")][r.get("pass")] += 1
             key = (r["kernel"], r["variant"], r["param"])
             tag = (r["build"], r["size"])
             ok = (not r.get("failed_calibration") and r.get("returncode") == 0 and not r.get("oom")
@@ -85,7 +88,7 @@ def load_campaign():
             data[tag][r["lang"]].setdefault(key, []).append([r["median"]])
             if key == v3.K8N:
                 lat[tag][r["lang"]].setdefault(key, []).append(r.get("lat", []))
-    return data, lat, failures, steal
+    return data, lat, failures, steal, {m: dict(ps) for m, ps in models.items()}
 
 
 def position_data(data, lat, pos, build="new"):
@@ -383,7 +386,7 @@ def run_all(data, lat, langs, footprint, c3, hw, build_pub="new"):
 
 def main():
     v2.ADDED.clear()  # une seule campagne : aucun langage relié par un pont
-    data, lat, failures, steal = load_campaign()
+    data, lat, failures, steal, models = load_campaign()
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
     hw = hw_numbers()
@@ -392,6 +395,7 @@ def main():
     out["hw"] = {k: v for k, v in hw.items() if k != "bw"} | {"bw": hw["bw"]}
     out["failures"] = failures
     out["steal_over_5pct"] = steal
+    out["cpu_models"] = models
     out["control"] = control(data)
     over = {k: v for k, v in out["control"].items() if v["over5"]}
     if over:
@@ -439,6 +443,10 @@ def report(o):
     absent, oom = cells(lambda f: f["absent"]), cells(lambda f: f["oom"] and not f["absent"])
     other = cells(lambda f: not f["oom"] and not f["absent"])
     fmt = lambda lst: ", ".join(f"{NAMES.get(l, l)} {k} {z} {v}{' ' + q if q else ''}" for l, k, z, v, q in lst) or "aucune"
+    cm = o["cpu_models"]
+    L += ["", "Processeur des enregistrements (section 5) : " + " ; ".join(
+        f"{m} ({sum(ps.values())} enregistrements ; passes {', '.join(str(p) for p in sorted(ps, key=str))})"
+        for m, ps in cm.items()) + (" — **plusieurs modèles : passes touchées à refaire**" if len(cm) > 1 else "") + "."]
     L += ["", f"Processus écartés : {len(fl)} (toutes passes) ; vol de temps > 5 % après reprise : "
           f"{len(o['steal_over_5pct'])}.", "",
           f"* hors mémoire ({len(oom)} cellules) : {fmt(oom)}",
