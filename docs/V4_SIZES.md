@@ -160,7 +160,7 @@ processus ; un processus qui en a plus de 5 % est refait une fois.
   pendant un processus de PHP (K7 naturel, grande taille, passe 0). La ligne a été retirée du journal ; le mode à blanc
   n'écrit plus dans le journal.
 
-### 7.2 Changement d'hôte (20 novembre, 1 h 45, avant toute mesure sur le nouvel hôte et toute analyse)
+### 7.2 Changement d'hôte (20 novembre, 1 h 25, avant toute mesure sur le nouvel hôte et toute analyse)
 
 * **Faits.** Le conteneur a redémarré le 20 novembre vers 1 h 19, pendant le dernier groupe de la passe 1 (K7, grande
   taille), sur une autre machine (machine 31) d'un autre modèle : Xeon Emerald Rapids (famille 6, modèle 207,
@@ -185,6 +185,19 @@ processus ; un processus qui en a plus de 5 % est refait une fois.
   mesure, les constructions des tailles et les anciens binaires d'Odin, de Chapel et de Go. La validation (4.1,
   `results/sizes/validation.md`, machine 30) n'est pas refaite : le code n'a pas changé, la limite de mémoire est la
   même, et chaque processus de la campagne vérifie ses sommes de contrôle.
+  Fait à 1 h 35, avant toute mesure : les 19 langages compilés reconstruits sans erreur. Par rapport aux binaires de
+  la machine 30, le code change pour les trois langages compilés par GCC 16 (C++, Ada, Fortran : `-march=native` y vaut
+  `sapphirerapids`) ; il est identique pour les autres (mêmes fichiers, ou mêmes sections de code et de données pour
+  Zig et Swift ; clang 23 vise ici `emeraldrapids`). Contrôle
+  refait, binaire du nouveau source contre binaire du source d'origine (`f0168b7`), tous deux construits sur la
+  machine 31 : identiques octet pour octet pour C, C++, Rust, D, Fortran, FreePascal et OCaml ; sections de code
+  (`.text`) et de données (`.data`, et `.rodata` sauf exceptions) identiques pour Zig, Haskell, Swift et C3 ; Mojo ne
+  diffère que par le chemin du source inscrit dans le binaire (construits à des chemins de même longueur : code
+  identique, un octet du chemin et l'identifiant de construction diffèrent) ; Nim, 3 octets de `.rodata` qui changent
+  avec l'emplacement de la construction (le même source construit à deux endroits diffère de même) ; Ada, 4 octets de
+  `.rodata` qui suivent le texte du source (somme de contrôle de l'unité). L'IL de C# et le bytecode de Java ne
+  dépendent pas de la machine : le contrôle de la machine 30 vaut tel quel. Odin, Chapel et Go gardent le contrôle par
+  la mesure des anciens binaires.
 * **Sentinelle** : la nouvelle campagne a dès le départ la sentinelle corrigée (7.1) ; K6 `mt` de PHP à la grande
   taille est mesuré dans l'ordre aléatoire, comme les autres cellules, et la remise en file prévue en 7.1 n'a plus
   d'objet.
