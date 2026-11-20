@@ -5891,3 +5891,85 @@ p2 k1:small lua/new aos energy n=2827 med=0.000884s ok=['True'] oom=False rc=0
 p2 k1:small lua/new soa energy n=4942 med=0.000612s ok=['True'] oom=False rc=0
 p2 k1:small lua/new natural_shuffled energy n=1347 med=0.002113s ok=['True'] oom=False rc=0
 2026-11-20T21:18:30 passe 2 groupe 16/24 k1:small 104 processus 306s
+p2 k9:small julia/new natural  n=10000 med=0.000104489s ok=['True'] oom=False rc=0
+p2 k9:small julia/new tuned  n=10000 med=9.6124e-05s ok=['True'] oom=False rc=0
+p2 k9:small julia/new mt  n=10000 med=0.000256759s ok=['True'] oom=False rc=0
+p2 k9:small zig/new natural  n=10000 med=0.000190818s ok=['True'] oom=False rc=0
+p2 k9:small zig/new tuned  n=10000 med=7.87965e-05s ok=['True'] oom=False rc=0
+p2 k9:small zig/new mt  n=1625 med=0.00181634s ok=['True'] oom=False rc=0
+p2 k9:small odin/new natural  n=10000 med=7.1526e-05s ok=['True'] oom=False rc=0
+p2 k9:small odin/new tuned  n=10000 med=7.73e-05s ok=['True'] oom=False rc=0
+p2 k9:small odin/new mt  n=4666 med=0.000525556s ok=['True'] oom=False rc=0
+p2 k9:small d/new natural  n=9369 med=0.0003278s ok=['True'] oom=False rc=0
+p2 k9:small d/new tuned  n=10000 med=7.71e-05s ok=['True'] oom=False rc=0
+p2 k9:small d/new mt  n=4809 med=0.0007525s ok=['True'] oom=False rc=0
+p2 k9:small java/new natural  n=3137 med=0.000110207s ok=['True'] oom=False rc=0
+p2 k9:small java/new tuned  n=7643 med=0.000139693s ok=['True'] oom=False rc=0
+p2 k9:small java/new mt  n=1581 med=0.00178923s ok=['True'] oom=False rc=0
+p2 k9:small js/new natural  n=2768 med=0.00168143s ok=['True'] oom=False rc=0
+p2 k9:small js/new tuned  n=4169 med=0.000838842s ok=['True'] oom=False rc=0
+p2 k9:small js/new mt  n=2551 med=0.000712272s ok=['True'] oom=False rc=0
+p2 k9:small csharp/new natural  n=3488 med=0.0009232s ok=['True'] oom=False rc=0
+p2 k9:small csharp/new tuned  n=10000 med=8.2e-05s ok=['True'] oom=False rc=0
+p2 k9:small csharp/new mt  n=1569 med=0.001956s ok=['True'] oom=False rc=0
+p2 k9:small ada/new natural  n=5579 med=0.00055233s ok=['True'] oom=False rc=0
+p2 k9:small ada/new tuned  n=10000 med=0.000236009s ok=['True'] oom=False rc=0
+p2 k9:small ada/new mt  n=1835 med=0.00149439s ok=['True'] oom=False rc=0
+p2 k9:small cpp/new natural  n=10000 med=8.84655e-05s ok=['True'] oom=False rc=0
+p2 k9:small cpp/new tuned  n=10000 med=8.4751e-05s ok=['True'] oom=False rc=0
+p2 k9:small cpp/new mt  n=6240 med=0.000459677s ok=['True'] oom=False rc=0
+p2 k9:small lua/new natural  n=219 med=0.008087s ok=['True'] oom=False rc=0
+p2 k9:small lua/new tuned  n=157 med=0.011426s ok=['True'] oom=False rc=0
+p2 k9:small lua/new mt  n=252 med=0.011471s ok=['True'] oom=False rc=0
+p2 k9:small bqn/new natural  n=1830 med=0.0014252s ok=['True'] oom=False rc=0
+p2 k9:small bqn/new tuned  n=6283 med=0.000443526s ok=['True'] oom=False rc=0
+p2 k9:small bqn/new mt  n=6940 med=0.000478858s ok=['True'] oom=False rc=0
+p2 k9:small rust/new natural  n=7777 med=0.000410622s ok=['True'] oom=False rc=0
+p2 k9:small rust/new tuned  n=10000 med=8.3849e-05s ok=['True'] oom=False rc=0
+p2 k9:small rust/new mt  n=882 med=0.000568781s ok=['True'] oom=False rc=0
+p2 k9:small mojo/new natural  n=883 med=0.00251182s ok=['True'] oom=False rc=0
+p2 k9:small mojo/new tuned  n=10000 med=7.7286e-05s ok=['True'] oom=False rc=0
+p2 k9:small mojo/new mt  n=9767 med=0.000303519s ok=['True'] oom=False rc=0
+p2 k9:small c3/new natural  n=10000 med=8.0553e-05s ok=['True'] oom=False rc=0
+p2 k9:small c3/new tuned  n=10000 med=7.62685e-05s ok=['True'] oom=False rc=0
+p2 k9:small c3/new mt  n=3711 med=0.000759822s ok=['True'] oom=False rc=0
+p2 k9:small swift/new natural  n=3122 med=0.000935304s ok=['True'] oom=False rc=0
+p2 k9:small swift/new tuned  n=10000 med=7.3657e-05s ok=['True'] oom=False rc=0
+p2 k9:small swift/new mt  n=7071 med=0.000432828s ok=['True'] oom=False rc=0
+p2 k9:small c/new natural  n=10000 med=8.374e-05s ok=['True'] oom=False rc=0
+p2 k9:small c/new tuned  n=10000 med=8.1382e-05s ok=['True'] oom=False rc=0
+p2 k9:small c/new mt  n=6496 med=0.000429895s ok=['True'] oom=False rc=0
+p2 k9:small haskell/new natural  n=928 med=0.00274626s ok=['True'] oom=False rc=0
+p2 k9:small haskell/new tuned  n=10000 med=9.6013e-05s ok=['True'] oom=False rc=0
+p2 k9:small haskell/new mt  n=8419 med=0.000362989s ok=['True'] oom=False rc=0
+p2 k9:small nim/new natural  n=5861 med=0.000544093s ok=['True'] oom=False rc=0
+p2 k9:small nim/new tuned  n=10000 med=8.1082e-05s ok=['True'] oom=False rc=0
+p2 k9:small nim/new mt  n=5911 med=0.000502025s ok=['True'] oom=False rc=0
+p2 k9:small chapel/new natural  n=10000 med=9.6e-05s ok=['True'] oom=False rc=0
+p2 k9:small chapel/new tuned  n=10000 med=7.5e-05s ok=['True'] oom=False rc=0
+p2 k9:small chapel/new mt  n=10000 med=5.8e-05s ok=['True'] oom=False rc=0
+p2 k9:small go/new natural  n=4017 med=0.000506618s ok=['True'] oom=False rc=0
+p2 k9:small go/new tuned  n=10000 med=0.000254735s ok=['True'] oom=False rc=0
+p2 k9:small go/new mt  n=10000 med=0.000283968s ok=['True'] oom=False rc=0
+p2 k9:small python/new natural  n=188 med=0.016263s ok=['True'] oom=False rc=0
+p2 k9:small python/new tuned  n=131 med=0.0209992s ok=['True'] oom=False rc=0
+p2 k9:small python/new mt  n=105 med=0.0297724s ok=['True'] oom=False rc=0
+p2 k9:small fpc/new natural  n=3751 med=0.000474443s ok=['True'] oom=False rc=0
+p2 k9:small fpc/new tuned  n=10000 med=0.000232509s ok=['True'] oom=False rc=0
+p2 k9:small fpc/new mt  n=2822 med=0.00110846s ok=['True'] oom=False rc=0
+p2 k9:small ocaml/new natural  n=2038 med=0.000780821s ok=['True'] oom=False rc=0
+p2 k9:small ocaml/new tuned  n=4114 med=0.000574112s ok=['True'] oom=False rc=0
+p2 k9:small ocaml/new mt  n=1151 med=0.00288606s ok=['True'] oom=False rc=0
+p2 k9:small fortran/new natural  n=10000 med=7.89205e-05s ok=['True'] oom=False rc=0
+p2 k9:small fortran/new tuned  n=10000 med=8.1437e-05s ok=['True'] oom=False rc=0
+p2 k9:small fortran/new mt  n=10000 med=5.9202e-05s ok=['True'] oom=False rc=0
+p2 k9:small php/new natural  n=217 med=0.0136454s ok=['True'] oom=False rc=0
+p2 k9:small php/new tuned  n=1493 med=0.00181548s ok=['True'] oom=False rc=0
+p2 k9:small php/new mt  n=1170 med=0.0016671s ok=['True'] oom=False rc=0
+2026-11-20T21:30:06 passe 2 groupe 17/24 k9:small 75 processus 696s
+p2 k6:pub chapel/old natural q6 n=58 med=0.0519185s ok=['True'] oom=False rc=0
+p2 k6:pub chapel/old natural q1 n=41 med=0.067649s ok=['True'] oom=False rc=0
+p2 k6:pub chapel/old tuned q6 n=212 med=0.0145055s ok=['True'] oom=False rc=0
+p2 k6:pub chapel/old tuned q1 n=83 med=0.036134s ok=['True'] oom=False rc=0
+p2 k6:pub chapel/old mt q6 n=503 med=0.001719s ok=['True'] oom=False rc=0
+p2 k6:pub chapel/old mt q1 n=267 med=0.009327s ok=['True'] oom=False rc=0
