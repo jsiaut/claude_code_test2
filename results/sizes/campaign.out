@@ -5730,3 +5730,79 @@ p2 k7:large csharp/new natural  n=3 med=17.5364s ok=['True'] oom=False rc=0
 p2 k7:large csharp/new tuned  n=3 med=5.22654s ok=['True'] oom=False rc=0
 2026-11-20T21:06:39 passe 2 groupe 14/24 k7:large 51 processus 6257s
 p2 k10:pub lua/new natural  n=5 med=0.55348s ok=['True'] oom=False rc=0
+p2 k10:pub lua/new tuned  n=11 med=0.254174s ok=['True'] oom=False rc=0
+p2 k10:pub js/new natural  n=3 med=7.5206s ok=['True'] oom=False rc=0
+p2 k10:pub js/new tuned  n=22 med=0.193465s ok=['True'] oom=False rc=0
+p2 k10:pub swift/new natural  n=3 med=17.6744s ok=['True'] oom=False rc=0
+p2 k10:pub swift/new tuned  n=38 med=0.079371s ok=['True'] oom=False rc=0
+p2 k10:pub d/new natural  n=3 med=1.74689s ok=['True'] oom=False rc=0
+p2 k10:pub d/new tuned  n=295 med=0.0685707s ok=['True'] oom=False rc=0
+p2 k10:pub mojo/new natural  n=3 med=1.55827s ok=['True'] oom=False rc=0
+p2 k10:pub mojo/new tuned  n=17 med=0.112955s ok=['True'] oom=False rc=0
+p2 k10:pub c3/new natural  n=3 med=1.34457s ok=['True'] oom=False rc=0
+p2 k10:pub c3/new tuned  n=16 med=0.122153s ok=['True'] oom=False rc=0
+p2 k10:pub zig/new natural  n=3 med=0.839933s ok=['True'] oom=False rc=0
+p2 k10:pub zig/new tuned  n=38 med=0.0999936s ok=['True'] oom=False rc=0
+p2 k10:pub odin/new natural  n=3 med=1.26454s ok=['True'] oom=False rc=0
+p2 k10:pub odin/new tuned  n=35 med=0.0673013s ok=['True'] oom=False rc=0
+p2 k10:pub fpc/new natural  n=3 med=2.20865s ok=['True'] oom=False rc=0
+p2 k10:pub fpc/new tuned  n=32 med=0.0663101s ok=['True'] oom=False rc=0
+p2 k10:pub chapel/new natural  n=3 med=1.6621s ok=['True'] oom=False rc=0
+p2 k10:pub chapel/new tuned  n=59 med=0.045632s ok=['True'] oom=False rc=0
+p2 k10:pub go/old natural  n=6 med=0.421739s ok=['True'] oom=False rc=0
+p2 k10:pub go/old tuned  n=6 med=0.439386s ok=['True'] oom=False rc=0
+p2 k10:pub julia/new natural  n=4 med=0.902092s ok=['True'] oom=False rc=0
+p2 k10:pub julia/new tuned  n=9 med=0.30624s ok=['True'] oom=False rc=0
+p2 k10:pub python/new natural  n=3 med=5.39307s ok=['True'] oom=False rc=0
+p2 k10:pub python/new tuned  n=3 med=2.66568s ok=['True'] oom=False rc=0
+p2 k10:pub java/new natural  n=3 med=0.896792s ok=['True'] oom=False rc=0
+p2 k10:pub java/new tuned  n=168 med=0.048899s ok=['True'] oom=False rc=0
+p2 k10:pub ocaml/new natural  n=3 med=1.69261s ok=['True'] oom=False rc=0
+p2 k10:pub ocaml/new tuned  n=37 med=0.163307s ok=['True'] oom=False rc=0
+p2 k10:pub chapel/old natural  n=3 med=1.60645s ok=['True'] oom=False rc=0
+p2 k10:pub chapel/old tuned  n=51 med=0.022602s ok=['True'] oom=False rc=0
+p2 k10:pub php/new natural  n=8 med=0.389661s ok=['True'] oom=False rc=0
+p2 k10:pub php/new tuned  n=21 med=0.140845s ok=['True'] oom=False rc=0
+p2 k10:pub odin/old natural  n=3 med=1.19965s ok=['True'] oom=False rc=0
+p2 k10:pub odin/old tuned  n=29 med=0.0795793s ok=['True'] oom=False rc=0
+p2 k10:pub fortran/new natural  n=3 med=0.941129s ok=['True'] oom=False rc=0
+p2 k10:pub fortran/new tuned  n=167 med=0.0215332s ok=['True'] oom=False rc=0
+p2 k10:pub go/new natural  n=7 med=0.473685s ok=['True'] oom=False rc=0
+p2 k10:pub go/new tuned  n=6 med=0.441895s ok=['True'] oom=False rc=0
+p2 k10:pub ada/new natural  n=3 med=3.681s ok=['True'] oom=False rc=0
+p2 k10:pub ada/new tuned  n=35 med=0.0767916s ok=['True'] oom=False rc=0
+p2 k10:pub bqn/new natural  n=0 med=nans ok=None oom=None rc=None
+p2 k10:pub bqn/new tuned  n=0 med=nans ok=None oom=None rc=None
+p2 k10:pub rust/new natural  n=31 med=0.0930769s ok=['True'] oom=False rc=0
+p2 k10:pub rust/new tuned  n=39 med=0.0612676s ok=['True'] oom=False rc=0
+p2 k10:pub c/new natural  n=3 med=0.809533s ok=['True'] oom=False rc=0
+p2 k10:pub c/new tuned  n=23 med=0.109133s ok=['True'] oom=False rc=0
+p2 k10:pub haskell/new natural  n=5 med=0.298632s ok=['True'] oom=False rc=0
+p2 k10:pub haskell/new tuned  n=28 med=0.071533s ok=['True'] oom=False rc=0
+p2 k10:pub nim/new natural  n=3 med=0.986577s ok=['True'] oom=False rc=0
+p2 k10:pub nim/new tuned  n=39 med=0.0806951s ok=['True'] oom=False rc=0
+p2 k10:pub csharp/new natural  n=3 med=2.89374s ok=['True'] oom=False rc=0
+p2 k10:pub csharp/new tuned  n=31 med=0.0644152s ok=['True'] oom=False rc=0
+p2 k10:pub cpp/new natural  n=3 med=1.0125s ok=['True'] oom=False rc=0
+p2 k10:pub cpp/new tuned  n=92 med=0.0614104s ok=['True'] oom=False rc=0
+2026-11-20T21:13:24 passe 2 groupe 15/24 k10:pub 56 processus 405s
+p2 k1:small rust/new natural energy n=10000 med=2.3409e-05s ok=['True'] oom=False rc=0
+p2 k1:small rust/new aos energy n=10000 med=1.8622e-05s ok=['True'] oom=False rc=0
+p2 k1:small rust/new soa energy n=10000 med=2.644e-06s ok=['True'] oom=False rc=0
+p2 k1:small rust/new natural_shuffled energy n=10000 med=2.3558e-05s ok=['True'] oom=False rc=0
+p2 k1:small c3/new natural energy n=10000 med=1.9846e-05s ok=['True'] oom=False rc=0
+p2 k1:small c3/new aos energy n=10000 med=2.18785e-05s ok=['True'] oom=False rc=0
+p2 k1:small c3/new soa energy n=10000 med=3.414e-06s ok=['True'] oom=False rc=0
+p2 k1:small c3/new natural_shuffled energy n=10000 med=1.9334e-05s ok=['True'] oom=False rc=0
+p2 k1:small d/new natural energy n=10000 med=2.26e-05s ok=['True'] oom=False rc=0
+p2 k1:small d/new aos energy n=10000 med=2.28e-05s ok=['True'] oom=False rc=0
+p2 k1:small d/new soa energy n=10000 med=3.6e-06s ok=['True'] oom=False rc=0
+p2 k1:small d/new natural_shuffled energy n=10000 med=2.33e-05s ok=['True'] oom=False rc=0
+p2 k1:small julia/new natural energy n=10000 med=2.322e-05s ok=['True'] oom=False rc=0
+p2 k1:small julia/new aos energy n=10000 med=1.708e-05s ok=['True'] oom=False rc=0
+p2 k1:small julia/new soa energy n=10000 med=4.712e-06s ok=['True'] oom=False rc=0
+p2 k1:small julia/new natural_shuffled energy n=10000 med=2.2499e-05s ok=['True'] oom=False rc=0
+p2 k1:small java/new natural energy n=874 med=4.2129e-05s ok=['True'] oom=False rc=0
+p2 k1:small java/new aos energy n=3221 med=2.1443e-05s ok=['True'] oom=False rc=0
+p2 k1:small java/new soa energy n=312 med=2.1009e-05s ok=['True'] oom=False rc=0
+p2 k1:small java/new natural_shuffled energy n=870 med=4.9343e-05s ok=['True'] oom=False rc=0
