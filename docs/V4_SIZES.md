@@ -160,6 +160,37 @@ processus ; un processus qui en a plus de 5 % est refait une fois.
   pendant un processus de PHP (K7 naturel, grande taille, passe 0). La ligne a été retirée du journal ; le mode à blanc
   n'écrit plus dans le journal.
 
+### 7.2 Changement d'hôte (20 novembre, 1 h 45, avant toute mesure sur le nouvel hôte et toute analyse)
+
+* **Faits.** Le conteneur a redémarré le 20 novembre vers 1 h 19, pendant le dernier groupe de la passe 1 (K7, grande
+  taille), sur une autre machine (machine 31) d'un autre modèle : Xeon Emerald Rapids (famille 6, modèle 207,
+  stepping 2, « @ 2.10GHz »), 4 vCPU, 15 Gio, L1d de 48 Kio et L2 de 2 Mio par cœur, L3 annoncé de 260 Mio, même
+  limite de mémoire du groupe (13,35 Gio). La machine 30 était un Granite Rapids (6/173/1, « @ 2.30GHz », L3 annoncé
+  de 504 Mio). La passe 0 était complète, la passe 1 à 23 groupes sur 24 : 4 382 processus enregistrés, tous lisibles ;
+  le processus en cours est perdu. Le redémarrage a vidé `/dev/shm` (constructions des tailles, données) ; le disque
+  est conservé.
+* **Règle appliquée (section 5).** Les passes touchées devraient être refaites sur un hôte du même modèle ; le modèle de
+  l'hôte ne se choisit pas depuis la session : toute la campagne est donc refaite sur la machine 31, caractérisée de
+  même (`tools/sizes/hwchar.sh`, `results/hw/machine31`). Dans les sections 6 à 8, « machine 30 » se lit
+  « machine 31 » : l'analyse porte sur les seules données de la machine 31, avec ses bornes physiques. Les tailles de
+  la section 3 gardent leur rôle : la petite tient dans le L2 d'un cœur (2 Mio), la grande dépasse le L3 annoncé.
+  Si l'hôte change encore de modèle, la même règle s'applique ; après un redémarrage sur le même modèle, la campagne
+  reprend où elle s'est arrêtée (un processus enregistré n'est pas refait).
+* **Données de la machine 30** : gardées telles quelles dans `results/sizes/machine30/` (mesures brutes, étalonnage,
+  journaux) ; elles n'entrent dans aucun calcul du point 2.
+* **Constructions.** Les binaires publiés (`bench/<langage>`) avaient été construits sur la machine 30 avec des options
+  qui visent le processeur hôte (`-march=native` et équivalents). Ils sont reconstruits sur la machine 31 à partir de
+  sources propres (caches et objets de construction effacés), et le contrôle de la section 4 est refait : binaire du
+  nouveau source contre binaire du source d'origine, construits sur la machine 31. Le pilote refait, avant la première
+  mesure, les constructions des tailles et les anciens binaires d'Odin, de Chapel et de Go. La validation (4.1,
+  `results/sizes/validation.md`, machine 30) n'est pas refaite : le code n'a pas changé, la limite de mémoire est la
+  même, et chaque processus de la campagne vérifie ses sommes de contrôle.
+* **Sentinelle** : la nouvelle campagne a dès le départ la sentinelle corrigée (7.1) ; K6 `mt` de PHP à la grande
+  taille est mesuré dans l'ordre aléatoire, comme les autres cellules, et la remise en file prévue en 7.1 n'a plus
+  d'objet.
+* **Ordre et durée** : mêmes graines, donc même ordre des groupes et des blocs que sur la machine 30 ; environ
+  20 heures (sur la machine 30 : 8 h pour la passe 0, étalonnage compris, environ 5 h 40 pour chacune des autres).
+
 ## 8. Analyse, fixée avant les mesures
 
 La méthode v3 (même graine, 20 000 variantes, mêmes poids, grille v2 corrigée par le point 1), appliquée aux seules

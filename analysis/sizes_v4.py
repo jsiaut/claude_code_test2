@@ -2,12 +2,13 @@
 """v4, point 2 : analyse des trois tailles (docs/V4_SIZES.md, section 8, fixée avant les mesures ; écart 4.1).
 
 La méthode v3 (même graine, 20 000 variantes, mêmes poids, grille v2 corrigée par le point 1) appliquée aux seules
-données de la machine 30 (results/sizes/raw, tools/sizes/campaign.py) :
+données de la machine 31 (results/sizes/raw, tools/sizes/campaign.py ; la campagne de la machine 30, interrompue par
+un changement de modèle d'hôte, est archivée dans results/sizes/machine30 et n'entre pas ici : docs/V4_SIZES.md, 7.2) :
 1. Hôte : la taille publiée de chaque noyau.
 2. Trois tailles : pour chacun des sept noyaux à trois tailles, chaque cellule du plafond (E) et du code par défaut
    (D1, et les parts de D2 et D3 tirées de K1 et de K8) est calculée à chaque taille, avec ses propres références
    (frontière des langages à cette taille ; bornes physiques du niveau de mémoire où tiennent les données, mesurées
-   sur l'hôte : results/hw/machine30), puis moyennée (en logarithme) sur les trois tailles, à poids égaux au centre ;
+   sur l'hôte : results/hw/machine31), puis moyennée (en logarithme) sur les trois tailles, à poids égaux au centre ;
    dans les variantes, les poids des tailles sont tirés comme les autres poids (Dirichlet autour de l'égalité,
    concentration 20, dans la moitié des variantes ; uniforme dans l'autre), par un générateur à part, pour que les
    autres tirages restent ceux de « Hôte ».
@@ -18,7 +19,7 @@ réplication, comme analysis/audit3.py), et les langages dont le rang change de 
 « Trois tailles ».
 Mise en œuvre de la méthode sur une seule campagne : tous les langages y sont mesurés de la même façon, donc aucun
 n'est « ajouté » par un pont (v2.ADDED vide : mêmes réservoirs de résidus et même générateur pour tous) ; les bornes
-physiques sont celles de la machine 30 dans les quatre calculs ; empreintes (D2) et grille (C) restent celles du
+physiques sont celles de la machine 31 dans les quatre calculs ; empreintes (D2) et grille (C) restent celles du
 classement publié. Une cellule manquante (hors mémoire, durée, échec) prend le temps admissible le plus lent des
 autres langages à cette taille (section 6). Contrôle des anciens binaires (écart 4.1 : Odin, Chapel, Go) : rapport
 des temps nouveau / ancien par cellule à la taille publiée ; au-delà de 5 %, l'écart est publié et les calculs sont
@@ -41,7 +42,7 @@ from audit3 import tiers  # noqa: E402
 B = int(os.environ.get("BOOT", "2000"))
 U = int(os.environ.get("UA", "20000"))
 RAW = os.path.join(ROOT, "results", "sizes", "raw")
-HW = os.path.join(ROOT, "results", "hw", "machine30")
+HW = os.path.join(ROOT, "results", "hw", "machine31")
 SIZED = ["k1", "k4", "k5", "k6", "k7", "k8", "k9"]
 # colonnes du tableau de la section 3 : taille de chaque noyau dans les positions petite, publiée, grande
 POS = {k: ["small", "pub", "large"] for k in SIZED}
@@ -141,10 +142,10 @@ def campaign_keys(data):
     return keys
 
 
-# ------------------------------------------------------------------ bornes physiques de la machine 30
+# ------------------------------------------------------------------ bornes physiques de la machine 31
 def hw_numbers():
     """Bande passante en lecture sur 1 thread selon la taille (bw), STREAM triad sur 4 threads, pic FMA et fréquence
-    (tools/hwprobe.c compilé en -O3 sur l'hôte, results/hw/machine30)."""
+    (tools/hwprobe.c compilé en -O3 sur l'hôte, results/hw/machine31)."""
     bw = []
     for line in open(os.path.join(HW, "bw.txt")):
         m = re.match(r"bw:\s+(\d+) KiB\s+([\d.]+) GB/s", line)
@@ -208,7 +209,7 @@ def summarize(s, langs):
 
 
 def single(d, lt, langs, footprint, c3, eb):
-    """Méthode v3 inchangée (confrontation.scenario, règle « main ») sur une position, bornes de la machine 30."""
+    """Méthode v3 inchangée (confrontation.scenario, règle « main ») sur une position, bornes de la machine 31."""
     saved = v3.EBOUND
     v3.EBOUND = eb
     try:
@@ -411,7 +412,7 @@ def report(o):
     names = ["Hôte", "Trois tailles", "Taille petite", "Taille publiée", "Taille grande"]
     L = ["# v4, point 2 : trois tailles par noyau — résultats", "",
          "*Plan : `docs/V4_SIZES.md` (sections 6 à 8, écart 4.1). Généré par `analysis/sizes_v4.py` à partir de "
-         "`results/sizes/raw` (machine 30). Le classement de tête du README ne change pas au point 2 (section 9).*", "",
+         "`results/sizes/raw` (machine 31). Le classement de tête du README ne change pas au point 2 (section 9).*", "",
          "## Classements", "",
          "| Langage | " + " | ".join(names) + " |", "|---|" + "---|" * len(names)]
     order = R["Trois tailles"]["order"]

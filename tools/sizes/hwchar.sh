@@ -1,13 +1,13 @@
 #!/bin/sh
 # v4, point 2 (docs/V4_SIZES.md, section 5) : caractérisation de l'hôte de la campagne des tailles, avant la campagne,
-# sur une machine au repos. Usage : tools/sizes/hwchar.sh [répertoire de sortie] (par défaut results/hw/machine30).
+# sur une machine au repos. Usage : tools/sizes/hwchar.sh [répertoire de sortie] (par défaut results/hw/machine31).
 # * tools/hwprobe.c, compilé sur l'hôte : fréquence, latences (jusqu'à 1 Gio, pages de 4 Kio et pages géantes),
 #   bandes passantes par taille, STREAM, pic de calcul, TLB, appel système, défaut de page ;
 # * chaîne de pointeurs de K2 (implémentation C, variante tuned, 5 répétitions) aux dix tailles publiées et à 512 Mio,
 #   1 Gio et 2 Gio (données produites par tools/gendata.c dans /dev/shm, une taille à la fois) : situe le L3 effectif.
 set -e
 cd "$(dirname "$0")/../.."
-OUT=${1:-results/hw/machine30}
+OUT=${1:-results/hw/machine31}
 mkdir -p "$OUT" /dev/shm/msbuild
 H=/dev/shm/msbuild/hwprobe
 gcc -O3 -march=native -pthread tools/hwprobe.c -o $H  # -O3 : en -O2, GCC 13 garde les accumulateurs de peak en mémoire
