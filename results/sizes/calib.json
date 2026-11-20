@@ -1,0 +1,22 @@
+{
+"d|new|k4|large|natural_unsorted|": {
+"reps": 57,
+"t_cal": 0.052382,
+"warmup": 1
+},
+"fortran|new|k4|large|branchless_unsorted|": {
+"reps": 14,
+"t_cal": 0.206367793,
+"warmup": 1
+},
+"fortran|new|k4|large|natural_sorted|": {
+"reps": 10,
+"t_cal": 0.287325877,
+"warmup": 1
+},
+"fortran|new|k4|large|natural_unsorted|": {
+"reps": 11,
+"t_cal": 0.256709659,
+"warmup": 1
+}
+}

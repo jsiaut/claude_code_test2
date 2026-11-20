@@ -1,0 +1,6 @@
+2026-11-20T01:43:58 constructions prêtes
+2026-11-20T01:43:58 passe 0 : 24 groupes ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+p0 k4:large fortran/new natural_unsorted  n=11 med=0.251267s ok=['True'] oom=False rc=0
+p0 k4:large fortran/new natural_sorted  n=10 med=0.256147s ok=['True'] oom=False rc=0
+p0 k4:large fortran/new branchless_unsorted  n=14 med=0.200465s ok=['True'] oom=False rc=0
+p0 k4:large d/new natural_unsorted  n=57 med=0.0526059s ok=['True'] oom=False rc=0
