@@ -200,12 +200,22 @@ def ebounds(hw, pos):
 
 # ------------------------------------------------------------------ calculs
 def summarize(s, langs):
+    """Résumé d'un calcul. Ek (plafond par noyau) et D1 à D4 (parts du code par défaut), au centre, sont gardés pour
+    expliquer les déplacements (ajout du 20 novembre, après le premier calcul : sorties seulement)."""
     order = sorted(langs, key=lambda l: (s["exp21"][l], -s["ms0"][l]))
     idx = {l: i for i, l in enumerate(RANKED)}
-    return {"order": order, "exp": {l: s["exp21"][l] for l in langs}, "rank90": {l: s["rank90"][l] for l in langs},
-            "first": {l: s["first"][l] for l in langs}, "ms0": {l: s["ms0"][l] for l in langs},
-            "E": {l: s["E"][l] for l in langs}, "D": {l: s["D"][l] for l in langs}, "C": {l: s["C"][l] for l in langs},
-            "tiers": tiers(order, s["prec"], idx)}
+    out = {"order": order, "exp": {l: s["exp21"][l] for l in langs}, "rank90": {l: s["rank90"][l] for l in langs},
+           "first": {l: s["first"][l] for l in langs}, "ms0": {l: s["ms0"][l] for l in langs},
+           "E": {l: s["E"][l] for l in langs}, "D": {l: s["D"][l] for l in langs}, "C": {l: s["C"][l] for l in langs},
+           "tiers": tiers(order, s["prec"], idx), "Ek": {l: s["Ek"][l] for l in langs}}
+    if "Dparts" in s:
+        out["Dparts"] = s["Dparts"]
+    elif "S0" in s:
+        A = s["A"]
+        out["Dparts"] = {l: {p: float(s["S0"][p][A.idx[l]]) for p in ("D1", "D2", "D3", "D4")} for l in langs}
+    if "tstar_src" in s:
+        out["tstar_src"] = s["tstar_src"]
+    return out
 
 
 def single(d, lt, langs, footprint, c3, eb):
@@ -335,7 +345,8 @@ def three_sizes(host, pos_data, langs, footprint, c3, ebs):
                        for j in range(NR)},
             "E": {l: float(S0["E"][As[1].idx[l]]) for l in langs}, "D": {l: float(S0["D"][As[1].idx[l]]) for l in langs},
             "C": {l: float(C0[As[1].idx[l]]) for l in langs},
-            "Ek": {l: {k: float(S0["Ek"][k][As[1].idx[l]]) for k in S0["Ek"]} for l in langs}}
+            "Ek": {l: {k: float(S0["Ek"][k][As[1].idx[l]]) for k in S0["Ek"]} for l in langs},
+            "Dparts": {l: {p: float(S0[p][As[1].idx[l]]) for p in ("D1", "D2", "D3", "D4")} for l in langs}}
 
 
 def control(data):

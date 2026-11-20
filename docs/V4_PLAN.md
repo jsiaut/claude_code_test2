@@ -13,9 +13,9 @@ une hypothèse non vérifiée.
    écarts de score entre les 14 premiers et décide de l'ordre du premier étage (sans lui, Chapel passe de la 10e à la 4e
    place, C++ de la 3e à la 5e) ; or 520 de ses 850 cases ne reposent que sur une lecture, et 56 des cases « sondées » à
    0 ne sont qu'imprimées par une sonde, sans preuve exécutée. 6 % des cases ont déjà été corrigées.
-2. **Trois tailles par noyau.** Toutes les mesures reposent sur une seule taille par noyau, sauf K2, où le rapport de
-   Python au C varie de 1,1 à 30 selon la taille. C'est l'hypothèse non testée qui touche le plus de cases mesurées :
-   tous les langages, tous les noyaux.
+2. **Trois tailles par noyau** (fait le 20 novembre : `docs/V4_SIZES.md`, section 10). Toutes les mesures reposent
+   sur une seule taille par noyau, sauf K2, où le rapport de Python au C varie de 1,1 à 30 selon la taille. C'est
+   l'hypothèse non testée qui touche le plus de cases mesurées : tous les langages, tous les noyaux.
 3. **Des conditions égales.** Les vérifications du code naturel (coupées dans cinq chaînes compilées, gardées dans sept
    et dans les langages gérés), la
    structure du stencil naturel (contiguë dans douze langages, imbriquée dans treize) et le SIMD explicite interdit dans
@@ -74,10 +74,13 @@ preuve par classe), puis les sorties publiées régénérées si des errata chan
 
 ## 3. Points 2 à 6
 
-Point 2 : plan détaillé dans `docs/V4_SIZES.md` (19 novembre, poussé avant tout changement de code et toute mesure).
+Point 2 : plan détaillé dans `docs/V4_SIZES.md` (19 novembre, poussé avant tout changement de code et toute mesure) ;
+résultats le 20 novembre (section 10) : aucun langage ne bouge de plus de deux places entre la taille publiée et la
+moyenne des trois tailles ; l'hôte en déplace cinq de trois ou quatre places.
 
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
 une fois le point précédent terminé. Machine : l'hôte actuel est un Xeon Granite Rapids (modèle 173), une troisième
 micro-architecture ; les campagnes y seront appariées à un témoin C, comme les précédentes, et le choix de l'hôte sera
-fixé dans chaque plan.
+fixé dans chaque plan. (20 novembre : depuis le redémarrage de 1 h 19, l'hôte est un Xeon Emerald Rapids, modèle 207,
+machine 31 : `docs/V4_SIZES.md`, 7.2.)

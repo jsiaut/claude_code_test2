@@ -1585,3 +1585,36 @@ Robustesse :
   dépasse 2^53, et BQN et JavaScript, dont les nombres sont des doubles, la rendent à l'arrondi près (règle : au-delà
   de 2^53, écart relatif d'au plus 10^-15) ; des processus tués par la limite de mémoire du groupe (13,35 Gio) à la
   grande taille (Python, BQN, PHP), qui rendent leurs cellules « hors mémoire » selon la section 6.
+* 2026-11-19, 12:22, au 20 novembre, 1:35 : **v4, point 2 : validation, campagne de la machine 30, changement
+  d'hôte** (`docs/V4_SIZES.md`, 7.1 et 7.2 ; `results/sizes/validation.md` ; `results/sizes/machine30/`). Validation :
+  25 langages, 1 683 cellules, variantes propres comprises (erratum : le message du commit 08b6ebc dit 1 692), toutes
+  justes sauf 11 processus tués par la limite de mémoire du groupe à la grande taille, « hors mémoire » selon la
+  section 6, et quatre sommes de Q1 au-delà de 2^53, acceptées à l'arrondi d'un double près (4.1). Campagne lancée à
+  12:34:40 sur la machine 30 (Granite Rapids 6/173/1), relancée à 12:56:42 après son premier groupe pour écrire dans un
+  répertoire de travail recopié par étapes (b79d581) ; le processus interrompu a été refait. À 18:34:41, une exécution
+  à blanc du pilote (pour compter les blocs restants) a écrit une ligne d'en-tête dans le journal de la campagne,
+  retirée à 18:36 ; aucune mesure lancée. Passe 0 finie à 20:35:04. Constat de 20:45 (7.1) : la sentinelle de mémoire
+  sommait les VmRSS des processus, que la copie sur écriture de `pcntl_fork` compte plusieurs fois ; deux cellules de
+  PHP (K6, grande taille, mt, Q1 et Q6) ont été arrêtées à tort ; correctif (plus grand VmRSS) en 29cc863. K10 de BQN,
+  absent par conception, n'est plus rempli par l'analyse. Passe 1 : groupes 1 à 23 finis à 00:14:57, sans anomalie. Le
+  20 novembre vers 1:19, le conteneur a redémarré sur un autre modèle de processeur (Emerald Rapids 6/207/2,
+  machine 31) pendant le dernier groupe de la passe 1 ; les 4 382 processus enregistrés sont archivés dans
+  `results/sizes/machine30/` et n'entrent pas dans l'analyse. Règle de la section 5 : toute la campagne est refaite
+  sur la machine 31 (7.2, poussé avant toute mesure en 37dfa21) ; binaires publiés reconstruits sur sources propres,
+  contrôle refait (5621a60), machine caractérisée (8b507c2).
+* 2026-11-20, 1:38 à 23:55 : **v4, point 2 : campagne de la machine 31 et résultats** (`docs/V4_SIZES.md`, 10 ;
+  `results/report_sizes.md` ; `results/sizes/analysis.json`). Campagne entière refaite sur la machine 31 (Emerald
+  Rapids 6/207/2), de 1:38 à 23:06, sans redémarrage : 6 594 processus (trois passes de 2 198, mêmes cellules), un
+  seul modèle de processeur, aucun processus au-delà de 5 % de vol de temps ; à chaque passe, les 13 échecs attendus
+  (11 hors mémoire à la grande taille, K10 de BQN) ; les deux cellules K6 `mt` de PHP passent avec la sentinelle
+  corrigée. Contrôle des anciens binaires (Odin, Chapel, Go) : 41 cellules sur 115 au-delà de 5 %, presque toutes par
+  un processus sur trois ; l'écart de K2 de Go à 8 Mio tient aux deux régimes de K2 à cette taille sur cet hôte ;
+  calculs refaits avec les anciens binaires (règle de la section 4), conclusions inchangées. Correction de mise en
+  œuvre, trouvée après le premier calcul et avant toute rédaction : le calcul avec les anciens binaires ne leur
+  donnait K2, K3 et K10 qu'à la position publiée (`b0df134`). Ajouts aux sorties, sans effet sur les calculs (vérifié :
+  classements identiques d'une exécution à l'autre) : classement publié, médianes des processus du contrôle, plafond
+  par noyau et parts du code par défaut de chaque calcul. Résultats : aucun langage ne bouge de plus de deux places
+  entre « Hôte » et « Trois tailles » ; entre le classement publié et « Hôte », Nim, D, Odin, Zig et Fortran bougent
+  de trois ou quatre places, d'abord par l'effet de placement de l'écrivain unique de K3, établi sur Emerald Rapids
+  (`docs/FINDINGS.md`) et retrouvé ici sur Granite Rapids (machine 30). Le classement de tête ne change pas
+  (section 9 du plan).

@@ -1,4 +1,4 @@
-# v4, point 2 : trois tailles par noyau — plan (19 novembre 2026)
+# v4, point 2 : trois tailles par noyau — plan (19 novembre 2026) et résultats (20 novembre)
 
 *Plan d'ensemble : `docs/V4_PLAN.md` (point 2). Ce plan est poussé avant tout changement de code et toute mesure ; les
 écarts éventuels seront datés et justifiés dans `docs/METHODOLOGY.md`.*
@@ -249,3 +249,139 @@ convergent) modifient aussi les implémentations et demanderont une campagne. Le
 d'une seule campagne qui réunira les points 2 à 4, sur un même hôte, avec les tailles comptées comme au calcul 2 de la
 section 8 (moyenne des trois tailles à poids égaux) : cette règle est fixée ici. D'ici là, les résultats du point 2
 sont publiés à côté du classement (README, `docs/V4_SIZES.md`), avec les deux effets séparés.
+
+## 10. Résultats (20 novembre, après la campagne)
+
+*Tableaux complets (rangs espérés, scores au centre, étages, contrôle) : `results/report_sizes.md` ; toutes les sorties :
+`results/sizes/analysis.json` (`analysis/sizes_v4.py`). Les calculs sont ceux de la section 8, sur les seules données
+de la machine 31 (7.2).*
+
+### 10.1 Campagne
+
+* Lancée le 20 novembre à 1 h 38 ; constructions des tailles et anciens binaires prêts à 1 h 44 ; passe 0 jusqu'à
+  10 h 23 (8 h 39, étalonnage compris), passe 1 jusqu'à 16 h 53 (6 h 31), passe 2 jusqu'à 23 h 06 (6 h 13), sans
+  redémarrage.
+* 6 594 processus : trois passes de 2 198, qui couvrent les mêmes cellules, sans doublon ; tous sur le même modèle de
+  processeur (6/207/2) ; aucun au-delà de 5 % de vol de temps, donc aucun refait.
+* Échecs : à chaque passe, les 13 cellules attendues et elles seules. Onze sont « hors mémoire » à la grande taille,
+  tuées par le noyau à la limite du groupe, les mêmes qu'à la validation : Python (K1 naturel et naturel mélangé), BQN
+  (K1, six variantes), PHP (K1 `natural_arr` et `natural_arr_shuffled`, K4 `natural_sorted`). Les deux autres sont K10
+  de BQN, absent par conception. Les deux cellules de PHP arrêtées à tort sur la machine 30 (K6 `mt`, Q1 et Q6, grande
+  taille) passent avec la sentinelle corrigée.
+* Cellules manquantes remplies (section 6), à la grande taille seulement : K1 de BQN (`aos`, `natural`,
+  `natural_shuffled`, `soa`) et de Python (`natural`, `natural_shuffled`), au temps de Go, le plus lent des autres
+  langages, sauf `soa` de BQN, au temps de Python. Les autres cellules hors mémoire sont des variantes propres à un
+  langage, ou n'entrent pas dans le score.
+
+### 10.2 Contrôle des anciens binaires (Odin, Chapel, Go)
+
+* 115 cellules ; 41 s'écartent de plus de 5 % (rapports de 0,29 à 1,55). Presque toujours, un processus sur les trois
+  d'une construction s'écarte des deux autres, dans un sens ou dans l'autre. Seules 3 cellules ont tous les processus
+  d'une construction plus lents que tous ceux de l'autre, alors que le hasard seul en donnerait environ une sur dix
+  (11 sur 115) avec trois processus de chaque côté : rien n'indique un effet du code (descriptif, hors plan).
+* L'écart le plus grand, K2 de Go à 8 Mio (0,29), vient de l'hôte. Sur la machine 31, K2 à 8 Mio a deux régimes d'un
+  processus à l'autre, pour tous les langages : 0,15 à 0,28 s, ou 0,44 à 0,81 s. 15 constructions sur 28 ont au moins
+  un processus lent, et les trois processus de l'ancien binaire de Go sont tombés dans le régime lent. La remarque
+  sur C++ avait déjà trouvé K2 à 8 Mio bimodal sur un autre Emerald Rapids (`docs/CPP.md`) ; sur la machine 30, à
+  cette taille, aucune construction ne variait de plus d'un facteur 1,75.
+* Règle de la section 4 : les calculs de la section 8 sont refaits avec les anciens binaires à la taille publiée.
+  « Hôte » : Odin passe de la 6e à la 4e place (rang espéré 6,83 → 5,69), Chapel de la 11e à la 10e ; Nim, D et Swift
+  reculent d'une place. « Trois tailles » : aucune place ne change (Odin 5,69 → 5,21). Aucun rang ne bouge de plus de
+  deux places entre « Hôte » et « Trois tailles », avec les anciens binaires comme avec les nouveaux. Le bruit de
+  processus de cet hôte déplace donc à lui seul un langage de deux places : c'est l'ordre de grandeur de l'effet des
+  tailles (10.4).
+* Correction, après le premier calcul et avant toute rédaction : le calcul refait avec les anciens binaires ne leur
+  donnait K2, K3 et K10 qu'à la position publiée. Or ces noyaux n'ont que leur taille publiée, qui entre dans les trois
+  positions. Après correction (`b0df134`), seuls « Taille petite » et « Taille grande » avec les anciens binaires
+  changent. Les calculs avec les nouveaux binaires sont identiques d'une exécution à l'autre (graines fixes).
+
+### 10.3 Classements
+
+Places (rang espéré de « Trois tailles » entre parenthèses) ; lignes dans l'ordre de « Trois tailles ».
+
+| Langage | Publié | Hôte | Trois tailles (rang espéré) | Petite | Publiée | Grande |
+|---|---|---|---|---|---|---|
+| C++ | 3 | 2 | 1 (2,37) | 1 | 3 | 1 |
+| C | 1 | 1 | 2 (2,84) | 2 | 1 | 3 |
+| C3 | 4 | 3 | 3 (3,51) | 3 | 2 | 2 |
+| Odin | 2 | 6 | 4 (5,69) | 4 | 6 | 5 |
+| Nim | 7 | 4 | 5 (6,09) | 6 | 4 | 6 |
+| D | 8 | 5 | 6 (6,43) | 7 | 5 | 7 |
+| Zig | 5 | 8 | 7 (7,70) | 10 | 8 | 4 |
+| Rust | 6 | 7 | 8 (7,76) | 8 | 7 | 9 |
+| Chapel | 10 | 11 | 9 (8,47) | 5 | 10 | 10 |
+| Ada | 9 | 9 | 10 (10,32) | 14 | 9 | 8 |
+| Swift | 12 | 10 | 11 (10,65) | 12 | 11 | 14 |
+| Mojo | 14 | 12 | 12 (10,98) | 11 | 12 | 11 |
+| Fortran | 11 | 14 | 13 (11,05) | 9 | 14 | 12 |
+| Julia | 13 | 13 | 14 (11,44) | 13 | 13 | 13 |
+| C# | 15 | 15 | 15 (15,30) | 15 | 15 | 16 |
+| FreePascal | 16 | 17 | 16 (16,22) | 16 | 17 | 15 |
+| Java | 17 | 16 | 17 (16,69) | 17 | 16 | 17 |
+| Go | 18 | 18 | 18 (17,56) | 18 | 18 | 18 |
+| Haskell | 19 | 19 | 19 (18,98) | 19 | 19 | 19 |
+| OCaml | 20 | 20 | 20 (20,32) | 20 | 20 | 20 |
+| BQN | 21 | 21 | 21 (21,29) | 21 | 21 | 21 |
+| PHP | 22 | 22 | 22 (22,26) | 23 | 22 | 23 |
+| JavaScript | 23 | 23 | 23 (22,33) | 22 | 23 | 22 |
+| Python | 24 | 24 | 24 (24,17) | 24 | 24 | 24 |
+| Lua | 25 | 25 | 25 (24,60) | 25 | 25 | 25 |
+
+« Publié » : le classement de tête du README. Colonnes « Petite », « Publiée », « Grande » : calcul 3 (pour K5,
+colonnes 2^11, soit la taille publiée, 2^15 et 2^21).
+
+### 10.4 Effet des tailles : « Hôte » contre « Trois tailles »
+
+* **Aucun langage ne bouge de plus de deux places** (seuil de la section 8), avec les nouveaux binaires comme avec les
+  anciens. Deux bougent de deux places : Odin (6e → 4e) et Chapel (11e → 9e) ; C++ passe devant C (rangs espérés
+  2,37 et 2,84), les autres bougent d'une place au plus. Ces déplacements sont de l'ordre du bruit de processus de
+  l'hôte (10.2).
+* Étages de « Trois tailles » (paires ordonnées dans au moins 95 % des variantes) : les 14 premiers | C#, FreePascal,
+  Java, Go | Haskell | OCaml, BQN, PHP, JavaScript, Python, Lua. Avec la taille publiée seule (« Hôte »), la frontière
+  entre le 14e et le 15e n'est pas établie sur cet hôte : le premier étage compte 18 langages.
+* Une taille à la fois (sensibilité), les déplacements sont plus grands, dans les deux sens :
+  * **petite taille** : Chapel 5e et Fortran 9e (11e et 14e dans « Hôte »), Zig 10e, Ada 14e. Les variantes à plusieurs
+    fils y paient surtout leur lancement : celles de C, C++, Zig, Ada, Rust et Odin, qui créent leurs fils à chaque
+    appel, sont plus lentes que leurs variantes à un fil (K9 : 0,43 à 1,8 ms, contre 0,08 à 0,24 ms), celles de Chapel
+    et de Fortran, qui gardent une réserve de fils (tâches de Chapel, équipe OpenMP de Fortran), plus rapides
+    (0,06 ms). Le plafond de K9 va de 11 à 99 parmi les 14 premiers, celui de K6 de 13 à 79 ;
+  * **grande taille** : Zig 4e, Ada 8e, FreePascal 15e (devant C#), Swift 14e. Les noyaux limités par la mémoire
+    rapprochent les compilés : parmi les 14 premiers, le plafond de K1 va de 84 à 100 (63 à 100 à la taille publiée),
+    celui de K9 de 68 à 99 (35 à 97). Zig et Ada, en retrait sur ces deux noyaux à la taille publiée, en profitent le
+    plus (K1 : 69 → 98 et 63 → 91).
+* La moyenne des trois tailles efface donc ces déplacements opposés : la petite taille favorise les runtimes à réserve
+  de fils, la grande les langages que la limite de la mémoire rapproche des meilleurs.
+
+### 10.5 Effet de l'hôte et du nouveau code : « Publié » contre « Hôte »
+
+* Cinq langages bougent de plus de deux places : **Nim (7e → 4e), D (8e → 5e), Odin (2e → 6e), Zig (5e → 8e),
+  Fortran (11e → 14e)**. Les scores baissent pour tous (C : 80,0 → 68,6), surtout par le plafond (C : 85,2 → 62,9).
+  Le changement de code du point 2 n'y est pour rien hors d'Odin, de Chapel et de Go : à la taille publiée, le code
+  machine est celui du source publié (4.1, 7.2) ; pour ces trois, voir 10.2.
+* **K3 en est le premier moteur, par un effet de placement du code déjà établi** (`docs/FINDINGS.md`, « K3 sur la
+  machine 3 », et l'expérience de disposition de la v3) : sur Emerald Rapids, la boucle de 16 `incq` en mémoire que
+  clang, rustc et Odin produisent pour l'écrivain unique coûte un ou sept cycles par incrément selon son décalage dans
+  sa ligne de 64 octets (un cycle à 8 et de 36 à 48), alors que le code de GCC (`mov`, `inc`, `mov`) reste rapide à
+  tous les décalages ; sur Cascade Lake, l'effet n'existe pas. La campagne le retrouve. Sur la machine 31, K3
+  `sw_padded` (un compteur par fil, sur sa propre ligne, lu et écrit sans `lock`) prend 0,017 à 0,020 s en D, C3, Nim
+  et FreePascal (1,5 à 1,7 cycle par incrément), 0,027 à 0,080 s en C++, Mojo et Ada, et 0,087 à 0,092 s, cinq fois
+  plus, en C, Fortran, Zig, C#, Rust, Odin, Chapel, Swift, Julia et Java ; les boucles du C et de Rust sont aux
+  décalages 16 et 32, du côté lent. Fait nouveau, l'effet existe aussi sur Granite Rapids : sur la machine 30, les
+  sept premiers sont ensemble (0,009 à 0,011 s), les dix autres à 0,059 à 0,066 s. Dans les données publiées, les 15
+  de ces 17 implémentations mesurées sur Cascade Lake (toutes sauf Swift et FreePascal, reliés par un pont) étaient
+  entre 84 et 100 % de la frontière. Le groupe d'un binaire tient donc à la forme du code émis et à la place de sa
+  boucle, que le source ne fixe pas. D, C3, Nim, FreePascal, C++ et Mojo passent sous la borne de la section 8
+  (5 cycles par incrément, 0,057 s). K3 compte pour un huitième du plafond : sur ce noyau, Odin et Zig perdent 77 et
+  79 points de plafond, Fortran 66 ; D en gagne 11, Nim en perd 9.
+* Autres noyaux : Odin et Zig perdent aussi sur K1 (96 → 67 et 98 → 69) et K9 (86 → 45 et 66 → 35), Fortran sur K4
+  (57 → 10) ; Nim gagne sur K5 (82 → 95).
+* L'effet de l'hôte, cinq langages à plus de deux places, est donc plus grand que celui des tailles, aucun.
+
+### 10.6 Ce que cela change
+
+* Le classement de tête du README ne change pas (section 9). La règle fixée pour la v4 s'applique : les tailles y
+  compteront comme au calcul 2 (moyenne des trois à poids égaux), dans une seule campagne réunissant les points 2 à 4.
+* Deux constats de cette campagne seront examinés avant cette campagne commune : l'effet de placement de K3, établi
+  sur Emerald Rapids et retrouvé sur Granite Rapids, premier moteur de l'effet de l'hôte, qui fait passer six
+  implémentations sous la borne physique du plan ; sur la machine 31, comme sur l'Emerald Rapids de la remarque sur
+  C++, K2 à 8 Mio a deux régimes d'un processus à l'autre, ce qui touche la part D4 du code par défaut.

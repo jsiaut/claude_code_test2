@@ -1,7 +1,8 @@
 # Quels langages incarnent le mieux la *mechanical sympathy* ?
 
 *Classement mesuré de 25 langages, octobre et novembre 2026 (Swift ajouté le 5 novembre, FreePascal et BQN le 6, PHP
-le 7 ; grille de contrôle auditée le 19, une sonde par case).*
+le 7 ; grille de contrôle auditée le 19, une sonde par case ; trois tailles par noyau mesurées le 20, à côté du
+classement).*
 
 Un seul critère : la *mechanical sympathy* au sens large, c'est-à-dire la capacité d'un langage à faire écrire du
 code en accord avec le matériel : disposition des données, SIMD, hiérarchie mémoire, concurrence, allocation,
@@ -279,6 +280,49 @@ langages inchangés.
   seules mesures (plafond et code par défaut), C reste 1er et les étages gardent les mêmes langages, mais l'ordre du
   premier change : Odin, C3 et Chapel suivent C, C++ est 5e, D 12e (voir « Les mesures et la grille, séparément ») ;
   sur le plafond seul, la tête serait C, C3, Swift, C++, Odin, Chapel, D.
+
+
+### La taille des données (v4, point 2 ; à côté du classement)
+
+Chaque noyau était mesuré à une seule taille, sauf K2. Le point 2 de la v4 a mesuré les sept noyaux dont le travail
+dépend d'une taille de données à trois tailles (une qui tient dans le L2 d'un cœur, la taille publiée, une au-delà du
+L3), pour les 25 langages, sur un même hôte (Emerald Rapids, machine 31 : 6 594 processus en trois passes), avec un
+plan et une analyse fixés avant les mesures ([`docs/V4_SIZES.md`](docs/V4_SIZES.md),
+[`results/report_sizes.md`](results/report_sizes.md)). Le classement ci-dessus ne change pas : il changera une seule
+fois, avec les points 3 et 4, dans une campagne où les tailles compteront à poids égaux.
+
+| Publié | Langage | Cet hôte, taille publiée | Trois tailles | Petite seule | Grande seule |
+|---|---|---|---|---|---|
+| 1 | C | 1 | 2 | 2 | 3 |
+| 2 | Odin | 6 | 4 | 4 | 5 |
+| 3 | C++ | 2 | 1 | 1 | 1 |
+| 4 | C3 | 3 | 3 | 3 | 2 |
+| 5 | Zig | 8 | 7 | 10 | 4 |
+| 6 | Rust | 7 | 8 | 8 | 9 |
+| 7 | Nim | 4 | 5 | 6 | 6 |
+| 8 | D | 5 | 6 | 7 | 7 |
+| 9 | Ada | 9 | 10 | 14 | 8 |
+| 10 | Chapel | 11 | 9 | 5 | 10 |
+| 11 | Fortran | 14 | 13 | 9 | 12 |
+| 12 | Swift | 10 | 11 | 12 | 14 |
+| 13 | Julia | 13 | 14 | 13 | 13 |
+| 14 | Mojo | 12 | 12 | 11 | 11 |
+
+Les onze suivants restent à une place au plus de leur rang publié dans chacun de ces calculs.
+
+* **L'effet des tailles est faible.** Entre la taille publiée seule sur cet hôte et la moyenne des trois tailles,
+  aucun langage ne bouge de plus de deux places : Odin et Chapel en gagnent deux, C++ passe devant C. C'est l'ordre du
+  bruit de processus de cet hôte : refait avec les anciens binaires d'Odin, de Chapel et de Go (contrôle prévu par le
+  plan), le calcul à la taille publiée déplace déjà Odin de deux places.
+* **Une taille seule déplace davantage, dans les deux sens.** À la petite taille, les variantes à plusieurs fils
+  paient surtout leur lancement, sauf en Chapel et en Fortran, qui gardent une réserve de fils : Chapel 5e, Fortran
+  9e. À la grande, la limite de la mémoire rapproche les compilés : Zig (4e) et Ada (8e) remontent, Swift descend
+  (14e).
+* **L'effet de l'hôte est plus grand.** Entre le classement publié et le même calcul sur cet hôte, cinq langages
+  bougent de trois ou quatre places : Nim (7e → 4e), D (8e → 5e), Odin (2e → 6e), Zig (5e → 8e), Fortran
+  (11e → 14e). Le premier moteur est l'écrivain unique de K3, dont la boucle coûte un ou sept cycles par incrément
+  selon sa place dans sa ligne de 64 octets (point 5 de « Ce qui sépare vraiment les langages ») : l'effet, établi sur
+  Emerald Rapids, existe aussi sur Granite Rapids, mais pas sur Cascade Lake, d'où vient le K3 du classement.
 
 ## Pourquoi cet ordre, langage par langage
 
@@ -1020,7 +1064,9 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
 * La v4, point par point, dans l'ordre de pertinence ([`docs/V4_PLAN.md`](docs/V4_PLAN.md)). Point 1, une sonde par
   case de la grille : méthode, preuves langage par langage, cases discutables et leur effet, erratum
   ([`docs/GRID_AUDIT.md`](docs/GRID_AUDIT.md), [`results/grid_audit/summary.md`](results/grid_audit/summary.md),
-  [`results/grid_audit/report_errata.md`](results/grid_audit/report_errata.md)).
+  [`results/grid_audit/report_errata.md`](results/grid_audit/report_errata.md)). Point 2, trois tailles par noyau :
+  plan, écarts, campagne, contrôle et résultats ([`docs/V4_SIZES.md`](docs/V4_SIZES.md),
+  [`results/report_sizes.md`](results/report_sizes.md)).
 * La sensibilité « sans SIMD explicite », le classement des variantes (types vectoriels du langage, intrinsèques de la
   plateforme, intrinsèques importées) et le décompte corrigé des formes de Q1 (9 contre 5) :
   [`docs/NOSIMD.md`](docs/NOSIMD.md) et [`results/report_nosimd.md`](results/report_nosimd.md) ; note d'explication
