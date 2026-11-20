@@ -339,14 +339,18 @@ def three_sizes(host, pos_data, langs, footprint, c3, ebs):
 
 
 def control(data):
-    """Écart 4.1 : rapport des temps nouveau / ancien (moyennes géométriques des médianes de processus) par cellule."""
+    """Écart 4.1 : rapport des temps nouveau / ancien (moyennes géométriques des médianes de processus) par cellule.
+    Descriptif, ajouté après les mesures : les médianes des processus de chaque construction, et « séparés » quand
+    tous les processus d'une construction sont plus lents que tous ceux de l'autre."""
     out = {}
     for l in CONTROL:
         new, old = data.get(("new", "pub"), {}).get(l, {}), data.get(("old", "pub"), {}).get(l, {})
         for key in sorted(set(new) & set(old)):
-            a = math.exp(np.mean(np.log([np.median(p) for p in new[key]])))
-            b = math.exp(np.mean(np.log([np.median(p) for p in old[key]])))
-            out[f"{l}|{'|'.join(key)}"] = {"new": a, "old": b, "ratio": a / b, "over5": abs(a / b - 1) > 0.05}
+            pn, po = [float(np.median(p)) for p in new[key]], [float(np.median(p)) for p in old[key]]
+            a, b = math.exp(np.mean(np.log(pn))), math.exp(np.mean(np.log(po)))
+            out[f"{l}|{'|'.join(key)}"] = {"new": a, "old": b, "ratio": a / b, "over5": abs(a / b - 1) > 0.05,
+                                           "new_procs": pn, "old_procs": po,
+                                           "separated": min(pn) > max(po) or min(po) > max(pn)}
     return out
 
 
@@ -357,7 +361,10 @@ def run_all(data, lat, langs, footprint, c3, hw, build_pub="new"):
         for l in CONTROL:
             for key, procs in data.get(("old", "pub"), {}).get(l, {}).items():
                 k = key[0]
-                pos[POS[k].index("pub") if k in SIZED else 1][0][l][key] = procs
+                # K2, K3 et K10 n'ont que leur taille publiée, présente dans les trois positions (correction du
+                # 20 novembre, après le premier calcul : seule la position publiée les recevait)
+                for p in ([POS[k].index("pub")] if k in SIZED else range(3)):
+                    pos[p][0][l][key] = procs
             if lat.get(("old", "pub"), {}).get(l):
                 pos[POS["k8"].index("pub")][1][l].update(lat[("old", "pub")][l])
     host_d, host_lt = defaultdict(dict), defaultdict(dict)
@@ -401,44 +408,88 @@ def main():
     over = {k: v for k, v in out["control"].items() if v["over5"]}
     if over:
         out["with_old_binaries"] = run_all(data, lat, langs, footprint, c3, hw, build_pub="old")
-    published = json.load(open(os.path.join(ROOT, "results", "summary_v3.json")))["results"]
-    out["published"] = {l: {"MS": published[l]["MS"]} for l in RANKED if l in published}
+    # classement publié (tableau de tête du README), tel que régénéré par l'audit de la grille (analysis/audit3.py)
+    pub = json.load(open(os.path.join(ROOT, "results", "audit3.json")))["scenarios"]["Publié"]
+    out["published"] = {"order": pub["order21"], "exp": pub["exp21"], "ms0": pub["ms0"], "tiers": pub["tiers"]}
     json.dump(out, open(os.path.join(ROOT, "results", "sizes", "analysis.json"), "w"), indent=1, default=float)
     report(out)
 
 
+def moved(a, b, langs):
+    """Langages dont la place change de plus de deux entre deux ordres : {langage: (place dans a, place dans b)}."""
+    return {l: (a.index(l) + 1, b.index(l) + 1) for l in langs if abs(a.index(l) - b.index(l)) > 2}
+
+
 def report(o):
-    R = o["results"]
+    R, P = o["results"], o["published"]
     names = ["Hôte", "Trois tailles", "Taille petite", "Taille publiée", "Taille grande"]
     L = ["# v4, point 2 : trois tailles par noyau — résultats", "",
          "*Plan : `docs/V4_SIZES.md` (sections 6 à 8, écart 4.1). Généré par `analysis/sizes_v4.py` à partir de "
          "`results/sizes/raw` (machine 31). Le classement de tête du README ne change pas au point 2 (section 9).*", "",
          "## Classements", "",
-         "| Langage | " + " | ".join(names) + " |", "|---|" + "---|" * len(names)]
+         "| Langage | Publié | " + " | ".join(names) + " |", "|---|---|" + "---|" * len(names)]
     order = R["Trois tailles"]["order"]
     for l in order:
-        cells = []
+        cells = [f"{P['order'].index(l) + 1} ({P['exp'][l]:.2f} ; {P['ms0'][l]:.1f})"]
         for n in names:
             r = R[n]
             cells.append(f"{r['order'].index(l) + 1} ({r['exp'][l]:.2f} ; {r['ms0'][l]:.1f})")
         L.append(f"| {NAMES[l]} | " + " | ".join(cells) + " |")
-    L += ["", "Chaque case : place (rang espéré ; score au centre). Ordre des lignes : « Trois tailles ».", "",
-          "## Étages indicatifs (paires ordonnées dans au moins 95 % des variantes)", ""]
+    L += ["", "Chaque case : place (rang espéré ; score au centre). Ordre des lignes : « Trois tailles ». « Publié » : "
+          "le classement de tête du README (`results/audit3.json`), calculé sur les données publiées (Cascade Lake, "
+          "et Emerald Rapids pour K5, K9 et les latences de K8).", "",
+          "## Étages indicatifs (paires ordonnées dans au moins 95 % des variantes)", "",
+          "* Publié (règle v3, avec sa condition de réplication) : "
+          + " | ".join(", ".join(NAMES[l] for l in t) for t in P["tiers"])]
     for n in names:
         L.append(f"* {n} : " + " | ".join(", ".join(NAMES[l] for l in t) for t in R[n]["tiers"]))
-    L += ["", "## Rangs qui bougent de plus de deux places entre « Hôte » et « Trois tailles »", ""]
+    L += ["", "## Rangs qui bougent de plus de deux places entre « Hôte » et « Trois tailles » (effet des tailles)", ""]
     if o["moved_more_than_2"]:
         for l, (a, b) in sorted(o["moved_more_than_2"].items(), key=lambda x: x[1][1]):
             L.append(f"* {NAMES[l]} : {a}e → {b}e")
     else:
         L.append("* aucun")
+    L += ["", "## Rangs qui bougent de plus de deux places entre « Publié » et « Hôte » (effet de l'hôte et du "
+          "nouveau code)", ""]
+    mp = moved(P["order"], R["Hôte"]["order"], P["order"])
+    L += [f"* {NAMES[l]} : {a}e → {b}e" for l, (a, b) in sorted(mp.items(), key=lambda x: x[1][1])] or ["* aucun"]
     L += ["", "## Cellules manquantes (temps le plus lent des autres langages)", ""]
     for n, lst in o["filled"].items():
         L.append(f"* {n} : " + (", ".join(f"{NAMES.get(x[0], x[0])} {x[1]}" for x in lst) if lst else "aucune"))
+    ctl = o["control"]
     L += ["", "## Contrôle des anciens binaires (Odin, Chapel, Go, taille publiée)", "",
-          "| Cellule | nouveau / ancien |", "|---|---|"]
-    for k, v in sorted(o["control"].items()):
-        L.append(f"| {k} | {v['ratio']:.3f}{' **> 5 %**' if v['over5'] else ''} |")
+          f"{len(ctl)} cellules ; écart de plus de 5 % : {sum(v['over5'] for v in ctl.values())} ; processus séparés "
+          f"(tous ceux d'une construction plus lents que tous ceux de l'autre, descriptif) : "
+          f"{sum(v['separated'] for v in ctl.values())}, dont {sum(v['separated'] and v['over5'] for v in ctl.values())} "
+          "au-delà de 5 %. Médianes des processus en secondes, une par passe.", "",
+          "| Cellule | nouveau / ancien | processus nouveaux | processus anciens | séparés |", "|---|---|---|---|---|"]
+    g = lambda ps: ", ".join(f"{p:.4g}" for p in ps)  # noqa: E731
+    for k, v in sorted(ctl.items()):
+        L.append(f"| {k} | {v['ratio']:.3f}{' **> 5 %**' if v['over5'] else ''} | {g(v['new_procs'])} | "
+                 f"{g(v['old_procs'])} | {'oui' if v['separated'] else ''} |")
+    W = o.get("with_old_binaries")
+    if W:
+        RW = W["results"]
+        L += ["", "## Calculs refaits avec les anciens binaires d'Odin, de Chapel et de Go à la taille publiée "
+              "(section 4)", "",
+              "Langages dont la place change dans au moins un calcul (place avec les nouveaux binaires → avec les "
+              "anciens ; rang espéré entre parenthèses) :", "",
+              "| Langage | " + " | ".join(names) + " |", "|---|" + "---|" * len(names)]
+        for l in order:
+            if all(R[n]["order"].index(l) == RW[n]["order"].index(l) for n in names):
+                continue
+            L.append(f"| {NAMES[l]} | " + " | ".join(
+                f"{R[n]['order'].index(l) + 1} → {RW[n]['order'].index(l) + 1} ({R[n]['exp'][l]:.2f} → "
+                f"{RW[n]['exp'][l]:.2f})" for n in names) + " |")
+        L += ["", "Scores au centre d'Odin, de Chapel et de Go (nouveaux → anciens binaires) :", ""]
+        for l in CONTROL:
+            L.append(f"* {NAMES[l]} : " + " ; ".join(f"{n} {R[n]['ms0'][l]:.1f} → {RW[n]['ms0'][l]:.1f}" for n in names))
+        mw = W["moved_more_than_2"]
+        L += ["", "Rangs qui bougent de plus de deux places entre « Hôte » et « Trois tailles », anciens binaires : "
+              + (", ".join(f"{NAMES[l]} {a}e → {b}e" for l, (a, b) in mw.items()) or "aucun") + ".", "",
+              "Étages indicatifs, anciens binaires :", ""]
+        for n in names:
+            L.append(f"* {n} : " + " | ".join(", ".join(NAMES[l] for l in t) for t in RW[n]["tiers"]))
     fl = o["failures"]
     cells = lambda sel: sorted({(f["lang"], f["key"][0], f["size"], f["key"][1], f["key"][2]) for f in fl if sel(f)})
     absent, oom = cells(lambda f: f["absent"]), cells(lambda f: f["oom"] and not f["absent"])
