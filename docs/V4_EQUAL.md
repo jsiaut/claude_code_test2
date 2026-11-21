@@ -153,9 +153,34 @@ base du point 2. Avant les mesures, à machine au repos : caractérisation (`too
 `results/hw/machine32`), mesure de b3, sonde de K2. Si le modèle change, la règle de `docs/V4_SIZES.md` (5) s'applique,
 et les cellules de la taille publiée du point 2 entrent dans la campagne pour refaire la base sur le nouveau modèle.
 
+### 5.1 Écart au plan (21 novembre, 8 h, après la caractérisation, avant toute mesure de la campagne)
+
+* **Faits.** La machine 32 est du modèle de la machine 31, mais ne se comporte pas comme elle (`results/hw/machine32`
+  contre `results/hw/machine31`) : la latence passe à celle de la mémoire entre 8 et 16 Mio (102 ns à 16 Mio, contre
+  40 ns sur la machine 31, dont le L3 effectif allait jusqu'à 16 à 24 Mio) ; STREAM triad sur 4 fils donne 176 Go/s
+  (226) ; le pic FMA AVX-512 165 Gflop/s (179). La part du L3 partagé qu'obtient la machine virtuelle diffère donc d'un
+  hôte à l'autre du même modèle.
+* **Conséquence.** Les rapports mesurés sur la machine 32 ne valent pas pour les données de la machine 31 : les 16 Mio
+  de K4, par exemple, tiennent dans le L3 effectif de l'une et pas de l'autre, et le gain d'un K4 en SIMD dépend de la
+  bande passante du niveau où sont les données. **La base est donc refaite sur la machine 32, dans la campagne du
+  point 3** : toutes les cellules du calcul « Hôte » à la taille publiée (K1 à K9, binaires publiés ; K10, hors score,
+  n'est pas mesuré), qui servent aussi de références aux nouvelles cellules. L'analyse (section 8) porte sur les seules
+  données de la machine 32, avec ses bornes physiques, et chaque calcul remplace directement les cellules qu'une règle
+  change par celles qui sont mesurées dans le nouveau mode ou la nouvelle forme, sans report de rapport. Le calcul
+  « Hôte » de la machine 31 (point 2) et celui de la machine 32 sont comparés, en réplication descriptive.
+* **b3 (3.4), début de la campagne** : 84,15 et 84,85 ms (médianes des 16 décalages, deux exécutions ;
+  `results/equal/k3_ref_start.txt`). La boucle est rapide à 5 décalages sur 16 (8, puis 36 à 48 : 12 à 16 ms), lente
+  aux 11 autres (63 à 88 ms), comme sur les Emerald Rapids précédents.
+* **Sonde de K2 (3.5)** : sur la machine 32, aucun des 60 processus n'a le régime lent de la machine 31 (0,145 à
+  0,169 s avec adresses aléatoires ou fixes ; 0,131 à 0,151 s avec 8 Mio de pages géantes ; `results/equal/k2_probe.txt`).
+  Les deux régimes de la machine 31 ne tiennent donc ni aux adresses virtuelles ni au TLB ; le régime lent (0,44 à
+  0,81 s, environ 105 à 190 ns par saut) a la latence de la mémoire, comme si les 8 Mio sortaient par moments du L3
+  effectif (hypothèse, non vérifiée). R5 ne change pas.
+
 ## 6. Cellules (taille publiée)
 
-Chaque nouvelle cellule est mesurée avec sa cellule de référence, du même langage, dans la même campagne :
+Chaque nouvelle cellule est mesurée avec sa cellule de référence, du même langage, dans la même campagne (et, depuis
+l'écart 5.1, avec toute la base à la taille publiée) :
 
 | Règle | Nouvelle cellule | Référence | Langages |
 |---|---|---|---|
@@ -163,7 +188,7 @@ Chaque nouvelle cellule est mesurée avec sa cellule de référence, du même la
 | R2 | K9 `natural_flat` (mode publié ; R1 pour C++ et D ; R1' pour Nim, Mojo, Swift, Go, OCaml) | K9 `natural`, binaire publié | 13 |
 | R3 | K4 `tuned` | K4 `branchless_unsorted`, binaire publié | 25 |
 
-Environ 190 nouvelles cellules et 175 références.
+Environ 190 nouvelles cellules ; avec la base (5.1), environ 520 cellules par passe.
 
 ## 7. Campagne
 
@@ -175,12 +200,10 @@ mesure ne tourne pendant la campagne.
 
 ## 8. Analyse, fixée avant les mesures
 
-La méthode v3 du point 2 (même graine, 20 000 variantes, mêmes poids, grille v2 corrigée par le point 1, bornes
-physiques de la machine 31), appliquée à la base « Hôte » du point 2 (`analysis/sizes_v4.py`). Report des mesures du
-point 3, comme les corrections appariées de la v3 (`apply_transfers`) : chaque processus de la cellule de base est
-multiplié par le rapport r = G(nouvelle) / G(référence), G = moyenne géométrique des médianes de processus de la
-campagne du point 3 ; les latences de K8 naturel, colonne par colonne, par le rapport des médianes ; K4 `tuned` est
-créée à partir de K4 `branchless_unsorted` de la base. Calculs :
+La méthode v3 du point 2 (même graine, 20 000 variantes, mêmes poids, grille v2 corrigée par le point 1), appliquée à
+la base « Hôte » refaite sur la machine 32, avec ses bornes physiques (écart 5.1 : la base et les nouvelles cellules
+viennent de la même campagne, et chaque calcul substitue directement les cellules mesurées ; le report de rapports
+prévu ici d'abord n'a plus d'objet). Calculs :
 
 1. **Hôte** : la base, refaite.
 2. **R1** : cellules naturelles des 8 langages en mode vérifié (dans le code par défaut et, là où la variante

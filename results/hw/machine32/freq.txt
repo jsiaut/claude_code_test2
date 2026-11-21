@@ -1,0 +1,4 @@
+TSC: 2.1000 GHz
+freq: 2.628 GHz effectifs (TSC 2.100 GHz, ratio cycles/TSC=1.252) x=1000000000
+freq: 2.809 GHz effectifs (TSC 2.100 GHz, ratio cycles/TSC=1.338) x=1000000000
+freq: 2.757 GHz effectifs (TSC 2.100 GHz, ratio cycles/TSC=1.313) x=1000000000
