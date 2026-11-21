@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 14 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo).
+Langages relevés : 15 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -367,4 +367,29 @@ Langages relevés : 14 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k8 tuned_it` | K8 | écrite | `k8 tuned_it` | piles en Array[.., 64] (sur la pile) |
 | `k9 tuned_v` | K9 | présente | `k9 tuned` | SIMD[float64, 8], chargements et écriture non alignés, j depuis 1 |
 | `k9 mt_pool` | K9 mt | présente | `k9 mt` | create_task (runtime asynchrone), quatre quarts |
+| `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 présente : mt_pool l'exécute |
+
+## C#
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : Vector512 et vpsadbw d'Avx512BW, la forme de bench/csharp_exp |
+| `k4 swar` | K4 | écrite | `k4 swar` | mots de 64 bits (Unsafe.ReadUnaligned) |
+| `k5 tuned_v` | K5 | présente | `k5 tuned` | Vector512<float>, quatre accumulateurs, FusedMultiplyAdd |
+| `q6 tuned_v` | Q6 | présente | `k6 tuned q6` | Vector512<int>, sélection par masque, Widen en Vector512<long> |
+| `q6 tuned_s` | Q6 | sans objet | — | forme principale présente ou écrite |
+| `q1 tuned_v` | Q1 | présente | `k6 tuned q1` | Vector512 et intrinsèques AVX-512, compte par PopCount de ExtractMostSignificantBits ; la forme de la remarque (accumulateurs en variables locales) n'est pas reprise : × 4,05 sous le protocole publié, son gain ne venait qu'avec FullOpts, option non admise (3.2, 4) |
+| `q1 tuned_s` | Q1 | sans objet | — | forme principale présente ou écrite |
+| `q6 mt_pool` (R) | Q6 mt | écrite | `k6 mt_pool q6` | forme de bench/csharp_exp (remarque sur C#, × 0,71) : Parallel.For sur les fils du ThreadPool, le fil appelant compris ; chaque quart : Q6Tuned publiée |
+| `q6 mt_pool_v` | Q6 mt | sans objet | — | tuned_v de Q6 présente : mt_pool l'exécute |
+| `q6 mt_pool_s` | Q6 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `q1 mt_pool` (R) | Q1 mt | écrite | `k6 mt_pool q1` | Parallel.For (forme de la remarque) ; chaque quart : Q1Tuned publiée |
+| `q1 mt_pool_v` | Q1 mt | sans objet | — | tuned_v de Q1 présente : mt_pool l'exécute |
+| `q1 mt_pool_s` | Q1 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `k7 tuned_pf` | K7 | présente | `k7 tuned` | lots de 16, Sse.Prefetch0 (préchargement en lecture : .NET n'expose pas prefetchw) |
+| `k7 tuned_oa` | K7 | sans objet | — | forme principale présente ou écrite |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | fonction récursive, état en paramètres et en retour, arène statique |
+| `k8 tuned_it` (R) | K8 | écrite | `k8 tuned_it` | forme de bench/csharp_exp (remarque sur C#, × 0,51), piles portées à 64 entrées (stackalloc) |
+| `k9 tuned_v` | K9 | présente | `k9 tuned` | Vector512<double>, Load et Store non alignés, j depuis 1 |
+| `k9 mt_pool` (R) | K9 mt | écrite | `k9 mt_pool` | Parallel.For (forme de la remarque, × 0,63) ; chaque quart : K9Rows publiée (tuned_v) |
 | `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 présente : mt_pool l'exécute |

@@ -221,12 +221,40 @@ static unsafe class Ms
         for (; i < n; i++) { uint x = v[i]; if (x >= 128) s += x; }
         return s;
     }
+    // v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits (Unsafe.ReadUnaligned). Le bit de
+    // poids fort de chaque octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les
+    // octets >= 128 ; les octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute
+    // donnée : une voie reçoit au plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les
+    // voies sont vidées dans la somme toutes les 128 mots (et à la fin). Aucun branchement sur les données.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    static ulong K4Swar(byte[] v)
+    {
+        const ulong ONES = 0x0101010101010101UL, LO = 0x00FF00FF00FF00FFUL;
+        ref byte b = ref MemoryMarshal.GetArrayDataReference(v);
+        int n = v.Length, i = 0;
+        ulong s = 0;
+        while (i + 8 <= n)
+        {
+            int e = i + 128 * 8 <= n ? i + 128 * 8 : n - (n - i) % 8;
+            ulong acc = 0;
+            for (; i < e; i += 8)
+            {
+                ulong w = Unsafe.ReadUnaligned<ulong>(ref Unsafe.Add(ref b, i));
+                ulong y = w & (((w >> 7) & ONES) * 0xFF);
+                acc += (y & LO) + ((y >> 8) & LO);
+            }
+            acc = (acc & 0x0000FFFF0000FFFFUL) + ((acc >> 16) & 0x0000FFFF0000FFFFUL); // deux voies de 32 bits
+            s += (acc & 0xFFFFFFFFUL) + (acc >> 32);
+        }
+        for (; i < n; i++) { ulong x = v[i]; s += x * (x >> 7); }
+        return s;
+    }
     static void RunK4(string v, int reps)
     {
         byte[] d = LoadBytes("k4_bytes.u8");
         if (v == "natural_sorted") Array.Sort(d);
-        bool bl = v == "branchless_unsorted", tu = v == "tuned";
-        Bench("k4", v, "16M", reps, () => (tu ? K4Tuned(d) : bl ? K4Branchless(d) : K4Natural(d)).ToString());
+        bool bl = v == "branchless_unsorted", tu = v == "tuned", sw = v == "swar";
+        Bench("k4", v, "16M", reps, () => (tu ? K4Tuned(d) : sw ? K4Swar(d) : bl ? K4Branchless(d) : K4Natural(d)).ToString());
     }
 
     // ------------------------------------------------------------------ K5
@@ -353,7 +381,21 @@ static unsafe class Ms
         Bench("k6", v, p, reps, () =>
         {
             long s = 0;
-            if (v == "mt")
+            if (v == "mt_pool")
+            {
+                // v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool ; forme de bench/csharp_exp, remarque sur C#, × 0,71 sur
+                // Q6) : Parallel.For sur les fils du ThreadPool (gardés par le runtime, le fil appelant compris), un quart
+                // par tâche, chacun en la forme de mt (Q6Tuned, Q1Tuned)
+                var part = new long[4];
+                Parallel.For(0, 4, k =>
+                {
+                    int lo = N6 / 4 * k, hi = N6 / 4 * (k + 1);
+                    if (q1) { var a = new long[30]; Q1Tuned(lo, hi, a); part[k] = a.Sum(); }
+                    else part[k] = Q6Tuned(lo, hi);
+                });
+                s = part.Sum();
+            }
+            else if (v == "mt")
             {
                 var part = new long[4];
                 var th = new Thread[4];
@@ -442,13 +484,71 @@ static unsafe class Ms
         return i;
     }
     static long ASum(int i) => i < 0 ? 0 : arena[i].V + ASum(arena[i].L) + ASum(arena[i].R);
+    // v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada, et de bench/c_k8val) : l'état passe
+    // par valeur, l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la fonction rend l'indice
+    // libre suivant. Même arène, mêmes liens et mêmes valeurs que ABuild ; somme récursive par les liens (ASum).
+    static int ABuildVal(int i, int dp, long q)
+    {
+        arena[i].V = q + i;
+        if (dp > 0)
+        {
+            int l = i + 1, r = ABuildVal(l, dp - 1, q);
+            arena[i].L = l; arena[i].R = r;
+            return ABuildVal(r, dp - 1, q);
+        }
+        arena[i].L = arena[i].R = -1;
+        return i + 1;
+    }
+    static long ValQuery(long q) { ABuildVal(0, Sizes.K8_REQ, q); return ASum(0); }
+    // v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/csharp_exp, remarque sur C#, × 0,51) : même
+    // arène, même ordre préfixe, construction et somme par piles explicites (stackalloc de 64 entrées : au plus une entrée
+    // par niveau à la construction, au plus profondeur + 1 à la somme ; Sizes.K8_REQ < 63, vérifié dans RunK8)
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    static int ABuildIt(int depth)
+    {
+        Span<int> sp = stackalloc int[64], sd8 = stackalloc int[64];
+        ANode[] ar = arena;
+        int n = 0, t = 0, root = -1, parent = -1, dp = depth;
+        bool left = true;
+        long c = cnt8;
+        while (true)
+        {
+            int i = t++;
+            ref ANode nd = ref ar[i];
+            nd.V = c++; nd.L = -1; nd.R = -1;
+            if (parent >= 0) { if (left) ar[parent].L = i; else ar[parent].R = i; } else root = i;
+            if (dp > 0) { sp[n] = i; sd8[n] = dp - 1; n++; parent = i; left = true; dp--; continue; }
+            if (n == 0) break;
+            n--; parent = sp[n]; dp = sd8[n]; left = false;
+        }
+        cnt8 = c; top = t;
+        return root;
+    }
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    static long ASumIt(int root)
+    {
+        Span<int> st = stackalloc int[64];
+        ANode[] ar = arena;
+        int n = 0;
+        long s = 0;
+        st[n++] = root;
+        while (n > 0)
+        {
+            ref ANode nd = ref ar[st[--n]];
+            s += nd.V;
+            if (nd.R >= 0) st[n++] = nd.R;
+            if (nd.L >= 0) st[n++] = nd.L;
+        }
+        return s;
+    }
     static Node? keep;
     static void RunK8(string v, int reps)
     {
         const int Q = 16384;
         cnt8 = 0; keep = TBuild(Sizes.K8_LONG); long lsum = TSum(keep);
         var lat = new long[Q];
-        bool tuned = v == "tuned";
+        bool tuned = v == "tuned", val = v == "tuned_val", it = v == "tuned_it";
+        if (Sizes.K8_REQ >= 63) throw new InvalidOperationException("piles de K8 tuned_it : 64 entrées");
         for (int r = -Warmup; r < reps; r++)
         {
             long total = 0;
@@ -457,7 +557,9 @@ static unsafe class Ms
             {
                 long a = Stopwatch.GetTimestamp();
                 cnt8 = qq;
-                long s = tuned ? (top = 0) + ASum(ABuild(Sizes.K8_REQ)) : TSum(TBuild(Sizes.K8_REQ));
+                long s = tuned ? (top = 0) + ASum(ABuild(Sizes.K8_REQ))
+                       : val ? ValQuery(qq)
+                       : it ? ASumIt(ABuildIt(Sizes.K8_REQ)) : TSum(TBuild(Sizes.K8_REQ));
                 total += s;
                 lat[qq] = (long)Stopwatch.GetElapsedTime(a).TotalNanoseconds;
             }
@@ -523,6 +625,13 @@ static unsafe class Ms
                 for (int it = 0; it < 4; it++)
                 {
                     if (v == "tuned") K9Rows(a, b, 1, M9 - 1);
+                    else if (v == "mt_pool")
+                    {
+                        // v4, point 4 (mt_pool ; forme de bench/csharp_exp, remarque sur C#, × 0,63) : Parallel.For sur le
+                        // ThreadPool, un quart des lignes par tâche, chacun en K9Rows (déjà la forme tuned_v)
+                        double* fa = a, fb = b;
+                        Parallel.For(0, 4, k => K9Rows(fa, fb, 1 + (M9 - 2) * k / 4, 1 + (M9 - 2) * (k + 1) / 4));
+                    }
                     else
                     {
                         double* fa = a, fb = b;

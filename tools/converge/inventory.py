@@ -418,6 +418,36 @@ INV = {
         "k9 mt_pool": e(P, [("k9", "mt", "")], "create_task (runtime asynchrone), quatre quarts"),
         "k9 mt_pool_v": e(S, note="tuned_v de K9 présente : mt_pool l'exécute"),
     },
+    "csharp": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : Vector512 et vpsadbw d'Avx512BW, la forme de bench/csharp_exp"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits (Unsafe.ReadUnaligned)"),
+        "k5 tuned_v": e(P, [("k5", "tuned", "")], "Vector512<float>, quatre accumulateurs, FusedMultiplyAdd"),
+        "q6 tuned_v": e(P, [("k6", "tuned", "q6")], "Vector512<int>, sélection par masque, Widen en Vector512<long>"),
+        "q6 tuned_s": SANS_REPLI,
+        "q1 tuned_v": e(P, [("k6", "tuned", "q1")], "Vector512 et intrinsèques AVX-512, compte par PopCount de "
+                        "ExtractMostSignificantBits ; la forme de la remarque (accumulateurs en variables locales) "
+                        "n'est pas reprise : × 4,05 sous le protocole publié, son gain ne venait qu'avec FullOpts, option "
+                        "non admise (3.2, 4)"),
+        "q1 tuned_s": SANS_REPLI,
+        "q6 mt_pool": e(E, [("k6", "mt_pool", "q6")], "forme de bench/csharp_exp (remarque sur C#, × 0,71) : Parallel.For "
+                        "sur les fils du ThreadPool, le fil appelant compris ; chaque quart : Q6Tuned publiée", True),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 présente : mt_pool l'exécute"),
+        "q6 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "q1 mt_pool": e(E, [("k6", "mt_pool", "q1")], "Parallel.For (forme de la remarque) ; chaque quart : Q1Tuned "
+                        "publiée", True),
+        "q1 mt_pool_v": e(S, note="tuned_v de Q1 présente : mt_pool l'exécute"),
+        "q1 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "k7 tuned_pf": e(P, [("k7", "tuned", "")], "lots de 16, Sse.Prefetch0 (préchargement en lecture : .NET n'expose pas "
+                         "prefetchw)"),
+        "k7 tuned_oa": SANS_REPLI,
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour, arène statique"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "forme de bench/csharp_exp (remarque sur C#, × 0,51), piles portées à "
+                         "64 entrées (stackalloc)", True),
+        "k9 tuned_v": e(P, [("k9", "tuned", "")], "Vector512<double>, Load et Store non alignés, j depuis 1"),
+        "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "Parallel.For (forme de la remarque, × 0,63) ; chaque quart : K9Rows "
+                        "publiée (tuned_v)", True),
+        "k9 mt_pool_v": e(S, note="tuned_v de K9 présente : mt_pool l'exécute"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
     "julia": {

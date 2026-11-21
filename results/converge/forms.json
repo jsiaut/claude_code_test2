@@ -3224,6 +3224,220 @@
     "remarque": false,
     "ceiling": "K9 mt"
    }
+  },
+  "csharp": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : Vector512 et vpsadbw d'Avx512BW, la forme de bench/csharp_exp",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "mots de 64 bits (Unsafe.ReadUnaligned)",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k5",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "Vector512<float>, quatre accumulateurs, FusedMultiplyAdd",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "tuned",
+      "q6"
+     ]
+    ],
+    "note": "Vector512<int>, sélection par masque, Widen en Vector512<long>",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "tuned",
+      "q1"
+     ]
+    ],
+    "note": "Vector512 et intrinsèques AVX-512, compte par PopCount de ExtractMostSignificantBits ; la forme de la remarque (accumulateurs en variables locales) n'est pas reprise : × 4,05 sous le protocole publié, son gain ne venait qu'avec FullOpts, option non admise (3.2, 4)",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool",
+      "q6"
+     ]
+    ],
+    "note": "forme de bench/csharp_exp (remarque sur C#, × 0,71) : Parallel.For sur les fils du ThreadPool, le fil appelant compris ; chaque quart : Q6Tuned publiée",
+    "remarque": true,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q6 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool",
+      "q1"
+     ]
+    ],
+    "note": "Parallel.For (forme de la remarque) ; chaque quart : Q1Tuned publiée",
+    "remarque": true,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q1 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "présente",
+    "cells": [
+     [
+      "k7",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "lots de 16, Sse.Prefetch0 (préchargement en lecture : .NET n'expose pas prefetchw)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "fonction récursive, état en paramètres et en retour, arène statique",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "forme de bench/csharp_exp (remarque sur C#, × 0,51), piles portées à 64 entrées (stackalloc)",
+    "remarque": true,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "Vector512<double>, Load et Store non alignés, j depuis 1",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "mt_pool",
+      ""
+     ]
+    ],
+    "note": "Parallel.For (forme de la remarque, × 0,63) ; chaque quart : K9Rows publiée (tuned_v)",
+    "remarque": true,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de K9 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }
