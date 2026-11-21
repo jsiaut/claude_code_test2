@@ -83,6 +83,9 @@ def fields(params):
     p["N6_4"] = p["N6"] // 4
     p["K7_LOG"] = p["K7_LOG2"] + 1
     p["K8_NODES"] = (2 << p["K8_REQ"]) - 1
+    # v4, point 4 : décalage du compte dans la table tassée de Lua (rq_pack) : la somme d'une clé (au plus N7 × 999)
+    # doit tenir sous ce bit ; 35 à la taille publiée
+    p["K7_SUMBITS"] = max(35, (p["N7"] * 999).bit_length()) if "N7" in p else 35
     return p
 
 
@@ -93,5 +96,35 @@ def apply(lang, text, params):
         n = text.count(old)
         if n != count:
             raise SystemExit(f"{lang} : motif {old!r} trouvé {n} fois, {count} attendu(s)")
+        text = text.replace(old, new.format(**f))
+    return text
+
+
+# v4, point 4 (docs/V4_CONVERGE.md, 3.2, 5) : copies bench/<langage>_cv des langages sans construction. Les motifs du
+# source publié s'y trouvent aux mêmes comptes ; les formes nouvelles y ajoutent leurs propres constantes de taille.
+CV_EXTRA = {
+    "python": [("tab = k7_tuned_oa(keys, vals, 21)", "tab = k7_tuned_oa(keys, vals, {K7_LOG})", 1),
+               ('tval, tit, d8 = v == "tuned_val", v == "tuned_it", 10', 'tval, tit, d8 = v == "tuned_val", v == "tuned_it", {K8_REQ}', 1)],
+    "lua": [("local tab = k7_tuned_oa(keys, vals, n, 21)", "local tab = k7_tuned_oa(keys, vals, n, {K7_LOG})", 1),
+            ("if tval then a_build_val(1, 10, q)", "if tval then a_build_val(1, {K8_REQ}, q)", 1),
+            ("s = a_sum_it(a_build_it(10))", "s = a_sum_it(a_build_it({K8_REQ}))", 1),
+            ("local ONE = 1 << 35", "local ONE = 1 << {K7_SUMBITS}", 1)],
+    "php": [("            $log = 21;\n", "            $log = {K7_LOG};\n", 1),
+            ("a_build_val(0, 10, $q, $av, $al, $ar);", "a_build_val(0, {K8_REQ}, $q, $av, $al, $ar);", 1)],
+    "bqn": [("  d8 ← 10 ⋄ n8 ← 2047\n", "  d8 ← {K8_REQ} ⋄ n8 ← {K8_NODES}\n", 1)],
+    "js": [("  const D8 = 10;\n", "  const D8 = {K8_REQ};\n", 1)],
+    "julia": [("const K7_LOG = 21\n", "const K7_LOG = {K7_LOG}\n", 1),
+              ("const K8_REQ = 10\n", "const K8_REQ = {K8_REQ}\n", 1)],
+}
+CV_PATCHES = {lang: (PATCHES[lang][0], PATCHES[lang][1] + CV_EXTRA[lang]) for lang in CV_EXTRA}
+
+
+def apply_cv(lang, text, params):
+    """Comme apply, pour la copie bench/<langage>_cv (point 4)."""
+    f = fields(params)
+    for old, new, count in CV_PATCHES[lang][1]:
+        n = text.count(old)
+        if n != count:
+            raise SystemExit(f"{lang} (_cv) : motif {old!r} trouvé {n} fois, {count} attendu(s)")
         text = text.replace(old, new.format(**f))
     return text
