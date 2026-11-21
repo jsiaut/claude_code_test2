@@ -3891,6 +3891,232 @@
     "remarque": true,
     "ceiling": "K7"
    }
+  },
+  "go": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : simd/archsimd (Uint8x64), masque, SumOf8AbsDiff",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "mots de 64 bits (binary.LittleEndian.Uint64)",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k5",
+      "tuned_v",
+      ""
+     ]
+    ],
+    "note": "forme de bench/go_exp (remarque sur Go, tuned_r, × 0,75), recopiée : Float32x16, quatre accumulateurs, MulAdd, la réduction finale dans les registres ; la variante tuned publiée réduit par un tableau en mémoire",
+    "remarque": true,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "tuned",
+      "q6"
+     ]
+    ],
+    "note": "Int32x16 (archsimd), masques, produit en i32, Masked, accumulation en Int64x8",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_v",
+      "q1"
+     ]
+    ],
+    "note": "forme de bench/go_exp (remarque sur Go, tuned_1p), recopiée : une passe, compte par bits.OnesCount16 du masque, additions masquées par IfElse, accumulateurs en variables locales ; plus lente que la variante tuned publiée (scalaire) dans la remarque (× 1,36) et à l'essai",
+    "remarque": true,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q6"
+     ]
+    ],
+    "note": "goroutines : fils du runtime (GOMAXPROCS), créés une fois",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q6 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q1"
+     ]
+    ],
+    "note": "goroutines (fils du runtime)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_v",
+      "q1"
+     ]
+    ],
+    "note": "goroutines, chaque quart : tuned_v (mt_1p de la remarque)",
+    "remarque": true,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun préchargement exporté (grille E4 = 0, results/probes/go.txt : internal/runtime/sys.Prefetch interdit hors de la bibliothèque)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "présente",
+    "cells": [
+     [
+      "k7",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "la variante tuned publiée : la même table (cases de 16 octets), sans préchargement ni lots",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "fonction récursive, état en paramètres et en retour, tranche de longueur fixe (la variante tuned publiée passe un compteur et la tranche par pointeur, et ajoute par append)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "forme de bench/go_noexp (remarque sur Go, × 0,62), recopiée : piles de 64 entrées (profondeur contrôlée à la compilation)",
+    "remarque": true,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "tuned_v",
+      ""
+     ]
+    ],
+    "note": "forme de bench/go_exp (remarque sur Go, tuned_vec, × 0,78) : Float64x8, j depuis 1, accès non alignés, fin par chargements partiels",
+    "remarque": true,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "mt",
+      ""
+     ]
+    ],
+    "note": "goroutines (fils du runtime)",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "mt_pool_v",
+      ""
+     ]
+    ],
+    "note": "goroutines, chaque quart : tuned_v (mt_vec de la remarque, × 0,73)",
+    "remarque": true,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }

@@ -2,7 +2,9 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
+	"math/bits"
 	"os"
 	"runtime"
 	"simd/archsimd"
@@ -303,6 +305,35 @@ func k4Tuned(v []byte) uint64 {
 	}
 	return s
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, swar) : huit octets par mot de 64 bits (binary.LittleEndian.Uint64, une
+// lecture non alignée). Par mot w : m = (w >> 7) & 0x0101…01 (le bit de poids fort de chaque octet), y = w & (m * 0xFF)
+// (octets >= 128 gardés, les autres à zéro), puis les octets de rang pair et impair ajoutés en quatre voies de 16 bits.
+// Exactitude : par mot, chaque voie reçoit au plus 2 × 255 = 510 ; vidée toutes les 128 mots, elle reste sous
+// 128 × 510 = 65 280 < 2^16 ; au vidage, deux voies de 32 bits (au plus 2 × 65 280) ajoutées à la somme de 64 bits.
+// Les n mod 8 derniers octets : x & -(x >> 7).
+//
+//go:noinline
+func k4Swar(v []byte) uint64 {
+	n := len(v)
+	nw := n / 8
+	s := uint64(0)
+	for i := 0; i < nw; {
+		e := min(i+128, nw)
+		acc := uint64(0)
+		for ; i < e; i++ {
+			w := binary.LittleEndian.Uint64(v[8*i:])
+			y := w & (((w >> 7) & 0x0101010101010101) * 0xFF)
+			acc += (y & 0x00FF00FF00FF00FF) + ((y >> 8) & 0x00FF00FF00FF00FF)
+		}
+		acc = (acc & 0x0000FFFF0000FFFF) + ((acc >> 16) & 0x0000FFFF0000FFFF)
+		s += (acc & 0xFFFFFFFF) + (acc >> 32)
+	}
+	for k := nw * 8; k < n; k++ {
+		x := uint64(v[k])
+		s += x & -(x >> 7)
+	}
+	return s
+}
 func runK4(v string, reps int) {
 	d := loadBytes("k4_bytes.u8")
 	if v == "natural_sorted" {
@@ -311,6 +342,9 @@ func runK4(v string, reps int) {
 	bench("k4", v, "16M", reps, func() string {
 		if v == "tuned" {
 			return strconv.FormatUint(k4Tuned(d), 10)
+		}
+		if v == "swar" {
+			return strconv.FormatUint(k4Swar(d), 10)
 		}
 		if v == "branchless_unsorted" {
 			return strconv.FormatUint(k4Branchless(d), 10)
@@ -351,6 +385,34 @@ func k5Tuned(a, b []float32) float32 {
 	return r
 }
 
+// v4, point 4 (3.3, K5 tuned_v) : la forme de la remarque sur Go (bench/go_exp, tuned_r ; docs/GO.md, 4.3 : × 0,75),
+// recopiée : la boucle de k5Tuned, la réduction finale dans les registres (GetLo/GetHi, ConcatAddPairs) ; le résultat
+// passe par la mémoire avant ClearAVXUpperBits, sans quoi le compilateur place VZEROUPPER avant la réduction (vérifié
+// au désassemblage par la remarque).
+//
+//go:noinline
+func k5TunedR(a, b []float32) float32 {
+	z := archsimd.BroadcastFloat32x16(0)
+	s0, s1, s2, s3 := z, z, z, z
+	for i := 0; i+64 <= len(a); i += 64 {
+		s0 = archsimd.LoadFloat32x16(a[i:i+16]).MulAdd(archsimd.LoadFloat32x16(b[i:i+16]), s0)
+		s1 = archsimd.LoadFloat32x16(a[i+16:i+32]).MulAdd(archsimd.LoadFloat32x16(b[i+16:i+32]), s1)
+		s2 = archsimd.LoadFloat32x16(a[i+32:i+48]).MulAdd(archsimd.LoadFloat32x16(b[i+32:i+48]), s2)
+		s3 = archsimd.LoadFloat32x16(a[i+48:i+64]).MulAdd(archsimd.LoadFloat32x16(b[i+48:i+64]), s3)
+	}
+	s := s0.Add(s1).Add(s2.Add(s3))
+	h := s.GetLo().Add(s.GetHi())
+	q := h.GetLo().Add(h.GetHi())
+	q = q.ConcatAddPairs(q)
+	q = q.ConcatAddPairs(q)
+	// le résultat passe par la mémoire : sinon le compilateur place VZEROUPPER avant la réduction (vérifié au
+	// désassemblage), qui salit de nouveau les registres avant le retour en SSE
+	var out [4]float32
+	q.StoreArray(&out)
+	archsimd.ClearAVXUpperBits()
+	return out[0]
+}
+
 var sink []float32
 
 func runK5(v string, reps int) {
@@ -362,6 +424,8 @@ func runK5(v string, reps int) {
 			sink = a // barrière : a s'échappe vers une globale
 			if v == "tuned" {
 				d = k5Tuned(sink, b)
+			} else if v == "tuned_v" {
+				d = k5TunedR(sink, b)
 			} else {
 				d = k5Natural(sink, b)
 			}
@@ -462,6 +526,140 @@ func q1Tuned(c *Cols, lo, hi int, acc *Q1Acc) {
 		}
 	}
 }
+// v4, point 4 (3.3, Q1 tuned_v) : la forme de la remarque sur Go (bench/go_exp, tuned_1p ; docs/GO.md, 4.3),
+// recopiée : une passe, algorithme de la référence C (16 lignes par tour, masque de passage, un masque par groupe,
+// compte par population du masque : bits.OnesCount16 de ToBits), accumulateurs des six groupes en variables locales,
+// additions masquées par IfElse. La variante tuned publiée est scalaire. Exactitude : quantité, prix et
+// prix × (100 − remise) en voies de 32 bits vidées toutes les 2 048 lignes, soit 128 lignes par voie : au plus
+// 128 × 50 000 × 100 = 6,4 × 10^8 < 2^31 (prix ≤ 50 000, docs/SPEC.md) ; charge en 64 bits.
+//
+//go:noinline
+func q1OnePass(c *Cols, lo, hi int, acc *Q1Acc) {
+	lim, c100 := archsimd.BroadcastInt32x16(10471), archsimd.BroadcastInt32x16(100)
+	k0 := archsimd.BroadcastInt32x16(0)
+	k1 := archsimd.BroadcastInt32x16(1)
+	k2 := archsimd.BroadcastInt32x16(2)
+	k3 := archsimd.BroadcastInt32x16(3)
+	k4 := archsimd.BroadcastInt32x16(4)
+	k5 := archsimd.BroadcastInt32x16(5)
+	z, zl := archsimd.BroadcastInt32x16(0), archsimd.BroadcastInt64x8(0)
+	i := lo
+	for i+16 <= hi {
+		end := hi - (hi-i)%16
+		if i+2048 <= hi {
+			end = i + 2048
+		}
+		q0, p0, dp0, cl0, ch0, n0 := z, z, z, zl, zl, int64(0)
+		q1, p1, dp1, cl1, ch1, n1 := z, z, z, zl, zl, int64(0)
+		q2, p2, dp2, cl2, ch2, n2 := z, z, z, zl, zl, int64(0)
+		q3, p3, dp3, cl3, ch3, n3 := z, z, z, zl, zl, int64(0)
+		q4, p4, dp4, cl4, ch4, n4 := z, z, z, zl, zl, int64(0)
+		q5, p5, dp5, cl5, ch5, n5 := z, z, z, zl, zl, int64(0)
+		for ; i < end; i += 16 {
+			pass := archsimd.LoadInt32x16(c.sd[i : i+16]).LessEqual(lim)
+			rf := archsimd.LoadUint8x16(c.rf[i : i+16]).ExtendToUint32().AsInt32x16()
+			gr := rf.Add(rf).Add(archsimd.LoadUint8x16(c.ls[i : i+16]).ExtendToUint32().AsInt32x16())
+			vq := archsimd.LoadUint8x16(c.q[i : i+16]).ExtendToUint32().AsInt32x16()
+			vd := archsimd.LoadUint8x16(c.d[i : i+16]).ExtendToUint32().AsInt32x16()
+			vt := archsimd.LoadUint8x16(c.t[i : i+16]).ExtendToUint32().AsInt32x16().Add(c100)
+			vp := archsimd.LoadInt32x16(c.pr[i : i+16])
+			vdp := vp.Mul(c100.Sub(vd))
+			chl := vdp.GetLo().ExtendToInt64().Mul(vt.GetLo().ExtendToInt64())
+			chh := vdp.GetHi().ExtendToInt64().Mul(vt.GetHi().ExtendToInt64())
+			m0 := pass.And(gr.Equal(k0))
+			b0 := m0.ToBits()
+			n0 += int64(bits.OnesCount16(b0))
+			q0, p0, dp0 = q0.Add(vq).IfElse(m0, q0), p0.Add(vp).IfElse(m0, p0), dp0.Add(vdp).IfElse(m0, dp0)
+			cl0 = cl0.Add(chl).IfElse(archsimd.Mask64x8FromBits(uint8(b0)), cl0)
+			ch0 = ch0.Add(chh).IfElse(archsimd.Mask64x8FromBits(uint8(b0>>8)), ch0)
+			m1 := pass.And(gr.Equal(k1))
+			b1 := m1.ToBits()
+			n1 += int64(bits.OnesCount16(b1))
+			q1, p1, dp1 = q1.Add(vq).IfElse(m1, q1), p1.Add(vp).IfElse(m1, p1), dp1.Add(vdp).IfElse(m1, dp1)
+			cl1 = cl1.Add(chl).IfElse(archsimd.Mask64x8FromBits(uint8(b1)), cl1)
+			ch1 = ch1.Add(chh).IfElse(archsimd.Mask64x8FromBits(uint8(b1>>8)), ch1)
+			m2 := pass.And(gr.Equal(k2))
+			b2 := m2.ToBits()
+			n2 += int64(bits.OnesCount16(b2))
+			q2, p2, dp2 = q2.Add(vq).IfElse(m2, q2), p2.Add(vp).IfElse(m2, p2), dp2.Add(vdp).IfElse(m2, dp2)
+			cl2 = cl2.Add(chl).IfElse(archsimd.Mask64x8FromBits(uint8(b2)), cl2)
+			ch2 = ch2.Add(chh).IfElse(archsimd.Mask64x8FromBits(uint8(b2>>8)), ch2)
+			m3 := pass.And(gr.Equal(k3))
+			b3 := m3.ToBits()
+			n3 += int64(bits.OnesCount16(b3))
+			q3, p3, dp3 = q3.Add(vq).IfElse(m3, q3), p3.Add(vp).IfElse(m3, p3), dp3.Add(vdp).IfElse(m3, dp3)
+			cl3 = cl3.Add(chl).IfElse(archsimd.Mask64x8FromBits(uint8(b3)), cl3)
+			ch3 = ch3.Add(chh).IfElse(archsimd.Mask64x8FromBits(uint8(b3>>8)), ch3)
+			m4 := pass.And(gr.Equal(k4))
+			b4 := m4.ToBits()
+			n4 += int64(bits.OnesCount16(b4))
+			q4, p4, dp4 = q4.Add(vq).IfElse(m4, q4), p4.Add(vp).IfElse(m4, p4), dp4.Add(vdp).IfElse(m4, dp4)
+			cl4 = cl4.Add(chl).IfElse(archsimd.Mask64x8FromBits(uint8(b4)), cl4)
+			ch4 = ch4.Add(chh).IfElse(archsimd.Mask64x8FromBits(uint8(b4>>8)), ch4)
+			m5 := pass.And(gr.Equal(k5))
+			b5 := m5.ToBits()
+			n5 += int64(bits.OnesCount16(b5))
+			q5, p5, dp5 = q5.Add(vq).IfElse(m5, q5), p5.Add(vp).IfElse(m5, p5), dp5.Add(vdp).IfElse(m5, dp5)
+			cl5 = cl5.Add(chl).IfElse(archsimd.Mask64x8FromBits(uint8(b5)), cl5)
+			ch5 = ch5.Add(chh).IfElse(archsimd.Mask64x8FromBits(uint8(b5>>8)), ch5)
+		}
+		acc[0][0] += n0
+		acc[0][1] += sum32(q0)
+		acc[0][2] += sum32(p0)
+		acc[0][3] += sum32(dp0)
+		acc[0][4] += sum64(cl0.Add(ch0))
+		acc[1][0] += n1
+		acc[1][1] += sum32(q1)
+		acc[1][2] += sum32(p1)
+		acc[1][3] += sum32(dp1)
+		acc[1][4] += sum64(cl1.Add(ch1))
+		acc[2][0] += n2
+		acc[2][1] += sum32(q2)
+		acc[2][2] += sum32(p2)
+		acc[2][3] += sum32(dp2)
+		acc[2][4] += sum64(cl2.Add(ch2))
+		acc[3][0] += n3
+		acc[3][1] += sum32(q3)
+		acc[3][2] += sum32(p3)
+		acc[3][3] += sum32(dp3)
+		acc[3][4] += sum64(cl3.Add(ch3))
+		acc[4][0] += n4
+		acc[4][1] += sum32(q4)
+		acc[4][2] += sum32(p4)
+		acc[4][3] += sum32(dp4)
+		acc[4][4] += sum64(cl4.Add(ch4))
+		acc[5][0] += n5
+		acc[5][1] += sum32(q5)
+		acc[5][2] += sum32(p5)
+		acc[5][3] += sum32(dp5)
+		acc[5][4] += sum64(cl5.Add(ch5))
+	}
+	archsimd.ClearAVXUpperBits()
+	if i < hi {
+		q1Natural(c, i, hi, acc)
+	}
+}
+
+func sum32(v archsimd.Int32x16) int64 {
+	var t [16]int32
+	v.StoreArray(&t)
+	s := int64(0)
+	for _, x := range t {
+		s += int64(x)
+	}
+	return s
+}
+
+func sum64(v archsimd.Int64x8) int64 {
+	var t [8]int64
+	v.StoreArray(&t)
+	s := int64(0)
+	for _, x := range t {
+		s += x
+	}
+	return s
+}
+
 func fold(a *Q1Acc) int64 {
 	s := int64(0)
 	for g := range 6 {
@@ -490,6 +688,10 @@ func runK6(v string, reps int, p string) {
 			var a Q1Acc
 			q1Tuned(c, 0, N6, &a)
 			s = fold(&a)
+		case v == "tuned_v" && q1:
+			var a Q1Acc
+			q1OnePass(c, 0, N6, &a)
+			s = fold(&a)
 		default:
 			var wg sync.WaitGroup
 			part := make([]int64, 4)
@@ -500,7 +702,11 @@ func runK6(v string, reps int, p string) {
 					lo, hi := N6*t/4, N6*(t+1)/4
 					if q1 {
 						var a Q1Acc
-						q1Tuned(c, lo, hi, &a)
+						if v == "mt_pool_v" { // v4, point 4 : goroutines (fils du runtime), chaque quart : tuned_v
+							q1OnePass(c, lo, hi, &a)
+						} else {
+							q1Tuned(c, lo, hi, &a)
+						}
 						part[t] = fold(&a)
 					} else {
 						part[t] = q6Tuned(c, lo, hi)
@@ -621,6 +827,77 @@ func aSum(a []ANode, i int32) int64 {
 	return n.v + aSum(a, n.l) + aSum(a, n.r)
 }
 
+// v4, point 4 (3.3, K8 tuned_val) : arène de nœuds ANode (tranche de longueur fixe, réutilisée), construite en ordre
+// préfixe ; l'état passe par valeur (i : indice du nœud ; q : numéro de requête, valeur du nœud = q + i), le prochain
+// indice libre revient en résultat ; ni pointeur vers un état ni append. Mêmes nœuds, mêmes valeurs et mêmes liens que
+// aBuild.
+func aBuildVal(a []ANode, i int32, d int, q int64) int32 {
+	a[i].v = q + int64(i)
+	if d > 0 {
+		l := i + 1
+		r := aBuildVal(a, l, d-1, q)
+		a[i].l, a[i].r = l, r
+		return aBuildVal(a, r, d-1, q)
+	}
+	a[i].l, a[i].r = -1, -1
+	return i + 1
+}
+
+// v4, point 4 (3.3, K8 tuned_it) : la forme de la remarque sur Go (bench/go_noexp, tuned_it ; docs/GO.md, 4.3 :
+// × 0,62), recopiée : construction et somme itératives, piles explicites de 64 entrées ; même ordre préfixe et mêmes
+// valeurs que aBuild et aSum. La profondeur doit rester sous 63 : contrôlé à la compilation (une constante négative
+// ne se convertit pas en uint).
+const _ = uint(62 - sizeK8Req)
+
+func aBuildIt(a []ANode, depth int, q int64) int32 {
+	var stP, stD [64]int32
+	sp, nxt, parent, d := 0, int32(0), int32(-1), int32(depth)
+	right := false
+	for {
+		i := nxt
+		nxt++
+		a[i] = ANode{q + int64(i), -1, -1}
+		if parent >= 0 {
+			if right {
+				a[parent].r = i
+			} else {
+				a[parent].l = i
+			}
+		}
+		if d > 0 {
+			stP[sp], stD[sp] = i, d-1
+			sp++
+			parent, right, d = i, false, d-1
+		} else {
+			if sp == 0 {
+				break
+			}
+			sp--
+			parent, d, right = stP[sp], stD[sp], true
+		}
+	}
+	return 0
+}
+func aSumIt(a []ANode, root int32) int64 {
+	var st [64]int32
+	sp := 0
+	st[sp] = root
+	sp++
+	s := int64(0)
+	for sp > 0 {
+		sp--
+		n := a[st[sp]]
+		s += n.v
+		if n.l >= 0 {
+			st[sp] = n.r
+			sp++
+			st[sp] = n.l
+			sp++
+		}
+	}
+	return s
+}
+
 var keepAlive *Node
 
 func runK8(v string, reps int) {
@@ -641,6 +918,14 @@ func runK8(v string, reps int) {
 				arena = arena[:0]
 				root := aBuild(&arena, sizeK8Req, &c)
 				s = aSum(arena, root)
+			} else if v == "tuned_val" {
+				arena = arena[:(2<<sizeK8Req)-1]
+				aBuildVal(arena, 0, sizeK8Req, c)
+				s = aSum(arena, 0)
+			} else if v == "tuned_it" {
+				arena = arena[:(2<<sizeK8Req)-1]
+				root := aBuildIt(arena, sizeK8Req, c)
+				s = aSumIt(arena, root)
 			} else {
 				s = tSum(tBuild(sizeK8Req, &c))
 			}
@@ -692,6 +977,34 @@ func k9Rows(in, out []float64, r0, r1 int) {
 			o[j] = 0.25 * (((up[j] + dn[j]) + mid[j-1]) + mid[j+1])
 		}
 	}
+}
+// v4, point 4 (3.3, K9 tuned_v) : la forme de la remarque sur Go (bench/go_exp, tuned_vec ; docs/GO.md, 4.3 : × 0,78),
+// recopiée : par ligne, j depuis 1, vecteurs de 8 float64 (archsimd) chargés et écrits sans contrainte d'alignement,
+// mêmes additions dans le même ordre ; les 6 dernières colonnes par chargements partiels.
+//
+//go:noinline
+func k9RowsVec(in, out []float64, r0, r1 int) {
+	q := archsimd.BroadcastFloat64x8(0.25)
+	for i := r0; i < r1; i++ {
+		up := in[(i-1)*M9 : i*M9 : i*M9]
+		mid := in[i*M9 : (i+1)*M9 : (i+1)*M9]
+		dn := in[(i+1)*M9 : (i+2)*M9 : (i+2)*M9]
+		o := out[i*M9 : (i+1)*M9 : (i+1)*M9]
+		j := 1
+		for ; j+8 <= M9-1; j += 8 {
+			s := archsimd.LoadFloat64x8(up[j : j+8]).Add(archsimd.LoadFloat64x8(dn[j : j+8])).
+				Add(archsimd.LoadFloat64x8(mid[j-1 : j+7])).Add(archsimd.LoadFloat64x8(mid[j+1 : j+9]))
+			q.Mul(s).Store(o[j : j+8])
+		}
+		if n := M9 - 1 - j; n > 0 {
+			u, _ := archsimd.LoadFloat64x8Part(up[j : j+n])
+			w, _ := archsimd.LoadFloat64x8Part(dn[j : j+n])
+			l, _ := archsimd.LoadFloat64x8Part(mid[j-1 : j-1+n])
+			r, _ := archsimd.LoadFloat64x8Part(mid[j+1 : j+1+n])
+			q.Mul(u.Add(w).Add(l).Add(r)).StorePart(o[j : j+n])
+		}
+	}
+	archsimd.ClearAVXUpperBits()
 }
 func runK9(v string, reps int) {
 	// harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
@@ -751,13 +1064,19 @@ func runK9(v string, reps int) {
 			for range 4 {
 				if v == "tuned" {
 					k9Rows(a, b, 1, M9-1)
+				} else if v == "tuned_v" {
+					k9RowsVec(a, b, 1, M9-1)
 				} else {
 					var wg sync.WaitGroup
 					for t := range 4 {
 						wg.Add(1)
 						go func() {
 							defer wg.Done()
-							k9Rows(a, b, 1+(M9-2)*t/4, 1+(M9-2)*(t+1)/4)
+							if v == "mt_pool_v" { // v4, point 4 : goroutines (fils du runtime), chaque quart : tuned_v
+								k9RowsVec(a, b, 1+(M9-2)*t/4, 1+(M9-2)*(t+1)/4)
+							} else {
+								k9Rows(a, b, 1+(M9-2)*t/4, 1+(M9-2)*(t+1)/4)
+							}
 						}()
 					}
 					wg.Wait()

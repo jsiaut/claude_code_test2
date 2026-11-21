@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 17 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java).
+Langages relevés : 18 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -444,3 +444,28 @@ Langages relevés : 17 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k9 mt_pool` (R) | K9 mt | écrite | `k9 mt_pool` | chaque quart : k9Rows publiée (la remarque : × 0,81) |
 | `k9 mt_pool_v` (R) | K9 mt | écrite | `k9 mt_pool_v` | chaque quart : tuned_v (la remarque : × 0,77) |
 | `k7 rq_iso` (R) | K7 | écrite | `k7 rq_iso` | forme de bench/java_exp (remarque sur Java, tuned_iso, × 0,72) : la boucle de la variante tuned dans sa propre méthode ; son gain tient à l'unité de compilation du JIT (runK7, appelée une fois, est compilée sur place), coût propre au runtime (plan, 3.5). Les lots lus d'avance de la remarque (tuned_batch, × 0,80) ne sont pas repris : sans préchargement, ils perdent sur la forme isolée seule |
+
+## Go
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : simd/archsimd (Uint8x64), masque, SumOf8AbsDiff |
+| `k4 swar` | K4 | écrite | `k4 swar` | mots de 64 bits (binary.LittleEndian.Uint64) |
+| `k5 tuned_v` (R) | K5 | écrite | `k5 tuned_v` | forme de bench/go_exp (remarque sur Go, tuned_r, × 0,75), recopiée : Float32x16, quatre accumulateurs, MulAdd, la réduction finale dans les registres ; la variante tuned publiée réduit par un tableau en mémoire |
+| `q6 tuned_v` | Q6 | présente | `k6 tuned q6` | Int32x16 (archsimd), masques, produit en i32, Masked, accumulation en Int64x8 |
+| `q6 tuned_s` | Q6 | sans objet | — | forme principale présente ou écrite |
+| `q1 tuned_v` (R) | Q1 | écrite | `k6 tuned_v q1` | forme de bench/go_exp (remarque sur Go, tuned_1p), recopiée : une passe, compte par bits.OnesCount16 du masque, additions masquées par IfElse, accumulateurs en variables locales ; plus lente que la variante tuned publiée (scalaire) dans la remarque (× 1,36) et à l'essai |
+| `q1 tuned_s` | Q1 | sans objet | — | forme principale présente ou écrite |
+| `q6 mt_pool` | Q6 mt | présente | `k6 mt q6` | goroutines : fils du runtime (GOMAXPROCS), créés une fois |
+| `q6 mt_pool_v` | Q6 mt | sans objet | — | tuned_v de Q6 présente : mt_pool l'exécute |
+| `q6 mt_pool_s` | Q6 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `q1 mt_pool` | Q1 mt | présente | `k6 mt q1` | goroutines (fils du runtime) |
+| `q1 mt_pool_v` (R) | Q1 mt | écrite | `k6 mt_pool_v q1` | goroutines, chaque quart : tuned_v (mt_1p de la remarque) |
+| `q1 mt_pool_s` | Q1 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `k7 tuned_pf` | K7 | non écrivible | — | aucun préchargement exporté (grille E4 = 0, results/probes/go.txt : internal/runtime/sys.Prefetch interdit hors de la bibliothèque) |
+| `k7 tuned_oa` | K7 | présente | `k7 tuned` | la variante tuned publiée : la même table (cases de 16 octets), sans préchargement ni lots |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | fonction récursive, état en paramètres et en retour, tranche de longueur fixe (la variante tuned publiée passe un compteur et la tranche par pointeur, et ajoute par append) |
+| `k8 tuned_it` (R) | K8 | écrite | `k8 tuned_it` | forme de bench/go_noexp (remarque sur Go, × 0,62), recopiée : piles de 64 entrées (profondeur contrôlée à la compilation) |
+| `k9 tuned_v` (R) | K9 | écrite | `k9 tuned_v` | forme de bench/go_exp (remarque sur Go, tuned_vec, × 0,78) : Float64x8, j depuis 1, accès non alignés, fin par chargements partiels |
+| `k9 mt_pool` | K9 mt | présente | `k9 mt` | goroutines (fils du runtime) |
+| `k9 mt_pool_v` (R) | K9 mt | écrite | `k9 mt_pool_v` | goroutines, chaque quart : tuned_v (mt_vec de la remarque, × 0,73) |

@@ -1,4 +1,4 @@
-# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 18:23 UTC (java), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 18:25 UTC (go), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 # langage noyau variante paramètre : temps (s), somme de contrôle, verdict
 c k1 natural energy : 0.0359 1049202.377034 juste
 c k1 aos energy : 0.02788 1049202.377035 juste
@@ -514,34 +514,42 @@ fpc k9 natural - : 0.04033 2.095103199218750E+006 juste
 fpc k9 tuned - : 0.0298 2.095103199218750E+006 juste
 fpc k9 mt - : 0.009214 2.095103199218750E+006 juste
 fpc k9 mt_pool - : 0.007602 2.095103199218750E+006 juste
-go k1 natural energy : 2.054 1049202.377034 juste
-go k1 aos energy : 0.6364 1049202.377035 juste
-go k1 soa energy : 0.004429 1049202.377017 juste
-go k1 natural_shuffled energy : 2.052 1049202.377034 juste
-go k2 tuned 16384 : 0.007452 3568 juste
-go k2 tuned 262144 : 0.02372 46960 juste
-go k2 tuned 8388608 : 0.1668 1325440 juste
-go k3 rmw_padded - : 0.2194 134217728 juste
-go k3 sw_padded - : 0.4051 134217728 juste
-go k4 natural_unsorted - : 0.01205 1605908545 juste
+go k1 natural energy : 2.236 1049202.377034 juste
+go k1 aos energy : 1.315 1049202.377035 juste
+go k1 soa energy : 0.00551 1049202.377017 juste
+go k1 natural_shuffled energy : 2.054 1049202.377034 juste
+go k2 tuned 16384 : 0.008112 3568 juste
+go k2 tuned 262144 : 0.02477 46960 juste
+go k2 tuned 8388608 : 0.1472 1325440 juste
+go k3 rmw_padded - : 0.2795 134217728 juste
+go k3 sw_padded - : 0.4081 134217728 juste
+go k4 natural_unsorted - : 0.01225 1605908545 juste
 go k4 branchless_unsorted - : 0.0132 1605908545 juste
-go k4 tuned - : 0.001388 1605908545 juste
-go k5 natural - : 0.09463 509.0856 juste
-go k5 tuned - : 0.007503 509.0858 juste
-go k6 natural q6 : 0.1423 45333132534 juste
-go k6 natural q1 : 0.0763 3997084032331541 juste
-go k6 tuned q6 : 0.01628 45333132534 juste
-go k6 tuned q1 : 0.05765 3997084032331541 juste
-go k6 mt q6 : 0.006369 45333132534 juste
-go k6 mt q1 : 0.02805 3997084032331541 juste
-go k7 natural - : 2.306 1048575:4294504410765 juste
-go k7 tuned - : 0.1981 1048575:4294504410765 juste
-go k8 natural - : 1.04 2508056453121 juste
-go k8 tuned - : 0.2835 2508056453121 juste
-go k9 natural - : 0.05497 2.095103199218750e+06 juste
-go k9 tuned - : 0.04193 2.095103199218750e+06 juste
-go k9 mt - : 0.009003 2.095103199218750e+06 juste
-go k9 natural_flat - : 0.0358 2.095103199218750e+06 juste
+go k4 tuned - : 0.001513 1605908545 juste
+go k4 swar - : 0.004963 1605908545 juste
+go k5 natural - : 0.1018 509.0856 juste
+go k5 tuned - : 0.008945 509.0858 juste
+go k5 tuned_v - : 0.01314 509.0858 juste
+go k6 natural q6 : 0.1466 45333132534 juste
+go k6 natural q1 : 0.07497 3997084032331541 juste
+go k6 tuned q6 : 0.01575 45333132534 juste
+go k6 tuned q1 : 0.05794 3997084032331541 juste
+go k6 mt q6 : 0.00454 45333132534 juste
+go k6 mt q1 : 0.01698 3997084032331541 juste
+go k6 tuned_v q1 : 0.08865 3997084032331541 juste
+go k6 mt_pool_v q1 : 0.02599 3997084032331541 juste
+go k7 natural - : 1.591 1048575:4294504410765 juste
+go k7 tuned - : 0.1966 1048575:4294504410765 juste
+go k8 natural - : 0.9501 2508056453121 juste
+go k8 tuned - : 0.2599 2508056453121 juste
+go k8 tuned_val - : 0.2579 2508056453121 juste
+go k8 tuned_it - : 0.1695 2508056453121 juste
+go k9 natural - : 0.05873 2.095103199218750e+06 juste
+go k9 tuned - : 0.02392 2.095103199218750e+06 juste
+go k9 mt - : 0.00943 2.095103199218750e+06 juste
+go k9 natural_flat - : 0.03219 2.095103199218750e+06 juste
+go k9 tuned_v - : 0.02265 2.095103199218750e+06 juste
+go k9 mt_pool_v - : 0.007634 2.095103199218750e+06 juste
 csharp k1 natural energy : 0.04676 1049202.376981 juste
 csharp k1 aos energy : 0.0335 1049202.376981 juste
 csharp k1 soa energy : 0.003149 1049202.377017 juste
@@ -847,4 +855,4 @@ julia k9 tuned - : 0.01698 2.095103199218750e+06 juste
 julia k9 mt - : 0.007475 2.095103199218750e+06 juste
 julia k9 tuned_v - : 0.01573 2.095103199218750e+06 juste
 julia k9 mt_pool_v - : 0.01221 2.095103199218750e+06 juste
-# 847 cellules, 847 justes, 0 fausses
+# 855 cellules, 855 justes, 0 fausses

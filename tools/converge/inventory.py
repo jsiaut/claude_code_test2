@@ -523,6 +523,41 @@ INV = {
         "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "chaque quart : k9Rows publiée (la remarque : × 0,81)", True),
         "k9 mt_pool_v": e(E, [("k9", "mt_pool_v", "")], "chaque quart : tuned_v (la remarque : × 0,77)", True),
     },
+    "go": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : simd/archsimd (Uint8x64), masque, SumOf8AbsDiff"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits (binary.LittleEndian.Uint64)"),
+        "k5 tuned_v": e(E, [("k5", "tuned_v", "")], "forme de bench/go_exp (remarque sur Go, tuned_r, × 0,75), recopiée : "
+                        "Float32x16, quatre accumulateurs, MulAdd, la réduction finale dans les registres ; la variante "
+                        "tuned publiée réduit par un tableau en mémoire", True),
+        "q6 tuned_v": e(P, [("k6", "tuned", "q6")], "Int32x16 (archsimd), masques, produit en i32, Masked, "
+                        "accumulation en Int64x8"),
+        "q6 tuned_s": SANS_REPLI,
+        "q1 tuned_v": e(E, [("k6", "tuned_v", "q1")], "forme de bench/go_exp (remarque sur Go, tuned_1p), recopiée : une "
+                        "passe, compte par bits.OnesCount16 du masque, additions masquées par IfElse, accumulateurs en "
+                        "variables locales ; plus lente que la variante tuned publiée (scalaire) dans la remarque "
+                        "(× 1,36) et à l'essai", True),
+        "q1 tuned_s": SANS_REPLI,
+        "q6 mt_pool": e(P, [("k6", "mt", "q6")], "goroutines : fils du runtime (GOMAXPROCS), créés une fois"),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 présente : mt_pool l'exécute"),
+        "q6 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "q1 mt_pool": e(P, [("k6", "mt", "q1")], "goroutines (fils du runtime)"),
+        "q1 mt_pool_v": e(E, [("k6", "mt_pool_v", "q1")], "goroutines, chaque quart : tuned_v (mt_1p de la remarque)", True),
+        "q1 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "k7 tuned_pf": e(N, note="aucun préchargement exporté (grille E4 = 0, results/probes/go.txt : "
+                         "internal/runtime/sys.Prefetch interdit hors de la bibliothèque)"),
+        "k7 tuned_oa": e(P, [("k7", "tuned", "")], "la variante tuned publiée : la même table (cases de 16 octets), "
+                         "sans préchargement ni lots"),
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour, tranche de "
+                          "longueur fixe (la variante tuned publiée passe un compteur et la tranche par pointeur, et "
+                          "ajoute par append)"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "forme de bench/go_noexp (remarque sur Go, × 0,62), recopiée : piles "
+                         "de 64 entrées (profondeur contrôlée à la compilation)", True),
+        "k9 tuned_v": e(E, [("k9", "tuned_v", "")], "forme de bench/go_exp (remarque sur Go, tuned_vec, × 0,78) : "
+                        "Float64x8, j depuis 1, accès non alignés, fin par chargements partiels", True),
+        "k9 mt_pool": e(P, [("k9", "mt", "")], "goroutines (fils du runtime)"),
+        "k9 mt_pool_v": e(E, [("k9", "mt_pool_v", "")], "goroutines, chaque quart : tuned_v (mt_vec de la remarque, "
+                          "× 0,73)", True),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
     "java": {
