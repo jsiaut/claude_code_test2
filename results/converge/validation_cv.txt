@@ -1,4 +1,4 @@
-# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 18:53 UTC (js), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 19:02 UTC (python), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 # langage noyau variante paramètre : temps (s), somme de contrôle, verdict
 c k1 natural energy : 0.0359 1049202.377034 juste
 c k1 aos energy : 0.02788 1049202.377035 juste
@@ -694,34 +694,47 @@ ocaml k9 tuned - : 0.04467 2.095103199218750e+06 juste
 ocaml k9 mt - : 0.02329 2.095103199218750e+06 juste
 ocaml k9 natural_flat - : 0.2479 2.095103199218750e+06 juste
 ocaml k9 mt_pool - : 0.01856 2.095103199218750e+06 juste
-python k1 natural energy : 0.5489 1049202.377006 juste
-python k1 aos energy : 0.9027 1049202.377006 juste
-python k1 soa energy : 0.7351 1049202.377006 juste
-python k1 natural_shuffled energy : 1.932 1049202.377006 juste
-python k2 tuned 16384 : 0.1405 3568 juste
-python k2 tuned 262144 : 0.1322 46960 juste
-python k2 tuned 8388608 : 0.1784 1325440 juste
-python k3 rmw_padded - : 3.829 134217728 juste
-python k3 sw_padded - : 2.184 134217728 juste
-python k4 natural_unsorted - : 0.4816 1605908545 juste
-python k4 branchless_unsorted - : 0.6 1605908545 juste
-python k4 tuned - : 0.06579 1605908545 juste
-python k5 natural - : 7.38 509.0857 juste
-python k5 tuned - : 3.328 509.0857 juste
-python k6 natural q6 : 1.124 45333132534 juste
-python k6 natural q1 : 5.614 3997084032331541 juste
-python k6 tuned q6 : 1.449 45333132534 juste
-python k6 tuned q1 : 4.79 3997084032331541 juste
-python k6 mt q6 : 0.4014 45333132534 juste
-python k6 mt q1 : 1.178 3997084032331541 juste
-python k7 natural - : 13.07 1048575:4294504410765 juste
-python k7 tuned - : 17.11 1048575:4294504410765 juste
-python k8 natural - : 14.35 2508056453121 juste
-python k8 tuned - : 9.35 2508056453121 juste
-python k9 natural - : 1.294 2.095103199218750e+06 juste
-python k9 tuned - : 1.544 2.095103199218750e+06 juste
-python k9 mt - : 0.5393 2.095103199218750e+06 juste
-python k9 natural_flat - : 2.227 2.095103199218750e+06 juste
+python k1 natural energy : 0.5942 1049202.377006 juste
+python k1 aos energy : 0.8562 1049202.377006 juste
+python k1 soa energy : 0.7067 1049202.377006 juste
+python k1 natural_shuffled energy : 2.234 1049202.377006 juste
+python k2 tuned 16384 : 0.1459 3568 juste
+python k2 tuned 262144 : 0.1437 46960 juste
+python k2 tuned 8388608 : 0.4272 1325440 juste
+python k3 rmw_padded - : 3.944 134217728 juste
+python k3 sw_padded - : 2.376 134217728 juste
+python k4 natural_unsorted - : 0.4861 1605908545 juste
+python k4 branchless_unsorted - : 0.5487 1605908545 juste
+python k4 tuned - : 0.07966 1605908545 juste
+python k4 swar - : 0.6183 1605908545 juste
+python k5 natural - : 7.28 509.0857 juste
+python k5 tuned - : 3.388 509.0857 juste
+python k6 natural q6 : 1.419 45333132534 juste
+python k6 natural q1 : 6.014 3997084032331541 juste
+python k6 tuned q6 : 1.4 45333132534 juste
+python k6 tuned q1 : 5.27 3997084032331541 juste
+python k6 mt q6 : 0.5014 45333132534 juste
+python k6 mt q1 : 2.003 3997084032331541 juste
+python k6 tuned_s q6 : 3.628 45333132534 juste
+python k6 tuned_s q1 : 23.12 3997084032331541 juste
+python k6 mt_pool q6 : 0.5324 45333132534 juste
+python k6 mt_pool q1 : 2.015 3997084032331541 juste
+python k6 mt_pool_s q6 : 1.33 45333132534 juste
+python k6 mt_pool_s q1 : 5.862 3997084032331541 juste
+python k6 rq_cols q6 : 0.5008 45333132534 juste
+python k6 rq_cols_mt q6 : 0.1391 45333132534 juste
+python k7 natural - : 13.85 1048575:4294504410765 juste
+python k7 tuned - : 17.39 1048575:4294504410765 juste
+python k7 tuned_oa - : 9.056 1048575:4294504410765 juste
+python k8 natural - : 15.03 2508056453121 juste
+python k8 tuned - : 9.582 2508056453121 juste
+python k8 tuned_val - : 6.024 2508056453121 juste
+python k8 tuned_it - : 6.811 2508056453121 juste
+python k9 natural - : 1.434 2.095103199218750e+06 juste
+python k9 tuned - : 1.485 2.095103199218750e+06 juste
+python k9 mt - : 0.6407 2.095103199218750e+06 juste
+python k9 natural_flat - : 2.32 2.095103199218750e+06 juste
+python k9 mt_pool - : 0.5764 2.095103199218750e+06 juste
 lua k1 natural energy : 0.4673 1049202.377006 juste
 lua k1 aos energy : 0.4068 1049202.377006 juste
 lua k1 soa energy : 0.2173 1049202.377006 juste
@@ -892,4 +905,4 @@ julia k9 tuned - : 0.01698 2.095103199218750e+06 juste
 julia k9 mt - : 0.007475 2.095103199218750e+06 juste
 julia k9 tuned_v - : 0.01573 2.095103199218750e+06 juste
 julia k9 mt_pool_v - : 0.01221 2.095103199218750e+06 juste
-# 892 cellules, 892 justes, 0 fausses
+# 905 cellules, 905 justes, 0 fausses

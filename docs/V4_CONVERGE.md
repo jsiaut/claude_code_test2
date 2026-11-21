@@ -216,6 +216,11 @@ configuration d'un runtime est décrit et n'entre pas au catalogue (règle 3.2, 
   dans ses registres, ou vectorise la boucle, ce que cette forme empêcherait. Elle est recopiée de la copie de la
   remarque sous le nom `rq_slide`, avec sa version à quatre fils `rq_slide_mt` (les fils de la variante `mt` du
   langage, chaque quart : `rq_slide`), plafond K9 et K9 à quatre fils.
+* **Q6 en colonnes de Python** (remarque sur Python, `docs/PYTHON.md` : × 0,35, et × 0,29 à quatre fils), absente de
+  la section 2 : classée propre au runtime (3.5). Son gain tient au coût de l'interpréteur par ligne, que la forme
+  remplace par des boucles en C de la bibliothèque standard (`bytes.translate`, entiers longs, `bytes.find`) ; un
+  langage compilé n'a pas ce coût. Recopiée sous les noms `rq_cols` et `rq_cols_mt` (la réserve de fils de Python,
+  chaque quart : `rq_cols`).
 * **K5 sur données f64 de JavaScript** (`rq_f64`) : la copie de la remarque convertissait les données hors chrono ; la
   conversion est faite dans le chrono, une fois par répétition (3.2, 1 : le calcul sur les données telles qu'elles
   sont stockées), pour un coût négligeable (2048 éléments, contre 65 536 produits scalaires par répétition).

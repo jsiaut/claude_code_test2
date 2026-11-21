@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 23 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go, Haskell, OCaml, BQN, PHP, JavaScript).
+Langages relevés : 24 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go, Haskell, OCaml, BQN, PHP, JavaScript, Python).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -597,3 +597,30 @@ Langages relevés : 23 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k5 rq_f64` (R) | K5 | écrite | `k5 rq_f64` | forme de bench/js_exp (remarque sur JavaScript, tuned_f64, × 0,88) : k5Tuned sur des copies Float64Array, la conversion faite dans le chrono (la remarque la faisait hors chrono) ; classée propre au runtime par le plan (3.5 : conversion des tableaux typés) |
 | `k9 rq_slide` (R) | K9 | écrite | `k9 rq_slide` | forme de bench/js_exp (remarque sur JavaScript, tuned_v, × 0,88) : vues de lignes, voisins de gauche et du centre gardés dans des variables ; classée propre au runtime (écart daté, docs/V4_CONVERGE.md 4.2 : le coût de chaque lecture d'élément) |
 | `k9 rq_slide_mt` (R) | K9 mt | écrite | `k9 rq_slide_mt` | les Workers de mt, chaque quart : rq_slide (mt_v de la remarque, × 0,83) |
+
+## Python
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : sans SIMD (grille C1 = 0, C2 = 0), bytes.translate puis sum (boucles en C de la bibliothèque standard) |
+| `k4 swar` | K4 | écrite | `k4 swar` | mots de 64 bits (vue memoryview « Q », dans le chrono), entiers de Python |
+| `k5 tuned_v` | K5 | non écrivible | — | aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/python.txt) |
+| `q6 tuned_v` | Q6 | non écrivible | — | aucun type vectoriel (grille C1 = 0) |
+| `q6 tuned_s` | Q6 | écrite | `k6 tuned_s q6` | prédicat 0/1 sans branchement (booléens réunis par &), s += prix × remise × m ; la variante tuned publiée filtre par un if |
+| `q1 tuned_v` | Q1 | non écrivible | — | aucun type vectoriel (grille C1 = 0) |
+| `q1 tuned_s` | Q1 | écrite | `k6 tuned_s q1` | une passe, 30 variables locales, masques par décalage du bit de signe ; 21,7 s à l'essai contre 4,6 s pour la variante tuned publiée |
+| `q6 mt_pool` | Q6 mt | écrite | `k6 mt_pool q6` | sous-interpréteurs créés avant la mesure (comme mt : chacun son verrou global, grille D1 = ½), trois fils créés une fois, liés chacun à un sous-interpréteur, le fil principal au premier, réveillés par threading.Barrier ; la variante mt crée ses fils à chaque appel ; chaque quart : q6_tuned publiée |
+| `q6 mt_pool_v` | Q6 mt | sans objet | — | tuned_v de Q6 non écrivible |
+| `q6 mt_pool_s` | Q6 mt | écrite | `k6 mt_pool_s q6` | chaque quart : tuned_s |
+| `q1 mt_pool` | Q1 mt | écrite | `k6 mt_pool q1` | chaque quart : q1_tuned publiée |
+| `q1 mt_pool_v` | Q1 mt | sans objet | — | tuned_v de Q1 non écrivible |
+| `q1 mt_pool_s` | Q1 mt | écrite | `k6 mt_pool_s q1` | chaque quart : tuned_s |
+| `k7 tuned_pf` | K7 | non écrivible | — | aucun préchargement (grille E4 = 0, results/probes/python.txt) |
+| `k7 tuned_oa` | K7 | écrite | `k7 tuned_oa` | cases de 16 octets contiguës dans un array('Q') (clé << 32 | compte, somme), Fibonacci, sondage linéaire ; la variante tuned publiée compte par collections.Counter et somme par un dict |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | fonction récursive, état en paramètres et en retour (la variante tuned publiée tient le compteur dans un attribut de classe) |
+| `k8 tuned_it` | K8 | écrite | `k8 tuned_it` | piles de 64 entrées (listes allouées une fois, profondeur vérifiée) |
+| `k9 tuned_v` | K9 | non écrivible | — | aucun type vectoriel (grille C1 = 0) |
+| `k9 mt_pool` | K9 mt | écrite | `k9 mt_pool` | la réserve SubPool, chaque quart : les lignes publiées (rows) |
+| `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 non écrivible |
+| `k6 rq_cols` (R) | Q6 | écrite | `k6 rq_cols q6` | forme de bench/python_exp (remarque sur Python, tuned_c, × 0,35) : Q6 en colonnes, masques par bytes.translate réunis en entiers longs, lignes retenues trouvées par bytes.find ; classée propre au runtime (écart daté, docs/V4_CONVERGE.md 4.2 : le coût de l'interpréteur par ligne) |
+| `k6 rq_cols_mt` (R) | Q6 mt | écrite | `k6 rq_cols_mt q6` | la réserve SubPool, chaque quart : rq_cols (mt_c de la remarque, × 0,29) |

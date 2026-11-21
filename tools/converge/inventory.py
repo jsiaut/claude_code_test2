@@ -733,8 +733,47 @@ INV = {
         "k9 mt_pool": e(P, [("k9", "mt", "")], "Workers créés avant la mesure, grilles en SharedArrayBuffer"),
         "k9 mt_pool_v": e(S, note="tuned_v de K9 non écrivible"),
     },
+    "python": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : sans SIMD (grille C1 = 0, C2 = 0), bytes.translate puis "
+                      "sum (boucles en C de la bibliothèque standard)"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits (vue memoryview « Q », dans le chrono), entiers de Python"),
+        "k5 tuned_v": e(N, note="aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/python.txt)"),
+        "q6 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "q6 tuned_s": e(E, [("k6", "tuned_s", "q6")], "prédicat 0/1 sans branchement (booléens réunis par &), "
+                        "s += prix × remise × m ; la variante tuned publiée filtre par un if"),
+        "q1 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "q1 tuned_s": e(E, [("k6", "tuned_s", "q1")], "une passe, 30 variables locales, masques par décalage du bit de "
+                        "signe ; 21,7 s à l'essai contre 4,6 s pour la variante tuned publiée"),
+        "q6 mt_pool": e(E, [("k6", "mt_pool", "q6")], "sous-interpréteurs créés avant la mesure (comme mt : chacun son "
+                        "verrou global, grille D1 = ½), trois fils créés une fois, liés chacun à un sous-interpréteur, "
+                        "le fil principal au premier, réveillés par threading.Barrier ; la variante mt crée ses fils à "
+                        "chaque appel ; chaque quart : q6_tuned publiée"),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 non écrivible"),
+        "q6 mt_pool_s": e(E, [("k6", "mt_pool_s", "q6")], "chaque quart : tuned_s"),
+        "q1 mt_pool": e(E, [("k6", "mt_pool", "q1")], "chaque quart : q1_tuned publiée"),
+        "q1 mt_pool_v": e(S, note="tuned_v de Q1 non écrivible"),
+        "q1 mt_pool_s": e(E, [("k6", "mt_pool_s", "q1")], "chaque quart : tuned_s"),
+        "k7 tuned_pf": e(N, note="aucun préchargement (grille E4 = 0, results/probes/python.txt)"),
+        "k7 tuned_oa": e(E, [("k7", "tuned_oa", "")], "cases de 16 octets contiguës dans un array('Q') (clé << 32 | "
+                         "compte, somme), Fibonacci, sondage linéaire ; la variante tuned publiée compte par "
+                         "collections.Counter et somme par un dict"),
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour (la variante "
+                          "tuned publiée tient le compteur dans un attribut de classe)"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "piles de 64 entrées (listes allouées une fois, profondeur vérifiée)"),
+        "k9 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "la réserve SubPool, chaque quart : les lignes publiées (rows)"),
+        "k9 mt_pool_v": e(S, note="tuned_v de K9 non écrivible"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
+    "python": {
+        "k6 rq_cols": {**e(E, [("k6", "rq_cols", "q6")], "forme de bench/python_exp (remarque sur Python, tuned_c, × 0,35) : "
+                           "Q6 en colonnes, masques par bytes.translate réunis en entiers longs, lignes retenues "
+                           "trouvées par bytes.find ; classée propre au runtime (écart daté, docs/V4_CONVERGE.md 4.2 : "
+                           "le coût de l'interpréteur par ligne)", True), "ceiling": "Q6"},
+        "k6 rq_cols_mt": {**e(E, [("k6", "rq_cols_mt", "q6")], "la réserve SubPool, chaque quart : rq_cols (mt_c de la "
+                              "remarque, × 0,29)", True), "ceiling": "Q6 mt"},
+    },
     "js": {
         "k5 rq_f64": {**e(E, [("k5", "rq_f64", "")], "forme de bench/js_exp (remarque sur JavaScript, tuned_f64, × 0,88) : "
                           "k5Tuned sur des copies Float64Array, la conversion faite dans le chrono (la remarque la "
