@@ -1657,3 +1657,9 @@ Robustesse :
   et « Toutes, R1' », à la 17e avec « Toutes » ; Java et Go gagnent une place ; les déplacements de plus de deux places
   et le contrôle hors plan ne changent pas ; aucune place ne change dans les quatorze premiers. FreePascal recevra un
   K4 `tuned` sans assembleur au point 4.
+* 2026-11-21, 16:30 : **v4, point 4 : plan** (`docs/V4_CONVERGE.md`), poussé avant tout code et toute mesure. Faits
+  relevés : écarts au plafond sur la machine 32 (base du point 3), formes de la frontière lues dans les sources (K7 de
+  Chapel : lots de 16 préchargés ; K8 d'Ada : état passé par copie, comme la forme « par valeur » de la remarque sur
+  C), formes des remarques restées en sensibilité avec leurs rapports mesurés, trois écarts sans explication dans les
+  sources (K9 à un et quatre fils, Q6 de Chapel). Règles C1 à C6 ; catalogue de 15 formes ; diagnostic avant portage.
+

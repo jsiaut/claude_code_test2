@@ -85,6 +85,11 @@ deux conditions de mesure trouvées au point 2 (placement de la boucle de K3, r�
 le SIMD explicite dans K4 fait monter Zig de quatre places, K3 rapporté à une boucle de référence fait reculer Nim et D
 de trois ; ensemble, les règles déplacent Zig (8e → 4e) et D (6e → 9e).
 
+Point 4 : plan détaillé dans `docs/V4_CONVERGE.md` (21 novembre, poussé avant tout changement de code et toute mesure) :
+le plafond prend la meilleure forme admise (la règle commune des remarques ne vaut plus pour le code optimisé) ;
+catalogue de formes par cellule du plafond (frontière de la machine 32 et formes mesurées par les remarques), porté
+dans tous les langages qui peuvent les écrire ; diagnostic préalable des écarts sans explication (K9, Q6 de Chapel).
+
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
 une fois le point précédent terminé. Machine : l'hôte actuel est un Xeon Granite Rapids (modèle 173), une troisième
