@@ -224,6 +224,11 @@ configuration d'un runtime est décrit et n'entre pas au catalogue (règle 3.2, 
 * **K5 sur données f64 de JavaScript** (`rq_f64`) : la copie de la remarque convertissait les données hors chrono ; la
   conversion est faite dans le chrono, une fois par répétition (3.2, 1 : le calcul sur les données telles qu'elles
   sont stockées), pour un coût négligeable (2048 éléments, contre 65 536 produits scalaires par répétition).
+* **Analyse** (`analysis/converge_v4.py`, poussée avant la campagne) : les calculs 1 à 6 de la section 8, et en
+  information le calcul « Hôte, source non corrigée » (contrôle de l'erratum, 4.1, 2 : les cellules que la correction
+  de la base change, mesurées sur la source du commit `ea2da12`, à la place de celles de la base). Les cellules des
+  formes viennent du relevé (`results/converge/forms.json`) ; chaque nouvelle cellule est tirée par son propre
+  générateur (graine fixée par la cellule et le langage), pour être tirée de la même façon dans tous les calculs.
 
 ## 5. Code
 

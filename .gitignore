@@ -42,3 +42,4 @@ tools/sizes/gendata
 # v4, point 2 : écritures de la campagne en cours (recopiées dans results/sizes par tools/sizes/save_progress.sh)
 results/sizes/work/
 results/equal/work/
+results/converge/work/
