@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 20 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go, Haskell, OCaml).
+Langages relevés : 21 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go, Haskell, OCaml, BQN).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -519,3 +519,28 @@ Langages relevés : 20 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k9 tuned_v` | K9 | non écrivible | — | aucun type vectoriel (grille C1 = 0) ; la forme floatarray de la remarque (× 0,945) n'est pas reprise : gain sous 10 %, et ce n'est pas une forme du catalogue |
 | `k9 mt_pool` | K9 mt | écrite | `k9 mt_pool` | réserve de domaines, chaque quart : k9_rows publiée |
 | `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 non écrivible |
+
+## BQN
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | non écrivible | — | SIMD explicite : grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur) ; BQN n'a pas de variante tuned de K4 au point 3 |
+| `k4 swar` | K4 | non écrivible | — | ni entier de 64 bits ni décalage : les nombres de BQN sont des f64 (entiers exacts sous 2^53) ; •bit n'offre que cast, not, neg, and, or, xor, add, sub et mul (« •ns.Keys •bit », 21 novembre) : le masque tiré du bit de poids fort de chaque octet ne s'écrit pas mot à mot |
+| `k5 tuned_v` | K5 | non écrivible | — | grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur) |
+| `q6 tuned_v` | Q6 | non écrivible | — | grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur) |
+| `q6 tuned_s` | Q6 | écrite | `k6 tuned_s q6` | prédicat en 0/1 par comparaisons sur des colonnes entières, +´ m × prix × remise, sans filtrage (la variante tuned publiée filtre deux fois par le masque) |
+| `q1 tuned_v` | Q1 | non écrivible | — | grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur) |
+| `q1 tuned_s` | Q1 | écrite | `k6 tuned_s q1` | une passe ligne à ligne (boucle interprétée, •_while_), 30 accumulateurs en variables locales, un masque 0/1 par groupe ; 7,7 s à l'essai contre 0,29 s pour la variante tuned publiée (un masque par groupe sur des colonnes entières) |
+| `q6 mt_pool` | Q6 mt | non écrivible | — | pas de threads : grille D1 = 0 (results/probes/bqn.txt ; CBQN n'est pas réentrant) |
+| `q6 mt_pool_v` | Q6 mt | non écrivible | — | pas de threads (D1 = 0) |
+| `q6 mt_pool_s` | Q6 mt | non écrivible | — | pas de threads (D1 = 0) |
+| `q1 mt_pool` | Q1 mt | non écrivible | — | pas de threads (D1 = 0) |
+| `q1 mt_pool_v` | Q1 mt | non écrivible | — | pas de threads (D1 = 0) |
+| `q1 mt_pool_s` | Q1 mt | non écrivible | — | pas de threads (D1 = 0) |
+| `k7 tuned_pf` | K7 | non écrivible | — | aucun préchargement (grille E4 = 0, results/probes/bqn.txt) |
+| `k7 tuned_oa` | K7 | non écrivible | — | la disposition ne s'écrit pas : un tableau BQN n'a qu'un type d'éléments, sans entier de 64 bits ; un f64 ne tient pas exactement clé et compte (56 bits), et une case de 16 octets en quatre i32 demanderait une somme de 64 bits faite à la main (retenue) |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | récursion interprétée, état par valeur, arène de trois listes mise à jour en place (affectation modifiée) ; 12,6 s à l'essai contre 0,22 s pour la variante tuned publiée (arbre construit niveau par niveau en primitives) |
+| `k8 tuned_it` | K8 | écrite | `k8 tuned_it` | boucles interprétées, piles de 64 entrées allouées une fois (profondeur vérifiée, !) ; 19,5 s à l'essai |
+| `k9 tuned_v` | K9 | non écrivible | — | grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur) |
+| `k9 mt_pool` | K9 mt | non écrivible | — | pas de threads (D1 = 0) |
+| `k9 mt_pool_v` | K9 mt | non écrivible | — | pas de threads (D1 = 0) |

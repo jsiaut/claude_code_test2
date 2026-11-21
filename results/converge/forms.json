@@ -4551,6 +4551,172 @@
     "remarque": false,
     "ceiling": "K9 mt"
    }
+  },
+  "bqn": {
+   "k4 tuned": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "SIMD explicite : grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur) ; BQN n'a pas de variante tuned de K4 au point 3",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "ni entier de 64 bits ni décalage : les nombres de BQN sont des f64 (entiers exacts sous 2^53) ; •bit n'offre que cast, not, neg, and, or, xor, add, sub et mul (« •ns.Keys •bit », 21 novembre) : le masque tiré du bit de poids fort de chaque octet ne s'écrit pas mot à mot",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur)",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur)",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_s",
+      "q6"
+     ]
+    ],
+    "note": "prédicat en 0/1 par comparaisons sur des colonnes entières, +´ m × prix × remise, sans filtrage (la variante tuned publiée filtre deux fois par le masque)",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur)",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_s",
+      "q1"
+     ]
+    ],
+    "note": "une passe ligne à ligne (boucle interprétée, •_while_), 30 accumulateurs en variables locales, un masque 0/1 par groupe ; 7,7 s à l'essai contre 0,29 s pour la variante tuned publiée (un masque par groupe sur des colonnes entières)",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de threads : grille D1 = 0 (results/probes/bqn.txt ; CBQN n'est pas réentrant)",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de threads (D1 = 0)",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de threads (D1 = 0)",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de threads (D1 = 0)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de threads (D1 = 0)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de threads (D1 = 0)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun préchargement (grille E4 = 0, results/probes/bqn.txt)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "la disposition ne s'écrit pas : un tableau BQN n'a qu'un type d'éléments, sans entier de 64 bits ; un f64 ne tient pas exactement clé et compte (56 bits), et une case de 16 octets en quatre i32 demanderait une somme de 64 bits faite à la main (retenue)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "récursion interprétée, état par valeur, arène de trois listes mise à jour en place (affectation modifiée) ; 12,6 s à l'essai contre 0,22 s pour la variante tuned publiée (arbre construit niveau par niveau en primitives)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "boucles interprétées, piles de 64 entrées allouées une fois (profondeur vérifiée, !) ; 19,5 s à l'essai",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur)",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de threads (D1 = 0)",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de threads (D1 = 0)",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }

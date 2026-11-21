@@ -148,6 +148,28 @@ Q1Tun ← {𝕊 sd‿qt‿dc‿tx‿rf‿ls‿pr:                           # op
   ch ← dp × 100 + tx
   +´ ∾ {m ← keep ∧ g = 𝕩 ⋄ ⟨+´ m, +´ m / qt, +´ m / pr, +´ m / dp, +´ m / ch⟩}¨ ↕6
 }
+# v4, point 4 (docs/V4_CONVERGE.md, 3.3 ; SIMD, fils et préchargement non écrivibles : grille C1, C2, D1, E4 = 0).
+# Q6 tuned_s : prédicat en 0/1 par comparaisons, sans filtrage ; s = +´ m × prix × remise (sommes exactes : entiers
+# < 2⋆53 en f64)
+Q6S ← {𝕊 sd‿qt‿dc‿pr: m ← ((8766 ≤ sd) ∧ sd < 9131) ∧ ((5 ≤ dc) ∧ dc ≤ 7) ∧ qt < 24 ⋄ +´ m × pr × dc}
+# Q1 tuned_s : une passe ligne à ligne (boucle interprétée, •_while_), les 30 accumulateurs en variables locales ; par
+# ligne, un masque 0/1 par groupe (passage ∧ groupe = k), additions masquées, sans branchement
+Q1S ← {𝕊 sd‿qt‿dc‿tx‿rf‿ls‿pr:
+  n0←q0←p0←e0←c0←n1←q1←p1←e1←c1←n2←q2←p2←e2←c2←n3←q3←p3←e3←c3←n4←q4←p4←e4←c4←n5←q5←p5←e5←c5←0
+  {𝕊 i:
+    keep ← 10471 ≥ i⊑sd
+    g ← (2 × i⊑rf) + i⊑ls
+    q ← i⊑qt ⋄ p ← i⊑pr ⋄ dp ← p × 100 - i⊑dc ⋄ ch ← dp × 100 + i⊑tx
+    m ← keep ∧ g = 0 ⋄ n0 +↩ m ⋄ q0 +↩ m × q ⋄ p0 +↩ m × p ⋄ e0 +↩ m × dp ⋄ c0 +↩ m × ch
+    m ↩ keep ∧ g = 1 ⋄ n1 +↩ m ⋄ q1 +↩ m × q ⋄ p1 +↩ m × p ⋄ e1 +↩ m × dp ⋄ c1 +↩ m × ch
+    m ↩ keep ∧ g = 2 ⋄ n2 +↩ m ⋄ q2 +↩ m × q ⋄ p2 +↩ m × p ⋄ e2 +↩ m × dp ⋄ c2 +↩ m × ch
+    m ↩ keep ∧ g = 3 ⋄ n3 +↩ m ⋄ q3 +↩ m × q ⋄ p3 +↩ m × p ⋄ e3 +↩ m × dp ⋄ c3 +↩ m × ch
+    m ↩ keep ∧ g = 4 ⋄ n4 +↩ m ⋄ q4 +↩ m × q ⋄ p4 +↩ m × p ⋄ e4 +↩ m × dp ⋄ c4 +↩ m × ch
+    m ↩ keep ∧ g = 5 ⋄ n5 +↩ m ⋄ q5 +↩ m × q ⋄ p5 +↩ m × p ⋄ e5 +↩ m × dp ⋄ c5 +↩ m × ch
+    i + 1
+  } •_while_ {𝕩 < ≠sd} 0
+  +´ n0‿q0‿p0‿e0‿c0‿n1‿q1‿p1‿e1‿c1‿n2‿q2‿p2‿e2‿c2‿n3‿q3‿p3‿e3‿c3‿n4‿q4‿p4‿e4‿c4‿n5‿q5‿p5‿e5‿c5
+}
 Chunks ← {<˘ 4‿4194304 ⥊ 𝕩}                                # 4 morceaux contigus d'une colonne
 RunK6 ← {𝕤
   sd ← I32 "k6_shipdate.i32" ⋄ pr ← I32 "k6_extendedprice.i32"
@@ -157,11 +179,13 @@ RunK6 ← {𝕤
   {p ≡ "q6" ?
      {v ≡ "natural" ? {𝕤 ⋄ IntStr Q6Nat q6c} _bench @
       ; v ≡ "tuned" ? {𝕤 ⋄ IntStr Q6Tun q6c} _bench @
+      ; v ≡ "tuned_s" ? {𝕤 ⋄ IntStr Q6S q6c} _bench @
       ; Meta "k6_mt;pas de threads : 4 morceaux traités en séquence"
         ch ← <˘ ⍉ > Chunks¨ q6c
         {𝕤 ⋄ IntStr +´ Q6Tun¨ ch} _bench @}
    ; {v ≡ "natural" ? {𝕤 ⋄ IntStr Q1Nat q1c} _bench @
       ; v ≡ "tuned" ? {𝕤 ⋄ IntStr Q1Tun q1c} _bench @
+      ; v ≡ "tuned_s" ? {𝕤 ⋄ IntStr Q1S q1c} _bench @
       ; Meta "k6_mt;pas de threads : 4 morceaux traités en séquence"
         ch ← <˘ ⍉ > Chunks¨ q1c
         {𝕤 ⋄ IntStr +´ Q1Tun¨ ch} _bench @}}
@@ -235,7 +259,46 @@ ASum ← {𝕊 val‿ls‿rs:
 RunK8 ← {𝕤
   long‿· ← Build 20‿0
   lsum ← TSum long
-  Query ← (⊑ "natural"‿"tuned"‿"natural_ns" ⊐ <v) ◶ ⟨{TSum ⊑ Build 10‿𝕩}, {ASum ABuild 𝕩}, {NSum ⊑ NBuild 10‿𝕩}⟩
+  # v4, point 4 (docs/V4_CONVERGE.md, 3.3) : K8 tuned_val et tuned_it, écrites nœud à nœud (boucles et récursion
+  # interprétées) sur une arène de trois listes (valeurs, fils gauches, fils droits) allouée une fois et mise à jour en
+  # place (affectation modifiée ↩) ; profondeur d8, n8 nœuds
+  d8 ← 10 ⋄ n8 ← 2047
+  "K8 tuned_it : piles de 64 entrées, la profondeur doit rester sous 63" ! d8 < 63
+  av ← n8⥊0 ⋄ al ← n8⥊¯1 ⋄ ar ← n8⥊¯1
+  stp ← 64⥊0 ⋄ std ← 64⥊0 ⋄ sts ← 64⥊0
+  # tuned_val : ordre préfixe, état par valeur (i : indice du nœud ; q : numéro de requête, valeur du nœud = q + i),
+  # rend l'indice libre suivant ; somme récursive par les liens
+  BuildVal ← {𝕊 i‿d‿q:
+    d = 0 ? av (q+i)˙⌾(i⊸⊑)↩ ⋄ al ¯1˙⌾(i⊸⊑)↩ ⋄ ar ¯1˙⌾(i⊸⊑)↩ ⋄ i+1 ;
+    𝕊 i‿d‿q:
+    av (q+i)˙⌾(i⊸⊑)↩
+    l ← i+1 ⋄ r ← 𝕊 l‿(d-1)‿q
+    al l˙⌾(i⊸⊑)↩ ⋄ ar r˙⌾(i⊸⊑)↩
+    𝕊 r‿(d-1)‿q
+  }
+  SumRec ← {𝕊 i: i < 0 ? 0 ; 𝕊 i: (i⊑av) + (𝕊 i⊑al) + 𝕊 i⊑ar}
+  # tuned_it : construction itérative (la descente à gauche empile le sous-arbre droit de chaque nœud interne, repris à
+  # la feuille suivante : même ordre préfixe), somme itérative ; piles explicites de 64 entrées
+  BuildIt ← {𝕊 q:
+    sp ← 0 ⋄ parent ← ¯1 ⋄ right ← 0 ⋄ d ← d8 ⋄ go ← 1
+    {𝕊 i:
+      av (q+i)˙⌾(i⊸⊑)↩
+      {𝕤 ⋄ right ? ar i˙⌾(parent⊸⊑)↩ ; al i˙⌾(parent⊸⊑)↩}⍟(parent ≥ 0) @
+      {𝕤 ⋄ d > 0 ? stp i˙⌾(sp⊸⊑)↩ ⋄ std (d-1)˙⌾(sp⊸⊑)↩ ⋄ sp +↩ 1 ⋄ parent ↩ i ⋄ right ↩ 0 ⋄ d -↩ 1 ;
+          al ¯1˙⌾(i⊸⊑)↩ ⋄ ar ¯1˙⌾(i⊸⊑)↩
+          {𝕤 ⋄ sp = 0 ? go ↩ 0 ; sp -↩ 1 ⋄ parent ↩ sp⊑stp ⋄ d ↩ sp⊑std ⋄ right ↩ 1} @} @
+      i + 1
+    } •_while_ {𝕤 ⋄ go} 0
+  }
+  SumIt ← {𝕤
+    sts 0˙⌾(0⊸⊑)↩ ⋄ sp ← 1 ⋄ s ← 0
+    {𝕤
+      sp -↩ 1 ⋄ i ← sp⊑sts ⋄ s +↩ i⊑av ⋄ l ← i⊑al
+      {𝕤 ⋄ sts (i⊑ar)˙⌾(sp⊸⊑)↩ ⋄ sts l˙⌾((sp+1)⊸⊑)↩ ⋄ sp +↩ 2}⍟(l ≥ 0) @
+    } •_while_ {𝕤 ⋄ sp > 0} @
+    s
+  }
+  Query ← (⊑ "natural"‿"tuned"‿"natural_ns"‿"tuned_val"‿"tuned_it" ⊐ <v) ◶ ⟨{TSum ⊑ Build 10‿𝕩}, {ASum ABuild 𝕩}, {NSum ⊑ NBuild 10‿𝕩}, {BuildVal 0‿d8‿𝕩 ⋄ SumRec 0}, {BuildIt 𝕩 ⋄ SumIt @}⟩
   {𝕊 r:
     t0 ← •MonoTime @
     sl ← {𝕊 q: a ← •MonoTime @ ⋄ s ← Query q ⋄ ⟨s, (•MonoTime @) - a⟩}¨ ↕q8

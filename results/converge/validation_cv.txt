@@ -1,4 +1,4 @@
-# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 18:33 UTC (ocaml), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 18:41 UTC (bqn), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 # langage noyau variante paramètre : temps (s), somme de contrôle, verdict
 c k1 natural energy : 0.0359 1049202.377034 juste
 c k1 aos energy : 0.02788 1049202.377035 juste
@@ -778,32 +778,36 @@ php k9 natural - : 0.9215 2.095103199218750e+06 juste
 php k9 tuned - : 0.1351 2.095103199218750e+06 juste
 php k9 mt - : 0.08448 2.095103199218750e+06 juste
 php k9 natural_flat - : 1.177 2.095103199218750e+06 juste
-bqn k1 natural energy : 0.1284 1049202.377006078 juste
-bqn k1 aos energy : 0.1252 1049202.3770061205 juste
-bqn k1 soa energy : 0.04136 1049202.3770061205 juste
-bqn k1 natural_shuffled energy : 0.1251 1049202.3770061391 juste
-bqn k2 tuned 16384 : 0.03395 3568 juste
-bqn k2 tuned 262144 : 0.04929 46960 juste
-bqn k2 tuned 8388608 : 0.178 1325440 juste
-bqn k3 rmw_padded - : 2.61 134217728 juste
-bqn k3 sw_padded - : 2.632 134217728 juste
-bqn k4 natural_unsorted - : 0.006561 1605908545 juste
-bqn k4 branchless_unsorted - : 0.011 1605908545 juste
-bqn k5 natural - : 0.1296 509.0857434398008 juste
-bqn k5 tuned - : 0.03258 509.0857434398008 juste
-bqn k6 natural q6 : 0.06868 45333132534 juste
-bqn k6 natural q1 : 0.3401 3997084032331541 juste
-bqn k6 tuned q6 : 0.0233 45333132534 juste
-bqn k6 tuned q1 : 0.2375 3997084032331541 juste
-bqn k6 mt q6 : 0.0205 45333132534 juste
-bqn k6 mt q1 : 0.1701 3997084032331541 juste
-bqn k7 natural - : 1.118 1048575:4294504410765 juste
-bqn k7 tuned - : 0.7777 1048575:4294504410765 juste
-bqn k8 natural - : 6.695 2508056453121 juste
-bqn k8 tuned - : 0.1918 2508056453121 juste
-bqn k9 natural - : 0.2495 2095103.19921875 juste
-bqn k9 tuned - : 0.08381 2095103.19921875 juste
-bqn k9 mt - : 0.08432 2095103.19921875 juste
+bqn k1 natural energy : 0.1321 1049202.377006078 juste
+bqn k1 aos energy : 0.1216 1049202.3770061205 juste
+bqn k1 soa energy : 0.04327 1049202.3770061205 juste
+bqn k1 natural_shuffled energy : 0.1233 1049202.3770061391 juste
+bqn k2 tuned 16384 : 0.03926 3568 juste
+bqn k2 tuned 262144 : 0.04836 46960 juste
+bqn k2 tuned 8388608 : 0.1768 1325440 juste
+bqn k3 rmw_padded - : 2.672 134217728 juste
+bqn k3 sw_padded - : 2.862 134217728 juste
+bqn k4 natural_unsorted - : 0.007189 1605908545 juste
+bqn k4 branchless_unsorted - : 0.01081 1605908545 juste
+bqn k5 natural - : 0.1103 509.0857434398008 juste
+bqn k5 tuned - : 0.03093 509.0857434398008 juste
+bqn k6 natural q6 : 0.0696 45333132534 juste
+bqn k6 natural q1 : 0.3747 3997084032331541 juste
+bqn k6 tuned q6 : 0.03838 45333132534 juste
+bqn k6 tuned q1 : 0.2453 3997084032331541 juste
+bqn k6 mt q6 : 0.02268 45333132534 juste
+bqn k6 mt q1 : 0.1812 3997084032331541 juste
+bqn k6 tuned_s q6 : 0.05822 45333132534 juste
+bqn k6 tuned_s q1 : 7.693 3997084032331541 juste
+bqn k7 natural - : 1.217 1048575:4294504410765 juste
+bqn k7 tuned - : 0.7204 1048575:4294504410765 juste
+bqn k8 natural - : 6.507 2508056453121 juste
+bqn k8 tuned - : 0.1899 2508056453121 juste
+bqn k8 tuned_val - : 12.84 2508056453121 juste
+bqn k8 tuned_it - : 20.83 2508056453121 juste
+bqn k9 natural - : 0.2837 2095103.19921875 juste
+bqn k9 tuned - : 0.09476 2095103.19921875 juste
+bqn k9 mt - : 0.1176 2095103.19921875 juste
 js k1 natural energy : 0.1765 1049202.377006 juste
 js k1 aos energy : 0.04276 1049202.377006 juste
 js k1 soa energy : 0.01539 1049202.377006 juste
@@ -872,4 +876,4 @@ julia k9 tuned - : 0.01698 2.095103199218750e+06 juste
 julia k9 mt - : 0.007475 2.095103199218750e+06 juste
 julia k9 tuned_v - : 0.01573 2.095103199218750e+06 juste
 julia k9 mt_pool_v - : 0.01221 2.095103199218750e+06 juste
-# 872 cellules, 872 justes, 0 fausses
+# 876 cellules, 876 justes, 0 fausses
