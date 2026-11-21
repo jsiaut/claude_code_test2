@@ -2287,6 +2287,240 @@
     "remarque": false,
     "ceiling": "K9 mt"
    }
+  },
+  "fortran": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : sans SIMD explicite, la meilleure boucle scalaire (vectorisée par gfortran)",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "tableau d'octets vu en entiers de 64 bits (c_f_pointer) ; masque par ishft(m, 8) - m (entiers signés) ; gfortran vectorise la boucle",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de vecteurs explicites : grille C1 = 0 (« aucun type vectoriel ») et C2 = 0 (aucun intrinsèque), sondes results/probes/fortran.txt ; la forme de la remarque (rq_acc16) en tient lieu",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "grille C1 = 0 (« aucun type vectoriel ») et C2 = 0 (aucun intrinsèque), sondes results/probes/fortran.txt",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "tuned",
+      "q6"
+     ]
+    ],
+    "note": "prédicat en 0/1 par merge (pas d'entiers non signés), s += prix × remise × m en 64 bits, !$omp simd",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "grille C1 = 0 (« aucun type vectoriel ») et C2 = 0 (aucun intrinsèque), sondes results/probes/fortran.txt",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_s",
+      "q1"
+     ]
+    ],
+    "note": "une passe, 30 accumulateurs locaux de 64 bits, masques par merge ; la variante tuned publiée agrège par blocs et par groupe",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q6"
+     ]
+    ],
+    "note": "équipe OpenMP (fils gardés par le runtime)",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q6 non écrivible",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_s de Q6 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q1"
+     ]
+    ],
+    "note": "équipe OpenMP",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q1 non écrivible",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_s",
+      "q1"
+     ]
+    ],
+    "note": "équipe OpenMP, chaque quart : tuned_s",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas d'instruction de préchargement : grille E4 = 0 ; la variante tuned publiée lit par lots les cases (chargements anticipés) avec un autre hachage",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k7",
+      "tuned_oa",
+      ""
+     ]
+    ],
+    "note": "la table de tuned_pf sans préchargement ni lots ; produit de Fibonacci modulo 2^32 par moitiés de 16 bits (entiers signés de 64 bits)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "arguments value, arène de nœuds de 16 octets",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "piles en tableaux fixes (64)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "grille C1 = 0 (« aucun type vectoriel ») et C2 = 0 (aucun intrinsèque), sondes results/probes/fortran.txt",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "mt",
+      ""
+     ]
+    ],
+    "note": "équipe OpenMP, quatre blocs de colonnes",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de K9 non écrivible",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k5 rq_acc16": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k5",
+      "rq_acc16",
+      ""
+     ]
+    ],
+    "note": "forme de bench/fortran_exp (remarque sur Fortran) : quatre accumulateurs écrits comme des tableaux de 16 valeurs, une réduction finale ; propre à Fortran, qui n'a pas de type vectoriel (K5 tuned_v non écrivible)",
+    "remarque": true,
+    "ceiling": "K5"
+   },
+   "k8 rq_aos": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "rq_aos",
+      ""
+     ]
+    ],
+    "note": "forme de bench/fortran_exp (remarque sur Fortran) : la variante tuned (état par référence) sur une arène de nœuds de 16 octets au lieu de trois tableaux",
+    "remarque": true,
+    "ceiling": "K8"
+   }
   }
  }
 }

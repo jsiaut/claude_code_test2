@@ -313,6 +313,8 @@ contains
       t0 = now()
       if (v == "tuned") then
         s = k4_tuned(b)
+      else if (v == "swar") then
+        s = k4_swar(b)
       else if (v == "branchless_unsorted") then
         s = k4_branchless(b)
       else
@@ -351,6 +353,8 @@ contains
         a(1) = a(1) + vzero  ! écriture opaque : le compilateur ne peut pas sortir le calcul de la boucle
         if (v == "tuned") then
           d = k5_tuned(a, b)
+        else if (v == "rq_acc16") then
+          d = k5_acc16(a, b)
         else
           d = k5_natural(a, b)
         end if
@@ -432,6 +436,18 @@ contains
           end if
         end do
         !$omp end parallel do
+      else if (v == "mt_pool_s" .and. isq1) then
+        ! v4, point 4 (mt_pool_s) : l'équipe OpenMP de mt (fils gardés par le runtime : la réserve de mt_pool, présente),
+        ! chaque quart en tuned_s
+        !$omp parallel do num_threads(4) private(lo, hi) reduction(+:acc) schedule(static, 1)
+        do th = 0, 3
+          lo = 1 + N6 / 4 * th
+          hi = N6 / 4 * (th + 1)
+          call q1_tuned_s(sd, pr, q, d, t, rf, ls, lo, hi, acc)
+        end do
+        !$omp end parallel do
+      else if (v == "tuned_s" .and. isq1) then
+        call q1_tuned_s(sd, pr, q, d, t, rf, ls, 1, N6, acc)
       else if (v == "tuned") then
         if (isq1) then
           call q1_tuned(sd, pr, q, d, t, rf, ls, 1, N6, acc)
@@ -519,6 +535,34 @@ contains
           end do
         end do
         deallocate (tab)
+      else if (v == "tuned_oa") then
+        ! v4, point 4 (docs/V4_CONVERGE.md, 3.3, K7 tuned_oa, repli de tuned_pf : Fortran n'a pas d'instruction de
+        ! préchargement) : la table de tuned_pf (capacité 2^(LOG2+1), cases de 16 octets, sondage linéaire), hachage de
+        ! Fibonacci (clé × 0x9E3779B1 mod 2^32) >> (32 − LOG), sans préchargement ni lots. Le produit modulo 2^32 est
+        ! calculé par moitiés de 16 bits de la constante (0x9E37 = 40503, 0x79B1 = 31153) en entiers de 64 bits :
+        ! chaque produit partiel est < 2^48, sans dépassement.
+        t0 = now()
+        allocate (st(0:CAP - 1))
+        st = slot(0, 0, 0_int64)
+        do i = 1, N7
+          k = iand(int(keys(i), int64), 4294967295_int64)
+          k = iand(k * 31153_int64 + ishft(iand(k * 40503_int64, 65535_int64), 16), 4294967295_int64)
+          s = int(ishft(k, -(32 - LOG)))
+          do while (st(s)%cnt /= 0 .and. st(s)%key /= keys(i))
+            s = iand(s + 1, CAP - 1)
+          end do
+          st(s)%key = keys(i)
+          st(s)%cnt = st(s)%cnt + 1
+          st(s)%sum = st(s)%sum + vals(i)
+        end do
+        t1 = now()
+        do s = 0, CAP - 1
+          if (st(s)%cnt /= 0) then
+            nk = nk + 1
+            ws = ws + st(s)%sum * (iand(int(st(s)%key, int64), 1023_int64) + 1)
+          end if
+        end do
+        deallocate (st)
       else  ! adressage ouvert, sondage linéaire ; chargements anticipés par lots (pas d'intrinsèque prefetch)
         t0 = now()
         allocate (st(0:CAP - 1))
@@ -566,7 +610,118 @@ module k8m
   end type
   integer(int64), allocatable :: av(:)
   integer(int32), allocatable :: al(:), ar(:)
+  ! v4, point 4 : arène en tableau de nœuds de 16 octets (valeur, enfants), celle de bench/fortran_exp (remarque) et du
+  ! catalogue (docs/V4_CONVERGE.md, 3.3, K8)
+  type :: anode
+    integer(int64) :: v
+    integer(int32) :: l, r
+  end type
+  type(anode), allocatable :: an(:)
 contains
+  ! v4, point 4 (docs/V4_CONVERGE.md, 3.5, rq_aos ; forme de bench/fortran_exp, remarque sur Fortran) : la variante
+  ! tuned (état par référence) sur l'arène de nœuds de 16 octets au lieu de trois tableaux
+  recursive integer(int32) function aos_build(top, dep, c) result(i)
+    integer(int32), intent(inout) :: top
+    integer, intent(in) :: dep
+    integer(int64), intent(inout) :: c
+    integer(int32) :: l
+    i = top
+    top = top + 1
+    an(i)%v = c
+    c = c + 1
+    if (dep > 0) then
+      l = aos_build(top, dep - 1, c)
+      an(i)%l = l
+      an(i)%r = aos_build(top, dep - 1, c)
+    else
+      an(i)%l = -1
+      an(i)%r = -1
+    end if
+  end function
+  recursive integer(int64) function aos_sum(i) result(s)
+    integer(int32), intent(in) :: i
+    if (i < 0) then
+      s = 0
+    else
+      s = an(i)%v + aos_sum(an(i)%l) + aos_sum(an(i)%r)
+    end if
+  end function
+  ! v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada, et de bench/c_k8val) : l'état
+  ! passe par valeur (attribut value), l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la
+  ! fonction rend l'indice libre suivant. Arène de nœuds de 16 octets ; somme récursive par les liens (aos_sum).
+  recursive integer(int32) function val_build(i, dep, q) result(nxt)
+    integer(int32), value :: i
+    integer, value :: dep
+    integer(int64), value :: q
+    integer(int32) :: l, r
+    an(i)%v = q + i
+    if (dep > 0) then
+      l = i + 1
+      r = val_build(l, dep - 1, q)
+      an(i)%l = l
+      an(i)%r = r
+      nxt = val_build(r, dep - 1, q)
+    else
+      an(i)%l = -1
+      an(i)%r = -1
+      nxt = i + 1
+    end if
+  end function
+  ! v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/c_k8it, remarque sur C) : construction et
+  ! somme itératives, piles explicites (tableaux fixes de 64 entrées : au plus une entrée par niveau à la construction,
+  ! au plus profondeur + 1 à la somme, SIZE_K8_REQ < 63 vérifié à l'exécution de run_k8). La construction descend à
+  ! gauche en empilant le sous-arbre droit de chaque nœud interne, puis le reprend à la feuille suivante : même ordre
+  ! préfixe, mêmes liens et mêmes valeurs.
+  subroutine it_build(depth, q)
+    integer, intent(in) :: depth
+    integer(int64), intent(in) :: q
+    integer(int32) :: stp(64), top, parent, i
+    integer :: std(64), sp, d
+    logical :: right
+    sp = 0; top = 0; parent = -1; right = .false.; d = depth
+    do
+      i = top
+      top = top + 1
+      an(i)%v = q + i
+      if (parent >= 0) then
+        if (right) then
+          an(parent)%r = i
+        else
+          an(parent)%l = i
+        end if
+      end if
+      if (d > 0) then
+        sp = sp + 1
+        stp(sp) = i
+        std(sp) = d - 1
+        parent = i; right = .false.; d = d - 1
+      else
+        an(i)%l = -1
+        an(i)%r = -1
+        if (sp == 0) exit
+        parent = stp(sp); d = std(sp); right = .true.
+        sp = sp - 1
+      end if
+    end do
+  end subroutine
+  integer(int64) function it_sum(root) result(s)
+    integer(int32), intent(in) :: root
+    integer(int32) :: st(64), i
+    integer :: sp
+    s = 0
+    sp = 1
+    st(1) = root
+    do while (sp > 0)
+      i = st(sp)
+      sp = sp - 1
+      s = s + an(i)%v
+      if (an(i)%l >= 0) then
+        st(sp + 1) = an(i)%r
+        st(sp + 2) = an(i)%l
+        sp = sp + 2
+      end if
+    end do
+  end function
   recursive function t_build(dep, c) result(n)
     integer, intent(in) :: dep
     integer(int64), intent(inout) :: c
@@ -659,6 +814,8 @@ contains
     integer :: r, qq
     real(real64) :: t0, t1
     allocate (av(0:2*2**SIZE_K8_REQ - 2), al(0:2*2**SIZE_K8_REQ - 2), ar(0:2*2**SIZE_K8_REQ - 2))
+    allocate (an(0:2*2**SIZE_K8_REQ - 2))
+    if (SIZE_K8_REQ >= 63) error stop "piles de K8 tuned_it : 64 entrées"
     cnt = 0
     keep => t_build(SIZE_K8_LONG, cnt)
     lsum = t_sum(keep)
@@ -672,6 +829,16 @@ contains
           top = 0
           root = a_build(top, SIZE_K8_REQ, c)
           s = a_sum(root)
+        else if (v == "tuned_val") then
+          top = val_build(0, SIZE_K8_REQ, c)
+          s = aos_sum(0)
+        else if (v == "tuned_it") then
+          call it_build(SIZE_K8_REQ, c)
+          s = it_sum(0)
+        else if (v == "rq_aos") then
+          top = 0
+          root = aos_build(top, SIZE_K8_REQ, c)
+          s = aos_sum(root)
         else
           tr => t_build(SIZE_K8_REQ, c)
           s = t_sum(tr)

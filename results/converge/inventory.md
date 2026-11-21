@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 10 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel).
+Langages relevés : 11 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -265,3 +265,30 @@ Langages relevés : 10 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel)
 | `k9 tuned_v` | K9 | écrite | `k9 tuned_v` | intrinsèques importées sur les tableaux 2D de Chapel lus par pointeur, j depuis 1 ; la variante tuned publiée est une boucle foreach vectorisée par LLVM |
 | `k9 mt_pool` | K9 mt | présente | `k9 mt` | forall (fils du runtime), quatre blocs de lignes |
 | `k9 mt_pool_v` | K9 mt | écrite | `k9 mt_pool_v` | coforall, quatre quarts : tuned_v |
+
+## Fortran
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : sans SIMD explicite, la meilleure boucle scalaire (vectorisée par gfortran) |
+| `k4 swar` | K4 | écrite | `k4 swar` | tableau d'octets vu en entiers de 64 bits (c_f_pointer) ; masque par ishft(m, 8) - m (entiers signés) ; gfortran vectorise la boucle |
+| `k5 tuned_v` | K5 | non écrivible | — | pas de vecteurs explicites : grille C1 = 0 (« aucun type vectoriel ») et C2 = 0 (aucun intrinsèque), sondes results/probes/fortran.txt ; la forme de la remarque (rq_acc16) en tient lieu |
+| `q6 tuned_v` | Q6 | non écrivible | — | grille C1 = 0 (« aucun type vectoriel ») et C2 = 0 (aucun intrinsèque), sondes results/probes/fortran.txt |
+| `q6 tuned_s` | Q6 | présente | `k6 tuned q6` | prédicat en 0/1 par merge (pas d'entiers non signés), s += prix × remise × m en 64 bits, !$omp simd |
+| `q1 tuned_v` | Q1 | non écrivible | — | grille C1 = 0 (« aucun type vectoriel ») et C2 = 0 (aucun intrinsèque), sondes results/probes/fortran.txt |
+| `q1 tuned_s` | Q1 | écrite | `k6 tuned_s q1` | une passe, 30 accumulateurs locaux de 64 bits, masques par merge ; la variante tuned publiée agrège par blocs et par groupe |
+| `q6 mt_pool` | Q6 mt | présente | `k6 mt q6` | équipe OpenMP (fils gardés par le runtime) |
+| `q6 mt_pool_v` | Q6 mt | sans objet | — | tuned_v de Q6 non écrivible |
+| `q6 mt_pool_s` | Q6 mt | sans objet | — | tuned_s de Q6 présente : mt_pool l'exécute |
+| `q1 mt_pool` | Q1 mt | présente | `k6 mt q1` | équipe OpenMP |
+| `q1 mt_pool_v` | Q1 mt | sans objet | — | tuned_v de Q1 non écrivible |
+| `q1 mt_pool_s` | Q1 mt | écrite | `k6 mt_pool_s q1` | équipe OpenMP, chaque quart : tuned_s |
+| `k7 tuned_pf` | K7 | non écrivible | — | pas d'instruction de préchargement : grille E4 = 0 ; la variante tuned publiée lit par lots les cases (chargements anticipés) avec un autre hachage |
+| `k7 tuned_oa` | K7 | écrite | `k7 tuned_oa` | la table de tuned_pf sans préchargement ni lots ; produit de Fibonacci modulo 2^32 par moitiés de 16 bits (entiers signés de 64 bits) |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | arguments value, arène de nœuds de 16 octets |
+| `k8 tuned_it` | K8 | écrite | `k8 tuned_it` | piles en tableaux fixes (64) |
+| `k9 tuned_v` | K9 | non écrivible | — | grille C1 = 0 (« aucun type vectoriel ») et C2 = 0 (aucun intrinsèque), sondes results/probes/fortran.txt |
+| `k9 mt_pool` | K9 mt | présente | `k9 mt` | équipe OpenMP, quatre blocs de colonnes |
+| `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 non écrivible |
+| `k5 rq_acc16` (R) | K5 | écrite | `k5 rq_acc16` | forme de bench/fortran_exp (remarque sur Fortran) : quatre accumulateurs écrits comme des tableaux de 16 valeurs, une réduction finale ; propre à Fortran, qui n'a pas de type vectoriel (K5 tuned_v non écrivible) |
+| `k8 rq_aos` (R) | K8 | écrite | `k8 rq_aos` | forme de bench/fortran_exp (remarque sur Fortran) : la variante tuned (état par référence) sur une arène de nœuds de 16 octets au lieu de trois tableaux |
