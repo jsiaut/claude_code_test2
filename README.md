@@ -324,6 +324,13 @@ Les onze suivants restent à une place au plus de leur rang publié dans chacun 
   selon sa place dans sa ligne de 64 octets (point 5 de « Ce qui sépare vraiment les langages ») : l'effet, établi sur
   Emerald Rapids, existe aussi sur Granite Rapids, mais pas sur Cascade Lake, d'où vient le K3 du classement.
 
+*Erratum (21 novembre) : cette campagne a mesuré les sources de `bench/<langage>`, auxquelles manquent, pour 20
+langages, les corrections que le classement publié applique (copies corrigées des remarques, harnais commun de K9).
+L'effet des tailles, mesuré sur le même code des deux côtés, tient ; la comparaison au classement publié (« l'effet de
+l'hôte », dernier point) mêle ces corrections : le K4 de Fortran, le K9 d'Odin et de Zig en dépendent
+([`docs/V4_SIZES.md`](docs/V4_SIZES.md), 10.7). Les sources sont mises en accord avec le classement publié au
+point 4, qui mesurera l'effet de l'erratum.*
+
 ### Des conditions égales (v4, point 3 ; à côté du classement)
 
 Trois conditions n'étaient pas les mêmes pour tous les langages : les vérifications à l'exécution du code naturel
@@ -385,9 +392,12 @@ FreePascal, 18e avec R3 et avec « Toutes, R1' ».
   (11e → 14e) reculent de trois places par rapport au classement publié. Avec les règles du point 3 (« Toutes »),
   seul Mojo s'écarte de plus de deux places du classement publié (14e → 10e).
 
-*Erratum (21 novembre, le jour même) : le K4 `tuned` de FreePascal, écrit en assembleur en ligne, que la spécification
+*Errata (21 novembre, le jour même). Le K4 `tuned` de FreePascal, écrit en assembleur en ligne, que la spécification
 interdit dans le code optimisé, avait été compté ; écarté, FreePascal recule de deux places avec R3 (18e), Java et Go en
-gagnent une ; les autres conclusions ne changent pas ([`docs/V4_EQUAL.md`](docs/V4_EQUAL.md), 11.8).*
+gagnent une ; les autres conclusions ne changent pas ([`docs/V4_EQUAL.md`](docs/V4_EQUAL.md), 11.8). Comme celle du
+point 2, cette campagne a mesuré des sources sans les corrections du classement publié pour 20 langages : l'effet de
+chaque règle, mesuré sur le même code des deux côtés, tient ; les comparaisons au classement publié (réplication,
+dernière phrase) et la place relative de C, Chapel, Ada et Swift, dont le K9 était déjà au harnais commun, non (11.9).*
 
 ## Pourquoi cet ordre, langage par langage
 

@@ -1,0 +1,5 @@
+# K9 de Rust, binaire publié (ancien harnais) et copie bench/rust_k9h (harnais commun), 7 répétitions, pecount ; 2026-11-21 16:36 UTC ;  Intel(R) Xeon(R) Processor @ 2.10GHz ; modèle 207
+rust tuned : temps (s) 0.015494928 0.016497661 0.019367490 0.020297403 0.020712231 0.022635013 0.023546167 ; défauts de page du processus 139565
+rust mt : temps (s) 0.009621194 0.010421064 0.010564661 0.011256287 0.011910094 0.012052475 0.012223243 ; défauts de page du processus 139595
+rust_k9h tuned : temps (s) 0.012388148 0.012477664 0.012551045 0.012735007 0.013104085 0.013794633 0.016707413 ; défauts de page du processus 24823
+rust_k9h mt : temps (s) 0.004223269 0.004332450 0.004697292 0.005052094 0.005386621 0.006276876 0.006448064 ; défauts de page du processus 24837

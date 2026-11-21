@@ -443,3 +443,19 @@ selon les latences : les reculs de Nim et de Chapel et la montée d'Ada dans « 
   aucune place ne change, et les rangs espérés de 0,04 au plus (Julia dans « Toutes »). Les calculs sans R3 sont
   identiques.
 * **Pour la campagne finale.** FreePascal recevra un K4 `tuned` sans assembleur, dans le catalogue du point 4.
+
+### 11.9 Erratum : la base n'est pas le code du classement publié (21 novembre, en préparant le point 4)
+
+* La campagne a mesuré, comme celle du point 2, les sources de `bench/<langage>`, auxquelles manquent pour 20 langages
+  les corrections que le classement publié applique (copies `_fix`, harnais commun de K9 des copies `_k9h`, `bqn_rq`) :
+  la liste et les ordres de grandeur sont dans `docs/V4_SIZES.md`, 10.7. Les copies `bench/<langage>_eq` en partent
+  aussi.
+* **Ce qui tient** : les comparaisons entre calculs (« Hôte » contre R1, R1', R2, R3, R4 et « Toutes », 11.4 à 11.6)
+  portent sur le même code des deux côtés ; elles décrivent l'effet des règles sur le code non corrigé.
+* **Ce qui ne tient pas** : les comparaisons au classement publié. En 11.3, « Zig et Fortran reculent de trois places
+  par rapport au classement publié » mêle les corrections absentes (harnais de K9 pour Zig, K4 de Fortran) ; en 11.5,
+  la phrase sur l'écart de « Toutes » au classement publié aussi. La place du premier étage dans « Hôte » est faussée
+  dans le même sens : C, Chapel, Ada et Swift, dont le K9 était déjà au harnais commun, y sont avantagés.
+* **Suite** : comme pour le point 2 (`docs/V4_SIZES.md`, 10.7) ; la campagne du point 4 mesure les cellules touchées
+  avec les deux sources, et l'effet de l'erratum sur les calculs de ce point sera publié ici.
+

@@ -1661,5 +1661,17 @@ Robustesse :
   relevés : écarts au plafond sur la machine 32 (base du point 3), formes de la frontière lues dans les sources (K7 de
   Chapel : lots de 16 préchargés ; K8 d'Ada : état passé par copie, comme la forme « par valeur » de la remarque sur
   C), formes des remarques restées en sensibilité avec leurs rapports mesurés, trois écarts sans explication dans les
-  sources (K9 à un et quatre fils, Q6 de Chapel). Règles C1 à C6 ; catalogue de 15 formes ; diagnostic avant portage.
+  sources (K9 à un et quatre fils, Q6 de Chapel). Règles C1 à C6 ; catalogue de 14 formes ; diagnostic avant portage.
+* 2026-11-21, 15:55 à 17:00 : **v4, point 4 : diagnostic ; erratum des points 2 et 3** (`docs/V4_CONVERGE.md`, 4.1 ;
+  `docs/V4_SIZES.md`, 10.7 ; `docs/V4_EQUAL.md`, 11.9). Le conteneur a redémarré vers 15:55 (machine 33, même modèle,
+  caractérisée : `results/hw/machine33`). Diagnostic (`tools/converge/diag.sh`, `results/converge/diag`) : sur la
+  boucle de K9 du C, alignement, distance entre grilles, pages géantes et largeur des vecteurs restent dans la variation
+  d'une exécution à l'autre ; l'écart de K9 vient du harnais (Rust, ancien harnais contre copie `_k9h` : 20,3 contre
+  12,7 ms à un fil, 11,3 contre 5,1 à quatre ; défauts de page 139 600 contre 24 800) ; les fils inoccupés de Chapel ne
+  ralentissent pas son Q6 à un fil. En remontant à la source de l'écart : les sources publiées de 20 langages n'ont ni
+  les corrections que le classement publié applique (copies `_fix`, `bqn_rq`, `results/transfers.json`) ni le harnais
+  commun de K9 (copies `_k9h`), alors que les campagnes des points 2 et 3 les ont mesurées comme « le source publié ».
+  Erratum publié ; les comparaisons internes de ces points tiennent, leurs comparaisons au classement publié non.
+  Écarts au plan du point 4 : base corrigée (corrections et harnais reportés dans `bench/<langage>`, relevé publié),
+  contrôle de l'erratum par paires dans la même campagne, `tuned_a` retiré du catalogue.
 

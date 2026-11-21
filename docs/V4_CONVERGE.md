@@ -22,8 +22,8 @@ l'écrire, mesure l'effet sur le classement et fixe d'avance la règle de la cam
   quatre fils (`mt`), K7 (`natural`, `tuned`), K8 (`natural`, `tuned`, `tuned_alloc`), K9 à un fil (`natural`,
   `tuned`) et à quatre fils (`mt`). K2 (part D4) n'a qu'une forme, fixée par la spécification ; K10 n'entre pas au
   score.
-* **Écarts sur la machine 32** (base du point 3, binaires publiés, `results/equal/raw`). Rapport au plus rapide des
-  25 langages, pour les quatorze premiers du classement :
+* **Écarts sur la machine 32** (base du point 3, binaires publiés, `results/equal/raw` ; sources non corrigées pour
+  20 langages, voir 4.1). Rapport au plus rapide des 25 langages, pour les quatorze premiers du classement :
 
   | Cellule | Frontière | Langages ≥ 0,9 (sur 14) | Médiane | Le plus bas |
   |---|---|---|---|---|
@@ -125,7 +125,7 @@ qui ne peuvent pas écrire la forme principale de la même cellule.
 | K8 | `tuned_val` | arène de nœuds (valeur `i64`, enfants `i32`) réutilisée ; construction récursive en ordre préfixe où l'état (prochain indice libre ; valeur du nœud = numéro de requête + son indice préfixe) passe par valeur, en arguments et en retour, sans pointeur vers un état ; somme récursive par les liens | frontière (Ada) ; C 0,57 et 0,45, OCaml 0,77 |
 | K8 | `tuned_it` | la même arène, construction et somme itératives avec une pile explicite (tableau) de nœuds en attente | C 0,40, C# 0,51, Go 0,62, Java 0,64, JavaScript 0,73 |
 | K9 | `tuned_v` | grilles plates alignées sur 64 octets ; par ligne, vecteurs explicites de 8 `f64` : haut, bas, gauche et droite chargés en vecteurs (désalignés pour gauche et droite), même ordre des additions, résultat écrit en vecteur, reste scalaire | frontière (Swift) ; Go 0,78 |
-| K9 | `tuned_a` (repli) | grilles plates alignées sur 64 octets, boucle vectorisée par le compilateur | C (0,91) |
+| K9 | `tuned_a` (repli ; retiré, 4.1) | grilles plates alignées sur 64 octets, boucle vectorisée par le compilateur | C (0,91) |
 
 Le diagnostic de la section 4 peut ajouter des formes à ce tableau, par un écart daté, avant le portage.
 
@@ -171,6 +171,42 @@ si l'hôte les expose, les compteurs matériels de `perf_event_open` (`docs/INST
 (`results/converge/diag/`). Un mécanisme établi qui s'exprime dans le source (alignement, décalage des tampons,
 largeur) devient une forme du catalogue par un écart daté, avant le portage ; un mécanisme qui tient à la
 configuration d'un runtime est décrit et n'entre pas au catalogue (règle 3.2, 4).
+
+### 4.1 Résultats du diagnostic et écarts au plan (21 novembre, avant le portage)
+
+* **Hôte.** Le conteneur a redémarré vers 15 h 55 sur un Xeon du même modèle (6/207/2) : machine 33, caractérisée à
+  machine au repos (`results/hw/machine33`). Latences, bande passante d'un fil (28 Go/s) et pic de calcul sont ceux de
+  la machine 32 ; à quatre fils, la bande passante varie beaucoup d'une mesure à l'autre (STREAM triad de 47 à 148 Go/s
+  en quatre mesures ; sur la machine 32, de 43 à 176 Go/s selon le noyau de STREAM).
+* **K9 : ni l'alignement ni la largeur.** Sur la boucle de K9 du C (`tools/converge/k9_diag.c`,
+  `tools/converge/diag.sh`, `results/converge/diag/k9.txt`), le décalage des grilles dans leur page (0 à 64 octets),
+  leur distance modulo 4 Kio, les pages géantes et la forme (boucle du C, vecteurs explicites de 256 ou 512 bits)
+  restent dans la variation d'une exécution à l'autre : 11,5 à 16,0 ms à un fil (boucle non vectorisée : 13,4 à
+  20,4), 3,7 à 6,5 ms à quatre.
+* **K9 : le harnais.** Les écarts de la section 2 viennent du harnais : les sources publiées de 18 implémentations
+  réallouent encore les grilles à chaque répétition, alors que le classement publié a mesuré K9 au harnais commun
+  (`docs/K9.md`). Sur la machine 33, le K9 de Rust passe de 20,3 à 12,7 ms à un fil et de 11,3 à 5,1 ms à quatre fils
+  avec sa copie au harnais commun (médianes de sept répétitions ; défauts de page par processus : 139 600 contre
+  24 800 ; `results/converge/diag/harnais.txt`).
+* **Q6 de Chapel.** Avec un seul fil de runtime, son Q6 à un fil ne change pas (14,1 ms, comme avec quatre) : les fils
+  inoccupés n'y sont pour rien. À quatre fils, 1,7 ms (médiane) : plus de quatre fois plus vite qu'à un fil, sur la
+  machine 33 comme sur la machine 32 ; non expliqué, et sans forme à porter (`results/converge/diag/chapel_q6.txt`).
+* **Erratum des points 2 et 3.** Plus largement, les sources publiées de 20 langages n'ont ni les corrections que le
+  classement publié applique (copies `_fix`, `bqn_rq`), ni le harnais commun de K9 (copies `_k9h`), alors que les
+  campagnes des points 2 et 3 les ont mesurées comme « le source publié » (`docs/V4_SIZES.md`, 10.7 ;
+  `docs/V4_EQUAL.md`, 11.9). Les écarts de la section 2 sont mesurés sur ces sources.
+* **Écarts au plan qui en découlent :**
+  1. **Base corrigée.** Avant le portage, chaque source publiée `bench/<langage>` reçoit les corrections que le
+     classement publié lui applique (différence entre la copie corrigée et sa copie de référence de la remarque,
+     reportée sur la source actuelle, qui garde les tailles du point 2 et les modes du point 3) et le harnais commun
+     de K9, sans autre changement ; chaque source corrigée est validée (sommes de contrôle) et le relevé des
+     corrections reportées est publié (`results/converge/corrections.md`). La base du point 4 et les copies `_cv`
+     partent de ces sources (au lieu de `bench/<langage>_eq`), avec les variantes du point 3 recopiées (K4 `tuned`,
+     sauf celui de FreePascal ; K9 `natural_flat`, au harnais commun).
+  2. **Contrôle de l'erratum.** La campagne mesure aussi chaque cellule que la correction change sur la source non
+     corrigée (le code des points 2 et 3) ; ces paires, au même hôte, donnent l'effet de l'erratum.
+  3. **Catalogue.** `tuned_a` (K9) est retiré : l'alignement ne change rien de mesurable. Les autres formes restent ;
+     les écarts de la section 2 seront remesurés sur la base corrigée.
 
 ## 5. Code
 

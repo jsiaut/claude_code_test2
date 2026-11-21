@@ -385,3 +385,35 @@ colonnes 2^11, soit la taille publiée, 2^15 et 2^21).
   sur Emerald Rapids et retrouvé sur Granite Rapids, premier moteur de l'effet de l'hôte, qui fait passer six
   implémentations sous la borne physique du plan ; sur la machine 31, comme sur l'Emerald Rapids de la remarque sur
   C++, K2 à 8 Mio a deux régimes d'un processus à l'autre, ce qui touche la part D4 du code par défaut.
+
+### 10.7 Erratum (21 novembre, trouvé en préparant le point 4 : `docs/V4_CONVERGE.md`, 4.1)
+
+* **Faute.** La campagne a mesuré les sources de `bench/<langage>`, présentées comme « le source publié » (4.1,
+  7.2, 10.5). Pour 20 langages sur 25, ce n'est pas le code du classement publié. Les errata des remarques ont été
+  corrigés dans des copies (`bench/<langage>_fix`, `bench/<implémentation>_k9h`, `bench/bqn_rq`), mesurées par paires ;
+  le classement publié applique leurs rapports aux données d'origine (`results/transfers.json`, `results/raw_k9h`,
+  `analysis/analyze_v2.py`, `dataset_main`), et les sources publiées sont restées d'origine. Manquent aux sources :
+  * les corrections d'implémentation : Ada (K1 `aos` et `soa`, K2, Q6 et Q1 `tuned` et `mt`, K9 `tuned` et `mt`),
+    Fortran (K1 naturel et mélangé, K2, K4 naturel et sans branchement, K6 naturel, K9 naturel), D (Q1 `tuned` et
+    `mt`), Rust (K7 `tuned`), Java (K5 `tuned`, K1 `soa`), Go (K5, K1 `soa`, Q6 `tuned` et `mt`, K9), Haskell (une
+    trentaine de clés, K9, latences de K8), OCaml (Q6 `tuned` et `mt`, K1 `aos`, K7 et K8 `tuned`), JavaScript (K7
+    `tuned`), Python (K3, K6 `mt`, K8 naturel, K9 `mt`, latences de K8), Lua (K3, K4, Q6 `tuned` et `mt`, K8 naturel et
+    ses latences), BQN (K9, K7 naturel) ;
+  * le harnais commun de K9 (révision du 1er novembre, `docs/K9.md`) : les grilles sont encore réallouées à chaque
+    répétition dans les sources de C++, Zig, Odin, C3, Nim, D, C#, Java, Rust, Go, Julia, Mojo, Haskell, OCaml, Python
+    et Lua (les trois variantes), de Fortran et de JavaScript (naturel).
+* **Ordre de grandeur.** Certaines corrections sont grandes : K5 `tuned` de Go × 0,38, K1 `aos` d'OCaml × 0,17, K4
+  naturel de Haskell × 0,15, Q1 de D × 0,33, K4 sans branchement de Fortran × 0,38 (le noyau inliné dans la boucle de
+  mesure n'était pas vectorisé) ; le harnais de K9, × 0,41 à 0,65 à quatre fils sur la machine 16, et sur la machine
+  33, pour Rust, 20,3 → 12,7 ms à un fil et 11,3 → 5,1 ms à quatre fils (`results/converge/diag/harnais.txt`).
+* **Ce qui tient.** Les comparaisons internes de la campagne (« Hôte » contre « Trois tailles » et contre les tailles
+  seules, 10.3 et 10.4) portent sur le même code des deux côtés : elles décrivent l'effet des tailles sur le code non
+  corrigé. Le contrôle des anciens binaires (10.2) n'est pas touché.
+* **Ce qui ne tient pas.** La comparaison au classement publié (10.5, « effet de l'hôte et du nouveau code ») mêle
+  l'hôte et les corrections absentes : la baisse de Fortran sur K4 (57 → 10) tient d'abord à la correction
+  `NOINLINE`, une partie des baisses d'Odin et de Zig sur K9 (86 → 45, 66 → 35) au harnais ; le nombre de langages
+  déplacés par « l'hôte » (cinq) n'est donc pas établi.
+* **Suite.** Les sources publiées sont mises en accord avec le classement publié avant le point 4
+  (`docs/V4_CONVERGE.md`, 4.1). La campagne du point 4 mesure, sur un même hôte, chaque cellule touchée avec les deux
+  sources ; l'effet de l'erratum sera publié ici. La campagne finale de la v4 mesure le code corrigé.
+
