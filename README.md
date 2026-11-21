@@ -355,7 +355,8 @@ ici.
 | 13 | Julia | 13 | 13 | 13 | 14 | 12 | 14 | 14 |
 | 14 | Mojo | 12 | 12 | 12 | 11 | 13 | 10 | 11 |
 
-Les onze suivants restent à une place au plus de leur rang publié dans chacun de ces calculs (R1' compris).
+Les onze suivants restent à une place au plus de leur rang publié dans chacun de ces calculs (R1' compris), sauf
+FreePascal, 18e avec R3 et avec « Toutes, R1' ».
 
 * **Les vérifications et le stencil bougent peu.** Ni R1, ni R1', ni R2 ne déplacent un langage de plus de deux
   places. Les vérifications coûtent pourtant cher à certains noyaux naturels : le stencil de Chapel prend 20 fois son
@@ -366,7 +367,7 @@ Les onze suivants restent à une place au plus de leur rang publié dans chacun 
   d'un processus à l'autre bien plus que les temps : avec celles des binaires publiés, R1' fait monter Ada de trois
   places (10e → 7e).
 * **Le SIMD explicite dans K4 fait monter Zig de quatre places** (8e → 4e) : sa meilleure forme publiée prenait
-  6,5 ms, sa forme en `@Vector` 0,61 ms. Les formes `tuned` de 19 langages font K4 en 0,58 à 1,30 ms, à la bande
+  6,5 ms, sa forme en `@Vector` 0,61 ms. Les formes `tuned` de 18 langages font K4 en 0,58 à 1,30 ms, à la bande
   passante d'un cœur ou près d'elle ; K4 ne sépare plus que six langages, de 4,1 à 212 ms : BQN, OCaml, JavaScript,
   PHP, Python et Lua.
 * **K3 rapporté à une boucle de référence fait reculer Nim et D de trois places** (5e → 8e, 6e → 9e). Sur cet hôte,
@@ -383,6 +384,10 @@ Les onze suivants restent à une place au plus de leur rang publié dans chacun 
   processeur) ne diffèrent de plus de deux places pour aucun langage ; sur les deux, Zig (5e → 8e) et Fortran
   (11e → 14e) reculent de trois places par rapport au classement publié. Avec les règles du point 3 (« Toutes »),
   seul Mojo s'écarte de plus de deux places du classement publié (14e → 10e).
+
+*Erratum (21 novembre, le jour même) : le K4 `tuned` de FreePascal, écrit en assembleur en ligne, que la spécification
+interdit dans le code optimisé, avait été compté ; écarté, FreePascal recule de deux places avec R3 (18e), Java et Go en
+gagnent une ; les autres conclusions ne changent pas ([`docs/V4_EQUAL.md`](docs/V4_EQUAL.md), 11.8).*
 
 ## Pourquoi cet ordre, langage par langage
 

@@ -1650,3 +1650,10 @@ Robustesse :
   publiés (`analysis/equal_v4_lat.py`, `results/equal/lat_check.txt`) ; la montée de Zig, le recul de D et, avec R1',
   la montée d'Ada n'en dépendent pas, les autres déplacements de plus de deux places sont au seuil. Le classement de
   tête ne change pas (section 9 du plan).
+* 2026-11-21, 16:00 : **v4, point 3 : erratum** (`docs/V4_EQUAL.md`, 11.8). En préparant le point 4, relu la règle du
+  code optimisé (`docs/SPEC.md`, 0) : l'assembleur en ligne y est interdit, et le K4 `tuned` de FreePascal du point 3
+  en est fait ; le tableau de R3 (3.3) l'admettait à tort, contre le texte de la règle. La cellule est écartée
+  (`analysis/equal_v4.py`, `NOT_ADMITTED`), les sorties régénérées : FreePascal passe de la 16e à la 18e place avec R3
+  et « Toutes, R1' », à la 17e avec « Toutes » ; Java et Go gagnent une place ; les déplacements de plus de deux places
+  et le contrôle hors plan ne changent pas ; aucune place ne change dans les quatorze premiers. FreePascal recevra un
+  K4 `tuned` sans assembleur au point 4.

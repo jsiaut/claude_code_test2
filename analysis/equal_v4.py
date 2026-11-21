@@ -58,6 +58,12 @@ K3K = [("k3", "sw_padded", ""), ("k3", "rmw_padded", "")]
 K4K = [("k4", "natural_unsorted", ""), ("k4", "branchless_unsorted", "")]
 R3_SEED = v3.SEED + 3303  # générateur de la cellule K4 tuned (calculs R3, Toutes)
 CALCS = ["Hôte", "R1", "R1'", "R2", "R3", "R4", "Toutes", "Toutes, R1'"]
+# Erratum du 21 novembre (docs/V4_EQUAL.md, 11.8), trouvé en préparant le point 4, après la première exécution : le K4
+# tuned de FreePascal est écrit en assembleur en ligne, que la spécification interdit dans `tuned` (docs/SPEC.md, 0) et
+# que le texte de R3 n'admet pas (types vectoriels ou intrinsèques de la chaîne) ; le tableau de 3.3 l'admettait à
+# tort. La cellule mesurée est écartée des calculs : FreePascal garde le meilleur de ses deux formes publiées.
+NOT_ADMITTED = {("eq", "fpc", ("k4", "tuned", "")): "assembleur en ligne, interdit dans tuned (SPEC 0)"}
+EXCLUDED = []  # cellules écartées par load() : (construction, langage, clé, raison, temps)
 
 
 # ------------------------------------------------------------------ données
@@ -86,6 +92,11 @@ def load():
             data[r["build"]][r["lang"]].setdefault(key, []).append([r["median"]])
             if key == K8N:
                 lat[r["build"]][r["lang"]].setdefault(key, []).append(r.get("lat", []))
+    EXCLUDED.clear()
+    for (b, l, key), why in NOT_ADMITTED.items():
+        procs = data.get(b, {}).get(l, {}).pop(key, None)
+        if procs:
+            EXCLUDED.append((b, l, key, why, gm(procs)))
     return data, lat, failures, steal, {m: dict(ps) for m, ps in models.items()}
 
 
@@ -282,7 +293,8 @@ def main():
     out = {"results": res, "moved_more_than_2": moved, "b3": b3, "b3_runs_ms": b3_runs,
            "bounds": {f"{k}#{i}": v for (k, i), v in eb.items()}, "hw": {k: v for k, v in hw.items()},
            "ratios": ratios(data, langs, b3, tstar_k3), "k3_frontier": tstar_k3,
-           "failures": failures, "steal_over_5pct": steal, "cpu_models": models}
+           "failures": failures, "steal_over_5pct": steal, "cpu_models": models,
+           "not_admitted": [{"build": b, "lang": l, "key": "|".join(k), "reason": w, "time": t} for b, l, k, w, t in EXCLUDED]}
     m31 = json.load(open(os.path.join(ROOT, "results", "sizes", "analysis.json")))["results"]["Hôte"]
     out["machine31_host"] = {"order": m31["order"], "exp": m31["exp"], "ms0": m31["ms0"], "tiers": m31["tiers"]}
     out["moved_m31_m32"] = S.moved(m31["order"], h, langs)
@@ -349,6 +361,9 @@ def report(o):
         if x:
             L.append(f"| {NAMES[l]} | {1e3 * x['best2']:.2f} | " + (f"{1e3 * x['tuned']:.2f} | {x['ratio']:.2f}"
                                                                      if x["tuned"] else "– | –") + " |")
+    for x in o.get("not_admitted", []):
+        L.append(f"\nCellule mesurée, non admise : {NAMES[x['lang']]} {x['build']} {x['key']} ({1e3 * x['time']:.2f} ms) : "
+                 f"{x['reason']} (erratum du 21 novembre, `docs/V4_EQUAL.md`, 11.8).")
     L += ["", "### R4 : K3 (meilleur de sw_padded et rmw_padded) et b3", "",
           "| Langage | t (ms) | t / b3 | cellule « frontière » de la base | cellule R4 |", "|---|---|---|---|---|"]
     for l in R["Hôte"]["order"]:

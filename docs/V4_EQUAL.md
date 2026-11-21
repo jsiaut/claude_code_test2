@@ -103,7 +103,7 @@ grille lui reconnaît :
 
 | Forme | Langages |
 |---|---|
-| Intrinsèques de la plateforme ou importées | C (`immintrin.h`), C++ (`immintrin.h` ou `std::experimental::simd`), Rust (`std::arch`), Nim (`importc` depuis `immintrin.h`), Ada (type vectoriel de GCC et builtins importés), Chapel (`extern proc` depuis `immintrin.h`), Go (`simd/archsimd`), FreePascal (assembleur en ligne AVX2, sa seule voie : `-Sv` n'a ni masque ni octets) |
+| Intrinsèques de la plateforme ou importées | C (`immintrin.h`), C++ (`immintrin.h` ou `std::experimental::simd`), Rust (`std::arch`), Nim (`importc` depuis `immintrin.h`), Ada (type vectoriel de GCC et builtins importés), Chapel (`extern proc` depuis `immintrin.h`), Go (`simd/archsimd`), FreePascal (assembleur en ligne AVX2, sa seule voie : `-Sv` n'a ni masque ni octets ; **non admis**, erratum 11.8 : la spécification interdit l'assembleur en ligne dans `tuned`) |
 | Types vectoriels du langage | Zig (`@Vector`), Odin (`#simd`), C3 (`char[<64>]`), D (`core.simd`), Mojo (`SIMD`, forme de `bench/mojo_exp`), Swift (`SIMD64<UInt8>`), C# (`Vector512<byte>`, forme de `bench/csharp_exp`), Java (Vector API), Julia (`VecElement` et `llvmcall`), Haskell (primitives SIMD de GHC, si elles permettent la comparaison d'octets ; sinon sa meilleure forme scalaire, avec la raison) |
 | Sans SIMD explicite : la meilleure forme du langage et de sa bibliothèque standard | Fortran, JavaScript, Python, OCaml, Lua, BQN, PHP |
 
@@ -296,24 +296,24 @@ README.
 | Langage | Publié | Hôte | R1 | R1' | R2 | R3 | R4 | Toutes (rang espéré) | Toutes, R1' |
 |---|---|---|---|---|---|---|---|---|---|
 | C | 1 | 1 | 1 | 1 | 1 | 2 | 1 | 1 (1,64) | 1 |
-| C++ | 3 | 2 | 3 | 2 | 2 | 1 | 2 | 2 (2,87) | 2 |
+| C++ | 3 | 2 | 3 | 2 | 2 | 1 | 2 | 2 (2,86) | 2 |
 | Odin | 2 | 4 | 4 | 4 | 5 | 5 | 4 | 3 (5,18) | 4 |
-| Zig | 5 | 8 | 9 | 8 | 8 | 4 | 6 | 4 (5,40) | 3 |
+| Zig | 5 | 8 | 9 | 8 | 8 | 4 | 6 | 4 (5,39) | 3 |
 | C3 | 4 | 3 | 2 | 3 | 3 | 3 | 3 | 5 (5,81) | 5 |
 | Rust | 6 | 7 | 7 | 7 | 7 | 9 | 5 | 6 (6,48) | 7 |
 | Nim | 7 | 5 | 5 | 5 | 4 | 6 | 8 | 7 (7,25) | 8 |
 | Ada | 9 | 10 | 8 | 9 | 10 | 8 | 10 | 8 (7,26) | 6 |
-| D | 8 | 6 | 6 | 6 | 6 | 7 | 9 | 9 (8,42) | 9 |
-| Mojo | 14 | 12 | 12 | 12 | 12 | 11 | 13 | 10 (9,87) | 11 |
-| Chapel | 10 | 9 | 10 | 10 | 9 | 10 | 7 | 11 (10,65) | 10 |
-| Swift | 12 | 11 | 11 | 11 | 11 | 12 | 11 | 12 (10,67) | 12 |
-| Fortran | 11 | 14 | 14 | 14 | 14 | 13 | 14 | 13 (12,10) | 13 |
-| Julia | 13 | 13 | 13 | 13 | 13 | 14 | 12 | 14 (12,88) | 14 |
-| C# | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 (14,11) | 15 |
-| FreePascal | 16 | 16 | 16 | 16 | 16 | 16 | 17 | 16 (15,93) | 16 |
-| Java | 17 | 17 | 17 | 17 | 17 | 17 | 16 | 17 (17,09) | 17 |
-| Go | 18 | 18 | 18 | 18 | 18 | 18 | 18 | 18 (17,44) | 18 |
-| Haskell | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 (18,95) | 19 |
+| D | 8 | 6 | 6 | 6 | 6 | 7 | 9 | 9 (8,41) | 9 |
+| Mojo | 14 | 12 | 12 | 12 | 12 | 11 | 13 | 10 (9,86) | 11 |
+| Chapel | 10 | 9 | 10 | 10 | 9 | 10 | 7 | 11 (10,63) | 10 |
+| Swift | 12 | 11 | 11 | 11 | 11 | 12 | 11 | 12 (10,65) | 12 |
+| Fortran | 11 | 14 | 14 | 14 | 14 | 13 | 14 | 13 (12,07) | 13 |
+| Julia | 13 | 13 | 13 | 13 | 13 | 14 | 12 | 14 (12,84) | 14 |
+| C# | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 (14,05) | 15 |
+| Java | 17 | 17 | 17 | 17 | 17 | 16 | 16 | 16 (16,79) | 16 |
+| FreePascal | 16 | 16 | 16 | 16 | 16 | 18 | 17 | 17 (17,03) | 18 |
+| Go | 18 | 18 | 18 | 18 | 18 | 17 | 18 | 18 (17,03) | 17 |
+| Haskell | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 (18,79) | 19 |
 | OCaml | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 (20,26) | 20 |
 | BQN | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 (21,44) | 21 |
 | JavaScript | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 22 (22,23) | 23 |
@@ -364,15 +364,17 @@ de temps ne sont pas examinés.
   contiguë gagne davantage (C++ 0,77, D 0,63) ; sans vérifications, davantage pour Swift (0,22), Nim (0,51) et Mojo
   (0,59), moins pour Go (0,94) et D (0,82). Le code optimisé de K9 était déjà contigu : le plafond de K9 ne bouge que
   pour Nim, Java, JavaScript et Lua, où la variante naturelle est ou devient la meilleure à un fil (0,02 au plus).
-* **R3, K4 `tuned` (24 langages) : Zig gagne quatre places (8e → 4e)**, seul déplacement de plus de deux places ; C++
-  passe 1er, Ada gagne deux places, Rust en perd deux. Les formes `tuned` de 19 langages prennent 0,58 à 1,30 ms (17
-  entre 0,58 et 0,79 ms ; Haskell 1,24, Fortran 1,30), à la bande passante en lecture d'un cœur ou près d'elle (borne
+* **R3, K4 `tuned` (23 langages admis ; 11.8) : Zig gagne quatre places (8e → 4e)**, seul déplacement de plus de deux
+  places ; C++ passe 1er, Ada gagne deux places, Rust et FreePascal en perdent deux. Les formes `tuned` admises de 18
+  langages prennent 0,58 à 1,30 ms (16 entre 0,58 et 0,79 ms ; Haskell 1,24, Fortran 1,30), à la bande passante en
+  lecture d'un cœur ou près d'elle (borne
   physique de K4 sur cet hôte, 16 Mio lus à la bande passante mesurée à cette taille : 0,59 ms) ; celles d'OCaml, de
   JavaScript et de PHP 5,5 à 7,2 ms, de Python 68 ms, de Lua 212 ms. La cellule K4 du plafond monte surtout pour les
-  langages dont la meilleure forme publiée était lente : FreePascal 0,07 → 0,95, C# 0,09 → 0,94, Go 0,10 → 0,89,
-  Fortran 0,09 → 0,44, Mojo 0,14 → 0,77, Zig 0,18 → 0,95 (6,5 → 0,61 ms), Ada 0,25 → 0,94, C++ 0,27 → 0,91. Elle
-  baisse un peu là où elle ne gagne rien, parce que la frontière passe de 1,17 ms (Chapel, forme publiée) à 0,58 ms
-  (C3, `tuned`) : Chapel 1,00 → 0,95, Swift 0,76 → 0,73, BQN (sans variante `tuned`, 5.2) 0,29 → 0,14.
+  langages dont la meilleure forme publiée était lente : C# 0,09 → 0,94, Go 0,10 → 0,89, Fortran 0,09 → 0,44, Mojo
+  0,14 → 0,77, Zig 0,18 → 0,95 (6,5 → 0,61 ms), Ada 0,25 → 0,94, C++ 0,27 → 0,91. Elle baisse là où elle ne gagne
+  rien, parce que la frontière passe de 1,17 ms (Chapel, forme publiée) à 0,58 ms (C3, `tuned`) : Chapel 1,00 → 0,95,
+  Swift 0,76 → 0,73, BQN (sans variante `tuned`, 5.2) 0,29 → 0,14, FreePascal (forme `tuned` non admise, 11.8)
+  0,07 → 0,03.
 * **R4, K3 rapporté à b3 (25 langages) : Nim (5e → 8e) et D (6e → 9e) reculent de trois places** ; Rust (7e → 5e),
   Zig (8e → 6e) et Chapel (9e → 7e) en gagnent deux. Les boucles de K3 (meilleur de `sw_padded` et `rmw_padded`) se
   répartissent presque comme au point 2 (FreePascal, du côté rapide sur la machine 31, est ici entre les deux) : D,
@@ -423,3 +425,21 @@ selon les latences : les reculs de Nim et de Chapel et la montée d'Ada dans « 
 * Un constat sera examiné avant la campagne finale, comme ceux du point 2 (`docs/V4_SIZES.md`, 10.6) : la part D3 du
   code par défaut dépend des maxima de latence de quelques processus de K8, qui varient d'un processus à l'autre bien
   plus que les temps ; ici, elle déplace des langages autant que les vérifications elles-mêmes.
+
+### 11.8 Erratum (21 novembre, après la publication de cette section, en préparant le point 4)
+
+* **Faute.** Le K4 `tuned` de FreePascal (`bench/fpc_eq`, `K4TunedAsm`) est écrit en assembleur en ligne. La
+  spécification l'interdit dans `tuned` (`docs/SPEC.md`, 0 : « Interdits : FFI vers du code C/C++/asm écrit à côté,
+  assembleur en ligne et bibliothèques tierces »), le texte de R3 ne l'admet pas (« types vectoriels du langage ou
+  intrinsèques de sa chaîne standard », 3.3) et les autres variantes optimisées de FreePascal s'en passent
+  (`docs/FPC.md`). Le tableau de 3.3 l'admettait à tort, et la cellule (0,61 ms) était comptée dans R3, « Toutes » et
+  « Toutes, R1' ».
+* **Correction.** La cellule est écartée des calculs (`analysis/equal_v4.py`, `NOT_ADMITTED`) : FreePascal garde le
+  meilleur de ses deux formes publiées de K4 (18 ms). Les sorties sont régénérées (`results/equal/analysis.json`,
+  `results/report_equal.md`, `results/equal/lat_check.txt`) et les sections 11.2 et 11.4 corrigées.
+* **Effet.** FreePascal passe de la 16e à la 18e place avec R3 et « Toutes, R1' », à la 17e avec « Toutes » ; Java et
+  Go gagnent une place (Java 16e dans R3 et les deux calculs combinés, Go 17e dans R3 et « Toutes, R1' »). Les
+  déplacements de plus de deux places et le contrôle hors plan (11.6) ne changent pas ; dans les quatorze premiers,
+  aucune place ne change, et les rangs espérés de 0,04 au plus (Julia dans « Toutes »). Les calculs sans R3 sont
+  identiques.
+* **Pour la campagne finale.** FreePascal recevra un K4 `tuned` sans assembleur, dans le catalogue du point 4.
