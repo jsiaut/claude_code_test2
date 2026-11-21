@@ -5424,6 +5424,255 @@
     "remarque": true,
     "ceiling": "Q6 mt"
    }
+  },
+  "lua": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : sans SIMD (grille C1 = 0, C2 = 0), huit octets par mot de 64 bits (string.unpack), voies vidées à chaque mot par une multiplication",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "mots de 64 bits (string.unpack), voies de 16 bits vidées toutes les 128 mots",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/lua.txt)",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel (grille C1 = 0)",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "tuned",
+      "q6"
+     ]
+    ],
+    "note": "la variante tuned publiée : masque sans branchement, bit de signe de trois différences par décalage logique, s += prix × remise × m",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel (grille C1 = 0)",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_s",
+      "q1"
+     ]
+    ],
+    "note": "une passe, 30 variables locales, masques 0/1 par décalage logique ; 5,3 s à l'essai contre 2,3 s pour la variante tuned publiée",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de fils parallèles : grille D1 = 0 (results/probes/lua.txt : les coroutines alternent sur un seul fil système)",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de fils (D1 = 0)",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de fils (D1 = 0)",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de fils (D1 = 0)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de fils (D1 = 0)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de fils (D1 = 0)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun préchargement (grille E4 = 0, results/probes/lua.txt)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k7",
+      "tuned_oa",
+      ""
+     ]
+    ],
+    "note": "une case = deux entiers consécutifs de la partie tableau d'une table (clé << 32 | compte, somme), table.create puis remise à zéro dans le chrono, Fibonacci, sondage linéaire ; la variante tuned publiée prend deux tables de hachage de Lua",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "fonction récursive, état en paramètres et en retour (la variante tuned publiée tient l'indice libre et le compteur dans des variables globales)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "forme de bench/lua_exp (remarque sur Lua), recopiée : piles explicites en tables",
+    "remarque": true,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel (grille C1 = 0)",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de fils (D1 = 0)",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "pas de fils (D1 = 0)",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k6 rq_nest": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "rq_nest",
+      "q6"
+     ]
+    ],
+    "note": "forme de bench/lua_exp (remarque sur Lua, tuned_n, × 0,51) : Q6 par tests imbriqués, date et remise lues une fois ; classée propre au runtime par le plan (section 2)",
+    "remarque": true,
+    "ceiling": "Q6"
+   },
+   "k6 rq_nest_mt": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "rq_nest_mt",
+      "q6"
+     ]
+    ],
+    "note": "la variante mt de Lua (quatre morceaux en séquence, sans fils), chaque morceau : rq_nest (mt_n de la remarque)",
+    "remarque": true,
+    "ceiling": "Q6 mt"
+   },
+   "k7 rq_pack": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k7",
+      "rq_pack",
+      ""
+     ]
+    ],
+    "note": "forme de bench/lua_exp (remarque sur Lua, tuned_p, × 0,71) : une seule table, compte et somme tassés dans un entier ; propre au runtime (représentation des tables de Lua, plan 3.5)",
+    "remarque": true,
+    "ceiling": "K7"
+   },
+   "k9 rq_slide": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "rq_slide",
+      ""
+     ]
+    ],
+    "note": "forme de bench/lua_exp (remarque sur Lua, tuned_s, × 0,87) : voisins de gauche et du centre gardés dans des variables ; classée propre au runtime (écart daté, docs/V4_CONVERGE.md 4.2)",
+    "remarque": true,
+    "ceiling": "K9"
+   },
+   "k9 rq_slide_mt": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "rq_slide_mt",
+      ""
+     ]
+    ],
+    "note": "la variante mt de Lua est le code de tuned (sans fils) : le même code que rq_slide (mt_s de la remarque)",
+    "remarque": true,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }

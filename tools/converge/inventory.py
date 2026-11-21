@@ -764,8 +764,52 @@ INV = {
         "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "la réserve SubPool, chaque quart : les lignes publiées (rows)"),
         "k9 mt_pool_v": e(S, note="tuned_v de K9 non écrivible"),
     },
+    "lua": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : sans SIMD (grille C1 = 0, C2 = 0), huit octets par mot de "
+                      "64 bits (string.unpack), voies vidées à chaque mot par une multiplication"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits (string.unpack), voies de 16 bits vidées toutes les 128 mots"),
+        "k5 tuned_v": e(N, note="aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/lua.txt)"),
+        "q6 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "q6 tuned_s": e(P, [("k6", "tuned", "q6")], "la variante tuned publiée : masque sans branchement, bit de signe de "
+                        "trois différences par décalage logique, s += prix × remise × m"),
+        "q1 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "q1 tuned_s": e(E, [("k6", "tuned_s", "q1")], "une passe, 30 variables locales, masques 0/1 par décalage logique ; "
+                        "5,3 s à l'essai contre 2,3 s pour la variante tuned publiée"),
+        "q6 mt_pool": e(N, note="pas de fils parallèles : grille D1 = 0 (results/probes/lua.txt : les coroutines alternent sur un seul fil système)"),
+        "q6 mt_pool_v": e(N, note="pas de fils (D1 = 0)"),
+        "q6 mt_pool_s": e(N, note="pas de fils (D1 = 0)"),
+        "q1 mt_pool": e(N, note="pas de fils (D1 = 0)"),
+        "q1 mt_pool_v": e(N, note="pas de fils (D1 = 0)"),
+        "q1 mt_pool_s": e(N, note="pas de fils (D1 = 0)"),
+        "k7 tuned_pf": e(N, note="aucun préchargement (grille E4 = 0, results/probes/lua.txt)"),
+        "k7 tuned_oa": e(E, [("k7", "tuned_oa", "")], "une case = deux entiers consécutifs de la partie tableau d'une "
+                         "table (clé << 32 | compte, somme), table.create puis remise à zéro dans le chrono, Fibonacci, "
+                         "sondage linéaire ; la variante tuned publiée prend deux tables de hachage de Lua"),
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour (la variante "
+                          "tuned publiée tient l'indice libre et le compteur dans des variables globales)"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "forme de bench/lua_exp (remarque sur Lua), recopiée : piles "
+                         "explicites en tables", True),
+        "k9 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "k9 mt_pool": e(N, note="pas de fils (D1 = 0)"),
+        "k9 mt_pool_v": e(N, note="pas de fils (D1 = 0)"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
+    "lua": {
+        "k6 rq_nest": {**e(E, [("k6", "rq_nest", "q6")], "forme de bench/lua_exp (remarque sur Lua, tuned_n, × 0,51) : Q6 "
+                           "par tests imbriqués, date et remise lues une fois ; classée propre au runtime par le plan "
+                           "(section 2)", True), "ceiling": "Q6"},
+        "k6 rq_nest_mt": {**e(E, [("k6", "rq_nest_mt", "q6")], "la variante mt de Lua (quatre morceaux en séquence, sans "
+                              "fils), chaque morceau : rq_nest (mt_n de la remarque)", True), "ceiling": "Q6 mt"},
+        "k7 rq_pack": {**e(E, [("k7", "rq_pack", "")], "forme de bench/lua_exp (remarque sur Lua, tuned_p, × 0,71) : une "
+                           "seule table, compte et somme tassés dans un entier ; propre au runtime (représentation des "
+                           "tables de Lua, plan 3.5)", True), "ceiling": "K7"},
+        "k9 rq_slide": {**e(E, [("k9", "rq_slide", "")], "forme de bench/lua_exp (remarque sur Lua, tuned_s, × 0,87) : "
+                            "voisins de gauche et du centre gardés dans des variables ; classée propre au runtime (écart "
+                            "daté, docs/V4_CONVERGE.md 4.2)", True), "ceiling": "K9"},
+        "k9 rq_slide_mt": {**e(E, [("k9", "rq_slide_mt", "")], "la variante mt de Lua est le code de tuned (sans fils) : "
+                               "le même code que rq_slide (mt_s de la remarque)", True), "ceiling": "K9 mt"},
+    },
     "python": {
         "k6 rq_cols": {**e(E, [("k6", "rq_cols", "q6")], "forme de bench/python_exp (remarque sur Python, tuned_c, × 0,35) : "
                            "Q6 en colonnes, masques par bytes.translate réunis en entiers longs, lignes retenues "

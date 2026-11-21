@@ -1,4 +1,4 @@
-# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 19:02 UTC (python), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 19:06 UTC (lua), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 # langage noyau variante paramètre : temps (s), somme de contrôle, verdict
 c k1 natural energy : 0.0359 1049202.377034 juste
 c k1 aos energy : 0.02788 1049202.377035 juste
@@ -735,34 +735,44 @@ python k9 tuned - : 1.485 2.095103199218750e+06 juste
 python k9 mt - : 0.6407 2.095103199218750e+06 juste
 python k9 natural_flat - : 2.32 2.095103199218750e+06 juste
 python k9 mt_pool - : 0.5764 2.095103199218750e+06 juste
-lua k1 natural energy : 0.4673 1049202.377006 juste
-lua k1 aos energy : 0.4068 1049202.377006 juste
-lua k1 soa energy : 0.2173 1049202.377006 juste
-lua k1 natural_shuffled energy : 1.407 1049202.377006 juste
-lua k2 tuned 16384 : 0.03053 3568 juste
-lua k2 tuned 262144 : 0.03821 46960 juste
-lua k2 tuned 8388608 : 0.5939 1325440 juste
-lua k3 rmw_padded - : 2.074 134217728 juste
-lua k3 sw_padded - : 2.098 134217728 juste
-lua k4 natural_unsorted - : 0.3048 1605908545 juste
-lua k4 branchless_unsorted - : 0.2737 1605908545 juste
-lua k4 tuned - : 0.2167 1605908545 juste
-lua k5 natural - : 2.008 509.0857 juste
-lua k5 tuned - : 1.941 509.0857 juste
-lua k6 natural q6 : 0.4752 45333132534 juste
-lua k6 natural q1 : 2.228 3997084032331541 juste
-lua k6 tuned q6 : 1.221 45333132534 juste
-lua k6 tuned q1 : 2.068 3997084032331541 juste
-lua k6 mt q6 : 1.197 45333132534 juste
-lua k6 mt q1 : 1.854 3997084032331541 juste
-lua k7 natural - : 6.105 1048575:4294504410765 juste
-lua k7 tuned - : 3.851 1048575:4294504410765 juste
-lua k8 natural - : 10.46 2508056453121 juste
-lua k8 tuned - : 4.035 2508056453121 juste
-lua k9 natural - : 0.5552 2.095103199218750e+06 juste
-lua k9 tuned - : 0.816 2.095103199218750e+06 juste
-lua k9 mt - : 0.8487 2.095103199218750e+06 juste
-lua k9 natural_flat - : 0.8464 2.095103199218750e+06 juste
+lua k1 natural energy : 0.489 1049202.377006 juste
+lua k1 aos energy : 0.333 1049202.377006 juste
+lua k1 soa energy : 0.218 1049202.377006 juste
+lua k1 natural_shuffled energy : 1.869 1049202.377006 juste
+lua k2 tuned 16384 : 0.03086 3568 juste
+lua k2 tuned 262144 : 0.03665 46960 juste
+lua k2 tuned 8388608 : 0.5214 1325440 juste
+lua k3 rmw_padded - : 2.07 134217728 juste
+lua k3 sw_padded - : 2.23 134217728 juste
+lua k4 natural_unsorted - : 0.3299 1605908545 juste
+lua k4 branchless_unsorted - : 0.271 1605908545 juste
+lua k4 tuned - : 0.2136 1605908545 juste
+lua k4 swar - : 0.2166 1605908545 juste
+lua k5 natural - : 1.997 509.0857 juste
+lua k5 tuned - : 1.976 509.0857 juste
+lua k6 natural q6 : 0.5072 45333132534 juste
+lua k6 natural q1 : 2.144 3997084032331541 juste
+lua k6 tuned q6 : 1.145 45333132534 juste
+lua k6 tuned q1 : 2.004 3997084032331541 juste
+lua k6 mt q6 : 1.003 45333132534 juste
+lua k6 mt q1 : 1.811 3997084032331541 juste
+lua k6 tuned_s q1 : 4.57 3997084032331541 juste
+lua k6 rq_nest q6 : 0.4588 45333132534 juste
+lua k6 rq_nest_mt q6 : 0.4439 45333132534 juste
+lua k7 natural - : 5.663 1048575:4294504410765 juste
+lua k7 tuned - : 3.635 1048575:4294504410765 juste
+lua k7 tuned_oa - : 3.37 1048575:4294504410765 juste
+lua k7 rq_pack - : 2.262 1048575:4294504410765 juste
+lua k8 natural - : 10.74 2508056453121 juste
+lua k8 tuned - : 4.194 2508056453121 juste
+lua k8 tuned_val - : 3.813 2508056453121 juste
+lua k8 tuned_it - : 4.747 2508056453121 juste
+lua k9 natural - : 0.5792 2.095103199218750e+06 juste
+lua k9 tuned - : 0.9131 2.095103199218750e+06 juste
+lua k9 mt - : 0.8281 2.095103199218750e+06 juste
+lua k9 natural_flat - : 0.8943 2.095103199218750e+06 juste
+lua k9 rq_slide - : 0.89 2.095103199218750e+06 juste
+lua k9 rq_slide_mt - : 0.759 2.095103199218750e+06 juste
 php k1 natural energy : 0.5963 1049202.377006 juste
 php k1 aos energy : 0.1826 1049202.377006 juste
 php k1 soa energy : 0.03677 1049202.377006 juste
@@ -905,4 +915,4 @@ julia k9 tuned - : 0.01698 2.095103199218750e+06 juste
 julia k9 mt - : 0.007475 2.095103199218750e+06 juste
 julia k9 tuned_v - : 0.01573 2.095103199218750e+06 juste
 julia k9 mt_pool_v - : 0.01221 2.095103199218750e+06 juste
-# 905 cellules, 905 justes, 0 fausses
+# 915 cellules, 915 justes, 0 fausses
