@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 15 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#).
+Langages relevés : 16 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -393,3 +393,28 @@ Langages relevés : 15 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k9 tuned_v` | K9 | présente | `k9 tuned` | Vector512<double>, Load et Store non alignés, j depuis 1 |
 | `k9 mt_pool` (R) | K9 mt | écrite | `k9 mt_pool` | Parallel.For (forme de la remarque, × 0,63) ; chaque quart : K9Rows publiée (tuned_v) |
 | `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 présente : mt_pool l'exécute |
+
+## FreePascal
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` (R) | K4 | écrite | `k4 tuned` | sans assembleur (erratum du point 3, docs/V4_EQUAL.md 11.8) : forme de bench/fpc_rq (remarque sur FreePascal, K4BranchlessPtr) : masque -(x shr 7), pointeur avancé par Inc ; -Sv n'a ni octets ni masques (grille C1 = ½, sonde results/probes/fpc.txt) |
+| `k4 swar` | K4 | écrite | `k4 swar` | mots de 64 bits (unaligned), masque par (m * $FF) |
+| `k5 tuned_v` (R) | K5 | écrite | `k5 tuned_v` | forme de bench/fpc_rq (remarque sur FreePascal, × 0,68) : -Sv, 4 Single (la plus grande largeur admise : 8 Single = erreur interne 200610072), huit accumulateurs, pas de FMA vectorielle, pointeurs avancés par Inc ; la variante tuned publiée indexe |
+| `q6 tuned_v` | Q6 | non écrivible | — | -Sv n'accepte que des tableaux de Single ou de Double (sonde du 21 novembre : « Operator is not overloaded » sur array[0..3] of LongInt), sans masque ni comparaison ; aucun intrinsèque SSE/AVX (grille C1 = ½, C2 = ½ par l'assembleur seul, non admis) |
+| `q6 tuned_s` | Q6 | présente | `k6 tuned q6` | la variante tuned publiée : prédicat en 0/1 par soustractions non signées et bit de signe (shr 63), produit en 32 bits, s += produit and -m en 64 bits |
+| `q1 tuned_v` | Q1 | non écrivible | — | comme Q6 : pas d'entiers en -Sv, aucun intrinsèque |
+| `q1 tuned_s` | Q1 | écrite | `k6 tuned_s q1` | une passe, 30 accumulateurs locaux de 64 bits, masques par bit de signe ; plus lente que la variante tuned publiée (deux tables en mémoire entrelacées) à l'essai : FPC garde les accumulateurs en mémoire |
+| `q6 mt_pool` | Q6 mt | écrite | `k6 mt_pool q6` | événements de la RTL (RTLEventSetEvent / RTLEventWaitFor : la RTL n'a pas de barrière), fils créés une fois par BeginThread ; chaque quart : Q6Tuned publiée (tuned_s) |
+| `q6 mt_pool_v` | Q6 mt | sans objet | — | tuned_v de Q6 non écrivible |
+| `q6 mt_pool_s` | Q6 mt | sans objet | — | tuned_s de Q6 présente : mt_pool l'exécute |
+| `q1 mt_pool` | Q1 mt | écrite | `k6 mt_pool q1` | chaque quart : Q1Tuned publiée |
+| `q1 mt_pool_v` | Q1 mt | sans objet | — | tuned_v de Q1 non écrivible |
+| `q1 mt_pool_s` | Q1 mt | écrite | `k6 mt_pool_s q1` | chaque quart : tuned_s |
+| `k7 tuned_pf` | K7 | présente | `k7 tuned` | lots de 16, Prefetch du System : prefetchnta, la seule instruction de préchargement de la chaîne (sans écriture ni localité ; grille E4 = ½) |
+| `k7 tuned_oa` | K7 | sans objet | — | forme principale présente ou écrite |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | fonction récursive, état en paramètres et en retour |
+| `k8 tuned_it` (R) | K8 | écrite | `k8 tuned_it` | forme de bench/fpc_rq (remarque sur FreePascal, × 0,38), recopiée : piles de 64 entrées ({$if} sur MS_K8_REQ à la compilation) |
+| `k9 tuned_v` | K9 | non écrivible | — | -Sv : 2 Double au plus, opérandes mémoire alignés sur 16 octets exigés (erreur 216 sinon, sonde results/probes/fpc.txt) : les voisins j - 1 et j + 1 ne peuvent pas l'être en même temps que j ; l'essai en -Sv sur 2 Double est plus lent que le scalaire (docs/FPC.md, 2.4) |
+| `k9 mt_pool` | K9 mt | écrite | `k9 mt_pool` | chaque quart : K9Rows publiée |
+| `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 non écrivible |

@@ -19,6 +19,7 @@ type
 
 function K1SoAV(vx, vy, vz, m: PV4; n: SizeInt): Double;
 function K5TunedV(a, b: PV4; n: SizeInt): Single;
+function K5TunedVPtr(a, b: PV4; n: SizeInt): Single;
 
 implementation
 
@@ -62,6 +63,35 @@ begin
     s6 := s6 + a[i + 6] * b[i + 6];
     s7 := s7 + a[i + 7] * b[i + 7];
     Inc(i, 8);
+  end;
+  t := ((s0 + s1) + (s2 + s3)) + ((s4 + s5) + (s6 + s7));
+  Result := (t[0] + t[1]) + (t[2] + t[3]);
+end;
+
+{ v4, point 4 (docs/V4_CONVERGE.md, 3.3, K5 tuned_v) : la forme de la remarque sur FreePascal (bench/fpc_rq, MIEUX ;
+  docs/FPC.md, 5) : le même calcul que K5TunedV (8 accumulateurs de 4 voies, 4 Single étant la plus grande largeur
+  que -Sv accepte : 8 Single = erreur interne 200610072), pointeurs avancés par Inc au lieu d'indices ; mêmes
+  additions dans le même ordre, donc le même résultat }
+function K5TunedVPtr(a, b: PV4; n: SizeInt): Single;
+var
+  s0, s1, s2, s3, s4, s5, s6, s7, t: TV4;
+  e: PV4;
+begin
+  FillChar(s0, SizeOf(s0), 0);
+  s1 := s0; s2 := s0; s3 := s0; s4 := s0; s5 := s0; s6 := s0; s7 := s0;
+  e := a + n div 4;
+  while a < e do
+  begin
+    s0 := s0 + a[0] * b[0];
+    s1 := s1 + a[1] * b[1];
+    s2 := s2 + a[2] * b[2];
+    s3 := s3 + a[3] * b[3];
+    s4 := s4 + a[4] * b[4];
+    s5 := s5 + a[5] * b[5];
+    s6 := s6 + a[6] * b[6];
+    s7 := s7 + a[7] * b[7];
+    Inc(a, 8);
+    Inc(b, 8);
   end;
   t := ((s0 + s1) + (s2 + s3)) + ((s4 + s5) + (s6 + s7));
   Result := (t[0] + t[1]) + (t[2] + t[3]);

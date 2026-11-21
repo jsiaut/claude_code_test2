@@ -448,6 +448,44 @@ INV = {
                         "publiée (tuned_v)", True),
         "k9 mt_pool_v": e(S, note="tuned_v de K9 présente : mt_pool l'exécute"),
     },
+    "fpc": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "sans assembleur (erratum du point 3, docs/V4_EQUAL.md 11.8) : forme de "
+                      "bench/fpc_rq (remarque sur FreePascal, K4BranchlessPtr) : masque -(x shr 7), pointeur avancé "
+                      "par Inc ; -Sv n'a ni octets ni masques (grille C1 = ½, sonde results/probes/fpc.txt)", True),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits (unaligned), masque par (m * $FF)"),
+        "k5 tuned_v": e(E, [("k5", "tuned_v", "")], "forme de bench/fpc_rq (remarque sur FreePascal, × 0,68) : -Sv, "
+                        "4 Single (la plus grande largeur admise : 8 Single = erreur interne 200610072), huit "
+                        "accumulateurs, pas de FMA vectorielle, pointeurs avancés par Inc ; la variante tuned publiée "
+                        "indexe", True),
+        "q6 tuned_v": e(N, note="-Sv n'accepte que des tableaux de Single ou de Double (sonde du 21 novembre : "
+                        "« Operator is not overloaded » sur array[0..3] of LongInt), sans masque ni comparaison ; "
+                        "aucun intrinsèque SSE/AVX (grille C1 = ½, C2 = ½ par l'assembleur seul, non admis)"),
+        "q6 tuned_s": e(P, [("k6", "tuned", "q6")], "la variante tuned publiée : prédicat en 0/1 par soustractions non "
+                        "signées et bit de signe (shr 63), produit en 32 bits, s += produit and -m en 64 bits"),
+        "q1 tuned_v": e(N, note="comme Q6 : pas d'entiers en -Sv, aucun intrinsèque"),
+        "q1 tuned_s": e(E, [("k6", "tuned_s", "q1")], "une passe, 30 accumulateurs locaux de 64 bits, masques par bit "
+                        "de signe ; plus lente que la variante tuned publiée (deux tables en mémoire entrelacées) à "
+                        "l'essai : FPC garde les accumulateurs en mémoire"),
+        "q6 mt_pool": e(E, [("k6", "mt_pool", "q6")], "événements de la RTL (RTLEventSetEvent / RTLEventWaitFor : la "
+                        "RTL n'a pas de barrière), fils créés une fois par BeginThread ; chaque quart : Q6Tuned publiée "
+                        "(tuned_s)"),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 non écrivible"),
+        "q6 mt_pool_s": e(S, note="tuned_s de Q6 présente : mt_pool l'exécute"),
+        "q1 mt_pool": e(E, [("k6", "mt_pool", "q1")], "chaque quart : Q1Tuned publiée"),
+        "q1 mt_pool_v": e(S, note="tuned_v de Q1 non écrivible"),
+        "q1 mt_pool_s": e(E, [("k6", "mt_pool_s", "q1")], "chaque quart : tuned_s"),
+        "k7 tuned_pf": e(P, [("k7", "tuned", "")], "lots de 16, Prefetch du System : prefetchnta, la seule instruction "
+                         "de préchargement de la chaîne (sans écriture ni localité ; grille E4 = ½)"),
+        "k7 tuned_oa": SANS_REPLI,
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "forme de bench/fpc_rq (remarque sur FreePascal, × 0,38), "
+                         "recopiée : piles de 64 entrées ({$if} sur MS_K8_REQ à la compilation)", True),
+        "k9 tuned_v": e(N, note="-Sv : 2 Double au plus, opérandes mémoire alignés sur 16 octets exigés (erreur 216 "
+                        "sinon, sonde results/probes/fpc.txt) : les voisins j - 1 et j + 1 ne peuvent pas l'être en "
+                        "même temps que j ; l'essai en -Sv sur 2 Double est plus lent que le scalaire (docs/FPC.md, 2.4)"),
+        "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "chaque quart : K9Rows publiée"),
+        "k9 mt_pool_v": e(S, note="tuned_v de K9 non écrivible"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
     "julia": {
