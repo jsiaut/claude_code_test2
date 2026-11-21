@@ -367,8 +367,41 @@ INV = {
         "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "chaque quart : k9Rows publiée (tuned_v)"),
         "k9 mt_pool_v": e(S, note="tuned_v de K9 présente : mt_pool l'exécute"),
     },
+    "julia": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : llvmcall (VecElement et IR de LLVM, la seule voie de Base)"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits (unsafe_load)"),
+        "k5 tuned_v": e(E, [("k5", "tuned_v", "")], "llvmcall : <16 x float>, quatre accumulateurs, llvm.fmuladd ; la "
+                        "variante tuned publiée est une boucle @simd à un accumulateur"),
+        "q6 tuned_v": e(E, [("k6", "tuned_v", "q6")], "llvmcall (IR de tools/converge/gen_julia_ir.py)"),
+        "q6 tuned_s": e(P, [("k6", "tuned", "q6")], "la variante tuned publiée : prédicat sans branchement par "
+                        "soustractions non signées et comparaisons, ifelse, @simd"),
+        "q1 tuned_v": e(E, [("k6", "tuned_v", "q1")], "llvmcall : la référence C, compte par llvm.ctpop du masque "
+                        "(IR de tools/converge/gen_julia_ir.py) ; la variante tuned publiée agrège par blocs et par groupe"),
+        "q1 tuned_s": e(E, [("k6", "tuned_s", "q1")], "forme de bench/julia_exp (remarque sur Julia, × 0,53), recopiée pour "
+                        "le calcul 4 bien que tuned_v soit écrite", True),
+        "q6 mt_pool": e(P, [("k6", "mt", "q6")], "Threads.@spawn : tâches sur les fils gardés par le runtime (-t 4)"),
+        "q6 mt_pool_v": e(E, [("k6", "mt_pool_v", "q6")], "Threads.@spawn, chaque quart : tuned_v"),
+        "q6 mt_pool_s": e(S, note="tuned_s de Q6 présente : mt_pool l'exécute"),
+        "q1 mt_pool": e(P, [("k6", "mt", "q1")], "Threads.@spawn"),
+        "q1 mt_pool_v": e(E, [("k6", "mt_pool_v", "q1")], "Threads.@spawn, chaque quart : tuned_v"),
+        "q1 mt_pool_s": e(S, note="tuned_s n'est écrite que comme forme de la remarque (calcul 4)"),
+        "k7 tuned_pf": e(E, [("k7", "tuned_pf", "")], "forme de bench/julia_exp (remarque sur Julia, × 0,69), recopiée : "
+                         "lots de 16, llvm.prefetch par ccall llvmcall (écriture)", True),
+        "k7 tuned_oa": e(P, [("k7", "tuned", "")], "la variante tuned publiée : la même table, sans préchargement"),
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour (indices de base 1)"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "piles en vecteurs de 64 entrées alloués une fois, hors chrono"),
+        "k9 tuned_v": e(E, [("k9", "tuned_v", "")], "llvmcall : <8 x double> le long de la dimension contiguë de la Matrix "
+                        "(colonnes), reste scalaire dans l'IR"),
+        "k9 mt_pool": e(P, [("k9", "mt", "")], "Threads.@spawn, quatre blocs de colonnes"),
+        "k9 mt_pool_v": e(E, [("k9", "mt_pool_v", "")], "Threads.@spawn, chaque quart : tuned_v"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
+    "julia": {
+        "k8 rq_spec": {**e(E, [("k8", "rq_spec", "")], "forme de bench/julia_exp (remarque sur Julia, × 0,83) : la "
+                           "variante tuned spécialisée sur la profondeur (Val) ; classée propre au runtime par le plan "
+                           "(2 : spécialisation de Julia)", True), "ceiling": "K8"},
+    },
     "fortran": {
         "k5 rq_acc16": {**e(E, [("k5", "rq_acc16", "")], "forme de bench/fortran_exp (remarque sur Fortran) : quatre "
                             "accumulateurs écrits comme des tableaux de 16 valeurs, une réduction finale ; propre à "

@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 12 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift).
+Langages relevés : 13 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -317,3 +317,29 @@ Langages relevés : 12 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k9 tuned_v` | K9 | présente | `k9 tuned` | la forme de la frontière : SIMD8<Double>, j depuis 1 |
 | `k9 mt_pool` | K9 mt | écrite | `k9 mt_pool` | chaque quart : k9Rows publiée (tuned_v) |
 | `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 présente : mt_pool l'exécute |
+
+## Julia
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : llvmcall (VecElement et IR de LLVM, la seule voie de Base) |
+| `k4 swar` | K4 | écrite | `k4 swar` | mots de 64 bits (unsafe_load) |
+| `k5 tuned_v` | K5 | écrite | `k5 tuned_v` | llvmcall : <16 x float>, quatre accumulateurs, llvm.fmuladd ; la variante tuned publiée est une boucle @simd à un accumulateur |
+| `q6 tuned_v` | Q6 | écrite | `k6 tuned_v q6` | llvmcall (IR de tools/converge/gen_julia_ir.py) |
+| `q6 tuned_s` | Q6 | présente | `k6 tuned q6` | la variante tuned publiée : prédicat sans branchement par soustractions non signées et comparaisons, ifelse, @simd |
+| `q1 tuned_v` | Q1 | écrite | `k6 tuned_v q1` | llvmcall : la référence C, compte par llvm.ctpop du masque (IR de tools/converge/gen_julia_ir.py) ; la variante tuned publiée agrège par blocs et par groupe |
+| `q1 tuned_s` (R) | Q1 | écrite | `k6 tuned_s q1` | forme de bench/julia_exp (remarque sur Julia, × 0,53), recopiée pour le calcul 4 bien que tuned_v soit écrite |
+| `q6 mt_pool` | Q6 mt | présente | `k6 mt q6` | Threads.@spawn : tâches sur les fils gardés par le runtime (-t 4) |
+| `q6 mt_pool_v` | Q6 mt | écrite | `k6 mt_pool_v q6` | Threads.@spawn, chaque quart : tuned_v |
+| `q6 mt_pool_s` | Q6 mt | sans objet | — | tuned_s de Q6 présente : mt_pool l'exécute |
+| `q1 mt_pool` | Q1 mt | présente | `k6 mt q1` | Threads.@spawn |
+| `q1 mt_pool_v` | Q1 mt | écrite | `k6 mt_pool_v q1` | Threads.@spawn, chaque quart : tuned_v |
+| `q1 mt_pool_s` | Q1 mt | sans objet | — | tuned_s n'est écrite que comme forme de la remarque (calcul 4) |
+| `k7 tuned_pf` (R) | K7 | écrite | `k7 tuned_pf` | forme de bench/julia_exp (remarque sur Julia, × 0,69), recopiée : lots de 16, llvm.prefetch par ccall llvmcall (écriture) |
+| `k7 tuned_oa` | K7 | présente | `k7 tuned` | la variante tuned publiée : la même table, sans préchargement |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | fonction récursive, état en paramètres et en retour (indices de base 1) |
+| `k8 tuned_it` | K8 | écrite | `k8 tuned_it` | piles en vecteurs de 64 entrées alloués une fois, hors chrono |
+| `k9 tuned_v` | K9 | écrite | `k9 tuned_v` | llvmcall : <8 x double> le long de la dimension contiguë de la Matrix (colonnes), reste scalaire dans l'IR |
+| `k9 mt_pool` | K9 mt | présente | `k9 mt` | Threads.@spawn, quatre blocs de colonnes |
+| `k9 mt_pool_v` | K9 mt | écrite | `k9 mt_pool_v` | Threads.@spawn, chaque quart : tuned_v |
+| `k8 rq_spec` (R) | K8 | écrite | `k8 rq_spec` | forme de bench/julia_exp (remarque sur Julia, × 0,83) : la variante tuned spécialisée sur la profondeur (Val) ; classée propre au runtime par le plan (2 : spécialisation de Julia) |
