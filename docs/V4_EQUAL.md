@@ -177,6 +177,41 @@ et les cellules de la taille publiée du point 2 entrent dans la campagne pour r
   0,81 s, environ 105 à 190 ns par saut) a la latence de la mémoire, comme si les 8 Mio sortaient par moments du L3
   effectif (hypothèse, non vérifiée). R5 ne change pas.
 
+### 5.2 Écarts au plan (21 novembre, après les copies, les constructions et les sondes, avant toute mesure de la campagne)
+
+* **BQN n'a pas de variante `tuned` de K4** (3.3 : 25 langages, donc 24). Trois formes essayées, toutes justes : le
+  filtre `+´ (128 ≤ d) / d` (sa forme naturelle publiée, 7,0 ms), le masque `+´ d × 128 ≤ d` (sa forme sans branche
+  publiée, 7,1 ms) et l'histogramme `/⁼` (7,6 ms). Aucune ne bat les deux formes publiées, qui s'exécutent déjà dans
+  les primitives vectorisées de CBQN ; son plafond de K4 reste le meilleur des deux formes publiées.
+* **D est aussi mesuré dans le mode R1'** (`-boundscheck=off`), comme le prévoit le tableau de 3.1 ; les sections 4, 6
+  et 8 l'oubliaient (« 8 » langages, copie en R1' pour Nim, Mojo, Swift, Go et OCaml seulement). Le mode publié
+  (`-release`) ne retire les vérifications de bornes que du code `@system` : celles du code `@safe`, dont les modèles
+  de Phobos instanciés dans le programme, restent. Le binaire publié contient 893 appels aux gestionnaires de
+  dépassement, 177 avec `-boundscheck=off` (ceux de la bibliothèque précompilée) et 965 avec `-boundscheck=on` ; les
+  noyaux naturels nommés (`k1Natural`, `k4Natural`, `k5Natural`, `k9Natural`) n'en ont aucun dans le binaire publié
+  (`results/equal/builds.txt` ; `objdump`). R1' compte donc 9 langages, et la copie de D est aussi construite dans ce
+  mode (`eq_unc`), pour le calcul 8.
+* **Les variantes des copies sont listées dans `eq_variants`**, et non `extra_variants` (section 4) : ce fichier, copié
+  du source publié, garde les variantes propres déjà publiées (K8 `tuned_alloc`).
+* **Base** : les cellules du score à la taille publiée (`analysis/analyze_v3.py`, `needed_keys` : 27 cellules par
+  langage, dont K2 à ses trois tailles du score et K3 `sw_padded` et `rmw_padded`), soit 655 processus par passe, et
+  188 nouvelles cellules : 843 processus par passe (`tools/equal/campaign.py --dry`). Les binaires publiés de la
+  campagne sont reconstruits sur la machine 32 depuis les sources suivies (`/dev/shm/msbuild/<langage>/pub`), comme
+  les autres constructions.
+* **Faits établis avant la campagne.** Les modes ajoutés aux `build.sh` ne changent pas les binaires publiés : sans
+  `MS_MODE`, les commandes du compilateur sont les mêmes et les binaires identiques octet pour octet (14 langages) ;
+  ceux de Swift ne diffèrent que par l'identifiant de construction et l'empreinte du module, qui diffèrent aussi entre
+  deux constructions avec l'ancien script (`results/equal/hookcheck.txt`). Chaque mode change le binaire
+  (`results/equal/builds.txt`). Les sondes de mode se comportent comme prévu (`results/equal/probes/probes.txt`) : les
+  8 modes R1 s'arrêtent sur la lecture hors des bornes (le C sur les rangées de taille connue de son K9 seulement :
+  l'accès par pointeur n'est pas vérifiable, 3.1), les 9 modes R1' et les modes publiés sans vérification ne
+  s'arrêtent pas, les modes publiés vérifiés s'arrêtent.
+* **Analyse** (`analysis/equal_v4.py`, essayée sur des données fictives avant la campagne) : la cellule de K3 de R4
+  est obtenue en relevant les temps de K3 à b3 au moins et en prenant b3 pour référence dans les deux normalisations,
+  ce qui donne min(1, b3 / t) partout ; la cellule K4 `tuned` de R3 est tirée comme les autres cellules de K4 (mêmes
+  réservoirs de résidus), par un générateur à part pour que les autres tirages ne changent pas ; chaque mesure de b3
+  (début, fin) est la moyenne des médianes de deux exécutions de `tools/k3_align.c`.
+
 ## 6. Cellules (taille publiée)
 
 Chaque nouvelle cellule est mesurée avec sa cellule de référence, du même langage, dans la même campagne (et, depuis

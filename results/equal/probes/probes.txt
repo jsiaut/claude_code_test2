@@ -1,0 +1,79 @@
+# Sondes de mode (results/equal/probes/run.sh), 2026-11-21T08:25Z, Intel(R) Xeon(R) Processor @ 2.10GHz
+# langage mode cas : résultat [attendu] verdict
+c pub 1d : passe : 0 [passe] conforme
+c pub 2d : passe : 1 [passe] conforme
+c chk 1d : passe : 0 [passe] conforme
+Illegal instruction
+c chk 2d : arrêt (code 132) :  [arrêt] conforme
+cpp pub 1d : passe : 0 [passe] conforme
+cpp pub 2d : passe : 0 [passe] conforme
+Aborted
+cpp chk 1d : arrêt (code 134) : /opt/gcc-16/include/c++/16.2.0/bits/stl_vector.h:1253: constexpr std::vector<_Tp, _Alloc>: [arrêt] conforme
+Aborted
+cpp chk 2d : arrêt (code 134) : /opt/gcc-16/include/c++/16.2.0/bits/stl_vector.h:1253: constexpr std::vector<_Tp, _Alloc>: [arrêt] conforme
+fortran pub 1d : passe :    0.0000000000000000      [passe] conforme
+fortran pub 2d : passe :    1.0000000000000000      [passe] conforme
+fortran chk 1d : arrêt (code 2) : At line 13 of file probe.f90 [arrêt] conforme
+fortran chk 2d : arrêt (code 2) : At line 17 of file probe.f90 [arrêt] conforme
+zig pub 1d : passe : 0 [passe] conforme
+zig pub 2d : passe : 1 [passe] conforme
+Aborted
+zig chk 1d : arrêt (code 134) : thread 8008 panic: index out of bounds: index 1000, len 1000 [arrêt] conforme
+Aborted
+zig chk 2d : arrêt (code 134) : thread 8017 panic: index out of bounds: index 64, len 64 [arrêt] conforme
+c3 pub 1d : passe : 0.000000 [passe] conforme
+c3 pub 2d : passe : 1.000000 [passe] conforme
+c3 chk 1d : arrêt (code 132) : ERROR: 'Array index out of bounds (array had size 1000, index was 1000)' [arrêt] conforme
+c3 chk 2d : arrêt (code 132) : ERROR: 'Array index out of bounds (array had size 4, index was 4)' [arrêt] conforme
+d pub 1d : passe : 0 [passe] conforme
+d pub 2d : passe : 0 [passe] conforme
+d chk 1d : arrêt (code 1) : core.exception.ArrayIndexError@probe.d(8): index [1000] is out of bounds for array of leng [arrêt] conforme
+d chk 2d : arrêt (code 1) : core.exception.ArrayIndexError@probe.d(12): index [64] is out of bounds for array of lengt [arrêt] conforme
+d unc 1d : passe : 0 [passe] conforme
+d unc 2d : passe : 0 [passe] conforme
+chapel pub 1d : passe : 0.0 [passe] conforme
+chapel pub 2d : passe : 1.0 [passe] conforme
+chapel chk 1d : arrêt (code 1) : probe.chpl:7: error: halt reached - array index out of bounds [arrêt] conforme
+chapel chk 2d : arrêt (code 1) : probe.chpl:10: error: halt reached - array index out of bounds [arrêt] conforme
+fpc pub 1d : passe : 0.000 [passe] conforme
+fpc pub 2d : passe : 1.000 [passe] conforme
+fpc chk 1d : arrêt (code 217) : An unhandled exception occurred at $0000000000401202: [arrêt] conforme
+fpc chk 2d : arrêt (code 217) : An unhandled exception occurred at $0000000000401317: [arrêt] conforme
+Illegal instruction
+swift pub 1d : arrêt (code 132) : *** Signal 4: Backtracing from 0x56163e94a7f5... done *** [arrêt] conforme
+Illegal instruction
+swift pub 2d : arrêt (code 132) : *** Signal 4: Backtracing from 0x55e691c5296d... done *** [arrêt] conforme
+swift unc 1d : passe : 0.0 [passe] conforme
+swift unc 2d : passe : 0.0 [passe] conforme
+ada pub 1d : arrêt (code 1) : raised CONSTRAINT_ERROR : probe.adb:15 index check failed [arrêt] conforme
+ada pub 2d : arrêt (code 1) : raised CONSTRAINT_ERROR : probe.adb:21 index check failed [arrêt] conforme
+ada unc 1d : passe :  6.24978220019802E-319 [passe] conforme
+ada unc 2d : passe :  1.00000000000000E+00 [passe] conforme
+nim pub 1d : arrêt (code 1) : fatal.nim(62)            sysFatal [arrêt] conforme
+nim pub 2d : arrêt (code 1) : fatal.nim(62)            sysFatal [arrêt] conforme
+nim unc 1d : passe : 0.0 [passe] conforme
+nim unc 2d : passe : 0.0 [passe] conforme
+Illegal instruction
+odin pub 1d : arrêt (code 132) : /dev/shm/probes/odin/pub/probe.odin(12:17) Index 1000 is out of range 0..<1000 [arrêt] conforme
+Illegal instruction
+odin pub 2d : arrêt (code 132) : /dev/shm/probes/odin/pub/probe.odin(16:20) Index 64 is out of range 0..<64 [arrêt] conforme
+odin unc 1d : passe : 0 [passe] conforme
+odin unc 2d : passe : 1 [passe] conforme
+julia pub 1d : arrêt (code 1) : ERROR: LoadError: BoundsError: attempt to access 1000-element Vector{Float64} at index [10 [arrêt] conforme
+julia pub 2d : arrêt (code 1) : ERROR: LoadError: BoundsError: attempt to access 64×4 Matrix{Float64} at index [65, 2] [arrêt] conforme
+julia unc 1d : passe : 3.39519326554e-313 [passe] conforme
+julia unc 2d : passe : 1.0 [passe] conforme
+Illegal instruction
+mojo pub 1d : arrêt (code 132) : At: /dev/shm/probes/mojo/pub/probe.mojo:8:16: Assert Error: index 1000 is out of bounds, v [arrêt] conforme
+Illegal instruction
+mojo pub 2d : arrêt (code 132) : At: /dev/shm/probes/mojo/pub/probe.mojo:13:19: Assert Error: index 64 is out of bounds, va [arrêt] conforme
+mojo unc 1d : passe : 0.0 [passe] conforme
+mojo unc 2d : passe : 1.0 [passe] conforme
+go pub 1d : arrêt (code 2) : panic: runtime error: index out of range [1000] with length 1000 [arrêt] conforme
+go pub 2d : arrêt (code 2) : panic: runtime error: index out of range [64] with length 64 [arrêt] conforme
+go unc 1d : passe : 0 [passe] conforme
+go unc 2d : passe : 0 [passe] conforme
+ocaml pub 1d : arrêt (code 2) : Fatal error: exception Invalid_argument("index out of bounds") [arrêt] conforme
+ocaml pub 2d : arrêt (code 2) : Fatal error: exception Invalid_argument("index out of bounds") [arrêt] conforme
+ocaml unc 1d : passe : 6.58021e-319 [passe] conforme
+ocaml unc 2d : passe : 2.02369e-320 [passe] conforme

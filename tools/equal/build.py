@@ -50,5 +50,27 @@ def build(lang, name):
     return dst
 
 
+def source_hash(lang, name):
+    """Empreinte d'une construction : son nom (mode) et les fichiers suivis de son répertoire source (contenu de
+    l'arbre de travail)."""
+    import hashlib
+    src = os.path.join("bench", lang + ("_eq" if name.startswith("eq") else ""))
+    h = hashlib.sha256(name.encode() + b"\0")
+    for f in sorted(tracked(src)):
+        h.update(f.encode() + b"\0" + open(os.path.join(ROOT, src, f), "rb").read())
+    return h.hexdigest()
+
+
+def ensure(lang, name):
+    """Construction refaite seulement si ses sources ou son mode ont changé depuis la dernière (.source_hash)."""
+    d = build_dir(lang, name)
+    stamp = os.path.join(d, ".source_hash")
+    h = source_hash(lang, name)
+    if not (os.path.exists(stamp) and open(stamp).read() == h):
+        build(lang, name)
+        open(stamp, "w").write(h)
+    return d
+
+
 if __name__ == "__main__":
     print(build(sys.argv[1], sys.argv[2]))

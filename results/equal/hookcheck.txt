@@ -1,0 +1,21 @@
+# Contrôle des modes ajoutés aux build.sh (tools/equal/hookcheck.sh), 21 novembre 2026, machine 32 : build.sh du commit 55ae9e6
+# (avant les modes) et de l'arbre de travail, sans MS_MODE, dans le même répertoire ; commandes du compilateur et binaires.
+c commandes=same binaires=same (1 commandes, 1 binaires)
+cpp commandes=same binaires=same (1 commandes, 1 binaires)
+fortran commandes=same binaires=same (4 commandes, 1 binaires)
+zig commandes=same binaires=same (1 commandes, 1 binaires)
+c3 commandes=same binaires=same (1 commandes, 1 binaires)
+d commandes=same binaires=same (1 commandes, 1 binaires)
+chapel commandes=same binaires=same (5 commandes, 3 binaires)
+fpc commandes=same binaires=same (3 commandes, 1 binaires)
+ada commandes=same binaires=same (1 commandes, 1 binaires)
+nim commandes=same binaires=same (1 commandes, 1 binaires)
+odin commandes=same binaires=same (1 commandes, 1 binaires)
+mojo commandes=same binaires=same (1 commandes, 1 binaires)
+go commandes=same binaires=same (1 commandes, 1 binaires)
+ocaml commandes=same binaires=same (1 commandes, 1 binaires)
+swift commandes=same binaires=DIFF (1 commandes, 1 binaires)
+# Swift : les octets qui diffèrent sont ceux de deux identifiants propres à chaque construction, l'identifiant de
+# construction (section .note.gnu.build-id, 20 octets, décalages 737 à 756) et l'empreinte du module (section
+# .swift_modhash, 16 octets, décalages 92917 à 92932) ; deux constructions successives avec l'ancien build.sh diffèrent
+# aux mêmes endroits (35 octets, deux octets égaux par hasard), l'ancienne et la nouvelle aussi (36 octets).

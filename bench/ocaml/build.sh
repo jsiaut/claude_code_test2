@@ -2,6 +2,13 @@
 # OCaml 5.5.2 + flambda (-O3) ; bibliothèques unix et bigarray de la distribution
 set -e
 cd "$(dirname "$0")"
+# v4, point 3 (docs/V4_EQUAL.md, 3.1). MS_MODE=unc : mode R1', sans vérifications (-unsafe) ; sans MS_MODE, la
+# commande publiée.
+case "${MS_MODE:-}" in
+  "") MODE="" ;;
+  unc) MODE=-unsafe ;;
+  *) echo "MS_MODE=$MS_MODE : mode inconnu pour ce langage" >&2; exit 2 ;;
+esac
 /opt/ocaml/bin/ocamlfind ocamlopt -version >/dev/null 2>&1 || true
 # Tailles de la construction (v4, point 2 : docs/V4_SIZES.md) : les noms MS_* du source sont remplacés à la
 # compilation (préprocesseur -pp, qui garde les lignes) par les valeurs des variables MS_* ; sans elles, par le texte
@@ -22,4 +29,4 @@ s/\\bMS_K8_LONG\\b/$(v "$MS_K8_LONG" 20)/g
 s/\\bMS_K8_REQ\\b/$(v "$MS_K8_REQ" 10)/g
 s/\\bMS_M9\\b/$(v "$MS_M9" 2048)/g
 EOF
-/opt/ocaml/bin/ocamlopt -O3 -pp "sed -f sizes.sed" -I +unix unix.cmxa ms.ml -o ms
+/opt/ocaml/bin/ocamlopt -O3 $MODE -pp "sed -f sizes.sed" -I +unix unix.cmxa ms.ml -o ms

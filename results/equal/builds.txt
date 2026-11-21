@@ -1,0 +1,20 @@
+# Binaires des modes (tools/equal/validate.py modes), 2026-11-21 08:30 UTC, 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+# langage mode : fichier, octets différents du binaire publié construit dans le même répertoire
+c chk : ms, 2409 octets différents
+cpp chk : ms, 109794 octets différents
+zig chk : ms, 3761939 octets différents
+odin unc : ms, 227687 octets différents
+c3 chk : ms, 506911 octets différents
+d chk : ms, 1176693 octets différents
+d unc : ms, 1166975 octets différents
+nim unc : ms, 141217 octets différents
+ada unc : ms, 2221295 octets différents
+fortran chk : ms, 83824 octets différents
+chapel chk : ms_nat, 2519962 octets différents
+chapel chk : ms_tuned, 2524541 octets différents
+chapel chk : ms_fm, 2525159 octets différents
+mojo unc : ms, 179031 octets différents
+swift unc : ms, 112902 octets différents
+fpc chk : ms, 1037668 octets différents
+go unc : ms, 1672105 octets différents
+ocaml unc : ms, 1405095 octets différents
