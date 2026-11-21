@@ -1,0 +1,25 @@
+--- a/bench/fortran_cv/build.sh
++++ b/bench/fortran_cv/build.sh
+@@ -3,6 +3,13 @@
+ # noyaux tuned (tuned.f90) avec en plus -mprefer-vector-width=512.
+ set -e
+ cd "$(dirname "$0")"
++# v4, point 3 (docs/V4_EQUAL.md, 3.1). MS_MODE=chk : mode R1, vérifications activées par l'option documentée
++# (-fcheck=bounds) ; sans MS_MODE, la commande publiée.
++case "${MS_MODE:-}" in
++  "") MODE="" ;;
++  chk) MODE=-fcheck=bounds ;;
++  *) echo "MS_MODE=$MS_MODE : mode inconnu pour ce langage" >&2; exit 2 ;;
++esac
+ FC=/opt/gcc-16/bin/gfortran-16
+ # Tailles de la construction (v4, point 2 : docs/V4_SIZES.md) : variables MS_*, valeurs publiées par défaut ; module
+ # de constantes seulement (sizes.f90), compilé pour son .mod, sans objet à lier.
+@@ -18,6 +25,6 @@
+ end module
+ EOF
+ $FC -c sizes.f90 -o sizes.o
+-$FC -O3 -march=native -mprefer-vector-width=512 -fopenmp -c tuned.f90 -o tuned.o
+-$FC -O3 -march=native -fopenmp -o ms ms.f90 tuned.o
++$FC -O3 -march=native -mprefer-vector-width=512 -fopenmp $MODE -c tuned.f90 -o tuned.o
++$FC -O3 -march=native -fopenmp $MODE -o ms ms.f90 tuned.o
+ rm -f *.mod *.o

@@ -1,0 +1,87 @@
+--- a/bench/swift_cv/ms.swift
++++ b/bench/swift_cv/ms.swift
+@@ -263,12 +263,40 @@
+     for x in v { s &+= UInt64(x) &* UInt64(x >> 7) }
+     return s
+ }
++// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (SIMD8<UInt64> de la bibliothèque standard) :
++// 64 octets par tour, chaque voie de 64 bits traite ses 8 octets : masque des octets >= 128 par leur bit de poids
++// fort, sommes par paires d'octets puis par multiplication. (La forme sur SIMD64<UInt8>, élargie en SIMD64<UInt16> par
++// init(truncatingIfNeeded:) avec replacing(with:where:), donne la même somme en 202 ms au lieu de 0,8 : ces
++// conversions entre types de voies ne sont pas vectorisées.)
++@inline(never) func k4Tuned(_ v: UnsafeBufferPointer<UInt8>) -> UInt64 {
++    let n = v.count
++    let base = UnsafeRawPointer(v.baseAddress!)
++    let ones = SIMD8<UInt64>(repeating: 0x0101_0101_0101_0101)
++    let lo = SIMD8<UInt64>(repeating: 0x00FF_00FF_00FF_00FF)
++    let mul = SIMD8<UInt64>(repeating: 0x0001_0001_0001_0001)
++    var acc = SIMD8<UInt64>(repeating: 0)
++    var i = 0
++    while i &+ 64 <= n {
++        let w = base.loadUnaligned(fromByteOffset: i, as: SIMD8<UInt64>.self)
++        let y = w & (((w &>> 7) & ones) &* 0xFF)
++        let p = (y & lo) &+ ((y &>> 8) & lo)
++        acc &+= (p &* mul) &>> 48
++        i &+= 64
++    }
++    var s = acc.wrappedSum()
++    while i < n {
++        if v[i] >= 128 { s &+= UInt64(v[i]) }
++        i &+= 1
++    }
++    return s
++}
+ func runK4(_ v: String, _ reps: Int) {
+-    if v == "branchless_unsorted" {
++    if v == "branchless_unsorted" || v == "tuned" {
+         let d = UnsafeBufferPointer(load("k4_bytes.u8", UInt8.self))
++        let tu = v == "tuned"
+         for r in -warmup..<reps {
+             let t0 = nowNs()
+-            let s = k4Branchless(d)
++            let s = tu ? k4Tuned(d) : k4Branchless(d)
+             let dt = secs(t0)
+             if r >= 0 { result("k4", v, "16M", r, dt, "\(s)") }
+         }
+@@ -644,6 +672,14 @@
+         }
+     }
+ }
++/// v4, point 3 (docs/V4_EQUAL.md, R2) : naturel en grille contiguë, [Double] indexé i * M9 + j, même boucle
++@inline(never) func k9NaturalFlat(_ inp: [Double], _ out: inout [Double]) {
++    for i in 1..<M9 - 1 {
++        for j in 1..<M9 - 1 {
++            out[i * M9 + j] = 0.25 * (((inp[(i - 1) * M9 + j] + inp[(i + 1) * M9 + j]) + inp[i * M9 + j - 1]) + inp[i * M9 + j + 1])
++        }
++    }
++}
+ // Optimisé : tableau plat contigu aligné, SIMD8<Double>
+ @inline(never) func k9Rows(_ inp: UnsafePointer<Double>, _ o: UnsafeMutablePointer<Double>, _ r0: Int, _ r1: Int) {
+     let q4 = SIMD8<Double>(repeating: 0.25)
+@@ -684,6 +720,26 @@
+             if r >= 0 { result("k9", v, "2048^2x4", r, dt, String(format: "%.15e", s)) }
+         }
+         return
++    }
++    if v == "natural_flat" {
++        var a = [Double](repeating: 0, count: M9 * M9)
++        var b = [Double](repeating: 0, count: M9 * M9)
++        for r in -warmup..<reps {
++            for k in 0..<M9 * M9 {
++                a[k] = k9Init(k / M9, k % M9)
++                b[k] = a[k]
++            }
++            let t0 = nowNs()
++            for _ in 0..<4 {
++                k9NaturalFlat(a, &b)
++                swap(&a, &b)
++            }
++            let dt = secs(t0)
++            var s = 0.0
++            for x in a { s += x }
++            if r >= 0 { result("k9", v, "2048^2x4", r, dt, String(format: "%.15e", s)) }
++        }
++        return
+     }
+     let n = M9 * M9
+     var a = alignedBuffer(n, Double.self), b = alignedBuffer(n, Double.self)

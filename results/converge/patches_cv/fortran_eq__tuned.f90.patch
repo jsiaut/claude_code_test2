@@ -1,0 +1,25 @@
+--- a/bench/fortran_cv/tuned.f90
++++ b/bench/fortran_cv/tuned.f90
+@@ -104,4 +104,22 @@
+       end do
+     end do
+   end subroutine
++  ! v4, point 3 (docs/V4_EQUAL.md, R3) : K4 tuned. Fortran n'a pas de SIMD explicite : la meilleure forme trouvée de
++  ! la boucle scalaire, vectorisée par gfortran. Tableau déclaré contiguous (Fortran 2008 : sans lui, la boucle sur un
++  ! tableau de forme présumée n'est pas vectorisée, 10 à 18 ms au lieu de 1,2), octets >= 128 (négatifs en int8)
++  ! comptés b + 256 par merge, accumulateur 32 bits par tranche de 4 Mio (255 x 2^22 < 2^31).
++  integer(int64) function k4_tuned(b) result(s)
++    integer(int8), intent(in), contiguous :: b(:)
++    integer(int32) :: p
++    integer :: i, j, n
++    n = size(b)
++    s = 0
++    do j = 1, n, 4194304
++      p = 0
++      do i = j, min(n, j + 4194303)
++        p = p + merge(int(b(i), int32) + 256, 0, b(i) < 0)
++      end do
++      s = s + p
++    end do
++  end function
+ end module

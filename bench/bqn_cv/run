@@ -1,0 +1,4 @@
+#!/bin/sh
+# BQN (CBQN 0.12.0 construit pour la cible Cascade Lake, /opt/cbqn-cl : docs/BQN.md, 2.1) : les variables du pilote
+# (MS_DATA, WARMUP) passent en arguments, BQN n'ayant pas de lecture de l'environnement dans sa bibliothèque système
+exec /opt/cbqn-cl/bin/BQN "$(dirname "$0")/ms.bqn" "${MS_DATA:-/opt/msdata}" "${WARMUP:-3}" "$@"

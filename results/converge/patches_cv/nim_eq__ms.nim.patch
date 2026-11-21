@@ -1,0 +1,72 @@
+--- a/bench/nim_cv/ms.nim
++++ b/bench/nim_cv/ms.nim
+@@ -180,15 +180,39 @@
+     if x >= 128: result += x
+ proc k4Branchless(v: seq[uint8]): uint64 {.noinline.} =
+   for x in v: result += uint64(x) * uint64(x shr 7)
++# v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (intrinsèques AVX-512BW importées de
++# immintrin.h) : masque v >= 128 par le bit de poids fort, octets hors masque mis à zéro, vpsadbw en sommes de 64 bits.
++type M512i {.importc: "__m512i", header: "<immintrin.h>".} = object
++proc mm512_setzero_si512(): M512i {.importc: "_mm512_setzero_si512", header: "<immintrin.h>".}
++proc mm512_loadu_si512(p: pointer): M512i {.importc: "_mm512_loadu_si512", header: "<immintrin.h>".}
++proc mm512_movepi8_mask(a: M512i): uint64 {.importc: "_mm512_movepi8_mask", header: "<immintrin.h>".}
++proc mm512_maskz_mov_epi8(k: uint64, a: M512i): M512i {.importc: "_mm512_maskz_mov_epi8", header: "<immintrin.h>".}
++proc mm512_sad_epu8(a, b: M512i): M512i {.importc: "_mm512_sad_epu8", header: "<immintrin.h>".}
++proc mm512_add_epi64(a, b: M512i): M512i {.importc: "_mm512_add_epi64", header: "<immintrin.h>".}
++proc mm512_reduce_add_epi64(a: M512i): int64 {.importc: "_mm512_reduce_add_epi64", header: "<immintrin.h>".}
++proc k4Tuned(v: seq[uint8]): uint64 {.noinline.} =
++  let n = v.len
++  let zero = mm512_setzero_si512()
++  var acc = mm512_setzero_si512()
++  var i = 0
++  while i + 64 <= n:
++    let x = mm512_loadu_si512(v[i].unsafeAddr)
++    acc = mm512_add_epi64(acc, mm512_sad_epu8(mm512_maskz_mov_epi8(mm512_movepi8_mask(x), x), zero))
++    i += 64
++  result = uint64(mm512_reduce_add_epi64(acc))
++  while i < n:
++    if v[i] >= 128: result += v[i]
++    inc i
+ proc runK4(v: string, reps: int) =
+   let b = load[uint8]("k4_bytes.u8")
+   var d = newSeq[uint8](b.len)
+   copyMem(d[0].addr, b.p, b.len)
+   if v == "natural_sorted": d.sort()
+   let bl = v == "branchless_unsorted"
++  let tu = v == "tuned"
+   for r in -WARMUP ..< reps:
+     let t0 = getMonoTime()
+-    let s = if bl: k4Branchless(d) else: k4Natural(d)
++    let s = if tu: k4Tuned(d) elif bl: k4Branchless(d) else: k4Natural(d)
+     let dt = secs(t0)
+     if r >= 0: result("k4", v, "16M", r, dt, $s)
+ 
+@@ -425,6 +449,11 @@
+   for i in 1 ..< M9 - 1:
+     for j in 1 ..< M9 - 1:
+       b[i][j] = 0.25 * (((a[i - 1][j] + a[i + 1][j]) + a[i][j - 1]) + a[i][j + 1])
++# v4, point 3 (docs/V4_EQUAL.md, R2) : naturel en grille contiguë, seq[float] indexé i * M9 + j, même boucle
++proc k9NaturalFlat(a: seq[float], b: var seq[float]) {.noinline.} =
++  for i in 1 ..< M9 - 1:
++    for j in 1 ..< M9 - 1:
++      b[i * M9 + j] = 0.25 * (((a[(i - 1) * M9 + j] + a[(i + 1) * M9 + j]) + a[i * M9 + j - 1]) + a[i * M9 + j + 1])
+ {.push boundChecks: off, overflowChecks: off.}
+ proc k9Rows(a, b: ptr UncheckedArray[float], r0, r1: int) {.noinline.} =
+   for i in r0 ..< r1:
+@@ -452,6 +481,16 @@
+       dt = secs(t0)
+       for row in a:
+         for x in row: s += x
++    elif v == "natural_flat":
++      var a = newSeq[float](M9 * M9)
++      for k in 0 ..< M9 * M9: a[k] = k9Init(k div M9, k mod M9)
++      var b = a
++      let t0 = getMonoTime()
++      for _ in 0 ..< 4:
++        k9NaturalFlat(a, b)
++        swap(a, b)
++      dt = secs(t0)
++      for x in a: s += x
+     else:
+       var a = cast[ptr UncheckedArray[float]](aligned_alloc(64, csize_t(M9 * M9 * 8)))
+       var b = cast[ptr UncheckedArray[float]](aligned_alloc(64, csize_t(M9 * M9 * 8)))

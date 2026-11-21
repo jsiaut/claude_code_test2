@@ -1,0 +1,85 @@
+--- a/bench/go_cv/ms.go
++++ b/bench/go_cv/ms.go
+@@ -275,12 +275,42 @@
+ 	}
+ 	return s
+ }
++// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (simd/archsimd, GOEXPERIMENT=simd) : masque
++// v >= 128 (VPCMPUB), octets hors masque à zéro, VPSADBW en sommes de 64 bits.
++//
++//go:noinline
++func k4Tuned(v []byte) uint64 {
++	lim := archsimd.BroadcastUint8x64(128)
++	zero := archsimd.BroadcastUint8x64(0)
++	var acc archsimd.Uint64x8
++	n := len(v)
++	i := 0
++	for ; i+64 <= n; i += 64 {
++		x := archsimd.LoadUint8x64(v[i : i+64])
++		acc = acc.Add(x.Masked(x.GreaterEqual(lim)).SumOf8AbsDiff(zero))
++	}
++	var lanes [8]uint64
++	acc.StoreArray(&lanes)
++	s := uint64(0)
++	for _, l := range lanes {
++		s += l
++	}
++	for ; i < n; i++ {
++		if v[i] >= 128 {
++			s += uint64(v[i])
++		}
++	}
++	return s
++}
+ func runK4(v string, reps int) {
+ 	d := loadBytes("k4_bytes.u8")
+ 	if v == "natural_sorted" {
+ 		slices.Sort(d)
+ 	}
+ 	bench("k4", v, "16M", reps, func() string {
++		if v == "tuned" {
++			return strconv.FormatUint(k4Tuned(d), 10)
++		}
+ 		if v == "branchless_unsorted" {
+ 			return strconv.FormatUint(k4Branchless(d), 10)
+ 		}
+@@ -637,6 +667,17 @@
+ 	}
+ }
+ 
++// v4, point 3 (docs/V4_EQUAL.md, R2) : naturel en grille contiguë, []float64 indexée i*M9 + j, même boucle
++//
++//go:noinline
++func k9NaturalFlat(in, out []float64) {
++	for i := 1; i < M9-1; i++ {
++		for j := 1; j < M9-1; j++ {
++			out[i*M9+j] = 0.25 * (((in[(i-1)*M9+j] + in[(i+1)*M9+j]) + in[i*M9+j-1]) + in[i*M9+j+1])
++		}
++	}
++}
++
+ //go:noinline
+ func k9Rows(in, out []float64, r0, r1 int) {
+ 	for i := r0; i < r1; i++ {
+@@ -672,6 +713,21 @@
+ 					s += a[i][j]
+ 				}
+ 			}
++		} else if v == "natural_flat" {
++			a, b := make([]float64, M9*M9), make([]float64, M9*M9)
++			for k := range a {
++				a[k] = k9Init(k/M9, k%M9)
++				b[k] = a[k]
++			}
++			t0 := time.Now()
++			for range 4 {
++				k9NaturalFlat(a, b)
++				a, b = b, a
++			}
++			dt = time.Since(t0).Seconds()
++			for k := range a {
++				s += a[k]
++			}
+ 		} else {
+ 			a, b := make([]float64, M9*M9), make([]float64, M9*M9)
+ 			for k := range a {

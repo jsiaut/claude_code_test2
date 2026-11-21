@@ -1,0 +1,61 @@
+--- a/bench/fpc_cv/ms.pas
++++ b/bench/fpc_cv/ms.pas
+@@ -446,6 +446,47 @@
+   Result := s;
+ end;
+ 
++{ v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite par l'assembleur en ligne, la seule voie de FPC
++  pour des octets (-Sv n'a ni masque ni octets ; l'assembleur de FPC 3.2.2 ne connaît pas AVX-512, d'où AVX2) : 32
++  octets par tour, masque v >= 128 (vpcmpgtb : octets négatifs), octets hors masque à zéro, vpsadbw en quatre sommes
++  de 64 bits. }
++{$asmmode intel}
++function K4TunedAsm(p: PByte; n: SizeInt): QWord; assembler; nostackframe;
++asm
++  vpxor    ymm0, ymm0, ymm0
++  vpxor    ymm1, ymm1, ymm1
++  xor      rax, rax
++  mov      rcx, rsi
++  and      rcx, -32
++@loop:
++  cmp      rax, rcx
++  jae      @done
++  vmovdqu  ymm2, [rdi + rax]
++  vpcmpgtb ymm3, ymm1, ymm2
++  vpand    ymm2, ymm2, ymm3
++  vpsadbw  ymm2, ymm2, ymm1
++  vpaddq   ymm0, ymm0, ymm2
++  add      rax, 32
++  jmp      @loop
++@done:
++  vextracti128 xmm2, ymm0, 1
++  vpaddq   xmm0, xmm0, xmm2
++  vpshufd  xmm2, xmm0, $4E
++  vpaddq   xmm0, xmm0, xmm2
++  vmovq    rax, xmm0
++  vzeroupper
++end;
++
++function K4Tuned(v: PByte; n: SizeInt): QWord;
++var
++  i: SizeInt;
++begin
++  Result := K4TunedAsm(v, n);
++  for i := n and not SizeInt(31) to n - 1 do
++    if v[i] >= 128 then
++      Result := Result + v[i];
++end;
++
+ procedure RunK4(const v: string; reps: Integer);
+ var
+   d: TArrU8;
+@@ -473,7 +514,9 @@
+   for r := -Warmup to reps - 1 do
+   begin
+     t0 := NowNs;
+-    if v = 'branchless_unsorted' then
++    if v = 'tuned' then
++      s := K4Tuned(@d[0], Length(d))
++    else if v = 'branchless_unsorted' then
+       s := K4Branchless(@d[0], Length(d))
+     else
+       s := K4Natural(d);

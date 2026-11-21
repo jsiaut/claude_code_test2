@@ -1,0 +1,9 @@
+#!/bin/sh
+# variantes natural* -> options par défaut ; réductions flottantes réassociables -> ms_fm
+d="$(dirname "$0")"
+case "$1:$2" in
+  *:natural*|*:footprint*) b=ms_nat ;;
+  k1:aos|k1:soa|k5:tuned) b=ms_fm ;;
+  *) b=ms_tuned ;;
+esac
+exec "$d/$b" --warm="${WARMUP:-1}" --dataDir="${MS_DATA:-/opt/msdata}" "$@"

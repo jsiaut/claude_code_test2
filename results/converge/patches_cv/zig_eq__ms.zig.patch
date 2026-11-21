@@ -1,0 +1,46 @@
+--- a/bench/zig_cv/ms.zig
++++ b/bench/zig_cv/ms.zig
+@@ -212,14 +212,42 @@
+     for (v) |x| s += @as(u64, x) * (x >> 7);
+     return s;
+ }
++// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (@Vector) : 64 octets par tour, masque
++// v >= 128 par comparaison vectorielle, octets hors masque à zéro, cumulés en 64 voies de u16 (au plus 256 tours, sans
++// débordement), puis réduits en u64.
++noinline fn k4Tuned(v: []const u8) u64 {
++    const V8 = @Vector(64, u8);
++    const V16 = @Vector(64, u16);
++    const zero8: V8 = @splat(0);
++    const lim: V8 = @splat(128);
++    var s: u64 = 0;
++    var i: usize = 0;
++    while (i + 64 <= v.len) {
++        var acc: V16 = @splat(0);
++        var k: usize = 0;
++        while (k < 256 and i + 64 <= v.len) : ({
++            k += 1;
++            i += 64;
++        }) {
++            const x: V8 = v[i..][0..64].*;
++            acc += @as(V16, @select(u8, x >= lim, x, zero8));
++        }
++        s += @reduce(.Add, @as(@Vector(64, u64), acc));
++    }
++    while (i < v.len) : (i += 1) {
++        if (v[i] >= 128) s += v[i];
++    }
++    return s;
++}
+ fn runK4(v: []const u8, reps: i32) void {
+     const d = load(u8, "k4_bytes.u8");
+     if (std.mem.eql(u8, v, "natural_sorted")) std.mem.sort(u8, d, {}, std.sort.asc(u8));
+     const bl = std.mem.eql(u8, v, "branchless_unsorted");
++    const tu = std.mem.eql(u8, v, "tuned");
+     var r: i32 = -warmup;
+     while (r < reps) : (r += 1) {
+         const t0 = nowNs();
+-        const s = if (bl) k4Branchless(d) else k4Natural(d);
++        const s = if (tu) k4Tuned(d) else if (bl) k4Branchless(d) else k4Natural(d);
+         const dt = secs(t0);
+         if (r >= 0) result("k4", v, "16M", r, dt, fmt("{d}", .{s}));
+     }

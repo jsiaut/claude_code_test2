@@ -1,0 +1,65 @@
+--- a/bench/haskell_cv/Ms.hs
++++ b/bench/haskell_cv/Ms.hs
+@@ -22,6 +22,7 @@
+ import GHC.Exts
+ import GHC.ForeignPtr (mallocPlainForeignPtrAlignedBytes, unsafeWithForeignPtr)
+ import GHC.IO (IO (..))
++import System.IO.Unsafe (unsafeDupablePerformIO)
+ import GHC.Word (Word32 (..), Word64 (..))
+ import System.Environment
+ import System.Mem (performMajorGC)
+@@ -226,12 +227,53 @@
+ k4Branchless :: BS.ByteString -> Word64
+ k4Branchless = BS.foldl' (\s x -> s + fromIntegral x * fromIntegral (x `shiftR` 7)) 0
+ 
++-- v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (primitives SIMD de GHC, -fllvm). GHC n'offre
++-- sur les vecteurs d'entiers ni comparaison, ni décalage, ni « et » : les 64 octets d'un bloc sont lus comme 32 voies de
++-- 16 bits ; reste et quotient par 256 séparent octets pairs et impairs ; x * (x quot 128) garde x si x >= 128, 0 sinon.
++-- Cumul en voies de 16 bits sur au plus 128 blocs (2 x 128 x 255 = 65 280), puis en Word64.
++{-# NOINLINE k4Tuned #-}
++k4Tuned :: BS.ByteString -> Word64
++k4Tuned bs = unsafeDupablePerformIO $ BSU.unsafeUseAsCStringLen bs $ \(Ptr a, n) -> return $! k4TunedAddr a n
++
++k4TunedAddr :: Addr# -> Int -> Word64
++k4TunedAddr a (I# n) = chunks 0# 0
++  where
++    nb = n -# (n `remInt#` 64#)
++    -- les vecteurs sont des valeurs non pointées : liés par case, constantes recalculées sur place (LLVM les sort de la
++    -- boucle)
++    blocks :: Int# -> Int# -> Word16X32# -> Word16X32#
++    blocks i end acc
++      | isTrue# (i >=# end) = acc
++      | otherwise =
++          case indexWord16OffAddrAsWord16X32# a (uncheckedIShiftRL# i 1#) of  -- indice en unités de 16 bits
++            u -> case remWord16X32# u (broadcastWord16X32# (wordToWord16# 256##)) of
++              lo -> case quotWord16X32# u (broadcastWord16X32# (wordToWord16# 256##)) of
++                hi -> blocks (i +# 64#) end
++                        (plusWord16X32# acc
++                          (plusWord16X32# (timesWord16X32# lo (quotWord16X32# lo (broadcastWord16X32# (wordToWord16# 128##))))
++                                          (timesWord16X32# hi (quotWord16X32# hi (broadcastWord16X32# (wordToWord16# 128##))))))
++    lanesum :: Word16X32# -> Word64
++    lanesum v = case unpackWord16X32# v of
++      (# x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22, x23, x24, x25, x26, x27, x28, x29, x30, x31 #) -> W64# (wordToWord64# (word16ToWord# x0 `plusWord#` word16ToWord# x1 `plusWord#` word16ToWord# x2 `plusWord#` word16ToWord# x3 `plusWord#` word16ToWord# x4 `plusWord#` word16ToWord# x5 `plusWord#` word16ToWord# x6 `plusWord#` word16ToWord# x7 `plusWord#` word16ToWord# x8 `plusWord#` word16ToWord# x9 `plusWord#` word16ToWord# x10 `plusWord#` word16ToWord# x11 `plusWord#` word16ToWord# x12 `plusWord#` word16ToWord# x13 `plusWord#` word16ToWord# x14 `plusWord#` word16ToWord# x15 `plusWord#` word16ToWord# x16 `plusWord#` word16ToWord# x17 `plusWord#` word16ToWord# x18 `plusWord#` word16ToWord# x19 `plusWord#` word16ToWord# x20 `plusWord#` word16ToWord# x21 `plusWord#` word16ToWord# x22 `plusWord#` word16ToWord# x23 `plusWord#` word16ToWord# x24 `plusWord#` word16ToWord# x25 `plusWord#` word16ToWord# x26 `plusWord#` word16ToWord# x27 `plusWord#` word16ToWord# x28 `plusWord#` word16ToWord# x29 `plusWord#` word16ToWord# x30 `plusWord#` word16ToWord# x31))
++    chunks :: Int# -> Word64 -> Word64
++    chunks i !s
++      | isTrue# (i >=# nb) = tailSum i s
++      | otherwise =
++          let end = if isTrue# (i +# 8192# <# nb) then i +# 8192# else nb
++          in chunks end (s + lanesum (blocks i end (broadcastWord16X32# (wordToWord16# 0##))))
++    tailSum :: Int# -> Word64 -> Word64
++    tailSum i !s
++      | isTrue# (i >=# n) = s
++      | otherwise =
++          let x = W# (word8ToWord# (indexWord8OffAddr# a i))
++          in tailSum (i +# 1#) (if x >= 128 then s + fromIntegral x else s)
++
+ runK4 :: String -> Int -> Int -> IO ()
+ runK4 v warm reps = do
+   d <- dataDir
+   bs0 <- BS.readFile (d ++ "/k4_bytes.u8")
+   let bs = if v == "natural_sorted" then BS.sort bs0 else bs0
+-      f = if v == "branchless_unsorted" then k4Branchless else k4Natural
++      f = if v == "tuned" then k4Tuned else if v == "branchless_unsorted" then k4Branchless else k4Natural
+   ref <- newIORef bs
+   bench "k4" v "16M" warm reps (readIORef ref >>= \x -> return $! show (f x))
+ 

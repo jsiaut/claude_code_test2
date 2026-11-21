@@ -1,0 +1,18 @@
+--- a/bench/nim_cv/build.sh
++++ b/bench/nim_cv/build.sh
+@@ -2,7 +2,14 @@
+ # Nim 2.2.12 -> C -> clang 23 (-O3 -march=native) ; -d:release (vérifications à l'exécution conservées)
+ set -e
+ cd "$(dirname "$0")"
++# v4, point 3 (docs/V4_EQUAL.md, 3.1). MS_MODE=unc : mode R1', sans vérifications (-d:danger) ; sans MS_MODE, la
++# commande publiée.
++case "${MS_MODE:-}" in
++  "") OPT=-d:release ;;
++  unc) OPT=-d:danger ;;
++  *) echo "MS_MODE=$MS_MODE : mode inconnu pour ce langage" >&2; exit 2 ;;
++esac
+ # Tailles redéfinissables (v4, point 2 : docs/V4_SIZES.md) ; sans variable MS_*, le binaire publié
+ DEFS=$(env | grep -E '^MS_(N1|N4|N5|INNER5|N6|N7|K7_LOG2|K7_NB|K8_LONG|K8_REQ|M9)=' | sed 's/^/-d:/' | tr '\n' ' ')
+-/opt/nim/bin/nim c -d:release --cc:clang --clang.exe:clang-23 --clang.linkerexe:clang-23 \
++/opt/nim/bin/nim c $OPT --cc:clang --clang.exe:clang-23 --clang.linkerexe:clang-23 \
+   --passC:"-march=native" --threads:on --mm:orc --hints:off --warnings:off --nimcache:./nimcache $DEFS -o:ms ms.nim

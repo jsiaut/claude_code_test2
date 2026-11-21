@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /opt/julia/bin/julia -O3 -t 4 --startup-file=no "$(dirname "$0")/ms.jl" "$@"

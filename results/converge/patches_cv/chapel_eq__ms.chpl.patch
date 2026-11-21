@@ -1,0 +1,47 @@
+--- a/bench/chapel_cv/ms.chpl
++++ b/bench/chapel_cv/ms.chpl
+@@ -152,13 +152,43 @@
+   for x in b do s += (x * (x >> 7)): uint;
+   return s;
+ }
++// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (intrinsèques AVX-512BW importées de
++// immintrin.h par extern proc, comme la sonde C2) : masque v >= 128 par le bit de poids fort, octets hors masque mis
++// à zéro, vpsadbw en sommes de 64 bits.
++require "immintrin.h";
++extern type __m512i;
++extern proc _mm512_setzero_si512(): __m512i;
++extern proc _mm512_loadu_si512(p: c_ptrConst(void)): __m512i;
++extern proc _mm512_movepi8_mask(a: __m512i): uint(64);
++extern proc _mm512_maskz_mov_epi8(k: uint(64), a: __m512i): __m512i;
++extern proc _mm512_sad_epu8(a: __m512i, b: __m512i): __m512i;
++extern proc _mm512_add_epi64(a: __m512i, b: __m512i): __m512i;
++extern proc _mm512_reduce_add_epi64(a: __m512i): int(64);
++proc k4Tuned(const ref b: [] uint(8)): uint {
++  const n = b.size;
++  const p = c_ptrToConst(b[0]);
++  const zero = _mm512_setzero_si512();
++  var acc = _mm512_setzero_si512();
++  var i = 0;
++  while i + 64 <= n {
++    const x = _mm512_loadu_si512((p + i): c_ptrConst(void));
++    acc = _mm512_add_epi64(acc, _mm512_sad_epu8(_mm512_maskz_mov_epi8(_mm512_movepi8_mask(x), x), zero));
++    i += 64;
++  }
++  var s = _mm512_reduce_add_epi64(acc): uint;
++  while i < n {
++    if b[i] >= 128 then s += b[i];
++    i += 1;
++  }
++  return s;
++}
+ proc runK4(v: string, reps: int) {
+   var b = loadArr("k4_bytes.u8", uint(8));
+   if v == "natural_sorted" then sort(b);  // hors chrono
+   var sw: stopwatch;
+   for r in -warm..<reps {
+     sw.clear(); sw.start();
+-    const s = if v == "branchless_unsorted" then k4Branchless(b) else k4Natural(b);
++    const s = if v == "tuned" then k4Tuned(b) else if v == "branchless_unsorted" then k4Branchless(b) else k4Natural(b);
+     sw.stop();
+     if r >= 0 then result("k4", v, "16M", r, sw.elapsed(), s: string);
+   }

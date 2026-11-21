@@ -1,0 +1,74 @@
+--- a/bench/d_cv/ms.d
++++ b/bench/d_cv/ms.d
+@@ -7,7 +7,8 @@
+ import core.time : MonoTime;
+ import ldc.attributes : llvmFastMathFlag;
+ import ldc.intrinsics : llvm_prefetch;
+-import ldc.simd : loadUnaligned, storeUnaligned;
++import ldc.simd : loadUnaligned, storeUnaligned, greaterOrEqualMask;
++import ldc.gccbuiltins_x86 : __builtin_ia32_psadbw512;
+ import std.algorithm : sort;
+ import std.concurrency;
+ import std.conv : to;
+@@ -181,13 +182,34 @@
+ // ------------------------------------------------------------------ K4
+ pragma(inline, false) ulong k4Natural(const ubyte[] v) { ulong s = 0; foreach (x; v) if (x >= 128) s += x; return s; }
+ pragma(inline, false) ulong k4Branchless(const ubyte[] v) { ulong s = 0; foreach (x; v) s += cast(ulong) x * (x >> 7); return s; }
++// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (vecteurs de core.simd, masque non signé de
++// ldc.simd, vpsadbw de ldc.gccbuiltins_x86) : masque v >= 128, octets hors masque à zéro, sommes de 8 octets en
++// entiers de 64 bits.
++pragma(inline, false) ulong k4Tuned(const ubyte[] v) {
++    alias ubyte64 = __vector(ubyte[64]);
++    alias byte64 = __vector(byte[64]);
++    long8 acc = 0;
++    ubyte64 lim = 128;
++    byte64 zero = 0;
++    size_t i = 0;
++    const n = v.length;
++    for (; i + 64 <= n; i += 64) {
++        ubyte64 x = loadUnaligned!ubyte64(v.ptr + i);
++        ubyte64 y = x & cast(ubyte64) greaterOrEqualMask!ubyte64(x, lim);
++        acc += __builtin_ia32_psadbw512(cast(byte64) y, zero);
++    }
++    ulong s = 0;
++    foreach (k; 0 .. 8) s += acc[k];
++    for (; i < n; i++) if (v[i] >= 128) s += v[i];
++    return s;
++}
+ void runK4(string v, int reps) {
+     auto d = load!ubyte("k4_bytes.u8");
+     if (v == "natural_sorted") sort(d);
+-    bool bl = v == "branchless_unsorted";
++    bool bl = v == "branchless_unsorted", tu = v == "tuned";
+     foreach (r; -WARMUP .. reps) {
+         auto t0 = MonoTime.currTime;
+-        ulong s = bl ? k4Branchless(d) : k4Natural(d);
++        ulong s = tu ? k4Tuned(d) : bl ? k4Branchless(d) : k4Natural(d);
+         auto dt = secs(t0);
+         if (r >= 0) result("k4", v, "16M", r, dt, s.to!string);
+     }
+@@ -403,6 +425,10 @@
+ pragma(inline, false) void k9Natural(double[][] a, double[][] b) {
+     foreach (i; 1 .. M9 - 1) foreach (j; 1 .. M9 - 1) b[i][j] = 0.25 * (((a[i - 1][j] + a[i + 1][j]) + a[i][j - 1]) + a[i][j + 1]);
+ }
++// v4, point 3 (docs/V4_EQUAL.md, R2) : naturel en grille contiguë, double[] indexé i * M9 + j, même boucle
++pragma(inline, false) void k9NaturalFlat(double[] a, double[] b) {
++    foreach (i; 1 .. M9 - 1) foreach (j; 1 .. M9 - 1) b[i * M9 + j] = 0.25 * (((a[(i - 1) * M9 + j] + a[(i + 1) * M9 + j]) + a[i * M9 + j - 1]) + a[i * M9 + j + 1]);
++}
+ pragma(inline, false) void k9Rows(const(double)* a, double* b, size_t r0, size_t r1) {
+     double8 q4 = 0.25;
+     foreach (i; r0 .. r1) {
+@@ -426,6 +452,13 @@
+             foreach (_; 0 .. 4) { k9Natural(a, b); auto tmp = a; a = b; b = tmp; }
+             dt = secs(t0);
+             foreach (row; a) foreach (x; row) s += x;
++        } else if (v == "natural_flat") {
++            auto a = new double[](M9 * M9), b = new double[](M9 * M9);
++            foreach (k; 0 .. M9 * M9) a[k] = b[k] = k9Init(k / M9, k % M9);
++            auto t0 = MonoTime.currTime;
++            foreach (_; 0 .. 4) { k9NaturalFlat(a, b); auto tmp = a; a = b; b = tmp; }
++            dt = secs(t0);
++            foreach (x; a) s += x;
+         } else {
+             auto a = cast(double*) aligned_alloc(64, M9 * M9 * 8), b = cast(double*) aligned_alloc(64, M9 * M9 * 8);
+             foreach (k; 0 .. M9 * M9) a[k] = b[k] = k9Init(k / M9, k % M9);

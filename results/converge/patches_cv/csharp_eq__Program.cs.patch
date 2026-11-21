@@ -1,0 +1,39 @@
+--- a/bench/csharp_cv/Program.cs
++++ b/bench/csharp_cv/Program.cs
+@@ -199,12 +199,34 @@
+     static ulong K4Natural(byte[] v) { ulong s = 0; foreach (byte x in v) if (x >= 128) s += x; return s; }
+     [MethodImpl(MethodImplOptions.NoInlining)]
+     static ulong K4Branchless(byte[] v) { ulong s = 0; foreach (byte x in v) s += (ulong)x * (ulong)(x >> 7); return s; }
++    // v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (Vector512, vpsadbw d'Avx512BW) : la forme
++    // de la remarque sur C# (bench/csharp_exp, K4Simd) : masque v >= 128 par le signe, octets hors masque à zéro,
++    // sommes de 8 octets en entiers de 64 bits, deux accumulateurs.
++    [MethodImpl(MethodImplOptions.NoInlining)]
++    static ulong K4Tuned(byte[] v)
++    {
++        ref byte b = ref MemoryMarshal.GetArrayDataReference(v);
++        int n = v.Length, i = 0;
++        Vector512<ulong> a0 = default, a1 = default;
++        for (; i + 128 <= n; i += 128)
++        {
++            var x0 = Vector512.LoadUnsafe(ref b, (nuint)i);
++            var x1 = Vector512.LoadUnsafe(ref b, (nuint)(i + 64));
++            var m0 = Vector512.LessThan(x0.AsSByte(), Vector512<sbyte>.Zero).AsByte();
++            var m1 = Vector512.LessThan(x1.AsSByte(), Vector512<sbyte>.Zero).AsByte();
++            a0 += Avx512BW.SumAbsoluteDifferences(x0 & m0, Vector512<byte>.Zero).AsUInt64();
++            a1 += Avx512BW.SumAbsoluteDifferences(x1 & m1, Vector512<byte>.Zero).AsUInt64();
++        }
++        ulong s = Vector512.Sum(a0 + a1);
++        for (; i < n; i++) { uint x = v[i]; if (x >= 128) s += x; }
++        return s;
++    }
+     static void RunK4(string v, int reps)
+     {
+         byte[] d = LoadBytes("k4_bytes.u8");
+         if (v == "natural_sorted") Array.Sort(d);
+-        bool bl = v == "branchless_unsorted";
+-        Bench("k4", v, "16M", reps, () => (bl ? K4Branchless(d) : K4Natural(d)).ToString());
++        bool bl = v == "branchless_unsorted", tu = v == "tuned";
++        Bench("k4", v, "16M", reps, () => (tu ? K4Tuned(d) : bl ? K4Branchless(d) : K4Natural(d)).ToString());
+     }
+ 
+     // ------------------------------------------------------------------ K5

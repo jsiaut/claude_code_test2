@@ -1,0 +1,47 @@
+--- a/bench/c3_cv/ms.c3
++++ b/bench/c3_cv/ms.c3
+@@ -215,6 +215,31 @@
+ 	foreach (x : v) s += (ulong)x * (ulong)(x >> 7);
+ 	return s;
+ }
++// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (vecteurs natifs char[<64>]) : 64 octets par
++// tour, masque v >= 128 (comp_ge), octets hors masque à zéro (math::select), cumulés en 64 voies de ushort (au plus
++// 256 tours, sans débordement), puis réduits en ulong. (x * (x >> 7), la forme sans branchement, est fausse sur un
++// vecteur de char : c3c y fait du décalage un décalage arithmétique, 160 >> 7 = -1.)
++fn ulong k4_tuned(char[] v) @noinline
++{
++	ulong s;
++	usz n = v.len;
++	usz i = 0;
++	char[<64>] lim = 128;
++	char[<64>] zero;
++	while (i + 64 <= n)
++	{
++		ushort[<64>] acc;
++		for (int k = 0; k < 256 && i + 64 <= n; k++)
++		{
++			char[<64>] x = mem::load((char[<64>]*)&v[i], 1);
++			acc += (ushort[<64>])math::select(x.comp_ge(lim), x, zero);
++			i += 64;
++		}
++		s += ((ulong[<64>])acc).sum();
++	}
++	for (; i < n; i++) if (v[i] >= 128) s += v[i];
++	return s;
++}
+ fn void run_k4(String v, int reps)
+ {
+ 	char[] d = load_bytes("k4_bytes.u8");
+@@ -231,10 +256,11 @@
+ 		}
+ 	}
+ 	bool bl = v == "branchless_unsorted";
++	bool tu = v == "tuned";
+ 	for (int r = -g_warmup; r < reps; r++)
+ 	{
+ 		Clock t0 = clock::now();
+-		ulong s = bl ? k4_branchless(d) : k4_natural(d);
++		ulong s = tu ? k4_tuned(d) : bl ? k4_branchless(d) : k4_natural(d);
+ 		double dt = secs(t0);
+ 		if (r >= 0) result("k4", v, "16M", r, dt, string::tformat("%d", s));
+ 	}

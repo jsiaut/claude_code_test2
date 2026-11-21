@@ -1,0 +1,87 @@
+--- a/bench/rust_cv/ms.rs
++++ b/bench/rust_cv/ms.rs
+@@ -217,13 +217,42 @@
+ fn k4_branchless(v: &[u8]) -> u64 {
+     v.iter().map(|&x| x as u64 * (x >> 7) as u64).sum()
+ }
++// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (std::arch, AVX-512BW) : masque v >= 128 par le
++// bit de poids fort, octets hors masque mis à zéro, vpsadbw en sommes de 64 bits.
++#[target_feature(enable = "avx512f,avx512bw")]
++unsafe fn k4_tuned_avx512(v: &[u8]) -> u64 {
++    let n = v.len();
++    let p = v.as_ptr();
++    let zero = _mm512_setzero_si512();
++    let mut acc = _mm512_setzero_si512();
++    let mut i = 0;
++    while i + 64 <= n {
++        let x = unsafe { _mm512_loadu_si512(p.add(i) as *const _) };
++        let y = _mm512_maskz_mov_epi8(_mm512_movepi8_mask(x), x);
++        acc = _mm512_add_epi64(acc, _mm512_sad_epu8(y, zero));
++        i += 64;
++    }
++    let mut s = _mm512_reduce_add_epi64(acc) as u64;
++    while i < n {
++        if v[i] >= 128 {
++            s += v[i] as u64;
++        }
++        i += 1;
++    }
++    s
++}
++#[inline(never)]
++fn k4_tuned(v: &[u8]) -> u64 {
++    unsafe { k4_tuned_avx512(v) }
++}
+ fn run_k4(v: &str, reps: i32) {
+     let mut d = load_bytes("k4_bytes.u8");
+     if v == "natural_sorted" {
+         d.sort_unstable();
+     }
+     let bl = v == "branchless_unsorted";
+-    bench("k4", v, "16M", reps, || (if bl { k4_branchless(&d) } else { k4_natural(&d) }).to_string());
++    let tu = v == "tuned";
++    bench("k4", v, "16M", reps, || (if tu { k4_tuned(&d) } else if bl { k4_branchless(&d) } else { k4_natural(&d) }).to_string());
+ }
+ 
+ // ------------------------------------------------------------------ K5
+@@ -525,6 +554,15 @@
+         }
+     }
+ }
++// v4, point 3 (docs/V4_EQUAL.md, R2) : naturel en grille contiguë, Vec<f64> indexé i * M9 + j, même boucle
++#[inline(never)]
++fn k9_natural_flat(inp: &Vec<f64>, out: &mut Vec<f64>) {
++    for i in 1..M9 - 1 {
++        for j in 1..M9 - 1 {
++            out[i * M9 + j] = 0.25 * (((inp[(i - 1) * M9 + j] + inp[(i + 1) * M9 + j]) + inp[i * M9 + j - 1]) + inp[i * M9 + j + 1]);
++        }
++    }
++}
+ #[inline(never)]
+ fn k9_rows(inp: &[f64], out: &mut [f64], r0: usize) {
+     // out = lignes [r0, r0 + out.len()/M9) ; inp = grille complète
+@@ -554,6 +592,24 @@
+             if r >= 0 {
+                 result("k9", v, "2048^2x4", r, dt, &format!("{s:.15e}"));
+             }
++        }
++        return;
++    }
++    if v == "natural_flat" {
++        let init: Vec<f64> = (0..M9 * M9).map(|k| k9_init(k / M9, k % M9)).collect();
++        for r in -warmup()..reps {
++            let mut a = init.clone();
++            let mut b = init.clone();
++            let t0 = Instant::now();
++            for _ in 0..4 {
++                k9_natural_flat(&a, &mut b);
++                std::mem::swap(&mut a, &mut b);
++            }
++            let dt = t0.elapsed().as_secs_f64();
++            let s: f64 = a.iter().sum();
++            if r >= 0 {
++                result("k9", v, "2048^2x4", r, dt, &format!("{s:.15e}"));
++            }
+         }
+         return;
+     }

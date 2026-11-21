@@ -1,0 +1,72 @@
+--- a/bench/java_cv/Ms.java
++++ b/bench/java_cv/Ms.java
+@@ -166,6 +166,31 @@
+     // ------------------------------------------------------------------ K4
+     static long k4Natural(byte[] v) { long s = 0; for (byte b : v) { int x = b & 0xFF; if (x >= 128) s += x; } return s; }
+     static long k4Branchless(byte[] v) { long s = 0; for (byte b : v) { int x = b & 0xFF; s += x * (x >> 7); } return s; }
++    // v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (Vector API, en incubation, comme les autres
++    // variantes tuned) : 64 octets par tour, octets < 128 (signés >= 0) mis à zéro par blend, élargis sans signe en deux
++    // vecteurs de 32 shorts, cumulés au plus 128 tours (2 x 128 x 255 = 65 280, sans signe), puis en entiers. (Une forme
++    // sur 8 voies de 64 bits, octets traités par masques et multiplication, prend 2,5 ms au lieu de 0,6.)
++    static final VectorSpecies<Byte> B64 = ByteVector.SPECIES_512;
++    static final VectorSpecies<Short> S32 = ShortVector.SPECIES_512;
++    static long k4Tuned(byte[] v) {
++        int n = v.length, i = 0;
++        IntVector acc = IntVector.zero(IS);
++        while (i + 64 <= n) {
++            ShortVector a0 = ShortVector.zero(S32), a1 = ShortVector.zero(S32);
++            for (int k = 0; k < 128 && i + 64 <= n; k++, i += 64) {
++                ByteVector x = ByteVector.fromArray(B64, v, i);
++                ByteVector y = x.blend((byte) 0, x.compare(VectorOperators.GE, (byte) 0));
++                a0 = a0.add((ShortVector) y.convertShape(VectorOperators.ZERO_EXTEND_B2S, S32, 0));
++                a1 = a1.add((ShortVector) y.convertShape(VectorOperators.ZERO_EXTEND_B2S, S32, 1));
++            }
++            ShortVector t = a0.add(a1);
++            acc = acc.add((IntVector) t.convertShape(VectorOperators.ZERO_EXTEND_S2I, IS, 0))
++                     .add((IntVector) t.convertShape(VectorOperators.ZERO_EXTEND_S2I, IS, 1));
++        }
++        long s = acc.reduceLanesToLong(VectorOperators.ADD);
++        for (; i < n; i++) { int x = v[i] & 0xFF; if (x >= 128) s += x; }
++        return s;
++    }
+     static void runK4(String v, int reps) {
+         byte[] d = loadBytes("k4_bytes.u8");
+         if (v.equals("natural_sorted")) { // tri par comptage (octets non signés), hors chrono
+@@ -174,8 +199,8 @@
+             int k = 0;
+             for (int b = 0; b < 256; b++) for (int c = 0; c < cnt[b]; c++) d[k++] = (byte) b;
+         }
+-        boolean bl = v.equals("branchless_unsorted");
+-        bench("k4", v, "16M", reps, () -> Long.toString(bl ? k4Branchless(d) : k4Natural(d)));
++        boolean bl = v.equals("branchless_unsorted"), tu = v.equals("tuned");
++        bench("k4", v, "16M", reps, () -> Long.toString(tu ? k4Tuned(d) : bl ? k4Branchless(d) : k4Natural(d)));
+     }
+ 
+     // ------------------------------------------------------------------ K5
+@@ -387,6 +412,12 @@
+             for (int j = 1; j < M9 - 1; j++)
+                 out[i][j] = 0.25 * (((in[i - 1][j] + in[i + 1][j]) + in[i][j - 1]) + in[i][j + 1]);
+     }
++    // v4, point 3 (docs/V4_EQUAL.md, R2) : naturel en grille contiguë, double[] indexé i * M9 + j, même boucle
++    static void k9NaturalFlat(double[] in, double[] out) {
++        for (int i = 1; i < M9 - 1; i++)
++            for (int j = 1; j < M9 - 1; j++)
++                out[i * M9 + j] = 0.25 * (((in[(i - 1) * M9 + j] + in[(i + 1) * M9 + j]) + in[i * M9 + j - 1]) + in[i * M9 + j + 1]);
++    }
+     static void k9Rows(double[] in, double[] out, int r0, int r1) {
+         for (int i = r0; i < r1; i++) {
+             int up = (i - 1) * M9, mid = i * M9, dn = (i + 1) * M9;
+@@ -403,6 +434,13 @@
+                 for (int it = 0; it < 4; it++) { k9Natural(a, b); double[][] tmp = a; a = b; b = tmp; }
+                 t1 = System.nanoTime();
+                 for (double[] row : a) for (double x : row) s += x;
++            } else if (v.equals("natural_flat")) {
++                double[] a = new double[M9 * M9], b = new double[M9 * M9];
++                for (int k = 0; k < M9 * M9; k++) a[k] = b[k] = k9Init(k / M9, k % M9);
++                t0 = System.nanoTime();
++                for (int it = 0; it < 4; it++) { k9NaturalFlat(a, b); double[] tmp = a; a = b; b = tmp; }
++                t1 = System.nanoTime();
++                for (double x : a) s += x;
+             } else {
+                 double[] a = new double[M9 * M9], b = new double[M9 * M9];
+                 for (int k = 0; k < M9 * M9; k++) a[k] = b[k] = k9Init(k / M9, k % M9);
