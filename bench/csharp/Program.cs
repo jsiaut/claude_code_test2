@@ -476,12 +476,17 @@ static unsafe class Ms
     }
     static void RunK9(string v, int reps)
     {
+        // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+        double[,] na = null, nb = null;
+        double* ga = null, gb = null;
+        if (v == "natural") { na = new double[M9, M9]; nb = new double[M9, M9]; }
+        else { ga = (double*)NativeMemory.AlignedAlloc(M9 * M9 * 8, 64); gb = (double*)NativeMemory.AlignedAlloc(M9 * M9 * 8, 64); }
         for (int r = -Warmup; r < reps; r++)
         {
             double s = 0, dt;
             if (v == "natural")
             {
-                var a = new double[M9, M9]; var b = new double[M9, M9];
+                var a = na; var b = nb;
                 for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) a[i, j] = b[i, j] = K9Init(i, j);
                 long t0 = Stopwatch.GetTimestamp();
                 for (int it = 0; it < 4; it++) { K9Natural(a, b); (a, b) = (b, a); }
@@ -490,7 +495,7 @@ static unsafe class Ms
             }
             else
             {
-                double* a = (double*)NativeMemory.AlignedAlloc(M9 * M9 * 8, 64), b = (double*)NativeMemory.AlignedAlloc(M9 * M9 * 8, 64);
+                double* a = ga, b = gb;
                 for (int k = 0; k < M9 * M9; k++) a[k] = b[k] = K9Init(k / M9, k % M9);
                 long t0 = Stopwatch.GetTimestamp();
                 for (int it = 0; it < 4; it++)
@@ -512,10 +517,10 @@ static unsafe class Ms
                 }
                 dt = Stopwatch.GetElapsedTime(t0).TotalSeconds;
                 for (int k = 0; k < M9 * M9; k++) s += a[k];
-                NativeMemory.AlignedFree(a); NativeMemory.AlignedFree(b);
             }
             if (r >= 0) Result("k9", v, "2048^2x4", r, dt, s.ToString("0.000000000000000e+00", Inv));
         }
+        if (ga != null) { NativeMemory.AlignedFree(ga); NativeMemory.AlignedFree(gb); }
     }
 
     // ------------------------------------------------------------------ K10

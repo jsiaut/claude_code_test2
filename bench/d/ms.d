@@ -1,4 +1,7 @@
 // Implémentation D (LDC 1.43 / druntime-Phobos 2.113, sans paquet tiers). Voir docs/SPEC.md.
+// Correction de la remarque sur D (docs/DLANG.md), reportée le 21 novembre (v4, point 4 : docs/V4_CONVERGE.md, 4.1) :
+// Q1 optimisé écrit comme dans les autres langages à types vectoriels portables (même algorithme que la référence C),
+// marqué « Remarque D : » ; harnais commun de K9 (docs/K9.md).
 import core.atomic;
 import core.memory : GC;
 import core.simd;
@@ -261,25 +264,51 @@ pragma(inline, false) void q1Natural(const ref Cols c, size_t lo, size_t hi, ref
         }
     }
 }
-// Q1 optimisé : agrégation masquée par groupe sur blocs (vectorisée par LLVM), 32 bits vidés par blocs
+// Remarque D : Q1 optimisé, même algorithme que la référence C (une passe, 16 lignes par itération, agrégation
+// masquée par groupe) en types vectoriels portables de core.simd, comme C++, Zig, Odin, C3, Mojo et C# ; accumulateurs
+// 32 bits vidés toutes les 4096 lignes, colonne « charge » en 64 bits (lignes paires et impaires).
+alias ubyte16v = __vector(ubyte[16]);
+pragma(inline, true) int16 ld8(const(ubyte)* p) {
+    int[16] a; // élargissement 8 -> 32 bits (vpmovzxbd) ; écrire v.array[k] dans une fonction inline fait planter LDC 1.43
+    foreach (k; 0 .. 16) a[k] = p[k];
+    return loadUnaligned!int16(a.ptr);
+}
+pragma(inline, true) int16 ld32(const(int)* p) { return loadUnaligned!int16(p); }
+pragma(inline, true) long sum16(int16 v) { long s = 0; foreach (k; 0 .. 16) s += v.array[k]; return s; }
+pragma(inline, true) long sum8(long8 v) { long s = 0; foreach (k; 0 .. 8) s += v.array[k]; return s; }
 pragma(inline, false) void q1Tuned(const ref Cols c, size_t lo, size_t hi, ref Q1Acc acc) {
-    enum B = 4096;
     const(int)* sd = c.sd.ptr, pr = c.pr.ptr;
     const(ubyte)* q = c.q.ptr, d = c.d.ptr, t = c.t.ptr, rf = c.rf.ptr, ls = c.ls.ptr;
-    for (size_t b0 = lo; b0 < hi; b0 += B) {
-        size_t nb = hi - b0 < B ? hi - b0 : B;
+    const int16 lim = 10471, c100 = 100;
+    size_t i = lo;
+    while (i + 16 <= hi) {
+        int16[6] aq = 0, ap = 0, adp = 0, cnt = 0;
+        long8[6] ace = 0, aco = 0;
+        size_t end = i + 4096 <= hi ? i + 4096 : hi - (hi - i) % 16;
+        for (; i < end; i += 16) {
+            int16 pass = ld32(sd + i) <= lim;
+            int16 vg = ld8(rf + i) * 2 + ld8(ls + i);
+            int16 vq = ld8(q + i), vd = ld8(d + i), vt = ld8(t + i) + c100, vp = ld32(pr + i);
+            int16 vdp = vp * (c100 - vd);
+            long8 dp64 = cast(long8) vdp, t64 = cast(long8) vt;
+            long8 che = ((dp64 << 32) >> 32) * ((t64 << 32) >> 32); // lignes paires (vpmuldq)
+            long8 cho = (dp64 >> 32) * (t64 >> 32);                  // lignes impaires
+            static foreach (g; 0 .. 6) {{
+                int16 m = pass & (vg == int16(g));
+                cnt[g] -= m;
+                aq[g] += vq & m; ap[g] += vp & m; adp[g] += vdp & m;
+                long8 m64 = cast(long8) m;
+                ace[g] += che & ((m64 << 32) >> 32);
+                aco[g] += cho & (m64 >> 32);
+            }}
+        }
         foreach (g; 0 .. 6) {
-            int cnt = 0, sq = 0, sp = 0, sdp = 0;
-            long sch = 0;
-            foreach (i; b0 .. b0 + nb) {
-                int m = -((sd[i] <= 10471) & (rf[i] * 2 + ls[i] == g));
-                int dp = pr[i] * (100 - d[i]);
-                cnt -= m; sq += q[i] & m; sp += pr[i] & m; sdp += dp & m;
-                sch += cast(long)(dp & m) * (100 + t[i]);
-            }
-            acc[g][0] += cnt; acc[g][1] += sq; acc[g][2] += sp; acc[g][3] += sdp; acc[g][4] += sch;
+            long8 ch = ace[g] + aco[g]; // variable nommée : « sum8(ace[g] + aco[g]) » dans un += fait planter LDC 1.43
+            acc[g][0] += sum16(cnt[g]); acc[g][1] += sum16(aq[g]); acc[g][2] += sum16(ap[g]);
+            acc[g][3] += sum16(adp[g]); acc[g][4] += sum8(ch);
         }
     }
+    if (i < hi) q1Natural(c, i, hi, acc); // reste éventuel (< 16 lignes)
 }
 long fold(ref Q1Acc a) { long s = 0; foreach (row; a) foreach (x; row) s += x; return s; }
 void runK6(string v, int reps, string p) {
@@ -417,17 +446,22 @@ pragma(inline, false) void k9Rows(const(double)* a, double* b, size_t r0, size_t
     }
 }
 void runK9(string v, int reps) {
+    // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+    double[][] na, nb;
+    double* ga, gb;
+    if (v == "natural") { na = new double[][](M9, M9); nb = new double[][](M9, M9); } // tableau de tableaux (idiome D)
+    else { ga = cast(double*) aligned_alloc(64, M9 * M9 * 8); gb = cast(double*) aligned_alloc(64, M9 * M9 * 8); }
     foreach (r; -WARMUP .. reps) {
         double s = 0, dt;
         if (v == "natural") {
-            auto a = new double[][](M9, M9), b = new double[][](M9, M9); // tableau de tableaux (idiome D)
+            auto a = na, b = nb;
             foreach (i; 0 .. M9) foreach (j; 0 .. M9) a[i][j] = b[i][j] = k9Init(i, j);
             auto t0 = MonoTime.currTime;
             foreach (_; 0 .. 4) { k9Natural(a, b); auto tmp = a; a = b; b = tmp; }
             dt = secs(t0);
             foreach (row; a) foreach (x; row) s += x;
         } else {
-            auto a = cast(double*) aligned_alloc(64, M9 * M9 * 8), b = cast(double*) aligned_alloc(64, M9 * M9 * 8);
+            auto a = ga, b = gb;
             foreach (k; 0 .. M9 * M9) a[k] = b[k] = k9Init(k / M9, k % M9);
             auto t0 = MonoTime.currTime;
             foreach (_; 0 .. 4) {
@@ -444,10 +478,10 @@ void runK9(string v, int reps) {
             }
             dt = secs(t0);
             foreach (k; 0 .. M9 * M9) s += a[k];
-            free(a); free(b);
         }
         if (r >= 0) result("k9", v, "2048^2x4", r, dt, format("%.15e", s));
     }
+    if (v != "natural") { free(ga); free(gb); }
 }
 
 // ------------------------------------------------------------------ K10

@@ -425,7 +425,8 @@ fn run_k7(v: &str, reps: i32) {
                 let mut h = [0u32; 16];
                 for b in 0..16 {
                     h[b] = kc[b].wrapping_mul(0x9E37_79B1) >> (32 - LOG);
-                    unsafe { _mm_prefetch::<_MM_HINT_T0>(tab.as_ptr().add(h[b] as usize) as *const i8) };
+                    // remarque sur Rust : préchargement en écriture (prefetchw), comme __builtin_prefetch(p, 1, 0) de la référence C
+                    unsafe { _mm_prefetch::<_MM_HINT_ET0>(tab.as_ptr().add(h[b] as usize) as *const i8) };
                 }
                 for b in 0..16 {
                     let k = kc[b];
@@ -539,11 +540,18 @@ fn k9_rows(inp: &[f64], out: &mut [f64], r0: usize) {
     }
 }
 fn run_k9(v: &str, reps: i32) {
+    // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
     if v == "natural" {
         let init: Vec<Vec<f64>> = (0..M9).map(|i| (0..M9).map(|j| k9_init(i, j)).collect()).collect();
+        let mut a = init.clone();
+        let mut b = init.clone();
         for r in -warmup()..reps {
-            let mut a = init.clone();
-            let mut b = init.clone();
+            for (row, src) in a.iter_mut().zip(init.iter()) {
+                row.copy_from_slice(src);
+            }
+            for (row, src) in b.iter_mut().zip(init.iter()) {
+                row.copy_from_slice(src);
+            }
             let t0 = Instant::now();
             for _ in 0..4 {
                 k9_natural(&a, &mut b);
@@ -558,9 +566,11 @@ fn run_k9(v: &str, reps: i32) {
         return;
     }
     let init: Vec<f64> = (0..M9 * M9).map(|k| k9_init(k / M9, k % M9)).collect();
+    let mut a = init.clone();
+    let mut b = init.clone();
     for r in -warmup()..reps {
-        let mut a = init.clone();
-        let mut b = init.clone();
+        a.copy_from_slice(&init);
+        b.copy_from_slice(&init);
         let t0 = Instant::now();
         for _ in 0..4 {
             let inner = &mut b[M9..(M9 - 1) * M9];

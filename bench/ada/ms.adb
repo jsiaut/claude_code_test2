@@ -1,4 +1,8 @@
 --  Implémentation Ada 2022 (GNAT 16) des noyaux de docs/SPEC.md.
+--  Correction de la remarque sur Ada (docs/ADA.md), reportée le 21 novembre (v4, point 4 : docs/V4_CONVERGE.md, 4.1) :
+--  les sept sous-programmes « tuned » qui portent pragma Suppress (All_Checks) sont marqués « with No_Inline ». Sans
+--  -gnatp, GNAT compile avec -fnon-call-exceptions ; inlinés dans un appelant à régions d'exceptions, leurs boucles
+--  n'étaient pas vectorisées.
 --  « natural » : enregistrements et tableaux Ada, vérifications à l'exécution actives (défaut GNAT),
 --  Ada.Containers.Hashed_Maps, types accès + Unchecked_Deallocation, objets protégés, tâches.
 --  « tuned » : pragma Suppress (All_Checks), clauses de représentation (alignement, taille),
@@ -123,7 +127,7 @@ procedure Ms is
       end loop;
       return E;
    end K1_Natural;
-   function K1_Aos (Ps : Particle_Arr) return Long_Float is
+   function K1_Aos (Ps : Particle_Arr) return Long_Float with No_Inline is  --  No_Inline : correction du 30/10 (docs/ADA.md)
       pragma Suppress (All_Checks);
       Acc : array (0 .. 7) of Long_Float := [others => 0.0];
       E   : Long_Float := 0.0;
@@ -142,7 +146,7 @@ procedure Ms is
       end loop;
       return E;
    end K1_Aos;
-   function K1_Soa (Vx, Vy, Vz, M : F32_Arr) return Long_Float is
+   function K1_Soa (Vx, Vy, Vz, M : F32_Arr) return Long_Float with No_Inline is  --  No_Inline : correction du 30/10 (docs/ADA.md)
       pragma Suppress (All_Checks);
       Acc : array (0 .. 15) of Long_Float := [others => 0.0];
       E   : Long_Float := 0.0;
@@ -255,7 +259,7 @@ procedure Ms is
    end Run_K1;
 
    ---------------------------------------------------------------- K2
-   function K2_Chase (A : U32_Arr; H : Integer) return Unsigned_32 is
+   function K2_Chase (A : U32_Arr; H : Integer) return Unsigned_32 with No_Inline is  --  No_Inline : correction du 30/10 (docs/ADA.md)
       pragma Suppress (All_Checks);
       I : Unsigned_32 := 0;
    begin
@@ -419,7 +423,7 @@ procedure Ms is
       return S;
    end K5_Natural;
    --  AVX-512 explicite : type vectoriel GCC + FMA importé, 4 accumulateurs
-   function K5_Tuned (A, B : F32_Arr) return Float is
+   function K5_Tuned (A, B : F32_Arr) return Float with No_Inline is  --  No_Inline : correction du 30/10 (docs/ADA.md)
       pragma Suppress (All_Checks);
       S0, S1, S2, S3 : M512 := [others => 0.0];
       I : Natural := A'First;
@@ -484,7 +488,7 @@ procedure Ms is
       end loop;
       return S;
    end Q6_Natural;
-   function Q6_Tuned (Sd, Pr : I32_Arr; D, Q : U8_Arr; Lo, Hi : Natural) return Integer_64 is
+   function Q6_Tuned (Sd, Pr : I32_Arr; D, Q : U8_Arr; Lo, Hi : Natural) return Integer_64 with No_Inline is  --  No_Inline : correction du 30/10 (docs/ADA.md)
       pragma Suppress (All_Checks);
       S : Integer_64 := 0;
    begin
@@ -514,7 +518,7 @@ procedure Ms is
    end Q1_Natural;
    --  Q1 par blocs de 1024 lignes : conversions et produits une fois par bloc (tableaux larges),
    --  puis une passe vectorisable (masquée) par groupe.
-   procedure Q1_Tuned (C : Cols6; Lo, Hi : Natural; Acc : in out Q1_Acc) is
+   procedure Q1_Tuned (C : Cols6; Lo, Hi : Natural; Acc : in out Q1_Acc) with No_Inline is  --  No_Inline : correction du 30/10 (docs/ADA.md)
       pragma Suppress (All_Checks);
       B : constant := 1024;
       Gg, Qv, Pv : I32_Arr (0 .. B - 1);
@@ -925,7 +929,7 @@ procedure Ms is
          end loop;
       end loop;
    end K9_Natural;
-   procedure K9_Rows (A : Grid; B : in out Grid; R0, R1 : Natural) is
+   procedure K9_Rows (A : Grid; B : in out Grid; R0, R1 : Natural) with No_Inline is  --  No_Inline : correction du 30/10 (docs/ADA.md)
       pragma Suppress (All_Checks);
    begin
       for I in R0 .. R1 loop

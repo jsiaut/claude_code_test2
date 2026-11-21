@@ -551,21 +551,23 @@ static double k9_init(int i, int j) { return (double)((i * 31 + j * 17) % 1024) 
     }
 }
 static void run_k9(std::string_view v, int reps) {
+    // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+    std::vector<std::vector<double>> na, nb;
+    avec<double> fa, fb;
+    if (v == "natural") { na.assign(M9, std::vector<double>(M9)); nb.assign(M9, std::vector<double>(M9)); }
+    else { fa.resize((size_t)M9 * M9); fb.resize((size_t)M9 * M9); }
     for (int r = -warmup_count(); r < reps; r++) {
         double s = 0, t0, t1;
         if (v == "natural") {
-            std::vector<std::vector<double>> a(M9, std::vector<double>(M9));
-            for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) a[i][j] = k9_init(i, j);
-            auto b = a;
+            auto &a = na, &b = nb;
+            for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) a[i][j] = b[i][j] = k9_init(i, j);
             t0 = now();
             for (int it = 0; it < IT9; it++) { k9_natural(a, b); std::swap(a, b); }
             t1 = now();
             for (const auto &row : a) for (double x : row) s += x;
         } else {
-            avec<double> a((size_t)M9 * M9);
-            for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) a[(size_t)i * M9 + j] = k9_init(i, j);
-            avec<double> b = a;
-            double *in = a.data(), *out = b.data();
+            for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) fa[(size_t)i * M9 + j] = fb[(size_t)i * M9 + j] = k9_init(i, j);
+            double *in = fa.data(), *out = fb.data();
             t0 = now();
             for (int it = 0; it < IT9; it++) {
                 if (v == "tuned") k9_rows(in, out, 1, M9 - 1);

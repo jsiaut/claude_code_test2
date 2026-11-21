@@ -592,52 +592,57 @@ struct K9Job { double* a; double* b; usz r0; usz r1; }
 fn int k9_worker(void* arg) { K9Job* j = arg; k9_rows(j.a, j.b, j.r0, j.r1); return 0; }
 fn void run_k9(String v, int reps)
 {
-	for (int r = -g_warmup; r < reps; r++)
+	// harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+	if (v == "natural")
 	{
-		double s;
-		double dt;
-		if (v == "natural")
+		Grid* a = mem::new(Grid);
+		Grid* b = mem::new(Grid);
+		for (int r = -g_warmup; r < reps; r++)
 		{
-			Grid* a = mem::new(Grid);
-			Grid* b = mem::new(Grid);
+			double s;
+			double dt;
 			for (usz i = 0; i < M9; i++) for (usz j = 0; j < M9; j++) { (*a)[i][j] = k9_init(i, j); (*b)[i][j] = (*a)[i][j]; }
 			Clock t0 = clock::now();
 			for (int it = 0; it < 4; it++) { k9_natural(a, b); Grid* tmp = a; a = b; b = tmp; }
 			dt = secs(t0);
 			for (usz i = 0; i < M9; i++) for (usz j = 0; j < M9; j++) s += (*a)[i][j];
-			free(a); free(b);
+			if (r >= 0) result("k9", v, "2048^2x4", r, dt, string::tformat("%.15e", s));
 		}
-		else
+		free(a); free(b);
+		return;
+	}
+	double* a = alloc::malloc_aligned(mem, M9 * M9 * 8, 64)!!;
+	double* b = alloc::malloc_aligned(mem, M9 * M9 * 8, 64)!!;
+	for (int r = -g_warmup; r < reps; r++)
+	{
+		double s;
+		double dt;
+		for (usz k = 0; k < M9 * M9; k++) { a[k] = k9_init(k / M9, k % M9); b[k] = a[k]; }
+		Clock t0 = clock::now();
+		for (int it = 0; it < 4; it++)
 		{
-			double* a = alloc::malloc_aligned(mem, M9 * M9 * 8, 64)!!;
-			double* b = alloc::malloc_aligned(mem, M9 * M9 * 8, 64)!!;
-			for (usz k = 0; k < M9 * M9; k++) { a[k] = k9_init(k / M9, k % M9); b[k] = a[k]; }
-			Clock t0 = clock::now();
-			for (int it = 0; it < 4; it++)
+			if (v == "tuned")
 			{
-				if (v == "tuned")
-				{
-					k9_rows(a, b, 1, M9 - 1);
-				}
-				else
-				{
-					K9Job[4] jobs;
-					Thread[4] th;
-					for (usz t = 0; t < 4; t++)
-					{
-						jobs[t] = { a, b, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4 };
-						th[t].create(&k9_worker, &jobs[t])!!;
-					}
-					for (int t = 0; t < 4; t++) th[t].join()!!;
-				}
-				double* tmp = a; a = b; b = tmp;
+				k9_rows(a, b, 1, M9 - 1);
 			}
-			dt = secs(t0);
-			for (usz k = 0; k < M9 * M9; k++) s += a[k];
-			alloc::free_aligned(mem, a); alloc::free_aligned(mem, b);
+			else
+			{
+				K9Job[4] jobs;
+				Thread[4] th;
+				for (usz t = 0; t < 4; t++)
+				{
+					jobs[t] = { a, b, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4 };
+					th[t].create(&k9_worker, &jobs[t])!!;
+				}
+				for (int t = 0; t < 4; t++) th[t].join()!!;
+			}
+			double* tmp = a; a = b; b = tmp;
 		}
+		dt = secs(t0);
+		for (usz k = 0; k < M9 * M9; k++) s += a[k];
 		if (r >= 0) result("k9", v, "2048^2x4", r, dt, string::tformat("%.15e", s));
 	}
+	alloc::free_aligned(mem, a); alloc::free_aligned(mem, b);
 }
 
 // ------------------------------------------------------------------ K10

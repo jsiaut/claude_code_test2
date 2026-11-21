@@ -1,5 +1,6 @@
 #!/bin/sh
-# OCaml 5.5.2 + flambda (-O3) ; bibliothèques unix et bigarray de la distribution
+# OCaml 5.5.2 + flambda (-O3) ; bibliothèques unix, bigarray et runtime_events de la distribution (horloge monotone :
+# correction de la remarque sur OCaml, docs/OCAML.md, reportée le 21 novembre, v4, point 4 : docs/V4_CONVERGE.md, 4.1)
 set -e
 cd "$(dirname "$0")"
 # v4, point 3 (docs/V4_EQUAL.md, 3.1). MS_MODE=unc : mode R1', sans vérifications (-unsafe) ; sans MS_MODE, la
@@ -29,4 +30,4 @@ s/\\bMS_K8_LONG\\b/$(v "$MS_K8_LONG" 20)/g
 s/\\bMS_K8_REQ\\b/$(v "$MS_K8_REQ" 10)/g
 s/\\bMS_M9\\b/$(v "$MS_M9" 2048)/g
 EOF
-/opt/ocaml/bin/ocamlopt -O3 $MODE -pp "sed -f sizes.sed" -I +unix unix.cmxa ms.ml -o ms
+/opt/ocaml/bin/ocamlopt -O3 $MODE -pp "sed -f sizes.sed" -I +unix -I +runtime_events unix.cmxa runtime_events.cmxa ms.ml -o ms

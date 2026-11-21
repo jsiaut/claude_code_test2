@@ -1,0 +1,207 @@
+--- a/bench/python/ms.py
++++ b/bench/python/ms.py
+@@ -35,6 +35,34 @@
+             result(k, v, p, r, dt, chk)
+ 
+ 
++# ------------------------------------------------------------------ sous-interpréteurs
++# remarque sur Python (docs/PYTHON.md) : de vrais fils parallèles dans le build par défaut : des sous-interpréteurs
++# de la bibliothèque standard (concurrent.interpreters, depuis 3.14), chacun avec son propre verrou global, chacun sur
++# son fil ; ils sont créés avant la mesure (comme les Workers de JavaScript) et ne partagent que des tampons
++# (memoryview).
++def sub_pool(n, setup, **shared):
++    from concurrent import interpreters
++    its = []
++    for t in range(n):
++        it = interpreters.create()
++        it.prepare_main(t=t, **shared)
++        it.exec(setup)
++        its.append(it)
++    return its
++
++
++def sub_run(its, code):
++    th = [threading.Thread(target=it.exec, args=(code,)) for it in its]
++    for x in th:
++        x.start()
++    for x in th:
++        x.join()
++
++
++def sub_close(its):
++    for it in its:
++        it.close()
++
+ # ------------------------------------------------------------------ K1
+ N1 = 1 << 22
+ 
+@@ -121,32 +149,34 @@
+ def run_k3(v, reps):
+     rmw = v.startswith("rmw")
+     stride = 16 if v.endswith("padded") else 1  # array('q') : 128 o ou 8 o
+-    print("META;k3_mechanism;" + ("threading.Lock par compteur (Python n'a pas d'atomiques)" if rmw
+-                                  else "c[i] = c[i] + 1 sur array('q') (sûr grâce au GIL ou à l'écrivain unique)"), flush=True)
++    print("META;k3_mechanism;" + ("sous-interpréteurs (un fil chacun) ; threading.Lock par compteur, propre à son "
++                                  "sous-interpréteur (Python n'a pas d'atomiques)" if rmw
++                                  else "sous-interpréteurs (un fil chacun) ; c[i] = c[i] + 1 sur une memoryview partagée "
++                                  "de array('q') (écrivain unique)"), flush=True)
+     c = array("q", [0] * (16 * 6))
+-    locks = [threading.Lock() for _ in range(4)]
+-
+-    def work(t):
+-        idx = 16 + t * stride
+-        if rmw:
+-            lk = locks[t]
+-            for _ in range(ITER3):
+-                with lk:
+-                    c[idx] += 1
+-        else:
+-            for _ in range(ITER3):
+-                c[idx] = c[idx] + 1
++    setup = """
++import threading
++def work():
++    idx = 16 + t * stride
++    m = mv
++    if rmw:
++        lk = threading.Lock()
++        for _ in range(ITER):
++            with lk:
++                m[idx] += 1
++    else:
++        for _ in range(ITER):
++            m[idx] = m[idx] + 1
++"""
++    its = sub_pool(4, setup, mv=memoryview(c), stride=stride, ITER=ITER3, rmw=rmw)
+ 
+     def once():
+         for t in range(4):
+             c[16 + t * stride] = 0
+-        th = [threading.Thread(target=work, args=(t,)) for t in range(4)]
+-        for x in th:
+-            x.start()
+-        for x in th:
+-            x.join()
++        sub_run(its, "work()")
+         return str(sum(c[16 + t * stride] for t in range(4)))
+     bench("k3", v, "4x2^25", reps, once)
++    sub_close(its)
+ 
+ 
+ # ------------------------------------------------------------------ K4
+@@ -243,24 +273,29 @@
+          "d": load("k6_discount.u8", "B"), "t": load("k6_tax.u8", "B"), "rf": load("k6_returnflag.u8", "B"),
+          "ls": load("k6_linestatus.u8", "B")}
+     q1 = p == "q1"
++    if v == "mt":
++        import inspect
++        part = array("q", [0] * 4)
++        setup = inspect.getsource(q6_tuned) + inspect.getsource(q1_tuned) + """
++c = {"sd": sd, "pr": pr, "q": q, "d": d, "t": tx, "rf": rf, "ls": ls}
++lo, hi = N6 // 4 * t, N6 // 4 * (t + 1)
++def work():
++    if q1:
++        acc = [[0] * 5 for _ in range(6)]
++        q1_tuned(c, lo, hi, acc)
++        part[t] = sum(map(sum, acc))
++    else:
++        part[t] = q6_tuned(c, lo, hi)
++"""
++        its = sub_pool(4, setup, sd=memoryview(c["sd"]), pr=memoryview(c["pr"]), q=memoryview(c["q"]),
++                       d=memoryview(c["d"]), tx=memoryview(c["t"]), rf=memoryview(c["rf"]), ls=memoryview(c["ls"]),
++                       part=memoryview(part), N6=N6, q1=q1)
+ 
+     def once():
+         if v == "mt":
+-            part = [0] * 4
+-
+-            def work(t):
+-                lo, hi = N6 // 4 * t, N6 // 4 * (t + 1)
+-                if q1:
+-                    acc = [[0] * 5 for _ in range(6)]
+-                    q1_tuned(c, lo, hi, acc)
+-                    part[t] = sum(map(sum, acc))
+-                else:
+-                    part[t] = q6_tuned(c, lo, hi)
+-            th = [threading.Thread(target=work, args=(t,)) for t in range(4)]
+-            for x in th:
+-                x.start()
+-            for x in th:
+-                x.join()
++            for t in range(4):
++                part[t] = 0
++            sub_run(its, "work()")
+             return str(sum(part))
+         if q1:
+             if v == "tuned":
+@@ -272,6 +307,8 @@
+             return str(sum(acc))
+         return str(q6_tuned(c, 0, N6) if v == "tuned" else q6_natural(c, 0, N6))
+     bench("k6", v, p, reps, once)
++    if v == "mt":
++        sub_close(its)
+ 
+ 
+ # ------------------------------------------------------------------ K7
+@@ -398,10 +435,59 @@
+         b[i][1:M9 - 1] = [0.25 * (((u + d) + l) + r) for u, d, l, r in zip(up[1:M9 - 1], dn[1:M9 - 1], mid[0:M9 - 2], mid[2:M9])]
+ 
+ 
++K9_SUB = """
++from array import array
++def rows(A, B, r0, r1):
++    for i in range(r0, r1):
++        up, mid, dn = A[(i - 1) * M9:i * M9], A[i * M9:(i + 1) * M9], A[(i + 1) * M9:(i + 2) * M9]
++        B[i * M9 + 1:(i + 1) * M9 - 1] = array("d", [0.25 * (((u + d) + l) + r) for u, d, l, r in
++                                                     zip(up[1:M9 - 1], dn[1:M9 - 1], mid[0:M9 - 2], mid[2:M9])])
++r0, r1 = 1 + (M9 - 2) * t // 4, 1 + (M9 - 2) * (t + 1) // 4
++def work():
++    if ctl[0] == 0:
++        rows(ga, gb, r0, r1)
++    else:
++        rows(gb, ga, r0, r1)
++"""
++
++
++def run_k9_mt(v, reps):
++    """K9 mt sur sous-interpréteurs : deux grilles plates array('d') allouées une fois par processus (harnais commun),
++    réinitialisées hors chrono ; mêmes opérations que k9_rows, dans le même ordre ; somme de contrôle dans le même
++    ordre (ligne par ligne)."""
++    init = array("d", (k9_init(i, j) for i in range(M9) for j in range(M9)))
++    ga, gb, ctl = array("d", init), array("d", init), array("q", [0])
++    its = sub_pool(4, K9_SUB, ga=memoryview(ga), gb=memoryview(gb), ctl=memoryview(ctl), M9=M9)
++    for r in range(-WARMUP, reps):
++        ga[:] = init
++        gb[:] = init
++        t0 = time.perf_counter()
++        for it in range(4):
++            ctl[0] = it % 2
++            sub_run(its, "work()")
++        dt = time.perf_counter() - t0
++        a = ga if ctl[0] == 1 else gb  # après 4 itérations : a = ga (comme a, b = b, a quatre fois)
++        s = 0.0
++        for x in a:
++            s += x
++        if r >= 0:
++            result("k9", v, "2048^2x4", r, dt, f"{s:.15e}")
++    sub_close(its)
++
++
+ def run_k9(v, reps):
++    # harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
++    if v == "mt":
++        run_k9_mt(v, reps)
++        return
++    init = [[k9_init(i, j) for j in range(M9)] for i in range(M9)]
++    ga = [row[:] for row in init]
++    gb = [row[:] for row in init]
+     for r in range(-WARMUP, reps):
+-        a = [[k9_init(i, j) for j in range(M9)] for i in range(M9)]
+-        b = [row[:] for row in a]
++        for i in range(M9):
++            ga[i][:] = init[i]
++            gb[i][:] = init[i]
++        a, b = ga, gb
+         t0 = time.perf_counter()
+         for _ in range(4):
+             if v == "natural":

@@ -1,0 +1,18 @@
+--- a/bench/js/ms.js
++++ b/bench/js/ms.js
+@@ -293,10 +293,13 @@
+ }
+ const fmtE = (s) => s.toExponential(15).replace(/e\+(\d)$/, 'e+0$1');
+ async function runK9(v, reps) {
++  // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+   if (v === 'natural') {
++    const na = Array.from({ length: M9 }, (_, i) => Array.from({ length: M9 }, (_, j) => k9Init(i, j)));
++    const nb = na.map(row => row.slice());
+     for (let r = -WARMUP; r < reps; r++) {
+-      let a = Array.from({ length: M9 }, (_, i) => Array.from({ length: M9 }, (_, j) => k9Init(i, j)));
+-      let b = a.map(row => row.slice());
++      for (let i = 0; i < M9; i++) { const ra = na[i], rb = nb[i]; for (let j = 0; j < M9; j++) ra[j] = rb[j] = k9Init(i, j); }
++      let a = na, b = nb;
+       const t0 = now();
+       for (let it = 0; it < 4; it++) { k9Natural(a, b); [a, b] = [b, a]; }
+       const dt = Number(now() - t0) * 1e-9;

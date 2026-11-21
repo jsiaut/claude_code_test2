@@ -1674,4 +1674,13 @@ Robustesse :
   Erratum publié ; les comparaisons internes de ces points tiennent, leurs comparaisons au classement publié non.
   Écarts au plan du point 4 : base corrigée (corrections et harnais reportés dans `bench/<langage>`, relevé publié),
   contrôle de l'erratum par paires dans la même campagne, `tuned_a` retiré du catalogue.
+* 2026-11-21, 17:00 à 17:50 : **v4, point 4 : base corrigée** (`docs/V4_CONVERGE.md`, 4.1, écart 1 ;
+  `results/converge/corrections.md`). Les corrections du classement publié sont reportées dans les sources publiées de
+  20 langages : différence entre la source au commit qui a créé chaque copie corrigée et cette copie
+  (`tools/converge/corrections.py`, correctifs dans `results/converge/patches/`), appliquée à la source actuelle. Les
+  copies des remarques postérieures au 1er novembre contiennent déjà le harnais commun de K9 (Go, Haskell, JavaScript,
+  Lua, OCaml, Python ; Fortran par `fortran_fix_k9h`) ; D, Rust et Java reçoivent leur copie `_fix` puis `_k9h` ; C++,
+  Zig, Odin, C3, Nim, C#, Julia et Mojo le seul harnais. Reportés à la main : K8 `tuned` de Haskell et d'OCaml (tailles
+  du point 2), les options de construction de Haskell et d'OCaml, les deux errata de BQN (sans ses blocs, restés en
+  sensibilité). Validation : 525 cellules, toutes justes (`results/converge/validation_base.txt`).
 

@@ -1,0 +1,60 @@
+--- a/bench/go/ms.go
++++ b/bench/go/ms.go
+@@ -107,6 +107,7 @@
+ 	}
+ 	var t [8]float64
+ 	a0.Add(a1).StoreArray(&t)
++	archsimd.ClearAVXUpperBits() // remarque sur Go (docs/GO.md) : passage d'AVX à SSE sans pénalité
+ 	s := 0.0
+ 	for _, x := range t {
+ 		s += x
+@@ -312,6 +313,7 @@
+ 	}
+ 	var t [16]float32
+ 	s0.Add(s1).Add(s2.Add(s3)).StoreArray(&t)
++	archsimd.ClearAVXUpperBits() // remarque sur Go (docs/GO.md) : passage d'AVX à SSE sans pénalité
+ 	r := float32(0)
+ 	for _, x := range t {
+ 		r += x
+@@ -376,6 +378,7 @@
+ 	}
+ 	var t [8]int64
+ 	acc.StoreArray(&t)
++	archsimd.ClearAVXUpperBits() // remarque sur Go (docs/GO.md) : passage d'AVX à SSE sans pénalité
+ 	s := int64(0)
+ 	for _, x := range t {
+ 		s += x
+@@ -650,12 +653,22 @@
+ 	}
+ }
+ func runK9(v string, reps int) {
++	// harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
++	var na, nb [][]float64
++	var ga, gb []float64
++	if v == "natural" {
++		na, nb = make([][]float64, M9), make([][]float64, M9)
++		for i := range M9 {
++			na[i], nb[i] = make([]float64, M9), make([]float64, M9)
++		}
++	} else {
++		ga, gb = make([]float64, M9*M9), make([]float64, M9*M9)
++	}
+ 	for r := -warmup(); r < reps; r++ {
+ 		var s, dt float64
+ 		if v == "natural" {
+-			a, b := make([][]float64, M9), make([][]float64, M9)
++			a, b := na, nb
+ 			for i := range M9 {
+-				a[i], b[i] = make([]float64, M9), make([]float64, M9)
+ 				for j := range M9 {
+ 					a[i][j] = k9Init(i, j)
+ 					b[i][j] = a[i][j]
+@@ -673,7 +686,7 @@
+ 				}
+ 			}
+ 		} else {
+-			a, b := make([]float64, M9*M9), make([]float64, M9*M9)
++			a, b := ga, gb
+ 			for k := range a {
+ 				a[k] = k9Init(k/M9, k%M9)
+ 				b[k] = a[k]

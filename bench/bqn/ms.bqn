@@ -171,7 +171,7 @@ RunK6 ← {𝕤
 K7Check ← {𝕊 ks‿cs‿ss: (IntStr ≠ks) ∾ ":" ∾ IntStr +´ ss × 1 + 1024 | ks}
 RunK7 ← {𝕤
   keys ← U32 "k7_keys.u32" ⋄ vals ← I32 "k7_vals.u32"
-  {v ≡ "natural" ?   # table de hachage de la bibliothèque système (•HashMap), valeur ⟨compte, somme⟩, ligne à ligne
+  {v ≡ "natural_map" ?   # forme publiée d'abord : •HashMap de la bibliothèque système, ligne à ligne (information)
      res ← @
      {𝕤
        m ← ⟨⟩ •HashMap ⟨⟩
@@ -181,7 +181,8 @@ RunK7 ← {𝕤
      } {𝕤 ⋄ t0 ← •MonoTime @ ⋄ c ← 𝔽 @ ⋄ t ← (•MonoTime @) - t0
         cs‿ss ← <˘ ⍉ > res.Values @
         ⟨t, K7Check (res.Keys @)‿cs‿ss⟩} _timedRun @
-   ; v ≡ "natural_arr" ?   # sensibilité : l'idiome tableau de BQN (classement ⊐, histogramme /⁼, regroupement ⊔)
+   ; v ≡ "natural" ?   # naturel (erratum de la remarque sur BQN, docs/BQN.md) : l'idiome de la documentation,
+     # doc/group.md (⊐⊸⊔), histogramme /⁼
      res ← @
      {𝕤
        i ← ⊐ keys
@@ -265,11 +266,17 @@ J9Tun ← {   # optimisé : grille plate ; voisins = tranches décalées de ±1 
   (m9 ↑ 𝕩) ∾ seg ∾ (-m9) ↑ 𝕩
 }
 f0 ← ⥊ g0
+# erratum de la remarque sur BQN (docs/BQN.md), reporté le 21 novembre (v4, point 4 : docs/V4_CONVERGE.md, 4.1) : le
+# calcul seul est chronométré ; la somme de contrôle (somme de la grille) l'est hors chrono, comme dans les autres langages
+_k9Timed ← {
+  G ← 𝔽
+  {𝕤 ⋄ t0 ← •MonoTime @ ⋄ g ← G @ ⋄ t ← (•MonoTime @) - t0 ⋄ ⟨t, FltStr +´ ⥊ g⟩} _timedRun @
+}
 RunK9 ← {𝕤
-  {v ≡ "natural" ? {𝕤 ⋄ FltStr +´ ⥊ J9Nat⍟4 g0} _bench @
-   ; v ≡ "tuned" ? {𝕤 ⋄ FltStr +´ J9Tun⍟4 f0} _bench @
+  {v ≡ "natural" ? {𝕤 ⋄ J9Nat⍟4 g0} _k9Timed @
+   ; v ≡ "tuned" ? {𝕤 ⋄ J9Tun⍟4 f0} _k9Timed @
    ; Meta "k9_mt;pas de threads : même code que tuned, sur un seul cœur"
-     {𝕤 ⋄ FltStr +´ J9Tun⍟4 f0} _bench @}
+     {𝕤 ⋄ J9Tun⍟4 f0} _k9Timed @}
 }
 
 # ------------------------------------------------------------------ choix du noyau

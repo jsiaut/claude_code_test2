@@ -236,15 +236,17 @@ function runK7(v, reps) {
     } else {
       const LOG = 21, CAP = 1 << LOG;
       const t0 = now();
-      const tab = new Float64Array(4 * CAP); // [clé, compteur, somme, -] : 32 o par case, 2 par ligne
+      // remarque sur JavaScript (docs/JAVASCRIPT.md) : cases de 16 o comme en C et dans les autres implémentations :
+      // [clé u32, compteur u32, somme f64], par deux vues typées sur le même ArrayBuffer ; 4 cases par ligne
+      const tb = new ArrayBuffer(16 * CAP), tk = new Uint32Array(tb), tsum = new Float64Array(tb);
       for (let i = 0; i < keys.length; i++) {
         const k = keys[i];
         let s = Math.imul(k, 0x9E3779B1) >>> (32 - LOG);
-        while (tab[4 * s + 1] !== 0 && tab[4 * s] !== k) s = (s + 1) & (CAP - 1);
-        tab[4 * s] = k; tab[4 * s + 1] += 1; tab[4 * s + 2] += vals[i];
+        while (tk[4 * s + 1] !== 0 && tk[4 * s] !== k) s = (s + 1) & (CAP - 1);
+        tk[4 * s] = k; tk[4 * s + 1] += 1; tsum[2 * s + 1] += vals[i];
       }
       dt = Number(now() - t0) * 1e-9;
-      for (let s = 0; s < CAP; s++) if (tab[4 * s + 1] !== 0) { nk++; ws += tab[4 * s + 2] * ((tab[4 * s] & 1023) + 1); }
+      for (let s = 0; s < CAP; s++) if (tk[4 * s + 1] !== 0) { nk++; ws += tsum[2 * s + 1] * ((tk[4 * s] & 1023) + 1); }
     }
     if (r >= 0) result('k7', v, '16M/1M', r, dt, `${nk}:${ws}`);
   }
@@ -293,10 +295,13 @@ function k9Rows(a, b, r0, r1) {
 }
 const fmtE = (s) => s.toExponential(15).replace(/e\+(\d)$/, 'e+0$1');
 async function runK9(v, reps) {
+  // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
   if (v === 'natural') {
+    const na = Array.from({ length: M9 }, (_, i) => Array.from({ length: M9 }, (_, j) => k9Init(i, j)));
+    const nb = na.map(row => row.slice());
     for (let r = -WARMUP; r < reps; r++) {
-      let a = Array.from({ length: M9 }, (_, i) => Array.from({ length: M9 }, (_, j) => k9Init(i, j)));
-      let b = a.map(row => row.slice());
+      for (let i = 0; i < M9; i++) { const ra = na[i], rb = nb[i]; for (let j = 0; j < M9; j++) ra[j] = rb[j] = k9Init(i, j); }
+      let a = na, b = nb;
       const t0 = now();
       for (let it = 0; it < 4; it++) { k9Natural(a, b); [a, b] = [b, a]; }
       const dt = Number(now() - t0) * 1e-9;

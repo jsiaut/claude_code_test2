@@ -1,0 +1,20 @@
+--- a/bench/python/ms.py
++++ b/bench/python/ms.py
+@@ -399,9 +399,15 @@
+ 
+ 
+ def run_k9(v, reps):
++    # harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
++    init = [[k9_init(i, j) for j in range(M9)] for i in range(M9)]
++    ga = [row[:] for row in init]
++    gb = [row[:] for row in init]
+     for r in range(-WARMUP, reps):
+-        a = [[k9_init(i, j) for j in range(M9)] for i in range(M9)]
+-        b = [row[:] for row in a]
++        for i in range(M9):
++            ga[i][:] = init[i]
++            gb[i][:] = init[i]
++        a, b = ga, gb
+         t0 = time.perf_counter()
+         for _ in range(4):
+             if v == "natural":

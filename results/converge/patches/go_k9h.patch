@@ -1,0 +1,36 @@
+--- a/bench/go/ms.go
++++ b/bench/go/ms.go
+@@ -650,12 +650,22 @@
+ 	}
+ }
+ func runK9(v string, reps int) {
++	// harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
++	var na, nb [][]float64
++	var ga, gb []float64
++	if v == "natural" {
++		na, nb = make([][]float64, M9), make([][]float64, M9)
++		for i := range M9 {
++			na[i], nb[i] = make([]float64, M9), make([]float64, M9)
++		}
++	} else {
++		ga, gb = make([]float64, M9*M9), make([]float64, M9*M9)
++	}
+ 	for r := -warmup(); r < reps; r++ {
+ 		var s, dt float64
+ 		if v == "natural" {
+-			a, b := make([][]float64, M9), make([][]float64, M9)
++			a, b := na, nb
+ 			for i := range M9 {
+-				a[i], b[i] = make([]float64, M9), make([]float64, M9)
+ 				for j := range M9 {
+ 					a[i][j] = k9Init(i, j)
+ 					b[i][j] = a[i][j]
+@@ -673,7 +683,7 @@
+ 				}
+ 			}
+ 		} else {
+-			a, b := make([]float64, M9*M9), make([]float64, M9*M9)
++			a, b := ga, gb
+ 			for k := range a {
+ 				a[k] = k9Init(k/M9, k%M9)
+ 				b[k] = a[k]

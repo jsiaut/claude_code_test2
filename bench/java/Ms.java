@@ -1,4 +1,5 @@
 // Implémentation Java 27 (JDK seul ; jdk.incubator.vector pour les variantes tuned).
+import java.lang.foreign.*;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.nio.ByteBuffer;
@@ -42,6 +43,16 @@ public class Ms {
     static final VectorSpecies<Long> LS = LongVector.SPECIES_512;
     static final VectorSpecies<Byte> BS = ByteVector.SPECIES_128;
 
+    // Remarque sur Java (docs/JAVA.md) : avec les en-têtes compacts du JDK 27, les données d'un float[] commencent à
+    // 12 octets de l'objet, et chaque chargement de 64 octets chevauche deux lignes de cache. Les variantes à SIMD
+    // explicite de K5 et de K1 (soa) lisent donc des copies hors tas alignées sur 64 octets, comme les autres langages.
+    static final ByteOrder NO = ByteOrder.nativeOrder();
+    static MemorySegment aligned(float[] src) {
+        MemorySegment s = Arena.global().allocate(4L * src.length, 64);
+        MemorySegment.copy(src, 0, s, ValueLayout.JAVA_FLOAT, 0, src.length);
+        return s;
+    }
+
     // ------------------------------------------------------------------ K1
     static final int N1 = Sizes.N1;
     // type enregistrement par défaut de Java moderne : record (objet sur le tas)
@@ -77,6 +88,20 @@ public class Ms {
         }
         return a0.add(a1).reduceLanes(VectorOperators.ADD);
     }
+    static double k1SoASeg(MemorySegment vx, MemorySegment vy, MemorySegment vz, MemorySegment m) {
+        DoubleVector a0 = DoubleVector.zero(DS), a1 = DoubleVector.zero(DS);
+        FloatVector h = FloatVector.broadcast(FS, 0.5f);
+        int n = (int) (vx.byteSize() / 4);
+        for (int i = 0; i < n; i += 16) {
+            long o = 4L * i;
+            FloatVector x = FloatVector.fromMemorySegment(FS, vx, o, NO), y = FloatVector.fromMemorySegment(FS, vy, o, NO);
+            FloatVector z = FloatVector.fromMemorySegment(FS, vz, o, NO), w = FloatVector.fromMemorySegment(FS, m, o, NO);
+            FloatVector e = h.mul(w).mul(z.fma(z, y.fma(y, x.mul(x))));
+            a0 = a0.add((DoubleVector) e.convertShape(VectorOperators.F2D, DS, 0));
+            a1 = a1.add((DoubleVector) e.convertShape(VectorOperators.F2D, DS, 1));
+        }
+        return a0.add(a1).reduceLanes(VectorOperators.ADD);
+    }
     // Empreinte K1 (D2a) : octets vivants du tas après GC complet, et RSS courant (pages de 4 Kio)
     static long liveNow() {
         Runtime rt = Runtime.getRuntime();
@@ -97,9 +122,11 @@ public class Ms {
         if (v.equals("footprint_raw")) { result("k1", v, "energy", 0, 0, "0"); return; }
         if (v.equals("aos")) { bench("k1", v, "energy", reps, () -> String.format("%.6f", k1AoS(raw))); return; }
         if (v.equals("soa")) {
-            float[][] c = new float[16][N1];
-            for (int i = 0; i < N1; i++) for (int k = 0; k < 16; k++) c[k][i] = raw[16 * i + k];
-            bench("k1", v, "energy", reps, () -> String.format("%.6f", k1SoA(c[3], c[4], c[5], c[9])));
+            // colonnes hors tas alignées sur 64 octets (remarque sur Java, docs/JAVA.md)
+            MemorySegment[] c = new MemorySegment[16];
+            for (int k = 0; k < 16; k++) c[k] = Arena.global().allocate(4L * N1, 64);
+            for (int i = 0; i < N1; i++) for (int k = 0; k < 16; k++) c[k].setAtIndex(ValueLayout.JAVA_FLOAT, i, raw[16 * i + k]);
+            bench("k1", v, "energy", reps, () -> String.format("%.6f", k1SoASeg(c[3], c[4], c[5], c[9])));
             return;
         }
         long m1 = 0, r1 = 0;
@@ -191,14 +218,30 @@ public class Ms {
         }
         return s0.add(s1).add(s2.add(s3)).reduceLanes(VectorOperators.ADD);
     }
+    static float k5TunedSeg(MemorySegment a, MemorySegment b, int n) {
+        FloatVector s0 = FloatVector.zero(FS), s1 = s0, s2 = s0, s3 = s0;
+        for (int i = 0; i < n; i += 64) {
+            long o = 4L * i;
+            s0 = FloatVector.fromMemorySegment(FS, a, o, NO).fma(FloatVector.fromMemorySegment(FS, b, o, NO), s0);
+            s1 = FloatVector.fromMemorySegment(FS, a, o + 64, NO).fma(FloatVector.fromMemorySegment(FS, b, o + 64, NO), s1);
+            s2 = FloatVector.fromMemorySegment(FS, a, o + 128, NO).fma(FloatVector.fromMemorySegment(FS, b, o + 128, NO), s2);
+            s3 = FloatVector.fromMemorySegment(FS, a, o + 192, NO).fma(FloatVector.fromMemorySegment(FS, b, o + 192, NO), s3);
+        }
+        return s0.add(s1).add(s2.add(s3)).reduceLanes(VectorOperators.ADD);
+    }
     static volatile float[] sinkA; // barrière d'optimisation : relu à chaque itération
+    static volatile MemorySegment sinkSA; // idem pour la copie alignée
     static void runK5(String v, int reps) {
         float[] a = loadF32("k5_a.f32"), b = loadF32("k5_b.f32");
         sinkA = a;
         boolean tuned = v.equals("tuned");
+        // tuned : copies hors tas alignées sur 64 octets (remarque sur Java, docs/JAVA.md)
+        MemorySegment sa = aligned(a), sb = aligned(b);
+        sinkSA = sa;
+        int n = a.length;
         bench("k5", v, "2048x65536", reps, () -> {
             float d = 0;
-            for (int it = 0; it < INNER5; it++) d = tuned ? k5Tuned(sinkA, b) : k5Natural(sinkA, b);
+            for (int it = 0; it < INNER5; it++) d = tuned ? k5TunedSeg(sinkSA, sb, n) : k5Natural(sinkA, b);
             return String.format("%.4f", d);
         });
     }
@@ -394,17 +437,22 @@ public class Ms {
         }
     }
     static void runK9(String v, int reps) {
+        // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
+        double[][] na = null, nb = null;
+        double[] ga = null, gb = null;
+        if (v.equals("natural")) { na = new double[M9][M9]; nb = new double[M9][M9]; }
+        else { ga = new double[M9 * M9]; gb = new double[M9 * M9]; }
         for (int r = -warmup(); r < reps; r++) {
             double s = 0; long t0, t1;
             if (v.equals("natural")) {
-                double[][] a = new double[M9][M9], b = new double[M9][M9];
+                double[][] a = na, b = nb;
                 for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) a[i][j] = b[i][j] = k9Init(i, j);
                 t0 = System.nanoTime();
                 for (int it = 0; it < 4; it++) { k9Natural(a, b); double[][] tmp = a; a = b; b = tmp; }
                 t1 = System.nanoTime();
                 for (double[] row : a) for (double x : row) s += x;
             } else {
-                double[] a = new double[M9 * M9], b = new double[M9 * M9];
+                double[] a = ga, b = gb;
                 for (int k = 0; k < M9 * M9; k++) a[k] = b[k] = k9Init(k / M9, k % M9);
                 t0 = System.nanoTime();
                 for (int it = 0; it < 4; it++) {

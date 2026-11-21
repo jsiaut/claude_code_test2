@@ -13,7 +13,8 @@ let map kind name =
   a
 
 let result k v p rep sec chk = Printf.printf "RESULT;%s;%s;%s;%d;%.9f;%s\n%!" k v p rep sec chk
-let now () = Unix.gettimeofday ()
+(* remarque sur OCaml (docs/OCAML.md) : horloge monotone à la nanoseconde de la distribution, depuis OCaml 5.4 *)
+let now () = Int64.to_float (Runtime_events.Timestamp.to_int64 (Runtime_events.Timestamp.get_current ())) *. 1e-9
 
 let bench k v p reps f =
   for r = -warmup to reps - 1 do
@@ -39,7 +40,9 @@ let[@inline never] k1_natural (ps : particle array) =
 (* AoS manuel : Bigarray float32 entrelacé (pas de 16), 4 accumulateurs *)
 let[@inline never] k1_aos (f : (float, float32_elt, c_layout) Array1.t) =
   let a0 = ref 0.0 and a1 = ref 0.0 and a2 = ref 0.0 and a3 = ref 0.0 in
-  let e i = 0.5 *. Array1.unsafe_get f (i + 9) *. ((Array1.unsafe_get f (i + 3) ** 2.) +. (Array1.unsafe_get f (i + 4) ** 2.) +. (Array1.unsafe_get f (i + 5) ** 2.)) in
+  (* remarque sur OCaml (docs/OCAML.md) : x *. x, pas pow de la libm *)
+  let e i = let x = Array1.unsafe_get f (i + 3) and y = Array1.unsafe_get f (i + 4) and z = Array1.unsafe_get f (i + 5) in
+    0.5 *. Array1.unsafe_get f (i + 9) *. ((x *. x) +. (y *. y) +. (z *. z)) in
   let i = ref 0 in
   while !i < n1 * 16 do
     a0 := !a0 +. e !i; a1 := !a1 +. e (!i + 16); a2 := !a2 +. e (!i + 32); a3 := !a3 +. e (!i + 48);
@@ -216,7 +219,9 @@ let[@inline never] q6_tuned c lo hi =
   let s = ref 0 in
   for i = lo to hi - 1 do
     let sd = Int32.to_int (Array1.unsafe_get c.sd i) and d = Array1.unsafe_get c.d i and q = Array1.unsafe_get c.q i in
-    let m = Bool.to_int (sd - 8766 >= 0 && sd - 8766 < 365) land Bool.to_int (d - 5 >= 0 && d - 5 <= 2) land Bool.to_int (q < 24) in
+    (* remarque sur OCaml (docs/OCAML.md) : chaque comparaison séparément ; && (court-circuit) gardait deux branchements *)
+    let m = Bool.to_int (sd - 8766 >= 0) land Bool.to_int (sd - 8766 < 365) land Bool.to_int (d - 5 >= 0)
+            land Bool.to_int (d - 5 <= 2) land Bool.to_int (q < 24) in
     s := !s + (Int32.to_int (Array1.unsafe_get c.pr i) * d * m)
   done;
   !s
@@ -341,13 +346,14 @@ let run_k8 v reps =
   let keep = t_build MS_K8_LONG (ref 0) in
   let lsum = t_sum keep in
   let lat = Array.make q 0.0 in
+  (* remarque sur OCaml (docs/OCAML.md) : sommet et compteur de l'arène alloués une fois, remis à zéro à chaque requête *)
+  let top = ref 0 and ca = ref 0 in
   for r = -warmup to reps - 1 do
     let total = ref 0 in
     let t0 = now () in
     for qq = 0 to q - 1 do
       let a = now () in
-      let c = ref qq in
-      let s = if v = "tuned" then a_sum (a_build (ref 0) MS_K8_REQ c) else t_sum (t_build MS_K8_REQ c) in
+      let s = if v = "tuned" then (top := 0; ca := qq; a_sum (a_build top MS_K8_REQ ca)) else t_sum (t_build MS_K8_REQ (ref qq)) in
       total := !total + s;
       lat.(qq) <- (now () -. a) *. 1e9
     done;
@@ -381,32 +387,35 @@ let[@inline never] k9_rows (a : (float, float64_elt, c_layout) Array1.t) (b : (f
   done
 
 let run_k9 v reps =
-  for r = -warmup to reps - 1 do
-    let s, dt =
-      if v = "natural" then begin
-        let a = Array.init m9 (fun i -> Array.init m9 (fun j -> k9_init i j)) in
-        let b = Array.map Array.copy a in
-        let t0 = now () in
-        k9_natural a b; k9_natural b a; k9_natural a b; k9_natural b a;
-        let dt = now () -. t0 in
-        (Array.fold_left (Array.fold_left ( +. )) 0.0 a, dt)
-      end else begin
-        let mk () = let g = Array1.create float64 c_layout (m9 * m9) in for k = 0 to (m9 * m9) - 1 do g.{k} <- k9_init (k / m9) (k mod m9) done; g in
-        let a = mk () and b = mk () in
-        let step x y =
-          if v = "tuned" then k9_rows x y 1 (m9 - 1)
-          else Array.iter Domain.join (Array.init 4 (fun t -> Domain.spawn (fun () -> k9_rows x y (1 + ((m9 - 2) * t / 4)) (1 + ((m9 - 2) * (t + 1) / 4)))))
-        in
-        let t0 = now () in
-        step a b; step b a; step a b; step b a;
-        let dt = now () -. t0 in
-        let s = ref 0.0 in
-        for k = 0 to (m9 * m9) - 1 do s := !s +. a.{k} done;
-        (!s, dt)
-      end
+  (* harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono *)
+  if v = "natural" then begin
+    let a = Array.make_matrix m9 m9 0.0 and b = Array.make_matrix m9 m9 0.0 in
+    for r = -warmup to reps - 1 do
+      for i = 0 to m9 - 1 do
+        for j = 0 to m9 - 1 do let x = k9_init i j in a.(i).(j) <- x; b.(i).(j) <- x done
+      done;
+      let t0 = now () in
+      k9_natural a b; k9_natural b a; k9_natural a b; k9_natural b a;
+      let dt = now () -. t0 in
+      let s = Array.fold_left (Array.fold_left ( +. )) 0.0 a in
+      if r >= 0 then result "k9" v "2048^2x4" r dt (Printf.sprintf "%.15e" s)
+    done
+  end else begin
+    let a = Array1.create float64 c_layout (m9 * m9) and b = Array1.create float64 c_layout (m9 * m9) in
+    let step x y =
+      if v = "tuned" then k9_rows x y 1 (m9 - 1)
+      else Array.iter Domain.join (Array.init 4 (fun t -> Domain.spawn (fun () -> k9_rows x y (1 + ((m9 - 2) * t / 4)) (1 + ((m9 - 2) * (t + 1) / 4)))))
     in
-    if r >= 0 then result "k9" v "2048^2x4" r dt (Printf.sprintf "%.15e" s)
-  done
+    for r = -warmup to reps - 1 do
+      for k = 0 to (m9 * m9) - 1 do let x = k9_init (k / m9) (k mod m9) in a.{k} <- x; b.{k} <- x done;
+      let t0 = now () in
+      step a b; step b a; step a b; step b a;
+      let dt = now () -. t0 in
+      let s = ref 0.0 in
+      for k = 0 to (m9 * m9) - 1 do s := !s +. a.{k} done;
+      if r >= 0 then result "k9" v "2048^2x4" r dt (Printf.sprintf "%.15e" !s)
+    done
+  end
 
 (* ------------------------------------------------------------------ K10 *)
 let m10 = 1 lsl 22

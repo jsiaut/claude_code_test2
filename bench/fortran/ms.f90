@@ -1,4 +1,7 @@
 ! Implémentation Fortran 2018 (+ OpenMP 5 pour les threads et atomiques) des noyaux de docs/SPEC.md.
+! Correction de la remarque sur Fortran (docs/FORTRAN.md), reportée le 21 novembre (v4, point 4 : docs/V4_CONVERGE.md,
+! 4.1) : les noyaux de ce fichier sont marqués !GCC$ ATTRIBUTES NOINLINE, comme les 14 noyaux du banc C ; K5 et K9
+! naturels passent dans des fonctions, corps inchangés ; harnais commun de K9 (docs/K9.md).
 ! Compilateurs : gfortran 16 (bench/fortran) et flang 23 (bench/fortran_flang), mêmes sources.
 ! Les noyaux « tuned » sont dans tuned.f90, compilé avec -mprefer-vector-width=512 (option documentée).
 ! « natural » : type dérivé + tableau allouable, syntaxe tableau, intrinsèques (dot_product),
@@ -119,6 +122,7 @@ module k1m
   integer, parameter :: N1 = SIZE_N1
 contains
   real(real64) function k1_natural(ps) result(e)
+    !GCC$ ATTRIBUTES NOINLINE :: k1_natural  ! correction du 30/10 (docs/FORTRAN.md)
     type(particle), intent(in) :: ps(:)
     integer :: i
     e = 0
@@ -199,6 +203,7 @@ module k25m
   implicit none
 contains
   integer(int32) function k2_chase(a, h) result(i)
+    !GCC$ ATTRIBUTES NOINLINE :: k2_chase  ! correction du 30/10 (docs/FORTRAN.md)
     integer(int32), intent(in) :: a(0:)
     integer, intent(in) :: h
     integer :: k
@@ -265,6 +270,7 @@ contains
   end subroutine
 
   integer(int64) function k4_natural(b) result(s)
+    !GCC$ ATTRIBUTES NOINLINE :: k4_natural  ! correction du 30/10 (docs/FORTRAN.md)
     integer(int8), intent(in) :: b(:)
     integer :: i, x
     s = 0
@@ -274,6 +280,7 @@ contains
     end do
   end function
   integer(int64) function k4_branchless(b) result(s)
+    !GCC$ ATTRIBUTES NOINLINE :: k4_branchless  ! correction du 30/10 (docs/FORTRAN.md)
     integer(int8), intent(in) :: b(:)
     integer :: i, x
     s = 0
@@ -314,6 +321,11 @@ contains
     end do
   end subroutine
 
+  real(real32) function k5_natural(a, b) result(d)
+    !GCC$ ATTRIBUTES NOINLINE :: k5_natural  ! correction du 30/10 : même calcul, hors de la boucle de mesure
+    real(real32), intent(in), contiguous :: a(:), b(:)
+    d = dot_product(a, b)
+  end function
   subroutine run_k5(v, reps)
     character(*), intent(in) :: v
     integer, intent(in) :: reps
@@ -338,7 +350,7 @@ contains
         if (v == "tuned") then
           d = k5_tuned(a, b)
         else
-          d = dot_product(a, b)
+          d = k5_natural(a, b)
         end if
         vsink = d
       end do
@@ -360,6 +372,7 @@ module k6m
   integer(int8), allocatable :: q(:), d(:), t(:), rf(:), ls(:)
 contains
   integer(int64) function q6_natural(lo, hi) result(s)
+    !GCC$ ATTRIBUTES NOINLINE :: q6_natural  ! correction du 30/10 (docs/FORTRAN.md)
     integer, intent(in) :: lo, hi
     integer :: i
     s = 0
@@ -368,6 +381,7 @@ contains
     end do
   end function
   subroutine q1_natural(lo, hi, acc)
+    !GCC$ ATTRIBUTES NOINLINE :: q1_natural  ! correction du 30/10 (docs/FORTRAN.md)
     integer, intent(in) :: lo, hi
     integer(int64), intent(inout) :: acc(5, 0:5)
     integer :: i, g
@@ -692,6 +706,12 @@ contains
       end do
     end do
   end subroutine
+  subroutine k9_natural(a, b)
+    !GCC$ ATTRIBUTES NOINLINE :: k9_natural  ! correction du 30/10 : même instruction, hors de la boucle de mesure
+    real(real64), intent(in) :: a(0:M9 - 1, 0:M9 - 1)
+    real(real64), intent(inout) :: b(0:M9 - 1, 0:M9 - 1)
+    b(1:M9 - 2, 1:M9 - 2) = 0.25d0 * (((a(0:M9 - 3, 1:M9 - 2) + a(2:M9 - 1, 1:M9 - 2)) + a(1:M9 - 2, 0:M9 - 3)) + a(1:M9 - 2, 2:M9 - 1))
+  end subroutine
   subroutine run_k9(v, reps)
     character(*), intent(in) :: v
     integer, intent(in) :: reps
@@ -702,24 +722,25 @@ contains
     real(real64) :: t0, t1
     character(40) :: s
     integer(int64), parameter :: NN = int(M9, int64) * M9
+    ! harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
     if (v /= "natural") then
       allocate (ba(NN + 8), bb(NN + 8))
       pa => align64_r64(ba, NN)
       pb => align64_r64(bb, NN)
+    else
+      allocate (a(0:M9 - 1, 0:M9 - 1), b(0:M9 - 1, 0:M9 - 1))
     end if
     do r = -warm, reps - 1
       if (v == "natural") then  ! tableau 2D allouable + syntaxe tableau (idiome Fortran)
-        allocate (a(0:M9 - 1, 0:M9 - 1))
         call k9_init(a)
         b = a
         t0 = now()
         do it = 1, IT9
-          b(1:M9 - 2, 1:M9 - 2) = 0.25d0 * (((a(0:M9 - 3, 1:M9 - 2) + a(2:M9 - 1, 1:M9 - 2)) + a(1:M9 - 2, 0:M9 - 3)) + a(1:M9 - 2, 2:M9 - 1))
+          call k9_natural(a, b)
           call swap2(a, b)
         end do
         t1 = now()
         write (s, '(es22.15e2)') sum(a)
-        deallocate (a, b)
       else
         call k9_init(pa)
         pb = pa
