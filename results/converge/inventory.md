@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 9 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada).
+Langages relevés : 10 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -240,3 +240,28 @@ Langages relevés : 9 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada).
 | `k9 tuned_v` | K9 | écrite | `k9 tuned_v` | type vectoriel GCC de 8 Long_Float, builtins loadupd, addpd, mulpd, storeupd, j depuis 1 ; la variante tuned publiée est une boucle scalaire vectorisée par GCC |
 | `k9 mt_pool` | K9 mt | écrite | `k9 mt_pool` | chaque quart : K9_Rows publiée |
 | `k9 mt_pool_v` | K9 mt | écrite | `k9 mt_pool_v` | chaque quart : tuned_v |
+
+## Chapel
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : intrinsèques AVX-512BW importées par extern proc |
+| `k4 swar` | K4 | écrite | `k4 swar` | mots de 64 bits (OS.POSIX.memcpy) |
+| `k5 tuned_v` | K5 | écrite | `k5 tuned_v` | intrinsèques AVX-512 importées (FMA, quatre accumulateurs), binaire ms_tuned ; la variante tuned publiée est une boucle simple vectorisée par LLVM sous --no-ieee-float |
+| `q6 tuned_v` | Q6 | écrite | `k6 tuned_v q6` | intrinsèques importées ; comparaisons par le bit de signe d'une différence (les comparaisons à immédiat sont des macros, non importables) ; la variante tuned publiée est scalaire, vectorisée par LLVM |
+| `q6 tuned_s` | Q6 | sans objet | — | forme principale présente ou écrite |
+| `q1 tuned_v` (R) | Q1 | écrite | `k6 tuned_v q1` | forme de bench/chapel_exp (remarque sur Chapel, × 0,84), recopiée : la référence C en intrinsèques importées ; la variante tuned publiée agrège par blocs et par groupe |
+| `q1 tuned_s` | Q1 | sans objet | — | forme principale présente ou écrite |
+| `q6 mt_pool` | Q6 mt | présente | `k6 mt q6` | coforall : tâches sur les fils gardés par le runtime (créés une fois) |
+| `q6 mt_pool_v` | Q6 mt | écrite | `k6 mt_pool_v q6` | coforall, chaque quart : tuned_v |
+| `q6 mt_pool_s` | Q6 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `q1 mt_pool` | Q1 mt | présente | `k6 mt q1` | coforall (fils du runtime) |
+| `q1 mt_pool_v` | Q1 mt | écrite | `k6 mt_pool_v q1` | coforall, chaque quart : tuned_v |
+| `q1 mt_pool_s` | Q1 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `k7 tuned_pf` | K7 | présente | `k7 tuned` | la forme de la frontière ; le module Prefetch n'expose que __builtin_prefetch(addr), un préchargement en lecture |
+| `k7 tuned_oa` | K7 | sans objet | — | forme principale présente ou écrite |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | procédure récursive, état en paramètres et en retour |
+| `k8 tuned_it` | K8 | écrite | `k8 tuned_it` | piles en tuples (64 * int(32)) : aucune allocation |
+| `k9 tuned_v` | K9 | écrite | `k9 tuned_v` | intrinsèques importées sur les tableaux 2D de Chapel lus par pointeur, j depuis 1 ; la variante tuned publiée est une boucle foreach vectorisée par LLVM |
+| `k9 mt_pool` | K9 mt | présente | `k9 mt` | forall (fils du runtime), quatre blocs de lignes |
+| `k9 mt_pool_v` | K9 mt | écrite | `k9 mt_pool_v` | coforall, quatre quarts : tuned_v |

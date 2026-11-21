@@ -5,7 +5,7 @@
 // « tuned » : sans vérifications (--fast), vecteurs 512 bits autorisés, --no-ieee-float pour les
 // réductions flottantes que la spec permet de réassocier, atomiques avec memoryOrder, coforall/forall.
 // Horloge : Time.stopwatch (gettimeofday dans le runtime : microseconde, non monotone).
-use Time, IO, CTypes, Map, Sort, Prefetch;  // Prefetch : module « package » livré avec Chapel
+use Time, IO, CTypes, Map, Sort, Prefetch, OS, BitOps;  // Prefetch : module « package » livré avec Chapel
 
 config const dataDir = "/opt/msdata";
 config const warm = 1;
@@ -182,13 +182,40 @@ proc k4Tuned(const ref b: [] uint(8)): uint {
   }
   return s;
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits (lus par memcpy). Le bit de
+// poids fort de chaque octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les
+// octets >= 128 ; les octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute
+// donnée : une voie reçoit au plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les
+// voies sont vidées dans la somme de 64 bits toutes les 128 mots (et à la fin). Aucun branchement sur les données.
+proc k4Swar(const ref b: [] uint(8)): uint {
+  const ONES = 0x0101010101010101: uint, LO = 0x00FF00FF00FF00FF: uint;
+  const n = b.size;
+  const p = c_ptrToConst(b[0]);
+  var s: uint = 0, i = 0;
+  while i + 8 <= n {
+    const e = if i + 128 * 8 <= n then i + 128 * 8 else n - (n - i) % 8;
+    var acc: uint = 0;
+    while i < e {
+      var w: uint;
+      OS.POSIX.memcpy(c_ptrTo(w): c_ptr(void), (p + i): c_ptr(void), 8);
+      const y = w & (((w >> 7) & ONES) * 0xFF);
+      acc += (y & LO) + ((y >> 8) & LO);
+      i += 8;
+    }
+    acc = (acc & 0x0000FFFF0000FFFF) + ((acc >> 16) & 0x0000FFFF0000FFFF);  // deux voies de 32 bits
+    s += (acc & 0xFFFFFFFF) + (acc >> 32);
+  }
+  while i < n { s += b[i]: uint * (b[i] >> 7): uint; i += 1; }
+  return s;
+}
 proc runK4(v: string, reps: int) {
   var b = loadArr("k4_bytes.u8", uint(8));
   if v == "natural_sorted" then sort(b);  // hors chrono
   var sw: stopwatch;
   for r in -warm..<reps {
     sw.clear(); sw.start();
-    const s = if v == "tuned" then k4Tuned(b) else if v == "branchless_unsorted" then k4Branchless(b) else k4Natural(b);
+    const s = if v == "tuned" then k4Tuned(b) else if v == "swar" then k4Swar(b)
+              else if v == "branchless_unsorted" then k4Branchless(b) else k4Natural(b);
     sw.stop();
     if r >= 0 then result("k4", v, "16M", r, sw.elapsed(), s: string);
   }
@@ -207,6 +234,28 @@ proc k5Tuned(const ref a: [] real(32), const ref b: [] real(32)): real(32) {
   for i in a.domain do s += a[i] * b[i];
   return s;
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K5 tuned_v ; forme de la frontière, C++ et C) : intrinsèques AVX-512
+// importées de immintrin.h : 16 f32, quatre accumulateurs indépendants, 64 éléments par tour, FMA, réduction
+// horizontale une fois par appel. La variante tuned publiée est une boucle simple vectorisée par LLVM sous
+// --no-ieee-float (binaire ms_fm) ; celle-ci tourne dans le binaire ms_tuned (options publiées de tuned).
+extern type __m512;
+extern proc _mm512_setzero_ps(): __m512;
+extern proc _mm512_loadu_ps(p: c_ptrConst(void)): __m512;
+extern proc _mm512_fmadd_ps(a: __m512, b: __m512, c: __m512): __m512;
+extern proc _mm512_add_ps(a: __m512, b: __m512): __m512;
+extern proc _mm512_reduce_add_ps(a: __m512): real(32);
+proc k5TunedV(a: c_ptrConst(real(32)), b: c_ptrConst(real(32)), n: int): real(32) {
+  var s0 = _mm512_setzero_ps(), s1 = s0, s2 = s0, s3 = s0;
+  var i = 0;
+  while i < n {
+    s0 = _mm512_fmadd_ps(_mm512_loadu_ps((a + i): c_ptrConst(void)), _mm512_loadu_ps((b + i): c_ptrConst(void)), s0);
+    s1 = _mm512_fmadd_ps(_mm512_loadu_ps((a + i + 16): c_ptrConst(void)), _mm512_loadu_ps((b + i + 16): c_ptrConst(void)), s1);
+    s2 = _mm512_fmadd_ps(_mm512_loadu_ps((a + i + 32): c_ptrConst(void)), _mm512_loadu_ps((b + i + 32): c_ptrConst(void)), s2);
+    s3 = _mm512_fmadd_ps(_mm512_loadu_ps((a + i + 48): c_ptrConst(void)), _mm512_loadu_ps((b + i + 48): c_ptrConst(void)), s3);
+    i += 64;
+  }
+  return _mm512_reduce_add_ps(_mm512_add_ps(_mm512_add_ps(s0, s1), _mm512_add_ps(s2, s3)));
+}
 proc runK5(v: string, reps: int) {
   var a = loadArr("k5_a.f32", real(32));
   const b = loadArr("k5_b.f32", real(32));
@@ -217,7 +266,9 @@ proc runK5(v: string, reps: int) {
     sw.clear(); sw.start();
     for 1..MS_INNER5 {
       a[0] += zero;  // écriture opaque : le compilateur ne peut pas sortir le calcul de la boucle
-      d = if v == "tuned" then k5Tuned(a, b) else k5Natural(a, b);
+      d = if v == "tuned" then k5Tuned(a, b)
+          else if v == "tuned_v" then k5TunedV(c_ptrToConst(a[0]), c_ptrToConst(b[0]), a.size)
+          else k5Natural(a, b);
       sink.write(d, memoryOrder.relaxed);
     }
     sw.stop();
@@ -291,6 +342,120 @@ proc q1Tuned(sd: c_ptrConst(int(32)), pr: c_ptrConst(int(32)), q: c_ptrConst(uin
     i0 += n;
   }
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3) : intrinsèques AVX-512 importées de immintrin.h (celles de bench/chapel_exp,
+// remarque sur Chapel, et celles de Q6 tuned_v). Les comparaisons à immédiat de immintrin.h sont des macros, que
+// extern proc n'importe pas : les comparaisons passent par le bit de signe d'une différence (movepi32_mask), exact
+// pour toutes les données de la spécification (aucune différence ne déborde).
+extern type __m256i;
+extern type __m128i;
+extern proc _mm512_set1_epi32(x: int(32)): __m512i;
+extern proc _mm_loadu_si128(p: c_ptrConst(void)): __m128i;
+extern proc _mm512_cvtepu8_epi32(x: __m128i): __m512i;
+extern proc _mm512_add_epi32(a: __m512i, b: __m512i): __m512i;
+extern proc _mm512_sub_epi32(a: __m512i, b: __m512i): __m512i;
+extern proc _mm512_xor_si512(a: __m512i, b: __m512i): __m512i;
+extern proc _mm512_mullo_epi32(a: __m512i, b: __m512i): __m512i;
+extern proc _mm512_maskz_mullo_epi32(k: uint(16), a: __m512i, b: __m512i): __m512i;
+extern proc _mm512_mul_epi32(a: __m512i, b: __m512i): __m512i;
+extern proc _mm512_srli_epi64(a: __m512i, n: c_uint): __m512i;
+extern proc _mm512_slli_epi64(a: __m512i, n: c_uint): __m512i;
+extern proc _mm512_srai_epi64(a: __m512i, n: c_uint): __m512i;
+extern proc _mm512_movepi32_mask(a: __m512i): uint(16);
+extern proc _mm512_mask_testn_epi32_mask(u: uint(16), a: __m512i, b: __m512i): uint(16);
+extern proc _mm512_mask_add_epi32(src: __m512i, k: uint(16), a: __m512i, b: __m512i): __m512i;
+extern proc _mm512_mask_add_epi64(src: __m512i, k: uint(8), a: __m512i, b: __m512i): __m512i;
+extern proc _mm512_reduce_add_epi32(a: __m512i): int(32);
+extern proc _mm512_cvtepi32_epi64(a: __m256i): __m512i;
+extern proc _mm512_castsi512_si256(a: __m512i): __m256i;
+extern proc _mm512_maskz_compress_epi64(k: uint(8), a: __m512i): __m512i;
+extern proc _pext_u32(a: c_uint, m: c_uint): c_uint;
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q6 tuned_v ; forme de la frontière, Zig) : blocs de 16 lignes : colonnes
+// élargies en i32, prédicat par comparaisons (bits de signe), produit prix × remise en i32 sélectionné par le masque,
+// accumulation en i64 (voies paires et impaires). Exactitude pour toute donnée de la spécification (docs/SPEC.md, K6)
+// : prix <= 50 000 et remise <= 10, donc produit <= 500 000 < 2^31 ; une voie de 64 bits reçoit au plus N6 / 16
+// produits. La variante tuned publiée est scalaire, vectorisée par LLVM.
+proc q6TunedV(sd: c_ptrConst(int(32)), d: c_ptrConst(uint(8)), q: c_ptrConst(uint(8)), pr: c_ptrConst(int(32)),
+              lo: int, hi: int): int {
+  const c8766 = _mm512_set1_epi32(8766), c9131 = _mm512_set1_epi32(9131), c5 = _mm512_set1_epi32(5),
+        c8 = _mm512_set1_epi32(8), c24 = _mm512_set1_epi32(24);
+  var a0 = _mm512_setzero_si512(), a1 = _mm512_setzero_si512();
+  var i = lo;
+  const stop = hi + 1 - (hi + 1 - lo) % 16;
+  while i < stop {
+    const vsd = _mm512_loadu_si512((sd + i): c_ptrConst(void)), vp = _mm512_loadu_si512((pr + i): c_ptrConst(void));
+    const vd = _mm512_cvtepu8_epi32(_mm_loadu_si128((d + i): c_ptrConst(void)));
+    const vq = _mm512_cvtepu8_epi32(_mm_loadu_si128((q + i): c_ptrConst(void)));
+    const m = ~_mm512_movepi32_mask(_mm512_sub_epi32(vsd, c8766)) & _mm512_movepi32_mask(_mm512_sub_epi32(vsd, c9131))
+            & ~_mm512_movepi32_mask(_mm512_sub_epi32(vd, c5)) & _mm512_movepi32_mask(_mm512_sub_epi32(vd, c8))
+            & _mm512_movepi32_mask(_mm512_sub_epi32(vq, c24));
+    const pv = _mm512_maskz_mullo_epi32(m, vp, vd);
+    a0 = _mm512_add_epi64(a0, _mm512_srai_epi64(_mm512_slli_epi64(pv, 32), 32));  // lignes paires
+    a1 = _mm512_add_epi64(a1, _mm512_srai_epi64(pv, 32));                          // lignes impaires
+    i += 16;
+  }
+  var s = _mm512_reduce_add_epi64(_mm512_add_epi64(a0, a1)): int;
+  for j in i..hi do  // reste (moins de 16 lignes) : scalaire
+    if sd[j] >= 8766 && sd[j] < 9131 && d[j] >= 5 && d[j] <= 7 && q[j] < 24 then s += pr[j]: int * d[j];
+  return s;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q1 tuned_v) : la forme de bench/chapel_exp (remarque sur Chapel, × 0,84),
+// recopiée : l'algorithme masqué de la référence C en intrinsèques importées. La variante tuned publiée agrège par
+// blocs et par groupe, vectorisée par LLVM.
+proc q1TunedV(sd: c_ptrConst(int(32)), pr: c_ptrConst(int(32)), q: c_ptrConst(uint(8)), d: c_ptrConst(uint(8)),
+             t: c_ptrConst(uint(8)), rf: c_ptrConst(uint(8)), ls: c_ptrConst(uint(8)), lo: int, hi: int, ref acc: [] int) {
+  // une passe masquée par tranche de 16 lignes, comme le C (les comparaisons à immédiat, des macros, ne s'importent
+  // pas : sd <= 10471 par le bit de signe de sd - 10472, l'égalité au groupe par testn)
+  const lim = _mm512_set1_epi32(10472), c100 = _mm512_set1_epi32(100);
+  var i = lo;
+  const stop = hi + 1 - (hi + 1 - lo) % 16;
+  while i < stop {
+    var aq, ap, adp, ace, aco: 6*__m512i;
+    var cnt: 6*int;
+    for param g in 0..<6 {
+      aq[g] = _mm512_setzero_si512(); ap[g] = aq[g]; adp[g] = aq[g]; ace[g] = aq[g]; aco[g] = aq[g];
+    }
+    const blockEnd = min(i + 4096, stop);
+    while i < blockEnd {
+      const pass = _mm512_movepi32_mask(_mm512_sub_epi32(_mm512_loadu_si512((sd + i): c_ptrConst(void)), lim));
+      const rfv = _mm512_cvtepu8_epi32(_mm_loadu_si128((rf + i): c_ptrConst(void)));
+      const vg = _mm512_add_epi32(_mm512_add_epi32(rfv, rfv), _mm512_cvtepu8_epi32(_mm_loadu_si128((ls + i): c_ptrConst(void))));
+      const vq = _mm512_cvtepu8_epi32(_mm_loadu_si128((q + i): c_ptrConst(void)));
+      const vd = _mm512_cvtepu8_epi32(_mm_loadu_si128((d + i): c_ptrConst(void)));
+      const vt = _mm512_add_epi32(_mm512_cvtepu8_epi32(_mm_loadu_si128((t + i): c_ptrConst(void))), c100);
+      const vp = _mm512_loadu_si512((pr + i): c_ptrConst(void));
+      const vdp = _mm512_mullo_epi32(vp, _mm512_sub_epi32(c100, vd));
+      const che = _mm512_mul_epi32(vdp, vt);                                                  // lignes paires
+      const cho = _mm512_mul_epi32(_mm512_srli_epi64(vdp, 32), _mm512_srli_epi64(vt, 32));   // lignes impaires
+      for param g in 0..<6 {
+        const x = _mm512_xor_si512(vg, _mm512_set1_epi32(g: int(32)));
+        const m = _mm512_mask_testn_epi32_mask(pass, x, x);
+        cnt[g] += popCount(m);
+        aq[g] = _mm512_mask_add_epi32(aq[g], m, aq[g], vq);
+        ap[g] = _mm512_mask_add_epi32(ap[g], m, ap[g], vp);
+        adp[g] = _mm512_mask_add_epi32(adp[g], m, adp[g], vdp);
+        ace[g] = _mm512_mask_add_epi64(ace[g], _pext_u32(m: c_uint, 0x5555: c_uint): uint(8), ace[g], che);
+        aco[g] = _mm512_mask_add_epi64(aco[g], _pext_u32(m: c_uint, 0xAAAA: c_uint): uint(8), aco[g], cho);
+      }
+      i += 16;
+    }
+    for param g in 0..<6 {
+      acc[g * 5] += cnt[g];
+      acc[g * 5 + 1] += _mm512_reduce_add_epi32(aq[g]);
+      acc[g * 5 + 2] += _mm512_reduce_add_epi32(ap[g]);
+      acc[g * 5 + 3] += _mm512_reduce_add_epi64(_mm512_cvtepi32_epi64(_mm512_castsi512_si256(adp[g])))
+                      + _mm512_reduce_add_epi64(_mm512_cvtepi32_epi64(_mm512_castsi512_si256(
+                          _mm512_maskz_compress_epi64(0xF0: uint(8), adp[g]))));
+      acc[g * 5 + 4] += _mm512_reduce_add_epi64(ace[g]) + _mm512_reduce_add_epi64(aco[g]);
+    }
+  }
+  for j in i..hi {  // reste (moins de 16 lignes) : scalaire
+    if sd[j] <= 10471 {
+      const g = (rf[j] * 2 + ls[j]): int;
+      const p = pr[j]: int, dp = p * (100 - d[j]);
+      acc[g * 5] += 1; acc[g * 5 + 1] += q[j]; acc[g * 5 + 2] += p; acc[g * 5 + 3] += dp; acc[g * 5 + 4] += dp * (100 + t[j]);
+    }
+  }
+}
 proc runK6(v: string, reps: int, p: string) {
   const sd = loadArr("k6_shipdate.i32", int(32)), pr = loadArr("k6_extendedprice.i32", int(32));
   const q = loadArr("k6_quantity.u8", uint(8)), d = loadArr("k6_discount.u8", uint(8)), t = loadArr("k6_tax.u8", uint(8));
@@ -312,6 +477,19 @@ proc runK6(v: string, reps: int, p: string) {
         else p6[th] = q6Tuned(sd, d, q, pr, lo, hi);
       }
       for th in 0..<4 { acc += parts[th]; s6 += p6[th]; }
+    } else if v == "mt_pool_v" {
+      // v4, point 4 (mt_pool_v) : le coforall de mt (tâches sur les fils gardés par le runtime : la réserve de
+      // fils de mt_pool, présente), chaque quart exécutant les formes tuned_v
+      var parts: [0..<4] [0..<30] int;
+      var p6: [0..<4] int;
+      coforall th in 0..<4 with (ref parts, ref p6) {
+        const lo = N6 / 4 * th, hi = N6 / 4 * (th + 1) - 1;
+        if isQ1 then q1TunedV(psd, ppr, pq, pd, pt, prf, pls, lo, hi, parts[th]);
+        else p6[th] = q6TunedV(psd, pd, pq, ppr, lo, hi);
+      }
+      for th in 0..<4 { acc += parts[th]; s6 += p6[th]; }
+    } else if v == "tuned_v" {
+      if isQ1 then q1TunedV(psd, ppr, pq, pd, pt, prf, pls, 0, N6 - 1, acc); else s6 = q6TunedV(psd, pd, pq, ppr, 0, N6 - 1);
     } else if v == "tuned" {
       if isQ1 then q1Tuned(psd, ppr, pq, pd, pt, prf, pls, 0, N6 - 1, acc); else s6 = q6Tuned(sd, d, q, pr, 0, N6 - 1);
     } else {
@@ -397,6 +575,62 @@ proc aBuild(ref a: [] ANode, ref top: int(32), d: int, ref c: int): int(32) {
 proc aSum(const ref a: [] ANode, i: int(32)): int {
   return if i < 0 then 0 else a[i].v + aSum(a, a[i].l) + aSum(a, a[i].r);
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada, et de bench/c_k8val) : l'état passe
+// par valeur, l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la procédure rend l'indice
+// libre suivant. Même arène, mêmes liens et mêmes valeurs que aBuild ; somme récursive par les liens (aSum).
+proc avBuild(ref a: [] ANode, i: int(32), d: int, q: int): int(32) {
+  a[i].v = q + i;
+  if d > 0 {
+    const l = i + 1, r = avBuild(a, l, d - 1, q);
+    a[i].l = l;
+    a[i].r = r;
+    return avBuild(a, r, d - 1, q);
+  }
+  a[i].l = -1;
+  a[i].r = -1;
+  return i + 1;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/c_k8it, remarque sur C) : construction et somme
+// itératives, piles explicites (tuples : aucune allocation). La construction descend à gauche en empilant le
+// sous-arbre droit de chaque nœud interne, puis le reprend à la feuille suivante : même ordre préfixe, mêmes liens et
+// mêmes valeurs que aBuild. Les piles tiennent par construction : au plus une entrée par niveau à la construction, au
+// plus profondeur + 1 à la somme.
+proc aiBuild(ref a: [] ANode, depth: int, q: int) {
+  if MS_K8_REQ >= 63 then compilerError("piles de K8 tuned_it : 64 entrées");
+  var stP: 64 * int(32), stD: 64 * int;
+  var sp = 0, d = depth, right = false;
+  var top: int(32) = 0, parent: int(32) = -1;
+  while true {
+    const i = top;
+    top += 1;
+    a[i].v = q + i;
+    if parent >= 0 {
+      if right then a[parent].r = i; else a[parent].l = i;
+    }
+    if d > 0 {
+      stP[sp] = i; stD[sp] = d - 1; sp += 1;
+      parent = i; right = false; d -= 1;
+    } else {
+      a[i].l = -1;
+      a[i].r = -1;
+      if sp == 0 then break;
+      sp -= 1;
+      parent = stP[sp]; d = stD[sp]; right = true;
+    }
+  }
+}
+proc aiSum(const ref a: [] ANode, root: int(32)): int {
+  var st: 64 * int(32);
+  var sp = 1, s = 0;
+  st[0] = root;
+  while sp > 0 {
+    sp -= 1;
+    const i = st[sp];
+    s += a[i].v;
+    if a[i].l >= 0 { st[sp] = a[i].r; st[sp + 1] = a[i].l; sp += 2; }
+  }
+  return s;
+}
 proc runK8(v: string, reps: int) {
   param Q = 16384;
   var cnt = 0;
@@ -415,6 +649,12 @@ proc runK8(v: string, reps: int) {
         var top: int(32) = 0;
         const root = aBuild(arena, top, MS_K8_REQ, c);
         s = aSum(arena, root);
+      } else if v == "tuned_val" {
+        avBuild(arena, 0, MS_K8_REQ, c);
+        s = aSum(arena, 0);
+      } else if v == "tuned_it" {
+        aiBuild(arena, MS_K8_REQ, c);
+        s = aiSum(arena, 0);
       } else {
         const t = tBuild(MS_K8_REQ, c);
         s = tSum(t.borrow());
@@ -451,6 +691,42 @@ proc k9Par(const ref a: [] real, ref b: [] real) {
     foreach j in 1..M9 - 2 do
       b[i, j] = 0.25 * (((a[i - 1, j] + a[i + 1, j]) + a[i, j - 1]) + a[i, j + 1]);
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K9 tuned_v ; forme de la frontière, Swift) : par ligne, vecteurs explicites de
+// 8 f64 (intrinsèques AVX-512 importées) : haut, bas, gauche et droite chargés en vecteurs, même ordre des additions
+// que la spécification, résultat écrit en vecteur, reste scalaire ; comme chez Swift, la boucle part de j = 1,
+// chargements et écriture non alignés. Les grilles sont les tableaux 2D de Chapel (contigus, ligne par ligne), lus par
+// pointeur. La variante tuned publiée est une boucle foreach vectorisée par LLVM.
+extern type __m512d;
+extern proc _mm512_set1_pd(x: real): __m512d;
+extern proc _mm512_loadu_pd(p: c_ptrConst(void)): __m512d;
+extern proc _mm512_storeu_pd(p: c_ptr(void), a: __m512d);
+extern proc _mm512_add_pd(a: __m512d, b: __m512d): __m512d;
+extern proc _mm512_mul_pd(a: __m512d, b: __m512d): __m512d;
+proc k9RowsV(a: c_ptrConst(real), b: c_ptr(real), r0: int, r1: int) {
+  const q4 = _mm512_set1_pd(0.25);
+  for i in r0..r1 {
+    const up = a + (i - 1) * M9, mid = a + i * M9, dn = a + (i + 1) * M9;
+    const o = b + i * M9;
+    var j = 1;
+    while j + 8 <= M9 - 1 {
+      const s = _mm512_add_pd(_mm512_add_pd(_mm512_add_pd(_mm512_loadu_pd((up + j): c_ptrConst(void)),
+                                                          _mm512_loadu_pd((dn + j): c_ptrConst(void))),
+                                            _mm512_loadu_pd((mid + j - 1): c_ptrConst(void))),
+                              _mm512_loadu_pd((mid + j + 1): c_ptrConst(void)));
+      _mm512_storeu_pd((o + j): c_ptr(void), _mm512_mul_pd(q4, s));
+      j += 8;
+    }
+    while j < M9 - 1 {
+      o[j] = 0.25 * (((up[j] + dn[j]) + mid[j - 1]) + mid[j + 1]);
+      j += 1;
+    }
+  }
+}
+// mt_pool_v (v4, point 4) : quatre quarts contigus par coforall (tâches sur les fils gardés par le runtime, la réserve
+// de mt_pool, présente), chacun en tuned_v
+proc k9ParV(a: c_ptrConst(real), b: c_ptr(real)) {
+  coforall th in 0..<4 do k9RowsV(a, b, 1 + (M9 - 2) * th / 4, (M9 - 2) * (th + 1) / 4);
+}
 proc runK9(v: string, reps: int) {
   var a, b: [0..<M9, 0..<M9] real;
   var sw: stopwatch;
@@ -461,6 +737,13 @@ proc runK9(v: string, reps: int) {
     for 1..2 {  // 4 itérations : a -> b -> a -> b -> a
       if v == "natural" { k9Natural(a, b); k9Natural(b, a); }
       else if v == "tuned" { k9Rows(a, b, 1, M9 - 2); k9Rows(b, a, 1, M9 - 2); }
+      else if v == "tuned_v" {
+        k9RowsV(c_ptrToConst(a[0, 0]), c_ptrTo(b[0, 0]), 1, M9 - 2);
+        k9RowsV(c_ptrToConst(b[0, 0]), c_ptrTo(a[0, 0]), 1, M9 - 2);
+      } else if v == "mt_pool_v" {
+        k9ParV(c_ptrToConst(a[0, 0]), c_ptrTo(b[0, 0]));
+        k9ParV(c_ptrToConst(b[0, 0]), c_ptrTo(a[0, 0]));
+      }
       else { k9Par(a, b); k9Par(b, a); }
     }
     sw.stop();

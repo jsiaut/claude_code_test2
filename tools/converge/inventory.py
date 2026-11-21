@@ -279,6 +279,36 @@ INV = {
         "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "chaque quart : K9_Rows publiée"),
         "k9 mt_pool_v": e(E, [("k9", "mt_pool_v", "")], "chaque quart : tuned_v"),
     },
+    "chapel": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : intrinsèques AVX-512BW importées par extern proc"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits (OS.POSIX.memcpy)"),
+        "k5 tuned_v": e(E, [("k5", "tuned_v", "")], "intrinsèques AVX-512 importées (FMA, quatre accumulateurs), "
+                        "binaire ms_tuned ; la variante tuned publiée est une boucle simple vectorisée par LLVM sous "
+                        "--no-ieee-float"),
+        "q6 tuned_v": e(E, [("k6", "tuned_v", "q6")], "intrinsèques importées ; comparaisons par le bit de signe d'une "
+                        "différence (les comparaisons à immédiat sont des macros, non importables) ; la variante tuned "
+                        "publiée est scalaire, vectorisée par LLVM"),
+        "q6 tuned_s": SANS_REPLI,
+        "q1 tuned_v": e(E, [("k6", "tuned_v", "q1")], "forme de bench/chapel_exp (remarque sur Chapel, × 0,84), recopiée : "
+                        "la référence C en intrinsèques importées ; la variante tuned publiée agrège par blocs et par "
+                        "groupe", True),
+        "q1 tuned_s": SANS_REPLI,
+        "q6 mt_pool": e(P, [("k6", "mt", "q6")], "coforall : tâches sur les fils gardés par le runtime (créés une fois)"),
+        "q6 mt_pool_v": e(E, [("k6", "mt_pool_v", "q6")], "coforall, chaque quart : tuned_v"),
+        "q6 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "q1 mt_pool": e(P, [("k6", "mt", "q1")], "coforall (fils du runtime)"),
+        "q1 mt_pool_v": e(E, [("k6", "mt_pool_v", "q1")], "coforall, chaque quart : tuned_v"),
+        "q1 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "k7 tuned_pf": e(P, [("k7", "tuned", "")], "la forme de la frontière ; le module Prefetch n'expose que "
+                         "__builtin_prefetch(addr), un préchargement en lecture"),
+        "k7 tuned_oa": SANS_REPLI,
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "procédure récursive, état en paramètres et en retour"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "piles en tuples (64 * int(32)) : aucune allocation"),
+        "k9 tuned_v": e(E, [("k9", "tuned_v", "")], "intrinsèques importées sur les tableaux 2D de Chapel lus par "
+                        "pointeur, j depuis 1 ; la variante tuned publiée est une boucle foreach vectorisée par LLVM"),
+        "k9 mt_pool": e(P, [("k9", "mt", "")], "forall (fils du runtime), quatre blocs de lignes"),
+        "k9 mt_pool_v": e(E, [("k9", "mt_pool_v", "")], "coforall, quatre quarts : tuned_v"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
     "nim": {

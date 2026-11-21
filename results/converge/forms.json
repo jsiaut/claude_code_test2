@@ -2055,6 +2055,238 @@
     "remarque": false,
     "ceiling": "K9 mt"
    }
+  },
+  "chapel": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : intrinsèques AVX-512BW importées par extern proc",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "mots de 64 bits (OS.POSIX.memcpy)",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k5",
+      "tuned_v",
+      ""
+     ]
+    ],
+    "note": "intrinsèques AVX-512 importées (FMA, quatre accumulateurs), binaire ms_tuned ; la variante tuned publiée est une boucle simple vectorisée par LLVM sous --no-ieee-float",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_v",
+      "q6"
+     ]
+    ],
+    "note": "intrinsèques importées ; comparaisons par le bit de signe d'une différence (les comparaisons à immédiat sont des macros, non importables) ; la variante tuned publiée est scalaire, vectorisée par LLVM",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_v",
+      "q1"
+     ]
+    ],
+    "note": "forme de bench/chapel_exp (remarque sur Chapel, × 0,84), recopiée : la référence C en intrinsèques importées ; la variante tuned publiée agrège par blocs et par groupe",
+    "remarque": true,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q6"
+     ]
+    ],
+    "note": "coforall : tâches sur les fils gardés par le runtime (créés une fois)",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_v",
+      "q6"
+     ]
+    ],
+    "note": "coforall, chaque quart : tuned_v",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q1"
+     ]
+    ],
+    "note": "coforall (fils du runtime)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_v",
+      "q1"
+     ]
+    ],
+    "note": "coforall, chaque quart : tuned_v",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "présente",
+    "cells": [
+     [
+      "k7",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "la forme de la frontière ; le module Prefetch n'expose que __builtin_prefetch(addr), un préchargement en lecture",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "procédure récursive, état en paramètres et en retour",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "piles en tuples (64 * int(32)) : aucune allocation",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "tuned_v",
+      ""
+     ]
+    ],
+    "note": "intrinsèques importées sur les tableaux 2D de Chapel lus par pointeur, j depuis 1 ; la variante tuned publiée est une boucle foreach vectorisée par LLVM",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "mt",
+      ""
+     ]
+    ],
+    "note": "forall (fils du runtime), quatre blocs de lignes",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "mt_pool_v",
+      ""
+     ]
+    ],
+    "note": "coforall, quatre quarts : tuned_v",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }

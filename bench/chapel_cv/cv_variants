@@ -1,1 +1,11 @@
 k4 tuned
+k4 swar
+k5 tuned_v
+k6 tuned_v q6
+k6 tuned_v q1
+k6 mt_pool_v q6
+k6 mt_pool_v q1
+k8 tuned_val
+k8 tuned_it
+k9 tuned_v
+k9 mt_pool_v
