@@ -9,3 +9,5 @@
 2026-11-21T10:07:36 passe 0 groupe 7/9 k8 72 processus 732s
 2026-11-21T10:17:42 passe 0 groupe 8/9 k3 50 processus 604s
 2026-11-21T10:39:36 passe 0 groupe 9/9 k9 113 processus 1311s
+2026-11-21T10:39:38 passe 1 : 9 groupes ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-21T10:46:30 passe 1 groupe 1/9 k3 50 processus 412s
