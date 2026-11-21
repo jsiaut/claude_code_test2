@@ -592,6 +592,44 @@ INV = {
         "k9 mt_pool": e(P, [("k9", "mt", "")], "forkOn (capacités du runtime)"),
         "k9 mt_pool_v": e(S, note="tuned_v de K9 présente : mt_pool l'exécute"),
     },
+    "ocaml": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : sans SIMD (aucun type vectoriel), huit octets par mot "
+                      "Int64, somme des voies par multiplication à chaque mot"),
+        "k4 swar": e(E, [("k4", "swar", "")], "voies de 16 bits en Int64 (le int de 63 bits ne tient pas quatre voies), "
+                     "vidées toutes les 128 mots"),
+        "k5 tuned_v": e(N, note="aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/ocaml.txt) ; "
+                        "la forme à huit accumulateurs de la remarque (× 0,97, dans le bruit) n'est pas reprise"),
+        "q6 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "q6 tuned_s": e(E, [("k6", "tuned_s", "q6")], "forme de bench/ocaml_exp (remarque sur OCaml, tuned_m, × 0,86), "
+                        "recopiée : masque tiré des bits de signe des cinq bornes, s += prix × remise × m ; la variante "
+                        "tuned publiée fait cinq comparaisons (Bool.to_int)", True),
+        "q1 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "q1 tuned_s": e(E, [("k6", "tuned_s", "q1")], "une passe, 30 références locales, masques par décalage arithmétique ; "
+                        "plus lente que la variante tuned publiée à l'essai (379 contre 115 ms)"),
+        "q6 mt_pool": e(E, [("k6", "mt_pool", "q6")], "trois domaines créés une fois, barrière par Mutex et Condition "
+                        "(la bibliothèque standard n'en a pas), le domaine principal traite le quart 0 ; la variante mt "
+                        "publiée crée ses domaines à chaque appel ; chaque quart : q6_tuned publiée"),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 non écrivible"),
+        "q6 mt_pool_s": e(E, [("k6", "mt_pool_s", "q6")], "chaque quart : tuned_s (mt_m de la remarque, ici par la "
+                          "réserve)", True),
+        "q1 mt_pool": e(E, [("k6", "mt_pool", "q1")], "chaque quart : q1_tuned publiée"),
+        "q1 mt_pool_v": e(S, note="tuned_v de Q1 non écrivible"),
+        "q1 mt_pool_s": e(E, [("k6", "mt_pool_s", "q1")], "chaque quart : tuned_s"),
+        "k7 tuned_pf": e(N, note="aucun préchargement (grille E4 = 0, results/probes/ocaml.txt)"),
+        "k7 tuned_oa": e(E, [("k7", "tuned_oa", "")], "forme de bench/ocaml_exp (remarque sur OCaml, tuned_p, × 0,875), "
+                         "recopiée : cases de deux mots (clé et compteur de 30 bits dans un entier, somme dans l'autre), "
+                         "c'est-à-dire la table de tuned_pf sans préchargement ; la variante tuned publiée prend trois "
+                         "mots par case. Le plan (section 2) la range parmi les formes propres au runtime (champs de "
+                         "deux mots d'OCaml) : comptée ici comme repli, la cellule du plafond est la même (K7)", True),
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "forme de bench/ocaml_exp (remarque sur OCaml, × 0,77), "
+                          "recopiée", True),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "piles de 64 entrées (tableaux alloués une fois ; profondeur "
+                         "vérifiée au lancement)"),
+        "k9 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0) ; la forme floatarray de la remarque (× 0,945) "
+                        "n'est pas reprise : gain sous 10 %, et ce n'est pas une forme du catalogue"),
+        "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "réserve de domaines, chaque quart : k9_rows publiée"),
+        "k9 mt_pool_v": e(S, note="tuned_v de K9 non écrivible"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
     "java": {

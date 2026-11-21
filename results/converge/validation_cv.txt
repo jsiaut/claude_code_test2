@@ -1,4 +1,4 @@
-# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 18:30 UTC (haskell), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 18:33 UTC (ocaml), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 # langage noyau variante paramètre : temps (s), somme de contrôle, verdict
 c k1 natural energy : 0.0359 1049202.377034 juste
 c k1 aos energy : 0.02788 1049202.377035 juste
@@ -655,34 +655,45 @@ haskell k8 tuned_it - : 0.09729 2508056453121 juste
 haskell k9 natural - : 0.1001 2.095103199218750e6 juste
 haskell k9 tuned - : 0.02281 2.095103199218750e6 juste
 haskell k9 mt - : 0.01078 2.095103199218750e6 juste
-ocaml k1 natural energy : 0.07461 1049202.377006 juste
-ocaml k1 aos energy : 0.0384 1049202.377006 juste
-ocaml k1 soa energy : 0.007876 1049202.377006 juste
-ocaml k1 natural_shuffled energy : 0.1633 1049202.377006 juste
-ocaml k2 tuned 16384 : 0.01356 3568 juste
-ocaml k2 tuned 262144 : 0.0335 46960 juste
-ocaml k2 tuned 8388608 : 0.1548 1325440 juste
-ocaml k3 rmw_padded - : 0.3157 134217728 juste
-ocaml k3 sw_padded - : 0.429 134217728 juste
-ocaml k4 natural_unsorted - : 0.109 1605908545 juste
-ocaml k4 branchless_unsorted - : 0.02317 1605908545 juste
-ocaml k4 tuned - : 0.005644 1605908545 juste
-ocaml k5 natural - : 0.2175 509.0857 juste
-ocaml k5 tuned - : 0.07438 509.0857 juste
-ocaml k6 natural q6 : 0.1607 45333132534 juste
-ocaml k6 natural q1 : 0.1778 3997084032331541 juste
-ocaml k6 tuned q6 : 0.09684 45333132534 juste
-ocaml k6 tuned q1 : 0.1128 3997084032331541 juste
-ocaml k6 mt q6 : 0.03496 45333132534 juste
-ocaml k6 mt q1 : 0.03103 3997084032331541 juste
-ocaml k7 natural - : 3.951 1048575:4294504410765 juste
-ocaml k7 tuned - : 0.3113 1048575:4294504410765 juste
-ocaml k8 natural - : 0.2691 2508056453121 juste
-ocaml k8 tuned - : 0.2386 2508056453121 juste
-ocaml k9 natural - : 0.2659 2.095103199218750e+06 juste
-ocaml k9 tuned - : 0.04685 2.095103199218750e+06 juste
-ocaml k9 mt - : 0.01636 2.095103199218750e+06 juste
-ocaml k9 natural_flat - : 0.2574 2.095103199218750e+06 juste
+ocaml k1 natural energy : 0.07329 1049202.377006 juste
+ocaml k1 aos energy : 0.03943 1049202.377006 juste
+ocaml k1 soa energy : 0.01108 1049202.377006 juste
+ocaml k1 natural_shuffled energy : 0.1594 1049202.377006 juste
+ocaml k2 tuned 16384 : 0.01363 3568 juste
+ocaml k2 tuned 262144 : 0.03183 46960 juste
+ocaml k2 tuned 8388608 : 0.1598 1325440 juste
+ocaml k3 rmw_padded - : 0.3461 134217728 juste
+ocaml k3 sw_padded - : 0.4319 134217728 juste
+ocaml k4 natural_unsorted - : 0.1082 1605908545 juste
+ocaml k4 branchless_unsorted - : 0.03064 1605908545 juste
+ocaml k4 tuned - : 0.005639 1605908545 juste
+ocaml k4 swar - : 0.005711 1605908545 juste
+ocaml k5 natural - : 0.2227 509.0857 juste
+ocaml k5 tuned - : 0.08142 509.0857 juste
+ocaml k6 natural q6 : 0.1751 45333132534 juste
+ocaml k6 natural q1 : 0.1245 3997084032331541 juste
+ocaml k6 tuned q6 : 0.09327 45333132534 juste
+ocaml k6 tuned q1 : 0.1097 3997084032331541 juste
+ocaml k6 mt q6 : 0.05219 45333132534 juste
+ocaml k6 mt q1 : 0.04476 3997084032331541 juste
+ocaml k6 tuned_s q6 : 0.08056 45333132534 juste
+ocaml k6 tuned_s q1 : 0.3922 3997084032331541 juste
+ocaml k6 mt_pool q6 : 0.0354 45333132534 juste
+ocaml k6 mt_pool q1 : 0.05508 3997084032331541 juste
+ocaml k6 mt_pool_s q6 : 0.03228 45333132534 juste
+ocaml k6 mt_pool_s q1 : 0.1498 3997084032331541 juste
+ocaml k7 natural - : 3.962 1048575:4294504410765 juste
+ocaml k7 tuned - : 0.4086 1048575:4294504410765 juste
+ocaml k7 tuned_oa - : 0.3283 1048575:4294504410765 juste
+ocaml k8 natural - : 0.3027 2508056453121 juste
+ocaml k8 tuned - : 0.2299 2508056453121 juste
+ocaml k8 tuned_val - : 0.2159 2508056453121 juste
+ocaml k8 tuned_it - : 0.1693 2508056453121 juste
+ocaml k9 natural - : 0.2492 2.095103199218750e+06 juste
+ocaml k9 tuned - : 0.04467 2.095103199218750e+06 juste
+ocaml k9 mt - : 0.02329 2.095103199218750e+06 juste
+ocaml k9 natural_flat - : 0.2479 2.095103199218750e+06 juste
+ocaml k9 mt_pool - : 0.01856 2.095103199218750e+06 juste
 python k1 natural energy : 0.5489 1049202.377006 juste
 python k1 aos energy : 0.9027 1049202.377006 juste
 python k1 soa energy : 0.7351 1049202.377006 juste
@@ -861,4 +872,4 @@ julia k9 tuned - : 0.01698 2.095103199218750e+06 juste
 julia k9 mt - : 0.007475 2.095103199218750e+06 juste
 julia k9 tuned_v - : 0.01573 2.095103199218750e+06 juste
 julia k9 mt_pool_v - : 0.01221 2.095103199218750e+06 juste
-# 861 cellules, 861 justes, 0 fausses
+# 872 cellules, 872 justes, 0 fausses
