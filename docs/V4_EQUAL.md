@@ -1,4 +1,4 @@
-# v4, point 3 : des conditions égales — plan (21 novembre 2026)
+# v4, point 3 : des conditions égales — plan et résultats (21 novembre 2026)
 
 *Plan d'ensemble : `docs/V4_PLAN.md` (point 3). Ce plan est poussé avant tout changement de code et toute mesure ; les
 écarts éventuels seront datés et justifiés dans `docs/METHODOLOGY.md`.*
@@ -267,3 +267,159 @@ l'effet mesuré ici : il est publié à côté du classement (README, ce documen
 3. Copies et constructions, sondes de mode, validation ; outils poussés avant la campagne.
 4. Campagne.
 5. Analyse, documents, journal.
+
+## 11. Résultats (21 novembre, après la campagne)
+
+*Tableaux complets (places, rangs espérés, scores au centre, rangs plausibles, étages, rapports de temps de chaque
+règle) : `results/report_equal.md` ; toutes les sorties : `results/equal/analysis.json` (`analysis/equal_v4.py`). Les
+calculs sont ceux de la section 8, sur les seules données de la machine 32 (5.1). Le contrôle de 11.6 est hors plan.*
+
+### 11.1 Campagne
+
+* Lancée le 21 novembre à 8 h 50, constructions prêtes ; passe 0 jusqu'à 10 h 39 (1 h 49, étalonnage compris),
+  passe 1 jusqu'à 12 h 02 (1 h 23), passe 2 jusqu'à 13 h 28 (1 h 26), sans redémarrage.
+* 2 559 processus : trois passes de 853, qui couvrent les mêmes cellules, sans doublon ; tous sur le même modèle de
+  processeur (6/207/2). Aucun échec : sommes de contrôle justes, code de retour nul, aucun arrêt pour la mémoire ou la
+  durée. Aucun processus au-delà de 5 % de vol de temps (4,0 % au plus), donc aucun refait.
+* b3 à la fin de la campagne, machine au repos : 84,55 et 84,75 ms (`results/equal/k3_ref_end.txt`), contre 84,15 et
+  84,85 au début ; b3 = 84,58 ms. Les décalages rapides sont les mêmes qu'au début (8, puis 36 à 48).
+* K2 à 8 Mio (3.5, descriptif) : hors Lua (0,37 à 0,55 s, plus lent à toutes les tailles), 70 des 72 processus
+  prennent 0,149 à 0,243 s ; deux sont plus lents, Java (0,34 s) et OCaml (0,51 s, dans la plage du régime lent de la
+  machine 31). La sonde de 5.1 n'en avait trouvé aucun sur 60 processus du C : le régime lent existe aussi sur la
+  machine 32, plus rare.
+
+### 11.2 Classements
+
+Places ; lignes dans l'ordre de « Toutes » (rang espéré entre parenthèses). « Publié » : le classement de tête du
+README.
+
+| Langage | Publié | Hôte | R1 | R1' | R2 | R3 | R4 | Toutes (rang espéré) | Toutes, R1' |
+|---|---|---|---|---|---|---|---|---|---|
+| C | 1 | 1 | 1 | 1 | 1 | 2 | 1 | 1 (1,64) | 1 |
+| C++ | 3 | 2 | 3 | 2 | 2 | 1 | 2 | 2 (2,87) | 2 |
+| Odin | 2 | 4 | 4 | 4 | 5 | 5 | 4 | 3 (5,18) | 4 |
+| Zig | 5 | 8 | 9 | 8 | 8 | 4 | 6 | 4 (5,40) | 3 |
+| C3 | 4 | 3 | 2 | 3 | 3 | 3 | 3 | 5 (5,81) | 5 |
+| Rust | 6 | 7 | 7 | 7 | 7 | 9 | 5 | 6 (6,48) | 7 |
+| Nim | 7 | 5 | 5 | 5 | 4 | 6 | 8 | 7 (7,25) | 8 |
+| Ada | 9 | 10 | 8 | 9 | 10 | 8 | 10 | 8 (7,26) | 6 |
+| D | 8 | 6 | 6 | 6 | 6 | 7 | 9 | 9 (8,42) | 9 |
+| Mojo | 14 | 12 | 12 | 12 | 12 | 11 | 13 | 10 (9,87) | 11 |
+| Chapel | 10 | 9 | 10 | 10 | 9 | 10 | 7 | 11 (10,65) | 10 |
+| Swift | 12 | 11 | 11 | 11 | 11 | 12 | 11 | 12 (10,67) | 12 |
+| Fortran | 11 | 14 | 14 | 14 | 14 | 13 | 14 | 13 (12,10) | 13 |
+| Julia | 13 | 13 | 13 | 13 | 13 | 14 | 12 | 14 (12,88) | 14 |
+| C# | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 (14,11) | 15 |
+| FreePascal | 16 | 16 | 16 | 16 | 16 | 16 | 17 | 16 (15,93) | 16 |
+| Java | 17 | 17 | 17 | 17 | 17 | 17 | 16 | 17 (17,09) | 17 |
+| Go | 18 | 18 | 18 | 18 | 18 | 18 | 18 | 18 (17,44) | 18 |
+| Haskell | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 (18,95) | 19 |
+| OCaml | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 (20,26) | 20 |
+| BQN | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 (21,44) | 21 |
+| JavaScript | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 22 (22,23) | 23 |
+| PHP | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 23 (22,24) | 22 |
+| Python | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 (24,13) | 24 |
+| Lua | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 (24,68) | 25 |
+
+Étages (paires ordonnées dans au moins 95 % des variantes), les mêmes dans les huit calculs : les 18 premiers |
+Haskell | OCaml, BQN, PHP, JavaScript, Python, Lua.
+
+### 11.3 Réplication : machine 31 et machine 32
+
+* Le calcul « Hôte » de la machine 32 et celui de la machine 31 (point 2 : même modèle de processeur, L3 effectif plus
+  grand) ne diffèrent de plus de deux places pour aucun langage ; Odin (6e → 4e) et Chapel (11e → 9e) en gagnent deux.
+* Par rapport au classement publié, Zig (5e → 8e) et Fortran (11e → 14e) reculent de trois places sur les deux hôtes ;
+  Odin, Nim et D, qui bougeaient de trois ou quatre places sur la machine 31 (2e → 6e, 7e → 4e, 8e → 5e), en bougent
+  deux sur la machine 32 (4e, 5e, 6e). L'effet de l'hôte du point 2 (`docs/V4_SIZES.md`, 10.5) se retrouve donc, dans
+  le même sens, un peu plus faible.
+
+### 11.4 Effet de chaque règle
+
+Rapports de temps (moyennes géométriques des médianes de processus) de chaque nouvelle cellule à sa référence :
+`results/report_equal.md`. Les rapports cités ici se retrouvent à chacune des trois passes. Les mécanismes des écarts
+de temps ne sont pas examinés.
+
+* **R1, vérifications actives (8 langages) : aucun langage ne bouge de plus de deux places.** Moyenne géométrique
+  des 9 cellules naturelles, mode R1 / mode publié : C 1,00 (seules les rangées de taille connue de son K9 sont
+  vérifiables, 5.2), D 1,05, Fortran 1,09, C++ 1,13 (K9 ×2,1 : sa grille imbriquée, 22 à 26 ms → 48 à 50), C3 1,21
+  (K5 ×1,7), Zig 1,44 (K4 ×10 : 6 à 12 ms → 78 à 83), FreePascal 1,70 (K6 Q1 ×7,5, K9 ×3,4), Chapel 2,33 (K9 ×20 :
+  15 à 19 ms → 323 à 332 ; K6 Q1 ×9,6, Q6 ×4,0, K5 ×2,3). Le code naturel ne compte guère que dans D1, la moitié du
+  code par défaut, soit un huitième du score au centre, et il y est déjà loin de la frontière : le D1 de Chapel passe de
+  0,150 à 0,065, ce qui lui retire un point de score. Le reste du mouvement vient de D3 : les latences de K8 naturel
+  (p99,9 et maximum d'une itération, rapportés aux meilleurs des 25 langages) viennent des nouveaux processus, et
+  leur maximum varie d'un processus à l'autre bien plus que les temps (C : 0,17 à 0,76 ms pour le binaire publié,
+  0,19 à 5,2 ms en mode R1, pour un rapport des temps de 1,02). C++ perd ainsi 3,8 points de code par défaut par D3
+  et 1,0 par D1 ; FreePascal en gagne 6,4 par D3 ; les meilleures latences, qui servent de référence, montent, et
+  les langages hors de R1 gagnent 0,5 à 1,8 point par D3. Les échanges de places de R1 (C3 et C++, Zig et Ada) tiennent
+  à ces latences (11.6).
+* **R1', aucune vérification (9 langages) : aucun langage ne bouge de plus de deux places.** Mode R1' / mode publié :
+  Ada 0,66 (K7 ×0,15 : 6,0 à 6,2 s → 0,7 à 1,3 ; K9 ×0,37 ; K6 Q1 ×0,50), Mojo 0,78 (K9 ×0,17, K6 Q1 ×0,33), Swift
+  0,81 (K4 ×0,23 : 78 à 80 ms → 18), Odin 0,81 (K6 Q6 ×0,25), Go 0,87 (K6 Q6 ×0,43), OCaml 0,91 (K5 ×0,72), Nim
+  0,93, Julia et D 0,99. Trois cellules sont plus lentes sans vérifications : K4 de Mojo (×1,50), K8 de Julia
+  (×1,18), K9 d'Odin (×1,13). Ada gagne 2,9 points de code par défaut par D1 et en perd autant par D3 ; avec les
+  latences de K8 des binaires publiés, il passe de la 10e à la 7e place (11.6).
+* **R2, stencil contigu (13 langages) : aucun langage ne bouge de plus d'une place** (Nim et Odin échangent les 4e et
+  5e). K9 contigu / imbriqué, mode publié : Swift 0,35, JavaScript 0,44, Nim 0,56, Rust 0,72, D 0,74, Mojo et OCaml
+  0,77, Go 0,81 ; C++ 1,00 et Java 1,05 ; PHP 1,28, Lua 1,63, Python 1,83. Avec les vérifications de R1, la grille
+  contiguë gagne davantage (C++ 0,77, D 0,63) ; sans vérifications, davantage pour Swift (0,22), Nim (0,51) et Mojo
+  (0,59), moins pour Go (0,94) et D (0,82). Le code optimisé de K9 était déjà contigu : le plafond de K9 ne bouge que
+  pour Nim, Java, JavaScript et Lua, où la variante naturelle est ou devient la meilleure à un fil (0,02 au plus).
+* **R3, K4 `tuned` (24 langages) : Zig gagne quatre places (8e → 4e)**, seul déplacement de plus de deux places ; C++
+  passe 1er, Ada gagne deux places, Rust en perd deux. Les formes `tuned` de 19 langages prennent 0,58 à 1,30 ms (17
+  entre 0,58 et 0,79 ms ; Haskell 1,24, Fortran 1,30), à la bande passante en lecture d'un cœur ou près d'elle (borne
+  physique de K4 sur cet hôte, 16 Mio lus à la bande passante mesurée à cette taille : 0,59 ms) ; celles d'OCaml, de
+  JavaScript et de PHP 5,5 à 7,2 ms, de Python 68 ms, de Lua 212 ms. La cellule K4 du plafond monte surtout pour les
+  langages dont la meilleure forme publiée était lente : FreePascal 0,07 → 0,95, C# 0,09 → 0,94, Go 0,10 → 0,89,
+  Fortran 0,09 → 0,44, Mojo 0,14 → 0,77, Zig 0,18 → 0,95 (6,5 → 0,61 ms), Ada 0,25 → 0,94, C++ 0,27 → 0,91. Elle
+  baisse un peu là où elle ne gagne rien, parce que la frontière passe de 1,17 ms (Chapel, forme publiée) à 0,58 ms
+  (C3, `tuned`) : Chapel 1,00 → 0,95, Swift 0,76 → 0,73, BQN (sans variante `tuned`, 5.2) 0,29 → 0,14.
+* **R4, K3 rapporté à b3 (25 langages) : Nim (5e → 8e) et D (6e → 9e) reculent de trois places** ; Rust (7e → 5e),
+  Zig (8e → 6e) et Chapel (9e → 7e) en gagnent deux. Les boucles de K3 (meilleur de `sw_padded` et `rmw_padded`) se
+  répartissent presque comme au point 2 (FreePascal, du côté rapide sur la machine 31, est ici entre les deux) : D,
+  C3 et Nim du côté rapide (16,7 à 19,5 ms), C++, Mojo, Ada et FreePascal entre les deux (25 à 48 ms), C, Fortran,
+  Zig, Chapel, Rust, Odin, Swift, Java, C# et Julia du côté lent (86 à 92 ms), autour de b3 (84,6 ms). Rapportées à
+  b3, elles valent toutes 0,92 à 1, au lieu de 0,18 à 1 rapportées à la frontière (D) : K3 ne sépare plus ces
+  langages, mais garde l'écart avec ceux qui ne peuvent pas écrire sans `lock` (Go 0,34, OCaml 0,25, Haskell 0,23,
+  JavaScript 0,16) et avec les interprétés (0,03 au plus). La cellule K3 de C passe de 0,19 à 0,96, son plafond de
+  61,7 à 75,6.
+
+### 11.5 Toutes les règles ensemble
+
+* **« Toutes » (R1, R2, R3, R4 : les règles du point 3) : Zig (8e → 4e) et D (6e → 9e) bougent de plus de deux
+  places.** Odin passe 3e ; C3 (3e → 5e), Nim (5e → 7e) et Chapel (9e → 11e) reculent de deux places, Ada
+  (10e → 8e) et Mojo (12e → 10e) en gagnent deux. Les scores montent (C : 70,6 → 76,2), par le plafond (C : 61,7 →
+  78,0), surtout par R4 et R3.
+* **« Toutes, R1' » : Zig (8e → 3e), Ada (10e → 6e), Nim (5e → 8e) et D (6e → 9e).**
+* Les étages ne changent pas (11.2).
+* Par rapport au classement publié, dont le K3 vient surtout de Cascade Lake, où l'effet de placement n'existe pas
+  (`docs/V4_SIZES.md`, 10.5), « Toutes » ne déplace de plus de deux places que Mojo (14e → 10e) ; « Hôte » en déplace
+  deux (Zig et Fortran, 11.3).
+
+### 11.6 Contrôle hors plan : latences de K8
+
+Écrit après la première exécution de l'analyse, pour mesurer ce que D3 fait aux déplacements (11.4). Les calculs R1,
+R1', « Toutes » et « Toutes, R1' » sont refaits avec les latences de K8 des binaires publiés : les temps des nouvelles
+cellules sont substitués, pas les latences (`analysis/equal_v4_lat.py`, `results/equal/lat_check.txt`).
+
+| Calcul | Plus de deux places contre « Hôte », plan | Contrôle |
+|---|---|---|
+| R1 | aucun | aucun (Ada et Chapel échangent les 9e et 10e places) |
+| R1' | aucun | Ada 10e → 7e |
+| Toutes | Zig 8e → 4e, D 6e → 9e | Zig 8e → 3e, Ada 10e → 7e, Nim 5e → 8e, D 6e → 9e, Chapel 9e → 12e |
+| Toutes, R1' | Zig 8e → 3e, Ada 10e → 6e, Nim 5e → 8e, D 6e → 9e | Zig 8e → 3e, Ada 10e → 6e, D 6e → 9e |
+
+Ne dépendent pas des latences de K8 : la montée de Zig (quatre ou cinq places) et le recul de D (trois places) dans
+les deux calculs combinés, la montée d'Ada dans « Toutes, R1' » (quatre places). Sont au seuil, à deux ou trois places
+selon les latences : les reculs de Nim et de Chapel et la montée d'Ada dans « Toutes », le recul de Nim dans
+« Toutes, R1' ».
+
+### 11.7 Ce que cela change
+
+* Le classement de tête du README ne change pas (section 9). R1 à R5 s'appliqueront dans la campagne finale de la v4,
+  qui réunira les points 2 à 4.
+* Les règles qui touchent au plafond (R3, R4) déplacent le plus ; celles qui touchent au code naturel (R1, R2) peu,
+  parce que le code naturel ne pèse qu'un huitième du score au centre et qu'il est déjà loin de la frontière, même
+  quand une vérification multiplie un temps par 10 ou 20.
+* Un constat sera examiné avant la campagne finale, comme ceux du point 2 (`docs/V4_SIZES.md`, 10.6) : la part D3 du
+  code par défaut dépend des maxima de latence de quelques processus de K8, qui varient d'un processus à l'autre bien
+  plus que les temps ; ici, elle déplace des langages autant que les vérifications elles-mêmes.

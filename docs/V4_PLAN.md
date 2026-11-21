@@ -80,11 +80,15 @@ moyenne des trois tailles ; l'hôte en déplace cinq de trois ou quatre places.
 
 Point 3 : plan détaillé dans `docs/V4_EQUAL.md` (21 novembre, poussé avant tout changement de code et toute mesure) :
 vérifications du code naturel actives pour tous, stencil naturel contigu pour tous, K4 `tuned` avec SIMD explicite, et
-deux conditions de mesure trouvées au point 2 (placement de la boucle de K3, régimes de K2 à 8 Mio).
+deux conditions de mesure trouvées au point 2 (placement de la boucle de K3, régimes de K2 à 8 Mio). Résultats le
+21 novembre (section 11) : les vérifications et le stencil contigu ne déplacent aucun langage de plus de deux places ;
+le SIMD explicite dans K4 fait monter Zig de quatre places, K3 rapporté à une boucle de référence fait reculer Nim et D
+de trois ; ensemble, les règles déplacent Zig (8e → 4e) et D (6e → 9e).
 
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
 une fois le point précédent terminé. Machine : l'hôte actuel est un Xeon Granite Rapids (modèle 173), une troisième
 micro-architecture ; les campagnes y seront appariées à un témoin C, comme les précédentes, et le choix de l'hôte sera
 fixé dans chaque plan. (20 novembre : depuis le redémarrage de 1 h 19, l'hôte est un Xeon Emerald Rapids, modèle 207,
-machine 31 : `docs/V4_SIZES.md`, 7.2.)
+machine 31 : `docs/V4_SIZES.md`, 7.2. 21 novembre : depuis le redémarrage de 7 h 30, machine 32, du même modèle, au L3
+effectif plus petit : `docs/V4_EQUAL.md`, 5.1.)

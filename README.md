@@ -1,8 +1,8 @@
 # Quels langages incarnent le mieux la *mechanical sympathy* ?
 
 *Classement mesuré de 25 langages, octobre et novembre 2026 (Swift ajouté le 5 novembre, FreePascal et BQN le 6, PHP
-le 7 ; grille de contrôle auditée le 19, une sonde par case ; trois tailles par noyau mesurées le 20, à côté du
-classement).*
+le 7 ; grille de contrôle auditée le 19, une sonde par case ; trois tailles par noyau mesurées le 20 et des conditions
+égales le 21, à côté du classement).*
 
 Un seul critère : la *mechanical sympathy* au sens large, c'est-à-dire la capacité d'un langage à faire écrire du
 code en accord avec le matériel : disposition des données, SIMD, hiérarchie mémoire, concurrence, allocation,
@@ -323,6 +323,66 @@ Les onze suivants restent à une place au plus de leur rang publié dans chacun 
   (11e → 14e). Le premier moteur est l'écrivain unique de K3, dont la boucle coûte un ou sept cycles par incrément
   selon sa place dans sa ligne de 64 octets (point 5 de « Ce qui sépare vraiment les langages ») : l'effet, établi sur
   Emerald Rapids, existe aussi sur Granite Rapids, mais pas sur Cascade Lake, d'où vient le K3 du classement.
+
+### Des conditions égales (v4, point 3 ; à côté du classement)
+
+Trois conditions n'étaient pas les mêmes pour tous les langages : les vérifications à l'exécution du code naturel
+(actives dans le mode publié de 17 langages, absentes de celui des 8 autres), la structure du stencil naturel
+(contigu dans 12 langages, tableau de tableaux dans 13) et l'interdiction du SIMD explicite dans K4 ; le point 2 en a
+trouvé une quatrième, la place de la boucle de K3 dans sa ligne de 64 octets. Le point 3 de la v4 a mesuré l'effet de
+quatre règles communes : **R1**, vérifications actives pour tous (**R1'**, aucune vérification, en sensibilité) ;
+**R2**, stencil naturel contigu pour tous ; **R3**, une variante `tuned` de K4, SIMD explicite compris ; **R4**, K3
+rapporté à une boucle de référence mesurée sur l'hôte. Une seule campagne, sur un même hôte (Emerald Rapids,
+machine 32 : 2 559 processus en trois passes, base comprise), avec un plan et une analyse fixés avant les mesures
+([`docs/V4_EQUAL.md`](docs/V4_EQUAL.md), [`results/report_equal.md`](results/report_equal.md)). Le classement
+ci-dessus ne change pas : ces règles s'appliqueront dans la campagne finale de la v4, quel que soit leur effet mesuré
+ici.
+
+| Publié | Langage | Cet hôte | R1 | R2 | R3 | R4 | Toutes | Toutes, R1' |
+|---|---|---|---|---|---|---|---|---|
+| 1 | C | 1 | 1 | 1 | 2 | 1 | 1 | 1 |
+| 2 | Odin | 4 | 4 | 5 | 5 | 4 | 3 | 4 |
+| 3 | C++ | 2 | 3 | 2 | 1 | 2 | 2 | 2 |
+| 4 | C3 | 3 | 2 | 3 | 3 | 3 | 5 | 5 |
+| 5 | Zig | 8 | 9 | 8 | 4 | 6 | 4 | 3 |
+| 6 | Rust | 7 | 7 | 7 | 9 | 5 | 6 | 7 |
+| 7 | Nim | 5 | 5 | 4 | 6 | 8 | 7 | 8 |
+| 8 | D | 6 | 6 | 6 | 7 | 9 | 9 | 9 |
+| 9 | Ada | 10 | 8 | 10 | 8 | 10 | 8 | 6 |
+| 10 | Chapel | 9 | 10 | 9 | 10 | 7 | 11 | 10 |
+| 11 | Fortran | 14 | 14 | 14 | 13 | 14 | 13 | 13 |
+| 12 | Swift | 11 | 11 | 11 | 12 | 11 | 12 | 12 |
+| 13 | Julia | 13 | 13 | 13 | 14 | 12 | 14 | 14 |
+| 14 | Mojo | 12 | 12 | 12 | 11 | 13 | 10 | 11 |
+
+Les onze suivants restent à une place au plus de leur rang publié dans chacun de ces calculs (R1' compris).
+
+* **Les vérifications et le stencil bougent peu.** Ni R1, ni R1', ni R2 ne déplacent un langage de plus de deux
+  places. Les vérifications coûtent pourtant cher à certains noyaux naturels : le stencil de Chapel prend 20 fois son
+  temps avec `--checks`, le K4 de Zig 10 fois en `-O safe`, la requête Q1 de FreePascal 7,5 fois avec `-Cr -Co` ;
+  sans vérifications (`-gnatp`), Ada fait son agrégation par hachage en 0,15 fois son temps publié. Mais le code
+  naturel ne compte guère que pour un huitième du score, et il y est déjà loin de la frontière : Chapel, le plus
+  touché, perd un point par son code naturel. Une part de ce qui bouge vient des latences de queue de K8, qui varient
+  d'un processus à l'autre bien plus que les temps : avec celles des binaires publiés, R1' fait monter Ada de trois
+  places (10e → 7e).
+* **Le SIMD explicite dans K4 fait monter Zig de quatre places** (8e → 4e) : sa meilleure forme publiée prenait
+  6,5 ms, sa forme en `@Vector` 0,61 ms. Les formes `tuned` de 19 langages font K4 en 0,58 à 1,30 ms, à la bande
+  passante d'un cœur ou près d'elle ; K4 ne sépare plus que six langages, de 4,1 à 212 ms : BQN, OCaml, JavaScript,
+  PHP, Python et Lua.
+* **K3 rapporté à une boucle de référence fait reculer Nim et D de trois places** (5e → 8e, 6e → 9e). Sur cet hôte,
+  la boucle de l'écrivain unique est rapide ou lente selon la forme du code émis et sa place dans sa ligne de 64
+  octets : celles de D, C3 et Nim prennent 17 à 20 ms, celles de C, Rust, Odin, Zig, Chapel, Swift, Julia, Fortran, C#
+  et Java 86 à 92 ms. Rapportées à la médiane des 16 places de la boucle de référence (84,6 ms), elles valent toutes
+  0,92 à 1 ; l'écart reste entier avec les langages qui ne peuvent pas écrire sans `lock` (Go, OCaml, Haskell,
+  JavaScript : 0,16 à 0,34).
+* **Ensemble, les règles du point 3 déplacent de plus de deux places Zig (8e → 4e) et D (6e → 9e)** ; avec R1' au
+  lieu de R1, aussi Ada (10e → 6e) et Nim (5e → 8e). Un contrôle hors plan, avec les latences de K8 des binaires
+  publiés, montre que la montée de Zig, le recul de D et, avec R1', la montée d'Ada ne dépendent pas de ces latences ;
+  les autres déplacements de Nim, de Chapel et d'Ada sont au seuil (deux ou trois places selon les latences).
+* **Réplication.** Le calcul à la taille publiée sur cet hôte et celui du point 2 (machine 31, même modèle de
+  processeur) ne diffèrent de plus de deux places pour aucun langage ; sur les deux, Zig (5e → 8e) et Fortran
+  (11e → 14e) reculent de trois places par rapport au classement publié. Avec les règles du point 3 (« Toutes »),
+  seul Mojo s'écarte de plus de deux places du classement publié (14e → 10e).
 
 ## Pourquoi cet ordre, langage par langage
 
@@ -1066,7 +1126,9 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   ([`docs/GRID_AUDIT.md`](docs/GRID_AUDIT.md), [`results/grid_audit/summary.md`](results/grid_audit/summary.md),
   [`results/grid_audit/report_errata.md`](results/grid_audit/report_errata.md)). Point 2, trois tailles par noyau :
   plan, écarts, campagne, contrôle et résultats ([`docs/V4_SIZES.md`](docs/V4_SIZES.md),
-  [`results/report_sizes.md`](results/report_sizes.md)).
+  [`results/report_sizes.md`](results/report_sizes.md)). Point 3, des conditions égales (vérifications, stencil, SIMD
+  explicite dans K4, placement de K3) : plan, écarts, campagne, contrôle et résultats
+  ([`docs/V4_EQUAL.md`](docs/V4_EQUAL.md), [`results/report_equal.md`](results/report_equal.md)).
 * La sensibilité « sans SIMD explicite », le classement des variantes (types vectoriels du langage, intrinsèques de la
   plateforme, intrinsèques importées) et le décompte corrigé des formes de Q1 (9 contre 5) :
   [`docs/NOSIMD.md`](docs/NOSIMD.md) et [`results/report_nosimd.md`](results/report_nosimd.md) ; note d'explication

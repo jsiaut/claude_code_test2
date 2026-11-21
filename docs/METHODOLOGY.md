@@ -1635,3 +1635,18 @@ Robustesse :
   (`results/equal/probes`) ; D aussi mesuré en R1', comme le prévoit le tableau 3.1 (5.2). Validation : les 198
   nouvelles cellules justes (`results/equal/validation.txt`). Pilote, validation et analyse poussés avant la campagne
   (967d7d9).
+* 2026-11-21, 8:50 à 13:50 : **v4, point 3 : campagne et résultats** (`docs/V4_EQUAL.md`, 11 ;
+  `results/report_equal.md` ; `results/equal/analysis.json`). Campagne sur la machine 32, de 8:50 à 13:28, sans
+  redémarrage : 2 559 processus (trois passes de 853, mêmes cellules), un seul modèle de processeur, aucun échec,
+  aucun processus au-delà de 5 % de vol de temps ; b3 de fin, machine au repos : 84,55 et 84,75 ms (début : 84,15 et
+  84,85). Résultats : R1, R1' et R2 ne déplacent aucun langage de plus de deux places, malgré de grands écarts de
+  temps (Chapel avec `--checks` : K9 ×20 ; Zig en `-O safe` : K4 ×10 ; Ada en `-gnatp` : K7 ×0,15), parce que le code
+  naturel ne compte guère que dans D1 et y est déjà loin de la frontière ; R3 fait monter Zig de quatre places, R4 fait
+  reculer Nim et D de trois ; ensemble, Zig (8e → 4e) et D (6e → 9e), et avec R1' aussi Ada et Nim. Réplication :
+  « Hôte » de la machine 32 et de la machine 31 à deux places au plus. Constat à la lecture des sorties : sous R1 et
+  R1', la part D3 (latences de K8 des nouveaux processus) bouge autant que D1, parce que le maximum de latence varie
+  d'un processus à l'autre bien plus que les temps. Contrôle hors plan, ajouté après la première exécution de
+  l'analyse et sans changer ses calculs : les quatre calculs concernés refaits avec les latences de K8 des binaires
+  publiés (`analysis/equal_v4_lat.py`, `results/equal/lat_check.txt`) ; la montée de Zig, le recul de D et, avec R1',
+  la montée d'Ada n'en dépendent pas, les autres déplacements de plus de deux places sont au seuil. Le classement de
+  tête ne change pas (section 9 du plan).
