@@ -697,8 +697,56 @@ INV = {
                         "segment partagé (shmop)"),
         "k9 mt_pool_v": e(S, note="tuned_v de K9 non écrivible"),
     },
+    "js": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : sans SIMD (grille C1 = 0 : SIMD.js retiré, le SIMD de "
+                      "WebAssembly n'est pas exposé à JavaScript), quatre octets par mot de 32 bits (vue Uint32Array), "
+                      "voies de 16 bits vidées toutes les 128 mots : la forme swar"),
+        "k4 swar": e(P, [("k4", "tuned", "")], "la variante tuned du point 3 : mots de 32 bits, le plus large entier des "
+                     "opérations bit à bit de JavaScript"),
+        "k5 tuned_v": e(N, note="aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/js.txt) ; la "
+                        "forme de la remarque sur données f64 (rq_f64) en tient lieu"),
+        "q6 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "q6 tuned_s": e(E, [("k6", "tuned_s", "q6")], "forme de bench/js_exp (remarque sur JavaScript, tuned_m, × 0,60), "
+                        "recopiée : masque par négation, sommes entières de 32 bits par blocs de 4096 lignes ; la "
+                        "variante tuned publiée multiplie par le prédicat, en f64", True),
+        "q1 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "q1 tuned_s": e(E, [("k6", "tuned_s", "q1")], "une passe, 30 variables locales, masques par décalage du bit de "
+                        "signe en entiers de 32 bits ; la variante tuned publiée accumule dans un Float64Array"),
+        "q6 mt_pool": e(P, [("k6", "mt", "q6")], "Workers créés avant la mesure (worker_threads, colonnes en "
+                        "SharedArrayBuffer, grille D1 = ½), réveillés par message à chaque appel, le fil principal en "
+                        "attente ; chaque quart : q6Tuned publiée"),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 non écrivible"),
+        "q6 mt_pool_s": e(E, [("k6", "mt_pool_s", "q6")], "les Workers de mt, chaque quart : tuned_s (mt_m de la "
+                          "remarque, × 0,65)", True),
+        "q1 mt_pool": e(P, [("k6", "mt", "q1")], "Workers créés avant la mesure ; chaque quart : q1Tuned publiée"),
+        "q1 mt_pool_v": e(S, note="tuned_v de Q1 non écrivible"),
+        "q1 mt_pool_s": e(E, [("k6", "mt_pool_s", "q1")], "les Workers de mt, chaque quart : tuned_s"),
+        "k7 tuned_pf": e(N, note="aucun préchargement (grille E4 = 0, results/probes/js.txt)"),
+        "k7 tuned_oa": e(P, [("k7", "tuned", "")], "la variante tuned publiée : cases de 16 octets [clé u32, compte u32, "
+                         "somme f64] par deux vues typées d'un ArrayBuffer, hachage de Fibonacci (Math.imul), sondage "
+                         "linéaire, sans préchargement"),
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour (la variante "
+                          "tuned publiée passe l'état par des variables globales)"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "forme de bench/js_exp (remarque sur JavaScript, × 0,73), "
+                         "recopiée : piles de 64 entrées (profondeur vérifiée)", True),
+        "k9 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "k9 mt_pool": e(P, [("k9", "mt", "")], "Workers créés avant la mesure, grilles en SharedArrayBuffer"),
+        "k9 mt_pool_v": e(S, note="tuned_v de K9 non écrivible"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
+    "js": {
+        "k5 rq_f64": {**e(E, [("k5", "rq_f64", "")], "forme de bench/js_exp (remarque sur JavaScript, tuned_f64, × 0,88) : "
+                          "k5Tuned sur des copies Float64Array, la conversion faite dans le chrono (la remarque la "
+                          "faisait hors chrono) ; classée propre au runtime par le plan (3.5 : conversion des tableaux "
+                          "typés)", True), "ceiling": "K5"},
+        "k9 rq_slide": {**e(E, [("k9", "rq_slide", "")], "forme de bench/js_exp (remarque sur JavaScript, tuned_v, "
+                            "× 0,88) : vues de lignes, voisins de gauche et du centre gardés dans des variables ; "
+                            "classée propre au runtime (écart daté, docs/V4_CONVERGE.md 4.2 : le coût de chaque lecture "
+                            "d'élément)", True), "ceiling": "K9"},
+        "k9 rq_slide_mt": {**e(E, [("k9", "rq_slide_mt", "")], "les Workers de mt, chaque quart : rq_slide (mt_v de la "
+                               "remarque, × 0,83)", True), "ceiling": "K9 mt"},
+    },
     "java": {
         "k7 rq_iso": {**e(E, [("k7", "rq_iso", "")], "forme de bench/java_exp (remarque sur Java, tuned_iso, × 0,72) : "
                           "la boucle de la variante tuned dans sa propre méthode ; son gain tient à l'unité de "

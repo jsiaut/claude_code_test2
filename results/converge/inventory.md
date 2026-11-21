@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 22 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go, Haskell, OCaml, BQN, PHP).
+Langages relevés : 23 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go, Haskell, OCaml, BQN, PHP, JavaScript).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -569,3 +569,31 @@ Langages relevés : 22 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k9 tuned_v` | K9 | non écrivible | — | aucun type vectoriel (grille C1 = 0) |
 | `k9 mt_pool` | K9 mt | présente | `k9 mt` | processus créés avant la mesure, lignes voisines échangées par un segment partagé (shmop) |
 | `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 non écrivible |
+
+## JavaScript
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : sans SIMD (grille C1 = 0 : SIMD.js retiré, le SIMD de WebAssembly n'est pas exposé à JavaScript), quatre octets par mot de 32 bits (vue Uint32Array), voies de 16 bits vidées toutes les 128 mots : la forme swar |
+| `k4 swar` | K4 | présente | `k4 tuned` | la variante tuned du point 3 : mots de 32 bits, le plus large entier des opérations bit à bit de JavaScript |
+| `k5 tuned_v` | K5 | non écrivible | — | aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/js.txt) ; la forme de la remarque sur données f64 (rq_f64) en tient lieu |
+| `q6 tuned_v` | Q6 | non écrivible | — | aucun type vectoriel (grille C1 = 0) |
+| `q6 tuned_s` (R) | Q6 | écrite | `k6 tuned_s q6` | forme de bench/js_exp (remarque sur JavaScript, tuned_m, × 0,60), recopiée : masque par négation, sommes entières de 32 bits par blocs de 4096 lignes ; la variante tuned publiée multiplie par le prédicat, en f64 |
+| `q1 tuned_v` | Q1 | non écrivible | — | aucun type vectoriel (grille C1 = 0) |
+| `q1 tuned_s` | Q1 | écrite | `k6 tuned_s q1` | une passe, 30 variables locales, masques par décalage du bit de signe en entiers de 32 bits ; la variante tuned publiée accumule dans un Float64Array |
+| `q6 mt_pool` | Q6 mt | présente | `k6 mt q6` | Workers créés avant la mesure (worker_threads, colonnes en SharedArrayBuffer, grille D1 = ½), réveillés par message à chaque appel, le fil principal en attente ; chaque quart : q6Tuned publiée |
+| `q6 mt_pool_v` | Q6 mt | sans objet | — | tuned_v de Q6 non écrivible |
+| `q6 mt_pool_s` (R) | Q6 mt | écrite | `k6 mt_pool_s q6` | les Workers de mt, chaque quart : tuned_s (mt_m de la remarque, × 0,65) |
+| `q1 mt_pool` | Q1 mt | présente | `k6 mt q1` | Workers créés avant la mesure ; chaque quart : q1Tuned publiée |
+| `q1 mt_pool_v` | Q1 mt | sans objet | — | tuned_v de Q1 non écrivible |
+| `q1 mt_pool_s` | Q1 mt | écrite | `k6 mt_pool_s q1` | les Workers de mt, chaque quart : tuned_s |
+| `k7 tuned_pf` | K7 | non écrivible | — | aucun préchargement (grille E4 = 0, results/probes/js.txt) |
+| `k7 tuned_oa` | K7 | présente | `k7 tuned` | la variante tuned publiée : cases de 16 octets [clé u32, compte u32, somme f64] par deux vues typées d'un ArrayBuffer, hachage de Fibonacci (Math.imul), sondage linéaire, sans préchargement |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | fonction récursive, état en paramètres et en retour (la variante tuned publiée passe l'état par des variables globales) |
+| `k8 tuned_it` (R) | K8 | écrite | `k8 tuned_it` | forme de bench/js_exp (remarque sur JavaScript, × 0,73), recopiée : piles de 64 entrées (profondeur vérifiée) |
+| `k9 tuned_v` | K9 | non écrivible | — | aucun type vectoriel (grille C1 = 0) |
+| `k9 mt_pool` | K9 mt | présente | `k9 mt` | Workers créés avant la mesure, grilles en SharedArrayBuffer |
+| `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 non écrivible |
+| `k5 rq_f64` (R) | K5 | écrite | `k5 rq_f64` | forme de bench/js_exp (remarque sur JavaScript, tuned_f64, × 0,88) : k5Tuned sur des copies Float64Array, la conversion faite dans le chrono (la remarque la faisait hors chrono) ; classée propre au runtime par le plan (3.5 : conversion des tableaux typés) |
+| `k9 rq_slide` (R) | K9 | écrite | `k9 rq_slide` | forme de bench/js_exp (remarque sur JavaScript, tuned_v, × 0,88) : vues de lignes, voisins de gauche et du centre gardés dans des variables ; classée propre au runtime (écart daté, docs/V4_CONVERGE.md 4.2 : le coût de chaque lecture d'élément) |
+| `k9 rq_slide_mt` (R) | K9 mt | écrite | `k9 rq_slide_mt` | les Workers de mt, chaque quart : rq_slide (mt_v de la remarque, × 0,83) |

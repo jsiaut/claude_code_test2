@@ -4931,6 +4931,259 @@
     "remarque": false,
     "ceiling": "K9 mt"
    }
+  },
+  "js": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : sans SIMD (grille C1 = 0 : SIMD.js retiré, le SIMD de WebAssembly n'est pas exposé à JavaScript), quatre octets par mot de 32 bits (vue Uint32Array), voies de 16 bits vidées toutes les 128 mots : la forme swar",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "présente",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "la variante tuned du point 3 : mots de 32 bits, le plus large entier des opérations bit à bit de JavaScript",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/js.txt) ; la forme de la remarque sur données f64 (rq_f64) en tient lieu",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel (grille C1 = 0)",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_s",
+      "q6"
+     ]
+    ],
+    "note": "forme de bench/js_exp (remarque sur JavaScript, tuned_m, × 0,60), recopiée : masque par négation, sommes entières de 32 bits par blocs de 4096 lignes ; la variante tuned publiée multiplie par le prédicat, en f64",
+    "remarque": true,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel (grille C1 = 0)",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_s",
+      "q1"
+     ]
+    ],
+    "note": "une passe, 30 variables locales, masques par décalage du bit de signe en entiers de 32 bits ; la variante tuned publiée accumule dans un Float64Array",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q6"
+     ]
+    ],
+    "note": "Workers créés avant la mesure (worker_threads, colonnes en SharedArrayBuffer, grille D1 = ½), réveillés par message à chaque appel, le fil principal en attente ; chaque quart : q6Tuned publiée",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q6 non écrivible",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_s",
+      "q6"
+     ]
+    ],
+    "note": "les Workers de mt, chaque quart : tuned_s (mt_m de la remarque, × 0,65)",
+    "remarque": true,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q1"
+     ]
+    ],
+    "note": "Workers créés avant la mesure ; chaque quart : q1Tuned publiée",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q1 non écrivible",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_s",
+      "q1"
+     ]
+    ],
+    "note": "les Workers de mt, chaque quart : tuned_s",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun préchargement (grille E4 = 0, results/probes/js.txt)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "présente",
+    "cells": [
+     [
+      "k7",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "la variante tuned publiée : cases de 16 octets [clé u32, compte u32, somme f64] par deux vues typées d'un ArrayBuffer, hachage de Fibonacci (Math.imul), sondage linéaire, sans préchargement",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "fonction récursive, état en paramètres et en retour (la variante tuned publiée passe l'état par des variables globales)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "forme de bench/js_exp (remarque sur JavaScript, × 0,73), recopiée : piles de 64 entrées (profondeur vérifiée)",
+    "remarque": true,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel (grille C1 = 0)",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "mt",
+      ""
+     ]
+    ],
+    "note": "Workers créés avant la mesure, grilles en SharedArrayBuffer",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de K9 non écrivible",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k5 rq_f64": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k5",
+      "rq_f64",
+      ""
+     ]
+    ],
+    "note": "forme de bench/js_exp (remarque sur JavaScript, tuned_f64, × 0,88) : k5Tuned sur des copies Float64Array, la conversion faite dans le chrono (la remarque la faisait hors chrono) ; classée propre au runtime par le plan (3.5 : conversion des tableaux typés)",
+    "remarque": true,
+    "ceiling": "K5"
+   },
+   "k9 rq_slide": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "rq_slide",
+      ""
+     ]
+    ],
+    "note": "forme de bench/js_exp (remarque sur JavaScript, tuned_v, × 0,88) : vues de lignes, voisins de gauche et du centre gardés dans des variables ; classée propre au runtime (écart daté, docs/V4_CONVERGE.md 4.2 : le coût de chaque lecture d'élément)",
+    "remarque": true,
+    "ceiling": "K9"
+   },
+   "k9 rq_slide_mt": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "rq_slide_mt",
+      ""
+     ]
+    ],
+    "note": "les Workers de mt, chaque quart : rq_slide (mt_v de la remarque, × 0,83)",
+    "remarque": true,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }

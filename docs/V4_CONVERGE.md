@@ -208,6 +208,18 @@ configuration d'un runtime est décrit et n'entre pas au catalogue (règle 3.2, 
   3. **Catalogue.** `tuned_a` (K9) est retiré : l'alignement ne change rien de mesurable. Les autres formes restent ;
      les écarts de la section 2 seront remesurés sur la base corrigée.
 
+### 4.2 Écarts datés pendant le portage (21 novembre)
+
+* **K9 à voisins glissants** (Lua 0,87, JavaScript 0,88 : section 2) : la forme manque au tableau du catalogue (3.3).
+  Elle est classée propre au runtime (3.5) : son gain tient au coût de chaque lecture d'élément dans ces runtimes
+  (vérifications de bornes et de type de V8, accès aux tables de Lua) ; un langage compilé garde lui-même les voisins
+  dans ses registres, ou vectorise la boucle, ce que cette forme empêcherait. Elle est recopiée de la copie de la
+  remarque sous le nom `rq_slide`, avec sa version à quatre fils `rq_slide_mt` (les fils de la variante `mt` du
+  langage, chaque quart : `rq_slide`), plafond K9 et K9 à quatre fils.
+* **K5 sur données f64 de JavaScript** (`rq_f64`) : la copie de la remarque convertissait les données hors chrono ; la
+  conversion est faite dans le chrono, une fois par répétition (3.2, 1 : le calcul sur les données telles qu'elles
+  sont stockées), pour un coût négligeable (2048 éléments, contre 65 536 produits scalaires par répétition).
+
 ## 5. Code
 
 * **Copies** `bench/<langage>_cv`, faites depuis `bench/<langage>_eq` (source publié, K4 `tuned` de R3, K9 naturel
