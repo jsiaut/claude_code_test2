@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 8 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D).
+Langages relevés : 9 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -215,3 +215,28 @@ Langages relevés : 8 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D).
 | `k9 tuned_v` | K9 | présente | `k9 tuned` | double8 de core.simd, loadUnaligned et storeUnaligned, j depuis 1 |
 | `k9 mt_pool` | K9 mt | écrite | `k9 mt_pool` | chaque quart : k9Rows publiée (tuned_v) |
 | `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 présente : mt_pool l'exécute |
+
+## Ada
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : type vectoriel GCC et builtins importés (vpmovb2m, vmovdqu8 masqué, vpsadbw) |
+| `k4 swar` | K4 | écrite | `k4 swar` | mots de 64 bits lus par superposition d'adresse |
+| `k5 tuned_v` | K5 | présente | `k5 tuned` | type vectoriel GCC de 16 Float, builtin FMA, quatre accumulateurs |
+| `q6 tuned_v` | Q6 | écrite | `k6 tuned_v q6` | type vectoriel GCC et builtins AVX-512 importés (pmovzxbd, comparaisons vers masque, pmulld masqué) ; la variante tuned publiée est scalaire, vectorisée par GCC |
+| `q6 tuned_s` | Q6 | sans objet | — | forme principale présente ou écrite |
+| `q1 tuned_v` | Q1 | écrite | `k6 tuned_v q1` | la référence C en builtins importés (popcount, pext, pmuldq) ; boucle des six groupes déroulée (pragma Loop_Optimize (Unroll) : 70 → 22 ms) ; la variante tuned publiée agrège par blocs et par groupe en scalaire |
+| `q1 tuned_s` | Q1 | sans objet | — | forme principale présente ou écrite |
+| `q6 mt_pool` | Q6 mt | écrite | `k6 mt_pool q6` | trois tâches Ada créées une fois, rendez-vous Go et Done ; chaque quart : Q6_Tuned publiée |
+| `q6 mt_pool_v` | Q6 mt | écrite | `k6 mt_pool_v q6` | chaque quart : tuned_v |
+| `q6 mt_pool_s` | Q6 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `q1 mt_pool` | Q1 mt | écrite | `k6 mt_pool q1` | chaque quart : Q1_Tuned publiée |
+| `q1 mt_pool_v` | Q1 mt | écrite | `k6 mt_pool_v q1` | chaque quart : tuned_v |
+| `q1 mt_pool_s` | Q1 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `k7 tuned_pf` | K7 | présente | `k7 tuned` | lots de 16, __builtin_prefetch(p, 1, 0) importé (écriture) |
+| `k7 tuned_oa` | K7 | sans objet | — | forme principale présente ou écrite |
+| `k8 tuned_val` | K8 | présente | `k8 tuned` | la forme de la frontière : paramètres in out de types élémentaires, passés par copie (RM 6.2) |
+| `k8 tuned_it` | K8 | écrite | `k8 tuned_it` | piles en tableaux fixes (0 .. 63) |
+| `k9 tuned_v` | K9 | écrite | `k9 tuned_v` | type vectoriel GCC de 8 Long_Float, builtins loadupd, addpd, mulpd, storeupd, j depuis 1 ; la variante tuned publiée est une boucle scalaire vectorisée par GCC |
+| `k9 mt_pool` | K9 mt | écrite | `k9 mt_pool` | chaque quart : K9_Rows publiée |
+| `k9 mt_pool_v` | K9 mt | écrite | `k9 mt_pool_v` | chaque quart : tuned_v |

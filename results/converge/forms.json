@@ -1823,6 +1823,238 @@
     "remarque": false,
     "ceiling": "K9 mt"
    }
+  },
+  "ada": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : type vectoriel GCC et builtins importés (vpmovb2m, vmovdqu8 masqué, vpsadbw)",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "mots de 64 bits lus par superposition d'adresse",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k5",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "type vectoriel GCC de 16 Float, builtin FMA, quatre accumulateurs",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_v",
+      "q6"
+     ]
+    ],
+    "note": "type vectoriel GCC et builtins AVX-512 importés (pmovzxbd, comparaisons vers masque, pmulld masqué) ; la variante tuned publiée est scalaire, vectorisée par GCC",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_v",
+      "q1"
+     ]
+    ],
+    "note": "la référence C en builtins importés (popcount, pext, pmuldq) ; boucle des six groupes déroulée (pragma Loop_Optimize (Unroll) : 70 → 22 ms) ; la variante tuned publiée agrège par blocs et par groupe en scalaire",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool",
+      "q6"
+     ]
+    ],
+    "note": "trois tâches Ada créées une fois, rendez-vous Go et Done ; chaque quart : Q6_Tuned publiée",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_v",
+      "q6"
+     ]
+    ],
+    "note": "chaque quart : tuned_v",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool",
+      "q1"
+     ]
+    ],
+    "note": "chaque quart : Q1_Tuned publiée",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_v",
+      "q1"
+     ]
+    ],
+    "note": "chaque quart : tuned_v",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "présente",
+    "cells": [
+     [
+      "k7",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "lots de 16, __builtin_prefetch(p, 1, 0) importé (écriture)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "présente",
+    "cells": [
+     [
+      "k8",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "la forme de la frontière : paramètres in out de types élémentaires, passés par copie (RM 6.2)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "piles en tableaux fixes (0 .. 63)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "tuned_v",
+      ""
+     ]
+    ],
+    "note": "type vectoriel GCC de 8 Long_Float, builtins loadupd, addpd, mulpd, storeupd, j depuis 1 ; la variante tuned publiée est une boucle scalaire vectorisée par GCC",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "mt_pool",
+      ""
+     ]
+    ],
+    "note": "chaque quart : K9_Rows publiée",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "mt_pool_v",
+      ""
+     ]
+    ],
+    "note": "chaque quart : tuned_v",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }

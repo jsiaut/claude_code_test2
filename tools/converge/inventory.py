@@ -248,6 +248,37 @@ INV = {
         "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "chaque quart : k9Rows publiée (tuned_v)"),
         "k9 mt_pool_v": e(S, note="tuned_v de K9 présente : mt_pool l'exécute"),
     },
+    "ada": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : type vectoriel GCC et builtins importés (vpmovb2m, "
+                      "vmovdqu8 masqué, vpsadbw)"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits lus par superposition d'adresse"),
+        "k5 tuned_v": e(P, [("k5", "tuned", "")], "type vectoriel GCC de 16 Float, builtin FMA, quatre accumulateurs"),
+        "q6 tuned_v": e(E, [("k6", "tuned_v", "q6")], "type vectoriel GCC et builtins AVX-512 importés (pmovzxbd, "
+                        "comparaisons vers masque, pmulld masqué) ; la variante tuned publiée est scalaire, vectorisée "
+                        "par GCC"),
+        "q6 tuned_s": SANS_REPLI,
+        "q1 tuned_v": e(E, [("k6", "tuned_v", "q1")], "la référence C en builtins importés (popcount, pext, pmuldq) ; "
+                        "boucle des six groupes déroulée (pragma Loop_Optimize (Unroll) : 70 → 22 ms) ; la variante "
+                        "tuned publiée agrège par blocs et par groupe en scalaire"),
+        "q1 tuned_s": SANS_REPLI,
+        "q6 mt_pool": e(E, [("k6", "mt_pool", "q6")], "trois tâches Ada créées une fois, rendez-vous Go et Done ; chaque "
+                        "quart : Q6_Tuned publiée"),
+        "q6 mt_pool_v": e(E, [("k6", "mt_pool_v", "q6")], "chaque quart : tuned_v"),
+        "q6 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "q1 mt_pool": e(E, [("k6", "mt_pool", "q1")], "chaque quart : Q1_Tuned publiée"),
+        "q1 mt_pool_v": e(E, [("k6", "mt_pool_v", "q1")], "chaque quart : tuned_v"),
+        "q1 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "k7 tuned_pf": e(P, [("k7", "tuned", "")], "lots de 16, __builtin_prefetch(p, 1, 0) importé (écriture)"),
+        "k7 tuned_oa": SANS_REPLI,
+        "k8 tuned_val": e(P, [("k8", "tuned", "")], "la forme de la frontière : paramètres in out de types élémentaires, "
+                          "passés par copie (RM 6.2)"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "piles en tableaux fixes (0 .. 63)"),
+        "k9 tuned_v": e(E, [("k9", "tuned_v", "")], "type vectoriel GCC de 8 Long_Float, builtins loadupd, addpd, "
+                        "mulpd, storeupd, j depuis 1 ; la variante tuned publiée est une boucle scalaire vectorisée par "
+                        "GCC"),
+        "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "chaque quart : K9_Rows publiée"),
+        "k9 mt_pool_v": e(E, [("k9", "mt_pool_v", "")], "chaque quart : tuned_v"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
     "nim": {

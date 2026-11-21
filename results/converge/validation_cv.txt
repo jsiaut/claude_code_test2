@@ -1,4 +1,4 @@
-# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 17:33 UTC (d), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 17:39 UTC (ada), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 # langage noyau variante paramètre : temps (s), somme de contrôle, verdict
 c k1 natural energy : 0.0359 1049202.377034 juste
 c k1 aos energy : 0.02788 1049202.377035 juste
@@ -299,34 +299,45 @@ nim k9 natural_flat - : 0.02677 2.095103199218750e+006 juste
 nim k9 tuned_v - : 0.01456 2.095103199218750e+006 juste
 nim k9 mt_pool - : 0.004206 2.095103199218750e+006 juste
 nim k9 mt_pool_v - : 0.004106 2.095103199218750e+006 juste
-ada k1 natural energy : 0.0299 1049202.377008 juste
-ada k1 aos energy : 0.02708 1049202.377017 juste
-ada k1 soa energy : 0.005751 1049202.377035 juste
-ada k1 natural_shuffled energy : 0.03046 1049202.377008 juste
-ada k2 tuned 16384 : 0.01045 3568 juste
-ada k2 tuned 262144 : 0.02833 46960 juste
-ada k2 tuned 8388608 : 0.1963 1325440 juste
-ada k3 rmw_padded - : 0.3157 134217728 juste
-ada k3 sw_padded - : 0.01336 134217728 juste
-ada k4 natural_unsorted - : 0.006706 1605908545 juste
-ada k4 branchless_unsorted - : 0.004885 1605908545 juste
-ada k4 tuned - : 0.001521 1605908545 juste
-ada k5 natural - : 0.1151 509.0856 juste
-ada k5 tuned - : 0.004687 509.0858 juste
-ada k6 natural q6 : 0.05343 45333132534 juste
-ada k6 natural q1 : 0.09533 3997084032331541 juste
-ada k6 tuned q6 : 0.01486 45333132534 juste
-ada k6 tuned q1 : 0.04154 3997084032331541 juste
-ada k6 mt q6 : 0.006735 45333132534 juste
-ada k6 mt q1 : 0.01847 3997084032331541 juste
-ada k7 natural - : 6.01 1048575:4294504410765 juste
-ada k7 tuned - : 0.1585 1048575:4294504410765 juste
-ada k8 natural - : 0.7291 2508056453121 juste
-ada k8 tuned - : 0.07705 2508056453121 juste
-ada k8 tuned_alloc - : 0.1719 2508056453121 juste
-ada k9 natural - : 0.06256 2.095103199218750E+06 juste
-ada k9 tuned - : 0.01932 2.095103199218750E+06 juste
-ada k9 mt - : 0.01131 2.095103199218750E+06 juste
+ada k1 natural energy : 0.0346 1049202.377008 juste
+ada k1 aos energy : 0.02748 1049202.377017 juste
+ada k1 soa energy : 0.005718 1049202.377035 juste
+ada k1 natural_shuffled energy : 0.03098 1049202.377008 juste
+ada k2 tuned 16384 : 0.01075 3568 juste
+ada k2 tuned 262144 : 0.02686 46960 juste
+ada k2 tuned 8388608 : 0.229 1325440 juste
+ada k3 rmw_padded - : 0.3261 134217728 juste
+ada k3 sw_padded - : 0.08111 134217728 juste
+ada k4 natural_unsorted - : 0.007319 1605908545 juste
+ada k4 branchless_unsorted - : 0.004825 1605908545 juste
+ada k4 tuned - : 0.002053 1605908545 juste
+ada k4 swar - : 0.00272 1605908545 juste
+ada k5 natural - : 0.09429 509.0856 juste
+ada k5 tuned - : 0.005772 509.0858 juste
+ada k6 natural q6 : 0.07335 45333132534 juste
+ada k6 natural q1 : 0.09509 3997084032331541 juste
+ada k6 tuned q6 : 0.0159 45333132534 juste
+ada k6 tuned q1 : 0.0546 3997084032331541 juste
+ada k6 mt q6 : 0.008138 45333132534 juste
+ada k6 mt q1 : 0.01977 3997084032331541 juste
+ada k6 tuned_v q6 : 0.0149 45333132534 juste
+ada k6 tuned_v q1 : 0.0222 3997084032331541 juste
+ada k6 mt_pool q6 : 0.004289 45333132534 juste
+ada k6 mt_pool q1 : 0.01177 3997084032331541 juste
+ada k6 mt_pool_v q6 : 0.004334 45333132534 juste
+ada k6 mt_pool_v q1 : 0.005874 3997084032331541 juste
+ada k7 natural - : 6.14 1048575:4294504410765 juste
+ada k7 tuned - : 0.16 1048575:4294504410765 juste
+ada k8 natural - : 0.6732 2508056453121 juste
+ada k8 tuned - : 0.07212 2508056453121 juste
+ada k8 tuned_alloc - : 0.1878 2508056453121 juste
+ada k8 tuned_it - : 0.09209 2508056453121 juste
+ada k9 natural - : 0.03601 2.095103199218750E+06 juste
+ada k9 tuned - : 0.01586 2.095103199218750E+06 juste
+ada k9 mt - : 0.008112 2.095103199218750E+06 juste
+ada k9 tuned_v - : 0.01766 2.095103199218750E+06 juste
+ada k9 mt_pool - : 0.004591 2.095103199218750E+06 juste
+ada k9 mt_pool_v - : 0.005292 2.095103199218750E+06 juste
 fortran k1 natural energy : 0.03051 1049202.377008 juste
 fortran k1 aos energy : 0.03065 1049202.377035 juste
 fortran k1 soa energy : 0.005407 1049202.377035 juste
@@ -767,4 +778,4 @@ julia k8 tuned - : 0.3784 2508056453121 juste
 julia k9 natural - : 0.01951 2.095103199218750e+06 juste
 julia k9 tuned - : 0.02267 2.095103199218750e+06 juste
 julia k9 mt - : 0.01016 2.095103199218750e+06 juste
-# 767 cellules, 767 justes, 0 fausses
+# 778 cellules, 778 justes, 0 fausses
