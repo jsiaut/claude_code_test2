@@ -3004,6 +3004,226 @@
     "remarque": true,
     "ceiling": "K8"
    }
+  },
+  "mojo": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : SIMD[DType.uint8, 64], la forme de bench/mojo_exp",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "mots de 64 bits (chargement non aligné par pointeur)",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k5",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "SIMD[float32, 16], quatre accumulateurs, fma",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "tuned",
+      "q6"
+     ]
+    ],
+    "note": "SIMD[int32, 16], select, accumulation en SIMD[int64, 16]",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_v",
+      "q1"
+     ]
+    ],
+    "note": "compte par reduce_bit_count du masque ; la variante tuned publiée réduit les voies d'une sélection à chaque tour",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q6"
+     ]
+    ],
+    "note": "create_task : tâches sur les fils gardés par le runtime asynchrone",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q6 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q1"
+     ]
+    ],
+    "note": "create_task (runtime asynchrone)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_v",
+      "q1"
+     ]
+    ],
+    "note": "create_task, chaque quart : tuned_v",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "présente",
+    "cells": [
+     [
+      "k7",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "lots de 16, prefetch[PrefetchOptions().for_write()]",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "fonction récursive, état en paramètres et en retour",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "piles en Array[.., 64] (sur la pile)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "SIMD[float64, 8], chargements et écriture non alignés, j depuis 1",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "mt",
+      ""
+     ]
+    ],
+    "note": "create_task (runtime asynchrone), quatre quarts",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de K9 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }

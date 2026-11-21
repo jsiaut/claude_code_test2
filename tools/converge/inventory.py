@@ -395,6 +395,29 @@ INV = {
         "k9 mt_pool": e(P, [("k9", "mt", "")], "Threads.@spawn, quatre blocs de colonnes"),
         "k9 mt_pool_v": e(E, [("k9", "mt_pool_v", "")], "Threads.@spawn, chaque quart : tuned_v"),
     },
+    "mojo": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : SIMD[DType.uint8, 64], la forme de bench/mojo_exp"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits (chargement non aligné par pointeur)"),
+        "k5 tuned_v": e(P, [("k5", "tuned", "")], "SIMD[float32, 16], quatre accumulateurs, fma"),
+        "q6 tuned_v": e(P, [("k6", "tuned", "q6")], "SIMD[int32, 16], select, accumulation en SIMD[int64, 16]"),
+        "q6 tuned_s": SANS_REPLI,
+        "q1 tuned_v": e(E, [("k6", "tuned_v", "q1")], "compte par reduce_bit_count du masque ; la variante tuned publiée "
+                        "réduit les voies d'une sélection à chaque tour"),
+        "q1 tuned_s": SANS_REPLI,
+        "q6 mt_pool": e(P, [("k6", "mt", "q6")], "create_task : tâches sur les fils gardés par le runtime asynchrone"),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 présente : mt_pool l'exécute"),
+        "q6 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "q1 mt_pool": e(P, [("k6", "mt", "q1")], "create_task (runtime asynchrone)"),
+        "q1 mt_pool_v": e(E, [("k6", "mt_pool_v", "q1")], "create_task, chaque quart : tuned_v"),
+        "q1 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "k7 tuned_pf": e(P, [("k7", "tuned", "")], "lots de 16, prefetch[PrefetchOptions().for_write()]"),
+        "k7 tuned_oa": SANS_REPLI,
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "piles en Array[.., 64] (sur la pile)"),
+        "k9 tuned_v": e(P, [("k9", "tuned", "")], "SIMD[float64, 8], chargements et écriture non alignés, j depuis 1"),
+        "k9 mt_pool": e(P, [("k9", "mt", "")], "create_task (runtime asynchrone), quatre quarts"),
+        "k9 mt_pool_v": e(S, note="tuned_v de K9 présente : mt_pool l'exécute"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
     "julia": {

@@ -239,6 +239,35 @@ def k4_tuned(v: List[UInt8]) -> UInt64:
         i += 1
     return s
 
+# v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits (chargement non aligné). Le bit
+# de poids fort de chaque octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde
+# les octets >= 128 ; les octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute
+# donnée : une voie reçoit au plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les
+# voies sont vidées dans la somme toutes les 128 mots (et à la fin). Aucun branchement sur les données.
+@inline(.never)
+def k4_swar(v: List[UInt8]) -> UInt64:
+    comptime ONES: UInt64 = 0x0101010101010101
+    comptime LO: UInt64 = 0x00FF00FF00FF00FF
+    var p = v.unsafe_ptr()
+    var n = len(v)
+    var s: UInt64 = 0
+    var i = 0
+    while i + 8 <= n:
+        var e = i + 128 * 8 if i + 128 * 8 <= n else n - (n - i) % 8
+        var acc: UInt64 = 0
+        while i < e:
+            var w = (p + i).unsafe_bitcast[UInt64]().unsafe_load[alignment=1](0)
+            var y = w & (((w >> 7) & ONES) * 0xFF)
+            acc += (y & LO) + ((y >> 8) & LO)
+            i += 8
+        acc = (acc & 0x0000FFFF0000FFFF) + ((acc >> 16) & 0x0000FFFF0000FFFF)  # deux voies de 32 bits
+        s += (acc & 0xFFFFFFFF) + (acc >> 32)
+    while i < n:
+        var b = p[unsafe_offset=i]
+        s += UInt64(b) * UInt64(b >> 7)
+        i += 1
+    return s
+
 def run_k4(v: String, reps: Int, warmup: Int) raises:
     var d: List[UInt8]
     with open(String(DATA) + "k4_bytes.u8", "r") as f:
@@ -248,7 +277,7 @@ def run_k4(v: String, reps: Int, warmup: Int) raises:
     var bl = v == "branchless_unsorted"
     for r in range(-warmup, reps):
         var t0 = perf_counter_ns()
-        var s = k4_tuned(d) if v == "tuned" else (k4_branchless(d) if bl else k4_natural(d))
+        var s = k4_tuned(d) if v == "tuned" else (k4_swar(d) if v == "swar" else (k4_branchless(d) if bl else k4_natural(d)))
         var dt = secs(t0)
         if r >= 0:
             result("k4", v, "16M", r, dt, String(s))
@@ -381,11 +410,58 @@ def q1_tuned(c: Cols, lo: Int, hi: Int, mut acc: List[Int64]):
     if i < hi:
         q1_natural(c, i, hi, acc)
 
+# v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q1 tuned_v) : l'algorithme de q1_tuned, le compte de chaque groupe par
+# population du masque (reduce_bit_count) au lieu de la somme des voies d'une sélection à chaque tour (relevé, règle 1).
+# Exactitude : celle de q1_tuned (voies de 32 bits vidées toutes les 4 096 lignes).
+@inline(.never)
+def q1_tuned_v(c: Cols, lo: Int, hi: Int, mut acc: List[Int64]):
+    comptime L16 = SIMD[DType.int64, 16]
+    var i = lo
+    while i + 16 <= hi:
+        var aq = Array[I16, 6](fill=I16(0))
+        var ap = Array[I16, 6](fill=I16(0))
+        var adp = Array[I16, 6](fill=I16(0))
+        var ach = Array[L16, 6](fill=L16(0))
+        var cnt = Array[Int64, 6](fill=0)
+        var end = i + 4096 if i + 4096 <= hi else hi - (hi - i) % 16
+        while i < end:
+            var p_ = c.sd.p.unsafe_load[width=16, alignment=64](i).le(I16(10471))
+            var vg = ld8(c.rf, i) * 2 + ld8(c.ls, i)
+            var vq = ld8(c.q, i)
+            var vd = ld8(c.d, i)
+            var vt = ld8(c.t, i) + 100
+            var vp = c.pr.p.unsafe_load[width=16, alignment=64](i)
+            var vdp = vp * (100 - vd)
+            var ch = vdp.cast[DType.int64]() * vt.cast[DType.int64]()
+            comptime for g in range(6):
+                var m = p_ & vg.eq(I16(g))
+                cnt[g] += Int64(m.reduce_bit_count())
+                aq[g] += m.select(vq, I16(0))
+                ap[g] += m.select(vp, I16(0))
+                adp[g] += m.select(vdp, I16(0))
+                ach[g] += m.select(ch, L16(0))
+            i += 16
+        for g in range(6):
+            acc[g * 5] += cnt[g]
+            acc[g * 5 + 1] += Int64(aq[g].reduce_add())
+            acc[g * 5 + 2] += Int64(ap[g].reduce_add())
+            acc[g * 5 + 3] += adp[g].cast[DType.int64]().reduce_add()
+            acc[g * 5 + 4] += ach[g].reduce_add()
+    if i < hi:
+        q1_natural(c, i, hi, acc)
+
 def fold(acc: List[Int64]) -> Int64:
     var s: Int64 = 0
     for x in acc:
         s += x
     return s
+
+# mt_pool_v (v4, point 4) : les tâches de mt (create_task, sur les fils gardés par le runtime asynchrone : la réserve de
+# mt_pool, présente), chaque quart en tuned_v de Q1
+__async def k6_worker_v(c: Cols, lo: Int, hi: Int) -> Int64:
+    var a = List[Int64](length=30, fill=0)
+    q1_tuned_v(c, lo, hi, a)
+    return fold(a)
 
 __async def k6_worker(c: Cols, lo: Int, hi: Int, q1: Bool) -> Int64:
     if q1:
@@ -408,10 +484,18 @@ def run_k6(v: String, reps: Int, p: String, warmup: Int) raises:
             var a2 = create_task(k6_worker(c, N6 // 2, 3 * (N6 // 4), q1))
             var a3 = create_task(k6_worker(c, 3 * (N6 // 4), N6, q1))
             s = a0.wait() + a1.wait() + a2.wait() + a3.wait()
+        elif v == "mt_pool_v" and q1:
+            var a0 = create_task(k6_worker_v(c, 0, N6 // 4))
+            var a1 = create_task(k6_worker_v(c, N6 // 4, N6 // 2))
+            var a2 = create_task(k6_worker_v(c, N6 // 2, 3 * (N6 // 4)))
+            var a3 = create_task(k6_worker_v(c, 3 * (N6 // 4), N6))
+            s = a0.wait() + a1.wait() + a2.wait() + a3.wait()
         elif q1:
             var a = List[Int64](length=30, fill=0)
             if v == "tuned":
                 q1_tuned(c, 0, N6, a)
+            elif v == "tuned_v":
+                q1_tuned_v(c, 0, N6, a)
             else:
                 q1_natural(c, 0, N6, a)
             s = fold(a)
@@ -545,9 +629,76 @@ def a_sum(a: Pointer[ANode, MutUntrackedOrigin], i: Int32) -> Int64:
     var n = a[unsafe_offset=Int(i)]
     return n.v + a_sum(a, n.l) + a_sum(a, n.r)
 
+# v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada, et de bench/c_k8val) : l'état passe
+# par valeur, l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la fonction rend l'indice
+# libre suivant. Même arène, mêmes liens et mêmes valeurs que a_build ; somme récursive par les liens (a_sum).
+def av_build(a: Pointer[ANode, MutUntrackedOrigin], i: Int32, d: Int, q: Int64) -> Int32:
+    a[unsafe_offset=Int(i)] = ANode(q + Int64(i), -1, -1)
+    if d > 0:
+        var l = i + 1
+        var r = av_build(a, l, d - 1, q)
+        a[unsafe_offset=Int(i)].l = l
+        a[unsafe_offset=Int(i)].r = r
+        return av_build(a, r, d - 1, q)
+    return i + 1
+
+# v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/c_k8it, remarque sur C) : construction et somme
+# itératives, piles explicites (Array de 64 entrées, sur la pile : au plus une entrée par niveau à la construction, au
+# plus profondeur + 1 à la somme ; K8_REQ < 63, vérifié dans run_k8). La construction descend à gauche en empilant le
+# sous-arbre droit de chaque nœud interne, puis le reprend à la feuille suivante : même ordre préfixe, mêmes liens et
+# mêmes valeurs que a_build.
+def ai_build(a: Pointer[ANode, MutUntrackedOrigin], depth: Int, q: Int64):
+    var stp = Array[Int32, 64](fill=0)
+    var std = Array[Int, 64](fill=0)
+    var sp = 0
+    var top: Int32 = 0
+    var parent: Int32 = -1
+    var right = False
+    var d = depth
+    while True:
+        var i = top
+        top += 1
+        a[unsafe_offset=Int(i)] = ANode(q + Int64(i), -1, -1)
+        if parent >= 0:
+            if right:
+                a[unsafe_offset=Int(parent)].r = i
+            else:
+                a[unsafe_offset=Int(parent)].l = i
+        if d > 0:
+            stp[sp] = i
+            std[sp] = d - 1
+            sp += 1
+            parent = i
+            right = False
+            d -= 1
+        else:
+            if sp == 0:
+                break
+            sp -= 1
+            parent = stp[sp]
+            d = std[sp]
+            right = True
+
+def ai_sum(a: Pointer[ANode, MutUntrackedOrigin], root: Int32) -> Int64:
+    var st = Array[Int32, 64](fill=0)
+    var sp = 1
+    st[0] = root
+    var s: Int64 = 0
+    while sp > 0:
+        sp -= 1
+        var n = a[unsafe_offset=Int(st[sp])]
+        s += n.v
+        if n.l >= 0:
+            st[sp] = n.r
+            st[sp + 1] = n.l
+            sp += 2
+    return s
+
 def run_k8(v: String, reps: Int, warmup: Int) raises:
     comptime Q = 16384; comptime K8_LONG = get_defined_int["MS_K8_LONG", 20](); comptime K8_REQ = get_defined_int["MS_K8_REQ", 10]()
     var tuned = v == "tuned"
+    if K8_REQ >= 63:
+        raise Error("piles de K8 tuned_it : 64 entrées")
     var c0: Int64 = 0
     var keep = t_build(K8_LONG, c0)
     var lsum = t_sum(keep)
@@ -563,6 +714,12 @@ def run_k8(v: String, reps: Int, warmup: Int) raises:
             if tuned:
                 var top: Int32 = 0
                 s = a_sum(arena, a_build(arena, top, K8_REQ, c))
+            elif v == "tuned_val":
+                _ = av_build(arena, 0, K8_REQ, c)
+                s = a_sum(arena, 0)
+            elif v == "tuned_it":
+                ai_build(arena, K8_REQ, c)
+                s = ai_sum(arena, 0)
             else:
                 var t = t_build(K8_REQ, c)
                 s = t_sum(t)

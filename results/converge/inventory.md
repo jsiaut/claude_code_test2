@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 13 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia).
+Langages relevés : 14 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -343,3 +343,28 @@ Langages relevés : 13 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k9 mt_pool` | K9 mt | présente | `k9 mt` | Threads.@spawn, quatre blocs de colonnes |
 | `k9 mt_pool_v` | K9 mt | écrite | `k9 mt_pool_v` | Threads.@spawn, chaque quart : tuned_v |
 | `k8 rq_spec` (R) | K8 | écrite | `k8 rq_spec` | forme de bench/julia_exp (remarque sur Julia, × 0,83) : la variante tuned spécialisée sur la profondeur (Val) ; classée propre au runtime par le plan (2 : spécialisation de Julia) |
+
+## Mojo
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : SIMD[DType.uint8, 64], la forme de bench/mojo_exp |
+| `k4 swar` | K4 | écrite | `k4 swar` | mots de 64 bits (chargement non aligné par pointeur) |
+| `k5 tuned_v` | K5 | présente | `k5 tuned` | SIMD[float32, 16], quatre accumulateurs, fma |
+| `q6 tuned_v` | Q6 | présente | `k6 tuned q6` | SIMD[int32, 16], select, accumulation en SIMD[int64, 16] |
+| `q6 tuned_s` | Q6 | sans objet | — | forme principale présente ou écrite |
+| `q1 tuned_v` | Q1 | écrite | `k6 tuned_v q1` | compte par reduce_bit_count du masque ; la variante tuned publiée réduit les voies d'une sélection à chaque tour |
+| `q1 tuned_s` | Q1 | sans objet | — | forme principale présente ou écrite |
+| `q6 mt_pool` | Q6 mt | présente | `k6 mt q6` | create_task : tâches sur les fils gardés par le runtime asynchrone |
+| `q6 mt_pool_v` | Q6 mt | sans objet | — | tuned_v de Q6 présente : mt_pool l'exécute |
+| `q6 mt_pool_s` | Q6 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `q1 mt_pool` | Q1 mt | présente | `k6 mt q1` | create_task (runtime asynchrone) |
+| `q1 mt_pool_v` | Q1 mt | écrite | `k6 mt_pool_v q1` | create_task, chaque quart : tuned_v |
+| `q1 mt_pool_s` | Q1 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `k7 tuned_pf` | K7 | présente | `k7 tuned` | lots de 16, prefetch[PrefetchOptions().for_write()] |
+| `k7 tuned_oa` | K7 | sans objet | — | forme principale présente ou écrite |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | fonction récursive, état en paramètres et en retour |
+| `k8 tuned_it` | K8 | écrite | `k8 tuned_it` | piles en Array[.., 64] (sur la pile) |
+| `k9 tuned_v` | K9 | présente | `k9 tuned` | SIMD[float64, 8], chargements et écriture non alignés, j depuis 1 |
+| `k9 mt_pool` | K9 mt | présente | `k9 mt` | create_task (runtime asynchrone), quatre quarts |
+| `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 présente : mt_pool l'exécute |
