@@ -348,8 +348,45 @@ function k4_tuned(string $s): int
     return $t;
 }
 
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, swar) : huit octets par entier de 64 bits (unpack de la chaîne lue telle
+// quelle, dans le chrono). Par mot w : m = (w >> 7) & 0x0101…01 (le bit de poids fort de chaque octet ; >> est
+// arithmétique, le masque écarte les bits de signe recopiés), y = w & ((m << 8) - m) (m × 0xFF sans dépassement : un
+// produit hors des entiers passerait en flottant), puis les octets de rang pair et impair ajoutés en quatre voies de 16
+// bits. Exactitude : par mot, chaque voie reçoit au plus 2 × 255 = 510 ; vidées toutes les 64 mots (au plus 32 640
+// < 2^15 par voie : la voie haute laisse le bit de signe à 0, aucune somme ne déborde), puis deux voies de 32 bits
+// ajoutées à la somme. Les n mod 8 derniers octets : x * (x >> 7).
+function k4_swar(string $s): int
+{
+    $n = strlen($s);
+    $nw = $n >> 3;
+    $w = $nw > 0 ? unpack('P' . $nw, $s) : [];
+    $t = 0;
+    $k = 1;
+    while ($k <= $nw) {
+        $e = min($k + 64, $nw + 1);
+        $acc = 0;
+        for (; $k < $e; $k++) {
+            $x = $w[$k];
+            $m = ($x >> 7) & 0x0101010101010101;
+            $y = $x & (($m << 8) - $m);
+            $acc += ($y & 0x00FF00FF00FF00FF) + (($y >> 8) & 0x00FF00FF00FF00FF);
+        }
+        $acc = ($acc & 0x0000FFFF0000FFFF) + (($acc >> 16) & 0x0000FFFF0000FFFF);
+        $t += ($acc & 0xFFFFFFFF) + ($acc >> 32);
+    }
+    for ($i = $nw << 3; $i < $n; $i++) {
+        $x = ord($s[$i]);
+        $t += $x * ($x >> 7);
+    }
+    return $t;
+}
+
 function run_k4(string $v, int $reps): void
 {
+    if ($v === 'swar') {
+        bench('k4', $v, '16M', $reps, 'k4_swar', [file_get_contents(data_path('k4_bytes.u8'))]);
+        return;
+    }
     if ($v === 'tuned') {
         bench('k4', $v, '16M', $reps, 'k4_tuned', [file_get_contents(data_path('k4_bytes.u8'))]);
         return;
@@ -441,6 +478,20 @@ function q6_tuned(array $sd, array $d, array $q, array $pr, int $lo, int $hi): i
     return $s;
 }
 
+// v4, point 4 (3.3, Q6 tuned_s) : sans branchement : chaque intervalle en une différence non signée, dont on retranche
+// la largeur (négative si la valeur est dans l'intervalle) ; les trois réunies par & : le bit de signe vaut 1 si les
+// trois tests passent ; s += prix × remise × m (entiers de 64 bits)
+function q6_tuned_s(array $sd, array $d, array $q, array $pr, int $lo, int $hi): int
+{
+    $s = 0;
+    for ($i = $lo; $i < $hi; $i++) {
+        $dd = $d[$i];
+        $m = (((($sd[$i] - 8766) & 0xFFFFFFFF) - 365) & ((($dd - 5) & 0xFF) - 3) & ($q[$i] - 24)) >> 63;
+        $s += $pr[$i] * $dd * ($m & 1);
+    }
+    return $s;
+}
+
 function q1_natural(array $c, int $lo, int $hi, array &$acc): void
 {
     [$sd, $pr, $q, $d, $t, $rf, $ls] = $c;
@@ -478,6 +529,38 @@ function q1_tuned(array $c, int $lo, int $hi): int
     return array_sum($cnt) + array_sum($sq) + array_sum($sp) + array_sum($sdp) + array_sum($sdt);
 }
 
+// v4, point 4 (3.3, Q1 tuned_s) : une passe, les 30 accumulateurs en variables locales ; par ligne, pm = -1 si
+// shipdate <= 10471 (décalage arithmétique du signe de shipdate - 10472), et pour chaque groupe k,
+// mk = pm & (signe de (g ^ k) - 1), -1 si g = k ; additions masquées par & mk, sans branchement
+function q1_tuned_s(array $c, int $lo, int $hi): int
+{
+    [$sd, $pr, $q, $d, $t, $rf, $ls] = $c;
+    $n0 = $q0 = $p0 = $e0 = $c0 = $n1 = $q1 = $p1 = $e1 = $c1 = $n2 = $q2 = $p2 = $e2 = $c2 = 0;
+    $n3 = $q3 = $p3 = $e3 = $c3 = $n4 = $q4 = $p4 = $e4 = $c4 = $n5 = $q5 = $p5 = $e5 = $c5 = 0;
+    for ($i = $lo; $i < $hi; $i++) {
+        $pm = ($sd[$i] - 10472) >> 63;
+        $g = $rf[$i] * 2 + $ls[$i];
+        $qq = $q[$i];
+        $p = $pr[$i];
+        $dp = $p * (100 - $d[$i]);
+        $ch = $dp * (100 + $t[$i]);
+        $m = $pm & (($g - 1) >> 63);
+        $n0 -= $m; $q0 += $qq & $m; $p0 += $p & $m; $e0 += $dp & $m; $c0 += $ch & $m;
+        $m = $pm & ((($g ^ 1) - 1) >> 63);
+        $n1 -= $m; $q1 += $qq & $m; $p1 += $p & $m; $e1 += $dp & $m; $c1 += $ch & $m;
+        $m = $pm & ((($g ^ 2) - 1) >> 63);
+        $n2 -= $m; $q2 += $qq & $m; $p2 += $p & $m; $e2 += $dp & $m; $c2 += $ch & $m;
+        $m = $pm & ((($g ^ 3) - 1) >> 63);
+        $n3 -= $m; $q3 += $qq & $m; $p3 += $p & $m; $e3 += $dp & $m; $c3 += $ch & $m;
+        $m = $pm & ((($g ^ 4) - 1) >> 63);
+        $n4 -= $m; $q4 += $qq & $m; $p4 += $p & $m; $e4 += $dp & $m; $c4 += $ch & $m;
+        $m = $pm & ((($g ^ 5) - 1) >> 63);
+        $n5 -= $m; $q5 += $qq & $m; $p5 += $p & $m; $e5 += $dp & $m; $c5 += $ch & $m;
+    }
+    return $n0 + $q0 + $p0 + $e0 + $c0 + $n1 + $q1 + $p1 + $e1 + $c1 + $n2 + $q2 + $p2 + $e2 + $c2
+        + $n3 + $q3 + $p3 + $e3 + $c3 + $n4 + $q4 + $p4 + $e4 + $c4 + $n5 + $q5 + $p5 + $e5 + $c5;
+}
+
 function q1_natural_all(array $c): int
 {
     $acc = array_fill(0, 30, 0);
@@ -496,6 +579,24 @@ function run_k6(string $v, int $reps, string $p): void
         load('k6_discount.u8', 'C'), load('k6_tax.u8', 'C'), load('k6_returnflag.u8', 'C'),
         load('k6_linestatus.u8', 'C')];
     $q1 = $p === 'q1';
+    if ($v === 'mt_pool_s') { // v4, point 4 : la réserve de processus de mt, chaque quart : tuned_s
+        $ws = workers(4, function (int $t, string $cmd) use ($c, $q1): string {
+            $lo = intdiv(N6, 4) * $t;
+            $hi = intdiv(N6, 4) * ($t + 1);
+            return (string)($q1 ? q1_tuned_s($c, $lo, $hi) : q6_tuned_s($c[0], $c[3], $c[2], $c[1], $lo, $hi));
+        });
+        bench('k6', $v, $p, $reps, 'k6_mt', [$ws]);
+        stop_workers($ws);
+        return;
+    }
+    if ($v === 'tuned_s') { // v4, point 4
+        if ($q1) {
+            bench('k6', $v, $p, $reps, 'q1_tuned_s', [$c, 0, N6]);
+        } else {
+            bench('k6', $v, $p, $reps, 'q6_tuned_s', [$c[0], $c[3], $c[2], $c[1], 0, N6]);
+        }
+        return;
+    }
     if ($v === 'mt') {
         echo "META;k6_mt;4 processus (pcntl_fork) créés avant la mesure, colonnes partagées en copie sur écriture, code tuned sur un quart des lignes chacun, résultat par paire de sockets\n";
         $ws = workers(4, function (int $t, string $cmd) use ($c, $q1): string {
@@ -544,6 +645,47 @@ function run_k7(string $v, int $reps): void
                 $ws += $e[1] * (($k & 1023) + 1);
             }
             unset($m);
+        } elseif ($v === 'tuned_oa') {
+            // v4, point 4 (docs/V4_CONVERGE.md, 3.3, K7 tuned_oa : forme de repli, PHP n'ayant pas de préchargement) :
+            // la table de tuned_pf sans préchargement : capacité 2^(LOG2+1), une case = deux entiers consécutifs d'un
+            // tableau « packed » (clé << 32 | compte, puis somme : 16 octets de données), hachage de Fibonacci
+            // (clé × 0x9E3779B1 mod 2^32) >> (32 − LOG) calculé par moitiés de 16 bits (0x9E37 = 40503, 0x79B1 = 31153 :
+            // un produit de 64 bits passerait en flottant), sondage linéaire ; une case est vide si son premier entier
+            // vaut 0 (un compte vaut au moins 1). La variante tuned publiée hache par les bits bas et sépare les clés.
+            $t0 = hrtime(true);
+            $log = 21;
+            $cap = 1 << $log;
+            $msk = $cap - 1;
+            $tab = array_fill(0, 2 * $cap, 0);
+            foreach ($keys as $i => $k) {
+                $kl = $k & 0xFFFF;
+                $h = (($kl * 31153 + ((($kl * 40503 + ($k >> 16) * 31153) & 0xFFFF) << 16)) & 0xFFFFFFFF) >> (32 - $log);
+                while (true) {
+                    $x = $tab[2 * $h];
+                    if ($x === 0) {
+                        $tab[2 * $h] = ($k << 32) | 1;
+                        $tab[2 * $h + 1] = $vals[$i];
+                        break;
+                    }
+                    if ((($x >> 32) & 0xFFFFFFFF) === $k) {
+                        $tab[2 * $h] = $x + 1;
+                        $tab[2 * $h + 1] += $vals[$i];
+                        break;
+                    }
+                    $h = ($h + 1) & $msk;
+                }
+            }
+            $dt = (hrtime(true) - $t0) / 1e9;
+            $nk = 0;
+            $ws = 0;
+            for ($h = 0; $h < $cap; $h++) {
+                $x = $tab[2 * $h];
+                if ($x !== 0) {
+                    $nk++;
+                    $ws += $tab[2 * $h + 1] * (((($x >> 32) & 0xFFFFFFFF) & 1023) + 1);
+                }
+            }
+            unset($tab);
         } else { // table maison à adressage ouvert : clés et couples (compte, somme) entrelacés dans deux tableaux
             // « packed » (2^21 cases), sondage linéaire, hachage par les bits bas (les clés sont brouillées ; un
             // hachage multiplicatif sur 32 bits, comme celui du C, passerait en flottant : 2.4)
@@ -675,6 +817,29 @@ function a_sum(array $v, array $l, array $r, array &$st): int
     return $s;
 }
 
+// v4, point 4 (3.3, K8 tuned_val) : la même arène (trois tableaux passés par référence), construite en ordre préfixe
+// par récursion ; l'état passe par valeur (i : indice du nœud ; q : numéro de requête, valeur du nœud = q + i), le
+// prochain indice libre revient en résultat ; somme récursive par les liens
+function a_build_val(int $i, int $d, int $q, array &$v, array &$l, array &$r): int
+{
+    $v[$i] = $q + $i;
+    if ($d === 0) {
+        $l[$i] = -1;
+        $r[$i] = -1;
+        return $i + 1;
+    }
+    $li = $i + 1;
+    $ri = a_build_val($li, $d - 1, $q, $v, $l, $r);
+    $l[$i] = $li;
+    $r[$i] = $ri;
+    return a_build_val($ri, $d - 1, $q, $v, $l, $r);
+}
+
+function a_sum_rec(array $v, array $l, array $r, int $i): int
+{
+    return $i < 0 ? 0 : $v[$i] + a_sum_rec($v, $l, $r, $l[$i]) + a_sum_rec($v, $l, $r, $r[$i]);
+}
+
 function run_k8(string $v, int $reps): void
 {
     global $WARMUP;
@@ -684,6 +849,7 @@ function run_k8(string $v, int $reps): void
     $lsum = t_sum($keep);
     $lat = array_fill(0, $Q, 0);
     $tuned = $v === 'tuned';
+    $tval = $v === 'tuned_val'; // v4, point 4
     $av = array_fill(0, 2047, 0);
     $al = array_fill(0, 2047, -1);
     $ar = array_fill(0, 2047, -1);
@@ -696,6 +862,9 @@ function run_k8(string $v, int $reps): void
             if ($tuned) {
                 a_build(10, $q, $av, $al, $ar, $st);
                 $s = a_sum($av, $al, $ar, $st);
+            } elseif ($tval) {
+                a_build_val(0, 10, $q, $av, $al, $ar);
+                $s = a_sum_rec($av, $al, $ar, 0);
             } else {
                 Counter8::$c = $q;
                 $s = t_sum(t_build(10));

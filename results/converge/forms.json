@@ -4717,6 +4717,220 @@
     "remarque": false,
     "ceiling": "K9 mt"
    }
+  },
+  "php": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : sans SIMD (grille C1 = 0, C2 = 0), count_chars sur la chaîne lue telle quelle (la boucle de la bibliothèque standard)",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "entiers de 64 bits (unpack de la chaîne, dans le chrono) ; m × 0xFF écrit (m << 8) - m et voies vidées toutes les 64 mots : un dépassement passerait en flottant",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/php.txt)",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel (grille C1 = 0)",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_s",
+      "q6"
+     ]
+    ],
+    "note": "trois différences non signées réunies par & et décalage du bit de signe, s += prix × remise × m ; la variante tuned publiée teste par branchements",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel (grille C1 = 0)",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_s",
+      "q1"
+     ]
+    ],
+    "note": "une passe, 30 variables locales, masques par décalage du bit de signe ; le JIT tracing de PHP 8.5.12 refuse la boucle sur les données du banc (« JIT compilation error », quelle que soit l'écriture essayée ; il la compile sur des données synthétiques) : elle s'exécute dans l'interpréteur (4,7 s contre 0,28 s pour la variante tuned publiée, à l'essai)",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q6"
+     ]
+    ],
+    "note": "processus créés avant la mesure (pcntl_fork : PHP n'a pas de fils, grille D1 = ½), commandes et résultats par paires de sockets ; chaque quart : q6_tuned publiée",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q6 non écrivible",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_s",
+      "q6"
+     ]
+    ],
+    "note": "la réserve de processus de mt, chaque quart : tuned_s",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q1"
+     ]
+    ],
+    "note": "processus créés avant la mesure ; chaque quart : q1_tuned publiée",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q1 non écrivible",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_s",
+      "q1"
+     ]
+    ],
+    "note": "chaque quart : tuned_s",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun préchargement (grille E4 = 0, results/probes/php.txt)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k7",
+      "tuned_oa",
+      ""
+     ]
+    ],
+    "note": "une case = deux entiers consécutifs d'un tableau packed (clé << 32 | compte, somme), hachage de Fibonacci par moitiés de 16 bits, sondage linéaire ; la variante tuned publiée hache par les bits bas et sépare les clés",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "fonction récursive, état en paramètres et en retour, arène par référence ; somme récursive",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "présente",
+    "cells": [
+     [
+      "k8",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "la variante tuned publiée : arène construite et sommée sans récursion, pile explicite réutilisée",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun type vectoriel (grille C1 = 0)",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "mt",
+      ""
+     ]
+    ],
+    "note": "processus créés avant la mesure, lignes voisines échangées par un segment partagé (shmop)",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de K9 non écrivible",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }

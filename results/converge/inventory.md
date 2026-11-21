@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 21 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go, Haskell, OCaml, BQN).
+Langages relevés : 22 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go, Haskell, OCaml, BQN, PHP).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -544,3 +544,28 @@ Langages relevés : 21 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k9 tuned_v` | K9 | non écrivible | — | grille C1 = 0 et C2 = 0 (results/probes/bqn.txt : aucun type vectoriel, aucune intrinsèque ; les primitives de CBQN sont vectorisées dans l'interpréteur) |
 | `k9 mt_pool` | K9 mt | non écrivible | — | pas de threads (D1 = 0) |
 | `k9 mt_pool_v` | K9 mt | non écrivible | — | pas de threads (D1 = 0) |
+
+## PHP
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : sans SIMD (grille C1 = 0, C2 = 0), count_chars sur la chaîne lue telle quelle (la boucle de la bibliothèque standard) |
+| `k4 swar` | K4 | écrite | `k4 swar` | entiers de 64 bits (unpack de la chaîne, dans le chrono) ; m × 0xFF écrit (m << 8) - m et voies vidées toutes les 64 mots : un dépassement passerait en flottant |
+| `k5 tuned_v` | K5 | non écrivible | — | aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/php.txt) |
+| `q6 tuned_v` | Q6 | non écrivible | — | aucun type vectoriel (grille C1 = 0) |
+| `q6 tuned_s` | Q6 | écrite | `k6 tuned_s q6` | trois différences non signées réunies par & et décalage du bit de signe, s += prix × remise × m ; la variante tuned publiée teste par branchements |
+| `q1 tuned_v` | Q1 | non écrivible | — | aucun type vectoriel (grille C1 = 0) |
+| `q1 tuned_s` | Q1 | écrite | `k6 tuned_s q1` | une passe, 30 variables locales, masques par décalage du bit de signe ; le JIT tracing de PHP 8.5.12 refuse la boucle sur les données du banc (« JIT compilation error », quelle que soit l'écriture essayée ; il la compile sur des données synthétiques) : elle s'exécute dans l'interpréteur (4,7 s contre 0,28 s pour la variante tuned publiée, à l'essai) |
+| `q6 mt_pool` | Q6 mt | présente | `k6 mt q6` | processus créés avant la mesure (pcntl_fork : PHP n'a pas de fils, grille D1 = ½), commandes et résultats par paires de sockets ; chaque quart : q6_tuned publiée |
+| `q6 mt_pool_v` | Q6 mt | sans objet | — | tuned_v de Q6 non écrivible |
+| `q6 mt_pool_s` | Q6 mt | écrite | `k6 mt_pool_s q6` | la réserve de processus de mt, chaque quart : tuned_s |
+| `q1 mt_pool` | Q1 mt | présente | `k6 mt q1` | processus créés avant la mesure ; chaque quart : q1_tuned publiée |
+| `q1 mt_pool_v` | Q1 mt | sans objet | — | tuned_v de Q1 non écrivible |
+| `q1 mt_pool_s` | Q1 mt | écrite | `k6 mt_pool_s q1` | chaque quart : tuned_s |
+| `k7 tuned_pf` | K7 | non écrivible | — | aucun préchargement (grille E4 = 0, results/probes/php.txt) |
+| `k7 tuned_oa` | K7 | écrite | `k7 tuned_oa` | une case = deux entiers consécutifs d'un tableau packed (clé << 32 | compte, somme), hachage de Fibonacci par moitiés de 16 bits, sondage linéaire ; la variante tuned publiée hache par les bits bas et sépare les clés |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | fonction récursive, état en paramètres et en retour, arène par référence ; somme récursive |
+| `k8 tuned_it` | K8 | présente | `k8 tuned` | la variante tuned publiée : arène construite et sommée sans récursion, pile explicite réutilisée |
+| `k9 tuned_v` | K9 | non écrivible | — | aucun type vectoriel (grille C1 = 0) |
+| `k9 mt_pool` | K9 mt | présente | `k9 mt` | processus créés avant la mesure, lignes voisines échangées par un segment partagé (shmop) |
+| `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 non écrivible |

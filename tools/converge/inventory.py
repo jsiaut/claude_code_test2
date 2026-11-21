@@ -662,6 +662,41 @@ INV = {
         "k9 mt_pool": e(N, note="pas de threads (D1 = 0)"),
         "k9 mt_pool_v": e(N, note="pas de threads (D1 = 0)"),
     },
+    "php": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : sans SIMD (grille C1 = 0, C2 = 0), count_chars sur la "
+                      "chaîne lue telle quelle (la boucle de la bibliothèque standard)"),
+        "k4 swar": e(E, [("k4", "swar", "")], "entiers de 64 bits (unpack de la chaîne, dans le chrono) ; m × 0xFF "
+                     "écrit (m << 8) - m et voies vidées toutes les 64 mots : un dépassement passerait en flottant"),
+        "k5 tuned_v": e(N, note="aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/php.txt)"),
+        "q6 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "q6 tuned_s": e(E, [("k6", "tuned_s", "q6")], "trois différences non signées réunies par & et décalage du bit "
+                        "de signe, s += prix × remise × m ; la variante tuned publiée teste par branchements"),
+        "q1 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "q1 tuned_s": e(E, [("k6", "tuned_s", "q1")], "une passe, 30 variables locales, masques par décalage du bit de "
+                        "signe ; le JIT tracing de PHP 8.5.12 refuse la boucle sur les données du banc (« JIT "
+                        "compilation error », quelle que soit l'écriture essayée ; il la compile sur des données "
+                        "synthétiques) : elle s'exécute dans l'interpréteur (4,7 s contre 0,28 s pour la variante tuned "
+                        "publiée, à l'essai)"),
+        "q6 mt_pool": e(P, [("k6", "mt", "q6")], "processus créés avant la mesure (pcntl_fork : PHP n'a pas de fils, "
+                        "grille D1 = ½), commandes et résultats par paires de sockets ; chaque quart : q6_tuned publiée"),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 non écrivible"),
+        "q6 mt_pool_s": e(E, [("k6", "mt_pool_s", "q6")], "la réserve de processus de mt, chaque quart : tuned_s"),
+        "q1 mt_pool": e(P, [("k6", "mt", "q1")], "processus créés avant la mesure ; chaque quart : q1_tuned publiée"),
+        "q1 mt_pool_v": e(S, note="tuned_v de Q1 non écrivible"),
+        "q1 mt_pool_s": e(E, [("k6", "mt_pool_s", "q1")], "chaque quart : tuned_s"),
+        "k7 tuned_pf": e(N, note="aucun préchargement (grille E4 = 0, results/probes/php.txt)"),
+        "k7 tuned_oa": e(E, [("k7", "tuned_oa", "")], "une case = deux entiers consécutifs d'un tableau packed (clé << 32 "
+                         "| compte, somme), hachage de Fibonacci par moitiés de 16 bits, sondage linéaire ; la variante "
+                         "tuned publiée hache par les bits bas et sépare les clés"),
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour, arène par "
+                          "référence ; somme récursive"),
+        "k8 tuned_it": e(P, [("k8", "tuned", "")], "la variante tuned publiée : arène construite et sommée sans récursion, "
+                         "pile explicite réutilisée"),
+        "k9 tuned_v": e(N, note="aucun type vectoriel (grille C1 = 0)"),
+        "k9 mt_pool": e(P, [("k9", "mt", "")], "processus créés avant la mesure, lignes voisines échangées par un "
+                        "segment partagé (shmop)"),
+        "k9 mt_pool_v": e(S, note="tuned_v de K9 non écrivible"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
     "java": {
