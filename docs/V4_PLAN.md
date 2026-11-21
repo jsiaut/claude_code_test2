@@ -78,6 +78,10 @@ Point 2 : plan détaillé dans `docs/V4_SIZES.md` (19 novembre, poussé avant to
 résultats le 20 novembre (section 10) : aucun langage ne bouge de plus de deux places entre la taille publiée et la
 moyenne des trois tailles ; l'hôte en déplace cinq de trois ou quatre places.
 
+Point 3 : plan détaillé dans `docs/V4_EQUAL.md` (21 novembre, poussé avant tout changement de code et toute mesure) :
+vérifications du code naturel actives pour tous, stencil naturel contigu pour tous, K4 `tuned` avec SIMD explicite, et
+deux conditions de mesure trouvées au point 2 (placement de la boucle de K3, régimes de K2 à 8 Mio).
+
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
 une fois le point précédent terminé. Machine : l'hôte actuel est un Xeon Granite Rapids (modèle 173), une troisième
