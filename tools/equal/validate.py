@@ -8,7 +8,7 @@
    chaque nouvelle cellule (toute construction autre que pub) exécutée une fois (une répétition après l'échauffement)
    à la taille publiée ; sa somme de contrôle doit être celle de la taille publiée (tools/driver.py, celle du C).
 
-Usage : validate.py [modes|cells|all] [langage,...]"""
+Usage : validate.py [modes|cells|all] [langage,...] [construction,...]"""
 import os, shutil, subprocess, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -54,7 +54,10 @@ def mode_builds(langs):
     open(OUT_BUILDS, "w").write("\n".join(lines) + "\n")
 
 
-def cells(langs):
+def cells(langs, only_builds=None):
+    """Valide les nouvelles cellules des langages donnés (constructions only_builds seulement, si donné). Pour une
+    partie des langages, le résultat se fusionne avec le fichier existant : ses lignes des autres langages, ou des
+    autres constructions, sont gardées, et la nouvelle exécution est datée dans l'en-tête."""
     t0 = time.time()
     for lang in langs:
         for b in C.builds_of(lang):
@@ -68,7 +71,7 @@ def cells(langs):
     n = 0
     for lang in langs:
         for b in C.builds_of(lang):
-            if b == "pub":
+            if b == "pub" or (only_builds and b not in only_builds):
                 continue
             for k in C.KERNELS:
                 for v, q in C.cells(lang, b, k):
@@ -81,7 +84,19 @@ def cells(langs):
                             f"{'juste' if ok else 'FAUX (code ' + str(rec['returncode']) + ') ' + rec['stderr'][-200:]}")
                     lines.append(line)
                     print(line, flush=True)
-    lines.append(f"# {n} cellules, {n - bad} justes, {bad} fausses")
+    partial = set(langs) != set(C.LANGS) or only_builds
+    if partial and os.path.exists(OUT_VALID):
+        new_keys = {tuple(l.split()[:5]) for l in lines if not l.startswith("#")}
+        old = [l for l in open(OUT_VALID).read().splitlines() if l and not l.startswith("# ")
+               and tuple(l.split()[:5]) not in new_keys]
+        head = [l for l in open(OUT_VALID).read().splitlines() if l.startswith("# ") and " cellules, " not in l]
+        body = old + [l for l in lines if not l.startswith("#")]
+        head.append(f"# complément ({','.join(langs)}"
+                    + (f" ; {','.join(only_builds)}" if only_builds else "") + f") : {lines[0][2:]}")
+        lines = head + body
+    body = [l for l in lines if not l.startswith("#")]
+    bad = sum(not l.endswith(" juste") for l in body)
+    lines.append(f"# {len(body)} cellules, {len(body) - bad} justes, {bad} fausses")
     open(OUT_VALID, "w").write("\n".join(lines) + "\n")
     return bad
 
@@ -89,7 +104,8 @@ def cells(langs):
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
     langs = sys.argv[2].split(",") if len(sys.argv) > 2 else C.LANGS
+    only = sys.argv[3].split(",") if len(sys.argv) > 3 else None
     if what in ("modes", "all"):
         mode_builds(langs)
     if what in ("cells", "all"):
-        sys.exit(1 if cells(langs) else 0)
+        sys.exit(1 if cells(langs, only) else 0)
