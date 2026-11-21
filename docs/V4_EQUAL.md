@@ -194,10 +194,10 @@ et les cellules de la taille publiée du point 2 entrent dans la campagne pour r
 * **Les variantes des copies sont listées dans `eq_variants`**, et non `extra_variants` (section 4) : ce fichier, copié
   du source publié, garde les variantes propres déjà publiées (K8 `tuned_alloc`).
 * **Base** : les cellules du score à la taille publiée (`analysis/analyze_v3.py`, `needed_keys` : 27 cellules par
-  langage, dont K2 à ses trois tailles du score et K3 `sw_padded` et `rmw_padded`), soit 655 processus par passe, et
-  188 nouvelles cellules : 843 processus par passe (`tools/equal/campaign.py --dry`). Les binaires publiés de la
-  campagne sont reconstruits sur la machine 32 depuis les sources suivies (`/dev/shm/msbuild/<langage>/pub`), comme
-  les autres constructions.
+  langage, dont K2 à ses trois tailles du score et K3 `sw_padded` et `rmw_padded`), soit 655 processus par passe, et 198
+  nouvelles cellules (D compris en R1') : 853 processus par passe (`tools/equal/campaign.py --dry`). Les binaires
+  publiés de la campagne sont reconstruits sur la machine 32 depuis les sources suivies
+  (`/dev/shm/msbuild/<langage>/pub`), comme les autres constructions.
 * **Faits établis avant la campagne.** Les modes ajoutés aux `build.sh` ne changent pas les binaires publiés : sans
   `MS_MODE`, les commandes du compilateur sont les mêmes et les binaires identiques octet pour octet (14 langages) ;
   ceux de Swift ne diffèrent que par l'identifiant de construction et l'empreinte du module, qui diffèrent aussi entre
