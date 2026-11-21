@@ -1,6 +1,7 @@
 # Validation des nouvelles cellules (tools/equal/validate.py cells), 2026-11-21 08:44 UTC, 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 # constructions faites en 494 s ; une répétition après l'échauffement
 # langage construction noyau variante paramètre : temps (s), somme de contrôle, verdict
+# complément (d ; unc,eq_unc) : Validation des nouvelles cellules (tools/equal/validate.py cells), 2026-11-21 08:49 UTC, 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 c eq k4 tuned - : 0.001592 1605908545 juste
 c chk k1 natural energy : 0.03247 1049202.377034 juste
 c chk k1 natural_shuffled energy : 0.03199 1049202.377034 juste
@@ -189,4 +190,14 @@ julia unc k6 natural q1 : 0.05693 3997084032331541 juste
 julia unc k7 natural - : 0.7524 1048575:4294504410765 juste
 julia unc k8 natural - : 0.6339 2508056453121 juste
 julia unc k9 natural - : 0.02215 2.095103199218750e+06 juste
-# 188 cellules, 188 justes, 0 fausses
+d unc k1 natural energy : 0.03423 1049202.376981 juste
+d unc k1 natural_shuffled energy : 0.03262 1049202.376981 juste
+d unc k4 natural_unsorted - : 0.002355 1605908545 juste
+d unc k5 natural - : 0.0934 509.0856 juste
+d unc k6 natural q6 : 0.04843 45333132534 juste
+d unc k6 natural q1 : 0.05458 3997084032331541 juste
+d unc k7 natural - : 0.7488 1048575:4294504410765 juste
+d unc k8 natural - : 2.112 2508056453121 juste
+d unc k9 natural - : 0.02932 2.095103199218750e+06 juste
+d eq_unc k9 natural_flat - : 0.02099 2.095103199218750e+06 juste
+# 198 cellules, 198 justes, 0 fausses

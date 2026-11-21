@@ -1618,3 +1618,20 @@ Robustesse :
   de trois ou quatre places, d'abord par l'effet de placement de l'écrivain unique de K3, établi sur Emerald Rapids
   (`docs/FINDINGS.md`) et retrouvé ici sur Granite Rapids (machine 30). Le classement de tête ne change pas
   (section 9 du plan).
+* 2026-11-21, 7:30 à 8:52 : **v4, point 3 : machine 32, copies, modes, sondes, validation** (`docs/V4_EQUAL.md`, 5.1
+  et 5.2). Le conteneur a redémarré vers 7:30 sur un Xeon du modèle de la machine 31 (6/207/2) au L3 effectif plus
+  petit (machine 32) : la base est refaite dans la campagne du point 3 (5.1, poussé avant toute mesure en 5a92a41).
+  Copies `bench/<langage>_eq` de 24 langages : K4 `tuned` (SIMD explicite là où la grille en crédite un, meilleure
+  forme du langage et de sa bibliothèque standard ailleurs) et K9 naturel contigu pour les 13 langages imbriqués ; BQN
+  n'a pas de variante `tuned` (aucune forme ne bat ses primitives). Constats en écrivant ces variantes (commentaires
+  des sources) : en C3, le décalage à droite d'un vecteur de `char` est arithmétique (160 >> 7 donne −1 : comparaison
+  et `math::select` à la place) ; en Swift, la forme sur `SIMD64<UInt8>` élargie en `SIMD64<UInt16>` prend 202 ms au
+  lieu de 0,8 (conversions entre types de voies non vectorisées : mots de 64 bits à la place) ; en Java, une forme sur
+  huit voies de 64 bits prend 2,5 ms au lieu de 0,6 avec `blend` et l'élargissement sans signe de l'API Vector ; en
+  Haskell, GHC n'offre sur les vecteurs d'entiers ni comparaison, ni décalage, ni « et » (octets séparés par reste et
+  quotient) ; en Julia, `llvmcall` est la seule voie de Base ; en Fortran, la boucle sur un tableau de forme présumée
+  n'est pas vectorisée (10 à 18 ms), sur un tableau `contiguous` elle l'est (1,2 ms). Modes R1 et R1' dans les
+  `build.sh` (`MS_MODE`), binaires publiés inchangés (`results/equal/hookcheck.txt`) ; sondes de mode conformes
+  (`results/equal/probes`) ; D aussi mesuré en R1', comme le prévoit le tableau 3.1 (5.2). Validation : les 198
+  nouvelles cellules justes (`results/equal/validation.txt`). Pilote, validation et analyse poussés avant la campagne
+  (967d7d9).
