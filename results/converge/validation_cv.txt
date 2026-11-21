@@ -1,4 +1,4 @@
-# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 17:49 UTC (fortran), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+# Validation des copies _cv (tools/converge/validate_cv.py), dernière exécution 2026-11-21 17:52 UTC (swift), 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 # langage noyau variante paramètre : temps (s), somme de contrôle, verdict
 c k1 natural energy : 0.0359 1049202.377034 juste
 c k1 aos energy : 0.02788 1049202.377035 juste
@@ -438,34 +438,41 @@ mojo k9 natural - : 0.1813 2095103.19921875 juste
 mojo k9 tuned - : 0.01959 2095103.19921875 juste
 mojo k9 mt - : 0.004463 2095103.19921875 juste
 mojo k9 natural_flat - : 0.1695 2095103.19921875 juste
-swift k1 natural energy : 0.02974 1049202.376981 juste
-swift k1 aos energy : 0.02561 1049202.376981 juste
-swift k1 soa energy : 0.004647 1049202.377017 juste
-swift k1 natural_shuffled energy : 0.03291 1049202.376981 juste
-swift k2 tuned 16384 : 0.007633 3568 juste
+swift k1 natural energy : 0.03632 1049202.376981 juste
+swift k1 aos energy : 0.02667 1049202.376981 juste
+swift k1 soa energy : 0.00533 1049202.377017 juste
+swift k1 natural_shuffled energy : 0.03211 1049202.376981 juste
+swift k2 tuned 16384 : 0.007602 3568 juste
 swift k2 tuned 262144 : 0.02392 46960 juste
-swift k2 tuned 8388608 : 0.1593 1325440 juste
-swift k3 rmw_padded - : 0.2273 134217728 juste
-swift k3 sw_padded - : 0.08964 134217728 juste
-swift k4 natural_unsorted - : 0.08072 1605908545 juste
-swift k4 branchless_unsorted - : 0.002918 1605908545 juste
-swift k4 tuned - : 0.001286 1605908545 juste
-swift k5 natural - : 0.09746 509.0856 juste
-swift k5 tuned - : 0.003581 509.0858 juste
-swift k6 natural q6 : 0.05524 45333132534 juste
-swift k6 natural q1 : 0.07233 3997084032331541 juste
-swift k6 tuned q6 : 0.01357 45333132534 juste
-swift k6 tuned q1 : 0.02449 3997084032331541 juste
-swift k6 mt q6 : 0.007707 45333132534 juste
-swift k6 mt q1 : 0.01101 3997084032331541 juste
-swift k7 natural - : 1.136 1048575:4294504410765 juste
-swift k7 tuned - : 0.1443 1048575:4294504410765 juste
-swift k8 natural - : 1.797 2508056453121 juste
-swift k8 tuned - : 0.2832 2508056453121 juste
-swift k9 natural - : 0.1001 2.095103199218750e+06 juste
-swift k9 tuned - : 0.01321 2.095103199218750e+06 juste
-swift k9 mt - : 0.004394 2.095103199218750e+06 juste
-swift k9 natural_flat - : 0.02592 2.095103199218750e+06 juste
+swift k2 tuned 8388608 : 0.1507 1325440 juste
+swift k3 rmw_padded - : 0.2231 134217728 juste
+swift k3 sw_padded - : 0.09072 134217728 juste
+swift k4 natural_unsorted - : 0.1018 1605908545 juste
+swift k4 branchless_unsorted - : 0.003759 1605908545 juste
+swift k4 tuned - : 0.002766 1605908545 juste
+swift k4 swar - : 0.003395 1605908545 juste
+swift k5 natural - : 0.09421 509.0856 juste
+swift k5 tuned - : 0.00605 509.0858 juste
+swift k6 natural q6 : 0.05144 45333132534 juste
+swift k6 natural q1 : 0.06951 3997084032331541 juste
+swift k6 tuned q6 : 0.01403 45333132534 juste
+swift k6 tuned q1 : 0.02386 3997084032331541 juste
+swift k6 mt q6 : 0.008691 45333132534 juste
+swift k6 mt q1 : 0.0108 3997084032331541 juste
+swift k6 mt_pool q6 : 0.006352 45333132534 juste
+swift k6 mt_pool q1 : 0.00997 3997084032331541 juste
+swift k7 natural - : 1.535 1048575:4294504410765 juste
+swift k7 tuned - : 0.1608 1048575:4294504410765 juste
+swift k7 tuned_pf - : 0.1988 1048575:4294504410765 juste
+swift k8 natural - : 2.21 2508056453121 juste
+swift k8 tuned - : 0.2909 2508056453121 juste
+swift k8 tuned_val - : 0.1448 2508056453121 juste
+swift k8 tuned_it - : 0.09695 2508056453121 juste
+swift k9 natural - : 0.06882 2.095103199218750e+06 juste
+swift k9 tuned - : 0.01614 2.095103199218750e+06 juste
+swift k9 mt - : 0.006416 2.095103199218750e+06 juste
+swift k9 natural_flat - : 0.02634 2.095103199218750e+06 juste
+swift k9 mt_pool - : 0.003565 2.095103199218750e+06 juste
 fpc k1 natural energy : 0.03408 1049202.376981 juste
 fpc k1 aos energy : 0.03 1049202.377017 juste
 fpc k1 soa energy : 0.005782 1049202.376981 juste
@@ -796,4 +803,4 @@ julia k8 tuned - : 0.3784 2508056453121 juste
 julia k9 natural - : 0.01951 2.095103199218750e+06 juste
 julia k9 tuned - : 0.02267 2.095103199218750e+06 juste
 julia k9 mt - : 0.01016 2.095103199218750e+06 juste
-# 796 cellules, 796 justes, 0 fausses
+# 803 cellules, 803 justes, 0 fausses

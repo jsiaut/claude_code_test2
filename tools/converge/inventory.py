@@ -338,6 +338,35 @@ INV = {
         "k9 mt_pool": e(P, [("k9", "mt", "")], "équipe OpenMP, quatre blocs de colonnes"),
         "k9 mt_pool_v": e(S, note="tuned_v de K9 non écrivible"),
     },
+    "swift": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : SIMD8<UInt64>, masque par le bit de poids fort, somme "
+                      "par voies"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits scalaires (loadUnaligned)"),
+        "k5 tuned_v": e(P, [("k5", "tuned", "")], "SIMD16<Float>, quatre accumulateurs, addProduct (FMA), réduction en "
+                        "arbre une fois par appel"),
+        "q6 tuned_v": e(P, [("k6", "tuned", "q6")], "SIMD16<Int32>, masques, replacing(with:where:), accumulation en "
+                        "SIMD16<Int64>"),
+        "q6 tuned_s": SANS_REPLI,
+        "q1 tuned_v": e(P, [("k6", "tuned", "q1")], "l'algorithme de la référence, groupes déroulés à la main ; compte par "
+                        "accumulation des voies du masque, réduite toutes les 4 096 lignes ; charge en SIMD16<Int64>"),
+        "q1 tuned_s": SANS_REPLI,
+        "q6 mt_pool": e(E, [("k6", "mt_pool", "q6")], "trois Foundation.Thread créés une fois, DispatchSemaphore ; chaque "
+                        "quart : q6Tuned publiée (tuned_v)"),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 présente : mt_pool l'exécute"),
+        "q6 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "q1 mt_pool": e(E, [("k6", "mt_pool", "q1")], "chaque quart : q1Tuned publiée (tuned_v)"),
+        "q1 mt_pool_v": e(S, note="tuned_v de Q1 présente : mt_pool l'exécute"),
+        "q1 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "k7 tuned_pf": e(E, [("k7", "tuned_pf", "")], "lots de 16, préchargement en écriture par "
+                         "@_silgen_name(\"llvm.prefetch.p0\") (attribut souligné, grille E4 = ½ ; 16 prefetchw dans le "
+                         "binaire)"),
+        "k7 tuned_oa": e(P, [("k7", "tuned", "")], "la variante tuned publiée : la même table, sans préchargement"),
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "piles en InlineArray<64, Int32> (sur la pile)"),
+        "k9 tuned_v": e(P, [("k9", "tuned", "")], "la forme de la frontière : SIMD8<Double>, j depuis 1"),
+        "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "chaque quart : k9Rows publiée (tuned_v)"),
+        "k9 mt_pool_v": e(S, note="tuned_v de K9 présente : mt_pool l'exécute"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
     "fortran": {

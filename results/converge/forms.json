@@ -2521,6 +2521,226 @@
     "remarque": true,
     "ceiling": "K8"
    }
+  },
+  "swift": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : SIMD8<UInt64>, masque par le bit de poids fort, somme par voies",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "mots de 64 bits scalaires (loadUnaligned)",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k5",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "SIMD16<Float>, quatre accumulateurs, addProduct (FMA), réduction en arbre une fois par appel",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "tuned",
+      "q6"
+     ]
+    ],
+    "note": "SIMD16<Int32>, masques, replacing(with:where:), accumulation en SIMD16<Int64>",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "tuned",
+      "q1"
+     ]
+    ],
+    "note": "l'algorithme de la référence, groupes déroulés à la main ; compte par accumulation des voies du masque, réduite toutes les 4 096 lignes ; charge en SIMD16<Int64>",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool",
+      "q6"
+     ]
+    ],
+    "note": "trois Foundation.Thread créés une fois, DispatchSemaphore ; chaque quart : q6Tuned publiée (tuned_v)",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q6 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool",
+      "q1"
+     ]
+    ],
+    "note": "chaque quart : q1Tuned publiée (tuned_v)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q1 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k7",
+      "tuned_pf",
+      ""
+     ]
+    ],
+    "note": "lots de 16, préchargement en écriture par @_silgen_name(\"llvm.prefetch.p0\") (attribut souligné, grille E4 = ½ ; 16 prefetchw dans le binaire)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "présente",
+    "cells": [
+     [
+      "k7",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "la variante tuned publiée : la même table, sans préchargement",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "fonction récursive, état en paramètres et en retour",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "piles en InlineArray<64, Int32> (sur la pile)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "la forme de la frontière : SIMD8<Double>, j depuis 1",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "mt_pool",
+      ""
+     ]
+    ],
+    "note": "chaque quart : k9Rows publiée (tuned_v)",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de K9 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }

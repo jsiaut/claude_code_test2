@@ -55,6 +55,38 @@ func runThreads(_ n: Int, _ body: @escaping @Sendable (Int) -> Void) {
     }
     for _ in 0..<n { done.wait() }
 }
+/// v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool) : réserve de quatre fils de travail, le fil principal compris. Trois
+/// Foundation.Thread sont créés une fois par processus, avant l'échauffement ; à chaque appel, un sémaphore par fil le
+/// réveille, chacun traite son quart (0 pour le fil principal), et un sémaphore commun attend leur fin. Entre deux
+/// appels, les fils attendent, bloqués, sur leur sémaphore (DispatchSemaphore, qui ordonne aussi les accès mémoire).
+final class Pool: @unchecked Sendable {
+    let start = (0..<3).map { _ in DispatchSemaphore(value: 0) }
+    let done = DispatchSemaphore(value: 0)
+    var job: @Sendable (Int) -> Void = { _ in }
+    var quit = false
+    init() {
+        for t in 1...3 {
+            Thread { [self] in
+                while true {
+                    start[t - 1].wait()
+                    if quit { break }
+                    job(t)
+                    done.signal()
+                }
+            }.start()
+        }
+    }
+    func run(_ body: @escaping @Sendable (Int) -> Void) {
+        job = body
+        for s in start { s.signal() }
+        body(0)
+        for _ in 0..<3 { done.wait() }
+    }
+    func stop() {
+        quit = true
+        for s in start { s.signal() }
+    }
+}
 @inline(__always) func ld16(_ p: UnsafePointer<Float>) -> SIMD16<Float> { UnsafeRawPointer(p).loadUnaligned(as: SIMD16<Float>.self) }
 @inline(__always) func ld16(_ p: UnsafePointer<Int32>) -> SIMD16<Int32> { UnsafeRawPointer(p).loadUnaligned(as: SIMD16<Int32>.self) }
 // élargissements écrits voie par voie (vectorisés en vpmovzxbd / vpmovsxdq) : init(truncatingIfNeeded:) de la
@@ -290,13 +322,42 @@ func runK3(_ v: String, _ reps: Int) {
     }
     return s
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits (scalaires). Le bit de poids fort
+// de chaque octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les octets
+// >= 128 ; les octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute donnée : une
+// voie reçoit au plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les voies sont
+// vidées dans la somme de 64 bits toutes les 128 mots (et à la fin). Aucun branchement sur les données.
+@inline(never) func k4Swar(_ v: UnsafeBufferPointer<UInt8>) -> UInt64 {
+    let ones: UInt64 = 0x0101_0101_0101_0101, lo: UInt64 = 0x00FF_00FF_00FF_00FF
+    let n = v.count
+    let base = UnsafeRawPointer(v.baseAddress!)
+    var s: UInt64 = 0
+    var i = 0
+    while i &+ 8 <= n {
+        let end = i &+ 128 * 8 <= n ? i &+ 128 * 8 : n &- (n &- i) % 8
+        var acc: UInt64 = 0
+        while i < end {
+            let w = base.loadUnaligned(fromByteOffset: i, as: UInt64.self)
+            let y = w & (((w &>> 7) & ones) &* 0xFF)
+            acc &+= (y & lo) &+ ((y &>> 8) & lo)
+            i &+= 8
+        }
+        acc = (acc & 0x0000_FFFF_0000_FFFF) &+ ((acc &>> 16) & 0x0000_FFFF_0000_FFFF)  // deux voies de 32 bits
+        s &+= (acc & 0xFFFF_FFFF) &+ (acc &>> 32)
+    }
+    while i < n {
+        s &+= UInt64(v[i]) &* UInt64(v[i] &>> 7)
+        i &+= 1
+    }
+    return s
+}
 func runK4(_ v: String, _ reps: Int) {
-    if v == "branchless_unsorted" || v == "tuned" {
+    if v == "branchless_unsorted" || v == "tuned" || v == "swar" {
         let d = UnsafeBufferPointer(load("k4_bytes.u8", UInt8.self))
-        let tu = v == "tuned"
+        let tu = v == "tuned", sw = v == "swar"
         for r in -warmup..<reps {
             let t0 = nowNs()
-            let s = tu ? k4Tuned(d) : k4Branchless(d)
+            let s = tu ? k4Tuned(d) : sw ? k4Swar(d) : k4Branchless(d)
             let dt = secs(t0)
             if r >= 0 { result("k4", v, "16M", r, dt, "\(s)") }
         }
@@ -503,6 +564,9 @@ func runK6(_ v: String, _ reps: Int, _ p: String) {
                   rf: UnsafePointer(load("k6_returnflag.u8", UInt8.self).baseAddress!),
                   ls: UnsafePointer(load("k6_linestatus.u8", UInt8.self).baseAddress!))
     nonisolated(unsafe) let part = UnsafeMutablePointer<Int64>.allocate(capacity: 4 * 32)
+    // mt_pool (v4, point 4) : un quart par fil de la réserve, chacun exécute la forme de mt (q6Tuned, q1Tuned : déjà les
+    // formes tuned_v du catalogue)
+    let pool: Pool? = v == "mt_pool" ? Pool() : nil
     for r in -warmup..<reps {
         part.initialize(repeating: 0, count: 4 * 32)
         var s: Int64 = 0
@@ -513,13 +577,20 @@ func runK6(_ v: String, _ reps: Int, _ p: String) {
                 if q1 { q1Tuned(c, lo, hi, part + 32 * t) } else { part[32 * t] = q6Tuned(c, lo, hi) }
             }
             for k in 0..<(4 * 32) { s &+= part[k] }
+        } else if let pool {
+            pool.run { t in
+                let lo = N6 / 4 * t, hi = N6 / 4 * (t + 1)
+                if q1 { q1Tuned(c, lo, hi, part + 32 * t) } else { part[32 * t] = q6Tuned(c, lo, hi) }
+            }
+            for k in 0..<(4 * 32) { s &+= part[k] }
         } else {
             if q1 { q1Tuned(c, 0, N6, part) } else { s = q6Tuned(c, 0, N6) }
         }
         let dt = secs(t0)
-        if q1 && v != "mt" { for k in 0..<30 { s &+= part[k] } }
+        if q1 && v != "mt" && pool == nil { for k in 0..<30 { s &+= part[k] } }
         if r >= 0 { result("k6", v, p, r, dt, "\(s)") }
     }
+    pool?.stop()
 }
 
 // ------------------------------------------------------------------ K7
@@ -538,6 +609,10 @@ struct Slot {
     var count: UInt32
     var sum: UInt64
 }
+/// Préchargement de LLVM par l'attribut souligné @_silgen_name (grille E4 = ½ : livré mais souligné ; la sonde de la
+/// grille, probes/swift/base.sh, y relève des prefetchw dans le code produit)
+@_silgen_name("llvm.prefetch.p0")
+func llvmPrefetch(_ p: UnsafeRawPointer, _ rw: Int32, _ locality: Int32, _ cache: Int32)
 func runK7(_ v: String, _ reps: Int) {
     let keys = loadArray("k7_keys.u32", UInt32.self), vals = loadArray("k7_vals.u32", UInt32.self)
     for r in -warmup..<reps {
@@ -552,6 +627,51 @@ func runK7(_ v: String, _ reps: Int) {
                 nk += 1
                 ws += a.sum * UInt64((k & 1023) + 1)
             }
+        } else if v == "tuned_pf" {
+            // v4, point 4 (docs/V4_CONVERGE.md, 3.3, K7 tuned_pf ; forme de la frontière, Chapel) : la table de tuned,
+            // clés par lots de 16 : les 16 hachages calculés et leurs cases préchargées en écriture (llvm.prefetch, rw = 1),
+            // puis les 16 insertions
+            let LOG = UInt32(SIZE_K7_LOG2 + 1), CAP = 1 << (SIZE_K7_LOG2 + 1)
+            let t0 = nowNs()
+            let tab = alignedBuffer(CAP, Slot.self)
+            tab.initialize(repeating: Slot(key: 0, count: 0, sum: 0), count: CAP)
+            keys.withUnsafeBufferPointer { kb in
+                vals.withUnsafeBufferPointer { vb in
+                    let n = kb.count
+                    var i = 0
+                    var h = SIMD16<UInt32>()
+                    while i &+ 16 <= n {
+                        for b in 0..<16 {
+                            h[b] = (kb[i &+ b] &* 0x9E37_79B1) &>> (32 &- LOG)
+                            llvmPrefetch(UnsafeRawPointer(tab + Int(h[b])), 1, 3, 1)
+                        }
+                        for b in 0..<16 {
+                            let k = kb[i &+ b]
+                            var s = Int(h[b])
+                            while tab[s].count != 0 && tab[s].key != k { s = (s &+ 1) & (CAP &- 1) }
+                            tab[s].key = k
+                            tab[s].count &+= 1
+                            tab[s].sum &+= UInt64(vb[i &+ b])
+                        }
+                        i &+= 16
+                    }
+                    while i < n {  // reste (moins de 16 clés)
+                        let k = kb[i]
+                        var s = Int((k &* 0x9E37_79B1) >> (32 &- LOG))
+                        while tab[s].count != 0 && tab[s].key != k { s = (s &+ 1) & (CAP &- 1) }
+                        tab[s].key = k
+                        tab[s].count &+= 1
+                        tab[s].sum &+= UInt64(vb[i])
+                        i &+= 1
+                    }
+                }
+            }
+            dt = secs(t0)
+            for s in 0..<CAP where tab[s].count != 0 {
+                nk += 1
+                ws &+= tab[s].sum &* UInt64((tab[s].key & 1023) + 1)
+            }
+            tab.deallocate()
         } else {  // adressage ouvert, sondage linéaire, hachage de Fibonacci (pas de préchargement logiciel en Swift)
             let LOG = UInt32(SIZE_K7_LOG2 + 1), CAP = 1 << (SIZE_K7_LOG2 + 1)
             let t0 = nowNs()
@@ -625,9 +745,77 @@ func aSum(_ a: UnsafePointer<ANode>, _ i: Int32) -> Int64 {
     let n = a[Int(i)]
     return n.v &+ aSum(a, n.l) &+ aSum(a, n.r)
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada, et de bench/c_k8val) : l'état passe
+// par valeur, l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la fonction rend l'indice
+// libre suivant. Même arène, mêmes liens et mêmes valeurs que aBuild ; somme récursive par les liens (aSum).
+func avBuild(_ a: UnsafeMutablePointer<ANode>, _ i: Int32, _ d: Int, _ q: Int64) -> Int32 {
+    a[Int(i)].v = q &+ Int64(i)
+    if d > 0 {
+        let l = i &+ 1
+        let r = avBuild(a, l, d &- 1, q)
+        a[Int(i)].l = l
+        a[Int(i)].r = r
+        return avBuild(a, r, d &- 1, q)
+    }
+    a[Int(i)].l = -1
+    a[Int(i)].r = -1
+    return i &+ 1
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/c_k8it, remarque sur C) : construction et somme
+// itératives, piles explicites (InlineArray de 64 entrées, sur la pile : au plus une entrée par niveau à la
+// construction, au plus profondeur + 1 à la somme ; SIZE_K8_REQ < 63, vérifié dans runK8). La construction descend à
+// gauche en empilant le sous-arbre droit de chaque nœud interne, puis le reprend à la feuille suivante : même ordre
+// préfixe, mêmes liens et mêmes valeurs que aBuild.
+func aiBuild(_ a: UnsafeMutablePointer<ANode>, _ depth: Int, _ q: Int64) {
+    var stP = InlineArray<64, Int32>(repeating: 0), stD = InlineArray<64, Int32>(repeating: 0)
+    var sp = 0, d = Int32(depth), right = false
+    var top: Int32 = 0, parent: Int32 = -1
+    while true {
+        let i = top
+        top &+= 1
+        a[Int(i)].v = q &+ Int64(i)
+        if parent >= 0 {
+            if right { a[Int(parent)].r = i } else { a[Int(parent)].l = i }
+        }
+        if d > 0 {
+            stP[sp] = i
+            stD[sp] = d &- 1
+            sp &+= 1
+            parent = i
+            right = false
+            d &-= 1
+        } else {
+            a[Int(i)].l = -1
+            a[Int(i)].r = -1
+            if sp == 0 { break }
+            sp &-= 1
+            parent = stP[sp]
+            d = stD[sp]
+            right = true
+        }
+    }
+}
+func aiSum(_ a: UnsafePointer<ANode>, _ root: Int32) -> Int64 {
+    var st = InlineArray<64, Int32>(repeating: 0)
+    var sp = 1
+    st[0] = root
+    var s: Int64 = 0
+    while sp > 0 {
+        sp &-= 1
+        let n = a[Int(st[sp])]
+        s &+= n.v
+        if n.l >= 0 {
+            st[sp] = n.r
+            st[sp &+ 1] = n.l
+            sp &+= 2
+        }
+    }
+    return s
+}
 func runK8(_ v: String, _ reps: Int) {
     let Q = 16384
     let tuned = v == "tuned"
+    precondition(SIZE_K8_REQ < 63, "piles de K8 tuned_it : 64 entrées")
     var c0: Int64 = 0
     let keep = tBuild(SIZE_K8_LONG, &c0)
     let lsum = tSum(keep)
@@ -643,6 +831,12 @@ func runK8(_ v: String, _ reps: Int) {
             if tuned {
                 var top: Int32 = 0
                 s = aSum(arena, aBuild(arena, &top, SIZE_K8_REQ, &c))
+            } else if v == "tuned_val" {
+                _ = avBuild(arena, 0, SIZE_K8_REQ, c)
+                s = aSum(arena, 0)
+            } else if v == "tuned_it" {
+                aiBuild(arena, SIZE_K8_REQ, c)
+                s = aiSum(arena, 0)
             } else {
                 let t = tBuild(SIZE_K8_REQ, &c)
                 s = tSum(t)
@@ -743,6 +937,8 @@ func runK9(_ v: String, _ reps: Int) {
     }
     let n = M9 * M9
     var a = alignedBuffer(n, Double.self), b = alignedBuffer(n, Double.self)
+    // mt_pool (v4, point 4) : un quart des lignes par fil de la réserve, chacun exécute k9Rows (déjà la forme tuned_v)
+    let pool: Pool? = v == "mt_pool" ? Pool() : nil
     for r in -warmup..<reps {
         for k in 0..<n {
             a[k] = k9Init(k / M9, k % M9)
@@ -752,6 +948,9 @@ func runK9(_ v: String, _ reps: Int) {
         for _ in 0..<4 {
             if v == "tuned" {
                 k9Rows(a, b, 1, M9 - 1)
+            } else if let pool {
+                nonisolated(unsafe) let (x, y) = (a, b)
+                pool.run { t in k9Rows(x, y, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4) }
             } else {
                 nonisolated(unsafe) let (x, y) = (a, b)
                 runThreads(4) { t in k9Rows(x, y, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4) }
@@ -763,6 +962,7 @@ func runK9(_ v: String, _ reps: Int) {
         for k in 0..<n { s += a[k] }
         if r >= 0 { result("k9", v, "2048^2x4", r, dt, String(format: "%.15e", s)) }
     }
+    pool?.stop()
 }
 
 // ------------------------------------------------------------------ K10

@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 11 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran).
+Langages relevés : 12 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -292,3 +292,28 @@ Langages relevés : 11 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 non écrivible |
 | `k5 rq_acc16` (R) | K5 | écrite | `k5 rq_acc16` | forme de bench/fortran_exp (remarque sur Fortran) : quatre accumulateurs écrits comme des tableaux de 16 valeurs, une réduction finale ; propre à Fortran, qui n'a pas de type vectoriel (K5 tuned_v non écrivible) |
 | `k8 rq_aos` (R) | K8 | écrite | `k8 rq_aos` | forme de bench/fortran_exp (remarque sur Fortran) : la variante tuned (état par référence) sur une arène de nœuds de 16 octets au lieu de trois tableaux |
+
+## Swift
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : SIMD8<UInt64>, masque par le bit de poids fort, somme par voies |
+| `k4 swar` | K4 | écrite | `k4 swar` | mots de 64 bits scalaires (loadUnaligned) |
+| `k5 tuned_v` | K5 | présente | `k5 tuned` | SIMD16<Float>, quatre accumulateurs, addProduct (FMA), réduction en arbre une fois par appel |
+| `q6 tuned_v` | Q6 | présente | `k6 tuned q6` | SIMD16<Int32>, masques, replacing(with:where:), accumulation en SIMD16<Int64> |
+| `q6 tuned_s` | Q6 | sans objet | — | forme principale présente ou écrite |
+| `q1 tuned_v` | Q1 | présente | `k6 tuned q1` | l'algorithme de la référence, groupes déroulés à la main ; compte par accumulation des voies du masque, réduite toutes les 4 096 lignes ; charge en SIMD16<Int64> |
+| `q1 tuned_s` | Q1 | sans objet | — | forme principale présente ou écrite |
+| `q6 mt_pool` | Q6 mt | écrite | `k6 mt_pool q6` | trois Foundation.Thread créés une fois, DispatchSemaphore ; chaque quart : q6Tuned publiée (tuned_v) |
+| `q6 mt_pool_v` | Q6 mt | sans objet | — | tuned_v de Q6 présente : mt_pool l'exécute |
+| `q6 mt_pool_s` | Q6 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `q1 mt_pool` | Q1 mt | écrite | `k6 mt_pool q1` | chaque quart : q1Tuned publiée (tuned_v) |
+| `q1 mt_pool_v` | Q1 mt | sans objet | — | tuned_v de Q1 présente : mt_pool l'exécute |
+| `q1 mt_pool_s` | Q1 mt | sans objet | — | pas de forme scalaire nouvelle |
+| `k7 tuned_pf` | K7 | écrite | `k7 tuned_pf` | lots de 16, préchargement en écriture par @_silgen_name("llvm.prefetch.p0") (attribut souligné, grille E4 = ½ ; 16 prefetchw dans le binaire) |
+| `k7 tuned_oa` | K7 | présente | `k7 tuned` | la variante tuned publiée : la même table, sans préchargement |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | fonction récursive, état en paramètres et en retour |
+| `k8 tuned_it` | K8 | écrite | `k8 tuned_it` | piles en InlineArray<64, Int32> (sur la pile) |
+| `k9 tuned_v` | K9 | présente | `k9 tuned` | la forme de la frontière : SIMD8<Double>, j depuis 1 |
+| `k9 mt_pool` | K9 mt | écrite | `k9 mt_pool` | chaque quart : k9Rows publiée (tuned_v) |
+| `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 présente : mt_pool l'exécute |
