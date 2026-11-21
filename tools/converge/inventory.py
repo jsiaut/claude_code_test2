@@ -558,6 +558,40 @@ INV = {
         "k9 mt_pool_v": e(E, [("k9", "mt_pool_v", "")], "goroutines, chaque quart : tuned_v (mt_vec de la remarque, "
                           "× 0,73)", True),
     },
+    "haskell": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : primitives SIMD de GHC (Word16X32#), sans comparaison "
+                      "ni « et » : reste et quotient par 256 et par 128"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits (indexWord8OffAddrAsWord64#, lecture non alignée)"),
+        "k5 tuned_v": e(P, [("k5", "tuned", "")], "FloatX16#, quatre accumulateurs, fmaddFloatX16#, 64 éléments par tour"),
+        "q6 tuned_v": e(N, note="GHC 9.14.1 n'offre sur les vecteurs d'entiers (Int32X16#…) ni comparaison, ni masque, "
+                        "ni sélection, ni « et » (GHC.Exts : broadcast, pack/unpack, insert, plus, minus, times, quot, "
+                        "rem, negate, lectures et écritures ; « :browse GHC.Exts », 21 novembre) : le prédicat ne s'écrit "
+                        "pas par comparaisons"),
+        "q6 tuned_s": e(P, [("k6", "tuned", "q6")], "la variante tuned publiée : prédicat en 0/1 par comparaisons non "
+                        "signées (fromEnum), s += prix × remise × m en 64 bits"),
+        "q1 tuned_v": e(N, note="comme Q6 : ni comparaison ni masque sur les vecteurs d'entiers de GHC"),
+        "q1 tuned_s": e(E, [("k6", "tuned_s", "q1")], "une passe, 30 accumulateurs en arguments stricts de la boucle, "
+                        "masques par décalage arithmétique ; bien plus lente que la variante tuned publiée à l'essai "
+                        "(342 contre 46 ms : GHC passe les 31 arguments par sa pile)"),
+        "q6 mt_pool": e(P, [("k6", "mt", "q6")], "forkOn : fils légers sur les capacités du runtime (-N4, fils gardés "
+                        "par le RTS)"),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 non écrivible"),
+        "q6 mt_pool_s": e(S, note="tuned_s de Q6 présente : mt_pool l'exécute"),
+        "q1 mt_pool": e(P, [("k6", "mt", "q1")], "forkOn (capacités du runtime)"),
+        "q1 mt_pool_v": e(S, note="tuned_v de Q1 non écrivible"),
+        "q1 mt_pool_s": e(E, [("k6", "mt_pool_s", "q1")], "forkOn, chaque quart : tuned_s"),
+        "k7 tuned_pf": e(E, [("k7", "tuned_pf", "")], "la table de la variante tuned, lots de 16, prefetchAddr3# "
+                         "(préchargement en lecture : GHC n'en a pas en écriture)"),
+        "k7 tuned_oa": SANS_REPLI,
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive dans IO, état en arguments et en retour (la "
+                          "variante tuned publiée garde l'indice libre et le compteur en mémoire brute)"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "piles de 64 entrées en mémoire brute allouée une fois "
+                         "(profondeur contrôlée à la compilation, #error)"),
+        "k9 tuned_v": e(P, [("k9", "tuned", "")], "DoubleX8#, j depuis 1, chargements et écritures non alignés, reste "
+                        "scalaire"),
+        "k9 mt_pool": e(P, [("k9", "mt", "")], "forkOn (capacités du runtime)"),
+        "k9 mt_pool_v": e(S, note="tuned_v de K9 présente : mt_pool l'exécute"),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
     "java": {

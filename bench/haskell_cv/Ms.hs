@@ -15,6 +15,7 @@ import Data.IORef
 import Data.List (foldl', sort)
 import Data.Word
 import Foreign.ForeignPtr
+import Foreign.Marshal.Alloc (allocaBytes)
 import Foreign.Marshal.Utils (copyBytes, fillBytes)
 import Foreign.Ptr
 import Foreign.Storable
@@ -269,12 +270,50 @@ k4TunedAddr a (I# n) = chunks 0# 0
           let x = W# (word8ToWord# (indexWord8OffAddr# a i))
           in tailSum (i +# 1#) (if x >= 128 then s + fromIntegral x else s)
 
+-- v4, point 4 (docs/V4_CONVERGE.md, 3.3, swar) : huit octets par mot de 64 bits (indexWord8OffAddrAsWord64#, lecture
+-- non alignée). Par mot w : m = (w >> 7) .&. 0x0101…01 (le bit de poids fort de chaque octet), y = w .&. (m * 0xFF)
+-- (octets >= 128 gardés, les autres à zéro), puis les octets de rang pair et impair ajoutés en quatre voies de 16 bits.
+-- Exactitude : par mot, chaque voie reçoit au plus 2 × 255 = 510 ; vidée toutes les 128 mots, elle reste sous
+-- 128 × 510 = 65 280 < 2^16 ; au vidage, deux voies de 32 bits (au plus 2 × 65 280) ajoutées à la somme de 64 bits.
+-- Les n mod 8 derniers octets : x .&. negate (x >> 7).
+{-# NOINLINE k4Swar #-}
+k4Swar :: BS.ByteString -> Word64
+k4Swar bs = unsafeDupablePerformIO $ BSU.unsafeUseAsCStringLen bs $ \(Ptr a, n) -> return $! k4SwarAddr a n
+
+k4SwarAddr :: Addr# -> Int -> Word64
+k4SwarAddr a n = tailSum (nw * 8) (blocks 0 0)
+  where
+    nw = n `quot` 8
+    word :: Int -> Word64
+    word (I# i) = W64# (indexWord8OffAddrAsWord64# a (i *# 8#))
+    blocks :: Int -> Word64 -> Word64
+    blocks !i !s
+      | i >= nw = s
+      | otherwise =
+          let e = min (i + 128) nw
+              inner :: Int -> Word64 -> Word64
+              inner !k !acc
+                | k >= e = acc
+                | otherwise =
+                    let w = word k
+                        y = w .&. (((w `shiftR` 7) .&. 0x0101010101010101) * 0xFF)
+                    in inner (k + 1) (acc + (y .&. 0x00FF00FF00FF00FF) + ((y `shiftR` 8) .&. 0x00FF00FF00FF00FF))
+              a1 = inner i 0
+              a2 = (a1 .&. 0x0000FFFF0000FFFF) + ((a1 `shiftR` 16) .&. 0x0000FFFF0000FFFF)
+          in blocks e (s + (a2 .&. 0xFFFFFFFF) + (a2 `shiftR` 32))
+    tailSum :: Int -> Word64 -> Word64
+    tailSum i@(I# i#) !s
+      | i >= n = s
+      | otherwise =
+          let x = fromIntegral (W# (word8ToWord# (indexWord8OffAddr# a i#))) :: Word64
+          in tailSum (i + 1) (s + (x .&. negate (x `shiftR` 7)))
+
 runK4 :: String -> Int -> Int -> IO ()
 runK4 v warm reps = do
   d <- dataDir
   bs0 <- BS.readFile (d ++ "/k4_bytes.u8")
   let bs = if v == "natural_sorted" then BS.sort bs0 else bs0
-      f = if v == "tuned" then k4Tuned else if v == "branchless_unsorted" then k4Branchless else k4Natural
+      f = if v == "tuned" then k4Tuned else if v == "swar" then k4Swar else if v == "branchless_unsorted" then k4Branchless else k4Natural
   ref <- newIORef bs
   bench "k4" v "16M" warm reps (readIORef ref >>= \x -> return $! show (f x))
 
@@ -397,6 +436,32 @@ q1Tuned c lo hi = do
     go lo
     forM [0 .. 29] (peekElemOff a)
 
+-- v4, point 4 (docs/V4_CONVERGE.md, 3.3, Q1 tuned_s : forme de repli, tuned_v n'étant pas écrivible) : une passe,
+-- les 30 accumulateurs en arguments stricts de la boucle (variables locales non boxées) ; par ligne, pm = -1 si
+-- shipdate <= 10471 (décalage arithmétique du signe de shipdate - 10472), et pour chaque groupe k,
+-- mk = pm .&. (signe de (g xor k) - 1), -1 si g = k ; additions masquées par .&. mk, sans branchement. Exactitude :
+-- les mêmes sommes de 64 bits que q1Tuned.
+q1TunedS :: Cols -> Int -> Int -> IO [Int]
+q1TunedS c lo hi = go lo 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  where
+    go !i !n0 !q0 !p0 !e0 !c0 !n1 !q1 !p1 !e1 !c1 !n2 !q2 !p2 !e2 !c2 !n3 !q3 !p3 !e3 !c3 !n4 !q4 !p4 !e4 !c4 !n5 !q5 !p5 !e5 !c5
+      | i >= hi = return [n0, q0, p0, e0, c0, n1, q1, p1, e1, c1, n2, q2, p2, e2, c2, n3, q3, p3, e3, c3, n4, q4, p4, e4, c4, n5, q5, p5, e5, c5]
+      | otherwise = do
+          sd <- rd32 (csd c) i; rf <- rd8 (crf c) i; ls <- rd8 (cls c) i; q <- rd8 (cq c) i
+          d <- rd8 (cd c) i; t <- rd8 (ct c) i; p <- rd32 (cpr c) i
+          let pm = (sd - 10472) `shiftR` 63 :: Int
+              g = rf * 2 + ls
+              dp = p * (100 - d)
+              ch = dp * (100 + t)
+              m k = pm .&. ((xor g k - 1) `shiftR` 63)
+              !m0 = m 0; !m1 = m 1; !m2 = m 2; !m3 = m 3; !m4 = m 4; !m5 = m 5
+          go (i + 1) (n0 - m0) (q0 + (q .&. m0)) (p0 + (p .&. m0)) (e0 + (dp .&. m0)) (c0 + (ch .&. m0))
+                     (n1 - m1) (q1 + (q .&. m1)) (p1 + (p .&. m1)) (e1 + (dp .&. m1)) (c1 + (ch .&. m1))
+                     (n2 - m2) (q2 + (q .&. m2)) (p2 + (p .&. m2)) (e2 + (dp .&. m2)) (c2 + (ch .&. m2))
+                     (n3 - m3) (q3 + (q .&. m3)) (p3 + (p .&. m3)) (e3 + (dp .&. m3)) (c3 + (ch .&. m3))
+                     (n4 - m4) (q4 + (q .&. m4)) (p4 + (p .&. m4)) (e4 + (dp .&. m4)) (c4 + (ch .&. m4))
+                     (n5 - m5) (q5 + (q .&. m5)) (p5 + (p .&. m5)) (e5 + (dp .&. m5)) (c5 + (ch .&. m5))
+
 runK6 :: String -> Int -> Int -> String -> IO ()
 runK6 v warm reps p = do
   sdB <- loadBuf "k6_shipdate.i32"; prB <- loadBuf "k6_extendedprice.i32"
@@ -406,14 +471,68 @@ runK6 v warm reps p = do
     let c = Cols sd pr q d t rf ls
         q1 = p == "q1"
         one lo hi = if q1 then sum <$> q1Tuned c lo hi else q6Tuned c lo hi
+        oneS lo hi = sum <$> q1TunedS c lo hi  -- v4, point 4 : tuned_s de Q1
     bench "k6" v p warm reps $ case v of
       "mt" -> do
         parts <- forM [0 .. 3] $ \k -> newEmptyMVar >>= \mv -> forkOn k (one (n6 `div` 4 * k) (n6 `div` 4 * (k + 1)) >>= putMVar mv) >> return mv
         show . sum <$> mapM takeMVar parts
+      -- v4, point 4 : fils légers sur les capacités du runtime (-N4), comme mt ; chaque quart : tuned_s
+      "mt_pool_s" -> do
+        parts <- forM [0 .. 3] $ \k -> newEmptyMVar >>= \mv -> forkOn k (oneS (n6 `div` 4 * k) (n6 `div` 4 * (k + 1)) >>= putMVar mv) >> return mv
+        show . sum <$> mapM takeMVar parts
       "tuned" -> show <$> one 0 n6
+      "tuned_s" -> show <$> oneS 0 n6
       _ -> show <$> (if q1 then sum <$> q1Natural c 0 n6 else q6Natural c 0 n6)
 
 -- ------------------------------------------------------------------ K7
+-- v4, point 4 (docs/V4_CONVERGE.md, 3.3, K7 tuned_pf) : la table de la variante tuned (capacité 2^(LOG2+1), cases de
+-- 16 octets, hachage de Fibonacci, sondage linéaire, allouée et remise à zéro dans la zone chronométrée), clés par lots
+-- de 16 : les 16 hachages calculés et leurs cases préchargées (prefetchAddr3# : préchargement en lecture, GHC n'en a
+-- pas en écriture), puis les 16 insertions.
+k7TunedPf :: Ptr Word32 -> Ptr Word32 -> Int -> Int -> Int -> IO (ForeignPtr Word8)
+k7TunedPf keys vals n logc cap = do
+  fp <- mallocPlainForeignPtrAlignedBytes (cap * 16) 64 :: IO (ForeignPtr Word8)
+  unsafeWithForeignPtr fp $ \t -> allocaBytes (16 * 8) $ \(hs :: Ptr Int) -> do
+    fillBytes t 0 (cap * 16)
+    let !(Ptr ta) = t
+        hashOf :: Word32 -> Int
+        hashOf k = fromIntegral ((k * 0x9E3779B1) `shiftR` (32 - logc))
+        ins :: Word32 -> Word32 -> Int -> IO ()
+        ins !k !x !h = do
+          let probe !s = do
+                cnt <- peekByteOff t (s * 16 + 4) :: IO Word32
+                key <- peekByteOff t (s * 16) :: IO Word32
+                if cnt /= 0 && key /= k then probe ((s + 1) .&. (cap - 1)) else return s
+          s <- probe h
+          cnt <- peekByteOff t (s * 16 + 4) :: IO Word32
+          sm <- peekByteOff t (s * 16 + 8) :: IO Word64
+          pokeByteOff t (s * 16) k
+          pokeByteOff t (s * 16 + 4) (cnt + 1)
+          pokeByteOff t (s * 16 + 8) (sm + fromIntegral x)
+        pre :: Int -> Int -> IO ()
+        pre !i !b
+          | b >= 16 = return ()
+          | otherwise = do
+              k <- peekElemOff keys (i + b)
+              let !h@(I# h#) = hashOf k
+              pokeElemOff hs b h
+              IO (\st -> (# prefetchAddr3# ta (h# *# 16#) st, () #))
+              pre i (b + 1)
+        put :: Int -> Int -> IO ()
+        put !i !b
+          | b >= 16 = return ()
+          | otherwise = do
+              k <- peekElemOff keys (i + b); x <- peekElemOff vals (i + b); h <- peekElemOff hs b
+              ins k x h
+              put i (b + 1)
+        batch :: Int -> IO ()
+        batch !i
+          | i + 16 <= n = pre i 0 >> put i 0 >> batch (i + 16)
+          | i < n = do k <- peekElemOff keys i; x <- peekElemOff vals i; ins k x (hashOf k); batch (i + 1)
+          | otherwise = return ()
+    batch 0
+  return fp
+
 runK7 :: String -> Int -> Int -> IO ()
 runK7 v warm reps = do
   kB <- loadBuf "k7_keys.u32" :: IO (Buf Word32)
@@ -436,7 +555,7 @@ runK7 v warm reps = do
           return (show (IM.size m) ++ ":" ++ show ws, dt)
         else do
           let logc = MS_K7_LOG2 + 1 :: Int; cap = 1 `shiftL` logc :: Int
-          (tab, dt) <- timed $ do
+          (tab, dt) <- if v == "tuned_pf" then timed (k7TunedPf keys vals n logc cap) else timed $ do
             fp <- mallocPlainForeignPtrAlignedBytes (cap * 16) 64 :: IO (ForeignPtr Word8)
             unsafeWithForeignPtr fp $ \t -> do
               fillBytes t 0 (cap * 16)
@@ -505,6 +624,67 @@ aSum av al ar i
       a <- aSum av al ar l; b <- aSum av al ar r
       return $! v + a + b
 
+-- v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val) : la même arène (tableaux av, al, ar), construite en ordre
+-- préfixe ; l'état passe par valeur (i : indice du nœud ; q : numéro de requête, valeur du nœud = q + i), le prochain
+-- indice libre revient en résultat ; ni mémoire d'état ni IORef. Mêmes nœuds, mêmes valeurs et mêmes liens que aBuild.
+aBuildVal :: Ptr Int -> Ptr Int32 -> Ptr Int32 -> Int -> Int -> Int -> IO Int
+aBuildVal av al ar !i !d !q = do
+  pokeElemOff av i (q + i)
+  if d == 0
+    then pokeElemOff al i (-1) >> pokeElemOff ar i (-1) >> return (i + 1)
+    else do
+      let l = i + 1
+      r <- aBuildVal av al ar l (d - 1) q
+      pokeElemOff al i (fromIntegral l) >> pokeElemOff ar i (fromIntegral r)
+      aBuildVal av al ar r (d - 1) q
+
+-- v4, point 4 (3.3, K8 tuned_it) : la même arène, construction et somme itératives avec des piles explicites de 64
+-- entrées (tampons bruts alloués une fois, hors chrono) ; la construction descend à gauche en empilant le sous-arbre
+-- droit de chaque nœud interne, puis le reprend à la feuille suivante (même ordre préfixe, mêmes valeurs que aBuild).
+-- La profondeur doit rester sous 63 : contrôlé à la compilation.
+#if MS_K8_REQ >= 63
+#error "K8 tuned_it : piles de 64 entrées, MS_K8_REQ doit rester sous 63"
+#endif
+aBuildIt :: Ptr Int -> Ptr Int32 -> Ptr Int32 -> Ptr Int -> Int -> Int -> IO ()
+aBuildIt av al ar stk depth q = go 0 0 (-1) False depth
+  where
+    go :: Int -> Int -> Int -> Bool -> Int -> IO ()
+    go !sp !i !parent !right !d = do
+      pokeElemOff av i (q + i)
+      when (parent >= 0) $ if right then pokeElemOff ar parent (fromIntegral i) else pokeElemOff al parent (fromIntegral i)
+      if d > 0
+        then do
+          pokeElemOff stk (2 * sp) i
+          pokeElemOff stk (2 * sp + 1) (d - 1)
+          go (sp + 1) (i + 1) i False (d - 1)
+        else do
+          pokeElemOff al i (-1)
+          pokeElemOff ar i (-1)
+          if sp == 0
+            then return ()
+            else do
+              pp <- peekElemOff stk (2 * (sp - 1))
+              dd <- peekElemOff stk (2 * (sp - 1) + 1)
+              go (sp - 1) (i + 1) pp True dd
+
+aSumIt :: Ptr Int -> Ptr Int32 -> Ptr Int32 -> Ptr Int32 -> IO Int
+aSumIt av al ar stk = pokeElemOff stk 0 0 >> go 1 0
+  where
+    go :: Int -> Int -> IO Int
+    go !sp !s
+      | sp == 0 = return s
+      | otherwise = do
+          i <- fromIntegral <$> peekElemOff stk (sp - 1)
+          x <- peekElemOff av i
+          l <- peekElemOff al i
+          if l >= 0
+            then do
+              r <- peekElemOff ar i
+              pokeElemOff stk (sp - 1) r
+              pokeElemOff stk sp l
+              go (sp + 1) (s + x)
+            else go (sp - 1) (s + x)
+
 runK8 :: String -> Int -> Int -> IO ()
 runK8 v warm reps = do
   let q = 16384 :: Int
@@ -512,13 +692,18 @@ runK8 v warm reps = do
       !lsum = tSum keep
   fv <- mallocForeignPtrArray ((2 `shiftL` MS_K8_REQ) - 1); fl <- mallocForeignPtrArray ((2 `shiftL` MS_K8_REQ) - 1); fr <- mallocForeignPtrArray ((2 `shiftL` MS_K8_REQ) - 1)
   fst8 <- mallocForeignPtrArray 2 :: IO (ForeignPtr Int)  -- [indice du prochain nœud, compteur de valeurs]
+  fstk <- mallocForeignPtrArray 128 :: IO (ForeignPtr Int)  -- v4, point 4 : piles de tuned_it (construction)
+  fss <- mallocForeignPtrArray 64 :: IO (ForeignPtr Int32)  -- et somme
   unsafeWithForeignPtr fv $ \av -> unsafeWithForeignPtr fl $ \al -> unsafeWithForeignPtr fr $ \ar -> unsafeWithForeignPtr fst8 $ \top ->
+   unsafeWithForeignPtr fstk $ \stk -> unsafeWithForeignPtr fss $ \sst ->
     forM_ [-warm .. reps - 1] $ \r -> do
       t0 <- getMonotonicTimeNSec
       (total, lat) <- foldM (\(!tot, ls) qq -> do
         a <- getMonotonicTimeNSec
         !s <- if v == "tuned"
           then do poke top 0; pokeElemOff top 1 qq; root <- aBuild av al ar top (top `plusPtr` 8) MS_K8_REQ; aSum av al ar root
+          else if v == "tuned_val" then aBuildVal av al ar 0 MS_K8_REQ qq >> aSum av al ar 0
+          else if v == "tuned_it" then aBuildIt av al ar stk MS_K8_REQ qq >> aSumIt av al ar sst
           else return $! tSum (fst (tBuild MS_K8_REQ qq))
         b <- getMonotonicTimeNSec
         return (tot + s, (b - a) : ls)) (0, []) [0 .. q - 1]

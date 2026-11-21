@@ -4117,6 +4117,226 @@
     "remarque": true,
     "ceiling": "K9 mt"
    }
+  },
+  "haskell": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : primitives SIMD de GHC (Word16X32#), sans comparaison ni « et » : reste et quotient par 256 et par 128",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "mots de 64 bits (indexWord8OffAddrAsWord64#, lecture non alignée)",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k5",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "FloatX16#, quatre accumulateurs, fmaddFloatX16#, 64 éléments par tour",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "GHC 9.14.1 n'offre sur les vecteurs d'entiers (Int32X16#…) ni comparaison, ni masque, ni sélection, ni « et » (GHC.Exts : broadcast, pack/unpack, insert, plus, minus, times, quot, rem, negate, lectures et écritures ; « :browse GHC.Exts », 21 novembre) : le prédicat ne s'écrit pas par comparaisons",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "tuned",
+      "q6"
+     ]
+    ],
+    "note": "la variante tuned publiée : prédicat en 0/1 par comparaisons non signées (fromEnum), s += prix × remise × m en 64 bits",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "comme Q6 : ni comparaison ni masque sur les vecteurs d'entiers de GHC",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_s",
+      "q1"
+     ]
+    ],
+    "note": "une passe, 30 accumulateurs en arguments stricts de la boucle, masques par décalage arithmétique ; bien plus lente que la variante tuned publiée à l'essai (342 contre 46 ms : GHC passe les 31 arguments par sa pile)",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q6"
+     ]
+    ],
+    "note": "forkOn : fils légers sur les capacités du runtime (-N4, fils gardés par le RTS)",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q6 non écrivible",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_s de Q6 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "mt",
+      "q1"
+     ]
+    ],
+    "note": "forkOn (capacités du runtime)",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q1 non écrivible",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_s",
+      "q1"
+     ]
+    ],
+    "note": "forkOn, chaque quart : tuned_s",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k7",
+      "tuned_pf",
+      ""
+     ]
+    ],
+    "note": "la table de la variante tuned, lots de 16, prefetchAddr3# (préchargement en lecture : GHC n'en a pas en écriture)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "fonction récursive dans IO, état en arguments et en retour (la variante tuned publiée garde l'indice libre et le compteur en mémoire brute)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "piles de 64 entrées en mémoire brute allouée une fois (profondeur contrôlée à la compilation, #error)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "DoubleX8#, j depuis 1, chargements et écritures non alignés, reste scalaire",
+    "remarque": false,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "présente",
+    "cells": [
+     [
+      "k9",
+      "mt",
+      ""
+     ]
+    ],
+    "note": "forkOn (capacités du runtime)",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de K9 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "K9 mt"
+   }
   }
  }
 }

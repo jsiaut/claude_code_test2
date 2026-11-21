@@ -3,7 +3,7 @@
 Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.
 États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par la remarque du langage (calcul 4).
 
-Langages relevés : 18 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go).
+Langages relevés : 19 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#, FreePascal, Java, Go, Haskell).
 
 ## Règles de lecture appliquées au relevé (fixées au fil du portage, 21 novembre)
 
@@ -469,3 +469,28 @@ Langages relevés : 18 sur 25 (C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel,
 | `k9 tuned_v` (R) | K9 | écrite | `k9 tuned_v` | forme de bench/go_exp (remarque sur Go, tuned_vec, × 0,78) : Float64x8, j depuis 1, accès non alignés, fin par chargements partiels |
 | `k9 mt_pool` | K9 mt | présente | `k9 mt` | goroutines (fils du runtime) |
 | `k9 mt_pool_v` (R) | K9 mt | écrite | `k9 mt_pool_v` | goroutines, chaque quart : tuned_v (mt_vec de la remarque, × 0,73) |
+
+## Haskell
+
+| Forme | Cellule | État | Variante | Note |
+|---|---|---|---|---|
+| `k4 tuned` | K4 | écrite | `k4 tuned` | point 3 (R3) : primitives SIMD de GHC (Word16X32#), sans comparaison ni « et » : reste et quotient par 256 et par 128 |
+| `k4 swar` | K4 | écrite | `k4 swar` | mots de 64 bits (indexWord8OffAddrAsWord64#, lecture non alignée) |
+| `k5 tuned_v` | K5 | présente | `k5 tuned` | FloatX16#, quatre accumulateurs, fmaddFloatX16#, 64 éléments par tour |
+| `q6 tuned_v` | Q6 | non écrivible | — | GHC 9.14.1 n'offre sur les vecteurs d'entiers (Int32X16#…) ni comparaison, ni masque, ni sélection, ni « et » (GHC.Exts : broadcast, pack/unpack, insert, plus, minus, times, quot, rem, negate, lectures et écritures ; « :browse GHC.Exts », 21 novembre) : le prédicat ne s'écrit pas par comparaisons |
+| `q6 tuned_s` | Q6 | présente | `k6 tuned q6` | la variante tuned publiée : prédicat en 0/1 par comparaisons non signées (fromEnum), s += prix × remise × m en 64 bits |
+| `q1 tuned_v` | Q1 | non écrivible | — | comme Q6 : ni comparaison ni masque sur les vecteurs d'entiers de GHC |
+| `q1 tuned_s` | Q1 | écrite | `k6 tuned_s q1` | une passe, 30 accumulateurs en arguments stricts de la boucle, masques par décalage arithmétique ; bien plus lente que la variante tuned publiée à l'essai (342 contre 46 ms : GHC passe les 31 arguments par sa pile) |
+| `q6 mt_pool` | Q6 mt | présente | `k6 mt q6` | forkOn : fils légers sur les capacités du runtime (-N4, fils gardés par le RTS) |
+| `q6 mt_pool_v` | Q6 mt | sans objet | — | tuned_v de Q6 non écrivible |
+| `q6 mt_pool_s` | Q6 mt | sans objet | — | tuned_s de Q6 présente : mt_pool l'exécute |
+| `q1 mt_pool` | Q1 mt | présente | `k6 mt q1` | forkOn (capacités du runtime) |
+| `q1 mt_pool_v` | Q1 mt | sans objet | — | tuned_v de Q1 non écrivible |
+| `q1 mt_pool_s` | Q1 mt | écrite | `k6 mt_pool_s q1` | forkOn, chaque quart : tuned_s |
+| `k7 tuned_pf` | K7 | écrite | `k7 tuned_pf` | la table de la variante tuned, lots de 16, prefetchAddr3# (préchargement en lecture : GHC n'en a pas en écriture) |
+| `k7 tuned_oa` | K7 | sans objet | — | forme principale présente ou écrite |
+| `k8 tuned_val` | K8 | écrite | `k8 tuned_val` | fonction récursive dans IO, état en arguments et en retour (la variante tuned publiée garde l'indice libre et le compteur en mémoire brute) |
+| `k8 tuned_it` | K8 | écrite | `k8 tuned_it` | piles de 64 entrées en mémoire brute allouée une fois (profondeur contrôlée à la compilation, #error) |
+| `k9 tuned_v` | K9 | présente | `k9 tuned` | DoubleX8#, j depuis 1, chargements et écritures non alignés, reste scalaire |
+| `k9 mt_pool` | K9 mt | présente | `k9 mt` | forkOn (capacités du runtime) |
+| `k9 mt_pool_v` | K9 mt | sans objet | — | tuned_v de K9 présente : mt_pool l'exécute |
