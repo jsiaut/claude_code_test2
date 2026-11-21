@@ -11,7 +11,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLongArray;
+import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 import jdk.incubator.vector.*;
 
@@ -36,6 +41,28 @@ public class Ms {
             if (r >= 0) result(k, v, p, r, (t1 - t0) * 1e-9, chk);
         }
     }
+
+    // v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool) : réserve de fils, forme de la remarque sur Java (bench/java_exp :
+    // exécuteur à fils fixes, créé hors chrono), ramenée à la définition : quatre fils de travail en tout, le fil
+    // principal compris. Trois fils de réserve, démarrés une fois par processus avant l'échauffement
+    // (prestartAllCoreThreads) ; à chaque appel, trois quarts leur sont remis, le fil principal traite le quart 0, puis
+    // attend les trois autres (Future.get, qui ordonne aussi les accès mémoire). Entre deux appels, les fils de la
+    // réserve attendent, bloqués, sur la file de l'exécuteur.
+    static ThreadPoolExecutor pool;
+    static void poolStart() {
+        pool = new ThreadPoolExecutor(3, 3, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), r -> {
+            Thread th = new Thread(r);
+            th.setDaemon(true);
+            return th;
+        });
+        pool.prestartAllCoreThreads();
+    }
+    static void poolRun(IntConsumer job) {
+        Future<?> f1 = pool.submit(() -> job.accept(1)), f2 = pool.submit(() -> job.accept(2)), f3 = pool.submit(() -> job.accept(3));
+        job.accept(0);
+        try { f1.get(); f2.get(); f3.get(); } catch (Exception e) { throw new RuntimeException(e); }
+    }
+    static void poolStop() { pool.shutdown(); }
 
     static final VectorSpecies<Float> FS = FloatVector.SPECIES_512;
     static final VectorSpecies<Double> DS = DoubleVector.SPECIES_512;
@@ -218,6 +245,30 @@ public class Ms {
         for (; i < n; i++) { int x = v[i] & 0xFF; if (x >= 128) s += x; }
         return s;
     }
+    // v4, point 4 (3.3, swar) : huit octets par mot de 64 bits, lus par la vue VarHandle du tableau d'octets (petit-
+    // boutiste, sans contrainte d'alignement). Par mot w : m = (w >>> 7) & 0x0101…01 (le bit de poids fort de chaque
+    // octet), y = w & (m * 0xFF) (octets >= 128 gardés, les autres à zéro), puis les octets de rang pair et impair
+    // ajoutés en quatre voies de 16 bits. Exactitude : par mot, chaque voie reçoit au plus 2 × 255 = 510 ; vidée toutes
+    // les 128 mots, elle reste sous 128 × 510 = 65 280 < 2^16 ; au vidage, deux voies de 32 bits (au plus 2 × 65 280)
+    // ajoutées à la somme de 64 bits. Les n mod 8 derniers octets : x & -(x >>> 7).
+    static final VarHandle LV = MethodHandles.byteArrayViewVarHandle(long[].class, ByteOrder.LITTLE_ENDIAN);
+    static long k4Swar(byte[] v) {
+        int n = v.length, nw = n >>> 3, i = 0;
+        long s = 0;
+        while (i < nw) {
+            int e = Math.min(i + 128, nw);
+            long acc = 0;
+            for (; i < e; i++) {
+                long w = (long) LV.get(v, i << 3);
+                long y = w & (((w >>> 7) & 0x0101010101010101L) * 0xFF);
+                acc += (y & 0x00FF00FF00FF00FFL) + ((y >>> 8) & 0x00FF00FF00FF00FFL);
+            }
+            acc = (acc & 0x0000FFFF0000FFFFL) + ((acc >>> 16) & 0x0000FFFF0000FFFFL);
+            s += (acc & 0xFFFFFFFFL) + (acc >>> 32);
+        }
+        for (int k = nw << 3; k < n; k++) { int x = v[k] & 0xFF; s += x & -(x >>> 7); }
+        return s;
+    }
     static void runK4(String v, int reps) {
         byte[] d = loadBytes("k4_bytes.u8");
         if (v.equals("natural_sorted")) { // tri par comptage (octets non signés), hors chrono
@@ -226,8 +277,8 @@ public class Ms {
             int k = 0;
             for (int b = 0; b < 256; b++) for (int c = 0; c < cnt[b]; c++) d[k++] = (byte) b;
         }
-        boolean bl = v.equals("branchless_unsorted"), tu = v.equals("tuned");
-        bench("k4", v, "16M", reps, () -> Long.toString(tu ? k4Tuned(d) : bl ? k4Branchless(d) : k4Natural(d)));
+        boolean bl = v.equals("branchless_unsorted"), tu = v.equals("tuned"), sw = v.equals("swar");
+        bench("k4", v, "16M", reps, () -> Long.toString(tu ? k4Tuned(d) : sw ? k4Swar(d) : bl ? k4Branchless(d) : k4Natural(d)));
     }
 
     // ------------------------------------------------------------------ K5
@@ -341,13 +392,94 @@ public class Ms {
         }
         if (end < hi) q1Natural(end, hi, acc);
     }
+    // v4, point 4 (3.3, Q1 tuned_v) : la forme de la remarque sur Java (bench/java_exp, q1OnePass ; docs/JAVA.md, 4.2 :
+    // × 0,40), recopiée : l'algorithme de la référence C en une passe (16 lignes par tour, masque de passage, un masque
+    // par groupe, compte par population du masque, Long.bitCount), les accumulateurs des six groupes en variables
+    // locales (un tableau de vecteurs les mettrait sur le tas). La variante tuned publiée fait une passe par groupe sur
+    // des blocs de 2 048 lignes. Exactitude : quantité, prix et prix × (100 − remise) en voies de 32 bits vidées toutes
+    // les 2 048 lignes, soit 128 lignes par voie : au plus 128 × 50 000 × 100 = 6,4 × 10^8 < 2^31 (prix ≤ 50 000,
+    // docs/SPEC.md) ; charge en 64 bits.
+    static void q1OnePass(int lo, int hi, long[] acc) {
+        IntVector c100 = IntVector.broadcast(IS, 100), z = IntVector.zero(IS);
+        LongVector zl = LongVector.zero(LS);
+        int i = lo;
+        while (i + 16 <= hi) {
+            int end = i + 2048 <= hi ? i + 2048 : hi - (hi - i) % 16;
+            IntVector q0 = z, p0 = z, dp0 = z; LongVector cl0 = zl, ch0 = zl; long n0 = 0;
+            IntVector q1 = z, p1 = z, dp1 = z; LongVector cl1 = zl, ch1 = zl; long n1 = 0;
+            IntVector q2 = z, p2 = z, dp2 = z; LongVector cl2 = zl, ch2 = zl; long n2 = 0;
+            IntVector q3 = z, p3 = z, dp3 = z; LongVector cl3 = zl, ch3 = zl; long n3 = 0;
+            IntVector q4 = z, p4 = z, dp4 = z; LongVector cl4 = zl, ch4 = zl; long n4 = 0;
+            IntVector q5 = z, p5 = z, dp5 = z; LongVector cl5 = zl, ch5 = zl; long n5 = 0;
+            for (; i < end; i += 16) {
+                VectorMask<Integer> pass = IntVector.fromArray(IS, sd, i).compare(VectorOperators.LE, 10471);
+                IntVector vg = ((IntVector) ByteVector.fromArray(BS, rf, i).convertShape(VectorOperators.B2I, IS, 0)).lanewise(VectorOperators.LSHL, 1)
+                        .add((IntVector) ByteVector.fromArray(BS, ls, i).convertShape(VectorOperators.B2I, IS, 0));
+                IntVector vq = (IntVector) ByteVector.fromArray(BS, q, i).convertShape(VectorOperators.B2I, IS, 0);
+                IntVector vd = (IntVector) ByteVector.fromArray(BS, d, i).convertShape(VectorOperators.B2I, IS, 0);
+                IntVector vt = ((IntVector) ByteVector.fromArray(BS, t, i).convertShape(VectorOperators.B2I, IS, 0)).add(c100);
+                IntVector vp = IntVector.fromArray(IS, pr, i);
+                IntVector vdp = vp.mul(c100.sub(vd));
+                LongVector chl = ((LongVector) vdp.convertShape(VectorOperators.I2L, LS, 0)).mul((LongVector) vt.convertShape(VectorOperators.I2L, LS, 0));
+                LongVector chh = ((LongVector) vdp.convertShape(VectorOperators.I2L, LS, 1)).mul((LongVector) vt.convertShape(VectorOperators.I2L, LS, 1));
+                VectorMask<Integer> m0 = pass.and(vg.compare(VectorOperators.EQ, 0)); long b0 = m0.toLong();
+                n0 += Long.bitCount(b0); q0 = q0.add(vq, m0); p0 = p0.add(vp, m0); dp0 = dp0.add(vdp, m0);
+                cl0 = cl0.add(chl, VectorMask.fromLong(LS, b0)); ch0 = ch0.add(chh, VectorMask.fromLong(LS, b0 >>> 8));
+                VectorMask<Integer> m1 = pass.and(vg.compare(VectorOperators.EQ, 1)); long b1 = m1.toLong();
+                n1 += Long.bitCount(b1); q1 = q1.add(vq, m1); p1 = p1.add(vp, m1); dp1 = dp1.add(vdp, m1);
+                cl1 = cl1.add(chl, VectorMask.fromLong(LS, b1)); ch1 = ch1.add(chh, VectorMask.fromLong(LS, b1 >>> 8));
+                VectorMask<Integer> m2 = pass.and(vg.compare(VectorOperators.EQ, 2)); long b2 = m2.toLong();
+                n2 += Long.bitCount(b2); q2 = q2.add(vq, m2); p2 = p2.add(vp, m2); dp2 = dp2.add(vdp, m2);
+                cl2 = cl2.add(chl, VectorMask.fromLong(LS, b2)); ch2 = ch2.add(chh, VectorMask.fromLong(LS, b2 >>> 8));
+                VectorMask<Integer> m3 = pass.and(vg.compare(VectorOperators.EQ, 3)); long b3 = m3.toLong();
+                n3 += Long.bitCount(b3); q3 = q3.add(vq, m3); p3 = p3.add(vp, m3); dp3 = dp3.add(vdp, m3);
+                cl3 = cl3.add(chl, VectorMask.fromLong(LS, b3)); ch3 = ch3.add(chh, VectorMask.fromLong(LS, b3 >>> 8));
+                VectorMask<Integer> m4 = pass.and(vg.compare(VectorOperators.EQ, 4)); long b4 = m4.toLong();
+                n4 += Long.bitCount(b4); q4 = q4.add(vq, m4); p4 = p4.add(vp, m4); dp4 = dp4.add(vdp, m4);
+                cl4 = cl4.add(chl, VectorMask.fromLong(LS, b4)); ch4 = ch4.add(chh, VectorMask.fromLong(LS, b4 >>> 8));
+                VectorMask<Integer> m5 = pass.and(vg.compare(VectorOperators.EQ, 5)); long b5 = m5.toLong();
+                n5 += Long.bitCount(b5); q5 = q5.add(vq, m5); p5 = p5.add(vp, m5); dp5 = dp5.add(vdp, m5);
+                cl5 = cl5.add(chl, VectorMask.fromLong(LS, b5)); ch5 = ch5.add(chh, VectorMask.fromLong(LS, b5 >>> 8));
+            }
+            acc[0] += n0; acc[1] += q0.reduceLanesToLong(VectorOperators.ADD); acc[2] += p0.reduceLanesToLong(VectorOperators.ADD);
+            acc[3] += ((LongVector) dp0.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp0.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[4] += cl0.add(ch0).reduceLanes(VectorOperators.ADD);
+            acc[5] += n1; acc[6] += q1.reduceLanesToLong(VectorOperators.ADD); acc[7] += p1.reduceLanesToLong(VectorOperators.ADD);
+            acc[8] += ((LongVector) dp1.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp1.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[9] += cl1.add(ch1).reduceLanes(VectorOperators.ADD);
+            acc[10] += n2; acc[11] += q2.reduceLanesToLong(VectorOperators.ADD); acc[12] += p2.reduceLanesToLong(VectorOperators.ADD);
+            acc[13] += ((LongVector) dp2.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp2.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[14] += cl2.add(ch2).reduceLanes(VectorOperators.ADD);
+            acc[15] += n3; acc[16] += q3.reduceLanesToLong(VectorOperators.ADD); acc[17] += p3.reduceLanesToLong(VectorOperators.ADD);
+            acc[18] += ((LongVector) dp3.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp3.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[19] += cl3.add(ch3).reduceLanes(VectorOperators.ADD);
+            acc[20] += n4; acc[21] += q4.reduceLanesToLong(VectorOperators.ADD); acc[22] += p4.reduceLanesToLong(VectorOperators.ADD);
+            acc[23] += ((LongVector) dp4.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp4.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[24] += cl4.add(ch4).reduceLanes(VectorOperators.ADD);
+            acc[25] += n5; acc[26] += q5.reduceLanesToLong(VectorOperators.ADD); acc[27] += p5.reduceLanesToLong(VectorOperators.ADD);
+            acc[28] += ((LongVector) dp5.convertShape(VectorOperators.I2L, LS, 0)).add((LongVector) dp5.convertShape(VectorOperators.I2L, LS, 1)).reduceLanes(VectorOperators.ADD);
+            acc[29] += cl5.add(ch5).reduceLanes(VectorOperators.ADD);
+        }
+        if (i < hi) q1Natural(i, hi, acc);
+    }
     static void runK6(String v, int reps, String p) {
         sd = loadI32("k6_shipdate.i32"); pr = loadI32("k6_extendedprice.i32"); q = loadBytes("k6_quantity.u8");
         d = loadBytes("k6_discount.u8"); t = loadBytes("k6_tax.u8"); rf = loadBytes("k6_returnflag.u8"); ls = loadBytes("k6_linestatus.u8");
         boolean q1 = p.equals("q1");
+        // v4, point 4 : réserve de fils ; mt_pool : formes publiées par quart ; mt_pool_v (Q1) : tuned_v par quart
+        boolean pl = v.startsWith("mt_pool"), vec1 = v.equals("mt_pool_v");
+        if (pl) poolStart();
         bench("k6", v, p, reps, () -> {
             long s = 0;
-            if (v.equals("mt")) {
+            if (pl) {
+                long[] part = new long[4];
+                poolRun(w -> {
+                    int lo = (int) ((long) N6 * w / 4), hi = (int) ((long) N6 * (w + 1) / 4);
+                    if (q1) { long[] a = new long[30]; if (vec1) q1OnePass(lo, hi, a); else q1Tuned(lo, hi, a); part[w] = Arrays.stream(a).sum(); }
+                    else part[w] = q6Tuned(lo, hi);
+                });
+                for (long x : part) s += x;
+            } else if (v.equals("mt")) {
                 long[] part = new long[4];
                 Thread[] th = new Thread[4];
                 for (int k = 0; k < 4; k++) {
@@ -362,15 +494,33 @@ public class Ms {
                 for (long x : part) s += x;
             } else if (q1) {
                 long[] a = new long[30];
-                if (v.equals("tuned")) q1Tuned(0, N6, a); else q1Natural(0, N6, a);
+                if (v.equals("tuned")) q1Tuned(0, N6, a); else if (v.equals("tuned_v")) q1OnePass(0, N6, a); else q1Natural(0, N6, a);
                 for (long x : a) s += x;
             } else s = v.equals("tuned") ? q6Tuned(0, N6) : q6Natural(0, N6);
             return Long.toString(s);
         });
+        if (pl) poolStop();
     }
 
     // ------------------------------------------------------------------ K7
     static final class Agg { int count; long sum; }
+    // v4, point 4 (3.5, forme propre au runtime) : rq_iso, la forme de la remarque sur Java (bench/java_exp, tuned_iso ;
+    // docs/JAVA.md, 4.2 : × 0,72) : la boucle de la variante tuned, inchangée, dans sa propre méthode. runK7 n'est
+    // appelée qu'une fois : sa boucle est compilée sur place (OSR) ; isolée, la méthode est compilée par C2 comme un
+    // tout (unité de compilation du JIT, coût propre au runtime de Java : docs/V4_CONVERGE.md, 3.5).
+    static long[] k7TunedIso(int[] keys, int[] vals) {
+        final int LOG = Sizes.K7_LOG2 + 1, CAP = 1 << LOG;
+        long[] tab = new long[2 * CAP];
+        for (int i = 0; i < keys.length; i++) {
+            int k = keys[i];
+            int s = (k * 0x9E3779B1) >>> (32 - LOG);
+            long w;
+            while ((w = tab[2 * s]) != 0 && (int) (w >>> 32) != k) s = (s + 1) & (CAP - 1);
+            tab[2 * s] = ((long) k << 32) | ((w & 0xFFFFFFFFL) + 1);
+            tab[2 * s + 1] += vals[i];
+        }
+        return tab;
+    }
     static void runK7(String v, int reps) {
         int[] keys = loadI32("k7_keys.u32"), vals = loadI32("k7_vals.u32");
         for (int r = -warmup(); r < reps; r++) {
@@ -388,15 +538,19 @@ public class Ms {
             } else {
                 final int LOG = Sizes.K7_LOG2 + 1, CAP = 1 << LOG;
                 long t0 = System.nanoTime();
-                // AoS manuel dans un long[] : [clé<<32 | compteur, somme] = 16 o par case, comme en C
-                long[] tab = new long[2 * CAP];
-                for (int i = 0; i < keys.length; i++) {
-                    int k = keys[i];
-                    int s = (k * 0x9E3779B1) >>> (32 - LOG);
-                    long w;
-                    while ((w = tab[2 * s]) != 0 && (int) (w >>> 32) != k) s = (s + 1) & (CAP - 1);
-                    tab[2 * s] = ((long) k << 32) | ((w & 0xFFFFFFFFL) + 1);
-                    tab[2 * s + 1] += vals[i];
+                long[] tab;
+                if (v.equals("rq_iso")) tab = k7TunedIso(keys, vals);
+                else {
+                    // AoS manuel dans un long[] : [clé<<32 | compteur, somme] = 16 o par case, comme en C
+                    tab = new long[2 * CAP];
+                    for (int i = 0; i < keys.length; i++) {
+                        int k = keys[i];
+                        int s = (k * 0x9E3779B1) >>> (32 - LOG);
+                        long w;
+                        while ((w = tab[2 * s]) != 0 && (int) (w >>> 32) != k) s = (s + 1) & (CAP - 1);
+                        tab[2 * s] = ((long) k << 32) | ((w & 0xFFFFFFFFL) + 1);
+                        tab[2 * s + 1] += vals[i];
+                    }
                 }
                 dt = (System.nanoTime() - t0) * 1e-9;
                 for (int s = 0; s < CAP; s++) {
@@ -421,12 +575,58 @@ public class Ms {
         return i;
     }
     static long aSum(int i) { return i < 0 ? 0 : av[i] + aSum(al[i]) + aSum(ar[i]); }
+    // v4, point 4 (3.3, K8 tuned_val) : la même arène (tableaux av, al, ar), construite en ordre préfixe ; l'état passe
+    // par valeur (i : indice du nœud ; q : numéro de requête, valeur du nœud = q + i), le prochain indice libre revient
+    // en résultat ; ni champ statique ni objet d'état. Mêmes nœuds, mêmes valeurs et mêmes liens que aBuild.
+    static int aBuildVal(int i, int dpt, long q) {
+        av[i] = q + i;
+        if (dpt > 0) {
+            int l = i + 1, r = aBuildVal(l, dpt - 1, q);
+            al[i] = l;
+            ar[i] = r;
+            return aBuildVal(r, dpt - 1, q);
+        }
+        al[i] = ar[i] = -1;
+        return i + 1;
+    }
+    // v4, point 4 (3.3, K8 tuned_it) : la forme de la remarque sur Java (bench/java_exp ; docs/JAVA.md, 4.2 : × 0,64),
+    // recopiée : construction et somme itératives, piles explicites de 64 entrées ; même ordre préfixe, même arène et
+    // mêmes valeurs que aBuild et aSum. La profondeur doit rester sous 63 (contrôle dans runK8).
+    static final int[] stP = new int[64], stD = new int[64], stS = new int[64];
+    static int aBuildIt(int depth, long base) {
+        int sp = 0, nxt = 0, parent = -1, dd = depth;
+        boolean right = false;
+        for (;;) {
+            int i = nxt++;
+            av[i] = base + i;
+            if (parent >= 0) { if (right) ar[parent] = i; else al[parent] = i; }
+            if (dd > 0) { stP[sp] = i; stD[sp] = dd - 1; sp++; parent = i; right = false; dd = dd - 1; }
+            else {
+                al[i] = ar[i] = -1;
+                if (sp == 0) break;
+                sp--; parent = stP[sp]; dd = stD[sp]; right = true;
+            }
+        }
+        return 0;
+    }
+    static long aSumIt(int root) {
+        int sp = 0;
+        long s = 0;
+        stS[sp++] = root;
+        while (sp > 0) {
+            int i = stS[--sp];
+            s += av[i];
+            if (al[i] >= 0) { stS[sp++] = ar[i]; stS[sp++] = al[i]; }
+        }
+        return s;
+    }
     static Node keep;
     static void runK8(String v, int reps) {
         final int Q = 16384;
         cnt8 = 0; keep = tBuild(Sizes.K8_LONG); long lsum = tSum(keep);
         long[] lat = new long[Q];
-        boolean tuned = v.equals("tuned");
+        boolean tuned = v.equals("tuned"), tval = v.equals("tuned_val"), tit = v.equals("tuned_it");
+        if (tit && Sizes.K8_REQ >= 63) throw new IllegalStateException("K8 tuned_it : piles de 64 entrées, K8_REQ doit rester sous 63");
         for (int r = -warmup(); r < reps; r++) {
             long total = 0;
             long t0 = System.nanoTime();
@@ -434,7 +634,9 @@ public class Ms {
                 long a = System.nanoTime();
                 cnt8 = qq;
                 long s;
-                if (tuned) { top = 0; s = aSum(aBuild(Sizes.K8_REQ)); } else s = tSum(tBuild(Sizes.K8_REQ));
+                if (tval) { aBuildVal(0, Sizes.K8_REQ, qq); s = aSum(0); }
+                else if (tit) s = aSumIt(aBuildIt(Sizes.K8_REQ, qq));
+                else if (tuned) { top = 0; s = aSum(aBuild(Sizes.K8_REQ)); } else s = tSum(tBuild(Sizes.K8_REQ));
                 total += s;
                 lat[qq] = System.nanoTime() - a;
             }
@@ -467,12 +669,32 @@ public class Ms {
             for (int j = 1; j < M9 - 1; j++) out[mid + j] = 0.25 * (((in[up + j] + in[dn + j]) + in[mid + j - 1]) + in[mid + j + 1]);
         }
     }
+    // v4, point 4 (3.3, K9 tuned_v) : la forme de la remarque sur Java (bench/java_exp, tuned_vec ; docs/JAVA.md, 4.2),
+    // recopiée : par ligne, j depuis 1, vecteurs de 8 double (Vector API) chargés et écrits sans contrainte
+    // d'alignement (tableaux du tas), mêmes additions dans le même ordre ((haut + bas) + gauche) + droite, reste
+    // scalaire.
+    static final DoubleVector Q9 = DoubleVector.broadcast(DS, 0.25);
+    static void k9RowsVec(double[] in, double[] out, int r0, int r1) {
+        for (int i = r0; i < r1; i++) {
+            int up = (i - 1) * M9, mid = i * M9, dn = (i + 1) * M9;
+            int j = 1;
+            for (; j + 8 <= M9 - 1; j += 8) {
+                DoubleVector s = DoubleVector.fromArray(DS, in, up + j).add(DoubleVector.fromArray(DS, in, dn + j))
+                        .add(DoubleVector.fromArray(DS, in, mid + j - 1)).add(DoubleVector.fromArray(DS, in, mid + j + 1));
+                Q9.mul(s).intoArray(out, mid + j);
+            }
+            for (; j < M9 - 1; j++) out[mid + j] = 0.25 * (((in[up + j] + in[dn + j]) + in[mid + j - 1]) + in[mid + j + 1]);
+        }
+    }
     static void runK9(String v, int reps) {
         // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
         double[][] na = null, nb = null;
         double[] ga = null, gb = null;
         if (v.equals("natural")) { na = new double[M9][M9]; nb = new double[M9][M9]; }
         else { ga = new double[M9 * M9]; gb = new double[M9 * M9]; }
+        // v4, point 4 : réserve de fils ; mt_pool : k9Rows publiée par quart ; mt_pool_v : tuned_v par quart
+        boolean pl = v.startsWith("mt_pool"), vec = v.equals("mt_pool_v");
+        if (pl) poolStart();
         for (int r = -warmup(); r < reps; r++) {
             double s = 0; long t0, t1;
             if (v.equals("natural")) {
@@ -495,7 +717,14 @@ public class Ms {
                 t0 = System.nanoTime();
                 for (int it = 0; it < 4; it++) {
                     if (v.equals("tuned")) k9Rows(a, b, 1, M9 - 1);
-                    else {
+                    else if (v.equals("tuned_v")) k9RowsVec(a, b, 1, M9 - 1);
+                    else if (pl) {
+                        final double[] fa = a, fb = b;
+                        poolRun(w -> {
+                            int r0 = 1 + (M9 - 2) * w / 4, r1 = 1 + (M9 - 2) * (w + 1) / 4;
+                            if (vec) k9RowsVec(fa, fb, r0, r1); else k9Rows(fa, fb, r0, r1);
+                        });
+                    } else {
                         Thread[] th = new Thread[4];
                         final double[] fa = a, fb = b;
                         for (int k = 0; k < 4; k++) {
@@ -512,6 +741,7 @@ public class Ms {
             }
             if (r >= 0) result("k9", v, "2048^2x4", r, (t1 - t0) * 1e-9, String.format("%.15e", s));
         }
+        if (pl) poolStop();
     }
 
     // ------------------------------------------------------------------ K10

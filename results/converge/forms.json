@@ -3652,6 +3652,245 @@
     "remarque": false,
     "ceiling": "K9 mt"
    }
+  },
+  "java": {
+   "k4 tuned": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "point 3 (R3) : Vector API (ByteVector de 64 octets), blend, voies de 16 bits",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k4 swar": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k4",
+      "swar",
+      ""
+     ]
+    ],
+    "note": "mots de 64 bits lus par la vue VarHandle du tableau d'octets (byteArrayViewVarHandle)",
+    "remarque": false,
+    "ceiling": "K4"
+   },
+   "k5 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k5",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "FloatVector de 16 f32 (Vector API), quatre accumulateurs, fma, 64 éléments par tour, copies hors tas alignées sur 64 octets",
+    "remarque": false,
+    "ceiling": "K5"
+   },
+   "q6 tuned_v": {
+    "status": "présente",
+    "cells": [
+     [
+      "k6",
+      "tuned",
+      "q6"
+     ]
+    ],
+    "note": "IntVector de 16 voies, comparaisons, produit en i32, blend, accumulation en LongVector",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q6 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q6"
+   },
+   "q1 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_v",
+      "q1"
+     ]
+    ],
+    "note": "forme de bench/java_exp (remarque sur Java, × 0,40), recopiée : une passe, algorithme de la référence C, compte par Long.bitCount du masque, accumulateurs en variables locales ; la variante tuned publiée fait une passe par groupe sur des blocs de 2 048 lignes",
+    "remarque": true,
+    "ceiling": "Q1"
+   },
+   "q1 tuned_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "forme principale présente ou écrite",
+    "remarque": false,
+    "ceiling": "Q1"
+   },
+   "q6 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool",
+      "q6"
+     ]
+    ],
+    "note": "forme de bench/java_exp (remarque sur Java) ramenée à la définition : ThreadPoolExecutor de trois fils démarrés avant l'échauffement, le fil principal traite le quart 0 (la remarque : quatre fils de réserve, le fil principal en attente) ; chaque quart : q6Tuned publiée (tuned_v)",
+    "remarque": true,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_v": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "tuned_v de Q6 présente : mt_pool l'exécute",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q6 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q6 mt"
+   },
+   "q1 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool",
+      "q1"
+     ]
+    ],
+    "note": "chaque quart : q1Tuned publiée",
+    "remarque": true,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_v",
+      "q1"
+     ]
+    ],
+    "note": "chaque quart : tuned_v (mt_pool_1p de la remarque)",
+    "remarque": true,
+    "ceiling": "Q1 mt"
+   },
+   "q1 mt_pool_s": {
+    "status": "sans objet",
+    "cells": [],
+    "note": "pas de forme scalaire nouvelle",
+    "remarque": false,
+    "ceiling": "Q1 mt"
+   },
+   "k7 tuned_pf": {
+    "status": "non écrivible",
+    "cells": [],
+    "note": "aucun préchargement dans le JDK (grille E4 = 0, results/probes/java.txt : Unsafe.prefetch* retirées au JDK 9)",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k7 tuned_oa": {
+    "status": "présente",
+    "cells": [
+     [
+      "k7",
+      "tuned",
+      ""
+     ]
+    ],
+    "note": "la variante tuned publiée : la même table (cases de 16 octets dans un long[] : clé et compte dans un mot, somme dans l'autre), sans préchargement ni lots",
+    "remarque": false,
+    "ceiling": "K7"
+   },
+   "k8 tuned_val": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_val",
+      ""
+     ]
+    ],
+    "note": "fonction récursive, état en paramètres et en retour (la variante tuned publiée passe l'état par des champs statiques)",
+    "remarque": false,
+    "ceiling": "K8"
+   },
+   "k8 tuned_it": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k8",
+      "tuned_it",
+      ""
+     ]
+    ],
+    "note": "forme de bench/java_exp (remarque sur Java, × 0,64), recopiée : piles de 64 entrées (K8_REQ contrôlée)",
+    "remarque": true,
+    "ceiling": "K8"
+   },
+   "k9 tuned_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "tuned_v",
+      ""
+     ]
+    ],
+    "note": "forme de bench/java_exp (remarque sur Java, tuned_vec, × 0,96) : DoubleVector de 8, j depuis 1, accès non alignés (tableaux du tas)",
+    "remarque": true,
+    "ceiling": "K9"
+   },
+   "k9 mt_pool": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "mt_pool",
+      ""
+     ]
+    ],
+    "note": "chaque quart : k9Rows publiée (la remarque : × 0,81)",
+    "remarque": true,
+    "ceiling": "K9 mt"
+   },
+   "k9 mt_pool_v": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "mt_pool_v",
+      ""
+     ]
+    ],
+    "note": "chaque quart : tuned_v (la remarque : × 0,77)",
+    "remarque": true,
+    "ceiling": "K9 mt"
+   },
+   "k7 rq_iso": {
+    "status": "écrite",
+    "cells": [
+     [
+      "k7",
+      "rq_iso",
+      ""
+     ]
+    ],
+    "note": "forme de bench/java_exp (remarque sur Java, tuned_iso, × 0,72) : la boucle de la variante tuned dans sa propre méthode ; son gain tient à l'unité de compilation du JIT (runK7, appelée une fois, est compilée sur place), coût propre au runtime (plan, 3.5). Les lots lus d'avance de la remarque (tuned_batch, × 0,80) ne sont pas repris : sans préchargement, ils perdent sur la forme isolée seule",
+    "remarque": true,
+    "ceiling": "K7"
+   }
   }
  }
 }

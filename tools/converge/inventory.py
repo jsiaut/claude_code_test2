@@ -486,8 +486,52 @@ INV = {
         "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "chaque quart : K9Rows publiée"),
         "k9 mt_pool_v": e(S, note="tuned_v de K9 non écrivible"),
     },
+    "java": {
+        "k4 tuned": e(E, [("k4", "tuned", "")], "point 3 (R3) : Vector API (ByteVector de 64 octets), blend, voies de "
+                      "16 bits"),
+        "k4 swar": e(E, [("k4", "swar", "")], "mots de 64 bits lus par la vue VarHandle du tableau d'octets "
+                     "(byteArrayViewVarHandle)"),
+        "k5 tuned_v": e(P, [("k5", "tuned", "")], "FloatVector de 16 f32 (Vector API), quatre accumulateurs, fma, 64 "
+                        "éléments par tour, copies hors tas alignées sur 64 octets"),
+        "q6 tuned_v": e(P, [("k6", "tuned", "q6")], "IntVector de 16 voies, comparaisons, produit en i32, blend, "
+                        "accumulation en LongVector"),
+        "q6 tuned_s": SANS_REPLI,
+        "q1 tuned_v": e(E, [("k6", "tuned_v", "q1")], "forme de bench/java_exp (remarque sur Java, × 0,40), recopiée : "
+                        "une passe, algorithme de la référence C, compte par Long.bitCount du masque, accumulateurs en "
+                        "variables locales ; la variante tuned publiée fait une passe par groupe sur des blocs de 2 048 "
+                        "lignes", True),
+        "q1 tuned_s": SANS_REPLI,
+        "q6 mt_pool": e(E, [("k6", "mt_pool", "q6")], "forme de bench/java_exp (remarque sur Java) ramenée à la "
+                        "définition : ThreadPoolExecutor de trois fils démarrés avant l'échauffement, le fil principal "
+                        "traite le quart 0 (la remarque : quatre fils de réserve, le fil principal en attente) ; chaque "
+                        "quart : q6Tuned publiée (tuned_v)", True),
+        "q6 mt_pool_v": e(S, note="tuned_v de Q6 présente : mt_pool l'exécute"),
+        "q6 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "q1 mt_pool": e(E, [("k6", "mt_pool", "q1")], "chaque quart : q1Tuned publiée", True),
+        "q1 mt_pool_v": e(E, [("k6", "mt_pool_v", "q1")], "chaque quart : tuned_v (mt_pool_1p de la remarque)", True),
+        "q1 mt_pool_s": e(S, note="pas de forme scalaire nouvelle"),
+        "k7 tuned_pf": e(N, note="aucun préchargement dans le JDK (grille E4 = 0, results/probes/java.txt : "
+                         "Unsafe.prefetch* retirées au JDK 9)"),
+        "k7 tuned_oa": e(P, [("k7", "tuned", "")], "la variante tuned publiée : la même table (cases de 16 octets dans "
+                         "un long[] : clé et compte dans un mot, somme dans l'autre), sans préchargement ni lots"),
+        "k8 tuned_val": e(E, [("k8", "tuned_val", "")], "fonction récursive, état en paramètres et en retour (la "
+                          "variante tuned publiée passe l'état par des champs statiques)"),
+        "k8 tuned_it": e(E, [("k8", "tuned_it", "")], "forme de bench/java_exp (remarque sur Java, × 0,64), recopiée : "
+                         "piles de 64 entrées (K8_REQ contrôlée)", True),
+        "k9 tuned_v": e(E, [("k9", "tuned_v", "")], "forme de bench/java_exp (remarque sur Java, tuned_vec, × 0,96) : "
+                        "DoubleVector de 8, j depuis 1, accès non alignés (tableaux du tas)", True),
+        "k9 mt_pool": e(E, [("k9", "mt_pool", "")], "chaque quart : k9Rows publiée (la remarque : × 0,81)", True),
+        "k9 mt_pool_v": e(E, [("k9", "mt_pool_v", "")], "chaque quart : tuned_v (la remarque : × 0,77)", True),
+    },
 }
 RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {nom: entrée, avec sa cellule du plafond}
+    "java": {
+        "k7 rq_iso": {**e(E, [("k7", "rq_iso", "")], "forme de bench/java_exp (remarque sur Java, tuned_iso, × 0,72) : "
+                          "la boucle de la variante tuned dans sa propre méthode ; son gain tient à l'unité de "
+                          "compilation du JIT (runK7, appelée une fois, est compilée sur place), coût propre au runtime "
+                          "(plan, 3.5). Les lots lus d'avance de la remarque (tuned_batch, × 0,80) ne sont pas repris : "
+                          "sans préchargement, ils perdent sur la forme isolée seule", True), "ceiling": "K7"},
+    },
     "julia": {
         "k8 rq_spec": {**e(E, [("k8", "rq_spec", "")], "forme de bench/julia_exp (remarque sur Julia, × 0,83) : la "
                            "variante tuned spécialisée sur la profondeur (Val) ; classée propre au runtime par le plan "
