@@ -1,0 +1,34 @@
+# tools/k3_align.c (clang-23 -O2 -march=native), machine 33, 2026-11-22 01:30 UTC, fin de la campagne du point 4
+décalage  0 octets :   89.2 ms
+décalage  4 octets :   86.0 ms
+décalage  8 octets :   11.9 ms
+décalage 12 octets :   64.2 ms
+décalage 16 octets :   86.1 ms
+décalage 20 octets :   87.7 ms
+décalage 24 octets :   87.5 ms
+décalage 28 octets :   85.3 ms
+décalage 32 octets :   87.1 ms
+décalage 36 octets :   15.5 ms
+décalage 40 octets :   11.8 ms
+décalage 44 octets :   14.0 ms
+décalage 48 octets :   14.7 ms
+décalage 52 octets :   87.6 ms
+décalage 56 octets :   87.8 ms
+décalage 60 octets :   85.3 ms
+--- deuxième exécution
+décalage  0 octets :   87.1 ms
+décalage  4 octets :   84.2 ms
+décalage  8 octets :   12.6 ms
+décalage 12 octets :   70.2 ms
+décalage 16 octets :   84.6 ms
+décalage 20 octets :   87.3 ms
+décalage 24 octets :   87.3 ms
+décalage 28 octets :   84.7 ms
+décalage 32 octets :   87.7 ms
+décalage 36 octets :   15.5 ms
+décalage 40 octets :   11.8 ms
+décalage 44 octets :   13.1 ms
+décalage 48 octets :   15.5 ms
+décalage 52 octets :   89.0 ms
+décalage 56 octets :   86.3 ms
+décalage 60 octets :   84.5 ms

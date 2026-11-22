@@ -3125,3 +3125,4 @@ p2 k3 nim/pub sw_padded  n=34 med=0.0858669s ok=['True'] oom=False rc=0
 p2 k3 fpc/pub rmw_padded  n=8 med=0.346066s ok=['True'] oom=False rc=0
 p2 k3 fpc/pub sw_padded  n=192 med=0.0174397s ok=['True'] oom=False rc=0
 2026-11-22T01:29:33 passe 2 groupe 9/9 k3 56 processus 468s
+2026-11-22T01:29:35 campagne finie
