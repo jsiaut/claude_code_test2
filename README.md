@@ -516,10 +516,10 @@ langages interprétés et OCaml aucune.
   La grille note les leviers qu'un langage offre ; l'indice, ce que coûte de s'en servir.
 * **La compilation croisée confirme l'examen statique** : les 18 compilations interprétées (9 langages, aarch64 et
   riscv64) acceptent ou refusent la source exactement comme prévu ; D ne refuse que pour un seul builtin x86 (K4).
-* **Remplacer une partie de la grille par l'indice dans la campagne finale serait un changement de règle** : la
-  décision revient à l'auteur de l'étude. Le point 5 recommande de publier l'indice à côté de la grille : son effet est
-  faible, il compte une seconde fois une part du plafond (les cellules atteintes) et il fait de l'absence de
-  vérification de huit langages un coût de chaque forme ([`docs/V4_COST.md`](docs/V4_COST.md), 11.7).
+* **La grille est gardée** (décision de l'auteur de l'étude, 22 novembre) : l'indice d'accès est publié à côté, et
+  non à sa place. Son effet sur l'ordre est faible, il compterait une seconde fois une part du plafond (les cellules
+  atteintes) et ferait de l'absence de vérification de huit langages un coût de chaque forme
+  ([`docs/V4_COST.md`](docs/V4_COST.md), 11.7).
 
 ## Pourquoi cet ordre, langage par langage
 

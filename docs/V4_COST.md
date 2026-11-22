@@ -458,3 +458,5 @@ sauf Java (16e → 13e) quand la grille entière est remplacée.
   coût de chaque forme ; parmi les 19 langages qui atteignent le plafond, l'indice ne suit les catégories C et E que de
   loin (ρ 0,30 et 0,38) : il ne les remplace pas, il mesure autre chose. Le point 5 recommande de publier l'indice à
   côté de la grille plutôt qu'à sa place.
+* **Décision de l'auteur de l'étude (22 novembre) : la grille est gardée** dans la campagne finale ; l'indice d'accès
+  est publié à côté (README, section du point 5).

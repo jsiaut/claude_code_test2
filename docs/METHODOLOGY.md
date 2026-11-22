@@ -1743,3 +1743,5 @@ Robustesse :
   l'auteur (section 6 du plan) : remplacer ou non une partie de la grille dans la campagne finale ; recommandation :
   publier l'indice à côté. Documents : `docs/V4_COST.md` (11), README (section du point 5, liens), `docs/V4_PLAN.md`.
   Le classement de tête ne change pas.
+* 2026-11-22, 6:44 : **v4, point 5 : décision de l'auteur de l'étude** : la grille est gardée dans la campagne finale ;
+  l'indice d'accès est publié à côté (`docs/V4_COST.md`, 11.7 ; README ; `docs/V4_PLAN.md`). Passage au point 6.

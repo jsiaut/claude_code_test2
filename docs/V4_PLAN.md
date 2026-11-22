@@ -101,8 +101,8 @@ aarch64 et riscv64 là où une chaîne croisée existe hors ligne ; un indice d'
 catégories C et E de la grille, à côté du classement. Résultats le 22 novembre (section 11) : la forme qui atteint le
 plafond a 3,5 fois les lignes du code naturel en médiane ; l'indice d'accès va de 0 (six langages) à 0,50 (Mojo) ; à
 la place des catégories C et E, il ne déplace que Mojo de plus de deux places (13e → 10e) ; la compilation croisée
-confirme l'examen statique. Remplacer une partie de la grille dans la campagne finale est soumis à l'auteur de
-l'étude ; le point 5 recommande de publier l'indice à côté.
+confirme l'examen statique. Décision de l'auteur de l'étude (22 novembre) : la grille est gardée dans la campagne
+finale ; l'indice est publié à côté.
 
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
