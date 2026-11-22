@@ -106,8 +106,8 @@ def executed_files(lang, dst, srcfiles):
         for f in files:
             p = os.path.join(root, f)
             rel = os.path.relpath(p, dst)
-            if rel in srcfiles or os.path.islink(p):
-                continue
+            if (rel in srcfiles and not f.endswith(".class")) or os.path.islink(p):
+                continue  # les .class publiés de Java sont suivis par git, et réécrits par javac
             with open(p, "rb") as fh:
                 head = fh.read(4)
             if head == b"\x7fELF" and os.access(p, os.X_OK) and not f.endswith(".so"):
