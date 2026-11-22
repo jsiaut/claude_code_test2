@@ -1,4 +1,19 @@
 {
+"ada|cv|k3|sw_padded|": {
+"reps": 128,
+"t_cal": 0.023317412,
+"warmup": 1
+},
+"ada|op|k3|op_cachelines|": {
+"reps": 152,
+"t_cal": 0.019679732,
+"warmup": 1
+},
+"ada|op|k3|sw_padded|": {
+"reps": 107,
+"t_cal": 0.027920783,
+"warmup": 1
+},
 "c|cv|k9|mt_pool_v|": {
 "reps": 718,
 "t_cal": 0.004173366,
@@ -99,6 +114,16 @@
 "t_cal": 0.007893238,
 "warmup": 1
 },
+"mojo|op|k3|op_max|": {
+"reps": 36,
+"t_cal": 0.081396758,
+"warmup": 1
+},
+"mojo|op|k3|sw_padded|": {
+"reps": 264,
+"t_cal": 0.011360267,
+"warmup": 1
+},
 "mojo|op|k9|mt|": {
 "reps": 344,
 "t_cal": 0.008709651,
@@ -139,6 +164,16 @@
 "t_cal": 1.326124563,
 "warmup": 1
 },
+"python|op|k3|op_dask|": {
+"reps": 3,
+"t_cal": 22.151813785,
+"warmup": 1
+},
+"python|op|k3|sw_padded|": {
+"reps": 3,
+"t_cal": 1.917574355,
+"warmup": 1
+},
 "python|op|k9|mt|": {
 "reps": 3,
 "t_cal": 0.793895587,
@@ -167,6 +202,26 @@
 "rust|cv|k3|sw_padded|": {
 "reps": 32,
 "t_cal": 0.09199627,
+"warmup": 1
+},
+"rust|op|k3|op_cache_padded|": {
+"reps": 36,
+"t_cal": 0.081274129,
+"warmup": 1
+},
+"rust|op|k3|op_crossbeam|": {
+"reps": 37,
+"t_cal": 0.079219492,
+"warmup": 1
+},
+"rust|op|k3|op_libc|": {
+"reps": 36,
+"t_cal": 0.082463885,
+"warmup": 1
+},
+"rust|op|k3|sw_padded|": {
+"reps": 219,
+"t_cal": 0.013671614,
 "warmup": 1
 }
 }

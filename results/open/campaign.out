@@ -36,3 +36,15 @@ p0 k3 c/pub sw_padded  n=37 med=0.075019s ok=['True'] oom=False rc=0
 p0 k3 rust/cv sw_padded  n=32 med=0.0786204s ok=['True'] oom=False rc=0
 p0 k3 go/cv rmw_padded  n=15 med=0.234404s ok=['True'] oom=False rc=0
 p0 k3 python/cv sw_padded  n=3 med=2.39079s ok=['True'] oom=False rc=0
+p0 k3 python/op op_dask  n=3 med=22.3478s ok=['True'] oom=False rc=0
+p0 k3 python/op sw_padded  n=3 med=2.16974s ok=['True'] oom=False rc=0
+p0 k3 ada/op op_cachelines  n=152 med=0.0138448s ok=['True'] oom=False rc=0
+p0 k3 ada/op sw_padded  n=107 med=0.0139646s ok=['True'] oom=False rc=0
+p0 k3 mojo/op op_max  n=36 med=0.0788162s ok=['True'] oom=False rc=0
+p0 k3 mojo/op sw_padded  n=264 med=0.0169264s ok=['True'] oom=False rc=0
+p0 k3 rust/op op_cache_padded  n=36 med=0.0777809s ok=['True'] oom=False rc=0
+p0 k3 rust/op op_crossbeam  n=37 med=0.0809497s ok=['True'] oom=False rc=0
+p0 k3 rust/op op_libc  n=36 med=0.0808946s ok=['True'] oom=False rc=0
+p0 k3 rust/op sw_padded  n=219 med=0.0132504s ok=['True'] oom=False rc=0
+p0 k3 ada/cv sw_padded  n=128 med=0.0163639s ok=['True'] oom=False rc=0
+2026-11-22T09:43:10 passe 0 groupe 2/7 k3 18 processus 209s
