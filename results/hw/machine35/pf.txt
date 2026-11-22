@@ -1,0 +1,6 @@
+TSC: 2.1000 GHz
+pf: 2794 ns par défaut de page mineur (page de 4 Kio, mise à zéro comprise)
+pf: 1410 ns par défaut de page mineur (page de 4 Kio, mise à zéro comprise)
+pf: 1510 ns par défaut de page mineur (page de 4 Kio, mise à zéro comprise)
+pf: 1803 ns par défaut de page mineur (page de 4 Kio, mise à zéro comprise)
+pf: 1642 ns par défaut de page mineur (page de 4 Kio, mise à zéro comprise)
