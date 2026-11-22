@@ -375,11 +375,13 @@ L/N : moyenne géométrique sur les 12 cellules ; parts pondérées par les lign
   moyenne géométrique médiane (1,3 en Lua à 6,9 en Nim) ; dans les 103 cellules atteintes, la part de lignes ajoutées
   médiane est 0,69. Sept cellules seulement ont le code naturel pour forme d'accès (K9 en Java, Fortran, Python et
   Lua ; Q1 en JavaScript et Lua ; K4 en BQN). L'indice d'accès est donc bas partout : 0,50 au plus (Mojo).
-* **Le prix n'est pas le même.** Mojo atteint 8 cellules avec le moins de lignes ajoutées des compilés (L/N 2,33), sans
-  construction propre à une architecture (ses `SIMD[...]` compilent pour aarch64 et riscv64) et avec peu de code sans
-  vérification (0,16) ; Odin atteint aussi 8 cellules sans code non portable. C atteint le plus de cellules (9), mais
-  tout son code est sans vérification et ses formes vectorielles, dans 9 cellules, sont propres à x86 : indice 0,16.
-  Rust et Nim atteignent 8 cellules avec des intrinsèques x86 dans 9 ; Julia paie ses formes vectorielles en IR de
+* **Le prix n'est pas le même.** Mojo atteint 8 cellules avec le moins de lignes ajoutées des sept langages qui en
+  atteignent 8 ou plus (189 ; L/N 2,33), sans construction propre à une architecture (ses `SIMD[...]` compilent pour
+  aarch64 et riscv64) et avec peu de code sans vérification (0,16) ; Odin et C3 atteignent aussi 8 cellules sans code
+  non portable, C3 sans aucune vérification (mode publié). C atteint le plus de cellules (9), mais tout son code est
+  sans vérification et 9 de ses 12 formes d'accès (dont 7 des 9 cellules atteintes) portent des intrinsèques x86 :
+  indice 0,16. Rust et Nim atteignent 8 cellules, avec des intrinsèques x86 dans 9 de leurs 12 formes d'accès (dont 7
+  et 6 des cellules atteintes) ; Julia paie ses formes vectorielles en IR de
   LLVM (L/N 6,45, part sans vérification 0,87). Java, Go et C# atteignent 3 cellules ; Java sans aucune ligne sans
   vérification ni propre à une architecture.
 * **Là où le mode publié vérifie, le code rapide contourne souvent la vérification** : part sans vérification de

@@ -1728,3 +1728,18 @@ Robustesse :
   méthodes à pointeurs lues comme méthodes `unsafe` (la classe entière est `unsafe`) ; Julia, `llvmcall` ajouté
   (portée : la chaîne d'IR) ; Mojo, `UntrackedOrigin` ajouté ; lexèmes des chaînes sur plusieurs lignes comptés comme
   code ; directives `//go:` comptées comme code.
+* 2026-11-22, 6:35 : **v4, point 5 : comptage, compilation croisée, analyse et résultats** (`docs/V4_COST.md`, 11 ;
+  `results/report_cost.md`). Comptage à 6 h 14 (562 formes, 618 régions). Examen des 2 004 occurrences : cinq faux
+  positifs sans effet (FreePascal, hors région) et une correction de l'outil (Ada : `pragma Suppress` dans un bloc
+  `declare`, en-têtes `overriding` ; seule la forme naturelle de K7 d'Ada change). Compilation pour aarch64 et
+  riscv64 : 18 compilations interprétées (9 langages ; C++ non interprété, son contrôle échouant faute de `std::simd`
+  dans la libc++ de LLVM), toutes conformes à l'examen statique ; réglages de l'outil avant l'exécution retenue
+  (flang : modules intrinsèques et OpenMP 5.2 ; Mojo : processeur par défaut). Analyse exécutée sans changement ;
+  contrôle : « Convergent, avec R4 » identique au point 4. Résultats : forme d'accès à 3,5 fois les lignes du code
+  naturel en médiane ; indice d'accès de 0 (six langages sans cellule atteinte) à 0,50 (Mojo) ; « Accès » ne déplace
+  que Mojo de plus de deux places (13e → 10e), comme les sensibilités (a), (b), (d) et (f) ; seuil de 0,8 : Odin,
+  Swift et Ada ; grille entière remplacée : le haut bouleversé. Sur les 19 langages qui atteignent le plafond
+  (information hors plan), l'indice ne suit les catégories C et E que de loin (ρ 0,30 et 0,38). Décision soumise à
+  l'auteur (section 6 du plan) : remplacer ou non une partie de la grille dans la campagne finale ; recommandation :
+  publier l'indice à côté. Documents : `docs/V4_COST.md` (11), README (section du point 5, liens), `docs/V4_PLAN.md`.
+  Le classement de tête ne change pas.

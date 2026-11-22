@@ -461,6 +461,66 @@ avec R4.
   corrigée déplace encore D (8e → 4e), Odin (2e → 5e) et Mojo (14e → 11e) ; Fortran et Zig, qui reculaient de trois
   places aux points 2 et 3, non : le premier par les corrections, le second par l'hôte.
 
+### Le coût d'accès au plafond (v4, point 5 ; à côté du classement)
+
+Le plafond prend la forme la plus rapide de chaque langage, quel qu'en soit le prix ; la grille (catégories C et E)
+note les leviers qu'offre le langage. Le point 5 de la v4 a mesuré, sur les sources du point 4, ce que coûte
+d'atteindre le plafond : dans chacune des 12 cellules du plafond, les lignes de la forme la plus rapide contre celles
+du code naturel, la part de ces lignes qui s'exécute sans vérification de sûreté mémoire, et la présence d'une
+construction propre à x86, contrôlée en compilant pour aarch64 et riscv64. Un indice d'accès (0 à 1) combine ces trois
+coûts dans les cellules où le langage atteint 90 % de la frontière. Relevé statique de 562 formes (618 régions), plan,
+règles de lecture et écarts fixés avant tout comptage ([`docs/V4_COST.md`](docs/V4_COST.md),
+[`results/report_cost.md`](results/report_cost.md)). Le classement ci-dessus ne change pas.
+
+| Publié | Langage | Convergent, R4 | Accès | Indice d'accès | Cellules atteintes | L/N | Sans vérif. | Non portables |
+|---|---|---|---|---|---|---|---|---|
+| 1 | C | 3 | 4 | 0,160 | 9 | 3,52 | 1,00 | 9 |
+| 2 | Odin | 5 | 3 | 0,402 | 8 | 3,73 | 0,50 | 0 |
+| 3 | C++ | 1 | 2 | 0,285 | 7 | 3,45 | 1,00 | 1 |
+| 4 | C3 | 4 | 5 | 0,314 | 8 | 3,70 | 1,00 | 0 |
+| 5 | Zig | 2 | 1 | 0,239 | 6 | 3,71 | 1,00 | 0 |
+| 6 | Rust | 7 | 7 | 0,218 | 8 | 5,14 | 0,39 | 9 |
+| 7 | Nim | 6 | 6 | 0,239 | 8 | 6,88 | 0,39 | 9 |
+| 8 | D | 8 | 8 | 0,163 | 5 | 5,39 | 1,00 | 1 |
+| 9 | Ada | 10 | 12 | 0,164 | 5 | 3,62 | 0,50 | 6 |
+| 10 | Chapel | 9 | 9 | 0,169 | 8 | 3,82 | 1,00 | 8 |
+| 11 | Fortran | 11 | 11 | 0,130 | 3 | 1,87 | 1,00 | 0 |
+| 12 | Swift | 14 | 13 | 0,243 | 4 | 3,20 | 0,33 | 0 |
+| 13 | Julia | 12 | 14 | 0,271 | 5 | 6,45 | 0,87 | 0 |
+| 14 | Mojo | 13 | 10 | 0,497 | 8 | 2,33 | 0,16 | 0 |
+
+« Convergent, R4 » : le calcul du point 4 avec K3 rapporté à la boucle de référence ; « Accès » : le même, avec
+l'indice à la place de chaque capacité des catégories C et E. L/N : lignes de la forme la plus rapide sur lignes du
+code naturel, moyenne géométrique des 12 cellules ; « Sans vérif. » : part de ces lignes sans vérification de sûreté
+mémoire (1 dans les huit langages dont le mode publié ne vérifie pas les bornes) ; « Non portables » : cellules dont la
+forme la plus rapide porte une construction propre à x86. Les onze suivants restent à deux places au plus de leur rang
+« Convergent, R4 » ; Java atteint 3 cellules (indice 0,240), C# 3 (0,168), Go 3 (0,116), FreePascal et Haskell 1, les
+langages interprétés et OCaml aucune.
+
+* **Atteindre le plafond coûte des lignes partout.** La forme la plus rapide a 3,5 fois les lignes du code naturel
+  (médiane des 25 langages ; de 1,3 en Lua à 6,9 en Nim), et seules sept cellules sur 300 ont le code naturel pour forme
+  la plus rapide. L'indice est donc bas partout : 0,50 au plus.
+* **Mojo et Odin atteignent le plafond au meilleur prix** : 8 cellules chacun, sans construction propre à x86 (leurs
+  formes vectorielles compilent pour aarch64 et riscv64), Mojo avec le moins de lignes ajoutées des langages qui
+  atteignent 8 cellules ou plus, et peu de code sans vérification ; C3 aussi, mais sans aucune vérification. C atteint
+  le plus de cellules (9), mais sans aucune vérification, et 9 de ses 12 formes les plus rapides portent des
+  intrinsèques x86, comme 9 de celles de Rust et de Nim (8 cellules chacun). Julia paie ses formes vectorielles en IR
+  de LLVM (L/N 6,45, 87 % des lignes sans vérification). Java atteint 3 cellules sans une ligne sans vérification ni
+  propre à une architecture.
+* **Remplacer les catégories C et E par l'indice ne déplace qu'un langage de plus de deux places** : Mojo, 13e → 10e.
+  Zig passe 1er devant C++, Odin 3e, C 4e. La part marginale, la part sans vérification retirée, la forme la plus
+  courte et les lexèmes donnent le même résultat ; le seuil de 0,8 déplace Odin (2e), Swift (10e) et Ada (13e).
+  Remplacer la grille entière bouleverse le haut : Odin 1er, C3 2e, C++ 3e, Mojo 4e, Zig 5e, C 8e.
+* **L'indice mesure autre chose que la grille.** Sur les 25 langages, il suit les catégories C et E (ρ de Spearman
+  0,69 et 0,68), mais par les six langages qui n'atteignent aucune cellule ; sur les 19 autres, ρ tombe à 0,30 et 0,38.
+  La grille note les leviers qu'un langage offre ; l'indice, ce que coûte de s'en servir.
+* **La compilation croisée confirme l'examen statique** : les 18 compilations interprétées (9 langages, aarch64 et
+  riscv64) acceptent ou refusent la source exactement comme prévu ; D ne refuse que pour un seul builtin x86 (K4).
+* **Remplacer une partie de la grille par l'indice dans la campagne finale serait un changement de règle** : la
+  décision revient à l'auteur de l'étude. Le point 5 recommande de publier l'indice à côté de la grille : son effet est
+  faible, il compte une seconde fois une part du plafond (les cellules atteintes) et il fait de l'absence de
+  vérification de huit langages un coût de chaque forme ([`docs/V4_COST.md`](docs/V4_COST.md), 11.7).
+
 ## Pourquoi cet ordre, langage par langage
 
 Les temps cités viennent de la machine de référence (Cascade Lake), sauf mention d'Emerald Rapids. « Plafond » : le
@@ -1209,7 +1269,11 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   optimisé convergent (catalogue des formes du plafond porté dans les 25 langages, base corrigée, effet de l'erratum
   des points 2 et 3) : plan, diagnostic, écarts, relevé des formes, campagne et résultats
   ([`docs/V4_CONVERGE.md`](docs/V4_CONVERGE.md), [`results/converge/inventory.md`](results/converge/inventory.md),
-  [`results/report_converge.md`](results/report_converge.md)).
+  [`results/report_converge.md`](results/report_converge.md)). Point 5, le coût d'accès au plafond (lignes ajoutées,
+  code sans vérification, portabilité, compilation pour aarch64 et riscv64, indice d'accès) : plan, règles de lecture,
+  écarts, relevé des régions, occurrences et résultats ([`docs/V4_COST.md`](docs/V4_COST.md),
+  [`results/cost/regions.md`](results/cost/regions.md), [`results/cost/matches.md`](results/cost/matches.md),
+  [`results/report_cost.md`](results/report_cost.md)).
 * La sensibilité « sans SIMD explicite », le classement des variantes (types vectoriels du langage, intrinsèques de la
   plateforme, intrinsèques importées) et le décompte corrigé des formes de Q1 (9 contre 5) :
   [`docs/NOSIMD.md`](docs/NOSIMD.md) et [`results/report_nosimd.md`](results/report_nosimd.md) ; note d'explication
