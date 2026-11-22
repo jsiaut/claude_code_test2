@@ -1,0 +1,11 @@
+# gcc -O3 -march=native -pthread tools/hwprobe.c (gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0), 2026-11-22 07:01 UTC
+model name	: Intel(R) Xeon(R) Processor @ 2.10GHz
+model		: 207
+stepping	: 2
+cpu MHz		: 2100.000
+cache size	: 266240 KB
+microcode	: 0x1
+4
+               total        used        free      shared  buff/cache   available
+Mem:     16869113856   540585984 16277688320    13152256   281780224 16328527872
+6.18.44-fc-v726

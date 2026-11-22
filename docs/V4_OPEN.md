@@ -211,3 +211,17 @@ décision de l'auteur de l'étude, qui lui sera soumise avec les résultats.
    campagne.
 6. Campagne.
 7. Analyse, résultats (section 11 de ce document), README, `docs/V4_PLAN.md`, journal.
+
+## 10. Écarts datés
+
+1. **Recherche (3.2), 22 novembre, 7 h 20, avant toute recherche retenue.** La recherche du site de PyPI est protégée
+   par un défi JavaScript, et celle de Hackage refuse les requêtes automatisées (protection CSRF) : ni l'une ni
+   l'autre n'est contournée. Le registre General de Julia, opam, le Swift Package Index et l'archive d'Ubuntu n'ont pas
+   d'API de recherche. Pour ces registres, la requête devient la recherche des mots de la case (mot entier, sans
+   distinction de casse) dans le nom, la description et les mots-clés des paquets de l'index du registre tel que le
+   publie ecosyste.ms (service ouvert de métadonnées de paquets) : l'index entier (Hackage, opam, General, Swift
+   Package Index, Ubuntu 24.04), ou ses 20 000 paquets les plus téléchargés (PyPI, près d'un million de paquets).
+   Nimble, Alire, Mason, l'index de fortran-lang.org et le dépôt `vendor` de C3 sont lus de même dans leur propre
+   index (fichier ou clone Git). Les statistiques d'usage restent celles de 3.1. Les registres qui ont une API de
+   recherche publique (crates.io, npm, NuGet, Packagist, dub, Maven Central, pkg.go.dev, LuaRocks) sont interrogés
+   par elle, comme prévu.
