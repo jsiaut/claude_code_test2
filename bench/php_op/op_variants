@@ -1,0 +1,5 @@
+# v4, point 6 (docs/V4_OPEN.md, 5) : formes de la piste ouverte de cette copie : noyau variante paramètre ; cellule ;
+# bibliothèque. La forme d'accès de chaque cellule touchée est mesurée aussi dans cette construction (témoin, 5.2).
+k6 op_amphp q6 ; Q6 mt ; amphp/parallel-functions
+k6 op_amphp q1 ; Q1 mt ; amphp/parallel-functions
+k9 op_amphp ; K9 mt ; amphp/parallel-functions
