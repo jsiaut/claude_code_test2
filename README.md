@@ -567,8 +567,8 @@ compris.
   de 13e à 10e avec MAX seul.
 * **Moins de lignes, pas plus de vitesse** : 25 des 40 formes ont moins de lignes que la forme standard la plus rapide
   (NumPy : une à treize lignes dans les cellules à un fil), mais le gain de lignes va rarement avec un gain de temps.
-* **Décision en attente** : publier cette piste comme seconde colonne du classement final, ou la garder à côté, est une
-  décision de l'auteur de l'étude ; elle lui est soumise avec ces résultats
+* **La piste ouverte reste à côté** (décision de l'auteur de l'étude, 22 novembre) : elle n'est pas une seconde colonne
+  du classement. Son seul effet tient à des notes de grille d'un langage, et la partie mesurée ne déplace personne
   ([`docs/V4_OPEN.md`](docs/V4_OPEN.md), 11.5).
 
 ## Pourquoi cet ordre, langage par langage

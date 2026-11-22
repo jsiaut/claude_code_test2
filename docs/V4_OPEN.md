@@ -411,3 +411,5 @@ contre 53), Julia (39 contre 35) et JavaScript (24 contre 20).
   qu'une règle mécanique a choisies, dont certaines sont limitées ou peu suivies (cache-padded se dit dépréciée,
   swift-memory-allocation n'a pas de version publiée, vmsl se dit expérimentale), et cet effet se réduit de moitié avec
   la liste nommée ou la note ½ ; la partie mesurée, le plafond, ne déplace personne.
+* **Décision de l'auteur de l'étude** (22 novembre, 10 h 37) : la piste ouverte reste publiée à côté du classement,
+  comme les points 2 à 5 ; elle n'en devient pas une seconde colonne.

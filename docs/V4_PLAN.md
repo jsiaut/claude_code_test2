@@ -115,8 +115,9 @@ toute sonde et toute forme) : 47 bibliothèques dans 17 langages comblent 47 des
 11) : les sondes montent 41 des 47 cases ; mesurées sur la machine 34, les 40 formes ne battent la forme standard la
 plus rapide que dans 13 cellules sur 35 (de beaucoup seulement NumPy en Python et vmsl en Lua, qui restent loin de la
 frontière), et le plafond ouvert seul ne déplace personne de plus de deux places ; la grille ouverte fait passer Rust
-1er (8 cases comblées), 4e avec les seules bibliothèques nommées ou des cases à ½. Publier cette piste comme seconde
-colonne du classement final est soumis à l'auteur de l'étude (`docs/V4_OPEN.md`, 11.5).
+1er (8 cases comblées), 4e avec les seules bibliothèques nommées ou des cases à ½. Décision de l'auteur de l'étude
+(22 novembre) : la piste ouverte reste publiée à côté du classement, et non comme seconde colonne (`docs/V4_OPEN.md`,
+11.5).
 
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,

@@ -1803,3 +1803,6 @@ Robustesse :
   × 0,21, vmsl en Lua, × 0,05 ; ailleurs à 3 % au mieux) ; aucune ne devient la frontière. Plafond ouvert seul : aucun
   déplacement de plus de deux places ; grille ouverte : Rust 1er (4e avec les seules bibliothèques nommées ou des cases
   à ½), Mojo 10e avec MAX seul. Décision soumise à l'auteur : seconde colonne ou piste à côté.
+* 2026-11-22, 10:37 : **v4, point 6 : décision de l'auteur de l'étude** : la piste ouverte reste publiée à côté du
+  classement, et non comme seconde colonne (`docs/V4_OPEN.md`, 11.5 ; README ; `docs/V4_PLAN.md`). Les six points de
+  la v4 sont faits ; le classement de tête du README n'a pas changé.
