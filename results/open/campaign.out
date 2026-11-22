@@ -149,3 +149,11 @@ p1 k3 rust/op op_crossbeam  n=37 med=0.0775667s ok=['True'] oom=False rc=0
 p1 k3 rust/op op_libc  n=36 med=0.0773169s ok=['True'] oom=False rc=0
 p1 k3 rust/op sw_padded  n=219 med=0.012625s ok=['True'] oom=False rc=0
 2026-11-22T09:55:04 passe 1 groupe 1/7 k3 18 processus 158s
+p1 k1 c/pub soa energy n=557 med=0.00287439s ok=['True'] oom=False rc=0
+p1 k1 d/cv soa energy n=531 med=0.0028022s ok=['True'] oom=False rc=0
+p1 k1 python/op op_numpy energy n=36 med=0.063342s ok=['True'] oom=False rc=0
+p1 k1 python/op soa energy n=3 med=0.612859s ok=['True'] oom=False rc=0
+p1 k1 python/cv soa energy n=3 med=0.64765s ok=['True'] oom=False rc=0
+p1 k1 d/op op_soa energy n=548 med=0.00279885s ok=['True'] oom=False rc=0
+p1 k1 d/op soa energy n=605 med=0.0027576s ok=['True'] oom=False rc=0
+2026-11-22T09:55:25 passe 1 groupe 2/7 k1 7 processus 19s
