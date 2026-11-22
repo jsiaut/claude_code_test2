@@ -177,7 +177,21 @@
    "libc": "0.2.191",
    "crossbeam": "0.8.5"
   },
-  "note": "A6 : la recherche de crates.io est en texte intégral ; « struct of arrays » ramène des crates très téléchargées sans rapport, et soa_derive, au 16e rang, n'est pas examinée (3.2 : les dix premières) : le trou reste."
+  "note": "A6 : la recherche de crates.io est en texte intégral ; « struct of arrays » ramène des crates très téléchargées sans rapport, et soa_derive, au 16e rang, n'est pas examinée (3.2 : les dix premières) : le trou reste.",
+  "formes": {
+   "bumpalo": {
+    "K8": "op_bumpalo : nœuds de chaque requête alloués par Bump::alloc (liens &'b Node), arène remise à zéro par reset() ; parcours de la forme d'accès tuned_it"
+   },
+   "cordyceps": {
+    "K3": "op_cordyceps : compteurs de sw_padded dans cordyceps::util::CachePadded"
+   },
+   "crossbeam": {
+    "K3": "op_crossbeam : compteurs de sw_padded dans crossbeam_utils::CachePadded"
+   },
+   "libc": {
+    "K3": "op_libc : compteurs de sw_padded espacés de sysconf(_SC_LEVEL1_DCACHE_LINESIZE) octets, lu à l'exécution"
+   }
+  }
  },
  "d": {
   "cases": {
@@ -213,6 +227,11 @@
   "versions": {
    "soa": "0.2.0 (étiquette v0.2.0)",
    "mir-algorithm": "3.22.5 (avec mir-core 1.7.4)"
+  },
+  "formes": {
+   "soa": {
+    "K1": "op_soa : particules dans un SOA!Particle (un tableau par champ), boucle d'énergie de la forme soa sur ses champs"
+   }
   }
  },
  "php": {
@@ -327,6 +346,13 @@
   "versions": {
    "amphp/parallel-functions": "2.0.0 (avec amphp/parallel 2.4.0)",
    "rindow/rindow-math-matrix": "2.2.0"
+  },
+  "formes": {
+   "amphp/parallel-functions": {
+    "Q6 mt": "op_amphp : Amp\\ParallelFunctions\\parallelMap sur quatre tranches de lignes, sommes partielles réunies",
+    "Q1 mt": "op_amphp : parallelMap sur quatre tranches, agrégats partiels fusionnés",
+    "K9 mt": "op_amphp : parallelMap sur quatre bandes de lignes à chaque pas, bandes réassemblées"
+   }
   }
  },
  "java": {
@@ -453,7 +479,6 @@
     "choix": "github.com/templexxx/cpu"
    },
    "D5": {
-    "choix": "github.com/marusama/cyclicbarrier",
     "refus": {
      "github.com/coreos/etcd/clientv3/concurrency": "verrous distribués d'etcd",
      "go.etcd.io/etcd/client/v3/concurrency": "verrous distribués d'etcd",
@@ -461,7 +486,10 @@
      "github.com/tj/go-spin": "indicateur d'attente en terminal",
      "github.com/gernest/wow/spin": "indicateur d'attente en terminal",
      "github.com/spinnaker/spin/cmd/gateclient": "outil Spinnaker",
-     "github.com/elodina/siesta": "client Kafka"
+     "github.com/elodina/siesta": "client Kafka",
+     "github.com/marusama/cyclicbarrier": "barrière de rendez-vous entre fils : ni barrière mémoire ni indication d'attente active (légende de D5, 3.3 a, 1)",
+     "github.com/cockroachdb/errors/barriers": "« barrières » d'erreurs",
+     "github.com/fermyon/spin/sdk/go/v2/http": "cadriciel Spin (WebAssembly)"
     }
    },
    "E4": {
@@ -490,7 +518,6 @@
    "github.com/templexxx/cpu": [
     "K3"
    ],
-   "github.com/marusama/cyclicbarrier": [],
    "gonum.org/v1/gonum/mat": [
     "K9",
     "K9 mt"
@@ -500,16 +527,23 @@
   "raisons_cellules": {
    "github.com/samber/lo/parallel": "D1 = 1 (goroutines)",
    "github.com/templexxx/cpu": "D3 = 0 : CacheLineSize pour espacer les compteurs",
-   "github.com/marusama/cyclicbarrier": "D5 : levier hors de la table de l'écart 3",
    "gonum.org/v1/gonum/mat": "C1 = C2 = ½ : vues (Slice), Add et Scale de matrices float64 font la moyenne à quatre points ; K5 et K1 (float32), Q6 et Q1 (colonnes entières) : types absents ; K4 : aucune somme conditionnelle",
    "github.com/benjojo/numa": "F2 : levier hors de la table de l'écart 3"
   },
   "versions": {
    "github.com/samber/lo/parallel": "v1.53.0 (module github.com/samber/lo)",
    "github.com/templexxx/cpu": "v0.1.1",
-   "github.com/marusama/cyclicbarrier": "v1.1.0",
    "gonum.org/v1/gonum/mat": "v0.17.0 (module gonum.org/v1/gonum)",
    "github.com/benjojo/numa": "v0.0.0-20260918214945-1058a779f434 (aucune version publiée)"
+  },
+  "formes": {
+   "github.com/templexxx/cpu": {
+    "K3": "op_cpu : compteurs de rmw_padded bourrés à cpu.CacheLineSize (type de bourrage du paquet s'il existe)"
+   },
+   "gonum.org/v1/gonum/mat": {
+    "K9": "op_gonum : grilles en mat.Dense ; vues Slice des quatre voisins, Add trois fois puis Scale(0.25) dans la vue intérieure (ordre ((haut+bas)+gauche)+droite gardé)",
+    "K9 mt": "op_gonum : la même suite d'opérations sur quatre bandes de lignes, une goroutine par bande"
+   }
   }
  },
  "julia": {
@@ -564,7 +598,12 @@
    "ThreadPinningCore": "0.4.5",
    "NUMA": "0.1.1"
   },
-  "note": "Le relevé classe par les téléchargements du dernier mois publiés par ecosyste.ms ; contrôle par la statistique du plan, les requêtes du dernier mois aux serveurs de paquets (julialang-logs ; tools/open/julia_requests.py, results/open/registry/julia_requests.json) : les dix premières de chaque case sont les mêmes, dans le même ordre."
+  "note": "Le relevé classe par les téléchargements du dernier mois publiés par ecosyste.ms ; contrôle par la statistique du plan, les requêtes du dernier mois aux serveurs de paquets (julialang-logs ; tools/open/julia_requests.py, results/open/registry/julia_requests.json) : les dix premières de chaque case sont les mêmes, dans le même ordre.",
+  "formes": {
+   "Bumper": {
+    "K8": "op_bumper : nœuds de chaque requête dans un tableau alloué par @alloc dans @no_escape (liens par indices)"
+   }
+  }
  },
  "haskell": {
   "cases": {
@@ -623,10 +662,12 @@
     "vide": "aucune réponse"
    },
    "D5": {
-    "choix": "concurrent-barrier",
     "refus": {
      "doctest-extract": "tests",
-     "barrier": "générateur de badges"
+     "barrier": "générateur de badges",
+     "concurrent-barrier": "barrière de rendez-vous entre fils : ni barrière mémoire ni indication d'attente active (légende de D5, 3.3 a, 1)",
+     "cloudy": "outil en ligne de commande pour lancer des machines dans le nuage",
+     "barrier-monad": "monade de « barrière » (coroutines), sans barrière mémoire ni attente active"
     }
    },
    "F2": {
@@ -643,19 +684,16 @@
   "cellules": {
    "parallel": [],
    "atomic-primops": [],
-   "concurrent-barrier": [],
    "mmap": []
   },
   "raisons_cellules": {
    "parallel": "D1 = 1 (forkOn)",
    "atomic-primops": "D2 : levier hors de la table de l'écart 3",
-   "concurrent-barrier": "D5 : levier hors de la table de l'écart 3",
    "mmap": "F4 : levier hors de la table de l'écart 3"
   },
   "versions": {
    "parallel": "3.3.0.0",
    "atomic-primops": "0.8.8",
-   "concurrent-barrier": "0.1.2",
    "mmap": "0.5.9"
   }
  },
@@ -713,6 +751,11 @@
   "versions": {
    "github.com/swift-molecules/swift-memory-allocation": "branche main, révision 8742a8c (aucune version publiée)",
    "github.com/jjjkkkjjj/Matft": "1.0.1 (étiquette 1.0.1, commit bf66a10)"
+  },
+  "formes": {
+   "github.com/swift-molecules/swift-memory-allocation": {
+    "K8": "op_arena : nœuds de chaque requête alloués par l'arène du produit « Memory Allocator Arena », libérée d'un bloc"
+   }
   }
  },
  "c": {
@@ -799,6 +842,11 @@
   "versions": {
    "lwt": "1.2.0 (commit fedb90b de parasail, index d'Alire)",
    "cachelines": "0.1.0 (commit 5c97574, index d'Alire)"
+  },
+  "formes": {
+   "cachelines": {
+    "K3": "op_cachelines : compteurs de sw_padded du type aligné et bourré de cachelines"
+   }
   }
  },
  "chapel": {
@@ -832,6 +880,14 @@
   },
   "versions": {
    "MAX 26.7.0": "26.7.0 (paquet conda max-core 26.7.0)"
+  },
+  "formes": {
+   "MAX 26.7.0": {
+    "Q6 mt": "op_max : sync_parallelize sur quatre tranches de lignes, sommes partielles réunies",
+    "Q1 mt": "op_max : sync_parallelize sur quatre tranches, agrégats partiels fusionnés",
+    "K9 mt": "op_max : sync_parallelize sur quatre bandes de lignes à chaque pas",
+    "K3": "op_max : quatre éléments de travail de sync_parallelize, chacun écrivain unique de son compteur bourré"
+   }
   }
  },
  "nim": {
@@ -1007,6 +1063,11 @@
   "versions": {
    "@protobufjs/pool": "1.1.0",
    "ndarray": "1.1.1"
+  },
+  "formes": {
+   "@protobufjs/pool": {
+    "K8": "op_pool : nœuds de chaque requête dans des vues typées de tranches données par pool(alloc, slice, taille)"
+   }
   }
  },
  "lua": {
@@ -1120,6 +1181,17 @@
   "versions": {
    "pessoa736/vmsl": "1.1-2 (étiquette v1.1)",
    "moteus/lua-llthreads2": "0.1.6-1 (étiquette v0.1.6)"
+  },
+  "formes": {
+   "pessoa736/vmsl": {
+    "K5": "op_vmsl : produit scalaire Vector * Vector",
+    "K9": "op_vmsl : grille en Matrix ; submatrix des quatre voisins, sommes (+) puis échelle (* 0.25), intérieur recopié dans la grille"
+   },
+   "moteus/lua-llthreads2": {
+    "Q6 mt": "op_llthreads2 : quatre fils llthreads2, chacun reçoit sa tranche de colonnes en chaînes (string.pack) et rend sa somme",
+    "Q1 mt": "op_llthreads2 : quatre fils, tranches en chaînes, agrégats partiels rendus et fusionnés",
+    "K9 mt": "op_llthreads2 : à chaque pas, quatre fils reçoivent leur bande (et ses voisines) en chaînes et rendent la bande calculée"
+   }
   }
  },
  "python": {
@@ -1265,6 +1337,25 @@
    "numpy": "2.5.5",
    "dask": "2026.8.0",
    "atomics": "1.0.3"
+  },
+  "formes": {
+   "numpy": {
+    "K1": "op_numpy : champs en tableaux float32, énergie par expression sur tableaux entiers sommée en float64",
+    "K4": "op_numpy : somme conditionnelle par masque (np.sum(a, where=a >= 128, dtype=np.int64))",
+    "K5": "op_numpy : np.dot sur float32",
+    "Q6": "op_numpy : masques booléens combinés, puis np.dot des colonnes filtrées",
+    "Q1": "op_numpy : groupes par np.bincount(clé, weights=…) sur les lignes filtrées",
+    "K9": "op_numpy : moyenne à quatre points par tranches de tableaux (((haut + bas) + gauche) + droite) * 0.25",
+    "Q6 mt": "op_numpy : la forme Q6 sur quatre tranches, une par threading.Thread (NumPy rend le GIL)",
+    "Q1 mt": "op_numpy : la forme Q1 sur quatre tranches, une par fil",
+    "K9 mt": "op_numpy : la forme K9 sur quatre bandes de lignes, une par fil, à chaque pas"
+   },
+   "dask": {
+    "Q6 mt": "op_dask : dask.array en quatre blocs, réduction calculée par l'ordonnanceur à fils (num_workers=4)",
+    "Q1 mt": "op_dask : dask.array en quatre blocs, groupes par bloc (map_blocks) réduits par l'ordonnanceur à fils",
+    "K9 mt": "op_dask : map_overlap(depth=1) de la moyenne à quatre points sur quatre bandes, ordonnanceur à fils",
+    "K3": "op_dask : quatre tâches dask.delayed, chacune écrivain unique de son compteur dans un tableau NumPy espacé de 64 octets"
+   }
   }
  },
  "ocaml": {
@@ -1338,6 +1429,13 @@
    "ocaml_intrinsics_kernel": "v0.17.3",
    "domainslib": "0.5.2 (avec saturn 1.0.0, domain-local-await 1.0.1, multicore-magic 2.3.2, backoff 0.1.1, thread-table 1.0.0)",
    "processor": "0.2"
+  },
+  "formes": {
+   "ocaml_intrinsics_kernel": {
+    "K4": "op_intrinsics : somme conditionnelle de la forme tuned par Conditional.select_int",
+    "Q6": "op_intrinsics : filtre de la forme tuned_s par Conditional.select_int",
+    "Q6 mt": "op_intrinsics : la même sélection dans la forme mt_pool_s"
+   }
   }
  },
  "fortran": {

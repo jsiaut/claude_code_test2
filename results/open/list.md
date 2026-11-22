@@ -113,9 +113,13 @@ Nommée par le dossier (3.3 c) : **rayon** (1.12.0), pour C5 (aussi retenue par 
 Cellules du plafond attribuées (3.4) :
 
 * bumpalo : **K8** (B2 = ½ : arène (Bump) pour les nœuds de l'arbre)
+  * K8 : op_bumpalo : nœuds de chaque requête alloués par Bump::alloc (liens &'b Node), arène remise à zéro par reset() ; parcours de la forme d'accès tuned_it
 * cordyceps : **K3** (D3 = 0 : CachePadded pour espacer les compteurs)
+  * K3 : op_cordyceps : compteurs de sw_padded dans cordyceps::util::CachePadded
 * crossbeam : **K3** (D3 = 0 : crossbeam_utils::CachePadded)
+  * K3 : op_crossbeam : compteurs de sw_padded dans crossbeam_utils::CachePadded
 * libc : **K3** (D3 = 0 : taille de ligne lue par sysconf pour espacer les compteurs ; D4 et F4 hors de la table)
+  * K3 : op_libc : compteurs de sw_padded espacés de sysconf(_SC_LEVEL1_DCACHE_LINESIZE) octets, lu à l'exécution
 * fearless_simd : **aucune** (C2 = 1 : std::arch donne déjà les intrinsèques)
 * ndarray : **aucune** (C2 = 1)
 * rayon : **aucune** (D1 = 1 (std::thread))
@@ -156,6 +160,7 @@ Registre : dub ; statistique : téléchargements du dernier mois (dub).
 Cellules du plafond attribuées (3.4) :
 
 * soa : **K1** (A6 = 0 : conteneur SoA des particules)
+  * K1 : op_soa : particules dans un SOA!Particle (un tableau par champ), boucle d'énergie de la forme soa sur ses champs
 * mir-algorithm : **aucune** (C1 = C2 = 1)
 
 ## Ada
@@ -174,6 +179,7 @@ Cellules du plafond attribuées (3.4) :
 
 * lwt : **aucune** (D1 = 1 (tâches))
 * cachelines : **K3** (D3 = 0 : compteurs alignés sur la ligne de cache)
+  * K3 : op_cachelines : compteurs de sw_padded du type aligné et bourré de cachelines
 
 ## Chapel
 
@@ -229,6 +235,7 @@ Registre : Swift Package Index ; statistique : aucune : ancienneté de la premi�
 Cellules du plafond attribuées (3.4) :
 
 * github.com/swift-molecules/swift-memory-allocation : **K8** (B2 = ½ : arène pour les nœuds de l'arbre)
+  * K8 : op_arena : nœuds de chaque requête alloués par l'arène du produit « Memory Allocator Arena », libérée d'un bloc
 * github.com/jjjkkkjjj/Matft : **aucune** (C1 = 1)
 
 ## Julia
@@ -249,6 +256,7 @@ Le relevé classe par les téléchargements du dernier mois publiés par ecosyst
 Cellules du plafond attribuées (3.4) :
 
 * Bumper : **K8** (B2 = ½ : nœuds dans un tableau alloué par @alloc (allocateur à pointeur))
+  * K8 : op_bumper : nœuds de chaque requête dans un tableau alloué par @alloc dans @no_escape (liens par indices)
 * VectorizationBase : **aucune** (C2 = 1)
 * ThreadPinningCore : **aucune** (D4 : levier hors de la table de l'écart 3)
 * NUMA : **aucune** (F2 : levier hors de la table de l'écart 3)
@@ -276,6 +284,10 @@ Nommée par le dossier (3.3 c) : **MAX 26.7.0** (26.7.0 (paquet conda max-core 2
 Cellules du plafond attribuées (3.4) :
 
 * MAX 26.7.0 : **Q6 mt, Q1 mt, K9 mt, K3** (D1 = ½ : sync_parallelize répartit le calcul sur les cœurs ; F1 sans cellule (C1 = 1))
+  * Q6 mt : op_max : sync_parallelize sur quatre tranches de lignes, sommes partielles réunies
+  * Q1 mt : op_max : sync_parallelize sur quatre tranches, agrégats partiels fusionnés
+  * K9 mt : op_max : sync_parallelize sur quatre bandes de lignes à chaque pas
+  * K3 : op_max : quatre éléments de travail de sync_parallelize, chacun écrivain unique de son compteur bourré
 
 ## C#
 
@@ -345,7 +357,7 @@ Registre : modules (pkg.go.dev) ; statistique : « imported by » (pkg.go.dev).
 | C5 | 0 | github.com/samber/lo/parallel | v1.53.0 (module github.com/samber/lo) | 7 | 82 | github.com/influxdata/telegraf/plugins/inputs/lustre2 (greffon de collecte de Telegraf (Lustre)) ; go.chromium.org/luci/common/sync/parallel (réserve de tâches, sans boucle ni réduction parallèle) ; github.com/rlmcpherson/s3gof3r (transferts S3) ; github.com/u-root/u-root/pkg/dhclient (client DHCP) ; github.com/libp2p/go-libp2p-kad-dht/dual (table de hachage distribuée) ; github.com/Workiva/go-datastructures/btree/palm (arbre B parallèle) |
 | D2 | 0.5 | aucune | — | — | — | sync/atomic (bibliothèque standard elle-même) ; go.uber.org/atomic (enveloppes des atomiques de sync/atomic, sans ordres explicites) ; golang.org/x/net/html/atom (fichiers, flux ou analyse, pas d'atomiques en mémoire) ; github.com/mmcdole/gofeed (fichiers, flux ou analyse, pas d'atomiques en mémoire) ; golang.org/x/tools/go/analysis/passes/atomic (fichiers, flux ou analyse, pas d'atomiques en mémoire) ; github.com/moby/sys/atomicwriter (fichiers, flux ou analyse, pas d'atomiques en mémoire) ; github.com/larksuite/oapi-sdk-go/v3 (fichiers, flux ou analyse, pas d'atomiques en mémoire) ; github.com/rogpeppe/go-internal/lockedfile (fichiers, flux ou analyse, pas d'atomiques en mémoire) ; github.com/dchest/safefile (fichiers, flux ou analyse, pas d'atomiques en mémoire) ; github.com/natefinch/atomic (fichiers, flux ou analyse, pas d'atomiques en mémoire) |
 | D3 | 0 | github.com/templexxx/cpu | v0.1.1 | 1 | 19 |  |
-| D5 | 0 | github.com/marusama/cyclicbarrier | v1.1.0 | 8 | 36 | github.com/coreos/etcd/clientv3/concurrency (verrous distribués d'etcd) ; go.etcd.io/etcd/client/v3/concurrency (verrous distribués d'etcd) ; go.etcd.io/etcd/clientv3/concurrency (verrous distribués d'etcd) ; github.com/tj/go-spin (indicateur d'attente en terminal) ; github.com/gernest/wow/spin (indicateur d'attente en terminal) ; github.com/spinnaker/spin/cmd/gateclient (outil Spinnaker) ; github.com/elodina/siesta (client Kafka) |
+| D5 | 0 | aucune | — | — | — | github.com/coreos/etcd/clientv3/concurrency (verrous distribués d'etcd) ; go.etcd.io/etcd/client/v3/concurrency (verrous distribués d'etcd) ; go.etcd.io/etcd/clientv3/concurrency (verrous distribués d'etcd) ; github.com/tj/go-spin (indicateur d'attente en terminal) ; github.com/gernest/wow/spin (indicateur d'attente en terminal) ; github.com/spinnaker/spin/cmd/gateclient (outil Spinnaker) ; github.com/elodina/siesta (client Kafka) ; github.com/marusama/cyclicbarrier (barrière de rendez-vous entre fils : ni barrière mémoire ni indication d'attente active (légende de D5, 3.3 a, 1)) ; github.com/cockroachdb/errors/barriers (« barrières » d'erreurs) ; github.com/fermyon/spin/sdk/go/v2/http (cadriciel Spin (WebAssembly)) |
 | E4 | 0 | aucune | — | — | — | www.velocidex.com/golang/go-prefetch (préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement) ; github.com/ava-labs/avalanchego/vms/evm/prefetch (préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement) ; github.com/containerd/nydus-snapshotter/pkg/prefetch (préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement) ; github.com/Lakshmi-Priya-Ramisetty/healthcare-data-harmonization/mapping_engine/fetch (préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement) ; github.com/GoogleCloudPlatform/healthcare-data-harmonization/mapping_engine/fetch (préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement) ; github.com/springml-code/reltio-healthcare-data-harmonization/mapping_engine/fetch (préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement) ; github.com/spiral/jobs/v2 (préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement) ; github.com/bazel-contrib/rules_img/img_tool/pkg/prefetch (préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement) ; github.com/dmundt/go-cask/cas/cache/prefetch (préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement) ; github.com/networkservicemesh/integration-tests/extensions/prefetch (préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement) |
 | F1 | 0.5 | gonum.org/v1/gonum/mat | v0.17.0 (module gonum.org/v1/gonum) | 1 | 2 504 |  |
 | F2 | 0 | github.com/benjojo/numa | v0.0.0-20260918214945-1058a779f434 (aucune version publiée) | 8 | 0 | github.com/jaypipes/ghw (découverte du matériel, sans placement) ; github.com/k8stopologyawareschedwg/numaplacement (ordonnancement Kubernetes) ; github.com/lrita/numa (ne se construit pas avec Go 1.27 (go:linkname vers runtime.systemstack, interdit) (3.3 a, 2)) ; github.com/zededa/ghw (découverte du matériel, sans placement) ; github.com/Jaganathancse/numautils (lecture de la topologie, sans placement) ; gitlab.com/blockforge/blockforge/pkg/hwloc (lecture de la topologie (hwloc), sans placement) ; github.com/arcticflint/numa (refusé par le proxy des modules de Go (403 SECURITY ERROR) : ne s'installe pas) |
@@ -354,8 +366,10 @@ Cellules du plafond attribuées (3.4) :
 
 * github.com/samber/lo/parallel : **aucune** (D1 = 1 (goroutines))
 * github.com/templexxx/cpu : **K3** (D3 = 0 : CacheLineSize pour espacer les compteurs)
-* github.com/marusama/cyclicbarrier : **aucune** (D5 : levier hors de la table de l'écart 3)
+  * K3 : op_cpu : compteurs de rmw_padded bourrés à cpu.CacheLineSize (type de bourrage du paquet s'il existe)
 * gonum.org/v1/gonum/mat : **K9, K9 mt** (C1 = C2 = ½ : vues (Slice), Add et Scale de matrices float64 font la moyenne à quatre points ; K5 et K1 (float32), Q6 et Q1 (colonnes entières) : types absents ; K4 : aucune somme conditionnelle)
+  * K9 : op_gonum : grilles en mat.Dense ; vues Slice des quatre voisins, Add trois fois puis Scale(0.25) dans la vue intérieure (ordre ((haut+bas)+gauche)+droite gardé)
+  * K9 mt : op_gonum : la même suite d'opérations sur quatre bandes de lignes, une goroutine par bande
 * github.com/benjojo/numa : **aucune** (F2 : levier hors de la table de l'écart 3)
 
 ## Haskell
@@ -374,7 +388,7 @@ La page « top » de Hackage, titrée « Total downloads », donne en fait les t
 | D2 | 0.5 | atomic-primops | 0.8.8 | 2 | 192 | hapistrano (déploiement) |
 | D3 | 0 | aucune | — | — | — | pykinos-core (structures bloquées, pas d'aide ligne de cache) |
 | D4 | 0.5 | aucune | — | — | — | aucune réponse |
-| D5 | 0 | concurrent-barrier | 0.1.2 | 3 | 12 | doctest-extract (tests) ; barrier (générateur de badges) |
+| D5 | 0 | aucune | — | — | — | doctest-extract (tests) ; barrier (générateur de badges) ; concurrent-barrier (barrière de rendez-vous entre fils : ni barrière mémoire ni indication d'attente active (légende de D5, 3.3 a, 1)) ; cloudy (outil en ligne de commande pour lancer des machines dans le nuage) ; barrier-monad (monade de « barrière » (coroutines), sans barrière mémoire ni attente active) |
 | F2 | 0 | aucune | — | — | — | aucune réponse |
 | F4 | 0 | mmap | 0.5.9 | 2 | 72 | JuicyPixels (images) |
 
@@ -382,7 +396,6 @@ Cellules du plafond attribuées (3.4) :
 
 * parallel : **aucune** (D1 = 1 (forkOn))
 * atomic-primops : **aucune** (D2 : levier hors de la table de l'écart 3)
-* concurrent-barrier : **aucune** (D5 : levier hors de la table de l'écart 3)
 * mmap : **aucune** (F4 : levier hors de la table de l'écart 3)
 
 ## OCaml
@@ -408,6 +421,9 @@ Statistique : nombre de paquets d'opam qui en dépendent (« Required by », opa
 Cellules du plafond attribuées (3.4) :
 
 * ocaml_intrinsics_kernel : **K4, Q6, Q6 mt** (C1 = C2 = 0 : Conditional.select_int fait sans branchement la somme sous condition de K4 et de Q6 ; ni vecteurs ni opérations sur tableaux pour K1, K5, Q1 et K9)
+  * K4 : op_intrinsics : somme conditionnelle de la forme tuned par Conditional.select_int
+  * Q6 : op_intrinsics : filtre de la forme tuned_s par Conditional.select_int
+  * Q6 mt : op_intrinsics : la même sélection dans la forme mt_pool_s
 * domainslib : **aucune** (D1 = 1 (Domain))
 * processor : **aucune** (D4 : levier hors de la table de l'écart 3)
 
@@ -458,6 +474,7 @@ Registre : npm ; statistique : téléchargements du dernier mois (api.npmjs.org)
 Cellules du plafond attribuées (3.4) :
 
 * @protobufjs/pool : **K8** (B2 = 0 : nœuds de l'arbre dans des tranches d'un bloc commun)
+  * K8 : op_pool : nœuds de chaque requête dans des vues typées de tranches données par pool(alloc, slice, taille)
 * ndarray : **aucune** (aucune opération de calcul (écart 3))
 
 ## PHP
@@ -484,6 +501,9 @@ Registre : Packagist ; statistique : téléchargements du dernier mois (Packagis
 Cellules du plafond attribuées (3.4) :
 
 * amphp/parallel-functions : **Q6 mt, Q1 mt, K9 mt** (D1 = ½ : parallelMap répartit le calcul sur des processus ; sans mémoire partagée, pas K3)
+  * Q6 mt : op_amphp : Amp\ParallelFunctions\parallelMap sur quatre tranches de lignes, sommes partielles réunies
+  * Q1 mt : op_amphp : parallelMap sur quatre tranches, agrégats partiels fusionnés
+  * K9 mt : op_amphp : parallelMap sur quatre bandes de lignes à chaque pas, bandes réassemblées
 * rindow/rindow-math-matrix : **aucune** (opérations écrites en PHP (pilote MatlibPHP) : rien de compilé)
 
 ## Python
@@ -511,7 +531,20 @@ Nommée par le dossier (3.3 c) : **numpy** (2.5.5), pour F1 (ndarray : tableau m
 Cellules du plafond attribuées (3.4) :
 
 * numpy : **K1, K4, K5, Q6, Q1, K9, Q6 mt, Q1 mt, K9 mt** (C1 = C2 = 0 : opérations compilées sur tableaux entiers ; formes à quatre fils par threading (le GIL est rendu pendant les opérations))
+  * K1 : op_numpy : champs en tableaux float32, énergie par expression sur tableaux entiers sommée en float64
+  * K4 : op_numpy : somme conditionnelle par masque (np.sum(a, where=a >= 128, dtype=np.int64))
+  * K5 : op_numpy : np.dot sur float32
+  * Q6 : op_numpy : masques booléens combinés, puis np.dot des colonnes filtrées
+  * Q1 : op_numpy : groupes par np.bincount(clé, weights=…) sur les lignes filtrées
+  * K9 : op_numpy : moyenne à quatre points par tranches de tableaux (((haut + bas) + gauche) + droite) * 0.25
+  * Q6 mt : op_numpy : la forme Q6 sur quatre tranches, une par threading.Thread (NumPy rend le GIL)
+  * Q1 mt : op_numpy : la forme Q1 sur quatre tranches, une par fil
+  * K9 mt : op_numpy : la forme K9 sur quatre bandes de lignes, une par fil, à chaque pas
 * dask : **Q6 mt, Q1 mt, K9 mt, K3** (D1 = ½ : ordonnanceur à fils (dask.array sur NumPy, delayed))
+  * Q6 mt : op_dask : dask.array en quatre blocs, réduction calculée par l'ordonnanceur à fils (num_workers=4)
+  * Q1 mt : op_dask : dask.array en quatre blocs, groupes par bloc (map_blocks) réduits par l'ordonnanceur à fils
+  * K9 mt : op_dask : map_overlap(depth=1) de la moyenne à quatre points sur quatre bandes, ordonnanceur à fils
+  * K3 : op_dask : quatre tâches dask.delayed, chacune écrivain unique de son compteur dans un tableau NumPy espacé de 64 octets
 * atomics : **aucune** (D2 : levier hors de la table de l'écart 3)
 
 ## Lua
@@ -539,7 +572,12 @@ Registre : LuaRocks ; statistique : téléchargements (LuaRocks).
 Cellules du plafond attribuées (3.4) :
 
 * pessoa736/vmsl : **K5, K9** (C1 = C2 = 0 : produit scalaire (Vector * Vector), sommes et échelles de matrices (submatrix, +, *) en C ; ni produit terme à terme (K1) ni comparaison (K4, Q6, Q1) ; aucun fil pour les formes à quatre fils)
+  * K5 : op_vmsl : produit scalaire Vector * Vector
+  * K9 : op_vmsl : grille en Matrix ; submatrix des quatre voisins, sommes (+) puis échelle (* 0.25), intérieur recopié dans la grille
 * moteus/lua-llthreads2 : **Q6 mt, Q1 mt, K9 mt** (D1 = 0 : fils dans des états Lua séparés, données passées par copie ; sans mémoire partagée, pas K3)
+  * Q6 mt : op_llthreads2 : quatre fils llthreads2, chacun reçoit sa tranche de colonnes en chaînes (string.pack) et rend sa somme
+  * Q1 mt : op_llthreads2 : quatre fils, tranches en chaînes, agrégats partiels rendus et fusionnés
+  * K9 mt : op_llthreads2 : à chaque pas, quatre fils reçoivent leur bande (et ses voisines) en chaînes et rendent la bande calculée
 
 ## Récapitulatif
 
@@ -580,12 +618,10 @@ Cellules du plafond attribuées (3.4) :
 | Java | F2 | org.apache.ignite:ignite-numa-allocator | 2.18.0 | règle | — |
 | Go | C5 | github.com/samber/lo/parallel | v1.53.0 (module github.com/samber/lo) | règle | — |
 | Go | D3 | github.com/templexxx/cpu | v0.1.1 | règle | K3 |
-| Go | D5 | github.com/marusama/cyclicbarrier | v1.1.0 | règle | — |
 | Go | F1 | gonum.org/v1/gonum/mat | v0.17.0 (module gonum.org/v1/gonum) | règle | K9, K9 mt |
 | Go | F2 | github.com/benjojo/numa | v0.0.0-20260918214945-1058a779f434 (aucune version publiée) | règle | — |
 | Haskell | C5 | parallel | 3.3.0.0 | règle | — |
 | Haskell | D2 | atomic-primops | 0.8.8 | règle | — |
-| Haskell | D5 | concurrent-barrier | 0.1.2 | règle | — |
 | Haskell | F4 | mmap | 0.5.9 | règle | — |
 | OCaml | C2 | ocaml_intrinsics_kernel | v0.17.3 | règle | K4, Q6, Q6 mt |
 | OCaml | C5 | domainslib | 0.5.2 (avec saturn 1.0.0, domain-local-await 1.0.1, multicore-magic 2.3.2, backoff 0.1.1, thread-table 1.0.0) | règle | — |
@@ -600,4 +636,4 @@ Cellules du plafond attribuées (3.4) :
 | Lua | D1 | moteus/lua-llthreads2 | 0.1.6-1 (étiquette v0.1.6) | règle | Q6 mt, Q1 mt, K9 mt |
 | Lua | F1 | pessoa736/vmsl | 1.1-2 (étiquette v1.1) | règle | K5, K9 |
 
-54 entrées (case comblée) ; 40 couples (bibliothèque, cellule du plafond) dans 18 bibliothèques de 12 langages.
+52 entrées (case comblée) ; 40 couples (bibliothèque, cellule du plafond) dans 18 bibliothèques de 12 langages.

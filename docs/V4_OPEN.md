@@ -268,3 +268,12 @@ décision de l'auteur de l'étude, qui lui sera soumise avec les résultats.
    * Lecture de 3.3 d. La règle choisit case par case : une bibliothèque comble les cases dont la recherche la retient,
      et pas, en plus, une case où la recherche ne l'a pas trouvée ; une bibliothèque nommée par le dossier (3.3 c)
      comble les cases que son API comble.
+5. **Correction du relevé et noms des formes (3.3 a, 5.1), 22 novembre, 8 h 28, avant toute sonde et toute forme.**
+   (1) `github.com/marusama/cyclicbarrier` (Go) et `concurrent-barrier` (Haskell) avaient été retenues pour D5 ; ce
+   sont des barrières de rendez-vous entre fils, alors que la légende de D5 vise les barrières mémoire et
+   l'indication d'attente active (notes publiées de D5 : `atomic_thread_fence`, `pause`). Elles sont refusées (3.3 a,
+   1), et aucune autre des dix premières ne fournit le levier : D5 reste un trou en Go et en Haskell. La liste compte
+   47 bibliothèques dans 17 langages, qui comblent 47 cases ; les 40 couples (bibliothèque, cellule) ne changent pas
+   (ni l'une ni l'autre n'avait de cellule). (2) Le relevé nomme maintenant chaque forme `op_*` et l'idiome de la
+   bibliothèque qu'elle emploie (5.1, « nommées dans le relevé ») : `results/open/list.md`, sous les cellules
+   attribuées.

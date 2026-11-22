@@ -94,8 +94,11 @@ def main():
         if d.get("cellules"):
             L += ["", "Cellules du plafond attribuées (3.4) :", ""]
             why = d.get("raisons_cellules", {})
+            forms = d.get("formes", {})
             for lib, cells in d["cellules"].items():
                 L.append(f"* {lib} : **{', '.join(cells) if cells else 'aucune'}** ({why.get(lib, '?')})")
+                for cell in cells:
+                    L.append(f"  * {cell} : {forms.get(lib, {}).get(cell, '?')}")
         L.append("")
     L += ["## Récapitulatif", "", "| Langage | Case | Bibliothèque | Version | Entrée | Cellules du plafond |",
           "|---|---|---|---|---|---|"]
