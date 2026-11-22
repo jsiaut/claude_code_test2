@@ -214,7 +214,7 @@ décision de l'auteur de l'étude, qui lui sera soumise avec les résultats.
 
 ## 10. Écarts datés
 
-1. **Recherche (3.2), 22 novembre, 7 h 20, avant toute recherche retenue.** La recherche du site de PyPI est protégée
+1. **Recherche (3.2), 22 novembre, 7 h 08, avant toute recherche retenue.** La recherche du site de PyPI est protégée
    par un défi JavaScript, et celle de Hackage refuse les requêtes automatisées (protection CSRF) : ni l'une ni
    l'autre n'est contournée. Le registre General de Julia, opam, le Swift Package Index et l'archive d'Ubuntu n'ont pas
    d'API de recherche. Pour ces registres, la requête devient la recherche des mots de la case (mot entier, sans
@@ -225,3 +225,23 @@ décision de l'auteur de l'étude, qui lui sera soumise avec les résultats.
    index (fichier ou clone Git). Les statistiques d'usage restent celles de 3.1. Les registres qui ont une API de
    recherche publique (crates.io, npm, NuGet, Packagist, dub, Maven Central, pkg.go.dev, LuaRocks) sont interrogés
    par elle, comme prévu.
+2. **Popcon (3.1), 22 novembre, 7 h 15, avant tout choix.** Le concours de popularité d'Ubuntu n'est plus publié
+   (`popcon.ubuntu.com` ne sert plus de données) : pour C et C++, la statistique d'usage est celle de Debian
+   (`popcon.debian.org`, installations), dont l'archive d'Ubuntu dérive ; l'index reste celui d'Ubuntu 24.04.
+3. **Attribution des cellules du plafond (3.4), 22 novembre, 7 h 23, avant toute sonde et toute forme.** Le plan
+   attribuait à chaque bibliothèque toutes les cellules où son API fait le calcul chaud : une bibliothèque de tableaux
+   ou de vecteurs l'aurait été à huit cellules dans chaque langage, même là où la forme d'accès du langage (point 5)
+   use déjà du même levier par sa bibliothèque standard. Une bibliothèque ne peut alors changer le plafond que par la
+   qualité de sa mise en œuvre, et le portage du point 4 a déjà donné à chaque langage les meilleures formes connues
+   de ce levier. L'attribution se limite donc aux cellules où la bibliothèque apporte un levier que la bibliothèque
+   standard n'offre pas en entier, selon la grille du score central :
+   * vecteurs explicites (C1, C2) ou opérations compilées sur tableaux entiers (F1) : K1, K4, K5, Q6, Q1, K9 et leurs
+     formes à quatre fils, si C1 et C2 valent toutes deux moins de 1 ;
+   * fils parallèles ou parallélisme de données (D1, C5) : Q6 mt, Q1 mt, K9 mt et K3, si D1 vaut moins de 1 ;
+   * préchargement (E4) : K7, si E4 vaut moins de 1 ;
+   * aide ligne de cache (D3) : K3, si D3 vaut moins de 1 ;
+   * arènes et allocateurs (B2) : K8, si B2 vaut moins de 1 ;
+   * SoA (A6) : K1, si A6 vaut moins de 1.
+   Une bibliothèque qui comble une case n'est attribuée à une cellule de la table que si son API fait le calcul de
+   cette cellule (une bibliothèque de tableaux sans opérations de calcul n'est attribuée à aucune). La grille ouverte
+   (section 4) n'est pas touchée : toutes les cases comblées y comptent.
