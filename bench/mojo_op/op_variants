@@ -1,0 +1,6 @@
+# v4, point 6 (docs/V4_OPEN.md, 5) : formes de la piste ouverte de cette copie : noyau variante paramètre ; cellule ;
+# bibliothèque. La forme d'accès de chaque cellule touchée est mesurée aussi dans cette construction (témoin, 5.2).
+k6 op_max q6 ; Q6 mt ; MAX 26.7.0
+k6 op_max q1 ; Q1 mt ; MAX 26.7.0
+k9 op_max ; K9 mt ; MAX 26.7.0
+k3 op_max ; K3 ; MAX 26.7.0

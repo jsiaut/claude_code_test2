@@ -1,0 +1,4 @@
+#!/bin/sh
+# v4, point 6 (docs/V4_OPEN.md, 5.2) : construction _op de Python : le même CPython 3.15.2, avec l'environnement
+# /opt/open/python (NumPy 2.5.5, dask 2026.8.0 ; results/open/lock/python/requirements.txt).
+exec /opt/open/python/bin/python "$(dirname "$0")/ms.py" "$@"
