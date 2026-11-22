@@ -20,6 +20,8 @@ Ada (GNAT 16) Alire n'est pas sur l'hôte : commits de l'index d'Alire, compilé
 Swift 6.4.2 (SwiftPM) : lock/swift/Package.swift, Package.resolved (arène), Package.matft.swift, Package.matft.resolved
             swift-memory-allocation : aucune version publiée, branche main, révision 8742a8c ;
             Matft 1.0.1 (étiquette 1.0.1, bf66a10), avec swift-collections 1.7.6.
+            Copie bench/swift_op : paquet bench/swift_op/deps (arène seule) ; son Package.resolved a les 48 mêmes
+            révisions que celui de la sonde (Package.probe.resolved, moins Matft et swift-collections).
 Julia (Pkg, JULIA_DEPOT_PATH=/opt/open/julia/depot) : lock/julia/Project.toml, Manifest.toml
             Bumper 0.7.2 ; VectorizationBase 0.21.74 ; ThreadPinningCore 0.4.5 ; NUMA 0.1.1.
 Mojo 1.2.0  MAX 26.7.0 : paquet conda max-core-26.7.0-release.conda (canal max de Modular, repo.prefix.dev ;
