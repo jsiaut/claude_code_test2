@@ -286,3 +286,22 @@ décision de l'auteur de l'étude, qui lui sera soumise avec les résultats.
    nombres de la liste ne changent pas. Les sondes suivent la norme du point 1 ; elles impriment, pour chaque case
    comblée, la note que la légende donnerait si l'API était livrée, avec ses limites en ligne NOTE
    (`results/open/probes/<langage>.txt`).
+7. **Dénominateur du report, horloge des fils de Lua, processus d'amphp (5.2, 6, 7), 22 novembre, 9 h 30, après la
+   validation des formes et avant la campagne.** (1) Pendant la validation (un processus par forme), la forme
+   d'accès de K3 (`sw_padded`) a tourné en 13 à 19 ms dans certaines constructions (la copie `_op` de Rust, `sw_padded`
+   de Mojo) contre 72 à 77 ms dans les autres, avec la même boucle `incq` : un effet de placement du code dans le
+   binaire, pas une modification du code standard par la bibliothèque (la même boucle, seule, tourne toujours en 72 à
+   77 ms). Le rapport r mesurerait alors la disposition du binaire, pas la bibliothèque. Règle, fixée avant la
+   campagne : pour chaque (langage, cellule), le témoin w est la médiane sur les trois passes du rapport (forme
+   d'accès dans `_op`) / (forme d'accès dans `_cv`) ; si |w − 1| > 0,10, le dénominateur de r devient la forme
+   d'accès dans `_cv` (r : médiane sur les passes de (forme `op_*`) / (forme d'accès dans `_cv`)), et les deux r sont
+   rapportés ; sinon, le dénominateur est celui du plan. R4 relève de toute façon K3 à b3. (2) Lua : l'horloge du banc
+   est `os.clock()`, le temps processeur du processus, égal au temps écoulé dans un seul fil ; avec quatre fils
+   llthreads2, il compterait le temps des quatre. Les formes `op_llthreads2` lisent donc le temps écoulé par
+   `date +%s.%N` (`io.popen`, comme la sonde de D1), avant le lancement des fils et après leur fin ; leur r rapporte
+   ce temps au temps processeur de la forme d'accès, qui n'a qu'un fil. (3) PHP : amphp lance ses processus par
+   `PHP_BINARY` avec ses seules options par défaut ; les formes `op_amphp` leur passent celles du banc (OPcache, JIT
+   tracing, mémoire), que les processus de `mt` héritent de `pcntl_fork`, par l'option documentée `binary` de
+   `ProcessContextFactory`, et leurs fonctions par le fichier d'amorce (`bootstrapPath`). Relevé des formes pour la
+   campagne et l'analyse : `results/open/forms.json` (`tools/open/forms.py`) ; témoin d'hôte : la forme d'accès de C
+   de chaque cellule touchée, dans la construction qui la porte.

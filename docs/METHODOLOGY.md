@@ -1780,3 +1780,15 @@ Robustesse :
   privé, `cache-padded` est retenue pour D3 de Rust. Talons C d'ocaml_intrinsics_kernel compilés pour le
   processeur hôte (5.2 du plan), sans quoi popcnt devient une fonction logicielle. Résumé :
   `results/open/probes/summary.md`, `results/open/grid_open.json` (`tools/open/probes_summary.py`).
+* 2026-11-22, 9:40 : **v4, point 6 : formes du plafond ouvert, outils de campagne et d'analyse, avant la campagne**
+  (`docs/V4_OPEN.md`, 5 à 7, écart 7). Les 40 formes `op_*` des 40 couples (bibliothèque, cellule) sont écrites dans
+  12 copies `bench/<langage>_op` (Python 13, Rust 4, Mojo 4, Lua 5, Go 3, OCaml 3, PHP 3, D, Ada, Swift, Julia,
+  JavaScript 1) ; chacune, exécutée une fois à la taille publiée, rend la somme de contrôle publiée. Bibliothèques
+  compilées avec les options de la construction publiée du langage (SwiftPM en -O et module entier avec
+  `-target-cpu native`, puis la commande swiftc publiée ; ocaml_intrinsics_kernel reconstruite en `-O3` ; modules de
+  Go par la même commande `GOAMD64=v4`). Écart 7 : dénominateur du report pris dans `_cv` si le témoin de construction
+  s'écarte de plus de 10 % (effet de placement de K3 vu à la validation), horloge murale pour les fils llthreads2 de
+  Lua, options du banc passées aux processus d'amphp. Relevé des formes `results/open/forms.json`
+  (`tools/open/forms.py`) ; pilote `tools/open/campaign.py` (121 processus par passe, trois passes, b3 au début et à
+  la fin) ; analyse `analysis/open_v4.py` (contrôle « Convergent, avec R4 », calculs 1 à 7), essayée sur des données
+  synthétiques non gardées.
