@@ -234,4 +234,13 @@ fictives au format de la campagne.
 
 ## 11. Écarts datés
 
-*(aucun à ce jour)*
+1. **K4 `tuned` de Java faux au-delà de 2^31 (22 novembre, 16 h 21, pendant l'étalonnage, avant toute passe).** À la
+   grande taille (2^28 octets), la cellule rend -67 246 612 au lieu de 25 702 557 164 : les 16 voies `int` de la forme
+   cumulaient tout le tableau, et `reduceLanesToLong` de l'API Vector réduit en `int` avant d'élargir. À la taille
+   publiée, la somme (1,6·10^9) tient sous 2^31 ; la forme n'en était pas moins hors de la règle C2, 2 (« un
+   accumulateur entier doit tenir par construction »), et la relecture des preuves du point 4 l'avait laissée passer.
+   Correction (`bench/java_cv/Ms.java`) : chaque bloc de 128 tours est réduit en `int` (au plus 2 088 960) et ajouté à
+   une somme de 64 bits ; la cellule est reconstruite et de nouveau étalonnée et validée à ses trois tailles. Comme
+   la validation ne voit que les données du banc, toutes les cellules de K4 sont aussi exécutées une fois sur des
+   données extrêmes (2^28 octets à 255 : chaque accumulateur reçoit son maximum), avant la passe 0
+   (`tools/final/k4_extreme.py`, `results/final/k4_extreme.txt`).

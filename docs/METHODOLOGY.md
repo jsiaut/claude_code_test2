@@ -1815,3 +1815,8 @@ Robustesse :
   d'une machine à l'autre du même modèle (85,1 ms sur la machine 33, 69,4 sur la 34). Durée estimée à une trentaine
   d'heures : un groupe (noyau, taille) d'une passe est toujours mesuré sur une même machine, et refait en entier si un
   redémarrage l'interrompt. Étalonnage et validation en une phase avant la passe 0.
+* 2026-11-22, 16:30 : **v4, campagne finale : écart 1** (`docs/V4_FINAL.md`, 11) : à l'étalonnage, le K4 `tuned` de
+  Java est faux à la grande taille (réduction `int` de `reduceLanesToLong` ; somme au-delà de 2^31) ; corrigé par une
+  réduction par bloc en 64 bits, revalidé ; contrôle de toutes les cellules de K4 sur des données extrêmes (2^28
+  octets à 255) avant la passe 0. Les autres cellules étalonnées jusque-là sont justes ; six sont hors mémoire à la
+  grande taille, celles du point 2 (K1 de Python et de BQN).

@@ -224,11 +224,14 @@ public class Ms {
     // variantes tuned) : 64 octets par tour, octets < 128 (signés >= 0) mis à zéro par blend, élargis sans signe en deux
     // vecteurs de 32 shorts, cumulés au plus 128 tours (2 x 128 x 255 = 65 280, sans signe), puis en entiers. (Une forme
     // sur 8 voies de 64 bits, octets traités par masques et multiplication, prend 2,5 ms au lieu de 0,6.)
+    // Campagne finale (docs/V4_FINAL.md, 11, écart 1) : chaque bloc de 128 tours est réduit en int (au plus
+    // 16 x 2 x 65 280 = 2 088 960 < 2^31) et ajouté à la somme de 64 bits ; avant, les 16 voies int cumulaient tout le
+    // tableau et reduceLanesToLong réduit en int avant d'élargir : faux dès que la somme dépasse 2^31 (taille 2^28).
     static final VectorSpecies<Byte> B64 = ByteVector.SPECIES_512;
     static final VectorSpecies<Short> S32 = ShortVector.SPECIES_512;
     static long k4Tuned(byte[] v) {
         int n = v.length, i = 0;
-        IntVector acc = IntVector.zero(IS);
+        long s = 0;
         while (i + 64 <= n) {
             ShortVector a0 = ShortVector.zero(S32), a1 = ShortVector.zero(S32);
             for (int k = 0; k < 128 && i + 64 <= n; k++, i += 64) {
@@ -238,10 +241,10 @@ public class Ms {
                 a1 = a1.add((ShortVector) y.convertShape(VectorOperators.ZERO_EXTEND_B2S, S32, 1));
             }
             ShortVector t = a0.add(a1);
-            acc = acc.add((IntVector) t.convertShape(VectorOperators.ZERO_EXTEND_S2I, IS, 0))
-                     .add((IntVector) t.convertShape(VectorOperators.ZERO_EXTEND_S2I, IS, 1));
+            s += ((IntVector) t.convertShape(VectorOperators.ZERO_EXTEND_S2I, IS, 0))
+                     .add((IntVector) t.convertShape(VectorOperators.ZERO_EXTEND_S2I, IS, 1))
+                     .reduceLanes(VectorOperators.ADD);
         }
-        long s = acc.reduceLanesToLong(VectorOperators.ADD);
         for (; i < n; i++) { int x = v[i] & 0xFF; if (x >= 128) s += x; }
         return s;
     }
