@@ -1710,7 +1710,7 @@ Robustesse :
   Documents : `docs/V4_CONVERGE.md` (11), effet mesuré de l'erratum dans `docs/V4_SIZES.md` (10.7) et
   `docs/V4_EQUAL.md` (11.9), README (section du point 4, errata des points 2 et 3), `docs/V4_PLAN.md`. Le classement
   de tête ne change pas (section 9 du plan).
-* 2026-11-22, 2:00 à 3:00 : **v4, point 5 : plan** (`docs/V4_COST.md`), poussé avant tout outil et tout comptage.
+* 2026-11-22, 5:26 : **v4, point 5 : plan** (`docs/V4_COST.md`), poussé avant tout outil et tout comptage.
   Faits relevés : formes et temps du point 4 (300 cellules de langage, 424 formes à 10 % ou moins de la meilleure de
   leur langage) ; code d'une forme pas toujours isolé dans une fonction (régions à délimiter à la lecture) ;
   vérifications des modes publiés (point 3) ; constructions qui contournent une vérification et constructions propres
