@@ -365,3 +365,11 @@ p2 k3 go/cv rmw_padded  n=15 med=0.217427s ok=['True'] oom=False rc=0
 p2 k3 python/cv sw_padded  n=3 med=2.00156s ok=['True'] oom=False rc=0
 p2 k3 ada/cv sw_padded  n=128 med=0.0138349s ok=['True'] oom=False rc=0
 2026-11-22T10:15:50 passe 2 groupe 5/7 k3 18 processus 150s
+p2 k5 lua/op op_vmsl  n=33 med=0.091134s ok=['True'] oom=False rc=0
+p2 k5 lua/op tuned  n=3 med=1.68717s ok=['True'] oom=False rc=0
+p2 k5 python/cv tuned  n=3 med=2.79543s ok=['True'] oom=False rc=0
+p2 k5 lua/cv tuned  n=3 med=1.82445s ok=['True'] oom=False rc=0
+p2 k5 c/pub tuned  n=634 med=0.003705s ok=['True'] oom=False rc=0
+p2 k5 python/op op_numpy  n=81 med=0.037704s ok=['True'] oom=False rc=0
+p2 k5 python/op tuned  n=3 med=2.74896s ok=['True'] oom=False rc=0
+2026-11-22T10:16:38 passe 2 groupe 6/7 k5 7 processus 46s
