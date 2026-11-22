@@ -94,6 +94,12 @@ base du point 4 est corrigée, et sa campagne mesure aussi l'ancienne source. R�
 la convergence ne déplace aucun langage de plus de deux places (C++ passe 1er, Zig 4e), surtout par K4 et K8 ; avec
 R4, Zig passe 2e et D 8e ; l'erratum ne déplace aucun langage de plus de deux places sur un même hôte.
 
+Point 5 : plan détaillé dans `docs/V4_COST.md` (22 novembre, poussé avant tout outil et tout comptage) : mesure statique
+des sources du point 4, pour la forme qui atteint chaque cellule du plafond : lignes ajoutées au code naturel, lignes
+sans les vérifications de sûreté mémoire du mode publié, constructions propres à une architecture, compilation pour
+aarch64 et riscv64 là où une chaîne croisée existe hors ligne ; un indice d'accès, et un scénario où il remplace les
+catégories C et E de la grille, à côté du classement.
+
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
 une fois le point précédent terminé. Machine : l'hôte actuel est un Xeon Granite Rapids (modèle 173), une troisième
