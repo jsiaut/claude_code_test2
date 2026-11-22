@@ -82,14 +82,26 @@ def scope_pushpop(lines, i):
     return out
 
 
-SUB = re.compile(r"^\s*(procedure|function)\s+(\w+)", re.I)
+SUB = re.compile(r"^\s*(?:(?:not\s+)?overriding\s+)?(procedure|function)\s+(\w+)", re.I)
+DECLARE = re.compile(r"^\s*declare\s*$", re.I)
 
 
 def scope_unit(lines, i):
-    """Ada : le sous-programme qui contient la ligne i (en-tête moins indenté qu'elle, jusqu'à son « end Nom; »)."""
+    """Ada : la région déclarative qui contient la ligne i : le bloc « declare » (de declare à son « end; ») ou le
+    sous-programme (de son en-tête à son « end Nom; »), le plus proche des deux (en-tête moins indenté que la ligne).
+    Correction du 22 novembre, à l'examen des occurrences (docs/V4_COST.md, 11) : un pragma placé dans un bloc declare
+    ne s'applique qu'au bloc ; les en-têtes « overriding procedure » sont reconnus."""
     for h in range(i - 1, -1, -1):
+        if not lines[h].strip() or indent(lines[h]) >= indent(lines[i]):
+            continue
+        if DECLARE.match(lines[h]):
+            base = indent(lines[h])
+            for j in range(i + 1, len(lines)):
+                if re.match(r"^\s*end\s*;", lines[j]) and indent(lines[j]) == base:
+                    return set(range(h, j + 1))
+            break
         m = SUB.match(lines[h])
-        if m and indent(lines[h]) < indent(lines[i]):
+        if m:
             name, base = m.group(2), indent(lines[h])
             end = re.compile(r"^\s*end\s+" + re.escape(name) + r"\s*;", re.I)
             for j in range(i + 1, len(lines)):
