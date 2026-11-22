@@ -1,0 +1,6743 @@
+{
+ "c": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 6,
+    "T": 97,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa",
+     "k1_soa_prep"
+    ],
+    "L": 24,
+    "T": 368,
+    "U": 0,
+    "X": 10
+   },
+   "k3|sw_packed|": {
+    "entry": "k3_worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 18,
+    "T": 245,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "k3_worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 18,
+    "T": 245,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 6,
+    "T": 58,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 14,
+    "T": 139,
+    "U": 0,
+    "X": 6
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 5,
+    "T": 59,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5_tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 10,
+    "T": 180,
+    "U": 0,
+    "X": 6
+   },
+   "k6|mt_pool_v|q6": {
+    "entry": "k6_job",
+    "regions": [
+     "pool",
+     "k6_job",
+     "k6_pool_run",
+     "q6_tuned_v",
+     "q6_natural"
+    ],
+    "L": 77,
+    "T": 963,
+    "U": 0,
+    "X": 12
+   },
+   "k6|mt_pool|q1": {
+    "entry": "k6_job",
+    "regions": [
+     "pool",
+     "k6_job",
+     "k6_pool_run",
+     "q1_tuned",
+     "q1_natural"
+    ],
+    "L": 106,
+    "T": 1450,
+    "U": 0,
+    "X": 24
+   },
+   "k6|mt|q1": {
+    "entry": "k6_worker",
+    "regions": [
+     "k6_worker",
+     "k6_mt_run",
+     "q1_tuned",
+     "q1_natural"
+    ],
+    "L": 72,
+    "T": 1181,
+    "U": 0,
+    "X": 24
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 13,
+    "T": 176,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 7,
+    "T": 111,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q6": {
+    "entry": "q6_tuned_v",
+    "regions": [
+     "q6_tuned_v",
+     "q6_natural"
+    ],
+    "L": 24,
+    "T": 376,
+    "U": 0,
+    "X": 12
+   },
+   "k6|tuned|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "q1_tuned",
+     "q1_natural"
+    ],
+    "L": 53,
+    "T": 863,
+    "U": 0,
+    "X": 24
+   },
+   "k7|natural|": {
+    "entry": "Node7",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 11,
+    "T": 158,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot7",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 18,
+    "T": 235,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t8_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 10,
+    "T": 169,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "a8i_build",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 38,
+    "T": 350,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt_pool_v|": {
+    "entry": "k9_job",
+    "regions": [
+     "pool",
+     "k9_job",
+     "k9_pool_run",
+     "k9_rows_v"
+    ],
+    "L": 61,
+    "T": 692,
+    "U": 0,
+    "X": 5
+   },
+   "k9|mt_pool|": {
+    "entry": "k9_job",
+    "regions": [
+     "pool",
+     "k9_job",
+     "k9_pool_run",
+     "k9_rows"
+    ],
+    "L": 53,
+    "T": 611,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 5,
+    "T": 118,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned_v|": {
+    "entry": "k9_rows_v",
+    "regions": [
+     "k9_rows_v"
+    ],
+    "L": 15,
+    "T": 242,
+    "U": 0,
+    "X": 5
+   }
+  },
+  "files": {
+   "ms.c": {
+    "arch_lines": [
+     4,
+     159,
+     160,
+     164,
+     165,
+     166,
+     167,
+     168,
+     169,
+     170,
+     173,
+     305,
+     306,
+     309,
+     310,
+     311,
+     313,
+     369,
+     371,
+     372,
+     373,
+     374,
+     376,
+     435,
+     438,
+     440,
+     443,
+     444,
+     445,
+     446,
+     447,
+     448,
+     449,
+     450,
+     451,
+     452,
+     454,
+     456,
+     457,
+     458,
+     459,
+     460,
+     465,
+     466,
+     467,
+     468,
+     469,
+     479,
+     480,
+     481,
+     484,
+     485,
+     486,
+     487,
+     488,
+     489,
+     490,
+     491,
+     493,
+     758,
+     764,
+     765,
+     766,
+     767,
+     868,
+     882
+    ],
+    "code_lines": 850
+   }
+  },
+  "no_check_mode": true
+ },
+ "odin": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 5,
+    "T": 61,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa",
+     "k1_soa_prep"
+    ],
+    "L": 23,
+    "T": 348,
+    "U": 20,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "k3_worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 24,
+    "T": 221,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "k3_worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 24,
+    "T": 221,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 5,
+    "T": 35,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 20,
+    "T": 177,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 5,
+    "T": 42,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5_tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 11,
+    "T": 209,
+    "U": 11,
+    "X": 0
+   },
+   "k6|mt_pool_v|q1": {
+    "entry": "k6_pool_job",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "k6_pool_run",
+     "q1_tuned_v"
+    ],
+    "L": 88,
+    "T": 954,
+    "U": 41,
+    "X": 0
+   },
+   "k6|mt_pool|q6": {
+    "entry": "k6_pool_job",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "k6_pool_run",
+     "q6_tuned"
+    ],
+    "L": 66,
+    "T": 654,
+    "U": 19,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 14,
+    "T": 153,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 7,
+    "T": 99,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q1": {
+    "entry": "q1_tuned_v",
+    "regions": [
+     "q1_tuned_v"
+    ],
+    "L": 37,
+    "T": 519,
+    "U": 37,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "q6_tuned",
+    "regions": [
+     "q6_tuned"
+    ],
+    "L": 15,
+    "T": 219,
+    "U": 15,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Agg",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 8,
+    "T": 82,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 22,
+    "T": 198,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 13,
+    "T": 155,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "ai_build",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 51,
+    "T": 334,
+    "U": 41,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "k9_pool_job",
+    "regions": [
+     "pool",
+     "k9_pool",
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 57,
+    "T": 635,
+    "U": 16,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural",
+     "k9_nat_alloc"
+    ],
+    "L": 4,
+    "T": 117,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9_rows",
+    "regions": [
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 14,
+    "T": 283,
+    "U": 12,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.odin": {
+    "arch_lines": [],
+    "code_lines": 832
+   }
+  },
+  "no_check_mode": false
+ },
+ "cpp": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 6,
+    "T": 95,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa",
+     "k1_soa_prep"
+    ],
+    "L": 24,
+    "T": 384,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "ctr",
+    "regions": [
+     "k3"
+    ],
+    "L": 15,
+    "T": 220,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "ctr",
+    "regions": [
+     "k3"
+    ],
+    "L": 15,
+    "T": 220,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 6,
+    "T": 48,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 16,
+    "T": 156,
+    "U": 0,
+    "X": 6
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 5,
+    "T": 60,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5_tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 11,
+    "T": 253,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool_v|q6": {
+    "entry": "q6_tuned_v",
+    "regions": [
+     "pool",
+     "k6_pool_run",
+     "q6_tuned_v",
+     "simd_ld",
+     "q6_natural"
+    ],
+    "L": 60,
+    "T": 779,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "pool",
+     "k6_pool_run",
+     "q1_tuned",
+     "simd_ld",
+     "q1_natural"
+    ],
+    "L": 89,
+    "T": 1135,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool|q6": {
+    "entry": "q6_tuned",
+    "regions": [
+     "pool",
+     "k6_pool_run",
+     "q6_tuned",
+     "simd_ld",
+     "q6_natural"
+    ],
+    "L": 64,
+    "T": 816,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "k6_mt_run",
+     "q1_tuned",
+     "simd_ld",
+     "q1_natural"
+    ],
+    "L": 64,
+    "T": 918,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 13,
+    "T": 156,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 6,
+    "T": 112,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q6": {
+    "entry": "q6_tuned_v",
+    "regions": [
+     "q6_tuned_v",
+     "simd_ld",
+     "q6_natural"
+    ],
+    "L": 21,
+    "T": 369,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "q1_tuned",
+     "simd_ld",
+     "q1_natural"
+    ],
+    "L": 50,
+    "T": 725,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "q6_tuned",
+    "regions": [
+     "q6_tuned",
+     "simd_ld",
+     "q6_natural"
+    ],
+    "L": 25,
+    "T": 406,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Agg",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 7,
+    "T": 66,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot7",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 18,
+    "T": 214,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t8_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 8,
+    "T": 133,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_val|": {
+    "entry": "a8v_build",
+    "regions": [
+     "k8_tuned_val"
+    ],
+    "L": 14,
+    "T": 197,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt_pool_v|": {
+    "entry": "k9_rows_v",
+    "regions": [
+     "pool",
+     "k9_pool_run",
+     "k9_rows_v",
+     "k9_flat"
+    ],
+    "L": 49,
+    "T": 623,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "k9_rows",
+    "regions": [
+     "pool",
+     "k9_pool_run",
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 41,
+    "T": 509,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt|": {
+    "entry": "k9_rows",
+    "regions": [
+     "k9_mt",
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 11,
+    "T": 267,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural",
+     "k9_nat_alloc"
+    ],
+    "L": 6,
+    "T": 184,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned_v|": {
+    "entry": "k9_rows_v",
+    "regions": [
+     "k9_rows_v",
+     "k9_flat"
+    ],
+    "L": 17,
+    "T": 311,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.cpp": {
+    "arch_lines": [
+     23,
+     300,
+     301,
+     304,
+     305,
+     306,
+     308,
+     839,
+     851
+    ],
+    "code_lines": 822
+   }
+  },
+  "no_check_mode": true
+ },
+ "c3": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 6,
+    "T": 65,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa",
+     "k1_soa_prep"
+    ],
+    "L": 30,
+    "T": 369,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "k3_worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 27,
+    "T": 265,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "k3_worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 27,
+    "T": 265,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 6,
+    "T": 35,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 21,
+    "T": 193,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 6,
+    "T": 52,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5_tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 12,
+    "T": 294,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool_v|q1": {
+    "entry": "k6_pool_job",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "k6_pool_run",
+     "q1_tuned_v",
+     "ld",
+     "q1_natural"
+    ],
+    "L": 141,
+    "T": 1466,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool|q1": {
+    "entry": "k6_pool_job",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "k6_pool_run",
+     "q1_tuned",
+     "ld",
+     "q1_natural"
+    ],
+    "L": 141,
+    "T": 1474,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool|q6": {
+    "entry": "k6_pool_job",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "k6_pool_run",
+     "q6_tuned",
+     "ld",
+     "q6_natural"
+    ],
+    "L": 106,
+    "T": 1053,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "k6_worker",
+    "regions": [
+     "k6_worker",
+     "k6_mt_run",
+     "q1_tuned",
+     "ld",
+     "q1_natural"
+    ],
+    "L": 78,
+    "T": 1055,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 17,
+    "T": 183,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 9,
+    "T": 106,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q1": {
+    "entry": "q1_tuned_v",
+    "regions": [
+     "q1_tuned_v",
+     "ld",
+     "q1_natural"
+    ],
+    "L": 62,
+    "T": 838,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "q1_tuned",
+     "ld",
+     "q1_natural"
+    ],
+    "L": 62,
+    "T": 846,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "q6_tuned",
+    "regions": [
+     "q6_tuned",
+     "ld",
+     "q6_natural"
+    ],
+    "L": 27,
+    "T": 425,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Agg",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 15,
+    "T": 81,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 24,
+    "T": 238,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 10,
+    "T": 161,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "ai_build",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 57,
+    "T": 351,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "k9_pool_job",
+    "regions": [
+     "pool",
+     "k9_pool",
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 89,
+    "T": 873,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 10,
+    "T": 154,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9_rows",
+    "regions": [
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 22,
+    "T": 357,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.c3": {
+    "arch_lines": [],
+    "code_lines": 1002
+   }
+  },
+  "no_check_mode": true
+ },
+ "zig": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 5,
+    "T": 75,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1SoA",
+    "regions": [
+     "k1_soa",
+     "k1_soa_prep"
+    ],
+    "L": 26,
+    "T": 342,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "k3Worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 19,
+    "T": 300,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "k3Worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 19,
+    "T": 300,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 7,
+    "T": 43,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4Tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 24,
+    "T": 225,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 5,
+    "T": 48,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5Tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 13,
+    "T": 179,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool|q1": {
+    "entry": "k6PoolJob",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "k6_pool_run",
+     "k6_worker",
+     "q1_tuned"
+    ],
+    "L": 110,
+    "T": 1341,
+    "U": 1,
+    "X": 0
+   },
+   "k6|mt_pool|q6": {
+    "entry": "k6PoolJob",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "k6_pool_run",
+     "k6_worker",
+     "q6_tuned"
+    ],
+    "L": 83,
+    "T": 930,
+    "U": 1,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "k6Worker",
+    "regions": [
+     "k6_worker",
+     "k6_mt_run",
+     "q1_tuned"
+    ],
+    "L": 53,
+    "T": 903,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 14,
+    "T": 175,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 7,
+    "T": 111,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1Tuned",
+    "regions": [
+     "q1_tuned"
+    ],
+    "L": 41,
+    "T": 711,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "q6Tuned",
+    "regions": [
+     "q6_tuned"
+    ],
+    "L": 14,
+    "T": 300,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Agg",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 8,
+    "T": 96,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 21,
+    "T": 266,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "tBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 19,
+    "T": 202,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "aiBuild",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 56,
+    "T": 454,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "k9PoolJob",
+    "regions": [
+     "pool",
+     "k9_pool",
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 82,
+    "T": 850,
+    "U": 1,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 7,
+    "T": 150,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9Rows",
+    "regions": [
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 21,
+    "T": 321,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.zig": {
+    "arch_lines": [],
+    "code_lines": 876
+   }
+  },
+  "no_check_mode": true
+ },
+ "rust": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 4,
+    "T": 72,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa",
+     "k1_soa_prep",
+     "abuf"
+    ],
+    "L": 42,
+    "T": 641,
+    "U": 22,
+    "X": 12
+   },
+   "k3|sw_packed|": {
+    "entry": "Padded",
+    "regions": [
+     "k3"
+    ],
+    "L": 22,
+    "T": 227,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "Padded",
+    "regions": [
+     "k3"
+    ],
+    "L": 22,
+    "T": 227,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 4,
+    "T": 50,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned_avx512",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 26,
+    "T": 190,
+    "U": 22,
+    "X": 7
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 4,
+    "T": 56,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5_tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 14,
+    "T": 246,
+    "U": 13,
+    "X": 7
+   },
+   "k6|mt_pool_v|q6": {
+    "entry": "K6Job",
+    "regions": [
+     "pool",
+     "k6_job",
+     "k6_pool_run",
+     "q6_tuned_v",
+     "q6_natural"
+    ],
+    "L": 106,
+    "T": 1239,
+    "U": 30,
+    "X": 13
+   },
+   "k6|mt_pool|q1": {
+    "entry": "K6Job",
+    "regions": [
+     "pool",
+     "k6_job",
+     "k6_pool_run",
+     "q1_tuned",
+     "q1_natural"
+    ],
+    "L": 135,
+    "T": 1601,
+    "U": 54,
+    "X": 24
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 15,
+    "T": 173,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 10,
+    "T": 109,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q6": {
+    "entry": "q6_tuned_v",
+    "regions": [
+     "q6_tuned_v",
+     "q6_natural"
+    ],
+    "L": 32,
+    "T": 470,
+    "U": 21,
+    "X": 13
+   },
+   "k6|tuned|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "q1_tuned",
+     "q1_natural"
+    ],
+    "L": 61,
+    "T": 832,
+    "U": 45,
+    "X": 24
+   },
+   "k7|natural|": {
+    "entry": "HashMap",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 6,
+    "T": 76,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot7",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 24,
+    "T": 264,
+    "U": 1,
+    "X": 1
+   },
+   "k8|natural|": {
+    "entry": "t_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 10,
+    "T": 177,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "ai_build",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 54,
+    "T": 408,
+    "U": 8,
+    "X": 0
+   },
+   "k9|mt_pool_v|": {
+    "entry": "K9Job",
+    "regions": [
+     "pool",
+     "k9_job",
+     "k9_flat",
+     "k9_pool_call",
+     "k9_rows_v",
+     "abuf"
+    ],
+    "L": 113,
+    "T": 1352,
+    "U": 39,
+    "X": 6
+   },
+   "k9|mt_pool|": {
+    "entry": "K9Job",
+    "regions": [
+     "pool",
+     "k9_job",
+     "k9_flat",
+     "k9_pool_call",
+     "k9_rows",
+     "abuf"
+    ],
+    "L": 101,
+    "T": 1221,
+    "U": 16,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural",
+     "k9_nat_alloc"
+    ],
+    "L": 10,
+    "T": 124,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned_v|": {
+    "entry": "k9_rows_v",
+    "regions": [
+     "k9_rows_v",
+     "k9_flat",
+     "k9_v_call",
+     "abuf"
+    ],
+    "L": 52,
+    "T": 726,
+    "U": 32,
+    "X": 6
+   }
+  },
+  "files": {
+   "ms.rs": {
+    "arch_lines": [
+     3,
+     159,
+     162,
+     163,
+     166,
+     167,
+     168,
+     169,
+     170,
+     171,
+     172,
+     173,
+     176,
+     284,
+     288,
+     289,
+     292,
+     293,
+     294,
+     297,
+     359,
+     361,
+     365,
+     366,
+     367,
+     368,
+     371,
+     418,
+     420,
+     421,
+     422,
+     427,
+     428,
+     429,
+     431,
+     432,
+     433,
+     434,
+     435,
+     438,
+     456,
+     458,
+     459,
+     462,
+     467,
+     468,
+     469,
+     472,
+     473,
+     474,
+     475,
+     476,
+     478,
+     480,
+     481,
+     482,
+     483,
+     484,
+     490,
+     491,
+     492,
+     493,
+     494,
+     495,
+     606,
+     847,
+     849,
+     858,
+     859,
+     860,
+     861
+    ],
+    "code_lines": 1016
+   }
+  },
+  "no_check_mode": false
+ },
+ "nim": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 2,
+    "T": 56,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1SoA",
+    "regions": [
+     "k1_soa",
+     "k1_push",
+     "aa_decl"
+    ],
+    "L": 35,
+    "T": 541,
+    "U": 19,
+    "X": 13
+   },
+   "k3|sw_packed|": {
+    "entry": "k3Worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 19,
+    "T": 236,
+    "U": 1,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "k3Worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 19,
+    "T": 236,
+    "U": 1,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 3,
+    "T": 31,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4Tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 21,
+    "T": 273,
+    "U": 1,
+    "X": 8
+   },
+   "k5|natural|": {
+    "entry": "k5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 2,
+    "T": 43,
+    "U": 1,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5Tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 19,
+    "T": 307,
+    "U": 5,
+    "X": 6
+   },
+   "k6|mt_pool_v|q1": {
+    "entry": "k6PoolJob",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "q1_tuned_v",
+     "k6v_push",
+     "q1_natural"
+    ],
+    "L": 143,
+    "T": 1869,
+    "U": 42,
+    "X": 26
+   },
+   "k6|mt_pool_v|q6": {
+    "entry": "k6PoolJob",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "q6_tuned_v",
+     "k6v_push",
+     "q6_natural"
+    ],
+    "L": 110,
+    "T": 1196,
+    "U": 25,
+    "X": 18
+   },
+   "k6|natural|q1": {
+    "entry": "q1Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 11,
+    "T": 162,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 4,
+    "T": 95,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q1": {
+    "entry": "q1TunedV",
+    "regions": [
+     "q1_tuned_v",
+     "k6v_push",
+     "q1_natural"
+    ],
+    "L": 79,
+    "T": 1389,
+    "U": 40,
+    "X": 26
+   },
+   "k6|tuned_v|q6": {
+    "entry": "q6TunedV",
+    "regions": [
+     "q6_tuned_v",
+     "k6v_push",
+     "q6_natural"
+    ],
+    "L": 46,
+    "T": 716,
+    "U": 23,
+    "X": 18
+   },
+   "k7|natural|": {
+    "entry": "Agg",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 9,
+    "T": 65,
+    "U": 1,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot",
+    "regions": [
+     "k7_tuned",
+     "aa_decl"
+    ],
+    "L": 25,
+    "T": 289,
+    "U": 17,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "tBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 11,
+    "T": 104,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "aiBuild",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 46,
+    "T": 330,
+    "U": 42,
+    "X": 0
+   },
+   "k9|mt_pool_v|": {
+    "entry": "k9PoolJob",
+    "regions": [
+     "pool",
+     "k9_pool",
+     "k9_rows_v",
+     "k9_flat",
+     "aa_decl"
+    ],
+    "L": 84,
+    "T": 896,
+    "U": 23,
+    "X": 6
+   },
+   "k9|mt_pool|": {
+    "entry": "k9PoolJob",
+    "regions": [
+     "pool",
+     "k9_pool",
+     "k9_rows",
+     "k9_flat",
+     "aa_decl"
+    ],
+    "L": 69,
+    "T": 682,
+    "U": 14,
+    "X": 0
+   },
+   "k9|mt|": {
+    "entry": "k9Worker",
+    "regions": [
+     "k9_mt",
+     "k9_rows",
+     "k9_flat",
+     "aa_decl"
+    ],
+    "L": 17,
+    "T": 376,
+    "U": 12,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 9,
+    "T": 160,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned_v|": {
+    "entry": "k9RowsV",
+    "regions": [
+     "k9_rows_v",
+     "k9_flat",
+     "aa_decl"
+    ],
+    "L": 27,
+    "T": 472,
+    "U": 20,
+    "X": 6
+   }
+  },
+  "files": {
+   "ms.nim": {
+    "arch_lines": [
+     28,
+     29,
+     30,
+     31,
+     32,
+     33,
+     34,
+     35,
+     36,
+     37,
+     38,
+     39,
+     40,
+     41,
+     42,
+     43,
+     45,
+     237,
+     238,
+     239,
+     240,
+     241,
+     242,
+     243,
+     244,
+     382,
+     383,
+     384,
+     385,
+     386,
+     387,
+     388,
+     389,
+     390,
+     391,
+     392,
+     393,
+     394,
+     395,
+     396,
+     397,
+     398,
+     399,
+     400,
+     401,
+     402,
+     403,
+     404,
+     753,
+     754,
+     755,
+     756
+    ],
+    "code_lines": 844
+   }
+  },
+  "no_check_mode": false
+ },
+ "d": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 5,
+    "T": 66,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1SoA",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 25,
+    "T": 328,
+    "U": 2,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "Padded",
+    "regions": [
+     "k3"
+    ],
+    "L": 16,
+    "T": 248,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "Padded",
+    "regions": [
+     "k3"
+    ],
+    "L": 16,
+    "T": 248,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 1,
+    "T": 41,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4Tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 19,
+    "T": 184,
+    "U": 1,
+    "X": 1
+   },
+   "k5|natural|": {
+    "entry": "k5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 5,
+    "T": 53,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5Tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 15,
+    "T": 229,
+    "U": 4,
+    "X": 0
+   },
+   "k6|mt_pool_v|q6": {
+    "entry": "k6PoolJob",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "q6_tuned_v",
+     "k6_simd_v",
+     "q6_natural"
+    ],
+    "L": 75,
+    "T": 896,
+    "U": 4,
+    "X": 0
+   },
+   "k6|mt_pool|q1": {
+    "entry": "k6PoolJob",
+    "regions": [
+     "pool",
+     "k6_pool",
+     "q1_tuned",
+     "k6_simd",
+     "q1_natural"
+    ],
+    "L": 97,
+    "T": 1287,
+    "U": 4,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 9,
+    "T": 159,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 6,
+    "T": 105,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q6": {
+    "entry": "q6TunedV",
+    "regions": [
+     "q6_tuned_v",
+     "k6_simd_v",
+     "q6_natural"
+    ],
+    "L": 32,
+    "T": 493,
+    "U": 3,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1Tuned",
+    "regions": [
+     "q1_tuned",
+     "k6_simd",
+     "q1_natural"
+    ],
+    "L": 54,
+    "T": 884,
+    "U": 3,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Agg",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 5,
+    "T": 66,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 16,
+    "T": 225,
+    "U": 1,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "tBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 8,
+    "T": 106,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "aiBuild",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 35,
+    "T": 354,
+    "U": 1,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "k9PoolJob",
+    "regions": [
+     "pool",
+     "k9_pool",
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 55,
+    "T": 604,
+    "U": 2,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 5,
+    "T": 146,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9Rows",
+    "regions": [
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 16,
+    "T": 274,
+    "U": 1,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.d": {
+    "arch_lines": [
+     16,
+     242
+    ],
+    "code_lines": 684
+   }
+  },
+  "no_check_mode": true
+ },
+ "ada": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "K1_Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 8,
+    "T": 71,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "K1_Soa",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 36,
+    "T": 420,
+    "U": 19,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "Worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 57,
+    "T": 397,
+    "U": 57,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "Worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 57,
+    "T": 397,
+    "U": 57,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "K4_Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 10,
+    "T": 48,
+    "U": 0,
+    "X": 0
+   },
+   "k4|swar|": {
+    "entry": "K4_Swar",
+    "regions": [
+     "k4_swar"
+    ],
+    "L": 31,
+    "T": 280,
+    "U": 31,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "K4_Tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 35,
+    "T": 306,
+    "U": 1,
+    "X": 4
+   },
+   "k5|natural|": {
+    "entry": "K5_Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 8,
+    "T": 48,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "K5_Tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 32,
+    "T": 464,
+    "U": 27,
+    "X": 2
+   },
+   "k6|mt_pool_v|q1": {
+    "entry": "Pool_Worker",
+    "regions": [
+     "k6_pool",
+     "q1_tuned_v",
+     "q1_natural"
+    ],
+    "L": 179,
+    "T": 1985,
+    "U": 69,
+    "X": 10
+   },
+   "k6|mt_pool_v|q6": {
+    "entry": "Pool_Worker",
+    "regions": [
+     "k6_pool",
+     "q6_tuned_v",
+     "q6_natural"
+    ],
+    "L": 128,
+    "T": 1216,
+    "U": 35,
+    "X": 6
+   },
+   "k6|natural|q1": {
+    "entry": "Q1_Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 17,
+    "T": 213,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "Q6_Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 10,
+    "T": 116,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q1": {
+    "entry": "Q1_Tuned_V",
+    "regions": [
+     "q1_tuned_v",
+     "q1_natural"
+    ],
+    "L": 114,
+    "T": 1582,
+    "U": 69,
+    "X": 10
+   },
+   "k6|tuned_v|q6": {
+    "entry": "Q6_Tuned_V",
+    "regions": [
+     "q6_tuned_v",
+     "q6_natural"
+    ],
+    "L": 63,
+    "T": 813,
+    "U": 35,
+    "X": 6
+   },
+   "k7|natural|": {
+    "entry": "U32_Maps",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 21,
+    "T": 162,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot_Arr",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 35,
+    "T": 330,
+    "U": 27,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "T_Build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 27,
+    "T": 195,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned|": {
+    "entry": "A_Build",
+    "regions": [
+     "k8_tuned"
+    ],
+    "L": 28,
+    "T": 252,
+    "U": 23,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "Pool_Worker",
+    "regions": [
+     "k9_pool",
+     "k9_rows"
+    ],
+    "L": 52,
+    "T": 346,
+    "U": 10,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "K9_Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 8,
+    "T": 93,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "K9_Rows",
+    "regions": [
+     "k9_rows"
+    ],
+    "L": 10,
+    "T": 111,
+    "U": 10,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.adb": {
+    "arch_lines": [
+     103,
+     107,
+     109,
+     396,
+     398,
+     400,
+     402,
+     654,
+     656,
+     658,
+     660,
+     662,
+     664,
+     666,
+     668,
+     670,
+     672,
+     674,
+     1349,
+     1351,
+     1353,
+     1355
+    ],
+    "code_lines": 1516
+   }
+  },
+  "no_check_mode": false
+ },
+ "chapel": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 5,
+    "T": 62,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1Soa",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 7,
+    "T": 165,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 9,
+    "T": 115,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 9,
+    "T": 115,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 5,
+    "T": 42,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4Tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 26,
+    "T": 246,
+    "U": 3,
+    "X": 13
+   },
+   "k5|natural|": {
+    "entry": "k5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 5,
+    "T": 64,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned_v|": {
+    "entry": "k5TunedV",
+    "regions": [
+     "k5_tuned_v"
+    ],
+    "L": 18,
+    "T": 315,
+    "U": 6,
+    "X": 12
+   },
+   "k5|tuned|": {
+    "entry": "k5Tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 5,
+    "T": 64,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool_v|q1": {
+    "entry": "coforall",
+    "regions": [
+     "k6_pool_v",
+     "q1_tuned_v",
+     "ptrs"
+    ],
+    "L": 87,
+    "T": 1419,
+    "U": 13,
+    "X": 49
+   },
+   "k6|mt_pool_v|q6": {
+    "entry": "coforall",
+    "regions": [
+     "k6_pool_v",
+     "q6_tuned_v",
+     "ptrs"
+    ],
+    "L": 48,
+    "T": 770,
+    "U": 8,
+    "X": 27
+   },
+   "k6|mt|q6": {
+    "entry": "coforall",
+    "regions": [
+     "k6_mt",
+     "q6_tuned"
+    ],
+    "L": 17,
+    "T": 293,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 14,
+    "T": 172,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 7,
+    "T": 124,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q1": {
+    "entry": "q1TunedV",
+    "regions": [
+     "q1_tuned_v",
+     "ptrs"
+    ],
+    "L": 79,
+    "T": 1283,
+    "U": 13,
+    "X": 49
+   },
+   "k6|tuned_v|q6": {
+    "entry": "q6TunedV",
+    "regions": [
+     "q6_tuned_v",
+     "ptrs"
+    ],
+    "L": 40,
+    "T": 634,
+    "U": 8,
+    "X": 27
+   },
+   "k6|tuned|q6": {
+    "entry": "q6Tuned",
+    "regions": [
+     "q6_tuned"
+    ],
+    "L": 9,
+    "T": 157,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Agg",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 10,
+    "T": 91,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 18,
+    "T": 209,
+    "U": 1,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "tBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 12,
+    "T": 134,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "aiBuild",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 38,
+    "T": 375,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt_pool_v|": {
+    "entry": "k9ParV",
+    "regions": [
+     "k9_par_v",
+     "k9_rows_v"
+    ],
+    "L": 29,
+    "T": 380,
+    "U": 9,
+    "X": 12
+   },
+   "k9|mt|": {
+    "entry": "k9Par",
+    "regions": [
+     "k9_par"
+    ],
+    "L": 5,
+    "T": 90,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 4,
+    "T": 88,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned_v|": {
+    "entry": "k9RowsV",
+    "regions": [
+     "k9_rows_v"
+    ],
+    "L": 26,
+    "T": 321,
+    "U": 8,
+    "X": 12
+   },
+   "k9|tuned|": {
+    "entry": "k9Rows",
+    "regions": [
+     "k9_rows"
+    ],
+    "L": 5,
+    "T": 93,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.chpl": {
+    "arch_lines": [
+     158,
+     159,
+     160,
+     161,
+     162,
+     163,
+     164,
+     165,
+     166,
+     170,
+     171,
+     174,
+     175,
+     178,
+     241,
+     242,
+     243,
+     244,
+     245,
+     246,
+     248,
+     251,
+     252,
+     253,
+     254,
+     257,
+     349,
+     350,
+     351,
+     352,
+     353,
+     354,
+     355,
+     356,
+     357,
+     358,
+     359,
+     360,
+     361,
+     362,
+     363,
+     364,
+     365,
+     366,
+     367,
+     368,
+     369,
+     370,
+     379,
+     380,
+     381,
+     385,
+     386,
+     387,
+     388,
+     389,
+     390,
+     391,
+     392,
+     393,
+     396,
+     408,
+     412,
+     415,
+     419,
+     420,
+     421,
+     422,
+     423,
+     424,
+     425,
+     426,
+     427,
+     428,
+     430,
+     431,
+     433,
+     434,
+     435,
+     436,
+     437,
+     443,
+     444,
+     445,
+     446,
+     447,
+     448,
+     699,
+     700,
+     701,
+     702,
+     703,
+     704,
+     706,
+     712,
+     713,
+     714,
+     715,
+     716
+    ],
+    "code_lines": 748
+   }
+  },
+  "no_check_mode": true
+ },
+ "fortran": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 8,
+    "T": 87,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa",
+     "align32"
+    ],
+    "L": 25,
+    "T": 308,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 20,
+    "T": 132,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 20,
+    "T": 132,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 9,
+    "T": 73,
+    "U": 0,
+    "X": 0
+   },
+   "k4|swar|": {
+    "entry": "k4_swar",
+    "regions": [
+     "k4_swar"
+    ],
+    "L": 25,
+    "T": 300,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 4,
+    "T": 46,
+    "U": 0,
+    "X": 0
+   },
+   "k5|rq_acc16|": {
+    "entry": "k5_acc16",
+    "regions": [
+     "k5_acc16"
+    ],
+    "L": 13,
+    "T": 207,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5_tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 15,
+    "T": 189,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "k6_mt",
+     "q1_tuned"
+    ],
+    "L": 45,
+    "T": 557,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q6": {
+    "entry": "q6_tuned",
+    "regions": [
+     "k6_mt",
+     "q6_tuned"
+    ],
+    "L": 23,
+    "T": 276,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 18,
+    "T": 190,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 8,
+    "T": 99,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "q1_tuned"
+    ],
+    "L": 34,
+    "T": 448,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "q6_tuned",
+    "regions": [
+     "q6_tuned"
+    ],
+    "L": 12,
+    "T": 167,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "hnode",
+    "regions": [
+     "k7_natural",
+     "k7_params"
+    ],
+    "L": 28,
+    "T": 245,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned_oa|": {
+    "entry": "slot",
+    "regions": [
+     "k7_tuned_oa",
+     "k7_slot",
+     "k7_params"
+    ],
+    "L": 19,
+    "T": 227,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "touch",
+    "regions": [
+     "k7_tuned",
+     "k7_slot",
+     "k7_params"
+    ],
+    "L": 28,
+    "T": 309,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 31,
+    "T": 227,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_val|": {
+    "entry": "val_build",
+    "regions": [
+     "k8_tuned_val"
+    ],
+    "L": 32,
+    "T": 250,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt|": {
+    "entry": "k9_cols",
+    "regions": [
+     "k9_mt",
+     "k9_cols",
+     "k9_flat",
+     "align64"
+    ],
+    "L": 31,
+    "T": 390,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 7,
+    "T": 189,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.f90": {
+    "arch_lines": [],
+    "code_lines": 1016
+   },
+   "tuned.f90": {
+    "arch_lines": [],
+    "code_lines": 188
+   }
+  },
+  "no_check_mode": true
+ },
+ "swift": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 7,
+    "T": 68,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1SoA",
+    "regions": [
+     "k1_soa",
+     "simd_f",
+     "aligned"
+    ],
+    "L": 45,
+    "T": 633,
+    "U": 14,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "runThreads",
+    "regions": [
+     "k3",
+     "threads"
+    ],
+    "L": 20,
+    "T": 241,
+    "U": 2,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "runThreads",
+    "regions": [
+     "k3",
+     "threads"
+    ],
+    "L": 20,
+    "T": 241,
+    "U": 2,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 7,
+    "T": 45,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4Tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 22,
+    "T": 199,
+    "U": 9,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 5,
+    "T": 55,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5Tuned",
+    "regions": [
+     "k5_tuned",
+     "simd_f"
+    ],
+    "L": 17,
+    "T": 289,
+    "U": 6,
+    "X": 0
+   },
+   "k6|mt_pool|q1": {
+    "entry": "Pool",
+    "regions": [
+     "k6_pool",
+     "pool",
+     "q1_tuned",
+     "colsp",
+     "part",
+     "simd_i"
+    ],
+    "L": 120,
+    "T": 1586,
+    "U": 40,
+    "X": 0
+   },
+   "k6|mt_pool|q6": {
+    "entry": "Pool",
+    "regions": [
+     "k6_pool",
+     "pool",
+     "q6_tuned",
+     "colsp",
+     "part",
+     "simd_i"
+    ],
+    "L": 79,
+    "T": 924,
+    "U": 18,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "runThreads",
+    "regions": [
+     "k6_mt",
+     "threads",
+     "q1_tuned",
+     "colsp",
+     "part",
+     "simd_i"
+    ],
+    "L": 97,
+    "T": 1462,
+    "U": 40,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1Natural",
+    "regions": [
+     "q1_natural",
+     "cols",
+     "q1agg"
+    ],
+    "L": 25,
+    "T": 304,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6Natural",
+    "regions": [
+     "q6_natural",
+     "cols"
+    ],
+    "L": 17,
+    "T": 213,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1Tuned",
+    "regions": [
+     "q1_tuned",
+     "colsp",
+     "part",
+     "simd_i"
+    ],
+    "L": 85,
+    "T": 1310,
+    "U": 39,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "q6Tuned",
+    "regions": [
+     "q6_tuned",
+     "colsp",
+     "simd_i"
+    ],
+    "L": 43,
+    "T": 629,
+    "U": 16,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Agg",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 10,
+    "T": 78,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot",
+    "regions": [
+     "k7_tuned",
+     "aligned"
+    ],
+    "L": 23,
+    "T": 243,
+    "U": 14,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "tBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 19,
+    "T": 130,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "aiBuild",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 53,
+    "T": 374,
+    "U": 13,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "Pool",
+    "regions": [
+     "k9_pool",
+     "pool",
+     "k9_rows",
+     "k9_flat",
+     "aligned"
+    ],
+    "L": 53,
+    "T": 610,
+    "U": 10,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 9,
+    "T": 160,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9Rows",
+    "regions": [
+     "k9_rows",
+     "k9_flat",
+     "aligned"
+    ],
+    "L": 21,
+    "T": 358,
+    "U": 10,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.swift": {
+    "arch_lines": [],
+    "code_lines": 971
+   }
+  },
+  "no_check_mode": false
+ },
+ "julia": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 7,
+    "T": 55,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 8,
+    "T": 115,
+    "U": 3,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "k3_worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 17,
+    "T": 131,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "k3_worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 17,
+    "T": 131,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 9,
+    "T": 33,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 32,
+    "T": 279,
+    "U": 16,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 7,
+    "T": 43,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned_v|": {
+    "entry": "k5_tuned_v",
+    "regions": [
+     "k5_tuned_v"
+    ],
+    "L": 51,
+    "T": 803,
+    "U": 49,
+    "X": 0
+   },
+   "k6|mt_pool_v|q1": {
+    "entry": "q1_tuned_v",
+    "regions": [
+     "k6_mt_pool_v",
+     "q1_tuned_v",
+     "q1_natural"
+    ],
+    "L": 349,
+    "T": 5857,
+    "U": 324,
+    "X": 0
+   },
+   "k6|mt_pool_v|q6": {
+    "entry": "q6_tuned_v",
+    "regions": [
+     "k6_mt_pool_v",
+     "q6_tuned_v",
+     "q6_natural"
+    ],
+    "L": 67,
+    "T": 1113,
+    "U": 46,
+    "X": 0
+   },
+   "k6|mt|q6": {
+    "entry": "q6_tuned",
+    "regions": [
+     "k6_mt",
+     "q6_tuned"
+    ],
+    "L": 14,
+    "T": 211,
+    "U": 4,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 9,
+    "T": 143,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 9,
+    "T": 92,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q1": {
+    "entry": "q1_tuned_v",
+    "regions": [
+     "q1_tuned_v",
+     "q1_natural"
+    ],
+    "L": 344,
+    "T": 5772,
+    "U": 324,
+    "X": 0
+   },
+   "k6|tuned_v|q6": {
+    "entry": "q6_tuned_v",
+    "regions": [
+     "q6_tuned_v",
+     "q6_natural"
+    ],
+    "L": 62,
+    "T": 1028,
+    "U": 46,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Dict",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 6,
+    "T": 68,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned_pf|": {
+    "entry": "prefetchw",
+    "regions": [
+     "slot",
+     "k7_tuned_pf"
+    ],
+    "L": 24,
+    "T": 252,
+    "U": 18,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot",
+    "regions": [
+     "slot",
+     "k7_tuned"
+    ],
+    "L": 14,
+    "T": 133,
+    "U": 9,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 11,
+    "T": 133,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "a_build_it",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 35,
+    "T": 373,
+    "U": 22,
+    "X": 0
+   },
+   "k9|mt_pool_v|": {
+    "entry": "k9_cols_v",
+    "regions": [
+     "k9_mt_pool_v",
+     "k9_tuned_v"
+    ],
+    "L": 68,
+    "T": 845,
+    "U": 65,
+    "X": 0
+   },
+   "k9|mt|": {
+    "entry": "k9_cols",
+    "regions": [
+     "k9_mt",
+     "k9_cols"
+    ],
+    "L": 9,
+    "T": 147,
+    "U": 5,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 5,
+    "T": 87,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned_v|": {
+    "entry": "k9_cols_v",
+    "regions": [
+     "k9_tuned_v"
+    ],
+    "L": 66,
+    "T": 794,
+    "U": 65,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9_cols",
+    "regions": [
+     "k9_cols"
+    ],
+    "L": 7,
+    "T": 94,
+    "U": 5,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.jl": {
+    "arch_lines": [],
+    "code_lines": 1138
+   }
+  },
+  "no_check_mode": false
+ },
+ "mojo": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 6,
+    "T": 69,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 20,
+    "T": 339,
+    "U": 6,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "k3_worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 16,
+    "T": 225,
+    "U": 2,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "k3_worker",
+    "regions": [
+     "k3"
+    ],
+    "L": 16,
+    "T": 225,
+    "U": 2,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 7,
+    "T": 43,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 18,
+    "T": 171,
+    "U": 3,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 6,
+    "T": 59,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5_tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 12,
+    "T": 268,
+    "U": 4,
+    "X": 0
+   },
+   "k6|mt_pool_v|q1": {
+    "entry": "k6_worker_v",
+    "regions": [
+     "k6_worker_v",
+     "fold",
+     "q1_tuned_v",
+     "simd_i",
+     "q1_natural"
+    ],
+    "L": 66,
+    "T": 935,
+    "U": 3,
+    "X": 0
+   },
+   "k6|mt|q6": {
+    "entry": "k6_worker",
+    "regions": [
+     "k6_worker",
+     "q6_tuned",
+     "simd_i",
+     "q6_natural"
+    ],
+    "L": 34,
+    "T": 552,
+    "U": 3,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 12,
+    "T": 168,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 7,
+    "T": 109,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q1": {
+    "entry": "q1_tuned_v",
+    "regions": [
+     "q1_tuned_v",
+     "simd_i",
+     "q1_natural"
+    ],
+    "L": 52,
+    "T": 755,
+    "U": 3,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "q6_tuned",
+    "regions": [
+     "q6_tuned",
+     "simd_i",
+     "q6_natural"
+    ],
+    "L": 23,
+    "T": 377,
+    "U": 3,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Agg",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 13,
+    "T": 108,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 24,
+    "T": 268,
+    "U": 7,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 30,
+    "T": 277,
+    "U": 9,
+    "X": 0
+   },
+   "k8|tuned_val|": {
+    "entry": "av_build",
+    "regions": [
+     "k8_tuned_val"
+    ],
+    "L": 20,
+    "T": 221,
+    "U": 7,
+    "X": 0
+   },
+   "k9|mt|": {
+    "entry": "k9_worker",
+    "regions": [
+     "k9_mt",
+     "k9_rows"
+    ],
+    "L": 26,
+    "T": 487,
+    "U": 7,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 12,
+    "T": 176,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9_rows",
+    "regions": [
+     "k9_rows"
+    ],
+    "L": 18,
+    "T": 295,
+    "U": 6,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.mojo": {
+    "arch_lines": [],
+    "code_lines": 860
+   }
+  },
+  "no_check_mode": false
+ },
+ "csharp": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "K1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 17,
+    "T": 293,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "K1SoA",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 22,
+    "T": 259,
+    "U": 17,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "Thread",
+    "regions": [
+     "k3"
+    ],
+    "L": 15,
+    "T": 174,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "Thread",
+    "regions": [
+     "k3"
+    ],
+    "L": 15,
+    "T": 174,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "K4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 2,
+    "T": 44,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "K4Tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 19,
+    "T": 240,
+    "U": 1,
+    "X": 2
+   },
+   "k5|natural|": {
+    "entry": "K5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 2,
+    "T": 60,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "K5Tuned",
+    "regions": [
+     "k5_tuned",
+     "load_aligned"
+    ],
+    "L": 22,
+    "T": 318,
+    "U": 21,
+    "X": 0
+   },
+   "k6|mt_pool|q6": {
+    "entry": "Parallel",
+    "regions": [
+     "k6_mt_pool",
+     "q6_tuned",
+     "ld",
+     "q6_natural"
+    ],
+    "L": 35,
+    "T": 469,
+    "U": 2,
+    "X": 1
+   },
+   "k6|mt|q1": {
+    "entry": "Thread",
+    "regions": [
+     "k6_mt",
+     "q1_tuned",
+     "ld",
+     "q1_natural"
+    ],
+    "L": 71,
+    "T": 999,
+    "U": 5,
+    "X": 3
+   },
+   "k6|natural|q1": {
+    "entry": "Q1Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 13,
+    "T": 153,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "Q6Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 8,
+    "T": 94,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "Q1Tuned",
+    "regions": [
+     "q1_tuned",
+     "ld",
+     "q1_natural"
+    ],
+    "L": 57,
+    "T": 847,
+    "U": 5,
+    "X": 3
+   },
+   "k6|tuned|q6": {
+    "entry": "Q6Tuned",
+    "regions": [
+     "q6_tuned",
+     "ld",
+     "q6_natural"
+    ],
+    "L": 27,
+    "T": 369,
+    "U": 2,
+    "X": 1
+   },
+   "k7|natural|": {
+    "entry": "Dictionary",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 6,
+    "T": 87,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "Slot",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 17,
+    "T": 239,
+    "U": 14,
+    "X": 1
+   },
+   "k8|natural|": {
+    "entry": "TBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 3,
+    "T": 101,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "ABuildIt",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 41,
+    "T": 406,
+    "U": 2,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "Parallel",
+    "regions": [
+     "k9_mt_pool",
+     "k9_rows"
+    ],
+    "L": 17,
+    "T": 329,
+    "U": 15,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "K9Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 9,
+    "T": 149,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "K9Rows",
+    "regions": [
+     "k9_rows"
+    ],
+    "L": 15,
+    "T": 273,
+    "U": 14,
+    "X": 0
+   }
+  },
+  "files": {
+   "Program.cs": {
+    "arch_lines": [
+     9,
+     217,
+     218,
+     301,
+     352,
+     353,
+     457
+    ],
+    "code_lines": 669
+   }
+  },
+  "no_check_mode": false
+ },
+ "fpc": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "K1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 10,
+    "T": 98,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "K1SoAV",
+    "regions": [
+     "k1_soa",
+     "msvec_unit",
+     "aligned"
+    ],
+    "L": 44,
+    "T": 393,
+    "U": 1,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "K3Worker",
+    "regions": [
+     "k3",
+     "aligned"
+    ],
+    "L": 44,
+    "T": 299,
+    "U": 3,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "K3Worker",
+    "regions": [
+     "k3",
+     "aligned"
+    ],
+    "L": 44,
+    "T": 299,
+    "U": 3,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "K4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 11,
+    "T": 58,
+    "U": 0,
+    "X": 0
+   },
+   "k4|swar|": {
+    "entry": "K4Swar",
+    "regions": [
+     "k4_swar"
+    ],
+    "L": 37,
+    "T": 252,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "K5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 10,
+    "T": 57,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned_v|": {
+    "entry": "K5TunedVPtr",
+    "regions": [
+     "k5_tuned_v",
+     "msvec_unit",
+     "load_raw",
+     "aligned"
+    ],
+    "L": 54,
+    "T": 473,
+    "U": 1,
+    "X": 0
+   },
+   "k6|mt_pool|q1": {
+    "entry": "K6PoolJob",
+    "regions": [
+     "k6_pool",
+     "pool",
+     "q1_tuned",
+     "q1_sum",
+     "colsp",
+     "load_raw",
+     "aligned"
+    ],
+    "L": 201,
+    "T": 1602,
+    "U": 8,
+    "X": 0
+   },
+   "k6|mt_pool|q6": {
+    "entry": "K6PoolJob",
+    "regions": [
+     "k6_pool",
+     "pool",
+     "q6_tuned",
+     "colsp",
+     "load_raw",
+     "aligned"
+    ],
+    "L": 148,
+    "T": 992,
+    "U": 8,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "K6Worker",
+    "regions": [
+     "k6_mt",
+     "q1_tuned",
+     "q1_sum",
+     "colsp",
+     "load_raw",
+     "aligned"
+    ],
+    "L": 135,
+    "T": 1252,
+    "U": 6,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "Q1Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 19,
+    "T": 189,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "Q6Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 11,
+    "T": 120,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "Q1Tuned",
+    "regions": [
+     "q1_tuned",
+     "colsp",
+     "load_raw",
+     "aligned"
+    ],
+    "L": 88,
+    "T": 892,
+    "U": 1,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "Q6Tuned",
+    "regions": [
+     "q6_tuned",
+     "colsp",
+     "load_raw",
+     "aligned"
+    ],
+    "L": 43,
+    "T": 351,
+    "U": 1,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "TAggMap",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 16,
+    "T": 102,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "K7Tuned",
+    "regions": [
+     "k7_tuned",
+     "aligned"
+    ],
+    "L": 49,
+    "T": 362,
+    "U": 2,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "TBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 40,
+    "T": 192,
+    "U": 9,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "AIBuild",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 80,
+    "T": 436,
+    "U": 1,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "K9PoolJob",
+    "regions": [
+     "k9_pool",
+     "pool",
+     "k9_rows",
+     "aligned"
+    ],
+    "L": 118,
+    "T": 752,
+    "U": 1,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "K9Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 14,
+    "T": 132,
+    "U": 1,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "K9Rows",
+    "regions": [
+     "k9_rows",
+     "aligned"
+    ],
+    "L": 35,
+    "T": 278,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.pas": {
+    "arch_lines": [],
+    "code_lines": 1762
+   },
+   "msvec.pas": {
+    "arch_lines": [],
+    "code_lines": 78
+   }
+  },
+  "no_check_mode": true
+ },
+ "java": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 13,
+    "T": 282,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1SoASeg",
+    "regions": [
+     "k1_soa",
+     "fs",
+     "ds",
+     "no"
+    ],
+    "L": 20,
+    "T": 377,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "LA",
+    "regions": [
+     "k3"
+    ],
+    "L": 15,
+    "T": 230,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "LA",
+    "regions": [
+     "k3"
+    ],
+    "L": 15,
+    "T": 230,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 1,
+    "T": 45,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4Tuned",
+    "regions": [
+     "k4_tuned",
+     "is"
+    ],
+    "L": 22,
+    "T": 308,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 1,
+    "T": 52,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5TunedSeg",
+    "regions": [
+     "k5_tuned",
+     "fs",
+     "no",
+     "aligned"
+    ],
+    "L": 19,
+    "T": 323,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool_v|q1": {
+    "entry": "q1OnePass",
+    "regions": [
+     "k6_pool",
+     "pool",
+     "q1_onepass",
+     "is",
+     "ls_bs",
+     "q1_natural"
+    ],
+    "L": 99,
+    "T": 2366,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool|q6": {
+    "entry": "poolRun",
+    "regions": [
+     "k6_pool",
+     "pool",
+     "q6_tuned",
+     "is",
+     "ls_bs",
+     "q6_natural"
+    ],
+    "L": 47,
+    "T": 729,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q6": {
+    "entry": "q6Tuned",
+    "regions": [
+     "k6_mt",
+     "q6_tuned",
+     "is",
+     "ls_bs",
+     "q6_natural"
+    ],
+    "L": 35,
+    "T": 581,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 9,
+    "T": 145,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 6,
+    "T": 86,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_v|q1": {
+    "entry": "q1OnePass",
+    "regions": [
+     "q1_onepass",
+     "is",
+     "ls_bs",
+     "q1_natural"
+    ],
+    "L": 75,
+    "T": 2034,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "q6Tuned",
+    "regions": [
+     "q6_tuned",
+     "is",
+     "ls_bs",
+     "q6_natural"
+    ],
+    "L": 23,
+    "T": 397,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "HashMap",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 6,
+    "T": 77,
+    "U": 0,
+    "X": 0
+   },
+   "k7|rq_iso|": {
+    "entry": "k7TunedIso",
+    "regions": [
+     "k7_rq_iso"
+    ],
+    "L": 13,
+    "T": 174,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "tBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 3,
+    "T": 104,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "aBuildIt",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 30,
+    "T": 364,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt_pool_v|": {
+    "entry": "k9RowsVec",
+    "regions": [
+     "k9_pool",
+     "pool",
+     "k9_vec",
+     "ds",
+     "k9_flat"
+    ],
+    "L": 38,
+    "T": 566,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "poolRun",
+    "regions": [
+     "k9_pool",
+     "pool",
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 30,
+    "T": 438,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 7,
+    "T": 154,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "Ms.java": {
+    "arch_lines": [],
+    "code_lines": 718
+   }
+  },
+  "no_check_mode": false
+ },
+ "go": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 8,
+    "T": 66,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1SoA",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 32,
+    "T": 297,
+    "U": 0,
+    "X": 7
+   },
+   "k3|rmw_packed|": {
+    "entry": "ctr",
+    "regions": [
+     "k3",
+     "k3_packed"
+    ],
+    "L": 26,
+    "T": 139,
+    "U": 0,
+    "X": 0
+   },
+   "k3|rmw_padded|": {
+    "entry": "padded",
+    "regions": [
+     "k3",
+     "k3_padded"
+    ],
+    "L": 30,
+    "T": 153,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 10,
+    "T": 44,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4Tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 24,
+    "T": 157,
+    "U": 0,
+    "X": 4
+   },
+   "k5|natural|": {
+    "entry": "k5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 8,
+    "T": 43,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned_v|": {
+    "entry": "k5TunedR",
+    "regions": [
+     "k5_tuned_v"
+    ],
+    "L": 20,
+    "T": 296,
+    "U": 0,
+    "X": 6
+   },
+   "k5|tuned|": {
+    "entry": "k5Tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 19,
+    "T": 260,
+    "U": 0,
+    "X": 6
+   },
+   "k6|mt_pool_v|q1": {
+    "entry": "q1OnePass",
+    "regions": [
+     "k6_mt",
+     "q1_onepass",
+     "sum3264",
+     "q1_natural",
+     "fold"
+    ],
+    "L": 172,
+    "T": 2126,
+    "U": 0,
+    "X": 30
+   },
+   "k6|mt|q1": {
+    "entry": "q1Tuned",
+    "regions": [
+     "k6_mt",
+     "q1_tuned",
+     "fold"
+    ],
+    "L": 60,
+    "T": 519,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q6": {
+    "entry": "q6Tuned",
+    "regions": [
+     "k6_mt",
+     "q6_tuned",
+     "q6_natural"
+    ],
+    "L": 57,
+    "T": 554,
+    "U": 0,
+    "X": 8
+   },
+   "k6|natural|q1": {
+    "entry": "q1Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 15,
+    "T": 157,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 10,
+    "T": 108,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1Tuned",
+    "regions": [
+     "q1_tuned"
+    ],
+    "L": 27,
+    "T": 336,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "q6Tuned",
+    "regions": [
+     "q6_tuned",
+     "q6_natural"
+    ],
+    "L": 33,
+    "T": 412,
+    "U": 0,
+    "X": 8
+   },
+   "k7|natural|": {
+    "entry": "agg",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 11,
+    "T": 55,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "slot",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 17,
+    "T": 115,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "tBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 19,
+    "T": 107,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "aBuildIt",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 55,
+    "T": 317,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt_pool_v|": {
+    "entry": "k9RowsVec",
+    "regions": [
+     "k9_mt",
+     "k9_vec",
+     "k9_flat"
+    ],
+    "L": 39,
+    "T": 518,
+    "U": 0,
+    "X": 8
+   },
+   "k9|natural|": {
+    "entry": "k9Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 13,
+    "T": 171,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned_v|": {
+    "entry": "k9RowsVec",
+    "regions": [
+     "k9_vec",
+     "k9_flat"
+    ],
+    "L": 26,
+    "T": 404,
+    "U": 0,
+    "X": 8
+   }
+  },
+  "files": {
+   "ms.go": {
+    "arch_lines": [
+     10,
+     97,
+     99,
+     101,
+     102,
+     103,
+     104,
+     112,
+     286,
+     287,
+     288,
+     292,
+     370,
+     373,
+     374,
+     375,
+     376,
+     380,
+     395,
+     398,
+     399,
+     400,
+     401,
+     412,
+     461,
+     462,
+     463,
+     466,
+     467,
+     468,
+     470,
+     475,
+     538,
+     539,
+     540,
+     541,
+     542,
+     543,
+     544,
+     545,
+     559,
+     560,
+     561,
+     562,
+     563,
+     564,
+     565,
+     573,
+     574,
+     579,
+     580,
+     585,
+     586,
+     591,
+     592,
+     597,
+     598,
+     603,
+     604,
+     637,
+     643,
+     653,
+     987,
+     995,
+     996,
+     1000,
+     1001,
+     1002,
+     1003,
+     1007
+    ],
+    "code_lines": 1080
+   }
+  },
+  "no_check_mode": false
+ },
+ "haskell": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 8,
+    "T": 190,
+    "U": 1,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1SoA",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 23,
+    "T": 375,
+    "U": 8,
+    "X": 0
+   },
+   "k3|rmw_packed|": {
+    "entry": "fetchAddI",
+    "regions": [
+     "k3",
+     "parallel_io"
+    ],
+    "L": 20,
+    "T": 303,
+    "U": 0,
+    "X": 0
+   },
+   "k3|rmw_padded|": {
+    "entry": "fetchAddI",
+    "regions": [
+     "k3",
+     "parallel_io"
+    ],
+    "L": 20,
+    "T": 303,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 3,
+    "T": 36,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4TunedAddr",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 33,
+    "T": 615,
+    "U": 3,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 7,
+    "T": 117,
+    "U": 2,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5Tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 15,
+    "T": 303,
+    "U": 3,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "forkOn",
+    "regions": [
+     "k6_mt",
+     "one",
+     "q1_tuned"
+    ],
+    "L": 21,
+    "T": 326,
+    "U": 3,
+    "X": 0
+   },
+   "k6|mt|q6": {
+    "entry": "forkOn",
+    "regions": [
+     "k6_mt",
+     "one",
+     "q6_tuned"
+    ],
+    "L": 12,
+    "T": 205,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 17,
+    "T": 235,
+    "U": 3,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 10,
+    "T": 113,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1Tuned",
+    "regions": [
+     "one",
+     "q1_tuned"
+    ],
+    "L": 19,
+    "T": 269,
+    "U": 3,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "q6Tuned",
+    "regions": [
+     "one",
+     "q6_tuned"
+    ],
+    "L": 10,
+    "T": 148,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "insertWith",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 7,
+    "T": 85,
+    "U": 2,
+    "X": 0
+   },
+   "k7|tuned_pf|": {
+    "entry": "k7TunedPf",
+    "regions": [
+     "k7_params",
+     "k7_tuned_pf"
+    ],
+    "L": 44,
+    "T": 487,
+    "U": 14,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "probe",
+    "regions": [
+     "k7_params",
+     "k7_tuned"
+    ],
+    "L": 23,
+    "T": 231,
+    "U": 10,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "tBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 7,
+    "T": 104,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "aBuildIt",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 46,
+    "T": 446,
+    "U": 19,
+    "X": 0
+   },
+   "k9|mt|": {
+    "entry": "parallelIO",
+    "regions": [
+     "k9_mt",
+     "parallel_io",
+     "k9_rows"
+    ],
+    "L": 32,
+    "T": 471,
+    "U": 10,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9Step",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 8,
+    "T": 203,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9Rows",
+    "regions": [
+     "k9_rows"
+    ],
+    "L": 24,
+    "T": 367,
+    "U": 10,
+    "X": 0
+   }
+  },
+  "files": {
+   "Ms.hs": {
+    "arch_lines": [],
+    "code_lines": 705
+   }
+  },
+  "no_check_mode": false
+ },
+ "ocaml": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 10,
+    "T": 273,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 15,
+    "T": 266,
+    "U": 3,
+    "X": 0
+   },
+   "k3|rmw_packed|": {
+    "entry": "fetch_and_add",
+    "regions": [
+     "k3"
+    ],
+    "L": 8,
+    "T": 120,
+    "U": 0,
+    "X": 0
+   },
+   "k3|rmw_padded|": {
+    "entry": "make_contended",
+    "regions": [
+     "k3"
+    ],
+    "L": 8,
+    "T": 120,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 7,
+    "T": 62,
+    "U": 1,
+    "X": 0
+   },
+   "k4|swar|": {
+    "entry": "k4_swar",
+    "regions": [
+     "k4_swar"
+    ],
+    "L": 23,
+    "T": 253,
+    "U": 1,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 19,
+    "T": 192,
+    "U": 1,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 4,
+    "T": 76,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5_tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 9,
+    "T": 153,
+    "U": 1,
+    "X": 0
+   },
+   "k6|mt_pool_s|q6": {
+    "entry": "pool_run",
+    "regions": [
+     "k6_pool",
+     "pool",
+     "one_s",
+     "q6_tuned_m"
+    ],
+    "L": 53,
+    "T": 587,
+    "U": 2,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "k6_mt",
+     "q1_tuned"
+    ],
+    "L": 16,
+    "T": 349,
+    "U": 9,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 9,
+    "T": 205,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 7,
+    "T": 108,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_s|q6": {
+    "entry": "q6_tuned_m",
+    "regions": [
+     "one_s",
+     "q6_tuned_m"
+    ],
+    "L": 9,
+    "T": 173,
+    "U": 2,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "q1_tuned"
+    ],
+    "L": 14,
+    "T": 290,
+    "U": 9,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Hashtbl",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 8,
+    "T": 97,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned_oa|": {
+    "entry": "cmask",
+    "regions": [
+     "k7_tuned_oa"
+    ],
+    "L": 12,
+    "T": 195,
+    "U": 3,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 7,
+    "T": 109,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "a_build_it",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 44,
+    "T": 358,
+    "U": 14,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "pool_run",
+    "regions": [
+     "k9_pool",
+     "pool",
+     "k9_rows"
+    ],
+    "L": 49,
+    "T": 569,
+    "U": 2,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 5,
+    "T": 126,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9_rows",
+    "regions": [
+     "k9_rows"
+    ],
+    "L": 9,
+    "T": 174,
+    "U": 2,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.ml": {
+    "arch_lines": [],
+    "code_lines": 638
+   }
+  },
+  "no_check_mode": false
+ },
+ "bqn": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "K1Nat",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 2,
+    "T": 53,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "K1Tun",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 2,
+    "T": 51,
+    "U": 0,
+    "X": 0
+   },
+   "k3|rmw_packed|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 3,
+    "T": 49,
+    "U": 0,
+    "X": 0
+   },
+   "k3|rmw_padded|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 3,
+    "T": 49,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 3,
+    "T": 49,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 3,
+    "T": 49,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "d",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 1,
+    "T": 18,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "b",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 1,
+    "T": 31,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "Sum",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 1,
+    "T": 36,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "Chunks",
+    "regions": [
+     "chunks",
+     "k6_mt_q1",
+     "q1_tuned"
+    ],
+    "L": 10,
+    "T": 126,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q6": {
+    "entry": "Chunks",
+    "regions": [
+     "chunks",
+     "k6_mt_q6",
+     "q6_tuned"
+    ],
+    "L": 4,
+    "T": 87,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "Q1Nat",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 9,
+    "T": 99,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "Q6Nat",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 1,
+    "T": 48,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "Q1Tun",
+    "regions": [
+     "q1_tuned"
+    ],
+    "L": 7,
+    "T": 92,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q6": {
+    "entry": "Q6Tun",
+    "regions": [
+     "q6_tuned"
+    ],
+    "L": 1,
+    "T": 54,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "keys",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 2,
+    "T": 29,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "ki",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 8,
+    "T": 62,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "Build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 3,
+    "T": 103,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned|": {
+    "entry": "ABuild",
+    "regions": [
+     "k8_tuned"
+    ],
+    "L": 11,
+    "T": 180,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt|": {
+    "entry": "J9Tun",
+    "regions": [
+     "k9_tuned"
+    ],
+    "L": 8,
+    "T": 121,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "J9Nat",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 5,
+    "T": 78,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "J9Tun",
+    "regions": [
+     "k9_tuned"
+    ],
+    "L": 8,
+    "T": 121,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.bqn": {
+    "arch_lines": [],
+    "code_lines": 295
+   }
+  },
+  "no_check_mode": false
+ },
+ "php": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 24,
+    "T": 229,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 25,
+    "T": 253,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "shmop_write",
+    "regions": [
+     "k3",
+     "workers"
+    ],
+    "L": 72,
+    "T": 622,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "shmop_write",
+    "regions": [
+     "k3",
+     "workers"
+    ],
+    "L": 72,
+    "T": 622,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 10,
+    "T": 45,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 10,
+    "T": 56,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 9,
+    "T": 69,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5_tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 10,
+    "T": 97,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool_s|q6": {
+    "entry": "k6_mt",
+    "regions": [
+     "k6_mt_fn",
+     "k6_mt_pool_s",
+     "workers",
+     "q6_tuned_s"
+    ],
+    "L": 62,
+    "T": 592,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "k6_mt",
+    "regions": [
+     "k6_mt_fn",
+     "k6_mt",
+     "workers",
+     "q1_tuned"
+    ],
+    "L": 70,
+    "T": 696,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 16,
+    "T": 202,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 10,
+    "T": 126,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_s|q6": {
+    "entry": "q6_tuned_s",
+    "regions": [
+     "q6_tuned_s"
+    ],
+    "L": 10,
+    "T": 142,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "q1_tuned"
+    ],
+    "L": 18,
+    "T": 246,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "isset",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 9,
+    "T": 81,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned_oa|": {
+    "entry": "array_fill",
+    "regions": [
+     "k7_tuned_oa"
+    ],
+    "L": 22,
+    "T": 232,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 19,
+    "T": 137,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned|": {
+    "entry": "a_build",
+    "regions": [
+     "k8_tuned"
+    ],
+    "L": 59,
+    "T": 422,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt|": {
+    "entry": "run_workers",
+    "regions": [
+     "k9_mt",
+     "workers",
+     "k9_rows"
+    ],
+    "L": 107,
+    "T": 1146,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 20,
+    "T": 240,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9_rows",
+    "regions": [
+     "k9_rows",
+     "k9_flat"
+    ],
+    "L": 15,
+    "T": 199,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.php": {
+    "arch_lines": [],
+    "code_lines": 1029
+   }
+  },
+  "no_check_mode": false
+ },
+ "js": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1Natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 11,
+    "T": 234,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1SoA",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 11,
+    "T": 330,
+    "U": 0,
+    "X": 0
+   },
+   "k3|rmw_packed|": {
+    "entry": "Atomics",
+    "regions": [
+     "k3",
+     "workers"
+    ],
+    "L": 24,
+    "T": 344,
+    "U": 0,
+    "X": 0
+   },
+   "k3|rmw_padded|": {
+    "entry": "Atomics",
+    "regions": [
+     "k3",
+     "workers"
+    ],
+    "L": 24,
+    "T": 344,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4Natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 1,
+    "T": 51,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4Tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 18,
+    "T": 212,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5Natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 1,
+    "T": 45,
+    "U": 0,
+    "X": 0
+   },
+   "k5|rq_f64|": {
+    "entry": "Float64Array",
+    "regions": [
+     "k5_rq_f64",
+     "k5_tuned"
+    ],
+    "L": 9,
+    "T": 233,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5Tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 8,
+    "T": 214,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool_s|q6": {
+    "entry": "q6TunedM",
+    "regions": [
+     "k6_mt",
+     "workers",
+     "load_shared",
+     "q6_tuned_m"
+    ],
+    "L": 40,
+    "T": 666,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "q1Tuned",
+    "regions": [
+     "k6_mt",
+     "workers",
+     "load_shared",
+     "q1_tuned",
+     "sum"
+    ],
+    "L": 40,
+    "T": 737,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1Natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 9,
+    "T": 153,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6Natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 5,
+    "T": 95,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned_s|q6": {
+    "entry": "q6TunedM",
+    "regions": [
+     "q6_tuned_m"
+    ],
+    "L": 12,
+    "T": 155,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "Map",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 5,
+    "T": 82,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned|": {
+    "entry": "tk",
+    "regions": [
+     "k7_tuned"
+    ],
+    "L": 8,
+    "T": 152,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "tBuild",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 2,
+    "T": 89,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_it|": {
+    "entry": "aBuildIt",
+    "regions": [
+     "k8_tuned_it"
+    ],
+    "L": 20,
+    "T": 357,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9Natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 6,
+    "T": 157,
+    "U": 0,
+    "X": 0
+   },
+   "k9|rq_slide_mt|": {
+    "entry": "k9RowsV",
+    "regions": [
+     "k9_mt",
+     "workers",
+     "k9_rows_v",
+     "k9_flat"
+    ],
+    "L": 30,
+    "T": 616,
+    "U": 0,
+    "X": 0
+   },
+   "k9|rq_slide|": {
+    "entry": "k9RowsV",
+    "regions": [
+     "k9_rows_v",
+     "k9_flat"
+    ],
+    "L": 10,
+    "T": 267,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.js": {
+    "arch_lines": [],
+    "code_lines": 508
+   }
+  },
+  "no_check_mode": false
+ },
+ "python": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 13,
+    "T": 208,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 4,
+    "T": 86,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "sub_run",
+    "regions": [
+     "k3",
+     "sub_pool",
+     "sub_run"
+    ],
+    "L": 37,
+    "T": 268,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "sub_run",
+    "regions": [
+     "k3",
+     "sub_pool",
+     "sub_run"
+    ],
+    "L": 37,
+    "T": 268,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 6,
+    "T": 24,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 3,
+    "T": 35,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 5,
+    "T": 35,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "sumprod",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 1,
+    "T": 11,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt_pool|q1": {
+    "entry": "SubPool",
+    "regions": [
+     "k6_sub",
+     "k6_pool_close",
+     "sub_pool_cls",
+     "sub_pool",
+     "q1_tuned"
+    ],
+    "L": 74,
+    "T": 840,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "sub_run",
+    "regions": [
+     "k6_sub",
+     "k6_mt_close",
+     "sub_pool",
+     "sub_run",
+     "q1_tuned"
+    ],
+    "L": 55,
+    "T": 677,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 13,
+    "T": 170,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 7,
+    "T": 99,
+    "U": 0,
+    "X": 0
+   },
+   "k6|rq_cols_mt|q6": {
+    "entry": "SubPool",
+    "regions": [
+     "k6_sub",
+     "k6_pool_close",
+     "sub_pool_cls",
+     "sub_pool",
+     "q6_columns",
+     "q6_tables"
+    ],
+    "L": 82,
+    "T": 1057,
+    "U": 0,
+    "X": 0
+   },
+   "k6|rq_cols|q6": {
+    "entry": "q6_columns",
+    "regions": [
+     "q6_columns",
+     "q6_tables"
+    ],
+    "L": 19,
+    "T": 371,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "q1_tuned",
+     "q1_tuned_acc"
+    ],
+    "L": 12,
+    "T": 170,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "get",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 8,
+    "T": 53,
+    "U": 0,
+    "X": 0
+   },
+   "k7|tuned_oa|": {
+    "entry": "k7_tuned_oa",
+    "regions": [
+     "k7_tuned_oa"
+    ],
+    "L": 18,
+    "T": 147,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 13,
+    "T": 123,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_val|": {
+    "entry": "a_build_val",
+    "regions": [
+     "k8_tuned_val"
+    ],
+    "L": 13,
+    "T": 137,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt_pool|": {
+    "entry": "SubPool",
+    "regions": [
+     "k9_mt",
+     "sub_pool",
+     "sub_pool_cls"
+    ],
+    "L": 63,
+    "T": 667,
+    "U": 0,
+    "X": 0
+   },
+   "k9|mt|": {
+    "entry": "sub_run",
+    "regions": [
+     "k9_mt",
+     "sub_pool",
+     "sub_run"
+    ],
+    "L": 44,
+    "T": 505,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 5,
+    "T": 99,
+    "U": 0,
+    "X": 0
+   },
+   "k9|tuned|": {
+    "entry": "k9_rows",
+    "regions": [
+     "k9_rows"
+    ],
+    "L": 4,
+    "T": 120,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.py": {
+    "arch_lines": [],
+    "code_lines": 659
+   }
+  },
+  "no_check_mode": false
+ },
+ "lua": {
+  "forms": {
+   "k1|natural|energy": {
+    "entry": "k1_natural",
+    "regions": [
+     "k1_natural"
+    ],
+    "L": 15,
+    "T": 237,
+    "U": 0,
+    "X": 0
+   },
+   "k1|soa|energy": {
+    "entry": "k1_soa",
+    "regions": [
+     "k1_soa"
+    ],
+    "L": 12,
+    "T": 203,
+    "U": 0,
+    "X": 0
+   },
+   "k3|rmw_packed|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 7,
+    "T": 70,
+    "U": 0,
+    "X": 0
+   },
+   "k3|rmw_padded|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 7,
+    "T": 70,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_packed|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 7,
+    "T": 70,
+    "U": 0,
+    "X": 0
+   },
+   "k3|sw_padded|": {
+    "entry": "stride",
+    "regions": [
+     "k3"
+    ],
+    "L": 7,
+    "T": 70,
+    "U": 0,
+    "X": 0
+   },
+   "k4|natural_unsorted|": {
+    "entry": "k4_natural",
+    "regions": [
+     "k4_natural"
+    ],
+    "L": 8,
+    "T": 41,
+    "U": 0,
+    "X": 0
+   },
+   "k4|swar|": {
+    "entry": "k4_swar",
+    "regions": [
+     "k4_swar"
+    ],
+    "L": 20,
+    "T": 193,
+    "U": 0,
+    "X": 0
+   },
+   "k4|tuned|": {
+    "entry": "k4_tuned",
+    "regions": [
+     "k4_tuned"
+    ],
+    "L": 17,
+    "T": 135,
+    "U": 0,
+    "X": 0
+   },
+   "k5|natural|": {
+    "entry": "k5_natural",
+    "regions": [
+     "k5_natural"
+    ],
+    "L": 5,
+    "T": 37,
+    "U": 0,
+    "X": 0
+   },
+   "k5|tuned|": {
+    "entry": "k5_tuned",
+    "regions": [
+     "k5_tuned"
+    ],
+    "L": 7,
+    "T": 115,
+    "U": 0,
+    "X": 0
+   },
+   "k6|mt|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "k6_chunks_q1",
+     "q1_tuned"
+    ],
+    "L": 15,
+    "T": 286,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q1": {
+    "entry": "q1_natural",
+    "regions": [
+     "q1_natural"
+    ],
+    "L": 12,
+    "T": 200,
+    "U": 0,
+    "X": 0
+   },
+   "k6|natural|q6": {
+    "entry": "q6_natural",
+    "regions": [
+     "q6_natural"
+    ],
+    "L": 8,
+    "T": 99,
+    "U": 0,
+    "X": 0
+   },
+   "k6|rq_nest_mt|q6": {
+    "entry": "q6_nested",
+    "regions": [
+     "k6_nest_mt",
+     "q6_nested"
+    ],
+    "L": 13,
+    "T": 138,
+    "U": 0,
+    "X": 0
+   },
+   "k6|rq_nest|q6": {
+    "entry": "q6_nested",
+    "regions": [
+     "q6_nested"
+    ],
+    "L": 12,
+    "T": 100,
+    "U": 0,
+    "X": 0
+   },
+   "k6|tuned|q1": {
+    "entry": "q1_tuned",
+    "regions": [
+     "k6_chunks_q1",
+     "q1_tuned"
+    ],
+    "L": 15,
+    "T": 286,
+    "U": 0,
+    "X": 0
+   },
+   "k7|natural|": {
+    "entry": "m",
+    "regions": [
+     "k7_natural"
+    ],
+    "L": 6,
+    "T": 71,
+    "U": 0,
+    "X": 0
+   },
+   "k7|rq_pack|": {
+    "entry": "ONE",
+    "regions": [
+     "k7_rq_pack"
+    ],
+    "L": 7,
+    "T": 62,
+    "U": 0,
+    "X": 0
+   },
+   "k8|natural|": {
+    "entry": "t_build",
+    "regions": [
+     "k8_natural"
+    ],
+    "L": 7,
+    "T": 90,
+    "U": 0,
+    "X": 0
+   },
+   "k8|tuned_val|": {
+    "entry": "a_build_val",
+    "regions": [
+     "k8_tuned_val"
+    ],
+    "L": 10,
+    "T": 144,
+    "U": 0,
+    "X": 0
+   },
+   "k9|natural|": {
+    "entry": "k9_natural",
+    "regions": [
+     "k9_natural"
+    ],
+    "L": 7,
+    "T": 126,
+    "U": 0,
+    "X": 0
+   },
+   "k9|rq_slide_mt|": {
+    "entry": "k9_flat_s",
+    "regions": [
+     "k9_flat_s"
+    ],
+    "L": 11,
+    "T": 103,
+    "U": 0,
+    "X": 0
+   }
+  },
+  "files": {
+   "ms.lua": {
+    "arch_lines": [],
+    "code_lines": 589
+   }
+  },
+  "no_check_mode": false
+ }
+}

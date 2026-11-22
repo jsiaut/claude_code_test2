@@ -283,3 +283,176 @@ d'entrée, formes requises). Les cas que 3.2 ne tranche pas ont reçu une règle
    un commentaire).
 6. **Go, `//go:`** (3.3) : les directives de compilation de Go comptent comme code, comme les pragmas des autres
    langages (`{-# #-}`, `{$ }`, `!$`, `#[ ]`).
+
+## 11. Résultats (22 novembre, après le comptage)
+
+*Sorties : `results/cost/counts.json`, `results/cost/regions.md`, `results/cost/matches.md` (`tools/cost/count.py`),
+`results/cost/compile.txt` (`tools/cost/xcompile.sh`), `results/cost/cost.json` et `results/report_cost.md`
+(`analysis/cost_v4.py`). Le classement de tête du README ne change pas.*
+
+### 11.1 Relevé et comptage
+
+562 formes, dans 618 régions (1 115 intervalles de lignes) des 25 copies `_cv`, relevées dans l'ordre du classement
+et poussées en sept lots, chacun contrôlé avant le lot suivant ; comptage le 22 novembre à 6 h 14, après les écarts
+de la section 10. Le comptage lui-même prend deux secondes : tout le travail est dans la délimitation des régions.
+
+### 11.2 Examen des occurrences
+
+Les 2 004 occurrences trouvées dans les fichiers entiers (1 230 constructions qui contournent une vérification, dont
+795 dans une région ; 774 constructions propres à une architecture, dont 751 dans une région) ont été examinées
+(`results/cost/matches.md`). Elles appartiennent toutes aux familles des listes, avec deux réserves :
+
+* **Faux positifs sans effet** : cinq `^` de FreePascal dans des chaînes de format (« 4x2^25 »), hors de toute région.
+  Les motifs s'appliquent aussi aux chaînes, à dessein : les noms des intrinsèques importés par Nim (`importc`) et
+  Chapel (`extern`) n'y figurent que dans des chaînes.
+* **Correction de l'outil** : en Ada, un `pragma Suppress` placé dans un bloc `declare` (K7 tuned) ne s'applique qu'à ce
+  bloc, et non à toute la procédure (branche naturelle comprise) ; les en-têtes `overriding procedure` n'étaient pas
+  reconnus. Corrigé (`count.py`, `scope_unit`) ; effet : la forme naturelle de K7 d'Ada perd 14 lignes comptées à tort
+  sans vérification, et aucune forme d'accès ne change.
+
+Recherche complémentaire dans les langages où l'examen statique ne trouve aucune construction propre à x86 (Zig, Odin,
+C3, Fortran, Julia, Mojo, Swift, FreePascal, Haskell, OCaml, Java, JavaScript, Python, Lua, PHP, BQN) : les mots x86,
+AVX, SSE, amd64, pause, cpuid, popcnt et voisins n'apparaissent dans le code d'aucun d'eux, sinon dans `assert`,
+`isset` et `Atomics.pause` (API portable de JavaScript).
+
+### 11.3 Compilation pour aarch64 et riscv64
+
+| Langage | Contrôle x86_64 | aarch64 | riscv64 | Prévision statique | Cause du refus |
+|---|---|---|---|---|---|
+| C | compile | refus | refus | refus | `immintrin.h` (hors x86) |
+| C++ | refus | – | – | refus | contrôle : `std::simd` absent de la libc++ de LLVM ; examen statique seul |
+| Zig | compile | compile | compile | compile | |
+| Go | compile | refus | refus | refus | `simd/archsimd` : `archsimd.BroadcastFloat64x8` non défini pour arm64 et riscv64 |
+| D | compile | refus | refus | refus | le seul builtin x86 (`__builtin_ia32_psadbw512`, K4 tuned) : sans lui, le fichier compile pour les deux cibles |
+| Odin | compile | compile | compile | compile | |
+| C3 | compile | compile | compile | compile | |
+| Nim | compile | refus | refus | refus | `immintrin.h` (intrinsèques importés) |
+| Fortran | compile | compile | compile | compile | |
+| Mojo | compile | compile | compile | compile | |
+
+Les 18 compilations interprétées (9 langages, 2 cibles ; C++ n'est pas interprété, son contrôle échouant) donnent
+toutes le résultat prévu par l'examen statique du fichier entier : aucun désaccord, donc aucun écart sur la liste
+de 3.5. Réglages de l'outil (`tools/cost/xcompile.sh`,
+avant l'exécution retenue) : flang-23 ne livre ses modules intrinsèques (`iso_fortran_env`, `iso_c_binding`,
+`omp_lib`) que pour x86_64, et suppose OpenMP 3.1 quand gfortran suppose 5.x ; les modules de l'installation x86_64 et
+`-fopenmp-version=52` sont donnés pour les trois cibles. Mojo prend son processeur par défaut (l'hôte), `native`
+n'étant pas un nom accepté. C++ et les langages sans chaîne croisée hors ligne sont classés par l'examen statique
+seul. Cellules non portables (forme d'accès portant une construction propre à x86), tous langages : C 9, Nim 9
+(intrinsèques importés de `immintrin.h`), Rust 9 (`std::arch`, `#[target_feature]`), Chapel 8 (intrinsèques
+déclarés `extern`), Go 7 (`simd/archsimd`), C# 6 (`Avx512F`, `Avx512BW`, `Sse`), Ada 6 (`__builtin_ia32_…`), C++ 1
+(K4 tuned, intrinsèques), D 1 (K4 tuned) ; aucune en Zig, Odin, C3, Fortran, Mojo, Swift, Julia, Java, Haskell,
+FreePascal, OCaml et dans les langages interprétés.
+
+### 11.4 Par langage (calcul 2)
+
+| Langage | Cellules atteintes | L/N | Lignes ajoutées | Sans vérif. (abs.) | Sans vérif. (marg.) | Non portables | Indice d'accès |
+|---|---|---|---|---|---|---|---|
+| Mojo | 8 | 2,33 | 189 | 0,16 | 0,16 | 0 | 0,497 |
+| Odin | 8 | 3,73 | 318 | 0,50 | 0,50 | 0 | 0,402 |
+| C3 | 8 | 3,70 | 476 | 1,00 | 0,00 | 0 | 0,314 |
+| C++ | 7 | 3,45 | 295 | 1,00 | 0,00 | 1 | 0,285 |
+| Julia | 5 | 6,45 | 1 020 | 0,87 | 0,87 | 0 | 0,271 |
+| Swift | 4 | 3,20 | 411 | 0,33 | 0,33 | 0 | 0,243 |
+| Java | 3 | 4,81 | 313 | 0,00 | 0,00 | 0 | 0,240 |
+| Nim | 8 | 6,88 | 560 | 0,39 | 0,39 | 9 | 0,239 |
+| Zig | 6 | 3,71 | 391 | 1,00 | 0,01 | 0 | 0,239 |
+| Rust | 8 | 5,14 | 549 | 0,39 | 0,39 | 9 | 0,218 |
+| Chapel | 8 | 3,82 | 329 | 1,00 | 0,16 | 8 | 0,169 |
+| C# | 3 | 3,66 | 253 | 0,27 | 0,27 | 6 | 0,168 |
+| Ada | 5 | 3,62 | 568 | 0,50 | 0,50 | 6 | 0,164 |
+| D | 5 | 5,39 | 375 | 1,00 | 0,06 | 1 | 0,163 |
+| C | 9 | 3,52 | 318 | 1,00 | 0,00 | 9 | 0,160 |
+| Fortran | 3 | 1,87 | 120 | 1,00 | 0,00 | 0 | 0,130 |
+| Go | 3 | 2,61 | 262 | 0,00 | 0,00 | 7 | 0,116 |
+| FreePascal | 1 | 4,16 | 722 | 1,00 | 0,03 | 0 | 0,056 |
+| Haskell | 1 | 2,35 | 156 | 0,25 | 0,25 | 0 | 0,052 |
+| OCaml, JavaScript, Python, Lua, BQN, PHP | 0 | 1,30 à 3,33 | 22 à 245 | 0 à 0,19 | 0 à 0,19 | 0 | 0 |
+
+L/N : moyenne géométrique sur les 12 cellules ; parts pondérées par les lignes. Détail par cellule :
+`results/report_cost.md`.
+
+* **Atteindre le plafond coûte des lignes partout.** La forme d'accès a 3,5 fois les lignes du code naturel en
+  moyenne géométrique médiane (1,3 en Lua à 6,9 en Nim) ; dans les 103 cellules atteintes, la part de lignes ajoutées
+  médiane est 0,69. Sept cellules seulement ont le code naturel pour forme d'accès (K9 en Java, Fortran, Python et
+  Lua ; Q1 en JavaScript et Lua ; K4 en BQN). L'indice d'accès est donc bas partout : 0,50 au plus (Mojo).
+* **Le prix n'est pas le même.** Mojo atteint 8 cellules avec le moins de lignes ajoutées des compilés (L/N 2,33), sans
+  construction propre à une architecture (ses `SIMD[...]` compilent pour aarch64 et riscv64) et avec peu de code sans
+  vérification (0,16) ; Odin atteint aussi 8 cellules sans code non portable. C atteint le plus de cellules (9), mais
+  tout son code est sans vérification et ses formes vectorielles, dans 9 cellules, sont propres à x86 : indice 0,16.
+  Rust et Nim atteignent 8 cellules avec des intrinsèques x86 dans 9 ; Julia paie ses formes vectorielles en IR de
+  LLVM (L/N 6,45, part sans vérification 0,87). Java, Go et C# atteignent 3 cellules ; Java sans aucune ligne sans
+  vérification ni propre à une architecture.
+* **Là où le mode publié vérifie, le code rapide contourne souvent la vérification** : part sans vérification de
+  0,87 en Julia (`@inbounds`, IR de LLVM), 0,50 en Odin et en Ada, 0,39 en Rust et en Nim, 0,33 en Swift, 0,27 en C#,
+  0,25 en Haskell et 0,19 en OCaml (primitives `unsafe…`) ; 0 en Java, en Go et dans les langages interprétés. La
+  part marginale des huit langages sans vérification dans leur mode publié est proche de 0 (0,16 au plus, Chapel,
+  `c_ptr`) : leur code rapide n'a rien à contourner.
+* **Julia, Q1** : avec le générateur de l'IR (213 lignes) à la place de l'IR (321), la part de lignes ajoutées passe de
+  0,97 à 0,96.
+
+### 11.5 Relation avec la grille (calcul 3)
+
+| Quantité | Catégorie C | Catégorie E | Pilier contrôle | Plafond (avec R4) |
+|---|---|---|---|---|
+| L/N (moyenne géométrique) | 0,54 | 0,59 | 0,58 | 0,60 |
+| lignes ajoutées | 0,55 | 0,66 | 0,65 | 0,58 |
+| part sans vérification (absolue) | 0,64 | 0,70 | 0,76 | 0,78 |
+| part sans vérification (marginale) | 0,37 | 0,51 | 0,34 | 0,24 |
+| part propre à une architecture | 0,45 | 0,45 | 0,44 | 0,54 |
+| cellules non portables | 0,47 | 0,47 | 0,46 | 0,52 |
+| indice d'accès | 0,69 | 0,68 | 0,71 | 0,73 |
+
+Sur les 25 langages, l'indice d'accès suit la grille et le plafond (ρ 0,68 à 0,73), mais par les six langages qui
+n'atteignent aucune cellule (indice 0, et grille basse) : sur les 19 autres (information hors plan), ρ vaut 0,30
+(catégorie C), 0,38 (E), 0,36 (pilier contrôle) et 0,41 (plafond). Parmi les langages qui atteignent le plafond,
+l'indice mesure donc autre chose que les catégories C et E : non pas les leviers qu'un langage offre, mais ce que coûte
+de s'en servir. La part absolue sans vérification suit le pilier contrôle (0,76 ; 0,53 sur 19) et le plafond (0,78 ;
+0,59) : les langages que la grille et le plafond classent le plus haut sont ceux dont le code rapide s'exécute sans
+vérification.
+
+### 11.6 Scénario « Accès » (calculs 4 et 5)
+
+Contrôle : « Convergent, avec R4 », refait par `analysis/cost_v4.py`, est identique à celui du point 4 (même ordre,
+écarts nuls).
+
+| Publié | Langage | Convergent, R4 | Accès | (a) marginale | (b) sans u | (c) seuil 0,8 | (d) la plus courte | (e) grille entière | (f) lexèmes |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | C | 3 | 4 | 3 | 4 | 4 | 4 | 8 | 4 |
+| 2 | Odin | 5 | 3 | 5 | 5 | 2 | 3 | 1 | 3 |
+| 3 | C++ | 1 | 2 | 1 | 1 | 3 | 2 | 3 | 2 |
+| 4 | C3 | 4 | 5 | 4 | 3 | 5 | 5 | 2 | 5 |
+| 5 | Zig | 2 | 1 | 2 | 2 | 1 | 1 | 5 | 1 |
+| 6 | Rust | 7 | 7 | 7 | 7 | 7 | 7 | 7 | 7 |
+| 7 | Nim | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 |
+| 8 | D | 8 | 8 | 9 | 8 | 8 | 9 | 12 | 8 |
+| 9 | Ada | 10 | 12 | 12 | 12 | 13 | 12 | 15 | 12 |
+| 10 | Chapel | 9 | 9 | 8 | 9 | 9 | 8 | 10 | 9 |
+| 11 | Fortran | 11 | 11 | 11 | 11 | 12 | 11 | 14 | 11 |
+| 12 | Swift | 14 | 13 | 13 | 14 | 10 | 13 | 11 | 13 |
+| 13 | Julia | 12 | 14 | 14 | 13 | 14 | 14 | 9 | 14 |
+| 14 | Mojo | 13 | 10 | 10 | 10 | 11 | 10 | 4 | 10 |
+
+Les onze suivants restent à deux places au plus de leur rang de « Convergent, avec R4 » dans chacun de ces calculs,
+sauf Java (16e → 13e) quand la grille entière est remplacée.
+
+* **Remplacer les catégories C et E par l'indice ne déplace qu'un langage de plus de deux places** : Mojo, 13e → 10e.
+  Zig passe 1er (rang espéré 2,83) devant C++ (2,97), Odin 3e (3,60, contre 5,39), C 4e (3,98, contre 2,88). Les
+  scores au centre baissent de 0 (Lua) à 8,8 points (D ; C − 8,6, C++ − 7,5), médiane − 3,2 : l'indice (0,50 au plus)
+  est plus bas que les notes des catégories C et E qu'il remplace, sauf la note E de Java (7,1 sur 100 ; indice 0,24) ;
+  en Lua, les trois valent 0.
+* **Sensibilités** : avec la part marginale, sans la part sans vérification, avec la forme la plus courte à 10 % ou
+  avec les lexèmes, Mojo (13e → 10e) reste le seul langage à bouger de plus de deux places, et aucun n'est à plus de
+  deux places de sa place dans « Accès ». Le seuil de 0,8 déplace Odin (5e → 2e), Swift (14e → 10e) et Ada (10e → 13e) ;
+  Mojo y gagne deux places (11e). Remplacer la grille entière par l'indice bouleverse le haut : Odin 1er, C3 2e, C++ 3e,
+  Mojo 4e, Zig 5e, C 8e, D 12e, Ada 15e.
+
+### 11.7 Ce que cela change
+
+* **Le classement publié ne change pas** (section 6).
+* **La décision de remplacer une partie de la grille revient à l'auteur de l'étude.** Les faits utiles : remplacer les
+  catégories C et E par l'indice déplace un seul langage de plus de deux places ; l'indice ne compte que les cellules
+  atteintes, donc une part du plafond (40 % du score), déjà compté, entre une seconde fois dans le pilier contrôle ;
+  la part sans vérification vaut 1 par construction dans huit langages, ce qui fait d'une propriété du mode publié un
+  coût de chaque forme ; parmi les 19 langages qui atteignent le plafond, l'indice ne suit les catégories C et E que de
+  loin (ρ 0,30 et 0,38) : il ne les remplace pas, il mesure autre chose. Le point 5 recommande de publier l'indice à
+  côté de la grille plutôt qu'à sa place.
