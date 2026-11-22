@@ -1,0 +1,5 @@
+#!/bin/sh
+# v4, point 6 (docs/V4_OPEN.md, 5.2) : la commande publiée, avec l'environnement des bibliothèques de la piste ouverte
+# (/opt/open/julia/env, dépôt /opt/open/julia/depot ; Manifest.toml dans results/open/lock/julia).
+export JULIA_DEPOT_PATH=/opt/open/julia/depot
+exec /opt/julia/bin/julia -O3 -t 4 --startup-file=no --project=/opt/open/julia/env "$(dirname "$0")/ms.jl" "$@"
