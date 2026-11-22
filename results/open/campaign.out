@@ -287,3 +287,11 @@ p2 k9 lua/op op_llthreads2  n=3 med=0.964786s ok=['True'] oom=False rc=0
 p2 k9 lua/op natural  n=5 med=0.53423s ok=['True'] oom=False rc=0
 p2 k9 lua/op rq_slide_mt  n=4 med=0.750884s ok=['True'] oom=False rc=0
 2026-11-22T10:08:08 passe 2 groupe 1/7 k9 27 processus 200s
+p2 k4 ocaml/cv tuned  n=313 med=0.010003s ok=['True'] oom=False rc=0
+p2 k4 ocaml/op op_intrinsics  n=47 med=0.0421769s ok=['True'] oom=False rc=0
+p2 k4 ocaml/op tuned  n=320 med=0.00958294s ok=['True'] oom=False rc=0
+p2 k4 c/cv tuned  n=2280 med=0.000702271s ok=['True'] oom=False rc=0
+p2 k4 python/cv tuned  n=54 med=0.0762748s ok=['True'] oom=False rc=0
+p2 k4 python/op op_numpy  n=22 med=0.165045s ok=['True'] oom=False rc=0
+p2 k4 python/op tuned  n=34 med=0.0903995s ok=['True'] oom=False rc=0
+2026-11-22T10:08:31 passe 2 groupe 2/7 k4 7 processus 21s
