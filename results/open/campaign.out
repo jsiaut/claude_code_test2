@@ -48,3 +48,11 @@ p0 k3 rust/op op_libc  n=36 med=0.0808946s ok=['True'] oom=False rc=0
 p0 k3 rust/op sw_padded  n=219 med=0.0132504s ok=['True'] oom=False rc=0
 p0 k3 ada/cv sw_padded  n=128 med=0.0163639s ok=['True'] oom=False rc=0
 2026-11-22T09:43:10 passe 0 groupe 2/7 k3 18 processus 209s
+p0 k5 c/pub tuned  n=634 med=0.00372405s ok=['True'] oom=False rc=0
+p0 k5 python/op op_numpy  n=81 med=0.0370521s ok=['True'] oom=False rc=0
+p0 k5 python/op tuned  n=3 med=2.78829s ok=['True'] oom=False rc=0
+p0 k5 python/cv tuned  n=3 med=2.698s ok=['True'] oom=False rc=0
+p0 k5 lua/op op_vmsl  n=33 med=0.08822s ok=['True'] oom=False rc=0
+p0 k5 lua/op tuned  n=3 med=1.60539s ok=['True'] oom=False rc=0
+p0 k5 lua/cv tuned  n=3 med=1.62308s ok=['True'] oom=False rc=0
+2026-11-22T09:44:16 passe 0 groupe 3/7 k5 7 processus 65s
