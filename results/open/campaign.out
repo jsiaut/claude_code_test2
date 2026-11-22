@@ -236,3 +236,11 @@ p1 k6 mojo/cv mt_pool_v q1 n=374 med=0.00783964s ok=['True'] oom=False rc=0
 p1 k6 c/cv tuned_v q6 n=212 med=0.014067s ok=['True'] oom=False rc=0
 p1 k6 c/cv mt_pool_v q6 n=589 med=0.0023498s ok=['True'] oom=False rc=0
 2026-11-22T10:02:55 passe 1 groupe 5/7 k6 42 processus 237s
+p1 k5 c/pub tuned  n=634 med=0.00366146s ok=['True'] oom=False rc=0
+p1 k5 lua/op op_vmsl  n=33 med=0.077728s ok=['True'] oom=False rc=0
+p1 k5 lua/op tuned  n=3 med=1.66753s ok=['True'] oom=False rc=0
+p1 k5 python/cv tuned  n=3 med=2.9071s ok=['True'] oom=False rc=0
+p1 k5 python/op op_numpy  n=81 med=0.038474s ok=['True'] oom=False rc=0
+p1 k5 python/op tuned  n=3 med=2.81026s ok=['True'] oom=False rc=0
+p1 k5 lua/cv tuned  n=3 med=2.11527s ok=['True'] oom=False rc=0
+2026-11-22T10:03:45 passe 1 groupe 6/7 k5 7 processus 48s
