@@ -314,6 +314,8 @@ def blocks_of(langs, kernel, size, p):
 # ------------------------------------------------------------------ étalonnage et validation
 def calibrate(langs, gsel, dry):
     m = None if dry else machine()
+    if not dry:
+        ensure_builds(langs)
     calib = load_json(CALIB, {})
     for kernel, size in pass_order(0, gsel):
         todo = [(l, c, v, q) for l in langs for c in FB.constructions(l) for v, q in cells(l, c, kernel)
@@ -425,11 +427,6 @@ def run(langs, passes, gsel, dry):
     calib = load_json(CALIB, {})
     if not dry:
         ensure_builds(langs)
-        try:
-            with open("/proc/self/oom_score_adj", "w") as f:
-                f.write("-900")
-        except OSError:
-            pass
     os.makedirs(RAW, exist_ok=True)
     total = 0
     for p in passes:
@@ -508,6 +505,11 @@ def main():
     a = ap.parse_args()
     langs = a.langs.split(",")
     gsel = set(a.groups.split(",")) if a.groups else None
+    try:  # le pilote, pas la victime, si le groupe de processus manque de mémoire
+        with open("/proc/self/oom_score_adj", "w") as f:
+            f.write("-900")
+    except OSError:
+        pass
     if a.action == "calibrate":
         calibrate(langs, gsel, a.dry)
     elif a.action == "run":
