@@ -346,3 +346,22 @@ p2 k6 mojo/op op_max q1 n=345 med=0.00906245s ok=['True'] oom=False rc=0
 p2 k6 mojo/op mt q6 n=415 med=0.00234316s ok=['True'] oom=False rc=0
 p2 k6 mojo/op mt_pool_v q1 n=264 med=0.00813332s ok=['True'] oom=False rc=0
 2026-11-22T10:13:18 passe 2 groupe 4/7 k6 42 processus 262s
+p2 k3 ada/op op_cachelines  n=152 med=0.0159713s ok=['True'] oom=False rc=0
+p2 k3 ada/op sw_padded  n=107 med=0.015995s ok=['True'] oom=False rc=0
+p2 k3 mojo/op op_max  n=36 med=0.0826673s ok=['True'] oom=False rc=0
+p2 k3 mojo/op sw_padded  n=264 med=0.0184663s ok=['True'] oom=False rc=0
+p2 k3 python/op op_dask  n=3 med=22.6736s ok=['True'] oom=False rc=0
+p2 k3 python/op sw_padded  n=3 med=1.85958s ok=['True'] oom=False rc=0
+p2 k3 c/pub sw_padded  n=37 med=0.0732837s ok=['True'] oom=False rc=0
+p2 k3 rust/op op_cache_padded  n=36 med=0.0770388s ok=['True'] oom=False rc=0
+p2 k3 rust/op op_crossbeam  n=37 med=0.0771834s ok=['True'] oom=False rc=0
+p2 k3 rust/op op_libc  n=36 med=0.0771552s ok=['True'] oom=False rc=0
+p2 k3 rust/op sw_padded  n=219 med=0.0118096s ok=['True'] oom=False rc=0
+p2 k3 mojo/cv sw_padded  n=191 med=0.0165531s ok=['True'] oom=False rc=0
+p2 k3 go/op op_cpu  n=11 med=0.208134s ok=['True'] oom=False rc=0
+p2 k3 go/op rmw_padded  n=13 med=0.212259s ok=['True'] oom=False rc=0
+p2 k3 rust/cv sw_padded  n=32 med=0.0780503s ok=['True'] oom=False rc=0
+p2 k3 go/cv rmw_padded  n=15 med=0.217427s ok=['True'] oom=False rc=0
+p2 k3 python/cv sw_padded  n=3 med=2.00156s ok=['True'] oom=False rc=0
+p2 k3 ada/cv sw_padded  n=128 med=0.0138349s ok=['True'] oom=False rc=0
+2026-11-22T10:15:50 passe 2 groupe 5/7 k3 18 processus 150s
