@@ -17,6 +17,13 @@ NAMES = {"c": "C", "odin": "Odin", "cpp": "C++", "c3": "C3", "zig": "Zig", "rust
          "ada": "Ada", "chapel": "Chapel", "fortran": "Fortran", "swift": "Swift", "julia": "Julia", "mojo": "Mojo",
          "csharp": "C#", "fpc": "FreePascal", "java": "Java", "go": "Go", "haskell": "Haskell", "ocaml": "OCaml",
          "bqn": "BQN", "js": "JavaScript", "php": "PHP", "python": "Python", "lua": "Lua"}
+REGISTRES = {"c": "archive d'Ubuntu 24.04", "cpp": "archive d'Ubuntu 24.04", "c3": "dépôt vendor de c3lang",
+             "rust": "crates.io", "nim": "nimble (liste nim-lang/packages)", "d": "dub", "ada": "Alire (index)",
+             "chapel": "Mason (registre)", "fortran": "index des paquets de fortran-lang.org",
+             "swift": "Swift Package Index", "julia": "General", "mojo": "paquets de Modular et canal modular-community",
+             "csharp": "NuGet", "fpc": "fppkg", "java": "Maven Central", "go": "modules (pkg.go.dev)",
+             "haskell": "Hackage", "ocaml": "opam", "js": "npm", "php": "Packagist", "python": "PyPI",
+             "lua": "LuaRocks"}
 
 
 def fmt_stat(s):
@@ -34,7 +41,11 @@ def main():
          "`results/open/registry/<langage>.json` (`tools/open/registry.py`) ; décisions : `results/open/decisions.json` ;",
          "ce fichier est écrit par `tools/open/listmd.py`. Pour chaque case, les bibliothèques sont examinées dans l'ordre",
          "de la statistique d'usage du registre ; la première admise (3.3 a) est retenue, et chaque bibliothèque mieux",
-         "classée est refusée avec sa raison. Aucune sonde, aucune forme n'a été écrite avant ce relevé.*", ""]
+         "classée est refusée avec sa raison. Aucune sonde, aucune forme n'a été écrite avant ce relevé.*", "",
+         "*Lecture de 3.3 d : une bibliothèque comble les cases dont la recherche la retient ; une bibliothèque nommée par",
+         "le dossier (3.3 c), les cases que son API comble. Les cellules du plafond suivent l'écart 3 (`docs/V4_OPEN.md`,",
+         "10) : une bibliothèque n'y est attribuée que si elle apporte un levier que la bibliothèque standard n'offre pas en",
+         "entier et que son API fait le calcul de la cellule ou en remplace le conteneur.*", ""]
     summary = []
     for lang in ORDER:
         p = os.path.join(REG, f"{lang}.json")
@@ -44,13 +55,14 @@ def main():
         d = dec[lang]
         L.append(f"## {NAMES[lang]}")
         L.append("")
-        L.append(f"Registre : {reg.get('registre') or d.get('registre', '')} ; statistique : "
+        L.append(f"Registre : {reg.get('registre') or REGISTRES.get(lang, '?')} ; statistique : "
                  f"{reg.get('statistique', '—')}.")
         L.append("")
         if d.get("note"):
             L += [d["note"], ""]
-        L.append("| Case | Note publiée | Retenue | Rang | Statistique | Refusées avant elle |")
-        L.append("|---|---|---|---|---|---|")
+        L.append("| Case | Note publiée | Retenue | Version | Rang | Statistique | Refusées avant elle |")
+        L.append("|---|---|---|---|---|---|---|")
+        vers = d.get("versions", {})
         for case, v in reg["cases"].items():
             dc = d.get("cases", {}).get(case, {})
             cands = v["candidates"]
@@ -69,26 +81,41 @@ def main():
                 parts.append(f"{c['name']} ({r})")
             if not cands:
                 parts = [dc.get("vide", "aucune réponse")]
-            L.append(f"| {case} | {v['note']} | {ch or 'aucune'} | {rk} | {st} | {' ; '.join(parts)} |")
+            L.append(f"| {case} | {v['note']} | {ch or 'aucune'} | {vers.get(ch, '—') if ch else '—'} | {rk} | {st} | "
+                     f"{' ; '.join(parts)} |")
             if ch:
                 summary.append((lang, case, ch, "règle"))
         for nm in d.get("nommees", []):
             L.append("")
-            L.append(f"Nommée par le dossier (3.3 c) : **{nm['nom']}**, pour {', '.join(nm['cases'])} "
-                     f"({nm.get('raison', '')}).")
+            L.append(f"Nommée par le dossier (3.3 c) : **{nm['nom']}** ({vers.get(nm['nom'], '?')}), pour "
+                     f"{', '.join(nm['cases'])} ({nm.get('raison', '')}).")
             for c in nm["cases"]:
                 summary.append((lang, c, nm["nom"], "nommée"))
         if d.get("cellules"):
             L += ["", "Cellules du plafond attribuées (3.4) :", ""]
+            why = d.get("raisons_cellules", {})
             for lib, cells in d["cellules"].items():
-                L.append(f"* {lib} : {', '.join(cells) if cells else 'aucune'}")
+                L.append(f"* {lib} : **{', '.join(cells) if cells else 'aucune'}** ({why.get(lib, '?')})")
         L.append("")
-    L += ["## Récapitulatif", "", "| Langage | Case | Bibliothèque | Entrée |", "|---|---|---|---|"]
+    L += ["## Récapitulatif", "", "| Langage | Case | Bibliothèque | Version | Entrée | Cellules du plafond |",
+          "|---|---|---|---|---|---|"]
+    ncell = 0
     for lang, case, lib, how in summary:
-        L.append(f"| {NAMES[lang]} | {case} | {lib} | {how} |")
+        cells = dec[lang].get("cellules", {}).get(lib, [])
+        L.append(f"| {NAMES[lang]} | {case} | {lib} | {dec[lang].get('versions', {}).get(lib, '?')} | {how} | "
+                 f"{', '.join(cells) if cells else '—'} |")
+    pairs = sorted({(lang, lib, c) for lang, case, lib, how in summary
+                    for c in dec[lang].get("cellules", {}).get(lib, [])})
+    L += ["", f"{len(summary)} entrées (case comblée) ; {len(pairs)} couples (bibliothèque, cellule du plafond) "
+          f"dans {len({(l, b) for l, b, c in pairs})} bibliothèques de {len({l for l, b, c in pairs})} langages."]
     with open(OUT, "w", encoding="utf-8") as f:
         f.write("\n".join(L) + "\n")
     print("écrit :", OUT, len(summary), "entrées")
+    missing = [ln for ln in L if "(?)" in ln or "| ? |" in ln]
+    if missing:
+        print("raisons ou versions manquantes :", len(missing))
+        for ln in missing[:20]:
+            print("  ", ln[:160])
 
 
 if __name__ == "__main__":

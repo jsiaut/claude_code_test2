@@ -1,0 +1,315 @@
+{
+ "langage": "julia",
+ "date": "2026-11-22 07:30 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": [
+    {
+     "name": "IndexedStructVectors",
+     "desc": "Tables with stable identifiers in Julia",
+     "mots": [
+      "soa",
+      "struct of arrays"
+     ],
+     "stat": 1
+    }
+   ]
+  },
+  "B2": {
+   "note": 0.5,
+   "mots": [
+    "arena",
+    "bump allocator",
+    "memory pool"
+   ],
+   "candidates": [
+    {
+     "name": "Bumper",
+     "desc": "Bring Your Own Stack",
+     "mots": [
+      "arena",
+      "bump allocator"
+     ],
+     "stat": 8098
+    },
+    {
+     "name": "Arena",
+     "desc": "Collection 3D visualization tools associated with the Caesar.jl and RoME.jl robot navigation packages",
+     "mots": [
+      "arena"
+     ],
+     "stat": 5
+    }
+   ]
+  },
+  "C1": {
+   "note": 0.5,
+   "mots": [
+    "simd",
+    "vector types"
+   ],
+   "candidates": [
+    {
+     "name": "CpuId",
+     "desc": "Ask the CPU for cache sizes, SIMD feature support, a running hypervisor, and more.",
+     "mots": [
+      "simd"
+     ],
+     "stat": 254528
+    },
+    {
+     "name": "VectorizationBase",
+     "desc": "Base library providing vectorization-tools (ie, SIMD) that other libraries are built off of.",
+     "mots": [
+      "simd"
+     ],
+     "stat": 136069
+    },
+    {
+     "name": "LoopVectorization",
+     "desc": "Macro(s) for vectorizing loops.",
+     "mots": [
+      "simd"
+     ],
+     "stat": 127985
+    },
+    {
+     "name": "SIMD",
+     "desc": "Explicit SIMD vector operations for Julia",
+     "mots": [
+      "simd"
+     ],
+     "stat": 101246
+    },
+    {
+     "name": "SIMDDualNumbers",
+     "desc": "Improves dual numbers support for SIMD use of ForwardDiff.jl.",
+     "mots": [
+      "simd"
+     ],
+     "stat": 3347
+    },
+    {
+     "name": "ExaModels",
+     "desc": "An algebraic modeling and automatic differentiation tool in Julia Language, specialized for SIMD abstraction of nonlinear programs.",
+     "mots": [
+      "simd"
+     ],
+     "stat": 2131
+    },
+    {
+     "name": "SIMDPirates",
+     "desc": "Pirating base type NTuple{N,Core.VecElement{T}} -- although base methods are NOT overloaded -- and plundering the great work of eschnett's SIMD.jl",
+     "mots": [
+      "simd"
+     ],
+     "stat": 1128
+    },
+    {
+     "name": "CUDASIMDTypes",
+     "desc": "Explicit SIMD types for CUDA",
+     "mots": [
+      "simd"
+     ],
+     "stat": 145
+    },
+    {
+     "name": "SIMDMathFunctions",
+     "desc": "Fast vectorized mathematical functions for SIMD.jl , using SLEEFPirates.jl .",
+     "mots": [
+      "simd"
+     ],
+     "stat": 57
+    },
+    {
+     "name": "FastTanhSinhQuadrature",
+     "desc": "Fast and high-precision numerical integration using Tanh-Sinh (Double Exponential) quadrature in Julia.",
+     "mots": [
+      "simd"
+     ],
+     "stat": 28
+    },
+    {
+     "name": "BatchSolve",
+     "desc": "Vectorized, batched root finders and minimizers. Also vectorized finite differences",
+     "mots": [
+      "simd"
+     ],
+     "stat": 26
+    },
+    {
+     "name": "LoopManagers",
+     "desc": "LoopManagers is the companion package of ManagedLoops. It provides managers to execute loops with SIMD, on multiple threads or on GPUs.",
+     "mots": [
+      "simd"
+     ],
+     "stat": 19
+    },
+    {
+     "name": "PaddedMatrices",
+     "desc": "This library provides arrays with columns padded to be a multiple of SIMD-vector width.",
+     "mots": [
+      "simd"
+     ],
+     "stat": 17
+    },
+    {
+     "name": "SIMDMath",
+     "desc": "Lightweight SIMD routines for special function evaluation",
+     "mots": [
+      "simd"
+     ],
+     "stat": 17
+    },
+    {
+     "name": "FastSinCos",
+     "desc": "Fast SIMD sincos approximations for Float32",
+     "mots": [
+      "simd"
+     ],
+     "stat": 14
+    },
+    {
+     "name": "ChipSort",
+     "desc": "Sorting deeds done down the chip",
+     "mots": [
+      "simd"
+     ],
+     "stat": 3
+    },
+    {
+     "name": "FastTransposeMatrix",
+     "desc": "Transpose matrices in memory efficiently via SIMD instructions",
+     "mots": [
+      "simd"
+     ],
+     "stat": 1
+    }
+   ]
+  },
+  "D3": {
+   "note": 0.5,
+   "mots": [
+    "cache line",
+    "cache padded",
+    "false sharing"
+   ],
+   "candidates": []
+  },
+  "D4": {
+   "note": 0.5,
+   "mots": [
+    "affinity",
+    "cpu affinity",
+    "thread pinning"
+   ],
+   "candidates": [
+    {
+     "name": "ThreadPinningCore",
+     "desc": "Core pinning/querying functionality of ThreadPinning.jl",
+     "mots": [
+      "thread pinning"
+     ],
+     "stat": 5539
+    },
+    {
+     "name": "ThreadPinning",
+     "desc": "Readily pin Julia threads to CPU-threads",
+     "mots": [
+      "thread pinning"
+     ],
+     "stat": 3036
+    }
+   ]
+  },
+  "F2": {
+   "note": 0.5,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": [
+    {
+     "name": "Hwloc_jll",
+     "desc": "",
+     "mots": [
+      "hwloc"
+     ],
+     "stat": 241706
+    },
+    {
+     "name": "Hwloc",
+     "desc": "A Julia API for hwloc",
+     "mots": [
+      "hwloc"
+     ],
+     "stat": 44747
+    },
+    {
+     "name": "ArrayAllocators",
+     "desc": "Allocate arrays with malloc, calloc, or on NUMA nodes",
+     "mots": [
+      "numa"
+     ],
+     "stat": 439
+    },
+    {
+     "name": "NUMA_jll",
+     "desc": "",
+     "mots": [
+      "numa"
+     ],
+     "stat": 393
+    },
+    {
+     "name": "NUMA",
+     "desc": "NUMA tools (from libnuma) for Julia",
+     "mots": [
+      "numa"
+     ],
+     "stat": 45
+    },
+    {
+     "name": "NumaAllocators",
+     "desc": "Allocate arrays with malloc, calloc, or on NUMA nodes",
+     "mots": [
+      "numa"
+     ],
+     "stat": 37
+    },
+    {
+     "name": "SafeByteCalculators",
+     "desc": "Allocate arrays with malloc, calloc, or on NUMA nodes",
+     "mots": [
+      "numa"
+     ],
+     "stat": 3
+    },
+    {
+     "name": "ApproximatingMapsBetweenLinearSpaces",
+     "desc": "Mirror of https://gitlab.kuleuven.be/numa/software/ApproximatingMapsBetweenLinearSpaces",
+     "mots": [
+      "numa"
+     ],
+     "stat": 1
+    },
+    {
+     "name": "ManiFactor",
+     "desc": "Mirror of https://gitlab.kuleuven.be/numa/software/ManiFactor",
+     "mots": [
+      "numa"
+     ],
+     "stat": 1
+    }
+   ]
+  }
+ },
+ "statistique": "téléchargements du dernier mois (ecosyste.ms, JuliaHub)",
+ "ordre": "stat"
+}

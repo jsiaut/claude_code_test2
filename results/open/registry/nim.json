@@ -1,0 +1,743 @@
+{
+ "langage": "nim",
+ "date": "2026-11-22 07:35 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": [
+    {
+     "name": "aossoa",
+     "desc": "Use a Structure of Arrays like an Array of Structures",
+     "mots": [
+      "structure of arrays"
+     ],
+     "stat": {
+      "first": "2021-11-06",
+      "latest": "2021-11-07",
+      "url": "https://github.com/guibar64/aossoa"
+     }
+    }
+   ]
+  },
+  "B2": {
+   "note": 0.5,
+   "mots": [
+    "arena",
+    "bump allocator",
+    "memory pool"
+   ],
+   "candidates": [
+    {
+     "name": "sharedmempool",
+     "desc": "threadsafe memory pool ",
+     "mots": [
+      "memory pool"
+     ],
+     "stat": {
+      "first": "2018-11-04",
+      "latest": "2019-06-09",
+      "url": "https://github.com/mikra01/sharedmempool"
+     }
+    }
+   ]
+  },
+  "C1": {
+   "note": 0,
+   "mots": [
+    "simd",
+    "vector types"
+   ],
+   "candidates": [
+    {
+     "name": "constantine",
+     "desc": "Modular, high-performance, zero-dependency cryptography stack for proof systems and blockchain protocols.",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2018-07-24",
+      "latest": "2026-11-13",
+      "url": "https://github.com/mratsim/constantine"
+     }
+    },
+    {
+     "name": "nimsimd",
+     "desc": "Pleasant Nim bindings for SIMD instruction sets",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2020-11-30",
+      "latest": "2026-09-24",
+      "url": "https://github.com/guzba/nimsimd"
+     }
+    },
+    {
+     "name": "crunchy",
+     "desc": "SIMD-optimized hashing, checksums and CRCs",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2022-06-12",
+      "latest": "2026-11-15",
+      "url": "https://github.com/guzba/crunchy"
+     }
+    },
+    {
+     "name": "simdutf",
+     "desc": "High performance, SIMD accelerated routines for unicode and base64 processing",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2024-09-11",
+      "latest": "2026-05-29",
+      "url": "https://github.com/ferus-web/simdutf"
+     }
+    },
+    {
+     "name": "kaleidoscope",
+     "desc": "Non-mature SIMD-accelerated drop-ins for std/strutils functions",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2024-12-12",
+      "latest": "2025-09-27",
+      "url": "https://github.com/xTrayambak/kaleidoscope"
+     }
+    },
+    {
+     "name": "floof",
+     "desc": "SIMD-accelerated multithreaded fuzzy search thats fast as f*ck",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2025-02-13",
+      "latest": "2025-02-15",
+      "url": "https://github.com/arashi-software/floof"
+     }
+    },
+    {
+     "name": "vecray",
+     "desc": "2d/3d array and vector types with basic math for them",
+     "mots": [
+      "vector types"
+     ],
+     "stat": {
+      "first": "2025-03-17",
+      "latest": "2025-07-01",
+      "url": "https://github.com/morganholly/vecray"
+     }
+    },
+    {
+     "name": "sdfy",
+     "desc": "A package implementing signed distance functions",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2025-06-07",
+      "latest": "2026-10-24",
+      "url": "https://github.com/elcritch/sdfy"
+     }
+    },
+    {
+     "name": "diffy",
+     "desc": "Simple diff and sub-image finder with SIMD based on Pixie",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2025-07-21",
+      "latest": "2025-09-17",
+      "url": "https://github.com/elcritch/diffy"
+     }
+    },
+    {
+     "name": "mmops",
+     "desc": "Zero-cost typed SIMD operations for Nim using familiar math operators (`+`, `-`, `*`, `/`, etc.) that compile directly to AVX2 instructions.",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2025-07-27",
+      "latest": "2025-08-06",
+      "url": "https://github.com/capocasa/mmops"
+     }
+    },
+    {
+     "name": "url",
+     "desc": "A high-performance, SIMD-accelerated URL parser based on the WHATWG standard.",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2025-09-30",
+      "latest": "2026-06-29",
+      "url": "https://github.com/xTrayambak/url"
+     }
+    },
+    {
+     "name": "overdrive",
+     "desc": "A CPU-agnostic, high-performance SIMD abstraction library in pure Nim.",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2025-10-19",
+      "latest": "2026-02-05",
+      "url": "https://github.com/xTrayambak/overdrive"
+     }
+    },
+    {
+     "name": "csort",
+     "desc": "A fast, branchless, sorting algorithm",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2026-02-17",
+      "latest": "2026-10-31",
+      "url": "https://github.com/WyattBlue/csort"
+     }
+    },
+    {
+     "name": "blackpaper",
+     "desc": "A simple Password Strength Estimator",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2026-03-02",
+      "latest": "2026-09-12",
+      "url": "https://github.com/openpeeps/blackpaper"
+     }
+    },
+    {
+     "name": "openparser",
+     "desc": "Tiny parsers and serializers for JSON, YAML, TOML, BSON, CSV, RSS/Atom feeds and more",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2026-04-14",
+      "latest": "2026-11-15",
+      "url": "https://github.com/openpeeps/openparser"
+     }
+    },
+    {
+     "name": "archive",
+     "desc": "Unified Nim library for archives and compression: Supporting tar, zip, gz, rar, zstd, lzip zz, lz4, bz2, brotli",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2026-10-26",
+      "latest": "2026-11-21",
+      "url": "https://github.com/nimbase/archive"
+     }
+    },
+    {
+     "name": "image",
+     "desc": "Pure-Nim image encoders/decoders supporting PNG, JPEG, TIFF, WebP, GIF, OpenEXR, BMP, HEIF/HEIC and RAW formats",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2026-10-26",
+      "latest": "2026-11-20",
+      "url": "https://github.com/nimbase/image"
+     }
+    },
+    {
+     "name": "simdX86",
+     "desc": "Wrappers for X86 SIMD intrinsics",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2018-03-31",
+      "latest": "2019-02-11",
+      "url": "https://github.com/nimlibs/simdX86"
+     }
+    },
+    {
+     "name": "laser",
+     "desc": "High Performance Computing and Image Toolbox: SIMD, JIT Assembler, OpenMP, runtime CPU feature detection, optimised machine learning primitives",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2018-10-13",
+      "latest": "2024-01-04",
+      "url": "https://github.com/numforge/laser"
+     }
+    },
+    {
+     "name": "cpuwhat",
+     "desc": "Nim utilities for advanced CPU operations: CPU identification, bindings to assorted intrinsics",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2019-10-01",
+      "latest": "2021-05-01",
+      "url": "https://github.com/awr1/cpuwhat"
+     }
+    },
+    {
+     "name": "noisy",
+     "desc": "SIMD-accelerated noise generation (Simplex, Perlin).",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2020-08-06",
+      "latest": "2023-08-28",
+      "url": "https://github.com/guzba/noisy"
+     }
+    },
+    {
+     "name": "gemmaJSON",
+     "desc": "json parsing library based on bindings of simdjson",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2023-10-17",
+      "latest": "2024-07-04",
+      "url": "https://github.com/sainttttt/gemmaJSON"
+     }
+    },
+    {
+     "name": "vqsort",
+     "desc": "A vectorized Quicksort (AVX2-only)",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": "2024-03-11",
+      "latest": "2024-03-12",
+      "url": "https://github.com/Asc2011/vqsort"
+     }
+    },
+    {
+     "name": "sol",
+     "desc": "A SIMD-accelerated vector library written in C99 with Nim bindings.",
+     "mots": [
+      "simd"
+     ],
+     "stat": {
+      "first": null,
+      "latest": null,
+      "url": "https://github.com/davidgarland/sol"
+     }
+    }
+   ]
+  },
+  "C5": {
+   "note": 0.5,
+   "mots": [
+    "parallel",
+    "parallel for",
+    "data parallel"
+   ],
+   "candidates": [
+    {
+     "name": "httpx",
+     "desc": "A super-fast epoll-backed and parallel HTTP server.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": {
+      "first": "2020-08-04",
+      "latest": "2024-11-26",
+      "url": "https://github.com/ringabout/httpx"
+     }
+    },
+    {
+     "name": "nmr",
+     "desc": "A super-fast Nim package manager with automatic dependency graph and parallel installation.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": {
+      "first": "2025-05-20",
+      "latest": "2025-06-12",
+      "url": "https://github.com/HapticX/nmr"
+     }
+    },
+    {
+     "name": "flowworkrunner",
+     "desc": "In-process work runner primitives for FlowBrigade Toolkit graphs.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": {
+      "first": "2026-07-02",
+      "latest": "2026-07-12",
+      "url": "https://github.com/puffball1567/flowworkrunner"
+     }
+    },
+    {
+     "name": "sitmo",
+     "desc": "Sitmo parallel random number generator in Nim",
+     "mots": [
+      "parallel"
+     ],
+     "stat": {
+      "first": "2017-05-12",
+      "latest": "2019-11-27",
+      "url": "https://github.com/jxy/sitmo"
+     }
+    },
+    {
+     "name": "httpbeast",
+     "desc": "A performant and scalable HTTP server.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": {
+      "first": "2017-10-29",
+      "latest": "2023-12-10",
+      "url": "https://github.com/dom96/httpbeast"
+     }
+    },
+    {
+     "name": "laser",
+     "desc": "High Performance Computing and Image Toolbox: SIMD, JIT Assembler, OpenMP, runtime CPU feature detection, optimised machine learning primitives",
+     "mots": [
+      "parallel"
+     ],
+     "stat": {
+      "first": "2018-10-13",
+      "latest": "2024-01-04",
+      "url": "https://github.com/numforge/laser"
+     }
+    },
+    {
+     "name": "css_html_minify",
+     "desc": "HTML & CSS Minify Lib & App based on Regexes & parallel MultiReplaces",
+     "mots": [
+      "parallel"
+     ],
+     "stat": {
+      "first": "2018-11-05",
+      "latest": "2019-03-18",
+      "url": "https://github.com/juancarlospaco/nim-css-html-minify"
+     }
+    },
+    {
+     "name": "pipelines",
+     "desc": "A tiny framework & language for crafting massively parallel data pipelines",
+     "mots": [
+      "parallel",
+      "data parallel"
+     ],
+     "stat": {
+      "first": "2018-12-29",
+      "latest": "2019-10-18",
+      "url": "https://github.com/calebwin/pipelines"
+     }
+    },
+    {
+     "name": "StashTable",
+     "desc": "Concurrent hash table",
+     "mots": [
+      "parallel"
+     ],
+     "stat": {
+      "first": "2020-03-28",
+      "latest": "2023-08-13",
+      "url": "https://github.com/olliNiinivaara/StashTable"
+     }
+    },
+    {
+     "name": "sha256_64B",
+     "desc": "sha256 hash of batches of 64B blocks in parallel via pure asm lib hashtree",
+     "mots": [
+      "parallel"
+     ],
+     "stat": {
+      "first": "2023-05-16",
+      "latest": "2023-05-16",
+      "url": "https://github.com/status-im/sha256_64B"
+     }
+    }
+   ]
+  },
+  "D3": {
+   "note": 0,
+   "mots": [
+    "cache line",
+    "cache padded",
+    "false sharing"
+   ],
+   "candidates": []
+  },
+  "F1": {
+   "note": 0.5,
+   "mots": [
+    "ndarray",
+    "multidimensional array",
+    "matrix"
+   ],
+   "candidates": [
+    {
+     "name": "glm",
+     "desc": "Port of c++ glm library with shader-like syntax",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2015-07-01",
+      "latest": "2026-05-18",
+      "url": "https://github.com/stavenko/nim-glm"
+     }
+    },
+    {
+     "name": "arraymancer",
+     "desc": "A tensor (multidimensional array) library for Nim",
+     "mots": [
+      "ndarray",
+      "multidimensional array",
+      "matrix"
+     ],
+     "stat": {
+      "first": "2017-04-13",
+      "latest": "2026-11-01",
+      "url": "https://github.com/mratsim/Arraymancer"
+     }
+    },
+    {
+     "name": "nio",
+     "desc": "Low Overhead Numerical/Native IO library & tools",
+     "mots": [
+      "ndarray",
+      "multidimensional array"
+     ],
+     "stat": {
+      "first": "2021-05-20",
+      "latest": "2026-09-07",
+      "url": "https://github.com/c-blake/nio"
+     }
+    },
+    {
+     "name": "steady",
+     "desc": "An ahead-of-time TinyML inference compiler and runtime in pure Nim, for microcontrollers.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2023-02-04",
+      "latest": "2026-10-21",
+      "url": "https://github.com/garrettkinman/Steady"
+     }
+    },
+    {
+     "name": "steadytensor",
+     "desc": "An ultra-light, ultra-flexible tensor library written in pure Nim. Intended for microcontrollers.",
+     "mots": [
+      "ndarray",
+      "matrix"
+     ],
+     "stat": {
+      "first": "2024-10-27",
+      "latest": "2026-02-07",
+      "url": "https://github.com/garrettkinman/SteadyTensor"
+     }
+    },
+    {
+     "name": "vecray",
+     "desc": "2d/3d array and vector types with basic math for them",
+     "mots": [
+      "multidimensional array",
+      "matrix"
+     ],
+     "stat": {
+      "first": "2025-03-17",
+      "latest": "2025-07-01",
+      "url": "https://github.com/morganholly/vecray"
+     }
+    },
+    {
+     "name": "ndarray",
+     "desc": "Nim bindings for ndarray-c library",
+     "mots": [
+      "ndarray"
+     ],
+     "stat": {
+      "first": "2025-12-24",
+      "latest": "2026-08-07",
+      "url": "https://github.com/jailop/ndarray-c"
+     }
+    },
+    {
+     "name": "linalg",
+     "desc": "Linear algebra for Nim",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2015-05-28",
+      "latest": "2021-01-21",
+      "url": "https://github.com/andreaferretti/linear-algebra"
+     }
+    },
+    {
+     "name": "pymod",
+     "desc": "Auto-generate a Python module that wraps a Nim module.",
+     "mots": [
+      "ndarray",
+      "matrix"
+     ],
+     "stat": {
+      "first": "2015-11-12",
+      "latest": "2016-11-02",
+      "url": "https://github.com/jboy/nim-pymod"
+     }
+    },
+    {
+     "name": "nimblas",
+     "desc": "BLAS for Nim",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2016-05-20",
+      "latest": "2024-05-23",
+      "url": "https://github.com/andreaferretti/nimblas"
+     }
+    },
+    {
+     "name": "snail",
+     "desc": "Simple linear algebra for nim. Js too.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2016-06-20",
+      "latest": "2020-09-21",
+      "url": "https://github.com/stisa/snail"
+     }
+    },
+    {
+     "name": "neo",
+     "desc": "Linear algebra for Nim",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2017-05-22",
+      "latest": "2024-08-28",
+      "url": "https://github.com/andreaferretti/neo"
+     }
+    },
+    {
+     "name": "nimhdf5",
+     "desc": "Bindings for the HDF5 data format C library",
+     "mots": [
+      "ndarray"
+     ],
+     "stat": {
+      "first": "2017-11-17",
+      "latest": "2024-11-08",
+      "url": "https://github.com/Vindaar/nimhdf5"
+     }
+    },
+    {
+     "name": "clblast",
+     "desc": "Wrapper for CLBlast, an OpenCL BLAS library",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2018-02-14",
+      "latest": "2023-10-19",
+      "url": "https://github.com/numforge/nim-clblast"
+     }
+    },
+    {
+     "name": "manu",
+     "desc": "Matrix library",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2018-04-01",
+      "latest": "2024-05-25",
+      "url": "https://github.com/planetis-m/manu"
+     }
+    },
+    {
+     "name": "numnim",
+     "desc": "A numpy like ndarray and dataframe library for nim-lang.",
+     "mots": [
+      "ndarray",
+      "matrix"
+     ],
+     "stat": {
+      "first": "2020-07-29",
+      "latest": "2020-08-05",
+      "url": "https://github.com/YesDrX/numnim"
+     }
+    },
+    {
+     "name": "matrixsdk",
+     "desc": "A Matrix (https://matrix.org) client and appservice API wrapper for Nim!",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2021-09-24",
+      "latest": "2022-04-15",
+      "url": "https://github.com/dylhack/matrix-nim-sdk"
+     }
+    },
+    {
+     "name": "exprgrad",
+     "desc": "An experimental deep learning framework",
+     "mots": [
+      "ndarray",
+      "matrix"
+     ],
+     "stat": {
+      "first": "2021-10-06",
+      "latest": "2022-12-30",
+      "url": "https://github.com/can-lehmann/exprgrad"
+     }
+    },
+    {
+     "name": "origin",
+     "desc": "A graphics math library",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": null,
+      "latest": null,
+      "url": "https://github.com/mfiano/origin.nim"
+     }
+    }
+   ]
+  },
+  "F2": {
+   "note": 0,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": []
+  }
+ },
+ "statistique": "aucune : ancienneté du premier commit (dépôt maintenu depuis le 22 novembre 2024)",
+ "ordre": "age"
+}

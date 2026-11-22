@@ -1,0 +1,1211 @@
+{
+ "langage": "lua",
+ "date": "2026-11-22 07:29 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": [
+    {
+     "name": "djerius/luaxml",
+     "desc": "a module that maps between Lua and XML without much ado",
+     "mots": [
+      "struct of arrays",
+      "structure of arrays"
+     ],
+     "stat": 38467
+    },
+    {
+     "name": "tomasguisasola/luasoap",
+     "desc": "Support for SOAP",
+     "mots": [
+      "soa"
+     ],
+     "stat": 16844
+    },
+    {
+     "name": "oberhofer/luacwrap",
+     "desc": "LuaCwrap C structure wrapper.",
+     "mots": [
+      "struct of arrays",
+      "structure of arrays"
+     ],
+     "stat": 1470
+    },
+    {
+     "name": "uoa-c4e/kong-plugin-uoa-soap-to-rest",
+     "desc": "Kong plugin to convert incoming SOAP/XML requests to the UoA expected REST/JSON format",
+     "mots": [
+      "soa"
+     ],
+     "stat": 930
+    },
+    {
+     "name": "cleoold/bitarray",
+     "desc": "Bit array library for lua",
+     "mots": [
+      "struct of arrays",
+      "structure of arrays"
+     ],
+     "stat": 411
+    },
+    {
+     "name": "marcosher1993-imit/kong-plugin-soap4kong",
+     "desc": "A plugin for the Kong Microservice API Gateway to convert a REST API request to a SOAP request and convert the SOAP Response to json",
+     "mots": [
+      "soa"
+     ],
+     "stat": 265
+    },
+    {
+     "name": "marcosher1993-imit/kong-plugin-soap4kong-generator",
+     "desc": "A plugin for the Kong Microservice API Gateway to convert a REST API request to a SOAP request and convert the SOAP Response to json",
+     "mots": [
+      "soa"
+     ],
+     "stat": 220
+    },
+    {
+     "name": "alex-mak/cmdbuild",
+     "desc": "CMDBuild SOAP API Wrapper",
+     "mots": [
+      "soa"
+     ],
+     "stat": 205
+    },
+    {
+     "name": "arulkumaran456/kong-plugin-soap-transform",
+     "desc": "Kong is a scalable and customizable API Management Layer built on top of Nginx.",
+     "mots": [
+      "soa"
+     ],
+     "stat": 164
+    },
+    {
+     "name": "nessan/scribe",
+     "desc": "Scribe converts Lua objects to readable strings and has output methods to output tables in many different formats.",
+     "mots": [
+      "struct of arrays",
+      "structure of arrays"
+     ],
+     "stat": 110
+    },
+    {
+     "name": "stein197/luarray",
+     "desc": "Instantiatable flexible array implementation with familiar methods for Lua",
+     "mots": [
+      "struct of arrays",
+      "structure of arrays"
+     ],
+     "stat": 75
+    },
+    {
+     "name": "melipayamak/melipayamak",
+     "desc": "Meliapayamak Web Service Wrapper for Lua",
+     "mots": [
+      "soa"
+     ],
+     "stat": 73
+    },
+    {
+     "name": "chaboksms/chaboksms",
+     "desc": "Chaboksms Web Service Wrapper for Lua",
+     "mots": [
+      "soa"
+     ],
+     "stat": 54
+    }
+   ]
+  },
+  "B2": {
+   "note": 0,
+   "mots": [
+    "arena",
+    "bump allocator",
+    "memory pool"
+   ],
+   "candidates": [
+    {
+     "name": "mtdowling/tecs",
+     "desc": "Typed, high-performance ECS framework for LuaJIT and Love2D",
+     "mots": [
+      "arena"
+     ],
+     "stat": 60
+    },
+    {
+     "name": "corrm/polyplug-guest",
+     "desc": "polyplug guest-side library for writing Lua plugins",
+     "mots": [
+      "arena"
+     ],
+     "stat": 25
+    },
+    {
+     "name": "fastipc/fipc",
+     "desc": "Shared-memory IPC for LuaJIT: streams, broadcasts, work queues and services between processes on one machine.",
+     "mots": [
+      "memory pool"
+     ],
+     "stat": 11
+    },
+    {
+     "name": "jinganix/pbwire",
+     "desc": "Protobuf wire codec: Lua tables through the pbwire C core",
+     "mots": [
+      "arena"
+     ],
+     "stat": 3
+    }
+   ]
+  },
+  "B5": {
+   "note": 0,
+   "mots": [
+    "raw memory",
+    "pointer",
+    "unsafe memory"
+   ],
+   "candidates": [
+    {
+     "name": "karlp/lua-mosquitto",
+     "desc": "Lua bindings to libmosquitto MQTT client library",
+     "mots": [
+      "pointer"
+     ],
+     "stat": 8209
+    },
+    {
+     "name": "mah0x211/io-pread",
+     "desc": "read nbytes of data from the specified position in the file without modifying the file pointer.",
+     "mots": [
+      "pointer"
+     ],
+     "stat": 4275
+    },
+    {
+     "name": "karlp/lua-libmodbus",
+     "desc": "Lua bindings to libmodbus",
+     "mots": [
+      "pointer"
+     ],
+     "stat": 4020
+    },
+    {
+     "name": "niecore/lua-mosquitto-v5",
+     "desc": "Lua bindings to libmosquitto",
+     "mots": [
+      "pointer"
+     ],
+     "stat": 1036
+    },
+    {
+     "name": "osch/compress.lzma",
+     "desc": "xz, lzma and raw LZMA1/LZMA2 compression for Lua strings and carrays",
+     "mots": [
+      "raw memory"
+     ],
+     "stat": 489
+    },
+    {
+     "name": "-asm/mjolnir._asm.sys.mouse",
+     "desc": "Functions for getting and setting the position of the mouse pointer.",
+     "mots": [
+      "pointer"
+     ],
+     "stat": 222
+    },
+    {
+     "name": "darkwiiplayer/rgbstr",
+     "desc": "Derive pseudo-random colours for strings",
+     "mots": [
+      "pointer"
+     ],
+     "stat": 103
+    },
+    {
+     "name": "bluelua/bluelua-evdev",
+     "desc": "Lua bindings for Linux evdev and uinput input control",
+     "mots": [
+      "pointer"
+     ],
+     "stat": 97
+    },
+    {
+     "name": "jamescmartin/luasubprocess",
+     "desc": "This is a Lua module that allows you to create child processes and communicate with them.",
+     "mots": [
+      "pointer"
+     ],
+     "stat": 72
+    },
+    {
+     "name": "topogibra/lua-mosquitto-v52",
+     "desc": "Lua bindings to libmosquitto",
+     "mots": [
+      "pointer"
+     ],
+     "stat": 25
+    },
+    {
+     "name": "corrm/polyplug-guest",
+     "desc": "polyplug guest-side library for writing Lua plugins",
+     "mots": [
+      "pointer"
+     ],
+     "stat": 25
+    }
+   ]
+  },
+  "C1": {
+   "note": 0,
+   "mots": [
+    "simd",
+    "vector types"
+   ],
+   "candidates": [
+    {
+     "name": "jdonaldson/hx-lua-simdjson",
+     "desc": "This is a simple Haxe-specific Lua binding for simdjson",
+     "mots": [
+      "simd"
+     ],
+     "stat": 90434
+    },
+    {
+     "name": "fouriertransformer/lua-simdjson",
+     "desc": "Lua bindings for simdjson",
+     "mots": [
+      "simd"
+     ],
+     "stat": 14903
+    },
+    {
+     "name": "membphis/api7-lua-resty-simdjson",
+     "desc": "Fast JSON encoder and decoder for OpenResty",
+     "mots": [
+      "simd"
+     ],
+     "stat": 4174
+    },
+    {
+     "name": "mambrus/lua-ctables",
+     "desc": "Bridge between C-arrays and Lua multi-dimensional tables.",
+     "mots": [
+      "vector types"
+     ],
+     "stat": 2163
+    },
+    {
+     "name": "omikhleia/printoptions.sile",
+     "desc": "(DEPRECATED: now an integral part of resilient.sile) Image tools for professional printers with the SILE typesetting system.",
+     "mots": [
+      "vector types"
+     ],
+     "stat": 766
+    },
+    {
+     "name": "freed-wu/bitset",
+     "desc": "Handle bit-vector datatype",
+     "mots": [
+      "vector types"
+     ],
+     "stat": 595
+    },
+    {
+     "name": "freed-wu/mpfonts",
+     "desc": "Computer Modern Type 3 fonts converted using METAPOST",
+     "mots": [
+      "vector types"
+     ],
+     "stat": 149
+    },
+    {
+     "name": "luarocks/bitfield",
+     "desc": "Packed Bitfield Type Library for Lua",
+     "mots": [
+      "vector types"
+     ],
+     "stat": 66
+    }
+   ]
+  },
+  "C2": {
+   "note": 0,
+   "mots": [
+    "intrinsics",
+    "avx"
+   ],
+   "candidates": [
+    {
+     "name": "5inq-kiji/ion7-core",
+     "desc": "Silicon-level LuaJIT FFI bindings for llama.cpp",
+     "mots": [
+      "avx"
+     ],
+     "stat": 31
+    }
+   ]
+  },
+  "C5": {
+   "note": 0,
+   "mots": [
+    "parallel",
+    "parallel for",
+    "data parallel"
+   ],
+   "candidates": [
+    {
+     "name": "benoitgermain/lanes",
+     "desc": "Multithreading support for Lua",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 534906
+    },
+    {
+     "name": "askyrme/luaproc",
+     "desc": "luaproc concurrency programming library for Lua.",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 2194
+    },
+    {
+     "name": "pc/opencl",
+     "desc": "OpenCL for Lua",
+     "mots": [
+      "parallel",
+      "parallel for",
+      "data parallel"
+     ],
+     "stat": 1065
+    },
+    {
+     "name": "moyu/dromozoa-prl",
+     "desc": "Lua bindings for Parallels Virtualization SDK",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 883
+    },
+    {
+     "name": "luarocks/leda",
+     "desc": "Leda",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 541
+    },
+    {
+     "name": "seba/activelua-learningtool",
+     "desc": "An implementation of active objects into lua.",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 415
+    },
+    {
+     "name": "aimingoo/harpseal",
+     "desc": "harpseal - distribution task for lua",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 401
+    },
+    {
+     "name": "luarocks/simulua",
+     "desc": "Simulua is a discrete-event process-oriented simulation library for Lua.",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 242
+    },
+    {
+     "name": "aimingoo/tundrawolf",
+     "desc": "tundrawolf - distribution task for nginx_lua",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 216
+    },
+    {
+     "name": "freed-wu/oberdiek",
+     "desc": "A bundle of packages submitted by Heiko Oberdiek",
+     "mots": [
+      "parallel",
+      "parallel for",
+      "data parallel"
+     ],
+     "stat": 214
+    },
+    {
+     "name": "aryajur/luastepper",
+     "desc": "Allow Lua scripts to run multiple Lua scripts in parallel, platform independent without using threading.",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 184
+    },
+    {
+     "name": "moteus/multirequests",
+     "desc": "Make multiple requests from different coroutines in parallel",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 151
+    },
+    {
+     "name": "rayaman/lnet",
+     "desc": "Lua networking library that wraps around lua-socket to make networking easy.",
+     "mots": [
+      "parallel",
+      "parallel for",
+      "data parallel"
+     ],
+     "stat": 137
+    },
+    {
+     "name": "illarn/illarn-tween",
+     "desc": "Interpolate values with complex logic easily",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 130
+    },
+    {
+     "name": "moteus/parallel",
+     "desc": "Basic parallel loops",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 118
+    },
+    {
+     "name": "freed-wu/latex-parallel",
+     "desc": "Typeset parallel texts",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 72
+    },
+    {
+     "name": "freed-wu/sauerj",
+     "desc": "A bundle of utilities by Jonathan Sauer",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 72
+    },
+    {
+     "name": "javalikescript/promise-async-await",
+     "desc": "an implementation of Promises/A+ in Lua with async/await support",
+     "mots": [
+      "parallel",
+      "parallel for"
+     ],
+     "stat": 47
+    },
+    {
+     "name": "evo4421/importutils",
+     "desc": "Functionally more complete, more modern modules introduced",
+     "mots": [
+      "parallel",
+      "parallel for",
+      "data parallel"
+     ],
+     "stat": 41
+    }
+   ]
+  },
+  "D1": {
+   "note": 0,
+   "mots": [
+    "threads",
+    "multithreading"
+   ],
+   "candidates": [
+    {
+     "name": "moteus/lua-llthreads2",
+     "desc": "Low-Level threads for Lua",
+     "mots": [
+      "threads"
+     ],
+     "stat": 1992072
+    },
+    {
+     "name": "daurnimator/cqueues",
+     "desc": "Continuation Queues: Embeddable asynchronous networking, threading, and notification framework for Lua on Unix.",
+     "mots": [
+      "threads"
+     ],
+     "stat": 1103589
+    },
+    {
+     "name": "benoitgermain/lanes",
+     "desc": "Multithreading support for Lua",
+     "mots": [
+      "multithreading"
+     ],
+     "stat": 534906
+    },
+    {
+     "name": "kernelsauce/turbo",
+     "desc": "A networking suite for LuaJIT2 and Linux, optimized for performance.",
+     "mots": [
+      "threads"
+     ],
+     "stat": 24947
+    },
+    {
+     "name": "daurnimator/lunix",
+     "desc": "Lua Unix Module.",
+     "mots": [
+      "threads"
+     ],
+     "stat": 8385
+    },
+    {
+     "name": "mihacooper/effil",
+     "desc": "Multithreading library for Lua.",
+     "mots": [
+      "multithreading"
+     ],
+     "stat": 5001
+    },
+    {
+     "name": "vrld/hump",
+     "desc": "Lightweight game development utilities",
+     "mots": [
+      "threads"
+     ],
+     "stat": 3710
+    },
+    {
+     "name": "osch/mtmsg",
+     "desc": "Low-level message buffers for inter-thread communication in arbitrary multi-threading scenarios",
+     "mots": [
+      "threads"
+     ],
+     "stat": 3548
+    },
+    {
+     "name": "bartbes/async",
+     "desc": "A love library for asynchronous background computation",
+     "mots": [
+      "threads"
+     ],
+     "stat": 2414
+    },
+    {
+     "name": "luarocks/oil",
+     "desc": "An Object Request Broker in Lua",
+     "mots": [
+      "multithreading"
+     ],
+     "stat": 1995
+    },
+    {
+     "name": "moteus/lua-llthreads2-compat",
+     "desc": "Low-Level threads for Lua",
+     "mots": [
+      "threads"
+     ],
+     "stat": 1336
+    },
+    {
+     "name": "tieske/copas-async",
+     "desc": "Copas add-on to provide true asynchronus threads",
+     "mots": [
+      "threads"
+     ],
+     "stat": 1312
+    },
+    {
+     "name": "tieske/darksidesync",
+     "desc": "Thread synchronization support for bindings to libraries with their own threadpools",
+     "mots": [
+      "threads"
+     ],
+     "stat": 878
+    },
+    {
+     "name": "nashory/loader",
+     "desc": "Multi-threaded data loader module for Torch",
+     "mots": [
+      "threads"
+     ],
+     "stat": 674
+    },
+    {
+     "name": "gonapps/gonapps-jwt",
+     "desc": "A thread-safe luaossl based JWT encoding/decoding module.",
+     "mots": [
+      "threads"
+     ],
+     "stat": 621
+    },
+    {
+     "name": "djfdyuruiry/luasocket-lanes",
+     "desc": "Network support for the Lua language, now with Lua Lanes support!",
+     "mots": [
+      "threads"
+     ],
+     "stat": 544
+    },
+    {
+     "name": "osch/mtstates",
+     "desc": "Pass Lua states to other threads in arbitrary multi-threading scenarios",
+     "mots": [
+      "threads"
+     ],
+     "stat": 462
+    },
+    {
+     "name": "otgo/telegram",
+     "desc": "Telegram bots API functions using threads by @otgo.",
+     "mots": [
+      "threads"
+     ],
+     "stat": 318
+    },
+    {
+     "name": "osch/mtint",
+     "desc": "Make threads and coroutines interruptible in arbitrary multi-threading scenarios",
+     "mots": [
+      "threads"
+     ],
+     "stat": 312
+    },
+    {
+     "name": "cmotl/torch_threads",
+     "desc": "Threads for Torch",
+     "mots": [
+      "threads"
+     ],
+     "stat": 308
+    },
+    {
+     "name": "maia/coutil",
+     "desc": "Coroutine utilities to support multithread in Lua",
+     "mots": [
+      "multithreading"
+     ],
+     "stat": 76
+    },
+    {
+     "name": "bartbes/repler",
+     "desc": "A repl for LOVE programs",
+     "mots": [
+      "threads"
+     ],
+     "stat": 71
+    },
+    {
+     "name": "hugeblank/raisin",
+     "desc": "Threads made easy",
+     "mots": [
+      "threads"
+     ],
+     "stat": 71
+    },
+    {
+     "name": "xriss/gamecake-wire",
+     "desc": "C11 threads and FIFOs across lua states",
+     "mots": [
+      "threads"
+     ],
+     "stat": 33
+    },
+    {
+     "name": "oscsoirey/raven-gui",
+     "desc": "LuaJIT bindings for Raven, a lightweight multithreaded GUI library in C",
+     "mots": [
+      "multithreading"
+     ],
+     "stat": 12
+    }
+   ]
+  },
+  "D2": {
+   "note": 0,
+   "mots": [
+    "atomic",
+    "atomics"
+   ],
+   "candidates": [
+    {
+     "name": "slact/feedparser",
+     "desc": "A decent RSS and Atom XML feed parser",
+     "mots": [
+      "atomic",
+      "atomics"
+     ],
+     "stat": 143497
+    },
+    {
+     "name": "neorocks/onedarkpro.nvim",
+     "desc": "Atom's iconic One Dark theme, for Neovim. Cacheable, fully customisable, Tree-sitter and LSP semantic token support. Comes with variants",
+     "mots": [
+      "atomic",
+      "atomics"
+     ],
+     "stat": 7067
+    },
+    {
+     "name": "neorocks/onenord.nvim",
+     "desc": "A Neovim theme that combines the Nord and Atom One Dark color palettes for a more vibrant programming experience.",
+     "mots": [
+      "atomic",
+      "atomics"
+     ],
+     "stat": 6411
+    },
+    {
+     "name": "neorocks/onedark.nvim",
+     "desc": "One dark and light colorscheme for neovim >= 0.5.0 written in lua based on Atom's One Dark and Light theme. Additionally, it comes with 5 color variant styles",
+     "mots": [
+      "atomic",
+      "atomics"
+     ],
+     "stat": 5277
+    },
+    {
+     "name": "neo451/feed.nvim",
+     "desc": "feature-rich neovim web feed reader, rss, atom and json, all in lua",
+     "mots": [
+      "atomic",
+      "atomics"
+     ],
+     "stat": 1506
+    },
+    {
+     "name": "benrob0329/lambda",
+     "desc": "Atomic lambda string-parser",
+     "mots": [
+      "atomic",
+      "atomics"
+     ],
+     "stat": 186
+    },
+    {
+     "name": "cxinu/rllib",
+     "desc": "High-performance, Redis-backed rate limiter for OpenResty and NGINX.",
+     "mots": [
+      "atomic",
+      "atomics"
+     ],
+     "stat": 57
+    },
+    {
+     "name": "cvar1984/atomas",
+     "desc": "",
+     "mots": [
+      "atomic",
+      "atomics"
+     ],
+     "stat": 30
+    },
+    {
+     "name": "snap/chemical-element",
+     "desc": "Chemical element of the periodic table of elements.",
+     "mots": [
+      "atomic",
+      "atomics"
+     ],
+     "stat": 27
+    },
+    {
+     "name": "mrjavad-seydi/lua-resty-adaptive-limit",
+     "desc": "Adaptive concurrency limiting and load shedding for OpenResty",
+     "mots": [
+      "atomic",
+      "atomics"
+     ],
+     "stat": 25
+    }
+   ]
+  },
+  "D3": {
+   "note": 0,
+   "mots": [
+    "cache line",
+    "cache padded",
+    "false sharing"
+   ],
+   "candidates": [
+    {
+     "name": "kaio326/luamemo",
+     "desc": "Memory layer for AI agents",
+     "mots": [
+      "false sharing"
+     ],
+     "stat": 141
+    },
+    {
+     "name": "pyrex41/shen",
+     "desc": "A speed-focused LuaJIT port of the Shen language (kernel 41.1)",
+     "mots": [
+      "cache line"
+     ],
+     "stat": 36
+    }
+   ]
+  },
+  "D4": {
+   "note": 0,
+   "mots": [
+    "affinity",
+    "cpu affinity",
+    "thread pinning"
+   ],
+   "candidates": [
+    {
+     "name": "umegaya/ffiex",
+     "desc": "extend luajit ffi module to give more affinity to C codes",
+     "mots": [
+      "affinity"
+     ],
+     "stat": 1367
+    },
+    {
+     "name": "mahkoe/ezserv",
+     "desc": "Friendly way to add HTTP/websocket servers to Lua",
+     "mots": [
+      "thread pinning"
+     ],
+     "stat": 211
+    }
+   ]
+  },
+  "D5": {
+   "note": 0,
+   "mots": [
+    "spin",
+    "spin wait",
+    "barrier"
+   ],
+   "candidates": [
+    {
+     "name": "j-hui/fidget.nvim",
+     "desc": "Extensible UI for Neovim notifications and LSP progress messages.",
+     "mots": [
+      "spin"
+     ],
+     "stat": 305437
+    },
+    {
+     "name": "nstefan002/donut.nvim",
+     "desc": "Spinning donut screensaver for Neovim",
+     "mots": [
+      "spin"
+     ],
+     "stat": 330
+    },
+    {
+     "name": "freed-wu/mpfonts",
+     "desc": "Computer Modern Type 3 fonts converted using METAPOST",
+     "mots": [
+      "spin"
+     ],
+     "stat": 149
+    },
+    {
+     "name": "tkolleh/roda",
+     "desc": "Elegant terminal spinners for Lua",
+     "mots": [
+      "spin"
+     ],
+     "stat": 127
+    },
+    {
+     "name": "xieyonn/spinner.nvim",
+     "desc": "Extensible spinner framework for Neovim plugins and UI.",
+     "mots": [
+      "spin"
+     ],
+     "stat": 119
+    },
+    {
+     "name": "fesily/lua-resty-latch",
+     "desc": "single-use thread barrier",
+     "mots": [
+      "barrier"
+     ],
+     "stat": 84
+    },
+    {
+     "name": "pigpigyyy/yarnflow",
+     "desc": "A Yarn Spinner compiler for Lua.",
+     "mots": [
+      "spin"
+     ],
+     "stat": 78
+    }
+   ]
+  },
+  "E4": {
+   "note": 0,
+   "mots": [
+    "prefetch"
+   ],
+   "candidates": []
+  },
+  "F1": {
+   "note": 0,
+   "mots": [
+    "ndarray",
+    "multidimensional array",
+    "matrix"
+   ],
+   "candidates": [
+    {
+     "name": "birchpointswe/santoku-matrix",
+     "desc": "",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 14202
+    },
+    {
+     "name": "luarocks/numlua",
+     "desc": "Numerical routines for Lua",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 3124
+    },
+    {
+     "name": "ladc/lgsl",
+     "desc": "A numerical library for Lua based on GSL",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 753
+    },
+    {
+     "name": "luarocks/numextra",
+     "desc": "Complementary functions for Numeric Lua",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 333
+    },
+    {
+     "name": "wrwrwr/glyphify",
+     "desc": "Redraw an image using glyphs.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 206
+    },
+    {
+     "name": "erickprogramer/luandarray",
+     "desc": "Ndarray manipulation quickly and optimally",
+     "mots": [
+      "ndarray"
+     ],
+     "stat": 139
+    },
+    {
+     "name": "pessoa736/vmsl",
+     "desc": "Lua library for N-dimensional vectors and matrices. Lua modules API (require), experimental.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 109
+    },
+    {
+     "name": "nubix-devbot/ht16k33",
+     "desc": "HT16K33 LED matrix driver",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 105
+    },
+    {
+     "name": "jtbx/chatter",
+     "desc": "A simple Matrix SDK for Lua.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 103
+    },
+    {
+     "name": "anggawardn/rndplugin",
+     "desc": "kong plugin to check request token authorization and forward request to filer payload(security-matrix) written in lua",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 73
+    },
+    {
+     "name": "flrgh/busted-matrix",
+     "desc": "Test matrix support for Busted",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 60
+    },
+    {
+     "name": "astra/leo",
+     "desc": "A data processing and manipulation toolkit for Lua.",
+     "mots": [
+      "multidimensional array"
+     ],
+     "stat": 53
+    },
+    {
+     "name": "ed-xyz/xyz_math",
+     "desc": "A 3D math library for Lua",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 48
+    },
+    {
+     "name": "timm/kah",
+     "desc": "Useful short lua functions (lists, csv, stats, rand, tests)",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 37
+    },
+    {
+     "name": "xriss/gamecake-tardis",
+     "desc": "Time and Relative Dimensions In Space",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 36
+    },
+    {
+     "name": "wsgtcyx/destiny-matrix",
+     "desc": "Destiny Matrix energy/points calculator",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 18
+    },
+    {
+     "name": "500foods/lua-zint-svg",
+     "desc": "Pure Lua barcodes: Code 39, Code 128, GS1-128, UPC, EAN, ITF, SSCC, and QR",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 6
+    }
+   ]
+  },
+  "F2": {
+   "note": 0,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": []
+  },
+  "F4": {
+   "note": 0,
+   "mots": [
+    "mmap",
+    "memory map"
+   ],
+   "candidates": [
+    {
+     "name": "shmul/lightningmdb",
+     "desc": "A thin wrapper around OpenLDAP Lightning Memory-Mapped Database (LMDB).",
+     "mots": [
+      "memory map"
+     ],
+     "stat": 73024
+    },
+    {
+     "name": "geoffleyland/mmapfile",
+     "desc": "Simple memory-mapped files",
+     "mots": [
+      "mmap",
+      "memory map"
+     ],
+     "stat": 1263
+    },
+    {
+     "name": "engin33r/lua-shmem",
+     "desc": "Extremely low-level shared memory management for IPC.",
+     "mots": [
+      "mmap"
+     ],
+     "stat": 217
+    },
+    {
+     "name": "kaio326/luamemo",
+     "desc": "Memory layer for AI agents",
+     "mots": [
+      "memory map"
+     ],
+     "stat": 141
+    },
+    {
+     "name": "starius/annoy",
+     "desc": "Approximate Nearest Neighbors Oh Yeah",
+     "mots": [
+      "mmap"
+     ],
+     "stat": 113
+    },
+    {
+     "name": "nubix-devbot/ht16k33",
+     "desc": "HT16K33 LED matrix driver",
+     "mots": [
+      "memory map"
+     ],
+     "stat": 105
+    },
+    {
+     "name": "fperrad/lua-loja",
+     "desc": "transparent persistence with a key/value store",
+     "mots": [
+      "memory map"
+     ],
+     "stat": 66
+    },
+    {
+     "name": "mtdowling/tecs",
+     "desc": "Typed, high-performance ECS framework for LuaJIT and Love2D",
+     "mots": [
+      "memory map"
+     ],
+     "stat": 60
+    },
+    {
+     "name": "nnengine/sheets",
+     "desc": "Fast, memory-efficient CSV and tabular data toolkit for Lua",
+     "mots": [
+      "memory map"
+     ],
+     "stat": 21
+    }
+   ]
+  }
+ },
+ "statistique": "téléchargements (LuaRocks)",
+ "ordre": "stat"
+}

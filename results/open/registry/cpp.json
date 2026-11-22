@@ -1,0 +1,42 @@
+{
+ "langage": "cpp",
+ "date": "2026-11-22 07:35 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": []
+  },
+  "F2": {
+   "note": 0,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": [
+    {
+     "name": "hwloc",
+     "desc": "",
+     "mots": [
+      "hwloc"
+     ],
+     "stat": 3053
+    },
+    {
+     "name": "hwloc-contrib",
+     "desc": "",
+     "mots": [
+      "hwloc"
+     ],
+     "stat": 0
+    }
+   ]
+  }
+ },
+ "statistique": "installations (popcon de Debian ; celui d'Ubuntu n'est plus publié : écart 2)",
+ "ordre": "stat"
+}

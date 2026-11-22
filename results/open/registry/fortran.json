@@ -1,0 +1,83 @@
+{
+ "langage": "fortran",
+ "date": "2026-11-22 07:36 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": []
+  },
+  "B2": {
+   "note": 0.5,
+   "mots": [
+    "arena",
+    "bump allocator",
+    "memory pool"
+   ],
+   "candidates": []
+  },
+  "C1": {
+   "note": 0,
+   "mots": [
+    "simd",
+    "vector types"
+   ],
+   "candidates": []
+  },
+  "C2": {
+   "note": 0,
+   "mots": [
+    "intrinsics",
+    "avx"
+   ],
+   "candidates": []
+  },
+  "D3": {
+   "note": 0,
+   "mots": [
+    "cache line",
+    "cache padded",
+    "false sharing"
+   ],
+   "candidates": []
+  },
+  "D5": {
+   "note": 0.5,
+   "mots": [
+    "spin",
+    "spin wait",
+    "barrier"
+   ],
+   "candidates": []
+  },
+  "E4": {
+   "note": 0,
+   "mots": [
+    "prefetch"
+   ],
+   "candidates": []
+  },
+  "F2": {
+   "note": 0.5,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": []
+  },
+  "F4": {
+   "note": 0,
+   "mots": [
+    "mmap",
+    "memory map"
+   ],
+   "candidates": []
+  }
+ },
+ "statistique": "aucune : ancienneté du premier commit (dépôt maintenu depuis le 22 novembre 2024)",
+ "ordre": "age"
+}

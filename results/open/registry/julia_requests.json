@@ -1,0 +1,234 @@
+{
+ "source": "julialang-logs, package_requests_by_date.csv.gz, statut 200, du 2026-10-23 au 2026-11-21",
+ "cases": {
+  "A6": [
+   {
+    "name": "IndexedStructVectors",
+    "rang_releve": 1,
+    "stat_releve": 1,
+    "requetes": 0,
+    "rang_requetes": 1
+   }
+  ],
+  "B2": [
+   {
+    "name": "Bumper",
+    "rang_releve": 1,
+    "stat_releve": 8098,
+    "requetes": 0,
+    "rang_requetes": 1
+   },
+   {
+    "name": "Arena",
+    "rang_releve": 2,
+    "stat_releve": 5,
+    "requetes": 0,
+    "rang_requetes": 2
+   }
+  ],
+  "C1": [
+   {
+    "name": "CpuId",
+    "rang_releve": 1,
+    "stat_releve": 254528,
+    "requetes": 0,
+    "rang_requetes": 1
+   },
+   {
+    "name": "VectorizationBase",
+    "rang_releve": 2,
+    "stat_releve": 136069,
+    "requetes": 0,
+    "rang_requetes": 2
+   },
+   {
+    "name": "LoopVectorization",
+    "rang_releve": 3,
+    "stat_releve": 127985,
+    "requetes": 0,
+    "rang_requetes": 3
+   },
+   {
+    "name": "SIMD",
+    "rang_releve": 4,
+    "stat_releve": 101246,
+    "requetes": 0,
+    "rang_requetes": 4
+   },
+   {
+    "name": "SIMDDualNumbers",
+    "rang_releve": 5,
+    "stat_releve": 3347,
+    "requetes": 0,
+    "rang_requetes": 5
+   },
+   {
+    "name": "ExaModels",
+    "rang_releve": 6,
+    "stat_releve": 2131,
+    "requetes": 0,
+    "rang_requetes": 6
+   },
+   {
+    "name": "SIMDPirates",
+    "rang_releve": 7,
+    "stat_releve": 1128,
+    "requetes": 0,
+    "rang_requetes": 7
+   },
+   {
+    "name": "CUDASIMDTypes",
+    "rang_releve": 8,
+    "stat_releve": 145,
+    "requetes": 0,
+    "rang_requetes": 8
+   },
+   {
+    "name": "SIMDMathFunctions",
+    "rang_releve": 9,
+    "stat_releve": 57,
+    "requetes": 0,
+    "rang_requetes": 9
+   },
+   {
+    "name": "FastTanhSinhQuadrature",
+    "rang_releve": 10,
+    "stat_releve": 28,
+    "requetes": 0,
+    "rang_requetes": 10
+   },
+   {
+    "name": "BatchSolve",
+    "rang_releve": 11,
+    "stat_releve": 26,
+    "requetes": 0,
+    "rang_requetes": 11
+   },
+   {
+    "name": "LoopManagers",
+    "rang_releve": 12,
+    "stat_releve": 19,
+    "requetes": 0,
+    "rang_requetes": 12
+   },
+   {
+    "name": "PaddedMatrices",
+    "rang_releve": 13,
+    "stat_releve": 17,
+    "requetes": 0,
+    "rang_requetes": 13
+   },
+   {
+    "name": "SIMDMath",
+    "rang_releve": 14,
+    "stat_releve": 17,
+    "requetes": 0,
+    "rang_requetes": 14
+   },
+   {
+    "name": "FastSinCos",
+    "rang_releve": 15,
+    "stat_releve": 14,
+    "requetes": 0,
+    "rang_requetes": 15
+   },
+   {
+    "name": "ChipSort",
+    "rang_releve": 16,
+    "stat_releve": 3,
+    "requetes": 0,
+    "rang_requetes": 16
+   },
+   {
+    "name": "FastTransposeMatrix",
+    "rang_releve": 17,
+    "stat_releve": 1,
+    "requetes": 0,
+    "rang_requetes": 17
+   }
+  ],
+  "D3": [],
+  "D4": [
+   {
+    "name": "ThreadPinningCore",
+    "rang_releve": 1,
+    "stat_releve": 5539,
+    "requetes": 0,
+    "rang_requetes": 1
+   },
+   {
+    "name": "ThreadPinning",
+    "rang_releve": 2,
+    "stat_releve": 3036,
+    "requetes": 0,
+    "rang_requetes": 2
+   }
+  ],
+  "F2": [
+   {
+    "name": "Hwloc_jll",
+    "rang_releve": 1,
+    "stat_releve": 241706,
+    "requetes": 0,
+    "rang_requetes": 1
+   },
+   {
+    "name": "Hwloc",
+    "rang_releve": 2,
+    "stat_releve": 44747,
+    "requetes": 0,
+    "rang_requetes": 2
+   },
+   {
+    "name": "ArrayAllocators",
+    "rang_releve": 3,
+    "stat_releve": 439,
+    "requetes": 0,
+    "rang_requetes": 3
+   },
+   {
+    "name": "NUMA_jll",
+    "rang_releve": 4,
+    "stat_releve": 393,
+    "requetes": 0,
+    "rang_requetes": 4
+   },
+   {
+    "name": "NUMA",
+    "rang_releve": 5,
+    "stat_releve": 45,
+    "requetes": 0,
+    "rang_requetes": 5
+   },
+   {
+    "name": "NumaAllocators",
+    "rang_releve": 6,
+    "stat_releve": 37,
+    "requetes": 0,
+    "rang_requetes": 6
+   },
+   {
+    "name": "SafeByteCalculators",
+    "rang_releve": 7,
+    "stat_releve": 3,
+    "requetes": 0,
+    "rang_requetes": 7
+   },
+   {
+    "name": "ApproximatingMapsBetweenLinearSpaces",
+    "rang_releve": 8,
+    "stat_releve": 1,
+    "requetes": 0,
+    "rang_requetes": 8
+   },
+   {
+    "name": "ManiFactor",
+    "rang_releve": 9,
+    "stat_releve": 1,
+    "requetes": 0,
+    "rang_requetes": 9
+   }
+  ]
+ },
+ "cases_dont_les_dix_premiers_changent": []
+}

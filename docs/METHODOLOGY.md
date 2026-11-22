@@ -1753,3 +1753,16 @@ Robustesse :
   première bibliothèque admise par ordre d'usage, plus les bibliothèques nommées par le dossier (sauf Numba et
   Polars). Grille ouverte par sondes, plafond ouvert par formes mesurées sur la machine 34 et reportées sur la
   campagne du point 4 ; code par défaut inchangé ; le classement de tête ne change pas.
+* 2026-11-22, 8:26 : **v4, point 6 : liste relevée et poussée avant toute sonde et toute forme** (`docs/V4_OPEN.md`,
+  3 et 10 ; `results/open/list.md`). Machine 34 caractérisée à 7 h 08. Registres des 22 langages qui en ont un
+  interrogés pour les 217 cases à moins de 1 (`tools/open/registry.py`, réponses dans `results/open/registry/`) ;
+  candidates examinées dans l'ordre d'usage, la première admise retenue, chaque refus motivé
+  (`results/open/decisions.json`) ; chaque bibliothèque retenue installée et exécutée avec la chaîne classée.
+  Résultat : 49 bibliothèques dans 17 langages comblent 49 des 217 cases (45 choix de la règle, plus 9 entrées des
+  bibliothèques nommées) ; aucune pour Zig, Odin et BQN (pas de registre), ni pour C3, FreePascal, Fortran, Chapel et
+  C# (aucune candidate admise). Cellules du plafond (écart 3) : 40 couples (bibliothèque, cellule) pour 18
+  bibliothèques de 12 langages, dont NumPy pour neuf cellules. Écarts datés 1 à 4 : source des recherches (PyPI et
+  Hackage protégés), popcon de Debian, attribution des cellules, puis statistiques (Hackage et Julia contrôlés avec
+  la statistique du plan : mêmes rangs), installations hors gestionnaire (opam, Alire, dub, LuaRocks absents) et
+  lecture de 3.3 d. Versions et verrous : `results/open/versions.txt`, `results/open/lock/`. Prochaine étape : les
+  sondes de la grille ouverte.

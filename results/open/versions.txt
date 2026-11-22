@@ -1,0 +1,50 @@
+Piste ouverte (v4, point 6) : versions figées des bibliothèques de la liste (docs/V4_OPEN.md, 3.3 e et 5)
+Relevé du 22 novembre 2026, machine 34. Installations hors du dépôt, sous /opt/open/<langage> ; fichiers de
+verrouillage recopiés dans results/open/lock/<langage>/. Les vérifications d'installation (3.3 a, 2) ont construit et
+exécuté un court programme par bibliothèque avec la chaîne classée ; les sondes de la grille ouverte viendront après.
+
+C, C++      hwloc 2.10.0 : paquet Ubuntu 24.04 libhwloc-dev 2.10.0-1build1 (apt).
+Rust 1.99.1 (cargo, CARGO_HOME=/opt/open/rust/cargo) : lock/rust/Cargo.toml, Cargo.lock
+            bumpalo 3.20.4 ; fearless_simd 1.2.0 ; rayon 1.12.0 ; cordyceps 0.3.5 ; core_affinity 0.8.3 ;
+            ndarray 0.17.2 ; hwlocality-sys 0.7.2 (sur libhwloc 2.10.0) ; memmap2 0.9.12 ; libc 0.2.191 ;
+            crossbeam 0.8.5.
+Nim 2.2.12 (nimble, --nimbleDir:/opt/open/nim/pkgs) : liste des paquets recopiée localement (packages_official.json,
+            le rafraîchissement de nimble répondant 405).
+            arraymancer 0.7.33 (révision 873ac94) ; mmops 0.1.1 (étiquette 0.1.1, révision a3cf2a4 ; le fichier
+            .nimble y porte 0.1.0) ; nimsimd 1.3.2 (révision 3f6b266), dépendance de mmops.
+D (LDC)     dub n'est pas livré avec LDC : sources aux étiquettes des versions de dub, compilées par ldc2 -i.
+            soa 0.2.0 (soa-d, étiquette v0.2.0, 161a15c) ; mir-algorithm 3.22.5 (ba6d483) avec mir-core 1.7.4 (4397b03).
+Ada (GNAT 16) Alire n'est pas sur l'hôte : commits de l'index d'Alire, compilés par gnatmake-16.
+            lwt 1.2.0 (parasail, commit fedb90b, sous-dossier lwt ; -lgomp) ;
+            cachelines 0.1.0 (ada-cachelines, 5c97574).
+Swift 6.4.2 (SwiftPM) : lock/swift/Package.swift, Package.resolved (arène), Package.matft.swift, Package.matft.resolved
+            swift-memory-allocation : aucune version publiée, branche main, révision 8742a8c ;
+            Matft 1.0.1 (étiquette 1.0.1, bf66a10), avec swift-collections 1.7.6.
+Julia (Pkg, JULIA_DEPOT_PATH=/opt/open/julia/depot) : lock/julia/Project.toml, Manifest.toml
+            Bumper 0.7.2 ; VectorizationBase 0.21.74 ; ThreadPinningCore 0.4.5 ; NUMA 0.1.1.
+Mojo 1.2.0  MAX 26.7.0 : paquet conda max-core-26.7.0-release.conda (canal max de Modular, repo.prefix.dev ;
+            sha256 591b7ceb5ad8e4f14058730aa9461ab269a212899386f4426aec89f3e216be90) ; la roue de PyPI ne contient
+            pas les paquets Mojo (.mojopkg) : ils sont pris dans l'archive conda, avec libAsyncRTMojoBindings.so.
+Java 27 (Maven, dépôt local /opt/open/java/m2)
+            net.openhft:affinity 2026.2 ; org.tensorflow:ndarray 1.0.0 ; org.apache.ignite:ignite-numa-allocator 2.18.0.
+Go 1.27 (modules, GOTOOLCHAIN=local) : lock/go/go.mod, go.sum (et go.numa.mod, go.numa.sum)
+            github.com/samber/lo v1.53.0 ; github.com/templexxx/cpu v0.1.1 ; github.com/marusama/cyclicbarrier v1.1.0 ;
+            gonum.org/v1/gonum v0.17.0 ; github.com/benjojo/numa v0.0.0-20260918214945-1058a779f434 (aucune version).
+Haskell (GHC 9.14.1, cabal, --store-dir=/opt/open/haskell/store)
+            parallel 3.3.0.0 ; atomic-primops 0.8.8 ; concurrent-barrier 0.1.2 ; mmap 0.5.9.
+OCaml 5.5.2 opam n'est pas sur l'hôte : versions publiées dans opam, prises à leurs archives de version (ou à leur
+            étiquette git quand l'archive de GitHub n'est pas joignable), construites par dune 3.25.0 (amorcé depuis
+            ses sources) : lock/ocaml/sources.txt (sha256 et commits)
+            ocaml_intrinsics_kernel v0.17.3 ; domainslib 0.5.2 (saturn 1.0.0, domain-local-await 1.0.1,
+            multicore-magic 2.3.2, backoff 0.1.1, thread-table 1.0.0) ; processor 0.2.
+JavaScript (npm ; vérification sous Node 26.12.1, la chaîne classée) : lock/js/package.json,
+            package-lock.json
+            @protobufjs/pool 1.1.0 ; ndarray 1.1.1.
+PHP 8.5.12  Composer exécuté par PHP 8.3 (le PHP 8.5 classé n'a pas openssl), avec config.platform php 8.5.12 et
+            ext-ffi ; les bibliothèques s'exécutent sous PHP 8.5.12 : lock/php/composer.json, composer.lock
+            amphp/parallel-functions 2.0.0 (amphp/parallel 2.4.0) ; rindow/rindow-math-matrix 2.2.0 (pilote PHP).
+Python 3.15.2 (venv /opt/open/python) : lock/python/requirements.txt
+            numpy 2.5.5 ; dask 2026.8.0 ; atomics 1.0.3.
+Lua 5.5.1   LuaRocks n'est pas sur l'hôte : sources aux étiquettes des rockspecs, compilées par gcc -O2 contre les
+            en-têtes de Lua 5.5.1.
+            lua-llthreads2 0.1.6-1 (étiquette v0.1.6, fe07894) ; vmsl 1.1-2 (étiquette v1.1, a170620).

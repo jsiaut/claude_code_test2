@@ -1,0 +1,502 @@
+{
+ "langage": "swift",
+ "date": "2026-11-22 07:32 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": [
+    {
+     "name": "github.com/RedMadRobot/service-autograph",
+     "desc": "Service generation utility.",
+     "mots": [
+      "soa"
+     ],
+     "stat": {
+      "first": "2017-12-12",
+      "latest": "2017-12-12"
+     }
+    }
+   ]
+  },
+  "B2": {
+   "note": 0.5,
+   "mots": [
+    "arena",
+    "bump allocator",
+    "memory pool"
+   ],
+   "candidates": [
+    {
+     "name": "github.com/swift-molecules/swift-memory-allocation",
+     "desc": "Memory.Allocator — allocators that carve a memory region (heap or inline) into slots: a passthrough System allocator, a bump Arena, and an O(1) fixed-size Pool.",
+     "mots": [
+      "arena"
+     ],
+     "stat": {
+      "first": "2025-11-18",
+      "latest": "2025-12-19"
+     }
+    },
+    {
+     "name": "github.com/swift-primitives/swift-memory-allocation-primitives",
+     "desc": "Memory.Allocator — allocators that carve a memory region (heap or inline) into slots: a passthrough System allocator, a bump Arena, and an O(1) fixed-size Pool.",
+     "mots": [
+      "arena"
+     ],
+     "stat": {
+      "first": "2025-11-18",
+      "latest": "2025-12-19"
+     }
+    },
+    {
+     "name": "github.com/tkausch/AdversarialKit",
+     "desc": "Game tree search for Swift: Alpha-Beta, MCTS and an arena to compare them.",
+     "mots": [
+      "arena"
+     ],
+     "stat": {
+      "first": "",
+      "latest": "2026-11-03"
+     }
+    },
+    {
+     "name": "github.com/finestructure/Arena",
+     "desc": "A command line tool to create Swift Playground projects with SPM package dependencies",
+     "mots": [
+      "arena"
+     ],
+     "stat": {
+      "first": "2019-12-19",
+      "latest": "2023-11-14"
+     }
+    }
+   ]
+  },
+  "C2": {
+   "note": 0.5,
+   "mots": [
+    "intrinsics",
+    "avx"
+   ],
+   "candidates": [
+    {
+     "name": "github.com/recp/cglm",
+     "desc": "📽 Highly Optimized 2D / 3D Graphics Math (glm) for C",
+     "mots": [
+      "avx"
+     ],
+     "stat": {
+      "first": "2017-02-13",
+      "latest": "2025-02-13"
+     }
+    }
+   ]
+  },
+  "D3": {
+   "note": 0.5,
+   "mots": [
+    "cache line",
+    "cache padded",
+    "false sharing"
+   ],
+   "candidates": []
+  },
+  "D5": {
+   "note": 0.5,
+   "mots": [
+    "spin",
+    "spin wait",
+    "barrier"
+   ],
+   "candidates": [
+    {
+     "name": "github.com/Spinners/Spin.Swift",
+     "desc": "Spin aims to provide a versatile Feedback Loop implementation working with the three main reactive frameworks available in the Swift community (RxSwift, ReactiveSwift and Combine)",
+     "mots": [
+      "spin"
+     ],
+     "stat": {
+      "first": "2019-12-30",
+      "latest": "2020-09-27"
+     }
+    },
+    {
+     "name": "github.com/kublaios/snapshotino",
+     "desc": "A lightweight, low-barrier-to-entry snapshot testing library for iOS",
+     "mots": [
+      "barrier"
+     ],
+     "stat": {
+      "first": "2023-03-05",
+      "latest": "2023-03-26"
+     }
+    }
+   ]
+  },
+  "E4": {
+   "note": 0.5,
+   "mots": [
+    "prefetch"
+   ],
+   "candidates": [
+    {
+     "name": "github.com/async-digital-ltd/look-ahead",
+     "desc": "Swift package that prefetches resources around the current position · Pecyn Swift sy'n rhaglwytho adnoddau o gwmpas y safle presennol",
+     "mots": [
+      "prefetch"
+     ],
+     "stat": {
+      "first": "",
+      "latest": "2026-11-18"
+     }
+    },
+    {
+     "name": "github.com/malcommac/ImageSizeFetcher",
+     "desc": "Finds the type/size of an image given its URL by fetching as little data as needed",
+     "mots": [
+      "prefetch"
+     ],
+     "stat": {
+      "first": "2018-09-09",
+      "latest": "2018-09-15"
+     }
+    }
+   ]
+  },
+  "F1": {
+   "note": 0.5,
+   "mots": [
+    "ndarray",
+    "multidimensional array",
+    "matrix"
+   ],
+   "candidates": [
+    {
+     "name": "github.com/recp/cglm",
+     "desc": "📽 Highly Optimized 2D / 3D Graphics Math (glm) for C",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2017-02-13",
+      "latest": "2025-02-13"
+     }
+    },
+    {
+     "name": "github.com/capnslipp/Vuckt",
+     "desc": "A Swift Vector Library That Doesn't Suck It",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2017-02-15",
+      "latest": "2026-04-30"
+     }
+    },
+    {
+     "name": "github.com/fireblade-engine/math",
+     "desc": "A dependency free, lightweight, fast math library for 2D and 3D vectors, quaternions and matrices in Swift with (optional) SIMD support.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2018-02-10",
+      "latest": "2026-11-13"
+     }
+    },
+    {
+     "name": "github.com/jjjkkkjjj/Matft",
+     "desc": "Numpy-like library in swift. (Multi-dimensional Array, ndarray, matrix and vector library)",
+     "mots": [
+      "ndarray",
+      "matrix"
+     ],
+     "stat": {
+      "first": "2020-03-30",
+      "latest": "2026-09-27"
+     }
+    },
+    {
+     "name": "github.com/dclelland/Plinth",
+     "desc": "Hardware-accelerated matrix/numeric programming library for Swift",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2022-03-30",
+      "latest": "2025-09-02"
+     }
+    },
+    {
+     "name": "github.com/ashvardanian/NumKong",
+     "desc": "Mixed-precision math, linear-algebra & retrieval kernels, 4000+ symbols from 4-bit numbers to 128-bit complex, for x86, Arm, RISC-V, LoongArch, Power & WASM, AMX & SME included 📐",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2023-07-13",
+      "latest": "2026-10-31"
+     }
+    },
+    {
+     "name": "github.com/ihar-shalouski/swift-vector-and-matrix",
+     "desc": "Swift library for linear algebra: generic vectors and matrices with operators, norms, dot/cross (2D), projection, rotation, determinants, transpose, and handy initializers. Clean, type-safe, well-tested. More vector/matrix implementations on the way.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2025-08-29",
+      "latest": "2025-08-29"
+     }
+    },
+    {
+     "name": "github.com/William-Weng/WWTextRasterizer",
+     "desc": "A lightweight Swift tool that converts text into a bitmap (BitMatrix) on iOS, suitable for use cases such as LED displays, small screens, font rasterization, custom font rendering, and dot-matrix type layouts.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2026-04-11",
+      "latest": "2026-04-11"
+     }
+    },
+    {
+     "name": "github.com/Kingpin-Apps/swift-package-compat-check",
+     "desc": "Local SPI build matrix for Swift packages.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2026-06-07",
+      "latest": "2026-06-12"
+     }
+    },
+    {
+     "name": "github.com/gaelic-ghost/MaxVol",
+     "desc": "Swift MaxVol implementation backed by Accelerate",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2026-07-01",
+      "latest": "2026-07-01"
+     }
+    },
+    {
+     "name": "github.com/nicklockwood/VectorMath",
+     "desc": "A Swift library for Mac and iOS that implements common 2D and 3D vector and matrix functions, useful for games or vector-based graphics",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2014-11-27",
+      "latest": "2019-11-10"
+     }
+    },
+    {
+     "name": "github.com/Jounce/Surge",
+     "desc": "A Swift library that uses the Accelerate framework to provide high-performance functions for matrix math, digital signal processing, and image manipulation.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2015-01-18",
+      "latest": "2021-01-14"
+     }
+    },
+    {
+     "name": "github.com/jkolb/swiftish",
+     "desc": "A fully generic Swift vector & matrix library",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2015-05-24",
+      "latest": "2018-09-01"
+     }
+    },
+    {
+     "name": "github.com/jkolb/Swiftish",
+     "desc": "A fully generic Swift vector & matrix library",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2015-05-24",
+      "latest": "2018-09-01"
+     }
+    },
+    {
+     "name": "github.com/capnslipp/SCNMathExtensions",
+     "desc": "Math extensions for SCNVector3, SCNQuaternion, SCNMatrix4",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2017-02-17",
+      "latest": "2024-11-16"
+     }
+    },
+    {
+     "name": "github.com/t-ae/ndarray",
+     "desc": "Float NDArray library for Swift, accelerated with Accelerate Framework",
+     "mots": [
+      "ndarray"
+     ],
+     "stat": {
+      "first": "2017-04-24",
+      "latest": "2018-10-15"
+     }
+    },
+    {
+     "name": "github.com/perfectlysoft/perfect-tensorflow",
+     "desc": "TensorFlow C API Class Wrapper in Server Side Swift.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2017-06-14",
+      "latest": "2020-07-07"
+     }
+    },
+    {
+     "name": "github.com/mitsuse/la",
+     "desc": "A library for linear algebra with type-safety written in Swift.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2017-07-17",
+      "latest": "2017-08-15"
+     }
+    },
+    {
+     "name": "github.com/Datt1994/DPVideoMerger-Swift",
+     "desc": "Multiple videos merge in one video with manage scale & aspect ratio and also merge videos to grid matrix layout for Swift.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2019-05-06",
+      "latest": "2020-09-12"
+     }
+    },
+    {
+     "name": "github.com/3qax/swiftygfx",
+     "desc": "A Swift graphics library useful when working with dot matrix displays.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2019-07-06",
+      "latest": "2019-12-24"
+     }
+    },
+    {
+     "name": "github.com/cgarciae/ndarray",
+     "desc": "A Multidimensional Array library for Swift",
+     "mots": [
+      "ndarray",
+      "multidimensional array"
+     ],
+     "stat": {
+      "first": "2019-08-01",
+      "latest": "2019-08-25"
+     }
+    },
+    {
+     "name": "github.com/b3ll/Decomposed",
+     "desc": "CATransform3D manipulation made easy.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2020-05-28",
+      "latest": "2022-12-12"
+     }
+    },
+    {
+     "name": "github.com/taketo1024/swm-matrix-tools",
+     "desc": "",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2021-05-27",
+      "latest": "2021-09-30"
+     }
+    },
+    {
+     "name": "github.com/eheitfield/SimpleMatrixKit",
+     "desc": "A Swift package for working with matrices",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2021-06-29",
+      "latest": "2021-06-29"
+     }
+    },
+    {
+     "name": "github.com/kiliankoe/swift-log-matrix",
+     "desc": "Send Swift logs directly to a Matrix room",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2023-03-25",
+      "latest": "2023-03-26"
+     }
+    },
+    {
+     "name": "github.com/SolarDesignSystem/Matrix-Swift",
+     "desc": "A 100% Swift implementation of matrices.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2023-04-07",
+      "latest": "2023-04-07"
+     }
+    },
+    {
+     "name": "github.com/softsuave-tech-matrix/adaptive_card_layout",
+     "desc": "Adaptive Card Layout for Swift and Swift UI",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2024-07-08",
+      "latest": "2024-08-01"
+     }
+    },
+    {
+     "name": "github.com/softsuave-tech-matrix/custom_filter_and_search_bar",
+     "desc": "",
+     "mots": [
+      "matrix"
+     ],
+     "stat": {
+      "first": "2024-08-21",
+      "latest": "2024-08-21"
+     }
+    }
+   ]
+  },
+  "F2": {
+   "note": 0,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": []
+  }
+ },
+ "statistique": "aucune : ancienneté de la première version (versions depuis le 22 novembre 2024)",
+ "ordre": "age"
+}

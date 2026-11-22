@@ -1,0 +1,20 @@
+[package]
+name = "chk"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bumpalo = "*"
+fearless_simd = "*"
+rayon = "*"
+cordyceps = "*"
+core_affinity = "*"
+ndarray = "*"
+memmap2 = "*"
+libc = "*"
+crossbeam = "*"
+hwlocality-sys = "*"
+
+[profile.release]
+opt-level = 3
+codegen-units = 1

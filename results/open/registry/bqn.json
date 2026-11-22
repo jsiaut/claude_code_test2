@@ -1,0 +1,117 @@
+{
+ "langage": "bqn",
+ "date": "2026-11-22 07:12 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": []
+  },
+  "B2": {
+   "note": 0,
+   "mots": [
+    "arena",
+    "bump allocator",
+    "memory pool"
+   ],
+   "candidates": []
+  },
+  "B5": {
+   "note": 0.5,
+   "mots": [
+    "raw memory",
+    "pointer",
+    "unsafe memory"
+   ],
+   "candidates": []
+  },
+  "C1": {
+   "note": 0,
+   "mots": [
+    "simd",
+    "vector types"
+   ],
+   "candidates": []
+  },
+  "C2": {
+   "note": 0,
+   "mots": [
+    "intrinsics",
+    "avx"
+   ],
+   "candidates": []
+  },
+  "C5": {
+   "note": 0,
+   "mots": [
+    "parallel",
+    "parallel for",
+    "data parallel"
+   ],
+   "candidates": []
+  },
+  "D1": {
+   "note": 0,
+   "mots": [
+    "threads",
+    "multithreading"
+   ],
+   "candidates": []
+  },
+  "D2": {
+   "note": 0,
+   "mots": [
+    "atomic",
+    "atomics"
+   ],
+   "candidates": []
+  },
+  "D3": {
+   "note": 0,
+   "mots": [
+    "cache line",
+    "cache padded",
+    "false sharing"
+   ],
+   "candidates": []
+  },
+  "D4": {
+   "note": 0,
+   "mots": [
+    "affinity",
+    "cpu affinity",
+    "thread pinning"
+   ],
+   "candidates": []
+  },
+  "D5": {
+   "note": 0,
+   "mots": [
+    "spin",
+    "spin wait",
+    "barrier"
+   ],
+   "candidates": []
+  },
+  "E4": {
+   "note": 0,
+   "mots": [
+    "prefetch"
+   ],
+   "candidates": []
+  },
+  "F2": {
+   "note": 0,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": []
+  }
+ },
+ "registre": "aucun : aucun gestionnaire de paquets"
+}

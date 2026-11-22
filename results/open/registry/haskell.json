@@ -1,0 +1,1067 @@
+{
+ "langage": "haskell",
+ "date": "2026-11-22 07:31 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": [
+    {
+     "name": "moonlight-triangulation",
+     "desc": "Delaunay and constrained Delaunay triangulation as a lawful\nfinite-set algebra, together with exact rational planar\nregions, labelled common refinement, intrinsic valuations,\nand polygonal Minkowski morphology. A mesh is a value of\nits site set, so\nunion, intersection and difference return triangula",
+     "mots": [
+      "structure of arrays"
+     ],
+     "stat": 63
+    }
+   ]
+  },
+  "B2": {
+   "note": 0.5,
+   "mots": [
+    "arena",
+    "bump allocator",
+    "memory pool"
+   ],
+   "candidates": [
+    {
+     "name": "frag",
+     "desc": "A fast and basic reimplementation of the Quake III Arena engine\nin Haskell; supports many Quake III Arena maps.",
+     "mots": [
+      "arena"
+     ],
+     "stat": 29
+    },
+    {
+     "name": "memory-pool",
+     "desc": "Lock-free threadsafe pinned memory pool manager",
+     "mots": [
+      "memory pool"
+     ],
+     "stat": 12
+    },
+    {
+     "name": "arena",
+     "desc": "",
+     "mots": [
+      "arena"
+     ],
+     "stat": 10
+    },
+    {
+     "name": "memorypool",
+     "desc": "See Readme",
+     "mots": [
+      "memory pool"
+     ],
+     "stat": 6
+    },
+    {
+     "name": "cek-pykinos",
+     "desc": "High-performance unboxed continuation stack and Store arena for CEK abstract machines,\nintegrating Pykinos unboxed blocked memory substrates.",
+     "mots": [
+      "arena"
+     ],
+     "stat": 3
+    }
+   ]
+  },
+  "C1": {
+   "note": 0.5,
+   "mots": [
+    "simd",
+    "vector types"
+   ],
+   "candidates": [
+    {
+     "name": "hw-dsv",
+     "desc": "Please see the README on Github at https://github.com/haskell-works/hw-dsv#readme",
+     "mots": [
+      "simd"
+     ],
+     "stat": 91
+    },
+    {
+     "name": "hw-simd",
+     "desc": "Please see the README on Github at https://github.com/haskell-works/hw-simd#readme",
+     "mots": [
+      "simd"
+     ],
+     "stat": 88
+    },
+    {
+     "name": "sized-vector",
+     "desc": "Size-parameterized vector types and functions using a data-type promotion.",
+     "mots": [
+      "vector types"
+     ],
+     "stat": 67
+    },
+    {
+     "name": "sdr",
+     "desc": "Write software defined radio applications in Haskell.\n\nFeatures:\n\nSignal processing blocks can be chained together using the Pipes library\n\nZero copy design\n\nSignal processing functions are implemented in both Haskell and C (with SIMD acceleration)\n\nCan FIR filter, decimate and resample\n\nHelper func",
+     "mots": [
+      "simd"
+     ],
+     "stat": 62
+    },
+    {
+     "name": "hw-json-simd",
+     "desc": "Please see the README on GitHub at https://github.com/haskell-works/hw-json-simd#readme",
+     "mots": [
+      "simd"
+     ],
+     "stat": 33
+    },
+    {
+     "name": "mersenne-random",
+     "desc": "The Mersenne twister is a pseudorandom number generator developed by\nMakoto Matsumoto and Takuji Nishimura that is based on a matrix linear\nrecurrence over a finite binary field. It provides for fast generation\nof very high quality pseudorandom numbers\n\nThis library uses SFMT, the SIMD-oriented Fast",
+     "mots": [
+      "simd"
+     ],
+     "stat": 24
+    },
+    {
+     "name": "wireform-core",
+     "desc": "Cross-format SWAR / SIMD-accelerated primitives used by every\nwireform-* format package.\n.\nModules:\n.\n* Wireform.FFI -- C FFI surface: packed-varint pre-scan + decode,\n  SWAR UTF-8 validation, SIMD NUL  byte  ASCII / whitespace\n  scanners, SIMD JSON escape scanner, SIMD Iceberg bounds compare,\n  Arr",
+     "mots": [
+      "simd"
+     ],
+     "stat": 22
+    },
+    {
+     "name": "solana-haskell-sdk",
+     "desc": "This library includes features like key generation and management,\ntransaction and instruction construction, and a JSON-RPC API client.\n\nThis library is aimed at developers building Solana dApps, tools, or infrastructure in Haskell.\n\nSerialization is verified byte-for-byte by golden-vector tests: ag",
+     "mots": [
+      "simd"
+     ],
+     "stat": 12
+    },
+    {
+     "name": "wireform-columnar-core",
+     "desc": "Format-agnostic columnar primitives shared by the wireform Arrow,\nParquet, ORC, and Iceberg packages: a pull-based iterator surface\n(Columnar.Stream), a pushdown predicate vocabulary\n(Columnar.Predicate), an mmap-aware file loader (Columnar.IO),\nLZ4 and raw LZO1X codecs (Columnar.LZ4, Columnar.LZO),",
+     "mots": [
+      "simd"
+     ],
+     "stat": 7
+    },
+    {
+     "name": "simd",
+     "desc": "SIMD (Single Instruction Multiple Data) CPU instructions provide a simple\nand fast way to parallelize numeric computations.   GHC 7.8 provides primops\nthat let us access these instructions.  This package wraps thos primops in\na more user friendly form.\n\nThe github repository contains an example usag",
+     "mots": [
+      "simd"
+     ],
+     "stat": 3
+    },
+    {
+     "name": "primitive-simd",
+     "desc": "",
+     "mots": [
+      "simd"
+     ],
+     "stat": 2
+    },
+    {
+     "name": "hw-simd-cli",
+     "desc": "Please see the README on Github at https://github.com/haskell-works/hw-simd-cli#readme",
+     "mots": [
+      "simd"
+     ],
+     "stat": 2
+    }
+   ]
+  },
+  "C2": {
+   "note": 0,
+   "mots": [
+    "intrinsics",
+    "avx"
+   ],
+   "candidates": [
+    {
+     "name": "llvm",
+     "desc": "High-level bindings to the LLVM compiler toolkit.\n\nNew in 3.2.0.0: Builds against LLVM 3.2\n\nNew in 3.0.0.0: The low-level bindings have been split into the\nllvm-base package.\n\nNew in 0.9.1.1: Builds against LLVM 2.9.\n\nNew in 0.9.1.0: Util.Memory for memory related intrinsics.\n\nNew in 0.9.0.0: Adapte",
+     "mots": [
+      "intrinsics"
+     ],
+     "stat": 97
+    },
+    {
+     "name": "blake3",
+     "desc": "Bindings to the official fast BLAKE3 implementations in assembly\nand C, with support for AVX-512, AVX2, SSE 2, and SSE 4.1.",
+     "mots": [
+      "avx"
+     ],
+     "stat": 27
+    }
+   ]
+  },
+  "C5": {
+   "note": 0.5,
+   "mots": [
+    "parallel",
+    "parallel for",
+    "data parallel"
+   ],
+   "candidates": [
+    {
+     "name": "futhark",
+     "desc": "Futhark is a small programming language designed to be compiled to\nefficient parallel code. It is a statically typed, data-parallel,\nand purely functional array language in the ML family, and comes\nwith a heavily optimising ahead-of-time compiler that presently\ngenerates GPU code via CUDA and OpenCL",
+     "mots": [
+      "parallel",
+      "data parallel"
+     ],
+     "stat": 999
+    },
+    {
+     "name": "parallel",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 289
+    },
+    {
+     "name": "massiv",
+     "desc": "Multi-dimensional Arrays with fusion, stencils and parallel computation.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 232
+    },
+    {
+     "name": "fbrnch",
+     "desc": "fbrnch (fedora branch or \"f-branch\" for short) is\na convenient packaging tool for Fedora Packagers,\nwith integration for Bugzilla, Koji, and Bodhi.\n\nFeatures include:\n\nmerging and building a package across release branches\n\nautomated parallel builds of sets of packages in dependency order\n\ncreating,",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 148
+    },
+    {
+     "name": "hip",
+     "desc": "Haskell Image Processing (HIP) Library provides an easy to use interface with a whole variaty of image manipulation capabilities.\n\nProcessing can be done sequentially as well as in parallel, with an inherited fusion capabily, all through repa and vector packages. It is highly extendable, with an abi",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 144
+    },
+    {
+     "name": "concurrency",
+     "desc": "A typeclass abstraction over much of Control.Concurrent (and some\nextras!). If you're looking for a general introduction to Haskell\nconcurrency, you should check out the excellent Parallel and\nConcurrent Programming in Haskell, by Simon Marlow. If you are\nalready familiar with concurrent Haskell, ju",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 136
+    },
+    {
+     "name": "DSH",
+     "desc": "This is a Haskell library for database-supported program\nexecution. Using DSH, a relational database management\nsystem (RDBMS) can be used as a coprocessor for the Haskell\nprogramming language, especially for those program fragments that\ncarry out data-intensive and data-parallel computations.\n\nData",
+     "mots": [
+      "parallel",
+      "data parallel"
+     ],
+     "stat": 134
+    },
+    {
+     "name": "amazonka-s3-streaming",
+     "desc": "Provides a conduit based streaming interface and a concurrent interface to\nuploading data to S3 using the Multipart API. Also provides method to upload\nfiles or bytestrings of known size in parallel. Please see README.md.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 110
+    },
+    {
+     "name": "parconc-examples",
+     "desc": "Examples to accompany the book \"Parallel and Concurrent Programming in Haskell\"",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 90
+    },
+    {
+     "name": "monad-parallel",
+     "desc": "This package defines classes of monads that can perform multiple executions in parallel and combine their results. For\nany monad that's an instance of the class, the package re-implements a subset of the Control.Monad interface, but with\nparallel execution.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 86
+    },
+    {
+     "name": "doctest-parallel",
+     "desc": "The doctest program checks examples in source code comments.  It is modeled\nafter doctest for Python (https://docs.python.org/3/library/doctest.html).\n\nDocumentation is at https://github.com/martijnbastiaan/doctest-parallel#readme.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 74
+    },
+    {
+     "name": "hPDB",
+     "desc": "Protein Data Bank file format is a most popular format for holding biological macromolecular data.\n\nThis is a very fast sequential parser:\n\nbelow 7s for the largest entry in PDB - 1HTQ which is over 70MB - as compared with\n\n11s of RASMOL 2.7.5,\n\nor 2m15s of BioPython with Python 2.6 interpreter.\n\nIn",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 67
+    },
+    {
+     "name": "threadscope",
+     "desc": "ThreadScope is a graphical viewer for thread profile\ninformation generated by the Glasgow Haskell compiler\n(GHC).\n\nThe Threadscope program allows us to debug the parallel\nperformance of Haskell programs. Using Threadscope we can\ncheck to see that work is well balanced across the\navailable processors",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 60
+    },
+    {
+     "name": "mpi-hs",
+     "desc": "MPI (the Message Passinag Interface) is\na widely used standard for distributed-memory programming on HPC\n(High Performance Computing) systems. MPI allows exchanging data\n(_messages_) between programs running in parallel. There are several\nhigh-quality open source MPI implementations (e.g. MPICH, MVA",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 60
+    },
+    {
+     "name": "dynamic-pipeline",
+     "desc": "dynamic-pipeline is a Type Safe Dynamic and Parallel Streaming Library, which is an implementation of Dynamic Pipeline Paradigm (DPP)\nproposed in this paper DPP.\n\nThe aim of this tool is to provide all the Type level constructs to guide the user in building a DPP flow to solve any algorithm that fit",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 55
+    },
+    {
+     "name": "shelltestrunner",
+     "desc": "shelltestrunner (executable: shelltest) is a portable\ncommand-line tool for testing command-line programs, or general shell\ncommands, released under GPLv3+.  It reads simple test specifications\ndefining a command to run, some input, and the expected output,\nstderr, and exit status.  It can run tests",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 53
+    },
+    {
+     "name": "parallel-io",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 43
+    },
+    {
+     "name": "parallel-tree-search",
+     "desc": "This Haskell library provides an implementation of parallel\nsearch based on the search tree provided by the package\ntree-monad.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 39
+    },
+    {
+     "name": "edenskel",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 39
+    },
+    {
+     "name": "CSPM-CoreLanguage",
+     "desc": "This package contains an interface for the CSP core-language.\nIt defines processes, events, event sets, and a domain specific language\nfor process operations like parallel or interleaving processes.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 38
+    },
+    {
+     "name": "ghc-parmake",
+     "desc": "'ghc-parmake' is a parallel wrapper for 'ghc --make'\nintended to work as its drop-in replacement. It can\nbuild your Haskell program in parallel using multiple\ncores.\n'ghc-parmake' works by extracting a module dependency\ngraph with 'ghc -M' and then running multiple 'ghc -c'\nprocesses in parallel.\nTo",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 36
+    },
+    {
+     "name": "ghc-make",
+     "desc": "The ghc-make program can be used as a drop-in replacement for ghc. This program\ntargets two use cases:\n\nIf a flag such as -j4 is passed, the modules will be compiled in parallel.\nIf the available parallelism is greater than a factor of 3, the build will probably run faster.\n\nIf there is no work to d",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 29
+    },
+    {
+     "name": "liquid-parallel",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 26
+    },
+    {
+     "name": "ghc-events-parallel",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 23
+    },
+    {
+     "name": "hs-speedscope",
+     "desc": "Convert an eventlog into the speedscope json format. The interactive visualisation\ndisplays an approximate trace of the program and summary views akin to .prof files.\nThere is also support for parallel programs, each capability is rendered in its own\nprofile.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 22
+    },
+    {
+     "name": "lambdasound",
+     "desc": "lambdasound can generate all kinds of sounds, play them and save them as wav or pcm data.\nSound can be manipulated in both a low and high-level way. It is possible to \noperate on the samples of a sound. However, there are also higher-level combinators \nfor various tasks, e.g. to facilitate sequentia",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 22
+    },
+    {
+     "name": "multisetrewrite",
+     "desc": "Multi-set rewrite rules with guards and a parallel execution scheme",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 20
+    },
+    {
+     "name": "dense",
+     "desc": "Multidimentional array library build on top of the vector package,\nusing indices from the linear package. Native support for mutable\narrays, stencils and parallel computation.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 20
+    },
+    {
+     "name": "join",
+     "desc": "Parallel Join Patterns with Guards and Propagation",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 19
+    },
+    {
+     "name": "cabal-matrix",
+     "desc": "cabal-matrix is a matrix builder for cabal. It lets you specify in a\nflexible way a list of configurations in which something can be built, such as\ncompiler versions, or dependency version restrictions. It will then run the\nbuilds in parallel (locally), and present the results in a TUI table where t",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 17
+    },
+    {
+     "name": "cabal-mon",
+     "desc": "A vty-based wrapper around the fswatch utility,\nwhich makes it easy to monitor parallel Cabal builds.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 16
+    },
+    {
+     "name": "Parallel-Arrows-Definition",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 16
+    },
+    {
+     "name": "hdph",
+     "desc": "Haskell distributed parallel Haskell (HdpH) is a Haskell DSL\nfor distributed-memory parallelism, implemented entirely in\nHaskell (as supported by GHC).",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 15
+    },
+    {
+     "name": "scxml-statecharts",
+     "desc": "Define a statechart (https://statecharts.dev/) in SCXML inside a Haskell\nmodule and get typed states, events and a step function out of it.\n\ngenerates FsmState, FsmEvent and the functions\ninitiateStateMachine :: m FsmState and\nnotifyStateMachine :: FsmState -> FsmEvent -> m FsmState, which call the\n",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 15
+    },
+    {
+     "name": "testrunner",
+     "desc": "testrunner is a framework to run unit tests. It has the\nfollowing distinguishing features:\n* It can run unit tests in parallel.\n* It can run QuickCheck and HUnit tests as well as simple\nboolean expressions.\n* It comes with a ready-made main function for your unit test\nexecutable.\n* This main functio",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 14
+    },
+    {
+     "name": "par-dual",
+     "desc": "Defines a ParDual class for a Parallel - Sequential relationship",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 14
+    },
+    {
+     "name": "mpi-hs-binary",
+     "desc": "MPI (the Message Passinag Interface) is\na widely used standard for distributed-memory programming on HPC\n(High Performance Computing) systems. MPI allows exchanging data\n(_messages_) between programs running in parallel. There are several\nhigh-quality open source MPI implementations (e.g. MPICH, MVA",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 13
+    },
+    {
+     "name": "haskell-cnc",
+     "desc": "Intel (Concurrent Collections) CnC is a data-flow like\ndeterministic parallel programming model, similar to\nstream-processing but in which nodes in the computation graph share data in tables.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 12
+    },
+    {
+     "name": "monad-parallel-progressbar",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 12
+    },
+    {
+     "name": "cached",
+     "desc": "The module Data.Cached lets you cache values to disk to avoid re-running\n(potentially long) computations between consecutive executions of your\nprogram. Cached values are recomputed only when needed, i.e. when other\ncached values on which they depend change. Independent computations are\nrun in paral",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 11
+    },
+    {
+     "name": "Parallel-Arrows-BaseSpec",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 10
+    },
+    {
+     "name": "Parallel-Arrows-Multicore",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 10
+    },
+    {
+     "name": "ghostscript-parallel",
+     "desc": "This is intended for rendering PostScript or PDF documents using Ghostscript.\nGhostscript has the option -dNumRenderingThreads\nbut it does not speedup pretty much,\nbecause it renders each page using multiple threads.\n\nThis program runs Ghostscript multiple times on distinct page subsets,\nsuch that G",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 10
+    },
+    {
+     "name": "hdph-closure",
+     "desc": "Explicit closures are serialisable representations of thunks.\nThis package exports the fully polymorphic explicit closures\nof HdpH (Haskell distributed parallel Haskell), for use\nby HdpH or other packages.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 9
+    },
+    {
+     "name": "urlcheck",
+     "desc": "A (SMP) parallel link checker.\nChecks the validity of embedded urls in the input files.\nUsage: urlcheck foo.html",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 8
+    },
+    {
+     "name": "par-traverse",
+     "desc": "Concurrent directory traversals in Haskell using parallel-io",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 8
+    },
+    {
+     "name": "passage",
+     "desc": "Passage is a PArallel SAmpler GEnerator. The user specifies a hierarchical\nBayesian model and data using the Passage EDSL, and Passage generates code\nto sample the posterior distribution in parallel.\n\nCurrently Passage targets C with OpenMP threads.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 8
+    },
+    {
+     "name": "Parallel-Arrows-ParMonad",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 8
+    },
+    {
+     "name": "mpi-hs-cereal",
+     "desc": "MPI (the Message Passinag Interface) is\na widely used standard for distributed-memory programming on HPC\n(High Performance Computing) systems. MPI allows exchanging data\n(_messages_) between programs running in parallel. There are several\nhigh-quality open source MPI implementations (e.g. MPICH, MVA",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 8
+    },
+    {
+     "name": "duoids",
+     "desc": "Duoids relate a pair of monoids, where one can be seen as\n“parallel” and the other “sequential”.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 8
+    },
+    {
+     "name": "parallel-tasks",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 7
+    },
+    {
+     "name": "lol-repa",
+     "desc": "Λ ∘ λ (Lol) is a general-purpose library for ring-based lattice cryptography.\nThis package provides a pure Haskell implementation of Lol's Tensor interface\nusing the repa library for parallel arrays.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 6
+    },
+    {
+     "name": "hedgehog-lockstep",
+     "desc": "Lockstep-style testing of stateful APIs built on Hedgehog's\nstate machine framework. Ports the ideas of quickcheck-lockstep onto\nHedgehog, giving integrated shrinking, parallel testing, and less\nboilerplate than the QuickCheck  quickcheck-dynamic  quickcheck-lockstep\nstack.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 6
+    },
+    {
+     "name": "classy-parallel",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 5
+    },
+    {
+     "name": "grenade",
+     "desc": "Grenade is a composable, dependently typed, practical, and fast\nrecurrent neural network library for precise specifications and\ncomplex deep neural networks in Haskell.\n\nGrenade provides an API for composing layers of a neural network\ninto a sequence parallel graph in a type safe manner; running\nnet",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 5
+    },
+    {
+     "name": "Parallel-Arrows-Eden",
+     "desc": "",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 5
+    },
+    {
+     "name": "mpi-hs-store",
+     "desc": "MPI (the Message Passinag Interface) is\na widely used standard for distributed-memory programming on HPC\n(High Performance Computing) systems. MPI allows exchanging data\n(_messages_) between programs running in parallel. There are several\nhigh-quality open source MPI implementations (e.g. MPICH, MVA",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 5
+    },
+    {
+     "name": "duoids-hedgehog",
+     "desc": "Duoids relate a pair of monoids, where one can be seen as\n“parallel” and the other “sequential”.",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 4
+    },
+    {
+     "name": "hbayesian",
+     "desc": "HBayesian is a library of MCMC samplers that compiles inference kernels to\nStableHLO and executes them via PJRT (CPU, GPU, or TPU). It provides\nstateless, composable transition kernels for MCMC, built on top of the HHLO\nHaskell frontend. Features include RandomWalk MH, Elliptical Slice, HMC,\nMALA, c",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 4
+    },
+    {
+     "name": "Dflow",
+     "desc": "This library provides Real Time Stream Processors (RTSPs). An RTSP\ntransforms an input event stream into an output event stream. The output\nevents occur asynchronously with input events. RTSPs can be composed into\npipelines or executed in parallel and their outputs merged. A Real Time\nAction (RTA) m",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 3
+    },
+    {
+     "name": "pure-cdt",
+     "desc": "Delaunay triangulation of a set of points in the plane, computed by divide\nand conquer and parallelised with Control.Parallel.Strategies; constrained\ntriangulation of a polygon with holes, where the boundary edges are forced\ninto the triangulation and the triangles outside the region are dropped;\nDe",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 3
+    },
+    {
+     "name": "hasktorch-CudaHashMap",
+     "desc": "Package maintainers\n\nFor package maintainers and hackage trustees\n\nCandidates\n\n\n\nhasktorch-CudaHashMap provides a HaskTorch interface to the GPU-parallel hash map implementations (cuco::dynamic_map and cuco::static_map) in NVIDIA cuCollections (cuco).\n\nIt supports high-throughput batch insertions an",
+     "mots": [
+      "parallel"
+     ],
+     "stat": 3
+    }
+   ]
+  },
+  "D2": {
+   "note": 0.5,
+   "mots": [
+    "atomic",
+    "atomics"
+   ],
+   "candidates": [
+    {
+     "name": "hapistrano",
+     "desc": "Hapistrano makes it easy to reliably deploy Haskell applications\nto a server.\n\nFollowing popular libraries like Ruby's Capistrano,\nHapistrano does the work of building the application\nwith dependencies into a distinct folder, and then atomically moves\na symlink to the latest complete build.\n\nThis al",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 412
+    },
+    {
+     "name": "atomic-primops",
+     "desc": "",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 192
+    },
+    {
+     "name": "atomic-write",
+     "desc": "",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 87
+    },
+    {
+     "name": "lockfree-queue",
+     "desc": "Michael and Scott queues are described in their PODC 1996 paper:\n\nhttp://dl.acm.org/citation.cfm?id=248052.248106\n\nThese are single-ended concurrent queues based on a singlly linked\nlist and using atomic CAS instructions to swap the tail pointers.\nAs a well-known efficient algorithm they became the ",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 68
+    },
+    {
+     "name": "atomic-counter",
+     "desc": "This package defines Counter type that can be safely modified\nconcurrently from multiple threads. The type supports only few\noperations, namely read, write, cas (compare and swap), add,\nsubtract and a few bitwise ones like or, and xor.\n\nMost common use case is having a shared counter that multiple\nt",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 68
+    },
+    {
+     "name": "lrucache",
+     "desc": "This package contains a simple, pure LRU cache, implemented in\nterms of Data.Map.\n\nIt also contains a mutable IO wrapper providing atomic updates to\nan LRU cache.",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 67
+    },
+    {
+     "name": "safeio",
+     "desc": "This package implements utilities to perform atomic output so as to avoid the problem of partial intermediate files.",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 50
+    },
+    {
+     "name": "GrammarProducts",
+     "desc": "generalized Algebraic Dynamic Programming\n\nAn algebra of linear and context-free grammars.\n\nThis library provides the implementation of our theory of algebraic operations over\nlinear and context-free grammars. Using algebraic operations, it is possible to\nconstruct complex dynamic programming algori",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 30
+    },
+    {
+     "name": "bits-atomic",
+     "desc": "",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 20
+    },
+    {
+     "name": "atomic-file-ops",
+     "desc": "",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 20
+    },
+    {
+     "name": "ring-buffers",
+     "desc": "mutable ring buffers with atomic updates in GHC Haskell, using the contiguous api internally to provide multiple array backends",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 16
+    },
+    {
+     "name": "atomic-primops-foreign",
+     "desc": "",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 14
+    },
+    {
+     "name": "dura",
+     "desc": "durable/atomic file system writes (from rio package).",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 13
+    },
+    {
+     "name": "atomic-modify",
+     "desc": "",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 10
+    },
+    {
+     "name": "int-supply",
+     "desc": "This package provides a simple, efficient supply of integers using atomic fetch-and-add.",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 10
+    },
+    {
+     "name": "primitive-atomic",
+     "desc": "",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 9
+    },
+    {
+     "name": "miso-css",
+     "desc": "miso-css is an evolutionary step ahead from\ncss-class-bindings.\n\nCSS class of an atomic selector can be applied to any DOM element, but\nthat is not true for classes used in composite selectors. Rules with\npartially matched selectors are silently ignored by browser and this\nopen a door for introducin",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 9
+    },
+    {
+     "name": "gachi-core",
+     "desc": "Foundational osteological memory representations and lock-free synchronization\nfor the Gachi ecosystem engine. Provides Polytropos-backed osteological data\nstructures, atomic rewriting primitives, and concurrent graph traversals.",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 7
+    },
+    {
+     "name": "atomic-css",
+     "desc": "Type-safe, composable CSS utility functions. Inspired by Tailwindcss and Elm-UI . See documentation for the Web.Atomic module below",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 6
+    },
+    {
+     "name": "atomic-primops-vector",
+     "desc": "",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 5
+    },
+    {
+     "name": "atomic-modify-general",
+     "desc": "",
+     "mots": [
+      "atomic"
+     ],
+     "stat": 4
+    }
+   ]
+  },
+  "D3": {
+   "note": 0,
+   "mots": [
+    "cache line",
+    "cache padded",
+    "false sharing"
+   ],
+   "candidates": [
+    {
+     "name": "pykinos-core",
+     "desc": "Cache-conscious, unboxed, blocked data structures for high-performance\nalgebraic evaluation, AST indexing, and transactional memory in Haskell.\n\nNamed from Greek πυκινός / πυκνός (close, compact, solid; cf. Homer, Iliad\n15.529 'πυκινὸς θώρηξ' and Dionysius of Halicarnassus 'τὸ πυκνόν'), pykinos\nelim",
+     "mots": [
+      "cache line"
+     ],
+     "stat": 3
+    }
+   ]
+  },
+  "D4": {
+   "note": 0.5,
+   "mots": [
+    "affinity",
+    "cpu affinity",
+    "thread pinning"
+   ],
+   "candidates": []
+  },
+  "D5": {
+   "note": 0,
+   "mots": [
+    "spin",
+    "spin wait",
+    "barrier"
+   ],
+   "candidates": [
+    {
+     "name": "doctest-extract",
+     "desc": "doctest-extract lets you write test examples and QuickCheck properties\nin Haddock comments and extracts them to test modules.\nIt means that the user sees your tests in the documentation\nand knows that the examples and properties are machine-tested,\nor at least, she can run the tests herself.\n\nI foun",
+     "mots": [
+      "barrier"
+     ],
+     "stat": 20
+    },
+    {
+     "name": "barrier",
+     "desc": "",
+     "mots": [
+      "barrier"
+     ],
+     "stat": 14
+    },
+    {
+     "name": "concurrent-barrier",
+     "desc": "",
+     "mots": [
+      "barrier"
+     ],
+     "stat": 12
+    },
+    {
+     "name": "cloudy",
+     "desc": "[Index] [Quick Jump]\n\nPackage maintainers\n\nFor package maintainers and hackage trustees\n\nCandidates\n\n\n\nCloudy is a CLI tool to easily spin up and control compute instances in\nvarious cloud environments.  You can think of it as an alternative to\ncloud-specific CLI tools, like aws for AWS, or scw for ",
+     "mots": [
+      "spin"
+     ],
+     "stat": 9
+    },
+    {
+     "name": "barrier-monad",
+     "desc": "",
+     "mots": [
+      "barrier"
+     ],
+     "stat": 4
+    }
+   ]
+  },
+  "F2": {
+   "note": 0,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": []
+  },
+  "F4": {
+   "note": 0,
+   "mots": [
+    "mmap",
+    "memory map"
+   ],
+   "candidates": [
+    {
+     "name": "JuicyPixels",
+     "desc": "This library can load and store images in PNG,Bitmap, Jpeg, Radiance, Tiff and Gif images.\n\n\n\n[Index] [Quick Jump]\n\nEnable the file loading via mmap (memory map)\n\nUse -f <flag> to enable a flag, or -f -<flag> to disable that flag. More info\n\nPackage maintainers\n\nFor package maintainers and hackage t",
+     "mots": [
+      "mmap",
+      "memory map"
+     ],
+     "stat": 313
+    },
+    {
+     "name": "mmap",
+     "desc": "",
+     "mots": [
+      "mmap"
+     ],
+     "stat": 72
+    },
+    {
+     "name": "bytestring-mmap",
+     "desc": "",
+     "mots": [
+      "mmap"
+     ],
+     "stat": 24
+    },
+    {
+     "name": "vector-mmap",
+     "desc": "",
+     "mots": [
+      "mmap"
+     ],
+     "stat": 23
+    },
+    {
+     "name": "unix-memory",
+     "desc": "unix memory syscalls (mmap, munmap, madvise, msync, mlock)",
+     "mots": [
+      "mmap"
+     ],
+     "stat": 13
+    },
+    {
+     "name": "hmatrix-mmap",
+     "desc": "Memory map Data.Packed.Vector.Vector from disk into memory efficiently.",
+     "mots": [
+      "mmap",
+      "memory map"
+     ],
+     "stat": 13
+    },
+    {
+     "name": "bindings-mmap",
+     "desc": "",
+     "mots": [
+      "mmap"
+     ],
+     "stat": 13
+    },
+    {
+     "name": "highWaterMark",
+     "desc": "A library for determining the amount of memory allocated a\nt any point by a GHC program. Note - it only counts memory\nunder the GHC storage manager, it does not count malloc, mmap'd stuff etc.\n\nObsolete.",
+     "mots": [
+      "mmap"
+     ],
+     "stat": 7
+    },
+    {
+     "name": "bytestring-mmap-compat",
+     "desc": "A fork of bytestring-mmap that compiles against unix >= 2.8.\n\nThe original package (Don Stewart, last uploaded 2011) calls\nSystem.Posix.openFd with the pre-2.8 four-argument signature.\nUpstream is unmaintained and the latest Hackage revision restricts\nthe unix bound to < 2.8, which makes the package",
+     "mots": [
+      "mmap"
+     ],
+     "stat": 7
+    },
+    {
+     "name": "wireform-columnar-core",
+     "desc": "Format-agnostic columnar primitives shared by the wireform Arrow,\nParquet, ORC, and Iceberg packages: a pull-based iterator surface\n(Columnar.Stream), a pushdown predicate vocabulary\n(Columnar.Predicate), an mmap-aware file loader (Columnar.IO),\nLZ4 and raw LZO1X codecs (Columnar.LZ4, Columnar.LZO),",
+     "mots": [
+      "mmap"
+     ],
+     "stat": 7
+    }
+   ]
+  }
+ },
+ "statistique": "téléchargements (page « top » de Hackage)",
+ "ordre": "stat"
+}

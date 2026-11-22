@@ -109,7 +109,9 @@ installation, tout code et toute mesure) : une liste de bibliothèques tierces f
 chaque langage, mots de recherche par case de la grille, la première bibliothèque admise par ordre d'usage, plus les
 bibliothèques nommées par le dossier) ; une grille ouverte (sondes des cases comblées) et un plafond ouvert (formes
 écrites avec ces bibliothèques, mesurées sur un même hôte et reportées sur la campagne du point 4), à côté du
-classement ; le code par défaut ne change pas.
+classement ; le code par défaut ne change pas. Liste relevée le 22 novembre (`results/open/list.md`, poussée avant
+toute sonde et toute forme) : 49 bibliothèques dans 17 langages comblent 49 des 217 cases ; 40 couples (bibliothèque,
+cellule du plafond) dans 12 langages.
 
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,

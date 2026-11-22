@@ -245,3 +245,26 @@ décision de l'auteur de l'étude, qui lui sera soumise avec les résultats.
    Une bibliothèque qui comble une case n'est attribuée à une cellule de la table que si son API fait le calcul de
    cette cellule (une bibliothèque de tableaux sans opérations de calcul n'est attribuée à aucune). La grille ouverte
    (section 4) n'est pas touchée : toutes les cases comblées y comptent.
+4. **Statistiques, installations et lecture de 3.3 d (3.1, 3.3), 22 novembre, 8 h 23, avant toute sonde et toute
+   forme.** Constatés pendant l'examen des candidates ; aucun ne change une bibliothèque retenue.
+   * Statistiques. La page « top » de Hackage, titrée « Total downloads », donne en fait les téléchargements des 30
+     derniers jours, la statistique du plan : contrôlé sur la page de chaque candidate (`tools/open/hackage30.py`,
+     mêmes nombres, mêmes rangs). Pour Julia, le relevé a classé par les téléchargements du dernier mois que publie
+     ecosyste.ms ; avec les requêtes du dernier mois de julialang-logs, la statistique du plan
+     (`tools/open/julia_requests.py`), les dix premières de chaque case sont les mêmes, dans le même ordre. NuGet ne
+     publie que des téléchargements totaux ; deps.dev compte les dépendants de la version par défaut. Pour 3.3 b, là
+     où le registre ne publie pas de versions (nimble, index de fortran-lang.org), la première version est le premier
+     commit et la condition « une version depuis le 22 novembre 2024 » devient « un commit depuis cette date » ; pour le
+     dépôt `vendor` de C3, la date d'entrée dans le dépôt ; fppkg ne publie aucune date (six paquets, aucun admis).
+   * Installations (3.3 a, 2 et 3.3 e). opam, Alire, dub et LuaRocks ne sont pas sur l'hôte : la version publiée dans
+     le registre est prise à ses sources (archive de version, ou étiquette Git, ou commit de l'index d'Alire) et
+     construite par l'outil du langage (dune 3.25.0 amorcé depuis ses sources, gnatmake-16, ldc2, gcc contre les
+     en-têtes de Lua 5.5.1). Les archives de GitHub ne sont pas joignables, les clones le sont. Composer s'exécute sous
+     PHP 8.3 (le PHP 8.5.12 classé n'a pas openssl) en visant la plateforme 8.5.12, où les bibliothèques s'exécutent ;
+     MAX vient de l'archive conda de `max-core` 26.7.0 (la roue de PyPI n'a pas les paquets Mojo) ; la liste de nimble
+     est recopiée localement (rafraîchissement refusé, 405). Un paquet sans version publiée est pris à la révision de
+     sa branche principale au 22 novembre (`swift-memory-allocation`, `benjojo/numa`). Versions et fichiers de
+     verrouillage : `results/open/versions.txt`, `results/open/lock/`.
+   * Lecture de 3.3 d. La règle choisit case par case : une bibliothèque comble les cases dont la recherche la retient,
+     et pas, en plus, une case où la recherche ne l'a pas trouvée ; une bibliothèque nommée par le dossier (3.3 c)
+     comble les cases que son API comble.

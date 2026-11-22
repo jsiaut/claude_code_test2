@@ -1,0 +1,101 @@
+{
+ "langage": "fpc",
+ "date": "2026-11-22 07:12 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": []
+  },
+  "B2": {
+   "note": 0.5,
+   "mots": [
+    "arena",
+    "bump allocator",
+    "memory pool"
+   ],
+   "candidates": []
+  },
+  "C1": {
+   "note": 0.5,
+   "mots": [
+    "simd",
+    "vector types"
+   ],
+   "candidates": []
+  },
+  "C2": {
+   "note": 0.5,
+   "mots": [
+    "intrinsics",
+    "avx"
+   ],
+   "candidates": []
+  },
+  "C5": {
+   "note": 0,
+   "mots": [
+    "parallel",
+    "parallel for",
+    "data parallel"
+   ],
+   "candidates": []
+  },
+  "D2": {
+   "note": 0.5,
+   "mots": [
+    "atomic",
+    "atomics"
+   ],
+   "candidates": []
+  },
+  "D3": {
+   "note": 0,
+   "mots": [
+    "cache line",
+    "cache padded",
+    "false sharing"
+   ],
+   "candidates": []
+  },
+  "D5": {
+   "note": 0.5,
+   "mots": [
+    "spin",
+    "spin wait",
+    "barrier"
+   ],
+   "candidates": []
+  },
+  "E4": {
+   "note": 0.5,
+   "mots": [
+    "prefetch"
+   ],
+   "candidates": []
+  },
+  "F1": {
+   "note": 0.5,
+   "mots": [
+    "ndarray",
+    "multidimensional array",
+    "matrix"
+   ],
+   "candidates": []
+  },
+  "F2": {
+   "note": 0,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": []
+  }
+ },
+ "statistique": "aucune (fppkg ne publie ni téléchargements ni dates)",
+ "ordre": "age"
+}

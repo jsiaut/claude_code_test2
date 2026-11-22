@@ -1,0 +1,86 @@
+{
+ "langage": "mojo",
+ "date": "2026-11-22 07:35 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": []
+  },
+  "B2": {
+   "note": 0.5,
+   "mots": [
+    "arena",
+    "bump allocator",
+    "memory pool"
+   ],
+   "candidates": []
+  },
+  "C5": {
+   "note": 0,
+   "mots": [
+    "parallel",
+    "parallel for",
+    "data parallel"
+   ],
+   "candidates": []
+  },
+  "D1": {
+   "note": 0.5,
+   "mots": [
+    "threads",
+    "multithreading"
+   ],
+   "candidates": []
+  },
+  "D3": {
+   "note": 0,
+   "mots": [
+    "cache line",
+    "cache padded",
+    "false sharing"
+   ],
+   "candidates": []
+  },
+  "D4": {
+   "note": 0,
+   "mots": [
+    "affinity",
+    "cpu affinity",
+    "thread pinning"
+   ],
+   "candidates": []
+  },
+  "F1": {
+   "note": 0.5,
+   "mots": [
+    "ndarray",
+    "multidimensional array",
+    "matrix"
+   ],
+   "candidates": []
+  },
+  "F2": {
+   "note": 0,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": []
+  },
+  "F4": {
+   "note": 0,
+   "mots": [
+    "mmap",
+    "memory map"
+   ],
+   "candidates": []
+  }
+ },
+ "statistique": "aucune : ancienneté de la première version (canal modular-community ; MAX : paquet de Modular)",
+ "ordre": "age"
+}

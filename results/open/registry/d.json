@@ -1,0 +1,151 @@
+{
+ "langage": "d",
+ "date": "2026-11-22 07:16 UTC",
+ "cases": {
+  "A6": {
+   "note": 0,
+   "mots": [
+    "soa",
+    "struct of arrays",
+    "structure of arrays"
+   ],
+   "candidates": [
+    {
+     "name": "soapclient",
+     "desc": "A simple client to connect to and interact with SOAP services.",
+     "mots": [
+      "soa"
+     ],
+     "stat": 7
+    },
+    {
+     "name": "soa",
+     "desc": "Struct Of Arrays template compatible with betterC",
+     "mots": [
+      "soa",
+      "struct of arrays"
+     ],
+     "stat": 2
+    }
+   ]
+  },
+  "B2": {
+   "note": 0.5,
+   "mots": [
+    "arena",
+    "bump allocator",
+    "memory pool"
+   ],
+   "candidates": []
+  },
+  "F1": {
+   "note": 0.5,
+   "mots": [
+    "ndarray",
+    "multidimensional array",
+    "matrix"
+   ],
+   "candidates": [
+    {
+     "name": "mir-algorithm",
+     "desc": "Dlang Core Library",
+     "mots": [
+      "multidimensional array"
+     ],
+     "stat": 21245
+    },
+    {
+     "name": "openmethods",
+     "desc": "fast, open multi-methods for D",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 9
+    },
+    {
+     "name": "openmethods:matrix",
+     "desc": "fast, open multi-methods for D",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 9
+    },
+    {
+     "name": "matrix-client",
+     "desc": "Library for Matrix.org clients",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 4
+    },
+    {
+     "name": "cushion",
+     "desc": "A library to help state transition matrix disign",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 4
+    },
+    {
+     "name": "graphite",
+     "desc": "Matrix, Graphic, Twitter Library for D.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 3
+    },
+    {
+     "name": "property-unit-matrix",
+     "desc": "Audit an explicitly declared building unit matrix: missing cells, conflicting placements, duplicate identifiers and floor-scoped labels. By NovAsia Estate.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 3
+    },
+    {
+     "name": "dvec",
+     "desc": "Library for extremely lightweight vector and matrix operations.",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 2
+    },
+    {
+     "name": "4x4d",
+     "desc": "Matrix (the chat protocol) Client-Server bot library",
+     "mots": [
+      "matrix"
+     ],
+     "stat": 2
+    }
+   ]
+  },
+  "F2": {
+   "note": 0,
+   "mots": [
+    "numa",
+    "hwloc"
+   ],
+   "candidates": [
+    {
+     "name": "numath",
+     "desc": "A new math library for D.",
+     "mots": [
+      "numa"
+     ],
+     "stat": 369
+    },
+    {
+     "name": "enumap",
+     "desc": "A lightweight structure that maps enum members to values",
+     "mots": [
+      "numa"
+     ],
+     "stat": 285
+    }
+   ]
+  }
+ },
+ "statistique": "téléchargements du dernier mois (dub)",
+ "ordre": "stat"
+}

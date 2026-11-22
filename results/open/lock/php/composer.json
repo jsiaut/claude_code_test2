@@ -1,0 +1,6 @@
+{
+    "require": {
+        "rindow/rindow-math-matrix": "^2.2",
+        "amphp/parallel-functions": "^2.0"
+    }
+}

@@ -1,0 +1,1347 @@
+{
+ "zig": {
+  "note": "Zig n'a pas de registre : les paquets se déclarent par URL (build.zig.zon).",
+  "cases": {}
+ },
+ "odin": {
+  "note": "Odin n'a pas de gestionnaire de paquets : la collection vendor est livrée avec le compilateur (déjà comptée).",
+  "cases": {}
+ },
+ "bqn": {
+  "note": "BQN n'a pas de gestionnaire de paquets.",
+  "cases": {}
+ },
+ "c3": {
+  "note": "Le dépôt vendor de C3 (27 bibliothèques, liaisons de bibliothèques C : box2d, curl, glfw, opengl…) ne contient aucune bibliothèque dont le nom ou la description porte un mot d'une case.",
+  "cases": {}
+ },
+ "fpc": {
+  "note": "Le dépôt fppkg de FreePascal 3.2.2 compte 6 paquets (cnocThreadingTools, dcserver, cerialization, cnocExpressionEvaluator, fpcdab, log4fpc) ; aucun ne porte un mot d'une case.",
+  "cases": {}
+ },
+ "csharp": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "*": "SOAP ou services, pas de SoA"
+    }
+   },
+   "B2": {
+    "refus": {
+     "Microsoft.IO.RecyclableMemoryStream": "réserve de tampons de flux, pas d'allocateur d'objets",
+     "CommunityToolkit.HighPerformance": "tampons loués à ArrayPool, pas d'allocateur d'objets",
+     "StackExchange.Redis.Extensions.Core": "client Redis",
+     "AsyncKeyedLock": "verrous",
+     "BetterBuffers": "réserve de tampons",
+     "FAkka.Microsoft.IO.RecyclableMemoryStream": "réserve de tampons de flux",
+     "Stratis.Features.MemoryPool": "réserve de transactions (chaîne de blocs)",
+     "Blockcore.Features.MemoryPool": "réserve de transactions (chaîne de blocs)",
+     "Microsoft.IO.RecyclableMemoryStream.Net35": "réserve de tampons de flux",
+     "MemoryPools": "réutilisation d'objets et de tampons, pas un allocateur ni une arène"
+    }
+   },
+   "D3": {
+    "refus": {
+     "*": "caches de données, pas d'aide ligne de cache"
+    }
+   },
+   "D4": {
+    "refus": {
+     "*": "sans rapport avec l'affinité processeur"
+    }
+   },
+   "F2": {
+    "refus": {
+     "*": "sans rapport avec NUMA"
+    }
+   }
+  }
+ },
+ "rust": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "arrayvec": "vecteur de capacité fixe, pas de SoA",
+     "ndarray": "tableaux à n dimensions, pas de SoA",
+     "daachorse": "recherche de motifs",
+     "grid": "grille 2D",
+     "array-macro": "macro de construction",
+     "npyz": "format de fichier NumPy",
+     "aneubeck-daachorse": "recherche de motifs",
+     "cargo-make": "outil de construction",
+     "clx": "interface en ligne de commande",
+     "hdf5-pure": "format HDF5"
+    }
+   },
+   "B2": {
+    "choix": "bumpalo"
+   },
+   "C1": {
+    "choix": "fearless_simd",
+    "refus": {
+     "encoding_rs": "encodages de texte",
+     "glam": "géométrie 3D (2 à 4 composantes), pas de vecteurs SIMD de largeur et de type quelconques",
+     "simd_cesu8": "encodage CESU-8",
+     "pulp-wasm-simd-flag": "drapeau de compilation de pulp"
+    }
+   },
+   "C5": {
+    "choix": "rayon"
+   },
+   "D3": {
+    "choix": "cordyceps",
+    "refus": {
+     "unicode-ident": "propriétés Unicode",
+     "unicode-id-start": "propriétés Unicode"
+    }
+   },
+   "D4": {
+    "choix": "core_affinity"
+   },
+   "F1": {
+    "choix": "ndarray"
+   },
+   "F2": {
+    "choix": "hwlocality-sys"
+   },
+   "F4": {
+    "choix": "memmap2"
+   }
+  },
+  "nommees": [
+   {
+    "nom": "libc",
+    "cases": [
+     "D3",
+     "D4",
+     "F4"
+    ],
+    "raison": "sysconf(_SC_LEVEL1_DCACHE_LINESIZE), sched_setaffinity, mmap, comme pour C"
+   },
+   {
+    "nom": "crossbeam",
+    "cases": [
+     "D3"
+    ],
+    "raison": "crossbeam_utils::CachePadded"
+   },
+   {
+    "nom": "rayon",
+    "cases": [
+     "C5"
+    ],
+    "raison": "aussi retenue par la règle"
+   }
+  ],
+  "cellules": {
+   "bumpalo": [
+    "K8"
+   ],
+   "cordyceps": [
+    "K3"
+   ],
+   "crossbeam": [
+    "K3"
+   ],
+   "libc": [
+    "K3"
+   ],
+   "fearless_simd": [],
+   "ndarray": [],
+   "rayon": [],
+   "core_affinity": [],
+   "hwlocality-sys": [],
+   "memmap2": []
+  },
+  "raisons_cellules": {
+   "bumpalo": "B2 = ½ : arène (Bump) pour les nœuds de l'arbre",
+   "cordyceps": "D3 = 0 : CachePadded pour espacer les compteurs",
+   "crossbeam": "D3 = 0 : crossbeam_utils::CachePadded",
+   "libc": "D3 = 0 : taille de ligne lue par sysconf pour espacer les compteurs ; D4 et F4 hors de la table",
+   "fearless_simd": "C2 = 1 : std::arch donne déjà les intrinsèques",
+   "ndarray": "C2 = 1",
+   "rayon": "D1 = 1 (std::thread)",
+   "core_affinity": "D4 : levier hors de la table de l'écart 3",
+   "hwlocality-sys": "F2 : levier hors de la table de l'écart 3",
+   "memmap2": "F4 : levier hors de la table de l'écart 3"
+  },
+  "versions": {
+   "bumpalo": "3.20.4",
+   "fearless_simd": "1.2.0",
+   "rayon": "1.12.0",
+   "cordyceps": "0.3.5",
+   "core_affinity": "0.8.3",
+   "ndarray": "0.17.2",
+   "hwlocality-sys": "0.7.2 (sur libhwloc 2.10.0)",
+   "memmap2": "0.9.12",
+   "libc": "0.2.191",
+   "crossbeam": "0.8.5"
+  },
+  "note": "A6 : la recherche de crates.io est en texte intégral ; « struct of arrays » ramène des crates très téléchargées sans rapport, et soa_derive, au 16e rang, n'est pas examinée (3.2 : les dix premières) : le trou reste."
+ },
+ "d": {
+  "cases": {
+   "A6": {
+    "choix": "soa",
+    "refus": {
+     "soapclient": "client SOAP"
+    }
+   },
+   "B2": {
+    "vide": "aucune réponse"
+   },
+   "F1": {
+    "choix": "mir-algorithm"
+   },
+   "F2": {
+    "refus": {
+     "numath": "bibliothèque mathématique",
+     "enumap": "table d'énumération"
+    }
+   }
+  },
+  "cellules": {
+   "soa": [
+    "K1"
+   ],
+   "mir-algorithm": []
+  },
+  "raisons_cellules": {
+   "soa": "A6 = 0 : conteneur SoA des particules",
+   "mir-algorithm": "C1 = C2 = 1"
+  },
+  "versions": {
+   "soa": "0.2.0 (étiquette v0.2.0)",
+   "mir-algorithm": "3.22.5 (avec mir-core 1.7.4)"
+  }
+ },
+ "php": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "*": "SOAP, pas de SoA"
+    }
+   },
+   "B2": {
+    "refus": {
+     "*": "sans rapport avec l'allocation"
+    }
+   },
+   "B5": {
+    "refus": {
+     "*": "pointeurs JSON (RFC 6901), pas de mémoire brute"
+    }
+   },
+   "C1": {
+    "refus": {
+     "*": "vecteurs de PostgreSQL, icônes ou analyse JSON, pas de types vectoriels"
+    }
+   },
+   "C2": {
+    "refus": {
+     "*": "sans intrinsèques exposées"
+    }
+   },
+   "C5": {
+    "choix": "amphp/parallel-functions",
+    "refus": {
+     "jean85/pretty-package-versions": "versions des paquets",
+     "brianium/paratest": "tests en parallèle (outil)",
+     "amphp/parallel": "tâches dans des processus ou des fils, sans boucle ni réduction parallèle",
+     "php-parallel-lint/php-parallel-lint": "outil de vérification de syntaxe",
+     "amphp/http-client": "client HTTP",
+     "php-parallel-lint/php-console-highlighter": "coloration de code",
+     "php-parallel-lint/php-console-color": "couleurs de console",
+     "nette/tester": "tests",
+     "spatie/async": "tâches asynchrones dans des processus, sans boucle ni réduction parallèle"
+    }
+   },
+   "D1": {
+    "refus": {
+     "amphp/parallel": "des processus ; des fils seulement avec l'extension parallel, qui exige un PHP compilé ZTS (le PHP classé ne l'est pas)",
+     "nette/safe-stream": "flux de fichiers",
+     "danog/loop": "boucle d'événements",
+     "danog/ipc": "communication entre processus",
+     "pocketmine/snooze": "exige l'extension pthreads (ZTS)",
+     "pocketmine/raklib-ipc": "communication entre fils de pthreads",
+     "spryker/oms-multi-thread": "module de commerce",
+     "duncan3dc/fork-helper": "processus (fork)",
+     "cheprasov/php-redis-lock": "verrou Redis",
+     "ramon/chat": "messagerie"
+    }
+   },
+   "D2": {
+    "refus": {
+     "*": "opérations atomiques sur fichiers ou motifs de conception, pas d'atomiques en mémoire"
+    }
+   },
+   "D3": {
+    "refus": {
+     "*": "caches HTTP ou d'application"
+    }
+   },
+   "D5": {
+    "refus": {
+     "*": "widgets d'attente et outils, pas d'attente active"
+    }
+   },
+   "E4": {
+    "refus": {
+     "*": "préchargement de pages web"
+    }
+   },
+   "F1": {
+    "choix": "rindow/rindow-math-matrix",
+    "refus": {
+     "markbaker/matrix": "matrices en tableaux PHP imbriqués, non contigus",
+     "tecnickcom/tc-lib-barcode": "codes-barres",
+     "alexpechkarev/google-maps": "API de cartes",
+     "markrogoyski/math-php": "matrices en tableaux PHP imbriqués, non contigus",
+     "rogervila/array-diff-multidimensional": "comparaison de tableaux",
+     "rubix/tensor": "matrices en tableaux PHP imbriqués (l'extension C tensor, distincte, n'est pas ce paquet)"
+    }
+   },
+   "F2": {
+    "refus": {
+     "*": "sans rapport avec NUMA"
+    }
+   },
+   "F4": {
+    "refus": {
+     "*": "« map » au sens de correspondance, pas de projection en mémoire"
+    }
+   }
+  },
+  "cellules": {
+   "amphp/parallel-functions": [
+    "Q6 mt",
+    "Q1 mt",
+    "K9 mt"
+   ],
+   "rindow/rindow-math-matrix": []
+  },
+  "raisons_cellules": {
+   "amphp/parallel-functions": "D1 = ½ : parallelMap répartit le calcul sur des processus ; sans mémoire partagée, pas K3",
+   "rindow/rindow-math-matrix": "opérations écrites en PHP (pilote MatlibPHP) : rien de compilé"
+  },
+  "versions": {
+   "amphp/parallel-functions": "2.0.0 (avec amphp/parallel 2.4.0)",
+   "rindow/rindow-math-matrix": "2.2.0"
+  }
+ },
+ "java": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "*": "cadres d'architecture orientée services (SOA), pas de SoA"
+    }
+   },
+   "B2": {
+    "refus": {
+     "org.uqbar-project:arena-core": "cadre d'interface graphique « Arena »",
+     "org.uqbar-project:arena-jface": "cadre d'interface graphique « Arena »",
+     "com.github.amitkhosla:memory-pool": "réserve d'objets (ObjectPool), pas un allocateur ni une arène",
+     "com.arena-returns:Pbbl": "application",
+     "*": "applications « arena »"
+    }
+   },
+   "B5": {
+    "refus": {
+     "*": "pointeurs JSON (RFC 6901)"
+    }
+   },
+   "C1": {
+    "refus": {
+     "*": "SIMD interne d'un interpréteur WebAssembly, d'un sérialiseur ou d'une bibliothèque d'inférence, ou types de tuiles vectorielles : pas de types vectoriels"
+    }
+   },
+   "C2": {
+    "refus": {
+     "*": "intrinsèques de JavaScript (webjars), d'un journal ou d'un compilateur ; bibliothèques natives qui n'exposent pas d'intrinsèques"
+    }
+   },
+   "D3": {
+    "vide": "aucune réponse"
+   },
+   "D4": {
+    "choix": "net.openhft:affinity",
+    "refus": {
+     "org.apache.bookkeeper:cpu-affinity": "n'attribue que des cœurs isolés par le noyau (isolcpus), absents de cet hôte : ne s'exécute pas ici (3.3 a, 2)",
+     "io.streamnative:cpu-affinity": "copie de la précédente, même limite"
+    }
+   },
+   "E4": {
+    "refus": {
+     "*": "préchargement de dépôts, de requêtes ou simulation, pas d'instruction de préchargement"
+    }
+   },
+   "F1": {
+    "choix": "org.tensorflow:ndarray",
+    "refus": {
+     "org.webjars.npm:ndarray": "bibliothèque JavaScript empaquetée (webjar)",
+     "org.webjars.npm:ndarray-ops": "bibliothèque JavaScript empaquetée (webjar)"
+    }
+   },
+   "F2": {
+    "choix": "org.apache.ignite:ignite-numa-allocator"
+   }
+  },
+  "cellules": {
+   "net.openhft:affinity": [],
+   "org.tensorflow:ndarray": [],
+   "org.apache.ignite:ignite-numa-allocator": []
+  },
+  "raisons_cellules": {
+   "net.openhft:affinity": "D4 : levier hors de la table de l'écart 3",
+   "org.tensorflow:ndarray": "aucune opération de calcul (écart 3)",
+   "org.apache.ignite:ignite-numa-allocator": "F2 : levier hors de la table de l'écart 3"
+  },
+  "versions": {
+   "net.openhft:affinity": "2026.2",
+   "org.tensorflow:ndarray": "1.0.0",
+   "org.apache.ignite:ignite-numa-allocator": "2.18.0"
+  }
+ },
+ "go": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "*": "schémas, sérialisation, tableaux de bits ou tenseurs, pas de SoA"
+    }
+   },
+   "B2": {
+    "refus": {
+     "github.com/valyala/bytebufferpool": "réserve de tampons d'octets",
+     "github.com/pingcap/tidb/util/arena": "arène d'octets d'un module interne de TiDB, sans objets typés",
+     "github.com/CannibalVox/cgoparam": "paramètres de cgo",
+     "github.com/andy-kimball/arenaskl": "liste à enjambements dans une arène",
+     "github.com/gobwas/pool": "réserves de structures",
+     "github.com/rclone/rclone/lib/pool": "réserve de tampons",
+     "github.com/kubeflow/arena/pkg/apis/types": "outil Kubernetes",
+     "*": "réserves applicatives, analyse JSON ou arène de mémoire C par cgo, sans objets Go"
+    }
+   },
+   "C1": {
+    "refus": {
+     "*": "JSON, hachages, géométrie 2D/3D ou images : pas de types vectoriels SIMD"
+    }
+   },
+   "C2": {
+    "refus": {
+     "*": "hachages, journaux ou moteurs internes : pas d'intrinsèques exposées"
+    }
+   },
+   "C5": {
+    "choix": "github.com/samber/lo/parallel",
+    "refus": {
+     "go.chromium.org/luci/common/sync/parallel": "réserve de tâches, sans boucle ni réduction parallèle",
+     "github.com/rlmcpherson/s3gof3r": "transferts S3",
+     "github.com/u-root/u-root/pkg/dhclient": "client DHCP",
+     "github.com/libp2p/go-libp2p-kad-dht/dual": "table de hachage distribuée",
+     "github.com/Workiva/go-datastructures/btree/palm": "arbre B parallèle",
+     "github.com/influxdata/telegraf/plugins/inputs/lustre2": "greffon de collecte de Telegraf (Lustre)"
+    }
+   },
+   "D2": {
+    "refus": {
+     "sync/atomic": "bibliothèque standard elle-même",
+     "go.uber.org/atomic": "enveloppes des atomiques de sync/atomic, sans ordres explicites",
+     "*": "fichiers, flux ou analyse, pas d'atomiques en mémoire"
+    }
+   },
+   "D3": {
+    "choix": "github.com/templexxx/cpu"
+   },
+   "D5": {
+    "choix": "github.com/marusama/cyclicbarrier",
+    "refus": {
+     "github.com/coreos/etcd/clientv3/concurrency": "verrous distribués d'etcd",
+     "go.etcd.io/etcd/client/v3/concurrency": "verrous distribués d'etcd",
+     "go.etcd.io/etcd/clientv3/concurrency": "verrous distribués d'etcd",
+     "github.com/tj/go-spin": "indicateur d'attente en terminal",
+     "github.com/gernest/wow/spin": "indicateur d'attente en terminal",
+     "github.com/spinnaker/spin/cmd/gateclient": "outil Spinnaker",
+     "github.com/elodina/siesta": "client Kafka"
+    }
+   },
+   "E4": {
+    "refus": {
+     "*": "préchargement de fichiers, de couches ou de requêtes, pas d'instruction de préchargement"
+    }
+   },
+   "F1": {
+    "choix": "gonum.org/v1/gonum/mat"
+   },
+   "F2": {
+    "choix": "github.com/benjojo/numa",
+    "refus": {
+     "github.com/jaypipes/ghw": "découverte du matériel, sans placement",
+     "github.com/k8stopologyawareschedwg/numaplacement": "ordonnancement Kubernetes",
+     "github.com/lrita/numa": "ne se construit pas avec Go 1.27 (go:linkname vers runtime.systemstack, interdit) (3.3 a, 2)",
+     "github.com/zededa/ghw": "découverte du matériel, sans placement",
+     "github.com/Jaganathancse/numautils": "lecture de la topologie, sans placement",
+     "gitlab.com/blockforge/blockforge/pkg/hwloc": "lecture de la topologie (hwloc), sans placement",
+     "github.com/arcticflint/numa": "refusé par le proxy des modules de Go (403 SECURITY ERROR) : ne s'installe pas"
+    }
+   }
+  },
+  "cellules": {
+   "github.com/samber/lo/parallel": [],
+   "github.com/templexxx/cpu": [
+    "K3"
+   ],
+   "github.com/marusama/cyclicbarrier": [],
+   "gonum.org/v1/gonum/mat": [
+    "K9",
+    "K9 mt"
+   ],
+   "github.com/benjojo/numa": []
+  },
+  "raisons_cellules": {
+   "github.com/samber/lo/parallel": "D1 = 1 (goroutines)",
+   "github.com/templexxx/cpu": "D3 = 0 : CacheLineSize pour espacer les compteurs",
+   "github.com/marusama/cyclicbarrier": "D5 : levier hors de la table de l'écart 3",
+   "gonum.org/v1/gonum/mat": "C1 = C2 = ½ : vues (Slice), Add et Scale de matrices float64 font la moyenne à quatre points ; K5 et K1 (float32), Q6 et Q1 (colonnes entières) : types absents ; K4 : aucune somme conditionnelle",
+   "github.com/benjojo/numa": "F2 : levier hors de la table de l'écart 3"
+  },
+  "versions": {
+   "github.com/samber/lo/parallel": "v1.53.0 (module github.com/samber/lo)",
+   "github.com/templexxx/cpu": "v0.1.1",
+   "github.com/marusama/cyclicbarrier": "v1.1.0",
+   "gonum.org/v1/gonum/mat": "v0.17.0 (module gonum.org/v1/gonum)",
+   "github.com/benjojo/numa": "v0.0.0-20260918214945-1058a779f434 (aucune version publiée)"
+  }
+ },
+ "julia": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "IndexedStructVectors": "tables à identifiants stables, pas de SoA"
+    }
+   },
+   "B2": {
+    "choix": "Bumper"
+   },
+   "C1": {
+    "choix": "VectorizationBase",
+    "refus": {
+     "CpuId": "interrogation du processeur"
+    }
+   },
+   "D3": {
+    "vide": "aucune réponse"
+   },
+   "D4": {
+    "choix": "ThreadPinningCore"
+   },
+   "F2": {
+    "choix": "NUMA",
+    "refus": {
+     "Hwloc_jll": "paquet binaire (JLL) de la bibliothèque C, sans API Julia",
+     "Hwloc": "lecture de la topologie, sans placement",
+     "ArrayAllocators": "malloc et calloc seulement : l'allocation sur un nœud NUMA est dans le paquet séparé NumaAllocators",
+     "NUMA_jll": "paquet binaire (JLL) de libnuma, sans API Julia"
+    }
+   }
+  },
+  "cellules": {
+   "Bumper": [
+    "K8"
+   ],
+   "VectorizationBase": [],
+   "ThreadPinningCore": [],
+   "NUMA": []
+  },
+  "raisons_cellules": {
+   "Bumper": "B2 = ½ : nœuds dans un tableau alloué par @alloc (allocateur à pointeur)",
+   "VectorizationBase": "C2 = 1",
+   "ThreadPinningCore": "D4 : levier hors de la table de l'écart 3",
+   "NUMA": "F2 : levier hors de la table de l'écart 3"
+  },
+  "versions": {
+   "Bumper": "0.7.2",
+   "VectorizationBase": "0.21.74",
+   "ThreadPinningCore": "0.4.5",
+   "NUMA": "0.1.1"
+  },
+  "note": "Le relevé classe par les téléchargements du dernier mois publiés par ecosyste.ms ; contrôle par la statistique du plan, les requêtes du dernier mois aux serveurs de paquets (julialang-logs ; tools/open/julia_requests.py, results/open/registry/julia_requests.json) : les dix premières de chaque case sont les mêmes, dans le même ordre."
+ },
+ "haskell": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "moonlight-triangulation": "triangulation"
+    }
+   },
+   "B2": {
+    "refus": {
+     "frag": "moteur de jeu",
+     "memory-pool": "réserve de tampons épinglés, pas d'allocateur d'objets",
+     "arena": "magasin de données journalisé",
+     "memorypool": "réserve de mémoire brute hors tas, comme Foreign.Marshal.Pool déjà livré",
+     "cek-pykinos": "pile et magasin d'un interpréteur"
+    }
+   },
+   "C1": {
+    "refus": {
+     "hw-dsv": "analyse CSV",
+     "hw-simd": "primitives internes des analyseurs hw-*",
+     "sized-vector": "vecteurs de taille au niveau des types, pas de SIMD",
+     "sdr": "radio logicielle",
+     "hw-json-simd": "analyse JSON",
+     "mersenne-random": "générateur pseudo-aléatoire",
+     "wireform-core": "primitives de formats",
+     "solana-haskell-sdk": "chaîne de blocs",
+     "wireform-columnar-core": "primitives de formats",
+     "simd": "dépendances non résolubles avec GHC 9.14.1 (paquet de 2014) : ne s'installe pas"
+    }
+   },
+   "C2": {
+    "refus": {
+     "llvm": "liaisons au compilateur LLVM",
+     "blake3": "hachage"
+    }
+   },
+   "C5": {
+    "choix": "parallel",
+    "refus": {
+     "futhark": "autre langage et compilateur (3.3 a, 3)"
+    }
+   },
+   "D2": {
+    "choix": "atomic-primops",
+    "refus": {
+     "hapistrano": "déploiement"
+    }
+   },
+   "D3": {
+    "refus": {
+     "pykinos-core": "structures bloquées, pas d'aide ligne de cache"
+    }
+   },
+   "D4": {
+    "vide": "aucune réponse"
+   },
+   "D5": {
+    "choix": "concurrent-barrier",
+    "refus": {
+     "doctest-extract": "tests",
+     "barrier": "générateur de badges"
+    }
+   },
+   "F2": {
+    "vide": "aucune réponse"
+   },
+   "F4": {
+    "choix": "mmap",
+    "refus": {
+     "JuicyPixels": "images"
+    }
+   }
+  },
+  "note": "La page « top » de Hackage, titrée « Total downloads », donne en fait les téléchargements des 30 derniers jours : contrôlé paquet par paquet sur la page de chaque candidate (tools/open/hackage30.py, results/open/registry/haskell_30d.json : mêmes nombres, mêmes rangs). vector, primitive, unordered-containers et hashtables, nommées par le dossier, ne comblent aucun trou de Haskell.",
+  "cellules": {
+   "parallel": [],
+   "atomic-primops": [],
+   "concurrent-barrier": [],
+   "mmap": []
+  },
+  "raisons_cellules": {
+   "parallel": "D1 = 1 (forkOn)",
+   "atomic-primops": "D2 : levier hors de la table de l'écart 3",
+   "concurrent-barrier": "D5 : levier hors de la table de l'écart 3",
+   "mmap": "F4 : levier hors de la table de l'écart 3"
+  },
+  "versions": {
+   "parallel": "3.3.0.0",
+   "atomic-primops": "0.8.8",
+   "concurrent-barrier": "0.1.2",
+   "mmap": "0.5.9"
+  }
+ },
+ "swift": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "*": "générateur de services"
+    }
+   },
+   "B2": {
+    "choix": "github.com/swift-molecules/swift-memory-allocation",
+    "note": "produit « Memory Allocator Arena »"
+   },
+   "C2": {
+    "refus": {
+     "*": "mathématiques graphiques en C"
+    }
+   },
+   "D3": {
+    "vide": "aucune réponse"
+   },
+   "D5": {
+    "refus": {
+     "*": "boucles de rétroaction, tests d'instantanés"
+    }
+   },
+   "E4": {
+    "refus": {
+     "*": "préchargement de ressources ou d'images"
+    }
+   },
+   "F1": {
+    "choix": "github.com/jjjkkkjjj/Matft",
+    "refus": {
+     "github.com/recp/cglm": "mathématiques graphiques en C",
+     "github.com/capnslipp/Vuckt": "vecteurs de géométrie",
+     "github.com/fireblade-engine/math": "mathématiques 2D et 3D"
+    }
+   },
+   "F2": {
+    "vide": "aucune réponse"
+   }
+  },
+  "cellules": {
+   "github.com/swift-molecules/swift-memory-allocation": [
+    "K8"
+   ],
+   "github.com/jjjkkkjjj/Matft": []
+  },
+  "raisons_cellules": {
+   "github.com/swift-molecules/swift-memory-allocation": "B2 = ½ : arène pour les nœuds de l'arbre",
+   "github.com/jjjkkkjjj/Matft": "C1 = 1"
+  },
+  "versions": {
+   "github.com/swift-molecules/swift-memory-allocation": "branche main, révision 8742a8c (aucune version publiée)",
+   "github.com/jjjkkkjjj/Matft": "1.0.1 (étiquette 1.0.1, commit bf66a10)"
+  }
+ },
+ "c": {
+  "note": "L'index d'Ubuntu publié par ecosyste.ms n'a pas de descriptions : la recherche ne lit que les noms des paquets.",
+  "cases": {
+   "A6": {
+    "vide": "aucune réponse"
+   },
+   "B2": {
+    "refus": {
+     "alien-arena-data": "jeu",
+     "alien-arena": "jeu",
+     "rust-id-arena": "crate Rust empaquetée",
+     "rust-la-arena": "crate Rust empaquetée",
+     "rust-typed-arena": "crate Rust empaquetée"
+    }
+   },
+   "F2": {
+    "choix": "hwloc"
+   }
+  },
+  "cellules": {
+   "hwloc": []
+  },
+  "raisons_cellules": {
+   "hwloc": "F2 : levier hors de la table de l'écart 3"
+  },
+  "versions": {
+   "hwloc": "2.10.0 (paquet Ubuntu libhwloc-dev 2.10.0-1build1)"
+  }
+ },
+ "cpp": {
+  "note": "L'index d'Ubuntu publié par ecosyste.ms n'a pas de descriptions : la recherche ne lit que les noms des paquets.",
+  "cases": {
+   "A6": {
+    "vide": "aucune réponse"
+   },
+   "F2": {
+    "choix": "hwloc"
+   }
+  },
+  "cellules": {
+   "hwloc": []
+  },
+  "raisons_cellules": {
+   "hwloc": "F2 : levier hors de la table de l'écart 3"
+  },
+  "versions": {
+   "hwloc": "2.10.0 (paquet Ubuntu libhwloc-dev 2.10.0-1build1)"
+  }
+ },
+ "ada": {
+  "cases": {
+   "A6": {
+    "vide": "aucune réponse"
+   },
+   "C5": {
+    "choix": "lwt",
+    "refus": {
+     "parallelize": "exécution de commandes en parallèle",
+     "pico_st7789": "pilote d'écran"
+    }
+   },
+   "D3": {
+    "choix": "cachelines"
+   },
+   "F2": {
+    "vide": "aucune réponse"
+   },
+   "F4": {
+    "vide": "aucune réponse"
+   }
+  },
+  "cellules": {
+   "lwt": [],
+   "cachelines": [
+    "K3"
+   ]
+  },
+  "raisons_cellules": {
+   "lwt": "D1 = 1 (tâches)",
+   "cachelines": "D3 = 0 : compteurs alignés sur la ligne de cache"
+  },
+  "versions": {
+   "lwt": "1.2.0 (commit fedb90b de parasail, index d'Alire)",
+   "cachelines": "0.1.0 (commit 5c97574, index d'Alire)"
+  }
+ },
+ "chapel": {
+  "note": "Le registre Mason compte 28 bricks ; aucune ne porte un mot d'une case.",
+  "cases": {}
+ },
+ "mojo": {
+  "note": "Le canal modular-community ne publie que des noms de paquets ; aucun ne porte un mot d'une case. MAX, nommé par le dossier, entre par 3.3 c.",
+  "cases": {},
+  "nommees": [
+   {
+    "nom": "MAX 26.7.0",
+    "cases": [
+     "C5",
+     "D1",
+     "F1"
+    ],
+    "raison": "max.algorithm.functional.sync_parallelize (boucle parallèle sur les cœurs), LayoutTensor ; paquet conda max-core 26.7.0, lié à Mojo 1.2.0"
+   }
+  ],
+  "cellules": {
+   "MAX 26.7.0": [
+    "Q6 mt",
+    "Q1 mt",
+    "K9 mt",
+    "K3"
+   ]
+  },
+  "raisons_cellules": {
+   "MAX 26.7.0": "D1 = ½ : sync_parallelize répartit le calcul sur les cœurs ; F1 sans cellule (C1 = 1)"
+  },
+  "versions": {
+   "MAX 26.7.0": "26.7.0 (paquet conda max-core 26.7.0)"
+  }
+ },
+ "nim": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "aossoa": "aucune version depuis le 22 novembre 2024 (3.3 b)"
+    }
+   },
+   "B2": {
+    "refus": {
+     "sharedmempool": "aucune version depuis le 22 novembre 2024 (3.3 b)"
+    }
+   },
+   "C1": {
+    "refus": {
+     "constantine": "cryptographie",
+     "nimsimd": "liaisons aux intrinsèques x86, pas de types portables",
+     "crunchy": "hachages",
+     "simdutf": "Unicode",
+     "kaleidoscope": "chaînes de caractères",
+     "floof": "recherche floue",
+     "vecray": "vecteurs de géométrie",
+     "sdfy": "fonctions de distance",
+     "diffy": "comparaison d'images"
+    },
+    "choix": "mmops"
+   },
+   "C5": {
+    "refus": {
+     "httpx": "serveur HTTP",
+     "nmr": "gestionnaire de paquets",
+     "flowworkrunner": "exécuteur de tâches d'une boîte à outils",
+     "sitmo": "aucune version depuis le 22 novembre 2024",
+     "httpbeast": "aucune version depuis le 22 novembre 2024",
+     "laser": "aucune version depuis le 22 novembre 2024",
+     "css_html_minify": "aucune version depuis le 22 novembre 2024",
+     "pipelines": "aucune version depuis le 22 novembre 2024",
+     "StashTable": "aucune version depuis le 22 novembre 2024",
+     "sha256_64B": "aucune version depuis le 22 novembre 2024"
+    }
+   },
+   "D3": {
+    "vide": "aucune réponse"
+   },
+   "F1": {
+    "choix": "arraymancer",
+    "refus": {
+     "glm": "mathématiques graphiques"
+    }
+   },
+   "F2": {
+    "vide": "aucune réponse"
+   }
+  },
+  "cellules": {
+   "mmops": [],
+   "arraymancer": []
+  },
+  "raisons_cellules": {
+   "mmops": "C2 = 1 : importc depuis immintrin.h",
+   "arraymancer": "C2 = 1"
+  },
+  "versions": {
+   "mmops": "0.1.1 (étiquette 0.1.1, commit a3cf2a4 ; le fichier .nimble y porte 0.1.0 ; avec nimsimd 1.3.2)",
+   "arraymancer": "0.7.33"
+  }
+ },
+ "js": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "*": "sérialisation, files, copies ou interpolation, pas de SoA"
+    }
+   },
+   "B2": {
+    "choix": "@protobufjs/pool"
+   },
+   "B5": {
+    "refus": {
+     "*": "caches, analyse ou pointeurs JSON, pas de mémoire brute"
+    }
+   },
+   "C1": {
+    "refus": {
+     "mime-types": "types MIME",
+     "@supabase/storage-js": "client de stockage",
+     "gl-matrix": "vecteurs et matrices de géométrie (2 à 4 composantes), pas de types SIMD",
+     "*": "tuiles vectorielles, icônes ou géométrie"
+    }
+   },
+   "C2": {
+    "refus": {
+     "get-intrinsic": "intrinsèques du langage JavaScript, pas du processeur",
+     "math-intrinsics": "intrinsèques du langage JavaScript",
+     "call-bound": "intrinsèques du langage JavaScript",
+     "cpu-features": "détection des fonctions du processeur",
+     "bun": "autre mise en œuvre du langage (3.3 a, 3)",
+     "*": "binaires de Bun ou outils de test"
+    }
+   },
+   "C5": {
+    "refus": {
+     "*": "fonctions asynchrones sur un seul fil, outils en ligne de commande ou géométrie : pas de boucle parallèle sur plusieurs cœurs"
+    }
+   },
+   "D1": {
+    "refus": {
+     "@emnapi/wasi-threads": "fils de WebAssembly (WASI)",
+     "@tailwindcss/oxide-wasm32-wasi": "binaire d'un outil",
+     "react-native-worklets": "React Native",
+     "@loaders.gl/worker-utils": "tâches sur des workers, déjà livrés (worker_threads)",
+     "@sanity/worker-channels": "canaux entre workers",
+     "threads": "enveloppe de worker_threads, déjà livrés : n'ajoute rien à la case",
+     "@copilotkit/web-components": "composants web",
+     "@convex-dev/agent": "agents",
+     "@phenomnomnominal/worker-require": "enveloppe de worker_threads",
+     "bare-worker": "autre environnement d'exécution (Bare)"
+    }
+   },
+   "D2": {
+    "refus": {
+     "*": "écritures de fichiers atomiques, CSS atomique ou limiteurs de débit, pas d'atomiques à ordres explicites"
+    }
+   },
+   "D3": {
+    "refus": {
+     "*": "caches de données ou de fichiers"
+    }
+   },
+   "D4": {
+    "refus": {
+     "*": "chargement de modules, réserves de workers ou détection de l'architecture, pas d'affinité"
+    }
+   },
+   "D5": {
+    "refus": {
+     "*": "coloration, temporisation ou attente d'un port, pas de barrière ni d'attente active"
+    }
+   },
+   "E4": {
+    "refus": {
+     "*": "préchargement de ressources web"
+    }
+   },
+   "F1": {
+    "choix": "ndarray",
+    "refus": {
+     "gl-matrix": "matrices de géométrie (2 à 4 composantes)"
+    }
+   },
+   "F2": {
+    "refus": {
+     "*": "sans rapport avec NUMA"
+    }
+   },
+   "F4": {
+    "refus": {
+     "*": "cartes de sources ou fonctions « map », pas de projection en mémoire"
+    }
+   }
+  },
+  "cellules": {
+   "@protobufjs/pool": [
+    "K8"
+   ],
+   "ndarray": []
+  },
+  "raisons_cellules": {
+   "@protobufjs/pool": "B2 = 0 : nœuds de l'arbre dans des tranches d'un bloc commun",
+   "ndarray": "aucune opération de calcul (écart 3)"
+  },
+  "versions": {
+   "@protobufjs/pool": "1.1.0",
+   "ndarray": "1.1.1"
+  }
+ },
+ "lua": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "*": "XML, SOAP, structures C ou tableaux de bits, pas de SoA"
+    }
+   },
+   "B2": {
+    "refus": {
+     "mtdowling/tecs": "LuaJIT seulement (FFI)",
+     "corrm/polyplug-guest": "greffons",
+     "fastipc/fipc": "LuaJIT seulement",
+     "jinganix/pbwire": "codec Protobuf"
+    }
+   },
+   "B5": {
+    "refus": {
+     "*": "liaisons à des bibliothèques C (MQTT, Modbus, compression, entrées), pas de mémoire brute"
+    }
+   },
+   "C1": {
+    "refus": {
+     "*": "liaisons à simdjson, tableaux C ou champs de bits, pas de types vectoriels"
+    }
+   },
+   "C2": {
+    "refus": {
+     "5inq-kiji/ion7-core": "LuaJIT seulement (llama.cpp)"
+    }
+   },
+   "C5": {
+    "refus": {
+     "benoitgermain/lanes": "ne se construit pas avec Lua 5.5 (lua_newstate a changé de signature) (3.3 a, 2)",
+     "askyrme/luaproc": "processus légers à messages, sans boucle ni réduction parallèle",
+     "pc/opencl": "noyaux écrits en OpenCL C, autre langage",
+     "moyu/dromozoa-prl": "virtualisation",
+     "luarocks/leda": "chaînes de traitement à étages",
+     "seba/activelua-learningtool": "objets actifs",
+     "aimingoo/harpseal": "distribution de tâches",
+     "luarocks/simulua": "simulation à événements discrets",
+     "aimingoo/tundrawolf": "distribution de tâches pour nginx",
+     "freed-wu/oberdiek": "paquets TeX"
+    }
+   },
+   "D1": {
+    "choix": "moteus/lua-llthreads2"
+   },
+   "D2": {
+    "refus": {
+     "*": "thèmes, flux RSS ou limiteurs, pas d'atomiques"
+    }
+   },
+   "D3": {
+    "refus": {
+     "*": "sans rapport avec la ligne de cache"
+    }
+   },
+   "D4": {
+    "refus": {
+     "umegaya/ffiex": "LuaJIT seulement (FFI)",
+     "mahkoe/ezserv": "serveur HTTP"
+    }
+   },
+   "D5": {
+    "refus": {
+     "*": "indicateurs d'attente en terminal ou barrière d'OpenResty, pas de barrière ni d'attente active pour Lua"
+    }
+   },
+   "F1": {
+    "choix": "pessoa736/vmsl",
+    "refus": {
+     "birchpointswe/santoku-matrix": "exige Lua 5.1 (rockspec) : ne s'installe pas avec Lua 5.5",
+     "luarocks/numlua": "archive source introuvable (GitHub Downloads) : ne s'installe pas",
+     "ladc/lgsl": "LuaJIT seulement",
+     "luarocks/numextra": "complément de numlua",
+     "wrwrwr/glyphify": "images",
+     "erickprogramer/luandarray": "le rockspec publié désigne des fichiers absents du dépôt : l'installation échoue"
+    }
+   },
+   "F4": {
+    "refus": {
+     "shmul/lightningmdb": "base de données projetée (LMDB), pas d'API de projection de fichiers",
+     "geoffleyland/mmapfile": "exige Lua 5.1 ou LuaJIT (rockspec) : ne s'installe pas avec Lua 5.5",
+     "engin33r/lua-shmem": "mémoire partagée POSIX entre processus, pas de fichiers projetés",
+     "kaio326/luamemo": "mémoire d'agents",
+     "starius/annoy": "plus proches voisins",
+     "nubix-devbot/ht16k33": "pilote de matrice de DEL",
+     "fperrad/lua-loja": "persistance clé-valeur",
+     "mtdowling/tecs": "LuaJIT seulement",
+     "nnengine/sheets": "tableurs CSV"
+    }
+   }
+  },
+  "cellules": {
+   "pessoa736/vmsl": [
+    "K5",
+    "K9"
+   ],
+   "moteus/lua-llthreads2": [
+    "Q6 mt",
+    "Q1 mt",
+    "K9 mt"
+   ]
+  },
+  "raisons_cellules": {
+   "pessoa736/vmsl": "C1 = C2 = 0 : produit scalaire (Vector * Vector), sommes et échelles de matrices (submatrix, +, *) en C ; ni produit terme à terme (K1) ni comparaison (K4, Q6, Q1) ; aucun fil pour les formes à quatre fils",
+   "moteus/lua-llthreads2": "D1 = 0 : fils dans des états Lua séparés, données passées par copie ; sans mémoire partagée, pas K3"
+  },
+  "versions": {
+   "pessoa736/vmsl": "1.1-2 (étiquette v1.1)",
+   "moteus/lua-llthreads2": "0.1.6-1 (étiquette v0.1.6)"
+  }
+ },
+ "python": {
+  "cases": {
+   "A6": {
+    "refus": {
+     "ibmmq": "messagerie IBM MQ",
+     "pymqi": "messagerie IBM MQ"
+    }
+   },
+   "B2": {
+    "refus": {
+     "localarena": "évaluation de modèles"
+    }
+   },
+   "B5": {
+    "refus": {
+     "python-jsonpath": "pointeurs JSON",
+     "json-spec": "pointeurs JSON",
+     "pyjsonpatch": "pointeurs JSON",
+     "pymemoryeditor": "lecture de la mémoire d'autres processus, pas d'accès à de la mémoire brute du programme"
+    }
+   },
+   "C1": {
+    "refus": {
+     "stringzilla": "chaînes de caractères",
+     "numkong": "fonctions de calcul sur tableaux, pas de types vectoriels",
+     "pysimdjson": "analyse JSON",
+     "chonkie-core": "découpage de texte",
+     "fastpybase64": "base64",
+     "pillow-simd": "images",
+     "turbovec": "quantification de vecteurs",
+     "pycrc32": "sommes de contrôle"
+    }
+   },
+   "C2": {
+    "refus": {
+     "ovphysx": "simulation physique"
+    }
+   },
+   "C5": {
+    "choix": "dask",
+    "refus": {
+     "pytest-cov": "mesure de couverture des tests"
+    }
+   },
+   "D1": {
+    "refus": {
+     "greenlet": "coroutines sur un seul fil",
+     "multiprocess": "processus, sans mémoire partagée ni fils parallèles",
+     "gevent": "coroutines",
+     "func-timeout": "délais",
+     "janus": "files asynchrones",
+     "zthreading": "enveloppes d'événements",
+     "pyleak": "détection de fuites",
+     "stopit": "délais",
+     "zernio-sdk": "client d'API",
+     "aws-logging-handlers": "journaux"
+    }
+   },
+   "D2": {
+    "choix": "atomics",
+    "refus": {
+     "atomicwrites": "écritures de fichiers",
+     "ase": "simulation atomique",
+     "ufmt": "formatage",
+     "atomicwrites-homeassistant": "écritures de fichiers",
+     "django-pgtransaction": "transactions de base de données",
+     "atomicx": "entiers atomiques sans ordres mémoire explicites",
+     "nvalchemi-toolkit-ops": "primitives GPU",
+     "atomos": "primitives atomiques sans ordres mémoire explicites",
+     "atomic-physics": "physique atomique"
+    }
+   },
+   "D3": {
+    "vide": "aucune réponse"
+   },
+   "D5": {
+    "refus": {
+     "spin": "outil de développement"
+    }
+   },
+   "E4": {
+    "refus": {
+     "*": "préchargement de requêtes de base de données ou générateur en arrière-plan, pas d'instruction de préchargement"
+    }
+   },
+   "F1": {
+    "refus": {
+     "segno": "codes QR",
+     "apprise": "notifications",
+     "affine": "transformations affines du plan",
+     "bitsandbytes": "quantification pour GPU",
+     "blosc2": "tableaux compressés par blocs, non contigus en mémoire",
+     "svgelements": "SVG",
+     "cma": "optimisation",
+     "matrix-nio": "client Matrix",
+     "cmaes": "optimisation",
+     "canmatrix": "bus automobile"
+    }
+   },
+   "F2": {
+    "refus": {
+     "nsj-rest-lib2": "routes REST"
+    }
+   }
+  },
+  "nommees": [
+   {
+    "nom": "numpy",
+    "cases": [
+     "F1"
+    ],
+    "raison": "ndarray : tableau multidimensionnel contigu à disposition définie ; Numba et Polars, aussi nommés, sont exclus (3.3 a, 3)"
+   }
+  ],
+  "cellules": {
+   "numpy": [
+    "K1",
+    "K4",
+    "K5",
+    "Q6",
+    "Q1",
+    "K9",
+    "Q6 mt",
+    "Q1 mt",
+    "K9 mt"
+   ],
+   "dask": [
+    "Q6 mt",
+    "Q1 mt",
+    "K9 mt",
+    "K3"
+   ],
+   "atomics": []
+  },
+  "raisons_cellules": {
+   "numpy": "C1 = C2 = 0 : opérations compilées sur tableaux entiers ; formes à quatre fils par threading (le GIL est rendu pendant les opérations)",
+   "dask": "D1 = ½ : ordonnanceur à fils (dask.array sur NumPy, delayed)",
+   "atomics": "D2 : levier hors de la table de l'écart 3"
+  },
+  "versions": {
+   "numpy": "2.5.5",
+   "dask": "2026.8.0",
+   "atomics": "1.0.3"
+  }
+ },
+ "ocaml": {
+  "note": "Statistique : nombre de paquets d'opam qui en dépendent (« Required by », opam.ocaml.org), relevé page par page. opam n'est pas sur l'hôte : les versions publiées dans opam sont prises à leurs sources (archives de version, ou étiquette git quand l'archive n'est pas joignable) et construites avec dune 3.25.0, amorcé depuis ses sources avec OCaml 5.5.2.",
+  "cases": {
+   "B5": {
+    "refus": {
+     "hweak": "table de hachage à pointeurs faibles",
+     "json-pointer": "JSON Pointer (RFC 6901)",
+     "ocaml-options-only-flambda-fp": "option de construction du compilateur (pointeurs de trame)",
+     "jsonschema-core": "schémas JSON",
+     "ocaml-options-only-fp": "option de construction du compilateur (pointeurs de trame)"
+    }
+   },
+   "C1": {
+    "refus": {
+     "rake": "autre langage (compilateur de Rake), pas une API OCaml",
+     "xoshiro-simd": "générateur pseudo-aléatoire ; aucun type vectoriel exposé"
+    }
+   },
+   "C2": {
+    "choix": "ocaml_intrinsics_kernel",
+    "refus": {
+     "bigstringaf": "ses « intrinsics » sont des primitives d'accès aux bigstrings, pas des instructions de la cible"
+    }
+   },
+   "C5": {
+    "choix": "domainslib",
+    "refus": {
+     "domain_shims": "Domain non parallèle, pour OCaml 4"
+    }
+   },
+   "D2": {
+    "refus": {
+     "dscheck": "vérificateur de modèle pour les tests",
+     "atomic": "rétroportage du module Atomic de la bibliothèque standard, sans ordre mémoire explicite",
+     "multicore-magic-dscheck": "variante de test de multicore-magic pour DScheck"
+    }
+   },
+   "D4": {
+    "choix": "processor"
+   },
+   "D5": {
+    "refus": {
+     "spin": "générateur de projets",
+     "opam-spin": "greffon d'opam pour le générateur Spin"
+    }
+   },
+   "F2": {
+    "refus": {
+     "numalib": "ne s'installe pas avec OCaml 5.5.2 (3.3 a, 2) : construite par jbuilder ; dune 3.25 ignore ses fichiers jbuild et n'en construit aucun module ; dépend aussi de core et async ≥ v0.9 (2017)",
+     "conf-numa": "paquet de configuration (présence de libnuma), sans API"
+    }
+   }
+  },
+  "cellules": {
+   "ocaml_intrinsics_kernel": [
+    "K4",
+    "Q6",
+    "Q6 mt"
+   ],
+   "domainslib": [],
+   "processor": []
+  },
+  "raisons_cellules": {
+   "ocaml_intrinsics_kernel": "C1 = C2 = 0 : Conditional.select_int fait sans branchement la somme sous condition de K4 et de Q6 ; ni vecteurs ni opérations sur tableaux pour K1, K5, Q1 et K9",
+   "domainslib": "D1 = 1 (Domain)",
+   "processor": "D4 : levier hors de la table de l'écart 3"
+  },
+  "versions": {
+   "ocaml_intrinsics_kernel": "v0.17.3",
+   "domainslib": "0.5.2 (avec saturn 1.0.0, domain-local-await 1.0.1, multicore-magic 2.3.2, backoff 0.1.1, thread-table 1.0.0)",
+   "processor": "0.2"
+  }
+ },
+ "fortran": {
+  "note": "L'index de fortran-lang.org compte 272 bibliothèques ; aucune ne porte un mot d'une case.",
+  "cases": {}
+ }
+}

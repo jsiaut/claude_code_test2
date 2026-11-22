@@ -14,6 +14,7 @@ results/open/registry/<langage>.json. Usage : tools/open/registry.py <langage>..
 Le choix (3.3) se fait à la lecture de ces fichiers et va dans results/open/list.md : cet outil ne choisit rien.
 """
 import html
+import hashlib
 import json
 import os
 import re
@@ -71,9 +72,9 @@ def kw_re(kw):
 
 
 # ------------------------------------------------------------------ réseau (cache local, reprises, politesse)
-def fetch(url, binary=False, tries=4, delay=0.3):
+def fetch(url, binary=False, tries=4, delay=0.3, cache=True):
     os.makedirs(CACHE, exist_ok=True)
-    key = re.sub(r"[^A-Za-z0-9]+", "_", url)[:180] + "_" + str(abs(hash(url)) % 10**8)
+    key = re.sub(r"[^A-Za-z0-9]+", "_", url)[:180] + "_" + hashlib.sha1(url.encode()).hexdigest()[:8]
     path = os.path.join(CACHE, key)
     if os.path.exists(path):
         with open(path, "rb") as f:
@@ -85,8 +86,9 @@ def fetch(url, binary=False, tries=4, delay=0.3):
             req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
             with urllib.request.urlopen(req, timeout=90) as r:
                 raw = r.read()
-            with open(path, "wb") as f:
-                f.write(raw)
+            if cache:
+                with open(path, "wb") as f:
+                    f.write(raw)
             time.sleep(delay)
             return raw if binary else raw.decode("utf-8", "replace")
         except urllib.error.HTTPError as e:
@@ -177,8 +179,19 @@ class Npm(Search):
                 for o in d.get("objects", [])]
 
     def stat(self, names):
-        return {n: (jget(f"https://api.npmjs.org/downloads/point/last-month/{n}") or {}).get("downloads", 0) or 0
-                for n in names}
+        """Requêtes groupées (128 paquets non préfixés par requête) ; un par un pour les paquets à préfixe (@x/y)."""
+        res, plain = {}, [n for n in names if not n.startswith("@")]
+        for i in range(0, len(plain), 128):
+            chunk = plain[i:i + 128]
+            d = jget("https://api.npmjs.org/downloads/point/last-month/" + ",".join(chunk)) or {}
+            if len(chunk) == 1:
+                d = {chunk[0]: d}
+            for n in chunk:
+                res[n] = ((d.get(n) or {}).get("downloads", 0)) or 0
+        for n in names:
+            if n.startswith("@"):
+                res[n] = (jget(f"https://api.npmjs.org/downloads/point/last-month/{n}") or {}).get("downloads", 0) or 0
+        return res
 
 
 class NuGet(Search):
@@ -319,22 +332,31 @@ class Eco(Index):
         self._items = None
 
     def items(self):
+        """Pages de 1000 paquets ; chaque page (des dizaines de Mo) est réduite aux champs utiles avant d'être
+        gardée dans le cache local."""
         if self._items is None:
             self._items, page = [], 1
             while True:
-                d = jget(f"https://packages.ecosyste.ms/api/v1/registries/{self.registry}/packages"
-                         f"?sort={self.sort}&order=desc&per_page=1000&page={page}", delay=1.0)
-                if not d:
+                cp = os.path.join(CACHE, f"eco_{self.registry}_{self.sort}_{page}.json")
+                if os.path.exists(cp):
+                    red = json.load(open(cp, encoding="utf-8"))
+                else:
+                    raw = fetch(f"https://packages.ecosyste.ms/api/v1/registries/{self.registry}/packages"
+                                f"?sort={self.sort}&order=desc&per_page=1000&page={page}", delay=1.0, cache=False)
+                    d = json.loads(raw) if raw else []
+                    red = [{"name": x["name"], "desc": (x.get("description") or "").strip()[:400],
+                            "keywords": x.get("keywords_array") or [], "downloads": x.get("downloads"),
+                            "period": x.get("downloads_period"),
+                            "dependents": x.get("dependent_packages_count"),
+                            "first": (x.get("first_release_published_at") or "")[:10],
+                            "latest": (x.get("latest_release_published_at") or "")[:10]} for x in d]
+                    os.makedirs(CACHE, exist_ok=True)
+                    json.dump(red, open(cp, "w", encoding="utf-8"))
+                if not red:
                     break
-                for x in d:
-                    self._items.append({"name": x["name"], "desc": (x.get("description") or "").strip(),
-                                        "keywords": x.get("keywords_array") or [], "downloads": x.get("downloads"),
-                                        "period": x.get("downloads_period"),
-                                        "dependents": x.get("dependent_packages_count"),
-                                        "first": (x.get("first_release_published_at") or "")[:10],
-                                        "latest": (x.get("latest_release_published_at") or "")[:10]})
+                self._items += red
                 page += 1
-                if len(d) < 1000 or (self.top and len(self._items) >= self.top):
+                if len(red) < 1000 or (self.top and len(self._items) >= self.top):
                     break
             if self.top:
                 self._items = self._items[:self.top]
@@ -376,6 +398,28 @@ class EcoStat(Eco):
     def stat(self, names):
         self.items()
         return {n: (self._by.get(n, {}).get(self.field) or 0) for n in names}
+
+
+class OpamDeps(Eco):
+    """opam : ecosyste.ms ne calcule pas les dépendants (zéro partout) ; on compte les paquets de la section
+    « Required by » de la page du paquet sur opam.ocaml.org (dépendants inverses de opam-repository)."""
+    stat_name = "dépendants inverses (« Required by », opam.ocaml.org)"
+
+    def __init__(self):
+        super().__init__("opam.ocaml.org")
+
+    def stat(self, names):
+        res = {}
+        for n in names:
+            raw = fetch(f"https://opam.ocaml.org/packages/{n}/") or ""
+            i = raw.find("Required by")
+            if i < 0:
+                res[n] = 0
+                continue
+            j = raw.find("Optionally used by", i)
+            seg = raw[i:j if j > 0 else i + 20000]
+            res[n] = len(set(re.findall(r'<a href="\.\./([^/"]+)/', seg)))
+        return res
 
 
 class EcoAge(Eco):
@@ -475,14 +519,16 @@ class FortranLang(Index):
         self._items, self._url = [], {}
         for c in self.CATS:
             raw = fetch(f"https://fortran-lang.org/categories/{c}/") or ""
-            for m in re.finditer(r'<a[^>]+href="(https://github\.com/[^"]+|https://gitlab\.com/[^"]+)"[^>]*>'
-                                 r'\s*(?:<[^>]+>\s*)*([^<]+)</', raw):
-                url, name = m.group(1), html.unescape(m.group(2)).strip()
-                tail = raw[m.end():m.end() + 600]
-                desc = html.unescape(re.sub(r"<[^>]+>", " ", tail.split("<a ")[0])).strip()
+            for m in re.finditer(r'<p class="rubric"[^>]*>.*?<a [^>]*href="([^"]+)"[^>]*>([^<]+)</a></p>(.*?)'
+                                 r'(?=<p class="rubric"|</section>)', raw, re.S):
+                url, name, rest = m.group(1), html.unescape(m.group(2)).strip(), m.group(3)
+                paras = [re.sub(r"<[^>]+>", " ", x) for x in re.findall(r"<p[^>]*>(.*?)</p>", rest, re.S)]
+                paras = [x for x in paras if x.strip() and not x.strip().startswith("Tags:")]
+                desc = html.unescape(paras[0]).strip() if paras else ""
+                tags = re.findall(r'<span class="std std-ref">([^<]+)</span>', rest)
                 if name and name not in self._url:
                     self._url[name] = url
-                    self._items.append({"name": name, "desc": " ".join(desc.split())[:300], "keywords": [c]})
+                    self._items.append({"name": name, "desc": " ".join(desc.split())[:300], "keywords": tags + [c]})
         return self._items
 
     def stat(self, names):
@@ -580,7 +626,7 @@ ADAPTERS = {
     "go": GoPkg, "csharp": NuGet, "java": Maven,
     "julia": lambda: EcoStat("juliahub.com", "downloads", "téléchargements du dernier mois (ecosyste.ms, JuliaHub)"),
     "haskell": HackageEco,
-    "ocaml": lambda: EcoStat("opam.ocaml.org", "dependents", "dépendants inverses (ecosyste.ms, opam)"),
+    "ocaml": OpamDeps,
     "js": Npm, "python": PyPIEco, "lua": LuaRocks, "php": Packagist,
 }
 NO_REGISTRY = {"zig": "paquets par URL, sans registre", "odin": "aucun gestionnaire (collection vendor livrée)",
