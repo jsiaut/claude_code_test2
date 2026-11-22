@@ -443,11 +443,11 @@ avec R4.
   (6e → 4e), Swift en perd deux (12e → 14e) ; derrière C++, C, C3 et Zig sont à égalité. Les scores des compilés
   montent de 5 points en médiane (C++ : + 8,8), par le plafond.
 * **Deux noyaux font l'essentiel.** Dans K4, le SIMD explicite du point 3 et une forme par mots de 64 bits (celle de
-  Swift) mettent seize langages entre 0,58 et 0,77 ms, à la bande passante d'un cœur. Dans K8, l'arbre parcouru avec
-  une pile explicite ou avec l'état passé par valeur divise le temps de 22 langages par 1,1 à 4,5 : seize font K8 en
-  63 à 123 ms, quand seul Ada était sous 180 ms avec les formes publiées, et C++ (62,5 ms) passe devant Ada (73,2).
-  Les réserves de fils améliorent les cellules à quatre fils de 15 à 18 langages. K5 et K7 bougent peu : les formes
-  du catalogue y étaient déjà présentes dans la plupart des langages.
+  Swift) mettent seize langages entre 0,58 et 0,77 ms, à la bande passante d'un cœur. Dans K8, l'arbre construit et
+  sommé avec une pile explicite, ou construit avec l'état passé par valeur, divise le temps de 22 langages par 1,1 à
+  4,5 : seize font K8 en 63 à 123 ms, quand seul Ada était sous 180 ms avec les formes publiées, et C++ (62,5 ms) passe
+  devant Ada (73,2). Les réserves de fils améliorent les cellules à quatre fils de 15 à 18 langages. K5 et K7 bougent
+  peu : les formes du catalogue y étaient déjà présentes dans la plupart des langages.
 * **Les remarques seules ne faisaient presque rien** : avec les seules formes que chaque remarque avait trouvées pour
   son langage, les scores montent de 0,4 point en médiane, contre 5 avec la convergence. Le gain vient des formes
   portées d'un langage à l'autre.
