@@ -521,6 +521,56 @@ langages interprétés et OCaml aucune.
   atteintes) et ferait de l'absence de vérification de huit langages un coût de chaque forme
   ([`docs/V4_COST.md`](docs/V4_COST.md), 11.7).
 
+### Une piste ouverte : les bibliothèques tierces (v4, point 6 ; à côté du classement)
+
+Le classement n'admet que la bibliothèque standard et note « absente » une capacité qu'offre seulement une
+bibliothèque tierce. Le point 6 de la v4 pose l'autre question, celle de l'écosystème, sur une liste fixée par une
+règle commune avant toute mesure : pour chaque case de la grille que la bibliothèque standard laisse vide, la première
+bibliothèque admise parmi les dix plus employées du registre du langage, plus celles que nomme le dossier (NumPy, la
+crate `libc`, MAX…). 47 bibliothèques dans 17 langages comblent 47 cases ; une sonde par case donne sa note (41 montent)
+et 40 formes nouvelles du plafond s'en servent dans 12 langages, mesurées sur un même hôte à côté de la forme la plus
+rapide du point 4 et reportées sur sa campagne. Plan, relevé et écarts : [`docs/V4_OPEN.md`](docs/V4_OPEN.md) ;
+résultats : [`results/report_open.md`](results/report_open.md). Le classement ci-dessus ne change pas.
+
+| Publié | Langage | Convergent, R4 | Ouverte | Plafond ouvert seul | Grille ouverte seule | Nommées seules | Cases à ½ |
+|---|---|---|---|---|---|---|---|
+| 1 | C | 3 | 3 | 3 | 3 | 2 | 2 |
+| 2 | Odin | 5 | 7 | 5 | 7 | 6 | 7 |
+| 3 | C++ | 1 | 2 | 1 | 2 | 1 | 1 |
+| 4 | C3 | 4 | 6 | 4 | 6 | 5 | 6 |
+| 5 | Zig | 2 | 4 | 2 | 4 | 3 | 3 |
+| 6 | Rust | 7 | **1** | 7 | **1** | **4** | **4** |
+| 7 | Nim | 6 | 5 | 6 | 5 | 7 | 5 |
+| 8 | D | 8 | 8 | 8 | 8 | 8 | 8 |
+| 9 | Ada | 10 | 10 | 10 | 10 | 12 | 10 |
+| 10 | Chapel | 9 | 9 | 9 | 9 | 9 | 9 |
+| 11 | Fortran | 11 | 13 | 12 | 13 | 11 | 11 |
+| 12 | Swift | 14 | 14 | 14 | 14 | 14 | 14 |
+| 13 | Julia | 12 | 11 | 11 | 11 | 13 | 12 |
+| 14 | Mojo | 13 | 12 | 13 | 12 | **10** | 13 |
+
+« Ouverte » : grille et plafond ouverts ; « Nommées seules » : les seules bibliothèques nommées par le dossier ;
+« Cases à ½ » : chaque case comblée par une bibliothèque vaut ½. En gras : plus de deux places d'écart avec
+« Convergent, R4 ». Les onze suivants (C# à Lua) gardent leur place dans tous les calculs, Python (24e) et Lua (25e)
+compris.
+
+* **Mesurées, les bibliothèques changent peu le plafond.** Elles ne battent la forme la plus rapide de la bibliothèque
+  standard que dans 13 cellules sur 35, et de beaucoup seulement en Python (NumPy : de 5 à 70 fois plus rapide dans
+  huit cellules) et en Lua (vmsl sur K5, 18 fois) ; ces deux langages restent de 5 à 48 fois plus lents que la
+  frontière, où l'échelle du plafond ne leur donne presque rien. Ailleurs, la bibliothèque est au mieux à 3 % de la
+  forme standard (Bumper en Julia, MAX en Mojo), souvent plus lente (gonum × 12 sur K9, amphp × 24 sur K9 mt, l'appel C
+  par élément d'`ocaml_intrinsics_kernel` × 7 sur K4). Le plafond ouvert seul ne déplace personne de plus de deux
+  places.
+* **La grille fait tout le déplacement : Rust passe 1er.** L'écosystème de Rust comble huit cases de sa grille (bumpalo,
+  fearless_simd, rayon, cache-padded, core_affinity, ndarray, hwlocality-sys, libc) ; aucun autre langage ne bouge de
+  plus de deux places. Avec les seules bibliothèques nommées, ou avec des cases comblées à ½, Rust est 4e, et Mojo monte
+  de 13e à 10e avec MAX seul.
+* **Moins de lignes, pas plus de vitesse** : 25 des 40 formes ont moins de lignes que la forme standard la plus rapide
+  (NumPy : une à treize lignes dans les cellules à un fil), mais le gain de lignes va rarement avec un gain de temps.
+* **Décision en attente** : publier cette piste comme seconde colonne du classement final, ou la garder à côté, est une
+  décision de l'auteur de l'étude ; elle lui est soumise avec ces résultats
+  ([`docs/V4_OPEN.md`](docs/V4_OPEN.md), 11.5).
+
 ## Pourquoi cet ordre, langage par langage
 
 Les temps cités viennent de la machine de référence (Cascade Lake), sauf mention d'Emerald Rapids. « Plafond » : le

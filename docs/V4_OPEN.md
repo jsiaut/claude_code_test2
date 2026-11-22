@@ -305,3 +305,109 @@ décision de l'auteur de l'étude, qui lui sera soumise avec les résultats.
    `ProcessContextFactory`, et leurs fonctions par le fichier d'amorce (`bootstrapPath`). Relevé des formes pour la
    campagne et l'analyse : `results/open/forms.json` (`tools/open/forms.py`) ; témoin d'hôte : la forme d'accès de C
    de chaque cellule touchée, dans la construction qui la porte.
+
+## 11. Résultats (22 novembre, après la campagne)
+
+*Sorties : `results/open/raw` (363 processus), `results/open/k3_ref_start.txt` et `results/open/k3_ref_end.txt`,
+`results/open/counts_op.json` et `results/open/regions_op.md` (`tools/open/count_op.py`), `results/open/analysis.json`
+et `results/report_open.md` (`analysis/open_v4.py`). Le classement de tête du README ne change pas (section 8).*
+
+### 11.1 Campagne
+
+Machine 34 (Xeon Emerald Rapids, modèle 207, le même pendant toute la campagne), 22 novembre, de 9 h 35 à 10 h 18 :
+trois passes de 121 processus (les 40 formes `op_*` ; les 35 formes d'accès, dans les constructions `op` et `cv` ;
+les 11 formes de C des cellules touchées), dans l'ordre tiré à la graine fixée. Aucun processus écarté (sommes de
+contrôle justes, ni dépassement de mémoire ni de durée), aucun vol de temps au-delà de 5 %, aucune reprise. b3 : 68,95
+et 69,80 ms avant la première passe, 69,75 et 69,40 ms après la dernière (85,12 ms sur la machine 33 ; le report garde
+les temps et le b3 du point 4). L'enregistrement de la fin du premier groupe n'avait rien poussé (`git add` refusé en
+bloc tant que `k3_ref_end.txt` manquait) : corrigé pendant la campagne, sans effet sur les mesures, gardées dans
+`results/open/work`. Contrôle : « Convergent, avec R4 » refait par l'outil à l'identique (même ordre, mêmes rangs
+espérés et mêmes scores au centre que le point 4).
+
+### 11.2 Formes et report
+
+Rapports r de chaque forme : `results/report_open.md`, « Report des formes ».
+
+* **Plus rapides que la forme d'accès** (13 cellules sur 35) : Python avec NumPy dans 8 cellules sur 10 (K5 × 0,014,
+  K9 mt × 0,04, K9 × 0,08, K1 × 0,10, Q6 × 0,11, Q6 mt × 0,18, Q1 × 0,19 ; Q1 mt × 0,20 avec dask, × 0,21 avec
+  NumPy) ; Lua avec vmsl sur K5 (× 0,054 : le produit scalaire en C) ; et, à 3 % près, Julia avec Bumper (K8, × 0,97),
+  Go avec templexxx/cpu (K3, × 0,98), Mojo avec MAX (Q1 mt, × 0,98) et Rust avec cache-padded (K3, × 0,99).
+* **Pas plus rapides** (22 cellules : la forme d'accès reste) : gonum (K9 × 12,2, K9 mt × 5,8 : trois `Add` et un
+  `Scale` font quatre passages sur la grille au lieu d'un), amphp (K9 mt × 24 : les bandes passent d'un processus à
+  l'autre par sérialisation ; Q6 mt × 1,04, Q1 mt × 1,12), `Conditional.select_int` d'OCaml (K4 × 7,1 : un appel C par
+  octet, le compilateur classé n'ayant pas l'intrinsèque ; Q6 × 1,05, Q6 mt × 1,18), dask sur K3 (× 11), NumPy sur K4
+  (× 2,3, contre `bytes.translate`), `@protobufjs/pool` (K8 × 2,6), bumpalo (× 1,47) et l'arène de Swift (× 1,46 : nœuds
+  de 24 octets alloués un à un, contre des indices dans un tableau), vmsl sur K9 (× 4,9 : `submatrix` recopie, et
+  l'intérieur est recopié élément par élément), llthreads2 (× 1,3 à 2,4 : les fils reçoivent leurs données en chaînes et
+  les décodent), MAX (K3 × 4,6, K9 mt × 1,18, Q6 mt × 1,01), soa de D (× 1,01), cachelines d'Ada (× 1,00 dans une même
+  construction).
+* **Témoin de construction** (écart 7) : w s'écarte de plus de 10 % pour 9 formes sur 40, qui prennent le
+  dénominateur de `_cv` : les trois formes K3 de Rust (w = 0,16 : `sw_padded` tourne en 13 ms dans la construction `op`,
+  en 79 ms dans `cv`, l'effet de placement que montre aussi b3, 13,6 ms au décalage de 8 octets contre 76,9 ms à 0), K3
+  d'Ada (0,89), K8 de JavaScript (0,87) et de Swift (1,18), K9 de Python (1,15) et ses deux formes Q1 mt (0,85). Aucune
+  ne change de côté : les formes de Rust passent de × 6,1 à × 0,99, celle d'Ada de × 1,00 à × 0,90 (K3 relevé à b3 de
+  toute façon), celle de Swift de × 1,23 à × 1,46.
+* **Loin de la frontière** : aucune forme `op_*` ne devient la plus rapide des 25 langages dans sa cellule. NumPy laisse
+  Python à 4,7 à 48 fois la frontière (Q6 4,7 ; K9 mt 7,8 ; K9 10,7 ; Q6 mt 11,9 ; K5 13,8 ; K1 32 ; Q1 45 ; Q1 mt 48),
+  vmsl laisse Lua à 32 fois sur K5 ; Bumper met K8 de Julia à 1,4 fois la frontière (C++), MAX Q1 mt de Mojo à 1,1 fois
+  (Odin).
+
+### 11.3 Classements (calculs 1 à 6)
+
+| Publié | Langage | Convergent, R4 | 1. Ouverte | 2. Plafond ouvert | 3. Grille ouverte | 4. Nommées | 5. Cases à ½ | 6. Témoin C |
+|---|---|---|---|---|---|---|---|---|
+| 1 | C | 3 | 3 | 3 | 3 | 2 | 2 | 3 |
+| 2 | Odin | 5 | 7 | 5 | 7 | 6 | 7 | 7 |
+| 3 | C++ | 1 | 2 | 1 | 2 | 1 | 1 | 2 |
+| 4 | C3 | 4 | 6 | 4 | 6 | 5 | 6 | 6 |
+| 5 | Zig | 2 | 4 | 2 | 4 | 3 | 3 | 4 |
+| 6 | Rust | 7 | **1** | 7 | **1** | **4** | **4** | **1** |
+| 7 | Nim | 6 | 5 | 6 | 5 | 7 | 5 | 5 |
+| 8 | D | 8 | 8 | 8 | 8 | 8 | 8 | 8 |
+| 9 | Ada | 10 | 10 | 10 | 10 | 12 | 10 | 10 |
+| 10 | Chapel | 9 | 9 | 9 | 9 | 9 | 9 | 9 |
+| 11 | Fortran | 11 | 13 | 12 | 13 | 11 | 11 | 13 |
+| 12 | Swift | 14 | 14 | 14 | 14 | 14 | 14 | 14 |
+| 13 | Julia | 12 | 11 | 11 | 11 | 13 | 12 | 11 |
+| 14 | Mojo | 13 | 12 | 13 | 12 | **10** | 13 | 12 |
+
+En gras : plus de deux places d'écart avec « Convergent, avec R4 ». Les onze suivants (C# à Lua) ont la même place dans
+les sept calculs. Rangs espérés, scores, rangs plausibles et étages : `results/report_open.md`.
+
+* **Le plafond ouvert seul ne déplace personne de plus de deux places.** Python y gagne (plafond E de 0,8 à 3,1 sur
+  100, score au centre de 12,3 à 13,3) mais reste 24e : à 4,7 à 48 fois la frontière, une cellule ne vaut presque rien
+  sur l'échelle de E (0,1 au plus par noyau). Julia et Fortran échangent les 11e et 12e places.
+* **La grille ouverte fait tout le déplacement** : Rust passe 1er (rang espéré 6,51 → 2,65, rang plausible 1–6), ses
+  huit cases comblées (B2, C1, C5, D3, D4, F1, F2, F4 : bumpalo, fearless_simd, rayon, cache-padded, core_affinity,
+  ndarray, hwlocality-sys, libc) portant sa catégorie C de 73,6 à 95,3. La grille seule (calcul 3) et le report par le
+  témoin C (calcul 6) donnent les mêmes places que le calcul 1.
+* **La place de Rust dépend de la règle de choix** : réduite aux bibliothèques nommées par le dossier (libc, crossbeam,
+  rayon : C5, D3, D4, F4), elle est 4e, et Mojo monte de 13e à 10e (MAX : C5, F1) ; avec les cases comblées à ½, 4e.
+  Les autres langages restent à deux places au plus de leur rang « Convergent, avec R4 » dans les six calculs.
+* Les étages indicatifs gardent leur forme : 19 langages, puis OCaml, BQN, JavaScript, PHP, Python et Lua.
+
+### 11.4 Coût d'accès (calcul 7, information)
+
+25 des 40 formes `op_*` ont moins de lignes que la forme d'accès de leur cellule, 12 en ont plus, 3 autant (médianes
+20,5 et 26 lignes ; outil et règles de lecture du point 5, `tools/open/regions_op.py`). Les bibliothèques raccourcissent
+surtout Python (188 lignes pour ses 13 formes, contre 481 pour les formes d'accès correspondantes : une à treize lignes
+dans les cellules à un fil avec NumPy, sans ligne de plus que le code naturel dans cinq d'entre elles), PHP (103 contre
+239 : `parallelMap` remplace la gestion des processus), Go (45 contre 95, mais gonum est plus lent) et Ada (28 contre
+57) ; elles allongent Lua (213 contre 53 : les fils reçoivent leurs colonnes en chaînes et les décodent), Swift (66
+contre 53), Julia (39 contre 35) et JavaScript (24 contre 20).
+
+### 11.5 Ce que cela change
+
+* Le classement de tête du README ne change pas (section 8).
+* Les bibliothèques tierces déplacent l'ordre par la grille, pas par le plafond : mesurées, elles ne battent la forme
+  d'accès de la bibliothèque standard que dans 13 cellules sur 35, de beaucoup seulement en Python et en Lua, deux
+  langages qu'elles laissent loin de la frontière. Leurs notes, elles, déplacent un langage : Rust, dont l'écosystème
+  comble huit cases de la grille, passe 1er.
+* Ce déplacement tient à la règle de choix : avec les seules bibliothèques nommées, ou avec des cases comblées à ½, Rust
+  est 4e.
+* **Décision soumise à l'auteur de l'étude** (section 8) : publier la piste ouverte comme seconde colonne du classement
+  final, ou la garder à côté, comme les points 2 à 5. Recommandation : la garder à côté. Elle répond à une autre
+  question (l'écosystème) ; son seul effet tient à huit notes de grille d'un langage, données par des bibliothèques
+  qu'une règle mécanique a choisies, dont certaines sont limitées ou peu suivies (cache-padded se dit dépréciée,
+  swift-memory-allocation n'a pas de version publiée, vmsl se dit expérimentale), et cet effet se réduit de moitié avec
+  la liste nommée ou la note ½ ; la partie mesurée, le plafond, ne déplace personne.

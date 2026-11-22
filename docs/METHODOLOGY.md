@@ -1792,3 +1792,14 @@ Robustesse :
   (`tools/open/forms.py`) ; pilote `tools/open/campaign.py` (121 processus par passe, trois passes, b3 au début et à
   la fin) ; analyse `analysis/open_v4.py` (contrôle « Convergent, avec R4 », calculs 1 à 7), essayée sur des données
   synthétiques non gardées.
+* 2026-11-22, 10:25 : **v4, point 6 : campagne et résultats de la piste ouverte** (`docs/V4_OPEN.md`, 11 ;
+  `results/report_open.md`). Machine 34, 9 h 35 à 10 h 18 : trois passes de 121 processus (formes `op_*`, formes
+  d'accès dans `op` et `cv`, formes de C), aucun processus écarté, aucun vol de temps au-delà de 5 % ; b3 pris avant et
+  après. L'enregistrement du premier groupe n'avait rien poussé (`git add` en bloc) : script corrigé pendant la
+  campagne, mesures intactes. Avant l'analyse : relevé des régions des formes `op_*` (`tools/open/regions_op.py`) et
+  garde du calcul 6 pour une forme sans témoin C (sans effet, toutes les mesures étant là). Contrôle « Convergent, avec
+  R4 » identique au point 4. Neuf formes prennent le dénominateur de `_cv` (écart 7 ; K3 de Rust : w = 0,16). Les
+  bibliothèques ne battent la forme standard la plus rapide que dans 13 cellules sur 35 (NumPy en Python, × 0,01 à
+  × 0,21, vmsl en Lua, × 0,05 ; ailleurs à 3 % au mieux) ; aucune ne devient la frontière. Plafond ouvert seul : aucun
+  déplacement de plus de deux places ; grille ouverte : Rust 1er (4e avec les seules bibliothèques nommées ou des cases
+  à ½), Mojo 10e avec MAX seul. Décision soumise à l'auteur : seconde colonne ou piste à côté.

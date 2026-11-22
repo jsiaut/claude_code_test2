@@ -111,7 +111,12 @@ bibliothèques nommées par le dossier) ; une grille ouverte (sondes des cases c
 écrites avec ces bibliothèques, mesurées sur un même hôte et reportées sur la campagne du point 4), à côté du
 classement ; le code par défaut ne change pas. Liste relevée le 22 novembre (`results/open/list.md`, poussée avant
 toute sonde et toute forme) : 47 bibliothèques dans 17 langages comblent 47 des 217 cases (après la correction de
-8 h 28, écart 5) ; 40 couples (bibliothèque, cellule du plafond) dans 12 langages.
+8 h 28, écart 5) ; 40 couples (bibliothèque, cellule du plafond) dans 12 langages. Résultats le 22 novembre (section
+11) : les sondes montent 41 des 47 cases ; mesurées sur la machine 34, les 40 formes ne battent la forme standard la
+plus rapide que dans 13 cellules sur 35 (de beaucoup seulement NumPy en Python et vmsl en Lua, qui restent loin de la
+frontière), et le plafond ouvert seul ne déplace personne de plus de deux places ; la grille ouverte fait passer Rust
+1er (8 cases comblées), 4e avec les seules bibliothèques nommées ou des cases à ½. Publier cette piste comme seconde
+colonne du classement final est soumis à l'auteur de l'étude (`docs/V4_OPEN.md`, 11.5).
 
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
