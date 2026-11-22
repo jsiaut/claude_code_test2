@@ -120,6 +120,12 @@ frontière), et le plafond ouvert seul ne déplace personne de plus de deux plac
 11.5).
 
 
+Campagne finale : plan détaillé dans `docs/V4_FINAL.md` (22 novembre, poussé avant tout outil, toute construction
+et toute mesure de la campagne) : une campagne qui réunit les règles des points 2 à 4 (trois tailles, R1 à R5, C1 à
+C6), avec la grille et sans la piste ouverte ; K8 naturel mesuré par sept processus, comme K2 ; b3 mesuré pour
+chaque groupe de K3 ; un groupe (noyau, taille) d'une passe toujours sur une même machine, refait en entier si un
+redémarrage l'interrompt. Son classement remplacera celui de la v3 en tête du README.
+
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
 une fois le point précédent terminé. Machine : l'hôte actuel est un Xeon Granite Rapids (modèle 173), une troisième
 micro-architecture ; les campagnes y seront appariées à un témoin C, comme les précédentes, et le choix de l'hôte sera

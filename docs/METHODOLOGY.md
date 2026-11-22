@@ -1806,3 +1806,12 @@ Robustesse :
 * 2026-11-22, 10:37 : **v4, point 6 : décision de l'auteur de l'étude** : la piste ouverte reste publiée à côté du
   classement, et non comme seconde colonne (`docs/V4_OPEN.md`, 11.5 ; README ; `docs/V4_PLAN.md`). Les six points de
   la v4 sont faits ; le classement de tête du README n'a pas changé.
+* 2026-11-22, 12:20 : **v4, campagne finale : plan détaillé** (`docs/V4_FINAL.md`), poussé avant tout outil, toute
+  construction et toute mesure. Le conteneur a redémarré vers 12 h 03 (machine 35, du modèle 6/207/2). Le plan réunit
+  les règles des points 2 à 4 (trois tailles, R1 à R5, C1 à C6), garde la grille (point 5) et laisse la piste ouverte
+  à côté (point 6). Constats examinés sur les enregistrements publiés : K8 naturel passe à sept processus (le D3 du
+  classement publié en avait sept, les points 2 à 4 trois) ; les processus lents de K5 du point 4 sont un épisode de
+  l'hôte (20 h 03 à 20 h 08), non un effet de la passe 0 ; b3 est mesuré pour chaque groupe de K3, parce qu'il change
+  d'une machine à l'autre du même modèle (85,1 ms sur la machine 33, 69,4 sur la 34). Durée estimée à une trentaine
+  d'heures : un groupe (noyau, taille) d'une passe est toujours mesuré sur une même machine, et refait en entier si un
+  redémarrage l'interrompt. Étalonnage et validation en une phase avant la passe 0.
