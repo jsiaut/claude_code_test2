@@ -129,3 +129,23 @@ p0 k4 ocaml/cv tuned  n=313 med=0.00558133s ok=['True'] oom=False rc=0
 p0 k4 python/cv tuned  n=54 med=0.0567822s ok=['True'] oom=False rc=0
 p0 k4 c/cv tuned  n=2280 med=0.000688892s ok=['True'] oom=False rc=0
 2026-11-22T09:52:24 passe 0 groupe 7/7 k4 7 processus 19s
+2026-11-22T09:52:26 passe 1 : 7 groupes ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+p1 k3 c/pub sw_padded  n=37 med=0.0767558s ok=['True'] oom=False rc=0
+p1 k3 rust/cv sw_padded  n=32 med=0.0786151s ok=['True'] oom=False rc=0
+p1 k3 go/op op_cpu  n=11 med=0.334565s ok=['True'] oom=False rc=0
+p1 k3 go/op rmw_padded  n=13 med=0.3828s ok=['True'] oom=False rc=0
+p1 k3 python/op op_dask  n=3 med=23.8009s ok=['True'] oom=False rc=0
+p1 k3 python/op sw_padded  n=3 med=2.10438s ok=['True'] oom=False rc=0
+p1 k3 ada/cv sw_padded  n=128 med=0.0154767s ok=['True'] oom=False rc=0
+p1 k3 mojo/op op_max  n=36 med=0.0781598s ok=['True'] oom=False rc=0
+p1 k3 mojo/op sw_padded  n=264 med=0.0168173s ok=['True'] oom=False rc=0
+p1 k3 mojo/cv sw_padded  n=191 med=0.0172587s ok=['True'] oom=False rc=0
+p1 k3 python/cv sw_padded  n=3 med=2.08122s ok=['True'] oom=False rc=0
+p1 k3 ada/op op_cachelines  n=152 med=0.0139973s ok=['True'] oom=False rc=0
+p1 k3 ada/op sw_padded  n=107 med=0.0137459s ok=['True'] oom=False rc=0
+p1 k3 go/cv rmw_padded  n=15 med=0.20839s ok=['True'] oom=False rc=0
+p1 k3 rust/op op_cache_padded  n=36 med=0.077356s ok=['True'] oom=False rc=0
+p1 k3 rust/op op_crossbeam  n=37 med=0.0775667s ok=['True'] oom=False rc=0
+p1 k3 rust/op op_libc  n=36 med=0.0773169s ok=['True'] oom=False rc=0
+p1 k3 rust/op sw_padded  n=219 med=0.012625s ok=['True'] oom=False rc=0
+2026-11-22T09:55:04 passe 1 groupe 1/7 k3 18 processus 158s
