@@ -387,3 +387,4 @@ p2 k8 rust/op op_bumpalo  n=20 med=0.113737s ok=['True'] oom=False rc=0
 p2 k8 rust/op tuned_it  n=38 med=0.0773185s ok=['True'] oom=False rc=0
 p2 k8 rust/cv tuned_it  n=42 med=0.0916931s ok=['True'] oom=False rc=0
 2026-11-22T10:17:44 passe 2 groupe 7/7 k8 13 processus 64s
+2026-11-22T10:17:51 b3 (end) : code 0
