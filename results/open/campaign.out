@@ -295,3 +295,11 @@ p2 k4 python/cv tuned  n=54 med=0.0762748s ok=['True'] oom=False rc=0
 p2 k4 python/op op_numpy  n=22 med=0.165045s ok=['True'] oom=False rc=0
 p2 k4 python/op tuned  n=34 med=0.0903995s ok=['True'] oom=False rc=0
 2026-11-22T10:08:31 passe 2 groupe 2/7 k4 7 processus 21s
+p2 k1 d/op op_soa energy n=548 med=0.0029965s ok=['True'] oom=False rc=0
+p2 k1 d/op soa energy n=605 med=0.0027833s ok=['True'] oom=False rc=0
+p2 k1 python/cv soa energy n=3 med=0.728765s ok=['True'] oom=False rc=0
+p2 k1 python/op op_numpy energy n=36 med=0.0791319s ok=['True'] oom=False rc=0
+p2 k1 python/op soa energy n=3 med=0.761934s ok=['True'] oom=False rc=0
+p2 k1 c/pub soa energy n=557 med=0.00261783s ok=['True'] oom=False rc=0
+p2 k1 d/cv soa energy n=531 med=0.0027727s ok=['True'] oom=False rc=0
+2026-11-22T10:08:54 passe 2 groupe 3/7 k1 7 processus 21s
