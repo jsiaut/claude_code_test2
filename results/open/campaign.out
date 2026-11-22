@@ -157,3 +157,31 @@ p1 k1 python/cv soa energy n=3 med=0.64765s ok=['True'] oom=False rc=0
 p1 k1 d/op op_soa energy n=548 med=0.00279885s ok=['True'] oom=False rc=0
 p1 k1 d/op soa energy n=605 med=0.0027576s ok=['True'] oom=False rc=0
 2026-11-22T09:55:25 passe 1 groupe 2/7 k1 7 processus 19s
+p1 k9 go/cv tuned_v  n=173 med=0.0148304s ok=['True'] oom=False rc=0
+p1 k9 go/cv mt_pool_v  n=421 med=0.00666694s ok=['True'] oom=False rc=0
+p1 k9 php/op op_amphp  n=3 med=1.53149s ok=['True'] oom=False rc=0
+p1 k9 php/op mt  n=51 med=0.0633895s ok=['True'] oom=False rc=0
+p1 k9 go/op op_gonum  n=17 med=0.193801s ok=['True'] oom=False rc=0
+p1 k9 go/op op_gonum_mt  n=81 med=0.0363477s ok=['True'] oom=False rc=0
+p1 k9 go/op tuned_v  n=117 med=0.0154382s ok=['True'] oom=False rc=0
+p1 k9 go/op mt_pool_v  n=399 med=0.00663944s ok=['True'] oom=False rc=0
+p1 k9 lua/cv natural  n=5 med=0.529735s ok=['True'] oom=False rc=0
+p1 k9 lua/cv rq_slide_mt  n=4 med=0.772555s ok=['True'] oom=False rc=0
+p1 k9 python/cv natural  n=3 med=1.30692s ok=['True'] oom=False rc=0
+p1 k9 python/cv mt  n=4 med=0.72059s ok=['True'] oom=False rc=0
+p1 k9 python/op op_numpy  n=27 med=0.11798s ok=['True'] oom=False rc=0
+p1 k9 python/op op_numpy_mt  n=87 med=0.0298854s ok=['True'] oom=False rc=0
+p1 k9 python/op op_dask_mt  n=10 med=0.260187s ok=['True'] oom=False rc=0
+p1 k9 python/op natural  n=3 med=1.25395s ok=['True'] oom=False rc=0
+p1 k9 python/op mt  n=3 med=0.482263s ok=['True'] oom=False rc=0
+p1 k9 php/cv mt  n=42 med=0.0640234s ok=['True'] oom=False rc=0
+p1 k9 c/cv tuned_v  n=200 med=0.0135558s ok=['True'] oom=False rc=0
+p1 k9 c/cv mt_pool_v  n=718 med=0.00474453s ok=['True'] oom=False rc=0
+p1 k9 mojo/cv mt  n=380 med=0.00568223s ok=['True'] oom=False rc=0
+p1 k9 mojo/op op_max  n=358 med=0.00646965s ok=['True'] oom=False rc=0
+p1 k9 mojo/op mt  n=344 med=0.00524661s ok=['True'] oom=False rc=0
+p1 k9 lua/op op_vmsl  n=3 med=2.31726s ok=['True'] oom=False rc=0
+p1 k9 lua/op op_llthreads2  n=3 med=0.872983s ok=['True'] oom=False rc=0
+p1 k9 lua/op natural  n=5 med=0.486658s ok=['True'] oom=False rc=0
+p1 k9 lua/op rq_slide_mt  n=4 med=0.681508s ok=['True'] oom=False rc=0
+2026-11-22T09:58:37 passe 1 groupe 3/7 k9 27 processus 190s
