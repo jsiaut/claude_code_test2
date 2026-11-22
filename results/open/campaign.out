@@ -1,0 +1,38 @@
+2026-11-22T09:35:50 constructions prêtes ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-22T09:35:56 b3 (start) : code 0
+2026-11-22T09:35:56 passe 0 : 7 groupes ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+p0 k9 go/op op_gonum  n=17 med=0.18922s ok=['True'] oom=False rc=0
+p0 k9 go/op op_gonum_mt  n=81 med=0.0382534s ok=['True'] oom=False rc=0
+p0 k9 go/op tuned_v  n=117 med=0.0154992s ok=['True'] oom=False rc=0
+p0 k9 go/op mt_pool_v  n=399 med=0.00635046s ok=['True'] oom=False rc=0
+p0 k9 php/op op_amphp  n=3 med=1.64406s ok=['True'] oom=False rc=0
+p0 k9 php/op mt  n=51 med=0.0668907s ok=['True'] oom=False rc=0
+p0 k9 mojo/cv mt  n=380 med=0.0063449s ok=['True'] oom=False rc=0
+p0 k9 python/cv natural  n=3 med=1.29605s ok=['True'] oom=False rc=0
+p0 k9 python/cv mt  n=4 med=0.53667s ok=['True'] oom=False rc=0
+p0 k9 lua/op op_vmsl  n=3 med=2.45268s ok=['True'] oom=False rc=0
+p0 k9 lua/op op_llthreads2  n=3 med=0.799038s ok=['True'] oom=False rc=0
+p0 k9 lua/op natural  n=5 med=0.505502s ok=['True'] oom=False rc=0
+p0 k9 lua/op rq_slide_mt  n=4 med=0.620826s ok=['True'] oom=False rc=0
+p0 k9 mojo/op op_max  n=358 med=0.0069176s ok=['True'] oom=False rc=0
+p0 k9 mojo/op mt  n=344 med=0.00585888s ok=['True'] oom=False rc=0
+p0 k9 go/cv tuned_v  n=173 med=0.016474s ok=['True'] oom=False rc=0
+p0 k9 go/cv mt_pool_v  n=421 med=0.00581447s ok=['True'] oom=False rc=0
+p0 k9 lua/cv natural  n=5 med=0.481819s ok=['True'] oom=False rc=0
+p0 k9 lua/cv rq_slide_mt  n=4 med=0.616377s ok=['True'] oom=False rc=0
+p0 k9 c/cv tuned_v  n=200 med=0.0138144s ok=['True'] oom=False rc=0
+p0 k9 c/cv mt_pool_v  n=718 med=0.00493719s ok=['True'] oom=False rc=0
+p0 k9 python/op op_numpy  n=27 med=0.110017s ok=['True'] oom=False rc=0
+p0 k9 python/op op_numpy_mt  n=87 med=0.0295728s ok=['True'] oom=False rc=0
+p0 k9 python/op op_dask_mt  n=10 med=0.26785s ok=['True'] oom=False rc=0
+p0 k9 python/op natural  n=3 med=1.49651s ok=['True'] oom=False rc=0
+p0 k9 python/op mt  n=3 med=0.732901s ok=['True'] oom=False rc=0
+p0 k9 php/cv mt  n=42 med=0.0647524s ok=['True'] oom=False rc=0
+2026-11-22T09:39:41 passe 0 groupe 1/7 k9 27 processus 225s
+p0 k3 go/op op_cpu  n=11 med=0.241106s ok=['True'] oom=False rc=0
+p0 k3 go/op rmw_padded  n=13 med=0.239918s ok=['True'] oom=False rc=0
+p0 k3 mojo/cv sw_padded  n=191 med=0.018556s ok=['True'] oom=False rc=0
+p0 k3 c/pub sw_padded  n=37 med=0.075019s ok=['True'] oom=False rc=0
+p0 k3 rust/cv sw_padded  n=32 med=0.0786204s ok=['True'] oom=False rc=0
+p0 k3 go/cv rmw_padded  n=15 med=0.234404s ok=['True'] oom=False rc=0
+p0 k3 python/cv sw_padded  n=3 med=2.39079s ok=['True'] oom=False rc=0
