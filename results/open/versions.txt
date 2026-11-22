@@ -34,7 +34,8 @@ Haskell (GHC 9.14.1, cabal, --store-dir=/opt/open/haskell/store)
             parallel 3.3.0.0 ; atomic-primops 0.8.8 ; concurrent-barrier 0.1.2 ; mmap 0.5.9.
 OCaml 5.5.2 opam n'est pas sur l'hôte : versions publiées dans opam, prises à leurs archives de version (ou à leur
             étiquette git quand l'archive de GitHub n'est pas joignable), construites par dune 3.25.0 (amorcé depuis
-            ses sources) : lock/ocaml/sources.txt (sha256 et commits)
+            ses sources ; talons C compilés pour le processeur hôte, c_flags -O2 -march=native dans dune-workspace) :
+            lock/ocaml/sources.txt (sha256 et commits)
             ocaml_intrinsics_kernel v0.17.3 ; domainslib 0.5.2 (saturn 1.0.0, domain-local-await 1.0.1,
             multicore-magic 2.3.2, backoff 0.1.1, thread-table 1.0.0) ; processor 0.2.
 JavaScript (npm ; vérification sous Node 26.12.1, la chaîne classée) : lock/js/package.json,
@@ -45,6 +46,6 @@ PHP 8.5.12  Composer exécuté par PHP 8.3 (le PHP 8.5 classé n'a pas openssl),
             amphp/parallel-functions 2.0.0 (amphp/parallel 2.4.0) ; rindow/rindow-math-matrix 2.2.0 (pilote PHP).
 Python 3.15.2 (venv /opt/open/python) : lock/python/requirements.txt
             numpy 2.5.5 ; dask 2026.8.0 ; atomics 1.0.3.
-Lua 5.5.1   LuaRocks n'est pas sur l'hôte : sources aux étiquettes des rockspecs, compilées par gcc -O2 contre les
-            en-têtes de Lua 5.5.1.
+Lua 5.5.1   LuaRocks n'est pas sur l'hôte : sources aux étiquettes des rockspecs (git archive), compilées par gcc -O2
+            -fPIC contre les en-têtes de Lua 5.5.1, sous /opt/open/lua (src, include, lib).
             lua-llthreads2 0.1.6-1 (étiquette v0.1.6, fe07894) ; vmsl 1.1-2 (étiquette v1.1, a170620).

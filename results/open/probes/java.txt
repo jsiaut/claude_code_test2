@@ -1,0 +1,7 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), Java : sondes exécutées le 2026-11-22 08:45, machine 34, openjdk version "27.0.1.0.3" 2026-10-25
+CAP;D4;1;net.openhft:affinity 2026.2;[exécutée] Affinity.setAffinity({2}) dans un fil : getAffinity = {2}, getCpu sur 1000 lectures = [2]
+NOTE;D4;note publiée 0 ; affinité d'un fil posée et relue (Affinity, AffinityLock) : 1
+CAP;F1;1;org.tensorflow:ndarray 1.0.0;[exécutée] NdArrays.wrap(Shape.of(300, 500), DataBuffers.of(double[150000])) de dimensions connues à l'exécution : shape [300, 500], a[2, 3] = 7.0 écrit à l'indice 1003 du tableau Java sous-jacent (2*500+3) ; a.get(2) est une vue de forme [500]
+NOTE;F1;note publiée ½ (tableaux de tableaux ; FFM) ; tableau à n dimensions de forme connue à l'exécution, sur un tampon contigu, vues par indice : 1
+CAP;F2;0.5;org.apache.ignite:ignite-numa-allocator 2.18.0;[exécutée] NumaAllocator(SimpleNumaAllocationStrategy(0)).allocateMemory(4 Mio) = 0x7f12a8ad7020 ; /proc/self/numa_maps : 7f12a8ad7000 bind:0 anon=1024 dirty=1024 active=0 N0=1024 kernelpagesize_kB=4
+NOTE;F2;note publiée 0 ; mémoire hors tas liée à un nœud (politique bind relue dans numa_maps), mais adresses brutes seulement : ni tableaux ni objets du tas, ni placement des fils : limitée, ½

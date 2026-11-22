@@ -1,0 +1,7 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), Haskell : sondes exécutées le 2026-11-22 08:47, machine 34, The Glorious Glasgow Haskell Compilation System, version 9.14.1
+CAP;C5;1;parallel 3.3.0.0;[exécutée] parMap rdeepseq sur 4 tranches : somme = 800000020000000 (attendu 800000020000000) ; parListChunk 100000 rdeepseq : 16000004000000 ; 4 capacités (+RTS -N4) ; RTS : SPARKS: 44 (43 converted, 0 overflowed, 0 dud, 0 GC'd, 1 fizzled)
+NOTE;C5;note publiée ½ (par# de ghc-prim ; parallel non livré) ; stratégies d'évaluation parallèle (parMap, parListChunk), étincelles converties sur 4 capacités : 1
+CAP;D2;0.5;atomic-primops 0.8.8;[exécutée] compteur atomique (incrCounter) incrémenté par 4 fils forkOn : 400000 (attendu 400000) ; casIORef réussi = True, valeur 41 ; storeLoadBarrier, loadLoadBarrier, writeBarrier appelées ; aucun ordre relâché, acquire ou release sur les opérations elles-mêmes
+NOTE;D2;note publiée ½ ; opérations atomiques (CAS, ajout) séquentiellement cohérentes et barrières explicites, mais aucun ordre mémoire choisi par opération : ½, inchangée
+CAP;F4;1;mmap 0.5.9;[exécutée] mmapFileForeignPtr : 4096 octets projetés (fichier dans /proc/self/maps = True) ; castForeignPtr vers Word32, sans copie : élément 1000 = 1000
+NOTE;F4;note publiée 0 ; fichier projeté (mmapFileForeignPtr) et relu comme Word32 sans copie : 1

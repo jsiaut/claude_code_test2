@@ -1,0 +1,5 @@
+(executable
+ (name probe)
+ (ocamlopt_flags (:standard -O3))
+ (foreign_stubs (language c) (names stubs))
+ (libraries unix domainslib processor ocaml_intrinsics_kernel))

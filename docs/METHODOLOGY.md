@@ -1771,3 +1771,12 @@ Robustesse :
   des barrières mémoire : refusées, D5 reste un trou dans ces deux langages ; la liste compte 47 bibliothèques qui
   comblent 47 cases, les 40 couples (bibliothèque, cellule) inchangés. Le relevé nomme aussi chaque forme `op_*` et
   son idiome (5.1).
+* 2026-11-22, 8:53 : **v4, point 6 : sondes de la grille ouverte** (`docs/V4_OPEN.md`, 4 ; `probes/open/<langage>`,
+  `results/open/probes/`). Une sonde exécutée par case comblée, avec la chaîne et les options du banc ; chacune se
+  sert de l'API pour le levier de la case et en imprime l'effet (affinité relue, politique NUMA relue, instructions
+  du code machine, adresses des tampons, fils distincts). Les 47 cases comblées sont sondées : 41 montent (34 à 1,
+  7 à ½), 6 restent à leur note publiée, la bibliothèque étant limitée (Bumper et VectorizationBase en Julia,
+  l'arène de Swift, atomic-primops, dask, MAX pour D1). Correction (écart 6) : le `CachePadded` de cordyceps est
+  privé, `cache-padded` est retenue pour D3 de Rust. Talons C d'ocaml_intrinsics_kernel compilés pour le
+  processeur hôte (5.2 du plan), sans quoi popcnt devient une fonction logicielle. Résumé :
+  `results/open/probes/summary.md`, `results/open/grid_open.json` (`tools/open/probes_summary.py`).

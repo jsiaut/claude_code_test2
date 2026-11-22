@@ -1,0 +1,7 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), Mojo : sondes exécutées le 2026-11-22 08:44, machine 34, Mojo 1.2.0 (2016d0cd)
+CAP;C5;1;MAX 26.7.0 (nommée);[exécutée] sync_parallelize(work, num_work_items=4) : somme = 800000020000000 (attendu 800000020000000) ; éléments de travail exécutés sur 4 fils distincts (gettid)
+NOTE;C5;note publiée 0 ; boucle parallèle sur les cœurs (max.algorithm.functional.sync_parallelize, parallelize), réduction par résultats partiels : 1
+CAP;D1;0.5;MAX 26.7.0 (nommée);[exécutée] les quatre éléments de travail écrivent dans la même List (mémoire partagée) : out = 50000005000000 150000005000000 250000005000000 350000005000000
+NOTE;D1;note publiée ½ (seulement runtime._asyncrt, privé) ; MAX donne des éléments de travail parallèles en mémoire partagée (fork-join), mais ni fil à créer ni à joindre : limitée, ½, inchangée
+CAP;F1;1;MAX 26.7.0 (nommée);[exécutée] LayoutTensor[float64, row_major(UNKNOWN, UNKNOWN)] sur RuntimeLayout( 300 , 500 ) : t[2, 3] = 7 écrit à l'indice 1003 du tampon contigu (2* 500 +3) ; dim(0) = 300 , dim(1) = 500
+NOTE;F1;note publiée ½ (pas de tableau multidimensionnel en std) ; LayoutTensor à disposition d'exécution (RuntimeLayout) sur un tampon contigu : 1 ; le compilateur signale LayoutTensor comme remplacé par TileTensor, du même paquet layout

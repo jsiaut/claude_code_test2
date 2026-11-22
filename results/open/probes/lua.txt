@@ -1,0 +1,5 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), Lua : sondes exécutées le 2026-11-22 08:51, machine 34, Lua 5.5.1  Copyright (C) 1994-2026 Lua.org, PUC-Rio
+CAP;D1;0.5;lua-llthreads2 0.1.6;[exécutée] 4 fils llthreads2 (états Lua séparés, arguments copiés) : somme = 5000000050000000 (attendu 5000000050000000) en 0.17 s écoulées et 0.48 s de processeur, contre 0.43 s pour la même boucle dans le fil principal ; aucune mémoire partagée entre états
+NOTE;D1;note publiée 0 (coroutines seulement) ; vrais fils système en parallèle, mais chacun dans son propre état Lua : données passées par copie (arguments et résultats), aucune mémoire partagée : limitée, ½, comme les processus de PHP
+CAP;F1;1;vmsl 1.1;[exécutée] matrix.CreateMatrix(300, 500) de dimensions connues à l'exécution : a[{3, 4}] = 7 lu à l'accès linéaire a[1004] = (3-1)*500+4 (tampon double contigu, par lignes) ; vecteurs : (1,2,3,4) * (4,3,2,1) = 20
+NOTE;F1;note publiée 0 ; matrice M×N sur un tampon double contigu, dimensions connues à l'exécution : 1 (deux dimensions seulement, comme les tableaux 2D de C)

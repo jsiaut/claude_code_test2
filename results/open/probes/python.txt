@@ -1,0 +1,7 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), Python : sondes exécutées le 2026-11-22 08:50, machine 34, Python 3.15.2
+CAP;C5;0.5;dask 2026.8.0;[exécutée] dask.array (4 blocs) .sum().compute(scheduler='threads', num_workers=4) = 800000020000000 (attendu 800000020000000) en 19.1 ms, contre 23.0 ms pour np.sum seul ; 4 tâches dask.delayed exécutées sur 4 fils distincts, somme 800000020000000
+NOTE;C5;note publiée ½ (multiprocessing.Pool.map) ; tableaux et tâches répartis sur un ordonnanceur à fils, parallèles seulement quand le calcul de chaque bloc rend le GIL (NumPy), ou sur des processus (données copiées) : limitée, ½, inchangée
+CAP;D2;1;atomics 1.0.3;[exécutée] atomic(width=8, INT) : 4 fils × 100000 fetch_inc(order=RELAXED) = 400000 (attendu 400000) ; load(order=ACQUIRE), store(order=RELEASE) puis load = 7 ; store(order=ACQUIRE) refusé (MemoryOrderError)
+NOTE;D2;note publiée 0 ; entiers atomiques à ordre mémoire explicite par opération (RELAXED, ACQUIRE, RELEASE, ACQ_REL, SEQ_CST), ordre invalide refusé : 1
+CAP;F1;1;numpy 2.5.5 (nommée);[exécutée] np.zeros((300, 500)) de dimensions connues à l'exécution : shape (300, 500), strides (4000, 8), C_CONTIGUOUS = True, a[2, 3] = 7.0 à l'indice 1003 de la vue aplatie (2*500+3), reshape sans copie = True
+NOTE;F1;note publiée ½ (memoryview.cast(shape=…)) ; tableau à n dimensions contigu, de forme connue à l'exécution, vues sans copie : 1
