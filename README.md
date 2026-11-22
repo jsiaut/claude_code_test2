@@ -328,8 +328,11 @@ Les onze suivants restent à une place au plus de leur rang publié dans chacun 
 langages, les corrections que le classement publié applique (copies corrigées des remarques, harnais commun de K9).
 L'effet des tailles, mesuré sur le même code des deux côtés, tient ; la comparaison au classement publié (« l'effet de
 l'hôte », dernier point) mêle ces corrections : le K4 de Fortran, le K9 d'Odin et de Zig en dépendent
-([`docs/V4_SIZES.md`](docs/V4_SIZES.md), 10.7). Les sources sont mises en accord avec le classement publié au
-point 4, qui mesurera l'effet de l'erratum.*
+([`docs/V4_SIZES.md`](docs/V4_SIZES.md), 10.7). Les sources ont été mises en accord avec le classement publié au
+point 4, qui a mesuré l'effet de l'erratum sur un même hôte : les deux sources y donnent des classements à deux places
+au plus l'un de l'autre ; contre le classement publié, la source corrigée déplace de trois ou quatre places D
+(8e → 4e), Odin (2e → 5e) et Mojo (14e → 11e), mais ni Fortran (13e : son recul tenait aux corrections absentes) ni
+Zig (6e) ([`docs/V4_CONVERGE.md`](docs/V4_CONVERGE.md), 11.9).*
 
 ### Des conditions égales (v4, point 3 ; à côté du classement)
 
@@ -397,7 +400,66 @@ interdit dans le code optimisé, avait été compté ; écarté, FreePascal recu
 gagnent une ; les autres conclusions ne changent pas ([`docs/V4_EQUAL.md`](docs/V4_EQUAL.md), 11.8). Comme celle du
 point 2, cette campagne a mesuré des sources sans les corrections du classement publié pour 20 langages : l'effet de
 chaque règle, mesuré sur le même code des deux côtés, tient ; les comparaisons au classement publié (réplication,
-dernière phrase) et la place relative de C, Chapel, Ada et Swift, dont le K9 était déjà au harnais commun, non (11.9).*
+dernière phrase) et la place relative de C, Chapel, Ada et Swift, dont le K9 était déjà au harnais commun, non (11.9).
+Mesuré au point 4 sur un même hôte, cet erratum ne déplace aucun langage de plus de deux places, et la montée de Zig
+par R3 comme le recul de D par R4 se retrouvent sur la source corrigée
+([`docs/V4_CONVERGE.md`](docs/V4_CONVERGE.md), 11.9).*
+
+### Un code optimisé convergent (v4, point 4 ; à côté du classement)
+
+Le plafond (40 % du score au centre) prend la meilleure variante optimisée de chaque langage : il dépend aussi de
+l'effort mis dans chaque implémentation. Les remarques avaient trouvé de meilleures formes pour une quinzaine de
+langages, gardées hors du classement et jamais tentées ailleurs. Le point 4 de la v4 a dressé un catalogue des formes
+de la frontière et de celles que les remarques ont mesurées (20 formes, réserves de fils comprises), l'a porté dans
+les 25 langages (230 formes écrites, 87 déjà présentes, 61 non écrivibles, preuve à l'appui, et 17 formes propres à un
+runtime), et a mesuré l'effet de la règle qui s'appliquera dans la campagne finale : le plafond prend la meilleure
+forme admise. Une seule campagne, sur un même hôte (Emerald Rapids, machine 33 : 3 096 processus en trois passes, base
+comprise), avec un plan et une analyse fixés avant les mesures ([`docs/V4_CONVERGE.md`](docs/V4_CONVERGE.md),
+[`results/report_converge.md`](results/report_converge.md)). Avant le portage, les sources publiées ont reçu les
+corrections que le classement publié leur applique (errata des points 2 et 3, ci-dessus). Le classement ci-dessus ne
+change pas.
+
+| Publié | Langage | Cet hôte | Convergent | Choix sur une passe | Remarques seules | Convergent, R4 | Source non corrigée |
+|---|---|---|---|---|---|---|---|
+| 1 | C | 1 | 2 | 4 | 1 | 3 | 1 |
+| 2 | Odin | 5 | 6 | 6 | 5 | 5 | 5 |
+| 3 | C++ | 2 | 1 | 1 | 2 | 1 | 3 |
+| 4 | C3 | 3 | 3 | 2 | 3 | 4 | 2 |
+| 5 | Zig | 6 | 4 | 3 | 8 | 2 | 6 |
+| 6 | Rust | 7 | 8 | 8 | 6 | 7 | 8 |
+| 7 | Nim | 8 | 7 | 7 | 7 | 6 | 7 |
+| 8 | D | 4 | 5 | 5 | 4 | 8 | 4 |
+| 9 | Ada | 9 | 9 | 9 | 9 | 10 | 10 |
+| 10 | Chapel | 10 | 11 | 11 | 10 | 9 | 9 |
+| 11 | Fortran | 13 | 12 | 13 | 11 | 11 | 14 |
+| 12 | Swift | 12 | 14 | 14 | 13 | 14 | 11 |
+| 13 | Julia | 14 | 13 | 12 | 14 | 12 | 13 |
+| 14 | Mojo | 11 | 10 | 10 | 12 | 13 | 12 |
+
+Les onze suivants restent à une place au plus de leur rang publié dans chacun de ces calculs, sauf FreePascal, 18e
+avec R4.
+
+* **La convergence ne déplace aucun langage de plus de deux places.** C++ passe 1er, Zig gagne deux places
+  (6e → 4e), Swift en perd deux (12e → 14e) ; derrière C++, C, C3 et Zig sont à égalité. Les scores des compilés
+  montent de 5 points en médiane (C++ : + 8,8), par le plafond.
+* **Deux noyaux font l'essentiel.** Dans K4, le SIMD explicite du point 3 et une forme par mots de 64 bits (celle de
+  Swift) mettent seize langages entre 0,58 et 0,77 ms, à la bande passante d'un cœur. Dans K8, l'arbre parcouru avec
+  une pile explicite ou avec l'état passé par valeur divise le temps de 22 langages par 1,1 à 4,5 : seize font K8 en
+  63 à 123 ms, quand seul Ada était sous 180 ms avec les formes publiées, et C++ (62,5 ms) passe devant Ada (73,2).
+  Les réserves de fils améliorent les cellules à quatre fils de 15 à 18 langages. K5 et K7 bougent peu : les formes
+  du catalogue y étaient déjà présentes dans la plupart des langages.
+* **Les remarques seules ne faisaient presque rien** : avec les seules formes que chaque remarque avait trouvées pour
+  son langage, les scores montent de 0,4 point en médiane, contre 5 avec la convergence. Le gain vient des formes
+  portées d'un langage à l'autre.
+* **Choisir le minimum parmi plus de formes ajoute peu par hasard.** Choisies sur une passe et estimées sur les deux
+  autres, les formes changent les rangs espérés de 0,4 au plus ; C, C3 et Zig, à égalité, y échangent leurs places
+  (C 4e), ce qui fait bouger C de trois places par rapport à « Cet hôte ».
+* **Avec K3 rapporté à la boucle de référence (R4), Zig passe 2e et D 8e**, comme au point 3.
+* **L'erratum des points 2 et 3 compte peu.** Sur cet hôte, la source non corrigée et la source corrigée donnent des
+  classements à deux places au plus l'un de l'autre, alors que des cellules changent beaucoup (harnais de K9 à quatre
+  fils : × 1,9 à 2,7 pour huit langages ; K4 naturel de Haskell : × 10,7). Contre le classement publié, la source
+  corrigée déplace encore D (8e → 4e), Odin (2e → 5e) et Mojo (14e → 11e) ; Fortran et Zig, qui reculaient de trois
+  places aux points 2 et 3, non : le premier par les corrections, le second par l'hôte.
 
 ## Pourquoi cet ordre, langage par langage
 
@@ -1143,7 +1205,11 @@ confrontée à la mienne par quatre tests pré-enregistrés ([`docs/CONFRONTATIO
   plan, écarts, campagne, contrôle et résultats ([`docs/V4_SIZES.md`](docs/V4_SIZES.md),
   [`results/report_sizes.md`](results/report_sizes.md)). Point 3, des conditions égales (vérifications, stencil, SIMD
   explicite dans K4, placement de K3) : plan, écarts, campagne, contrôle et résultats
-  ([`docs/V4_EQUAL.md`](docs/V4_EQUAL.md), [`results/report_equal.md`](results/report_equal.md)).
+  ([`docs/V4_EQUAL.md`](docs/V4_EQUAL.md), [`results/report_equal.md`](results/report_equal.md)). Point 4, un code
+  optimisé convergent (catalogue des formes du plafond porté dans les 25 langages, base corrigée, effet de l'erratum
+  des points 2 et 3) : plan, diagnostic, écarts, relevé des formes, campagne et résultats
+  ([`docs/V4_CONVERGE.md`](docs/V4_CONVERGE.md), [`results/converge/inventory.md`](results/converge/inventory.md),
+  [`results/report_converge.md`](results/report_converge.md)).
 * La sensibilité « sans SIMD explicite », le classement des variantes (types vectoriels du langage, intrinsèques de la
   plateforme, intrinsèques importées) et le décompte corrigé des formes de Q1 (9 contre 5) :
   [`docs/NOSIMD.md`](docs/NOSIMD.md) et [`results/report_nosimd.md`](results/report_nosimd.md) ; note d'explication

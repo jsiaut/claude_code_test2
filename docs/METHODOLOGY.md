@@ -1683,4 +1683,30 @@ Robustesse :
   Zig, Odin, C3, Nim, C#, Julia et Mojo le seul harnais. Reportés à la main : K8 `tuned` de Haskell et d'OCaml (tailles
   du point 2), les options de construction de Haskell et d'OCaml, les deux errata de BQN (sans ses blocs, restés en
   sensibilité). Validation : 525 cellules, toutes justes (`results/converge/validation_base.txt`).
-
+* 2026-11-21, 17:05 à 19:11 : **v4, point 4 : portage, relevé, pilote et analyse** (`docs/V4_CONVERGE.md`, 4.2 et
+  11.1 ; `results/converge/inventory.md`). Copies `bench/<langage>_cv` des 25 langages, parties des sources corrigées ;
+  formes du catalogue écrites langage par langage, dans l'ordre du classement, chaque langage poussé une fois validé
+  (17:33 à 19:06). Relevé : 230 formes écrites, 87 présentes, 61 non écrivibles (preuve notée), 122 sans objet, et 17
+  formes propres à un runtime ; 247 cellules nouvelles ; validation : 915 cellules des copies, toutes justes. Écarts
+  datés (4.2) : K9 à voisins glissants (Lua, JavaScript) et Q6 en colonnes de Python, classés propres au runtime ;
+  conversion de K5 de JavaScript faite dans le chrono. Pilote (`tools/converge/campaign.py`) et analyse
+  (`analysis/converge_v4.py`) poussés à 19:06, avant toute mesure ; constantes de taille des copies des langages
+  interprétés (`tools/sizes/patches.py`) à 19:09 ; b3 du début à 19:11.
+* 2026-11-21, 19:11 au 22 novembre, 1:55 : **v4, point 4 : campagne et résultats** (`docs/V4_CONVERGE.md`, 11 ;
+  `results/report_converge.md` ; `results/converge/analysis.json`). Campagne sur la machine 33, de 19:11 à 1:29, sans
+  redémarrage, enregistrée et poussée à chaque fin de groupe : 3 096 processus (trois passes de 1 032 : base, formes
+  écrites, source non corrigée ; le K9 naturel de Fortran sur la source non corrigée mesuré deux fois par passe, la
+  liste du pilote le comptant pour deux corrections), un seul modèle de processeur, aucun échec, vol de temps de 2,3 %
+  au plus ; b3 de fin, machine au repos : 85,65 et 84,55 ms (début : 84,90 et 85,40). Analyse exécutée sans
+  changement. Résultats : « Convergent » ne déplace aucun langage de plus de deux places (C++ 1er, Zig 6e → 4e, Swift
+  12e → 14e), surtout par K4 (`tuned` de R3, `swar`) et K8 (`tuned_it`, `tuned_val` : la frontière passe d'Ada,
+  73,2 ms, à C++, 62,5) ; « Remarques » : + 0,4 point en médiane au centre pour les 19 premiers, contre + 5,0 ;
+  sélection indépendante : 19 choix sur 250 changent, et C, C3 et Zig, à égalité, échangent leurs places (C 1er → 4e
+  par rapport à « Hôte ») ; avec R4, Zig 2e et D 8e. Contrôle de l'erratum : la source non corrigée ne déplace aucun
+  langage de plus de deux places ; contre le classement publié, la source corrigée déplace D, Odin et Mojo de trois ou
+  quatre places, ni Fortran ni Zig. Constats à la lecture des sorties, sans effet sur les calculs : en K5, huit
+  processus de la passe 0 ont une partie de leurs répétitions lente (médiane × 1,26 à 1,59, même minimum) ; avec une
+  réserve de fils, quatorze langages font Q6 à quatre fils plus de quatre fois plus vite qu'à un fil, comme Chapel.
+  Documents : `docs/V4_CONVERGE.md` (11), effet mesuré de l'erratum dans `docs/V4_SIZES.md` (10.7) et
+  `docs/V4_EQUAL.md` (11.9), README (section du point 4, errata des points 2 et 3), `docs/V4_PLAN.md`. Le classement
+  de tête ne change pas (section 9 du plan).

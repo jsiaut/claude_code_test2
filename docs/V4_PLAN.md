@@ -89,6 +89,10 @@ Point 4 : plan détaillé dans `docs/V4_CONVERGE.md` (21 novembre, poussé avant
 le plafond prend la meilleure forme admise (la règle commune des remarques ne vaut plus pour le code optimisé) ;
 catalogue de formes par cellule du plafond (frontière de la machine 32 et formes mesurées par les remarques), porté
 dans tous les langages qui peuvent les écrire ; diagnostic préalable des écarts sans explication (K9, Q6 de Chapel).
+Le diagnostic a trouvé l'erratum des points 2 et 3 (sources publiées sans les corrections du classement publié) : la
+base du point 4 est corrigée, et sa campagne mesure aussi l'ancienne source. Résultats le 22 novembre (section 11) :
+la convergence ne déplace aucun langage de plus de deux places (C++ passe 1er, Zig 4e), surtout par K4 et K8 ; avec
+R4, Zig passe 2e et D 8e ; l'erratum ne déplace aucun langage de plus de deux places sur un même hôte.
 
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
@@ -96,4 +100,5 @@ une fois le point précédent terminé. Machine : l'hôte actuel est un Xeon Gra
 micro-architecture ; les campagnes y seront appariées à un témoin C, comme les précédentes, et le choix de l'hôte sera
 fixé dans chaque plan. (20 novembre : depuis le redémarrage de 1 h 19, l'hôte est un Xeon Emerald Rapids, modèle 207,
 machine 31 : `docs/V4_SIZES.md`, 7.2. 21 novembre : depuis le redémarrage de 7 h 30, machine 32, du même modèle, au L3
-effectif plus petit : `docs/V4_EQUAL.md`, 5.1.)
+effectif plus petit : `docs/V4_EQUAL.md`, 5.1 ; depuis celui de 15 h 55, machine 33, du même modèle :
+`docs/V4_CONVERGE.md`, 4.1.)
