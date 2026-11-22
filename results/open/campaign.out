@@ -193,3 +193,46 @@ p1 k4 c/cv tuned  n=2280 med=0.000658767s ok=['True'] oom=False rc=0
 p1 k4 ocaml/op op_intrinsics  n=47 med=0.0400458s ok=['True'] oom=False rc=0
 p1 k4 ocaml/op tuned  n=320 med=0.00478536s ok=['True'] oom=False rc=0
 2026-11-22T09:58:56 passe 1 groupe 4/7 k4 7 processus 17s
+p1 k6 ocaml/cv tuned_s q6 n=47 med=0.0696057s ok=['True'] oom=False rc=0
+p1 k6 ocaml/cv mt_pool_s q6 n=179 med=0.0206153s ok=['True'] oom=False rc=0
+p1 k6 python/op op_numpy q6 n=50 med=0.059793s ok=['True'] oom=False rc=0
+p1 k6 python/op op_numpy q1 n=3 med=0.82487s ok=['True'] oom=False rc=0
+p1 k6 python/op op_numpy_mt q6 n=170 med=0.0191421s ok=['True'] oom=False rc=0
+p1 k6 python/op op_numpy_mt q1 n=10 med=0.254201s ok=['True'] oom=False rc=0
+p1 k6 python/op op_dask_mt q6 n=47 med=0.0736935s ok=['True'] oom=False rc=0
+p1 k6 python/op op_dask_mt q1 n=11 med=0.251227s ok=['True'] oom=False rc=0
+p1 k6 python/op rq_cols q6 n=5 med=0.516498s ok=['True'] oom=False rc=0
+p1 k6 python/op tuned q1 n=3 med=3.92059s ok=['True'] oom=False rc=0
+p1 k6 python/op rq_cols_mt q6 n=26 med=0.103104s ok=['True'] oom=False rc=0
+p1 k6 python/op mt_pool q1 n=3 med=1.02249s ok=['True'] oom=False rc=0
+p1 k6 php/op op_amphp q6 n=48 med=0.038098s ok=['True'] oom=False rc=0
+p1 k6 php/op op_amphp q1 n=31 med=0.0799976s ok=['True'] oom=False rc=0
+p1 k6 php/op mt_pool_s q6 n=88 med=0.0365024s ok=['True'] oom=False rc=0
+p1 k6 php/op mt q1 n=33 med=0.0940544s ok=['True'] oom=False rc=0
+p1 k6 c/pub tuned q1 n=109 med=0.0294928s ok=['True'] oom=False rc=0
+p1 k6 c/pub mt q1 n=265 med=0.0086405s ok=['True'] oom=False rc=0
+p1 k6 python/cv rq_cols q6 n=5 med=0.478734s ok=['True'] oom=False rc=0
+p1 k6 python/cv tuned q1 n=3 med=4.15927s ok=['True'] oom=False rc=0
+p1 k6 python/cv rq_cols_mt q6 n=23 med=0.0994355s ok=['True'] oom=False rc=0
+p1 k6 python/cv mt_pool q1 n=3 med=1.20027s ok=['True'] oom=False rc=0
+p1 k6 lua/op op_llthreads2 q6 n=3 med=0.886137s ok=['True'] oom=False rc=0
+p1 k6 lua/op op_llthreads2 q1 n=3 med=1.7768s ok=['True'] oom=False rc=0
+p1 k6 lua/op rq_nest_mt q6 n=6 med=0.44641s ok=['True'] oom=False rc=0
+p1 k6 lua/op mt q1 n=3 med=1.35583s ok=['True'] oom=False rc=0
+p1 k6 lua/cv rq_nest_mt q6 n=7 med=0.416228s ok=['True'] oom=False rc=0
+p1 k6 lua/cv mt q1 n=3 med=1.34168s ok=['True'] oom=False rc=0
+p1 k6 php/cv mt_pool_s q6 n=90 med=0.0382164s ok=['True'] oom=False rc=0
+p1 k6 php/cv mt q1 n=37 med=0.101275s ok=['True'] oom=False rc=0
+p1 k6 ocaml/op op_intrinsics q6 n=33 med=0.068459s ok=['True'] oom=False rc=0
+p1 k6 ocaml/op op_intrinsics_mt q6 n=82 med=0.0329697s ok=['True'] oom=False rc=0
+p1 k6 ocaml/op tuned_s q6 n=45 med=0.0631006s ok=['True'] oom=False rc=0
+p1 k6 ocaml/op mt_pool_s q6 n=175 med=0.0281768s ok=['True'] oom=False rc=0
+p1 k6 mojo/op op_max q6 n=399 med=0.00231247s ok=['True'] oom=False rc=0
+p1 k6 mojo/op op_max q1 n=345 med=0.0079835s ok=['True'] oom=False rc=0
+p1 k6 mojo/op mt q6 n=415 med=0.00237768s ok=['True'] oom=False rc=0
+p1 k6 mojo/op mt_pool_v q1 n=264 med=0.00812555s ok=['True'] oom=False rc=0
+p1 k6 mojo/cv mt q6 n=778 med=0.00239842s ok=['True'] oom=False rc=0
+p1 k6 mojo/cv mt_pool_v q1 n=374 med=0.00783964s ok=['True'] oom=False rc=0
+p1 k6 c/cv tuned_v q6 n=212 med=0.014067s ok=['True'] oom=False rc=0
+p1 k6 c/cv mt_pool_v q6 n=589 med=0.0023498s ok=['True'] oom=False rc=0
+2026-11-22T10:02:55 passe 1 groupe 5/7 k6 42 processus 237s
