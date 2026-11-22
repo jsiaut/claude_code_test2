@@ -11591,6 +11591,14 @@
 "ts": "2026-11-22T16:21:13",
 "warmup": 16
 },
+"java|cv|k4|large|tuned|": {
+"machine": "35",
+"reps": 92,
+"status": "ok",
+"t_cal": 0.032283046,
+"ts": "2026-11-22T16:46:46",
+"warmup": 31
+},
 "java|cv|k4|pub|swar|": {
 "machine": "35",
 "reps": 1083,
