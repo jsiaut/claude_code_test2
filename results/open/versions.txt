@@ -40,6 +40,8 @@ OCaml 5.5.2 opam n'est pas sur l'hôte : versions publiées dans opam, prises à
             lock/ocaml/sources.txt (sha256 et commits)
             ocaml_intrinsics_kernel v0.17.3 ; domainslib 0.5.2 (saturn 1.0.0, domain-local-await 1.0.1,
             multicore-magic 2.3.2, backoff 0.1.1, thread-table 1.0.0) ; processor 0.2.
+            Copie bench/ocaml_op : ocaml_intrinsics_kernel v0.17.3 (mêmes sources) reconstruite dans l'espace
+            /opt/open/ocaml/ws_op, avec ocamlopt_flags -O3 comme la commande publiée (talons C : -O2 -march=native).
 JavaScript (npm ; vérification sous Node 26.12.1, la chaîne classée) : lock/js/package.json,
             package-lock.json
             @protobufjs/pool 1.1.0 ; ndarray 1.1.1.
