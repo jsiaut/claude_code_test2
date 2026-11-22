@@ -113,3 +113,11 @@ p0 k8 rust/op op_bumpalo  n=20 med=0.11801s ok=['True'] oom=False rc=0
 p0 k8 rust/op tuned_it  n=38 med=0.0765053s ok=['True'] oom=False rc=0
 p0 k8 js/cv tuned_it  n=9 med=0.343928s ok=['True'] oom=False rc=0
 2026-11-22T09:51:32 passe 0 groupe 5/7 k8 13 processus 81s
+p0 k1 d/op op_soa energy n=548 med=0.0027022s ok=['True'] oom=False rc=0
+p0 k1 d/op soa energy n=605 med=0.0027208s ok=['True'] oom=False rc=0
+p0 k1 python/cv soa energy n=3 med=0.606402s ok=['True'] oom=False rc=0
+p0 k1 python/op op_numpy energy n=36 med=0.0896342s ok=['True'] oom=False rc=0
+p0 k1 python/op soa energy n=3 med=0.727802s ok=['True'] oom=False rc=0
+p0 k1 d/cv soa energy n=531 med=0.002679s ok=['True'] oom=False rc=0
+p0 k1 c/pub soa energy n=557 med=0.00272247s ok=['True'] oom=False rc=0
+2026-11-22T09:52:03 passe 0 groupe 6/7 k1 7 processus 29s
