@@ -373,3 +373,17 @@ p2 k5 c/pub tuned  n=634 med=0.003705s ok=['True'] oom=False rc=0
 p2 k5 python/op op_numpy  n=81 med=0.037704s ok=['True'] oom=False rc=0
 p2 k5 python/op tuned  n=3 med=2.74896s ok=['True'] oom=False rc=0
 2026-11-22T10:16:38 passe 2 groupe 6/7 k5 7 processus 46s
+p2 k8 julia/cv tuned_it  n=28 med=0.0790866s ok=['True'] oom=False rc=0
+p2 k8 julia/op op_bumper  n=29 med=0.102858s ok=['True'] oom=False rc=0
+p2 k8 julia/op tuned_it  n=38 med=0.0824502s ok=['True'] oom=False rc=0
+p2 k8 swift/op op_arena  n=27 med=0.161235s ok=['True'] oom=False rc=0
+p2 k8 swift/op tuned_it  n=31 med=0.0980984s ok=['True'] oom=False rc=0
+p2 k8 swift/cv tuned_it  n=23 med=0.083335s ok=['True'] oom=False rc=0
+p2 k8 js/cv tuned_it  n=9 med=0.373178s ok=['True'] oom=False rc=0
+p2 k8 c/cv tuned_it  n=37 med=0.085076s ok=['True'] oom=False rc=0
+p2 k8 js/op op_pool  n=3 med=0.951973s ok=['True'] oom=False rc=0
+p2 k8 js/op tuned_it  n=9 med=0.309734s ok=['True'] oom=False rc=0
+p2 k8 rust/op op_bumpalo  n=20 med=0.113737s ok=['True'] oom=False rc=0
+p2 k8 rust/op tuned_it  n=38 med=0.0773185s ok=['True'] oom=False rc=0
+p2 k8 rust/cv tuned_it  n=42 med=0.0916931s ok=['True'] oom=False rc=0
+2026-11-22T10:17:44 passe 2 groupe 7/7 k8 13 processus 64s
