@@ -416,4 +416,14 @@ colonnes 2^11, soit la taille publiée, 2^15 et 2^21).
 * **Suite.** Les sources publiées sont mises en accord avec le classement publié avant le point 4
   (`docs/V4_CONVERGE.md`, 4.1). La campagne du point 4 mesure, sur un même hôte, chaque cellule touchée avec les deux
   sources ; l'effet de l'erratum sera publié ici. La campagne finale de la v4 mesure le code corrigé.
+* **Effet mesuré (22 novembre, campagne du point 4, machine 33 : `docs/V4_CONVERGE.md`, 11.9).** Les rapports de
+  temps sont de l'ordre annoncé : harnais de K9 à quatre fils × 1,9 à 2,7 pour C++, C3, D, Odin, Zig, Rust, Nim et
+  Python, `tuned` × 1,5 à 1,7 pour neuf langages ; K4 naturel de Haskell × 10,7, K1 `aos` d'OCaml × 5,5, K4 de
+  Fortran × 2,5 et 3,1, Q1 de D × 2,6 et 2,8, K5 `tuned` de Go × 2,55. Mais le calcul « Hôte » sur l'une et l'autre
+  source ne diffère de plus de deux places pour aucun langage. Contre le classement publié, la source corrigée
+  déplace de plus de deux places D (8e → 4e), Odin (2e → 5e) et Mojo (14e → 11e). Pour 10.5 : la baisse de Fortran de
+  trois places tenait aux corrections absentes (13e avec la source corrigée) ; celle de Zig ne se retrouve sur la
+  machine 33 avec aucune des deux sources (6e), ni la montée de Nim (7e ou 8e) ; celle d'Odin et la montée de D, si.
+  Sur le code corrigé et sur cet hôte, l'effet de l'hôte déplace trois langages de trois ou quatre places (D, Odin,
+  Mojo), au lieu de cinq ; avec K3 rapporté à la boucle de référence (R4, point 3), D revient à sa place publiée.
 

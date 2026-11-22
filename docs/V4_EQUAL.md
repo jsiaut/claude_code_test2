@@ -458,4 +458,14 @@ selon les latences : les reculs de Nim et de Chapel et la montée d'Ada dans « 
   dans le même sens : C, Chapel, Ada et Swift, dont le K9 était déjà au harnais commun, y sont avantagés.
 * **Suite** : comme pour le point 2 (`docs/V4_SIZES.md`, 10.7) ; la campagne du point 4 mesure les cellules touchées
   avec les deux sources, et l'effet de l'erratum sur les calculs de ce point sera publié ici.
+* **Effet mesuré (22 novembre, campagne du point 4, machine 33 : `docs/V4_CONVERGE.md`, 11.9).** « Hôte » sur la
+  source non corrigée (le code de ce point) et sur la source corrigée ne diffèrent de plus de deux places pour aucun
+  langage. La source non corrigée avantage bien C (rang espéré 2,16 contre 2,86), Chapel et Swift (une place chacun),
+  pas Ada, que ses corrections propres pénalisent davantage (une place). « Hôte » de ce point (machine 32) et « Hôte,
+  source non corrigée » de la machine 33, même code, ne diffèrent de plus de deux places pour aucun langage. Pour 11.3 :
+  le recul de trois places de Fortran tenait aux corrections absentes (13e avec la source corrigée) ; celui de Zig ne
+  se retrouve sur la machine 33 avec aucune des deux sources (6e). Les deux effets de règle les plus nets de ce point
+  se retrouvent sur la source corrigée, avec la convergence du point 4 : le K4 en SIMD explicite fait monter Zig
+  (« Convergent, K4 seul » : 6e → 4e), et K3 rapporté à b3 fait reculer D (« Convergent, avec R4 » : 4e → 8e ; Zig
+  2e). R1 et R2 n'ont pas été refaits sur la source corrigée : ils le seront dans la campagne finale.
 
