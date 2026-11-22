@@ -8,11 +8,20 @@ UNCHECKED[langage] : constructions qui contournent une vérification de sûreté
   indent  : Julia, `@inbounds` suivi d'un bloc (`for`, `while`, `begin`, `let`, `if`) : la ligne, les lignes plus
             indentées qui suivent et le `end` qui ferme le bloc ; sinon la ligne seule ;
   pushpop : Nim, du `{.push … : off.}` au `{.pop.}` qui suit ;
-  unit    : Ada, `pragma Suppress` : le sous-programme qui le contient (de son en-tête à son `end Nom;`).
-Lecture du plan : `unsafe` en modificateur de classe (C#, `static unsafe class Ms`) n'est ni un bloc ni une méthode ; il
-autorise la syntaxe des pointeurs sans retirer la vérification des bornes des tableaux, et n'ouvre pas de portée.
+  unit    : Ada, `pragma Suppress` : le sous-programme qui le contient (de son en-tête à son `end Nom;`) ;
+  ir      : Julia, `llvmcall` : la ligne et la chaîne d'IR de LLVM qu'elle reçoit (constante « const NOM = ( » suivie d'une chaîne longue sur plusieurs lignes).
+Écarts datés du 22 novembre (docs/V4_COST.md, 10), fixés avant tout comptage :
+* C# : `unsafe` en modificateur de classe (`static unsafe class Ms`) n'est ni un bloc ni une méthode et n'ouvre pas de
+  portée ; il rend toutes les méthodes de la classe « unsafe » au sens du langage. Une méthode dont la signature déclare
+  un type pointeur (paramètre ou résultat) est une méthode `unsafe` (portée : la méthode) ; une ligne qui déclare ou
+  convertit un type pointeur (`float*`, `(double*)`) porte une construction de la liste ;
+* Julia : `llvmcall` ajouté (l'IR qu'il reçoit s'exécute sans aucune vérification) ;
+* Mojo : `UntrackedOrigin` ajouté (pointeurs dont l'origine n'est pas suivie : ni durée de vie ni bornes).
 NO_CHECK_MODE : langages dont le mode publié n'a pas de vérification de bornes (part absolue = 1).
-ARCH : constructions propres à une architecture (toutes à la ligne), communes et par langage.
+ARCH : constructions propres à une architecture (toutes à la ligne), communes et par langage. Écart daté du 22 novembre
+(docs/V4_COST.md, 10) : une barrière de compilateur à gabarit vide (`asm volatile("" : … : "memory")`, macros BARRIER et
+KEEP du harnais de C, opaque et keep de C++) n'émet aucune instruction et n'est propre à aucune architecture : elle
+n'est pas comptée (EMPTY_ASM).
 Chaque occurrence trouvée est listée dans results/cost/matches.md pour être examinée ; un ajout ou un retrait dans ces
 listes est un écart daté (docs/V4_COST.md)."""
 import re
@@ -32,10 +41,16 @@ UNCHECKED = {
             (r"'Address\b", "line"), (r"\bAddress_To_Access_Conversions\b", "line")],
     "odin": [(r"#no_bounds_check\b", "brace"), (r"\brawptr\b", "line"), (r"\btransmute\b", "line"),
              (r"\[\^\]", "line"), (r"\bmem\.ptr_offset\b", "line")],
-    "julia": [(r"@inbounds\b", "indent"), (r"\bunsafe_\w+", "line"), (r"\bpointer\(", "line")],
-    "mojo": [(r"\bUnsafePointer\b", "line"), (r"\bunsafe_\w+", "line"), (r"\bbitcast\b", "line")],
+    "julia": [(r"@inbounds\b", "indent"), (r"\bunsafe_\w+", "line"), (r"\bpointer\(", "line"),
+              (r"\bllvmcall\b", "ir")],
+    "mojo": [(r"\bUnsafePointer\b", "line"), (r"\bunsafe_\w+", "line"), (r"\bbitcast\b", "line"),
+             (r"\b\w*UntrackedOrigin\b", "line")],
     "csharp": [(r"\bunsafe\b", "brace"), (r"\bfixed\s*\(", "brace"), (r"\bstackalloc\b", "line"),
-               (r"\bUnsafe\.", "line"), (r"\bMemoryMarshal\.", "line")],
+               (r"\bUnsafe\.", "line"), (r"\bMemoryMarshal\.", "line"),
+               (r"^\s*(?:(?:public|private|internal|protected|static|readonly|unsafe|extern)\s+)+"
+                r"(?:[\w<>\[\],.?]+\*\s+\w+\s*(?:<[^>()]*>)?\s*\(|[\w<>\[\],.?]+\s+\w+\s*(?:<[^>()]*>)?\s*\([^)]*\w\*)",
+                "brace"),
+               (r"\b[A-Za-z_]\w*\*(?=[\s)\],>\[])", "line")],
     "java": [(r"\bsun\.misc\.Unsafe\b|\bjdk\.internal\.misc\.Unsafe\b", "line")],
     "go": [(r"\bunsafe\.", "line")],
     "haskell": [(r"\bunsafe[A-Z]\w*", "line"), (r"\bPtr\b", "line"), (r"\b(peek|poke)\w*", "line"),
@@ -62,6 +77,9 @@ ARCH = {
     "c": [r"\b__asm__\b|\basm\b"], "cpp": [r"\b__asm__\b|\basm\b"], "zig": [r"\basm\b"], "odin": [r"\basm\b"],
     "c3": [r"\basm\b"], "nim": [r"\basm\b"], "fpc": [r"\basm\b"], "haskell": [r"-m(avx|sse|bmi)\w*"],
 }
+
+
+EMPTY_ASM = re.compile(r'\b(__asm__|asm)\s*(volatile|__volatile__)?\s*\(\s*""')
 
 
 def unchecked(lang):

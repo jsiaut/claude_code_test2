@@ -16,7 +16,9 @@ réveillent des fils, ou combinent leurs résultats, appartiennent à la forme. 
 calculent la somme de contrôle et celles qui libèrent la mémoire après la mesure n'appartiennent à aucune forme.
 Les directives d'import et d'inclusion n'appartiennent à aucune forme ; les déclarations que le programme écrit lui-même
 pour une forme (intrinsèques importés par importc en Nim, extern en Chapel, pragma Import en Ada ; alias de types
-vectoriels ; pragmas qui coupent les vérifications autour d'une forme) appartiennent aux formes qui les emploient."""
+vectoriels ; pragmas qui coupent les vérifications autour d'une forme) appartiennent aux formes qui les emploient.
+Les autres règles de lecture appliquées pendant le relevé (conteneurs, fonctions partagées, état du harnais de K8,
+constantes, déclarations, code exécuté dans les Workers et les sous-interpréteurs) : docs/V4_COST.md, section 8."""
 
 
 def _r(f, *spans):

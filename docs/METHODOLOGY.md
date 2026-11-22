@@ -1719,3 +1719,12 @@ Robustesse :
   sur des programmes triviaux. Quantités : lignes ajoutées, part sans vérification (absolue, marginale), lignes
   propres à une architecture et portabilité ; indice d'accès ; scénario où il remplace les catégories C et E de la
   grille, sensibilités ; le classement de tête ne change pas.
+* 2026-11-22, 6:10 : **v4, point 5 : relevé des régions et écarts datés, avant tout comptage**
+  (`docs/V4_COST.md`, sections 8 à 10). Les régions des 25 langages sont relevées à la lecture des copies `_cv`,
+  dans l'ordre du classement, en sept lots poussés, chacun contrôlé par `tools/cost/count.py --check`. Règles de
+  lecture fixées pendant le relevé (choix de la variante, harnais, conteneurs, fonctions partagées, état du harnais de
+  K8, constantes, déclarations, directives, code exécuté dans les Workers et les sous-interpréteurs, code généré).
+  Écarts aux listes : barrières de compilateur vides écartées des constructions propres à une architecture ; C#,
+  méthodes à pointeurs lues comme méthodes `unsafe` (la classe entière est `unsafe`) ; Julia, `llvmcall` ajouté
+  (portée : la chaîne d'IR) ; Mojo, `UntrackedOrigin` ajouté ; lexèmes des chaînes sur plusieurs lignes comptés comme
+  code ; directives `//go:` comptées comme code.

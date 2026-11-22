@@ -99,6 +99,22 @@ def scope_unit(lines, i):
     return {i}
 
 
+def scope_ir(lines, i, m_end):
+    """Julia : la ligne de llvmcall et la chaîne d'IR qu'elle reçoit (constante « const NOM = (\"\"\" … \"\"\", … ) »)."""
+    out = {i}
+    m = re.match(r"\s*\(\s*(\w+)\s*,", lines[i][m_end:])
+    if not m:
+        return out
+    start = re.compile(r"^const\s+" + re.escape(m.group(1)) + r"\s*=")
+    for h, s in enumerate(lines):
+        if start.match(s):
+            for j in range(h, len(lines)):
+                out.add(j)
+                if j > h and '"""' in lines[j]:
+                    return out
+    return out
+
+
 # ------------------------------------------------------------------ fichiers
 def analyse_file(lang, path):
     text = open(path, encoding="utf-8").read()
@@ -119,6 +135,8 @@ def analyse_file(lang, path):
                     sc = scope_indent(lines, i, m.end())
                 elif kind == "pushpop":
                     sc = scope_pushpop(lines, i)
+                elif kind == "ir":
+                    sc = scope_ir(lines, i, m.end())
                 else:
                     sc = scope_unit(lines, i)
                 unchecked |= sc
@@ -127,6 +145,9 @@ def analyse_file(lang, path):
     for rx in P.arch(lang):
         for i, s in enumerate(lines):
             for m in rx.finditer(s):
+                if P.EMPTY_ASM.search(s):
+                    matches.append(("X", i, m.group(0), "barrière à gabarit vide : pas propre à une architecture"))
+                    continue
                 archl.add(i)
                 matches.append(("X", i, m.group(0), ""))
     toks = {i: len(lex.tokens(lang, lines[i])) for i in code}

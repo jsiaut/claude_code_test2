@@ -203,3 +203,83 @@ les résultats.
 3. Relevé des régions, langage par langage dans l'ordre du classement publié, poussé par lots ; puis comptage.
 4. Compilations pour aarch64 et riscv64.
 5. Analyse (calculs 1 à 5), résultats (section 11 de ce document), README, `docs/V4_PLAN.md`, journal.
+
+## 8. Règles de lecture du relevé (précisions de 3.2, fixées pendant le relevé, avant tout comptage)
+
+Le relevé (`tools/cost/regions.py`) a été fait langage par langage, dans l'ordre du classement publié, et poussé en
+sept lots le 22 novembre ; chaque lot est contrôlé par `tools/cost/count.py --check` (empreintes, bornes, fonctions
+d'entrée, formes requises). Les cas que 3.2 ne tranche pas ont reçu une règle, appliquée à tous les langages :
+
+* **Choix de la variante** : la ligne qui ne fait qu'appeler la fonction d'entrée d'une forme (avec ses arguments)
+  appartient au harnais ; celle qui prépare un état propre à la forme, lance ou réveille des fils, ou combine leurs
+  résultats appartient à la forme. En BQN, où le calcul tient souvent dans la ligne qui le passe au harnais
+  (`{𝕤 ⋄ … } _bench @`), la ligne appartient à la forme quand elle contient le calcul.
+* **Harnais** : la remise à zéro des compteurs de K3, la mesure du temps, la somme de contrôle et son formatage, les
+  libérations faites après la mesure, la répétition de K5 (65 536 appels et la barrière d'optimisation) et
+  l'itération de K9 (quatre pas et l'échange des grilles) n'appartiennent à aucune forme.
+* **Conteneurs** : le chargement des données et le conteneur où le harnais les range, commun aux variantes,
+  appartiennent au harnais ; un conteneur propre à certaines formes (tampon aligné, vue par pointeurs, colonnes
+  transposées de K1, collection construite pour le seul naturel, grille à deux dimensions du naturel de K9, grille
+  plate des formes optimisées, tampons partagés entre fils) appartient à ces formes, avec les fonctions qui le
+  construisent.
+* **Fonctions partagées** : une fonction appelée par la forme compte dans la forme ; une fonction qui sert plusieurs
+  formes (travailleur commun de K6 à deux branches, réserve de fils, aide d'alignement) compte entière dans chacune,
+  mais seules les fonctions appelées sur le chemin de la forme s'y ajoutent (la branche Q1 d'un travailleur commun
+  n'ajoute pas Q1 tuned à la forme Q6).
+* **État du harnais** : le compteur de valeurs de K8, que le harnais remet à q à chaque requête, appartient au
+  harnais, qu'il soit une variable locale, un champ statique ou une classe (Python, PHP).
+* **Constantes** : les constantes de taille du problème (N1, N6, ITER3, M9, `K7_LOG` et `K8_REQ` de Julia…)
+  appartiennent au harnais ; les constantes propres à une forme (capacité et lot de la table de K7, déclarés pour la
+  forme) lui appartiennent.
+* **Déclarations** : là où les variables locales se déclarent à part (FreePascal), une ligne de déclaration compte
+  dans une forme quand tous les noms qu'elle déclare ne servent qu'à elle. L'unité `msvec` de FreePascal, écrite pour
+  les seules formes vectorielles (option `-Sv`), compte dans chacune : cadre, directives, types vectoriels et
+  déclaration d'interface de sa fonction.
+* **Directives et attributs** : les directives d'import et d'inclusion n'appartiennent à aucune forme ; les attributs
+  et pragmas d'une fonction de la forme (`#[inline(never)]`, `@inline(.never)`, `{-# NOINLINE #-}`, `//go:noinline`)
+  et ses gardes (profondeur des piles de K8 tuned_it) lui appartiennent ; les déclarations écrites pour une forme
+  (intrinsèques importés, types vectoriels, pragmas qui coupent les vérifications) appartiennent aux formes qui les
+  emploient.
+* **Code exécuté ailleurs** : le code des Workers de JavaScript (même fichier : la branche de son noyau et le cadre côté
+  Worker), le code des sous-interpréteurs de Python (chaînes `setup` et `K9_SUB`) et la fonction de mesure propre à
+  K9 mt de PHP (dont seul le mécanisme des processus est retenu) comptent dans les formes à plusieurs fils.
+* **Code généré** : l'IR de Q1 `tuned_v` de Julia a été écrit par un générateur (`tools/converge/gen_julia_ir.py`) ;
+  il compte tel qu'il figure dans la source (11 donne aussi la part de lignes ajoutées avec le générateur à sa place).
+
+## 9. Outils (poussés avant le comptage)
+
+* `tools/cost/lex.py` : retrait des commentaires par langage (chaînes gardées ; une chaîne de documentation seule dans
+  son instruction compte comme commentaire ; directives gardées comme code : `!$` de Fortran, `{-# #-}` de Haskell,
+  `{$ }` de FreePascal, `#[ ]` de PHP, `//go:` de Go), lignes de code, lexèmes ;
+* `tools/cost/patterns.py` : listes de 3.4 et 3.5, avec la portée de chaque construction ;
+* `tools/cost/needed.py` : formes requises (forme d'accès, candidates à 10 %, références naturelles), d'après la
+  campagne du point 4 ;
+* `tools/cost/regions.py` : relevé des régions (25 langages) ;
+* `tools/cost/count.py` : contrôle du relevé (`--check`) et comptage (`results/cost/counts.json`, `regions.md`,
+  `matches.md`) ;
+* `tools/cost/xcompile.sh` : compilations pour aarch64 et riscv64 (`results/cost/compile.txt`) ;
+* `analysis/cost_v4.py` : calculs 1 à 5 (`results/cost/cost.json`, `results/report_cost.md`).
+
+## 10. Écarts datés (22 novembre, avant tout comptage)
+
+1. **Barrières de compilateur vides** (3.5) : `asm volatile("" : … : "memory")` (macros `BARRIER` et `KEEP` du harnais
+   de C, fonctions `opaque` et `keep` de C++) n'émet aucune instruction et n'est propre à aucune architecture ; ces
+   lignes sont écartées de la liste (elles restent dans `results/cost/matches.md`, marquées).
+2. **C#, `unsafe` de classe** (3.4) : la copie déclare `static unsafe class Ms`. Ce modificateur n'est ni un bloc ni
+   une méthode et n'ouvre pas de portée (sinon toutes les lignes, naturel compris, compteraient), mais il rend toutes
+   les méthodes de la classe « unsafe » au sens du langage : aucune n'a besoin du mot. Lecture retenue : une méthode
+   dont la signature déclare un type pointeur (paramètre ou résultat) est une méthode `unsafe` (portée : la méthode) ;
+   une ligne qui déclare ou convertit un type pointeur (`float*`, `(double*)`) porte une construction de la liste.
+   Limite connue : une ligne qui écrit par un pointeur déclaré plus haut, dans une méthode sans pointeur dans sa
+   signature, n'est pas comptée (un cas : la préparation de K1 soa).
+3. **Julia, `llvmcall`** (3.4) : ajouté à la liste ; portée : la ligne et la chaîne d'IR de LLVM qu'il reçoit, qui
+   s'exécute sans aucune vérification. Sans cet ajout, les formes vectorielles de Julia (K4, K5, Q6, Q1, K9)
+   n'auraient compté que leurs appels à `pointer(`.
+4. **Mojo, `UntrackedOrigin`** (3.4) : ajouté (pointeurs `Pointer[T, MutUntrackedOrigin]`, dont ni la durée de vie
+   ni les bornes ne sont vérifiées).
+5. **Lexèmes des chaînes sur plusieurs lignes** (3.3) : une chaîne sur une ligne reste un lexème ; le texte d'une
+   chaîne sur plusieurs lignes est découpé ligne par ligne comme du code. C'est du code que le programmeur écrit :
+   l'IR de LLVM en Julia, le code des sous-interpréteurs en Python. Ses lignes comptaient déjà (une chaîne n'est pas
+   un commentaire).
+6. **Go, `//go:`** (3.3) : les directives de compilation de Go comptent comme code, comme les pragmas des autres
+   langages (`{-# #-}`, `{$ }`, `!$`, `#[ ]`).
