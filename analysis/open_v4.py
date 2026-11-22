@@ -116,7 +116,7 @@ def op_patch(tr, langs, b3, mode):
     rapport tiré du témoin C (mode « c ») ; K3 relevé à b3."""
     def patch(A):
         for x in tr:
-            if x["r"] is None or (mode == "c" and x["r_c34"] is None):
+            if not usable(x, mode):
                 continue
             j = A.idx[x["lang"]]
             acc, key = tkey(x["access"]), tkey(x["key"])
@@ -139,11 +139,15 @@ def op_patch(tr, langs, b3, mode):
     return patch
 
 
-def e_meas_open(ceil_of, tr):
+def usable(x, mode):
+    return x["r"] is not None and (mode != "c" or x["r_c34"] is not None)
+
+
+def e_meas_open(ceil_of, tr, mode="r"):
     """E de « Convergent » (E_V2 et les formes admises du point 4), chaque clé op_* ajoutée au groupe de sa cellule."""
     e = cv.e_meas_with(ceil_of)
     for x in tr:
-        if x["r"] is None:
+        if not usable(x, mode):
             continue
         k, gi = ND.CELLS[x["cell"]]
         key = tkey(x["key"])
@@ -193,7 +197,7 @@ def run(env, tr=None, grid=None, mode="r"):
     lt = {l: dict(lat["pub"].get(l, {})) for l in langs}
     filled = S.fill_missing(d, langs, keys)
     add, ceil_of, missing = cv.additions(data, fc, langs)
-    e_meas = e_meas_open(ceil_of, tr or [])
+    e_meas = e_meas_open(ceil_of, tr or [], mode)
     patches = [cv.fill_patch(d, langs, add)]
     if tr:
         patches.append(op_patch(tr, langs, b3, mode))
