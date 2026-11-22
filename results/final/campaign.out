@@ -3021,3 +3021,6 @@ a900b74 v4, campagne finale en cours (2828 étalonnages, 0 processus enregistré
 étalonnage k9:small julia/cv mt_pool_v  : ok t=0.002304343
 étalonnage k9:small julia/unc natural  : ok t=8.3238e-05
 2026-11-22T16:46:23 étalonnage k9:small : 150 cellules, 29 s
+eeb3f18 v4, campagne finale en cours (2978 étalonnages, 0 processus enregistrés)
+2026-11-22T16:46:25 étalonnage : 2978 cellules, 1 à corriger (somme de contrôle ou erreur), 6 hors mémoire ou hors durée
+  à corriger : java|cv|k4|large|tuned| checksum ['-67246612']

@@ -11591,22 +11591,6 @@
 "ts": "2026-11-22T16:21:13",
 "warmup": 16
 },
-"java|cv|k4|large|tuned|": {
-"detail": {
-"chks": [
-"-67246612"
-],
-"proc_rss_kb": 843440,
-"returncode": 0,
-"stderr": "WARNING: Using incubator modules: jdk.incubator.vector\n"
-},
-"machine": "35",
-"reps": 80,
-"status": "checksum",
-"t_cal": 0.03738356,
-"ts": "2026-11-22T16:21:12",
-"warmup": 27
-},
 "java|cv|k4|pub|swar|": {
 "machine": "35",
 "reps": 1083,
@@ -11614,14 +11598,6 @@
 "t_cal": 0.002768007,
 "ts": "2026-11-22T12:43:54",
 "warmup": 362
-},
-"java|cv|k4|pub|tuned|": {
-"machine": "35",
-"reps": 1239,
-"status": "ok",
-"t_cal": 0.00241973,
-"ts": "2026-11-22T12:43:54",
-"warmup": 414
 },
 "java|cv|k4|small|swar|": {
 "machine": "35",
@@ -11633,11 +11609,11 @@
 },
 "java|cv|k4|small|tuned|": {
 "machine": "35",
-"reps": 170,
+"reps": 187,
 "status": "ok",
-"t_cal": 0.017639319,
-"ts": "2026-11-22T12:41:22",
-"warmup": 57
+"t_cal": 0.016019991,
+"ts": "2026-11-22T16:46:39",
+"warmup": 63
 },
 "java|cv|k6|large|mt_pool_v|q1": {
 "machine": "35",
