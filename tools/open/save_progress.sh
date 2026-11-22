@@ -6,8 +6,10 @@ W=results/open/work
 mkdir -p results/open/raw
 [ -d $W/raw ] && cp $W/raw/*.jsonl results/open/raw/ 2>/dev/null
 for f in calib.json campaign.log campaign.out; do [ -f $W/$f ] && cp $W/$f results/open/$f; done
-git add results/open/raw results/open/calib.json results/open/campaign.log results/open/campaign.out \
-  results/open/k3_ref_start.txt results/open/k3_ref_end.txt 2>/dev/null
+for f in results/open/raw results/open/calib.json results/open/campaign.log results/open/campaign.out \
+  results/open/k3_ref_start.txt results/open/k3_ref_end.txt; do  # un à un : un fichier absent n'arrête pas les autres
+  [ -e "$f" ] && git add "$f"
+done
 git diff --cached --quiet && exit 0
 n=$(cat results/open/raw/*.jsonl 2>/dev/null | wc -l)
 git commit -q -m "v4, point 6 : campagne de la piste ouverte en cours ($n processus enregistrés)
