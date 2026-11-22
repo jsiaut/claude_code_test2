@@ -1745,3 +1745,11 @@ Robustesse :
   Le classement de tête ne change pas.
 * 2026-11-22, 6:44 : **v4, point 5 : décision de l'auteur de l'étude** : la grille est gardée dans la campagne finale ;
   l'indice d'accès est publié à côté (`docs/V4_COST.md`, 11.7 ; README ; `docs/V4_PLAN.md`). Passage au point 6.
+* 2026-11-22, 7:02 : **v4, point 6 : plan** (`docs/V4_OPEN.md`), poussé avant toute recherche dans les registres,
+  toute installation, tout code et toute mesure. Faits relevés : 15 cases de la grille portent sur une API (217 cases
+  à moins de 1) ; 61 formes du catalogue du point 4 non écrivibles faute de levier dans la bibliothèque standard ;
+  registres et statistiques d'usage joignables depuis le conteneur ; NumPy 2.5.5 pour CPython 3.15 ; MAX 26.7.0 lié à
+  Mojo 1.2.0 ; hôte changé à 6 h 44 (machine 34). Liste : registre de chaque langage, mots de recherche par case, la
+  première bibliothèque admise par ordre d'usage, plus les bibliothèques nommées par le dossier (sauf Numba et
+  Polars). Grille ouverte par sondes, plafond ouvert par formes mesurées sur la machine 34 et reportées sur la
+  campagne du point 4 ; code par défaut inchangé ; le classement de tête ne change pas.

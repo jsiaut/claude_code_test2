@@ -104,6 +104,13 @@ la place des catégories C et E, il ne déplace que Mojo de plus de deux places 
 confirme l'examen statique. Décision de l'auteur de l'étude (22 novembre) : la grille est gardée dans la campagne
 finale ; l'indice est publié à côté.
 
+Point 6 : plan détaillé dans `docs/V4_OPEN.md` (22 novembre, poussé avant toute recherche dans les registres, toute
+installation, tout code et toute mesure) : une liste de bibliothèques tierces fixée par une règle commune (registre de
+chaque langage, mots de recherche par case de la grille, la première bibliothèque admise par ordre d'usage, plus les
+bibliothèques nommées par le dossier) ; une grille ouverte (sondes des cases comblées) et un plafond ouvert (formes
+écrites avec ces bibliothèques, mesurées sur un même hôte et reportées sur la campagne du point 4), à côté du
+classement ; le code par défaut ne change pas.
+
 
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
 une fois le point précédent terminé. Machine : l'hôte actuel est un Xeon Granite Rapids (modèle 173), une troisième
