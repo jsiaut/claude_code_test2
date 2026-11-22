@@ -185,3 +185,11 @@ p1 k9 lua/op op_llthreads2  n=3 med=0.872983s ok=['True'] oom=False rc=0
 p1 k9 lua/op natural  n=5 med=0.486658s ok=['True'] oom=False rc=0
 p1 k9 lua/op rq_slide_mt  n=4 med=0.681508s ok=['True'] oom=False rc=0
 2026-11-22T09:58:37 passe 1 groupe 3/7 k9 27 processus 190s
+p1 k4 python/cv tuned  n=54 med=0.0763215s ok=['True'] oom=False rc=0
+p1 k4 ocaml/cv tuned  n=313 med=0.00543198s ok=['True'] oom=False rc=0
+p1 k4 python/op op_numpy  n=22 med=0.139289s ok=['True'] oom=False rc=0
+p1 k4 python/op tuned  n=34 med=0.0535474s ok=['True'] oom=False rc=0
+p1 k4 c/cv tuned  n=2280 med=0.000658767s ok=['True'] oom=False rc=0
+p1 k4 ocaml/op op_intrinsics  n=47 med=0.0400458s ok=['True'] oom=False rc=0
+p1 k4 ocaml/op tuned  n=320 med=0.00478536s ok=['True'] oom=False rc=0
+2026-11-22T09:58:56 passe 1 groupe 4/7 k4 7 processus 17s
