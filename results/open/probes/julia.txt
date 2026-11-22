@@ -1,0 +1,9 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), Julia : sondes exécutées le 2026-11-22 08:43, machine 34, julia version 1.13.3
+CAP;B2;0.5;Bumper 0.7.2;[exécutée] @no_escape + @alloc(Float64, 1000) deux fois : écart entre les tampons = 8000 octets, somme = 3000.0 ; après la sortie du bloc, le tableau suivant reprend l'adresse du premier = true ; octets alloués sur le tas du GC par un bloc = 0
+NOTE;B2;note publiée ½ ; arène à pointeur de tableaux de types isbits, libérée à la sortie du bloc ; ni objets du tas ni structures mutables : limitée, ½, comme Foreign.Marshal.Pool de Haskell
+CAP;C1;0.5;VectorizationBase 0.21.74;[exécutée] Vec{16,Float32} (stridedpointer, vload avec MM{16}, muladd, vsum) : produit scalaire de 4096 = 24570.0 (somme scalaire 24570.0) ; code natif de dot_vb : 9 vfmadd…ps sur zmm ; pick_vector_width(Float32) = static(16)
+NOTE;C1;note publiée ½ ; types vectoriels Vec{W,T} portables (LLVM), mais l'API utilisateur n'est pas stable de son propre aveu et le paquet se dit déprécié à partir de Julia 1.11 (README : « Looking for new maintainers, otherwise deprecated in Julia 1.11 ») : ½
+CAP;D4;1;ThreadPinningCore 0.4.5;[exécutée] 4 fils ; pinthread(2) dans une tâche : ispinned = true, getcpuid sur 1000 lectures = Int32[2]
+NOTE;D4;note publiée ½ (JULIA_EXCLUSIVE=1, épinglage global) ; fil par fil, posé et relu : 1
+CAP;F2;1;NUMA 0.1.1;[exécutée] numa_available = true, 1 nœud(s) ; Vector{Float64}(numanode(1), 2^19) (nœuds numérotés à partir de 1) : pages sur le nœud 1 (which_numa_node) ; current_numa_node = 1
+NOTE;F2;note publiée ½ (Distributed, SharedArrays : processus) ; API de libnuma (numa_set_membind…) et tableaux alloués sur un nœud choisi, nœud des pages relu : 1

@@ -277,3 +277,12 @@ décision de l'auteur de l'étude, qui lui sera soumise avec les résultats.
    (ni l'une ni l'autre n'avait de cellule). (2) Le relevé nomme maintenant chaque forme `op_*` et l'idiome de la
    bibliothèque qu'elle emploie (5.1, « nommées dans le relevé ») : `results/open/list.md`, sous les cellules
    attribuées.
+6. **Correction du relevé à la sonde de Rust (3.3 a, 4), 22 novembre, 8 h 44, avant toute forme.** La sonde de D3 a
+   montré que le `CachePadded` de `cordyceps` (3e de la case) est `pub(crate)` : `use cordyceps::util::CachePadded`
+   échoue (E0603, module privé), et le crate n'offre aucun autre levier public de ligne de cache. Elle est refusée
+   (3.3 a, 1) ; `branches` (4e) ne donne que des indications de branchement et de préchargement ; `cache-padded` 1.3.0
+   (5e, « Prevent false sharing by padding and aligning to the length of a cache line », se dit déprécié au profit de
+   crossbeam-utils) est retenue, avec sa cellule K3 et la forme `op_cache_padded` à la place de `op_cordyceps`. Les
+   nombres de la liste ne changent pas. Les sondes suivent la norme du point 1 ; elles impriment, pour chaque case
+   comblée, la note que la légende donnerait si l'API était livrée, avec ses limites en ligne NOTE
+   (`results/open/probes/<langage>.txt`).

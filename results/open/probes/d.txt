@@ -1,0 +1,5 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), D : sondes exécutées le 2026-11-22 08:35, machine 34, LDC - the LLVM D compiler (1.43.0):
+CAP;A6;1;soa 0.2.0;[exécutée] SOA!P (4 champs float) : 1000 éléments par ~= ; écart entre vx[0] et vx[1] = 4 octets (sizeof P = 16) ; m[0] dans un autre tableau, à 12288 octets de vx[0] ; énergie par les champs = 2329834500.0, par l'itération des éléments = 2329834500.0 ; s[1].vy = 2.0
+NOTE;A6;note publiée 0 ; type SoA engendré à la compilation (un tableau par champ), accès par élément et par champ, tranches et intervalles : 1, comme std.MultiArrayList de Zig
+CAP;F1;1;mir-algorithm 3.22.5;[exécutée] slice!double(300, 500) de dimensions connues à l'exécution : shape [300, 500], strides [500, 1], t.field.length = 150000 (tampon contigu), t[2, 3] = 7 à l'indice 1003 (2*500+3)
+NOTE;F1;note publiée ½ (tableaux statiques de tableaux statiques) ; tranche multidimensionnelle contiguë de dimensions connues à l'exécution : 1

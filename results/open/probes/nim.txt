@@ -1,0 +1,5 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), Nim : sondes exécutées le 2026-11-22 08:35, machine 34, Nim Compiler Version 2.2.12 [Linux: amd64]
+CAP;C1;0.5;mmops 0.1.1;[exécutée] Mm[8, float32] (load, fma, sum) : produit scalaire de 4096 = 24570.0 (somme scalaire 24570.0) ; splat(2)*splat(3)+splat(1) = [7.0, 7.0, 7.0, 7.0, 7.0, 7.0, 7.0, 7.0] ; code machine de c1dot : 1 vfmadd…ps sur ymm
+NOTE;C1;note publiée 0 ; [recherche] mmops.nim : 227 appels mm256_, 0 mm512_ ; {.passC: "-mavx2 -mfma".} : types vectoriels à opérateurs, mais x86 AVX2 seulement, 256 bits seulement (ni AVX-512, ni NEON) : limitée, ½
+CAP;F1;1;arraymancer 0.7.33;[exécutée] zeros[float64](300, 500) de dimensions connues à l'exécution : shape [300, 500], strides [500, 1], is_C_contiguous = true, t[2, 3] = 7.0 lu à l'indice 1003 du tampon contigu (2*500+3)
+NOTE;F1;note publiée ½ (array[M, array[N, T]] fixe) ; tenseur contigu de dimensions connues à l'exécution : 1

@@ -1,0 +1,3 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), cpp : sondes exécutées le 2026-11-22 08:30, machine 34
+CAP;F2;1;hwloc 2.10.0 (libhwloc-dev 2.10.0-1build1);[exécutée] 1 nœud(s) NUMA, 4 cœurs ; zone de 4 Mio par hwloc_alloc_membind(BIND, STRICT) au nœud 0 : politique relue BIND (0), nœuds 0x00000001, pages sur 0x00000001 (0) ; set_membind pris en charge, get_area_memlocation pris en charge ; fil lié au PU 1 (0) : cpuset relu 0x00000002 (0), sched_getcpu = 1
+NOTE;F2;note publiée 0 ; hwloc place mémoire et fils sur les nœuds NUMA (politique et emplacement relus) : 1, comme si l'API était livrée

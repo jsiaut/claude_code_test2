@@ -1,0 +1,23 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), Rust : sondes exécutées le 2026-11-22 08:33, machine 34, rustc 1.99.1 (58cf8f9c3 2026-10-13)
+CAP;B2;1;bumpalo 3.20.4;[exécutée] Bump::alloc de 1000 nœuds (valeur, deux liens) : écarts d'adresse {3512, 32680, 16312, -24, 1704, 8104} (size_of = 24), somme en suivant les liens = 499500 ; allocated_bytes = 31872 ; bumpalo::collections::Vec::new_in(&bump) : tampon dans un bloc de l'arène = true ; reset() : 6 blocs ramenés à 1, allocated_bytes 31872 -> 16320, nouvel objet dans le bloc gardé = true
+NOTE;B2;note publiée ½ ; arène de premier ordre pour tout T et pour les collections du crate (Vec, String, Box) sur rustc stable : 1 ; limite : les collections de std (HashMap…) ne la prennent pas sans allocator_api, instable
+CAP;C1;1;fearless_simd 1.2.0;[exécutée] Level::new() = Avx512(Avx512 { _private: () }) ; f32x8 (from_slice, mul_add, reduce_sum) : produit scalaire de 4096 = 24570 (somme scalaire 24570) ; code machine de c1_dot_entry : 9 vfmadd…ps sur ymm
+NOTE;C1;note publiée ½ (std::simd instable) ; types vectoriels portables (f32x4 à f32x16, entiers, masques) sur SSE2, SSE4.2, AVX2, AVX-512, NEON et WebAssembly, choix du niveau à l'exécution : 1
+CAP;C5;1;rayon 1.12.0;[exécutée] par_chunks(2^20).map(somme).sum() = 799999980000000 sur 4 fils distincts (rayon::current_num_threads = 4) ; par_iter().sum() = 799999980000000 en 9.2 ms contre 799999980000000 en 24.1 ms en série
+NOTE;C5;note publiée 0 ; boucles et réductions parallèles (par_iter, par_chunks, sum, reduce) : 1
+CAP;D3;1;cache-padded 1.3.0;[exécutée] cache_padded::CachePadded<AtomicU64> : size_of = 128, align_of = 128, écart entre deux compteurs d'un tableau = 128 octets
+NOTE;D3;note publiée 0 ; type de bourrage à la ligne de cache (128 o sur x86-64) : 1 ; le crate se dit déprécié au profit de crossbeam-utils, qui offre le même type
+NOTE;D3;cordyceps 0.3.5, retenue d'abord par la règle : [échec] use cordyceps::util::CachePadded -> error[E0603]: module `util` is private : son CachePadded est pub(crate), aucun levier public (correction du relevé, écart 6)
+CAP;D3;1;crossbeam 0.8.5 (nommée);[exécutée] crossbeam::utils::CachePadded<AtomicU64> : size_of = 128, align_of = 128, écart entre deux compteurs = 128 octets
+CAP;D3;0.5;libc 0.2.191 (nommée);[exécutée] libc::sysconf(_SC_LEVEL1_DCACHE_LINESIZE) = 64 (valeur lue à l'exécution ; ni constante ni type de bourrage)
+NOTE;D3;libc seule : ½, comme sysconf par le module Glibc de Swift (note publiée) : requête à l'exécution, ni constante ni type de bourrage
+CAP;D4;1;core_affinity 0.8.3;[exécutée] get_core_ids() = 4 cœurs ; set_for_current(CoreId { id: 2 }) = true ; sched_getcpu sur 1000 lectures dans le fil : {2}
+CAP;D4;1;libc 0.2.191 (nommée);[exécutée] libc::sched_setaffinity(CPU 3) = 0 ; masque relu [3] ; sched_getcpu = 3
+NOTE;D4;note publiée 0 ; affinité d'un fil posée et relue : 1, comme sched_setaffinity en C
+CAP;F1;1;ndarray 0.17.2;[exécutée] Array2::<f64>::zeros((300, 500)) de dimensions connues à l'exécution : shape [300, 500], strides [500, 1], is_standard_layout = true, as_slice() contigu de Some(150000) éléments, a[[2, 3]] à l'indice 1003 = 2*500+3
+NOTE;F1;note publiée ½ (tableaux de tableaux de taille fixe) ; tableau multidimensionnel contigu de dimensions connues à l'exécution : 1
+CAP;F2;1;hwlocality-sys 0.7.2;[exécutée] 1 nœud(s) NUMA ; zone de 4 Mio par hwloc_alloc_membind(BIND, STRICT) au nœud 0 : politique relue 2 (BIND = 2, retour 0), premier nœud de la politique 0, premier nœud des pages 0 (retour 0)
+NOTE;F2;note publiée 0 ; placement NUMA de la mémoire (et des fils) par l'API de hwloc, appelée par la liaison du crate : 1
+CAP;F4;1;memmap2 0.9.12;[exécutée] Mmap::map : 4096 octets projetés (fichier dans /proc/self/maps = true) ; align_to::<u32>() sans copie : 1024 entiers, ints[1000] = 1000, même adresse = true (reste 0/0)
+CAP;F4;1;libc 0.2.191 (nommée);[exécutée] libc::mmap : page projetée, lue sans copie comme &[u32] : s[1000] = 1000 (adresse 0x7ff85f299000)
+NOTE;F4;note publiée 0 ; fichier projeté et lu comme &[u32] sans copie : 1

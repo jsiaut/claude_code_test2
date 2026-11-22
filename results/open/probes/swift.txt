@@ -1,0 +1,5 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), Swift : sondes exécutées le 2026-11-22 08:40, machine 34, Swift version 6.4.2 (swift-6.4.2-RELEASE)
+CAP;B2;0.5;swift-memory-allocation (révision 8742a8c);[exécutée] Memory.Allocator<Memory.Heap>.Arena : 1000 allocate(count:alignment:) de 24 octets, liés à Node (valeur, deux liens) par bindMemory : écarts d'adresse [24], somme en suivant les liens = 499500 ; allocated = 24000 ; après reset(), la première adresse revient = true
+NOTE;B2;note publiée ½ ; protocole d'allocateur (Memory.Allocator.Protocol) et arène remise à zéro d'un coup, mais d'octets bruts liés à la main (bindMemory) : ni objets Swift (classes), ni collections de la bibliothèque standard ; aucune version publiée (branche main) : limitée, ½, comme Foreign.Marshal.Pool de Haskell
+CAP;F1;1;Matft 1.0.1;[exécutée] Matft.nums(0, shape: [300, 500]) de dimensions connues à l'exécution : shape [300, 500], strides [500, 1], size 150000, a[2, 3] = 7 à l'indice 1003 du tampon aplati (2*500+3)
+NOTE;F1;note publiée ½ (InlineArray imbriqués de taille fixe) ; tableau multidimensionnel contigu de dimensions connues à l'exécution : 1

@@ -98,7 +98,7 @@ A6 : la recherche de crates.io est en texte intégral ; « struct of arrays » r
 | B2 | 0.5 | bumpalo | 3.20.4 | 1 | 215 297 252 |  |
 | C1 | 0.5 | fearless_simd | 1.2.0 | 5 | 15 119 210 | encoding_rs (encodages de texte) ; glam (géométrie 3D (2 à 4 composantes), pas de vecteurs SIMD de largeur et de type quelconques) ; simd_cesu8 (encodage CESU-8) ; pulp-wasm-simd-flag (drapeau de compilation de pulp) |
 | C5 | 0 | rayon | 1.12.0 | 1 | 178 285 310 |  |
-| D3 | 0 | cordyceps | 0.3.5 | 3 | 4 872 620 | unicode-ident (propriétés Unicode) ; unicode-id-start (propriétés Unicode) |
+| D3 | 0 | cache-padded | 1.3.0 (se dit déprécié au profit de crossbeam-utils) | 5 | 1 370 615 | unicode-ident (propriétés Unicode) ; unicode-id-start (propriétés Unicode) ; cordyceps (son CachePadded est pub(crate) (src/util.rs) : aucun type public de bourrage ; use cordyceps::util::CachePadded -> E0603, module privé (sonde ; 3.3 a, 1)) ; branches (indications de branchement et préchargement ; ni taille ni bourrage de ligne de cache) |
 | D4 | 0 | core_affinity | 0.8.3 | 1 | 7 865 906 |  |
 | F1 | 0.5 | ndarray | 0.17.2 | 1 | 37 960 350 |  |
 | F2 | 0 | hwlocality-sys | 0.7.2 (sur libhwloc 2.10.0) | 1 | 738 576 |  |
@@ -114,8 +114,6 @@ Cellules du plafond attribuées (3.4) :
 
 * bumpalo : **K8** (B2 = ½ : arène (Bump) pour les nœuds de l'arbre)
   * K8 : op_bumpalo : nœuds de chaque requête alloués par Bump::alloc (liens &'b Node), arène remise à zéro par reset() ; parcours de la forme d'accès tuned_it
-* cordyceps : **K3** (D3 = 0 : CachePadded pour espacer les compteurs)
-  * K3 : op_cordyceps : compteurs de sw_padded dans cordyceps::util::CachePadded
 * crossbeam : **K3** (D3 = 0 : crossbeam_utils::CachePadded)
   * K3 : op_crossbeam : compteurs de sw_padded dans crossbeam_utils::CachePadded
 * libc : **K3** (D3 = 0 : taille de ligne lue par sysconf pour espacer les compteurs ; D4 et F4 hors de la table)
@@ -126,6 +124,8 @@ Cellules du plafond attribuées (3.4) :
 * core_affinity : **aucune** (D4 : levier hors de la table de l'écart 3)
 * hwlocality-sys : **aucune** (F2 : levier hors de la table de l'écart 3)
 * memmap2 : **aucune** (F4 : levier hors de la table de l'écart 3)
+* cache-padded : **K3** (D3 = 0 : CachePadded (128 o) pour espacer les compteurs)
+  * K3 : op_cache_padded : compteurs de sw_padded dans cache_padded::CachePadded
 
 ## Nim
 
@@ -588,7 +588,7 @@ Cellules du plafond attribuées (3.4) :
 | Rust | B2 | bumpalo | 3.20.4 | règle | K8 |
 | Rust | C1 | fearless_simd | 1.2.0 | règle | — |
 | Rust | C5 | rayon | 1.12.0 | règle | — |
-| Rust | D3 | cordyceps | 0.3.5 | règle | K3 |
+| Rust | D3 | cache-padded | 1.3.0 (se dit déprécié au profit de crossbeam-utils) | règle | K3 |
 | Rust | D4 | core_affinity | 0.8.3 | règle | — |
 | Rust | F1 | ndarray | 0.17.2 | règle | — |
 | Rust | F2 | hwlocality-sys | 0.7.2 (sur libhwloc 2.10.0) | règle | — |

@@ -1,0 +1,5 @@
+# Grille ouverte (docs/V4_OPEN.md, 4), Ada : sondes exécutées le 2026-11-22 08:36, machine 34, GNATMAKE 16.2.0
+CAP;C5;1;lwt 1.2.0;[exécutée] Par_Range_Loop (1 .. 40_000_000, Num_Chunks => 4) sous LWT.OpenMP.OMP_Parallel (Num_Threads => 4) : somme des sommes partielles par tranche = 800000020000000 (attendu 800000020000000) ; tranches exécutées sur 4 fils distincts (gettid)
+NOTE;C5;note publiée 0 (boucles parallèles d'Ada 2022 non implémentées par GNAT) ; boucle parallèle par tranches (Par_Range_Loop, Par_Iterator_Loop), réduction par sommes partielles indexées par la tranche, motif de ses exemples : 1
+CAP;D3;1;cachelines 0.1.0;[exécutée] Cachelines.Destructive_Interference_Size = 128 ; Cachelines.Padded (compteur 64 bits) : taille 128 octets, alignement 128 ; écart entre Counters (1) et Counters (2) = 128 octets
+NOTE;D3;note publiée 0 ; constante de ligne (Destructive_Interference_Size) et type générique bourré et aligné (Cachelines.Padded, groupes) : 1

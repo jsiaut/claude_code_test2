@@ -24,6 +24,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "87a0cf66fd1eb2fb7b822cb78370d82303750809bc6ba855f3f58e517d3238db"
 
 [[package]]
+name = "cache-padded"
+version = "1.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "981520c98f422fcc584dc1a95c334e6953900b9106bc47a9839b81790009eb21"
+
+[[package]]
 name = "cc"
 version = "1.11.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -38,22 +44,6 @@ name = "cfg-if"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
-
-[[package]]
-name = "chk"
-version = "0.1.0"
-dependencies = [
- "bumpalo",
- "cordyceps",
- "core_affinity",
- "crossbeam",
- "fearless_simd",
- "hwlocality-sys",
- "libc",
- "memmap2",
- "ndarray",
- "rayon",
-]
 
 [[package]]
 name = "cordyceps"
@@ -312,6 +302,23 @@ name = "once_cell"
 version = "1.21.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
+
+[[package]]
+name = "open_probe"
+version = "0.1.0"
+dependencies = [
+ "bumpalo",
+ "cache-padded",
+ "cordyceps",
+ "core_affinity",
+ "crossbeam",
+ "fearless_simd",
+ "hwlocality-sys",
+ "libc",
+ "memmap2",
+ "ndarray",
+ "rayon",
+]
 
 [[package]]
 name = "pin-project-lite"

@@ -89,10 +89,12 @@
     "choix": "rayon"
    },
    "D3": {
-    "choix": "cordyceps",
+    "choix": "cache-padded",
     "refus": {
      "unicode-ident": "propriétés Unicode",
-     "unicode-id-start": "propriétés Unicode"
+     "unicode-id-start": "propriétés Unicode",
+     "cordyceps": "son CachePadded est pub(crate) (src/util.rs) : aucun type public de bourrage ; use cordyceps::util::CachePadded -> E0603, module privé (sonde ; 3.3 a, 1)",
+     "branches": "indications de branchement et préchargement ; ni taille ni bourrage de ligne de cache"
     }
    },
    "D4": {
@@ -137,9 +139,6 @@
    "bumpalo": [
     "K8"
    ],
-   "cordyceps": [
-    "K3"
-   ],
    "crossbeam": [
     "K3"
    ],
@@ -151,11 +150,13 @@
    "rayon": [],
    "core_affinity": [],
    "hwlocality-sys": [],
-   "memmap2": []
+   "memmap2": [],
+   "cache-padded": [
+    "K3"
+   ]
   },
   "raisons_cellules": {
    "bumpalo": "B2 = ½ : arène (Bump) pour les nœuds de l'arbre",
-   "cordyceps": "D3 = 0 : CachePadded pour espacer les compteurs",
    "crossbeam": "D3 = 0 : crossbeam_utils::CachePadded",
    "libc": "D3 = 0 : taille de ligne lue par sysconf pour espacer les compteurs ; D4 et F4 hors de la table",
    "fearless_simd": "C2 = 1 : std::arch donne déjà les intrinsèques",
@@ -163,33 +164,34 @@
    "rayon": "D1 = 1 (std::thread)",
    "core_affinity": "D4 : levier hors de la table de l'écart 3",
    "hwlocality-sys": "F2 : levier hors de la table de l'écart 3",
-   "memmap2": "F4 : levier hors de la table de l'écart 3"
+   "memmap2": "F4 : levier hors de la table de l'écart 3",
+   "cache-padded": "D3 = 0 : CachePadded (128 o) pour espacer les compteurs"
   },
   "versions": {
    "bumpalo": "3.20.4",
    "fearless_simd": "1.2.0",
    "rayon": "1.12.0",
-   "cordyceps": "0.3.5",
    "core_affinity": "0.8.3",
    "ndarray": "0.17.2",
    "hwlocality-sys": "0.7.2 (sur libhwloc 2.10.0)",
    "memmap2": "0.9.12",
    "libc": "0.2.191",
-   "crossbeam": "0.8.5"
+   "crossbeam": "0.8.5",
+   "cache-padded": "1.3.0 (se dit déprécié au profit de crossbeam-utils)"
   },
   "note": "A6 : la recherche de crates.io est en texte intégral ; « struct of arrays » ramène des crates très téléchargées sans rapport, et soa_derive, au 16e rang, n'est pas examinée (3.2 : les dix premières) : le trou reste.",
   "formes": {
    "bumpalo": {
     "K8": "op_bumpalo : nœuds de chaque requête alloués par Bump::alloc (liens &'b Node), arène remise à zéro par reset() ; parcours de la forme d'accès tuned_it"
    },
-   "cordyceps": {
-    "K3": "op_cordyceps : compteurs de sw_padded dans cordyceps::util::CachePadded"
-   },
    "crossbeam": {
     "K3": "op_crossbeam : compteurs de sw_padded dans crossbeam_utils::CachePadded"
    },
    "libc": {
     "K3": "op_libc : compteurs de sw_padded espacés de sysconf(_SC_LEVEL1_DCACHE_LINESIZE) octets, lu à l'exécution"
+   },
+   "cache-padded": {
+    "K3": "op_cache_padded : compteurs de sw_padded dans cache_padded::CachePadded"
    }
   }
  },
