@@ -243,4 +243,6 @@ fictives au format de la campagne.
    une somme de 64 bits ; la cellule est reconstruite et de nouveau étalonnée et validée à ses trois tailles. Comme
    la validation ne voit que les données du banc, toutes les cellules de K4 sont aussi exécutées une fois sur des
    données extrêmes (2^28 octets à 255 : chaque accumulateur reçoit son maximum), avant la passe 0
-   (`tools/final/k4_extreme.py`, `results/final/k4_extreme.txt`).
+   (`tools/final/k4_extreme.py`, `results/final/k4_extreme.txt`). Fait à 16 h 50 : la cellule corrigée est juste à
+   ses trois tailles, et les 114 cellules de K4 (constructions `pub`, `cv`, `chk`, `unc`) rendent la somme exacte
+   (2^28 × 255) sur les données extrêmes.
