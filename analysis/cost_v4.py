@@ -24,7 +24,8 @@ Calculs (section 5) :
    courte à 10 % ou moins (cellule atteinte : comme au calcul principal) ; (e) grille entière remplacée par l'indice ;
    (f) lexèmes au lieu des lignes (3.3).
 Le calcul « Convergent, avec R4 » est refait ici et comparé à results/converge/analysis.json (contrôle).
-Sorties : results/cost/cost.json, results/report_cost.md. Variables : BOOT (2000), UA (20000)."""
+Sorties : results/cost/cost.json, results/report_cost.md. Variables : BOOT (2000), UA (20000). Option --report :
+relit results/cost/compile.txt et régénère le rapport sans refaire les calculs."""
 import json, math, os, statistics, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -422,5 +423,13 @@ def report(o):
     open(REPORT, "w", encoding="utf-8").write("\n".join(L) + "\n")
 
 
+def report_only():
+    """--report : relit results/cost/compile.txt et régénère le rapport à partir de results/cost/cost.json."""
+    o = json.load(open(OUT))
+    o["compile"] = read_compile(json.load(open(COUNTS)))
+    json.dump(o, open(OUT, "w"), indent=1, ensure_ascii=False, default=float)
+    report(o)
+
+
 if __name__ == "__main__":
-    main()
+    report_only() if "--report" in sys.argv[1:] else main()

@@ -14,6 +14,9 @@ TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 ZIG=/opt/zig/zig GO=/opt/go127/bin/go LDC=/opt/ldc/bin/ldc2 ODIN=/opt/src/odin/odin C3C=/opt/src/c3c/build/c3c
 NIM=/opt/nim/bin/nim FLANG=/usr/bin/flang-23 MOJO=/opt/mojo-venv/bin/mojo
+# modules intrinsèques de flang (iso_fortran_env, iso_c_binding, omp_lib) : seule l'installation x86_64 en livre ; leurs
+# paramètres de type sont ceux des cibles Linux LP64 (aarch64, riscv64) pour les types employés par la copie
+FMOD=/usr/lib/llvm-23/lib/clang/23/finclude/flang/x86_64-pc-linux-gnu
 export GOCACHE="$TMP/gocache" GOPATH="$TMP/gopath" GOFLAGS=-mod=mod GOTOOLCHAIN=local
 
 mkdir -p "$(dirname "$OUT")"
@@ -73,13 +76,14 @@ for t in x86_64 aarch64 riscv64; do
   compile nim $t "$NIM c -d:release --cpu:$nc --os:linux --cc:clang --clang.exe:$TMP/zigcc-$t \
     --clang.linkerexe:$TMP/zigcc-$t $(native $t '--passC:-march=native') --threads:on --mm:orc --hints:off \
     --warnings:off --nimcache:./nimcache --noLinking:on ms.nim"
-  # Fortran : flang-23 (la construction publiée emploie gfortran-16), OpenMP
-  ff="$FLANG --target=$tr $(native $t -march=native) -O3 -fopenmp"
+  # Fortran : flang-23 (la construction publiée emploie gfortran-16), OpenMP 5.2 (gfortran : 5.x par défaut ; flang :
+  # 3.1, qui refuse les clauses acquire et release de la copie)
+  ff="$FLANG --target=$tr $(native $t -march=native) -fintrinsic-modules-path $FMOD -O3 -fopenmp -fopenmp-version=52"
   compile fortran $t "$ff -c sizes.f90 -o sizes.o && $ff -c tuned.f90 -o tuned.o && $ff -c ms.f90 -o ms.o"
-  # Mojo : objet pour la cible
+  # Mojo : objet pour la cible (processeur par défaut : l'hôte pour x86_64, la base de l'architecture sinon)
   mt=$(case $t in x86_64) echo x86_64-unknown-linux-gnu ;; aarch64) echo aarch64-unknown-linux-gnu ;;
        riscv64) echo riscv64-unknown-linux-gnu ;; esac)
-  compile mojo $t "$MOJO build --target-triple $mt $(native $t '--target-cpu native') --emit object ms.mojo -o ms.o \
+  compile mojo $t "$MOJO build --target-triple $mt --emit object ms.mojo -o ms.o \
     2>&1 | grep -v Crashpad; test -s ms.o"
 done
 echo "écrit : $OUT"
