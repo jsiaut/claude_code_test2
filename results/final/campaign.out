@@ -10575,3 +10575,57 @@ p2 k5:pub ada/unc#0 natural  n=35 med=0.0865473s ok=['True'] ok
 p2 k5:pub fpc/pub#0 natural  n=8 med=0.355649s ok=['True'] ok
 p2 k5:pub fpc/pub#0 tuned  n=85 med=0.0255052s ok=['True'] ok
 2026-11-23T13:13:27 passe 2 groupe 7/23 k5:pub : 73 processus, 292 s
+e99ca0c v4, campagne finale en cours (2981 étalonnages, 7438 processus enregistrés)
+2026-11-23T13:13:36 b3 avant le groupe K3 (passe 2, machine 35) : 57.90 et 70.55 ms
+p2 k3:pub julia/pub#0 rmw_padded  n=12 med=0.225576s ok=['True'] ok
+p2 k3:pub julia/pub#0 sw_padded  n=37 med=0.0811743s ok=['True'] ok
+p2 k3:pub php/pub#0 rmw_padded  n=3 med=23.3136s ok=['True'] ok
+p2 k3:pub php/pub#0 sw_padded  n=3 med=5.26885s ok=['True'] ok
+p2 k3:pub go/pub#0 rmw_padded  n=7 med=0.214961s ok=['True'] ok
+p2 k3:pub go/pub#0 sw_padded  n=7 med=0.350067s ok=['True'] ok
+p2 k3:pub c3/pub#0 rmw_padded  n=13 med=0.225911s ok=['True'] ok
+p2 k3:pub c3/pub#0 sw_padded  n=185 med=0.01659s ok=['True'] ok
+p2 k3:pub fortran/pub#0 rmw_padded  n=7 med=0.240769s ok=['True'] ok
+p2 k3:pub fortran/pub#0 sw_padded  n=36 med=0.0763284s ok=['True'] ok
+p2 k3:pub lua/pub#0 rmw_padded  n=3 med=1.77986s ok=['True'] ok
+p2 k3:pub lua/pub#0 sw_padded  n=3 med=1.64817s ok=['True'] ok
+p2 k3:pub java/pub#0 rmw_padded  n=7 med=0.216909s ok=['True'] ok
+p2 k3:pub java/pub#0 sw_padded  n=37 med=0.0811634s ok=['True'] ok
+p2 k3:pub rust/pub#0 rmw_padded  n=13 med=0.223002s ok=['True'] ok
+p2 k3:pub rust/pub#0 sw_padded  n=38 med=0.0774918s ok=['True'] ok
+p2 k3:pub js/pub#0 rmw_padded  n=5 med=0.445684s ok=['True'] ok
+p2 k3:pub js/pub#0 sw_padded  n=3 med=0.630549s ok=['True'] ok
+p2 k3:pub fpc/pub#0 rmw_padded  n=9 med=0.326464s ok=['True'] ok
+p2 k3:pub fpc/pub#0 sw_padded  n=196 med=0.012314s ok=['True'] ok
+p2 k3:pub zig/pub#0 rmw_padded  n=11 med=0.201307s ok=['True'] ok
+p2 k3:pub zig/pub#0 sw_padded  n=36 med=0.0779453s ok=['True'] ok
+p2 k3:pub csharp/pub#0 rmw_padded  n=8 med=0.266693s ok=['True'] ok
+p2 k3:pub csharp/pub#0 sw_padded  n=38 med=0.0795272s ok=['True'] ok
+p2 k3:pub odin/pub#0 rmw_padded  n=13 med=0.230018s ok=['True'] ok
+p2 k3:pub odin/pub#0 sw_padded  n=38 med=0.0786674s ok=['True'] ok
+p2 k3:pub cpp/pub#0 rmw_padded  n=12 med=0.223912s ok=['True'] ok
+p2 k3:pub cpp/pub#0 sw_padded  n=155 med=0.0158639s ok=['True'] ok
+p2 k3:pub c/pub#0 rmw_padded  n=13 med=0.202753s ok=['True'] ok
+p2 k3:pub c/pub#0 sw_padded  n=39 med=0.0729471s ok=['True'] ok
+p2 k3:pub nim/pub#0 rmw_padded  n=13 med=0.21745s ok=['True'] ok
+p2 k3:pub nim/pub#0 sw_padded  n=40 med=0.0717871s ok=['True'] ok
+p2 k3:pub swift/pub#0 rmw_padded  n=8 med=0.226819s ok=['True'] ok
+p2 k3:pub swift/pub#0 sw_padded  n=38 med=0.0786048s ok=['True'] ok
+p2 k3:pub chapel/pub#0 rmw_padded  n=7 med=0.23082s ok=['True'] ok
+p2 k3:pub chapel/pub#0 sw_padded  n=38 med=0.078017s ok=['True'] ok
+p2 k3:pub d/pub#0 rmw_padded  n=8 med=0.204077s ok=['True'] ok
+p2 k3:pub d/pub#0 sw_padded  n=173 med=0.01202s ok=['True'] ok
+p2 k3:pub ada/pub#0 rmw_padded  n=7 med=0.291613s ok=['True'] ok
+p2 k3:pub ada/pub#0 sw_padded  n=200 med=0.0144043s ok=['True'] ok
+p2 k3:pub python/pub#0 rmw_padded  n=3 med=3.99255s ok=['True'] ok
+p2 k3:pub python/pub#0 sw_padded  n=3 med=2.11286s ok=['True'] ok
+p2 k3:pub bqn/pub#0 rmw_padded  n=3 med=2.4381s ok=['True'] ok
+p2 k3:pub bqn/pub#0 sw_padded  n=3 med=2.31279s ok=['True'] ok
+p2 k3:pub ocaml/pub#0 rmw_padded  n=6 med=0.321586s ok=['True'] ok
+p2 k3:pub ocaml/pub#0 sw_padded  n=6 med=0.398624s ok=['True'] ok
+p2 k3:pub mojo/pub#0 rmw_padded  n=7 med=0.224473s ok=['True'] ok
+p2 k3:pub mojo/pub#0 sw_padded  n=173 med=0.0163593s ok=['True'] ok
+p2 k3:pub haskell/pub#0 rmw_padded  n=7 med=0.219261s ok=['True'] ok
+p2 k3:pub haskell/pub#0 sw_padded  n=7 med=0.385473s ok=['True'] ok
+2026-11-23T13:18:42 b3 après le groupe K3 (passe 2, machine 35) : 69.25 et 55.10 ms
+2026-11-23T13:18:42 passe 2 groupe 8/23 k3:pub : 50 processus, 306 s
