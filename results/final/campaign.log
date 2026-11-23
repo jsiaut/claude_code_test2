@@ -69,3 +69,6 @@
 2026-11-23T07:23:40 passe 1 groupe 13/23 k5:pub : 73 processus, 269 s
 2026-11-23T07:28:30 passe 1 groupe 14/23 k5:l2 : 73 processus, 287 s
 2026-11-23T07:32:02 passe 1 groupe 15/23 k7:small : 77 processus, 209 s
+2026-11-23T07:32:10 b3 avant le groupe K3 (passe 1, machine 35) : 54.65 et 69.50 ms
+2026-11-23T07:37:13 b3 après le groupe K3 (passe 1, machine 35) : 68.95 et 59.10 ms
+2026-11-23T07:37:13 passe 1 groupe 16/23 k3:pub : 50 processus, 303 s
