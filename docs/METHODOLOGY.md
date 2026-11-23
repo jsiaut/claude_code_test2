@@ -1820,3 +1820,10 @@ Robustesse :
   réduction par bloc en 64 bits, revalidé ; contrôle de toutes les cellules de K4 sur des données extrêmes (2^28
   octets à 255) avant la passe 0. Les autres cellules étalonnées jusque-là sont justes ; six sont hors mémoire à la
   grande taille, celles du point 2 (K1 de Python et de BQN).
+* 2026-11-23, 19:40 : **v4, campagne finale : fin des mesures** (`docs/V4_FINAL.md`, 12.1). Machine 35, sans
+  redémarrage depuis le 22 novembre, 12 h 03 : étalonnage et validation le 22 (12 h 41 à 16 h 47), passe 0 de 17 h 16
+  à 2 h 24, passe 1 jusqu'à 11 h 00, passe 2 jusqu'à 19 h 40 le 23. 9 738 processus enregistrés, aucun en échec ; 18
+  non exécutés (les six cellules hors mémoire de l'étalonnage, à chaque passe) ; quatre refaits pour vol de temps
+  au-delà de 5 % ; aucun groupe mis à part. b3 de 62,1 à 68,7 ms avant et après les groupes de K3 (b3 des groupes :
+  68,1, 63,1 et 63,2 ms), 65,3 au début et 67,2 à la fin ; deux exécutions successives diffèrent jusqu'à 27 %.
+  Empreinte des constructions : 378 595 996 octets.

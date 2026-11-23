@@ -246,3 +246,59 @@ fictives au format de la campagne.
    (`tools/final/k4_extreme.py`, `results/final/k4_extreme.txt`). Fait à 16 h 50 : la cellule corrigée est juste à
    ses trois tailles, et les 114 cellules de K4 (constructions `pub`, `cv`, `chk`, `unc`) rendent la somme exacte
    (2^28 × 255) sur les données extrêmes.
+
+## 12. Résultats (23 novembre, après la campagne)
+
+Enregistrements : `results/final/raw` (un fichier par langage), `results/final/calib.jsonl` et `calib.json`
+(étalonnage), `results/final/b3.jsonl`, `results/final/builds.jsonl` (empreintes des constructions),
+`results/final/k4_extreme.txt`, journaux `results/final/campaign.log` et `campaign.out`.
+
+### 12.1 Campagne
+
+* **Une seule machine, sans redémarrage.** Toute la campagne s'est faite sur la machine 35 (modèle 6/207/2,
+  caractérisée au repos avant la première mesure : `results/hw/machine35`), arrivée au redémarrage du 22 novembre vers
+  12 h 03, sans autre redémarrage jusqu'à la fin (un seul identifiant de démarrage dans tous les enregistrements). Aucun
+  groupe n'a donc été mis à part ni refait (aucun enregistrement dans `results/final/discarded`), aucune construction
+  n'a été refaite, et les bornes physiques sont celles de la machine 35.
+* **Constructions.** 25 langages, six constructions (section 5), trois jeux de tailles, depuis les fichiers suivis par
+  git ; empreintes dans `results/final/builds.jsonl` (le plan disait `builds.txt` : même contenu, une ligne JSON par
+  construction). Place dans `/dev/shm` : 378 595 996 octets à la fin de la campagne, constructions inchangées (la seule
+  valeur relevée avant, 378 594 901 octets, l'a été à la première construction, avant celle de Java : section 11,
+  écart 1, et `tools/final/build.py`).
+* **Étalonnage et validation** (22 novembre, 12 h 41 à 16 h 47) : 2 978 cellules, 2 981 exécutions (les trois tailles
+  de K4 `tuned` de Java, refaites après sa correction). Une cellule fausse, corrigée avant la passe 0 (écart 1) ; six
+  cellules hors mémoire, notées et non exécutées dans les passes : les quatre variantes de K1 de BQN à la grande taille
+  (`natural`, `natural_shuffled`, `aos`, `soa`) et K1 `natural` et `natural_shuffled` de Python à la grande taille,
+  tuées par le noyau (code -9) entre 11,7 et 11,9 Gio de mémoire résidente, la limite du groupe (13,35 Gio) comptant
+  aussi les données et les constructions placées dans `/dev/shm` ; ce sont les cellules du score qui l'étaient déjà au
+  point 2 (`docs/V4_SIZES.md`, 10.1) ; aucune au-delà de la limite de durée. Les 114 cellules de K4 rendent la somme
+  exacte sur des données extrêmes (`results/final/k4_extreme.txt`).
+* **Passes.**
+
+| Passe | Début | Fin | Durée | Processus | Exécutés | Non exécutés (hors mémoire) | Refaits pour vol de temps |
+|---|---|---|---|---|---|---|---|
+| 0 | 22 nov., 17 h 16 | 23 nov., 2 h 24 | 9 h 08 | 3 380 | 3 374 | 6 | 1 |
+| 1 | 23 nov., 2 h 24 | 11 h 00 | 8 h 36 | 3 179 | 3 173 | 6 | 3 |
+| 2 | 23 nov., 11 h 00 | 19 h 40 | 8 h 40 | 3 179 | 3 173 | 6 | 0 |
+
+  Aucun processus en échec (erreur, somme fausse, hors mémoire inattendu, durée) ; vol de temps au plus de 4,2 % dans
+  les enregistrements gardés. Les processus refaits (vol au-delà de 5 % à la première tentative) : Fortran Q1 à quatre
+  fils, petite taille (passe 0) ; Fortran K9 à quatre fils, petite taille, Java K1 naturel, petite taille, Rust Q1
+  naturel, grande taille (passe 1) ; aucun dans la passe 2. Au total, 9 738 processus enregistrés, 9 720 exécutés.
+* **b3** (ms ; deux exécutions, moyenne) :
+
+| Mesure | b3 | Exécutions |
+|---|---|---|
+| Début de la campagne (machine au repos, après la caractérisation) | 65,28 | 63,40 ; 67,15 |
+| Passe 0, avant le groupe K3 | 67,50 | 65,65 ; 69,35 |
+| Passe 0, après | 68,68 | 68,90 ; 68,45 |
+| Passe 1, avant | 62,08 | 54,65 ; 69,50 |
+| Passe 1, après | 64,03 | 68,95 ; 59,10 |
+| Passe 2, avant | 64,23 | 57,90 ; 70,55 |
+| Passe 2, après | 62,18 | 69,25 ; 55,10 |
+| Fin de la campagne (machine au repos, après la passe 2) | 67,18 | 70,05 ; 64,30 |
+
+  Deux exécutions successives de la même boucle diffèrent jusqu'à 27 % (54,65 et 69,50 ms), et l'écart touche les 16
+  décalages à la fois : c'est la vitesse de la machine qui change d'une seconde à l'autre (fréquence, ou part du cœur
+  physique laissée à la VM), pas le placement du code. La normalisation de R4 par la moyenne du groupe en retire une
+  partie ; ce qui reste entre dans le bruit des processus de K3, que le rééchantillonnage compte.
