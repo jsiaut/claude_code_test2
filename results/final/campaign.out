@@ -12909,3 +12909,4 @@ p2 k1:small lua/pub#0 natural_shuffled energy n=2423 med=0.00224s ok=['True'] ok
 p2 k1:small chapel/chk#0 natural energy n=10000 med=1.7e-05s ok=['True'] ok
 p2 k1:small chapel/chk#0 natural_shuffled energy n=10000 med=1.8e-05s ok=['True'] ok
 2026-11-23T19:40:10 passe 2 groupe 23/23 k1:small : 134 processus, 407 s
+37e157d v4, campagne finale en cours (2981 étalonnages, 9738 processus enregistrés)
