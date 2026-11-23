@@ -442,6 +442,9 @@ def summarize(s):
     prec = s["prec"]
     order = out["order"]
     out["ahead_next"] = {a: float(prec[RANKED.index(a), RANKED.index(b)]) for a, b in zip(order, order[1:])}
+    # ajout du 23 novembre, après le premier calcul (sortie seulement, sans changement de calcul) : la matrice des
+    # préséances, part des variantes où a passe devant b, pour décrire les étages
+    out["prec_full"] = {a: {b: float(prec[RANKED.index(a), RANKED.index(b)]) for b in order} for a in order}
     out["tstar"] = s["tstar"]
     return out
 
