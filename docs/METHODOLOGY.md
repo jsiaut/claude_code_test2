@@ -1827,3 +1827,16 @@ Robustesse :
   au-delà de 5 % ; aucun groupe mis à part. b3 de 62,1 à 68,7 ms avant et après les groupes de K3 (b3 des groupes :
   68,1, 63,1 et 63,2 ms), 65,3 au début et 67,2 à la fin ; deux exécutions successives diffèrent jusqu'à 27 %.
   Empreinte des constructions : 378 595 996 octets.
+* 2026-11-23, 20:10 : **v4, campagne finale : analyse et classement de la v4** (`docs/V4_FINAL.md`, 12 ;
+  `results/report_final.md`). Calcul « Final » (méthode v3, 20 000 variantes ; trois tailles, R1 à R5, C1 à C6, K8
+  naturel sur sept processus) : C++ 1er (78,9 points) et C 2e (78,3), à égalité de fait (C++ devant dans 51 % des
+  variantes ; premier dans 36,5 % contre 36,1 %) ; puis Odin, Rust, C3, Nim, D, Zig, Ada, Chapel, Fortran, Julia, Swift,
+  Mojo, C#, Go, FreePascal, Java, Haskell, OCaml, BQN, JavaScript, PHP, Python, Lua. Deux étages (19 et 6 ; la v3 en
+  avait trois, [14, 5, 6]). Par rapport à la v3, seul Zig bouge de plus de deux places (5e → 8e ; 5e sans R1).
+  Sensibilités : sans C1, C 1er et C++ 4e ; à trois tailles sans les autres règles, C3 1er ; sur les seules mesures, C
+  1er et Rust 2e ; les tailles, R2, R4, la sélection indépendante et les sept processus ne déplacent personne de plus de
+  deux places. Une sortie est ajoutée après le premier calcul (la matrice des préséances, pour décrire les étages), sans
+  changement de calcul ; le second calcul redonne le premier à l'identique. Le classement remplace celui de la v3 en
+  tête du README ; celui-ci passe dans `docs/RANKING_V3.md` avec ses notes, ses errata, « Pourquoi cet ordre », sa
+  méthode et ses limites ; « Comment c'est mesuré », « Limites », « Reproduire », « Pour aller plus loin » et « Une
+  autre étude » (corrélation de rang 0,74 avec l'étude voisine, 0,78 sur l'ordre de la v3) sont mis à jour pour la v4.

@@ -302,3 +302,97 @@ Enregistrements : `results/final/raw` (un fichier par langage), `results/final/c
   décalages à la fois : c'est la vitesse de la machine qui change d'une seconde à l'autre (fréquence, ou part du cœur
   physique laissée à la VM), pas le placement du code. La normalisation de R4 par la moyenne du groupe en retire une
   partie ; ce qui reste entre dans le bruit des processus de K3, que le rééchantillonnage compte.
+
+### 12.2 Classement « Final »
+
+Sorties : `results/final/analysis.json` et `results/report_final.md` (`analysis/final_v4.py`), graphique
+`results/charts/classement_v4.svg` (`analysis/charts_final.py`). b3 de référence (moyenne des huit mesures) : 65,14 ms ;
+b3 des groupes de K3 : 68,09, 63,05 et 63,20 ms (passes 0, 1 et 2).
+
+| Rang | Langage | Score | Rang espéré | Rang plausible | Devance le suivant | Plafond | Code par défaut | Contrôle |
+|---|---|---|---|---|---|---|---|---|
+| 1 | C++ | 78,9 | 2,53 | 1–6 | 51 % | 85,0 | 50,4 | 92,4 |
+| 2 | C | 78,3 | 2,59 | 1–7 | 73 % | 83,1 | 51,8 | 91,7 |
+| 3 | Odin | 72,7 | 4,17 | 1–8 | 58 % | 77,6 | 48,9 | 84,0 |
+| 4 | Rust | 71,5 | 4,95 | 1–9 | 59 % | 80,5 | 54,1 | 73,6 |
+| 5 | C3 | 71,1 | 5,41 | 2–9 | 61 % | 80,9 | 49,0 | 75,7 |
+| 6 | Nim | 71,0 | 6,35 | 3–10 | 52 % | 79,0 | 51,2 | 76,1 |
+| 7 | D | 73,5 | 6,62 | 3–12 | 58 % | 81,1 | 42,1 | 87,1 |
+| 8 | Zig | 72,2 | 7,08 | 2–11 | 76 % | 76,8 | 44,0 | 87,2 |
+| 9 | Ada | 71,4 | 8,99 | 5–12 | 65 % | 78,4 | 47,1 | 80,6 |
+| 10 | Chapel | 67,7 | 10,02 | 3–14 | 54 % | 87,5 | 44,4 | 61,8 |
+| 11 | Fortran | 67,0 | 10,54 | 6–14 | 49 % | 78,2 | 51,3 | 65,3 |
+| 12 | Julia | 66,6 | 10,58 | 6–14 | 78 % | 74,4 | 44,8 | 73,3 |
+| 13 | Swift | 64,4 | 12,73 | 10–14 | 53 % | 75,4 | 41,6 | 68,1 |
+| 14 | Mojo | 64,7 | 12,83 | 10–15 | 91 % | 73,0 | 43,2 | 70,5 |
+| 15 | C# | 60,2 | 14,89 | 13–16 | 97 % | 67,5 | 36,4 | 68,8 |
+| 16 | Go | 50,5 | 16,95 | 16–18 | 50 % | 59,1 | 39,2 | 48,7 |
+| 17 | FreePascal | 49,4 | 16,97 | 15–19 | 47 % | 41,6 | 43,6 | 62,3 |
+| 18 | Java | 49,4 | 16,98 | 16–18 | 95 % | 60,0 | 41,8 | 42,7 |
+| 19 | Haskell | 42,6 | 18,84 | 18–19 | 100 % | 49,6 | 32,8 | 41,5 |
+| 20 | OCaml | 24,5 | 20,21 | 20–22 | 89 % | 21,4 | 31,3 | 23,2 |
+| 21 | BQN | 17,0 | 21,61 | 20–23 | 54 % | 10,5 | 23,4 | 19,7 |
+| 22 | JavaScript | 17,6 | 21,94 | 21–24 | 68 % | 14,6 | 26,4 | 14,6 |
+| 23 | PHP | 16,9 | 22,42 | 21–23 | 97 % | 6,3 | 19,1 | 27,4 |
+| 24 | Python | 12,7 | 24,05 | 22–25 | 76 % | 1,0 | 7,6 | 29,7 |
+| 25 | Lua | 5,9 | 24,76 | 24–25 | — | 1,4 | 12,0 | 6,8 |
+
+Étages (règle v3 sans sa condition de réplication) : deux, les 19 premiers (de C++ à Haskell) et les six derniers
+(d'OCaml à Lua). Chaque langage du premier devance chacun du second dans au moins 99,6 % des variantes (Haskell devant
+BQN). Les autres marches les plus hautes : après les 14 premiers, 91,5 % au plus faible (Mojo devant C#) ; après C#,
+91,1 % (C# devant FreePascal) ; après Java, 89,0 % (FreePascal devant Haskell). Sur les seules mesures : six étages,
+[14, 5, 3, 1, 1, 1]. Premier : C++ dans 36,5 % des variantes, C 36,1 %, Odin 10,6 %, Rust 7,6 %, C3 3,1 %, Zig 2,1 %,
+Chapel 1,9 %, D 1,1 %, Nim 0,7 %.
+
+Cellules remplies (section 8) : à la grande taille, K1 `aos`, `natural`, `natural_shuffled` de BQN et K1 `natural`,
+`natural_shuffled` de Python prennent le temps de Go, le plus lent des autres langages ; K1 `soa` de BQN, celui de
+Python. Aucune forme du relevé ne manque.
+
+### 12.3 Sensibilités et décomposition
+
+| Calcul | Plus de deux places d'écart avec « Final » | Premier (part des variantes) |
+|---|---|---|
+| Final | | C++ 36,5 %, C 36,1 %, Odin 10,6 % |
+| Base, trois tailles (formes publiées, code naturel publié, K3 sans R4) | C3 1er (5e) | C3 30,4 %, C 26,3 %, C++ 20,7 % |
+| Sans les tailles (taille publiée seule) | aucun | C++ 33,5 %, C 27,8 %, Rust 14,2 %, Odin 14,1 % |
+| Sans R1 | Zig 5e (8e) | C++ 38,3 %, C 36,5 % |
+| Sans R2 | aucun (C 1er, C++ 2e) | C 39,5 %, C++ 35,9 %, Odin 11,9 % |
+| Sans C1 (formes publiées seules) | C++ 4e (1er) | C 40,6 %, Odin 18,6 %, C3 12,2 % |
+| Sans R4 | aucun | C++ 55,5 %, C 19,8 % |
+| R1' au lieu de R1 | Zig 4e (8e) | C++ 35,7 %, C 32,2 %, Odin 13,2 % |
+| Taille petite | Ada 12e (9e) | C 44,7 %, C++ 25,9 % |
+| Taille grande | aucun | C++ 58,7 %, C 17,4 % |
+| Sélection indépendante | aucun | C++ 37,1 %, C 36,4 %, Odin 11,9 % |
+| D3 et D4 sur trois processus | aucun | C++ 39,9 %, C 37,3 % |
+| Sur les seules mesures | Odin 6e (3e), Zig 12e (8e), Chapel 7e (10e), Fortran 8e (11e) | C 32,9 %, Rust 24,4 %, C++ 20,3 %, Chapel 14,5 % |
+
+(Parts de 10 % et plus. Rangs de tous les langages dans tous les calculs : `results/report_final.md`.)
+
+Les règles de la campagne déplacent peu de langages, chacune prise seule : R1 (et R1') déplace Zig, dont le code naturel
+compte en mode vérifié (`-O safe`) ; C1 fait passer C++ de la 4e à la 1re place (son arène de K8 par valeur, sa forme
+optimisée de K4) ; à trois tailles sans aucune des autres règles, C3 serait 1er. Les tailles, R2, R4, la sélection
+indépendante et les sept processus de K2 et de K8 ne déplacent personne de plus de deux places ; la seule petite taille
+déplace Ada. La première place, elle, se joue entre C++ et C : C++ la prend avec R4 (sans R4, 55,5 %), la grande taille
+(58,7 %) et C1 ; C avec la petite taille (44,7 %), sans R2, sans C1 et sur les seules mesures.
+
+### 12.4 Comparaisons
+
+* **Classement publié (v3)** : seul Zig bouge de plus de deux places (5e → 8e). En tête, C++ (3e → 1er) passe devant C
+  (1er → 2e) et Odin (2e → 3e) ; Rust gagne deux places (6e → 4e), C3 en perd une (4e → 5e), Nim et D en gagnent une (6e
+  et 7e). Plus bas, Julia passe devant Swift (12e et 13e), Go devant FreePascal et Java (16e, 17e, 18e), JavaScript
+  devant PHP (22e et 23e). Les étages de la v3 étaient [14, 5, 6] ; la marche entre les 14 premiers et C# ne tient plus
+  à 95 % (Mojo devance C# dans 91 % des variantes).
+* **« Convergent, avec R4 » du point 4** (machine 33, taille publiée seule, sans R1 ni R2) : Rust 7e → 4e, Zig 2e → 8e ;
+  les autres à deux places au plus.
+* **Écart entre passes** : pour chaque cellule, le rapport de sa passe la plus lente à la plus rapide a une médiane de
+  1,082 ; 576 cellules sur 2 972 (19 %) dépassent 1,2. La vitesse de la machine variait d'une seconde à l'autre (b3,
+  12.1) ; le rééchantillonnage des processus en tient compte.
+
+### 12.5 Écarts à l'analyse prévue
+
+* **Sortie ajoutée après le premier calcul** (23 novembre, 19 h 54) : la matrice des préséances de chaque calcul
+  (`prec_full` dans `results/final/analysis.json`), pour décrire les étages ; aucun calcul ne change. Le second calcul
+  (19 h 54 à 20 h 08) redonne le premier à l'identique : rapport identique octet pour octet, sorties identiques hors la
+  matrice ajoutée.
+* **Nom d'un relevé** : le plan annonçait les empreintes des constructions dans `results/final/builds.txt` ; elles sont
+  dans `results/final/builds.jsonl` (12.1).

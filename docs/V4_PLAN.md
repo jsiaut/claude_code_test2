@@ -126,6 +126,13 @@ C6), avec la grille et sans la piste ouverte ; K8 naturel mesuré par sept proce
 chaque groupe de K3 ; un groupe (noyau, taille) d'une passe toujours sur une même machine, refait en entier si un
 redémarrage l'interrompt. Son classement remplacera celui de la v3 en tête du README.
 
+Fait les 22 et 23 novembre (`docs/V4_FINAL.md`, 12) : machine 35 sans redémarrage, 9 738 processus, aucun en échec.
+Classement de la v4 : C++ et C en tête, à égalité de fait (C++ devant dans 51 % des variantes), puis Odin, Rust, C3,
+Nim, D, Zig, Ada, Chapel, Fortran, Julia, Swift, Mojo, C#, Go, FreePascal, Java, Haskell, OCaml, BQN, JavaScript, PHP,
+Python et Lua ; deux étages (les 19 premiers, les six derniers). Par rapport à la v3, seul Zig bouge de plus de deux
+places (de la 5e à la 8e, par R1). Il est en tête du README depuis le 23 novembre ; celui de la v3 est archivé dans
+`docs/RANKING_V3.md`.
+
 Chacun recevra son plan détaillé (implémentations, données, cellules, campagne, scénarios), poussé avant ses mesures,
 une fois le point précédent terminé. Machine : l'hôte actuel est un Xeon Granite Rapids (modèle 173), une troisième
 micro-architecture ; les campagnes y seront appariées à un témoin C, comme les précédentes, et le choix de l'hôte sera
