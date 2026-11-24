@@ -274,9 +274,15 @@ Le premier contrôle prend environ 30 s, le second 25 min (classement complet co
 demande de chaîne de compilation. Les deux commandes suivantes réécrivent `results/final/analysis.json`,
 `results/report_final.md` et le graphique.
 
-Remesurer demande les 25 chaînes de `env/toolchains.txt`, installées aux chemins que lisent les `build.sh`, et les
-données de `/opt/msdata` (`tools/gendata.c`) ; le dépôt n'a pas de script d'installation. Sur une machine du modèle
-6/207/2 :
+Remesurer demande les 25 chaînes de `env/toolchains.txt`, aux chemins que lisent les `build.sh`, et les données de
+`/opt/msdata` : `env/install.sh` les installe sur une Ubuntu 24.04 (environ 1 h 30 sur 4 cœurs, 35 Gio ; archives
+vérifiées par leur empreinte, versions exactes de l'étude). Réinstallées ainsi le 24 novembre, les chaînes redonnent
+le fichier ou le code machine de la campagne finale pour 192 constructions sur 225 ; celles de Rust, de D et de C3
+diffèrent, sans cause trouvée ([`V5.md`](V5.md), 2). Puis, sur une machine du modèle 6/207/2 :
+
+```bash
+sh env/install.sh
+```
 
 ```bash
 sh tools/final/machine.sh 36

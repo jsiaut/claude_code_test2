@@ -282,8 +282,8 @@ python3 analysis/charts_final.py
 ```
 
 Ces deux commandes réécrivent `results/final/analysis.json`, `results/report_final.md` et le graphique. Remesurer
-demande les 25 chaînes de [`env/toolchains.txt`](env/toolchains.txt), que le dépôt ne sait pas installer, et une
-machine du même modèle : [`docs/METHOD.md`](docs/METHOD.md), 11.
+demande les 25 chaînes de [`env/toolchains.txt`](env/toolchains.txt), que `env/install.sh` installe en 1 h 30 environ,
+et une machine du même modèle : [`docs/METHOD.md`](docs/METHOD.md), 11.
 
 ## Le dépôt
 
