@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Confronte les sondes exécutées (results/probes/<langage>.txt, lignes CAP;<id>;<valeur>;<preuve>) à la
-matrice du pilier C (analysis/capabilities.py). Depuis l'audit de la grille (docs/V4_PLAN.md 2.1), les sondes
+matrice du pilier C (analysis/capabilities.py ; classes de preuve : docs/METHOD.md, 7). Les sondes
 impriment la note de la règle v2 (score central ; la ligne dit quand v1 diffère) : la comparaison se fait à la note
 v2 (analysis/capabilities_v2.py), la note v1 est donnée à côté. Toute divergence est listée : la matrice doit être
-corrigée ou la divergence expliquée. Écrit results/probes/summary.md (analysis/grid_audit.py en fait la synthèse)."""
+corrigée ou la divergence expliquée. Écrit results/probes/summary.md."""
 import glob, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

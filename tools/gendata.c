@@ -3,7 +3,7 @@
 // Usage : gendata <répertoire> [--only k1,k2,k4,k5,k6,k7] [--n1 N] [--n4 N] [--n5 N] [--n6 N] [--n7 N] [--keys7 K]
 //         [--k2 S1,S2,...]
 // Sans option : les tailles publiées (fichiers identiques au bit près à ceux de la campagne). Les options donnent les
-// tailles du point 2 de la v4 (docs/V4_SIZES.md) : mêmes graines, même générateur, mêmes lois.
+// tailles petite et grande (docs/METHOD.md, 3 ; tools/sizes/sizes.py) : mêmes graines, même générateur, mêmes lois.
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>

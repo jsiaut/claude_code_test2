@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Génère docs/CAPABILITIES.md à partir de analysis/capabilities.py, des reclassements de la règle v2
-(analysis/capabilities_v2.py), des sondes exécutées (results/probes/*.txt) et de results/vectorization.json."""
+(analysis/capabilities_v2.py), des sondes exécutées (results/probes/*.txt) et de results/vectorization.json (C3)."""
 import glob, json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,8 +31,9 @@ def main():
            "sauf pour C et C++, dont la libc est la bibliothèque système.",
            "Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que la règle v2 (score central) reclasse. "
            "C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en natural "
-           "(`tools/c3_measure.py`). Les justifications et preuves de chaque cellule suivent le tableau ; l'état de "
-           "preuve (sonde exécutée, mesure ou lecture des sources) est décompté à la fin.", "",
+           "(`results/vectorization.json`, mesure faite pendant la v3 ; la règle v2 ne compte pas C3). Les "
+           "justifications et preuves de chaque cellule suivent le tableau ; l'état de preuve (sonde exécutée, "
+           "mesure ou lecture des sources) est décompté à la fin.", "",
            "| Capacité | " + " | ".join(SHORT[l] for l in ORDER) + " |",
            "|---|" + "---|" * len(ORDER)]
     for cat, (w, caps) in CATEGORIES.items():
@@ -74,9 +75,9 @@ def main():
                         tags.setdefault(lang, {}).setdefault(t, set()).add(p[1])
     out += ["## État de preuve", "",
             "Case **sondée** : une ligne `CAP` d'une sonde exécutée (`results/probes/<langage>.txt`), confrontée à la "
-            "matrice par `analysis/grid_audit.py` ; **mesurée** : C3 ; **lue** : justifiée par la seule lecture des "
-            "sources ou de la documentation. Depuis l'audit de la grille (v4, point 1 : `docs/V4_PLAN.md`, "
-            "`docs/GRID_AUDIT.md`), chaque preuve porte sa classe : **[exécutée]** (un programme se sert de la capacité "
+            "matrice par `analysis/check_probes.py` ; **mesurée** : C3 ; **lue** : justifiée par la seule lecture des "
+            "sources ou de la documentation. Depuis l'audit de la grille (v4, point 1 : `docs/HISTORY.md` ; norme de "
+            "preuve : `docs/METHOD.md`, 7), chaque preuve porte sa classe : **[exécutée]** (un programme se sert de la capacité "
             "et imprime un fait observable), **[échec]** (forme canonique refusée, ou comportement contraire mesuré), "
             "**[recherche]** (fouille des sources livrées ou de l'API publique avec un motif fixé d'avance, chaque "
             "résultat examiné). Une case peut porter plusieurs classes.", "",

@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-"""Pilote de mesure (voir docs/METHODOLOGY.md).
+"""Validation rapide d'une implémentation, à la taille publiée, et définitions communes au pilote de la campagne.
 
-Pour chaque (langage, noyau, variante, paramètre) : P processus indépendants,
-chacun exécutant WARMUP répétitions non mesurées puis R répétitions mesurées
-(le programme chronomètre lui-même la section de calcul). Le pilote enregistre :
-  * les lignes RESULT / LAT / META émises,
-  * rusage du processus fils via os.wait4 (pic RSS, temps CPU user/sys),
-  * le temps « steal » de l'hyperviseur (/proc/stat) pendant l'exécution,
-  * la validité du résultat par rapport aux sommes de contrôle attendues.
-Sortie : results/raw/<langage>.jsonl (une ligne JSON par processus).
+Usage : driver.py LANG [--kernels k1,k4] [--variants natural,tuned] [--params q1,16384] [--warmup N] [--timeout S]
 
-Usage : driver.py LANG [--kernels k1,k2] [--procs 3] [--quick]
+Construire d'abord sur place (bench/<langage>/build.sh). Pour chaque cellule (noyau, variante, paramètre) du langage,
+celles du plan commun (PLAN) et ses variantes propres (bench/<langage>/extra_variants), un processus exécute
+l'échauffement puis une répétition ; le programme chronomètre lui-même sa section de calcul (docs/SPEC.md, 0) et sa
+somme de contrôle est comparée à results/expected.json, calculé par l'implémentation C. Une ligne par cellule ; code
+de retour 1 si une cellule échoue. Rien n'est écrit dans le dépôt. K10 (hors score, plus mesuré) et l'empreinte de K1
+(fp) ne sont exécutés que sur demande (--kernels k10,fp).
+
+Le pilote de la campagne (tools/final/campaign.py) et l'analyse (analysis/final_v4.py) reprennent d'ici PLAN, les
+variantes communes à tous les langages, check, les sommes de contrôle de la taille publiée, et le relevé du vol de
+temps de l'hyperviseur. Les autres tailles : tools/sizes/validate.py.
 """
-import argparse, json, os, subprocess, tempfile, threading, time
+import argparse, json, os, subprocess, sys, tempfile, threading, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EXPECTED = json.load(open(os.path.join(ROOT, "results", "expected.json")))
@@ -31,6 +33,7 @@ PLAN = {
     "k10": [("natural", ""), ("tuned", "")],
     "fp": [("footprint", "energy"), ("footprint_raw", "energy"), ("footprint0", "energy")],
 }
+SCORED = ["k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8", "k9"]
 TOL = {"k1": 1e-6, "k5": 1e-3, "k9": 1e-9}
 CLK_TCK = os.sysconf("SC_CLK_TCK")
 NCPU = os.cpu_count()
@@ -43,6 +46,7 @@ def steal_ticks():
 
 
 def check(kernel, param, chk):
+    """Somme de contrôle de la taille publiée : True ou False, None si aucune valeur n'est attendue."""
     key = f"{kernel}:{param}" if kernel in ("k2", "k6") else kernel
     exp = EXPECTED.get(key)
     if exp is None:
@@ -56,33 +60,20 @@ def check(kernel, param, chk):
     return chk.strip() == exp
 
 
-def witness():
-    """Témoin d'environnement (tools/hwprobe.c, mode witness) : débit FMA, fréquence effective, latences à 2 et
-    32 Mio, bande passante en lecture sur 64 Mio."""
-    try:
-        out = subprocess.run(["/opt/hwprobe", "witness"], capture_output=True, text=True, timeout=30).stdout
-        f = [l for l in out.splitlines() if l.startswith("witness;")][-1].split(";")
-        return {"gflops": float(f[1]), "ghz": float(f[2]), "lat2M_ns": float(f[3]), "lat32M_ns": float(f[4]),
-                "bw_GBps": float(f[5])}
-    except Exception as e:  # noqa: BLE001
-        return {"error": str(e)}
+def extra_variants(lang):
+    """Variantes propres à un langage : bench/<langage>/extra_variants (« k8 tuned_alloc »)."""
+    extra = {}
+    ef = os.path.join(ROOT, "bench", lang, "extra_variants")
+    if os.path.exists(ef):
+        for line in open(ef):
+            f = line.split()
+            if len(f) >= 2:
+                extra.setdefault(f[0], []).append((f[1], f[2] if len(f) > 2 else ""))
+    return extra
 
 
-def thp_sampler(pid, box, stop):
-    """Relève toutes les 100 ms le maximum de AnonHugePages du processus (/proc/<pid>/smaps_rollup)."""
-    while not stop.is_set():
-        try:
-            for line in open(f"/proc/{pid}/smaps_rollup"):
-                if line.startswith("AnonHugePages:"):
-                    box[0] = max(box[0], int(line.split()[1]))
-        except OSError:
-            pass
-        stop.wait(0.1)
-
-
-def run_one(lang, kernel, variant, param, reps, warmup, timeout, wit=False, thp=False):
+def run_one(lang, kernel, variant, param, reps, warmup, timeout):
     runner = os.path.join(ROOT, "bench", lang, "run")
-    wv = witness() if wit else None
     k = "k1" if kernel == "fp" else kernel
     cmd = [runner, k, variant, str(reps)] + ([param] if param else [])
     env = dict(os.environ, WARMUP=str(warmup), MS_DATA=os.environ.get("MS_DATA", "/opt/msdata"))
@@ -91,30 +82,19 @@ def run_one(lang, kernel, variant, param, reps, warmup, timeout, wit=False, thp=
         proc = subprocess.Popen(cmd, stdout=fo, stderr=fe, env=env, cwd=os.path.join(ROOT, "bench", lang))
         timer = threading.Timer(timeout, proc.kill)
         timer.start()
-        box, stop = [0], threading.Event()
-        if thp:
-            th = threading.Thread(target=thp_sampler, args=(proc.pid, box, stop), daemon=True)
-            th.start()
         _, status, ru = os.wait4(proc.pid, 0)
-        stop.set()
         timer.cancel()
         proc.returncode = os.waitstatus_to_exitcode(status)
         fo.seek(0); out = fo.read()
         fe.seek(0); err = fe.read()
     wall = time.time() - t0
-    s1 = steal_ticks()
     rec = {"lang": lang, "kernel": kernel, "variant": variant, "param": param, "reps": [], "lat": [], "meta": {},
-           "returncode": proc.returncode, "wall": wall, "steal_ticks": s1 - s0, "stderr": err.decode(errors="replace")[-2000:],
-           "maxrss_kb": ru.ru_maxrss, "utime": ru.ru_utime, "stime": ru.ru_stime, "minflt": ru.ru_minflt,
-           "nvcsw": ru.ru_nvcsw, "nivcsw": ru.ru_nivcsw}
-    if wv is not None:
-        rec["witness"] = wv
-    if thp:
-        rec["anon_huge_kb_max"] = box[0]
+           "returncode": proc.returncode, "wall": wall, "steal_ticks": steal_ticks() - s0,
+           "stderr": err.decode(errors="replace")[-2000:], "maxrss_kb": ru.ru_maxrss}
     for line in out.decode(errors="replace").splitlines():
         f = line.strip().split(";")
         if f[0] == "RESULT" and len(f) >= 7:
-            ok = check(kernel if kernel != "fp" else "fp", param, f[6]) if kernel != "fp" else True
+            ok = check(kernel, param, f[6]) if kernel != "fp" else True
             rec["reps"].append({"rep": int(f[4]), "sec": float(f[5]), "chk": f[6], "ok": ok})
         elif f[0] == "LAT" and len(f) >= 7:
             rec["lat"].append([int(float(x)) for x in f[2:7]])
@@ -124,81 +104,33 @@ def run_one(lang, kernel, variant, param, reps, warmup, timeout, wit=False, thp=
 
 
 def main():
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(description="Validation rapide d'une implémentation (un processus, une répétition).")
     ap.add_argument("lang")
-    ap.add_argument("--kernels", default=",".join(PLAN.keys()))
-    ap.add_argument("--variants", default="")
-    ap.add_argument("--procs", type=int, default=3)
-    ap.add_argument("--reps", type=int, default=0, help="0 = adaptatif")
+    ap.add_argument("--kernels", default=",".join(SCORED))
+    ap.add_argument("--variants", default="", help="ne garder que ces variantes")
+    ap.add_argument("--params", default="", help="ne garder que ces paramètres (ex. q1, 16384)")
     ap.add_argument("--warmup", type=int, default=int(os.environ.get("WARMUP", "1")))
     ap.add_argument("--timeout", type=int, default=900)
-    ap.add_argument("--out", default="")
-    ap.add_argument("--quick", action="store_true", help="1 processus, 1 répétition (validation)")
-    ap.add_argument("--params", default="", help="ne garder que ces paramètres (ex. q1, 16384)")
-    ap.add_argument("--tag", default="", help="étiquette enregistrée dans chaque mesure (ex. complement)")
-    ap.add_argument("--witness", action="store_true", help="témoin d'environnement (hwprobe witness) avant chaque processus")
-    ap.add_argument("--thp", action="store_true", help="relevé de AnonHugePages pendant chaque processus")
-    ap.add_argument("--pass", dest="pass_", type=int, default=-1,
-                    help="campagne : n'exécute que le processus d'indice PASS (les passes sont lancées à des moments "
-                         "différents, dans un ordre aléatoire) ; le nombre de répétitions est figé par results/calib.json")
     a = ap.parse_args()
-    calib_path = os.path.join(ROOT, "results", "calib.json")
-    calib = json.load(open(calib_path)) if os.path.exists(calib_path) else {}
-    outdir = os.path.join(ROOT, "results", "raw")
-    os.makedirs(outdir, exist_ok=True)
-    out = open(a.out or os.path.join(outdir, f"{a.lang}.jsonl"), "a")
     vfilter = set(a.variants.split(",")) if a.variants else None
-    # variantes facultatives propres à un langage : fichier bench/<lang>/extra_variants ("k8 tuned_alloc")
-    extra = {}
-    ef = os.path.join(ROOT, "bench", a.lang, "extra_variants")
-    if os.path.exists(ef):
-        for line in open(ef):
-            f = line.split()
-            if len(f) >= 2:
-                extra.setdefault(f[0], []).append((f[1], f[2] if len(f) > 2 else ""))
+    extra = extra_variants(a.lang)
+    bad = 0
     for kernel in a.kernels.split(","):
         for variant, param in PLAN[kernel] + extra.get(kernel, []):
             if vfilter and variant not in vfilter:
                 continue
             if a.params and param not in a.params.split(","):
                 continue
-            procs = 1 if a.quick or kernel == "fp" else a.procs
-            reps = 1 if a.quick or kernel == "fp" else a.reps
-            key = f"{a.lang}|{kernel}|{variant}|{param}"
-            if reps == 0 and key in calib:  # répétitions figées par la première passe
-                reps, procs = calib[key]["reps"], min(procs, calib[key]["procs"])
-            elif reps == 0:  # calibration : 1 répétition pour estimer la durée
-                cal = run_one(a.lang, kernel, variant, param, 1, a.warmup, a.timeout)
-                t = cal["reps"][0]["sec"] if cal.get("reps") else 10.0
-                reps = max(3, min(10, int(3.0 / max(t, 1e-6))))
-                if t > 5.0:  # mesures très longues (langages interprétés) : 2 processus x 2 répétitions
-                    reps, procs = 2, min(procs, 2)
-                calib = json.load(open(calib_path)) if os.path.exists(calib_path) else {}
-                calib[key] = {"reps": reps, "procs": procs, "t_cal": t}
-                with open(calib_path + ".tmp", "w") as cf:
-                    json.dump(calib, cf, indent=0, sort_keys=True)
-                os.replace(calib_path + ".tmp", calib_path)
-            passes = range(procs) if a.pass_ < 0 else ([a.pass_] if a.pass_ < procs else [])
-            for p in passes:
-                # steal de l'hyperviseur > 2 % du temps CPU disponible : mesure refaite (2 fois au plus)
-                for attempt in range(3):
-                    rec = run_one(a.lang, kernel, variant, param, reps, a.warmup, a.timeout, a.witness, a.thp)
-                    steal_frac = rec["steal_ticks"] / max(1e-9, rec["wall"] * CLK_TCK * NCPU)
-                    rec["steal_frac"] = steal_frac
-                    rec["attempt"] = attempt
-                    if steal_frac <= 0.02 or a.quick:
-                        break
-                rec["proc"] = p
-                rec["ts"] = time.strftime("%Y-%m-%dT%H:%M:%S")
-                if a.tag:
-                    rec["tag"] = a.tag
-                out.write(json.dumps(rec) + "\n")
-                out.flush()
-                secs = [r["sec"] for r in rec.get("reps", [])]
-                oks = {r["ok"] for r in rec.get("reps", [])}
-                med = sorted(secs)[len(secs) // 2] if secs else float("nan")
-                print(f"{a.lang:10s} {kernel:4s} {variant:20s} {param:10s} p{p} n={len(secs)} med={med:.6f}s ok={oks} rc={rec.get('returncode')} {rec.get('error','')}"
-                      + (f" ERR:{rec['stderr'][-300:]}" if rec.get("returncode") not in (0, None) else ""), flush=True)
+            rec = run_one(a.lang, kernel, variant, param, 1, a.warmup, a.timeout)
+            secs = [r["sec"] for r in rec["reps"]]
+            oks = {r["ok"] for r in rec["reps"]}
+            good = rec["returncode"] == 0 and bool(secs) and oks <= {True}
+            bad += not good
+            med = sorted(secs)[len(secs) // 2] if secs else float("nan")
+            print(f"{a.lang:10s} {kernel:4s} {variant:20s} {param:10s} n={len(secs)} t={med:.6f}s ok={sorted(map(str, oks))} "
+                  f"rc={rec['returncode']} {'' if good else 'ÉCHEC'}"
+                  + (f" ERR:{rec['stderr'][-300:]}" if rec["returncode"] != 0 else ""), flush=True)
+    sys.exit(1 if bad else 0)
 
 
 if __name__ == "__main__":

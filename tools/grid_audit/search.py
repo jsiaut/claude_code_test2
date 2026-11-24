@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Recherche d'absence de l'audit de la grille (docs/V4_PLAN.md, 2.1, classe [recherche]).
+"""Recherche d'absence, preuve des cases à 0 de la grille portées par une API absente (classe [recherche] :
+docs/METHOD.md, 7).
 
 Usage : search.py <langage> <case> [<case>...]
 

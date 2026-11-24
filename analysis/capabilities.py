@@ -1,4 +1,4 @@
-"""Matrice de capacités (pilier C, docs/METHODOLOGY.md section 3).
+"""Matrice de capacités (pilier C : docs/METHOD.md, 7).
 
 Valeurs : 1 = présente, documentée et vérifiée ; 0.5 = partielle (expérimentale, non standard mais
 livrée avec la chaîne officielle, propre à un compilateur, ou limitée) ; 0 = absente, ou seulement
@@ -6,7 +6,7 @@ par une bibliothèque tierce ou une FFI.
 Preuves : « sonde » = vérifié par probes/<langage> (compilé et exécuté) ; « src » = lu dans les
 sources livrées avec la chaîne (chemins dans docs/CAPABILITIES.md) ; « bench » = utilisé et validé
 dans bench/<langage> ; « doc » = documentation officielle ; « mesure » = désassemblage de K4/K9
-natural (C3, rempli par analysis/vectorization.py).
+natural (C3 : results/vectorization.json, mesuré pendant la v3 ; la règle v2 ne compte pas C3).
 """
 
 CATEGORIES = {

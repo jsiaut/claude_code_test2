@@ -1,4 +1,4 @@
-# binaires et artefacts de compilation
+# artefacts de compilation des implémentations (bench/<langage>/build.sh lancé sur place)
 bench/*/ms
 bench/*/ms_*
 bench/*/target/
@@ -6,7 +6,10 @@ bench/*/zig-out/
 bench/*/.zig-cache/
 bench/*/bin/
 bench/*/obj/
+bench/*/classes/
 bench/*/dist-newstyle/
+bench/*/nimcache/
+bench/*/__pycache__/
 bench/*/*.o
 bench/*/*.ppu
 bench/*/*.hi
@@ -15,33 +18,23 @@ bench/*/*.cmi
 bench/*/*.cmo
 bench/*/*.ali
 bench/*/*.class
-bench/*/__pycache__/
-bench/*/nimcache/
+
+# artefacts des sondes de la grille et des listes d'API
 probes/*/bin/
-*.tmp
-__pycache__/
 probes/*/obj/
 probes/*/*.cmi
 probes/*/*.cmx
 probes/*/*.o
-
-bench/*/layout/
-
-# copie standard de Java (confrontation) : sortie de compilation
-bench/java_std/classes/
-tools/*/*/obj/
-tools/*/*/bin/
 probes/*/*/bin/
-tools/grid_audit/listings/*/bin/
-tools/grid_audit/listings/*/obj/
 probes/*/*/obj/
 probes/haskell/audit/*_hsc.[ch]
+tools/grid_audit/listings/*/bin/
+tools/grid_audit/listings/*/obj/
 
-# v4, point 2 : générateur de données compilé à la demande (tools/sizes/sizes.py)
+# générateur de données compilé à la demande (tools/sizes/sizes.py)
 tools/sizes/gendata
-# v4, point 2 : écritures de la campagne en cours (recopiées dans results/sizes par tools/sizes/save_progress.sh)
-results/sizes/work/
-results/equal/work/
-results/converge/work/
-results/open/work/
+# écritures d'une campagne en cours (recopiées dans results/final par tools/final/save_progress.sh)
 results/final/work/
+
+*.tmp
+__pycache__/

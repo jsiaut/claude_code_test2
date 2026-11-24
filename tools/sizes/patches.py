@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""v4, point 2 (docs/V4_SIZES.md) : tailles des langages interprétés ou à JIT sans construction.
+"""Tailles des langages interprétés ou à JIT sans construction (docs/METHOD.md, 3).
 
 Leurs sources publiées ne changent pas. La copie d'un jeu de tailles (tools/sizes/build.py) remplace les seules
 constantes de taille du source par celles du jeu : chaque entrée donne le texte publié exact, le texte de remplacement
@@ -100,7 +100,7 @@ def apply(lang, text, params):
     return text
 
 
-# v4, point 4 (docs/V4_CONVERGE.md, 3.2, 5) : copies bench/<langage>_cv des langages sans construction. Les motifs du
+# Copies bench/<langage>_cv des langages sans construction (formes du catalogue : docs/METHOD.md, 4). Les motifs du
 # source publié s'y trouvent aux mêmes comptes ; les formes nouvelles y ajoutent leurs propres constantes de taille.
 CV_EXTRA = {
     "python": [("tab = k7_tuned_oa(keys, vals, 21)", "tab = k7_tuned_oa(keys, vals, {K7_LOG})", 1),

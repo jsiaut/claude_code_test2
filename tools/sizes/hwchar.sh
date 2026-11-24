@@ -1,5 +1,5 @@
 #!/bin/sh
-# v4, point 2 (docs/V4_SIZES.md, section 5) : caractérisation de l'hôte de la campagne des tailles, avant la campagne,
+# Caractérisation d'une machine avant qu'elle mesure (docs/METHOD.md, 6 ; lancée par tools/final/machine.sh),
 # sur une machine au repos. Usage : tools/sizes/hwchar.sh [répertoire de sortie] (par défaut results/hw/machine31).
 # * tools/hwprobe.c, compilé sur l'hôte : fréquence, latences (jusqu'à 1 Gio, pages de 4 Kio et pages géantes),
 #   bandes passantes par taille, STREAM, pic de calcul, TLB, appel système, défaut de page ;

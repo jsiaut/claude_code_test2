@@ -2,7 +2,7 @@
 
 ● = 1 (présente, documentée, vérifiée) · ◐ = 0,5 (partielle : expérimentale, propre à un compilateur, livrée hors norme ou limitée, ou seulement par les types C que définit une FFI livrée avec la chaîne) · ○ = 0 (absente, ou seulement par une bibliothèque tierce, ou en appelant par une FFI du code C non intrinsèque).
 **Une seule règle pour la libc et les FFI** (`analysis/capabilities_v2.py`) : compte ce que la chaîne livre, y compris les intrinsèques et builtins du compilateur que le langage importe par sa FFI (Nim, Chapel, C3, Odin) ; ne compte pas l'appel de code C ordinaire par une FFI (la libc pour Rust, JavaScript, PHP ou BQN), sauf pour C et C++, dont la libc est la bibliothèque système.
-Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que la règle v2 (score central) reclasse. C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en natural (`tools/c3_measure.py`). Les justifications et preuves de chaque cellule suivent le tableau ; l'état de preuve (sonde exécutée, mesure ou lecture des sources) est décompté à la fin.
+Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que la règle v2 (score central) reclasse. C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en natural (`results/vectorization.json`, mesure faite pendant la v3 ; la règle v2 ne compte pas C3). Les justifications et preuves de chaque cellule suivent le tableau ; l'état de preuve (sonde exécutée, mesure ou lecture des sources) est décompté à la fin.
 
 | Capacité | C | C++ | Rust | Zig | Odin | C3 | D | Nim | Ada | Fortran | Chapel | Mojo | Swift | FPC | Go | C# | Java | Julia | Haskell | OCaml | JS | Python | Lua | BQN | PHP |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -276,7 +276,7 @@ Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que l
 
 ## État de preuve
 
-Case **sondée** : une ligne `CAP` d'une sonde exécutée (`results/probes/<langage>.txt`), confrontée à la matrice par `analysis/grid_audit.py` ; **mesurée** : C3 ; **lue** : justifiée par la seule lecture des sources ou de la documentation. Depuis l'audit de la grille (v4, point 1 : `docs/V4_PLAN.md`, `docs/GRID_AUDIT.md`), chaque preuve porte sa classe : **[exécutée]** (un programme se sert de la capacité et imprime un fait observable), **[échec]** (forme canonique refusée, ou comportement contraire mesuré), **[recherche]** (fouille des sources livrées ou de l'API publique avec un motif fixé d'avance, chaque résultat examiné). Une case peut porter plusieurs classes.
+Case **sondée** : une ligne `CAP` d'une sonde exécutée (`results/probes/<langage>.txt`), confrontée à la matrice par `analysis/check_probes.py` ; **mesurée** : C3 ; **lue** : justifiée par la seule lecture des sources ou de la documentation. Depuis l'audit de la grille (v4, point 1 : `docs/HISTORY.md` ; norme de preuve : `docs/METHOD.md`, 7), chaque preuve porte sa classe : **[exécutée]** (un programme se sert de la capacité et imprime un fait observable), **[échec]** (forme canonique refusée, ou comportement contraire mesuré), **[recherche]** (fouille des sources livrées ou de l'API publique avec un motif fixé d'avance, chaque résultat examiné). Une case peut porter plusieurs classes.
 
 | Langage | sondées | [exécutée] | [échec] | [recherche] | mesurées | lues |
 |---|---|---|---|---|---|---|

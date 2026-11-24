@@ -31,7 +31,7 @@ def env_for(lang, kernel, size):
 def checksum_ok(kernel, got, exp):
     """Tolérance de la spécification (TOL), égalité exacte sinon ; une somme de contrôle entière au-delà de 2^53 se
     compare à l'arrondi d'un double près (écart relatif d'au plus 1e-15) : un langage dont les nombres sont des doubles
-    (BQN) ne la représente pas exactement (docs/V4_SIZES.md, 4.1)."""
+    (BQN) ne la représente pas exactement."""
     try:
         if kernel in TOL:
             return abs(float(got) - float(exp)) <= TOL[kernel] * abs(float(exp))

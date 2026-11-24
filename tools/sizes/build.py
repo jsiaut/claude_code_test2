@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""v4, point 2 : constructions des tailles non publiées (docs/V4_SIZES.md).
+"""Constructions des tailles non publiées (docs/METHOD.md, 3), pour tools/sizes/validate.py et expected.py ; la
+campagne a ses propres constructions (tools/final/build.py).
 
 Usage : build.py <langage> [<jeu>...] (jeux : small, large ; tools/sizes/sizes.py, SETS).
 Copie bench/<langage> (sources, build.sh, run) dans /dev/shm/msbuild/<langage>/<jeu>, puis :

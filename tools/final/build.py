@@ -27,7 +27,7 @@ BUILD_ROOT = "/dev/shm/msbuild"
 WORK = os.path.join(ROOT, "results", "final", "work")
 LANGS = ["c", "cpp", "rust", "zig", "odin", "c3", "d", "nim", "ada", "fortran", "chapel", "mojo", "swift", "fpc", "go",
          "csharp", "java", "haskell", "ocaml", "python", "lua", "php", "bqn", "js", "julia"]
-CHK = ["c", "cpp", "fortran", "zig", "c3", "d", "chapel", "fpc"]          # R1 (docs/V4_EQUAL.md, 3.1)
+CHK = ["c", "cpp", "fortran", "zig", "c3", "d", "chapel", "fpc"]          # R1 (docs/METHOD.md, 5)
 UNC = ["swift", "ada", "nim", "odin", "julia", "mojo", "go", "ocaml", "d"]   # R1' (3.1 et écart 5.2)
 CV_CHK = ["cpp", "d"]                                                     # R2 dans le mode R1
 CV_UNC = ["nim", "mojo", "swift", "go", "ocaml", "d"]                     # R2 dans le mode R1'

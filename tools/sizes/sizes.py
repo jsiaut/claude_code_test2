@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""v4, point 2 (docs/V4_SIZES.md) : définition des trois tailles de chaque noyau, données et environnement.
+"""Définition des trois tailles de chaque noyau (docs/METHOD.md, 3), données et environnement.
 
 Chaque taille d'un noyau est un jeu de variables d'environnement lues par les implémentations (valeurs publiées par
 défaut) et, pour les noyaux à données, un répertoire de données propre dans /dev/shm, produit par tools/gendata.c
