@@ -1,5 +1,10 @@
 # v4, campagne finale : le classement de la v4 — plan (22 novembre 2026)
 
+*Note du 24 novembre 2026 (nettoyage du dépôt) : ce plan et son procès-verbal sont gardés tels qu'ils ont été écrits.
+Les documents, outils et résultats qu'ils citent et qui ne sont plus dans le dépôt sont dans l'archive
+([`HISTORY.md`](HISTORY.md)) ; la méthode en vigueur est décrite en un seul endroit dans [`METHOD.md`](METHOD.md) ; le
+calcul de la section 8 est fait par le seul `analysis/final_v4.py`, qui reprend le code des modules cités.*
+
 *Plan d'ensemble : `docs/V4_PLAN.md`. Ce plan est poussé avant tout outil, toute construction et toute mesure de la
 campagne ; les écarts éventuels seront datés ici (section 11) et dans le journal (`docs/METHODOLOGY.md`).*
 

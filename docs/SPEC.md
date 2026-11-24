@@ -1,8 +1,12 @@
-# Spécification des noyaux de mesure (contrat commun aux 22 langages ; Swift ajouté le 5 novembre)
+# Spécification des noyaux de mesure (contrat commun aux 25 langages)
 
 Version 1.0 — figée le 2026-10-28, **avant** toute mesure inter-langages.
 
 Révision : 1er novembre 2026, harnais de K9 (décision de l'auteur de l'étude, `docs/K9.md`) ; voir K9.
+
+Compléments de la v4, qui ne changent pas ce contrat (`docs/METHOD.md`, 3 à 5) : trois tailles par noyau, K4 `tuned`,
+formes du catalogue commun, K9 `natural_flat` ; K10 n'est plus mesuré. Les documents cités ici qui ne sont plus dans le
+dépôt sont dans l'archive (`docs/HISTORY.md`).
 
 Chaque noyau illustre un ou plusieurs principes de *mechanical sympathy*. Toutes
 les implémentations lisent **les mêmes fichiers binaires** (générés une fois par
