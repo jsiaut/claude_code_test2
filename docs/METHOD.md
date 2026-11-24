@@ -83,7 +83,7 @@ Sept noyaux comptent à trois tailles ; K2 et K3 à la leur.
   son runtime.
 * **C2, admission.** Une forme fait le calcul de la spécification sur les données telles qu'elles sont stockées, dans
   la zone chronométrée prévue ; elle est exacte pour toute donnée admise, pas seulement pour les fichiers du banc (un
-  accumulateur entier tient par construction, justifiée en commentaire) ; pour K8, chaque nœud est écrit avec sa valeur
+  accumulateur entier tient par construction, ce qu'un commentaire justifie) ; pour K8, chaque nœud est écrit avec sa valeur
   et ses liens et la somme suit les liens ; langage et bibliothèque standard seuls, sans assembleur en ligne ni option
   propre à une variante ; elle lit les tailles comme les variantes publiées.
 * **C3, le catalogue**, porté dans tout langage qui peut l'écrire :
@@ -145,7 +145,8 @@ conteneur par défaut, aucune annotation de performance ([`NATURAL.md`](NATURAL.
   b3 est le temps de la même boucle écrite en assembleur (`tools/k3_align.c`), médiane de ses 16 décalages, moyenne de
   deux exécutions, mesuré juste avant et juste après chaque groupe de K3 ; les temps de K3 d'un groupe sont ramenés au
   b3 de référence (moyenne de toutes les mesures) par le rapport des b3.
-* **R5.** K2 et K8 naturel (dont viennent D4 et D3) sont mesurés par sept processus par cellule au lieu de trois.
+* **R5.** K2 (dont vient D4) est mesuré par sept processus par cellule au lieu de trois ; la campagne finale applique
+  la même règle à K8 naturel (dont vient D3).
 
 ## 6. Campagne
 
