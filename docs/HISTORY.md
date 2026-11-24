@@ -38,6 +38,7 @@ La première commande lit un fichier de l'archive, la seconde le remet dans l'ar
 | 22 et 23 novembre | Campagne finale : le classement de la v4 | — | [`V4_FINAL.md`](V4_FINAL.md), gardé dans le dépôt |
 | 24 novembre | Nettoyage du dépôt, sans changement de chiffre | [`METHOD.md`](METHOD.md), `tools/check.sh` | ce document |
 | 24 novembre | v4.1 : quatre corrections de l'analyse, sans mesure nouvelle | A1 à A4 ; ordre publié : le score moyen des variantes, qui est aussi le score affiché | [`V4_1.md`](V4_1.md), gardé dans le dépôt |
+| 24 novembre | v5 : script d'installation des chaînes, une source par langage, C aussi par gcc ; nouvelle campagne sur la machine 36 | — (plan) | [`V5.md`](V5.md), gardé dans le dépôt |
 
 Le classement de la v3 a été publié du 30 octobre au 23 novembre, avec ses notes et ses errata
 (`docs/RANKING_V3.md`, `results/report_v3.md`).
@@ -97,7 +98,7 @@ citent aussi, ainsi que des copies du banc et des outils retirés.
 | `docs/GRID_AUDIT.md`, `docs/ANALYSIS_V2.md` | audit de la grille ; règle v2 | `METHOD.md`, 7 |
 | `docs/ANALYSIS_V3.md` | inférence, étages | `METHOD.md`, 9 |
 | `docs/<LANGAGE>.md` | relecture d'un langage | l'archive |
-| `bench/<langage>_<suffixe>` autre que `_cv` | copies des relectures et des points 2, 3 et 6 | l'archive ; les formes retenues sont dans `bench/<langage>_cv` |
+| `bench/<langage>_<suffixe>` | copies des relectures et des points 2, 3, 4 et 6 | l'archive ; les formes retenues sont dans `bench/<langage>` (la copie `_cv` du point 4 est devenue la source unique le 24 novembre) |
 | `analysis/analyze_v2.py`, `analysis/analyze_v3.py` | analyses des v2 et v3 | leur code utile est dans `analysis/final_v4.py` |
 | `tools/<x>_check/`, `tools/measure_*.py`, `tools/equal/`, `tools/open/`… | outils des relectures et des points | l'archive |
 | `results/raw*`, `results/report_*.md`, `results/sizes/`, `results/equal/`… | données et rapports des étapes | l'archive |

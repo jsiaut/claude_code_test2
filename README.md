@@ -289,13 +289,13 @@ et une machine du même modèle : [`docs/METHOD.md`](docs/METHOD.md), 11.
 
 | Répertoire | Contenu |
 |---|---|
-| `bench/<langage>/` | l'implémentation publiée de chaque langage, son `build.sh` et son `run` |
-| `bench/<langage>_cv/` | la même, avec les formes du catalogue en plus (`cv_variants`) |
+| `bench/<langage>/` | l'implémentation de chaque langage : variantes publiées et formes du catalogue (`cv_variants`), son `build.sh` et son `run` |
 | `probes/<langage>/` | les sondes de la grille de contrôle |
 | `tools/` | `final/` (constructions, campagne), `sizes/` (tailles, sommes attendues), `driver.py` (essai d'une implémentation), `gendata.c` (données), `hwprobe.c` (caractérisation), `grid_audit/` (recherches d'absence), `check.sh` (garde-fou) |
 | `analysis/` | `final_v4.py` (le classement), `capabilities*.py` (la grille), `check_probes.py`, `charts_final.py` |
 | `results/` | `final/` (mesures brutes, étalonnage, analyse), `report_final.md`, `probes/` et `grid_audit/` (preuves de la grille), `hw/machine35/`, `converge/` (relevé des formes) |
-| `docs/` | `METHOD.md` (la méthode), `SPEC.md` (les noyaux), `NATURAL.md` (le code naturel), `CAPABILITIES.md` (la grille), `V4_FINAL.md` (plan et procès-verbal de la campagne), `V4_1.md` (corrections de l'analyse), `HISTORY.md` (étapes et archive) |
+| `docs/` | `METHOD.md` (la méthode), `SPEC.md` (les noyaux), `NATURAL.md` (le code naturel), `CAPABILITIES.md` (la grille), `V4_FINAL.md` (plan et procès-verbal de la campagne), `V4_1.md` (corrections de l'analyse), `V5.md` (plan de la campagne rejouable), `HISTORY.md` (étapes et archive) |
+| `env/` | `install.sh` (installe les 25 chaînes), `toolchains.txt` (leurs versions), `msdata.sha256` (empreintes des données) |
 
 Tout ce qui a précédé (v1 à v3, relectures par langage, points 2 à 6 de la v4, ancien README) est dans l'archive, le
 commit `5fbe6a6` : [`docs/HISTORY.md`](docs/HISTORY.md).

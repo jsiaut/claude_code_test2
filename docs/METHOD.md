@@ -109,10 +109,9 @@ Sept noyaux comptent à trois tailles ; K2 et K3 à la leur.
   tableaux typés de JavaScript…) entre dans le plafond de ce langage sous un nom en `rq_`, sans être portée ailleurs.
 * **C6.** La variante `mt` publiée (fils créés à chaque appel) reste mesurée à côté des réserves de fils.
 
-Les formes ajoutées sont dans `bench/<langage>_cv`, copie de `bench/<langage>` qui en est un sur-ensemble ; ses
-variantes nouvelles sont déclarées dans `cv_variants`. Le rapport donne, cellule par cellule et taille par taille, la
-forme retenue. Le biais de choisir le minimum parmi plusieurs formes est contrôlé par la sensibilité « sélection
-indépendante » (10).
+Les formes ajoutées sont dans la source du langage, `bench/<langage>`, et déclarées dans son fichier `cv_variants`.
+Le rapport donne, cellule par cellule et taille par taille, la forme retenue. Le biais de choisir le minimum parmi
+plusieurs formes est contrôlé par la sensibilité « sélection indépendante » (10).
 
 ## 5. Conditions égales (règles R1 à R5) et code naturel
 
@@ -158,9 +157,14 @@ Outils : `tools/final/` ([`V4_FINAL.md`](V4_FINAL.md), 5 à 7, pour le détail e
   processus. Chaque machine est caractérisée au repos avant de mesurer (`tools/sizes/hwchar.sh`, `tools/hwprobe.c` :
   bande passante selon le volume, STREAM, débit crête, fréquence) dans `results/hw/machine<N>` ; ces relevés donnent
   les bornes physiques (8). Un groupe (noyau, taille) d'une passe est toujours mesuré en entier sur une même machine.
-* **Constructions** (`tools/final/build.py`), depuis les fichiers suivis par git, dans `/dev/shm` : `pub`
-  (`bench/<langage>`), `cv` (`bench/<langage>_cv`), `chk` et `unc` (modes R1 et R1'), `cv_chk` et `cv_unc`, chacune
-  aux trois jeux de tailles ; l'empreinte de chaque fichier exécuté est enregistrée (`results/final/builds.jsonl`).
+* **Constructions** (`tools/final/build.py`), depuis les fichiers suivis par git, dans `/dev/shm` : la source de
+  chaque langage dans le mode publié (`pub`) et dans les modes R1 et R1' (`chk`, `unc`), chacune aux trois jeux de
+  tailles ; l'empreinte de chaque fichier exécuté est enregistrée (`results/final/builds.jsonl`). Chaque mesure porte
+  une étiquette qui dit d'où vient sa cellule : `pub` (variantes publiées), `cv` (formes du catalogue), `chk` et `unc`
+  (code naturel dans les modes R1 et R1'), `cv_chk` et `cv_unc` (stencil naturel contigu dans ces modes). Dans la
+  campagne publiée, des 22 et 23 novembre, les formes du catalogue étaient dans une copie de la source
+  (`bench/<langage>_cv`) et les variantes publiées étaient mesurées dans le binaire sans elles ; depuis le 24
+  novembre il n'y a plus qu'une source par langage, celle de la copie ([`V5.md`](V5.md)).
 * **Étalonnage et validation** (`campaign.py calibrate`). Chaque cellule, à chaque taille, est exécutée une fois : la
   somme de contrôle est vérifiée, et la durée fixe le nombre de répétitions (environ 3 s par processus, de 3 à 10 000 ;
   une seule au-delà de 300 s) et l'échauffement (une répétition ; au moins trois et au moins une seconde pour Java, C#,
