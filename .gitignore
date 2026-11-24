@@ -34,7 +34,7 @@ tools/grid_audit/listings/*/obj/
 # générateur de données compilé à la demande (tools/sizes/sizes.py)
 tools/sizes/gendata
 # écritures d'une campagne en cours (recopiées dans results/final par tools/final/save_progress.sh)
-results/final/work/
+results/*/work/
 
 *.tmp
 __pycache__/

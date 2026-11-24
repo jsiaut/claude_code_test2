@@ -44,7 +44,8 @@ calculs : ils sont identiques d'un calcul à l'autre. Comparaison : le classemen
 (results/final/comparisons.json).
 
 Sorties : results/final/analysis.json, results/report_final.md. Variables : BOOT (2000 rééchantillonnages), UA (20 000
-variantes), FINAL_RAW (autres données), FINAL_OUT (autre répertoire de sortie). Contrôle : tools/check.sh."""
+variantes), FINAL_DIR (répertoire d'une autre campagne), FINAL_RAW (autres données), FINAL_OUT (autre répertoire de
+sortie). « --extract <fichier> <note> » : extrait de la campagne publiée, pour la réplication. Contrôle : tools/check.sh."""
 import copy, glob, importlib.util, json, math, os, re, sys, zlib
 from collections import defaultdict
 
@@ -1011,13 +1012,14 @@ def cell_estimates(F):
             for l, keys in dl.items() for key, procs in keys.items()}
 
 
-def extract(path):
+def extract(path, note):
     """Extrait de la campagne publiée, gardé pour qu'une campagne suivante s'y compare (replication) : classement et
-    scores du calcul « Final » déjà écrit (OUT), estimations par cellule relues dans les mesures."""
+    scores du calcul « Final » déjà écrit (OUT), estimations par cellule relues dans les mesures. Écrit le fichier
+    comparisons.json de la campagne suivante."""
     f = json.load(open(OUT))["results"][FINAL]
-    out = {k: f[k] for k in ("order", "ms_mean", "ms0", "exp", "first", "E", "D", "C")}
-    out["cells"] = cell_estimates(load())
-    json.dump(out, open(path, "w"), indent=1)
+    prev = {k: f[k] for k in ("order", "ms_mean", "ms0", "exp", "first", "E", "D", "C")}
+    prev["cells"] = cell_estimates(load())
+    json.dump({"note": note, "previous": prev}, open(path, "w"), indent=1, ensure_ascii=False)
 
 
 def replication(F, prev, fin):
@@ -1037,8 +1039,8 @@ def replication(F, prev, fin):
 
 
 def main():
-    if len(sys.argv) == 3 and sys.argv[1] == "--extract":
-        return extract(sys.argv[2])
+    if len(sys.argv) == 4 and sys.argv[1] == "--extract":  # --extract <fichier> <note>
+        return extract(sys.argv[2], sys.argv[3])
     F = load()
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
