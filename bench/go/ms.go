@@ -980,7 +980,9 @@ func k9Rows(in, out []float64, r0, r1 int) {
 }
 // v4, point 4 (3.3, K9 tuned_v) : la forme de la remarque sur Go (bench/go_exp, tuned_vec ; docs/GO.md, 4.3 : × 0,78),
 // recopiée : par ligne, j depuis 1, vecteurs de 8 float64 (archsimd) chargés et écrits sans contrainte d'alignement,
-// mêmes additions dans le même ordre ; les 6 dernières colonnes par chargements partiels.
+// mêmes additions dans le même ordre. Les dernières colonnes : un vecteur entier calé sur la fin de la ligne, qui
+// recouvre le précédent (v5, docs/V5.md, écart 1 : LoadFloat64x8Part charge 64 octets quelle que soit la longueur de
+// la tranche et lisait après la fin de la grille à la dernière ligne, d'où une erreur de segmentation occasionnelle).
 //
 //go:noinline
 func k9RowsVec(in, out []float64, r0, r1 int) {
@@ -996,12 +998,11 @@ func k9RowsVec(in, out []float64, r0, r1 int) {
 				Add(archsimd.LoadFloat64x8(mid[j-1 : j+7])).Add(archsimd.LoadFloat64x8(mid[j+1 : j+9]))
 			q.Mul(s).Store(o[j : j+8])
 		}
-		if n := M9 - 1 - j; n > 0 {
-			u, _ := archsimd.LoadFloat64x8Part(up[j : j+n])
-			w, _ := archsimd.LoadFloat64x8Part(dn[j : j+n])
-			l, _ := archsimd.LoadFloat64x8Part(mid[j-1 : j-1+n])
-			r, _ := archsimd.LoadFloat64x8Part(mid[j+1 : j+1+n])
-			q.Mul(u.Add(w).Add(l).Add(r)).StorePart(o[j : j+n])
+		if j < M9-1 {
+			j = M9 - 9
+			s := archsimd.LoadFloat64x8(up[j : j+8]).Add(archsimd.LoadFloat64x8(dn[j : j+8])).
+				Add(archsimd.LoadFloat64x8(mid[j-1 : j+7])).Add(archsimd.LoadFloat64x8(mid[j+1 : j+9]))
+			q.Mul(s).Store(o[j : j+8])
 		}
 	}
 	archsimd.ClearAVXUpperBits()
