@@ -3,7 +3,10 @@
 *Note du 24 novembre 2026 (nettoyage du dépôt) : ce plan et son procès-verbal sont gardés tels qu'ils ont été écrits.
 Les documents, outils et résultats qu'ils citent et qui ne sont plus dans le dépôt sont dans l'archive
 ([`HISTORY.md`](HISTORY.md)) ; la méthode en vigueur est décrite en un seul endroit dans [`METHOD.md`](METHOD.md) ; le
-calcul de la section 8 est fait par le seul `analysis/final_v4.py`, qui reprend le code des modules cités.*
+calcul de la section 8 est fait par le seul `analysis/final_v4.py`, qui reprend le code des modules cités. Depuis le
+24 novembre, le classement publié est celui de la v4.1 ([`V4_1.md`](V4_1.md)) : quatre corrections de l'analyse, sans
+mesure nouvelle ; le classement de la section 12.2 est le calcul « Méthode du 23 novembre » de
+`results/report_final.md`.*
 
 *Plan d'ensemble : `docs/V4_PLAN.md`. Ce plan est poussé avant tout outil, toute construction et toute mesure de la
 campagne ; les écarts éventuels seront datés ici (section 11) et dans le journal (`docs/METHODOLOGY.md`).*

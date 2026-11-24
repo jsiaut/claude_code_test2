@@ -1,9 +1,9 @@
 # Quels langages incarnent le mieux la *mechanical sympathy* ?
 
 *Classement mesuré de 25 langages, octobre et novembre 2026. Tous sont mesurés sur une même machine, sept noyaux à
-trois tailles de données, dans des conditions égales et avec un code optimisé convergent (v4, campagne des 22 et
-23 novembre). Méthode : [`docs/METHOD.md`](docs/METHOD.md) ; étapes précédentes et archive :
-[`docs/HISTORY.md`](docs/HISTORY.md).*
+trois tailles de données, dans des conditions égales et avec un code optimisé convergent (campagne des 22 et
+23 novembre ; analyse corrigée le 24, v4.1). Méthode : [`docs/METHOD.md`](docs/METHOD.md) ; corrections du
+24 novembre : [`docs/V4_1.md`](docs/V4_1.md) ; étapes précédentes et archive : [`docs/HISTORY.md`](docs/HISTORY.md).*
 
 Un seul critère : la *mechanical sympathy* au sens large, c'est-à-dire la capacité d'un langage à faire écrire du code
 en accord avec le matériel : disposition des données, SIMD, hiérarchie mémoire, concurrence, allocation, requêtes
@@ -14,110 +14,138 @@ sont mesurés sur un Xeon Emerald Rapids ; le pilier « contrôle » est un inve
 
 | Rang | Étage | Langage | Score | Rang plausible | Devance le suivant | Ce qui le place là |
 |---|---|---|---|---|---|---|
-| 1 | 1 | **C++** | 78,9 | 1–6 | 51 % | À égalité de fait avec C. Le plus de contrôle (`pmr`, atomiques, `std::simd` expérimental) et le 2e plafond : son arène de K8 par valeur fait la frontière de K8 ; code naturel 9e |
-| 2 | 1 | **C** | 78,3 | 1–7 | 73 % | Le meilleur code naturel, le 3e plafond (1er sur K4 et K7) et le contrôle de GNU C (2e) ; son K8 le plus rapide, une arène écrite par itération, reste à 0,66 de la frontière |
-| 3 | 1 | **Odin** | 72,7 | 1–8 | 58 % | Le Data-Oriented Design dans le langage (`#soa`, `#simd`, intrinsèques de LLVM, allocateurs) : 5e contrôle, 5e code naturel ; plafond 10e seulement (K4 70, K8 67) |
-| 4 | 1 | **Rust** | 71,5 | 1–9 | 59 % | Le meilleur code par défaut (2e code naturel, queues de latence de K8 courtes) et le 6e plafond ; contrôle 9e (ni affinité, ni `mmap` dans la bibliothèque standard) |
-| 5 | 1 | **C3** | 71,1 | 2–9 | 61 % | C avec vecteurs natifs : 5e plafond, 6e code naturel ; contrôle 8e (ni SoA ni intrinsèques officiels) ; 1er à trois tailles sans les autres règles de la v4 |
-| 6 | 1 | **Nim** | 71,0 | 3–10 | 52 % | Le meilleur K1 (98), 7e plafond, 4e code par défaut ; contrôle 7e (les leviers de C par sa compilation vers C) |
-| 7 | 1 | **D** | 73,5 | 3–12 | 58 % | 4e plafond et 4e contrôle (le contrôle de C, templates et CTFE), mais les pauses de son ramasse-miettes font les pires queues de latence de K8 des 19 premiers (D3 : 2 sur 100) |
-| 8 | 1 | **Zig** | 72,2 | 2–11 | 76 % | 3e contrôle (tous les leviers du DOD), mais son code naturel compte en mode vérifié (`-O safe`, R1) : 11e code naturel, 5e place sans R1 ; plafond 11e (vectoriseur de boucles désactivé en 0.17) |
-| 9 | 1 | **Ada** | 71,4 | 5–12 | 65 % | Disposition au bit près : 6e contrôle, 8e plafond, les queues de latence de K8 les plus courtes après Fortran ; code naturel 10e (vérifications) |
-| 10 | 1 | **Chapel** | 67,7 | 3–14 | 54 % | Le 1er plafond (K9 98, K4 90, K6 81) ; code naturel 16e sous R1 (`--checks`) et contrôle 16e (leviers bas niveau rares ou instables) |
-| 11 | 1 | **Fortran** | 67,0 | 6–14 | 49 % | À égalité de fait avec Julia. Les queues de latence de K8 les plus courtes, 3e code par défaut, 9e plafond ; ni SIMD explicite ni intrinsèques (K4 50, forme SWAR) : contrôle 14e |
-| 12 | 1 | **Julia** | 66,6 | 6–14 | 78 % | 3e code naturel et 13e plafond (74,4, contre 62,3 en v3 : formes du catalogue) ; les pauses du ramasse-miettes pèsent sur K8 (D3 10) |
-| 13 | 1 | **Swift** | 64,4 | 10–14 | 53 % | Types SIMD et `InlineArray` : le meilleur K5 (97) ; vérifications de `-O` coûteuses sur le code naturel (14e) et le K4 le plus lent des 14 premiers (46) ; contrôle 13e |
-| 14 | 1 | **Mojo** | 64,7 | 10–15 | 91 % | Le SIMD au cœur du langage (K5 92, K7 95) ; ni vectoriseur de boucles (K4 50) ni threads publics dans `std` ; K8 46 |
-| 15 | 1 | **C#** | 60,2 | 13–16 | 97 % | La boîte à outils la plus riche des langages à GC : 15e plafond (67,5, contre 53,6 en v3 : K4 optimisé, réserves de fils) ; objets en références (K7 54, K8 50, désordre de K1) |
-| 16 | 1 | **Go** | 50,5 | 16–18 | 50 % | À égalité de fait avec FreePascal. Structures par valeur et SIMD expérimental (K4 82) ; écritures atomiques séquentiellement cohérentes (K3 30) ; code naturel 18e |
-| 17 | 1 | **FreePascal** | 49,4 | 15–19 | 47 % | À égalité de fait avec Java. Records `packed`, assembleur, mémoire à la main : 15e contrôle, 12e code par défaut ; ni vectoriseur ni intrinsèques : 19e plafond (K4 14, K5 39) |
-| 18 | 1 | **Java** | 49,4 | 16–18 | 95 % | Les queues de latence de K8 les plus courtes des langages à ramasse-miettes (D3 59) et la Vector API (K5 84) ; pas de types valeur (K1 45, désordre de K1) ; contrôle 18e |
-| 19 | 1 | **Haskell** | 42,6 | 18–19 | 100 % | Peut descendre bas (FMA vectorielle de GHC : K5 91 ; K7 90) ; code par défaut boxé, ramasse-miettes imposé : code par défaut et contrôle 19e |
-| 20 | 2 | **OCaml** | 24,5 | 20–22 | 89 % | Bonne allocation générationnelle (D3 46) ; ni types valeur, ni flottant 32 bits de calcul, ni SIMD : plafond 21,4 |
-| 21 | 2 | **BQN** | 17,0 | 20–23 | 54 % | À égalité de fait avec JavaScript. Primitives vectorisées de CBQN, mais un coût fixe par appel ; ni threads, ni flottant 32 bits ; K1 hors mémoire à la grande taille |
-| 22 | 2 | **JavaScript** | 17,6 | 21–24 | 68 % | Tableaux typés compilés mais vérifiés, aucun SIMD : plafond 14,6 ; contrôle 24e |
-| 23 | 2 | **PHP** | 16,9 | 21–23 | 97 % | Chaque valeur un zval de 16 octets, chaque objet une référence : plafond 23e ; le contrôle d'un langage dynamique doté d'une FFI et de processus (21e) |
-| 24 | 2 | **Python** | 12,7 | 22–25 | 76 % | CPython seul : le plafond le plus bas (1,0), K1 naturel hors mémoire à la grande taille ; contrôle 20e (`ctypes`, sous-interpréteurs) |
-| 25 | 2 | **Lua** | 5,9 | 24–25 | — | PUC-Lua sans son API C : presque aucun levier (contrôle 6,8) ; plafond 1,4, au-dessus de CPython |
+| 1 | 1 | **C** | 87,1 | 1–3 | 75 % | Le meilleur code naturel, le 2e code par défaut, le 3e plafond (1er sur K4 et K7) et le contrôle de GNU C (2e) ; son K8 le plus rapide, une arène écrite par itération, reste à 0,66 de la frontière |
+| 2 | 1 | **C++** | 85,3 | 1–6 | 79 % | Le plus de contrôle (`pmr`, atomiques, `std::simd` expérimental) et le 1er plafond, de peu (90,1 ; Chapel 89,9, C 89,6) : son arène de K8 par valeur fait la frontière de K8 ; code naturel 9e |
+| 3 | 1 | **Odin** | 80,7 | 2–8 | 53 % | À égalité de fait avec Rust. Le Data-Oriented Design dans le langage (`#soa`, `#simd`, intrinsèques de LLVM, allocateurs) : 5e contrôle, 5e code naturel ; plafond 9e (K4 70, K8 67) |
+| 4 | 1 | **Rust** | 80,5 | 2–9 | 59 % | Le meilleur code par défaut (2e code naturel, queues de latence de K8 courtes) et le 4e plafond ; contrôle 9e (ni affinité, ni `mmap` dans la bibliothèque standard) ; 1er sur les seules mesures |
+| 5 | 1 | **D** | 80,9 | 3–10 | 52 % | À égalité de fait avec Nim. 5e plafond et 4e contrôle (le contrôle de C, templates et CTFE), mais les pauses de son ramasse-miettes font les pires queues de latence de K8 des 19 premiers (D3 : 2 sur 100) |
+| 6 | 1 | **Nim** | 79,5 | 3–9 | 58 % | Le meilleur K1 (98), 7e plafond, 3e code par défaut ; contrôle 7e (les leviers de C par sa compilation vers C) ; 3e sur les seules mesures |
+| 7 | 1 | **C3** | 78,9 | 3–9 | 62 % | C avec vecteurs natifs : 6e plafond, 6e code naturel ; contrôle 8e (ni SoA ni intrinsèques officiels) ; 3e à trois tailles sans les autres règles de la v4 |
+| 8 | 1 | **Zig** | 78,6 | 3–11 | 79 % | 3e contrôle (tous les leviers du DOD) et le meilleur K6 (94), mais son code naturel compte en mode vérifié (`-O safe`, R1) : 11e code naturel, 4e place sans R1 ; plafond 8e (vectoriseur de boucles désactivé en 0.17) |
+| 9 | 1 | **Ada** | 76,8 | 5–11 | 66 % | Disposition au bit près : 6e contrôle, 10e plafond, les queues de latence de K8 les plus courtes après Fortran ; code naturel 10e (vérifications) |
+| 10 | 1 | **Julia** | 74,0 | 6–13 | 67 % | 3e code naturel et 13e plafond ; les pauses du ramasse-miettes pèsent sur K8 (D3 10) |
+| 11 | 1 | **Fortran** | 72,2 | 7–14 | 66 % | Les queues de latence de K8 les plus courtes, 4e code par défaut, 12e plafond ; ni SIMD explicite ni intrinsèques (K4 50, forme SWAR) : contrôle 14e |
+| 12 | 1 | **Chapel** | 71,0 | 8–15 | 59 % | Le 2e plafond (K9 98, K4 90, K8 80) ; code naturel 16e sous R1 (`--checks`) et contrôle 16e (leviers bas niveau rares ou instables) |
+| 13 | 1 | **Swift** | 69,3 | 10–14 | 61 % | Types SIMD et `InlineArray` : le meilleur K5 (97) ; vérifications de `-O` coûteuses sur le code naturel (14e) et le K4 le plus lent des 14 premiers (46) ; contrôle 13e |
+| 14 | 1 | **Mojo** | 68,8 | 11–15 | 93 % | Le SIMD au cœur du langage (K5 92, K7 95) ; ni vectoriseur de boucles (K4 50) ni threads publics dans `std` ; K8 46 |
+| 15 | 1 | **C#** | 64,2 | 13–16 | 93 % | La boîte à outils la plus riche des langages à GC : 15e plafond (K4 optimisé, réserves de fils) ; objets en références (K7 54, K8 50, désordre de K1) |
+| 16 | 1 | **Java** | 54,8 | 15–18 | 56 % | Les queues de latence de K8 les plus courtes des langages à ramasse-miettes (D3 59) et la Vector API (K5 84) ; pas de types valeur (K1 45, désordre de K1) ; contrôle 18e |
+| 17 | 1 | **Go** | 53,6 | 16–18 | 58 % | Structures par valeur et SIMD expérimental (K4 82) ; écritures atomiques séquentiellement cohérentes (K3 35) ; code naturel 18e |
+| 18 | 1 | **FreePascal** | 51,1 | 15–19 | 88 % | Records `packed`, assembleur, mémoire à la main : 15e contrôle ; ni vectoriseur ni intrinsèques : 19e plafond (K4 14, K5 39) et code naturel 21e |
+| 19 | 1 | **Haskell** | 45,1 | 18–19 | 100 % | Peut descendre bas (FMA vectorielle de GHC : K5 91 ; K7 90) ; code par défaut boxé, ramasse-miettes imposé : code par défaut 20e, contrôle 19e |
+| 20 | 2 | **OCaml** | 26,9 | 20–21 | 92 % | Bonne allocation générationnelle (D3 46) ; ni types valeur, ni flottant 32 bits de calcul, ni SIMD : plafond 22,7 |
+| 21 | 2 | **BQN** | 18,3 | 20–23 | 47 % | À égalité de fait avec JavaScript. Primitives vectorisées de CBQN, mais un coût fixe par appel ; ni threads, ni flottant 32 bits ; K1 hors mémoire à la grande taille |
+| 22 | 2 | **JavaScript** | 19,1 | 21–24 | 70 % | Tableaux typés compilés mais vérifiés, aucun SIMD : plafond 15,6 ; contrôle 24e |
+| 23 | 2 | **PHP** | 17,5 | 21–23 | 97 % | Chaque valeur un zval de 16 octets, chaque objet une référence : plafond 23e ; le contrôle d'un langage dynamique doté d'une FFI et de processus (21e) |
+| 24 | 2 | **Python** | 12,8 | 22–25 | 76 % | CPython seul : le plafond le plus bas (1,0), K1 naturel hors mémoire à la grande taille ; contrôle 20e (`ctypes`, sous-interpréteurs) |
+| 25 | 2 | **Lua** | 6,2 | 24–25 | — | PUC-Lua sans son API C : presque aucun levier (contrôle 6,8) ; plafond 1,4, au-dessus de CPython |
 
 * **Score** (0–100) : 40 % de plafond mesuré (le meilleur code que le langage permet d'écrire pour la machine), 25 % de
   code par défaut mesuré (le code qu'on écrit sans y penser) et 35 % de contrôle (les leviers qu'offrent le langage et
   sa chaîne de compilation). C'est le score du centre : poids ci-dessus, choix de méthode principaux.
 * **Ordre** : le rang moyen sur 20 000 variantes de l'analyse, qui tirent au hasard les poids des piliers et des
   tailles, les normalisations, le jugement porté sur chaque capacité et le bruit de mesure. Il suit le score, sauf en
-  quatre endroits. D, Zig et Ada, 3e, 5e et 7e au score, ne sont que 7e, 8e et 9e : leur score tient à un contrôle élevé
-  et leur code par défaut est le plus faible des neuf premiers ; sur les seules mesures, ils sont 9e, 12e et 10e.
-  Ailleurs, deux langages notés à moins d'un point l'un de l'autre échangent leur place (Swift et Mojo, BQN et
-  JavaScript, FreePascal et Java).
+  deux endroits. D, 3e au score, n'est que 5e, derrière Odin et Rust, notés à moins d'un demi-point de lui : son score
+  tient à un contrôle élevé (4e) et son code par défaut n'est que 9e ; sur les seules mesures, il est 7e. BQN et
+  JavaScript, notés à moins d'un point l'un de l'autre, échangent leur place.
 * **Rang plausible** : le rang dans 90 % des variantes. **Devance le suivant** : la part des variantes où le langage
-  passe devant celui de la ligne suivante. Autour de 50 %, les deux langages sont à égalité de fait : C++ et C (51 %),
-  Fortran et Julia (49 %), Go et FreePascal (50 %), FreePascal et Java (47 %).
-* **Étages** : les 19 premiers (de C++ à Haskell) et les six derniers (d'OCaml à Lua), chaque langage du premier
+  passe devant celui de la ligne suivante. Autour de 50 %, les deux langages sont à égalité de fait : Odin et Rust
+  (53 %), D et Nim (52 %), BQN et JavaScript (47 %).
+* **Étages** : les 19 premiers (de C à Haskell) et les six derniers (d'OCaml à Lua), chaque langage du premier
   devançant chacun du second dans au moins 99,6 % des variantes. Plus haut, les marches restent sous 95 % : les 14
-  premiers devancent C# dans au moins 91,5 % des variantes, C# devance les quatre suivants dans au moins 91,1 %.
+  premiers devancent C# dans au moins 92,2 % des variantes, C# devance les quatre suivants dans au moins 93,4 %.
 * **Cellules hors mémoire** : à la grande taille, les quatre variantes de K1 de BQN et K1 naturel de Python dépassent
   la mémoire de la machine ; elles prennent le temps admissible le plus lent des autres langages, ce qui les flatte
   sans doute.
 
-![Classement de la v4](results/charts/classement_v4.svg)
+![Classement de la v4.1](results/charts/classement_v4.svg)
 
 ### Les mesures et la grille, séparément
 
 Le plafond et le code naturel sont mesurés ; le contrôle est une grille jugée de 34 capacités, dont chaque case repose
 sur une sonde exécutée ou une mesure ([`docs/CAPABILITIES.md`](docs/CAPABILITIES.md)). Le tableau les donne séparément
-(plafond et code naturel sur 100, contrôle en règle v2), avec le classement qu'on obtient sans la grille : son poids
-mis à 0 au centre et dans les 20 000 variantes ([`results/report_final.md`](results/report_final.md)).
+(plafond sur 100 ; code naturel sur 100, rapporté au meilleur code naturel ; contrôle sur 100), avec le classement
+qu'on obtient sans la grille : son poids mis à 0 au centre et dans les 20 000 variantes
+([`results/report_final.md`](results/report_final.md)).
 
 | Rang | Langage | Plafond (rang) | Code naturel (rang) | Contrôle (rang) | Sur les seules mesures : place (à 90 %) |
 |---|---|---|---|---|---|
-| 1 | C++ | 85,0 (2) | 14,0 (9) | 92,4 (1) | 3 (1–8) |
-| 2 | C | 83,1 (3) | 20,0 (1) | 91,7 (2) | 1 (1–6) |
-| 3 | Odin | 77,6 (10) | 17,9 (5) | 84,0 (5) | 6 (2–10) |
-| 4 | Rust | 80,5 (6) | 19,0 (2) | 73,6 (9) | 2 (1–6) |
-| 5 | C3 | 80,9 (5) | 17,4 (6) | 75,7 (8) | 4 (2–8) |
-| 6 | Nim | 79,0 (7) | 18,2 (4) | 76,1 (7) | 5 (3–9) |
-| 7 | D | 81,1 (4) | 16,2 (7) | 87,1 (4) | 9 (5–14) |
-| 8 | Zig | 76,8 (11) | 10,5 (11) | 87,2 (3) | 12 (8–13) |
-| 9 | Ada | 78,4 (8) | 10,5 (10) | 80,6 (6) | 10 (6–13) |
-| 10 | Chapel | 87,5 (1) | 7,5 (16) | 61,8 (16) | 7 (1–12) |
-| 11 | Fortran | 78,2 (9) | 15,9 (8) | 65,3 (14) | 8 (2–11) |
-| 12 | Julia | 74,4 (13) | 18,5 (3) | 73,3 (10) | 11 (7–14) |
-| 13 | Swift | 75,4 (12) | 9,0 (14) | 68,1 (13) | 13 (9–14) |
-| 14 | Mojo | 73,0 (14) | 9,4 (13) | 70,5 (11) | 14 (10–14) |
-| 15 | C# | 67,5 (15) | 8,1 (15) | 68,8 (12) | 15 (15–18) |
-| 16 | Go | 59,1 (17) | 5,5 (18) | 48,7 (17) | 17 (15–18) |
-| 17 | FreePascal | 41,6 (19) | 3,9 (21) | 62,3 (15) | 18 (15–19) |
-| 18 | Java | 60,0 (16) | 9,6 (12) | 42,7 (18) | 16 (15–17) |
-| 19 | Haskell | 49,6 (18) | 4,6 (20) | 41,5 (19) | 19 (18–19) |
-| 20 | OCaml | 21,4 (20) | 5,9 (17) | 23,2 (22) | 20 (20–21) |
-| 21 | BQN | 10,5 (22) | 4,9 (19) | 19,7 (23) | 22 (20–22) |
-| 22 | JavaScript | 14,6 (21) | 3,7 (22) | 14,6 (24) | 21 (21–22) |
-| 23 | PHP | 6,3 (23) | 1,7 (23) | 27,4 (21) | 23 (22–23) |
-| 24 | Python | 1,0 (25) | 0,4 (25) | 29,7 (20) | 25 (25–25) |
-| 25 | Lua | 1,4 (24) | 0,8 (24) | 6,8 (25) | 24 (24–24) |
+| 1 | C | 89,6 (3) | 69,6 (1) | 91,7 (2) | 2 (1–4) |
+| 2 | C++ | 90,1 (1) | 48,9 (9) | 92,4 (1) | 4 (1–8) |
+| 3 | Odin | 83,7 (9) | 62,3 (5) | 84,0 (5) | 6 (2–9) |
+| 4 | Rust | 88,3 (4) | 66,1 (2) | 73,6 (9) | 1 (1–4) |
+| 5 | D | 87,0 (5) | 56,6 (7) | 87,1 (4) | 7 (5–12) |
+| 6 | Nim | 85,9 (7) | 63,3 (4) | 76,1 (7) | 3 (3–7) |
+| 7 | C3 | 86,8 (6) | 60,5 (6) | 75,7 (8) | 5 (3–7) |
+| 8 | Zig | 84,4 (8) | 36,6 (11) | 87,2 (3) | 11 (8–12) |
+| 9 | Ada | 83,7 (10) | 36,7 (10) | 80,6 (6) | 12 (7–13) |
+| 10 | Julia | 78,4 (13) | 64,4 (3) | 73,3 (10) | 10 (6–13) |
+| 11 | Fortran | 79,1 (12) | 55,5 (8) | 65,3 (14) | 8 (5–13) |
+| 12 | Chapel | 89,9 (2) | 26,2 (16) | 61,8 (16) | 9 (3–13) |
+| 13 | Swift | 80,6 (11) | 31,4 (14) | 68,1 (13) | 13 (10–14) |
+| 14 | Mojo | 76,0 (14) | 32,6 (13) | 70,5 (11) | 14 (12–14) |
+| 15 | C# | 71,2 (15) | 28,2 (15) | 68,8 (12) | 16 (15–17) |
+| 16 | Java | 66,0 (16) | 33,5 (12) | 42,7 (18) | 15 (14–17) |
+| 17 | Go | 62,6 (17) | 19,2 (18) | 48,7 (17) | 17 (15–18) |
+| 18 | FreePascal | 43,0 (19) | 13,6 (21) | 62,3 (15) | 18 (16–19) |
+| 19 | Haskell | 52,3 (18) | 15,9 (20) | 41,5 (19) | 19 (18–19) |
+| 20 | OCaml | 22,7 (20) | 20,6 (17) | 23,2 (22) | 20 (20–21) |
+| 21 | BQN | 10,1 (22) | 17,1 (19) | 19,7 (23) | 22 (20–22) |
+| 22 | JavaScript | 15,6 (21) | 13,0 (22) | 14,6 (24) | 21 (21–22) |
+| 23 | PHP | 6,6 (23) | 5,8 (23) | 27,4 (21) | 23 (23–23) |
+| 24 | Python | 1,0 (25) | 1,3 (25) | 29,7 (20) | 25 (25–25) |
+| 25 | Lua | 1,4 (24) | 2,9 (24) | 6,8 (25) | 24 (24–24) |
 
-Sans la grille, les étages se séparent davantage : les 14 premiers (de C à Mojo), puis C#, Java, Go, FreePascal et
-Haskell, puis OCaml, JavaScript et BQN, puis PHP, Lua et Python, chacun seul. C y est 1er (dans 33 % des variantes ;
-Rust 24 %, C++ 20 %, Chapel 15 %). Le contrôle porte Odin (3e au lieu de 6e), D (7e au lieu de 9e) et Zig (8e au lieu de
-12e), et retient Chapel (10e au lieu de 7e) et Fortran (11e au lieu de 8e) ; sur le plafond seul, la tête serait Chapel,
-C++, C, D, C3, Rust.
+Sans la grille, les étages se séparent davantage : les 14 premiers (de Rust à Mojo), puis Java, C#, Go, FreePascal et
+Haskell, puis OCaml, JavaScript et BQN, puis PHP, Lua et Python, chacun seul. Rust et C s'y disputent la tête : Rust a
+le meilleur rang moyen, C est premier le plus souvent (43 % des variantes ; Rust 40 %, C++ 11 %). Le contrôle porte C++
+(2e au lieu de 4e), Odin (3e au lieu de 6e), D (5e au lieu de 7e), Zig (8e au lieu de 11e) et Ada (9e au lieu de 12e) ;
+il retient Rust (4e au lieu de 1er), Nim (6e au lieu de 3e), C3 (7e au lieu de 5e), Fortran (11e au lieu de 8e) et
+Chapel (12e au lieu de 9e). Sur le plafond seul, la tête serait C++, Chapel, C, Rust, D, C3, à moins de quatre points
+les uns des autres.
 
 ### Ce qui est sûr, et ce qui ne l'est pas
 
 * **Les grandes marches sont établies.** Les 19 premiers devancent les six derniers dans au moins 99,6 % des
-  variantes. Plus haut, Mojo devance C# dans 91 % des variantes, C# devance Go dans 97 % et Java devance Haskell
-  dans 95 %.
-* **En haut du tableau, l'ordre est la meilleure estimation, pas un fait établi.** C++ ou C est premier dans 73 % des
-  variantes (C++ 36,5 %, C 36,1 %), Odin dans 11 %, Rust dans 8 %, C3 dans 3 % ; de C++ à Zig, un langage devance le
-  suivant dans 51 à 76 % des variantes.
-* **La tête dépend des règles, chacune fixée avant les mesures.** Sans les formes du catalogue, C est 1er et C++ 4e ;
-  à trois tailles sans les autres règles de la v4, C3 est 1er ; sur les seules mesures, C est 1er et Rust 2e. Les autres
-  sensibilités ne déplacent personne de plus de deux places, sauf Zig (5e si son code naturel n'est pas compilé en mode
-  vérifié) et Ada (12e à la seule petite taille).
+  variantes. Plus haut, Mojo devance C# dans 93 % des variantes, C# devance Java dans 93 % et Java devance Haskell
+  dans 97 %.
+* **C est premier, sans que ce soit un fait établi.** C est premier dans 69 % des variantes, C++ dans 23 %, Rust dans
+  4 %, Odin dans 2,5 % ; C devance C++ dans 75 % des variantes, et chacun des deux devance chacun des 23 autres dans au
+  moins 76 %. D'Odin à Zig, un langage ne devance le suivant que dans 52 à 62 % des variantes : l'ordre de ces six-là
+  est la meilleure estimation, rien de plus.
+* **La tête dépend peu des règles.** C est 1er dans neuf des douze sensibilités ; C++ passe devant si K3 n'est pas
+  rapporté à la boucle de référence et à la seule grande taille, Rust sur les seules mesures. Peu de langages y bougent
+  de plus de deux places : C3 (3e à trois tailles sans les autres règles de la v4, 4e sans les formes du catalogue ou
+  sans la boucle de référence de K3), Zig (4e si son code naturel n'est pas compilé en mode vérifié), D (8e si les
+  vérifications sont retirées partout où une option le permet), Julia (13e à trois tailles sans les autres règles),
+  Ada et Fortran (12e et 8e à la seule petite taille).
 * **Une machine.** Le classement est mesuré sur un seul hôte, sans réplication. Des machines du même modèle diffèrent,
   et la vitesse de celle-ci variait d'une seconde à l'autre : deux exécutions successives de la boucle de référence de
   K3 diffèrent jusqu'à 27 %.
-* **Le contrôle pèse lourd, et il est jugé.** Sans lui, C passe 1er, Rust 2e, et Zig recule de quatre places.
+* **Le contrôle pèse lourd, et il est jugé.** Sans lui, Rust passe 1er, C++ 4e, et sept langages bougent de trois
+  places : Rust, Nim, Fortran et Chapel montent, Odin, Zig et Ada reculent.
+
+### Ce que les corrections du 24 novembre ont changé
+
+Le classement publié le 23 novembre plaçait C++ 1er et C 2e, à égalité de fait (C++ devant dans 51 % des variantes).
+Quatre éléments du calcul y créaient des écarts qui ne tenaient ni aux langages ni aux mesures. Ils ont été corrigés le
+24 novembre sans mesure nouvelle, par un plan poussé avant le recalcul ([`docs/V4_1.md`](docs/V4_1.md)).
+
+* **A1.** La grille est notée dans toutes les variantes par la règle en vigueur ; l'ancienne règle, abandonnée parce
+  qu'elle pénalise les langages normalisés (C, C++, Ada, Fortran), servait encore dans une variante sur deux.
+* **A2.** La boucle de référence de K3 est prise à son plus mauvais placement et non à sa médiane : une boucle sans
+  `lock` tombée sur un mauvais alignement reçoit 0,92 à 1, au lieu de 0,79 à 0,88.
+* **A3.** Le code naturel est rapporté au meilleur code naturel et non au meilleur code optimisé, qui l'écrasait : le
+  meilleur valait 20 sur 100, et ce demi-pilier ne séparait presque plus les langages.
+* **A4.** Les mesures à quatre fils ne comptent plus à la petite taille, où 10 à 15 µs de calcul ne mesurent que le
+  réveil des fils.
+
+C repasse 1er (premier dans 69 % des variantes, contre 36 %) et aucun langage ne bouge de plus de deux places : D
+passe de la 7e à la 5e, C3 de la 5e à la 7e, Julia de la 12e à la 10e, Chapel de la 10e à la 12e, Java de la 18e à la
+16e. A1 et A3 font l'essentiel : sans A1, C n'est premier que dans 48 % des variantes ; sans A3, dans 57 % ; sans A2,
+dans 65 % ; sans A4, rien ne change en tête, mais Chapel garde le 1er plafond. Sans les quatre, le calcul redonne à
+l'identique le classement du 23 novembre, gardé dans [`results/report_final.md`](results/report_final.md) (« Méthode
+du 23 novembre »).
 
 ## Ce qui sépare vraiment les langages
 
@@ -172,7 +200,8 @@ Un dixième noyau (file SPSC), hors score depuis la v2, n'est plus mesuré.
   résultat de l'implémentation C, au bit près pour les entiers.
 * **Des conditions égales** : le code naturel est compilé avec les vérifications à l'exécution que sa chaîne offre ; le
   stencil naturel est en grille contiguë pour tous ; aucune forme n'est en assembleur en ligne ; K3 est rapporté à une
-  boucle de référence mesurée sur la machine juste avant et juste après chaque groupe de K3.
+  boucle de référence, prise à son plus mauvais placement et mesurée sur la machine juste avant et juste après chaque
+  groupe de K3.
 * **Chaînes de compilation** : les dernières versions stables au 28 octobre 2026 (Swift, FreePascal, BQN et PHP
   ajoutés du 5 au 7 novembre : [`env/toolchains.txt`](env/toolchains.txt)), compilation pour le CPU hôte, ni PGO ni
   LTO ; chaque binaire est construit depuis les fichiers suivis par git, et son empreinte enregistrée.
@@ -180,12 +209,14 @@ Un dixième noyau (file SPSC), hors score depuis la v2, n'est plus mesuré.
   ([`results/hw/machine35`](results/hw/machine35)) ; trois passes dont l'ordre est tiré au hasard, 9 738 processus, du
   22 novembre, 17 h 16, au 23 novembre, 19 h 40 (UTC). Pas de compteurs matériels.
 * **Score** : contrôle (35 %), 34 capacités notées 0, ½ ou 1 ; plafond (40 %), pour chacune des douze mesures, à chaque
-  taille, le meilleur temps du langage rapporté à la référence de cette taille, puis la moyenne géométrique ; code par
-  défaut (25 %), la variante naturelle rapportée à la même référence (50 %), l'empreinte et la pénalité de désordre
-  d'une collection naturelle (15 %), la latence de queue de l'allocation (15 %), la chaîne de pointeurs (20 %).
+  taille, le meilleur temps du langage rapporté au meilleur des 25, puis la moyenne géométrique (les trois mesures à
+  quatre fils ne comptent qu'aux tailles publiée et grande) ; code par défaut (25 %), la variante naturelle rapportée
+  au meilleur code naturel (50 %), l'empreinte et la pénalité de désordre d'une collection naturelle (15 %), la latence
+  de queue de l'allocation (15 %), la chaîne de pointeurs (20 %).
 * **Incertitude** : 2 000 rééchantillonnages des processus pour le bruit de mesure ; 20 000 variantes de l'analyse.
-* **Garde-fous** : chaque étape a eu son plan, poussé avant ses mesures ; les écarts sont datés
-  ([`docs/V4_FINAL.md`](docs/V4_FINAL.md), 11 et 12.5) ; le calcul se reproduit à l'octet près (`tools/check.sh`).
+* **Garde-fous** : chaque étape a eu son plan, poussé avant ses mesures ou ses calculs ; les écarts sont datés
+  ([`docs/V4_FINAL.md`](docs/V4_FINAL.md), 11 et 12.5 ; [`docs/V4_1.md`](docs/V4_1.md), 7) ; le calcul se reproduit à
+  l'octet près (`tools/check.sh`).
 
 ## Limites
 
@@ -237,7 +268,7 @@ sh tools/check.sh
 ```
 
 Le premier contrôle (30 s) vérifie la grille contre ses sondes, le relevé des formes, le plan de la campagne et le
-classement sur 200 variantes ; le second (15 min) recalcule le classement complet et le compare à l'octet près. Ni l'un
+classement sur 200 variantes ; le second (22 min) recalcule le classement complet et le compare à l'octet près. Ni l'un
 ni l'autre ne demande de chaîne de compilation.
 
 ```bash
@@ -262,7 +293,7 @@ machine du même modèle : [`docs/METHOD.md`](docs/METHOD.md), 11.
 | `tools/` | `final/` (constructions, campagne), `sizes/` (tailles, sommes attendues), `driver.py` (essai d'une implémentation), `gendata.c` (données), `hwprobe.c` (caractérisation), `grid_audit/` (recherches d'absence), `check.sh` (garde-fou) |
 | `analysis/` | `final_v4.py` (le classement), `capabilities*.py` (la grille), `check_probes.py`, `charts_final.py` |
 | `results/` | `final/` (mesures brutes, étalonnage, analyse), `report_final.md`, `probes/` et `grid_audit/` (preuves de la grille), `hw/machine35/`, `converge/` (relevé des formes) |
-| `docs/` | `METHOD.md` (la méthode), `SPEC.md` (les noyaux), `NATURAL.md` (le code naturel), `CAPABILITIES.md` (la grille), `V4_FINAL.md` (plan et procès-verbal de la campagne), `HISTORY.md` (étapes et archive) |
+| `docs/` | `METHOD.md` (la méthode), `SPEC.md` (les noyaux), `NATURAL.md` (le code naturel), `CAPABILITIES.md` (la grille), `V4_FINAL.md` (plan et procès-verbal de la campagne), `V4_1.md` (corrections de l'analyse), `HISTORY.md` (étapes et archive) |
 
 Tout ce qui a précédé (v1 à v3, relectures par langage, points 2 à 6 de la v4, ancien README) est dans l'archive, le
 commit `5fbe6a6` : [`docs/HISTORY.md`](docs/HISTORY.md).

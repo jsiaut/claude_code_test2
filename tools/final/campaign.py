@@ -364,6 +364,8 @@ K3_ALIGN = "/dev/shm/k3_align"
 
 
 def b3(label, p=None, m=None):
+    # Enregistre la médiane des 16 décalages de chaque exécution et les 16 temps eux-mêmes (« outputs ») ; depuis la
+    # v4.1 (A2, docs/METHOD.md, 5), l'analyse prend le plus lent des 16, relu dans « outputs ».
     if not os.path.exists(K3_ALIGN):
         subprocess.run(["clang-23", "-O2", "-march=native", "-o", K3_ALIGN, os.path.join(ROOT, "tools", "k3_align.c")],
                        check=True)

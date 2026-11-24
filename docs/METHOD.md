@@ -268,7 +268,7 @@ python3 analysis/final_v4.py
 python3 analysis/charts_final.py
 ```
 
-Le premier contrôle prend environ 30 s, le second 15 min (classement complet comparé à l'octet près) ; aucun ne
+Le premier contrôle prend environ 30 s, le second 22 min (classement complet comparé à l'octet près) ; aucun ne
 demande de chaîne de compilation. Les deux commandes suivantes réécrivent `results/final/analysis.json`,
 `results/report_final.md` et le graphique.
 

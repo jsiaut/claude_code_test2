@@ -1,6 +1,6 @@
 # Historique de l'étude et archive
 
-*24 novembre 2026. Le dépôt ne garde plus que ce qui sert au classement de la v4 ; ce document dit d'où vient la
+*24 novembre 2026. Le dépôt ne garde plus que ce qui sert au classement publié (v4.1) ; ce document dit d'où vient la
 méthode, ce que les étapes précédentes ont établi, et où retrouver tout ce qui a été retiré de la branche.*
 
 ## L'archive
@@ -44,12 +44,16 @@ Le classement de la v3 a été publié du 30 octobre au 23 novembre, avec ses no
 
 ## Ce que ces étapes ont établi
 
-Les chiffres ci-dessous viennent de campagnes séparées, chacune sur son hôte ; ils ne sont pas remesurés dans la
-campagne finale. Leur détail est dans le document cité.
+Hors le classement du 23 novembre, les chiffres ci-dessous viennent de campagnes séparées, chacune sur son hôte ; ils
+ne sont pas remesurés dans la campagne finale. Leur détail est dans le document cité.
 
 * **Classement de la v3** (une taille par noyau, hôtes reliés par un témoin C, répliqué sur deux
   micro-architectures) : C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#,
   FreePascal, Java, Go, Haskell, OCaml, BQN, PHP, JavaScript, Python, Lua ; trois étages de 14, 5 et 6 langages.
+* **Classement du 23 novembre** (v4, avant les quatre corrections de l'analyse) : C++, C, Odin, Rust, C3, Nim, D, Zig,
+  Ada, Chapel, Fortran, Julia, Swift, Mojo, C#, Go, FreePascal, Java, Haskell, OCaml, BQN, JavaScript, PHP, Python,
+  Lua ; deux étages de 19 et 6 langages ; C++ devant C dans 51 % des variantes. Le calcul le redonne à l'identique
+  (« Méthode du 23 novembre » de `results/report_final.md`) ; son procès-verbal est [`V4_FINAL.md`](V4_FINAL.md), 12.
 * **Point 2, tailles** (`docs/V4_SIZES.md`). Entre la taille publiée seule et la moyenne des trois tailles, aucun
   langage ne bouge de plus de deux places ; l'effet de l'hôte est plus grand que celui des tailles.
 * **Point 3, conditions égales** (`docs/V4_EQUAL.md`). Les vérifications et le stencil contigu ne déplacent aucun

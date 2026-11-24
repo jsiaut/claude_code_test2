@@ -1028,6 +1028,10 @@ def place(r, l):
     return r["order"].index(l) + 1
 
 
+def nth(n):
+    return "1er" if n == 1 else f"{n}e"
+
+
 def report(o, calcs):
     R = o["results"]
     f = R[FINAL]
@@ -1065,10 +1069,10 @@ def report(o, calcs):
           "## Rangs qui bougent de plus de deux places par rapport à « Final »", ""]
     for c in calcs[1:]:
         mv = o["moved_more_than_2"][c]
-        L.append(f"* {c} : " + (", ".join(f"{NAMES[l]} {b}e (Final {a}e)" for l, (a, b) in
+        L.append(f"* {c} : " + (", ".join(f"{NAMES[l]} {nth(b)} (Final {nth(a)})" for l, (a, b) in
                                          sorted(mv.items(), key=lambda x: x[1][0])) or "aucun"))
     for name, mv in (("la méthode du 23 novembre", o["moved_vs_old"]), ("le classement de la v3", o["moved_vs_v3"])):
-        L.append(f"* Final contre {name} : " + (", ".join(f"{NAMES[l]} {a}e → {b}e" for l, (a, b) in
+        L.append(f"* Final contre {name} : " + (", ".join(f"{NAMES[l]} {nth(a)} → {nth(b)}" for l, (a, b) in
                                                           sorted(mv.items(), key=lambda x: x[1][1])) or "aucun"))
     L += ["", "## Plafond par noyau et parts du code par défaut (« Final », au centre)", "",
           "| Langage | " + " | ".join(k.upper() for k in E_V2) + " | D1 | D2 | D3 | D4 |",
