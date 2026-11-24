@@ -1,3 +1,0 @@
-#!/bin/sh
-# binaire de haskell_fix sur une seule capacité (sensibilité, docs/HASKELL.md)
-exec "$(dirname "$0")/../haskell_fix/ms" "$@" +RTS -N1 -RTS

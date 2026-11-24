@@ -1,5 +1,0 @@
-# Grille ouverte (docs/V4_OPEN.md, 4), JavaScript : sondes exécutées le 2026-11-22 08:49, machine 34, Node v26.12.1
-CAP;B2;0.5;@protobufjs/pool 1.1.0;[exécutée] pool(alloc, subarray, 8192) : 100 tranches de 24 octets, les 50 premières dans le même ArrayBuffer = true, décalages [0,24,48,72,96] ; 100 nœuds (valeur, deux liens) en tranches de 16 octets, somme en suivant les liens = 4950 ; une demande >= 4096 octets est allouée à part : 8192 octets, hors du bloc = true
-NOTE;B2;note publiée 0 ; allocateur de tranches d'octets dans un bloc commun (Uint8Array), comme ArrayPool de C# : ni objets JavaScript, ni libération d'un coup ; limitée, ½
-CAP;F1;1;ndarray 1.1.1;[exécutée] ndarray(Float64Array(150000), [300, 500]) de dimensions connues à l'exécution : shape [300,500], stride [500,1], a.get(2, 3) = 7 écrit à l'indice 1003 du tableau typé (2*500+3) ; pick(2, null) est une vue de forme [500] ; le paquet n'a aucune opération de calcul (vues seulement)
-NOTE;F1;note publiée 0 ; tableau à n dimensions sur un tableau typé contigu, de forme connue à l'exécution, vues : 1

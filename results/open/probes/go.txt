@@ -1,9 +1,0 @@
-# Grille ouverte (docs/V4_OPEN.md, 4), Go : sondes exécutées le 2026-11-22 08:46, machine 34, go version go1.27.3 linux/amd64
-CAP;C5;0.5;github.com/samber/lo/parallel v1.53.0;[exécutée] parallel.Map sur 4 éléments (une goroutine par élément) : somme = 800000020000000 (attendu 800000020000000), 4 fils système distincts ; aucune réduction ni découpage en tranches dans le paquet
-NOTE;C5;note publiée 0 ; Map, ForEach, Times en parallèle, mais une goroutine par élément, sans découpage en tranches ni réduction : limitée, ½
-CAP;D3;1;github.com/templexxx/cpu v0.1.1;[exécutée] cpu.CacheLineSize = 64 (constante par architecture) ; compteur bourré [cpu.CacheLineSize-8]byte : unsafe.Sizeof = 64, écart entre deux compteurs = 64 octets
-NOTE;D3;note publiée 0 ; constante de ligne de cache par architecture, utilisable comme longueur de bourrage : 1, comme std.atomic.cache_line de Zig
-CAP;F1;1;gonum.org/v1/gonum/mat v0.17.0;[exécutée] mat.NewDense(300, 500, nil) de dimensions connues à l'exécution : Dims = (300, 500), RawMatrix().Stride = 500, len(Data) = 150000 (tampon contigu), a.At(2, 3) = 7 à l'indice 1003 (2*500+3)
-NOTE;F1;note publiée ½ ([M][N]T fixe) ; matrice dense contiguë de dimensions connues à l'exécution : 1
-CAP;F2;1;github.com/benjojo/numa (révision 1058a77);[exécutée] Available = true, NodeCount = 1 ; RunOnNode(0) : erreur <nil>, fil sur le CPU 1 du nœud 0 ; SetMemPolicy(MPOL_BIND, {0}) : erreur <nil> ; GetMemPolicy relu : mode 2 (MPOL_BIND = 2), nœuds 1, erreur <nil>
-NOTE;F2;note publiée 0 ; placement des fils sur un nœud et politique mémoire posée et relue (set/get_mempolicy) : 1

@@ -1,4 +1,0 @@
-#!/bin/sh
-# v4, point 6 (docs/V4_OPEN.md, 5.2) : la commande publiée, les modules de la piste ouverte en plus (NODE_PATH :
-# /opt/open/js/node_modules ; package-lock.json dans results/open/lock/js).
-NODE_PATH=/opt/open/js/node_modules exec /opt/node26/bin/node --expose-gc --max-old-space-size=8192 "$(dirname "$0")/ms.js" "$@"

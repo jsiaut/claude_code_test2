@@ -1,3 +1,0 @@
-IsValueType=True SizeOf=8 sizeof(A)=4 sizeof(B)=8
-field <Value>k__BackingField : System.Object  explicitLayout=False
-B 1.5

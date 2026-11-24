@@ -1,5 +1,0 @@
-# v4, point 6 (docs/V4_OPEN.md, 5) : formes de la piste ouverte de cette copie : noyau variante paramètre ; cellule ;
-# bibliothèque. La forme d'accès de chaque cellule touchée est mesurée aussi dans cette construction (témoin, 5.2).
-k4 op_intrinsics ; K4 ; ocaml_intrinsics_kernel
-k6 op_intrinsics q6 ; Q6 ; ocaml_intrinsics_kernel
-k6 op_intrinsics_mt q6 ; Q6 mt ; ocaml_intrinsics_kernel

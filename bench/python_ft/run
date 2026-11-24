@@ -1,2 +1,0 @@
-#!/bin/sh
-exec python3.15t "$(dirname "$0")/../python/ms.py" "$@"

@@ -1,4 +1,0 @@
-#!/bin/sh
-# v4, point 6 (docs/V4_OPEN.md, 5.2) : la commande publiée, les modules C de la piste ouverte en plus (LUA_CPATH :
-# /opt/open/lua/lib, construits par gcc -O2 -fPIC comme l'indique results/open/versions.txt).
-LUA_CPATH="/opt/open/lua/lib/?.so;;" exec /opt/lua55/bin/lua "$(dirname "$0")/ms.lua" "$@"

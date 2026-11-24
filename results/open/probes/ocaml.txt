@@ -1,7 +1,0 @@
-# Grille ouverte (docs/V4_OPEN.md, 4), OCaml : sondes exécutées le 2026-11-22 08:49, machine 34, OCaml 5.5.2
-CAP;C2;0.5;ocaml_intrinsics_kernel v0.17.3;[exécutée] Int.count_set_bits sur 0..10^6 = 9884999 ; Conditional.select_int dans une somme conditionnelle de 0..255 (i >= 128) = 24512 (attendu 24512) ; code machine : popc appelle le talon C (call   155710 <caml_int_popcnt_tagged_to_untagged>) ; le talon compte 1 popcnt et 0 appel à __popcountdi2 ; caml_csel_value : 1 cmov
-NOTE;C2;note publiée 0 ; instructions de la cible (popcnt, cmov, lzcnt, min/max…) atteintes par des externes [@@noalloc] : sur OCaml 5.5.2, chaque usage est un appel C non inliné (seul le compilateur de Jane Street, OxCaml, les remplace par l'instruction) ; ni SIMD ni intrinsèques vectorielles : limitée, ½ ; talons C compilés pour le processeur hôte (-march=native), sans quoi popcnt devient __popcountdi2, logiciel
-CAP;C5;1;domainslib 0.5.2;[exécutée] Task.parallel_for_reduce sur 4 tranches (pool de 3 domaines + l'appelant) : somme = 800000020000000 (attendu 800000020000000) ; tranches exécutées sur 4 fils distincts
-NOTE;C5;note publiée 0 (Domainslib est tiers) ; boucles et réductions parallèles (parallel_for, parallel_for_reduce, parallel_scan) sur une réserve de domaines : 1
-CAP;D4;1;processor 0.2;[exécutée] Affinity.get_ids () avant = [0;1;2;3] ; dans un domaine, set_ids [2] puis get_ids () = [2], sched_getcpu sur 1000 lectures = [2] ; Query.cpu_count = 4
-NOTE;D4;note publiée 0 ; affinité du fil courant posée et relue (Affinity.set_ids, get_ids), topologie (Query) : 1
