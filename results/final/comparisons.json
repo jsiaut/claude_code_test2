@@ -1,6 +1,6 @@
 {
- "note": "Classements antérieurs auxquels results/report_final.md compare le classement de la v4 : « published », le classement de la v3 (tête du README du 30 octobre au 23 novembre 2026 ; scénario « Publié » de results/audit3.json) ; « point4_r4 », le calcul « Convergent, avec R4 » du point 4 de la v4 (results/converge/analysis.json). Extrait fait au commit 5fbe6a6, où ces deux fichiers se trouvent.",
- "published": {
+ "note": "Classement de la v3, auquel results/report_final.md compare le classement : tête du README du 30 octobre au 23 novembre 2026 (scénario « Publié » de results/audit3.json, dans l'archive : commit 5fbe6a6).",
+ "v3": {
   "order": [
    "c",
    "odin",
@@ -115,88 +115,5 @@
     "lua"
    ]
   ]
- },
- "point4_r4": {
-  "order": [
-   "cpp",
-   "zig",
-   "c",
-   "c3",
-   "odin",
-   "nim",
-   "rust",
-   "d",
-   "chapel",
-   "ada",
-   "fortran",
-   "julia",
-   "mojo",
-   "swift",
-   "csharp",
-   "java",
-   "go",
-   "fpc",
-   "haskell",
-   "ocaml",
-   "bqn",
-   "js",
-   "php",
-   "python",
-   "lua"
-  ],
-  "exp": {
-   "c": 2.8808999999999996,
-   "cpp": 2.45395,
-   "csharp": 14.8716,
-   "java": 16.3123,
-   "zig": 2.87205,
-   "odin": 5.3862499999999995,
-   "julia": 11.18135,
-   "ada": 11.0592,
-   "fortran": 11.127099999999999,
-   "js": 22.1292,
-   "python": 24.0935,
-   "haskell": 18.724700000000002,
-   "c3": 5.19405,
-   "d": 7.18055,
-   "rust": 6.50595,
-   "chapel": 9.59155,
-   "nim": 5.50485,
-   "mojo": 12.198199999999998,
-   "go": 17.29665,
-   "ocaml": 20.24505,
-   "lua": 24.7322,
-   "swift": 12.296949999999999,
-   "fpc": 17.39205,
-   "bqn": 21.4376,
-   "php": 22.332250000000005
-  },
-  "ms0": {
-   "c": 80.64011437485296,
-   "cpp": 81.9292296919455,
-   "csharp": 62.31475592917189,
-   "java": 55.28554953250739,
-   "zig": 78.67575920847442,
-   "odin": 74.96948996346644,
-   "julia": 67.66779035275788,
-   "ada": 70.7073408151527,
-   "fortran": 67.25306490171513,
-   "js": 16.44526368276367,
-   "python": 12.349461529511801,
-   "haskell": 44.708527799842884,
-   "c3": 73.47299785459464,
-   "d": 75.17367182639545,
-   "rust": 73.25155108839125,
-   "chapel": 68.9775634092238,
-   "nim": 74.50687831673855,
-   "mojo": 67.3029508428741,
-   "go": 51.05707339501801,
-   "ocaml": 23.184120419721875,
-   "lua": 5.81367404141505,
-   "swift": 67.00561515953883,
-   "fpc": 49.27549287987302,
-   "bqn": 16.664368087902417,
-   "php": 16.711705414352327
-  }
  }
 }

@@ -1,31 +1,34 @@
 #!/usr/bin/env python3
-"""Le classement de la v4 : calcul complet, de results/final/raw à results/report_final.md.
+"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v4.1).
 
-Méthode : docs/METHOD.md ; plan fixé avant les mesures : docs/V4_FINAL.md, section 8. Ce module est autonome : il lit
-les mesures de la campagne (results/final/raw, tools/final/campaign.py), b3 (results/final/b3.jsonl), les bornes
-physiques des machines qui ont mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json),
-l'empreinte de K1 (results/footprint.json), la vectorisation mesurée de la règle v1 (results/vectorization.json) et la
-grille de contrôle (analysis/capabilities.py, analysis/capabilities_v2.py).
+Méthode : docs/METHOD.md ; plans fixés avant les calculs : docs/V4_FINAL.md, section 8 (campagne finale), et
+docs/V4_1.md (corrections A1 à A4 de l'analyse). Ce module est autonome : il lit les mesures de la campagne
+(results/final/raw, tools/final/campaign.py), b3 (results/final/b3.jsonl), les bornes physiques des machines qui ont
+mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json), l'empreinte de K1
+(results/footprint.json) et la grille de contrôle (analysis/capabilities.py, analysis/capabilities_v2.py ; la
+vectorisation mesurée de results/vectorization.json ne sert qu'à la règle v1, dans les calculs sans A1).
 
 Score d'un langage (sur 100) : 0,35 x contrôle (C) + 0,40 x plafond (E) + 0,25 x code par défaut (D).
 * Plafond : moyenne géométrique sur huit noyaux (K1, K3 à K9) du rapport de la référence au meilleur temps du langage ;
   la référence est le meilleur des 25 langages (ou, dans une variante sur deux, la borne physique de la machine). Sept
   noyaux comptent à trois tailles (positions petite, publiée, grande ; pour K5 : 2^11, 2^15, 2^21) : chaque cellule est
-  calculée à chaque position avec ses propres références, puis moyennée en logarithme avec les poids des tailles.
-* Code par défaut : D1 (code naturel rapporté à la même référence), D2 (empreinte et désordre de K1), D3 (queues de
-  latence de K8 naturel), D4 (chaîne de pointeurs de K2), pondérés 0,5 / 0,15 / 0,15 / 0,2.
-* Contrôle : grille de 34 capacités notées 0, 1/2 ou 1.
-Ordre publié : rang moyen sur 20 000 variantes qui tirent la configuration (estimateur, normalisations, règle de la
-grille, agrégation), le rééchantillonnage des mesures, les poids (piliers, noyaux, parts de D, catégories de la grille,
-tailles) et un bruit de jugement sur chaque case de la grille.
+  calculée à chaque position avec ses propres références, puis moyennée en logarithme avec les poids des tailles ; les
+  mesures à quatre fils ne comptent qu'aux positions publiée et grande (A4).
+* Code par défaut : D1 (code naturel rapporté au meilleur code naturel, A3), D2 (empreinte et désordre de K1), D3
+  (queues de latence de K8 naturel), D4 (chaîne de pointeurs de K2), pondérés 0,5 / 0,15 / 0,15 / 0,2.
+* Contrôle : grille de 34 capacités notées 0, 1/2 ou 1, en règle v2 (A1).
+Ordre publié : rang moyen sur 20 000 variantes qui tirent la configuration (estimateur, normalisations, agrégation),
+le rééchantillonnage des mesures, les poids (piliers, noyaux, parts de D, catégories de la grille, tailles) et un bruit
+de jugement sur chaque case de la grille.
 
-Calcul « Final » (docs/V4_FINAL.md, 8) :
+Calcul « Final » (docs/V4_FINAL.md, 8 ; docs/V4_1.md, 3) :
 * plafond : à chaque taille, chaque cellule prend la meilleure forme admise (C1 : variantes publiées et formes du
   relevé, écrites dans la copie _cv ou présentes dans la base), la variante naturelle y entrant dans son mode R1 (huit
   langages) et, pour K9, sous sa forme contiguë (R2, treize langages ; mode R1 pour C++ et D) ;
-* K3 (R4) : chaque processus de K3 est ramené au b3 de référence (moyenne de toutes les mesures de b3) par le rapport
-  t x b3 / b3 de son groupe (moyenne des mesures faites juste avant et juste après le groupe de K3 de sa passe, sur sa
-  machine) ; les temps sont relevés à b3 au moins et la référence de K3 vaut b3 : la cellule vaut min(1, b3 / t) ;
+* K3 (R4, A2) : b3 est le plus lent des 16 décalages de la boucle de référence ; chaque processus de K3 est ramené au
+  b3 de référence (moyenne de toutes les mesures de b3) par le rapport t x b3 / b3 de son groupe (moyenne des mesures
+  faites juste avant et juste après le groupe de K3 de sa passe) ; les temps sont relevés à b3 au moins et la référence
+  de K3 vaut b3 : la cellule vaut min(1, b3 / t) ;
 * code par défaut : D1 et D2 (part de K1) à trois tailles avec R1 et R2 ; D3 (latences de K8 naturel, sept processus)
   à trois tailles ; D4 (K2, sept processus) à sa taille ; empreinte de K1 et grille inchangées ;
 * chaque cellule nouvelle (forme absente de la base) est tirée par son propre générateur (graine fixée par la clé, le
@@ -33,9 +36,11 @@ Calcul « Final » (docs/V4_FINAL.md, 8) :
 * cellule manquante de la base : temps admissible le plus lent des autres langages (variantes communes) ; forme
   manquante : absente de son ensemble, signalée.
 Sensibilités (CALCS) : Base, trois tailles ; sans les tailles, sans R1, sans R2, sans C1, sans R4 ; R1' au lieu de R1 ;
-une taille à la fois ; sélection indépendante ; D3 et D4 sur trois processus ; sur les seules mesures. Les tirages des
-variantes viennent du même générateur, avancé de la même façon pour tous les calculs : ils sont identiques d'un calcul
-à l'autre. Comparaisons : classement de la v3 et « Convergent, avec R4 » du point 4 (results/final/comparisons.json).
+une taille à la fois ; sélection indépendante ; D3 et D4 sur trois processus ; sur les seules mesures ; sans une
+correction de la v4.1 à la fois (Sans A1 à Sans A4) ; « Méthode du 23 novembre », sans aucune, qui redonne le classement
+publié le 23 novembre. Les tirages des variantes viennent du même générateur, avancé de la même façon pour tous les
+calculs : ils sont identiques d'un calcul à l'autre. Comparaison : le classement de la v3
+(results/final/comparisons.json).
 
 Sorties : results/final/analysis.json, results/report_final.md. Variables : BOOT (2000 rééchantillonnages), UA (20 000
 variantes), FINAL_RAW (autres données), FINAL_OUT (autre répertoire de sortie). Contrôle : tools/check.sh."""
@@ -125,9 +130,21 @@ OUT = os.path.join(OUTD, "analysis.json")
 REPORT = os.path.join(OUTD, "report_final.md") if "FINAL_OUT" in os.environ else os.path.join(ROOT, "results",
                                                                                                "report_final.md")
 FINAL = "Final"
+OLD = "Méthode du 23 novembre"  # sans A1 à A4 : doit redonner le classement publié le 23 novembre
+A_OFF = {"Sans A1": "a1", "Sans A2": "a2", "Sans A3": "a3", "Sans A4": "a4"}
 CALCS = [FINAL, "Base, trois tailles", "Sans les tailles (taille publiée seule)", "Sans R1", "Sans R2", "Sans C1",
          "Sans R4", "R1' au lieu de R1", "Taille petite", "Taille grande", "Sélection indépendante",
-         "D3 et D4 sur trois processus", "Sur les seules mesures"]
+         "D3 et D4 sur trois processus", "Sur les seules mesures"] + list(A_OFF) + [OLD]
+MT_MEASURES = {("k6", 2), ("k6", 3), ("k9", 1)}  # mesures à quatre fils : Q6 mt, Q1 mt, K9 mt (A4)
+
+
+def corrections(calc):
+    """Corrections de la v4.1 (docs/V4_1.md, 3) appliquées dans un calcul : A1 (grille en règle v2 dans toutes les
+    variantes), A2 (b3 : le plus lent des 16 décalages), A3 (code naturel rapporté au meilleur code naturel), A4
+    (mesures à quatre fils sans la petite taille)."""
+    if calc == OLD:
+        return {"a1": False, "a2": False, "a3": False, "a4": False}
+    return {a: A_OFF.get(calc) != a for a in ("a1", "a2", "a3", "a4")}
 
 
 def klass(l):
@@ -237,16 +254,26 @@ def load():
     return F
 
 
-def b3_values():
-    """b3 de référence (s) et b3 de chaque groupe de K3, par (passe, démarrage) : moyenne des mesures avant et après."""
+def b3_values(stat):
+    """b3 de référence (s) et b3 de chaque groupe de K3, par (passe, démarrage) : moyenne des mesures avant et après.
+    Une mesure est la moyenne de deux exécutions de la boucle de référence ; stat : « max », le plus lent de ses 16
+    décalages (A2), ou « median », leur médiane (méthode du 23 novembre, valeur enregistrée par le pilote)."""
     recs = [json.loads(l) for l in open(B3F)] if os.path.exists(B3F) else []
     if not recs:
         return None, {}, []
-    ref = 1e-3 * float(np.mean([r["b3_ms"] for r in recs]))
+
+    def value(r):
+        if stat == "median":
+            return r["b3_ms"]
+        runs = [[float(x) for x in re.findall(r":\s+([0-9.]+) ms", out)] for out in r["outputs"]]
+        assert all(len(x) == 16 for x in runs), r["label"]
+        return float(np.mean([max(x) for x in runs]))
+
+    ref = 1e-3 * float(np.mean([value(r) for r in recs]))
     groups = defaultdict(list)
     for r in recs:
         if r.get("pass") is not None and "groupe K3" in r["label"]:
-            groups[(r["pass"], r["boot_id"])].append(r["b3_ms"])
+            groups[(r["pass"], r["boot_id"])].append(value(r))
     return ref, {k: 1e-3 * float(np.mean(v)) for k, v in groups.items()}, recs
 
 
@@ -486,11 +513,12 @@ def references(A, est):
 
 
 # ------------------------------------------------------------------ score
-def scores(As, r, cfg, C, footprint, refs, ebs, wS, wE=None, wD=None, wP=None):
+def scores(As, r, cfg, C, footprint, refs, ebs, wS, wE=None, wD=None, wP=None, mt_nosmall=False):
     """Piliers et score de tous les langages pour la ligne r des tableaux (0 : estimation ponctuelle) et la
     configuration cfg. Chaque cellule de E, de D1, de D2 (part de K1) et de D3 est calculée à chaque position avec ses
     propres références puis moyennée en logarithme avec les poids wS ; K3 et D4 (une seule taille) sont pris à la
-    position publiée."""
+    position publiée. mt_nosmall (A4) : les mesures à quatre fils ne comptent qu'aux positions publiée et grande, leurs
+    poids ramenés à une somme de 1, sauf si la petite taille compte seule."""
     est = cfg["est"]
     A1 = As[1]
     kernels = list(A1.e_meas)
@@ -505,13 +533,16 @@ def scores(As, r, cfg, C, footprint, refs, ebs, wS, wE=None, wD=None, wP=None):
             lr = []
             for i, ks in enumerate(ms):
                 cell = np.zeros(n)
+                nosmall = mt_nosmall and (k, i) in MT_MEASURES and wS[1] + wS[2] > 0
                 for p in pos_of(k):
+                    if nosmall and p == 0:
+                        continue
                     t = As[p].best(est, ks, r)
                     if cfg["enorm"] == "bounds" and (k, i) in ebs[p]:
                         v = np.log(np.minimum(1.0, ebs[p][(k, i)] / t))
                     else:
                         v = np.log(refs[p][est]["tstar"][(k, i)] / t)
-                    cell = cell + wpos(k, p) * v
+                    cell = cell + (wS[p] / (wS[1] + wS[2]) if nosmall else wpos(k, p)) * v
                 lr.append(cell)
             ek[k] = np.mean(lr, axis=0)
             lnE += wE[k] * ek[k]
@@ -768,10 +799,13 @@ def selection(F, fc, pos):
 
 
 # ------------------------------------------------------------------ moteur : un calcul, ses 20 000 variantes
-def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="three", b3=None, measures_only=False):
+def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="three", b3=None, measures_only=False,
+          a1=True, a3=True, a4=True):
     """Un calcul. host : données qui avancent le générateur principal (les mêmes pour tous les calculs) ; pos_dl : [(d,
     lt)] des trois positions ; wmode : « three » (poids des tailles égaux au centre, tirés dans les variantes) ou une
-    position (0, 1, 2) de poids 1 ; b3 : R4 (référence de K3) ; measures_only : poids de la grille à 0."""
+    position (0, 1, 2) de poids 1 ; b3 : R4 (référence de K3) ; measures_only : poids de la grille à 0 ; a1, a3, a4 :
+    corrections de la v4.1. Les tirages de la règle de la grille (a1) et de la référence du code naturel (a3) sont
+    faits puis ignorés, pour que tous les calculs gardent les mêmes tirages."""
     rng = np.random.default_rng(SEED)
     keys = sorted(needed_keys())
     Arrays3(host[0], host[1], LANGS, B, rng, build_pools(host[0], LANGS, keys))  # avance rng de la même façon
@@ -805,7 +839,8 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
         return w
 
     w0 = np.full(3, 1 / 3)
-    S0 = scores(As, 0, MAIN, C0, footprint, refs, ebs, wsz(w0), wP=wmap(np.array([0.35, 0.40, 0.25])))
+    main = dict(MAIN, d1ref="best_natural") if a3 else MAIN
+    S0 = scores(As, 0, main, C0, footprint, refs, ebs, wsz(w0), wP=wmap(np.array([0.35, 0.40, 0.25])), mt_nosmall=a4)
     kernels, cat_names = list(As[1].e_meas), list(CATEGORIES)
     rk = As[1].ranked
     NR = len(RANKED)
@@ -813,6 +848,10 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
     srng = np.random.default_rng(SEED + 4200)  # poids des tailles : générateur à part
     for u in range(U):
         cfg = {k: v[int(rng.integers(len(v)))] for k, v in OPTS.items()}
+        if a1:
+            cfg["crule"] = "v2"
+        if a3:
+            cfg["d1ref"] = "best_natural"
         b = int(rng.integers(1, B + 1))
         wp = dirichlet(rng, 20 * np.array([0.35, 0.40, 0.25])) if rng.random() < 0.5 else dirichlet(rng, [1, 1, 1])
         wP = wmap(wp)
@@ -822,7 +861,7 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
         prng = np.random.default_rng(int(rng.integers(2 ** 63)))
         C = c_vector(c_score(c_cells(cfg["crule"], c3, rng=prng, noise=0.10), catw), LANGS)
         wS = dirichlet(srng, 20 * w0) if srng.random() < 0.5 else dirichlet(srng, [1, 1, 1])
-        S_u = scores(As, b, cfg, C, footprint, refs, ebs, wsz(wS), wE=wE, wD=wD, wP=wP)
+        S_u = scores(As, b, cfg, C, footprint, refs, ebs, wsz(wS), wE=wE, wD=wD, wP=wP, mt_nosmall=a4)
         r_ = ranks_of(S_u["MS"][rk])
         prec += r_[:, None] < r_[None, :]
         first[int(np.argmin(r_))] += 1
@@ -859,7 +898,9 @@ def summarize(s):
     return out
 
 
-def run_calc(calc, F, fc, footprint, c3, ebs, b3ref, k3n, host, keys):
+def run_calc(calc, F, fc, footprint, c3, ebs, b3, host, keys):
+    cor = corrections(calc)
+    b3ref, k3n = b3["max" if cor["a2"] else "median"][:2]
     pos = [position(F, p, calc, k3n) for p in range(3)]
     filled, missing = {}, []
     for p, (d, lt, src, miss) in enumerate(pos):
@@ -886,7 +927,8 @@ def run_calc(calc, F, fc, footprint, c3, ebs, b3ref, k3n, host, keys):
             patches[p].append(r4_patch(b3ref))
     wmode = {"Sans les tailles (taille publiée seule)": 1, "Taille petite": 0, "Taille grande": 2}.get(calc, "three")
     s = three(host, [(d, lt) for d, lt, src, miss in pos], footprint, c3, ebs, e_meas=e_meas, patches=patches,
-              wmode=wmode, b3=b3ref if r4 else None, measures_only=(calc == "Sur les seules mesures"))
+              wmode=wmode, b3=b3ref if r4 else None, measures_only=(calc == "Sur les seules mesures"),
+              a1=cor["a1"], a3=cor["a3"], a4=cor["a4"])
     out = summarize(s)
     out["missing"] = missing
     out["filled"] = {k: [[x[0], " ".join(x[1]).strip(), x[2]] for x in v] for k, v in filled.items()}
@@ -949,31 +991,33 @@ def main():
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
     hw, machines = machines_hw(F)
     ebs = [ebounds(hw, p) for p in range(3)]
-    b3ref, b3g, b3recs = b3_values()
-    k3n = k3_normalized(F, b3ref, b3g)
+    b3 = {}  # statistique de b3 -> (b3 de référence, temps de K3 ramenés à ce b3, b3 des groupes)
+    for stat in ("max", "median"):
+        ref, groups, b3recs = b3_values(stat)
+        b3[stat] = (ref, k3_normalized(F, ref, groups), groups)
     fc = forms_cells(LANGS)
     keys = campaign_keys({k: v for k, v in F.data.items() if k[0] == "pub"})
     hd = position(F, 1, "Base, trois tailles", {})[0]  # avance du générateur principal : la base, taille publiée
     host = (copy.deepcopy(hd), position(F, 1, "Base, trois tailles", {})[1])
     fill_missing(host[0], LANGS, keys)
     calcs = CALCS
-    res = {c: run_calc(c, F, fc, footprint, c3, ebs, b3ref, k3n, host, keys) for c in calcs}
+    res = {c: run_calc(c, F, fc, footprint, c3, ebs, b3, host, keys) for c in calcs}
     fin = res[FINAL]["order"]
     moved_ = {c: moved(fin, res[c]["order"], LANGS) for c in calcs[1:]}
-    out = {"results": res, "moved_more_than_2": moved_, "b3_ref": b3ref,
-           "b3_groups": {f"{p}|{boot}": v for (p, boot), v in b3g.items()},
+    out = {"results": res, "moved_more_than_2": moved_, "b3_ref": b3["max"][0],
+           "b3_groups": {f"{p}|{boot}": v for (p, boot), v in b3["max"][2].items()},
+           "b3_median_ref": b3["median"][0],
+           "b3_median_groups": {f"{p}|{boot}": v for (p, boot), v in b3["median"][2].items()},
            "b3_records": [{k: v for k, v in r.items() if k != "outputs"} for r in b3recs],
            "machines": machines, "group_machines": {f"{p}|{k}|{s}": sorted(m for m in v if m is not None)
                                                     for (p, k, s), v in sorted(F.machines.items())},
            "bounds": [{f"{k}#{i}": v for (k, i), v in e.items()} for e in ebs], "hw": hw,
            "retained": retained(F, fc), "spread": spread(F), "failures": F.failures, "skipped": F.skipped,
            "steal_over_5pct": F.steal, "cpu_models": {m: dict(ps) for m, ps in F.models.items()}}
-    # comparaisons : le classement de la v3 (tête du README jusqu'au 23 novembre) et « Convergent, avec R4 » du point 4
-    prev = json.load(open(os.path.join(FIN, "comparisons.json")))
-    out["published"] = prev["published"]
-    out["point4_r4"] = prev["point4_r4"]
-    out["moved_vs_published"] = moved(out["published"]["order"], fin, LANGS)
-    out["moved_vs_point4"] = moved(out["point4_r4"]["order"], fin, LANGS)
+    # comparaisons : la méthode du 23 novembre (calcul OLD) et le classement de la v3 (tête du README jusqu'au 23)
+    out["v3"] = json.load(open(os.path.join(FIN, "comparisons.json")))["v3"]
+    out["moved_vs_old"] = moved(res[OLD]["order"], fin, LANGS)
+    out["moved_vs_v3"] = moved(out["v3"]["order"], fin, LANGS)
     os.makedirs(OUTD, exist_ok=True)
     json.dump(out, open(OUT, "w"), indent=1, default=float)
     report(out, calcs)
@@ -987,12 +1031,14 @@ def place(r, l):
 def report(o, calcs):
     R = o["results"]
     f = R[FINAL]
-    L = ["# v4, campagne finale : le classement de la v4 — résultats", "",
-         "*Plan : `docs/V4_FINAL.md` (section 8, fixée avant les mesures). Généré par `analysis/final_v4.py` à partir "
-         "de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes "
-         "(`results/converge/forms.json`).*", "",
-         f"Machines : {', '.join(o['machines'])} ; b3 de référence : {1e3 * o['b3_ref']:.2f} ms ; b3 des groupes de K3 : "
-         + ", ".join(f"passe {k.split('|')[0]} {1e3 * v:.2f} ms" for k, v in sorted(o["b3_groups"].items())) + ".", "",
+    L = ["# v4.1, campagne finale : le classement — résultats", "",
+         "*Plans : `docs/V4_FINAL.md` (section 8, fixée avant les mesures) et `docs/V4_1.md` (corrections A1 à A4 de "
+         "l'analyse, 24 novembre). Généré par `analysis/final_v4.py` à partir de `results/final/raw`, de "
+         "`results/final/b3.jsonl` et du relevé des formes (`results/converge/forms.json`).*", "",
+         f"Machines : {', '.join(o['machines'])} ; b3 de référence (le plus lent des 16 décalages, A2) : "
+         f"{1e3 * o['b3_ref']:.2f} ms ; b3 des groupes de K3 : "
+         + ", ".join(f"passe {k.split('|')[0]} {1e3 * v:.2f} ms" for k, v in sorted(o["b3_groups"].items()))
+         + f" ; avec la médiane des 16 décalages (méthode du 23 novembre) : {1e3 * o['b3_median_ref']:.2f} ms.", "",
          "## Classement « Final »", "",
          "| Rang | Langage | Score | Rang espéré | Rang plausible | Devance le suivant | Plafond | Code par défaut | "
          "Contrôle |", "|---|---|---|---|---|---|---|---|---|"]
@@ -1003,24 +1049,25 @@ def report(o, calcs):
                  f"{f['D'][l]:.1f} | {f['C'][l]:.1f} |")
     L += ["", "Étages (paires ordonnées dans au moins 95 % des variantes) : "
           + " | ".join(", ".join(NAMES[l] for l in t) for t in f["tiers"]), "",
-          "## Tous les calculs", "", "| Langage | " + " | ".join(calcs) + " | Publié | Point 4 (R4) |",
-          "|---|" + "---|" * (len(calcs) + 2)]
+          "## Tous les calculs", "", "| Langage | " + " | ".join(calcs) + " | v3 |",
+          "|---|" + "---|" * (len(calcs) + 1)]
     for l in f["order"]:
         cells = []
         for c in calcs:
             p = place(R[c], l)
             mark = "" if c == FINAL or abs(p - place(f, l)) <= 2 else " **"
             cells.append(f"{p}{mark} ({R[c]['exp'][l]:.2f})")
-        cells.append(str(o["published"]["order"].index(l) + 1))
-        cells.append(str(o["point4_r4"]["order"].index(l) + 1))
+        cells.append(str(o["v3"]["order"].index(l) + 1))
         L.append(f"| {NAMES[l]} | " + " | ".join(cells) + " |")
     L += ["", "Chaque case : place (rang espéré) ; ** : plus de deux places d'écart avec « Final ». Ordre des lignes : "
-          "« Final ».", "", "## Rangs qui bougent de plus de deux places par rapport à « Final »", ""]
+          "« Final ». « Sans A1 » à « Sans A4 » : « Final » sans une correction de la v4.1 ; « Méthode du 23 novembre » : "
+          "sans aucune, le classement publié le 23 novembre ; v3 : le classement publié jusqu'au 23 novembre.", "",
+          "## Rangs qui bougent de plus de deux places par rapport à « Final »", ""]
     for c in calcs[1:]:
         mv = o["moved_more_than_2"][c]
         L.append(f"* {c} : " + (", ".join(f"{NAMES[l]} {b}e (Final {a}e)" for l, (a, b) in
                                          sorted(mv.items(), key=lambda x: x[1][0])) or "aucun"))
-    for name, mv in (("classement publié (v3)", o["moved_vs_published"]), ("point 4, avec R4", o["moved_vs_point4"])):
+    for name, mv in (("la méthode du 23 novembre", o["moved_vs_old"]), ("le classement de la v3", o["moved_vs_v3"])):
         L.append(f"* Final contre {name} : " + (", ".join(f"{NAMES[l]} {a}e → {b}e" for l, (a, b) in
                                                           sorted(mv.items(), key=lambda x: x[1][1])) or "aucun"))
     L += ["", "## Plafond par noyau et parts du code par défaut (« Final », au centre)", "",
