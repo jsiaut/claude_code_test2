@@ -3,7 +3,7 @@
 # dépôt ; vérifie aussi le plan de la campagne, sans rien mesurer (aucune chaîne de compilation n'est nécessaire).
 # À lancer avant et après tout changement du code d'analyse, des outils ou de la grille.
 #
-# Usage : sh tools/check.sh            tout, y compris le classement complet (20 000 variantes : environ 22 min)
+# Usage : sh tools/check.sh            tout, y compris le classement complet (20 000 variantes : environ 25 min)
 #         sh tools/check.sh --rapide   le classement est calculé sur 200 variantes et comparé à son empreinte de
 #                                      référence (tools/check.ref) : environ 30 s en tout
 #         sh tools/check.sh --ref      réécrit tools/check.ref ; seulement après un changement voulu de l'analyse

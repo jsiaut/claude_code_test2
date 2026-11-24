@@ -273,7 +273,7 @@ sh tools/check.sh
 ```
 
 Le premier contrôle (30 s) vérifie la grille contre ses sondes, le relevé des formes, le plan de la campagne et le
-classement sur 200 variantes ; le second (22 min) recalcule le classement complet et le compare à l'octet près. Ni l'un
+classement sur 200 variantes ; le second (25 min) recalcule le classement complet et le compare à l'octet près. Ni l'un
 ni l'autre ne demande de chaîne de compilation.
 
 ```bash
