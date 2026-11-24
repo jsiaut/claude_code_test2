@@ -18,6 +18,7 @@ gcc -O3 -march=native -pthread tools/hwprobe.c -o $H  # -O3 : en -O2, GCC 13 gar
 lscpu > "$OUT/lscpu.txt"
 for m in freq lat lathp bw stream peak tlb sys pf; do $H $m > "$OUT/$m.txt" 2>&1; done
 # chaîne de K2 jusqu'à 2 Gio
+[ -x bench/c/ms ] || sh bench/c/build.sh
 D=/dev/shm/ms_k2_char
 G=tools/sizes/gendata
 [ -x $G ] || gcc -O2 -o $G tools/gendata.c
