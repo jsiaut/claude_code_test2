@@ -268,6 +268,7 @@ def load_json(path, default):
 
 
 def save_calib(c):
+    os.makedirs(WORK, exist_ok=True)
     tmp = CALIB + ".tmp"
     json.dump(c, open(tmp, "w"), indent=0, sort_keys=True)
     os.replace(tmp, CALIB)
