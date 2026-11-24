@@ -1,9 +1,10 @@
-# Méthode du classement (v4)
+# Méthode du classement (v4.1)
 
 *État au 24 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
-été fixée par étapes, chacune par un plan poussé avant ses mesures ([`HISTORY.md`](HISTORY.md)). Le plan de la campagne
-dont viennent les chiffres, avec ses écarts datés et son procès-verbal, est [`V4_FINAL.md`](V4_FINAL.md) ; le contrat
-des noyaux est [`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
+été fixée par étapes, chacune par un plan poussé avant ses mesures ou ses calculs ([`HISTORY.md`](HISTORY.md)). Le plan
+de la campagne dont viennent les mesures, avec ses écarts datés et son procès-verbal, est [`V4_FINAL.md`](V4_FINAL.md) ;
+celui des quatre corrections de l'analyse (A1 à A4), [`V4_1.md`](V4_1.md) ; le contrat des noyaux est
+[`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
 
 ## 1. Ce qui est classé
 
@@ -81,11 +82,11 @@ Sept noyaux comptent à trois tailles ; K2 et K3 à la leur.
 * **C1.** Le plafond de chaque cellule prend le meilleur temps parmi les formes admises que le langage a écrites :
   variantes publiées (`tuned`, `mt`…, définies par `SPEC.md`), K4 `tuned` (R3), formes du catalogue, formes propres à
   son runtime.
-* **C2, admission.** Une forme fait le calcul de la spécification sur les données telles qu'elles sont stockées, dans
-  la zone chronométrée prévue ; elle est exacte pour toute donnée admise, pas seulement pour les fichiers du banc (un
-  accumulateur entier tient par construction, ce qu'un commentaire justifie) ; pour K8, chaque nœud est écrit avec sa valeur
-  et ses liens et la somme suit les liens ; langage et bibliothèque standard seuls, sans assembleur en ligne ni option
-  propre à une variante ; elle lit les tailles comme les variantes publiées.
+* **C2, admission.** Une forme fait le calcul de la spécification sur les données telles qu'elles sont stockées, dans la
+  zone chronométrée prévue ; elle est exacte pour toute donnée admise, pas seulement pour les fichiers du banc (un
+  accumulateur entier tient par construction, ce qu'un commentaire justifie) ; pour K8, chaque nœud est écrit avec sa
+  valeur et ses liens et la somme suit les liens ; langage et bibliothèque standard seuls, sans assembleur en ligne ni
+  option propre à une variante ; elle lit les tailles comme les variantes publiées.
 * **C3, le catalogue**, porté dans tout langage qui peut l'écrire :
 
   | Cellule | Forme | Définition courte |
@@ -142,9 +143,10 @@ conteneur par défaut, aucune annotation de performance ([`NATURAL.md`](NATURAL.
 * **R3.** K4 admet une forme `tuned`, SIMD explicite compris ; aucune forme n'est en assembleur en ligne.
 * **R4, K3 rapporté à une boucle de référence.** Sur ce processeur, la boucle de l'écrivain unique coûte de un à sept
   cycles par incrément selon la place du code dans sa ligne de 64 octets. La cellule de K3 vaut donc min(1, b3 / t) :
-  b3 est le temps de la même boucle écrite en assembleur (`tools/k3_align.c`), médiane de ses 16 décalages, moyenne de
-  deux exécutions, mesuré juste avant et juste après chaque groupe de K3 ; les temps de K3 d'un groupe sont ramenés au
-  b3 de référence (moyenne de toutes les mesures) par le rapport des b3.
+  b3 est le temps de la même boucle écrite en assembleur (`tools/k3_align.c`), au plus lent de ses 16 décalages (A2 ;
+  leur médiane jusqu'au 23 novembre), moyenne de deux exécutions, mesuré juste avant et juste après chaque groupe de
+  K3 ; les temps de K3 d'un groupe sont ramenés au b3 de référence (moyenne de toutes les mesures) par le rapport des
+  b3. Une boucle sans `lock` ne vaut ainsi pas moins que la boucle de référence à son plus mauvais placement.
 * **R5.** K2 (dont vient D4) est mesuré par sept processus par cellule au lieu de trois ; la campagne finale applique
   la même règle à K8 naturel (dont vient D3).
 
@@ -181,8 +183,9 @@ génération de code (E, 7, 10 %), HPC et OLAP (F, 4, 10 %). La liste, les notes
   la chaîne de référence telle qu'elle est livrée, sous une forme stable et complète ; ½ si elle est expérimentale,
   réservée à une unité interne ou partielle ; 0 si elle est absente ou seulement accessible par une bibliothèque tierce
   ou par une FFI vers du code non intrinsèque. La vectorisation automatique mesurée (C3) n'y compte pas : le plafond et
-  le code naturel la mesurent déjà. **Règle v1**, d'origine, tirée dans une variante sur deux : ½ aussi pour ce qui est
-  livré hors norme ou propre à un compilateur, et C3 comptée (`results/vectorization.json`).
+  le code naturel la mesurent déjà. **Règle v1**, d'origine : ½ aussi pour ce qui est livré hors norme ou propre à un
+  compilateur, et C3 comptée (`results/vectorization.json`) ; elle pénalise les langages normalisés et ne sert plus,
+  depuis A1, que dans la sensibilité « Sans A1 ».
 * **Une seule règle pour la libc et les FFI.** Compte ce que la chaîne livre, y compris les intrinsèques que le
   langage importe par sa FFI ; appeler du code C ordinaire par une FFI ne compte pas, sauf pour C et C++, dont la libc
   est la bibliothèque système ; les types C qu'une FFI livrée définit valent ½.
@@ -198,15 +201,16 @@ génération de code (E, 7, 10 %), HPC et OLAP (F, 4, 10 %). La liste, les notes
 Pour une cellule, le temps t d'un langage est la moyenne géométrique des médianes de ses processus, pour sa forme la
 plus rapide parmi les formes admises.
 
-* **Plafond.** E = 100 × moyenne géométrique des scores de huit noyaux (K1, K3 à K9). Le score d'un noyau est la
-  moyenne géométrique de ses mesures (quatre pour K6 : Q6 et Q1 à 1 et 4 fils ; deux pour K9 ; une ailleurs) ; une
-  mesure vaut référence / t, moyennée en logarithme sur les trois tailles. La référence est la frontière, le meilleur
-  temps des 25 langages à cette taille ; dans une variante sur deux, c'est la borne physique de la machine (octets à
-  déplacer sur la bande passante du niveau de mémoire où ils tiennent, opérations sur le débit crête), le rapport
-  étant alors plafonné à 1. K3 suit R4.
+* **Plafond.** E = 100 × moyenne géométrique des scores de huit noyaux (K1, K3 à K9). Le score d'un noyau est la moyenne
+  géométrique de ses mesures (quatre pour K6 : Q6 et Q1 à 1 et 4 fils ; deux pour K9 ; une ailleurs) ; une mesure vaut
+  référence / t, moyennée en logarithme sur les trois tailles ; les trois mesures à quatre fils ne comptent qu'aux
+  tailles publiée et grande (A4 : à la petite taille, elles mesurent le réveil des fils). La référence est la frontière,
+  le meilleur temps des 25 langages à cette taille ; dans une variante sur deux, c'est la borne physique de la machine
+  (octets à déplacer sur la bande passante du niveau de mémoire où ils tiennent, opérations sur le débit crête), le
+  rapport étant alors plafonné à 1. K3 suit R4.
 * **Code par défaut.** D = 100 × (0,5 D1 + 0,15 D2 + 0,15 D3 + 0,2 D4).
   * D1, code naturel : comme le plafond, avec la seule variante naturelle (K1, K4, K5, Q6, Q1, K7, K8, K9), rapportée
-    à la frontière du plafond (dans une variante sur deux, au meilleur code naturel).
+    au meilleur code naturel des 25 langages à chaque taille (A3 ; à la frontière du plafond jusqu'au 23 novembre).
   * D2, coût de structure : moyenne géométrique de min(1, 64 / octets par particule) (`results/footprint.json`) et de
     min(1, t naturel / t naturel permuté) sur K1, ce second terme aux trois tailles.
   * D3, prévisibilité : sur les latences des requêtes de K8 naturel, moyenne géométrique de (meilleur p99,9 / p99,9)
@@ -224,12 +228,11 @@ plus rapide parmi les formes admises.
   JIT, interprète ; moins de 20 résidus : tout le noyau), et chaque tirage ajoute à l'estimation de la cellule la
   moyenne de résidus tirés dans son réservoir. Les références restent celles des estimations ponctuelles. Les latences
   sont rééchantillonnées par processus puis par répétition.
-* **20 000 variantes de l'analyse.** Chacune tire : un rééchantillonnage ; sept choix de méthode à deux options
-  (estimateur : moyenne géométrique ou minimum des processus ; référence du plafond ; référence du code naturel ;
-  formes de D3 et de D4 ; agrégation ; règle de la grille) ; les poids des piliers et ceux des trois tailles (autour
-  de leurs valeurs du centre dans une variante sur deux, uniformes sur le simplexe dans l'autre), ceux des noyaux, des
-  parts de D et des catégories de la grille (autour de leurs valeurs du centre) ; un bruit de jugement, chaque case
-  jugée changeant de note avec une probabilité de 10 %.
+* **20 000 variantes de l'analyse.** Chacune tire : un rééchantillonnage ; cinq choix de méthode à deux options
+  (estimateur : moyenne géométrique ou minimum des processus ; référence du plafond ; formes de D3 et de D4 ;
+  agrégation) ; les poids des piliers et ceux des trois tailles (autour de leurs valeurs du centre dans une variante sur
+  deux, uniformes sur le simplexe dans l'autre), ceux des noyaux, des parts de D et des catégories de la grille (autour
+  de leurs valeurs du centre) ; un bruit de jugement, chaque case jugée changeant de note avec une probabilité de 10 %.
 * **Ce qui est publié.** L'ordre est le **rang moyen** sur les variantes. Le **rang plausible** est l'intervalle des
   rangs dans 90 % des variantes. « Devance le suivant » est la part des variantes où un langage passe devant celui de
   la ligne suivante. Le **score** affiché est celui du centre (poids et choix principaux, estimation ponctuelle) : il
@@ -239,11 +242,13 @@ plus rapide parmi les formes admises.
 
 ## 10. Sensibilités publiées
 
-`results/report_final.md` donne, à côté du classement, la place de chaque langage dans douze autres calculs faits avec
-les mêmes tirages : formes publiées seules et code naturel publié à trois tailles (« Base ») ; « Final » sans une règle
-à la fois (sans les tailles, sans R1, sans R2, sans C1, sans R4) ; R1' au lieu de R1 ; une taille seule (petite,
-grande) ; sélection indépendante (la forme de chaque cellule choisie sur la passe 0, estimée sur les passes 1 et 2) ;
-D3 et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0).
+`results/report_final.md` donne, à côté du classement, la place de chaque langage dans dix-sept autres calculs faits
+avec les mêmes tirages : formes publiées seules et code naturel publié à trois tailles (« Base ») ; « Final » sans une
+règle à la fois (sans les tailles, sans R1, sans R2, sans C1, sans R4) ; R1' au lieu de R1 ; une taille seule (petite,
+grande) ; sélection indépendante (la forme de chaque cellule choisie sur la passe 0, estimée sur les passes 1 et 2) ; D3
+et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans une correction de la v4.1 à
+la fois (« Sans A1 » à « Sans A4 ») ; sans aucune (« Méthode du 23 novembre », qui redonne le classement publié ce
+jour-là).
 
 ## 11. Vérifier, recalculer, remesurer
 
