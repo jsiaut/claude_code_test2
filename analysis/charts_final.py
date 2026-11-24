@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Graphique SVG du classement (campagne finale, analyse de la v4.1 : docs/V4_FINAL.md, docs/V4_1.md) : rang espéré
-sur les 20 000 variantes, rang plausible (90 %), score au centre.
+sur les 20 000 variantes, rang plausible (90 %), score moyen sur ces variantes (il fixe l'ordre).
 Entrée : results/final/analysis.json (ou FINAL_OUT/analysis.json). Sortie : results/charts/classement_v4.svg."""
 import json, os, sys
 
@@ -48,7 +48,7 @@ def ranking_svg(f, path, machines):
            '<text class="t1" x="16" y="26">Classement de la v4.1 (campagne finale, analyse corrigée)</text>',
            '<text class="t2" x="16" y="46">Point : rang espéré sur 20 000 variantes de l\'analyse (poids, méthodes, '
            'jugements, bruit, poids des tailles).</text>',
-           '<text class="t2" x="16" y="62">Trait : rang dans 90 % de ces variantes. À droite : score au centre. '
+           '<text class="t2" x="16" y="62">Trait : rang dans 90 % de ces variantes. À droite : score moyen sur ces variantes. '
            f'Machine{"s" if len(machines) > 1 else ""} {", ".join(machines)} (Emerald Rapids).</text>']
     for r in (1, 5, 10, 15, 20, 25):
         out.append(f'<line class="grid" x1="{X(r):.1f}" x2="{X(r):.1f}" y1="{T - 4}" y2="{T + n * row}"/>')
@@ -57,13 +57,13 @@ def ranking_svg(f, path, machines):
     for i, l in enumerate(order):
         y = T + i * row + row / 2
         a, b = f["rank90"][l]
-        tip = f"{i + 1}. {NAMES[l]} : rang espéré {fr(f['exp'][l], 2)}, rang plausible {a}–{b}, score {fr(f['ms0'][l])}"
+        tip = f"{i + 1}. {NAMES[l]} : rang espéré {fr(f['exp'][l], 2)}, rang plausible {a}–{b}, score {fr(f['ms_mean'][l])}"
         out.append(f'<g><title>{esc(tip)}</title>'
                    f'<rect x="16" y="{y - row / 2:.1f}" width="{W - 32}" height="{row}" fill="transparent"/>'
                    f'<text class="lab" x="{L - 12}" y="{y + 4:.1f}" text-anchor="end">{i + 1}. {esc(NAMES[l])}</text>'
                    f'<line class="ua" x1="{X(a):.1f}" x2="{X(b):.1f}" y1="{y:.1f}" y2="{y:.1f}"/>'
                    f'<circle class="dot" cx="{X(f["exp"][l]):.1f}" cy="{y:.1f}" r="5"/>'
-                   f'<text class="tick" x="{W - 16}" y="{y + 4:.1f}" text-anchor="end">{fr(f["ms0"][l])}</text></g>')
+                   f'<text class="tick" x="{W - 16}" y="{y + 4:.1f}" text-anchor="end">{fr(f["ms_mean"][l])}</text></g>')
     out.append("</svg>")
     os.makedirs(os.path.dirname(path), exist_ok=True)
     open(path, "w").write("\n".join(out))

@@ -17,9 +17,10 @@ Score d'un langage (sur 100) : 0,35 x contrôle (C) + 0,40 x plafond (E) + 0,25 
 * Code par défaut : D1 (code naturel rapporté au meilleur code naturel, A3), D2 (empreinte et désordre de K1), D3
   (queues de latence de K8 naturel), D4 (chaîne de pointeurs de K2), pondérés 0,5 / 0,15 / 0,15 / 0,2.
 * Contrôle : grille de 34 capacités notées 0, 1/2 ou 1, en règle v2 (A1).
-Ordre publié : rang moyen sur 20 000 variantes qui tirent la configuration (estimateur, normalisations, agrégation),
-le rééchantillonnage des mesures, les poids (piliers, noyaux, parts de D, catégories de la grille, tailles) et un bruit
-de jugement sur chaque case de la grille.
+Ordre publié : celui du score moyen sur 20 000 variantes qui tirent la configuration (estimateur, normalisations,
+agrégation), le rééchantillonnage des mesures, les poids (piliers, noyaux, parts de D, catégories de la grille, tailles)
+et un bruit de jugement sur chaque case de la grille. Jusqu'au 24 novembre, l'ordre était celui du rang moyen sur ces
+variantes : le calcul « Méthode du 23 novembre » le garde.
 
 Calcul « Final » (docs/V4_FINAL.md, 8 ; docs/V4_1.md, 3) :
 * plafond : à chaque taille, chaque cellule prend la meilleure forme admise (C1 : variantes publiées et formes du
@@ -845,6 +846,7 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
     rk = As[1].ranked
     NR = len(RANKED)
     prec, first, ranks = np.zeros((NR, NR)), np.zeros(NR), np.empty((U, NR), np.int16)
+    ms_sum = np.zeros(len(LANGS))
     srng = np.random.default_rng(SEED + 4200)  # poids des tailles : générateur à part
     for u in range(U):
         cfg = {k: v[int(rng.integers(len(v)))] for k, v in OPTS.items()}
@@ -863,6 +865,7 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
         wS = dirichlet(srng, 20 * w0) if srng.random() < 0.5 else dirichlet(srng, [1, 1, 1])
         S_u = scores(As, b, cfg, C, footprint, refs, ebs, wsz(wS), wE=wE, wD=wD, wP=wP, mt_nosmall=a4)
         r_ = ranks_of(S_u["MS"][rk])
+        ms_sum += S_u["MS"]
         prec += r_[:, None] < r_[None, :]
         first[int(np.argmin(r_))] += 1
         ranks[u] = r_
@@ -870,6 +873,7 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
     idx = As[1].idx
     exp21 = {a: 1 + sum(prec[RANKED.index(b_), RANKED.index(a)] for b_ in RANKED if b_ != a) for a in RANKED}
     return {"exp21": exp21, "ms0": {l: float(S0["MS"][idx[l]]) for l in LANGS}, "prec": prec,
+            "ms_mean": {l: float(ms_sum[idx[l]] / U) for l in LANGS},
             "first": {RANKED[j]: float(first[j] / U) for j in range(NR)},
             "rank90": {RANKED[j]: [int(np.quantile(ranks[:, j], 0.05)), int(np.quantile(ranks[:, j], 0.95))]
                        for j in range(NR)},
@@ -880,15 +884,20 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
             "tstar": [{f"{k}#{i}": v for (k, i), v in rf["mean"]["tstar"].items()} for rf in refs]}
 
 
-def summarize(s):
-    """Résumé d'un calcul : ordre (rang moyen, puis score au centre), rangs, scores, piliers, étages, plafond par noyau
-    et parts du code par défaut au centre, part des variantes où chaque langage devance le suivant, préséances."""
+def summarize(s, by_rank=False):
+    """Résumé d'un calcul : ordre (score moyen sur les variantes, puis rang moyen ; by_rank : rang moyen, puis score au
+    centre, la règle du 23 novembre), rangs, scores, piliers, étages, plafond par noyau et parts du code par défaut au
+    centre, part des variantes où chaque langage devance le suivant, préséances."""
     langs = LANGS
-    order = sorted(langs, key=lambda l: (s["exp21"][l], -s["ms0"][l]))
+    if by_rank:
+        order = sorted(langs, key=lambda l: (s["exp21"][l], -s["ms0"][l]))
+    else:
+        order = sorted(langs, key=lambda l: (-s["ms_mean"][l], s["exp21"][l]))
     idx = {l: i for i, l in enumerate(RANKED)}
     prec = s["prec"]
     out = {"order": order, "exp": {l: s["exp21"][l] for l in langs}, "rank90": {l: s["rank90"][l] for l in langs},
            "first": {l: s["first"][l] for l in langs}, "ms0": {l: s["ms0"][l] for l in langs},
+           "ms_mean": {l: s["ms_mean"][l] for l in langs},
            "E": {l: s["E"][l] for l in langs}, "D": {l: s["D"][l] for l in langs}, "C": {l: s["C"][l] for l in langs},
            "tiers": tiers(order, prec, idx), "Ek": {l: s["Ek"][l] for l in langs}}
     out["Dparts"] = s["Dparts"]
@@ -929,7 +938,7 @@ def run_calc(calc, F, fc, footprint, c3, ebs, b3, host, keys):
     s = three(host, [(d, lt) for d, lt, src, miss in pos], footprint, c3, ebs, e_meas=e_meas, patches=patches,
               wmode=wmode, b3=b3ref if r4 else None, measures_only=(calc == "Sur les seules mesures"),
               a1=cor["a1"], a3=cor["a3"], a4=cor["a4"])
-    out = summarize(s)
+    out = summarize(s, by_rank=(calc == OLD))
     out["missing"] = missing
     out["filled"] = {k: [[x[0], " ".join(x[1]).strip(), x[2]] for x in v] for k, v in filled.items()}
     if chosen is not None:
@@ -1044,14 +1053,17 @@ def report(o, calcs):
          + ", ".join(f"passe {k.split('|')[0]} {1e3 * v:.2f} ms" for k, v in sorted(o["b3_groups"].items()))
          + f" ; avec la médiane des 16 décalages (méthode du 23 novembre) : {1e3 * o['b3_median_ref']:.2f} ms.", "",
          "## Classement « Final »", "",
-         "| Rang | Langage | Score | Rang espéré | Rang plausible | Devance le suivant | Plafond | Code par défaut | "
-         "Contrôle |", "|---|---|---|---|---|---|---|---|---|"]
+         "| Rang | Langage | Score | Score au centre | Rang espéré | Rang plausible | Devance le suivant | Plafond | "
+         "Code par défaut | Contrôle |", "|---|---|---|---|---|---|---|---|---|---|"]
     for i, l in enumerate(f["order"]):
         ahead = f["ahead_next"].get(l)
-        L.append(f"| {i + 1} | {NAMES[l]} | {f['ms0'][l]:.1f} | {f['exp'][l]:.2f} | {f['rank90'][l][0]}–"
-                 f"{f['rank90'][l][1]} | {'—' if ahead is None else f'{100 * ahead:.0f} %'} | {f['E'][l]:.1f} | "
-                 f"{f['D'][l]:.1f} | {f['C'][l]:.1f} |")
-    L += ["", "Étages (paires ordonnées dans au moins 95 % des variantes) : "
+        L.append(f"| {i + 1} | {NAMES[l]} | {f['ms_mean'][l]:.1f} | {f['ms0'][l]:.1f} | {f['exp'][l]:.2f} | "
+                 f"{f['rank90'][l][0]}–{f['rank90'][l][1]} | {'—' if ahead is None else f'{100 * ahead:.0f} %'} | "
+                 f"{f['E'][l]:.1f} | {f['D'][l]:.1f} | {f['C'][l]:.1f} |")
+    L += ["", "Score : moyenne du score sur les variantes de l'analyse ; il fixe l'ordre. Score au centre, plafond, "
+          "code par défaut et contrôle : poids et choix principaux, estimation ponctuelle. Rang espéré : rang moyen sur "
+          "les variantes.", "",
+          "Étages (paires ordonnées dans au moins 95 % des variantes) : "
           + " | ".join(", ".join(NAMES[l] for l in t) for t in f["tiers"]), "",
           "## Tous les calculs", "", "| Langage | " + " | ".join(calcs) + " | v3 |",
           "|---|" + "---|" * (len(calcs) + 1)]
@@ -1060,12 +1072,13 @@ def report(o, calcs):
         for c in calcs:
             p = place(R[c], l)
             mark = "" if c == FINAL or abs(p - place(f, l)) <= 2 else " **"
-            cells.append(f"{p}{mark} ({R[c]['exp'][l]:.2f})")
+            cells.append(f"{p}{mark}")
         cells.append(str(o["v3"]["order"].index(l) + 1))
         L.append(f"| {NAMES[l]} | " + " | ".join(cells) + " |")
-    L += ["", "Chaque case : place (rang espéré) ; ** : plus de deux places d'écart avec « Final ». Ordre des lignes : "
+    L += ["", "Chaque case : place dans le calcul ; ** : plus de deux places d'écart avec « Final ». Ordre des lignes : "
           "« Final ». « Sans A1 » à « Sans A4 » : « Final » sans une correction de la v4.1 ; « Méthode du 23 novembre » : "
-          "sans aucune, le classement publié le 23 novembre ; v3 : le classement publié jusqu'au 23 novembre.", "",
+          "sans aucune et classée au rang moyen, le classement publié le 23 novembre ; v3 : le classement publié "
+          "jusqu'au 23 novembre.", "",
           "## Rangs qui bougent de plus de deux places par rapport à « Final »", ""]
     for c in calcs[1:]:
         mv = o["moved_more_than_2"][c]

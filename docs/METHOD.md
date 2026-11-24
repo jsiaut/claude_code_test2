@@ -233,11 +233,13 @@ plus rapide parmi les formes admises.
   agrégation) ; les poids des piliers et ceux des trois tailles (autour de leurs valeurs du centre dans une variante sur
   deux, uniformes sur le simplexe dans l'autre), ceux des noyaux, des parts de D et des catégories de la grille (autour
   de leurs valeurs du centre) ; un bruit de jugement, chaque case jugée changeant de note avec une probabilité de 10 %.
-* **Ce qui est publié.** L'ordre est le **rang moyen** sur les variantes. Le **rang plausible** est l'intervalle des
-  rangs dans 90 % des variantes. « Devance le suivant » est la part des variantes où un langage passe devant celui de
-  la ligne suivante. Le **score** affiché est celui du centre (poids et choix principaux, estimation ponctuelle) : il
-  ne suit pas toujours l'ordre. Les **étages** : une frontière sépare deux langages voisins si chaque langage au-dessus
-  devance chaque langage au-dessous dans au moins 95 % des variantes.
+* **Ce qui est publié.** Le **score** affiché est la moyenne du score sur les variantes, et l'ordre est le sien (à
+  égalité, le rang moyen départage). Jusqu'au 24 novembre, l'ordre était le rang moyen et le score affiché celui du
+  centre, qui ne suivait pas toujours l'ordre ; les deux ordres coïncident pour les 25 langages du classement publié
+  ([`V4_1.md`](V4_1.md), 9). Le **rang plausible** est l'intervalle des rangs dans 90 % des variantes. « Devance le
+  suivant » est la part des variantes où un langage passe devant celui de la ligne suivante. Les piliers sont donnés au
+  centre (poids et choix principaux, estimation ponctuelle). Les **étages** : une frontière sépare deux langages voisins
+  si chaque langage au-dessus devance chaque langage au-dessous dans au moins 95 % des variantes.
 * **Reproductibilité.** Les graines sont fixes : le calcul redonne ses sorties à l'octet près (`tools/check.sh`).
 
 ## 10. Sensibilités publiées
@@ -247,8 +249,8 @@ avec les mêmes tirages : formes publiées seules et code naturel publié à tro
 règle à la fois (sans les tailles, sans R1, sans R2, sans C1, sans R4) ; R1' au lieu de R1 ; une taille seule (petite,
 grande) ; sélection indépendante (la forme de chaque cellule choisie sur la passe 0, estimée sur les passes 1 et 2) ; D3
 et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans une correction de la v4.1 à
-la fois (« Sans A1 » à « Sans A4 ») ; sans aucune (« Méthode du 23 novembre », qui redonne le classement publié ce
-jour-là).
+la fois (« Sans A1 » à « Sans A4 ») ; sans aucune et classé au rang moyen (« Méthode du 23 novembre », qui redonne le
+classement publié ce jour-là).
 
 ## 11. Vérifier, recalculer, remesurer
 

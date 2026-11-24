@@ -37,7 +37,7 @@ La première commande lit un fichier de l'archive, la seconde le remet dans l'ar
 | 22 novembre | Point 6 : une piste ouverte aux bibliothèques tierces | rien : publiée à côté du classement | `docs/V4_OPEN.md` |
 | 22 et 23 novembre | Campagne finale : le classement de la v4 | — | [`V4_FINAL.md`](V4_FINAL.md), gardé dans le dépôt |
 | 24 novembre | Nettoyage du dépôt, sans changement de chiffre | [`METHOD.md`](METHOD.md), `tools/check.sh` | ce document |
-| 24 novembre | v4.1 : quatre corrections de l'analyse, sans mesure nouvelle | A1 à A4 | [`V4_1.md`](V4_1.md), gardé dans le dépôt |
+| 24 novembre | v4.1 : quatre corrections de l'analyse, sans mesure nouvelle | A1 à A4 ; ordre publié : le score moyen des variantes, qui est aussi le score affiché | [`V4_1.md`](V4_1.md), gardé dans le dépôt |
 
 Le classement de la v3 a été publié du 30 octobre au 23 novembre, avec ses notes et ses errata
 (`docs/RANKING_V3.md`, `results/report_v3.md`).
