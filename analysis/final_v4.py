@@ -1,20 +1,28 @@
 #!/usr/bin/env python3
-"""v4, campagne finale : le classement de la v4 (docs/V4_FINAL.md, section 8, fixée avant les mesures).
+"""Le classement de la v4 : calcul complet, de results/final/raw à results/report_final.md.
 
-La méthode v3 (même graine, 20 000 variantes, même rééchantillonnage, mêmes tirages des poids, des normalisations et du
-jugement de la grille) sur les seules données de la campagne finale (results/final/raw, tools/final/campaign.py), avec
-les bornes physiques des machines qui ont mesuré (médiane, quantité par quantité, de leurs caractérisations :
-results/hw/machine<N>). Un moteur unique (three) calcule tous les calculs à partir des trois positions de taille du
-point 2 (petite, publiée, grande ; pour K5 : 2^11, 2^15, 2^21) : chaque cellule du plafond et du code par défaut est
-calculée à chaque position avec ses propres références, puis moyennée en logarithme avec les poids des tailles (calcul
-« Final » : égaux au centre, tirés dans les variantes ; une taille seule : poids 1 à cette position). Les tirages des
-variantes (configuration, rééchantillonnage, poids, jugement de la grille) viennent du même générateur, avancé de la
-même façon pour tous les calculs : ils sont identiques d'un calcul à l'autre.
+Méthode : docs/METHOD.md ; plan fixé avant les mesures : docs/V4_FINAL.md, section 8. Ce module est autonome : il lit
+les mesures de la campagne (results/final/raw, tools/final/campaign.py), b3 (results/final/b3.jsonl), les bornes
+physiques des machines qui ont mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json),
+l'empreinte de K1 (results/footprint.json), la vectorisation mesurée de la règle v1 (results/vectorization.json) et la
+grille de contrôle (analysis/capabilities.py, analysis/capabilities_v2.py).
 
-Calcul « Final » (section 8) :
-* plafond : à chaque taille, chaque cellule prend la meilleure forme admise (C1 : variantes publiées et formes du relevé
-  results/converge/forms.json, écrites dans la copie _cv ou présentes dans la base), la variante naturelle y entrant
-  dans son mode R1 (huit langages) et, pour K9, sous sa forme contiguë (R2, treize langages ; mode R1 pour C++ et D) ;
+Score d'un langage (sur 100) : 0,35 x contrôle (C) + 0,40 x plafond (E) + 0,25 x code par défaut (D).
+* Plafond : moyenne géométrique sur huit noyaux (K1, K3 à K9) du rapport de la référence au meilleur temps du langage ;
+  la référence est le meilleur des 25 langages (ou, dans une variante sur deux, la borne physique de la machine). Sept
+  noyaux comptent à trois tailles (positions petite, publiée, grande ; pour K5 : 2^11, 2^15, 2^21) : chaque cellule est
+  calculée à chaque position avec ses propres références, puis moyennée en logarithme avec les poids des tailles.
+* Code par défaut : D1 (code naturel rapporté à la même référence), D2 (empreinte et désordre de K1), D3 (queues de
+  latence de K8 naturel), D4 (chaîne de pointeurs de K2), pondérés 0,5 / 0,15 / 0,15 / 0,2.
+* Contrôle : grille de 34 capacités notées 0, 1/2 ou 1.
+Ordre publié : rang moyen sur 20 000 variantes qui tirent la configuration (estimateur, normalisations, règle de la
+grille, agrégation), le rééchantillonnage des mesures, les poids (piliers, noyaux, parts de D, catégories de la grille,
+tailles) et un bruit de jugement sur chaque case de la grille.
+
+Calcul « Final » (docs/V4_FINAL.md, 8) :
+* plafond : à chaque taille, chaque cellule prend la meilleure forme admise (C1 : variantes publiées et formes du
+  relevé, écrites dans la copie _cv ou présentes dans la base), la variante naturelle y entrant dans son mode R1 (huit
+  langages) et, pour K9, sous sa forme contiguë (R2, treize langages ; mode R1 pour C++ et D) ;
 * K3 (R4) : chaque processus de K3 est ramené au b3 de référence (moyenne de toutes les mesures de b3) par le rapport
   t x b3 / b3 de son groupe (moyenne des mesures faites juste avant et juste après le groupe de K3 de sa passe, sur sa
   machine) ; les temps sont relevés à b3 au moins et la référence de K3 vaut b3 : la cellule vaut min(1, b3 / t) ;
@@ -22,59 +30,162 @@ Calcul « Final » (section 8) :
   à trois tailles ; D4 (K2, sept processus) à sa taille ; empreinte de K1 et grille inchangées ;
 * chaque cellule nouvelle (forme absente de la base) est tirée par son propre générateur (graine fixée par la clé, le
   langage et la position), dans les réservoirs de résidus de son noyau bâtis sur la base de la position ;
-* cellule manquante de la base : temps admissible le plus lent des autres langages (variantes communes ; point 2) ;
-  forme manquante : absente de son ensemble, signalée.
-Sensibilités et décomposition (section 8, 1 à 6) : Base, trois tailles ; sans les tailles (taille publiée seule, qui
-est aussi « une taille à la fois : publiée »), sans R1, sans R2, sans C1, sans R4 ; R1' au lieu de R1 ; une taille à la
-fois (petite, grande) ; sélection indépendante ; D3 et D4 sur trois processus. Comparaisons : classement publié (tête
-du README, results/audit3.json) et « Convergent, avec R4 » du point 4 (results/converge/analysis.json).
-Sorties : results/final/analysis.json, results/report_final.md. Variables : BOOT (2000), UA (20000), FINAL_RAW (données
-d'essai), FINAL_OUT (répertoire de sortie d'essai)."""
+* cellule manquante de la base : temps admissible le plus lent des autres langages (variantes communes) ; forme
+  manquante : absente de son ensemble, signalée.
+Sensibilités (CALCS) : Base, trois tailles ; sans les tailles, sans R1, sans R2, sans C1, sans R4 ; R1' au lieu de R1 ;
+une taille à la fois ; sélection indépendante ; D3 et D4 sur trois processus ; sur les seules mesures. Les tirages des
+variantes viennent du même générateur, avancé de la même façon pour tous les calculs : ils sont identiques d'un calcul
+à l'autre. Comparaisons : classement de la v3 et « Convergent, avec R4 » du point 4 (results/final/comparisons.json).
+
+Sorties : results/final/analysis.json, results/report_final.md. Variables : BOOT (2000 rééchantillonnages), UA (20 000
+variantes), FINAL_RAW (autres données), FINAL_OUT (autre répertoire de sortie). Contrôle : tools/check.sh."""
 import copy, glob, importlib.util, json, math, os, re, sys, zlib
 from collections import defaultdict
 
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
-import sizes_v4 as SZ  # noqa: E402  (positions, bornes, résumé d'un calcul, cellules manquantes)
-import converge_v4 as CV  # noqa: E402  (relevé des formes, cellules du plafond)
-import analyze_v2 as v2  # noqa: E402
-import analyze_v3 as v3  # noqa: E402
-from analyze_v2 import RANKED, ROOT, NAMES, CATEGORIES, c_cells, c_score, c_vector, ranks_of, dirichlet  # noqa: E402
-from analyze_v3 import (Arrays3, build_pools, needed_keys, references, MAIN, K1N, K1S, K2_SIZES, K8N, E_V2,  # noqa: E402
-                        proc_logs, klass)
+from capabilities import MATRIX, CATEGORIES, M  # noqa: E402
+from capabilities_v2 import V2_OVERRIDES, V2_DROP  # noqa: E402
 
 _spec = importlib.util.spec_from_file_location("fbuild", os.path.join(ROOT, "tools", "final", "build.py"))
-FB = importlib.util.module_from_spec(_spec)
+FB = importlib.util.module_from_spec(_spec)  # langages de chaque mode (R1, R1') : une seule liste, celle du pilote
 _spec.loader.exec_module(FB)
 
-B = int(os.environ.get("BOOT", "2000"))
-U = int(os.environ.get("UA", "20000"))
-FIN = os.path.join(ROOT, "results", "final")
-RAW = os.environ.get("FINAL_RAW", os.path.join(FIN, "raw"))
-B3F = os.path.join(os.path.dirname(RAW), "b3.jsonl")
-OUTD = os.environ.get("FINAL_OUT", FIN)
-OUT = os.path.join(OUTD, "analysis.json")
-REPORT = os.path.join(OUTD, "report_final.md") if "FINAL_OUT" in os.environ else os.path.join(ROOT, "results",
-                                                                                               "report_final.md")
+# ------------------------------------------------------------------ protocole
+# Ordre fixe des langages : les tirages en dépendent (les quatre derniers ont été ajoutés en cours d'étude).
+RANKED = ["c", "cpp", "csharp", "java", "zig", "odin", "julia", "ada", "fortran", "js", "python", "haskell",
+          "c3", "d", "rust", "chapel", "nim", "mojo", "go", "ocaml", "lua", "swift", "fpc", "bqn", "php"]
 LANGS = list(RANKED)
-SIZED, POS, POS_NAMES = SZ.SIZED, SZ.POS, SZ.POS_NAMES
+NAMES = {"c": "C", "cpp": "C++", "csharp": "C#", "java": "Java", "zig": "Zig", "odin": "Odin", "julia": "Julia",
+         "ada": "Ada", "fortran": "Fortran", "js": "JavaScript", "python": "Python", "haskell": "Haskell", "c3": "C3",
+         "d": "D", "rust": "Rust", "chapel": "Chapel", "nim": "Nim", "mojo": "Mojo", "go": "Go", "ocaml": "OCaml",
+         "lua": "Lua", "swift": "Swift", "fpc": "FreePascal", "bqn": "BQN", "php": "PHP"}
+# Plafond : par noyau, ses mesures ; chaque mesure est la liste des clés (noyau, variante, paramètre) admissibles,
+# dont le langage prend la plus rapide. Les formes du relevé s'y ajoutent (e_meas_with).
+E_V2 = {
+    "k1": [[("k1", "aos", "energy"), ("k1", "soa", "energy")]],
+    "k3": [[("k3", "sw_padded", ""), ("k3", "rmw_padded", "")]],
+    "k4": [[("k4", "natural_unsorted", ""), ("k4", "branchless_unsorted", "")]],
+    "k5": [[("k5", "natural", ""), ("k5", "tuned", "")]],
+    "k6": [[("k6", "natural", "q6"), ("k6", "tuned", "q6")], [("k6", "natural", "q1"), ("k6", "tuned", "q1")],
+           [("k6", "mt", "q6")], [("k6", "mt", "q1")]],
+    "k7": [[("k7", "natural", ""), ("k7", "tuned", "")]],
+    "k8": [[("k8", "natural", ""), ("k8", "tuned", ""), ("k8", "tuned_alloc", "")]],
+    "k9": [[("k9", "natural", ""), ("k9", "tuned", "")], [("k9", "mt", "")]],
+}
+# Code naturel (D1) : par noyau, (indice de la mesure du plafond qui sert de référence, clés naturelles).
+D1_V2 = {
+    "k1": [(0, [("k1", "natural", "energy")])], "k4": [(0, [("k4", "natural_unsorted", "")])],
+    "k5": [(0, [("k5", "natural", "")])], "k6": [(0, [("k6", "natural", "q6")]), (1, [("k6", "natural", "q1")])],
+    "k7": [(0, [("k7", "natural", "")])], "k8": [(0, [("k8", "natural", "")])], "k9": [(0, [("k9", "natural", "")])],
+}
+K2_SIZES = ["16384", "262144", "8388608"]
+K1N, K1S = ("k1", "natural", "energy"), ("k1", "natural_shuffled", "energy")
+K8N = ("k8", "natural", "")
 NAT_KEYS = [K1N, K1S, ("k4", "natural_unsorted", ""), ("k5", "natural", ""), ("k6", "natural", "q6"),
             ("k6", "natural", "q1"), ("k7", "natural", ""), K8N, ("k9", "natural", "")]
 K9N, K9F = ("k9", "natural", ""), ("k9", "natural_flat", "")
 K3K = [("k3", "sw_padded", ""), ("k3", "rmw_padded", "")]
-K2K = [("k2", "tuned", s) for s in K2_SIZES]
-CEIL = CV.CEIL
-NEW_SEED = v3.SEED + 4500  # générateurs des cellules nouvelles (complétés par la clé, le langage et la position)
-SEL_SEED = v3.SEED + 4501  # générateurs des cellules de la sélection indépendante
+# cellule du plafond du relevé des formes -> (noyau, rang de la mesure dans E_V2)
+CEIL = {"K4": ("k4", 0), "K5": ("k5", 0), "Q6": ("k6", 0), "Q1": ("k6", 1), "Q6 mt": ("k6", 2), "Q1 mt": ("k6", 3),
+        "K7": ("k7", 0), "K8": ("k8", 0), "K9": ("k9", 0), "K9 mt": ("k9", 1)}
+# noyaux à trois tailles ; taille de chaque noyau aux positions petite, publiée, grande (tools/sizes/sizes.py)
+SIZED = ["k1", "k4", "k5", "k6", "k7", "k8", "k9"]
+POS = {k: ["small", "pub", "large"] for k in SIZED}
+POS["k5"] = ["pub", "l2", "l3"]
+POS_NAMES = ["petite", "publiée", "grande"]
+PARAMS = {"k1": {"small": 1 << 14, "pub": 1 << 22, "large": 1 << 24},
+          "k4": {"small": 1 << 20, "pub": 1 << 24, "large": 1 << 28},
+          "k5": {"pub": (2048, 1 << 16), "l2": (1 << 15, 1 << 12), "l3": (1 << 21, 1 << 6)},
+          "k6": {"small": 1 << 16, "pub": 1 << 24, "large": 1 << 26},
+          "k9": {"small": 1 << 8, "pub": 1 << 11, "large": 1 << 13}}
+WEIGHTS = {"C": 0.35, "E": 0.40, "D": 0.25}
+DW = {"D1": 0.5, "D2": 0.15, "D3": 0.15, "D4": 0.2}
+# configuration du centre ; dans les variantes, chaque choix est tiré parmi les deux de OPTS
+MAIN = {"est": "mean", "enorm": "frontier", "d3": "abs", "d4": "best", "d1ref": "tstar", "agg": "arith", "crule": "v2"}
+OPTS = {"est": ["mean", "min"], "enorm": ["frontier", "bounds"], "d3": ["abs", "rel"], "d4": ["best", "c"],
+        "d1ref": ["tstar", "best_natural"], "agg": ["arith", "geo"], "crule": ["v2", "v1"]}
+JIT = {"java", "csharp", "js", "julia", "bqn", "php"}  # classes d'implémentation des réservoirs de résidus
+INTERP = {"python", "lua"}
+
+B = int(os.environ.get("BOOT", "2000"))
+U = int(os.environ.get("UA", "20000"))
+SEED = 20261029 + 3
+NEW_SEED = SEED + 4500  # générateurs des cellules nouvelles (complétés par la clé, le langage et la position)
+SEL_SEED = SEED + 4501  # générateurs des cellules de la sélection indépendante
+FIN = os.path.join(ROOT, "results", "final")
+RAW = os.environ.get("FINAL_RAW", os.path.join(FIN, "raw"))
+B3F = os.path.join(os.path.dirname(RAW), "b3.jsonl")
+FORMS = os.path.join(ROOT, "results", "converge", "forms.json")
+OUTD = os.environ.get("FINAL_OUT", FIN)
+OUT = os.path.join(OUTD, "analysis.json")
+REPORT = os.path.join(OUTD, "report_final.md") if "FINAL_OUT" in os.environ else os.path.join(ROOT, "results",
+                                                                                               "report_final.md")
 FINAL = "Final"
 CALCS = [FINAL, "Base, trois tailles", "Sans les tailles (taille publiée seule)", "Sans R1", "Sans R2", "Sans C1",
          "Sans R4", "R1' au lieu de R1", "Taille petite", "Taille grande", "Sélection indépendante",
          "D3 et D4 sur trois processus", "Sur les seules mesures"]
 
 
-# ------------------------------------------------------------------ données
+def klass(l):
+    return "interp" if l in INTERP else ("jit" if l in JIT else "aot")
+
+
+def needed_keys(e_meas=E_V2, d1_meas=D1_V2):
+    """Cellules du score : celles du plafond et du code naturel, K1 naturel (dans l'ordre et mélangé) et K2."""
+    keys = set()
+    for ms in e_meas.values():
+        for ks in ms:
+            keys.update(ks)
+    for lst in d1_meas.values():
+        for _, ks in lst:
+            keys.update(ks)
+    keys.update([K1N, K1S] + [("k2", "tuned", s) for s in K2_SIZES])
+    return keys
+
+
+# ------------------------------------------------------------------ grille de contrôle (pilier C)
+def c_cells(rule, c3, rng=None, noise=0.0):
+    """Valeurs des cases par langage : {langage: {capacité: valeur}} (C3 retirée en règle v2). Avec rng, chaque case
+    jugée change de note avec la probabilité noise (bruit de jugement)."""
+    out = {}
+    for l in RANKED:
+        cells = {}
+        for cat, (_, caps) in CATEGORIES.items():
+            for cap in caps:
+                if rule == "v2" and cap in V2_DROP:
+                    continue
+                v = MATRIX[l][cap]
+                if v == M:
+                    cells[cap] = c3.get(l, 0)  # mesurée : pas de bruit de jugement
+                    continue
+                v = V2_OVERRIDES[(l, cap)][0] if rule == "v2" and (l, cap) in V2_OVERRIDES else v[0]
+                if rng is not None and rng.random() < noise:
+                    v = 0.5 if v in (0, 1) else (0.0 if rng.random() < 0.5 else 1.0)
+                cells[cap] = v
+        out[l] = cells
+    return out
+
+
+def c_score(cells, catw):
+    res = {}
+    for l, cs in cells.items():
+        tot = 0.0
+        for cat, (_, caps) in CATEGORIES.items():
+            vals = [cs[c] for c in caps if c in cs]
+            tot += catw[cat] * sum(vals) / len(vals)
+        res[l] = 100 * tot
+    return res
+
+
+def c_vector(cdict, langs):
+    return np.array([cdict[l] for l in langs])
+
+
+# ------------------------------------------------------------------ données de la campagne
 class Data:
     """Mesures de la campagne : data[(construction, taille)][langage][clé] = [[médiane d'un processus]] ; pour chaque
     processus aussi sa passe et sa copie (bypass), et les latences de K8 naturel (lat)."""
@@ -92,6 +203,8 @@ class Data:
 
 
 def load():
+    """Un processus est retenu s'il a fini sans erreur, sans dépassement de mémoire ni de durée, et si toutes ses
+    sommes de contrôle sont justes ; il est représenté par la médiane de ses répétitions."""
     F = Data()
     for f in sorted(glob.glob(os.path.join(RAW, "*.jsonl"))):
         for line in open(f):
@@ -152,17 +265,79 @@ def k3_normalized(F, b3ref, b3g):
     return out
 
 
+def forms_cells(langs):
+    """{langage: [(construction, clé, cellule du plafond, forme, remarque)]} des formes écrites ou présentes du relevé
+    (results/converge/forms.json, tools/converge/inventory.py)."""
+    js = json.load(open(FORMS))["langs"]
+    out = {}
+    for l in langs:
+        rows = []
+        for form, x in sorted(js.get(l, {}).items()):
+            if x["status"] not in ("écrite", "présente"):
+                continue
+            for c in x["cells"]:
+                key = tuple(c)
+                rows.append(("cv" if x["status"] == "écrite" else "pub", key, x["ceiling"], form, bool(x["remarque"])))
+        out[l] = rows
+    return out
+
+
+def campaign_keys(data):
+    keys = set()
+    for dl in data.values():
+        for keys_l in dl.values():
+            keys.update(keys_l)
+    return keys
+
+
+def fill_missing(d, langs, keys):
+    """Une cellule manquante (hors mémoire, durée) prend le temps admissible le plus lent des autres langages. Seules
+    les variantes communes à tous les langages (tools/driver.py, PLAN) sont concernées : une variante propre à un
+    langage n'existe pas pour les autres, qui ne la reçoivent pas. Et seules les cellules du score (needed_keys)."""
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    from driver import PLAN
+    common = {(k, v, q) for k, lst in PLAN.items() for v, q in lst} & needed_keys()
+    filled = []
+    for key in sorted(k for k in keys if k in common):
+        have = [l for l in langs if d.get(l, {}).get(key)]
+        if not have or len(have) == len(langs):
+            continue
+        slow = max(have, key=lambda l: np.mean(np.log([np.median(p) for p in d[l][key]])))
+        for l in langs:
+            if not d.get(l, {}).get(key):
+                d[l][key] = [list(p) for p in d[slow][key]]
+                filled.append((l, key, slow))
+    return filled
+
+
+# ------------------------------------------------------------------ bornes physiques des machines
+def hw_numbers(path):
+    """Caractérisation d'une machine (tools/sizes/hwchar.sh, tools/hwprobe.c) : bande passante en lecture sur 1 thread
+    selon la taille (bw), STREAM triad sur 4 threads, pic FMA et fréquence."""
+    bw = []
+    for line in open(os.path.join(path, "bw.txt")):
+        m = re.match(r"bw:\s+(\d+) KiB\s+([\d.]+) GB/s", line)
+        if m:
+            bw.append((int(m.group(1)) * 1024, float(m.group(2)) * 1e9))
+    stream4 = []
+    for line in open(os.path.join(path, "stream.txt")):
+        m = re.search(r"stream: T=(\d)\s+(\w+)\s+([\d.]+) GB/s", line)
+        if m and m.group(1) == "4" and m.group(2) == "triad":  # triad : la figure de mérite de STREAM
+            stream4.append(float(m.group(3)) * 1e9)
+    peak = []
+    for line in open(os.path.join(path, "peak.txt")):
+        m = re.search(r"([\d.]+) GFLOP/s", line)
+        if m:
+            peak.append(float(m.group(1)) * 1e9)
+    freq = [float(m.group(1)) * 1e9 for line in open(os.path.join(path, "freq.txt"))
+            for m in [re.search(r"freq: ([\d.]+) GHz", line)] if m]
+    return {"bw": sorted(bw), "stream4": max(stream4), "peak": max(peak), "freq": max(freq)}
+
+
 def machines_hw(F):
     """Bornes physiques : médiane, quantité par quantité, des caractérisations des machines qui ont mesuré."""
     ms = sorted({m for v in F.machines.values() for m in v if m is not None}, key=lambda x: int(x))
-    hws = []
-    for m in ms:
-        saved = SZ.HW
-        SZ.HW = os.path.join(ROOT, "results", "hw", f"machine{m}")
-        try:
-            hws.append(SZ.hw_numbers())
-        finally:
-            SZ.HW = saved
+    hws = [hw_numbers(os.path.join(ROOT, "results", "hw", f"machine{m}")) for m in ms]
     if not hws:
         raise SystemExit("aucune machine dans les enregistrements")
     sizes = sorted(set.intersection(*[{s for s, _ in h["bw"]} for h in hws]))
@@ -171,6 +346,242 @@ def machines_hw(F):
     for q in ("stream4", "peak", "freq"):
         hw[q] = float(np.median([h[q] for h in hws]))
     return hw, ms
+
+
+def bw1(hw, size):
+    """Bande passante sur 1 thread du plus petit volume mesuré qui contient size (le plus grand volume au-delà)."""
+    for s, b in hw["bw"]:
+        if s >= size:
+            return b
+    return hw["bw"][-1][1]
+
+
+def bw4(hw, size):
+    """Sur 4 threads : 4 fois la bande passante d'un quart du volume tant que ce quart tient dans le L2 d'un cœur
+    (2 Mio), STREAM sur 4 threads au-delà."""
+    return 4 * bw1(hw, size / 4) if size / 4 <= 2 << 20 else hw["stream4"]
+
+
+def ebounds(hw, pos):
+    """Bornes physiques des mesures du plafond, à la taille de la position : octets à déplacer sur la bande passante
+    du niveau de mémoire où ils tiennent, opérations sur le débit crête, incréments sur la fréquence."""
+    n1, n4 = PARAMS["k1"][POS["k1"][pos]], PARAMS["k4"][POS["k4"][pos]]
+    n5, inner5 = PARAMS["k5"][POS["k5"][pos]]
+    n6, m9 = PARAMS["k6"][POS["k6"][pos]], PARAMS["k9"][POS["k9"][pos]]
+    g9 = 2 * 8 * m9 * m9
+    return {
+        ("k1", 0): 16 * n1 / bw1(hw, 16 * n1),
+        ("k3", 0): 2 ** 25 * 5 / hw["freq"],
+        ("k4", 0): n4 / bw1(hw, n4),
+        # K5 : calcul seul dans le L1 (2 x 2 x n x INNER / pic) ; au-delà, aussi la bande passante
+        ("k5", 0): max(4 * n5 * inner5 / hw["peak"], 0 if 8 * n5 <= 48 << 10 else 8 * n5 * inner5 / bw1(hw, 8 * n5)),
+        ("k6", 0): 10 * n6 / bw1(hw, 10 * n6), ("k6", 1): 13 * n6 / bw1(hw, 13 * n6),
+        ("k6", 2): 10 * n6 / bw4(hw, 10 * n6), ("k6", 3): 13 * n6 / bw4(hw, 13 * n6),
+        ("k9", 0): 4 * g9 / bw1(hw, g9), ("k9", 1): 4 * g9 / bw4(hw, g9),
+    }
+
+
+# ------------------------------------------------------------------ estimations et rééchantillonnage
+def proc_logs(procs):
+    return np.log(np.array([np.median(p) for p in procs], float))
+
+
+def build_pools(data, langs, keys):
+    """Réservoirs de résidus par (noyau, classe), fusionnés avec le noyau s'ils ont moins de 20 résidus."""
+    pools, kpool = defaultdict(list), defaultdict(list)
+    for l in langs:
+        for key in sorted(keys):  # ordre fixe : l'ordre d'un ensemble change d'un processus à l'autre
+            procs = data.get(l, {}).get(key)
+            if not procs or len(procs) < 2:
+                continue
+            y = proc_logs(procs)
+            P = len(y)
+            r = (y - y.mean()) * math.sqrt(P / (P - 1))
+            pools[(key[0], klass(l))].extend(r.tolist())
+            kpool[key[0]].extend(r.tolist())
+    out = {}
+    for k in kpool:
+        for c in ("aot", "jit", "interp"):
+            pl = pools.get((k, c), [])
+            out[(k, c)] = np.array(pl if len(pl) >= 20 else kpool[k], float)
+    return out
+
+
+def lat_rows(lprocs, nb, rng):
+    """D3 : médianes, sur toutes les répétitions, de p50, p99,9 et max (ligne 0) ; rééchantillonnage des processus puis
+    des répétitions (lignes 1..nb). Renvoie un tableau (nb + 1, 3)."""
+    arrs = [np.asarray(p, float) for p in lprocs if len(p)]
+    out = np.empty((nb + 1, 3))
+    allr = np.vstack(arrs)
+    out[0] = np.median(allr[:, [0, 3, 4]], axis=0)
+    for b in range(1, nb + 1):
+        pick = rng.integers(0, len(arrs), size=len(arrs))
+        rows = np.vstack([arrs[j][rng.integers(0, len(arrs[j]), size=len(arrs[j]))] for j in pick])
+        out[b] = np.median(rows[:, [0, 3, 4]], axis=0)
+    return out
+
+
+class Arrays3:
+    """Temps simulés par cellule : ligne 0 = estimation ponctuelle, lignes 1..nb = tirages à résidus regroupés.
+    Deux estimateurs : 'mean' (moyenne des logarithmes des médianes de processus) et 'min' (minimum des médianes)."""
+
+    def __init__(self, data, lat, langs, nb, rng, pools, e_meas=E_V2, d1_meas=D1_V2):
+        self.langs, self.nb, self.e_meas, self.d1_meas = langs, nb, e_meas, d1_meas
+        self.idx = {l: i for i, l in enumerate(langs)}
+        self.ranked = np.array([self.idx[l] for l in RANKED if l in self.idx])
+        self.t = {}
+        for key in sorted(needed_keys(e_meas, d1_meas)):
+            mean = np.full((nb + 1, len(langs)), np.nan)
+            mn = np.full((nb + 1, len(langs)), np.nan)
+            for l in langs:
+                procs = data.get(l, {}).get(key)
+                if not procs:
+                    continue
+                y = proc_logs(procs)
+                j = self.idx[l]
+                mean[0, j], mn[0, j] = math.exp(y.mean()), math.exp(y.min())
+                if nb:
+                    pool = pools[(key[0], klass(l))]
+                    draws = y.mean() + pool[rng.integers(0, len(pool), size=(nb, len(y)))]
+                    mean[1:, j], mn[1:, j] = np.exp(draws.mean(axis=1)), np.exp(draws.min(axis=1))
+            self.t[("mean", key)], self.t[("min", key)] = mean, mn
+        self.lat = np.full((nb + 1, len(langs), 3), np.nan)
+        for l in langs:
+            lp = lat.get(l, {}).get(K8N)
+            if lp and any(len(p) for p in lp):
+                self.lat[:, self.idx[l], :] = lat_rows(lp, nb, rng)
+
+    def dt(self, est, key, r):
+        return self.t[(est, key)][r]
+
+    def best(self, est, keys, r):
+        """Meilleur temps parmi les clés admissibles (NaN si aucune)."""
+        arr = np.vstack([self.t[(est, k)][r] for k in keys])
+        with np.errstate(all="ignore"):
+            out = np.nanmin(np.where(np.isnan(arr), np.inf, arr), axis=0)
+        out[np.isinf(out)] = np.nan
+        return out
+
+
+def references(A, est):
+    """Références fixes, calculées sur la ligne 0 (estimations ponctuelles) : frontière de chaque mesure du plafond
+    (tstar) et du code naturel (nat), K2 (meilleur langage, et C), latences de K8 (absolues, relatives à p50)."""
+    rk = A.ranked
+    ref = {"tstar": {}, "nat": {}, "k2_best": {}, "k2_c": {}}
+    with np.errstate(all="ignore"):
+        for k, ms in A.e_meas.items():
+            for i, ks in enumerate(ms):
+                ref["tstar"][(k, i)] = float(np.nanmin(A.best(est, ks, 0)[rk]))
+        for k, lst in A.d1_meas.items():
+            for i, ks in lst:
+                ref["nat"][(k, i)] = float(np.nanmin(A.best(est, ks, 0)[rk]))
+        for s in K2_SIZES:
+            t = A.dt(est, ("k2", "tuned", s), 0)
+            ref["k2_best"][s] = float(np.nanmin(t[rk]))
+            ref["k2_c"][s] = float(t[A.idx["c"]])
+        p50, p999, mx = A.lat[0, :, 0], A.lat[0, :, 1], A.lat[0, :, 2]
+        ref["d3_abs"] = (float(np.nanmin(p999[rk])), float(np.nanmin(mx[rk])))
+        ref["d3_rel"] = (float(np.nanmin((p999 / p50)[rk])), float(np.nanmin((mx / p50)[rk])))
+    return ref
+
+
+# ------------------------------------------------------------------ score
+def scores(As, r, cfg, C, footprint, refs, ebs, wS, wE=None, wD=None, wP=None):
+    """Piliers et score de tous les langages pour la ligne r des tableaux (0 : estimation ponctuelle) et la
+    configuration cfg. Chaque cellule de E, de D1, de D2 (part de K1) et de D3 est calculée à chaque position avec ses
+    propres références puis moyennée en logarithme avec les poids wS ; K3 et D4 (une seule taille) sont pris à la
+    position publiée."""
+    est = cfg["est"]
+    A1 = As[1]
+    kernels = list(A1.e_meas)
+    wE = wE or {k: 1 / len(kernels) for k in kernels}
+    wD, wP = wD or DW, wP or WEIGHTS
+    pos_of = lambda k: range(3) if k in SIZED else [1]  # noqa: E731
+    wpos = lambda k, p: wS[p] if k in SIZED else 1.0  # noqa: E731
+    n = len(A1.langs)
+    lnE, ek = np.zeros(n), {}
+    with np.errstate(all="ignore"):
+        for k, ms in A1.e_meas.items():
+            lr = []
+            for i, ks in enumerate(ms):
+                cell = np.zeros(n)
+                for p in pos_of(k):
+                    t = As[p].best(est, ks, r)
+                    if cfg["enorm"] == "bounds" and (k, i) in ebs[p]:
+                        v = np.log(np.minimum(1.0, ebs[p][(k, i)] / t))
+                    else:
+                        v = np.log(refs[p][est]["tstar"][(k, i)] / t)
+                    cell = cell + wpos(k, p) * v
+                lr.append(cell)
+            ek[k] = np.mean(lr, axis=0)
+            lnE += wE[k] * ek[k]
+        E = 100 * np.exp(lnE)
+        d1k = []
+        for k, lst in A1.d1_meas.items():
+            lr = []
+            for i, ks in lst:
+                cell = np.zeros(n)
+                for p in pos_of(k):
+                    ref = refs[p][est]
+                    t = As[p].best(est, ks, r)
+                    cell = cell + wpos(k, p) * np.log((ref["tstar"][(k, i)] if cfg["d1ref"] == "tstar" else ref["nat"][(k, i)]) / t)
+                lr.append(cell)
+            d1k.append(np.mean(lr, axis=0))
+        D1 = np.exp(np.mean(d1k, axis=0))
+        a = np.array([min(1.0, 64.0 / footprint[l]) if footprint.get(l) else np.nan for l in A1.langs])
+        lbb = sum(wS[p] * np.log(np.minimum(1.0, As[p].dt(est, K1N, r) / As[p].dt(est, K1S, r))) for p in range(3))
+        bb = np.exp(lbb)
+        D2 = np.where(np.isnan(a), bb, np.sqrt(a * bb))
+        l3 = np.zeros(n)
+        for p in range(3):
+            ref = refs[p][est]
+            p50, p999, mx = As[p].lat[r, :, 0], As[p].lat[r, :, 1], As[p].lat[r, :, 2]
+            if cfg["d3"] == "abs":
+                d3 = np.sqrt((ref["d3_abs"][0] / p999) * (ref["d3_abs"][1] / mx))
+            else:
+                d3 = np.sqrt((ref["d3_rel"][0] / (p999 / p50)) * (ref["d3_rel"][1] / (mx / p50)))
+            l3 = l3 + wS[p] * np.log(d3)
+        D3 = np.exp(l3)
+        l4 = []
+        ref1 = refs[1][est]
+        for s in K2_SIZES:
+            t = A1.dt(est, ("k2", "tuned", s), r)
+            refv = ref1["k2_best"][s] if cfg["d4"] == "best" else ref1["k2_c"][s]
+            l4.append(np.log(np.minimum(1.0, refv / t)))
+        D4 = np.exp(np.mean(l4, axis=0))
+        D = 100 * (wD["D1"] * D1 + wD["D2"] * D2 + wD["D3"] * D3 + wD["D4"] * D4)
+        if cfg["agg"] == "arith":
+            MS = wP["C"] * C + wP["E"] * E + wP["D"] * D
+        else:
+            MS = np.exp(wP["C"] * np.log(C) + wP["E"] * np.log(E) + wP["D"] * np.log(D))
+    return {"E": E, "D": D, "MS": MS, "D1": D1, "D2": D2, "D3": D3, "D4": D4, "Ek": {k: np.exp(v) for k, v in ek.items()}}
+
+
+def ranks_of(ms_ranked):
+    """Rang (1 = meilleur) de chaque langage classé ; NaN en dernier."""
+    order = np.argsort(-np.nan_to_num(ms_ranked, nan=-1e9), kind="stable")
+    rk = np.empty(len(ms_ranked), int)
+    rk[order] = np.arange(1, len(ms_ranked) + 1)
+    return rk
+
+
+def dirichlet(rng, alpha):
+    g = rng.gamma(np.asarray(alpha, float))
+    return g / g.sum()
+
+
+def tiers(order, prec, idx, level=0.95):
+    """Étages : frontière entre i et i + 1 si toutes les paires de part et d'autre sont ordonnées dans au moins level
+    des variantes."""
+    cuts = [i for i in range(1, len(order))
+            if all(prec[idx[a], idx[b]] >= level for a in order[:i] for b in order[i:])]
+    bounds = [0] + cuts + [len(order)]
+    return [order[bounds[j]:bounds[j + 1]] for j in range(len(bounds) - 1)]
+
+
+def moved(a, b, langs):
+    """Langages dont la place change de plus de deux entre deux ordres : {langage: (place dans a, place dans b)}."""
+    return {l: (a.index(l) + 1, b.index(l) + 1) for l in langs if abs(a.index(l) - b.index(l)) > 2}
 
 
 # ------------------------------------------------------------------ données d'une position et d'un calcul
@@ -271,6 +682,8 @@ def additions(F, fc, p, d):
 
 
 def e_meas_with(keys_ceil):
+    """E_V2 (même ordre des noyaux et des mesures : les poids tirés ne changent pas), chaque clé nouvelle ajoutée à la
+    mesure de sa cellule du plafond."""
     e = copy.deepcopy(E_V2)
     for key in sorted(keys_ceil):
         k, gi = CEIL[keys_ceil[key]]
@@ -354,24 +767,17 @@ def selection(F, fc, pos):
     return e, adds, list(sel_keys.values()), chosen
 
 
-# ------------------------------------------------------------------ moteur
-def scores(As, r, cfg, C, footprint, refs, ebs, wS, wE=None, wD=None, wP=None):
-    """scores3 de la v3 à trois positions (sizes_v4.scores_sizes) : chaque cellule de E, de D1, de D2 (part de K1) et
-    de D3 à chaque position avec ses propres références, moyennée en logarithme avec les poids wS ; K3 et D4 (une seule
-    taille) à la position publiée."""
-    return SZ.scores_sizes(As, r, cfg, C, footprint, refs, ebs, wS, wE=wE, wD=wD, wP=wP)
-
-
+# ------------------------------------------------------------------ moteur : un calcul, ses 20 000 variantes
 def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="three", b3=None, measures_only=False):
     """Un calcul. host : données qui avancent le générateur principal (les mêmes pour tous les calculs) ; pos_dl : [(d,
     lt)] des trois positions ; wmode : « three » (poids des tailles égaux au centre, tirés dans les variantes) ou une
     position (0, 1, 2) de poids 1 ; b3 : R4 (référence de K3) ; measures_only : poids de la grille à 0."""
-    rng = np.random.default_rng(v3.SEED)
+    rng = np.random.default_rng(SEED)
     keys = sorted(needed_keys())
     Arrays3(host[0], host[1], LANGS, B, rng, build_pools(host[0], LANGS, keys))  # avance rng de la même façon
     As, refs, ebs = [], [], [dict(e) for e in ebs]
     for p, (d, lt) in enumerate(pos_dl):
-        A = Arrays3(d, lt, LANGS, B, np.random.default_rng(v3.SEED + 4100 + p), build_pools(d, LANGS, keys))
+        A = Arrays3(d, lt, LANGS, B, np.random.default_rng(SEED + 4100 + p), build_pools(d, LANGS, keys))
         if e_meas is not None:
             A.e_meas = e_meas
         for patch in (patches or [[], [], []])[p]:
@@ -400,20 +806,18 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
 
     w0 = np.full(3, 1 / 3)
     S0 = scores(As, 0, MAIN, C0, footprint, refs, ebs, wsz(w0), wP=wmap(np.array([0.35, 0.40, 0.25])))
-    opts = {"est": ["mean", "min"], "enorm": ["frontier", "bounds"], "d3": ["abs", "rel"], "d4": ["best", "c"],
-            "d1ref": ["tstar", "best_natural"], "agg": ["arith", "geo"], "crule": ["v2", "v1"]}
     kernels, cat_names = list(As[1].e_meas), list(CATEGORIES)
     rk = As[1].ranked
     NR = len(RANKED)
     prec, first, ranks = np.zeros((NR, NR)), np.zeros(NR), np.empty((U, NR), np.int16)
-    srng = np.random.default_rng(v3.SEED + 4200)  # poids des tailles : générateur à part
+    srng = np.random.default_rng(SEED + 4200)  # poids des tailles : générateur à part
     for u in range(U):
-        cfg = {k: v[int(rng.integers(len(v)))] for k, v in opts.items()}
+        cfg = {k: v[int(rng.integers(len(v)))] for k, v in OPTS.items()}
         b = int(rng.integers(1, B + 1))
         wp = dirichlet(rng, 20 * np.array([0.35, 0.40, 0.25])) if rng.random() < 0.5 else dirichlet(rng, [1, 1, 1])
         wP = wmap(wp)
         wE = dict(zip(kernels, dirichlet(rng, 20 * np.full(len(kernels), 1 / len(kernels)))))
-        wD = dict(zip(("D1", "D2", "D3", "D4"), dirichlet(rng, 20 * np.array([v3.DW[k] for k in ("D1", "D2", "D3", "D4")]))))
+        wD = dict(zip(("D1", "D2", "D3", "D4"), dirichlet(rng, 20 * np.array([DW[k] for k in ("D1", "D2", "D3", "D4")]))))
         catw = dict(zip(cat_names, dirichlet(rng, 20 * np.array([catw0[c] for c in cat_names]))))
         prng = np.random.default_rng(int(rng.integers(2 ** 63)))
         C = c_vector(c_score(c_cells(cfg["crule"], c3, rng=prng, noise=0.10), catw), LANGS)
@@ -438,12 +842,18 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
 
 
 def summarize(s):
-    out = SZ.summarize(s, LANGS)
+    """Résumé d'un calcul : ordre (rang moyen, puis score au centre), rangs, scores, piliers, étages, plafond par noyau
+    et parts du code par défaut au centre, part des variantes où chaque langage devance le suivant, préséances."""
+    langs = LANGS
+    order = sorted(langs, key=lambda l: (s["exp21"][l], -s["ms0"][l]))
+    idx = {l: i for i, l in enumerate(RANKED)}
     prec = s["prec"]
-    order = out["order"]
+    out = {"order": order, "exp": {l: s["exp21"][l] for l in langs}, "rank90": {l: s["rank90"][l] for l in langs},
+           "first": {l: s["first"][l] for l in langs}, "ms0": {l: s["ms0"][l] for l in langs},
+           "E": {l: s["E"][l] for l in langs}, "D": {l: s["D"][l] for l in langs}, "C": {l: s["C"][l] for l in langs},
+           "tiers": tiers(order, prec, idx), "Ek": {l: s["Ek"][l] for l in langs}}
+    out["Dparts"] = s["Dparts"]
     out["ahead_next"] = {a: float(prec[RANKED.index(a), RANKED.index(b)]) for a, b in zip(order, order[1:])}
-    # ajout du 23 novembre, après le premier calcul (sortie seulement, sans changement de calcul) : la matrice des
-    # préséances, part des variantes où a passe devant b, pour décrire les étages
     out["prec_full"] = {a: {b: float(prec[RANKED.index(a), RANKED.index(b)]) for b in order} for a in order}
     out["tstar"] = s["tstar"]
     return out
@@ -453,7 +863,7 @@ def run_calc(calc, F, fc, footprint, c3, ebs, b3ref, k3n, host, keys):
     pos = [position(F, p, calc, k3n) for p in range(3)]
     filled, missing = {}, []
     for p, (d, lt, src, miss) in enumerate(pos):
-        filled[POS_NAMES[p]] = SZ.fill_missing(d, LANGS, keys)
+        filled[POS_NAMES[p]] = fill_missing(d, LANGS, keys)
         missing += miss
     e_meas, patches, chosen = None, [[], [], []], None
     if calc == "Sélection indépendante":
@@ -534,24 +944,23 @@ def spread(F):
 
 
 def main():
-    v2.ADDED.clear()  # une seule campagne : aucun langage relié par un pont
     F = load()
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
     hw, machines = machines_hw(F)
-    ebs = [SZ.ebounds(hw, p) for p in range(3)]
+    ebs = [ebounds(hw, p) for p in range(3)]
     b3ref, b3g, b3recs = b3_values()
     k3n = k3_normalized(F, b3ref, b3g)
-    fc = CV.forms_cells(LANGS)
-    keys = SZ.campaign_keys({k: v for k, v in F.data.items() if k[0] == "pub"})
+    fc = forms_cells(LANGS)
+    keys = campaign_keys({k: v for k, v in F.data.items() if k[0] == "pub"})
     hd = position(F, 1, "Base, trois tailles", {})[0]  # avance du générateur principal : la base, taille publiée
     host = (copy.deepcopy(hd), position(F, 1, "Base, trois tailles", {})[1])
-    SZ.fill_missing(host[0], LANGS, keys)
+    fill_missing(host[0], LANGS, keys)
     calcs = CALCS
     res = {c: run_calc(c, F, fc, footprint, c3, ebs, b3ref, k3n, host, keys) for c in calcs}
     fin = res[FINAL]["order"]
-    moved = {c: SZ.moved(fin, res[c]["order"], LANGS) for c in calcs[1:]}
-    out = {"results": res, "moved_more_than_2": moved, "b3_ref": b3ref,
+    moved_ = {c: moved(fin, res[c]["order"], LANGS) for c in calcs[1:]}
+    out = {"results": res, "moved_more_than_2": moved_, "b3_ref": b3ref,
            "b3_groups": {f"{p}|{boot}": v for (p, boot), v in b3g.items()},
            "b3_records": [{k: v for k, v in r.items() if k != "outputs"} for r in b3recs],
            "machines": machines, "group_machines": {f"{p}|{k}|{s}": sorted(m for m in v if m is not None)
@@ -559,12 +968,12 @@ def main():
            "bounds": [{f"{k}#{i}": v for (k, i), v in e.items()} for e in ebs], "hw": hw,
            "retained": retained(F, fc), "spread": spread(F), "failures": F.failures, "skipped": F.skipped,
            "steal_over_5pct": F.steal, "cpu_models": {m: dict(ps) for m, ps in F.models.items()}}
-    pub = json.load(open(os.path.join(ROOT, "results", "audit3.json")))["scenarios"]["Publié"]
-    out["published"] = {"order": pub["order21"], "exp": pub["exp21"], "ms0": pub["ms0"], "tiers": pub["tiers"]}
-    cv4 = json.load(open(os.path.join(ROOT, "results", "converge", "analysis.json")))["results"]["Convergent, avec R4"]
-    out["point4_r4"] = {"order": cv4["order"], "exp": cv4["exp"], "ms0": cv4["ms0"]}
-    out["moved_vs_published"] = SZ.moved(out["published"]["order"], fin, LANGS)
-    out["moved_vs_point4"] = SZ.moved(out["point4_r4"]["order"], fin, LANGS)
+    # comparaisons : le classement de la v3 (tête du README jusqu'au 23 novembre) et « Convergent, avec R4 » du point 4
+    prev = json.load(open(os.path.join(FIN, "comparisons.json")))
+    out["published"] = prev["published"]
+    out["point4_r4"] = prev["point4_r4"]
+    out["moved_vs_published"] = moved(out["published"]["order"], fin, LANGS)
+    out["moved_vs_point4"] = moved(out["point4_r4"]["order"], fin, LANGS)
     os.makedirs(OUTD, exist_ok=True)
     json.dump(out, open(OUT, "w"), indent=1, default=float)
     report(out, calcs)

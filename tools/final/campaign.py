@@ -38,7 +38,7 @@ _spec.loader.exec_module(FB)
 import sizes as S  # noqa: E402
 import driver as D  # noqa: E402  (PLAN, sommes de contrôle de la taille publiée, vol de temps)
 from validate import checksum_ok  # noqa: E402  (tolérances de la spécification, règle des 2^53)
-from analyze_v3 import needed_keys  # noqa: E402  (cellules du score)
+from final_v4 import needed_keys  # noqa: E402  (cellules du score)
 
 LANGS = FB.LANGS
 SIZED = ["k1", "k4", "k5", "k6", "k7", "k8", "k9"]

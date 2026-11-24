@@ -1,12 +1,32 @@
 #!/usr/bin/env python3
-"""Graphique SVG du classement de la v4 (campagne finale, docs/V4_FINAL.md, 9), sans dépendance, dans le style de celui
-de la v3 (analysis/charts_v3.py) : rang espéré sur les 20 000 variantes, rang plausible (90 %), score au centre.
+"""Graphique SVG du classement de la v4 (campagne finale, docs/V4_FINAL.md, 9) : rang espéré sur les 20 000
+variantes, rang plausible (90 %), score au centre.
 Entrée : results/final/analysis.json (ou FINAL_OUT/analysis.json). Sortie : results/charts/classement_v4.svg."""
 import json, os, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from analyze_v2 import NAMES, ROOT  # noqa: E402
-from charts_v2 import STYLE, esc  # noqa: E402
+from final_v4 import NAMES, ROOT  # noqa: E402
+
+STYLE = """<style>
+  svg { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781; --grid: #e1e0d9; --axis: #c3c2b7;
+        --s1: #2a78d6; --band: #b7d3f6; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    svg { --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781; --grid: #2c2c2a; --axis: #383835;
+          --s1: #3987e5; --band: #184f95; }
+  }
+  .bg { fill: var(--surface); } .t1 { fill: var(--ink); font-size: 15px; font-weight: 600; }
+  .t2 { fill: var(--ink2); font-size: 12px; } .lab { fill: var(--ink); font-size: 12px; }
+  .tick { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .grid { stroke: var(--grid); stroke-width: 1; } .axis { stroke: var(--axis); stroke-width: 1; }
+  .band { fill: var(--band); } .ua { stroke: var(--ink2); stroke-width: 2; stroke-linecap: round; }
+  .dot { fill: var(--s1); stroke: var(--surface); stroke-width: 2; }
+  .dot2 { fill: var(--muted); stroke: var(--surface); stroke-width: 2; }
+  .sep { stroke: var(--axis); stroke-width: 1; }
+</style>"""
+
+
+def esc(s):
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 SRC = os.path.join(os.environ.get("FINAL_OUT", os.path.join(ROOT, "results", "final")), "analysis.json")
 DST = os.environ.get("FINAL_CHART", os.path.join(ROOT, "results", "charts", "classement_v4.svg"))
