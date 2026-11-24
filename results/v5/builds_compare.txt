@@ -1,0 +1,2 @@
+# Empreintes des constructions : première construction de la campagne contre celles des démarrages suivants
+# 138 constructions enregistrées ; comparaisons : {'identiques': 0, 'texte identique': 0, 'différents': 0}
