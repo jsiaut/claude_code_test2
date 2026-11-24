@@ -122,7 +122,7 @@ U = int(os.environ.get("UA", "20000"))
 SEED = 20261029 + 3
 NEW_SEED = SEED + 4500  # générateurs des cellules nouvelles (complétés par la clé, le langage et la position)
 SEL_SEED = SEED + 4501  # générateurs des cellules de la sélection indépendante
-FIN = os.path.join(ROOT, "results", "final")
+FIN = os.path.join(ROOT, os.environ.get("FINAL_DIR", os.path.join("results", "final")))  # répertoire de la campagne
 RAW = os.environ.get("FINAL_RAW", os.path.join(FIN, "raw"))
 B3F = os.path.join(os.path.dirname(RAW), "b3.jsonl")
 FORMS = os.path.join(ROOT, "results", "converge", "forms.json")
@@ -137,6 +137,8 @@ CALCS = [FINAL, "Base, trois tailles", "Sans les tailles (taille publiée seule)
          "Sans R4", "R1' au lieu de R1", "Taille petite", "Taille grande", "Sélection indépendante",
          "D3 et D4 sur trois processus", "Sur les seules mesures"] + list(A_OFF) + [OLD]
 MT_MEASURES = {("k6", 2), ("k6", 3), ("k9", 1)}  # mesures à quatre fils : Q6 mt, Q1 mt, K9 mt (A4)
+GCC_CALC = "C par gcc"  # « Final » où les cellules de C viennent de ses constructions par gcc (docs/V5.md, S2)
+GCC_VIEW = {"c": {"gcc": "pub", "gcc_cv": "cv", "gcc_chk": "chk"}}
 
 
 def corrections(calc):
@@ -215,18 +217,27 @@ class Data:
         self.k3 = defaultdict(lambda: defaultdict(dict))  # (construction, taille) -> langage -> clé -> [(passe, boot)]
         self.failures, self.skipped, self.steal = [], [], []
         self.models, self.machines = defaultdict(lambda: defaultdict(int)), defaultdict(set)
+        self.gcc = 0  # enregistrements des étiquettes gcc laissés de côté
 
     def procs(self, cons, size, lang, key):
         return self.data.get((cons, size), {}).get(lang, {}).get(key)
 
 
-def load():
+def load(view=None):
     """Un processus est retenu s'il a fini sans erreur, sans dépassement de mémoire ni de durée, et si toutes ses
-    sommes de contrôle sont justes ; il est représenté par la médiane de ses répétitions."""
+    sommes de contrôle sont justes ; il est représenté par la médiane de ses répétitions. Les étiquettes gcc (C par gcc)
+    sont à part : sans view, elles sont ignorées ; avec view = {langage: {étiquette lue: étiquette remplacée}}, leurs
+    enregistrements prennent la place de ceux de l'étiquette remplacée (GCC_VIEW)."""
     F = Data()
     for f in sorted(glob.glob(os.path.join(RAW, "*.jsonl"))):
         for line in open(f):
             r = json.loads(line)
+            swap = (view or {}).get(r["lang"], {})
+            if r["construction"] in swap:
+                r["construction"] = swap[r["construction"]]
+            elif r["construction"] in swap.values() or r["construction"].startswith("gcc"):
+                F.gcc += r["construction"].startswith("gcc")
+                continue
             key = (r["kernel"], r["variant"], r["param"])
             tag = (r["construction"], r["size"])
             F.models[r.get("cpu_model", "?")][r.get("pass")] += 1
@@ -994,7 +1005,40 @@ def spread(F):
             "over_20pct": int((out > 1.2).sum())}
 
 
+def cell_estimates(F):
+    """Estimation ponctuelle de chaque cellule mesurée : moyenne géométrique des médianes de ses processus."""
+    return {"|".join((l, cons, size) + key): gm(procs) for (cons, size), dl in F.data.items()
+            for l, keys in dl.items() for key, procs in keys.items()}
+
+
+def extract(path):
+    """Extrait de la campagne publiée, gardé pour qu'une campagne suivante s'y compare (replication) : classement et
+    scores du calcul « Final » déjà écrit (OUT), estimations par cellule relues dans les mesures."""
+    f = json.load(open(OUT))["results"][FINAL]
+    out = {k: f[k] for k in ("order", "ms_mean", "ms0", "exp", "first", "E", "D", "C")}
+    out["cells"] = cell_estimates(load())
+    json.dump(out, open(path, "w"), indent=1)
+
+
+def replication(F, prev, fin):
+    """Cette campagne contre la précédente (prev : extract) : places et scores de « Final », langages à plus de deux
+    places, et rapport des temps cellule par cellule (cette campagne sur la précédente, cellules mesurées dans les
+    deux) : médiane d'ensemble, médiane par langage, part des cellules à moins de 10 % de la médiane d'ensemble."""
+    now = cell_estimates(F)
+    ratios = {k: now[k] / t for k, t in prev["cells"].items() if k in now}
+    med = float(np.median(list(ratios.values())))
+    by = defaultdict(list)
+    for k, r in ratios.items():
+        by[k.split("|")[0]].append(r)
+    return {"moved": moved(prev["order"], fin["order"], LANGS), "cells": len(ratios), "median": med,
+            "within_10pct": float(np.mean([abs(math.log(r / med)) <= math.log(1.10) for r in ratios.values()])),
+            "by_lang": {l: float(np.median(v)) for l, v in sorted(by.items())},
+            "previous": {k: prev[k] for k in ("order", "ms_mean", "exp", "first", "E", "D")}}
+
+
 def main():
+    if len(sys.argv) == 3 and sys.argv[1] == "--extract":
+        return extract(sys.argv[2])
     F = load()
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
@@ -1009,8 +1053,13 @@ def main():
     hd = position(F, 1, "Base, trois tailles", {})[0]  # avance du générateur principal : la base, taille publiée
     host = (copy.deepcopy(hd), position(F, 1, "Base, trois tailles", {})[1])
     fill_missing(host[0], LANGS, keys)
-    calcs = CALCS
+    calcs = list(CALCS)
     res = {c: run_calc(c, F, fc, footprint, c3, ebs, b3, host, keys) for c in calcs}
+    if F.gcc:  # C par gcc : mêmes tirages, les cellules de C prises dans ses constructions par gcc
+        Fg = load(GCC_VIEW)
+        b3g = {stat: (ref, k3_normalized(Fg, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
+        calcs.append(GCC_CALC)
+        res[GCC_CALC] = run_calc(GCC_CALC, Fg, fc, footprint, c3, ebs, b3g, host, keys)
     fin = res[FINAL]["order"]
     moved_ = {c: moved(fin, res[c]["order"], LANGS) for c in calcs[1:]}
     out = {"results": res, "moved_more_than_2": moved_, "b3_ref": b3["max"][0],
@@ -1023,10 +1072,16 @@ def main():
            "bounds": [{f"{k}#{i}": v for (k, i), v in e.items()} for e in ebs], "hw": hw,
            "retained": retained(F, fc), "spread": spread(F), "failures": F.failures, "skipped": F.skipped,
            "steal_over_5pct": F.steal, "cpu_models": {m: dict(ps) for m, ps in F.models.items()}}
-    # comparaisons : la méthode du 23 novembre (calcul OLD) et le classement de la v3 (tête du README jusqu'au 23)
-    out["v3"] = json.load(open(os.path.join(FIN, "comparisons.json")))["v3"]
+    # comparaisons : la méthode du 23 novembre (calcul OLD), le classement de la v3 (tête du README jusqu'au 23) ou la
+    # campagne précédente (réplication), selon ce que porte comparisons.json
+    comp = json.load(open(os.path.join(FIN, "comparisons.json")))
+    if "v3" in comp:
+        out["v3"] = comp["v3"]
     out["moved_vs_old"] = moved(res[OLD]["order"], fin, LANGS)
-    out["moved_vs_v3"] = moved(out["v3"]["order"], fin, LANGS)
+    if "v3" in comp:
+        out["moved_vs_v3"] = moved(out["v3"]["order"], fin, LANGS)
+    if "previous" in comp:
+        out["replication"] = replication(F, comp["previous"], res[FINAL])
     os.makedirs(OUTD, exist_ok=True)
     json.dump(out, open(OUT, "w"), indent=1, default=float)
     report(out, calcs)
@@ -1065,28 +1120,59 @@ def report(o, calcs):
           "les variantes.", "",
           "Étages (paires ordonnées dans au moins 95 % des variantes) : "
           + " | ".join(", ".join(NAMES[l] for l in t) for t in f["tiers"]), "",
-          "## Tous les calculs", "", "| Langage | " + " | ".join(calcs) + " | v3 |",
-          "|---|" + "---|" * (len(calcs) + 1)]
+          "## Tous les calculs", ""]
+    rp = o.get("replication")
+    if rp:  # campagne précédente : dernière colonne, et lignes des rangs qui bougent
+        last, last_order = "Campagne précédente", rp["previous"]["order"]
+        legend = ("« Méthode du 23 novembre » : sans aucune et classée au rang moyen ; « Campagne précédente » : son "
+                  "classement « Final ».")
+        versus = [("la méthode du 23 novembre", o["moved_vs_old"]), ("la campagne précédente", rp["moved"])]
+    else:
+        last, last_order = "v3", o["v3"]["order"]
+        legend = ("« Méthode du 23 novembre » : sans aucune et classée au rang moyen, le classement publié le "
+                  "23 novembre ; v3 : le classement publié jusqu'au 23 novembre.")
+        versus = [("la méthode du 23 novembre", o["moved_vs_old"]), ("le classement de la v3", o["moved_vs_v3"])]
+    L += ["| Langage | " + " | ".join(calcs) + f" | {last} |", "|---|" + "---|" * (len(calcs) + 1)]
     for l in f["order"]:
         cells = []
         for c in calcs:
             p = place(R[c], l)
             mark = "" if c == FINAL or abs(p - place(f, l)) <= 2 else " **"
             cells.append(f"{p}{mark}")
-        cells.append(str(o["v3"]["order"].index(l) + 1))
+        cells.append(str(last_order.index(l) + 1))
         L.append(f"| {NAMES[l]} | " + " | ".join(cells) + " |")
     L += ["", "Chaque case : place dans le calcul ; ** : plus de deux places d'écart avec « Final ». Ordre des lignes : "
-          "« Final ». « Sans A1 » à « Sans A4 » : « Final » sans une correction de la v4.1 ; « Méthode du 23 novembre » : "
-          "sans aucune et classée au rang moyen, le classement publié le 23 novembre ; v3 : le classement publié "
-          "jusqu'au 23 novembre.", "",
+          "« Final ». « Sans A1 » à « Sans A4 » : « Final » sans une correction de la v4.1 ; " + legend, "",
           "## Rangs qui bougent de plus de deux places par rapport à « Final »", ""]
     for c in calcs[1:]:
         mv = o["moved_more_than_2"][c]
         L.append(f"* {c} : " + (", ".join(f"{NAMES[l]} {nth(b)} (Final {nth(a)})" for l, (a, b) in
                                          sorted(mv.items(), key=lambda x: x[1][0])) or "aucun"))
-    for name, mv in (("la méthode du 23 novembre", o["moved_vs_old"]), ("le classement de la v3", o["moved_vs_v3"])):
+    for name, mv in versus:
         L.append(f"* Final contre {name} : " + (", ".join(f"{NAMES[l]} {nth(a)} → {nth(b)}" for l, (a, b) in
                                                           sorted(mv.items(), key=lambda x: x[1][1])) or "aucun"))
+    if GCC_CALC in R:
+        g, ks = R[GCC_CALC], list(E_V2)
+        L += ["", "## C par gcc", "",
+              "« C par gcc » : « Final » où toutes les cellules de C viennent de ses constructions par gcc ; la grille "
+              "et les autres langages ne changent pas.", "",
+              "| C compilé par | Place | Score | Premier | Devance C++ | Plafond | Code naturel | "
+              + " | ".join(k.upper() for k in ks) + " |", "|---|" + "---|" * (6 + len(ks))]
+        for name, r in (("clang (« Final »)", f), ("gcc", g)):
+            L.append(f"| {name} | {place(r, 'c')} | {r['ms_mean']['c']:.1f} | {100 * r['first']['c']:.1f} % | "
+                     f"{100 * r['prec_full']['c']['cpp']:.1f} % | {r['E']['c']:.1f} | {100 * r['Dparts']['c']['D1']:.1f} | "
+                     + " | ".join(f"{100 * r['Ek']['c'][k]:.0f}" for k in ks) + " |")
+    if rp:
+        pv = rp["previous"]
+        L += ["", "## Réplication : cette campagne et la précédente", "",
+              f"Cellules mesurées dans les deux campagnes : {rp['cells']}. Rapport des temps (cette campagne sur la "
+              f"précédente, estimations ponctuelles) : médiane {rp['median']:.3f} ; {100 * rp['within_10pct']:.0f} % des "
+              "cellules à moins de 10 % de cette médiane.", "",
+              "| Langage | Place | Place précédente | Score | Score précédent | Plafond | Plafond précédent | "
+              "Rapport médian des temps |", "|---|---|---|---|---|---|---|---|"]
+        for i, l in enumerate(f["order"]):
+            L.append(f"| {NAMES[l]} | {i + 1} | {pv['order'].index(l) + 1} | {f['ms_mean'][l]:.1f} | "
+                     f"{pv['ms_mean'][l]:.1f} | {f['E'][l]:.1f} | {pv['E'][l]:.1f} | {rp['by_lang'][l]:.3f} |")
     L += ["", "## Plafond par noyau et parts du code par défaut (« Final », au centre)", "",
           "| Langage | " + " | ".join(k.upper() for k in E_V2) + " | D1 | D2 | D3 | D4 |",
           "|---|" + "---|" * (len(E_V2) + 4)]
