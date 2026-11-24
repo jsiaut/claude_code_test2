@@ -18,6 +18,7 @@ with Ada.Strings.Fixed;           use Ada.Strings.Fixed;
 with Ada.Long_Float_Text_IO;
 with Ada.Containers.Hashed_Maps;
 with Ada.Unchecked_Deallocation;
+with Ada.Unchecked_Conversion;
 with Interfaces;                  use Interfaces;
 with Interfaces.C;
 with System;                      use System;
@@ -384,6 +385,86 @@ procedure Ms is
       end loop;
       return S;
    end K4_Branchless;
+   --  v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (types vectoriels GCC et builtins importés,
+   --  comme K5 tuned) : masque v >= 128 par le bit de poids fort (vpmovb2m), octets hors masque mis à zéro
+   --  (vmovdqu8 masqué), vpsadbw en huit sommes de 64 bits.
+   type V64I8 is array (0 .. 63) of Integer_8 with Alignment => 64;
+   pragma Machine_Attribute (V64I8, "vector_type");
+   type V8I64 is array (0 .. 7) of Integer_64 with Alignment => 64;
+   pragma Machine_Attribute (V8I64, "vector_type");
+   function B2Mask (A : V64I8) return Unsigned_64;
+   pragma Import (Intrinsic, B2Mask, "__builtin_ia32_cvtb2mask512");
+   function Mov_Masked (A, Src : V64I8; K : Unsigned_64) return V64I8;
+   pragma Import (Intrinsic, Mov_Masked, "__builtin_ia32_movdquqi512_mask");
+   function Sad (A, B : V64I8) return V8I64;
+   pragma Import (Intrinsic, Sad, "__builtin_ia32_psadbw512");
+   function Add_Q (A, B, Src : V8I64; K : Unsigned_8) return V8I64;
+   pragma Import (Intrinsic, Add_Q, "__builtin_ia32_paddq512_mask");
+   function K4_Tuned (B : U8_Arr) return Unsigned_64 is
+      --  les builtins prennent des octets signés (__v64qi) : les mêmes octets, vus comme Integer_8 ; vpmovb2m ne lit
+      --  que le bit de poids fort, et vpsadbw traite les octets comme non signés
+      Zero_V : constant V64I8 := [others => 0];
+      Acc    : V8I64 := [others => 0];
+      S      : Unsigned_64 := 0;
+      I      : Natural := B'First;
+   begin
+      while I + 63 <= B'Last loop
+         declare
+            X : V64I8 with Import, Address => B (I)'Address;
+         begin
+            Acc := Add_Q (Acc, Sad (Mov_Masked (X, Zero_V, B2Mask (X)), Zero_V), Acc, 16#FF#);
+         end;
+         I := I + 64;
+      end loop;
+      for K in 0 .. 7 loop
+         S := S + Unsigned_64 (Acc (K));
+      end loop;
+      while I <= B'Last loop
+         if B (I) >= 128 then
+            S := S + Unsigned_64 (B (I));
+         end if;
+         I := I + 1;
+      end loop;
+      return S;
+   end K4_Tuned;
+   --  v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits. Le bit de poids fort de
+   --  chaque octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les octets
+   --  >= 128 ; les octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute donnée :
+   --  une voie reçoit au plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les voies
+   --  sont vidées dans la somme de 64 bits toutes les 128 mots (et à la fin). Aucun branchement sur les données (le
+   --  reste, < 8 octets, par produit). Le mot est lu par superposition à l'adresse de l'octet (tableau aligné sur 64
+   --  octets, indices multiples de 8).
+   function K4_Swar (B : U8_Arr) return Unsigned_64 with No_Inline is
+      pragma Suppress (All_Checks);
+      Ones : constant Unsigned_64 := 16#0101_0101_0101_0101#;
+      Lo   : constant Unsigned_64 := 16#00FF_00FF_00FF_00FF#;
+      Last : constant Natural := B'Last + 1;  --  borne exclue
+      S    : Unsigned_64 := 0;
+      I    : Natural := B'First;
+      E    : Natural;
+      Acc, Y : Unsigned_64;
+   begin
+      while I + 8 <= Last loop
+         E := (if I + 128 * 8 <= Last then I + 128 * 8 else Last - (Last - I) mod 8);
+         Acc := 0;
+         while I < E loop
+            declare
+               W : Unsigned_64 with Import, Address => B (I)'Address;
+            begin
+               Y := W and ((Shift_Right (W, 7) and Ones) * 16#FF#);
+            end;
+            Acc := Acc + (Y and Lo) + (Shift_Right (Y, 8) and Lo);
+            I := I + 8;
+         end loop;
+         Acc := (Acc and 16#0000_FFFF_0000_FFFF#) + (Shift_Right (Acc, 16) and 16#0000_FFFF_0000_FFFF#);
+         S := S + (Acc and 16#FFFF_FFFF#) + Shift_Right (Acc, 32);
+      end loop;
+      while I <= B'Last loop
+         S := S + Unsigned_64 (B (I)) * Unsigned_64 (Shift_Right (B (I), 7));
+         I := I + 1;
+      end loop;
+      return S;
+   end K4_Swar;
    procedure Run_K4 (V : String; Reps : Integer) is
       B : constant U8_Acc := Load_U8 ("k4_bytes.u8");
       T0, T1 : Long_Float;
@@ -405,7 +486,8 @@ procedure Ms is
       end if;
       for R in -Warm .. Reps - 1 loop
          T0 := Now;
-         S := (if V = "branchless_unsorted" then K4_Branchless (B.all) else K4_Natural (B.all));
+         S := (if V = "tuned" then K4_Tuned (B.all) elsif V = "swar" then K4_Swar (B.all)
+               elsif V = "branchless_unsorted" then K4_Branchless (B.all) else K4_Natural (B.all));
          T1 := Now;
          if R >= 0 then
             Result ("k4", V, "16M", R, T1 - T0, Imgu (S));
@@ -561,6 +643,155 @@ procedure Ms is
          I0 := I0 + N;
       end loop;
    end Q1_Tuned;
+   --  v4, point 4 (docs/V4_CONVERGE.md, 3.3) : types vectoriels GCC et builtins AVX-512 importés, comme K4 et K5 tuned.
+   --  Les blocs de 16 lignes commencent à un indice multiple de 16 (0 ou un quart de N6) : les colonnes, alignées sur 64
+   --  octets, sont lues par superposition alignée.
+   type V16SI is array (0 .. 15) of Integer_32 with Alignment => 64;
+   pragma Machine_Attribute (V16SI, "vector_type");
+   type V16QI is array (0 .. 15) of Integer_8 with Alignment => 16;
+   pragma Machine_Attribute (V16QI, "vector_type");
+   function ZxBD (A : V16QI; Src : V16SI; K : Unsigned_16) return V16SI;
+   pragma Import (Intrinsic, ZxBD, "__builtin_ia32_pmovzxbd512_mask");
+   function CmpD (A, B : V16SI; P : Integer; K : Unsigned_16) return Unsigned_16;  --  P : 0 =, 1 <, 2 <=, 5 >=
+   pragma Import (Intrinsic, CmpD, "__builtin_ia32_cmpd512_mask");
+   function MulLoD (A, B, Src : V16SI; K : Unsigned_16) return V16SI;
+   pragma Import (Intrinsic, MulLoD, "__builtin_ia32_pmulld512_mask");
+   function PaddD (A, B, Src : V16SI; K : Unsigned_16) return V16SI;
+   pragma Import (Intrinsic, PaddD, "__builtin_ia32_paddd512_mask");
+   function PsubD (A, B, Src : V16SI; K : Unsigned_16) return V16SI;
+   pragma Import (Intrinsic, PsubD, "__builtin_ia32_psubd512_mask");
+   function SllD (A : V16SI; N : Integer; Src : V16SI; K : Unsigned_16) return V16SI;
+   pragma Import (Intrinsic, SllD, "__builtin_ia32_pslldi512_mask");
+   function SllQ (A : V8I64; N : Integer; Src : V8I64; K : Unsigned_8) return V8I64;
+   pragma Import (Intrinsic, SllQ, "__builtin_ia32_psllqi512_mask");
+   function SrlQ (A : V8I64; N : Integer; Src : V8I64; K : Unsigned_8) return V8I64;
+   pragma Import (Intrinsic, SrlQ, "__builtin_ia32_psrlqi512_mask");
+   function SraQ (A : V8I64; N : Integer; Src : V8I64; K : Unsigned_8) return V8I64;
+   pragma Import (Intrinsic, SraQ, "__builtin_ia32_psraqi512_mask");
+   function MulDQ (A, B : V16SI; Src : V8I64; K : Unsigned_8) return V8I64;
+   pragma Import (Intrinsic, MulDQ, "__builtin_ia32_pmuldq512_mask");
+   function Pext (A, M : Unsigned_32) return Unsigned_32;
+   pragma Import (Intrinsic, Pext, "__builtin_ia32_pext_si");
+   function Popcount (X : Unsigned_32) return Integer;
+   pragma Import (Intrinsic, Popcount, "__builtin_popcount");
+   function To_Q is new Ada.Unchecked_Conversion (V16SI, V8I64);
+   function To_D is new Ada.Unchecked_Conversion (V8I64, V16SI);
+   function Splat (X : Integer_32) return V16SI is ([others => X]);
+   Z16 : constant V16SI := [others => 0];
+   Z8  : constant V8I64 := [others => 0];
+
+   --  v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q6 tuned_v ; forme de la frontière, Zig) : blocs de 16 lignes en
+   --  vecteurs : colonnes élargies en i32, prédicat par comparaisons, produit prix × remise en i32 sélectionné par le
+   --  masque, accumulation en i64 (voies paires et impaires). Exactitude pour toute donnée (docs/SPEC.md, K6) : prix
+   --  <= 50 000 et remise <= 10, donc produit <= 500 000 < 2^31 ; une voie de 64 bits reçoit au plus N6 / 16
+   --  produits. La variante tuned publiée est scalaire, vectorisée par GCC.
+   function Q6_Tuned_V (C : Cols6; Lo, Hi : Natural) return Integer_64 with No_Inline is
+      pragma Suppress (All_Checks);
+      D0 : constant V16SI := Splat (8766);
+      D1 : constant V16SI := Splat (9131);
+      R0 : constant V16SI := Splat (5);
+      R1 : constant V16SI := Splat (7);
+      Q0 : constant V16SI := Splat (24);
+      A0, A1 : V8I64 := Z8;
+      I : Natural := Lo;
+      S : Integer_64 := 0;
+   begin
+      while I + 15 <= Hi loop
+         declare
+            Sd : V16SI with Import, Address => C.Sd (I)'Address;
+            Pr : V16SI with Import, Address => C.Pr (I)'Address;
+            Db : V16QI with Import, Address => C.D (I)'Address;
+            Qb : V16QI with Import, Address => C.Q (I)'Address;
+            D  : constant V16SI := ZxBD (Db, Z16, 16#FFFF#);
+            Q  : constant V16SI := ZxBD (Qb, Z16, 16#FFFF#);
+            M  : constant Unsigned_16 := CmpD (Sd, D0, 5, 16#FFFF#) and CmpD (Sd, D1, 1, 16#FFFF#)
+                                         and CmpD (D, R0, 5, 16#FFFF#) and CmpD (D, R1, 2, 16#FFFF#)
+                                         and CmpD (Q, Q0, 1, 16#FFFF#);
+            P  : constant V8I64 := To_Q (MulLoD (Pr, D, Z16, M));  --  zéro hors du masque
+         begin
+            A0 := Add_Q (A0, SraQ (SllQ (P, 32, Z8, 16#FF#), 32, Z8, 16#FF#), A0, 16#FF#);  --  lignes paires
+            A1 := Add_Q (A1, SraQ (P, 32, Z8, 16#FF#), A1, 16#FF#);                          --  lignes impaires
+         end;
+         I := I + 16;
+      end loop;
+      for K in 0 .. 7 loop
+         S := S + A0 (K) + A1 (K);
+      end loop;
+      return S + Q6_Natural (C, I, Hi);  --  reste (< 16 lignes)
+   end Q6_Tuned_V;
+
+   --  v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q1 tuned_v) : l'algorithme de la référence C, 16 lignes par tour,
+   --  masque de passage, groupe 2 × rf + ls, par groupe un masque, compte par population du masque, additions masquées
+   --  de la quantité, du prix et de prix × (100 − remise) en voies de 32 bits vidées toutes les 4 096 lignes (au plus
+   --  256 lignes par voie : 256 × 5 000 000 < 2^31), charge en 64 bits (lignes paires et impaires). La variante tuned
+   --  publiée agrège par blocs et par groupe en scalaire.
+   procedure Q1_Tuned_V (C : Cols6; Lo, Hi : Natural; Acc : in out Q1_Acc) with No_Inline is
+      pragma Suppress (All_Checks);
+      Lim  : constant V16SI := Splat (10471);
+      C100 : constant V16SI := Splat (100);
+      type V16_6 is array (0 .. 5) of V16SI;
+      type V8_6 is array (0 .. 5) of V8I64;
+      Aq, Ap, Adp : V16_6;
+      Ace, Aco : V8_6;
+      Cnt : array (0 .. 5) of Integer_64;
+      Last : constant Natural := Hi + 1;  --  borne exclue
+      I : Natural := Lo;
+      E : Natural;
+      M : Unsigned_16;
+   begin
+      while I + 16 <= Last loop
+         Aq := [others => Z16]; Ap := [others => Z16]; Adp := [others => Z16];
+         Ace := [others => Z8]; Aco := [others => Z8]; Cnt := [others => 0];
+         E := (if I + 4096 <= Last then I + 4096 else Last - (Last - I) mod 16);
+         while I < E loop
+            declare
+               Sd  : V16SI with Import, Address => C.Sd (I)'Address;
+               Pr  : V16SI with Import, Address => C.Pr (I)'Address;
+               Rfb : V16QI with Import, Address => C.Rf (I)'Address;
+               Lsb : V16QI with Import, Address => C.Ls (I)'Address;
+               Qb  : V16QI with Import, Address => C.Q (I)'Address;
+               Db  : V16QI with Import, Address => C.D (I)'Address;
+               Tb  : V16QI with Import, Address => C.T (I)'Address;
+               Pass : constant Unsigned_16 := CmpD (Sd, Lim, 2, 16#FFFF#);
+               Vg  : constant V16SI := PaddD (SllD (ZxBD (Rfb, Z16, 16#FFFF#), 1, Z16, 16#FFFF#),
+                                              ZxBD (Lsb, Z16, 16#FFFF#), Z16, 16#FFFF#);
+               Vq  : constant V16SI := ZxBD (Qb, Z16, 16#FFFF#);
+               Vd  : constant V16SI := ZxBD (Db, Z16, 16#FFFF#);
+               Vt  : constant V16SI := PaddD (ZxBD (Tb, Z16, 16#FFFF#), C100, Z16, 16#FFFF#);
+               Vdp : constant V16SI := MulLoD (Pr, PsubD (C100, Vd, Z16, 16#FFFF#), Z16, 16#FFFF#);
+               Che : constant V8I64 := MulDQ (Vdp, Vt, Z8, 16#FF#);  --  lignes paires
+               Cho : constant V8I64 := MulDQ (To_D (SrlQ (To_Q (Vdp), 32, Z8, 16#FF#)),
+                                              To_D (SrlQ (To_Q (Vt), 32, Z8, 16#FF#)), Z8, 16#FF#);  --  impaires
+            begin
+               for G in 0 .. 5 loop
+                  pragma Loop_Optimize (Unroll);  --  six groupes déroulés : accumulateurs en registres
+                  M := CmpD (Vg, Splat (Integer_32 (G)), 0, Pass);
+                  Cnt (G) := Cnt (G) + Integer_64 (Popcount (Unsigned_32 (M)));
+                  Aq (G) := PaddD (Aq (G), Vq, Aq (G), M);
+                  Ap (G) := PaddD (Ap (G), Pr, Ap (G), M);
+                  Adp (G) := PaddD (Adp (G), Vdp, Adp (G), M);
+                  Ace (G) := Add_Q (Ace (G), Che, Ace (G), Unsigned_8 (Pext (Unsigned_32 (M), 16#5555#)));
+                  Aco (G) := Add_Q (Aco (G), Cho, Aco (G), Unsigned_8 (Pext (Unsigned_32 (M), 16#AAAA#)));
+               end loop;
+            end;
+            I := I + 16;
+         end loop;
+         for G in 0 .. 5 loop
+            Acc (G, 0) := Acc (G, 0) + Cnt (G);
+            for K in 0 .. 15 loop
+               Acc (G, 1) := Acc (G, 1) + Integer_64 (Aq (G) (K));
+               Acc (G, 2) := Acc (G, 2) + Integer_64 (Ap (G) (K));
+               Acc (G, 3) := Acc (G, 3) + Integer_64 (Adp (G) (K));
+            end loop;
+            for K in 0 .. 7 loop
+               Acc (G, 4) := Acc (G, 4) + Ace (G) (K) + Aco (G) (K);
+            end loop;
+         end loop;
+      end loop;
+      if I <= Hi then
+         Q1_Natural (C, I, Hi, Acc);  --  reste (< 16 lignes)
+      end if;
+   end Q1_Tuned_V;
    procedure Run_K6 (V : String; Reps : Integer; P : String) is
       C : constant Cols6 := (Load_I32 ("k6_shipdate.i32"), Load_I32 ("k6_extendedprice.i32"), Load_U8 ("k6_quantity.u8"),
                              Load_U8 ("k6_discount.u8"), Load_U8 ("k6_tax.u8"), Load_U8 ("k6_returnflag.u8"),
@@ -593,7 +824,97 @@ procedure Ms is
             end if;
          end;
       end Worker;
+      --  v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool, mt_pool_v) : réserve de trois tâches (le fil principal fait le
+      --  quart 0), créées une fois avant l'échauffement ; à chaque appel, le rendez-vous Go les réveille et le
+      --  rendez-vous Done attend leur fin ; entre deux appels, elles attendent, bloquées, à Go (les rendez-vous
+      --  ordonnent aussi les accès mémoire, RM 9.10). mt_pool exécute dans chaque quart la forme de mt (Q6_Tuned,
+      --  Q1_Tuned), mt_pool_v les formes tuned_v.
+      Use_V : constant Boolean := V = "mt_pool_v";
+      procedure Quarter (T : Natural) is
+         Lo : constant Natural := N6 / 4 * T;
+         Hi : constant Natural := N6 / 4 * (T + 1) - 1;
+      begin
+         Parts (T) := [others => [others => 0]];
+         if Is_Q1 then
+            if Use_V then Q1_Tuned_V (C, Lo, Hi, Parts (T)); else Q1_Tuned (C, Lo, Hi, Parts (T)); end if;
+         else
+            P6 (T) := (if Use_V then Q6_Tuned_V (C, Lo, Hi) else Q6_Tuned (C.Sd.all, C.Pr.all, C.D.all, C.Q.all, Lo, Hi));
+         end if;
+      end Quarter;
+      task type Pool_Worker is
+         entry Start (Id : Natural);
+         entry Go;
+         entry Done;
+      end Pool_Worker;
+      task body Pool_Worker is
+         T : Natural;
+      begin
+         accept Start (Id : Natural) do
+            T := Id;
+         end Start;
+         loop
+            select
+               accept Go;
+            or
+               terminate;
+            end select;
+            Quarter (T);
+            accept Done;
+         end loop;
+      end Pool_Worker;
+      procedure Fold_Parts is
+      begin
+         for T in 0 .. 3 loop
+            if Is_Q1 then
+               for G in 0 .. 5 loop
+                  for K in 0 .. 4 loop
+                     Acc (G, K) := Acc (G, K) + Parts (T) (G, K);
+                  end loop;
+               end loop;
+            else
+               S6 := S6 + P6 (T);
+            end if;
+         end loop;
+      end Fold_Parts;
+      procedure Report (R : Integer) is
+      begin
+         if Is_Q1 then
+            for G in 0 .. 5 loop
+               for K in 0 .. 4 loop
+                  S6 := S6 + Acc (G, K);
+               end loop;
+            end loop;
+         end if;
+         if R >= 0 then
+            Result ("k6", V, P, R, T1 - T0, Img (S6));
+         end if;
+      end Report;
    begin
+      if V = "mt_pool" or else V = "mt_pool_v" then
+         declare
+            W : array (1 .. 3) of Pool_Worker;
+         begin
+            for T in W'Range loop
+               W (T).Start (T);
+            end loop;
+            for R in -Warm .. Reps - 1 loop
+               Acc := [others => [others => 0]];
+               S6 := 0;
+               T0 := Now;
+               for T in W'Range loop
+                  W (T).Go;
+               end loop;
+               Quarter (0);
+               for T in W'Range loop
+                  W (T).Done;
+               end loop;
+               Fold_Parts;
+               T1 := Now;
+               Report (R);
+            end loop;
+         end;  --  les tâches se terminent à la sortie du bloc (alternative terminate)
+         return;
+      end if;
       for R in -Warm .. Reps - 1 loop
          Acc := [others => [others => 0]];
          S6 := 0;
@@ -622,6 +943,12 @@ procedure Ms is
                Q1_Tuned (C, 0, N6 - 1, Acc);
             else
                S6 := Q6_Tuned (C.Sd.all, C.Pr.all, C.D.all, C.Q.all, 0, N6 - 1);
+            end if;
+         elsif V = "tuned_v" then
+            if Is_Q1 then
+               Q1_Tuned_V (C, 0, N6 - 1, Acc);
+            else
+               S6 := Q6_Tuned_V (C, 0, N6 - 1);
             end if;
          else
             if Is_Q1 then
@@ -796,6 +1123,75 @@ procedure Ms is
       return (if I < 0 then 0 else Arena (Natural (I)).V + A_Sum (Arena (Natural (I)).L) + A_Sum (Arena (Natural (I)).R));
    end A_Sum;
 
+   --  v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/c_k8it, remarque sur C) : construction et
+   --  somme itératives, piles explicites. La construction descend à gauche en empilant le sous-arbre droit de chaque
+   --  nœud interne, puis le reprend à la feuille suivante : même ordre préfixe, mêmes liens et mêmes valeurs que
+   --  A_Build. Les piles tiennent par construction : au plus une entrée par niveau à la construction, au plus
+   --  profondeur + 1 à la somme.
+   pragma Compile_Time_Error ($MS_K8_REQ >= 63, "piles de K8 tuned_it : 64 entrées");
+   procedure A_Build_It (Depth : Natural; Q : Integer_64) is
+      pragma Suppress (All_Checks);
+      type Pend is record
+         Parent : Integer_32;
+         Depth  : Natural;
+      end record;
+      Stk : array (0 .. 63) of Pend;
+      Sp : Natural := 0;
+      Top : Integer_32 := 0;
+      Parent : Integer_32 := -1;
+      Right : Boolean := False;
+      D : Natural := Depth;
+      I : Integer_32;
+   begin
+      loop
+         I := Top;
+         Top := Top + 1;
+         Arena (Natural (I)).V := Q + Integer_64 (I);
+         if Parent >= 0 then
+            if Right then
+               Arena (Natural (Parent)).R := I;
+            else
+               Arena (Natural (Parent)).L := I;
+            end if;
+         end if;
+         if D > 0 then
+            Stk (Sp) := (I, D - 1);
+            Sp := Sp + 1;
+            Parent := I;
+            Right := False;
+            D := D - 1;
+         else
+            Arena (Natural (I)).L := -1;
+            Arena (Natural (I)).R := -1;
+            exit when Sp = 0;
+            Sp := Sp - 1;
+            Parent := Stk (Sp).Parent;
+            D := Stk (Sp).Depth;
+            Right := True;
+         end if;
+      end loop;
+   end A_Build_It;
+   function A_Sum_It (Root : Integer_32) return Integer_64 is
+      pragma Suppress (All_Checks);
+      Stk : array (0 .. 63) of Integer_32;
+      Sp : Natural := 1;
+      S : Integer_64 := 0;
+      I : Integer_32;
+   begin
+      Stk (0) := Root;
+      while Sp > 0 loop
+         Sp := Sp - 1;
+         I := Stk (Sp);
+         S := S + Arena (Natural (I)).V;
+         if Arena (Natural (I)).L >= 0 then
+            Stk (Sp) := Arena (Natural (I)).R;
+            Stk (Sp + 1) := Arena (Natural (I)).L;
+            Sp := Sp + 2;
+         end if;
+      end loop;
+      return S;
+   end A_Sum_It;
+
    --  tuned_alloc : pool de stockage utilisateur (System.Storage_Pools), allocation par incrément
    type Bump_Pool is new Root_Storage_Pool with record
       Buf : Storage_Array (1 .. 64 * 2 ** $MS_K8_REQ);
@@ -884,6 +1280,9 @@ procedure Ms is
                begin
                   S := A_Sum (Root);
                end;
+            elsif V = "tuned_it" then
+               A_Build_It ($MS_K8_REQ, C);
+               S := A_Sum_It (0);
             elsif V = "tuned_alloc" then
                Pool.Top := 0;  --  libération en bloc
                S := P_Sum (P_Build ($MS_K8_REQ, C));
@@ -939,6 +1338,44 @@ procedure Ms is
          end loop;
       end loop;
    end K9_Rows;
+   --  v4, point 4 (docs/V4_CONVERGE.md, 3.3, K9 tuned_v ; forme de la frontière, Swift) : par ligne, vecteurs de 8 f64
+   --  (type vectoriel GCC, builtins AVX-512 importés) : haut, bas, gauche et droite chargés en vecteurs, même ordre des
+   --  additions que la spécification, résultat écrit en vecteur, reste scalaire. Grilles alignées sur 64 octets
+   --  (Grid) ; comme chez Swift, la boucle part de j = 1, chargements et écriture non alignés. La variante tuned
+   --  publiée est une boucle scalaire vectorisée par GCC.
+   type V8DF is array (0 .. 7) of Long_Float with Alignment => 64;
+   pragma Machine_Attribute (V8DF, "vector_type");
+   function LoadU (P : System.Address; Src : V8DF; K : Unsigned_8) return V8DF;
+   pragma Import (Intrinsic, LoadU, "__builtin_ia32_loadupd512_mask");
+   procedure StoreU (P : System.Address; A : V8DF; K : Unsigned_8);
+   pragma Import (Intrinsic, StoreU, "__builtin_ia32_storeupd512_mask");
+   function AddPD (A, B, Src : V8DF; K : Unsigned_8; R : Integer) return V8DF;
+   pragma Import (Intrinsic, AddPD, "__builtin_ia32_addpd512_mask");
+   function MulPD (A, B, Src : V8DF; K : Unsigned_8; R : Integer) return V8DF;
+   pragma Import (Intrinsic, MulPD, "__builtin_ia32_mulpd512_mask");
+   procedure K9_Rows_V (A : Grid; B : in out Grid; R0, R1 : Natural) with No_Inline is
+      pragma Suppress (All_Checks);
+      Z : constant V8DF := [others => 0.0];
+      Q : constant V8DF := [others => 0.25];
+      J : Natural;
+   begin
+      for I in R0 .. R1 loop
+         J := 1;
+         while J + 8 <= M9 - 1 loop
+            StoreU (B (I, J)'Address,
+                    MulPD (Q, AddPD (AddPD (AddPD (LoadU (A (I - 1, J)'Address, Z, 16#FF#),
+                                                   LoadU (A (I + 1, J)'Address, Z, 16#FF#), Z, 16#FF#, 4),
+                                            LoadU (A (I, J - 1)'Address, Z, 16#FF#), Z, 16#FF#, 4),
+                                     LoadU (A (I, J + 1)'Address, Z, 16#FF#), Z, 16#FF#, 4), Z, 16#FF#, 4),
+                    16#FF#);
+            J := J + 8;
+         end loop;
+         while J <= M9 - 2 loop
+            B (I, J) := 0.25 * (((A (I - 1, J) + A (I + 1, J)) + A (I, J - 1)) + A (I, J + 1));
+            J := J + 1;
+         end loop;
+      end loop;
+   end K9_Rows_V;
    procedure Run_K9 (V : String; Reps : Integer) is
       A : Grid_Acc := new Grid (0 .. M9 - 1, 0 .. M9 - 1);
       B : Grid_Acc := new Grid (0 .. M9 - 1, 0 .. M9 - 1);
@@ -955,7 +1392,72 @@ procedure Ms is
          end Start;
          K9_Rows (A.all, B.all, 1 + (M9 - 2) * T / 4, (M9 - 2) * (T + 1) / 4);
       end Worker;
+      --  v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool, mt_pool_v) : réserve de trois tâches (le fil principal fait le
+      --  quart 0), créées une fois avant l'échauffement, réveillées par le rendez-vous Go et attendues par Done (voir
+      --  Run_K6) ; elles lisent A et B, échangées entre deux appels par le fil principal. mt_pool exécute K9_Rows (la
+      --  forme de mt), mt_pool_v K9_Rows_V.
+      Use_V : constant Boolean := V = "mt_pool_v";
+      procedure Quarter (T : Natural) is
+         R0 : constant Natural := 1 + (M9 - 2) * T / 4;
+         R1 : constant Natural := (M9 - 2) * (T + 1) / 4;
+      begin
+         if Use_V then K9_Rows_V (A.all, B.all, R0, R1); else K9_Rows (A.all, B.all, R0, R1); end if;
+      end Quarter;
+      task type Pool_Worker is
+         entry Start (Id : Natural);
+         entry Go;
+         entry Done;
+      end Pool_Worker;
+      task body Pool_Worker is
+         T : Natural;
+      begin
+         accept Start (Id : Natural) do
+            T := Id;
+         end Start;
+         loop
+            select
+               accept Go;
+            or
+               terminate;
+            end select;
+            Quarter (T);
+            accept Done;
+         end loop;
+      end Pool_Worker;
    begin
+      if V = "mt_pool" or else V = "mt_pool_v" then
+         declare
+            W : array (1 .. 3) of Pool_Worker;
+         begin
+            for T in W'Range loop
+               W (T).Start (T);
+            end loop;
+            for R in -Warm .. Reps - 1 loop
+               K9_Init (A.all);
+               B.all := A.all;
+               T0 := Now;
+               for It in 1 .. 4 loop
+                  for T in W'Range loop
+                     W (T).Go;
+                  end loop;
+                  Quarter (0);
+                  for T in W'Range loop
+                     W (T).Done;
+                  end loop;
+                  Tmp := A; A := B; B := Tmp;
+               end loop;
+               T1 := Now;
+               S := 0.0;
+               for X of A.all loop
+                  S := S + X;
+               end loop;
+               if R >= 0 then
+                  Result ("k9", V, "2048^2x4", R, T1 - T0, Sci (S));
+               end if;
+            end loop;
+         end;  --  les tâches se terminent à la sortie du bloc (alternative terminate)
+         return;
+      end if;
       for R in -Warm .. Reps - 1 loop
          K9_Init (A.all);
          B.all := A.all;
@@ -965,6 +1467,8 @@ procedure Ms is
                K9_Natural (A.all, B.all);
             elsif V = "tuned" then
                K9_Rows (A.all, B.all, 1, M9 - 2);
+            elsif V = "tuned_v" then
+               K9_Rows_V (A.all, B.all, 1, M9 - 2);
             else
                declare
                   W : array (0 .. 3) of Worker;

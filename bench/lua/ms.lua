@@ -176,7 +176,62 @@ local function k4_branchless(t, n)
   end
   return acc
 end
+-- v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned. Lua n'a pas de SIMD : la meilleure forme trouvée lit huit octets
+-- par mot de 64 bits (string.unpack « <I8 ») : masque des octets >= 128 par leur bit de poids fort, sommes par paires
+-- d'octets puis par multiplication (0,21 s, contre 0,71 pour la boucle naturelle et 0,24 pour huit octets par appel de
+-- string.byte).
+local function k4_tuned(s)
+  local acc, n = 0, #s
+  local i = 1
+  local unpack, byte = string.unpack, string.byte
+  while i + 7 <= n do
+    local w = unpack("<I8", s, i)
+    local y = w & (((w >> 7) & 0x0101010101010101) * 0xFF)
+    local p = (y & 0x00FF00FF00FF00FF) + ((y >> 8) & 0x00FF00FF00FF00FF)
+    acc = acc + ((p * 0x0001000100010001) >> 48)
+    i = i + 8
+  end
+  for k = i, n do
+    local x = byte(s, k)
+    if x >= 128 then acc = acc + x end
+  end
+  return acc
+end
+-- v4, point 4 (docs/V4_CONVERGE.md, 3.3, swar) : huit octets par mot de 64 bits (string.unpack « <I8 » sur la chaîne
+-- des octets tels qu'ils sont stockés), voies de 16 bits accumulées sur 128 mots puis vidées (au plus 128 × 510 =
+-- 65 280 < 2^16 par voie ; entiers de Lua sur 64 bits, décalages logiques). La variante tuned du point 3 vide ses
+-- voies à chaque mot, par une multiplication. Les n mod 8 derniers octets : x * (x >> 7).
+local function k4_swar(s)
+  local n = #s
+  local nw = n // 8
+  local unpack = string.unpack
+  local t, i = 0, 1
+  for w0 = 0, nw - 1, 128 do
+    local e = math.min(w0 + 128, nw)
+    local acc = 0
+    for _ = w0, e - 1 do
+      local w = unpack("<I8", s, i)
+      i = i + 8
+      local y = w & (((w >> 7) & 0x0101010101010101) * 0xFF)
+      acc = acc + (y & 0x00FF00FF00FF00FF) + ((y >> 8) & 0x00FF00FF00FF00FF)
+    end
+    acc = (acc & 0x0000FFFF0000FFFF) + ((acc >> 16) & 0x0000FFFF0000FFFF)
+    t = t + (acc & 0xFFFFFFFF) + (acc >> 32)
+  end
+  for k = nw * 8 + 1, n do local x = string.byte(s, k); t = t + x * (x >> 7) end
+  return t
+end
 local function run_k4(v, reps)
+  if v == "swar" then
+    local s = read_all("k4_bytes.u8")
+    bench("k4", v, "16M", reps, function() return tostring(k4_swar(s)) end)
+    return
+  end
+  if v == "tuned" then  -- v4, point 3 (R3) : mots de 64 bits lus dans la chaîne des octets tels qu'ils sont stockés
+    local s = read_all("k4_bytes.u8")
+    bench("k4", v, "16M", reps, function() return tostring(k4_tuned(s)) end)
+    return
+  end
   local t, n = bytes("k4_bytes.u8")
   if v == "natural_sorted" then
     local cnt = {}
@@ -237,6 +292,49 @@ local function q6_tuned(c, lo, hi)
   end
   return s
 end
+-- v4, point 4 (docs/V4_CONVERGE.md, 3.5, forme propre au runtime) : rq_nest, la forme de la remarque sur Lua
+-- (bench/lua_exp, tuned_n ; docs/LUA.md : × 0,51), recopiée : Q6 par tests imbriqués, date et remise lues une fois
+local function q6_nested(c, lo, hi)
+  local sd, d, q, pr = c.sd, c.d, c.q, c.pr
+  local s = 0
+  for i = lo, hi do
+    local x = sd[i]
+    if x >= 8766 and x < 9131 then
+      local dd = d[i]
+      if dd >= 5 and dd <= 7 and q[i] < 24 then s = s + pr[i] * dd end
+    end
+  end
+  return s
+end
+-- v4, point 4 (3.3, Q1 tuned_s) : une passe, les 30 accumulateurs en variables locales ; par ligne, ps = 1 si
+-- shipdate <= 10471 (bit de signe de shipdate - 10472, décalage logique) et, pour chaque groupe k,
+-- mk = ps & (bit de signe de (g ~ k) - 1), 1 si g = k ; additions des produits par mk, sans branchement
+local function q1_tuned_s(c, lo, hi)
+  local sd, pr, q, d, t, rf, ls = c.sd, c.pr, c.q, c.d, c.t, c.rf, c.ls
+  local n0, q0, p0, e0, c0, n1, q1, p1, e1, c1, n2, q2, p2, e2, c2 = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  local n3, q3, p3, e3, c3, n4, q4, p4, e4, c4, n5, q5, p5, e5, c5 = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  for i = lo, hi do
+    local ps = (sd[i] - 10472) >> 63
+    local g = rf[i] * 2 + ls[i]
+    local qq, p = q[i], pr[i]
+    local dp = p * (100 - d[i])
+    local ch = dp * (100 + t[i])
+    local m = ps & ((g - 1) >> 63)
+    n0 = n0 + m; q0 = q0 + qq * m; p0 = p0 + p * m; e0 = e0 + dp * m; c0 = c0 + ch * m
+    m = ps & (((g ~ 1) - 1) >> 63)
+    n1 = n1 + m; q1 = q1 + qq * m; p1 = p1 + p * m; e1 = e1 + dp * m; c1 = c1 + ch * m
+    m = ps & (((g ~ 2) - 1) >> 63)
+    n2 = n2 + m; q2 = q2 + qq * m; p2 = p2 + p * m; e2 = e2 + dp * m; c2 = c2 + ch * m
+    m = ps & (((g ~ 3) - 1) >> 63)
+    n3 = n3 + m; q3 = q3 + qq * m; p3 = p3 + p * m; e3 = e3 + dp * m; c3 = c3 + ch * m
+    m = ps & (((g ~ 4) - 1) >> 63)
+    n4 = n4 + m; q4 = q4 + qq * m; p4 = p4 + p * m; e4 = e4 + dp * m; c4 = c4 + ch * m
+    m = ps & (((g ~ 5) - 1) >> 63)
+    n5 = n5 + m; q5 = q5 + qq * m; p5 = p5 + p * m; e5 = e5 + dp * m; c5 = c5 + ch * m
+  end
+  return n0 + q0 + p0 + e0 + c0 + n1 + q1 + p1 + e1 + c1 + n2 + q2 + p2 + e2 + c2
+    + n3 + q3 + p3 + e3 + c3 + n4 + q4 + p4 + e4 + c4 + n5 + q5 + p5 + e5 + c5
+end
 local function q1_natural(c, lo, hi, acc)
   local sd, pr, q, d, t, rf, ls = c.sd, c.pr, c.q, c.d, c.t, c.rf, c.ls
   for i = lo, hi do
@@ -270,6 +368,14 @@ local function run_k6(v, reps, p)
   local q1 = p == "q1"
   bench("k6", v, p, reps, function()
     local s = 0
+    -- v4, point 4 : tuned_s (Q6 : la variante tuned publiée en est déjà la forme) ; rq_nest et rq_nest_mt (Q6, tests
+    -- imbriqués : un bloc, ou quatre morceaux en séquence comme mt)
+    if q1 and v == "tuned_s" then return string.format("%d", q1_tuned_s(c, 1, N6)) end
+    if not q1 and v == "rq_nest" then return string.format("%d", q6_nested(c, 1, N6)) end
+    if not q1 and v == "rq_nest_mt" then
+      for k = 0, 3 do s = s + q6_nested(c, k * (N6 // 4) + 1, (k + 1) * (N6 // 4)) end
+      return string.format("%d", s)
+    end
     if q1 then
       local acc = {}
       for k = 1, 30 do acc[k] = 0 end
@@ -287,6 +393,27 @@ local function run_k6(v, reps, p)
 end
 
 -- ------------------------------------------------------------------ K7
+-- v4, point 4 (3.3, K7 tuned_oa : forme de repli, Lua n'ayant pas de préchargement) : la table de tuned_pf sans
+-- préchargement : capacité 2^(LOG2+1), une case = deux entiers consécutifs de la partie tableau d'une table Lua (clé << 32
+-- | compte, somme : 16 octets de données), allouée (table.create) et remise à zéro dans le chrono, hachage de Fibonacci
+-- (clé × 0x9E3779B1 mod 2^32) >> (32 − LOG), sondage linéaire ; une case est vide si son premier entier vaut 0
+local function k7_tuned_oa(keys, vals, n, log)
+  local cap = 1 << log
+  local msk, sh = cap - 1, 32 - log
+  local tab = table.create(2 * cap)
+  for s = 1, 2 * cap do tab[s] = 0 end
+  for i = 1, n do
+    local k = keys[i]
+    local s = ((k * 0x9E3779B1) & 0xFFFFFFFF) >> sh
+    while true do
+      local w = tab[2 * s + 1]
+      if w == 0 then tab[2 * s + 1] = (k << 32) | 1; tab[2 * s + 2] = vals[i]; break end
+      if (w >> 32) == k then tab[2 * s + 1] = w + 1; tab[2 * s + 2] = tab[2 * s + 2] + vals[i]; break end
+      s = (s + 1) & msk
+    end
+  end
+  return tab
+end
 local function run_k7(v, reps)
   local keys = load("k7_keys.u32", "<I4", 4)
   local vals = load("k7_vals.u32", "<I4", 4)
@@ -303,6 +430,28 @@ local function run_k7(v, reps)
       end
       dt = clock() - t0
       for k, e in pairs(m) do nk = nk + 1; ws = ws + e[2] * ((k & 1023) + 1) end
+    elseif v == "tuned_oa" then
+      local t0 = clock()
+      local tab = k7_tuned_oa(keys, vals, n, 21)
+      dt = clock() - t0
+      for s = 1, #tab, 2 do
+        local w = tab[s]
+        if w ~= 0 then nk = nk + 1; ws = ws + tab[s + 1] * (((w >> 32) & 1023) + 1) end
+      end
+    elseif v == "rq_pack" then -- v4, point 4 (3.5) : forme de la remarque sur Lua (bench/lua_exp, tuned_p ; docs/LUA.md :
+      -- × 0,71), propre au runtime (représentation des tables de Lua) : une seule table, compte et somme tassés dans un
+      -- entier (somme <= 2^24 · 999 < 2^34 sur les bits bas, compte <= 2^24 au-dessus du bit 35)
+      local t0 = clock()
+      local agg = {}
+      local ONE = 1 << 35
+      for i = 1, n do
+        local k = keys[i]
+        local e = agg[k]
+        if e then agg[k] = e + ONE + vals[i] else agg[k] = ONE + vals[i] end
+      end
+      dt = clock() - t0
+      local MASK = ONE - 1
+      for k, e in pairs(agg) do nk = nk + 1; ws = ws + (e & MASK) * ((k & 1023) + 1) end
     else -- deux tables plates clé -> entier (pas de table par entrée)
       local t0 = clock()
       local cnt, sum = {}, {}
@@ -337,6 +486,48 @@ local function a_build(d)
   return i
 end
 local function a_sum(i) if i == 0 then return 0 end; return AV[i] + a_sum(AL[i]) + a_sum(AR[i]) end
+-- v4, point 4 (3.3, K8 tuned_val) : la même arène (AV, AL, AR, indices depuis 1, 0 = pas d'enfant), construite en ordre
+-- préfixe ; l'état passe par valeur (i : indice du nœud ; q : numéro de requête, valeur du nœud = q + i - 1), le
+-- prochain indice libre revient en résultat ; ni variable globale d'état (top, cnt8). Somme : a_sum (récursive).
+local function a_build_val(i, d, q)
+  AV[i] = q + i - 1
+  if d == 0 then AL[i] = 0; AR[i] = 0; return i + 1 end
+  local l = i + 1
+  local r = a_build_val(l, d - 1, q)
+  AL[i] = l; AR[i] = r
+  return a_build_val(r, d - 1, q)
+end
+-- v4, point 4 (3.3, K8 tuned_it) : la forme de la remarque sur Lua (bench/lua_exp ; docs/LUA.md), recopiée : arène
+-- construite et parcourue par itération, piles explicites (tables) ; mêmes nœuds, mêmes valeurs, même ordre préfixe.
+local stN, stD, stS, stQ = {}, {}, {}, {}
+local function a_node()
+  top = top + 1
+  local i = top
+  AV[i] = cnt8; cnt8 = cnt8 + 1; AL[i] = 0; AR[i] = 0
+  return i
+end
+local function a_build_it(d0)
+  local root = a_node()
+  local sp = 0
+  if d0 > 0 then stN[1] = root; stD[1] = d0; stS[1] = 0; sp = 1 end
+  while sp > 0 do
+    local nd, d = stN[sp], stD[sp]
+    local c = a_node()
+    if stS[sp] == 0 then stS[sp] = 1; AL[nd] = c else sp = sp - 1; AR[nd] = c end
+    if d > 1 then sp = sp + 1; stN[sp] = c; stD[sp] = d - 1; stS[sp] = 0 end
+  end
+  return root
+end
+local function a_sum_it(root)
+  local s, sp = 0, 1
+  stQ[1] = root
+  while sp > 0 do
+    local nd = stQ[sp]; sp = sp - 1
+    s = s + AV[nd]
+    if AL[nd] ~= 0 then sp = sp + 1; stQ[sp] = AR[nd]; sp = sp + 1; stQ[sp] = AL[nd] end
+  end
+  return s
+end
 local function run_k8(v, reps)
   local Q = 16384
   cnt8 = 0
@@ -344,6 +535,7 @@ local function run_k8(v, reps)
   local lsum = t_sum(keep)
   local lat = {}
   local tuned = v == "tuned"
+  local tval, tit = v == "tuned_val", v == "tuned_it" -- v4, point 4
   for r = -WARMUP, reps - 1 do
     local total = 0
     local t0 = clock()
@@ -351,7 +543,9 @@ local function run_k8(v, reps)
       local a = clock()
       cnt8 = q
       local s
-      if tuned then top = 0; s = a_sum(a_build(10)) else s = t_sum(t_build(10)) end
+      if tval then a_build_val(1, 10, q); s = a_sum(1)
+      elseif tit then top = 0; s = a_sum_it(a_build_it(10))
+      elseif tuned then top = 0; s = a_sum(a_build(10)) else s = t_sum(t_build(10)) end
       total = total + s
       lat[q + 1] = (clock() - a) * 1e9
     end
@@ -379,6 +573,20 @@ local function k9_flat(a, b)
     for j = 2, M9 - 1 do b[mid + j] = 0.25 * (((a[up + j] + a[dn + j]) + a[mid + j - 1]) + a[mid + j + 1]) end
   end
 end
+-- v4, point 4 (docs/V4_CONVERGE.md, 3.5 et 4.2, forme propre au runtime) : rq_slide, la forme de la remarque sur Lua
+-- (bench/lua_exp, tuned_s ; docs/LUA.md : × 0,87), recopiée : voisins de gauche et du centre gardés dans des variables.
+-- rq_slide_mt : le même code (la variante mt de Lua, sans fils, est celle de tuned).
+local function k9_flat_s(a, b)
+  for i = 1, M9 - 2 do
+    local mid = i * M9
+    local l, c = a[mid + 1], a[mid + 2]
+    for j = mid + 2, mid + M9 - 1 do
+      local r = a[j + 1]
+      b[j] = 0.25 * (((a[j - M9] + a[j + M9]) + l) + r)
+      l, c = c, r
+    end
+  end
+end
 local function run_k9(v, reps)
   -- harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
   local ga, gb = {}, {}
@@ -394,11 +602,12 @@ local function run_k9(v, reps)
       k9_natural(a, b); k9_natural(b, a); k9_natural(a, b); k9_natural(b, a)
       dt = clock() - t0
       for i = 1, M9 do local row = a[i]; for j = 1, M9 do s = s + row[j] end end
-    else
+    else  -- tuned, mt et (v4, point 3, R2) natural_flat : la boucle naturelle sur une table plate
       local a, b = ga, gb
       for k = 0, M9 * M9 - 1 do local x = k9_init(k // M9, k % M9); a[k + 1] = x; b[k + 1] = x end
+      local f = (v == "rq_slide" or v == "rq_slide_mt") and k9_flat_s or k9_flat
       local t0 = clock()
-      k9_flat(a, b); k9_flat(b, a); k9_flat(a, b); k9_flat(b, a)
+      f(a, b); f(b, a); f(a, b); f(b, a)
       dt = clock() - t0
       for k = 1, M9 * M9 do s = s + a[k] end
     end

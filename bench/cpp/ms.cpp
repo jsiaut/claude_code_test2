@@ -20,6 +20,7 @@
 #include <new>
 #include <queue>
 #include <simd>
+#include <immintrin.h>
 #include <string>
 #include <string_view>
 #include <thread>
@@ -64,6 +65,36 @@ static double now() { return std::chrono::duration<double>(std::chrono::steady_c
 static uint64_t now_ns() {
     return (uint64_t)std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool) : réserve de quatre fils de travail, le fil principal compris. Les
+// trois autres (std::jthread) sont créés une fois par processus, avant l'échauffement ; à chaque appel, un
+// std::barrier les réveille, chacun traite son quart (0 pour le fil principal), et un second std::barrier attend leur
+// fin. Entre deux appels, ils attendent, bloqués, au premier. Les barrières ordonnent aussi les accès mémoire.
+struct Pool {
+    std::barrier<> start{4}, done{4};
+    const void *ctx = nullptr;
+    void (*call)(const void *, int) = nullptr;
+    bool quit = false;
+    std::array<std::jthread, 3> th;
+    Pool() {
+        for (int t = 1; t < 4; t++)
+            th[t - 1] = std::jthread([this, t] {
+                for (;;) {
+                    start.arrive_and_wait();
+                    if (quit) return;
+                    call(ctx, t);
+                    done.arrive_and_wait();
+                }
+            });
+    }
+    ~Pool() { quit = true; start.arrive_and_wait(); }  // puis les std::jthread sont rejoints
+    template <class F> void run(const F &f) {
+        ctx = &f;
+        call = [](const void *c, int t) { (*static_cast<const F *>(c))(t); };
+        start.arrive_and_wait();
+        f(0);
+        done.arrive_and_wait();
+    }
+};
 static int warmup_count() { const char *w = std::getenv("WARMUP"); return w ? std::atoi(w) : 1; }
 static void result(std::string_view k, std::string_view v, std::string_view p, int rep, double sec, const std::string &chk) {
     std::printf("RESULT;%.*s;%.*s;%.*s;%d;%.9f;%s\n", (int)k.size(), k.data(), (int)v.size(), v.data(), (int)p.size(), p.data(), rep, sec, chk.c_str());
@@ -261,14 +292,58 @@ static void run_k3(std::string_view v, int reps) {
     for (uint8_t x : v) s += (uint64_t)x * (x >> 7);
     return s;
 }
+// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (intrinsèques AVX-512BW, comme en C) : masque
+// v >= 128 par le bit de poids fort, octets hors masque mis à zéro, vpsadbw en sommes de 64 bits.
+[[gnu::noinline]] static uint64_t k4_tuned(const std::vector<uint8_t> &v) {
+    const uint8_t *p = v.data();
+    const size_t n = v.size();
+    __m512i acc = _mm512_setzero_si512();
+    const __m512i zero = _mm512_setzero_si512();
+    size_t i = 0;
+    for (; i + 64 <= n; i += 64) {
+        __m512i x = _mm512_loadu_si512(p + i);
+        __m512i y = _mm512_maskz_mov_epi8(_mm512_movepi8_mask(x), x);
+        acc = _mm512_add_epi64(acc, _mm512_sad_epu8(y, zero));
+    }
+    uint64_t s = (uint64_t)_mm512_reduce_add_epi64(acc);
+    for (; i < n; i++)
+        if (p[i] >= 128) s += p[i];
+    return s;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits. Le bit de poids fort de chaque
+// octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les octets >= 128 ; les
+// octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute donnée : une voie reçoit au
+// plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les voies sont vidées dans la somme
+// de 64 bits toutes les 128 mots (et à la fin). Aucun branchement sur les données (le reste, < 8 octets, par masque).
+[[gnu::noinline]] static uint64_t k4_swar(const std::vector<uint8_t> &v) {
+    constexpr uint64_t ones = 0x0101010101010101ull, lo = 0x00FF00FF00FF00FFull;
+    const uint8_t *p = v.data();
+    const size_t n = v.size();
+    uint64_t s = 0;
+    size_t i = 0;
+    while (i + 8 <= n) {
+        const size_t end = i + 128 * 8 <= n ? i + 128 * 8 : n - (n - i) % 8;
+        uint64_t acc = 0;
+        for (; i < end; i += 8) {
+            uint64_t w;
+            std::memcpy(&w, p + i, 8);
+            const uint64_t y = w & (((w >> 7) & ones) * 0xFF);
+            acc += (y & lo) + ((y >> 8) & lo);
+        }
+        acc = (acc & 0x0000FFFF0000FFFFull) + ((acc >> 16) & 0x0000FFFF0000FFFFull);  // deux voies de 32 bits
+        s += (acc & 0xFFFFFFFFull) + (acc >> 32);
+    }
+    for (; i < n; i++) s += p[i] & -(uint64_t)(p[i] >> 7);
+    return s;
+}
 static void run_k4(std::string_view v, int reps) {
     auto a = load<uint8_t>("k4_bytes.u8");
     std::vector<uint8_t> d(a.begin(), a.end());
     if (v == "natural_sorted") std::ranges::sort(d);  // hors chrono
-    const bool bl = v == "branchless_unsorted";
+    const bool bl = v == "branchless_unsorted", tu = v == "tuned", sw = v == "swar";
     for (int r = -warmup_count(); r < reps; r++) {
         double t0 = now();
-        uint64_t s = bl ? k4_branchless(d) : k4_natural(d);
+        uint64_t s = tu ? k4_tuned(d) : sw ? k4_swar(d) : bl ? k4_branchless(d) : k4_natural(d);
         double t1 = now();
         if (r >= 0) result("k4", v, "16M", r, t1 - t0, std::to_string(s));
     }
@@ -357,6 +432,22 @@ static I16 ld8(const uint8_t *p) { return I16(ss::unchecked_load<U8x16>(p, 16));
     }
     return s + q6_natural(c, i, hi);
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q6 tuned_v ; forme de la frontière, Zig) : blocs de 16 lignes en
+// std::simd : colonnes élargies en i32, prédicat par comparaisons, produit prix × remise en i32, sélection,
+// accumulation en i64 (vec<int64_t, 16>) ; la variante tuned publiée accumule en i32, vidé tous les 256 pas.
+// Exactitude pour toute donnée (docs/SPEC.md, K6) : prix <= 50 000 et remise <= 10, donc produit <= 500 000 < 2^31 ;
+// une voie de 64 bits reçoit au plus N6 / 16 produits.
+[[gnu::noinline]] static int64_t q6_tuned_v(const Cols &c, size_t lo, size_t hi) {
+    using L16 = ss::vec<int64_t, 16>;
+    L16 acc = 0;
+    size_t i = lo;
+    for (; i + 16 <= hi; i += 16) {
+        I16 sd = ld32(&c.sd[i]), d = ld8(&c.d[i]), q = ld8(&c.q[i]), p = ld32(&c.pr[i]);
+        auto m = (sd >= 8766) && (sd < 9131) && (d >= 5) && (d <= 7) && (q < 24);
+        acc += L16(ss::select(m, p * d, I16(0)));
+    }
+    return ss::reduce(acc) + q6_natural(c, i, hi);  // reste (< 16 lignes)
+}
 // Q1 std::simd : 16 lignes par pas, agrégation masquée par groupe ; accumulateurs 32 bits
 // vidés tous les 4096 lignes, colonne charge en 64 bits.
 [[gnu::noinline]] static void q1_tuned(const Cols &c, size_t lo, size_t hi, Q1Acc &acc) {
@@ -397,11 +488,28 @@ static void run_k6(std::string_view v, int reps, std::string_view p) {
            load<uint8_t>("k6_discount.u8"),  load<uint8_t>("k6_tax.u8"),            load<uint8_t>("k6_returnflag.u8"),
            load<uint8_t>("k6_linestatus.u8")};
     const bool q1 = p == "q1";
+    // mt_pool, mt_pool_v (v4, point 4) : un quart par fil de la réserve ; mt_pool exécute la forme de la variante mt
+    // publiée (q6_tuned, q1_tuned, déjà la forme tuned_v de Q1), mt_pool_v la forme tuned_v de Q6.
+    const int pl = v == "mt_pool" ? 0 : v == "mt_pool_v" && !q1 ? 1 : -1;
+    std::unique_ptr<Pool> pool;
+    if (pl >= 0) pool = std::make_unique<Pool>();
     for (int r = -warmup_count(); r < reps; r++) {
         Q1Acc acc{};
         int64_t s6 = 0;
         double t0 = now();
-        if (v == "mt") {
+        if (pl >= 0) {
+            std::array<Q1Acc, 4> part{};
+            std::array<int64_t, 4> p6{};
+            pool->run([&](int t) {
+                size_t lo = N6 * t / 4, hi = N6 * (t + 1) / 4;
+                if (q1) q1_tuned(c, lo, hi, part[t]);
+                else p6[t] = pl ? q6_tuned_v(c, lo, hi) : q6_tuned(c, lo, hi);
+            });
+            for (int t = 0; t < 4; t++) {
+                s6 += p6[t];
+                for (int g = 0; g < 6; g++) for (int k = 0; k < 5; k++) acc[g][k] += part[t][g][k];
+            }
+        } else if (v == "mt") {
             std::array<Q1Acc, 4> part{};
             std::array<int64_t, 4> p6{};
             {
@@ -418,6 +526,8 @@ static void run_k6(std::string_view v, int reps, std::string_view p) {
             }
         } else if (v == "tuned") {
             if (q1) q1_tuned(c, 0, N6, acc); else s6 = q6_tuned(c, 0, N6);
+        } else if (v == "tuned_v" && !q1) {
+            s6 = q6_tuned_v(c, 0, N6);
         } else {
             if (q1) q1_natural(c, 0, N6, acc); else s6 = q6_natural(c, 0, N6);
         }
@@ -492,6 +602,69 @@ static int32_t a8_build(std::vector<ANode> &a, int32_t &top, int depth, int64_t 
     return i;
 }
 static int64_t a8_sum(const std::vector<ANode> &a, int32_t i) { return i < 0 ? 0 : a[i].v + a8_sum(a, a[i].l) + a8_sum(a, a[i].r); }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.5, rq_ptr ; forme de bench/cpp_k8, remarque sur C++, × 0,77) : la variante tuned,
+// l'arène passée par pointeur brut au lieu de std::vector& (forme propre à C++ : relevé, results/converge/inventory.md).
+static int32_t p8a_build(ANode *a, int32_t &top, int depth, int64_t &counter) {
+    int32_t i = top++;
+    a[i].v = counter++;
+    if (depth > 0) { int32_t l = p8a_build(a, top, depth - 1, counter); a[i].l = l; a[i].r = p8a_build(a, top, depth - 1, counter); }
+    else a[i].l = a[i].r = -1;
+    return i;
+}
+static int64_t p8a_sum(const ANode *a, int32_t i) { return i < 0 ? 0 : a[i].v + p8a_sum(a, a[i].l) + p8a_sum(a, a[i].r); }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada, et de bench/c_k8val) : l'état passe
+// par valeur, l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la fonction rend l'indice
+// libre suivant. L'arène (la même que celle de tuned) est passée par pointeur ; somme récursive par les liens.
+static int32_t a8v_build(ANode *a, int32_t i, int depth, int64_t q) {
+    a[i].v = q + i;
+    if (depth > 0) {
+        const int32_t l = i + 1, r = a8v_build(a, l, depth - 1, q);
+        a[i].l = l;
+        a[i].r = r;
+        return a8v_build(a, r, depth - 1, q);
+    }
+    a[i].l = a[i].r = -1;
+    return i + 1;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/c_k8it, remarque sur C) : construction et somme
+// itératives, piles explicites. La construction descend à gauche en empilant le sous-arbre droit de chaque nœud
+// interne, puis le reprend à la feuille suivante : même ordre préfixe, mêmes liens et mêmes valeurs que a8_build. Les
+// piles tiennent par construction : au plus une entrée par niveau à la construction, au plus profondeur + 1 à la somme.
+static_assert(MS_K8_REQ < 63, "piles de K8 tuned_it : 64 entrées");
+static void a8i_build(ANode *a, int depth, int64_t q) {
+    struct Pend { int32_t parent, depth; };
+    std::array<Pend, 64> stk;
+    int sp = 0;
+    int32_t top = 0, parent = -1;
+    bool right = false;
+    int d = depth;
+    for (;;) {
+        const int32_t i = top++;
+        a[i].v = q + i;
+        if (parent >= 0) (right ? a[parent].r : a[parent].l) = i;
+        if (d > 0) {
+            stk[sp++] = {i, d - 1};
+            parent = i; right = false; d = d - 1;
+        } else {
+            a[i].l = a[i].r = -1;
+            if (!sp) break;
+            --sp;
+            parent = stk[sp].parent; d = stk[sp].depth; right = true;
+        }
+    }
+}
+static int64_t a8i_sum(const ANode *a, int32_t root) {
+    std::array<int32_t, 64> stk;
+    int sp = 0;
+    int64_t s = 0;
+    stk[sp++] = root;
+    while (sp) {
+        const int32_t i = stk[--sp];
+        s += a[i].v;
+        if (a[i].l >= 0) { stk[sp++] = a[i].r; stk[sp++] = a[i].l; }
+    }
+    return s;
+}
 // tuned_alloc : nœuds à pointeurs alloués dans une std::pmr::monotonic_buffer_resource réinitialisée
 struct PNode { int64_t v; PNode *l, *r; };
 static PNode *p8_build(std::pmr::polymorphic_allocator<PNode> &al, int depth, int64_t &counter) {
@@ -519,6 +692,9 @@ static void run_k8(std::string_view v, int reps) {
             uint64_t a = now_ns();
             int64_t c = q, s;
             if (v == "tuned") { int32_t top = 0; int32_t root = a8_build(arena, top, D, c); s = a8_sum(arena, root); }
+            else if (v == "tuned_val") { a8v_build(arena.data(), 0, D, c); s = p8a_sum(arena.data(), 0); }
+            else if (v == "tuned_it") { a8i_build(arena.data(), D, c); s = a8i_sum(arena.data(), 0); }
+            else if (v == "rq_ptr") { int32_t top = 0; int32_t root = p8a_build(arena.data(), top, D, c); s = p8a_sum(arena.data(), root); }
             else if (v == "tuned_alloc") { mono.release(); s = p8_sum(p8_build(al, D, c)); }
             else { auto t = t8_build(D, c); s = t8_sum(t.get()); }  // libération récursive par ~unique_ptr
             total += s;
@@ -543,11 +719,36 @@ static double k9_init(int i, int j) { return (double)((i * 31 + j * 17) % 1024) 
     for (int i = 1; i < M9 - 1; i++)
         for (int j = 1; j < M9 - 1; j++) out[i][j] = 0.25 * (((in[i - 1][j] + in[i + 1][j]) + in[i][j - 1]) + in[i][j + 1]);
 }
+// v4, point 3 (docs/V4_EQUAL.md, R2) : naturel en grille contiguë, std::vector<double> indexé i * M9 + j, même boucle
+[[gnu::noinline]] static void k9_natural_flat(const std::vector<double> &in, std::vector<double> &out) {
+    for (int i = 1; i < M9 - 1; i++)
+        for (int j = 1; j < M9 - 1; j++)
+            out[i * M9 + j] = 0.25 * (((in[(i - 1) * M9 + j] + in[(i + 1) * M9 + j]) + in[i * M9 + j - 1]) + in[i * M9 + j + 1]);
+}
 [[gnu::noinline]] static void k9_rows(const double *__restrict in, double *__restrict out, int r0, int r1) {
     for (int i = r0; i < r1; i++) {
         const double *__restrict up = in + (size_t)(i - 1) * M9, *__restrict mid = in + (size_t)i * M9, *__restrict dn = in + (size_t)(i + 1) * M9;
         double *__restrict o = out + (size_t)i * M9;
         for (int j = 1; j < M9 - 1; j++) o[j] = 0.25 * (((up[j] + dn[j]) + mid[j - 1]) + mid[j + 1]);
+    }
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K9 tuned_v ; forme de la frontière, Swift) : par ligne, std::simd de 8 f64 :
+// haut, bas, gauche et droite chargés en vecteurs, même ordre des additions que la spécification, résultat écrit en
+// vecteur, reste scalaire. Grilles plates alignées sur 64 octets (avec Aligned64) ; comme chez Swift, la boucle part de
+// j = 1, chargements et écriture non alignés.
+[[gnu::noinline]] static void k9_rows_v(const double *__restrict in, double *__restrict out, int r0, int r1) {
+    using D8 = ss::vec<double, 8>;
+    const D8 q = 0.25;
+    for (int i = r0; i < r1; i++) {
+        const double *up = in + (size_t)(i - 1) * M9, *mid = in + (size_t)i * M9, *dn = in + (size_t)(i + 1) * M9;
+        double *o = out + (size_t)i * M9;
+        int j = 1;
+        for (; j + 8 <= M9 - 1; j += 8) {
+            const D8 s = ((ss::unchecked_load<D8>(up + j, 8) + ss::unchecked_load<D8>(dn + j, 8)) +
+                          ss::unchecked_load<D8>(mid + j - 1, 8)) + ss::unchecked_load<D8>(mid + j + 1, 8);
+            ss::unchecked_store(q * s, o + j, 8);
+        }
+        for (; j < M9 - 1; j++) o[j] = 0.25 * (((up[j] + dn[j]) + mid[j - 1]) + mid[j + 1]);
     }
 }
 static void run_k9(std::string_view v, int reps) {
@@ -556,6 +757,11 @@ static void run_k9(std::string_view v, int reps) {
     avec<double> fa, fb;
     if (v == "natural") { na.assign(M9, std::vector<double>(M9)); nb.assign(M9, std::vector<double>(M9)); }
     else { fa.resize((size_t)M9 * M9); fb.resize((size_t)M9 * M9); }
+    // mt_pool, mt_pool_v (v4, point 4) : un quart des lignes par fil de la réserve ; mt_pool exécute k9_rows (la forme
+    // de mt), mt_pool_v la forme tuned_v.
+    const int pl = v == "mt_pool" ? 0 : v == "mt_pool_v" ? 1 : -1;
+    std::unique_ptr<Pool> pool;
+    if (pl >= 0) pool = std::make_unique<Pool>();
     for (int r = -warmup_count(); r < reps; r++) {
         double s = 0, t0, t1;
         if (v == "natural") {
@@ -565,12 +771,26 @@ static void run_k9(std::string_view v, int reps) {
             for (int it = 0; it < IT9; it++) { k9_natural(a, b); std::swap(a, b); }
             t1 = now();
             for (const auto &row : a) for (double x : row) s += x;
+        } else if (v == "natural_flat") {
+            std::vector<double> a((size_t)M9 * M9);
+            for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) a[i * M9 + j] = k9_init(i, j);
+            auto b = a;
+            t0 = now();
+            for (int it = 0; it < IT9; it++) { k9_natural_flat(a, b); std::swap(a, b); }
+            t1 = now();
+            for (double x : a) s += x;
         } else {
             for (int i = 0; i < M9; i++) for (int j = 0; j < M9; j++) fa[(size_t)i * M9 + j] = fb[(size_t)i * M9 + j] = k9_init(i, j);
             double *in = fa.data(), *out = fb.data();
             t0 = now();
             for (int it = 0; it < IT9; it++) {
                 if (v == "tuned") k9_rows(in, out, 1, M9 - 1);
+                else if (v == "tuned_v") k9_rows_v(in, out, 1, M9 - 1);
+                else if (pl >= 0)
+                    pool->run([&](int t) {
+                        const int r0 = 1 + (M9 - 2) * t / 4, r1 = 1 + (M9 - 2) * (t + 1) / 4;
+                        if (pl) k9_rows_v(in, out, r0, r1); else k9_rows(in, out, r0, r1);
+                    });
                 else {
                     std::array<std::jthread, 4> th;
                     for (int t = 0; t < 4; t++) th[t] = std::jthread(k9_rows, in, out, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4);

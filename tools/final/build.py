@@ -1,20 +1,26 @@
 #!/usr/bin/env python3
-"""v4, campagne finale (docs/V4_FINAL.md, 5 et 6) : constructions dans /dev/shm/msbuild/<langage>/f_<construction>_<jeu>.
+"""Constructions de la campagne (docs/METHOD.md, 6) dans /dev/shm/msbuild/<langage>/f_<construction>_<jeu>.
 
-Constructions (docs/V4_FINAL.md, 5) : pub (bench/<langage>, mode publié), cv (bench/<langage>_cv, mode publié), chk et
-unc (bench/<langage> dans les modes R1 et R1' : MS_MODE de build.sh ; Julia, sans construction, par l'option de son
-lanceur, comme au point 3), cv_chk et cv_unc (la copie dans ces modes). Jeux de tailles (tools/sizes/sizes.py, SETS) :
-pub, small, large. Langages compilés : paramètres MS_* du jeu passés à build.sh (sans eux, la taille publiée) ; langages
-sans construction : constantes de taille substituées dans la copie (tools/sizes/patches.py : PATCHES, ou CV_PATCHES pour
-les copies _cv), puis build.sh (vérification de syntaxe).
+Une source par langage (bench/<langage>), construite dans chaque mode : pub (mode publié), chk et unc (modes R1 et R1' :
+MS_MODE de build.sh ; Julia, sans construction, par l'option de son lanceur), et pour C, gcc et gcc_chk (la même source
+par gcc 16 : MS_CC de build.sh). Jeux de tailles (tools/sizes/sizes.py, SETS) : pub, small, large. Langages compilés :
+paramètres MS_* du jeu passés à build.sh (sans eux, la taille publiée) ; langages sans construction : constantes de
+taille substituées dans la copie de la construction (tools/sizes/patches.py), puis build.sh (vérification de syntaxe).
+
+Les enregistrements de la campagne portent une étiquette qui dit d'où vient la cellule (CELLS : pub, cv, chk, unc,
+cv_chk, cv_unc, gcc, gcc_cv, gcc_chk) ; plusieurs étiquettes partagent une construction (BUILD_OF).
 
 Chaque construction part des fichiers suivis par git, qui doivent être identiques à ceux du dernier commit (une source
 modifiée et non commitée est refusée) ; elle garde l'empreinte de ses entrées (.source_hash) et n'est refaite que si
 elles changent ou si /dev/shm a été vidé (redémarrage). Empreintes SHA-256 des fichiers exécutés (binaires ELF et, pour
 eux, de leur section .text ; IL de C#, classes de Java ; source et lanceur des langages sans construction) :
-results/final/work/builds.jsonl, une ligne par construction faite, avec la machine et l'identifiant de démarrage.
+builds.jsonl du répertoire de travail de la campagne, une ligne par construction faite, avec la machine et
+l'identifiant de démarrage.
 
-Usage : build.py [--jobs N] [--langs a,b] [--only pub,cv,...] [--sets pub,small,large] [--list] [--footprint]"""
+Répertoire de la campagne : results/final, ou celui de la variable MS_CAMPAIGN_DIR (une campagne en cours s'écrit à
+part de celle qui est publiée).
+
+Usage : build.py [--jobs N] [--langs a,b] [--only pub,chk,...] [--sets pub,small,large] [--list] [--footprint]"""
 import argparse, concurrent.futures as cf, hashlib, json, os, shutil, subprocess, sys, tempfile, threading, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -24,13 +30,16 @@ import sizes as S  # noqa: E402
 import patches as P  # noqa: E402
 
 BUILD_ROOT = "/dev/shm/msbuild"
-WORK = os.path.join(ROOT, "results", "final", "work")
+CAMPAIGN = os.path.join(ROOT, os.environ.get("MS_CAMPAIGN_DIR", os.path.join("results", "final")))
+WORK = os.path.join(CAMPAIGN, "work")
 LANGS = ["c", "cpp", "rust", "zig", "odin", "c3", "d", "nim", "ada", "fortran", "chapel", "mojo", "swift", "fpc", "go",
          "csharp", "java", "haskell", "ocaml", "python", "lua", "php", "bqn", "js", "julia"]
 CHK = ["c", "cpp", "fortran", "zig", "c3", "d", "chapel", "fpc"]          # R1 (docs/METHOD.md, 5)
 UNC = ["swift", "ada", "nim", "odin", "julia", "mojo", "go", "ocaml", "d"]   # R1' (3.1 et écart 5.2)
 CV_CHK = ["cpp", "d"]                                                     # R2 dans le mode R1
 CV_UNC = ["nim", "mojo", "swift", "go", "ocaml", "d"]                     # R2 dans le mode R1'
+GCC = ["c"]                                                               # C aussi par gcc (docs/V5.md, S2)
+BUILD_OF = {"cv": "pub", "cv_chk": "chk", "cv_unc": "unc", "gcc_cv": "gcc"}  # étiquette -> construction partagée
 INTERP = {"python", "lua", "php", "bqn", "js", "julia"}
 SETS = ["pub", "small", "large"]
 MAIN = {"python": "ms.py", "lua": "ms.lua", "php": "ms.php", "bqn": "ms.bqn", "js": "ms.js", "julia": "ms.jl"}
@@ -38,20 +47,31 @@ _lock = threading.Lock()
 
 
 def constructions(lang):
-    return ["pub", "cv"] + [c for c, lst in (("chk", CHK), ("unc", UNC), ("cv_chk", CV_CHK), ("cv_unc", CV_UNC))
-                            if lang in lst]
+    """Étiquettes des cellules d'un langage (une par origine de cellule : tools/final/campaign.py, cells)."""
+    return ["pub", "cv"] + [c for c, lst in (("chk", CHK), ("unc", UNC), ("cv_chk", CV_CHK), ("cv_unc", CV_UNC),
+                                             ("gcc", GCC), ("gcc_cv", GCC), ("gcc_chk", GCC)) if lang in lst]
 
 
-def source_dir(lang, cons):
-    return os.path.join("bench", lang + ("_cv" if cons.startswith("cv") else ""))
+def builds(lang):
+    """Constructions distinctes d'un langage."""
+    out = []
+    for c in constructions(lang):
+        b = BUILD_OF.get(c, c)
+        if b not in out:
+            out.append(b)
+    return out
+
+
+def source_dir(lang):
+    return os.path.join("bench", lang)
 
 
 def mode_of(cons):
-    return {"chk": "chk", "unc": "unc", "cv_chk": "chk", "cv_unc": "unc"}.get(cons)
+    return {"chk": "chk", "unc": "unc", "gcc_chk": "chk"}.get(BUILD_OF.get(cons, cons))
 
 
 def build_dir(lang, cons, sset):
-    return os.path.join(BUILD_ROOT, lang, f"f_{cons}_{sset}")
+    return os.path.join(BUILD_ROOT, lang, f"f_{BUILD_OF.get(cons, cons)}_{sset}")
 
 
 def tracked(src):
@@ -75,12 +95,13 @@ def machine():
 
 
 def input_hash(lang, cons, sset):
-    src = source_dir(lang, cons)
+    src = source_dir(lang)
+    cons = BUILD_OF.get(cons, cons)
     h = hashlib.sha256(f"{cons}|{sset}|{mode_of(cons)}\n".encode())
     for f in sorted(tracked(src)):
         h.update(f.encode() + b"\0" + open(os.path.join(ROOT, src, f), "rb").read())
     if lang in INTERP and sset != "pub":
-        h.update(repr(P.CV_PATCHES[lang] if cons.startswith("cv") else P.PATCHES[lang]).encode())
+        h.update(repr(P.PATCHES[lang]).encode())
     return h.hexdigest()
 
 
@@ -121,7 +142,7 @@ def executed_files(lang, dst, srcfiles):
 
 
 def build(lang, cons, sset):
-    src = source_dir(lang, cons)
+    src = source_dir(lang)
     files = tracked(src)
     dst = build_dir(lang, cons, sset)
     shutil.rmtree(dst, ignore_errors=True)
@@ -134,8 +155,7 @@ def build(lang, cons, sset):
         if sset != "pub":
             main = os.path.join(dst, MAIN[lang])
             text = open(main, encoding="utf-8").read()
-            fn = P.apply_cv if cons.startswith("cv") else P.apply
-            open(main, "w", encoding="utf-8").write(fn(lang, text, S.set_params(sset)))
+            open(main, "w", encoding="utf-8").write(P.apply(lang, text, S.set_params(sset)))
         if mode:
             if lang != "julia" or mode != "unc":
                 raise SystemExit(f"{lang} : pas de mode {mode}")
@@ -147,6 +167,8 @@ def build(lang, cons, sset):
     env = {k: v for k, v in os.environ.items() if not k.startswith("MS_")}
     if mode and lang not in INTERP:
         env["MS_MODE"] = mode
+    if cons.startswith("gcc"):
+        env["MS_CC"] = "gcc"
     if sset != "pub" and lang not in INTERP:
         env.update({k: str(v) for k, v in S.set_params(sset).items()})
         env["MS_SIZE_SET"] = sset
@@ -176,7 +198,7 @@ def ensure(lang, cons, sset):
 
 
 def all_builds(langs, only=None, sets=SETS):
-    return [(l, c, s) for l in langs for c in constructions(l) if only is None or c in only for s in sets]
+    return [(l, c, s) for l in langs for c in builds(l) if only is None or c in only for s in sets]
 
 
 def footprint():

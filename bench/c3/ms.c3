@@ -202,6 +202,70 @@ fn void run_k3(String v, int reps)
 	}
 }
 
+// ------------------------------------------------------------------ réserve de fils (v4, point 4)
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool) : réserve de quatre fils de travail, le fil principal compris. Les
+// trois autres sont créés une fois par processus, avant l'échauffement ; à chaque appel, une barrière les réveille,
+// chacun traite son quart (0 pour le fil principal), et une seconde barrière attend leur fin. Entre deux appels, ils
+// attendent, bloqués, à la première barrière. La bibliothèque standard de C3 n'a pas de barrière : celle-ci est faite
+// de son Mutex et de sa ConditionVariable (numéro de génération), qui ordonnent aussi les accès mémoire.
+struct Barrier { Mutex mu; ConditionVariable cv; int n; int count; uint gen; }
+fn void Barrier.init(&self, int n)
+{
+	self.mu.init()!!;
+	self.cv.init()!!;
+	self.n = n;
+}
+fn void Barrier.wait(&self)
+{
+	self.mu.lock();
+	uint g = self.gen;
+	if (++self.count == self.n)
+	{
+		self.count = 0;
+		self.gen++;
+		self.cv.broadcast();
+	}
+	else
+	{
+		while (g == self.gen) self.cv.wait(&self.mu);
+	}
+	self.mu.unlock();
+}
+alias PoolFn = fn void(void* data, int t);
+struct Pool { Barrier start; Barrier done; PoolFn job; void* data; bool quit; Thread[3] th; }
+Pool g_pool;
+fn int pool_worker(void* arg)
+{
+	int t = (int)(iptr)arg;
+	while (true)
+	{
+		g_pool.start.wait();
+		if (g_pool.quit) return 0;
+		g_pool.job(g_pool.data, t);
+		g_pool.done.wait();
+	}
+}
+fn void pool_start()
+{
+	g_pool.start.init(4);
+	g_pool.done.init(4);
+	for (int t = 1; t < 4; t++) g_pool.th[t - 1].create(&pool_worker, (void*)(iptr)t)!!;
+}
+fn void pool_run(PoolFn job, void* data)
+{
+	g_pool.job = job;
+	g_pool.data = data;
+	g_pool.start.wait();
+	job(data, 0);
+	g_pool.done.wait();
+}
+fn void pool_stop()
+{
+	g_pool.quit = true;
+	g_pool.start.wait();
+	for (int t = 0; t < 3; t++) g_pool.th[t].join()!!;
+}
+
 // ------------------------------------------------------------------ K4
 fn ulong k4_natural(char[] v) @noinline
 {
@@ -213,6 +277,59 @@ fn ulong k4_branchless(char[] v) @noinline
 {
 	ulong s;
 	foreach (x : v) s += (ulong)x * (ulong)(x >> 7);
+	return s;
+}
+// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (vecteurs natifs char[<64>]) : 64 octets par
+// tour, masque v >= 128 (comp_ge), octets hors masque à zéro (math::select), cumulés en 64 voies de ushort (au plus
+// 256 tours, sans débordement), puis réduits en ulong. (x * (x >> 7), la forme sans branchement, est fausse sur un
+// vecteur de char : c3c y fait du décalage un décalage arithmétique, 160 >> 7 = -1.)
+fn ulong k4_tuned(char[] v) @noinline
+{
+	ulong s;
+	usz n = v.len;
+	usz i = 0;
+	char[<64>] lim = 128;
+	char[<64>] zero;
+	while (i + 64 <= n)
+	{
+		ushort[<64>] acc;
+		for (int k = 0; k < 256 && i + 64 <= n; k++)
+		{
+			char[<64>] x = mem::load((char[<64>]*)&v[i], 1);
+			acc += (ushort[<64>])math::select(x.comp_ge(lim), x, zero);
+			i += 64;
+		}
+		s += ((ulong[<64>])acc).sum();
+	}
+	for (; i < n; i++) if (v[i] >= 128) s += v[i];
+	return s;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits. Le bit de poids fort de chaque
+// octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les octets >= 128 ; les
+// octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute donnée : une voie reçoit au
+// plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les voies sont vidées dans la somme
+// de 64 bits toutes les 128 mots (et à la fin). Aucun branchement sur les données (le reste, < 8 octets, par produit).
+fn ulong k4_swar(char[] v) @noinline
+{
+	const ulong ONES = 0x0101010101010101;
+	const ulong LO = 0x00FF00FF00FF00FF;
+	ulong s;
+	usz n = v.len;
+	usz i = 0;
+	while (i + 8 <= n)
+	{
+		usz end = i + 128 * 8 <= n ? i + 128 * 8 : n - (n - i) % 8;
+		ulong acc;
+		for (; i < end; i += 8)
+		{
+			ulong w = mem::load((ulong*)&v[i], 1);
+			ulong y = w & (((w >> 7) & ONES) * 0xFF);
+			acc += (y & LO) + ((y >> 8) & LO);
+		}
+		acc = (acc & 0x0000FFFF0000FFFF) + ((acc >> 16) & 0x0000FFFF0000FFFF); // deux voies de 32 bits
+		s += (acc & 0xFFFFFFFF) + (acc >> 32);
+	}
+	for (; i < n; i++) s += (ulong)v[i] * (ulong)(v[i] >> 7);
 	return s;
 }
 fn void run_k4(String v, int reps)
@@ -231,10 +348,12 @@ fn void run_k4(String v, int reps)
 		}
 	}
 	bool bl = v == "branchless_unsorted";
+	bool tu = v == "tuned";
+	bool sw = v == "swar";
 	for (int r = -g_warmup; r < reps; r++)
 	{
 		Clock t0 = clock::now();
-		ulong s = bl ? k4_branchless(d) : k4_natural(d);
+		ulong s = tu ? k4_tuned(d) : sw ? k4_swar(d) : bl ? k4_branchless(d) : k4_natural(d);
 		double dt = secs(t0);
 		if (r >= 0) result("k4", v, "16M", r, dt, string::tformat("%d", s));
 	}
@@ -371,6 +490,52 @@ fn void q1_tuned(Cols* c, usz lo, usz hi, Q1Acc* acc) @noinline
 	}
 	if (i < hi) q1_natural(c, i, hi, acc);
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q1 tuned_v) : l'algorithme de q1_tuned, le compte de chaque groupe par
+// population du masque (mask_to_int de std::math, puis popcount), comme la référence C, au lieu de la somme des voies
+// d'une sélection. Exactitude : celle de q1_tuned (voies de 32 bits vidées toutes les 4 096 lignes).
+fn void q1_tuned_v(Cols* c, usz lo, usz hi, Q1Acc* acc) @noinline
+{
+	usz i = lo;
+	while (i + 16 <= hi)
+	{
+		int[<16>][6] aq, ap, adp;
+		long[<16>][6] ach;
+		long[6] cnt;
+		usz end = i + 4096 <= hi ? i + 4096 : hi - (hi - i) % 16;
+		for (; i < end; i += 16)
+		{
+			bool[<16>] pass = $$veccomple(ld32(&c.sd[i]), (int[<16>])10471);
+			int[<16>] vg = ld8(&c.rf[i]) * 2 + ld8(&c.ls[i]);
+			int[<16>] vq = ld8(&c.q[i]);
+			int[<16>] vd = ld8(&c.d[i]);
+			int[<16>] vt = ld8(&c.t[i]) + 100;
+			int[<16>] vp = ld32(&c.pr[i]);
+			int[<16>] vdp = vp * (100 - vd);
+			long[<16>] ch = (long[<16>])vdp * (long[<16>])vt;
+			int[<16>] zi;
+			long[<16>] zl;
+			$for var $g = 0; $g < 6; $g++:
+			{
+				bool[<16>] m = pass & $$veccompeq(vg, (int[<16>])$g);
+				cnt[$g] += ((ushort)m.mask_to_int()).popcount();
+				aq[$g] += math::select(m, vq, zi);
+				ap[$g] += math::select(m, vp, zi);
+				adp[$g] += math::select(m, vdp, zi);
+				ach[$g] += math::select(m, ch, zl);
+			}
+			$endfor
+		}
+		for (int g = 0; g < 6; g++)
+		{
+			(*acc)[g][0] += cnt[g];
+			(*acc)[g][1] += aq[g].sum();
+			(*acc)[g][2] += ap[g].sum();
+			(*acc)[g][3] += ((long[<16>])adp[g]).sum();
+			(*acc)[g][4] += ach[g].sum();
+		}
+	}
+	if (i < hi) q1_natural(c, i, hi, acc);
+}
 fn long fold(Q1Acc* a)
 {
 	long s;
@@ -385,16 +550,49 @@ fn int k6_worker(void* arg)
 	else { j.res = q6_tuned(j.c, j.lo, j.hi); }
 	return 0;
 }
+// mt_pool, mt_pool_v (v4, point 4) : un quart par fil de la réserve ; mt_pool exécute la forme de la variante mt
+// publiée (q6_tuned, déjà la forme tuned_v de Q6 ; q1_tuned), mt_pool_v la forme tuned_v de Q1.
+struct K6Pool { Cols* c; bool q1; bool vec; long[4] res; }
+fn void k6_pool_job(void* data, int t)
+{
+	K6Pool* j = data;
+	usz lo = N6 / 4 * (usz)t;
+	usz hi = N6 / 4 * (usz)(t + 1);
+	if (j.q1)
+	{
+		Q1Acc a;
+		if (j.vec) { q1_tuned_v(j.c, lo, hi, &a); } else { q1_tuned(j.c, lo, hi, &a); }
+		j.res[t] = fold(&a);
+	}
+	else
+	{
+		j.res[t] = q6_tuned(j.c, lo, hi);
+	}
+}
 fn void run_k6(String v, int reps, String p)
 {
 	Cols c = { load(int, "k6_shipdate.i32"), load(int, "k6_extendedprice.i32"), load_bytes("k6_quantity.u8"), load_bytes("k6_discount.u8"),
 	           load_bytes("k6_tax.u8"), load_bytes("k6_returnflag.u8"), load_bytes("k6_linestatus.u8") };
 	bool q1 = p == "q1";
+	bool pl = v == "mt_pool" || (v == "mt_pool_v" && q1);
+	if (pl) pool_start();
 	for (int r = -g_warmup; r < reps; r++)
 	{
 		Clock t0 = clock::now();
 		long s;
-		if (v == "mt")
+		if (pl)
+		{
+			K6Pool j = { .c = &c, .q1 = q1, .vec = v == "mt_pool_v" };
+			pool_run(&k6_pool_job, &j);
+			for (int t = 0; t < 4; t++) s += j.res[t];
+		}
+		else if (v == "tuned_v" && q1)
+		{
+			Q1Acc a;
+			q1_tuned_v(&c, 0, N6, &a);
+			s = fold(&a);
+		}
+		else if (v == "mt")
 		{
 			K6Job[4] jobs;
 			Thread[4] th;
@@ -416,6 +614,7 @@ fn void run_k6(String v, int reps, String p)
 		double dt = secs(t0);
 		if (r >= 0) result("k6", v, p, r, dt, string::tformat("%d", s));
 	}
+	if (pl) pool_stop();
 }
 
 // ------------------------------------------------------------------ K7
@@ -505,11 +704,90 @@ fn int a_build(ANode* a, int* top, int d, long* c)
 	return i;
 }
 fn long a_sum(ANode* a, int i) => i < 0 ? 0 : a[i].v + a_sum(a, a[i].l) + a_sum(a, a[i].r);
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada, et de bench/c_k8val) : l'état passe
+// par valeur, l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la fonction rend l'indice
+// libre suivant. Même arène, mêmes liens et mêmes valeurs que a_build ; somme récursive par les liens (a_sum).
+fn int av_build(ANode* a, int i, int d, long q)
+{
+	a[i].v = q + i;
+	if (d > 0)
+	{
+		int l = i + 1;
+		int r = av_build(a, l, d - 1, q);
+		a[i].l = l;
+		a[i].r = r;
+		return av_build(a, r, d - 1, q);
+	}
+	a[i].l = -1;
+	a[i].r = -1;
+	return i + 1;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/c_k8it, remarque sur C) : construction et somme
+// itératives, piles explicites. La construction descend à gauche en empilant le sous-arbre droit de chaque nœud
+// interne, puis le reprend à la feuille suivante : même ordre préfixe, mêmes liens et mêmes valeurs que a_build. Les
+// piles tiennent par construction : au plus une entrée par niveau à la construction, au plus profondeur + 1 à la somme.
+$assert(SIZE_K8_REQ < 63);
+struct K8Pend { int parent; int depth; }
+fn void ai_build(ANode* a, int depth, long q)
+{
+	K8Pend[64] stk;
+	int sp = 0;
+	int top = 0;
+	int parent = -1;
+	bool right = false;
+	int d = depth;
+	while (true)
+	{
+		int i = top++;
+		a[i].v = q + i;
+		if (parent >= 0)
+		{
+			if (right) { a[parent].r = i; } else { a[parent].l = i; }
+		}
+		if (d > 0)
+		{
+			stk[sp++] = { i, d - 1 };
+			parent = i;
+			right = false;
+			d = d - 1;
+		}
+		else
+		{
+			a[i].l = -1;
+			a[i].r = -1;
+			if (sp == 0) break;
+			sp--;
+			parent = stk[sp].parent;
+			d = stk[sp].depth;
+			right = true;
+		}
+	}
+}
+fn long ai_sum(ANode* a, int root)
+{
+	int[64] stk;
+	int sp = 0;
+	long s;
+	stk[sp++] = root;
+	while (sp > 0)
+	{
+		int i = stk[--sp];
+		s += a[i].v;
+		if (a[i].l >= 0)
+		{
+			stk[sp++] = a[i].r;
+			stk[sp++] = a[i].l;
+		}
+	}
+	return s;
+}
 fn void run_k8(String v, int reps)
 {
 	const Q = 16384;
 	bool tuned = v == "tuned";
 	bool talloc = v == "tuned_alloc";
+	bool val = v == "tuned_val";
+	bool it = v == "tuned_it";
 	long c0;
 	Node* keep = t_build(mem, SIZE_K8_LONG, &c0);
 	long lsum = t_sum(keep);
@@ -528,6 +806,16 @@ fn void run_k8(String v, int reps)
 			{
 				int top = 0;
 				s = a_sum(arena, a_build(arena, &top, SIZE_K8_REQ, &c));
+			}
+			else if (val)
+			{
+				av_build(arena, 0, SIZE_K8_REQ, c);
+				s = a_sum(arena, 0);
+			}
+			else if (it)
+			{
+				ai_build(arena, SIZE_K8_REQ, c);
+				s = ai_sum(arena, 0);
 			}
 			else if (talloc)
 			{
@@ -590,6 +878,13 @@ fn void k9_rows(double* a, double* b, usz r0, usz r1) @noinline
 }
 struct K9Job { double* a; double* b; usz r0; usz r1; }
 fn int k9_worker(void* arg) { K9Job* j = arg; k9_rows(j.a, j.b, j.r0, j.r1); return 0; }
+// mt_pool (v4, point 4) : un quart des lignes par fil de la réserve, chacun exécute k9_rows (déjà la forme tuned_v)
+struct K9Pool { double* a; double* b; }
+fn void k9_pool_job(void* data, int t)
+{
+	K9Pool* j = data;
+	k9_rows(j.a, j.b, 1 + (M9 - 2) * (usz)t / 4, 1 + (M9 - 2) * (usz)(t + 1) / 4);
+}
 fn void run_k9(String v, int reps)
 {
 	// harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
@@ -613,6 +908,8 @@ fn void run_k9(String v, int reps)
 	}
 	double* a = alloc::malloc_aligned(mem, M9 * M9 * 8, 64)!!;
 	double* b = alloc::malloc_aligned(mem, M9 * M9 * 8, 64)!!;
+	bool pl = v == "mt_pool";
+	if (pl) pool_start();
 	for (int r = -g_warmup; r < reps; r++)
 	{
 		double s;
@@ -624,6 +921,11 @@ fn void run_k9(String v, int reps)
 			if (v == "tuned")
 			{
 				k9_rows(a, b, 1, M9 - 1);
+			}
+			else if (pl)
+			{
+				K9Pool j = { a, b };
+				pool_run(&k9_pool_job, &j);
 			}
 			else
 			{
@@ -642,6 +944,7 @@ fn void run_k9(String v, int reps)
 		for (usz k = 0; k < M9 * M9; k++) s += a[k];
 		if (r >= 0) result("k9", v, "2048^2x4", r, dt, string::tformat("%.15e", s));
 	}
+	if (pl) pool_stop();
 	alloc::free_aligned(mem, a); alloc::free_aligned(mem, b);
 }
 

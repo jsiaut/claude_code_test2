@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""v4, campagne finale (docs/V4_FINAL.md, 5 à 7) : étalonnage et validation, puis trois passes.
+"""Campagne de mesure (docs/METHOD.md, 6 ; plans : docs/V4_FINAL.md, 5 à 7, et docs/V5.md) : étalonnage et
+validation, puis trois passes.
 
 Constructions : tools/final/build.py (/dev/shm/msbuild/<langage>/f_<construction>_<jeu>), toutes faites et contrôlées
 avant la première mesure. Groupes : (noyau, taille), 21 pour les sept noyaux à trois tailles, plus K2 et K3 à leur
@@ -20,7 +21,8 @@ démarrage du noyau (boot_id).
   juste après chaque groupe de K3. Vol de temps au-delà de 5 % : processus refait une fois. Sentinelle de mémoire (plus
   grand VmRSS du groupe de processus, 13 Gio). Modèle du processeur vérifié avant chaque processus.
 * b3 <étiquette> : une mesure de b3 hors groupe (début, fin).
-Écritures dans results/final/work ; tools/final/save_progress.sh les recopie dans results/final et les pousse.
+Écritures dans le répertoire de travail de la campagne (results/final/work, ou work sous MS_CAMPAIGN_DIR) ;
+tools/final/save_progress.sh les recopie dans le répertoire de la campagne et les pousse.
 
 Usage : campaign.py calibrate|run|b3 [--passes 0,1,2] [--langs a,b] [--groups k1:small,...] [--dry] [étiquette]"""
 import argparse, json, math, os, random, re, shutil, signal, subprocess, sys, tempfile, threading, time
@@ -49,9 +51,9 @@ NATURAL = {"k1": [("natural", "energy"), ("natural_shuffled", "energy")], "k4": 
 NEEDED = needed_keys()
 JIT = {"java", "csharp", "js", "julia"}
 MEM_CAP_KB = 13 * 1024 * 1024
-SEED = 20261123
+SEED = 20261124  # ordre des groupes et des blocs (docs/V5.md, S4 ; campagne finale de la v4 : 20261123)
 EXP_SIZES = json.load(open(os.path.join(ROOT, "results", "sizes", "expected.json")))
-WORK = os.path.join(ROOT, "results", "final", "work")
+WORK = FB.WORK
 RAW = os.path.join(WORK, "raw")
 DISC = os.path.join(WORK, "discarded")
 CALIB = os.path.join(WORK, "calib.json")
@@ -93,13 +95,15 @@ def variant_file(path):
 
 
 def cells(lang, cons, kernel):
-    """Cellules (variante, paramètre) d'une construction pour un noyau (docs/V4_FINAL.md, 5)."""
-    if cons == "pub":
+    """Cellules (variante, paramètre) d'un noyau qui portent l'étiquette cons : variantes publiées (pub ; plan commun
+    et extra_variants), formes du catalogue (cv ; cv_variants), code naturel dans les modes R1 et R1' (chk, unc) et sa
+    forme contiguë de K9 dans ces modes (cv_chk, cv_unc) ; pour C par gcc, les mêmes (gcc, gcc_cv, gcc_chk)."""
+    if cons in ("pub", "gcc"):
         extra = variant_file(os.path.join(ROOT, "bench", lang, "extra_variants")).get(kernel, [])
         return [(v, q) for v, q in D.PLAN[kernel] + extra if (kernel, v, q) in NEEDED]
-    if cons == "cv":
-        return variant_file(os.path.join(ROOT, "bench", lang + "_cv", "cv_variants")).get(kernel, [])
-    if cons in ("chk", "unc"):
+    if cons in ("cv", "gcc_cv"):
+        return variant_file(os.path.join(ROOT, "bench", lang, "cv_variants")).get(kernel, [])
+    if cons in ("chk", "unc", "gcc_chk"):
         return NATURAL.get(kernel, [])
     if cons in ("cv_chk", "cv_unc"):
         return [("natural_flat", "")] if kernel == "k9" else []

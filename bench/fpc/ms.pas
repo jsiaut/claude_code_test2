@@ -446,6 +446,71 @@ begin
   Result := s;
 end;
 
+{ v4, point 4 (docs/V4_CONVERGE.md, 3.3 et 5 ; erratum docs/V4_EQUAL.md, 11.8 : l'assembleur en ligne n'est pas
+  admis) : variante tuned sans assembleur, la forme de la remarque sur FreePascal (bench/fpc_rq, K4BranchlessPtr ;
+  docs/FPC.md, 5) : octet lu une fois dans une variable locale, gardé par le masque -(x shr 7), pointeur avancé par
+  Inc. -Sv n'a ni octets ni masques : c'est la meilleure forme scalaire essayée (plus rapide que
+  branchless_unsorted ; déroulée à quatre ou huit octets par tour, plus lente : FPC garde des variables en mémoire). }
+function K4Tuned(v: PByte; n: SizeInt): QWord;
+var
+  e: PByte;
+  s, x: QWord;
+begin
+  s := 0;
+  e := v + n;
+  while v < e do
+  begin
+    x := v^;
+    s := s + (x and -(x shr 7));
+    Inc(v);
+  end;
+  Result := s;
+end;
+
+{ v4, point 4 (3.3, swar) : huit octets par mot de 64 bits, lu sans contrainte d'alignement (unaligned). Par mot w :
+  m = (w shr 7) and $0101…01 (le bit de poids fort de chaque octet), y = w and (m * $FF) (octets >= 128 gardés, les
+  autres à zéro), puis les octets de rang pair et de rang impair ajoutés en quatre voies de 16 bits. Exactitude : par
+  mot, chaque voie reçoit au plus 2 × 255 = 510 ; vidée toutes les 128 mots, elle reste sous 128 × 510 = 65 280
+  < 2^16 ; au vidage, deux voies de 32 bits (au plus 2 × 65 280 chacune) ajoutées à la somme de 64 bits. Les
+  n mod 8 derniers octets : la forme de tuned. }
+function K4Swar(v: PByte; n: SizeInt): QWord;
+const
+  L01 = QWord($0101010101010101);
+  L00FF = QWord($00FF00FF00FF00FF);
+  L0000FFFF = QWord($0000FFFF0000FFFF);
+var
+  p: PQWord;
+  nw, i, e: SizeInt;
+  w, y, acc, s, x: QWord;
+begin
+  s := 0;
+  p := PQWord(v);
+  nw := n div 8;
+  i := 0;
+  while i < nw do
+  begin
+    e := i + 128;
+    if e > nw then
+      e := nw;
+    acc := 0;
+    while i < e do
+    begin
+      w := unaligned(p[i]);
+      y := w and (((w shr 7) and L01) * $FF);
+      acc := acc + (y and L00FF) + ((y shr 8) and L00FF);
+      Inc(i);
+    end;
+    acc := (acc and L0000FFFF) + ((acc shr 16) and L0000FFFF);
+    s := s + (acc and $FFFFFFFF) + (acc shr 32);
+  end;
+  for i := nw * 8 to n - 1 do
+  begin
+    x := v[i];
+    s := s + (x and -(x shr 7));
+  end;
+  Result := s;
+end;
+
 procedure RunK4(const v: string; reps: Integer);
 var
   d: TArrU8;
@@ -473,7 +538,11 @@ begin
   for r := -Warmup to reps - 1 do
   begin
     t0 := NowNs;
-    if v = 'branchless_unsorted' then
+    if v = 'tuned' then
+      s := K4Tuned(@d[0], Length(d))
+    else if v = 'swar' then
+      s := K4Swar(@d[0], Length(d))
+    else if v = 'branchless_unsorted' then
       s := K4Branchless(@d[0], Length(d))
     else
       s := K4Natural(d);
@@ -526,13 +595,16 @@ procedure RunK5(const v: string; reps: Integer);
 var
   a, b: TArrS;
   pa, pb: PSingle;
-  tuned: Boolean;
+  tuned{$ifndef SCALAR}, tv{$endif}: Boolean;
   r, it: Integer;
   t0: QWord;
   dt: Double;
   d: Single;
 begin
   tuned := v = 'tuned';
+  {$ifndef SCALAR}
+  tv := v = 'tuned_v'; { v4, point 4 : K5TunedVPtr (unité msvec) }
+  {$endif}
   a := LoadS('k5_a.f32');
   b := LoadS('k5_b.f32');
   pa := LoadRaw('k5_a.f32');
@@ -543,6 +615,11 @@ begin
     t0 := NowNs;
     { FPC n'analyse pas les appels : chaque appel est exécuté et son résultat gardé (vérifié dans le code produit) }
     for it := 1 to INNER5 do
+      {$ifndef SCALAR}
+      if tv then
+        d := K5TunedVPtr(PV4(pa), PV4(pb), Length(a))
+      else
+      {$endif}
       if tuned then
         {$ifdef SCALAR}
         d := K5Tuned(pa, pb, Length(a))
@@ -554,6 +631,83 @@ begin
     dt := Secs(t0);
     if r >= 0 then
       Emit('k5', v, '2048x65536', r, dt, Format('%.4f', [d]));
+  end;
+end;
+
+{ ------------------------------------------------------------------ réserve de fils (v4, point 4) }
+{ docs/V4_CONVERGE.md, 3.3 (mt_pool) : quatre fils de travail, le fil principal compris. Les trois autres sont créés
+  une fois par processus (BeginThread), avant l'échauffement ; à chaque appel, le fil principal publie la tâche,
+  réveille chacun par son événement (RTLEventSetEvent), traite le quart 0, puis attend l'événement de fin de chacun.
+  Entre deux appels, ils attendent, bloqués (RTLEventWaitFor : mutex et condition POSIX de la RTL, unité cthreads ;
+  la RTL de FPC 3.2.2 n'a pas de barrière). Les événements ordonnent aussi les accès mémoire entre les fils. }
+type
+  TPoolJob = procedure(data: Pointer; w: Integer);
+  TPool = record
+    job: TPoolJob;
+    data: Pointer;
+    quit: Boolean;
+    go, done: array[1..3] of PRTLEvent;
+    th: array[1..3] of TThreadID;
+  end;
+
+var
+  WPool: TPool;
+
+function PoolWorker(p: Pointer): PtrInt;
+var
+  w: Integer;
+begin
+  w := Integer(PtrInt(p));
+  while True do
+  begin
+    RTLEventWaitFor(WPool.go[w]);
+    if WPool.quit then
+      Break;
+    WPool.job(WPool.data, w);
+    RTLEventSetEvent(WPool.done[w]);
+  end;
+  Result := 0;
+end;
+
+procedure PoolStart;
+var
+  w: Integer;
+begin
+  WPool.quit := False;
+  for w := 1 to 3 do
+  begin
+    WPool.go[w] := RTLEventCreate;
+    WPool.done[w] := RTLEventCreate;
+  end;
+  for w := 1 to 3 do
+    WPool.th[w] := BeginThread(@PoolWorker, Pointer(PtrInt(w)));
+end;
+
+procedure PoolRun(job: TPoolJob; data: Pointer);
+var
+  w: Integer;
+begin
+  WPool.job := job;
+  WPool.data := data;
+  for w := 1 to 3 do
+    RTLEventSetEvent(WPool.go[w]);
+  job(data, 0);
+  for w := 1 to 3 do
+    RTLEventWaitFor(WPool.done[w]);
+end;
+
+procedure PoolStop;
+var
+  w: Integer;
+begin
+  WPool.quit := True;
+  for w := 1 to 3 do
+    RTLEventSetEvent(WPool.go[w]);
+  for w := 1 to 3 do
+  begin
+    WaitForThreadTerminate(WPool.th[w], 0);
+    RTLEventDestroy(WPool.go[w]);
+    RTLEventDestroy(WPool.done[w]);
   end;
 end;
 
@@ -692,6 +846,64 @@ begin
   end;
 end;
 
+{ v4, point 4 (docs/V4_CONVERGE.md, 3.3, Q1 tuned_s : forme de repli, -Sv n'ayant pas d'entiers) : une passe, les 30
+  accumulateurs en variables locales de 64 bits ; par ligne, le masque de passage ps = 1 si shipdate <= 10471 (bit de
+  signe de shipdate - 10472 ; shr est un décalage logique en FPC) et, pour chaque groupe k, mk = ps and (bit de signe
+  de (g xor k) - 1), 1 si g = k ; additions masquées par and -mk, sans branchement. Exactitude : les mêmes sommes de
+  64 bits que la variante tuned publiée (aucune ne dépasse la somme de 64 bits que fait déjà Q1Tuned). }
+procedure Q1TunedS(csd, cpr: PLongInt; cq, cd, ct, crf, cls: PByte; lo, hi: SizeInt; var acc: TQ1Acc);
+var
+  n0, n1, n2, n3, n4, n5, q0, q1, q2, q3, q4, q5, p0, p1, p2, p3, p4, p5: Int64;
+  e0, e1, e2, e3, e4, e5, c0, c1, c2, c3, c4, c5: Int64;
+  ps, g, m, mm, qq, pp, dp, ch: Int64;
+  i: SizeInt;
+begin
+  n0 := 0; n1 := 0; n2 := 0; n3 := 0; n4 := 0; n5 := 0;
+  q0 := 0; q1 := 0; q2 := 0; q3 := 0; q4 := 0; q5 := 0;
+  p0 := 0; p1 := 0; p2 := 0; p3 := 0; p4 := 0; p5 := 0;
+  e0 := 0; e1 := 0; e2 := 0; e3 := 0; e4 := 0; e5 := 0;
+  c0 := 0; c1 := 0; c2 := 0; c3 := 0; c4 := 0; c5 := 0;
+  for i := lo to hi - 1 do
+  begin
+    ps := (Int64(csd[i]) - 10472) shr 63;
+    g := Int64(crf[i]) * 2 + cls[i];
+    qq := cq[i];
+    pp := cpr[i];
+    dp := pp * (100 - cd[i]);
+    ch := dp * (100 + ct[i]);
+    m := ps and ((g - 1) shr 63);
+    mm := -m;
+    n0 := n0 + m; q0 := q0 + (qq and mm); p0 := p0 + (pp and mm); e0 := e0 + (dp and mm); c0 := c0 + (ch and mm);
+    m := ps and (((g xor 1) - 1) shr 63);
+    mm := -m;
+    n1 := n1 + m; q1 := q1 + (qq and mm); p1 := p1 + (pp and mm); e1 := e1 + (dp and mm); c1 := c1 + (ch and mm);
+    m := ps and (((g xor 2) - 1) shr 63);
+    mm := -m;
+    n2 := n2 + m; q2 := q2 + (qq and mm); p2 := p2 + (pp and mm); e2 := e2 + (dp and mm); c2 := c2 + (ch and mm);
+    m := ps and (((g xor 3) - 1) shr 63);
+    mm := -m;
+    n3 := n3 + m; q3 := q3 + (qq and mm); p3 := p3 + (pp and mm); e3 := e3 + (dp and mm); c3 := c3 + (ch and mm);
+    m := ps and (((g xor 4) - 1) shr 63);
+    mm := -m;
+    n4 := n4 + m; q4 := q4 + (qq and mm); p4 := p4 + (pp and mm); e4 := e4 + (dp and mm); c4 := c4 + (ch and mm);
+    m := ps and (((g xor 5) - 1) shr 63);
+    mm := -m;
+    n5 := n5 + m; q5 := q5 + (qq and mm); p5 := p5 + (pp and mm); e5 := e5 + (dp and mm); c5 := c5 + (ch and mm);
+  end;
+  acc[0].count := acc[0].count + n0; acc[0].qty := acc[0].qty + q0; acc[0].price := acc[0].price + p0;
+  acc[0].discPrice := acc[0].discPrice + e0; acc[0].charge := acc[0].charge + c0;
+  acc[1].count := acc[1].count + n1; acc[1].qty := acc[1].qty + q1; acc[1].price := acc[1].price + p1;
+  acc[1].discPrice := acc[1].discPrice + e1; acc[1].charge := acc[1].charge + c1;
+  acc[2].count := acc[2].count + n2; acc[2].qty := acc[2].qty + q2; acc[2].price := acc[2].price + p2;
+  acc[2].discPrice := acc[2].discPrice + e2; acc[2].charge := acc[2].charge + c2;
+  acc[3].count := acc[3].count + n3; acc[3].qty := acc[3].qty + q3; acc[3].price := acc[3].price + p3;
+  acc[3].discPrice := acc[3].discPrice + e3; acc[3].charge := acc[3].charge + c3;
+  acc[4].count := acc[4].count + n4; acc[4].qty := acc[4].qty + q4; acc[4].price := acc[4].price + p4;
+  acc[4].discPrice := acc[4].discPrice + e4; acc[4].charge := acc[4].charge + c4;
+  acc[5].count := acc[5].count + n5; acc[5].qty := acc[5].qty + q5; acc[5].price := acc[5].price + p5;
+  acc[5].discPrice := acc[5].discPrice + e5; acc[5].charge := acc[5].charge + c5;
+end;
+
 type
   TK6Arg = record
     c: PColsP;
@@ -715,6 +927,34 @@ begin
   Result := 0;
 end;
 
+type
+  { v4, point 4 : tâche de la réserve de fils ; chaque fil écrit son quart de résultat }
+  TK6Job = record
+    c: PColsP;
+    q1, sc: Boolean;
+    s6: array[0..3] of Int64;
+    acc: array[0..3] of TQ1Acc;
+  end;
+  PK6Job = ^TK6Job;
+
+{ quart w : Q6Tuned publiée (Q6), Q1Tuned publiée (Q1, mt_pool) ou Q1TunedS (Q1, mt_pool_s) }
+procedure K6PoolJob(data: Pointer; w: Integer);
+var
+  j: PK6Job;
+  lo, hi: SizeInt;
+begin
+  j := PK6Job(data);
+  lo := SizeInt(N6) * w div 4;
+  hi := SizeInt(N6) * (w + 1) div 4;
+  with j^.c^ do
+    if not j^.q1 then
+      j^.s6[w] := Q6Tuned(sd, d, q, pr, lo, hi)
+    else if j^.sc then
+      Q1TunedS(sd, pr, q, d, t, rf, ls, lo, hi, j^.acc[w])
+    else
+      Q1Tuned(sd, pr, q, d, t, rf, ls, lo, hi, j^.acc[w]);
+end;
+
 function Q1Sum(const acc: TQ1Acc): Int64;
 var
   g: Integer;
@@ -732,12 +972,15 @@ var
   acc: TQ1Acc;
   arg: array[0..3] of TK6Arg;
   th: array[0..3] of TThreadID;
+  job: TK6Job;
+  pl: Boolean;
   r, t: Integer;
   t0: QWord;
   dt: Double;
   s: Int64;
 begin
   q1 := p = 'q1';
+  pl := (v = 'mt_pool') or (v = 'mt_pool_s'); { v4, point 4 : réserve de fils }
   if v = 'natural' then
   begin
     c.sd := LoadI32('k6_shipdate.i32');
@@ -771,12 +1014,28 @@ begin
   cp.t := LoadRaw('k6_tax.u8');
   cp.rf := LoadRaw('k6_returnflag.u8');
   cp.ls := LoadRaw('k6_linestatus.u8');
+  if pl then
+    PoolStart;
   for r := -Warmup to reps - 1 do
   begin
     FillChar(acc, SizeOf(acc), 0);
     s := 0;
     t0 := NowNs;
-    if v = 'mt' then
+    if pl then
+    begin
+      FillChar(job, SizeOf(job), 0);
+      job.c := @cp;
+      job.q1 := q1;
+      job.sc := v = 'mt_pool_s';
+      PoolRun(@K6PoolJob, @job);
+      for t := 0 to 3 do
+      begin
+        s := s + job.s6[t];
+        if q1 then
+          s := s + Q1Sum(job.acc[t]);
+      end;
+    end
+    else if v = 'mt' then
     begin
       for t := 0 to 3 do
       begin
@@ -795,16 +1054,20 @@ begin
           s := s + Q1Sum(arg[t].acc);
       end;
     end
+    else if q1 and (v = 'tuned_s') then
+      Q1TunedS(cp.sd, cp.pr, cp.q, cp.d, cp.t, cp.rf, cp.ls, 0, N6, acc)
     else if q1 then
       Q1Tuned(cp.sd, cp.pr, cp.q, cp.d, cp.t, cp.rf, cp.ls, 0, N6, acc)
     else
       s := Q6Tuned(cp.sd, cp.d, cp.q, cp.pr, 0, N6);
     dt := Secs(t0);
-    if q1 and (v <> 'mt') then
+    if q1 and (v <> 'mt') and not pl then
       s := Q1Sum(acc);
     if r >= 0 then
       Emit('k6', v, p, r, dt, IntToStr(s));
   end;
+  if pl then
+    PoolStop;
 end;
 
 { ------------------------------------------------------------------ K7 }
@@ -1051,6 +1314,110 @@ begin
     Result := a[i].v + ASum(a, a[i].l) + ASum(a, a[i].r);
 end;
 
+{ v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val) : la même arène que ABuild, construite en ordre préfixe ; l'état
+  passe par valeur (i : indice du nœud ; q : numéro de requête, valeur du nœud = q + i), le prochain indice libre
+  revient en résultat ; aucun pointeur vers un état. Mêmes nœuds, mêmes valeurs et mêmes liens que ABuild. }
+function AVBuild(a: PANode; i: LongInt; depth: Integer; q: Int64): LongInt;
+var
+  l, r: LongInt;
+begin
+  a[i].v := q + i;
+  if depth > 0 then
+  begin
+    l := i + 1;
+    r := AVBuild(a, l, depth - 1, q);
+    a[i].l := l;
+    a[i].r := r;
+    Result := AVBuild(a, r, depth - 1, q);
+  end
+  else
+  begin
+    a[i].l := -1;
+    a[i].r := -1;
+    Result := i + 1;
+  end;
+end;
+
+{ v4, point 4 (3.3, K8 tuned_it) : la forme de la remarque sur FreePascal (bench/fpc_rq, MIEUX ; docs/FPC.md, 5),
+  recopiée : arène construite et sommée par itération (piles explicites) ; la construction descend à gauche en
+  empilant le sous-arbre droit de chaque nœud interne, puis le reprend à la feuille suivante ; même ordre préfixe,
+  même arène et mêmes valeurs que ABuild et ASum. Piles de 64 entrées : la profondeur doit rester sous 63
+  (contrôle à la compilation ci-dessous). }
+{$if MS_K8_REQ >= 63}
+{$error K8 tuned_it : piles de 64 entrées, MS_K8_REQ doit rester sous 63}
+{$endif}
+function AIBuild(a: PANode; depth: Integer; q: Int64): LongInt;
+var
+  stkParent, stkDepth: array[0..63] of LongInt;
+  sp, d: Integer;
+  top, parent, i: LongInt;
+  right: Boolean;
+begin
+  sp := 0;
+  top := 0;
+  parent := -1;
+  right := False;
+  d := depth;
+  while True do
+  begin
+    i := top;
+    Inc(top);
+    a[i].v := q + i;
+    if parent >= 0 then
+      if right then
+        a[parent].r := i
+      else
+        a[parent].l := i;
+    if d > 0 then
+    begin
+      stkParent[sp] := i;
+      stkDepth[sp] := d - 1;
+      Inc(sp);
+      parent := i;
+      right := False;
+      d := d - 1;
+    end
+    else
+    begin
+      a[i].l := -1;
+      a[i].r := -1;
+      if sp = 0 then
+        Break;
+      Dec(sp);
+      parent := stkParent[sp];
+      d := stkDepth[sp];
+      right := True;
+    end;
+  end;
+  Result := 0;
+end;
+
+function AISum(a: PANode; root: LongInt): Int64;
+var
+  stk: array[0..63] of LongInt;
+  sp: Integer;
+  i: LongInt;
+  s: Int64;
+begin
+  sp := 0;
+  s := 0;
+  stk[sp] := root;
+  Inc(sp);
+  while sp > 0 do
+  begin
+    Dec(sp);
+    i := stk[sp];
+    s := s + a[i].v;
+    if a[i].l >= 0 then
+    begin
+      stk[sp] := a[i].r;
+      stk[sp + 1] := a[i].l;
+      Inc(sp, 2);
+    end;
+  end;
+  Result := s;
+end;
+
 {$ifdef EXP}
 type
   { sensibilité (copie bench/fpc_exp) : nœuds de classe (TObject.Create / Free) }
@@ -1095,7 +1462,7 @@ const
   Q = 16384;
   D = MS_K8_REQ;
 var
-  tuned: Boolean;
+  tuned, tval, tit: Boolean;
   cnt, lsum, total, c, s: Int64;
   longlived, t: PNode;
   {$ifdef EXP}
@@ -1110,6 +1477,8 @@ var
   dt: Double;
 begin
   tuned := v = 'tuned';
+  tval := v = 'tuned_val'; { v4, point 4 }
+  tit := v = 'tuned_it';
   {$ifdef EXP}
   cls := v = 'natural_cls';
   {$endif}
@@ -1135,7 +1504,17 @@ begin
       end
       else
       {$endif}
-      if tuned then
+      if tval then
+      begin
+        AVBuild(arena, 0, D, c);
+        s := ASum(arena, 0);
+      end
+      else if tit then
+      begin
+        root := AIBuild(arena, D, c);
+        s := AISum(arena, root);
+      end
+      else if tuned then
       begin
         top := 0;
         root := ABuild(arena, top, D, c);
@@ -1272,12 +1651,20 @@ begin
   Result := 0;
 end;
 
+{ v4, point 4 (3.3, K9 mt_pool) : quart w des lignes intérieures, K9Rows publiée, par la réserve de fils }
+procedure K9PoolJob(data: Pointer; w: Integer);
+begin
+  K9Rows(PK9Arg(data)^.inp, PK9Arg(data)^.outp, 1 + SizeInt(M9 - 2) * w div 4, 1 + SizeInt(M9 - 2) * (w + 1) div 4);
+end;
+
 procedure RunK9(const v: string; reps: Integer);
 var
   ga, gb, gt: PGrid;
   a, b, tmp: PDouble;
   arg: array[0..3] of TK9Arg;
   th: array[0..3] of TThreadID;
+  job: TK9Arg;
+  pl: Boolean;
   i, j, it, t, r: Integer;
   k, n: SizeInt;
   t0: QWord;
@@ -1322,6 +1709,9 @@ begin
   n := SizeInt(M9) * M9;
   a := AllocAligned(n * SizeOf(Double), 64);
   b := AllocAligned(n * SizeOf(Double), 64);
+  pl := v = 'mt_pool'; { v4, point 4 : réserve de fils }
+  if pl then
+    PoolStart;
   for r := -Warmup to reps - 1 do
   begin
     for i := 0 to M9 - 1 do
@@ -1333,6 +1723,12 @@ begin
     begin
       if v = 'tuned' then
         K9Rows(a, b, 1, M9 - 1)
+      else if pl then
+      begin
+        job.inp := a;
+        job.outp := b;
+        PoolRun(@K9PoolJob, @job);
+      end
       else
       begin
         for t := 0 to 3 do
@@ -1357,6 +1753,8 @@ begin
     if r >= 0 then
       Emit('k9', v, '2048^2x4', r, dt, Format('%.16e', [s]));
   end;
+  if pl then
+    PoolStop;
 end;
 
 { ------------------------------------------------------------------ K10 }

@@ -199,6 +199,65 @@ fn runK3(v: []const u8, reps: i32) void {
     }
 }
 
+// ------------------------------------------------------------------ réserve de fils (v4, point 4)
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool) : réserve de quatre fils de travail, le fil principal compris. Les
+// trois autres (std.Thread.spawn) sont créés une fois par processus, avant l'échauffement ; à chaque appel, une
+// barrière les réveille, chacun traite son quart (0 pour le fil principal), et une seconde barrière attend leur fin.
+// Entre deux appels, ils attendent, bloqués, à la première barrière. La bibliothèque standard n'a pas de barrière :
+// celle-ci est faite de std.Io.Mutex et std.Io.Condition (numéro de génération), qui ordonnent aussi les accès mémoire.
+const Barrier = struct {
+    mu: Io.Mutex = .init,
+    cv: Io.Condition = .init,
+    count: u32 = 0,
+    gen: u32 = 0,
+    fn wait(b: *Barrier) void {
+        b.mu.lockUncancelable(io);
+        defer b.mu.unlock(io);
+        const g = b.gen;
+        b.count += 1;
+        if (b.count == 4) {
+            b.count = 0;
+            b.gen +%= 1;
+            b.cv.broadcast(io);
+        } else {
+            while (g == b.gen) b.cv.waitUncancelable(io, &b.mu);
+        }
+    }
+};
+const PoolFn = *const fn (data: *anyopaque, t: usize) void;
+const Pool = struct {
+    start: Barrier = .{},
+    done: Barrier = .{},
+    job: PoolFn = undefined,
+    data: *anyopaque = undefined,
+    quit: bool = false,
+    th: [3]std.Thread = undefined,
+};
+var pool: Pool = .{};
+fn poolWorker(t: usize) void {
+    while (true) {
+        pool.start.wait();
+        if (pool.quit) return;
+        pool.job(pool.data, t);
+        pool.done.wait();
+    }
+}
+fn poolStart() void {
+    for (1..4) |t| pool.th[t - 1] = std.Thread.spawn(.{}, poolWorker, .{t}) catch @panic("spawn");
+}
+fn poolRun(job: PoolFn, data: *anyopaque) void {
+    pool.job = job;
+    pool.data = data;
+    pool.start.wait();
+    job(data, 0);
+    pool.done.wait();
+}
+fn poolStop() void {
+    pool.quit = true;
+    pool.start.wait();
+    for (pool.th) |x| x.join();
+}
+
 // ------------------------------------------------------------------ K4
 noinline fn k4Natural(v: []const u8) u64 {
     var s: u64 = 0;
@@ -212,14 +271,68 @@ noinline fn k4Branchless(v: []const u8) u64 {
     for (v) |x| s += @as(u64, x) * (x >> 7);
     return s;
 }
+// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (@Vector) : 64 octets par tour, masque
+// v >= 128 par comparaison vectorielle, octets hors masque à zéro, cumulés en 64 voies de u16 (au plus 256 tours, sans
+// débordement), puis réduits en u64.
+noinline fn k4Tuned(v: []const u8) u64 {
+    const V8 = @Vector(64, u8);
+    const V16 = @Vector(64, u16);
+    const zero8: V8 = @splat(0);
+    const lim: V8 = @splat(128);
+    var s: u64 = 0;
+    var i: usize = 0;
+    while (i + 64 <= v.len) {
+        var acc: V16 = @splat(0);
+        var k: usize = 0;
+        while (k < 256 and i + 64 <= v.len) : ({
+            k += 1;
+            i += 64;
+        }) {
+            const x: V8 = v[i..][0..64].*;
+            acc += @as(V16, @select(u8, x >= lim, x, zero8));
+        }
+        s += @reduce(.Add, @as(@Vector(64, u64), acc));
+    }
+    while (i < v.len) : (i += 1) {
+        if (v[i] >= 128) s += v[i];
+    }
+    return s;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits. Le bit de poids fort de chaque
+// octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les octets >= 128 ; les
+// octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute donnée : une voie reçoit au
+// plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les voies sont vidées dans la somme
+// de 64 bits toutes les 128 mots (et à la fin). Aucun branchement sur les données (le reste, < 8 octets, par produit).
+noinline fn k4Swar(v: []const u8) u64 {
+    const ones: u64 = 0x0101010101010101;
+    const lo: u64 = 0x00FF00FF00FF00FF;
+    const n = v.len;
+    var s: u64 = 0;
+    var i: usize = 0;
+    while (i + 8 <= n) {
+        const end = if (i + 128 * 8 <= n) i + 128 * 8 else n - (n - i) % 8;
+        var acc: u64 = 0;
+        while (i < end) : (i += 8) {
+            const w = std.mem.readInt(u64, v[i..][0..8], .little);
+            const y = w & (((w >> 7) & ones) * 0xFF);
+            acc += (y & lo) + ((y >> 8) & lo);
+        }
+        acc = (acc & 0x0000FFFF0000FFFF) + ((acc >> 16) & 0x0000FFFF0000FFFF); // deux voies de 32 bits
+        s += (acc & 0xFFFFFFFF) + (acc >> 32);
+    }
+    while (i < n) : (i += 1) s += @as(u64, v[i]) * (v[i] >> 7);
+    return s;
+}
 fn runK4(v: []const u8, reps: i32) void {
     const d = load(u8, "k4_bytes.u8");
     if (std.mem.eql(u8, v, "natural_sorted")) std.mem.sort(u8, d, {}, std.sort.asc(u8));
     const bl = std.mem.eql(u8, v, "branchless_unsorted");
+    const tu = std.mem.eql(u8, v, "tuned");
+    const sw = std.mem.eql(u8, v, "swar");
     var r: i32 = -warmup;
     while (r < reps) : (r += 1) {
         const t0 = nowNs();
-        const s = if (bl) k4Branchless(d) else k4Natural(d);
+        const s = if (tu) k4Tuned(d) else if (sw) k4Swar(d) else if (bl) k4Branchless(d) else k4Natural(d);
         const dt = secs(t0);
         if (r >= 0) result("k4", v, "16M", r, dt, fmt("{d}", .{s}));
     }
@@ -358,14 +471,27 @@ fn k6Worker(c: *const Cols, lo: usize, hi: usize, q1: bool, res: *i64) void {
         res.* = fold(&a);
     } else res.* = q6Tuned(c, lo, hi);
 }
+// mt_pool (v4, point 4) : un quart par fil de la réserve, chacun exécute la forme de la variante mt publiée (q6Tuned,
+// q1Tuned : déjà les formes tuned_v du catalogue)
+const K6Pool = struct { c: *const Cols, q1: bool, res: [4]i64 = @splat(0) };
+fn k6PoolJob(data: *anyopaque, t: usize) void {
+    const j: *K6Pool = @ptrCast(@alignCast(data));
+    k6Worker(j.c, N6 / 4 * t, N6 / 4 * (t + 1), j.q1, &j.res[t]);
+}
 fn runK6(v: []const u8, reps: i32, p: []const u8) void {
     const c = Cols{ .sd = load(i32, "k6_shipdate.i32"), .pr = load(i32, "k6_extendedprice.i32"), .q = load(u8, "k6_quantity.u8"), .d = load(u8, "k6_discount.u8"), .t = load(u8, "k6_tax.u8"), .rf = load(u8, "k6_returnflag.u8"), .ls = load(u8, "k6_linestatus.u8") };
     const q1 = std.mem.eql(u8, p, "q1");
+    const pl = std.mem.eql(u8, v, "mt_pool");
+    if (pl) poolStart();
     var r: i32 = -warmup;
     while (r < reps) : (r += 1) {
         const t0 = nowNs();
         var s: i64 = 0;
-        if (std.mem.eql(u8, v, "mt")) {
+        if (pl) {
+            var j = K6Pool{ .c = &c, .q1 = q1 };
+            poolRun(k6PoolJob, &j);
+            for (j.res) |x| s += x;
+        } else if (std.mem.eql(u8, v, "mt")) {
             var part: [4]i64 = @splat(0);
             var th: [4]std.Thread = undefined;
             for (0..4) |t| th[t] = std.Thread.spawn(.{}, k6Worker, .{ &c, N6 / 4 * t, N6 / 4 * (t + 1), q1, &part[t] }) catch @panic("spawn");
@@ -387,6 +513,7 @@ fn runK6(v: []const u8, reps: i32, p: []const u8) void {
         const dt = secs(t0);
         if (r >= 0) result("k6", v, p, r, dt, fmt("{d}", .{s}));
     }
+    if (pl) poolStop();
 }
 
 // ------------------------------------------------------------------ K7
@@ -486,10 +613,87 @@ fn aSum(a: *const [(2 << sizes.K8_REQ) - 1]ANode, i: i32) i64 {
     const n = a[@intCast(i)];
     return n.v + aSum(a, n.l) + aSum(a, n.r);
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada, et de bench/c_k8val) : l'état passe
+// par valeur, l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la fonction rend l'indice
+// libre suivant. Même arène, mêmes liens et mêmes valeurs que aBuild ; somme récursive par les liens (aSum).
+fn avBuild(a: *[(2 << sizes.K8_REQ) - 1]ANode, i: i32, d: u32, q: i64) i32 {
+    const k: usize = @intCast(i);
+    a[k].v = q + i;
+    if (d > 0) {
+        const l = i + 1;
+        const r = avBuild(a, l, d - 1, q);
+        a[k].l = l;
+        a[k].r = r;
+        return avBuild(a, r, d - 1, q);
+    }
+    a[k].l = -1;
+    a[k].r = -1;
+    return i + 1;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/c_k8it, remarque sur C) : construction et somme
+// itératives, piles explicites. La construction descend à gauche en empilant le sous-arbre droit de chaque nœud
+// interne, puis le reprend à la feuille suivante : même ordre préfixe, mêmes liens et mêmes valeurs que aBuild. Les
+// piles tiennent par construction : au plus une entrée par niveau à la construction, au plus profondeur + 1 à la somme.
+comptime {
+    std.debug.assert(sizes.K8_REQ < 63);
+}
+const K8Pend = struct { parent: i32, depth: u32 };
+fn aiBuild(a: *[(2 << sizes.K8_REQ) - 1]ANode, depth: u32, q: i64) void {
+    var stk: [64]K8Pend = undefined;
+    var sp: usize = 0;
+    var top: i32 = 0;
+    var parent: i32 = -1;
+    var right = false;
+    var d = depth;
+    while (true) {
+        const i = top;
+        top += 1;
+        const k: usize = @intCast(i);
+        a[k].v = q + i;
+        if (parent >= 0) {
+            const pk: usize = @intCast(parent);
+            if (right) a[pk].r = i else a[pk].l = i;
+        }
+        if (d > 0) {
+            stk[sp] = .{ .parent = i, .depth = d - 1 };
+            sp += 1;
+            parent = i;
+            right = false;
+            d -= 1;
+        } else {
+            a[k].l = -1;
+            a[k].r = -1;
+            if (sp == 0) break;
+            sp -= 1;
+            parent = stk[sp].parent;
+            d = stk[sp].depth;
+            right = true;
+        }
+    }
+}
+fn aiSum(a: *const [(2 << sizes.K8_REQ) - 1]ANode, root: i32) i64 {
+    var stk: [64]i32 = undefined;
+    var sp: usize = 1;
+    stk[0] = root;
+    var s: i64 = 0;
+    while (sp > 0) {
+        sp -= 1;
+        const n = a[@intCast(stk[sp])];
+        s += n.v;
+        if (n.l >= 0) {
+            stk[sp] = n.r;
+            stk[sp + 1] = n.l;
+            sp += 2;
+        }
+    }
+    return s;
+}
 fn runK8(v: []const u8, reps: i32) void {
     const Q = 16384;
     const tuned = std.mem.eql(u8, v, "tuned");
     const talloc = std.mem.eql(u8, v, "tuned_alloc");
+    const val = std.mem.eql(u8, v, "tuned_val");
+    const itr = std.mem.eql(u8, v, "tuned_it");
     const nodes = gpa.create([(2 << sizes.K8_REQ) - 1]ANode) catch @panic("oom");
     var c0: i64 = 0;
     const keep = tBuild(gpa, sizes.K8_LONG, &c0);
@@ -507,6 +711,12 @@ fn runK8(v: []const u8, reps: i32) void {
             if (tuned) { // nœuds compacts indexés dans un tableau réutilisé (DOD)
                 var top: i32 = 0;
                 s = aSum(nodes, aBuild(nodes, &top, sizes.K8_REQ, &c));
+            } else if (val) {
+                _ = avBuild(nodes, 0, sizes.K8_REQ, c);
+                s = aSum(nodes, 0);
+            } else if (itr) {
+                aiBuild(nodes, sizes.K8_REQ, c);
+                s = aiSum(nodes, 0);
             } else if (talloc) { // arène : libération en bloc, capacité conservée -> plus d'appel système
                 s = tSum(tBuild(arena.allocator(), sizes.K8_REQ, &c));
                 _ = arena.reset(.retain_capacity);
@@ -559,6 +769,12 @@ noinline fn k9Rows(in: []const f64, o: []f64, r0: usize, r1: usize) void {
         while (j < M9 - 1) : (j += 1) op[j] = 0.25 * (((up[j] + dn[j]) + mid[j - 1]) + mid[j + 1]);
     }
 }
+// mt_pool (v4, point 4) : un quart des lignes par fil de la réserve, chacun exécute k9Rows (déjà la forme tuned_v)
+const K9Pool = struct { a: []const f64, b: []f64 };
+fn k9PoolJob(data: *anyopaque, t: usize) void {
+    const j: *K9Pool = @ptrCast(@alignCast(data));
+    k9Rows(j.a, j.b, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4);
+}
 fn runK9(v: []const u8, reps: i32) void {
     // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
     if (std.mem.eql(u8, v, "natural")) {
@@ -588,6 +804,8 @@ fn runK9(v: []const u8, reps: i32) void {
     }
     var a = gpa.alignedAlloc(f64, .@"64", M9 * M9) catch @panic("oom");
     var b = gpa.alignedAlloc(f64, .@"64", M9 * M9) catch @panic("oom");
+    const pl = std.mem.eql(u8, v, "mt_pool");
+    if (pl) poolStart();
     var r: i32 = -warmup;
     while (r < reps) : (r += 1) {
         var s: f64 = 0;
@@ -597,7 +815,10 @@ fn runK9(v: []const u8, reps: i32) void {
         }
         const t0 = nowNs();
         for (0..4) |_| {
-            if (std.mem.eql(u8, v, "tuned")) k9Rows(a, b, 1, M9 - 1) else {
+            if (std.mem.eql(u8, v, "tuned")) k9Rows(a, b, 1, M9 - 1) else if (pl) {
+                var j = K9Pool{ .a = a, .b = b };
+                poolRun(k9PoolJob, &j);
+            } else {
                 var th: [4]std.Thread = undefined;
                 for (0..4) |t| th[t] = std.Thread.spawn(.{}, k9Rows, .{ a, b, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4 }) catch @panic("spawn");
                 for (th) |x| x.join();
@@ -608,6 +829,7 @@ fn runK9(v: []const u8, reps: i32) void {
         for (a) |x| s += x;
         if (r >= 0) result("k9", v, "2048^2x4", r, dt, fmt("{e:.15}", .{s}));
     }
+    if (pl) poolStop();
     gpa.free(a);
     gpa.free(b);
 }

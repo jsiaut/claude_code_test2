@@ -7,10 +7,13 @@ import core.memory : GC;
 import core.simd;
 import core.stdc.stdlib : aligned_alloc, free, malloc; mixin(import("sizes.inc"));
 import core.thread;
+import core.sync.barrier : Barrier;
+import core.stdc.string : memcpy;
 import core.time : MonoTime;
 import ldc.attributes : llvmFastMathFlag;
 import ldc.intrinsics : llvm_prefetch;
-import ldc.simd : loadUnaligned, storeUnaligned;
+import ldc.simd : loadUnaligned, storeUnaligned, greaterOrEqualMask;
+import ldc.gccbuiltins_x86 : __builtin_ia32_psadbw512;
 import std.algorithm : sort;
 import std.concurrency;
 import std.conv : to;
@@ -181,16 +184,101 @@ void runK3(string v, int reps) {
     }
 }
 
+// ------------------------------------------------------------------ réserve de fils (v4, point 4)
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool) : réserve de quatre fils de travail, le fil principal compris. Les
+// trois autres (core.thread) sont créés une fois par processus, avant l'échauffement ; à chaque appel, une barrière
+// (core.sync.barrier) les réveille, chacun traite son quart (0 pour le fil principal), et une seconde barrière attend
+// leur fin. Entre deux appels, ils attendent, bloqués, à la première. Le travail passe par un pointeur de fonction et
+// un pointeur de données, écrits avant la première barrière (aucune fermeture allouée par appel).
+__gshared Barrier poolStart, poolDone;
+__gshared void function(void*, int) poolFn;
+__gshared void* poolData;
+__gshared bool poolQuit;
+__gshared Thread[3] poolTh;
+void poolWorker(int t) {
+    for (;;) {
+        poolStart.wait();
+        if (poolQuit) return;
+        poolFn(poolData, t);
+        poolDone.wait();
+    }
+}
+void startPool() {
+    static Thread mk(int t) { return new Thread({ poolWorker(t); }).start(); }
+    poolStart = new Barrier(4);
+    poolDone = new Barrier(4);
+    foreach (t; 1 .. 4) poolTh[t - 1] = mk(t);
+}
+void runPool(void function(void*, int) fn, void* data) {
+    poolFn = fn;
+    poolData = data;
+    poolStart.wait();
+    fn(data, 0);
+    poolDone.wait();
+}
+void stopPool() {
+    poolQuit = true;
+    poolStart.wait();
+    foreach (t; poolTh) t.join();
+}
+
 // ------------------------------------------------------------------ K4
 pragma(inline, false) ulong k4Natural(const ubyte[] v) { ulong s = 0; foreach (x; v) if (x >= 128) s += x; return s; }
 pragma(inline, false) ulong k4Branchless(const ubyte[] v) { ulong s = 0; foreach (x; v) s += cast(ulong) x * (x >> 7); return s; }
+// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (vecteurs de core.simd, masque non signé de
+// ldc.simd, vpsadbw de ldc.gccbuiltins_x86) : masque v >= 128, octets hors masque à zéro, sommes de 8 octets en
+// entiers de 64 bits.
+pragma(inline, false) ulong k4Tuned(const ubyte[] v) {
+    alias ubyte64 = __vector(ubyte[64]);
+    alias byte64 = __vector(byte[64]);
+    long8 acc = 0;
+    ubyte64 lim = 128;
+    byte64 zero = 0;
+    size_t i = 0;
+    const n = v.length;
+    for (; i + 64 <= n; i += 64) {
+        ubyte64 x = loadUnaligned!ubyte64(v.ptr + i);
+        ubyte64 y = x & cast(ubyte64) greaterOrEqualMask!ubyte64(x, lim);
+        acc += __builtin_ia32_psadbw512(cast(byte64) y, zero);
+    }
+    ulong s = 0;
+    foreach (k; 0 .. 8) s += acc[k];
+    for (; i < n; i++) if (v[i] >= 128) s += v[i];
+    return s;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits. Le bit de poids fort de chaque
+// octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les octets >= 128 ; les
+// octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute donnée : une voie reçoit au
+// plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les voies sont vidées dans la somme
+// de 64 bits toutes les 128 mots (et à la fin). Aucun branchement sur les données (le reste, < 8 octets, par produit).
+pragma(inline, false) ulong k4Swar(const ubyte[] v) {
+    enum ulong ONES = 0x0101010101010101UL, LO = 0x00FF00FF00FF00FFUL;
+    const n = v.length;
+    const(ubyte)* p = v.ptr;
+    ulong s = 0;
+    size_t i = 0;
+    while (i + 8 <= n) {
+        const size_t end = i + 128 * 8 <= n ? i + 128 * 8 : n - (n - i) % 8;
+        ulong acc = 0;
+        for (; i < end; i += 8) {
+            ulong w;
+            memcpy(&w, p + i, 8);
+            const ulong y = w & (((w >> 7) & ONES) * 0xFF);
+            acc += (y & LO) + ((y >> 8) & LO);
+        }
+        acc = (acc & 0x0000FFFF0000FFFFUL) + ((acc >> 16) & 0x0000FFFF0000FFFFUL); // deux voies de 32 bits
+        s += (acc & 0xFFFFFFFFUL) + (acc >> 32);
+    }
+    for (; i < n; i++) s += cast(ulong) p[i] * (p[i] >> 7);
+    return s;
+}
 void runK4(string v, int reps) {
     auto d = load!ubyte("k4_bytes.u8");
     if (v == "natural_sorted") sort(d);
-    bool bl = v == "branchless_unsorted";
+    bool bl = v == "branchless_unsorted", tu = v == "tuned", sw = v == "swar";
     foreach (r; -WARMUP .. reps) {
         auto t0 = MonoTime.currTime;
-        ulong s = bl ? k4Branchless(d) : k4Natural(d);
+        ulong s = tu ? k4Tuned(d) : sw ? k4Swar(d) : bl ? k4Branchless(d) : k4Natural(d);
         auto dt = secs(t0);
         if (r >= 0) result("k4", v, "16M", r, dt, s.to!string);
     }
@@ -311,14 +399,52 @@ pragma(inline, false) void q1Tuned(const ref Cols c, size_t lo, size_t hi, ref Q
     if (i < hi) q1Natural(c, i, hi, acc); // reste éventuel (< 16 lignes)
 }
 long fold(ref Q1Acc a) { long s = 0; foreach (row; a) foreach (x; row) s += x; return s; }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q6 tuned_v ; forme de la frontière, Zig) : blocs de 16 lignes en vecteurs
+// de core.simd : colonnes élargies en i32, prédicat par comparaisons, produit prix × remise en i32, sélection (et
+// logique avec le masque), accumulation en i64 (voies paires et impaires, comme la charge de q1Tuned). Exactitude pour
+// toute donnée de la spécification (docs/SPEC.md, K6) : prix <= 50 000 et remise <= 10, donc produit <= 500 000 <
+// 2^31 ; une voie de 64 bits reçoit au plus N6 / 16 produits. La variante tuned publiée est scalaire sans branchement.
+pragma(inline, false) long q6TunedV(const ref Cols c, size_t lo, size_t hi) {
+    const(int)* sd = c.sd.ptr, pr = c.pr.ptr;
+    const(ubyte)* d = c.d.ptr, q = c.q.ptr;
+    const int16 d0 = 8766, d1 = 9131, r0 = 5, r1 = 7, q0 = 24;
+    long8 a0 = 0, a1 = 0;
+    size_t i = lo;
+    for (; i + 16 <= hi; i += 16) {
+        int16 vsd = ld32(sd + i), vd = ld8(d + i), vq = ld8(q + i), vp = ld32(pr + i);
+        int16 m = (vsd >= d0) & (vsd < d1) & (vd >= r0) & (vd <= r1) & (vq < q0);
+        long8 p64 = cast(long8)((vp * vd) & m);
+        a0 += (p64 << 32) >> 32; // lignes paires
+        a1 += p64 >> 32;         // lignes impaires
+    }
+    long8 a = a0 + a1; // variable nommée (voir sum8 plus haut)
+    return sum8(a) + q6Natural(c, i, hi); // reste (< 16 lignes)
+}
+// mt_pool, mt_pool_v (v4, point 4) : un quart par fil de la réserve ; mt_pool exécute la forme de la variante mt
+// publiée (q6Tuned, q1Tuned, déjà la forme tuned_v de Q1), mt_pool_v la forme tuned_v de Q6.
+struct K6Pool { const(Cols)* c; bool q1, vec; long[4] res; }
+void k6PoolJob(void* data, int t) {
+    auto j = cast(K6Pool*) data;
+    const size_t lo = N6 / 4 * t, hi = N6 / 4 * (t + 1);
+    if (j.q1) { Q1Acc a; q1Tuned(*j.c, lo, hi, a); j.res[t] = fold(a); }
+    else j.res[t] = j.vec ? q6TunedV(*j.c, lo, hi) : q6Tuned(*j.c, lo, hi);
+}
 void runK6(string v, int reps, string p) {
     auto c = Cols(load!int("k6_shipdate.i32"), load!int("k6_extendedprice.i32"), load!ubyte("k6_quantity.u8"), load!ubyte("k6_discount.u8"),
                   load!ubyte("k6_tax.u8"), load!ubyte("k6_returnflag.u8"), load!ubyte("k6_linestatus.u8"));
     bool q1 = p == "q1";
+    const bool pl = v == "mt_pool" || (v == "mt_pool_v" && !q1);
+    if (pl) startPool();
     foreach (r; -WARMUP .. reps) {
         auto t0 = MonoTime.currTime;
         long s = 0;
-        if (v == "mt") {
+        if (pl) {
+            auto j = K6Pool(&c, q1, v == "mt_pool_v");
+            runPool(&k6PoolJob, &j);
+            foreach (x; j.res) s += x;
+        } else if (v == "tuned_v" && !q1) {
+            s = q6TunedV(c, 0, N6);
+        } else if (v == "mt") {
             long[4] part;
             static Thread mk(Cols* c, size_t lo, size_t hi, bool q1, long* res) {
                 return new Thread({
@@ -337,6 +463,7 @@ void runK6(string v, int reps, string p) {
         auto dt = secs(t0);
         if (r >= 0) result("k6", v, p, r, dt, s.to!string);
     }
+    if (pl) stopPool();
 }
 
 // ------------------------------------------------------------------ K7
@@ -398,6 +525,57 @@ int aBuild(ANode* a, ref int top, int d, ref long c) {
     return i;
 }
 long aSum(const(ANode)* a, int i) { return i < 0 ? 0 : a[i].v + aSum(a, a[i].l) + aSum(a, a[i].r); }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada, et de bench/c_k8val) : l'état passe
+// par valeur, l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la fonction rend l'indice
+// libre suivant. Même arène, mêmes liens et mêmes valeurs que aBuild ; somme récursive par les liens (aSum).
+int avBuild(ANode* a, int i, int d, long q) {
+    a[i].v = q + i;
+    if (d > 0) {
+        const int l = i + 1, r = avBuild(a, l, d - 1, q);
+        a[i].l = l;
+        a[i].r = r;
+        return avBuild(a, r, d - 1, q);
+    }
+    a[i].l = a[i].r = -1;
+    return i + 1;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/c_k8it, remarque sur C) : construction et somme
+// itératives, piles explicites. La construction descend à gauche en empilant le sous-arbre droit de chaque nœud
+// interne, puis le reprend à la feuille suivante : même ordre préfixe, mêmes liens et mêmes valeurs que aBuild. Les
+// piles tiennent par construction : au plus une entrée par niveau à la construction, au plus profondeur + 1 à la somme.
+static assert(SIZE_K8_REQ < 63, "piles de K8 tuned_it : 64 entrées");
+struct K8Pend { int parent, depth; }
+void aiBuild(ANode* a, int depth, long q) {
+    K8Pend[64] stk = void;
+    int sp = 0, top = 0, parent = -1, d = depth;
+    bool right = false;
+    for (;;) {
+        const int i = top++;
+        a[i].v = q + i;
+        if (parent >= 0) { if (right) a[parent].r = i; else a[parent].l = i; }
+        if (d > 0) {
+            stk[sp++] = K8Pend(i, d - 1);
+            parent = i; right = false; d = d - 1;
+        } else {
+            a[i].l = a[i].r = -1;
+            if (sp == 0) break;
+            sp--;
+            parent = stk[sp].parent; d = stk[sp].depth; right = true;
+        }
+    }
+}
+long aiSum(const(ANode)* a, int root) {
+    int[64] stk = void;
+    int sp = 1;
+    stk[0] = root;
+    long s = 0;
+    while (sp > 0) {
+        const int i = stk[--sp];
+        s += a[i].v;
+        if (a[i].l >= 0) { stk[sp++] = a[i].r; stk[sp++] = a[i].l; }
+    }
+    return s;
+}
 __gshared Node keep;
 void runK8(string v, int reps) {
     enum Q = 16384;
@@ -413,7 +591,10 @@ void runK8(string v, int reps) {
         foreach (q; 0 .. Q) {
             auto a = MonoTime.currTime;
             long c = q, s;
-            if (tuned) { int top = 0; s = aSum(arena, aBuild(arena, top, SIZE_K8_REQ, c)); } else s = tSum(tBuild(SIZE_K8_REQ, c));
+            if (tuned) { int top = 0; s = aSum(arena, aBuild(arena, top, SIZE_K8_REQ, c)); }
+            else if (v == "tuned_val") { avBuild(arena, 0, SIZE_K8_REQ, c); s = aSum(arena, 0); }
+            else if (v == "tuned_it") { aiBuild(arena, SIZE_K8_REQ, c); s = aiSum(arena, 0); }
+            else s = tSum(tBuild(SIZE_K8_REQ, c));
             total += s;
             lat[q] = (MonoTime.currTime - a).total!"nsecs";
         }
@@ -432,6 +613,10 @@ double k9Init(size_t i, size_t j) { return ((i * 31 + j * 17) % 1024) / 1024.0; 
 pragma(inline, false) void k9Natural(double[][] a, double[][] b) {
     foreach (i; 1 .. M9 - 1) foreach (j; 1 .. M9 - 1) b[i][j] = 0.25 * (((a[i - 1][j] + a[i + 1][j]) + a[i][j - 1]) + a[i][j + 1]);
 }
+// v4, point 3 (docs/V4_EQUAL.md, R2) : naturel en grille contiguë, double[] indexé i * M9 + j, même boucle
+pragma(inline, false) void k9NaturalFlat(double[] a, double[] b) {
+    foreach (i; 1 .. M9 - 1) foreach (j; 1 .. M9 - 1) b[i * M9 + j] = 0.25 * (((a[(i - 1) * M9 + j] + a[(i + 1) * M9 + j]) + a[i * M9 + j - 1]) + a[i * M9 + j + 1]);
+}
 pragma(inline, false) void k9Rows(const(double)* a, double* b, size_t r0, size_t r1) {
     double8 q4 = 0.25;
     foreach (i; r0 .. r1) {
@@ -445,12 +630,20 @@ pragma(inline, false) void k9Rows(const(double)* a, double* b, size_t r0, size_t
         for (; j < M9 - 1; j++) o[j] = 0.25 * (((up[j] + dn[j]) + mid[j - 1]) + mid[j + 1]);
     }
 }
+// mt_pool (v4, point 4) : un quart des lignes par fil de la réserve, chacun exécute k9Rows (déjà la forme tuned_v)
+struct K9Pool { const(double)* a; double* b; }
+void k9PoolJob(void* data, int t) {
+    auto j = cast(K9Pool*) data;
+    k9Rows(j.a, j.b, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4);
+}
 void runK9(string v, int reps) {
     // harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
     double[][] na, nb;
     double* ga, gb;
     if (v == "natural") { na = new double[][](M9, M9); nb = new double[][](M9, M9); } // tableau de tableaux (idiome D)
     else { ga = cast(double*) aligned_alloc(64, M9 * M9 * 8); gb = cast(double*) aligned_alloc(64, M9 * M9 * 8); }
+    const bool pl = v == "mt_pool";
+    if (pl) startPool();
     foreach (r; -WARMUP .. reps) {
         double s = 0, dt;
         if (v == "natural") {
@@ -460,12 +653,20 @@ void runK9(string v, int reps) {
             foreach (_; 0 .. 4) { k9Natural(a, b); auto tmp = a; a = b; b = tmp; }
             dt = secs(t0);
             foreach (row; a) foreach (x; row) s += x;
+        } else if (v == "natural_flat") {
+            auto a = new double[](M9 * M9), b = new double[](M9 * M9);
+            foreach (k; 0 .. M9 * M9) a[k] = b[k] = k9Init(k / M9, k % M9);
+            auto t0 = MonoTime.currTime;
+            foreach (_; 0 .. 4) { k9NaturalFlat(a, b); auto tmp = a; a = b; b = tmp; }
+            dt = secs(t0);
+            foreach (x; a) s += x;
         } else {
             auto a = ga, b = gb;
             foreach (k; 0 .. M9 * M9) a[k] = b[k] = k9Init(k / M9, k % M9);
             auto t0 = MonoTime.currTime;
             foreach (_; 0 .. 4) {
                 if (v == "tuned") k9Rows(a, b, 1, M9 - 1);
+                else if (pl) { auto j = K9Pool(a, b); runPool(&k9PoolJob, &j); }
                 else {
                     static Thread mk(double* fa, double* fb, size_t r0, size_t r1) {
                         return new Thread({ k9Rows(fa, fb, r0, r1); }).start();
@@ -481,6 +682,7 @@ void runK9(string v, int reps) {
         }
         if (r >= 0) result("k9", v, "2048^2x4", r, dt, format("%.15e", s));
     }
+    if (pl) stopPool();
     if (v != "natural") { free(ga); free(gb); }
 }
 

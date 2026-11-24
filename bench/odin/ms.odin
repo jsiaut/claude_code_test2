@@ -188,6 +188,44 @@ run_k3 :: proc(v: string, reps: int) {
 	}
 }
 
+// ------------------------------------------------------------------ réserve de fils (v4, point 4)
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool) : réserve de quatre fils de travail, le fil principal compris. Les
+// trois autres sont créés une fois par processus, avant l'échauffement ; à chaque appel, une barrière de core:sync les
+// réveille, chacun traite son quart (0 pour le fil principal), et une seconde barrière attend leur fin. Entre deux
+// appels, ils attendent, bloqués, à la première barrière (mutex et condition de core:sync).
+Pool :: struct {
+	start, done: sync.Barrier,
+	job:         proc(data: rawptr, t: int),
+	data:        rawptr,
+	quit:        bool,
+	th:          [3]^thread.Thread,
+}
+pool: Pool
+pool_worker :: proc(t: int) {
+	for {
+		sync.barrier_wait(&pool.start)
+		if pool.quit do return
+		pool.job(pool.data, t)
+		sync.barrier_wait(&pool.done)
+	}
+}
+pool_start :: proc() {
+	sync.barrier_init(&pool.start, 4)
+	sync.barrier_init(&pool.done, 4)
+	for t in 1 ..< 4 do pool.th[t - 1] = thread.create_and_start_with_poly_data(t, pool_worker)
+}
+pool_run :: proc(job: proc(data: rawptr, t: int), data: rawptr) {
+	pool.job, pool.data = job, data
+	sync.barrier_wait(&pool.start)
+	job(data, 0)
+	sync.barrier_wait(&pool.done)
+}
+pool_stop :: proc() {
+	pool.quit = true
+	sync.barrier_wait(&pool.start)
+	for t in pool.th {thread.join(t); thread.destroy(t)}
+}
+
 // ------------------------------------------------------------------ K4
 k4_natural :: proc(v: []u8) -> u64 {
 	s: u64
@@ -199,13 +237,63 @@ k4_branchless :: proc(v: []u8) -> u64 {
 	for x in v do s += u64(x) * u64(x >> 7)
 	return s
 }
+// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (#simd et core:simd) : 64 octets par tour,
+// masque v >= 128 (lanes_ge), octets hors masque à zéro (select), cumulés en 64 voies de u16 (au plus 256 tours,
+// sans débordement), puis réduits en u64.
+k4_tuned :: proc(v: []u8) -> u64 {
+	V8 :: #simd[64]u8
+	V16 :: #simd[64]u16
+	lim := V8(128)
+	zero := V8(0)
+	s: u64
+	i := 0
+	n := len(v)
+	for i + 64 <= n {
+		acc := V16(0)
+		for k := 0; k < 256 && i + 64 <= n; k += 1 {
+			x := simd.from_slice(V8, v[i:i + 64])
+			acc += cast(V16)simd.select(simd.lanes_ge(x, lim), x, zero)
+			i += 64
+		}
+		s += simd.reduce_add_ordered(cast(#simd[64]u64)acc)
+	}
+	for ; i < n; i += 1 do if v[i] >= 128 do s += u64(v[i])
+	return s
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits. Le bit de poids fort de chaque
+// octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les octets >= 128 ; les
+// octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute donnée : une voie reçoit au
+// plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les voies sont vidées dans la somme
+// de 64 bits toutes les 128 mots (et à la fin). Aucun branchement sur les données (le reste, < 8 octets, par produit).
+k4_swar :: proc(v: []u8) -> u64 #no_bounds_check {
+	ONES :: 0x0101010101010101
+	LO :: 0x00FF00FF00FF00FF
+	s: u64
+	i := 0
+	n := len(v)
+	for i + 8 <= n {
+		end := i + 128 * 8 <= n ? i + 128 * 8 : n - (n - i) % 8
+		acc: u64
+		for ; i < end; i += 8 {
+			w := intrinsics.unaligned_load((^u64)(&v[i]))
+			y := w & (((w >> 7) & ONES) * 0xFF)
+			acc += (y & LO) + ((y >> 8) & LO)
+		}
+		acc = (acc & 0x0000FFFF0000FFFF) + ((acc >> 16) & 0x0000FFFF0000FFFF) // deux voies de 32 bits
+		s += (acc & 0xFFFFFFFF) + (acc >> 32)
+	}
+	for ; i < n; i += 1 do s += u64(v[i]) * u64(v[i] >> 7)
+	return s
+}
 run_k4 :: proc(v: string, reps: int) {
 	d := load(u8, "k4_bytes.u8")
 	if v == "natural_sorted" do slice.sort(d)
 	bl := v == "branchless_unsorted"
+	tu := v == "tuned"
+	sw := v == "swar"
 	for r := -WARMUP; r < reps; r += 1 {
 		t0 := time.tick_now()
-		s := bl ? k4_branchless(d) : k4_natural(d)
+		s := tu ? k4_tuned(d) : sw ? k4_swar(d) : bl ? k4_branchless(d) : k4_natural(d)
 		dt := secs(t0)
 		if r >= 0 do result("k4", v, "16M", r, dt, fmt.tprintf("%d", s))
 	}
@@ -327,6 +415,46 @@ q1_tuned :: proc(c: ^Cols, lo, hi: int, acc: ^Q1Acc) #no_bounds_check {
 	}
 	if i < hi do q1_natural(c, i, hi, acc)
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q1 tuned_v ; forme de bench/odin_q1, remarque sur Odin) : l'algorithme de
+// q1_tuned, le compte de chaque groupe par population du masque (card de simd.extract_msbs) au lieu de la somme de
+// ses voies. Exactitude : celle de q1_tuned (voies de 32 bits vidées toutes les 4 096 lignes).
+q1_tuned_v :: proc(c: ^Cols, lo, hi: int, acc: ^Q1Acc) #no_bounds_check {
+	I :: #simd[16]i32
+	L :: #simd[16]i64
+	i := lo
+	for i + 16 <= hi {
+		aq, ap, adp: [6]I
+		ach: [6]L
+		cnt: [6]i64
+		end := i + 4096 <= hi ? i + 4096 : hi - (hi - i) % 16
+		for ; i < end; i += 16 {
+			pass := simd.lanes_le((^I)(&c.sd[i])^, 10471)
+			vg := cast(I)(^#simd[16]u8)(&c.rf[i])^ * 2 + cast(I)(^#simd[16]u8)(&c.ls[i])^
+			vq := cast(I)(^#simd[16]u8)(&c.q[i])^
+			vd := cast(I)(^#simd[16]u8)(&c.d[i])^
+			vt := cast(I)(^#simd[16]u8)(&c.t[i])^ + 100
+			vp := (^I)(&c.pr[i])^
+			vdp := vp * (100 - vd)
+			ch := cast(L)vdp * cast(L)vt
+			#unroll for g in 0 ..< 6 {
+				m := pass & simd.lanes_eq(vg, I(g))
+				cnt[g] += i64(card(simd.extract_msbs(m)))
+				aq[g] += simd.select(m, vq, I(0))
+				ap[g] += simd.select(m, vp, I(0))
+				adp[g] += simd.select(m, vdp, I(0))
+				ach[g] += simd.select(cast(L)m, ch, L(0))
+			}
+		}
+		for g in 0 ..< 6 {
+			acc[g][0] += cnt[g]
+			acc[g][1] += i64(simd.reduce_add_pairs(aq[g]))
+			acc[g][2] += i64(simd.reduce_add_pairs(ap[g]))
+			acc[g][3] += simd.reduce_add_pairs(cast(L)adp[g])
+			acc[g][4] += simd.reduce_add_pairs(ach[g])
+		}
+	}
+	if i < hi do q1_natural(c, i, hi, acc)
+}
 fold :: proc(a: ^Q1Acc) -> i64 {
 	s: i64
 	for row in a do for x in row do s += x
@@ -341,13 +469,39 @@ K6Job :: struct {
 k6_worker :: proc(j: ^K6Job) {
 	if j.q1 {a: Q1Acc; q1_tuned(j.c, j.lo, j.hi, &a); j.res = fold(&a)} else do j.res = q6_tuned(j.c, j.lo, j.hi)
 }
+// mt_pool, mt_pool_v (v4, point 4) : un quart par fil de la réserve ; mt_pool exécute la forme de la variante mt
+// publiée (q6_tuned, déjà la forme tuned_v de Q6 ; q1_tuned), mt_pool_v la forme tuned_v de Q1.
+K6Pool :: struct {
+	c:       ^Cols,
+	q1, vec: bool,
+	res:     [4]i64,
+}
+k6_pool_job :: proc(data: rawptr, t: int) {
+	j := (^K6Pool)(data)
+	lo, hi := N6 / 4 * t, N6 / 4 * (t + 1)
+	if j.q1 {
+		a: Q1Acc
+		if j.vec {q1_tuned_v(j.c, lo, hi, &a)} else {q1_tuned(j.c, lo, hi, &a)}
+		j.res[t] = fold(&a)
+	} else do j.res[t] = q6_tuned(j.c, lo, hi)
+}
 run_k6 :: proc(v: string, reps: int, p: string) {
 	c := Cols{load(i32, "k6_shipdate.i32"), load(i32, "k6_extendedprice.i32"), load(u8, "k6_quantity.u8"), load(u8, "k6_discount.u8"), load(u8, "k6_tax.u8"), load(u8, "k6_returnflag.u8"), load(u8, "k6_linestatus.u8")}
 	q1 := p == "q1"
+	pl := v == "mt_pool" || (v == "mt_pool_v" && q1)
+	if pl do pool_start()
 	for r := -WARMUP; r < reps; r += 1 {
 		t0 := time.tick_now()
 		s: i64
 		switch v {
+		case "mt_pool", "mt_pool_v":
+			j := K6Pool{c = &c, q1 = q1, vec = v == "mt_pool_v"}
+			pool_run(k6_pool_job, &j)
+			for x in j.res do s += x
+		case "tuned_v":
+			a: Q1Acc
+			q1_tuned_v(&c, 0, N6, &a)
+			s = fold(&a)
 		case "mt":
 			jobs: [4]K6Job
 			th: [4]^thread.Thread
@@ -364,6 +518,7 @@ run_k6 :: proc(v: string, reps: int, p: string) {
 		dt := secs(t0)
 		if r >= 0 do result("k6", v, p, r, dt, fmt.tprintf("%d", s))
 	}
+	if pl do pool_stop()
 }
 
 // ------------------------------------------------------------------ K7
@@ -446,9 +601,74 @@ a_build :: proc(a: ^[K8_NODES]ANode, top: ^i32, d: int, c: ^i64) -> i32 #no_boun
 	return i
 }
 a_sum :: proc(a: ^[K8_NODES]ANode, i: i32) -> i64 #no_bounds_check {return i < 0 ? 0 : a[i].v + a_sum(a, a[i].l) + a_sum(a, a[i].r)}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada) : l'état passe par valeur,
+// l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la procédure rend l'indice libre
+// suivant. Même arène, mêmes liens et mêmes valeurs que a_build ; somme récursive par les liens (a_sum).
+av_build :: proc(a: ^[K8_NODES]ANode, i: i32, d: int, q: i64) -> i32 #no_bounds_check {
+	a[i].v = q + i64(i)
+	if d > 0 {
+		l := i + 1
+		r := av_build(a, l, d - 1, q)
+		a[i].l, a[i].r = l, r
+		return av_build(a, r, d - 1, q)
+	}
+	a[i].l, a[i].r = -1, -1
+	return i + 1
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de la remarque sur C, bench/c_k8it) : construction et
+// somme itératives, piles explicites. La construction descend à gauche en empilant le sous-arbre droit de chaque nœud
+// interne, puis le reprend à la feuille suivante : même ordre préfixe, mêmes liens et mêmes valeurs que a_build. Les
+// piles tiennent par construction : au plus une entrée par niveau à la construction, au plus profondeur + 1 à la somme.
+#assert(K8_REQ < 63)
+K8Pend :: struct {
+	parent: i32,
+	depth:  int,
+}
+ai_build :: proc(a: ^[K8_NODES]ANode, depth: int, q: i64) #no_bounds_check {
+	stk: [64]K8Pend
+	sp := 0
+	top, parent: i32 = 0, -1
+	right := false
+	d := depth
+	for {
+		i := top
+		top += 1
+		a[i].v = q + i64(i)
+		if parent >= 0 {
+			if right {a[parent].r = i} else {a[parent].l = i}
+		}
+		if d > 0 {
+			stk[sp] = {i, d - 1}
+			sp += 1
+			parent, right, d = i, false, d - 1
+		} else {
+			a[i].l, a[i].r = -1, -1
+			if sp == 0 do break
+			sp -= 1
+			parent, d, right = stk[sp].parent, stk[sp].depth, true
+		}
+	}
+}
+ai_sum :: proc(a: ^[K8_NODES]ANode, root: i32) -> i64 #no_bounds_check {
+	stk: [64]i32
+	sp := 1
+	stk[0] = root
+	s: i64
+	for sp > 0 {
+		sp -= 1
+		i := stk[sp]
+		s += a[i].v
+		if a[i].l >= 0 {
+			stk[sp], stk[sp + 1] = a[i].r, a[i].l
+			sp += 2
+		}
+	}
+	return s
+}
 run_k8 :: proc(v: string, reps: int) {
 	Q :: 16384
 	tuned, talloc := v == "tuned", v == "tuned_alloc"
+	val, it := v == "tuned_val", v == "tuned_it"
 	arena := new([K8_NODES]ANode)
 	c0: i64
 	keep := t_build(K8_LONG, &c0)
@@ -464,6 +684,12 @@ run_k8 :: proc(v: string, reps: int) {
 			if tuned { // nœuds compacts indexés dans un tableau réutilisé (DOD)
 				top: i32 = 0
 				s = a_sum(arena, a_build(arena, &top, K8_REQ, &c))
+			} else if val {
+				av_build(arena, 0, K8_REQ, c)
+				s = a_sum(arena, 0)
+			} else if it {
+				ai_build(arena, K8_REQ, c)
+				s = ai_sum(arena, 0)
 			} else if talloc {
 				// arène : idiome Odin « par trame » -> allocateur temporaire du contexte,
 				// libéré en bloc (l'arène vmem.Arena, protégée par mutex, est 2x plus lente : mesuré)
@@ -511,6 +737,14 @@ K9Job :: struct {
 	a, b:   []f64,
 	r0, r1: int,
 }
+// mt_pool (v4, point 4) : un quart des lignes par fil de la réserve, chacun exécute k9_rows (déjà la forme tuned_v)
+K9Pool :: struct {
+	a, b: []f64,
+}
+k9_pool_job :: proc(data: rawptr, t: int) {
+	j := (^K9Pool)(data)
+	k9_rows(j.a, j.b, 1 + (M9 - 2) * t / 4, 1 + (M9 - 2) * (t + 1) / 4)
+}
 run_k9 :: proc(v: string, reps: int) {
 	// harnais commun de K9 (docs/K9.md) : grilles allouées une fois par processus, réinitialisées hors chrono
 	if v == "natural" {
@@ -529,12 +763,16 @@ run_k9 :: proc(v: string, reps: int) {
 	}
 	a, _ := mem.make_aligned([]f64, M9 * M9, 64)
 	b, _ := mem.make_aligned([]f64, M9 * M9, 64)
+	if v == "mt_pool" do pool_start()
 	for r := -WARMUP; r < reps; r += 1 {
 		s, dt: f64
 		for k in 0 ..< M9 * M9 {a[k] = k9_init(k / M9, k % M9); b[k] = a[k]}
 		t0 := time.tick_now()
 		for _ in 0 ..< 4 {
-			if v == "tuned" {k9_rows(a, b, 1, M9 - 1)} else {
+			if v == "tuned" {k9_rows(a, b, 1, M9 - 1)} else if v == "mt_pool" {
+				j := K9Pool{a, b}
+				pool_run(k9_pool_job, &j)
+			} else {
 				jobs: [4]K9Job
 				th: [4]^thread.Thread
 				for t in 0 ..< 4 {
@@ -549,6 +787,7 @@ run_k9 :: proc(v: string, reps: int) {
 		for x in a do s += x
 		if r >= 0 do result("k9", v, "2048^2x4", r, dt, fmt.tprintf("%.15e", s))
 	}
+	if v == "mt_pool" do pool_stop()
 	delete(a); delete(b)
 }
 

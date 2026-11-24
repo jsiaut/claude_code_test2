@@ -41,6 +41,68 @@ impl ABuf {
     fn as_slice<T>(&self) -> &[T] {
         unsafe { std::slice::from_raw_parts(self.v.as_ptr() as *const T, self.bytes / std::mem::size_of::<T>()) }
     }
+    fn as_mut_slice<T>(&mut self) -> &mut [T] {
+        unsafe { std::slice::from_raw_parts_mut(self.v.as_mut_ptr() as *mut T, self.bytes / std::mem::size_of::<T>()) }
+    }
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool) : réserve de quatre fils de travail, le fil principal compris. Les
+// trois autres sont créés une fois par processus, avant l'échauffement (std::thread::scope autour des répétitions) ; à
+// chaque appel, un std::sync::Barrier les réveille, chacun traite son quart (0 pour le fil principal), et un second
+// attend leur fin. Entre deux appels, ils attendent, bloqués, au premier. Le travail est publié avant la première
+// barrière et lu après elle (les barrières ordonnent les accès mémoire) ; il vit jusqu'au retour de la seconde.
+trait Job: Sync {
+    fn run(&self, t: usize);
+}
+fn tramp<J: Job>(d: *const (), t: usize) {
+    unsafe { (*(d as *const J)).run(t) }
+}
+struct Pool {
+    start: std::sync::Barrier,
+    done: std::sync::Barrier,
+    job: UnsafeCell<(fn(*const (), usize), *const ())>,
+    quit: std::sync::atomic::AtomicBool,
+}
+unsafe impl Sync for Pool {}
+impl Pool {
+    fn new() -> Pool {
+        fn none(_: *const (), _: usize) {}
+        Pool { start: std::sync::Barrier::new(4), done: std::sync::Barrier::new(4),
+               job: UnsafeCell::new((none, std::ptr::null())), quit: std::sync::atomic::AtomicBool::new(false) }
+    }
+    fn worker(&self, t: usize) {
+        loop {
+            self.start.wait();
+            if self.quit.load(Ordering::Relaxed) {
+                return;
+            }
+            let (f, d) = unsafe { *self.job.get() };
+            f(d, t);
+            self.done.wait();
+        }
+    }
+    fn run<J: Job>(&self, j: &J) {
+        unsafe { *self.job.get() = (tramp::<J> as fn(*const (), usize), j as *const J as *const ()) };
+        self.start.wait();
+        j.run(0);
+        self.done.wait();
+    }
+    fn stop(&self) {
+        self.quit.store(true, Ordering::Relaxed);
+        self.start.wait();
+    }
+}
+/// Exécute `body` avec une réserve dont les trois fils sont créés avant (et rejoints après).
+fn with_pool<R>(body: impl FnOnce(&Pool) -> R) -> R {
+    let pool = Pool::new();
+    std::thread::scope(|sc| {
+        for t in 1..4 {
+            let p = &pool;
+            sc.spawn(move || p.worker(t));
+        }
+        let r = body(&pool);
+        pool.stop();
+        r
+    })
 }
 fn warmup() -> i32 {
     std::env::var("WARMUP").ok().and_then(|s| s.parse().ok()).unwrap_or(1)
@@ -217,13 +279,72 @@ fn k4_natural(v: &[u8]) -> u64 {
 fn k4_branchless(v: &[u8]) -> u64 {
     v.iter().map(|&x| x as u64 * (x >> 7) as u64).sum()
 }
+// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (std::arch, AVX-512BW) : masque v >= 128 par le
+// bit de poids fort, octets hors masque mis à zéro, vpsadbw en sommes de 64 bits.
+#[target_feature(enable = "avx512f,avx512bw")]
+unsafe fn k4_tuned_avx512(v: &[u8]) -> u64 {
+    let n = v.len();
+    let p = v.as_ptr();
+    let zero = _mm512_setzero_si512();
+    let mut acc = _mm512_setzero_si512();
+    let mut i = 0;
+    while i + 64 <= n {
+        let x = unsafe { _mm512_loadu_si512(p.add(i) as *const _) };
+        let y = _mm512_maskz_mov_epi8(_mm512_movepi8_mask(x), x);
+        acc = _mm512_add_epi64(acc, _mm512_sad_epu8(y, zero));
+        i += 64;
+    }
+    let mut s = _mm512_reduce_add_epi64(acc) as u64;
+    while i < n {
+        if v[i] >= 128 {
+            s += v[i] as u64;
+        }
+        i += 1;
+    }
+    s
+}
+#[inline(never)]
+fn k4_tuned(v: &[u8]) -> u64 {
+    unsafe { k4_tuned_avx512(v) }
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits. Le bit de poids fort de chaque
+// octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les octets >= 128 ; les
+// octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute donnée : une voie reçoit au
+// plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les voies sont vidées dans la somme
+// de 64 bits à chaque bloc de 128 mots. Aucun branchement sur les données (le reste, < 8 octets, par produit).
+#[inline(never)]
+fn k4_swar(v: &[u8]) -> u64 {
+    const ONES: u64 = 0x0101_0101_0101_0101;
+    const LO: u64 = 0x00FF_00FF_00FF_00FF;
+    let mut s = 0u64;
+    for block in v.chunks(128 * 8) {
+        let words = block.chunks_exact(8);
+        let rest = words.remainder();
+        let mut acc = 0u64;
+        for w in words {
+            let w = u64::from_le_bytes(w.try_into().unwrap());
+            let y = w & (((w >> 7) & ONES) * 0xFF);
+            acc += (y & LO) + ((y >> 8) & LO);
+        }
+        acc = (acc & 0x0000_FFFF_0000_FFFF) + ((acc >> 16) & 0x0000_FFFF_0000_FFFF); // deux voies de 32 bits
+        s += (acc & 0xFFFF_FFFF) + (acc >> 32);
+        for &x in rest {
+            s += x as u64 * (x >> 7) as u64;
+        }
+    }
+    s
+}
 fn run_k4(v: &str, reps: i32) {
     let mut d = load_bytes("k4_bytes.u8");
     if v == "natural_sorted" {
         d.sort_unstable();
     }
     let bl = v == "branchless_unsorted";
-    bench("k4", v, "16M", reps, || (if bl { k4_branchless(&d) } else { k4_natural(&d) }).to_string());
+    let tu = v == "tuned";
+    let sw = v == "swar";
+    bench("k4", v, "16M", reps, || {
+        (if tu { k4_tuned(&d) } else if sw { k4_swar(&d) } else if bl { k4_branchless(&d) } else { k4_natural(&d) }).to_string()
+    });
 }
 
 // ------------------------------------------------------------------ K5
@@ -289,6 +410,33 @@ fn q6_tuned(sd: &[i32], d: &[u8], q: &[u8], pr: &[i32]) -> i64 {
     }
     s
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q6 tuned_v ; forme de la frontière, Zig) : blocs de 16 lignes en vecteurs
+// AVX-512 (std::arch) : colonnes élargies en i32, prédicat par comparaisons, produit prix × remise en i32, sélection,
+// accumulation en i64 (deux vecteurs de 8 voies). Exactitude pour toute donnée de la spécification (docs/SPEC.md,
+// K6) : prix <= 50 000 et remise <= 10, donc produit <= 500 000 < 2^31 ; une voie de 64 bits reçoit au plus N6 / 16
+// produits. La variante tuned publiée est scalaire, sans branchement.
+#[target_feature(enable = "avx512f,avx512bw")]
+unsafe fn q6_tuned_v(c: &Cols, lo: usize, hi: usize) -> i64 {
+    let (d0, d1) = (_mm512_set1_epi32(8766), _mm512_set1_epi32(9131));
+    let (r0, r1, q0) = (_mm512_set1_epi32(5), _mm512_set1_epi32(7), _mm512_set1_epi32(24));
+    let (mut a0, mut a1) = (_mm512_setzero_si512(), _mm512_setzero_si512());
+    let mut i = lo;
+    assert!(hi <= c.sd.len() && hi <= c.pr.len() && hi <= c.d.len() && hi <= c.q.len());
+    while i + 16 <= hi {
+        let (sd, pr, d, q) = unsafe {
+            (_mm512_loadu_si512(c.sd.as_ptr().add(i) as *const _), _mm512_loadu_si512(c.pr.as_ptr().add(i) as *const _),
+             _mm512_cvtepu8_epi32(_mm_loadu_si128(c.d.as_ptr().add(i) as *const __m128i)),
+             _mm512_cvtepu8_epi32(_mm_loadu_si128(c.q.as_ptr().add(i) as *const __m128i)))
+        };
+        let m = _mm512_cmpge_epi32_mask(sd, d0) & _mm512_cmplt_epi32_mask(sd, d1) & _mm512_cmpge_epi32_mask(d, r0)
+            & _mm512_cmple_epi32_mask(d, r1) & _mm512_cmplt_epi32_mask(q, q0);
+        let p = _mm512_maskz_mov_epi32(m, _mm512_mullo_epi32(pr, d));
+        a0 = _mm512_add_epi64(a0, _mm512_cvtepi32_epi64(_mm512_castsi512_si256(p)));
+        a1 = _mm512_add_epi64(a1, _mm512_cvtepi32_epi64(_mm512_extracti64x4_epi64::<1>(p)));
+        i += 16;
+    }
+    _mm512_reduce_add_epi64(_mm512_add_epi64(a0, a1)) + q6_natural(c, i, hi) // reste (< 16 lignes)
+}
 #[inline(never)]
 fn q1_natural(c: &Cols, lo: usize, hi: usize, acc: &mut Q1Acc) {
     for i in lo..hi {
@@ -351,6 +499,24 @@ unsafe fn q1_tuned(c: &Cols, lo: usize, hi: usize, acc: &mut Q1Acc) {
         q1_natural(c, i, hi, acc);
     }
 }
+// mt_pool, mt_pool_v (v4, point 4) : un quart par fil de la réserve ; mt_pool exécute la forme de la variante mt publiée
+// (q6_tuned, q1_tuned, déjà la forme tuned_v de Q1), mt_pool_v la forme tuned_v de Q6.
+struct K6Job<'a> { c: &'a Cols, q1: bool, vec: bool, res: [std::sync::atomic::AtomicI64; 4] }
+impl Job for K6Job<'_> {
+    fn run(&self, t: usize) {
+        let (c, lo, hi) = (self.c, N6 * t / 4, N6 * (t + 1) / 4);
+        let s = if self.q1 {
+            let mut a = [[0i64; 5]; 6];
+            unsafe { q1_tuned(c, lo, hi, &mut a) };
+            a.iter().flatten().sum::<i64>()
+        } else if self.vec {
+            unsafe { q6_tuned_v(c, lo, hi) }
+        } else {
+            q6_tuned(&c.sd[lo..hi], &c.d[lo..hi], &c.q[lo..hi], &c.pr[lo..hi])
+        };
+        self.res[t].store(s, Ordering::Relaxed);
+    }
+}
 fn run_k6(v: &str, reps: i32, p: &str) {
     let c = Cols {
         sd: load_i32("k6_shipdate.i32"), pr: load_i32("k6_extendedprice.i32"), q: load_bytes("k6_quantity.u8"),
@@ -359,6 +525,16 @@ fn run_k6(v: &str, reps: i32, p: &str) {
     };
     let q1 = p == "q1";
     let fold = |acc: &Q1Acc| acc.iter().flatten().sum::<i64>();
+    if v == "mt_pool" || (v == "mt_pool_v" && !q1) {
+        let vec = v == "mt_pool_v";
+        return with_pool(|pool| {
+            bench("k6", v, p, reps, || {
+                let j = K6Job { c: &c, q1, vec, res: Default::default() };
+                pool.run(&j);
+                j.res.iter().map(|x| x.load(Ordering::Relaxed)).sum::<i64>().to_string()
+            })
+        });
+    }
     bench("k6", v, p, reps, || {
         let s: i64 = match (v, q1) {
             ("natural", false) => q6_natural(&c, 0, N6),
@@ -368,6 +544,7 @@ fn run_k6(v: &str, reps: i32, p: &str) {
                 fold(&a)
             }
             ("tuned", false) => q6_tuned(&c.sd, &c.d, &c.q, &c.pr),
+            ("tuned_v", false) => unsafe { q6_tuned_v(&c, 0, N6) },
             ("tuned", true) => {
                 let mut a = [[0i64; 5]; 6];
                 unsafe { q1_tuned(&c, 0, N6, &mut a) };
@@ -478,6 +655,109 @@ fn a_build(a: &mut Vec<ANode>, d: u32, c: &mut i64) -> i32 {
 fn a_sum(a: &[ANode], i: i32) -> i64 {
     if i < 0 { 0 } else { let n = a[i as usize]; n.v + a_sum(a, n.l) + a_sum(a, n.r) }
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.5, rq_arena ; forme de bench/rust_k8, remarque sur Rust, × 0,74) : l'arène
+// écrite comme en C, tranche préallouée, indice libre et compteur par référence, accès sans vérification (forme propre
+// à Rust : relevé, results/converge/inventory.md). SÛRETÉ (ici et dans les formes suivantes) : l'arbre complet de
+// profondeur K8_REQ a exactement (2 << K8_REQ) - 1 nœuds, la longueur de l'arène ; tout indice écrit ou lu y est.
+fn ac_build(a: &mut [ANode], top: &mut usize, d: u32, c: &mut i64) -> i32 {
+    let i = *top;
+    *top += 1;
+    unsafe { a.get_unchecked_mut(i).v = *c };
+    *c += 1;
+    if d > 0 {
+        let l = ac_build(a, top, d - 1, c);
+        unsafe { a.get_unchecked_mut(i).l = l };
+        let r = ac_build(a, top, d - 1, c);
+        unsafe { a.get_unchecked_mut(i).r = r };
+    } else {
+        unsafe {
+            let n = a.get_unchecked_mut(i);
+            n.l = -1;
+            n.r = -1;
+        }
+    }
+    i as i32
+}
+fn ac_sum(a: &[ANode], i: i32) -> i64 {
+    if i < 0 { 0 } else { let n = unsafe { *a.get_unchecked(i as usize) }; n.v + ac_sum(a, n.l) + ac_sum(a, n.r) }
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la frontière, Ada, et de bench/c_k8val) : l'état passe
+// par valeur, l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la fonction rend l'indice
+// libre suivant. Même arène préallouée que rq_arena ; somme récursive par les liens (ac_sum).
+fn av_build(a: &mut [ANode], i: i32, d: u32, q: i64) -> i32 {
+    unsafe { a.get_unchecked_mut(i as usize).v = q + i as i64 };
+    if d > 0 {
+        let l = i + 1;
+        let r = av_build(a, l, d - 1, q);
+        unsafe {
+            let n = a.get_unchecked_mut(i as usize);
+            n.l = l;
+            n.r = r;
+        }
+        return av_build(a, r, d - 1, q);
+    }
+    unsafe {
+        let n = a.get_unchecked_mut(i as usize);
+        n.l = -1;
+        n.r = -1;
+    }
+    i + 1
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de bench/c_k8it, remarque sur C) : construction et somme
+// itératives, piles explicites. La construction descend à gauche en empilant le sous-arbre droit de chaque nœud
+// interne, puis le reprend à la feuille suivante : même ordre préfixe, mêmes liens et mêmes valeurs. Les piles tiennent
+// par construction : au plus une entrée par niveau à la construction, au plus profondeur + 1 à la somme.
+const _: () = assert!(K8_REQ < 63, "piles de K8 tuned_it : 64 entrées");
+fn ai_build(a: &mut [ANode], depth: u32, q: i64) {
+    let mut stk = [(0i32, 0u32); 64];
+    let mut sp = 0usize;
+    let (mut top, mut parent, mut right, mut d) = (0i32, -1i32, false, depth);
+    loop {
+        let i = top;
+        top += 1;
+        unsafe { a.get_unchecked_mut(i as usize).v = q + i as i64 };
+        if parent >= 0 {
+            let p = unsafe { a.get_unchecked_mut(parent as usize) };
+            if right { p.r = i } else { p.l = i }
+        }
+        if d > 0 {
+            stk[sp] = (i, d - 1);
+            sp += 1;
+            parent = i;
+            right = false;
+            d -= 1;
+        } else {
+            unsafe {
+                let n = a.get_unchecked_mut(i as usize);
+                n.l = -1;
+                n.r = -1;
+            }
+            if sp == 0 {
+                break;
+            }
+            sp -= 1;
+            (parent, d) = stk[sp];
+            right = true;
+        }
+    }
+}
+fn ai_sum(a: &[ANode], root: i32) -> i64 {
+    let mut stk = [0i32; 64];
+    let mut sp = 1usize;
+    stk[0] = root;
+    let mut s = 0i64;
+    while sp > 0 {
+        sp -= 1;
+        let n = unsafe { *a.get_unchecked(stk[sp] as usize) };
+        s += n.v;
+        if n.l >= 0 {
+            stk[sp] = n.r;
+            stk[sp + 1] = n.l;
+            sp += 2;
+        }
+    }
+    s
+}
 fn run_k8(v: &str, reps: i32) {
     const Q: usize = 16384;
     let tuned = v == "tuned";
@@ -486,6 +766,7 @@ fn run_k8(v: &str, reps: i32) {
     let lsum = t_sum(&long);
     let mut lat = vec![0u64; Q];
     let mut arena: Vec<ANode> = Vec::with_capacity((2 << K8_REQ) - 1);
+    let mut fixed = vec![ANode::default(); (2 << K8_REQ) - 1]; // arène préallouée des formes du point 4
     for r in -warmup()..reps {
         let mut total = 0i64;
         let t0 = Instant::now();
@@ -496,6 +777,16 @@ fn run_k8(v: &str, reps: i32) {
                 arena.clear(); // réutilise la capacité : aucune allocation
                 let root = a_build(&mut arena, K8_REQ, &mut c);
                 a_sum(&arena, root)
+            } else if v == "tuned_val" {
+                av_build(&mut fixed, 0, K8_REQ, c);
+                ac_sum(&fixed, 0)
+            } else if v == "tuned_it" {
+                ai_build(&mut fixed, K8_REQ, c);
+                ai_sum(&fixed, 0)
+            } else if v == "rq_arena" {
+                let mut top = 0usize;
+                let root = ac_build(&mut fixed, &mut top, K8_REQ, &mut c);
+                ac_sum(&fixed, root)
             } else {
                 let t = t_build(K8_REQ, &mut c);
                 t_sum(&t) // libéré à la sortie de portée
@@ -526,6 +817,15 @@ fn k9_natural(inp: &Vec<Vec<f64>>, out: &mut Vec<Vec<f64>>) {
         }
     }
 }
+// v4, point 3 (docs/V4_EQUAL.md, R2) : naturel en grille contiguë, Vec<f64> indexé i * M9 + j, même boucle
+#[inline(never)]
+fn k9_natural_flat(inp: &Vec<f64>, out: &mut Vec<f64>) {
+    for i in 1..M9 - 1 {
+        for j in 1..M9 - 1 {
+            out[i * M9 + j] = 0.25 * (((inp[(i - 1) * M9 + j] + inp[(i + 1) * M9 + j]) + inp[i * M9 + j - 1]) + inp[i * M9 + j + 1]);
+        }
+    }
+}
 #[inline(never)]
 fn k9_rows(inp: &[f64], out: &mut [f64], r0: usize) {
     // out = lignes [r0, r0 + out.len()/M9) ; inp = grille complète
@@ -537,6 +837,48 @@ fn k9_rows(inp: &[f64], out: &mut [f64], r0: usize) {
         for j in 1..M9 - 1 {
             o[j] = 0.25 * (((up[j] + dn[j]) + mid[j - 1]) + mid[j + 1]);
         }
+    }
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K9 tuned_v ; forme de la frontière, Swift) : par ligne, vecteurs explicites
+// de 8 f64 (AVX-512, std::arch) : haut, bas, gauche et droite chargés en vecteurs, même ordre des additions que la
+// spécification, résultat écrit en vecteur, reste scalaire. Grilles plates alignées sur 64 octets (ABuf) ; comme chez
+// Swift, la boucle part de j = 1, chargements et écriture non alignés. La variante tuned publiée est une boucle
+// scalaire vectorisée par rustc.
+#[target_feature(enable = "avx512f")]
+unsafe fn k9_rows_v(inp: &[f64], out: &mut [f64], r0: usize) {
+    let q = _mm512_set1_pd(0.25);
+    for (k, o) in out.chunks_exact_mut(M9).enumerate() {
+        let i = r0 + k;
+        let up = &inp[(i - 1) * M9..i * M9];
+        let mid = &inp[i * M9..(i + 1) * M9];
+        let dn = &inp[(i + 1) * M9..(i + 2) * M9];
+        let mut j = 1;
+        while j + 8 <= M9 - 1 {
+            unsafe {
+                let s = _mm512_add_pd(_mm512_add_pd(_mm512_add_pd(_mm512_loadu_pd(up.as_ptr().add(j)), _mm512_loadu_pd(dn.as_ptr().add(j))),
+                                                    _mm512_loadu_pd(mid.as_ptr().add(j - 1))),
+                                      _mm512_loadu_pd(mid.as_ptr().add(j + 1)));
+                _mm512_storeu_pd(o.as_mut_ptr().add(j), _mm512_mul_pd(q, s));
+            }
+            j += 8;
+        }
+        while j < M9 - 1 {
+            o[j] = 0.25 * (((up[j] + dn[j]) + mid[j - 1]) + mid[j + 1]);
+            j += 1;
+        }
+    }
+}
+// mt_pool, mt_pool_v (v4, point 4) : un quart des lignes par fil de la réserve ; mt_pool exécute k9_rows (la forme de
+// mt), mt_pool_v la forme tuned_v. Chaque fil écrit ses seules lignes de la grille de sortie.
+struct K9Job { a: *const f64, b: *mut f64, vec: bool }
+unsafe impl Sync for K9Job {}
+impl Job for K9Job {
+    fn run(&self, t: usize) {
+        let rows = M9 - 2;
+        let (r0, r1) = (1 + rows * t / 4, 1 + rows * (t + 1) / 4);
+        let inp = unsafe { std::slice::from_raw_parts(self.a, M9 * M9) };
+        let out = unsafe { std::slice::from_raw_parts_mut(self.b.add(r0 * M9), (r1 - r0) * M9) };
+        if self.vec { unsafe { k9_rows_v(inp, out, r0) } } else { k9_rows(inp, out, r0) }
     }
 }
 fn run_k9(v: &str, reps: i32) {
@@ -565,7 +907,55 @@ fn run_k9(v: &str, reps: i32) {
         }
         return;
     }
+    if v == "natural_flat" {
+        let init: Vec<f64> = (0..M9 * M9).map(|k| k9_init(k / M9, k % M9)).collect();
+        for r in -warmup()..reps {
+            let mut a = init.clone();
+            let mut b = init.clone();
+            let t0 = Instant::now();
+            for _ in 0..4 {
+                k9_natural_flat(&a, &mut b);
+                std::mem::swap(&mut a, &mut b);
+            }
+            let dt = t0.elapsed().as_secs_f64();
+            let s: f64 = a.iter().sum();
+            if r >= 0 {
+                result("k9", v, "2048^2x4", r, dt, &format!("{s:.15e}"));
+            }
+        }
+        return;
+    }
     let init: Vec<f64> = (0..M9 * M9).map(|k| k9_init(k / M9, k % M9)).collect();
+    if v == "tuned_v" || v == "mt_pool" || v == "mt_pool_v" {
+        // grilles alignées sur 64 octets, allouées une fois, réinitialisées hors chrono (harnais commun)
+        let (mut ga, mut gb) = (ABuf::of(&init), ABuf::of(&init));
+        let mut run = |pool: Option<&Pool>| {
+            for r in -warmup()..reps {
+                ga.as_mut_slice::<f64>().copy_from_slice(&init);
+                gb.as_mut_slice::<f64>().copy_from_slice(&init);
+                let (mut a, mut b) = (ga.as_mut_slice::<f64>().as_mut_ptr(), gb.as_mut_slice::<f64>().as_mut_ptr());
+                let t0 = Instant::now();
+                for _ in 0..4 {
+                    match pool {
+                        Some(p) => p.run(&K9Job { a, b, vec: v == "mt_pool_v" }),
+                        None => unsafe {
+                            let inp = std::slice::from_raw_parts(a, M9 * M9);
+                            let out = std::slice::from_raw_parts_mut(b.add(M9), (M9 - 2) * M9);
+                            k9_rows_v(inp, out, 1)
+                        },
+                    }
+                    std::mem::swap(&mut a, &mut b);
+                }
+                let dt = t0.elapsed().as_secs_f64();
+                let s: f64 = unsafe { std::slice::from_raw_parts(a, M9 * M9) }.iter().sum();
+                if r >= 0 {
+                    result("k9", v, "2048^2x4", r, dt, &format!("{s:.15e}"));
+                }
+            }
+        };
+        if v == "tuned_v" { run(None) } else { with_pool(|p| run(Some(p))) }
+        return;
+    }
     let mut a = init.clone();
     let mut b = init.clone();
     for r in -warmup()..reps {

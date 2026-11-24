@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """v4, point 4 (docs/V4_CONVERGE.md, 3.4) : relevé des formes, langage par langage et forme par forme. Les données sont
 ici (INV) ; le script écrit results/converge/inventory.md (lecture) et results/converge/forms.json (lu par le pilote et
-par l'analyse), et vérifie que les cellules des formes écrites sont exactement celles de bench/<langage>_cv/cv_variants
+par l'analyse), et vérifie que les cellules des formes écrites sont exactement celles de bench/<langage>/cv_variants
 (hors K9 natural_flat, variante R2 du point 3, que le calcul du point 4 n'emploie pas).
 
-États : « présente » (une variante existante répond à la définition ; ses cellules sont celles de la source publiée),
-« écrite » (nouvelle variante de la copie _cv), « non écrivible » (capacité absente, preuve dans la note), « sans
+États : « présente » (une variante publiée répond à la définition ; ses cellules sont les siennes), « écrite »
+(variante ajoutée pour le catalogue, listée dans cv_variants), « non écrivible » (capacité absente, preuve dans la note), « sans
 objet » (forme de repli quand la forme principale est présente ou écrite ; mt_pool_* sans forme à un fil nouvelle).
 « remarque » : forme trouvée par la remarque du langage lui-même (calcul 4 de la section 8)."""
 import json, os, sys
@@ -871,7 +871,7 @@ RQ = {  # formes propres à un langage ou à son runtime (3.5), par langage : {n
 
 
 def cv_cells(lang):
-    path = os.path.join(ROOT, "bench", lang + "_cv", "cv_variants")
+    path = os.path.join(ROOT, "bench", lang, "cv_variants")
     out = set()
     for line in open(path):
         f = line.split()
@@ -903,8 +903,8 @@ def main():
         json.dumps(js, ensure_ascii=False, indent=1) + "\n")
     md = ["# Relevé des formes du point 4 (v4)", "",
           "Écrit par `tools/converge/inventory.py` (données dans le script) ; plan : `docs/V4_CONVERGE.md`, 3.3 à 3.5.",
-          "États : **présente** (variante existante conforme à la définition), **écrite** (variante nouvelle de la "
-          "copie `bench/<langage>_cv`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme "
+          "États : **présente** (variante publiée conforme à la définition), **écrite** (variante ajoutée pour le "
+          "catalogue, listée dans `cv_variants`), **non écrivible** (preuve dans la note), **sans objet** (repli d'une forme "
           "principale présente ou écrite ; réserve de fils sans forme à un fil nouvelle). « R » : forme trouvée par "
           "la remarque du langage (calcul 4).", "",
           f"Langages relevés : {len(done)} sur 25 ({', '.join(NAMES[l] for l in done)}).", "",

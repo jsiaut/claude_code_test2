@@ -24,7 +24,7 @@ variantes : le calcul « Méthode du 23 novembre » le garde.
 
 Calcul « Final » (docs/V4_FINAL.md, 8 ; docs/V4_1.md, 3) :
 * plafond : à chaque taille, chaque cellule prend la meilleure forme admise (C1 : variantes publiées et formes du
-  relevé, écrites dans la copie _cv ou présentes dans la base), la variante naturelle y entrant dans son mode R1 (huit
+  relevé, écrites pour le catalogue ou déjà publiées), la variante naturelle y entrant dans son mode R1 (huit
   langages) et, pour K9, sous sa forme contiguë (R2, treize langages ; mode R1 pour C++ et D) ;
 * K3 (R4, A2) : b3 est le plus lent des 16 décalages de la boucle de référence ; chaque processus de K3 est ramené au
   b3 de référence (moyenne de toutes les mesures de b3) par le rapport t x b3 / b3 de son groupe (moyenne des mesures
@@ -685,12 +685,12 @@ _NESTED = None
 
 
 def nested():
-    """Les 13 langages à grille imbriquée : ceux dont la copie _cv déclare K9 natural_flat (R2)."""
+    """Les 13 langages à grille imbriquée : ceux dont cv_variants déclare K9 natural_flat (R2)."""
     global _NESTED
     if _NESTED is None:
         _NESTED = []
         for l in LANGS:
-            p = os.path.join(ROOT, "bench", l + "_cv", "cv_variants")
+            p = os.path.join(ROOT, "bench", l, "cv_variants")
             if os.path.exists(p) and any(line.split()[:2] == ["k9", "natural_flat"] for line in open(p)):
                 _NESTED.append(l)
     return _NESTED

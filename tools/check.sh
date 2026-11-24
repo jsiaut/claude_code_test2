@@ -44,9 +44,9 @@ python3 tools/converge/inventory.py > /dev/null || ko "tools/converge/inventory.
 same results/converge/forms.json results/converge/inventory.md
 
 echo "3. Plan de la campagne (rien n'est exécuté)"
-is "constructions" "$(python3 tools/final/build.py --list | tail -1)" "225 constructions"
-is "cellules à étalonner" "$(python3 tools/final/campaign.py calibrate --dry | awk '{n += $(NF - 1)} END {print n}')" "2978"
-is "processus des trois passes" "$(python3 tools/final/campaign.py run --dry | tail -1)" "9738 processus"
+is "constructions" "$(python3 tools/final/build.py --list | tail -1)" "132 constructions"
+is "cellules à étalonner" "$(python3 tools/final/campaign.py calibrate --dry | awk '{n += $(NF - 1)} END {print n}')" "3106"
+is "processus des trois passes" "$(python3 tools/final/campaign.py run --dry | tail -1)" "10158 processus"
 
 echo "4. Classement"
 if [ "$MODE" = "--rapide" ]; then

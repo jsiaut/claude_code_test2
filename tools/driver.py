@@ -4,7 +4,8 @@
 Usage : driver.py LANG [--kernels k1,k4] [--variants natural,tuned] [--params q1,16384] [--warmup N] [--timeout S]
 
 Construire d'abord sur place (bench/<langage>/build.sh). Pour chaque cellule (noyau, variante, paramètre) du langage,
-celles du plan commun (PLAN) et ses variantes propres (bench/<langage>/extra_variants), un processus exécute
+celles du plan commun (PLAN), ses variantes propres (bench/<langage>/extra_variants) et ses formes du catalogue
+(cv_variants), un processus exécute
 l'échauffement puis une répétition ; le programme chronomètre lui-même sa section de calcul (docs/SPEC.md, 0) et sa
 somme de contrôle est comparée à results/expected.json, calculé par l'implémentation C. Une ligne par cellule ; code
 de retour 1 si une cellule échoue. Rien n'est écrit dans le dépôt. K10 (hors score, plus mesuré) et l'empreinte de K1
@@ -60,10 +61,11 @@ def check(kernel, param, chk):
     return chk.strip() == exp
 
 
-def extra_variants(lang):
-    """Variantes propres à un langage : bench/<langage>/extra_variants (« k8 tuned_alloc »)."""
+def extra_variants(lang, name="extra_variants"):
+    """Variantes propres à un langage : bench/<langage>/extra_variants (« k8 tuned_alloc ») ; name="cv_variants" :
+    ses formes du catalogue."""
     extra = {}
-    ef = os.path.join(ROOT, "bench", lang, "extra_variants")
+    ef = os.path.join(ROOT, "bench", lang, name)
     if os.path.exists(ef):
         for line in open(ef):
             f = line.split()
@@ -113,10 +115,10 @@ def main():
     ap.add_argument("--timeout", type=int, default=900)
     a = ap.parse_args()
     vfilter = set(a.variants.split(",")) if a.variants else None
-    extra = extra_variants(a.lang)
+    extra, cv = extra_variants(a.lang), extra_variants(a.lang, "cv_variants")
     bad = 0
     for kernel in a.kernels.split(","):
-        for variant, param in PLAN[kernel] + extra.get(kernel, []):
+        for variant, param in PLAN[kernel] + extra.get(kernel, []) + cv.get(kernel, []):
             if vfilter and variant not in vfilter:
                 continue
             if a.params and param not in a.params.split(","):

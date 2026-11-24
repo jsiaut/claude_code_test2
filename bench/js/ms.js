@@ -131,11 +131,33 @@ async function runK3(v, reps) {
 // ------------------------------------------------------------------ K4
 function k4Natural(v) { let s = 0; for (let i = 0; i < v.length; i++) { const x = v[i]; if (x >= 128) s += x; } return s; }
 function k4Branchless(v) { let s = 0; for (let i = 0; i < v.length; i++) { const x = v[i]; s += x * (x >> 7); } return s; }
+// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned. JavaScript n'a pas de SIMD : la meilleure forme trouvée, quatre
+// octets par mot de 32 bits (vue Uint32Array sur les mêmes octets) : masque des octets >= 128 par leur bit de poids
+// fort, sommes par paires d'octets dans deux champs de 16 bits, repliées tous les 128 mots (6 ms, contre 18 pour la
+// forme sans branchement et 14 pour celle-ci déroulée par quatre).
+function k4Tuned(v, w) {
+  let s = 0, i = 0;
+  const nw = w.length;
+  while (i < nw) {
+    const end = Math.min(nw, i + 128);
+    let acc = 0;
+    for (; i < end; i++) {
+      const x = w[i];
+      const y = x & (((x >>> 7) & 0x01010101) * 0xFF);
+      acc += (y & 0x00FF00FF) + ((y >>> 8) & 0x00FF00FF);
+    }
+    s += (acc & 0xFFFF) + Math.floor(acc / 65536);
+  }
+  for (let k = nw * 4; k < v.length; k++) { const x = v[k]; if (x >= 128) s += x; }
+  return s;
+}
 function runK4(v, reps) {
-  const d = load('k4_bytes.u8', Uint8Array);
+  let d = load('k4_bytes.u8', Uint8Array);
   if (v === 'natural_sorted') d.sort();
-  const bl = v === 'branchless_unsorted';
-  bench('k4', v, '16M', reps, () => String(bl ? k4Branchless(d) : k4Natural(d)));
+  const bl = v === 'branchless_unsorted', tu = v === 'tuned';
+  if (tu && d.byteOffset % 4 !== 0) d = new Uint8Array(d);  // vue de 32 bits alignée (hors chrono)
+  const w = tu ? new Uint32Array(d.buffer, d.byteOffset, d.length >> 2) : null;
+  bench('k4', v, '16M', reps, () => String(tu ? k4Tuned(d, w) : bl ? k4Branchless(d) : k4Natural(d)));
 }
 
 // ------------------------------------------------------------------ K5
@@ -152,6 +174,19 @@ function k5Tuned(a, b) { // pas de SIMD en JS : 8 accumulateurs indépendants
 const sink = { a: null };
 function runK5(v, reps) {
   const a = load('k5_a.f32', Float32Array), b = load('k5_b.f32', Float32Array);
+  if (v === 'rq_f64') {
+    // v4, point 4 (docs/V4_CONVERGE.md, 3.5, forme propre au runtime) : la forme de la remarque sur JavaScript
+    // (bench/js_exp, tuned_f64 ; docs/JAVASCRIPT.md : × 0,88) : k5Tuned sur des copies Float64Array des données ; la
+    // conversion est faite dans le chrono, une fois par répétition (la remarque la faisait hors chrono). Même résultat :
+    // les éléments d'un Float32Array sont lus en f64.
+    bench('k5', v, '2048x65536', reps, () => {
+      const a64 = Float64Array.from(a), b64 = Float64Array.from(b);
+      let d = 0;
+      for (let it = 0; it < INNER5; it++) { sink.a = a64; d = k5Tuned(sink.a, b64); }
+      return fix(d, 4);
+    });
+    return;
+  }
   const f = v === 'tuned' ? k5Tuned : k5Natural;
   bench('k5', v, '2048x65536', reps, () => {
     let d = 0;
@@ -176,6 +211,21 @@ function q6Tuned(c, lo, hi) { // prédicat sans branchement en arithmétique 32 
   }
   return s0 + s1;
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, Q6 tuned_s) : la forme de la remarque sur JavaScript (bench/js_exp, tuned_m ;
+// docs/JAVASCRIPT.md : × 0,60), recopiée : masque par négation, sommes entières de 32 bits par blocs de 4096 lignes
+// (|prix × remise| ≤ 500 000 : la somme d'un bloc tient sur 32 bits), puis somme des blocs.
+function q6TunedM(c, lo, hi) {
+  const { sd, d, q, pr } = c; let s = 0;
+  for (let i0 = lo; i0 < hi; i0 += 4096) {
+    const e = Math.min(i0 + 4096, hi); let b = 0;
+    for (let i = i0; i < e; i++) {
+      const m = ((sd[i] - 8766) >>> 0 < 365) & ((d[i] - 5) >>> 0 <= 2) & (q[i] < 24);
+      b = (b + ((pr[i] * d[i]) & -m)) | 0;
+    }
+    s += b;
+  }
+  return s;
+}
 function q1Natural(c, lo, hi, acc) {
   const { sd, pr, q, d, t, rf, ls } = c;
   for (let i = lo; i < hi; i++) {
@@ -196,16 +246,45 @@ function q1Tuned(c, lo, hi, acc) { // sans branchement : groupe 6 = rejet ; accu
   }
   for (let k = 0; k < 30; k++) acc[k] += a[k];
 }
+// v4, point 4 (3.3, Q1 tuned_s) : une passe, les 30 accumulateurs en variables locales ; par ligne, pm = -1 si
+// shipdate <= 10471 (décalage arithmétique du signe de shipdate - 10472, entiers de 32 bits), et pour chaque groupe k,
+// mk = pm & (signe de (g ^ k) - 1), -1 si g = k ; additions masquées par & mk, sans branchement. Exactitude : chaque
+// terme tient sur 32 bits (charge ≤ 50 000 × 100 × 108 < 2^31) ; les sommes, en f64, restent entières et exactes
+// (< 2^53).
+function q1TunedS(c, lo, hi) {
+  const { sd, pr, q, d, t, rf, ls } = c;
+  let n0 = 0, q0 = 0, p0 = 0, e0 = 0, c0 = 0, n1 = 0, q1 = 0, p1 = 0, e1 = 0, c1 = 0, n2 = 0, q2 = 0, p2 = 0, e2 = 0, c2 = 0;
+  let n3 = 0, q3 = 0, p3 = 0, e3 = 0, c3 = 0, n4 = 0, q4 = 0, p4 = 0, e4 = 0, c4 = 0, n5 = 0, q5 = 0, p5 = 0, e5 = 0, c5 = 0;
+  for (let i = lo; i < hi; i++) {
+    const pm = (sd[i] - 10472) >> 31, g = rf[i] * 2 + ls[i], qq = q[i], p = pr[i];
+    const dp = p * (100 - d[i]), ch = dp * (100 + t[i]);
+    let m = pm & ((g - 1) >> 31);
+    n0 -= m; q0 += qq & m; p0 += p & m; e0 += dp & m; c0 += ch & m;
+    m = pm & (((g ^ 1) - 1) >> 31);
+    n1 -= m; q1 += qq & m; p1 += p & m; e1 += dp & m; c1 += ch & m;
+    m = pm & (((g ^ 2) - 1) >> 31);
+    n2 -= m; q2 += qq & m; p2 += p & m; e2 += dp & m; c2 += ch & m;
+    m = pm & (((g ^ 3) - 1) >> 31);
+    n3 -= m; q3 += qq & m; p3 += p & m; e3 += dp & m; c3 += ch & m;
+    m = pm & (((g ^ 4) - 1) >> 31);
+    n4 -= m; q4 += qq & m; p4 += p & m; e4 += dp & m; c4 += ch & m;
+    m = pm & (((g ^ 5) - 1) >> 31);
+    n5 -= m; q5 += qq & m; p5 += p & m; e5 += dp & m; c5 += ch & m;
+  }
+  return n0 + q0 + p0 + e0 + c0 + n1 + q1 + p1 + e1 + c1 + n2 + q2 + p2 + e2 + c2
+    + n3 + q3 + p3 + e3 + c3 + n4 + q4 + p4 + e4 + c4 + n5 + q5 + p5 + e5 + c5;
+}
 const sum = (a) => a.reduce((x, y) => x + y, 0);
 const K6COLS = [['sd', 'k6_shipdate.i32', Int32Array], ['pr', 'k6_extendedprice.i32', Int32Array], ['q', 'k6_quantity.u8', Uint8Array],
   ['d', 'k6_discount.u8', Uint8Array], ['t', 'k6_tax.u8', Uint8Array], ['rf', 'k6_returnflag.u8', Uint8Array], ['ls', 'k6_linestatus.u8', Uint8Array]];
 async function runK6(v, reps, p) {
-  const shared = v === 'mt';
+  const shared = v === 'mt' || v === 'mt_pool_s'; // v4, point 4 : mt_pool_s, les mêmes Workers, chaque quart : tuned_s
   const c = {}; for (const [k, n, C] of K6COLS) c[k] = shared ? loadShared(n, C) : load(n, C);
   const q1 = p === 'q1';
   if (!shared) {
     bench('k6', v, p, reps, () => {
-      if (!q1) return String(v === 'tuned' ? q6Tuned(c, 0, N6) : q6Natural(c, 0, N6));
+      if (!q1) return String(v === 'tuned' ? q6Tuned(c, 0, N6) : v === 'tuned_s' ? q6TunedM(c, 0, N6) : q6Natural(c, 0, N6));
+      if (v === 'tuned_s') return String(q1TunedS(c, 0, N6));
       const acc = new Array(30).fill(0);
       (v === 'tuned' ? q1Tuned : q1Natural)(c, 0, N6, acc);
       return String(sum(acc));
@@ -213,7 +292,7 @@ async function runK6(v, reps, p) {
     return;
   }
   const out = new Float64Array(new SharedArrayBuffer(8 * 4));
-  const ws = spawn(4, { kind: 'k6', cols: c, q1, out: out });
+  const ws = spawn(4, { kind: 'k6', cols: c, q1, out: out, s: v === 'mt_pool_s' });
   await Promise.all(ws.map(w => new Promise(res => w.once('online', res))));
   await benchAsync('k6', v, p, reps, async () => { await runWorkers(ws); return String(out[0] + out[1] + out[2] + out[3]); });
   ws.forEach(w => w.terminate());
@@ -259,15 +338,50 @@ function tSum(n) { return n === null ? 0 : n.v + tSum(n.l) + tSum(n.r); }
 const av = new Float64Array(2047), al = new Int32Array(2047), ar = new Int32Array(2047); let top = 0;
 function aBuild(dp) { const i = top++; av[i] = cnt8++; al[i] = ar[i] = -1; if (dp > 0) { al[i] = aBuild(dp - 1); ar[i] = aBuild(dp - 1); } return i; }
 function aSum(i) { return i < 0 ? 0 : av[i] + aSum(al[i]) + aSum(ar[i]); }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val) : la même arène (av, al, ar), construite en ordre préfixe ;
+// l'état passe par valeur (i : indice du nœud ; q : numéro de requête, valeur du nœud = q + i), le prochain indice libre
+// revient en résultat ; ni variable globale d'état (top, cnt8). Somme : aSum (récursive, par les liens).
+function aBuildVal(i, dp, q) {
+  av[i] = q + i;
+  if (dp === 0) { al[i] = ar[i] = -1; return i + 1; }
+  const l = i + 1, r = aBuildVal(l, dp - 1, q);
+  al[i] = l; ar[i] = r;
+  return aBuildVal(r, dp - 1, q);
+}
+// v4, point 4 (3.3, K8 tuned_it) : la forme de la remarque sur JavaScript (bench/js_exp ; docs/JAVASCRIPT.md : × 0,73),
+// recopiée : arène construite et parcourue par itération, piles explicites de 64 entrées (profondeur vérifiée dans
+// runK8) ; mêmes nœuds, mêmes valeurs, même ordre préfixe que aBuild et aSum.
+const stN = new Int32Array(64), stD = new Int32Array(64), stS = new Int8Array(64), stQ = new Int32Array(64);
+function aNode(i) { av[i] = cnt8++; al[i] = ar[i] = -1; return i; }
+function aBuildIt(dp0) {
+  const root = aNode(top++); let sp = 0;
+  if (dp0 > 0) { stN[0] = root; stD[0] = dp0; stS[0] = 0; sp = 1; }
+  while (sp > 0) {
+    const k = sp - 1, n = stN[k], d = stD[k];
+    const c = aNode(top++);
+    if (stS[k] === 0) { stS[k] = 1; al[n] = c; } else { sp--; ar[n] = c; }
+    if (d > 1) { stN[sp] = c; stD[sp] = d - 1; stS[sp] = 0; sp++; }
+  }
+  return root;
+}
+function aSumIt(root) {
+  let s = 0, sp = 0; stQ[sp++] = root;
+  while (sp > 0) { const n = stQ[--sp]; s += av[n]; if (al[n] >= 0) { stQ[sp++] = ar[n]; stQ[sp++] = al[n]; } }
+  return s;
+}
 function runK8(v, reps) {
-  const Q = 16384, tuned = v === 'tuned';
+  const Q = 16384, tuned = v === 'tuned', tval = v === 'tuned_val', tit = v === 'tuned_it'; // v4, point 4
+  const D8 = 10;
+  if (tit && D8 >= 63) throw new Error('K8 tuned_it : piles de 64 entrées, la profondeur doit rester sous 63');
   cnt8 = 0; const keep = tBuild(20); const lsum = tSum(keep);
   const lat = new Float64Array(Q);
   for (let r = -WARMUP; r < reps; r++) {
     let total = 0; const t0 = now();
     for (let q = 0; q < Q; q++) {
       const a = now(); cnt8 = q;
-      let s; if (tuned) { top = 0; s = aSum(aBuild(10)); } else s = tSum(tBuild(10));
+      let s;
+      if (tval) { aBuildVal(0, D8, q); s = aSum(0); } else if (tit) { top = 0; s = aSumIt(aBuildIt(D8)); }
+      else if (tuned) { top = 0; s = aSum(aBuild(10)); } else s = tSum(tBuild(10));
       total += s; lat[q] = Number(now() - a);
     }
     const dt = Number(now() - t0) * 1e-9;
@@ -287,10 +401,26 @@ function k9Natural(a, b) {
   for (let i = 1; i < M9 - 1; i++) for (let j = 1; j < M9 - 1; j++)
     b[i][j] = 0.25 * (((a[i - 1][j] + a[i + 1][j]) + a[i][j - 1]) + a[i][j + 1]);
 }
+// v4, point 3 (docs/V4_EQUAL.md, R2) : naturel en grille contiguë, un seul Array indexé i * M9 + j, même boucle
+function k9NaturalFlat(a, b) {
+  for (let i = 1; i < M9 - 1; i++) for (let j = 1; j < M9 - 1; j++)
+    b[i * M9 + j] = 0.25 * (((a[(i - 1) * M9 + j] + a[(i + 1) * M9 + j]) + a[i * M9 + j - 1]) + a[i * M9 + j + 1]);
+}
 function k9Rows(a, b, r0, r1) {
   for (let i = r0; i < r1; i++) {
     const up = (i - 1) * M9, mid = i * M9, dn = (i + 1) * M9;
     for (let j = 1; j < M9 - 1; j++) b[mid + j] = 0.25 * (((a[up + j] + a[dn + j]) + a[mid + j - 1]) + a[mid + j + 1]);
+  }
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.5 et 4.2, forme propre au runtime) : rq_slide, la forme de la remarque sur
+// JavaScript (bench/js_exp, tuned_v ; docs/JAVASCRIPT.md : × 0,88), recopiée : vues de lignes (subarray), voisins de
+// gauche et du centre gardés dans des variables ; même ordre d'évaluation, résultat identique au bit.
+function k9RowsV(a, b, r0, r1) {
+  for (let i = r0; i < r1; i++) {
+    const up = a.subarray((i - 1) * M9, i * M9), mid = a.subarray(i * M9, (i + 1) * M9);
+    const dn = a.subarray((i + 1) * M9, (i + 2) * M9), o = b.subarray(i * M9, (i + 1) * M9);
+    let w = mid[0], c = mid[1];
+    for (let j = 1; j < M9 - 1; j++) { const e = mid[j + 1]; o[j] = 0.25 * (((up[j] + dn[j]) + w) + e); w = c; c = e; }
   }
 }
 const fmtE = (s) => s.toExponential(15).replace(/e\+(\d)$/, 'e+0$1');
@@ -310,16 +440,31 @@ async function runK9(v, reps) {
     }
     return;
   }
+  if (v === 'natural_flat') {
+    for (let r = -WARMUP; r < reps; r++) {
+      let a = Array.from({ length: M9 * M9 }, (_, k) => k9Init((k / M9) | 0, k % M9));
+      let b = a.slice();
+      const t0 = now();
+      for (let it = 0; it < 4; it++) { k9NaturalFlat(a, b); [a, b] = [b, a]; }
+      const dt = Number(now() - t0) * 1e-9;
+      let s = 0; for (const x of a) s += x;
+      if (r >= 0) result('k9', v, '2048^2x4', r, dt, fmtE(s));
+    }
+    return;
+  }
   const mk = () => { const g = new Float64Array(new SharedArrayBuffer(8 * M9 * M9)); for (let k = 0; k < M9 * M9; k++) g[k] = k9Init((k / M9) | 0, k % M9); return g; };
   const ga = mk(), gb = mk();
   let ws = null;
-  if (v === 'mt') { ws = spawn(4, { kind: 'k9', ga, gb }); await Promise.all(ws.map(w => new Promise(res => w.once('online', res)))); }
+  if (v === 'mt' || v === 'rq_slide_mt') { // v4, point 4 : rq_slide_mt, les mêmes Workers, chaque quart : rq_slide
+    ws = spawn(4, { kind: 'k9', ga, gb, rv: v === 'rq_slide_mt' }); await Promise.all(ws.map(w => new Promise(res => w.once('online', res))));
+  }
   for (let r = -WARMUP; r < reps; r++) {
     for (let k = 0; k < M9 * M9; k++) ga[k] = gb[k] = k9Init((k / M9) | 0, k % M9);
     let a = ga, b = gb;
     const t0 = now();
     for (let it = 0; it < 4; it++) {
       if (v === 'tuned') k9Rows(a, b, 1, M9 - 1);
+      else if (v === 'rq_slide') k9RowsV(a, b, 1, M9 - 1);
       else await Promise.all(ws.map(w => new Promise(res => { w.once('message', res); w.postMessage(a === ga ? 0 : 1); })));
       [a, b] = [b, a];
     }
@@ -377,12 +522,13 @@ function workerMain() {
       parentPort.postMessage(0);
     } else if (wd.kind === 'k6') {
       const lo = (N6 / 4) * wd.t, hi = (N6 / 4) * (wd.t + 1);
-      if (wd.q1) { const acc = new Array(30).fill(0); q1Tuned(wd.cols, lo, hi, acc); wd.out[wd.t] = sum(acc); }
-      else wd.out[wd.t] = q6Tuned(wd.cols, lo, hi);
+      if (wd.q1 && wd.s) wd.out[wd.t] = q1TunedS(wd.cols, lo, hi);
+      else if (wd.q1) { const acc = new Array(30).fill(0); q1Tuned(wd.cols, lo, hi, acc); wd.out[wd.t] = sum(acc); }
+      else wd.out[wd.t] = wd.s ? q6TunedM(wd.cols, lo, hi) : q6Tuned(wd.cols, lo, hi);
       parentPort.postMessage(0);
     } else if (wd.kind === 'k9') {
       const [a, b] = msg === 0 ? [wd.ga, wd.gb] : [wd.gb, wd.ga];
-      k9Rows(a, b, 1 + ((M9 - 2) * wd.t / 4 | 0), 1 + ((M9 - 2) * (wd.t + 1) / 4 | 0));
+      (wd.rv ? k9RowsV : k9Rows)(a, b, 1 + ((M9 - 2) * wd.t / 4 | 0), 1 + ((M9 - 2) * (wd.t + 1) / 4 | 0));
       parentPort.postMessage(0);
     } else if (wd.kind === 'k10p') {
       const ctl = wd.ctl, buf = wd.buf; let w = 0, rc = 0;

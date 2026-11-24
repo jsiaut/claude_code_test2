@@ -3,11 +3,11 @@
 (règle C2, 2 : exacte pour toutes les données admises, pas seulement pour les fichiers du banc).
 
 Données extrêmes : 2^28 octets (la grande taille), tous à 255 : chaque octet compte, et chaque accumulateur reçoit le
-plus qu'il puisse recevoir. Somme attendue : 2^28 x 255. Chaque cellule de K4 de la campagne (constructions pub, cv,
-chk, unc ; jeu de tailles « large ») est exécutée une fois, une répétition, sans échauffement, sur ces données placées
+plus qu'il puisse recevoir. Somme attendue : 2^28 x 255. Chaque cellule de K4 de la campagne (toutes les étiquettes ;
+jeu de tailles « large ») est exécutée une fois, une répétition, sans échauffement, sur ces données placées
 dans le répertoire de données de la grande taille (/dev/shm/ms_k4_large, que lisent aussi les constructions qui fixent
 ce répertoire à la compilation : Mojo), effacé ensuite pour que la campagne refasse les vraies données.
-Sortie : results/final/k4_extreme.txt. À lancer machine au repos, hors de la campagne."""
+Sortie : k4_extreme.txt dans le répertoire de la campagne. À lancer machine au repos, hors de la campagne."""
 import importlib.util, os, shutil, subprocess, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +20,7 @@ _spec.loader.exec_module(C)
 N = 1 << 28
 EXPECT = str(N * 255)
 D = C.S.data_dir("k4", "large")
-OUT = os.path.join(ROOT, "results", "final", "k4_extreme.txt")
+OUT = os.path.join(C.FB.CAMPAIGN, "k4_extreme.txt")
 
 
 def main():

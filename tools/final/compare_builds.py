@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""v4, campagne finale (docs/V4_FINAL.md, 5) : compare les empreintes des constructions d'une machine à l'autre.
+"""Campagne (docs/METHOD.md, 6) : compare les empreintes des constructions d'une machine à l'autre.
 
-Lit results/final/work/builds.jsonl (une ligne par construction faite, avec machine et démarrage) ; pour chaque
+Lit builds.jsonl du répertoire de travail de la campagne (une ligne par construction faite, avec machine et démarrage) ; pour chaque
 construction (langage, construction, jeu), compare la dernière construction de chaque démarrage à la première de la
 campagne : fichiers identiques, sections .text identiques (seuls diffèrent identifiant de construction, chemins ou
-tables), ou code différent. Sortie : results/final/builds_compare.txt."""
+tables), ou code différent. Sortie : builds_compare.txt dans le répertoire de la campagne (results/final, ou
+MS_CAMPAIGN_DIR)."""
 import json, os
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
-SRC = os.path.join(ROOT, "results", "final", "work", "builds.jsonl")
-OUT = os.path.join(ROOT, "results", "final", "builds_compare.txt")
+CAMPAIGN = os.path.join(ROOT, os.environ.get("MS_CAMPAIGN_DIR", os.path.join("results", "final")))
+SRC = os.path.join(CAMPAIGN, "work", "builds.jsonl")
+OUT = os.path.join(CAMPAIGN, "builds_compare.txt")
 
 
 def main():

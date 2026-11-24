@@ -74,6 +74,48 @@ static void *load(const char *name, size_t *bytes) {
 #ifndef MS_M9
 #define MS_M9 2048
 #endif
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, mt_pool) : réserve de quatre fils de travail, le fil principal compris. Les
+// trois autres sont créés une fois par processus, avant l'échauffement ; à chaque appel, une barrière les réveille,
+// chacun traite son quart (0 pour le fil principal), et une seconde barrière attend leur fin. Entre deux appels, ils
+// attendent, bloqués, à la première barrière (attente bloquante de la bibliothèque POSIX). Les barrières ordonnent
+// aussi les accès mémoire entre les fils.
+typedef struct {
+    void (*fn)(void *, int);
+    void *arg;
+    int quit;
+    pthread_barrier_t go, done;
+    pthread_t th[3];
+} Pool;
+static Pool pool;
+static void *pool_worker(void *v) {
+    int t = (int)(intptr_t)v;
+    for (;;) {
+        pthread_barrier_wait(&pool.go);
+        if (pool.quit) return NULL;
+        pool.fn(pool.arg, t);
+        pthread_barrier_wait(&pool.done);
+    }
+}
+static void pool_start(void) {
+    pthread_barrier_init(&pool.go, NULL, 4);
+    pthread_barrier_init(&pool.done, NULL, 4);
+    for (int t = 1; t < 4; t++) pthread_create(&pool.th[t - 1], NULL, pool_worker, (void *)(intptr_t)t);
+}
+static void pool_run(void (*fn)(void *, int), void *arg) {
+    pool.fn = fn;
+    pool.arg = arg;
+    pthread_barrier_wait(&pool.go);
+    fn(arg, 0);
+    pthread_barrier_wait(&pool.done);
+}
+static void pool_stop(void) {
+    pool.quit = 1;
+    pthread_barrier_wait(&pool.go);
+    for (int t = 0; t < 3; t++) pthread_join(pool.th[t], NULL);
+    pthread_barrier_destroy(&pool.go);
+    pthread_barrier_destroy(&pool.done);
+}
+
 static int warmup_count(void) {
     const char *w = getenv("WARMUP");
     return w ? atoi(w) : 1;
@@ -256,6 +298,47 @@ __attribute__((noinline)) static uint64_t k4_branchless(const uint8_t *v, size_t
     for (size_t i = 0; i < n; i++) s += (uint64_t)v[i] * (v[i] >> 7);
     return s;
 }
+// v4, point 3 (docs/V4_EQUAL.md, R3) : variante tuned, SIMD explicite (intrinsèques AVX-512BW de immintrin.h) :
+// le bit de poids fort de chaque octet donne le masque v >= 128, les octets hors masque sont mis à zéro, et
+// vpsadbw additionne chaque groupe de 8 octets en un entier de 64 bits.
+__attribute__((noinline)) static uint64_t k4_tuned(const uint8_t *v, size_t n) {
+    __m512i acc = _mm512_setzero_si512();
+    const __m512i zero = _mm512_setzero_si512();
+    size_t i = 0;
+    for (; i + 64 <= n; i += 64) {
+        __m512i x = _mm512_loadu_si512((const void *)(v + i));
+        __m512i y = _mm512_maskz_mov_epi8(_mm512_movepi8_mask(x), x);
+        acc = _mm512_add_epi64(acc, _mm512_sad_epu8(y, zero));
+    }
+    uint64_t s = (uint64_t)_mm512_reduce_add_epi64(acc);
+    for (; i < n; i++)
+        if (v[i] >= 128) s += v[i];
+    return s;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K4 swar) : octets traités par mots de 64 bits. Le bit de poids fort de chaque
+// octet, ramené au bit 0 de l'octet et multiplié par 0xFF, donne un masque d'octet qui garde les octets >= 128 ; les
+// octets gardés sont sommés par paires dans quatre voies de 16 bits. Exactitude pour toute donnée : une voie reçoit au
+// plus 2 × 255 = 510 par mot, donc au plus 128 × 510 = 65 280 < 2^16 en 128 mots ; les voies sont vidées dans la somme
+// de 64 bits toutes les 128 mots (et à la fin). Aucun branchement sur les données (le reste, < 8 octets, par masque).
+__attribute__((noinline)) static uint64_t k4_swar(const uint8_t *v, size_t n) {
+    const uint64_t ones = 0x0101010101010101ull, lo = 0x00FF00FF00FF00FFull;
+    uint64_t s = 0;
+    size_t i = 0;
+    while (i + 8 <= n) {
+        size_t end = i + 128 * 8 <= n ? i + 128 * 8 : n - (n - i) % 8;
+        uint64_t acc = 0;
+        for (; i < end; i += 8) {
+            uint64_t w;
+            memcpy(&w, v + i, 8);
+            uint64_t y = w & (((w >> 7) & ones) * 0xFF);
+            acc += (y & lo) + ((y >> 8) & lo);
+        }
+        acc = (acc & 0x0000FFFF0000FFFFull) + ((acc >> 16) & 0x0000FFFF0000FFFFull);  // deux voies de 32 bits
+        s += (acc & 0xFFFFFFFFull) + (acc >> 32);
+    }
+    for (; i < n; i++) s += v[i] & -(uint64_t)(v[i] >> 7);
+    return s;
+}
 static void run_k4(const char *variant, int reps) {
     uint8_t *v = load("k4_bytes.u8", NULL);
     if (!strcmp(variant, "natural_sorted")) {  // tri par comptage, hors chrono
@@ -264,11 +347,11 @@ static void run_k4(const char *variant, int reps) {
         size_t k = 0;
         for (int b = 0; b < 256; b++) for (size_t c = 0; c < cnt[b]; c++) v[k++] = (uint8_t)b;
     }
-    int bl = !strcmp(variant, "branchless_unsorted");
+    int bl = !strcmp(variant, "branchless_unsorted"), tu = !strcmp(variant, "tuned"), sw = !strcmp(variant, "swar");
     char chk[32];
     for (int r = -warmup_count(); r < reps; r++) {
         double t0 = now();
-        uint64_t s = bl ? k4_branchless(v, N4) : k4_natural(v, N4);
+        uint64_t s = tu ? k4_tuned(v, N4) : sw ? k4_swar(v, N4) : bl ? k4_branchless(v, N4) : k4_natural(v, N4);
         double t1 = now();
         snprintf(chk, sizeof chk, "%llu", (unsigned long long)s);
         if (r >= 0) result("k4", variant, "16M", r, t1 - t0, chk);
@@ -388,6 +471,27 @@ __attribute__((noinline)) static void q1_tuned(const Cols *c, size_t lo, size_t 
     }
     if (i < hi) q1_natural(c, i, hi, acc);  // reste éventuel (< 16 lignes)
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K6 Q6 tuned_v ; forme de la frontière, Zig) : blocs de 16 lignes en vecteurs
+// AVX-512 : colonnes élargies en i32, prédicat par comparaisons, produit prix × remise en i32, sélection, accumulation
+// en i64 (deux vecteurs de 8 voies). Exactitude pour toute donnée de la spécification (docs/SPEC.md, K6) : prix
+// <= 50 000 et remise <= 10, donc produit <= 500 000 < 2^31 ; une voie de 64 bits reçoit au plus N6 / 16 produits.
+__attribute__((noinline)) static int64_t q6_tuned_v(const Cols *c, size_t lo, size_t hi) {
+    const __m512i d0 = _mm512_set1_epi32(8766), d1 = _mm512_set1_epi32(9131), r0 = _mm512_set1_epi32(5),
+                  r1 = _mm512_set1_epi32(7), q0 = _mm512_set1_epi32(24);
+    __m512i a0 = _mm512_setzero_si512(), a1 = _mm512_setzero_si512();
+    size_t i = lo;
+    for (; i + 16 <= hi; i += 16) {
+        __m512i sd = _mm512_loadu_si512(c->sd + i), pr = _mm512_loadu_si512(c->pr + i);
+        __m512i d = _mm512_cvtepu8_epi32(_mm_loadu_si128((const __m128i *)(c->d + i)));
+        __m512i q = _mm512_cvtepu8_epi32(_mm_loadu_si128((const __m128i *)(c->q + i)));
+        __mmask16 m = _mm512_cmpge_epi32_mask(sd, d0) & _mm512_cmplt_epi32_mask(sd, d1) &
+                      _mm512_cmpge_epi32_mask(d, r0) & _mm512_cmple_epi32_mask(d, r1) & _mm512_cmplt_epi32_mask(q, q0);
+        __m512i p = _mm512_maskz_mov_epi32(m, _mm512_mullo_epi32(pr, d));
+        a0 = _mm512_add_epi64(a0, _mm512_cvtepi32_epi64(_mm512_castsi512_si256(p)));
+        a1 = _mm512_add_epi64(a1, _mm512_cvtepi32_epi64(_mm512_extracti64x4_epi64(p, 1)));
+    }
+    return _mm512_reduce_add_epi64(_mm512_add_epi64(a0, a1)) + q6_natural(c, i, hi);  // reste (< 16 lignes)
+}
 typedef struct { const Cols *c; size_t lo, hi; int q1; int64_t s6; Q1Acc acc; } K6Arg;
 static void *k6_worker(void *v) {
     K6Arg *a = v;
@@ -395,18 +499,38 @@ static void *k6_worker(void *v) {
     else a->s6 = q6_tuned(a->c->sd, a->c->d, a->c->q, a->c->pr, a->lo, a->hi);
     return NULL;
 }
+// mt_pool, mt_pool_v (v4, point 4) : un quart par fil de la réserve ; mt_pool exécute la forme de la variante mt publiée
+// (q6_tuned, q1_tuned), mt_pool_v la forme tuned_v de Q6.
+typedef struct { const Cols *c; int q1, vec; int64_t s6[4]; Q1Acc acc[4]; } K6Job;
+static void k6_job(void *v, int t) {
+    K6Job *j = v;
+    size_t lo = (size_t)N6 * t / 4, hi = (size_t)N6 * (t + 1) / 4;
+    if (j->q1) q1_tuned(j->c, lo, hi, &j->acc[t]);
+    else j->s6[t] = j->vec ? q6_tuned_v(j->c, lo, hi) : q6_tuned(j->c->sd, j->c->d, j->c->q, j->c->pr, lo, hi);
+}
 static void run_k6(const char *variant, int reps, const char *param) {
     Cols c = {load("k6_shipdate.i32", NULL), load("k6_extendedprice.i32", NULL), load("k6_quantity.u8", NULL),
               load("k6_discount.u8", NULL), load("k6_tax.u8", NULL), load("k6_returnflag.u8", NULL),
               load("k6_linestatus.u8", NULL)};
     int q1 = !strcmp(param, "q1");
+    int pl = !strcmp(variant, "mt_pool") ? 0 : !strcmp(variant, "mt_pool_v") && !q1 ? 1 : -1;
+    if (pl >= 0) pool_start();
     char chk[32];
     for (int r = -warmup_count(); r < reps; r++) {
         Q1Acc acc;
         memset(&acc, 0, sizeof acc);
         int64_t s6 = 0;
         double t0 = now();
-        if (!strcmp(variant, "mt")) {
+        if (pl >= 0) {
+            K6Job j;
+            memset(&j, 0, sizeof j);
+            j.c = &c; j.q1 = q1; j.vec = pl;
+            pool_run(k6_job, &j);
+            for (int t = 0; t < 4; t++) {
+                s6 += j.s6[t];
+                for (int g = 0; g < 6; g++) for (int k = 0; k < 5; k++) acc.a[g][k] += j.acc[t].a[g][k];
+            }
+        } else if (!strcmp(variant, "mt")) {
             pthread_t th[4];
             K6Arg arg[4];
             for (int t = 0; t < 4; t++) {
@@ -421,6 +545,8 @@ static void run_k6(const char *variant, int reps, const char *param) {
             }
         } else if (!strcmp(variant, "tuned")) {
             if (q1) q1_tuned(&c, 0, N6, &acc); else s6 = q6_tuned(c.sd, c.d, c.q, c.pr, 0, N6);
+        } else if (!strcmp(variant, "tuned_v") && !q1) {
+            s6 = q6_tuned_v(&c, 0, N6);
         } else {
             if (q1) q1_natural(&c, 0, N6, &acc); else s6 = q6_natural(&c, 0, N6);
         }
@@ -429,6 +555,7 @@ static void run_k6(const char *variant, int reps, const char *param) {
         snprintf(chk, sizeof chk, "%lld", (long long)s6);
         if (r >= 0) result("k6", variant, param, r, t1 - t0, chk);
     }
+    if (pl >= 0) pool_stop();
 }
 
 // ------------------------------------------------------------------ K7
@@ -512,13 +639,67 @@ static int32_t a8_build(ANode *a, int32_t *top, int depth, int64_t *counter) {
     return i;
 }
 static int64_t a8_sum(const ANode *a, int32_t i) { return i < 0 ? 0 : a[i].v + a8_sum(a, a[i].l) + a8_sum(a, a[i].r); }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_val ; forme de la copie bench/c_k8val, remarque sur C) : l'état passe
+// par valeur, l'indice du nœud en ordre préfixe (sa valeur : numéro de requête + indice) ; la fonction rend l'indice
+// libre suivant. Même arène, mêmes liens et mêmes valeurs que a8_build ; somme récursive par les liens (a8_sum).
+static int32_t a8v_build(ANode *a, int32_t i, int depth, int64_t q) {
+    a[i].v = q + i;
+    if (depth > 0) {
+        int32_t l = i + 1, r = a8v_build(a, l, depth - 1, q);
+        a[i].l = l;
+        a[i].r = r;
+        return a8v_build(a, r, depth - 1, q);
+    }
+    a[i].l = a[i].r = -1;
+    return i + 1;
+}
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K8 tuned_it ; forme de la copie bench/c_k8it, remarque sur C) : construction et
+// somme itératives, piles explicites. La construction descend à gauche en empilant le sous-arbre droit de chaque nœud
+// interne, puis le reprend à la feuille suivante : même ordre préfixe, mêmes liens et mêmes valeurs que a8_build. Les
+// piles tiennent par construction : au plus une entrée par niveau à la construction, au plus profondeur + 1 à la somme.
+_Static_assert(MS_K8_REQ < 63, "piles de K8 tuned_it : 64 entrées");
+static void a8i_build(ANode *a, int depth, int64_t q) {
+    struct { int32_t parent, depth; } stk[64];
+    int sp = 0;
+    int32_t top = 0, parent = -1;
+    int right = 0, d = depth;
+    for (;;) {
+        int32_t i = top++;
+        a[i].v = q + i;
+        if (parent >= 0) {
+            if (right) a[parent].r = i;
+            else a[parent].l = i;
+        }
+        if (d > 0) {
+            stk[sp].parent = i; stk[sp].depth = d - 1; sp++;
+            parent = i; right = 0; d = d - 1;
+        } else {
+            a[i].l = a[i].r = -1;
+            if (!sp) break;
+            sp--;
+            parent = stk[sp].parent; d = stk[sp].depth; right = 1;
+        }
+    }
+}
+static int64_t a8i_sum(const ANode *a, int32_t root) {
+    int32_t stk[64];
+    int sp = 0;
+    int64_t s = 0;
+    stk[sp++] = root;
+    while (sp) {
+        int32_t i = stk[--sp];
+        s += a[i].v;
+        if (a[i].l >= 0) { stk[sp++] = a[i].r; stk[sp++] = a[i].l; }
+    }
+    return s;
+}
 static int cmpu64(const void *x, const void *y) {
     uint64_t a = *(const uint64_t *)x, b = *(const uint64_t *)y;
     return (a > b) - (a < b);
 }
 static void run_k8(const char *variant, int reps) {
     enum { Q = 16384, D = MS_K8_REQ };
-    int tuned = !strcmp(variant, "tuned");
+    int tuned = !strcmp(variant, "tuned"), val = !strcmp(variant, "tuned_val"), it = !strcmp(variant, "tuned_it");
     int64_t cnt = 0;
     Node8 *longlived = t8_build(MS_K8_LONG, &cnt);
     int64_t lsum = t8_sum(longlived);
@@ -532,6 +713,8 @@ static void run_k8(const char *variant, int reps) {
             uint64_t a = now_ns();
             int64_t c = q, s;
             if (tuned) { int32_t top = 0; int32_t root = a8_build(arena, &top, D, &c); s = a8_sum(arena, root); }
+            else if (val) { a8v_build(arena, 0, D, c); s = a8_sum(arena, 0); }
+            else if (it) { a8i_build(arena, D, c); s = a8i_sum(arena, 0); }
             else { Node8 *t = t8_build(D, &c); s = t8_sum(t); t8_free(t); }
             total += s;
             lat[q] = now_ns() - a;
@@ -567,11 +750,41 @@ __attribute__((noinline)) static void k9_rows(const double *restrict in, double 
         for (int j = 1; j < M9 - 1; j++) o[j] = 0.25 * (((up[j] + dn[j]) + mid[j - 1]) + mid[j + 1]);
     }
 }
+// v4, point 4 (docs/V4_CONVERGE.md, 3.3, K9 tuned_v ; forme de la frontière, Swift) : par ligne, vecteurs explicites de
+// 8 f64 (AVX-512) : haut, bas, gauche et droite chargés en vecteurs, même ordre des additions que la spécification,
+// résultat écrit en vecteur, reste scalaire. Grilles plates alignées sur 64 octets (aligned_alloc du harnais) ; comme
+// chez Swift, la boucle part de j = 1, chargements et écriture non alignés (_mm512_loadu_pd, _mm512_storeu_pd).
+__attribute__((noinline)) static void k9_rows_v(const double *restrict in, double *restrict out, int r0, int r1) {
+    const __m512d q = _mm512_set1_pd(0.25);
+    for (int i = r0; i < r1; i++) {
+        const double *up = in + (size_t)(i - 1) * M9, *mid = in + (size_t)i * M9, *dn = in + (size_t)(i + 1) * M9;
+        double *o = out + (size_t)i * M9;
+        int j = 1;
+        for (; j + 8 <= M9 - 1; j += 8) {
+            __m512d s = _mm512_add_pd(_mm512_add_pd(_mm512_add_pd(_mm512_loadu_pd(up + j), _mm512_loadu_pd(dn + j)),
+                                                    _mm512_loadu_pd(mid + j - 1)),
+                                      _mm512_loadu_pd(mid + j + 1));
+            _mm512_storeu_pd(o + j, _mm512_mul_pd(q, s));
+        }
+        for (; j < M9 - 1; j++) o[j] = 0.25 * (((up[j] + dn[j]) + mid[j - 1]) + mid[j + 1]);
+    }
+}
+// mt_pool, mt_pool_v (v4, point 4) : un quart des lignes par fil de la réserve ; mt_pool exécute la forme de la variante
+// mt publiée (k9_rows), mt_pool_v la forme tuned_v.
+typedef struct { const double *in; double *out; int vec; } K9Job;
+static void k9_job(void *v, int t) {
+    K9Job *j = v;
+    int r0 = 1 + (M9 - 2) * t / 4, r1 = 1 + (M9 - 2) * (t + 1) / 4;
+    if (j->vec) k9_rows_v(j->in, j->out, r0, r1);
+    else k9_rows(j->in, j->out, r0, r1);
+}
 typedef struct { const double *in; double *out; int r0, r1; } K9Arg;
 static void *k9_worker(void *v) { K9Arg *a = v; k9_rows(a->in, a->out, a->r0, a->r1); return NULL; }
 static void run_k9(const char *variant, int reps) {
     size_t n = (size_t)M9 * M9;
     double *a = aligned_alloc(64, n * 8), *b = aligned_alloc(64, n * 8);
+    int pl = !strcmp(variant, "mt_pool") ? 0 : !strcmp(variant, "mt_pool_v") ? 1 : -1;
+    if (pl >= 0) pool_start();
     char chk[64];
     for (int r = -warmup_count(); r < reps; r++) {
         k9_init(a); memcpy(b, a, n * 8);  // le bord de b = bord initial
@@ -580,6 +793,8 @@ static void run_k9(const char *variant, int reps) {
         for (int it = 0; it < IT9; it++) {
             if (!strcmp(variant, "natural")) k9_natural((double (*)[M9])in, (double (*)[M9])out);
             else if (!strcmp(variant, "tuned")) k9_rows(in, out, 1, M9 - 1);
+            else if (!strcmp(variant, "tuned_v")) k9_rows_v(in, out, 1, M9 - 1);
+            else if (pl >= 0) { K9Job j = {in, out, pl}; pool_run(k9_job, &j); }
             else {
                 pthread_t th[4];
                 K9Arg arg[4];
@@ -597,6 +812,7 @@ static void run_k9(const char *variant, int reps) {
         snprintf(chk, sizeof chk, "%.15e", s);
         if (r >= 0) result("k9", variant, "2048^2x4", r, t1 - t0, chk);
     }
+    if (pl >= 0) pool_stop();
 }
 
 // ------------------------------------------------------------------ K10
