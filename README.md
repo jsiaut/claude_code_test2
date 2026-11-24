@@ -168,7 +168,9 @@ sources sont dans l'archive ([`docs/HISTORY.md`](docs/HISTORY.md)).
    à 117 ms pour le même source.
 6. **Concurrence.** Go, Haskell et OCaml n'ont que des écritures atomiques séquentiellement cohérentes : l'écrivain
    unique y est 6 à 7 fois plus lent qu'en C. JavaScript aussi, avec en plus un appel interne de V8 par opération.
-   CPython sérialise ses threads par son verrou global ; BQN et PHP n'ont pas de threads.
+   CPython sérialise ses threads par son verrou global ; BQN et PHP n'ont pas de threads. Réveiller des fils bloqués
+   coûte plus qu'un calcul court : Q6 sur 2^16 lignes prend 10 à 15 µs à un fil, mais 65 µs à quatre fils en C et en
+   C++ et 105 µs en Rust, contre 7,5 µs en Fortran, dont le runtime OpenMP attend activement.
 7. **Allocation.** Une arène divise K8 par 5 ou 6. Les allocateurs générationnels de Java et d'OCaml sont les
    meilleurs pour du code naturel. Les ramasse-miettes laissent des queues : pause de 89 ms en D, p99,9 à 30 fois la
    médiane en Julia, arrêt de 0,76 s en Python.
@@ -225,6 +227,9 @@ Un dixième noyau (file SPSC), hors score depuis la v2, n'est plus mesuré.
   latences de K8), l'ordre tiré au hasard et le rééchantillonnage en tiennent compte, sans le corriger.
 * **Six cellules hors mémoire** à la grande taille (BQN, Python), remplies par le temps le plus lent des autres
   langages. La grande taille est bornée par la mémoire de la machine : 1 Gio de données au plus.
+* **Des corrections décidées après coup.** Les quatre corrections du 24 novembre ont été trouvées en relisant les
+  résultats publiés, et leur effet estimé avant d'en écrire le plan : ce plan n'est pas aveugle, à la différence de
+  ceux des mesures. Le rapport garde le calcul sans elles et l'effet de chacune.
 * **Un seul auteur.** Les implémentations ont été relues après coup, langage par langage, et ces relectures ont corrigé
   des erreurs du banc et de la grille. Le catalogue commun réduit l'écart d'effort sur le plafond ; il ne touche pas le
   code naturel, dont le choix reste celui de l'auteur ([`docs/NATURAL.md`](docs/NATURAL.md)).
