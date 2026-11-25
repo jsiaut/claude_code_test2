@@ -1,0 +1,6 @@
+TSC: 2.1000 GHz
+sys: getppid 74.4 ns par appel (s=348000000)
+sys: getppid 76.2 ns par appel (s=348000000)
+sys: getppid 75.7 ns par appel (s=348000000)
+sys: getppid 83.2 ns par appel (s=348000000)
+sys: getppid 94.8 ns par appel (s=348000000)
