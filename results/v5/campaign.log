@@ -47,3 +47,6 @@
 2026-11-25T01:01:42 passe 0 groupe 19/23 k4:pub : 119 processus, 254 s
 2026-11-25T01:10:26 passe 0 groupe 20/23 k1:pub : 140 processus, 521 s
 2026-11-25T01:26:44 b3 arrivée de la machine 37 (passe None, machine 37) : 67.05 et 61.30 ms
+2026-11-25T01:36:12 passe 0 : 23 groupes ; machine 37 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-25T01:36:14 passe 0 k1:small : 123 enregistrements d'un autre démarrage mis à part ; groupe refait
+2026-11-25T01:42:17 passe 0 groupe 21/23 k1:small : 140 processus, 363 s
