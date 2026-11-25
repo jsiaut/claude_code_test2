@@ -7,13 +7,17 @@
 # 4. b3 à l'arrivée, machine au repos ;
 # 5. toutes les constructions (tools/final/build.py), puis comparaison de leurs empreintes avec celles des machines
 #    précédentes (tools/final/compare_builds.py -> builds_compare.txt).
-# Répertoire de la campagne : results/final, ou celui de MS_CAMPAIGN_DIR.
+# Répertoire de la campagne : results/final, ou celui de MS_CAMPAIGN_DIR. Refuse une machine d'un autre modèle que
+# celui de la campagne.
 set -e
 cd "$(dirname "$0")/../.."
 N=$1
 [ -n "$N" ] || { echo "usage : $0 <numéro de machine>" >&2; exit 2; }
 R=${MS_CAMPAIGN_DIR:-results/final}
-grep -q "^model[[:space:]]*: 207$" /proc/cpuinfo || echo "ATTENTION : modèle de processeur différent de 207" >&2
+# une campagne se mesure sur un seul modèle de processeur : celui de model.txt dans son répertoire (6/207/2 sans lui)
+M=$(cat "$R/model.txt" 2>/dev/null || echo 6/207/2)
+CUR=$(awk -F': ' '/^cpu family/ {f = $2} /^model\t/ {m = $2} /^stepping/ {print f "/" m "/" $2; exit}' /proc/cpuinfo)
+[ "$CUR" = "$M" ] || { echo "machine.sh : processeur $CUR, la campagne de $R se mesure sur $M" >&2; exit 1; }
 [ -f results/hw/machine$N/stream.txt ] || sh tools/sizes/hwchar.sh results/hw/machine$N
 echo "$N" > /dev/shm/ms_final_machine
 mkdir -p "$R"

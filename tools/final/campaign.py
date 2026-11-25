@@ -19,7 +19,8 @@ démarrage du noyau (boot_id).
   machine ; s'il a des enregistrements d'un autre démarrage et n'est pas terminé, ils sont mis à part
   (work/discarded) et le groupe est refait en entier. b3 (tools/k3_align.c, deux exécutions) est mesuré juste avant et
   juste après chaque groupe de K3. Vol de temps au-delà de 5 % : processus refait une fois. Sentinelle de mémoire (plus
-  grand VmRSS du groupe de processus, 13 Gio). Modèle du processeur vérifié avant chaque processus.
+  grand VmRSS du groupe de processus, 13 Gio). Modèle du processeur vérifié avant chaque processus : celui de la
+  campagne (model.txt de son répertoire ; 6/207/2 sans ce fichier).
 * b3 <étiquette> : une mesure de b3 hors groupe (début, fin).
 Écritures dans le répertoire de travail de la campagne (results/final/work, ou work sous MS_CAMPAIGN_DIR) ;
 tools/final/save_progress.sh les recopie dans le répertoire de la campagne et les pousse.
@@ -81,7 +82,14 @@ def cpu_model():
     return f"{info.get('cpu family')}/{info.get('model')}/{info.get('stepping')} {info.get('model name')}"
 
 
-MODEL = "6/207/2"
+def campaign_model():
+    """Modèle de processeur de la campagne : une campagne se mesure sur un seul modèle, inscrit dans model.txt de son
+    répertoire (docs/V5.md, 8, écart 5) ; sans ce fichier, 6/207/2, celui de la campagne finale de la v4."""
+    p = os.path.join(FB.CAMPAIGN, "model.txt")
+    return open(p).read().strip() if os.path.exists(p) else "6/207/2"
+
+
+MODEL = campaign_model()
 
 
 def variant_file(path):
@@ -277,7 +285,8 @@ def save_calib(c):
 def check_host(m):
     model = cpu_model()
     if not model.startswith(MODEL + " "):
-        raise SystemExit(f"modèle de processeur {model} : la campagne demande {MODEL} (docs/V4_FINAL.md, 6)")
+        raise SystemExit(f"modèle de processeur {model} : la campagne de {os.path.relpath(FB.CAMPAIGN, ROOT)} "
+                         f"demande {MODEL} (docs/METHOD.md, 6)")
     if FB.machine() != m:
         raise SystemExit("numéro de machine changé ou effacé pendant la campagne")
 

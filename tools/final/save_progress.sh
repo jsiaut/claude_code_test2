@@ -12,7 +12,7 @@ mkdir -p $R/raw $R/discarded
 [ -d $W/discarded ] && cp $W/discarded/*.jsonl $R/discarded/ 2>/dev/null
 for f in calib.json calib.jsonl b3.jsonl builds.jsonl campaign.log campaign.out; do [ -f $W/$f ] && cp $W/$f $R/$f; done
 for f in $R/raw $R/discarded $R/calib.json $R/calib.jsonl $R/b3.jsonl $R/builds.jsonl $R/campaign.log \
-  $R/campaign.out $R/builds_compare.txt $R/k4_extreme.txt $R/toolchains.txt results/hw; do
+  $R/campaign.out $R/builds_compare.txt $R/k4_extreme.txt $R/toolchains.txt $R/model.txt results/hw; do
   # un à un : un fichier absent n'arrête pas les autres ; results/hw : la caractérisation des machines de la campagne
   [ -e "$f" ] && git add "$f" 2>/dev/null
 done
