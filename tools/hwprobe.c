@@ -8,7 +8,8 @@
 //   lat     : latence de chargement dépendant selon la taille du working set
 //   lathp   : idem avec madvise(MADV_HUGEPAGE)
 //   bw      : bande passante lecture (somme AVX-512) selon la taille, 1 thread
-//   stream  : STREAM copy/scale/add/triad sur 3x128 Mo, 1 et 4 threads
+//   stream  : STREAM copy/scale/add/triad sur 3x128 Mo, 1, 2 et 4 threads ; les fils de travail relèvent leurs
+//             instants (tenu par le fil principal, le chronomètre partait en retard à 4 fils : docs/V5.md, 8)
 //   peak    : débit FMA (scalaire, AVX2, AVX-512) -> FLOP/cycle
 //   fs      : faux partage, 2 et 4 threads, distances 8..256 octets
 //   c2c     : latence de transfert de ligne entre paires de CPU (ping-pong)
@@ -134,18 +135,19 @@ static void t_bw(void) {
 }
 
 // ---------- stream ----------
-typedef struct { double *a, *b, *c; size_t lo, hi; int op, cpu; pthread_barrier_t *bar; } sarg;
+typedef struct { double *a, *b, *c; size_t lo, hi; int op, cpu; pthread_barrier_t *bar; double t0, t1; } sarg;
 static void *stream_w(void *v) {
     sarg *s = v; pin(s->cpu);
     double *a = s->a, *b = s->b, *c = s->c, q = 3.0;
     pthread_barrier_wait(s->bar);
+    s->t0 = now();
     switch (s->op) {
     case 0: for (size_t i = s->lo; i < s->hi; i++) c[i] = a[i]; break;
     case 1: for (size_t i = s->lo; i < s->hi; i++) b[i] = q * c[i]; break;
     case 2: for (size_t i = s->lo; i < s->hi; i++) c[i] = a[i] + b[i]; break;
     case 3: for (size_t i = s->lo; i < s->hi; i++) a[i] = b[i] + q * c[i]; break;
     }
-    pthread_barrier_wait(s->bar);
+    s->t1 = now();
     return NULL;
 }
 static void t_stream(void) {
@@ -157,16 +159,16 @@ static void t_stream(void) {
     for (int T = 1; T <= 4; T *= 2) for (int op = 0; op < 4; op++) {
         double best = 1e30;
         for (int r = 0; r < 5; r++) {
-            pthread_barrier_t bar; pthread_barrier_init(&bar, NULL, T + 1);
+            pthread_barrier_t bar; pthread_barrier_init(&bar, NULL, T);  // les fils de travail partent ensemble
             pthread_t th[4]; sarg sa[4];
-            for (int t = 0; t < T; t++) { sa[t] = (sarg){a, b, c, n * t / T, n * (t + 1) / T, op, t, &bar}; pthread_create(&th[t], NULL, stream_w, &sa[t]); }
-            pthread_barrier_wait(&bar); double t0 = now();
-            pthread_barrier_wait(&bar); double t1 = now();
+            for (int t = 0; t < T; t++) { sa[t] = (sarg){a, b, c, n * t / T, n * (t + 1) / T, op, t, &bar, 0, 0}; pthread_create(&th[t], NULL, stream_w, &sa[t]); }
             for (int t = 0; t < T; t++) pthread_join(th[t], NULL);
             pthread_barrier_destroy(&bar);
+            double t0 = sa[0].t0, t1 = sa[0].t1;  // du premier départ à la dernière arrivée
+            for (int t = 1; t < T; t++) { if (sa[t].t0 < t0) t0 = sa[t].t0; if (sa[t].t1 > t1) t1 = sa[t].t1; }
             if (t1 - t0 < best) best = t1 - t0;
         }
-        printf("stream: T=%d %-5s %7.2f GB/s (comptage STREAM, sans RFO)\n", T, nm[op], bytes[op] * n / best / 1e9);
+        printf("stream: T=%d %-5s %7.2f GB/s (comptage STREAM, sans RFO, instants relevés par les fils)\n", T, nm[op], bytes[op] * n / best / 1e9);
     }
 }
 
