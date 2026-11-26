@@ -1,0 +1,2 @@
+# Empreintes des constructions : dernière construction de chaque démarrage contre celle du démarrage précédent
+# 12 constructions enregistrées ; comparaisons : {'identiques': 0, 'texte identique': 0, 'différents': 0}
