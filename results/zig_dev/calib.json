@@ -15,6 +15,14 @@
 "ts": "2026-11-26T17:41:50",
 "warmup": 1
 },
+"zig|chk|k4|small|natural_unsorted|": {
+"machine": "39",
+"reps": 703,
+"status": "ok",
+"t_cal": 0.004264787,
+"ts": "2026-11-26T17:43:11",
+"warmup": 1
+},
 "zig|chk|k5|l3|natural|": {
 "machine": "39",
 "reps": 41,
@@ -101,6 +109,22 @@
 "status": "ok",
 "t_cal": 0.000186181,
 "ts": "2026-11-26T17:40:42",
+"warmup": 1
+},
+"zig|cv|k4|small|swar|": {
+"machine": "39",
+"reps": 10000,
+"status": "ok",
+"t_cal": 0.000126053,
+"ts": "2026-11-26T17:43:11",
+"warmup": 1
+},
+"zig|cv|k4|small|tuned|": {
+"machine": "39",
+"reps": 10000,
+"status": "ok",
+"t_cal": 5.1721e-05,
+"ts": "2026-11-26T17:43:11",
 "warmup": 1
 },
 "zig|cv|k6|large|mt_pool|q1": {
@@ -207,6 +231,14 @@
 "ts": "2026-11-26T17:42:03",
 "warmup": 1
 },
+"zig|dev_chk|k4|small|natural_unsorted|": {
+"machine": "39",
+"reps": 818,
+"status": "ok",
+"t_cal": 0.003665886,
+"ts": "2026-11-26T17:43:11",
+"warmup": 1
+},
 "zig|dev_chk|k5|l3|natural|": {
 "machine": "39",
 "reps": 41,
@@ -293,6 +325,22 @@
 "status": "ok",
 "t_cal": 6.6645e-05,
 "ts": "2026-11-26T17:40:42",
+"warmup": 1
+},
+"zig|dev_cv|k4|small|swar|": {
+"machine": "39",
+"reps": 10000,
+"status": "ok",
+"t_cal": 3.1776e-05,
+"ts": "2026-11-26T17:43:11",
+"warmup": 1
+},
+"zig|dev_cv|k4|small|tuned|": {
+"machine": "39",
+"reps": 10000,
+"status": "ok",
+"t_cal": 3.4521e-05,
+"ts": "2026-11-26T17:43:11",
 "warmup": 1
 },
 "zig|dev_cv|k6|large|mt_pool|q1": {
@@ -413,6 +461,22 @@
 "status": "ok",
 "t_cal": 0.024042085,
 "ts": "2026-11-26T17:41:58",
+"warmup": 1
+},
+"zig|dev|k4|small|branchless_unsorted|": {
+"machine": "39",
+"reps": 10000,
+"status": "ok",
+"t_cal": 0.00010414,
+"ts": "2026-11-26T17:43:11",
+"warmup": 1
+},
+"zig|dev|k4|small|natural_unsorted|": {
+"machine": "39",
+"reps": 10000,
+"status": "ok",
+"t_cal": 7.6602e-05,
+"ts": "2026-11-26T17:43:11",
 "warmup": 1
 },
 "zig|dev|k5|l3|natural|": {
@@ -693,6 +757,22 @@
 "status": "ok",
 "t_cal": 0.022757829,
 "ts": "2026-11-26T17:41:46",
+"warmup": 1
+},
+"zig|pub|k4|small|branchless_unsorted|": {
+"machine": "39",
+"reps": 7055,
+"status": "ok",
+"t_cal": 0.000425184,
+"ts": "2026-11-26T17:43:11",
+"warmup": 1
+},
+"zig|pub|k4|small|natural_unsorted|": {
+"machine": "39",
+"reps": 8365,
+"status": "ok",
+"t_cal": 0.000358628,
+"ts": "2026-11-26T17:43:11",
 "warmup": 1
 },
 "zig|pub|k5|l3|natural|": {
