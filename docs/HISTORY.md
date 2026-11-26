@@ -1,6 +1,6 @@
 # Historique de l'étude et archive
 
-*24 novembre 2026. Le dépôt ne garde plus que ce qui sert au classement publié (v4.1) ; ce document dit d'où vient la
+*État au 26 novembre 2026. Le dépôt ne garde que ce qui sert au classement publié (v5) ; ce document dit d'où vient la
 méthode, ce que les étapes précédentes ont établi, et où retrouver tout ce qui a été retiré de la branche.*
 
 ## L'archive
@@ -18,6 +18,11 @@ git checkout 5fbe6a6 -- docs/V4_EQUAL.md
 ```
 
 La première commande lit un fichier de l'archive, la seconde le remet dans l'arbre de travail.
+
+Deux jeux de mesures plus récents ont quitté la branche le 26 novembre, quand la campagne de la v5 a pris la place
+de la précédente : les mesures de la campagne des 22 et 23 novembre (machine 35) et la campagne inachevée des 24 et
+25 novembre. Ils sont dans le commit `76d07af` ; les commandes pour les relire ou les recalculer sont dans
+[`V5.md`](V5.md), 9.8.
 
 ## Les étapes
 
@@ -38,23 +43,29 @@ La première commande lit un fichier de l'archive, la seconde le remet dans l'ar
 | 22 et 23 novembre | Campagne finale : le classement de la v4 | — | [`V4_FINAL.md`](V4_FINAL.md), gardé dans le dépôt |
 | 24 novembre | Nettoyage du dépôt, sans changement de chiffre | [`METHOD.md`](METHOD.md), `tools/check.sh` | ce document |
 | 24 novembre | v4.1 : quatre corrections de l'analyse, sans mesure nouvelle | A1 à A4 ; ordre publié : le score moyen des variantes, qui est aussi le score affiché | [`V4_1.md`](V4_1.md), gardé dans le dépôt |
-| 24 novembre | v5 : script d'installation des chaînes, une source par langage, C aussi par gcc ; nouvelle campagne sur la machine 36 | — (plan) | [`V5.md`](V5.md), gardé dans le dépôt |
+| 24 au 26 novembre | v5 : script d'installation des chaînes, une source par langage, C aussi par gcc ; campagne rejouée sur un autre processeur (machine 38) : le classement publié | A5 et A6 ; une campagne par modèle de processeur | [`V5.md`](V5.md), gardé dans le dépôt |
 
 Le classement de la v3 a été publié du 30 octobre au 23 novembre, avec ses notes et ses errata
 (`docs/RANKING_V3.md`, `results/report_v3.md`).
 
 ## Ce que ces étapes ont établi
 
-Hors le classement du 23 novembre, les chiffres ci-dessous viennent de campagnes séparées, chacune sur son hôte ; ils
-ne sont pas remesurés dans la campagne finale. Leur détail est dans le document cité.
+Hors les classements des 23 et 24 novembre, les chiffres ci-dessous viennent de campagnes séparées, chacune sur son
+hôte ; ils ne sont pas remesurés dans la campagne publiée. Leur détail est dans le document cité.
 
 * **Classement de la v3** (une taille par noyau, hôtes reliés par un témoin C, répliqué sur deux
   micro-architectures) : C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#,
   FreePascal, Java, Go, Haskell, OCaml, BQN, PHP, JavaScript, Python, Lua ; trois étages de 14, 5 et 6 langages.
 * **Classement du 23 novembre** (v4, avant les quatre corrections de l'analyse) : C++, C, Odin, Rust, C3, Nim, D, Zig,
   Ada, Chapel, Fortran, Julia, Swift, Mojo, C#, Go, FreePascal, Java, Haskell, OCaml, BQN, JavaScript, PHP, Python,
-  Lua ; deux étages de 19 et 6 langages ; C++ devant C dans 51 % des variantes. Le calcul le redonne à l'identique
-  (« Méthode du 23 novembre » de `results/report_final.md`) ; son procès-verbal est [`V4_FINAL.md`](V4_FINAL.md), 12.
+  Lua ; deux étages de 19 et 6 langages ; C++ devant C dans 51 % des variantes. Son procès-verbal est
+  [`V4_FINAL.md`](V4_FINAL.md), 12. Sur les mesures de la campagne publiée, la même méthode (« Méthode du 23
+  novembre » de `results/report_final.md`) place C devant C++.
+* **Classement du 24 novembre** (v4.1 : la même campagne, celle de la machine 35, après les corrections A1 à A4 ;
+  publié jusqu'au 26 novembre) : C, C++, Odin, Rust, D, Nim, C3, Zig, Ada, Julia, Fortran, Chapel, Swift, Mojo, C#,
+  Java, Go, FreePascal, Haskell, OCaml, BQN, JavaScript, PHP, Python, Lua ; deux étages de 19 et 6 langages ; C
+  premier dans 69 % des variantes. La campagne publiée le redonne à deux échanges de voisins près
+  ([`V5.md`](V5.md), 9.6).
 * **Point 2, tailles** (`docs/V4_SIZES.md`). Entre la taille publiée seule et la moyenne des trois tailles, aucun
   langage ne bouge de plus de deux places ; l'effet de l'hôte est plus grand que celui des tailles.
 * **Point 3, conditions égales** (`docs/V4_EQUAL.md`). Les vérifications et le stencil contigu ne déplacent aucun
@@ -77,7 +88,8 @@ ne sont pas remesurés dans la campagne finale. Leur détail est dans le documen
   règle du « standard » à la grille et au code mesuré explique l'essentiel de l'écart : la règle de notation, et non
   les faits, fait le renversement.
 * **Autres chaînes, versions et modes** (C par GCC, flang, Zig 0.18-dev, .NET 11, LuaJIT, Bun, CPython sans GIL…) :
-  mesurés pendant la v3 (`docs/RANKING_V3.md`), pas dans la campagne finale.
+  mesurés pendant la v3 (`docs/RANKING_V3.md`), pas dans la campagne publiée, sauf C par gcc
+  ([`V5.md`](V5.md), 9.5).
 * **Faits de mécanisme** (`docs/FINDINGS.md` et les documents par langage) : la source des constats résumés dans le
   README, « Ce qui sépare vraiment les langages ».
 

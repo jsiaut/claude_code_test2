@@ -1,10 +1,11 @@
-# Méthode du classement (v4.1)
+# Méthode du classement (v5)
 
-*État au 24 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
+*État au 26 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
 été fixée par étapes, chacune par un plan poussé avant ses mesures ou ses calculs ([`HISTORY.md`](HISTORY.md)). Le plan
-de la campagne dont viennent les mesures, avec ses écarts datés et son procès-verbal, est [`V4_FINAL.md`](V4_FINAL.md) ;
-celui des quatre corrections de l'analyse (A1 à A4), [`V4_1.md`](V4_1.md) ; le contrat des noyaux est
-[`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
+de la campagne dont viennent les mesures, avec ses écarts datés (dont les corrections A5 et A6) et ses résultats, est
+[`V5.md`](V5.md) ; celui de la campagne précédente, dont elle reprend le protocole, [`V4_FINAL.md`](V4_FINAL.md) ;
+celui des corrections A1 à A4 de l'analyse, [`V4_1.md`](V4_1.md) ; le contrat des noyaux est [`SPEC.md`](SPEC.md) ; le
+calcul est `analysis/final_v4.py`.*
 
 ## 1. Ce qui est classé
 
@@ -140,31 +141,35 @@ conteneur par défaut, aucune annotation de performance ([`NATURAL.md`](NATURAL.
 * **R2, stencil naturel contigu.** K9 naturel est une grille contiguë pour tous ; les 13 langages dont l'idiome est un
   tableau de tableaux reçoivent la variante `natural_flat` (tableau 1D de leur conteneur par défaut, indexé `i*M + j`).
 * **R3.** K4 admet une forme `tuned`, SIMD explicite compris ; aucune forme n'est en assembleur en ligne.
-* **R4, K3 rapporté à une boucle de référence.** Sur ce processeur, la boucle de l'écrivain unique coûte de un à sept
-  cycles par incrément selon la place du code dans sa ligne de 64 octets. La cellule de K3 vaut donc min(1, b3 / t) :
+* **R4, K3 rapporté à une boucle de référence.** Sur les processeurs de l'étude, la boucle de l'écrivain unique coûte
+  de un à sept cycles par incrément selon la place du code dans sa ligne de 64 octets. La cellule de K3 vaut donc min(1, b3 / t) :
   b3 est le temps de la même boucle écrite en assembleur (`tools/k3_align.c`), au plus lent de ses 16 décalages (A2 ;
   leur médiane jusqu'au 23 novembre), moyenne de deux exécutions, mesuré juste avant et juste après chaque groupe de
   K3 ; les temps de K3 d'un groupe sont ramenés au b3 de référence (moyenne de toutes les mesures) par le rapport des
   b3. Une boucle sans `lock` ne vaut ainsi pas moins que la boucle de référence à son plus mauvais placement.
-* **R5.** K2 (dont vient D4) est mesuré par sept processus par cellule au lieu de trois ; la campagne finale applique
-  la même règle à K8 naturel (dont vient D3).
+* **R5.** K2 (dont vient D4) est mesuré par sept processus par cellule au lieu de trois ; la même règle vaut pour K8
+  naturel (dont vient D3).
 
 ## 6. Campagne
 
-Outils : `tools/final/` ([`V4_FINAL.md`](V4_FINAL.md), 5 à 7, pour le détail et le procès-verbal).
+Outils : `tools/final/` ([`V4_FINAL.md`](V4_FINAL.md), 5 à 7, pour le détail du protocole ; [`V5.md`](V5.md) pour la
+campagne publiée).
 
-* **Machine.** Un seul modèle de processeur (famille 6, modèle 207, pas 2 : Emerald Rapids), vérifié avant chaque
-  processus. Chaque machine est caractérisée au repos avant de mesurer (`tools/sizes/hwchar.sh`, `tools/hwprobe.c` :
-  bande passante selon le volume, STREAM, débit crête, fréquence) dans `results/hw/machine<N>` ; ces relevés donnent
-  les bornes physiques (8). Un groupe (noyau, taille) d'une passe est toujours mesuré en entier sur une même machine.
+* **Machine.** Une campagne se mesure sur un seul modèle de processeur, inscrit dans le `model.txt` de son répertoire
+  (campagne publiée : famille 6, modèle 173, révision 1, Granite Rapids) et vérifié avant chaque processus. Chaque
+  machine est caractérisée au repos avant de mesurer (`tools/sizes/hwchar.sh`, `tools/hwprobe.c` : bande passante selon
+  le volume, STREAM, débit crête, fréquence) dans `results/hw/machine<N>` ; ces relevés donnent les bornes physiques
+  (8). Un redémarrage de la VM donne une nouvelle machine, numérotée à la suite et caractérisée à son tour. Un groupe
+  (noyau, taille) d'une passe est toujours mesuré en entier sur une même machine : interrompu, il est refait.
 * **Constructions** (`tools/final/build.py`), depuis les fichiers suivis par git, dans `/dev/shm` : la source de
   chaque langage dans le mode publié (`pub`) et dans les modes R1 et R1' (`chk`, `unc`), chacune aux trois jeux de
   tailles ; l'empreinte de chaque fichier exécuté est enregistrée (`results/final/builds.jsonl`). Chaque mesure porte
   une étiquette qui dit d'où vient sa cellule : `pub` (variantes publiées), `cv` (formes du catalogue), `chk` et `unc`
-  (code naturel dans les modes R1 et R1'), `cv_chk` et `cv_unc` (stencil naturel contigu dans ces modes). Dans la
-  campagne publiée, des 22 et 23 novembre, les formes du catalogue étaient dans une copie de la source
-  (`bench/<langage>_cv`) et les variantes publiées étaient mesurées dans le binaire sans elles ; depuis le 24
-  novembre il n'y a plus qu'une source par langage, celle de la copie ([`V5.md`](V5.md)).
+  (code naturel dans les modes R1 et R1'), `cv_chk` et `cv_unc` (stencil naturel contigu dans ces modes). Variantes
+  publiées et formes du catalogue sortent du même binaire (`cv` partage la construction de `pub`, `cv_chk` celle de
+  `chk`, `cv_unc` celle de `unc`) ; dans la campagne précédente, les formes du catalogue étaient dans une copie de la
+  source. La source C est construite une seconde fois par gcc 16.2.0, avec les options de clang (étiquettes `gcc`,
+  `gcc_cv`, `gcc_chk`) : ces mesures n'entrent que dans la sensibilité « C par gcc » (10). 132 constructions.
 * **Étalonnage et validation** (`campaign.py calibrate`). Chaque cellule, à chaque taille, est exécutée une fois : la
   somme de contrôle est vérifiée, et la durée fixe le nombre de répétitions (environ 3 s par processus, de 3 à 10 000 ;
   une seule au-delà de 300 s) et l'échauffement (une répétition ; au moins trois et au moins une seconde pour Java, C#,
@@ -173,8 +178,8 @@ Outils : `tools/final/` ([`V4_FINAL.md`](V4_FINAL.md), 5 à 7, pour le détail e
   construction) sont tirés au hasard, à graine fixe. Un processus par cellule et par passe ; trois, deux et deux pour K2
   et K8 naturel. Un processus dont le vol de temps de l'hyperviseur dépasse 5 % est refait une fois. Rien d'autre ne
   tourne pendant la campagne.
-* **Volume.** 2 978 cellules, 9 738 processus, du 22 novembre, 17 h 16, au 23 novembre, 19 h 40 (UTC), sur la
-  machine 35, sans redémarrage ; aucun processus en échec.
+* **Volume.** 3 106 cellules et 10 158 processus, dont 128 cellules et 420 processus pour C par gcc, du 25 novembre,
+  6 h 12, au 26 novembre, 10 h 30 (UTC), sur la machine 38, sans redémarrage ; aucun processus en échec.
 
 ## 7. Grille de contrôle (pilier C)
 
@@ -211,7 +216,9 @@ plus rapide parmi les formes admises.
   tailles publiée et grande (A4 : à la petite taille, elles mesurent le réveil des fils). La référence est la frontière,
   le meilleur temps des 25 langages à cette taille ; dans une variante sur deux, c'est la borne physique de la machine
   (octets à déplacer sur la bande passante du niveau de mémoire où ils tiennent, opérations sur le débit crête), le
-  rapport étant alors plafonné à 1. K3 suit R4.
+  rapport étant alors plafonné à 1. La bande passante à quatre fils est le plus grand relevé de la sonde corrigée (A6 :
+  les fils de travail relèvent eux-mêmes leurs instants ; chronométré par le fil principal, le relevé d'origine était
+  plusieurs fois trop haut). K3 suit R4.
 * **Code par défaut.** D = 100 × (0,5 D1 + 0,15 D2 + 0,15 D3 + 0,2 D4).
   * D1, code naturel : comme le plafond, avec la seule variante naturelle (K1, K4, K5, Q6, Q1, K7, K8, K9), rapportée
     au meilleur code naturel des 25 langages à chaque taille (A3 ; à la frontière du plafond jusqu'au 23 novembre).
@@ -230,8 +237,12 @@ plus rapide parmi les formes admises.
 * **Bruit de mesure.** 2 000 rééchantillonnages. Avec trois processus, une cellule ne peut pas estimer seule sa
   variance : les résidus des cellules sont regroupés par noyau et par classe d'implémentation (compilée à l'avance,
   JIT, interprète ; moins de 20 résidus : tout le noyau), et chaque tirage ajoute à l'estimation de la cellule la
-  moyenne de résidus tirés dans son réservoir. Les références restent celles des estimations ponctuelles. Les latences
-  sont rééchantillonnées par processus puis par répétition.
+  moyenne de résidus tirés dans son réservoir. L'effet commun d'un groupe (noyau, taille) dans une passe est d'abord
+  retiré des résidus (A5) : c'est la médiane, sur les cellules du groupe, de l'écart entre la moyenne des logarithmes
+  des temps de la cellule dans cette passe et la moyenne de ses moyennes par passe. Un écart de vitesse de la machine
+  d'une passe à l'autre est commun à toutes les cellules du groupe et s'annule dans leurs rapports : ce n'est pas un
+  bruit propre à chaque cellule. Les références restent celles des estimations ponctuelles. Les latences sont
+  rééchantillonnées par processus puis par répétition, sans cette correction.
 * **20 000 variantes de l'analyse.** Chacune tire : un rééchantillonnage ; cinq choix de méthode à deux options
   (estimateur : moyenne géométrique ou minimum des processus ; référence du plafond ; formes de D3 et de D4 ;
   agrégation) ; les poids des piliers et ceux des trois tailles (autour de leurs valeurs du centre dans une variante sur
@@ -239,8 +250,8 @@ plus rapide parmi les formes admises.
   de leurs valeurs du centre) ; un bruit de jugement, chaque case jugée changeant de note avec une probabilité de 10 %.
 * **Ce qui est publié.** Le **score** affiché est la moyenne du score sur les variantes, et l'ordre est le sien (à
   égalité, le rang moyen départage). Jusqu'au 24 novembre, l'ordre était le rang moyen et le score affiché celui du
-  centre, qui ne suivait pas toujours l'ordre ; les deux ordres coïncident pour les 25 langages du classement publié
-  ([`V4_1.md`](V4_1.md), 9). Le **rang plausible** est l'intervalle des rangs dans 90 % des variantes. « Devance le
+  centre, qui ne suivait pas toujours l'ordre ([`V4_1.md`](V4_1.md), 9) ; les deux ordres coïncident pour les 25
+  langages du classement publié. Le **rang plausible** est l'intervalle des rangs dans 90 % des variantes. « Devance le
   suivant » est la part des variantes où un langage passe devant celui de la ligne suivante. Les piliers sont donnés au
   centre (poids et choix principaux, estimation ponctuelle). Les **étages** : une frontière sépare deux langages voisins
   si chaque langage au-dessus devance chaque langage au-dessous dans au moins 95 % des variantes.
@@ -248,13 +259,20 @@ plus rapide parmi les formes admises.
 
 ## 10. Sensibilités publiées
 
-`results/report_final.md` donne, à côté du classement, la place de chaque langage dans dix-sept autres calculs faits
+`results/report_final.md` donne, à côté du classement, la place de chaque langage dans vingt autres calculs faits
 avec les mêmes tirages : formes publiées seules et code naturel publié à trois tailles (« Base ») ; « Final » sans une
 règle à la fois (sans les tailles, sans R1, sans R2, sans C1, sans R4) ; R1' au lieu de R1 ; une taille seule (petite,
 grande) ; sélection indépendante (la forme de chaque cellule choisie sur la passe 0, estimée sur les passes 1 et 2) ; D3
-et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans une correction de la v4.1 à
-la fois (« Sans A1 » à « Sans A4 ») ; sans aucune et classé au rang moyen (« Méthode du 23 novembre », qui redonne le
-classement publié ce jour-là).
+et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans une correction à la fois
+(« Sans A1 » à « Sans A6 ») ; sans aucune et classé au rang moyen (« Méthode du 23 novembre », celle du classement
+publié ce jour-là) ; « C par gcc », où toutes les cellules de C viennent de ses constructions par gcc, la grille et les
+autres langages ne changeant pas.
+
+Le rapport donne aussi la **réplication** : la campagne précédente, telle qu'elle était publiée et recalculée par la
+méthode de celle-ci (`results/final/comparisons.json`, écrit par les options `--extract` et `--extract-same` de
+l'analyse), avec la place et le score de chaque langage dans chacune et, cellule par cellule, le rapport des temps
+entre les deux campagnes. Quand une campagne passe par plusieurs machines, il donne l'effet de machine : le rapport des
+temps d'une cellule sur chaque machine à ses temps sur la première.
 
 ## 11. Vérifier, recalculer, remesurer
 
@@ -280,16 +298,27 @@ demande de chaîne de compilation. Les deux commandes suivantes réécrivent `re
 
 Remesurer demande les 25 chaînes de `env/toolchains.txt`, aux chemins que lisent les `build.sh`, et les données de
 `/opt/msdata` : `env/install.sh` les installe sur une Ubuntu 24.04 (environ 1 h 30 sur 4 cœurs, 35 Gio ; archives
-vérifiées par leur empreinte, versions exactes de l'étude). Réinstallées ainsi le 24 novembre, les chaînes redonnent
-le fichier ou le code machine de la campagne finale pour 192 constructions sur 225 ; celles de Rust, de D et de C3
-diffèrent, sans cause trouvée ([`V5.md`](V5.md), 2). Puis, sur une machine du modèle 6/207/2 :
+vérifiées par leur empreinte, versions exactes de l'étude). La campagne publiée a été mesurée avec les chaînes ainsi
+réinstallées ; elles redonnent le fichier ou le code machine de la campagne précédente pour 192 constructions sur
+225, celles de Rust, de D et de C3 différant sans cause trouvée ([`V5.md`](V5.md), 2). Une campagne s'écrit dans son
+propre répertoire, ce qui laisse en place les résultats publiés ; son `model.txt` porte le modèle de son processeur
+(famille/modèle/révision : celui de la campagne publiée, ou celui de la machine pour mesurer sur un autre), et
+`machine.sh` comme le pilote refusent une machine d'un autre modèle :
 
 ```bash
 sh env/install.sh
 ```
 
 ```bash
-sh tools/final/machine.sh 36
+export MS_CAMPAIGN_DIR=results/rejeu
+```
+
+```bash
+mkdir -p results/rejeu && cp results/final/model.txt results/rejeu/
+```
+
+```bash
+sh tools/final/machine.sh 39
 ```
 
 ```bash
@@ -306,8 +335,10 @@ python3 tools/final/campaign.py run
 
 `machine.sh` caractérise la machine, mesure b3 et fait les constructions ; `calibrate` étalonne et valide chaque
 cellule ; `k4_extreme.py` contrôle les formes de K4 sur des données extrêmes ; `run` fait les trois passes et
-enregistre chaque groupe (`tools/final/save_progress.sh`, qui committe et pousse sur la branche courante). Pour essayer
-une seule implémentation, construite sur place :
+enregistre chaque groupe (`tools/final/save_progress.sh`, qui committe et pousse sur la branche courante). Après un
+redémarrage de la VM, relancer `machine.sh` avec le numéro suivant, puis `run`, qui reprend où il en était. L'analyse
+lit ce répertoire par `FINAL_DIR=results/rejeu` et écrit ailleurs par `FINAL_OUT`. Pour essayer une seule
+implémentation, construite sur place :
 
 ```bash
 python3 tools/driver.py c
