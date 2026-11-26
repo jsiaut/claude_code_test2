@@ -15,6 +15,22 @@
 "ts": "2026-11-26T17:41:50",
 "warmup": 1
 },
+"zig|chk|k1|pub|natural_shuffled|energy": {
+"machine": "39",
+"reps": 126,
+"status": "ok",
+"t_cal": 0.0236451,
+"ts": "2026-11-26T17:45:14",
+"warmup": 1
+},
+"zig|chk|k1|pub|natural|energy": {
+"machine": "39",
+"reps": 90,
+"status": "ok",
+"t_cal": 0.033025701,
+"ts": "2026-11-26T17:45:13",
+"warmup": 1
+},
 "zig|chk|k4|pub|natural_unsorted|": {
 "machine": "39",
 "reps": 46,
@@ -341,6 +357,22 @@
 "status": "ok",
 "t_cal": 0.073943464,
 "ts": "2026-11-26T17:42:03",
+"warmup": 1
+},
+"zig|dev_chk|k1|pub|natural_shuffled|energy": {
+"machine": "39",
+"reps": 130,
+"status": "ok",
+"t_cal": 0.023009311,
+"ts": "2026-11-26T17:45:17",
+"warmup": 1
+},
+"zig|dev_chk|k1|pub|natural|energy": {
+"machine": "39",
+"reps": 125,
+"status": "ok",
+"t_cal": 0.023959485,
+"ts": "2026-11-26T17:45:16",
 "warmup": 1
 },
 "zig|dev_chk|k4|pub|natural_unsorted|": {
@@ -685,6 +717,38 @@
 "status": "ok",
 "t_cal": 0.024042085,
 "ts": "2026-11-26T17:41:58",
+"warmup": 1
+},
+"zig|dev|k1|pub|aos|energy": {
+"machine": "39",
+"reps": 107,
+"status": "ok",
+"t_cal": 0.027895417,
+"ts": "2026-11-26T17:45:15",
+"warmup": 1
+},
+"zig|dev|k1|pub|natural_shuffled|energy": {
+"machine": "39",
+"reps": 135,
+"status": "ok",
+"t_cal": 0.022211435,
+"ts": "2026-11-26T17:45:16",
+"warmup": 1
+},
+"zig|dev|k1|pub|natural|energy": {
+"machine": "39",
+"reps": 131,
+"status": "ok",
+"t_cal": 0.022849598,
+"ts": "2026-11-26T17:45:14",
+"warmup": 1
+},
+"zig|dev|k1|pub|soa|energy": {
+"machine": "39",
+"reps": 677,
+"status": "ok",
+"t_cal": 0.004426471,
+"ts": "2026-11-26T17:45:15",
 "warmup": 1
 },
 "zig|dev|k3|pub|rmw_padded|": {
@@ -1149,6 +1213,38 @@
 "status": "ok",
 "t_cal": 0.022757829,
 "ts": "2026-11-26T17:41:46",
+"warmup": 1
+},
+"zig|pub|k1|pub|aos|energy": {
+"machine": "39",
+"reps": 113,
+"status": "ok",
+"t_cal": 0.026407906,
+"ts": "2026-11-26T17:45:11",
+"warmup": 1
+},
+"zig|pub|k1|pub|natural_shuffled|energy": {
+"machine": "39",
+"reps": 101,
+"status": "ok",
+"t_cal": 0.029601863,
+"ts": "2026-11-26T17:45:12",
+"warmup": 1
+},
+"zig|pub|k1|pub|natural|energy": {
+"machine": "39",
+"reps": 125,
+"status": "ok",
+"t_cal": 0.023927518,
+"ts": "2026-11-26T17:45:11",
+"warmup": 1
+},
+"zig|pub|k1|pub|soa|energy": {
+"machine": "39",
+"reps": 447,
+"status": "ok",
+"t_cal": 0.006699381,
+"ts": "2026-11-26T17:45:12",
 "warmup": 1
 },
 "zig|pub|k3|pub|rmw_padded|": {
