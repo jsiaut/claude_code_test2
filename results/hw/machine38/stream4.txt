@@ -1,3 +1,5 @@
+# sonde corrigée (tools/hwprobe.c, gcc -O3 -march=native -pthread, gcc 13.3.0), mode stream ; docs/V5.md, 8, écarts 4 et 6
+# à l'arrivée, avant l'étalonnage, machine au repos : 2026-11-25 06:25 UTC
 TSC: 2.3000 GHz
 stream: T=1 copy     9.29 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
 stream: T=1 scale    9.17 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
@@ -11,3 +13,17 @@ stream: T=4 copy    30.35 GB/s (comptage STREAM, sans RFO, instants relevés par
 stream: T=4 scale   30.70 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
 stream: T=4 add     38.20 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
 stream: T=4 triad   38.26 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+# après la dernière passe, machine au repos : 2026-11-26 10:31 UTC
+TSC: 2.3000 GHz
+stream: T=1 copy    11.79 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=1 scale   12.95 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=1 add     15.12 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=1 triad   11.25 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=2 copy    18.75 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=2 scale   18.56 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=2 add     21.22 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=2 triad   21.07 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=4 copy    33.49 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=4 scale   35.25 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=4 add     41.81 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=4 triad   42.89 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
