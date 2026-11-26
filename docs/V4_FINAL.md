@@ -8,6 +8,10 @@ calcul de la section 8 est fait par le seul `analysis/final_v4.py`, qui reprend 
 mesure nouvelle ; le classement de la section 12.2 est le calcul « Méthode du 23 novembre » de
 `results/report_final.md`.*
 
+*Note du 26 novembre 2026 : `results/final` et `results/report_final.md` portent désormais la campagne de la v5
+([`V5.md`](V5.md)). Les mesures et le rapport de la campagne décrite ici, avec le calcul « Méthode du 23 novembre » qui
+redonne le classement de la section 12.2, sont dans le commit `76d07af` ([`V5.md`](V5.md), 9.8).*
+
 *Plan d'ensemble : `docs/V4_PLAN.md`. Ce plan est poussé avant tout outil, toute construction et toute mesure de la
 campagne ; les écarts éventuels seront datés ici (section 11) et dans le journal (`docs/METHODOLOGY.md`).*
 
