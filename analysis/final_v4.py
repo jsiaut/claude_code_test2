@@ -3,11 +3,10 @@
 
 Méthode : docs/METHOD.md ; plans fixés avant les calculs : docs/V4_FINAL.md, section 8 (campagne finale de la v4),
 docs/V4_1.md (corrections A1 à A4 de l'analyse), docs/V5.md (campagne rejouée : corrections A5 et A6, C par gcc,
-réplication) et docs/V5_1.md (A7 : mode du code naturel tiré au sort). Ce module est autonome : il lit les mesures de la
-campagne
-(results/final/raw, tools/final/campaign.py), b3 (results/final/b3.jsonl), les bornes physiques des machines qui ont
-mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json), l'empreinte de K1
-(results/footprint.json) et la grille de contrôle (analysis/capabilities.py, analysis/capabilities_v2.py ; la
+réplication) et docs/V5_1.md (A7 et A8 : mode du code naturel tiré au sort). Ce module est autonome : il lit les
+mesures de la campagne (results/final/raw, tools/final/campaign.py), b3 (results/final/b3.jsonl), les bornes physiques
+des machines qui ont mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json), l'empreinte
+de K1 (results/footprint.json) et la grille de contrôle (analysis/capabilities.py, analysis/capabilities_v2.py ; la
 vectorisation mesurée de results/vectorization.json ne sert qu'à la règle v1, dans les calculs sans A1).
 
 Score d'un langage (sur 100) : 0,35 x contrôle (C) + 0,40 x plafond (E) + 0,25 x code par défaut (D).
@@ -44,12 +43,13 @@ Calcul « Final » (docs/V4_FINAL.md, 8 ; docs/V4_1.md, 3) :
 * A6 : la borne physique des mesures à quatre fils vient de la sonde corrigée (stream.txt ou stream4.txt de la
   machine ; pour une machine qui n'en a pas, médiane des relevés corrigés des machines de la campagne, à défaut des
   machines du même modèle, à défaut de toutes) ;
-* A7 : dans chaque variante, le code naturel est pris sous R1 ou dans le mode publié de chaque chaîne (les données du
-  calcul « Sans R1 »), à probabilité 1/2 ; le tirage vient d'un générateur à part, les autres tirages ne changent pas ;
-  au centre, le code naturel reste sous R1.
+* A7, A8 : dans chaque variante, le mode du code naturel est tiré parmi trois, à probabilité 1/3 : R1, le mode publié
+  de chaque chaîne (les données du calcul « Sans R1 ») ou R1' (celles de « R1' au lieu de R1 ») ; le tirage vient d'un
+  générateur à part, les autres tirages ne changent pas ; au centre, le code naturel reste sous R1. Sans A8 : tirage
+  entre les deux premiers modes, à probabilité 1/2 (le classement publié le 26 novembre à 15 h).
 Sensibilités (CALCS) : Base, trois tailles ; sans les tailles, sans R1, sans R2, sans C1, sans R4 ; R1' au lieu de R1 ;
 une taille à la fois ; sélection indépendante ; D3 et D4 sur trois processus ; sur les seules mesures ; sans une
-correction à la fois (Sans A1 à Sans A7) ; « Méthode du 23 novembre », sans aucune et classée au rang moyen ; « C par
+correction à la fois (Sans A1 à Sans A8) ; « Méthode du 23 novembre », sans aucune et classée au rang moyen ; « C par
 gcc », quand la campagne porte les constructions de C par gcc. Les tirages des variantes viennent du même générateur,
 avancé de la même façon pour tous les calculs : ils sont identiques d'un calcul à l'autre. Réplication : la campagne
 précédente, telle qu'elle était publiée et recalculée par cette méthode (comparisons.json de la campagne). Effet de
@@ -137,7 +137,7 @@ U = int(os.environ.get("UA", "20000"))
 SEED = 20261029 + 3
 NEW_SEED = SEED + 4500  # générateurs des cellules nouvelles (complétés par la clé, le langage et la position)
 SEL_SEED = SEED + 4501  # générateurs des cellules de la sélection indépendante
-DRAW_SEED = SEED + 4300  # A7 : tirage du mode du code naturel de chaque variante, générateur à part
+DRAW_SEED = SEED + 4300  # A7, A8 : tirage du mode du code naturel de chaque variante, générateur à part
 FIN = os.path.join(ROOT, os.environ.get("FINAL_DIR", os.path.join("results", "final")))  # répertoire de la campagne
 RAW = os.environ.get("FINAL_RAW", os.path.join(FIN, "raw"))
 B3F = os.path.join(os.path.dirname(RAW), "b3.jsonl")
@@ -147,9 +147,9 @@ OUT = os.path.join(OUTD, "analysis.json")
 REPORT = os.path.join(OUTD, "report_final.md") if "FINAL_OUT" in os.environ else os.path.join(ROOT, "results",
                                                                                                "report_final.md")
 FINAL = "Final"
-OLD = "Méthode du 23 novembre"  # sans aucune correction (A1 à A7), classée au rang moyen
+OLD = "Méthode du 23 novembre"  # sans aucune correction (A1 à A8), classée au rang moyen
 A_OFF = {"Sans A1": "a1", "Sans A2": "a2", "Sans A3": "a3", "Sans A4": "a4", "Sans A5": "a5", "Sans A6": "a6",
-         "Sans A7": "a7"}
+         "Sans A7": "a7", "Sans A8": "a8"}
 CALCS = [FINAL, "Base, trois tailles", "Sans les tailles (taille publiée seule)", "Sans R1", "Sans R2", "Sans C1",
          "Sans R4", "R1' au lieu de R1", "Taille petite", "Taille grande", "Sélection indépendante",
          "D3 et D4 sur trois processus", "Sur les seules mesures"] + list(A_OFF) + [OLD]
@@ -158,15 +158,17 @@ GCC_CALC = "C par gcc"  # « Final » où les cellules de C viennent de ses cons
 GCC_VIEW = {"c": {"gcc": "pub", "gcc_cv": "cv", "gcc_chk": "chk"}}
 # calculs dont le mode du code naturel est fixé, sans tirage (A7) : pas de R1, mode publié partout, R1' partout
 NO_DRAW = ("Base, trois tailles", "Sans R1", "R1' au lieu de R1")
+DRAW_MODES = ("R1", "mode publié", "R1'")  # modes du tirage, dans l'ordre du générateur ; sans A8 : les deux premiers
 
 
 def corrections(calc):
     """Corrections appliquées dans un calcul. v4.1 (docs/V4_1.md, 3) : A1 (grille en règle v2 dans toutes les
     variantes), A2 (b3 : le plus lent des 16 décalages), A3 (code naturel rapporté au meilleur code naturel), A4
     (mesures à quatre fils sans la petite taille). v5 (docs/V5.md, 8) : A5 (effet commun d'un groupe d'une passe
-    retiré des résidus), A6 (borne à quatre fils : relevé de la sonde corrigée). v5.1 (docs/V5_1.md, 3) : A7 (mode du
-    code naturel tiré au sort dans chaque variante : R1 ou mode publié)."""
-    names = ("a1", "a2", "a3", "a4", "a5", "a6", "a7")
+    retiré des résidus), A6 (borne à quatre fils : relevé de la sonde corrigée). v5.1 (docs/V5_1.md, 3 et 9) : A7 (mode
+    du code naturel tiré au sort dans chaque variante), A8 (tirage entre trois modes, R1, mode publié et R1' ; sans A8,
+    entre les deux premiers ; sans A7, pas de tirage : R1)."""
+    names = ("a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8")
     if calc == OLD:
         return dict.fromkeys(names, False)
     return {a: A_OFF.get(calc) != a for a in names}
@@ -724,8 +726,9 @@ def size_of(key, p):
 
 def position(F, p, calc, k3n, natural=None):
     """(d, lt, src, missing) d'une position : la base (construction pub), K3 de R4, puis les substitutions du calcul.
-    src[l][clé] = (construction, taille, clé source), pour la sélection indépendante. natural = « pub » : le code
-    naturel reste dans le mode publié de chaque chaîne, comme dans « Sans R1 » (l'autre option du tirage A7)."""
+    src[l][clé] = (construction, taille, clé source), pour la sélection indépendante. natural : un autre mode du
+    tirage (A7, A8) que celui du calcul ; « pub » : le code naturel reste dans le mode publié de chaque chaîne, comme
+    dans « Sans R1 » ; « unc » : il passe en mode R1', comme dans « R1' au lieu de R1 »."""
     d, lt, src, missing = defaultdict(dict), defaultdict(dict), defaultdict(dict), []
     three = calc == "D3 et D4 sur trois processus"
     for (cons, size), dl in F.data.items():
@@ -767,8 +770,8 @@ def position(F, p, calc, k3n, natural=None):
                 missing.append([l, cons, "latences de K8", size])
 
     mode = None if calc in ("Base, trois tailles", "Sans R1") else ("unc" if calc == "R1' au lieu de R1" else "chk")
-    if natural == "pub":
-        mode = None
+    if natural is not None:
+        mode = {"pub": None, "unc": "unc"}[natural]
     if mode:
         for l in (FB.CHK if mode == "chk" else FB.UNC):
             for k in NAT_KEYS:
@@ -903,14 +906,15 @@ def selection(F, fc, pos):
 
 # ------------------------------------------------------------------ moteur : un calcul, ses 20 000 variantes
 def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="three", b3=None, measures_only=False,
-          a1=True, a3=True, a4=True, a5=True, alt=None):
+          a1=True, a3=True, a4=True, a5=True, alt=()):
     """Un calcul. host : données qui avancent le générateur principal (les mêmes pour tous les calculs) ; pos_dl : [(d,
     lt)] des trois positions ; wmode : « three » (poids des tailles égaux au centre, tirés dans les variantes) ou une
     position (0, 1, 2) de poids 1 ; b3 : R4 (référence de K3) ; measures_only : poids de la grille à 0 ; a1, a3, a4,
     a5 : corrections (corrections()). Les tirages de la règle de la grille (a1) et de la référence du code naturel (a3)
-    sont faits puis ignorés, pour que tous les calculs gardent les mêmes tirages. alt (A7) : (pos_dl, patches) du même
-    calcul avec le code naturel en mode publié ; chaque variante prend alors l'un des deux jeux de tableaux, tiré par
-    un générateur à part (DRAW_SEED), et le centre garde le premier (R1)."""
+    sont faits puis ignorés, pour que tous les calculs gardent les mêmes tirages. alt (A7, A8) : [(pos_dl, patches)]
+    du même calcul avec le code naturel dans les autres modes du tirage (mode publié, puis R1') ; chaque variante
+    prend alors l'un des jeux de tableaux, tiré par un générateur à part (DRAW_SEED), et le centre garde le premier
+    (R1)."""
     rng = np.random.default_rng(SEED)
     keys = sorted(needed_keys())
     Arrays3(host[0], host[1], LANGS, B, rng, build_pools(host[0], LANGS, keys))  # avance rng de la même façon
@@ -934,11 +938,12 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
         return As, refs
 
     As, refs = arrays(pos_dl, patches)
-    worlds = [(As, refs)]  # jeux de tableaux : celui du calcul, puis, avec A7, celui du code naturel en mode publié
-    pub = np.zeros(U, bool)
-    if alt is not None:
-        worlds.append(arrays(*alt))
-        pub = np.random.default_rng(DRAW_SEED).random(U) < 0.5
+    worlds = [(As, refs)] + [arrays(*a) for a in alt]  # jeux de tableaux : celui du calcul, puis ceux des autres modes
+    draw = np.random.default_rng(DRAW_SEED)
+    if len(worlds) == 2:  # sans A8 : pile ou face, tel que publié le 26 novembre à 15 h
+        pick = (draw.random(U) < 0.5).astype(int)
+    else:
+        pick = draw.integers(0, len(worlds), U)
     catw0 = {cat: w for cat, (w, _) in CATEGORIES.items()}
     C0 = c_vector(c_score(c_cells("v2", c3), catw0), LANGS)
 
@@ -978,7 +983,7 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
         prng = np.random.default_rng(int(rng.integers(2 ** 63)))
         C = c_vector(c_score(c_cells(cfg["crule"], c3, rng=prng, noise=0.10), catw), LANGS)
         wS = dirichlet(srng, 20 * w0) if srng.random() < 0.5 else dirichlet(srng, [1, 1, 1])
-        Aw, rw = worlds[int(pub[u])]
+        Aw, rw = worlds[int(pick[u])]
         S_u = scores(Aw, b, cfg, C, footprint, rw, ebs, wsz(wS), wE=wE, wD=wD, wP=wP, mt_nosmall=a4)
         r_ = ranks_of(S_u["MS"][rk])
         ms_sum += S_u["MS"]
@@ -988,7 +993,7 @@ def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="th
     prec /= U
     idx = As[1].idx
     exp21 = {a: 1 + sum(prec[RANKED.index(b_), RANKED.index(a)] for b_ in RANKED if b_ != a) for a in RANKED}
-    return {"r1_share": None if alt is None else float(1 - pub.mean()),
+    return {"mode_share": [float((pick == i).mean()) for i in range(len(worlds))] if alt else None,
             "exp21": exp21, "ms0": {l: float(S0["MS"][idx[l]]) for l in LANGS}, "prec": prec,
             "ms_mean": {l: float(ms_sum[idx[l]] / U) for l in LANGS},
             "first": {RANKED[j]: float(first[j] / U) for j in range(NR)},
@@ -1021,8 +1026,8 @@ def summarize(s, by_rank=False):
     out["ahead_next"] = {a: float(prec[RANKED.index(a), RANKED.index(b)]) for a, b in zip(order, order[1:])}
     out["prec_full"] = {a: {b: float(prec[RANKED.index(a), RANKED.index(b)]) for b in order} for a in order}
     out["tstar"] = s["tstar"]
-    if s.get("r1_share") is not None:  # A7 : part des variantes dont le code naturel est sous R1
-        out["r1_share"] = s["r1_share"]
+    if s.get("mode_share") is not None:  # A7, A8 : part des variantes dans chaque mode du code naturel (DRAW_MODES)
+        out["mode_share"] = s["mode_share"]
     return out
 
 
@@ -1032,8 +1037,9 @@ def run_calc(calc, F, fc, footprint, c3, ebs, b3, host, keys):
     r4 = calc not in ("Base, trois tailles", "Sans R4")
 
     def world(natural=None):
-        """Données du calcul pour un mode du code naturel : le sien (None) ou le mode publié (« pub », l'autre option
-        du tirage A7) : positions, cellules remplies, manquantes, mesures du plafond, tableaux à ajouter, sélection."""
+        """Données du calcul pour un mode du code naturel : le sien (None) ou un autre mode du tirage (« pub » : mode
+        publié ; « unc » : R1') : positions, cellules remplies, manquantes, mesures du plafond, tableaux à ajouter,
+        sélection."""
         pos = [position(F, p, calc, k3n, natural) for p in range(3)]
         filled, missing = {}, []
         for p, (d, lt, src, miss) in enumerate(pos):
@@ -1060,13 +1066,14 @@ def run_calc(calc, F, fc, footprint, c3, ebs, b3, host, keys):
         return pos, filled, missing, e_meas, patches, chosen
 
     pos, filled, missing, e_meas, patches, chosen = world()
-    alt = None
-    if cor["a7"] and calc not in NO_DRAW:  # A7 : le même calcul, code naturel en mode publié
-        pos0, filled0, missing0, e_meas0, patches0, _ = world("pub")
-        if e_meas0 != e_meas or any([x[:2] for x in filled0[k]] != [x[:2] for x in filled[k]] for k in filled):
-            raise SystemExit(f"{calc} : les deux modes du code naturel n'ont pas les mêmes cellules")
-        missing += [m for m in missing0 if m not in missing]
-        alt = ([(d, lt) for d, lt, src, miss in pos0], patches0)
+    alt = []
+    if cor["a7"] and calc not in NO_DRAW:  # A7, A8 : le même calcul, code naturel dans les autres modes du tirage
+        for natural in ("pub", "unc") if cor["a8"] else ("pub",):
+            pos0, filled0, missing0, e_meas0, patches0, _ = world(natural)
+            if e_meas0 != e_meas or any([x[:2] for x in filled0[k]] != [x[:2] for x in filled[k]] for k in filled):
+                raise SystemExit(f"{calc} : les modes du code naturel n'ont pas les mêmes cellules")
+            missing += [m for m in missing0 if m not in missing]
+            alt.append(([(d, lt) for d, lt, src, miss in pos0], patches0))
     wmode = {"Sans les tailles (taille publiée seule)": 1, "Taille petite": 0, "Taille grande": 2}.get(calc, "three")
     s = three(host, [(d, lt) for d, lt, src, miss in pos], footprint, c3, ebs, e_meas=e_meas, patches=patches,
               wmode=wmode, b3=b3ref if r4 else None, measures_only=(calc == "Sur les seules mesures"),
@@ -1278,7 +1285,8 @@ def report(o, calcs):
     f = R[FINAL]
     L = ["# v5.1 : le classement — résultats", "",
          "*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse), `docs/V5.md` "
-         "(campagne rejouée, corrections A5 et A6) et `docs/V5_1.md` (A7 : mode du code naturel tiré au sort), fixés "
+         "(campagne rejouée, corrections A5 et A6) et `docs/V5_1.md` (A7 et A8 : mode du code naturel tiré au sort), "
+         "fixés "
          "avant les mesures ou avant leur analyse. Généré par "
          "`analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes "
          "(`results/converge/forms.json`).*", "",
@@ -1297,9 +1305,10 @@ def report(o, calcs):
     L += ["", "Score : moyenne du score sur les variantes de l'analyse ; il fixe l'ordre. Score au centre, plafond, "
           "code par défaut et contrôle : poids et choix principaux, estimation ponctuelle. Rang espéré : rang moyen sur "
           "les variantes.", ""]
-    if f.get("r1_share") is not None:
-        L += [f"Mode du code naturel (A7) : sous R1 dans {100 * f['r1_share']:.1f} % des variantes, dans le mode publié "
-              "de chaque chaîne dans les autres ; au centre, sous R1.", ""]
+    if f.get("mode_share") is not None:
+        L += ["Mode du code naturel, tiré dans chaque variante (A7, A8) : "
+              + ", ".join(f"{m} dans {100 * x:.1f} % des variantes" for m, x in zip(DRAW_MODES, f["mode_share"]))
+              + " ; au centre, R1.", ""]
     L += [
           "Étages (paires ordonnées dans au moins 95 % des variantes) : "
           + " | ".join(", ".join(NAMES[l] for l in t) for t in f["tiers"]), "",
@@ -1317,7 +1326,7 @@ def report(o, calcs):
             cells.append(str(rp["previous"]["order"].index(l) + 1))
         L.append(f"| {NAMES[l]} | " + " | ".join(cells) + " |")
     L += ["", "Chaque case : place dans le calcul ; ** : plus de deux places d'écart avec « Final ». Ordre des lignes : "
-          "« Final ». « Sans A1 » à « Sans A7 » : « Final » sans une de ses corrections ; « Méthode du 23 novembre » : "
+          "« Final ». « Sans A1 » à « Sans A8 » : « Final » sans une de ses corrections ; « Méthode du 23 novembre » : "
           "sans aucune et classée au rang moyen" + (" ; « Campagne précédente » : son classement publié." if rp
                                                     else "."), "",
           "## Rangs qui bougent de plus de deux places par rapport à « Final »", ""]
@@ -1367,17 +1376,18 @@ def report(o, calcs):
         L += ["", "« Publiée » : le classement de la campagne précédente tel qu'il était publié ; « recalculée » : la "
               "même campagne recalculée par la méthode de celle-ci (comparaison à méthode égale). Le plafond, donné au "
               "centre, est le même dans les deux."]
-    nat = R.get("Sans R1")  # code naturel en mode publié : l'autre option du tirage A7
+    nat = [(n, R[c]) for n, c in (("mode publié", "Sans R1"), ("R1'", "R1' au lieu de R1")) if c in R]
     L += ["", "## Plafond par noyau et parts du code par défaut (« Final », au centre)", "",
           "| Langage | " + " | ".join(k.upper() for k in E_V2) + " | D1 | D2 | D3 | D4 |"
-          + (" D1, mode publié |" if nat else ""), "|---|" + "---|" * (len(E_V2) + 4 + bool(nat))]
+          + "".join(f" D1, {n} |" for n, r in nat), "|---|" + "---|" * (len(E_V2) + 4 + len(nat))]
     for l in f["order"]:
         L.append(f"| {NAMES[l]} | " + " | ".join(f"{100 * f['Ek'][l][k]:.0f}" for k in E_V2) + " | "
                  + " | ".join(f"{100 * f['Dparts'][l][q]:.0f}" for q in ("D1", "D2", "D3", "D4")) + " |"
-                 + (f" {100 * nat['Dparts'][l]['D1']:.0f} |" if nat else ""))
+                 + "".join(f" {100 * r['Dparts'][l]['D1']:.0f} |" for n, r in nat))
     if nat:
         L += ["", "D1 : code naturel sous R1 (le centre) ; « D1, mode publié » : dans le mode publié de chaque chaîne "
-              "(centre de « Sans R1 »). Les variantes de « Final » tirent l'un ou l'autre (A7)."]
+              "(centre de « Sans R1 ») ; « D1, R1' » : sans les vérifications qu'une option retire (centre de « R1' au "
+              "lieu de R1 »). Les variantes de « Final » tirent l'un des trois (A7, A8)."]
     L += ["", "## Forme retenue par « Final », cellule par cellule et taille par taille (estimation ponctuelle)", "",
           "Chaque case : forme retenue aux tailles petite / publiée / grande (« pub » : une variante publiée) ; rapport "
           "de son temps à la meilleure forme publiée, à la taille publiée.", "",
