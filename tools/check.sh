@@ -3,9 +3,9 @@
 # dépôt ; vérifie aussi le plan de la campagne, sans rien mesurer (aucune chaîne de compilation n'est nécessaire).
 # À lancer avant et après tout changement du code d'analyse, des outils ou de la grille.
 #
-# Usage : sh tools/check.sh            tout, y compris le classement complet (20 000 variantes : une vingtaine de minutes)
+# Usage : sh tools/check.sh            tout, y compris le classement complet (20 000 variantes : environ 25 minutes)
 #         sh tools/check.sh --rapide   le classement est calculé sur 200 variantes et comparé à son empreinte de
-#                                      référence (tools/check.ref) : environ 40 s en tout
+#                                      référence (tools/check.ref) : environ 45 s en tout
 #         sh tools/check.sh --ref      réécrit tools/check.ref ; seulement après un changement voulu de l'analyse
 #
 # Les sorties régénérées sur place (grille, relevé des formes, graphique) sont comparées à l'index de git : après un
@@ -47,6 +47,7 @@ echo "3. Plan de la campagne (rien n'est exécuté)"
 is "constructions" "$(python3 tools/final/build.py --list | tail -1)" "132 constructions"
 is "cellules à étalonner" "$(python3 tools/final/campaign.py calibrate --dry | awk '{n += $(NF - 1)} END {print n}')" "3106"
 is "processus des trois passes" "$(python3 tools/final/campaign.py run --dry | tail -1)" "10158 processus"
+is "remesure de Zig" "$(MS_DEV=1 python3 tools/final/build.py --langs zig --list | tail -1)" "12 constructions"
 
 echo "4. Classement"
 if [ "$MODE" = "--rapide" ]; then

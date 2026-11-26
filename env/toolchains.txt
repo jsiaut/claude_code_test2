@@ -6,6 +6,7 @@ gnat       GNATMAKE 16.2.0
 libstdc++  /opt/gcc-16/lib64/libstdc++.so.6.0.36
 rustc      rustc 1.99.1 (58cf8f9c3 2026-10-13)
 zig        0.17.0
+zig-dev    0.18.0-dev.1298+4a0817482
 odin       /opt/src/odin/odin version dev-2026-10:84bc3fc ; Backend: LLVM 22.1.8
 c3c        C3 Compiler Version: 0.8.5_1 ; Git Hash: d1b1e4451716a34e9c5eb46b78999ff92e71c3a1 ; LLVM version: 23.1.5
 ldc2       LDC - the LLVM D compiler (1.43.0): ; based on DMD v2.113.0 and LLVM 21.1.8

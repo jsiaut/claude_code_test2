@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v5.1).
+"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v5.2).
 
 Méthode : docs/METHOD.md ; plans fixés avant les calculs : docs/V4_FINAL.md, section 8 (campagne finale de la v4),
 docs/V4_1.md (corrections A1 à A4 de l'analyse), docs/V5.md (campagne rejouée : corrections A5 et A6, C par gcc,
-réplication) et docs/V5_1.md (A7 et A8 : mode du code naturel tiré au sort). Ce module est autonome : il lit les
-mesures de la campagne (results/final/raw, tools/final/campaign.py), b3 (results/final/b3.jsonl), les bornes physiques
+réplication), docs/V5_1.md (A7 et A8 : mode du code naturel tiré au sort) et docs/V5_2.md (Zig par sa version de
+développement). Ce module est autonome : il lit les mesures de la campagne (results/final/raw,
+tools/final/campaign.py), la remesure de Zig (results/zig_dev/raw), b3 (results/final/b3.jsonl), les bornes physiques
 des machines qui ont mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json), l'empreinte
 de K1 (results/footprint.json) et la grille de contrôle (analysis/capabilities.py, analysis/capabilities_v2.py ; la
 vectorisation mesurée de results/vectorization.json ne sert qu'à la règle v1, dans les calculs sans A1).
@@ -47,19 +48,27 @@ Calcul « Final » (docs/V4_FINAL.md, 8 ; docs/V4_1.md, 3) :
   de chaque chaîne (les données du calcul « Sans R1 ») ou R1' (celles de « R1' au lieu de R1 ») ; le tirage vient d'un
   générateur à part, les autres tirages ne changent pas ; au centre, le code naturel reste sous R1. Sans A8 : tirage
   entre les deux premiers modes, à probabilité 1/2 (le classement publié le 26 novembre à 15 h).
+* Zig (docs/V5_2.md) : par exception, ses cellules sont celles de sa version de développement. Elle est mesurée hors
+  campagne, à côté d'un témoin (la version de la campagne, remesurée dans les mêmes groupes) ; chaque processus de Zig
+  de la campagne est multiplié par le rapport de sa cellule, moyenne géométrique des rapports appariés (même passe,
+  même copie) du temps sous la version de développement au temps du témoin ; ce rapport est rééchantillonné avec les
+  mesures. Les latences de K8 naturel restent celles de la campagne (docs/V5_2.md, 8 : leurs rapports ne se
+  distinguent pas du bruit). « Zig 0.17 » : le même calcul avec les cellules de la campagne ; FINAL_ZIG17=1 : sans
+  l'exception.
 Sensibilités (CALCS) : Base, trois tailles ; sans les tailles, sans R1, sans R2, sans C1, sans R4 ; R1' au lieu de R1 ;
 une taille à la fois ; sélection indépendante ; D3 et D4 sur trois processus ; sur les seules mesures ; sans une
 correction à la fois (Sans A1 à Sans A8) ; « Méthode du 23 novembre », sans aucune et classée au rang moyen ; « C par
-gcc », quand la campagne porte les constructions de C par gcc. Les tirages des variantes viennent du même générateur,
+gcc », quand la campagne porte les constructions de C par gcc ; « Zig 0.17 », quand Zig est remesuré par sa version
+de développement. Les tirages des variantes viennent du même générateur,
 avancé de la même façon pour tous les calculs : ils sont identiques d'un calcul à l'autre. Réplication : la campagne
 précédente, telle qu'elle était publiée et recalculée par cette méthode (comparisons.json de la campagne). Effet de
 machine : les cellules mesurées sur plusieurs machines de la campagne, rapportées à la première.
 
 Sorties : results/final/analysis.json, results/report_final.md. Variables : BOOT (2000 rééchantillonnages), UA (20 000
 variantes), FINAL_DIR (répertoire d'une autre campagne), FINAL_RAW (autres données), FINAL_OUT (autre répertoire de
-sortie). « --extract <fichier> <note> » et « --extract-same <fichier> <note> » : extraits du calcul déjà écrit, pour la
-réplication d'une campagne suivante (classement publié ; recalcul par la méthode de la suivante). Contrôle :
-tools/check.sh."""
+sortie), FINAL_ZIG17 (sans l'exception de Zig). « --extract <fichier> <note> » et « --extract-same <fichier> <note> » :
+extraits du calcul déjà écrit, pour la réplication d'une campagne suivante (classement publié ; recalcul par la méthode
+de la suivante). Contrôle : tools/check.sh."""
 import copy, glob, importlib.util, json, math, os, re, sys, zlib
 from collections import defaultdict
 
@@ -159,6 +168,14 @@ GCC_VIEW = {"c": {"gcc": "pub", "gcc_cv": "cv", "gcc_chk": "chk"}}
 # calculs dont le mode du code naturel est fixé, sans tirage (A7) : pas de R1, mode publié partout, R1' partout
 NO_DRAW = ("Base, trois tailles", "Sans R1", "R1' au lieu de R1")
 DRAW_MODES = ("R1", "mode publié", "R1'")  # modes du tirage, dans l'ordre du générateur ; sans A8 : les deux premiers
+# Zig par sa version de développement (docs/V5_2.md) : remesure à côté de la campagne, avec son témoin
+DEV_LANG = "zig"
+DEV_DIR = os.path.join(os.path.dirname(FIN), "zig_dev")
+DEV_VIEW = {"dev": "pub", "dev_cv": "cv", "dev_chk": "chk"}  # étiquette de la remesure -> étiquette de la campagne
+DEV_SEED = SEED + 4600  # rééchantillonnage du rapport au témoin : un générateur par cellule
+ZIG17 = "Zig 0.17"  # « Final » avec les cellules de Zig de la campagne, mesurées par sa version stable
+ZIGV = "Zig 0.18, K4 et K9 seuls"  # « Final » où seules les cellules de K4 et de K9 de Zig sont ramenées par le témoin
+ZIGL = "Zig 0.18, latences du plan"  # « Final » où les latences de K8 naturel de Zig sont ramenées elles aussi
 
 
 def corrections(calc):
@@ -232,8 +249,9 @@ def c_vector(cdict, langs):
 # ------------------------------------------------------------------ données de la campagne
 class Proc(list):
     """Un processus retenu : [médiane de ses répétitions]. Attributs : ps (passe), cp (copie), machine, boot
-    (démarrage), b (effet commun de son groupe dans sa passe, en logarithme : A5, block_effects)."""
-    ps, cp, machine, boot, b = None, 0, None, None, 0.0
+    (démarrage), b (effet commun de son groupe dans sa passe, en logarithme : A5, block_effects), dev (cellule de Zig
+    ramenée à la campagne : graine et rapports appariés au témoin, apply_dev)."""
+    ps, cp, machine, boot, b, dev = None, 0, None, None, 0.0, None
 
     def like(self, value):
         """Un processus de mêmes attributs et d'une autre valeur."""
@@ -301,6 +319,112 @@ def load(view=None):
                 F.lat[tag][r["lang"]].setdefault(key, []).append((r.get("copy", 0), r.get("lat", [])))
     F.blocks = block_effects(F.data)
     return F
+
+
+def dev_ratios():
+    """Remesure de Zig par sa version de développement (docs/V5_2.md, 3 et 4), si la campagne en a une. Pour chaque
+    cellule (étiquette, taille, clé) : les logarithmes des rapports appariés (même passe, même copie) du temps sous la
+    version de développement au temps du témoin, et la moyenne géométrique du témoin sur ces paires. Latences de K8
+    naturel : rapport des médianes de chaque colonne, toutes répétitions confondues. Un processus compte s'il est
+    retenu au sens de load. Sans remesure, ou sous FINAL_ZIG17 : None."""
+    raw = os.path.join(DEV_DIR, "raw", DEV_LANG + ".jsonl")
+    if os.environ.get("FINAL_ZIG17") or not os.path.exists(raw):
+        return None
+    t, lat = defaultdict(lambda: ({}, {})), defaultdict(lambda: ([], []))
+    machines, invalid, n = set(), [], [0, 0]
+    for line in open(raw):
+        r = json.loads(line)
+        side = int(r["construction"] in DEV_VIEW)  # 0 : témoin, 1 : version de développement
+        key = (r["kernel"], r["variant"], r["param"])
+        cell = (DEV_VIEW.get(r["construction"], r["construction"]), r["size"], key)
+        ok = (not r.get("skipped") and r.get("returncode") == 0 and not r.get("oom") and not r.get("timeout")
+              and r.get("n", 0) > 0 and r.get("oks") == ["True"])
+        if not ok:
+            invalid.append([r["construction"], r["size"], "|".join(key), r.get("pass")])
+            continue
+        n[side] += 1
+        machines.add(r.get("machine"))
+        t[cell][side][(r["pass"], r.get("copy", 0))] = r["median"]
+        if key == K8N:
+            lat[cell[:2]][side].extend(r.get("lat", []))
+    logs, witness = {}, {}
+    for cell, (w, d) in t.items():
+        pairs = sorted(set(w) & set(d))
+        if pairs:
+            logs[cell] = np.array([math.log(d[k] / w[k]) for k in pairs])
+            witness[cell] = math.exp(float(np.mean([math.log(w[k]) for k in pairs])))
+    latr = {tag: np.median(np.asarray(d, float), axis=0) / np.median(np.asarray(w, float), axis=0)
+            for tag, (w, d) in lat.items() if w and d}
+    return {"logs": logs, "witness": witness, "lat": latr, "machines": sorted(m for m in machines if m is not None),
+            "invalid": invalid, "processes": n}
+
+
+def apply_dev(F, dev, only=None, lat=False):
+    """Cellules de Zig ramenées aux conditions de la campagne (docs/V5_2.md, 4) : chaque processus de la campagne est
+    multiplié par le rapport de sa cellule (moyenne géométrique de ses rapports appariés) et garde ces rapports, que
+    dev_noise rééchantillonne. Une cellule sans rapport est retirée : elle est absente pour Zig. Renvoie les cellules
+    retirées. only : noyaux auxquels le transport est limité (les autres cellules restent celles de la campagne).
+    lat : chaque colonne des latences de K8 naturel est multipliée par son rapport, comme le prévoyait le plan ; par
+    défaut, elles restent celles de la campagne (docs/V5_2.md, 8)."""
+    absent = []
+    for (cons, size), dl in F.data.items():
+        keys = dl.get(DEV_LANG, {})
+        for key in sorted(keys):
+            if only is not None and key[0] not in only:
+                continue
+            logs = dev["logs"].get((cons, size, key))
+            if logs is None:
+                del keys[key]
+                absent.append([cons, size, "|".join(key)])
+                continue
+            rho, seed = math.exp(float(logs.mean())), [DEV_SEED, zlib.crc32("|".join((cons, size) + key).encode())]
+            keys[key] = [q.like(q[0] * rho) for q in keys[key]]
+            for q in keys[key]:
+                q.dev = (seed, logs)
+    for tag, dl in F.lat.items():
+        lp = dl.get(DEV_LANG, {})
+        if K8N in lp and lat:
+            if tag in dev["lat"] and (tag[0], tag[1], K8N) in dev["logs"]:
+                lp[K8N] = [(c, (np.asarray(rows, float) * dev["lat"][tag]).tolist() if len(rows) else rows)
+                           for c, rows in lp[K8N]]
+            else:
+                del lp[K8N]
+    return absent
+
+
+def dev_noise(procs, nb):
+    """Facteurs, pour les nb rééchantillonnages, du rapport au témoin d'une cellule de Zig ramenée à la campagne
+    (docs/V5_2.md, 4) : ses rapports appariés sont tirés avec remise par un générateur propre à la cellule, et leur
+    moyenne est rapportée à celle de l'estimation ponctuelle. 1 pour toute autre cellule."""
+    dev = getattr(procs[0], "dev", None)
+    if dev is None:
+        return 1.0
+    seed, logs = dev
+    pick = np.random.default_rng(seed).integers(0, len(logs), size=(nb, len(logs)))
+    return np.exp(logs[pick].mean(axis=1) - logs.mean())
+
+
+def dev_summary(dev, F17):
+    """Remesure de Zig, pour le rapport : version, machines, processus retenus, et pour chaque cellule son rapport au
+    témoin, ses paires, l'écart type de leurs logarithmes et le rapport du témoin à ses temps de la campagne."""
+    ver, p = "?", os.path.join(DEV_DIR, "toolchains.txt")
+    if os.path.exists(p):
+        for line in open(p):
+            if line.startswith(DEV_LANG + "-dev"):
+                ver = line.split(None, 1)[1].strip()
+    cells = {}
+    for (cons, size, key), logs in sorted(dev["logs"].items()):
+        camp = F17.procs(cons, size, DEV_LANG, key)
+        cells["|".join((cons, size) + key)] = {
+            "rho": math.exp(float(logs.mean())), "pairs": len(logs),
+            "sd": float(logs.std(ddof=1)) if len(logs) > 1 else 0.0,
+            "witness_vs_campaign": dev["witness"][(cons, size, key)] / gm(camp) if camp else None}
+    w = [c["witness_vs_campaign"] for c in cells.values() if c["witness_vs_campaign"]]
+    return {"version": ver, "machines": dev["machines"], "processes": dev["processes"], "invalid": dev["invalid"],
+            "absent": dev["absent"], "cells": cells,
+            "lat": {"|".join(tag): [float(x) for x in v] for tag, v in sorted(dev["lat"].items())},
+            "witness_vs_campaign": {"median": float(np.median(w)), "min": float(min(w)), "max": float(max(w)),
+                                    "within_10pct": float(np.mean([abs(math.log(x)) <= math.log(1.10) for x in w]))}}
 
 
 def block_effects(data):
@@ -573,7 +697,8 @@ class Arrays3:
                 if nb:
                     pool = pools[(key[0], klass(l))]
                     draws = y.mean() + pool[rng.integers(0, len(pool), size=(nb, len(y)))]
-                    mean[1:, j], mn[1:, j] = np.exp(draws.mean(axis=1)), np.exp(draws.min(axis=1))
+                    f = dev_noise(procs, nb)
+                    mean[1:, j], mn[1:, j] = f * np.exp(draws.mean(axis=1)), f * np.exp(draws.min(axis=1))
             self.t[("mean", key)], self.t[("min", key)] = mean, mn
         self.lat = np.full((nb + 1, len(langs), 3), np.nan)
         for l in langs:
@@ -850,7 +975,8 @@ def new_cells_patch(d, add, allkeys, p, base_seed, a5):
                     g = np.random.default_rng(seed_of(base_seed, key, l, p))
                     pool = pools[(key[0], klass(l))]
                     draws = y.mean() + pool[g.integers(0, len(pool), size=(A.nb, len(y)))]
-                    mean[1:, j], mn[1:, j] = np.exp(draws.mean(axis=1)), np.exp(draws.min(axis=1))
+                    f = dev_noise(procs, A.nb)
+                    mean[1:, j], mn[1:, j] = f * np.exp(draws.mean(axis=1)), f * np.exp(draws.min(axis=1))
             A.t[("mean", key)], A.t[("min", key)] = mean, mn
     return patch
 
@@ -1218,6 +1344,11 @@ def main():
     F = load()
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
+    dev, F17, c3_17 = dev_ratios(), None, c3
+    if dev:  # Zig par sa version de développement (docs/V5_2.md) : cellules ramenées à la campagne par le témoin
+        F17, F = F, load()
+        dev["absent"] = apply_dev(F, dev)
+        c3 = dict(c3, **{DEV_LANG: c3[DEV_LANG + "_master"]})  # règle v1 : vectorisation mesurée sous cette version
     hw, machines = machines_hw(F)
     ebs = [ebounds(hw, p) for p in range(3)]
     hw0 = machines_hw(F, a6=False)[0]  # sans A6 : relevé d'origine de STREAM à 4 fils
@@ -1228,14 +1359,17 @@ def main():
         b3[stat] = (ref, k3_normalized(F, ref, groups), groups)
     fc = forms_cells(LANGS)
     keys = campaign_keys({k: v for k, v in F.data.items() if k[0] == "pub"})
-    hd = position(F, 1, "Base, trois tailles", {})[0]  # avance du générateur principal : la base, taille publiée
-    host = (copy.deepcopy(hd), position(F, 1, "Base, trois tailles", {})[1])
+    Fh = F17 or F  # avance du générateur principal : la base de la campagne, taille publiée
+    hd = position(Fh, 1, "Base, trois tailles", {})[0]
+    host = (copy.deepcopy(hd), position(Fh, 1, "Base, trois tailles", {})[1])
     fill_missing(host[0], LANGS, keys)
     calcs = list(CALCS)
     res = {c: run_calc(c, F, fc, footprint, c3, ebs if corrections(c)["a6"] else ebs0, b3, host, keys)
            for c in calcs}
     if F.gcc:  # C par gcc : mêmes tirages, les cellules de C prises dans ses constructions par gcc
         Fg = load(GCC_VIEW)
+        if dev:
+            apply_dev(Fg, dev)
         b3g = {stat: (ref, k3_normalized(Fg, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
         calcs.append(GCC_CALC)
         res[GCC_CALC] = run_calc(GCC_CALC, Fg, fc, footprint, c3, ebs, b3g, host, keys)
@@ -1243,6 +1377,20 @@ def main():
                "failures": [x for x in Fg.failures if x["lang"] in GCC_VIEW],
                "skipped": [x for x in Fg.skipped if x["lang"] in GCC_VIEW],
                "steal_over_5pct": [x for x in Fg.steal if x[0] in GCC_VIEW]}
+    if dev:  # « Zig 0.17 » : mêmes tirages, les cellules de Zig de la campagne
+        b3s = {stat: (ref, k3_normalized(F17, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
+        calcs.append(ZIG17)
+        res[ZIG17] = run_calc(ZIG17, F17, fc, footprint, c3_17, ebs, b3s, host, keys)
+        Fv = load()  # le transport limité aux deux noyaux dont le code machine change (docs/V5_2.md, 8)
+        apply_dev(Fv, dev, only=("k4", "k9"))
+        b3v = {stat: (ref, k3_normalized(Fv, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
+        calcs.append(ZIGV)
+        res[ZIGV] = run_calc(ZIGV, Fv, fc, footprint, c3, ebs, b3v, host, keys)
+        Fl = load()  # le calcul du plan : les latences de K8 naturel ramenées elles aussi (docs/V5_2.md, 8)
+        apply_dev(Fl, dev, lat=True)
+        b3l = {stat: (ref, k3_normalized(Fl, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
+        calcs.append(ZIGL)
+        res[ZIGL] = run_calc(ZIGL, Fl, fc, footprint, c3, ebs, b3l, host, keys)
     fin = res[FINAL]["order"]
     moved_ = {c: moved(fin, res[c]["order"], LANGS) for c in calcs[1:]}
     out = {"results": res, "moved_more_than_2": moved_, "b3_ref": b3["max"][0],
@@ -1260,12 +1408,15 @@ def main():
            "steal_over_5pct": F.steal, "cpu_models": {m: dict(ps) for m, ps in F.models.items()}}
     if F.gcc:
         out["gcc"] = gcc
+    if dev:
+        out["zig_dev"] = dev_summary(dev, F17)
     # comparaisons : la méthode du 23 novembre (calcul OLD) et, si comparisons.json la porte, la campagne précédente
     out["moved_vs_old"] = moved(res[OLD]["order"], fin, LANGS)
     cp = os.path.join(FIN, "comparisons.json")
     comp = json.load(open(cp)) if os.path.exists(cp) else {}
-    if "previous" in comp:
-        out["replication"] = replication(F, comp["previous"], res[FINAL], comp.get("previous_same_method"))
+    if "previous" in comp:  # à compilateurs égaux : « Zig 0.17 » quand Zig est remesuré par sa version de développement
+        out["replication"] = replication(Fh, comp["previous"], res.get(ZIG17, res[FINAL]),
+                                         comp.get("previous_same_method"))
     os.makedirs(OUTD, exist_ok=True)
     json.dump(out, open(OUT, "w"), indent=1, default=float)
     report(out, calcs)
@@ -1283,10 +1434,12 @@ def nth(n):
 def report(o, calcs):
     R = o["results"]
     f = R[FINAL]
-    L = ["# v5.1 : le classement — résultats", "",
+    zd = o.get("zig_dev")  # Zig par sa version de développement : astérisque, et « Zig 0.17 » pour la réplication
+    star = lambda l: NAMES[l] + ("*" if zd and l == DEV_LANG else "")
+    L = ["# v5.2 : le classement — résultats", "",
          "*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse), `docs/V5.md` "
-         "(campagne rejouée, corrections A5 et A6) et `docs/V5_1.md` (A7 et A8 : mode du code naturel tiré au sort), "
-         "fixés "
+         "(campagne rejouée, corrections A5 et A6), `docs/V5_1.md` (A7 et A8 : mode du code naturel tiré au sort) et "
+         "`docs/V5_2.md` (Zig par sa version de développement), fixés "
          "avant les mesures ou avant leur analyse. Généré par "
          "`analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes "
          "(`results/converge/forms.json`).*", "",
@@ -1299,12 +1452,18 @@ def report(o, calcs):
          "Code par défaut | Contrôle |", "|---|---|---|---|---|---|---|---|---|---|"]
     for i, l in enumerate(f["order"]):
         ahead = f["ahead_next"].get(l)
-        L.append(f"| {i + 1} | {NAMES[l]} | {f['ms_mean'][l]:.1f} | {f['ms0'][l]:.1f} | {f['exp'][l]:.2f} | "
+        L.append(f"| {i + 1} | {star(l)} | {f['ms_mean'][l]:.1f} | {f['ms0'][l]:.1f} | {f['exp'][l]:.2f} | "
                  f"{f['rank90'][l][0]}–{f['rank90'][l][1]} | {'—' if ahead is None else f'{100 * ahead:.0f} %'} | "
                  f"{f['E'][l]:.1f} | {f['D'][l]:.1f} | {f['C'][l]:.1f} |")
     L += ["", "Score : moyenne du score sur les variantes de l'analyse ; il fixe l'ordre. Score au centre, plafond, "
           "code par défaut et contrôle : poids et choix principaux, estimation ponctuelle. Rang espéré : rang moyen sur "
           "les variantes.", ""]
+    if zd:
+        z17 = R[ZIG17]
+        L += [f"\\* Zig est mesuré, par exception, par sa version de développement {zd['version']} (`docs/V5_2.md`) : "
+              "ses temps sont ceux de la campagne, multipliés cellule par cellule par le rapport mesuré à côté d'un "
+              f"témoin ; ses latences de K8 naturel restent celles de la campagne. Avec sa version stable, celle de la "
+              f"campagne (« Zig 0.17 ») : {nth(place(z17, DEV_LANG))}, score {z17['ms_mean'][DEV_LANG]:.1f}.", ""]
     if f.get("mode_share") is not None:
         L += ["Mode du code naturel, tiré dans chaque variante (A7, A8) : "
               + ", ".join(f"{m} dans {100 * x:.1f} % des variantes" for m, x in zip(DRAW_MODES, f["mode_share"]))
@@ -1327,8 +1486,12 @@ def report(o, calcs):
         L.append(f"| {NAMES[l]} | " + " | ".join(cells) + " |")
     L += ["", "Chaque case : place dans le calcul ; ** : plus de deux places d'écart avec « Final ». Ordre des lignes : "
           "« Final ». « Sans A1 » à « Sans A8 » : « Final » sans une de ses corrections ; « Méthode du 23 novembre » : "
-          "sans aucune et classée au rang moyen" + (" ; « Campagne précédente » : son classement publié." if rp
-                                                    else "."), "",
+          "sans aucune et classée au rang moyen" + (" ; « Zig 0.17 » : « Final » avec les cellules de Zig de la "
+                                                    "campagne ; « Zig 0.18, K4 et K9 seuls » : le rapport au témoin "
+                                                    "appliqué à ces deux noyaux seulement ; « Zig 0.18, latences du "
+                                                    "plan » : les latences de K8 naturel de Zig multipliées elles "
+                                                    "aussi par leur rapport" if zd else "")
+          + (" ; « Campagne précédente » : son classement publié." if rp else "."), "",
           "## Rangs qui bougent de plus de deux places par rapport à « Final »", ""]
     for c in calcs[1:]:
         mv = o["moved_more_than_2"][c]
@@ -1340,8 +1503,9 @@ def report(o, calcs):
         versus.append(("la campagne précédente, classement publié", rp["moved"]))
     if sm:
         versus.append(("la campagne précédente recalculée par la méthode de celle-ci", sm["moved"]))
-    for name, mv in versus:
-        L.append(f"* Final contre {name} : " + (", ".join(f"{NAMES[l]} {nth(a)} → {nth(b)}" for l, (a, b) in
+    for i, (name, mv) in enumerate(versus):  # contre la campagne précédente : à compilateurs égaux (« Zig 0.17 »)
+        who = "« Zig 0.17 »" if zd and i else "Final"
+        L.append(f"* {who} contre {name} : " + (", ".join(f"{NAMES[l]} {nth(a)} → {nth(b)}" for l, (a, b) in
                                                           sorted(mv.items(), key=lambda x: x[1][1])) or "aucun"))
     if sm:
         L.append("* Campagne précédente, du classement publié à son recalcul : "
@@ -1359,9 +1523,12 @@ def report(o, calcs):
                      f"{100 * r['prec_full']['c']['cpp']:.1f} % | {r['E']['c']:.1f} | {100 * r['Dparts']['c']['D1']:.1f} | "
                      + " | ".join(f"{100 * r['Ek']['c'][k]:.0f}" for k in ks) + " |")
     if rp:
-        pv = rp["previous"]
-        L += ["", "## Réplication : cette campagne et la précédente", "",
-              f"Cellules mesurées dans les deux campagnes : {rp['cells']}. Rapport des temps (cette campagne sur la "
+        pv, f0 = rp["previous"], f
+        f = R.get(ZIG17, f)  # la campagne telle qu'elle a été mesurée : Zig par sa version stable, comme la précédente
+        L += ["", "## Réplication : cette campagne et la précédente", ""]
+        if zd:
+            L += ["Les deux campagnes sont comparées à compilateurs égaux : pour celle-ci, le calcul « Zig 0.17 ».", ""]
+        L += [f"Cellules mesurées dans les deux campagnes : {rp['cells']}. Rapport des temps (cette campagne sur la "
               f"précédente, estimations ponctuelles) : médiane {rp['median']:.3f} ; {100 * rp['within_10pct']:.0f} % des "
               "cellules à moins de 10 % de cette médiane.", "",
               "| Langage | Place | Précédente, recalculée | Précédente, publiée | Score | Précédent, recalculé | "
@@ -1376,6 +1543,29 @@ def report(o, calcs):
         L += ["", "« Publiée » : le classement de la campagne précédente tel qu'il était publié ; « recalculée » : la "
               "même campagne recalculée par la méthode de celle-ci (comparaison à méthode égale). Le plafond, donné au "
               "centre, est le même dans les deux."]
+        f = f0
+    if zd:
+        wc, kinds = zd["witness_vs_campaign"], {}
+        for name, c in zd["cells"].items():
+            cons, size, k, v, q = name.split("|")
+            row = kinds.setdefault((k, cons, v, q), ["–"] * 3)
+            row[POS[k].index(size) if k in POS else 1] = f"{c['rho']:.2f} ({c['pairs']})"
+        L += ["", "## Zig par sa version de développement", "",
+              f"Version {zd['version']}, mesurée hors campagne sur la machine {', '.join(zd['machines'])} avec son "
+              f"témoin, la version de la campagne remesurée dans les mêmes groupes : {zd['processes'][1]} et "
+              f"{zd['processes'][0]} processus retenus, {len(zd['invalid'])} écartés, {len(zd['absent'])} cellules "
+              "sans rapport. Chaque case : rapport du temps sous la version de développement au temps du témoin "
+              "(moyenne géométrique des rapports appariés, et nombre de paires) ; les processus de Zig de la campagne "
+              "sont multipliés par ce rapport.", "",
+              "| Noyau | Étiquette | Variante | " + " | ".join(POS_NAMES) + " |", "|---|---|---|---|---|---|"]
+        for (k, cons, v, q), row in sorted(kinds.items()):
+            L.append(f"| {k.upper()} | {cons} | {v}{' ' + q if q else ''} | " + " | ".join(row) + " |")
+        L += ["", f"Le témoin contre ses temps de la campagne : rapport médian {wc['median']:.2f}, de {wc['min']:.2f} "
+              f"à {wc['max']:.2f} ; {100 * wc['within_10pct']:.0f} % des cellules à moins de 10 %. Le transport annule "
+              "cet écart. Latences de K8 naturel (p50, p90, p99, p99,9, maximum), rapport des médianes, appliqué dans "
+              "le seul calcul « Zig 0.18, latences du plan » : "
+              + " ; ".join(f"{name.replace('|', ', ')} : " + ", ".join(f"{x:.2f}" for x in v)
+                           for name, v in zd["lat"].items()) + "."]
     nat = [(n, R[c]) for n, c in (("mode publié", "Sans R1"), ("R1'", "R1' au lieu de R1")) if c in R]
     L += ["", "## Plafond par noyau et parts du code par défaut (« Final », au centre)", "",
           "| Langage | " + " | ".join(k.upper() for k in E_V2) + " | D1 | D2 | D3 | D4 |"
