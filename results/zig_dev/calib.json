@@ -79,6 +79,14 @@
 "ts": "2026-11-26T17:42:20",
 "warmup": 1
 },
+"zig|chk|k9|large|natural|": {
+"machine": "39",
+"reps": 6,
+"status": "ok",
+"t_cal": 0.492670513,
+"ts": "2026-11-26T17:43:00",
+"warmup": 1
+},
 "zig|chk|k9|small|natural|": {
 "machine": "39",
 "reps": 10000,
@@ -149,6 +157,14 @@
 "status": "ok",
 "t_cal": 0.108186922,
 "ts": "2026-11-26T17:42:18",
+"warmup": 1
+},
+"zig|cv|k9|large|mt_pool|": {
+"machine": "39",
+"reps": 23,
+"status": "ok",
+"t_cal": 0.125536432,
+"ts": "2026-11-26T17:42:59",
 "warmup": 1
 },
 "zig|cv|k9|small|mt_pool|": {
@@ -239,6 +255,14 @@
 "ts": "2026-11-26T17:42:26",
 "warmup": 1
 },
+"zig|dev_chk|k9|large|natural|": {
+"machine": "39",
+"reps": 8,
+"status": "ok",
+"t_cal": 0.343095872,
+"ts": "2026-11-26T17:43:07",
+"warmup": 1
+},
 "zig|dev_chk|k9|small|natural|": {
 "machine": "39",
 "reps": 10000,
@@ -309,6 +333,14 @@
 "status": "ok",
 "t_cal": 0.094721586,
 "ts": "2026-11-26T17:42:23",
+"warmup": 1
+},
+"zig|dev_cv|k9|large|mt_pool|": {
+"machine": "39",
+"reps": 26,
+"status": "ok",
+"t_cal": 0.113828232,
+"ts": "2026-11-26T17:43:05",
 "warmup": 1
 },
 "zig|dev_cv|k9|small|mt_pool|": {
@@ -525,6 +557,30 @@
 "status": "ok",
 "t_cal": 0.19371106,
 "ts": "2026-11-26T17:42:22",
+"warmup": 1
+},
+"zig|dev|k9|large|mt|": {
+"machine": "39",
+"reps": 25,
+"status": "ok",
+"t_cal": 0.119483618,
+"ts": "2026-11-26T17:43:04",
+"warmup": 1
+},
+"zig|dev|k9|large|natural|": {
+"machine": "39",
+"reps": 5,
+"status": "ok",
+"t_cal": 0.526770501,
+"ts": "2026-11-26T17:43:02",
+"warmup": 1
+},
+"zig|dev|k9|large|tuned|": {
+"machine": "39",
+"reps": 8,
+"status": "ok",
+"t_cal": 0.344140145,
+"ts": "2026-11-26T17:43:03",
 "warmup": 1
 },
 "zig|dev|k9|small|mt|": {
@@ -757,6 +813,30 @@
 "status": "ok",
 "t_cal": 0.17654197,
 "ts": "2026-11-26T17:42:16",
+"warmup": 1
+},
+"zig|pub|k9|large|mt|": {
+"machine": "39",
+"reps": 26,
+"status": "ok",
+"t_cal": 0.112464479,
+"ts": "2026-11-26T17:42:58",
+"warmup": 1
+},
+"zig|pub|k9|large|natural|": {
+"machine": "39",
+"reps": 7,
+"status": "ok",
+"t_cal": 0.392588528,
+"ts": "2026-11-26T17:42:55",
+"warmup": 1
+},
+"zig|pub|k9|large|tuned|": {
+"machine": "39",
+"reps": 8,
+"status": "ok",
+"t_cal": 0.341401857,
+"ts": "2026-11-26T17:42:57",
 "warmup": 1
 },
 "zig|pub|k9|small|mt|": {
