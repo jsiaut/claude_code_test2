@@ -105,13 +105,14 @@ def variant_file(path):
 def cells(lang, cons, kernel):
     """Cellules (variante, paramètre) d'un noyau qui portent l'étiquette cons : variantes publiées (pub ; plan commun
     et extra_variants), formes du catalogue (cv ; cv_variants), code naturel dans les modes R1 et R1' (chk, unc) et sa
-    forme contiguë de K9 dans ces modes (cv_chk, cv_unc) ; pour C par gcc, les mêmes (gcc, gcc_cv, gcc_chk)."""
-    if cons in ("pub", "gcc"):
+    forme contiguë de K9 dans ces modes (cv_chk, cv_unc) ; pour C par gcc, les mêmes (gcc, gcc_cv, gcc_chk), comme pour
+    Zig par sa version de développement (dev, dev_cv, dev_chk : MS_DEV=1, docs/V5_2.md)."""
+    if cons in ("pub", "gcc", "dev"):
         extra = variant_file(os.path.join(ROOT, "bench", lang, "extra_variants")).get(kernel, [])
         return [(v, q) for v, q in D.PLAN[kernel] + extra if (kernel, v, q) in NEEDED]
-    if cons in ("cv", "gcc_cv"):
+    if cons in ("cv", "gcc_cv", "dev_cv"):
         return variant_file(os.path.join(ROOT, "bench", lang, "cv_variants")).get(kernel, [])
-    if cons in ("chk", "unc", "gcc_chk"):
+    if cons in ("chk", "unc", "gcc_chk", "dev_chk"):
         return NATURAL.get(kernel, [])
     if cons in ("cv_chk", "cv_unc"):
         return [("natural_flat", "")] if kernel == "k9" else []

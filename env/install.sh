@@ -106,6 +106,17 @@ step_zig() {
   untar zig-x86_64-linux-0.17.0.tar.xz /opt/zig
 }
 
+# Version de développement de Zig : exception de la v5.2 (docs/V5_2.md), à côté de la 0.17.0 qui reste son témoin.
+# ziglang.org ne garde pas ses archives de développement comme ses versions stables.
+step_zigdev() {
+  if has "0.18.0-dev.1298+4a0817482" /opt/zig-dev/zig version; then return; fi
+  say "Zig 0.18.0-dev.1298+4a0817482"
+  fetch https://ziglang.org/builds/zig-x86_64-linux-0.18.0-dev.1298+4a0817482.tar.xz \
+    zig-x86_64-linux-0.18.0-dev.1298+4a0817482.tar.xz \
+    e9a2ca22a64f89be010442fd18edbab647256684a395685279b13de02e7528f7
+  untar zig-x86_64-linux-0.18.0-dev.1298+4a0817482.tar.xz /opt/zig-dev
+}
+
 step_go() {
   if has "go1.27.3" /opt/go127/bin/go version; then return; fi
   say "Go 1.27.3"
@@ -346,7 +357,7 @@ step_data() {
   (cd /opt/msdata && sha256sum --quiet -c "$ROOT/env/msdata.sha256")
 }
 
-STEPS="apt gcc16 llvm23 zig go node julia nim jdk dotnet swift odin c3 rust fpc lua mojo python ghc ocaml ldc chapel cbqn php data"
+STEPS="apt gcc16 llvm23 zig zigdev go node julia nim jdk dotnet swift odin c3 rust fpc lua mojo python ghc ocaml ldc chapel cbqn php data"
 
 main() {
   if [ "${1:-}" = "--list" ]; then echo "$STEPS"; exit 0; fi

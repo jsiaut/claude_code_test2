@@ -3,12 +3,15 @@
 
 Une source par langage (bench/<langage>), construite dans chaque mode : pub (mode publié), chk et unc (modes R1 et R1' :
 MS_MODE de build.sh ; Julia, sans construction, par l'option de son lanceur), et pour C, gcc et gcc_chk (la même source
-par gcc 16 : MS_CC de build.sh). Jeux de tailles (tools/sizes/sizes.py, SETS) : pub, small, large. Langages compilés :
+par gcc 16 : MS_CC de build.sh). Sous MS_DEV=1 seulement, pour Zig, dev et dev_chk (la même source par sa version de
+développement : MS_ZIG de build.sh ; docs/V5_2.md, 3) : sans cette variable, le plan est celui de la campagne publiée.
+Jeux de tailles (tools/sizes/sizes.py, SETS) : pub, small, large. Langages compilés :
 paramètres MS_* du jeu passés à build.sh (sans eux, la taille publiée) ; langages sans construction : constantes de
 taille substituées dans la copie de la construction (tools/sizes/patches.py), puis build.sh (vérification de syntaxe).
 
 Les enregistrements de la campagne portent une étiquette qui dit d'où vient la cellule (CELLS : pub, cv, chk, unc,
-cv_chk, cv_unc, gcc, gcc_cv, gcc_chk) ; plusieurs étiquettes partagent une construction (BUILD_OF).
+cv_chk, cv_unc, gcc, gcc_cv, gcc_chk, dev, dev_cv, dev_chk) ; plusieurs étiquettes partagent une construction
+(BUILD_OF).
 
 Chaque construction part des fichiers suivis par git, qui doivent être identiques à ceux du dernier commit (une source
 modifiée et non commitée est refusée) ; elle garde l'empreinte de ses entrées (.source_hash) et n'est refaite que si
@@ -39,7 +42,8 @@ UNC = ["swift", "ada", "nim", "odin", "julia", "mojo", "go", "ocaml", "d"]   # R
 CV_CHK = ["cpp", "d"]                                                     # R2 dans le mode R1
 CV_UNC = ["nim", "mojo", "swift", "go", "ocaml", "d"]                     # R2 dans le mode R1'
 GCC = ["c"]                                                               # C aussi par gcc (docs/V5.md, S2)
-BUILD_OF = {"cv": "pub", "cv_chk": "chk", "cv_unc": "unc", "gcc_cv": "gcc"}  # étiquette -> construction partagée
+DEV = ["zig"] if os.environ.get("MS_DEV") else []                         # version de développement (docs/V5_2.md, 3)
+BUILD_OF = {"cv": "pub", "cv_chk": "chk", "cv_unc": "unc", "gcc_cv": "gcc", "dev_cv": "dev"}  # étiquette -> construction
 INTERP = {"python", "lua", "php", "bqn", "js", "julia"}
 SETS = ["pub", "small", "large"]
 MAIN = {"python": "ms.py", "lua": "ms.lua", "php": "ms.php", "bqn": "ms.bqn", "js": "ms.js", "julia": "ms.jl"}
@@ -49,7 +53,8 @@ _lock = threading.Lock()
 def constructions(lang):
     """Étiquettes des cellules d'un langage (une par origine de cellule : tools/final/campaign.py, cells)."""
     return ["pub", "cv"] + [c for c, lst in (("chk", CHK), ("unc", UNC), ("cv_chk", CV_CHK), ("cv_unc", CV_UNC),
-                                             ("gcc", GCC), ("gcc_cv", GCC), ("gcc_chk", GCC)) if lang in lst]
+                                             ("gcc", GCC), ("gcc_cv", GCC), ("gcc_chk", GCC),
+                                             ("dev", DEV), ("dev_cv", DEV), ("dev_chk", DEV)) if lang in lst]
 
 
 def builds(lang):
@@ -67,7 +72,7 @@ def source_dir(lang):
 
 
 def mode_of(cons):
-    return {"chk": "chk", "unc": "unc", "gcc_chk": "chk"}.get(BUILD_OF.get(cons, cons))
+    return {"chk": "chk", "unc": "unc", "gcc_chk": "chk", "dev_chk": "chk"}.get(BUILD_OF.get(cons, cons))
 
 
 def build_dir(lang, cons, sset):
@@ -169,6 +174,8 @@ def build(lang, cons, sset):
         env["MS_MODE"] = mode
     if cons.startswith("gcc"):
         env["MS_CC"] = "gcc"
+    if cons.startswith("dev"):
+        env["MS_ZIG"] = "dev"
     if sset != "pub" and lang not in INTERP:
         env.update({k: str(v) for k, v in S.set_params(sset).items()})
         env["MS_SIZE_SET"] = sset

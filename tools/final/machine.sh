@@ -8,7 +8,7 @@
 # 5. toutes les constructions (tools/final/build.py), puis comparaison de leurs empreintes avec celles des machines
 #    précédentes (tools/final/compare_builds.py -> builds_compare.txt).
 # Répertoire de la campagne : results/final, ou celui de MS_CAMPAIGN_DIR. Refuse une machine d'un autre modèle que
-# celui de la campagne.
+# celui de la campagne. MS_LANGS=a,b : ne construit que ces langages (remesure d'un langage : docs/V5_2.md, 3).
 set -e
 cd "$(dirname "$0")/../.."
 N=$1
@@ -23,6 +23,6 @@ echo "$N" > /dev/shm/ms_final_machine
 mkdir -p "$R"
 sh tools/versions.sh > "$R/toolchains.txt"
 python3 tools/final/campaign.py b3 "arrivée de la machine $N"
-python3 tools/final/build.py --jobs 3 --footprint
+python3 tools/final/build.py --jobs 3 --footprint ${MS_LANGS:+--langs "$MS_LANGS"}
 python3 tools/final/compare_builds.py
 sh tools/final/save_progress.sh
