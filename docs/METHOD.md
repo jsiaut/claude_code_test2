@@ -251,9 +251,10 @@ plus rapide parmi les formes admises.
   rééchantillonnées par processus puis par répétition, sans cette correction.
 * **20 000 variantes de l'analyse.** Chacune tire : un rééchantillonnage ; six choix de méthode à deux options
   (estimateur : moyenne géométrique ou minimum des processus ; référence du plafond ; formes de D3 et de D4 ;
-  agrégation ; mode du code naturel, R1 ou mode publié : A7, par un générateur à part) ; les poids des piliers et ceux des trois tailles (autour de leurs valeurs du centre dans une variante sur
-  deux, uniformes sur le simplexe dans l'autre), ceux des noyaux, des parts de D et des catégories de la grille (autour
-  de leurs valeurs du centre) ; un bruit de jugement, chaque case jugée changeant de note avec une probabilité de 10 %.
+  agrégation ; mode du code naturel, R1 ou mode publié : A7, par un générateur à part) ; les poids des piliers et ceux
+  des trois tailles (autour de leurs valeurs du centre dans une variante sur deux, uniformes sur le simplexe dans
+  l'autre), ceux des noyaux, des parts de D et des catégories de la grille (autour de leurs valeurs du centre) ; un
+  bruit de jugement, chaque case jugée changeant de note avec une probabilité de 10 %.
 * **Ce qui est publié.** Le **score** affiché est la moyenne du score sur les variantes, et l'ordre est le sien (à
   égalité, le rang moyen départage). Jusqu'au 24 novembre, l'ordre était le rang moyen et le score affiché celui du
   centre, qui ne suivait pas toujours l'ordre ([`V4_1.md`](V4_1.md), 9) ; les deux ordres coïncident pour les 25
@@ -300,8 +301,8 @@ python3 analysis/final_v4.py
 python3 analysis/charts_final.py
 ```
 
-Le premier contrôle prend environ 30 s, le second de 17 à 25 min selon la machine (classement complet comparé à
-l'octet près) ; aucun ne demande de chaîne de compilation. Les deux commandes suivantes réécrivent
+Le premier contrôle prend environ 30 s, le second une vingtaine de minutes (19 min sur la machine 38 ; classement
+complet comparé à l'octet près) ; aucun ne demande de chaîne de compilation. Les deux commandes suivantes réécrivent
 `results/final/analysis.json`, `results/report_final.md` et le graphique.
 
 Remesurer demande les 25 chaînes de `env/toolchains.txt`, aux chemins que lisent les `build.sh`, et les données de
