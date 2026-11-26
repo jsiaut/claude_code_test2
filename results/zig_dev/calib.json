@@ -87,6 +87,14 @@
 "ts": "2026-11-26T17:43:00",
 "warmup": 1
 },
+"zig|chk|k9|pub|natural|": {
+"machine": "39",
+"reps": 185,
+"status": "ok",
+"t_cal": 0.016188877,
+"ts": "2026-11-26T17:43:09",
+"warmup": 1
+},
 "zig|chk|k9|small|natural|": {
 "machine": "39",
 "reps": 10000,
@@ -165,6 +173,14 @@
 "status": "ok",
 "t_cal": 0.125536432,
 "ts": "2026-11-26T17:42:59",
+"warmup": 1
+},
+"zig|cv|k9|pub|mt_pool|": {
+"machine": "39",
+"reps": 584,
+"status": "ok",
+"t_cal": 0.005128645,
+"ts": "2026-11-26T17:43:09",
 "warmup": 1
 },
 "zig|cv|k9|small|mt_pool|": {
@@ -263,6 +279,14 @@
 "ts": "2026-11-26T17:43:07",
 "warmup": 1
 },
+"zig|dev_chk|k9|pub|natural|": {
+"machine": "39",
+"reps": 226,
+"status": "ok",
+"t_cal": 0.01323805,
+"ts": "2026-11-26T17:43:09",
+"warmup": 1
+},
 "zig|dev_chk|k9|small|natural|": {
 "machine": "39",
 "reps": 10000,
@@ -341,6 +365,14 @@
 "status": "ok",
 "t_cal": 0.113828232,
 "ts": "2026-11-26T17:43:05",
+"warmup": 1
+},
+"zig|dev_cv|k9|pub|mt_pool|": {
+"machine": "39",
+"reps": 570,
+"status": "ok",
+"t_cal": 0.005261167,
+"ts": "2026-11-26T17:43:09",
 "warmup": 1
 },
 "zig|dev_cv|k9|small|mt_pool|": {
@@ -581,6 +613,30 @@
 "status": "ok",
 "t_cal": 0.344140145,
 "ts": "2026-11-26T17:43:03",
+"warmup": 1
+},
+"zig|dev|k9|pub|mt|": {
+"machine": "39",
+"reps": 464,
+"status": "ok",
+"t_cal": 0.006464973,
+"ts": "2026-11-26T17:43:09",
+"warmup": 1
+},
+"zig|dev|k9|pub|natural|": {
+"machine": "39",
+"reps": 211,
+"status": "ok",
+"t_cal": 0.014165758,
+"ts": "2026-11-26T17:43:09",
+"warmup": 1
+},
+"zig|dev|k9|pub|tuned|": {
+"machine": "39",
+"reps": 228,
+"status": "ok",
+"t_cal": 0.013136558,
+"ts": "2026-11-26T17:43:09",
 "warmup": 1
 },
 "zig|dev|k9|small|mt|": {
@@ -837,6 +893,30 @@
 "status": "ok",
 "t_cal": 0.341401857,
 "ts": "2026-11-26T17:42:57",
+"warmup": 1
+},
+"zig|pub|k9|pub|mt|": {
+"machine": "39",
+"reps": 404,
+"status": "ok",
+"t_cal": 0.007407871,
+"ts": "2026-11-26T17:43:09",
+"warmup": 1
+},
+"zig|pub|k9|pub|natural|": {
+"machine": "39",
+"reps": 123,
+"status": "ok",
+"t_cal": 0.024311154,
+"ts": "2026-11-26T17:43:09",
+"warmup": 1
+},
+"zig|pub|k9|pub|tuned|": {
+"machine": "39",
+"reps": 232,
+"status": "ok",
+"t_cal": 0.012894392,
+"ts": "2026-11-26T17:43:09",
 "warmup": 1
 },
 "zig|pub|k9|small|mt|": {
