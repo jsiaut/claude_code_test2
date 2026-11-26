@@ -1,11 +1,11 @@
-# Méthode du classement (v5)
+# Méthode du classement (v5.1)
 
 *État au 26 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
 été fixée par étapes, chacune par un plan poussé avant ses mesures ou ses calculs ([`HISTORY.md`](HISTORY.md)). Le plan
 de la campagne dont viennent les mesures, avec ses écarts datés (dont les corrections A5 et A6) et ses résultats, est
 [`V5.md`](V5.md) ; celui de la campagne précédente, dont elle reprend le protocole, [`V4_FINAL.md`](V4_FINAL.md) ;
-celui des corrections A1 à A4 de l'analyse, [`V4_1.md`](V4_1.md) ; le contrat des noyaux est [`SPEC.md`](SPEC.md) ; le
-calcul est `analysis/final_v4.py`.*
+ceux des autres corrections de l'analyse, [`V4_1.md`](V4_1.md) (A1 à A4) et [`V5_1.md`](V5_1.md) (A7) ; le contrat
+des noyaux est [`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
 
 ## 1. Ce qui est classé
 
@@ -135,9 +135,13 @@ conteneur par défaut, aucune annotation de performance ([`NATURAL.md`](NATURAL.
   | FreePascal | `-O3` | `-Cr -Co` |
 
   Les 17 autres gardent déjà leurs vérifications. La règle égalise la politique, pas la liste des vérifications, qui
-  fait partie du langage : l'accès par pointeur de C et de C++ reste sans vérification. Les formes du plafond gardent
-  le mode publié. **R1'**, en sensibilité : aucune vérification là où une option les retire (construction `unc` :
-  Swift, Ada, Nim, Odin, Julia, Mojo, Go, OCaml, D).
+  fait partie du langage : l'accès par pointeur de C et de C++ reste sans vérification, et les options ne couvrent pas
+  la même chose d'une chaîne à l'autre (`-O safe` teste le débordement des entiers en Zig ; rustc a l'option, que son
+  mode de publication retire et que R1 n'active pas). Les formes du plafond gardent le mode publié.
+  **A7, mode tiré au sort.** Les mesures ne tranchent pas entre R1 et le mode publié de chaque chaîne, et ce choix
+  déplace un langage de cinq places ([`V5_1.md`](V5_1.md)) : chaque variante de l'analyse prend le code naturel sous
+  R1 ou dans le mode publié, à probabilité 1/2 (9) ; le centre reste sous R1. **R1'**, en sensibilité : aucune
+  vérification là où une option les retire (construction `unc` : Swift, Ada, Nim, Odin, Julia, Mojo, Go, OCaml, D).
 * **R2, stencil naturel contigu.** K9 naturel est une grille contiguë pour tous ; les 13 langages dont l'idiome est un
   tableau de tableaux reçoivent la variante `natural_flat` (tableau 1D de leur conteneur par défaut, indexé `i*M + j`).
 * **R3.** K4 admet une forme `tuned`, SIMD explicite compris ; aucune forme n'est en assembleur en ligne.
@@ -222,7 +226,8 @@ plus rapide parmi les formes admises.
   plusieurs fois trop haut). K3 suit R4.
 * **Code par défaut.** D = 100 × (0,5 D1 + 0,15 D2 + 0,15 D3 + 0,2 D4).
   * D1, code naturel : comme le plafond, avec la seule variante naturelle (K1, K4, K5, Q6, Q1, K7, K8, K9), rapportée
-    au meilleur code naturel des 25 langages à chaque taille (A3 ; à la frontière du plafond jusqu'au 23 novembre).
+    au meilleur code naturel des 25 langages à chaque taille (A3 ; à la frontière du plafond jusqu'au 23 novembre),
+    dans le mode que tire la variante (A7 : R1 ou mode publié de chaque chaîne ; R1 au centre).
   * D2, coût de structure : moyenne géométrique de min(1, 64 / octets par particule) (`results/footprint.json`) et de
     min(1, t naturel / t naturel permuté) sur K1, ce second terme aux trois tailles.
   * D3, prévisibilité : sur les latences des requêtes de K8 naturel, moyenne géométrique de (meilleur p99,9 / p99,9)
@@ -244,9 +249,9 @@ plus rapide parmi les formes admises.
   d'une passe à l'autre est commun à toutes les cellules du groupe et s'annule dans leurs rapports : ce n'est pas un
   bruit propre à chaque cellule. Les références restent celles des estimations ponctuelles. Les latences sont
   rééchantillonnées par processus puis par répétition, sans cette correction.
-* **20 000 variantes de l'analyse.** Chacune tire : un rééchantillonnage ; cinq choix de méthode à deux options
+* **20 000 variantes de l'analyse.** Chacune tire : un rééchantillonnage ; six choix de méthode à deux options
   (estimateur : moyenne géométrique ou minimum des processus ; référence du plafond ; formes de D3 et de D4 ;
-  agrégation) ; les poids des piliers et ceux des trois tailles (autour de leurs valeurs du centre dans une variante sur
+  agrégation ; mode du code naturel, R1 ou mode publié : A7, par un générateur à part) ; les poids des piliers et ceux des trois tailles (autour de leurs valeurs du centre dans une variante sur
   deux, uniformes sur le simplexe dans l'autre), ceux des noyaux, des parts de D et des catégories de la grille (autour
   de leurs valeurs du centre) ; un bruit de jugement, chaque case jugée changeant de note avec une probabilité de 10 %.
 * **Ce qui est publié.** Le **score** affiché est la moyenne du score sur les variantes, et l'ordre est le sien (à
@@ -254,20 +259,22 @@ plus rapide parmi les formes admises.
   centre, qui ne suivait pas toujours l'ordre ([`V4_1.md`](V4_1.md), 9) ; les deux ordres coïncident pour les 25
   langages du classement publié. Le **rang plausible** est l'intervalle des rangs dans 90 % des variantes. « Devance le
   suivant » est la part des variantes où un langage passe devant celui de la ligne suivante. Les piliers sont donnés au
-  centre (poids et choix principaux, estimation ponctuelle). Les **étages** : une frontière sépare deux langages voisins
-  si chaque langage au-dessus devance chaque langage au-dessous dans au moins 95 % des variantes.
+  centre (poids et choix principaux, estimation ponctuelle) ; le code naturel y est sous R1, et il est donné à côté
+  dans le mode publié. Les **étages** : une frontière sépare deux langages voisins si chaque langage au-dessus devance
+  chaque langage au-dessous dans au moins 95 % des variantes.
 * **Reproductibilité.** Les graines sont fixes : le calcul redonne ses sorties à l'octet près (`tools/check.sh`).
 
 ## 10. Sensibilités publiées
 
-`results/report_final.md` donne, à côté du classement, la place de chaque langage dans vingt autres calculs faits
-avec les mêmes tirages : formes publiées seules et code naturel publié à trois tailles (« Base ») ; « Final » sans une
-règle à la fois (sans les tailles, sans R1, sans R2, sans C1, sans R4) ; R1' au lieu de R1 ; une taille seule (petite,
-grande) ; sélection indépendante (la forme de chaque cellule choisie sur la passe 0, estimée sur les passes 1 et 2) ; D3
-et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans une correction à la fois
-(« Sans A1 » à « Sans A6 ») ; sans aucune et classé au rang moyen (« Méthode du 23 novembre », celle du classement
-publié ce jour-là) ; « C par gcc », où toutes les cellules de C viennent de ses constructions par gcc, la grille et les
-autres langages ne changeant pas.
+`results/report_final.md` donne, à côté du classement, la place de chaque langage dans vingt et un autres calculs
+faits avec les mêmes tirages : formes publiées seules et code naturel publié à trois tailles (« Base ») ; « Final »
+sans une règle à la fois (sans les tailles, sans R2, sans C1, sans R4) ; le code naturel dans un seul mode pour toutes
+les variantes (« Sans R1 » : le mode publié ; « Sans A7 » : R1 ; « R1' au lieu de R1 » : R1') ; une taille seule
+(petite, grande) ; sélection indépendante (la forme de chaque cellule choisie sur la passe 0, estimée sur les passes 1
+et 2) ; D3 et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans une correction
+à la fois (« Sans A1 » à « Sans A7 ») ; sans aucune et classé au rang moyen (« Méthode du 23 novembre », celle du
+classement publié ce jour-là) ; « C par gcc », où toutes les cellules de C viennent de ses constructions par gcc, la
+grille et les autres langages ne changeant pas.
 
 Le rapport donne aussi la **réplication** : la campagne précédente, telle qu'elle était publiée et recalculée par la
 méthode de celle-ci (`results/final/comparisons.json`, écrit par les options `--extract` et `--extract-same` de
