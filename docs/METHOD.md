@@ -1,11 +1,12 @@
-# Méthode du classement (v5.1)
+# Méthode du classement (v5.2)
 
 *État au 26 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
 été fixée par étapes, chacune par un plan poussé avant ses mesures ou ses calculs ([`HISTORY.md`](HISTORY.md)). Le plan
 de la campagne dont viennent les mesures, avec ses écarts datés (dont les corrections A5 et A6) et ses résultats, est
 [`V5.md`](V5.md) ; celui de la campagne précédente, dont elle reprend le protocole, [`V4_FINAL.md`](V4_FINAL.md) ;
-ceux des autres corrections de l'analyse, [`V4_1.md`](V4_1.md) (A1 à A4) et [`V5_1.md`](V5_1.md) (A7 et A8) ; le
-contrat des noyaux est [`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
+ceux des autres corrections de l'analyse, [`V4_1.md`](V4_1.md) (A1 à A4) et [`V5_1.md`](V5_1.md) (A7 et A8) ; celui
+de l'exception faite pour Zig, [`V5_2.md`](V5_2.md) ; le contrat des noyaux est [`SPEC.md`](SPEC.md) ; le calcul est
+`analysis/final_v4.py`.*
 
 ## 1. Ce qui est classé
 
@@ -195,6 +196,18 @@ campagne publiée).
   tourne pendant la campagne.
 * **Volume.** 3 106 cellules et 10 158 processus, dont 128 cellules et 420 processus pour C par gcc, du 25 novembre,
   6 h 12, au 26 novembre, 10 h 30 (UTC), sur la machine 38, sans redémarrage ; aucun processus en échec.
+* **Exception : Zig par sa version de développement** ([`V5_2.md`](V5_2.md)). Les chaînes sont les dernières versions
+  stables au 28 octobre 2026. Zig seul est classé avec sa version de développement, 0.18.0-dev.1298, parce que sa
+  version stable désactive le vectoriseur de boucles de LLVM ; il porte un astérisque. Il est remesuré hors campagne
+  (`results/zig_dev`, variable `MS_DEV=1`) par les mêmes outils, en six passes : chaque groupe mesure ses cellules par
+  la version de développement (étiquettes `dev`, `dev_cv`, `dev_chk`) et par la version de la campagne, son
+  **témoin**. Le rapport d'une cellule est la moyenne géométrique des rapports appariés (même passe, même copie) du
+  temps sous la version de développement au temps du témoin. Chaque processus de Zig de la campagne est multiplié par
+  le rapport de sa cellule : Zig est ainsi ramené aux conditions de la campagne, d'où viennent les références du
+  score. Ses latences de K8 naturel restent celles de la campagne : leurs rapports mesurés ne se distinguent pas du
+  bruit. La grille de Zig reste celle de sa version stable, que ses sondes rejouées sous la version de développement
+  confirment. La machine de la remesure est caractérisée comme les autres ; son relevé est rangé avec la remesure
+  (`results/zig_dev/hw`), `results/hw` ne gardant que les machines dont viennent les bornes.
 
 ## 7. Grille de contrôle (pilier C)
 
@@ -258,7 +271,8 @@ plus rapide parmi les formes admises.
   des temps de la cellule dans cette passe et la moyenne de ses moyennes par passe. Un écart de vitesse de la machine
   d'une passe à l'autre est commun à toutes les cellules du groupe et s'annule dans leurs rapports : ce n'est pas un
   bruit propre à chaque cellule. Les références restent celles des estimations ponctuelles. Les latences sont
-  rééchantillonnées par processus puis par répétition, sans cette correction.
+  rééchantillonnées par processus puis par répétition, sans cette correction. Pour Zig, le rapport au témoin de chaque
+  cellule est rééchantillonné lui aussi : ses paires sont tirées avec remise, par un générateur propre à la cellule.
 * **20 000 variantes de l'analyse.** Chacune tire : un rééchantillonnage ; cinq choix de méthode à deux options
   (estimateur : moyenne géométrique ou minimum des processus ; référence du plafond ; formes de D3 et de D4 ;
   agrégation) ; le mode du code naturel parmi trois (R1, mode publié, R1' : A7 et A8, par un générateur à part) ; les
@@ -277,7 +291,7 @@ plus rapide parmi les formes admises.
 
 ## 10. Sensibilités publiées
 
-`results/report_final.md` donne, à côté du classement, la place de chaque langage dans vingt-deux autres calculs
+`results/report_final.md` donne, à côté du classement, la place de chaque langage dans vingt-cinq autres calculs
 faits avec les mêmes tirages : formes publiées seules et code naturel publié à trois tailles (« Base ») ; « Final »
 sans une règle à la fois (sans les tailles, sans R2, sans C1, sans R4) ; le code naturel dans un seul mode pour toutes
 les variantes (« Sans A7 » : R1 ; « Sans R1 » : le mode publié ; « R1' au lieu de R1 » : R1') ; une taille seule
@@ -285,13 +299,18 @@ les variantes (« Sans A7 » : R1 ; « Sans R1 » : le mode publié ; « R1' au 
 et 2) ; D3 et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans une correction
 à la fois (« Sans A1 » à « Sans A8 » ; « Sans A8 » : le mode tiré entre R1 et le mode publié seuls) ; sans aucune et
 classé au rang moyen (« Méthode du 23 novembre », celle du classement publié ce jour-là) ; « C par gcc », où toutes
-les cellules de C viennent de ses constructions par gcc, la grille et les autres langages ne changeant pas.
+les cellules de C viennent de ses constructions par gcc, la grille et les autres langages ne changeant pas ; « Zig
+0.17 », où Zig garde les cellules de la campagne, mesurées par sa version stable ; « Zig 0.18, K4 et K9 seuls », où
+le rapport au témoin n'est appliqué qu'aux deux noyaux dont le code machine change ; « Zig 0.18, latences du plan »,
+où les latences de K8 naturel de Zig sont multipliées elles aussi par leur rapport. Sous `FINAL_ZIG17=1`, tout le
+calcul se fait sans l'exception de Zig : il redonne les calculs publiés le 26 novembre.
 
 Le rapport donne aussi la **réplication** : la campagne précédente, telle qu'elle était publiée et recalculée par la
 méthode de celle-ci (`results/final/comparisons.json`, écrit par les options `--extract` et `--extract-same` de
 l'analyse), avec la place et le score de chaque langage dans chacune et, cellule par cellule, le rapport des temps
-entre les deux campagnes. Quand une campagne passe par plusieurs machines, il donne l'effet de machine : le rapport des
-temps d'une cellule sur chaque machine à ses temps sur la première.
+entre les deux campagnes ; elle se fait à compilateurs égaux, donc avec « Zig 0.17 ». Quand une campagne passe par
+plusieurs machines, il donne l'effet de machine : le rapport des temps d'une cellule sur chaque machine à ses temps
+sur la première.
 
 ## 11. Vérifier, recalculer, remesurer
 
@@ -311,9 +330,9 @@ python3 analysis/final_v4.py
 python3 analysis/charts_final.py
 ```
 
-Le premier contrôle prend environ 40 s, le second une vingtaine de minutes (22 min sur la machine de l'étude ;
-classement complet comparé à l'octet près) ; aucun ne demande de chaîne de compilation. Les deux commandes suivantes
-réécrivent `results/final/analysis.json`, `results/report_final.md` et le graphique.
+Le premier contrôle prend environ 45 s, le second environ 25 minutes sur la machine de l'étude (classement complet
+comparé à l'octet près) ; aucun ne demande de chaîne de compilation. Les deux commandes suivantes réécrivent
+`results/final/analysis.json`, `results/report_final.md` et le graphique.
 
 Remesurer demande les 25 chaînes de `env/toolchains.txt`, aux chemins que lisent les `build.sh`, et les données de
 `/opt/msdata` : `env/install.sh` les installe sur une Ubuntu 24.04 (environ 1 h 30 sur 4 cœurs, 35 Gio ; archives
@@ -356,8 +375,10 @@ python3 tools/final/campaign.py run
 cellule ; `k4_extreme.py` contrôle les formes de K4 sur des données extrêmes ; `run` fait les trois passes et
 enregistre chaque groupe (`tools/final/save_progress.sh`, qui committe et pousse sur la branche courante). Après un
 redémarrage de la VM, relancer `machine.sh` avec le numéro suivant, puis `run`, qui reprend où il en était. L'analyse
-lit ce répertoire par `FINAL_DIR=results/rejeu` et écrit ailleurs par `FINAL_OUT`. Pour essayer une seule
-implémentation, construite sur place :
+lit ce répertoire par `FINAL_DIR=results/rejeu` et écrit ailleurs par `FINAL_OUT`. La remesure de Zig par sa version
+de développement suit les mêmes étapes dans `results/zig_dev`, avec `MS_DEV=1`, `MS_LANGS=zig` pour `machine.sh`,
+`--langs zig` pour `calibrate` et `run`, et `--passes 0,1,2,3,4,5` ; l'analyse la lit d'elle-même. Pour essayer une
+seule implémentation, construite sur place :
 
 ```bash
 python3 tools/driver.py c
