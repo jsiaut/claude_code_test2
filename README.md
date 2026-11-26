@@ -207,8 +207,8 @@ garde encore. Plan, mesures et résultats : [`docs/V5_2.md`](docs/V5_2.md).
 * **Comment c'est mesuré.** Zig n'est pas remesuré dans la campagne mais à part, sur la machine 39 : six passes, 1 554
   processus, chaque groupe mesurant ses cellules par les deux versions. La 0.17 y sert de témoin : chaque temps de Zig
   de la campagne est multiplié par le rapport, mesuré côte à côte, de la 0.18 à la 0.17. Ce rapport est rééchantillonné
-  avec les mesures ; les latences de queue de Zig restent celles de la campagne, leurs rapports ne se distinguant pas
-  du bruit.
+  avec les mesures. Les latences de queue de Zig restent celles de la campagne : leurs rapports ne se distinguent pas
+  du bruit, ce qui a été constaté après les mesures et s'écarte du plan ([`docs/V5_2.md`](docs/V5_2.md), 8).
 * **Ce que ça donne.** Zig passe de la 5e à la 3e place, de 77,7 à 79,6 ; il devance Odin dans 67 % des variantes. Le
   gain vient du code naturel dans les deux modes sans `-O safe` (69,3 sur 100 en mode publié au lieu de 55,2). Avec le
   rapport appliqué à K4 et à K9 seulement, les deux noyaux dont le code machine change, Zig est 3e avec 79,5 : sa place
