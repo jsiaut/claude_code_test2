@@ -44,7 +44,7 @@ de la précédente : les mesures de la campagne des 22 et 23 novembre (machine 3
 | 24 novembre | Nettoyage du dépôt, sans changement de chiffre | [`METHOD.md`](METHOD.md), `tools/check.sh` | ce document |
 | 24 novembre | v4.1 : quatre corrections de l'analyse, sans mesure nouvelle | A1 à A4 ; ordre publié : le score moyen des variantes, qui est aussi le score affiché | [`V4_1.md`](V4_1.md), gardé dans le dépôt |
 | 24 au 26 novembre | v5 : script d'installation des chaînes, une source par langage, C aussi par gcc ; campagne rejouée sur un autre processeur (machine 38), dont viennent les mesures du classement publié | A5 et A6 ; une campagne par modèle de processeur | [`V5.md`](V5.md), gardé dans le dépôt |
-| 26 novembre | v5.1 : le mode du code naturel tiré au sort, sans mesure nouvelle : le classement publié | A7 | [`V5_1.md`](V5_1.md), gardé dans le dépôt |
+| 26 novembre | v5.1 : le mode du code naturel tiré au sort, entre deux modes puis entre trois, sans mesure nouvelle : le classement publié | A7 et A8 | [`V5_1.md`](V5_1.md), gardé dans le dépôt |
 
 Le classement de la v3 a été publié du 30 octobre au 23 novembre, avec ses notes et ses errata
 (`docs/RANKING_V3.md`, `results/report_v3.md`).
@@ -72,6 +72,12 @@ son hôte ; ils ne sont pas remesurés dans la campagne publiée. Leur détail e
   Haskell, OCaml, BQN, JavaScript, PHP, Python, Lua ; trois étages de 15, 4 et 6 langages ; C premier dans 69 % des
   variantes. Le calcul le redonne à l'identique (« Sans A7 » de `results/report_final.md`) ; son procès-verbal est
   [`V5.md`](V5.md), 9.
+* **Classement du 26 novembre, 15 h** (v5.1, première forme : le mode du code naturel tiré entre R1 et le mode publié
+  de chaque chaîne) : C, C++, Odin, Rust, Zig, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, C#, Java, Go,
+  FreePascal, Haskell, OCaml, BQN, JavaScript, PHP, Python, Lua ; deux étages de 19 et 6 langages ; C premier dans
+  63 % des variantes. Publié quelques heures : le tirage entre trois modes, qui l'a remplacé, garde les 25 places.
+  Le calcul le redonne à l'identique (« Sans A8 » de `results/report_final.md`) ; son procès-verbal est
+  [`V5_1.md`](V5_1.md), 8.
 * **Point 2, tailles** (`docs/V4_SIZES.md`). Entre la taille publiée seule et la moyenne des trois tailles, aucun
   langage ne bouge de plus de deux places ; l'effet de l'hôte est plus grand que celui des tailles.
 * **Point 3, conditions égales** (`docs/V4_EQUAL.md`). Les vérifications et le stencil contigu ne déplacent aucun

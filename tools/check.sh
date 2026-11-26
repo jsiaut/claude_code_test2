@@ -5,7 +5,7 @@
 #
 # Usage : sh tools/check.sh            tout, y compris le classement complet (20 000 variantes : une vingtaine de minutes)
 #         sh tools/check.sh --rapide   le classement est calculé sur 200 variantes et comparé à son empreinte de
-#                                      référence (tools/check.ref) : environ 30 s en tout
+#                                      référence (tools/check.ref) : environ 40 s en tout
 #         sh tools/check.sh --ref      réécrit tools/check.ref ; seulement après un changement voulu de l'analyse
 #
 # Les sorties régénérées sur place (grille, relevé des formes, graphique) sont comparées à l'index de git : après un
