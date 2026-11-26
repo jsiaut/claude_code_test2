@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Graphique SVG du classement publié (calcul « Final » de la v5 : docs/METHOD.md, docs/V5.md) : rang espéré sur
+"""Graphique SVG du classement publié (calcul « Final » de la v5.1 : docs/METHOD.md, docs/V5_1.md) : rang espéré sur
 les 20 000 variantes, rang plausible (90 %), score moyen sur ces variantes (il fixe l'ordre).
 Entrée : results/final/analysis.json (ou FINAL_OUT/analysis.json). Sortie : results/charts/classement_v4.svg."""
 import json, os, sys
@@ -46,9 +46,9 @@ def ranking_svg(f, path, machines, models):
     H = T + n * row + 46
     X = lambda r: L + (r - 1) * (W - L - Rm) / (n - 1)  # noqa: E731
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" '
-           f'aria-label="Classement de la v5 et plage de rang plausible">', STYLE,
+           f'aria-label="Classement de la v5.1 et plage de rang plausible">', STYLE,
            f'<rect class="bg" width="{W}" height="{H}"/>',
-           '<text class="t1" x="16" y="26">Classement de la v5</text>',
+           '<text class="t1" x="16" y="26">Classement de la v5.1</text>',
            '<text class="t2" x="16" y="46">Point : rang espéré sur 20 000 variantes de l\'analyse (poids, méthodes, '
            'jugements, bruit, poids des tailles).</text>',
            '<text class="t2" x="16" y="62">Trait : rang dans 90 % de ces variantes. À droite : score moyen sur ces variantes. '

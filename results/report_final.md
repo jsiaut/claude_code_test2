@@ -1,6 +1,6 @@
-# v5 : le classement — résultats
+# v5.1 : le classement — résultats
 
-*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse) et `docs/V5.md` (campagne rejouée, corrections A5 et A6), fixés avant les mesures ou avant leur analyse. Généré par `analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes (`results/converge/forms.json`).*
+*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse), `docs/V5.md` (campagne rejouée, corrections A5 et A6) et `docs/V5_1.md` (A7 : mode du code naturel tiré au sort), fixés avant les mesures ou avant leur analyse. Généré par `analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes (`results/converge/forms.json`).*
 
 Machines : 38 ; b3 de référence (le plus lent des 16 décalages, A2) : 64.24 ms ; b3 des groupes de K3 : passe 0 64.62 ms, passe 1 64.20 ms, passe 2 63.92 ms ; avec la médiane des 16 décalages (méthode du 23 novembre) : 58.12 ms.
 
@@ -8,27 +8,27 @@ Machines : 38 ; b3 de référence (le plus lent des 16 décalages, A2) : 64.24 m
 
 | Rang | Langage | Score | Score au centre | Rang espéré | Rang plausible | Devance le suivant | Plafond | Code par défaut | Contrôle |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | C | 83.8 | 85.9 | 1.48 | 1–3 | 75 % | 84.6 | 79.9 | 91.7 |
-| 2 | C++ | 81.2 | 84.4 | 2.72 | 1–6 | 79 % | 87.7 | 68.0 | 92.4 |
-| 3 | Odin | 78.4 | 79.6 | 4.60 | 2–8 | 49 % | 81.7 | 69.9 | 84.0 |
-| 4 | Rust | 78.3 | 79.8 | 4.66 | 2–9 | 68 % | 86.6 | 77.6 | 73.6 |
-| 5 | Nim | 77.2 | 79.0 | 5.69 | 3–9 | 54 % | 83.5 | 75.9 | 76.1 |
-| 6 | D | 76.5 | 79.6 | 6.25 | 3–11 | 52 % | 85.6 | 59.6 | 87.1 |
-| 7 | C3 | 76.4 | 78.1 | 6.46 | 3–10 | 51 % | 84.2 | 71.6 | 75.7 |
-| 8 | Zig | 76.2 | 78.5 | 6.51 | 3–10 | 87 % | 82.5 | 59.8 | 87.2 |
-| 9 | Ada | 72.9 | 75.2 | 9.18 | 5–12 | 57 % | 81.6 | 57.5 | 80.6 |
-| 10 | Julia | 72.3 | 73.5 | 9.66 | 6–13 | 65 % | 77.9 | 66.8 | 73.3 |
-| 11 | Fortran | 71.0 | 72.3 | 10.55 | 6–14 | 73 % | 78.5 | 72.4 | 65.3 |
-| 12 | Chapel | 68.1 | 70.2 | 12.12 | 8–15 | 53 % | 86.7 | 55.6 | 61.8 |
-| 13 | Mojo | 67.8 | 69.3 | 12.51 | 10–14 | 58 % | 75.9 | 56.9 | 70.5 |
-| 14 | Swift | 67.2 | 68.6 | 12.86 | 11–14 | 94 % | 79.7 | 51.4 | 68.1 |
-| 15 | C# | 61.4 | 63.4 | 14.86 | 13–16 | 96 % | 69.9 | 45.3 | 68.8 |
-| 16 | Java | 52.7 | 53.7 | 16.74 | 16–18 | 62 % | 65.3 | 50.5 | 42.7 |
-| 17 | Go | 51.6 | 52.6 | 17.08 | 16–18 | 55 % | 62.5 | 42.2 | 48.7 |
-| 18 | FreePascal | 50.5 | 50.5 | 17.33 | 15–19 | 80 % | 42.3 | 47.2 | 62.3 |
-| 19 | Haskell | 45.8 | 45.6 | 18.73 | 18–19 | 100 % | 54.2 | 37.4 | 41.5 |
-| 20 | OCaml | 27.9 | 26.3 | 20.14 | 20–21 | 93 % | 23.3 | 35.5 | 23.2 |
-| 21 | BQN | 20.3 | 17.9 | 21.76 | 20–23 | 52 % | 9.9 | 28.1 | 19.7 |
+| 1 | C | 83.6 | 85.9 | 1.60 | 1–4 | 70 % | 84.6 | 79.9 | 91.7 |
+| 2 | C++ | 81.7 | 84.4 | 2.61 | 1–7 | 82 % | 87.7 | 68.0 | 92.4 |
+| 3 | Odin | 78.4 | 79.6 | 4.87 | 2–8 | 49 % | 81.7 | 69.9 | 84.0 |
+| 4 | Rust | 78.3 | 79.8 | 4.85 | 2–9 | 57 % | 86.6 | 77.6 | 73.6 |
+| 5 | Zig | 77.5 | 78.5 | 5.78 | 2–10 | 55 % | 82.5 | 59.8 | 87.2 |
+| 6 | Nim | 77.2 | 79.0 | 5.99 | 3–9 | 57 % | 83.5 | 75.9 | 76.1 |
+| 7 | C3 | 76.8 | 78.1 | 6.39 | 3–10 | 50 % | 84.2 | 71.6 | 75.7 |
+| 8 | D | 76.7 | 79.6 | 6.43 | 3–11 | 87 % | 85.6 | 59.6 | 87.1 |
+| 9 | Ada | 72.8 | 75.2 | 9.51 | 6–13 | 56 % | 81.6 | 57.5 | 80.6 |
+| 10 | Julia | 72.4 | 73.5 | 9.97 | 6–13 | 59 % | 77.9 | 66.8 | 73.3 |
+| 11 | Fortran | 71.7 | 72.3 | 10.44 | 6–14 | 60 % | 78.5 | 72.4 | 65.3 |
+| 12 | Chapel | 70.4 | 70.2 | 11.08 | 6–14 | 69 % | 86.7 | 55.6 | 61.8 |
+| 13 | Mojo | 67.8 | 69.3 | 12.71 | 10–14 | 58 % | 75.9 | 56.9 | 70.5 |
+| 14 | Swift | 67.2 | 68.6 | 13.03 | 11–14 | 94 % | 79.7 | 51.4 | 68.1 |
+| 15 | C# | 61.4 | 63.4 | 14.91 | 13–16 | 96 % | 69.9 | 45.3 | 68.8 |
+| 16 | Java | 52.8 | 53.7 | 16.79 | 16–18 | 62 % | 65.3 | 50.5 | 42.7 |
+| 17 | Go | 51.6 | 52.6 | 17.14 | 16–18 | 50 % | 62.5 | 42.2 | 48.7 |
+| 18 | FreePascal | 51.3 | 50.5 | 17.17 | 15–19 | 82 % | 42.3 | 47.2 | 62.3 |
+| 19 | Haskell | 45.9 | 45.6 | 18.75 | 18–19 | 100 % | 54.2 | 37.4 | 41.5 |
+| 20 | OCaml | 27.8 | 26.3 | 20.14 | 20–21 | 93 % | 23.3 | 35.5 | 23.2 |
+| 21 | BQN | 20.3 | 17.9 | 21.75 | 20–23 | 52 % | 9.9 | 28.1 | 19.7 |
 | 22 | JavaScript | 19.7 | 17.7 | 21.98 | 21–24 | 63 % | 15.8 | 25.1 | 14.6 |
 | 23 | PHP | 18.8 | 17.8 | 22.30 | 21–23 | 97 % | 6.8 | 21.9 | 27.4 |
 | 24 | Python | 10.7 | 12.7 | 24.09 | 22–25 | 73 % | 1.1 | 7.7 | 29.7 |
@@ -36,65 +36,68 @@ Machines : 38 ; b3 de référence (le plus lent des 16 décalages, A2) : 64.24 m
 
 Score : moyenne du score sur les variantes de l'analyse ; il fixe l'ordre. Score au centre, plafond, code par défaut et contrôle : poids et choix principaux, estimation ponctuelle. Rang espéré : rang moyen sur les variantes.
 
-Étages (paires ordonnées dans au moins 95 % des variantes) : C, C++, Odin, Rust, Nim, D, C3, Zig, Ada, Julia, Fortran, Chapel, Mojo, Swift, C# | Java, Go, FreePascal, Haskell | OCaml, BQN, JavaScript, PHP, Python, Lua
+Mode du code naturel (A7) : sous R1 dans 50.0 % des variantes, dans le mode publié de chaque chaîne dans les autres ; au centre, sous R1.
+
+Étages (paires ordonnées dans au moins 95 % des variantes) : C, C++, Odin, Rust, Zig, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, C#, Java, Go, FreePascal, Haskell | OCaml, BQN, JavaScript, PHP, Python, Lua
 
 ## Tous les calculs
 
-| Langage | Final | Base, trois tailles | Sans les tailles (taille publiée seule) | Sans R1 | Sans R2 | Sans C1 | Sans R4 | R1' au lieu de R1 | Taille petite | Taille grande | Sélection indépendante | D3 et D4 sur trois processus | Sur les seules mesures | Sans A1 | Sans A2 | Sans A3 | Sans A4 | Sans A5 | Sans A6 | Méthode du 23 novembre | C par gcc | Campagne précédente |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| C | 1 | 1 | 1 | 1 | 1 | 1 | 2 | 1 | 1 | 1 | 1 | 1 | 2 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
-| C++ | 2 | 2 | 2 | 2 | 2 | 2 | 1 | 2 | 2 | 2 | 2 | 2 | 5 ** | 2 | 2 | 2 | 2 | 2 | 2 | 2 | 2 | 2 |
-| Odin | 3 | 6 ** | 3 | 4 | 3 | 3 | 6 ** | 3 | 4 | 3 | 3 | 3 | 6 ** | 4 | 4 | 3 | 3 | 3 | 3 | 3 | 3 | 3 |
-| Rust | 4 | 4 | 5 | 5 | 4 | 5 | 3 | 6 | 3 | 4 | 4 | 4 | 1 ** | 3 | 3 | 4 | 4 | 4 | 4 | 4 | 4 | 4 |
-| Nim | 5 | 9 ** | 4 | 6 | 5 | 7 | 7 | 5 | 6 | 5 | 5 | 6 | 3 | 5 | 5 | 6 | 5 | 5 | 5 | 7 | 5 | 6 |
-| D | 6 | 5 | 8 | 8 | 8 | 6 | 4 | 8 | 7 | 6 | 6 | 5 | 8 | 8 | 6 | 8 | 6 | 6 | 6 | 8 | 6 | 5 |
-| C3 | 7 | 3 ** | 6 | 7 | 6 | 4 ** | 5 | 7 | 5 | 9 | 8 | 8 | 4 ** | 6 | 7 | 7 | 7 | 7 | 7 | 5 | 7 | 7 |
-| Zig | 8 | 7 | 7 | 3 ** | 7 | 8 | 8 | 4 ** | 8 | 7 | 7 | 7 | 10 | 7 | 8 | 5 ** | 8 | 8 | 8 | 6 | 8 | 8 |
-| Ada | 9 | 8 | 9 | 9 | 9 | 9 | 9 | 9 | 12 ** | 8 | 9 | 9 | 12 ** | 10 | 9 | 9 | 11 | 9 | 9 | 9 | 9 | 9 |
-| Julia | 10 | 13 ** | 11 | 11 | 10 | 11 | 10 | 10 | 10 | 10 | 10 | 10 | 9 | 9 | 10 | 10 | 9 | 10 | 10 | 12 | 10 | 10 |
-| Fortran | 11 | 11 | 10 | 12 | 11 | 10 | 12 | 12 | 9 | 11 | 11 | 11 | 7 ** | 11 | 11 | 11 | 10 | 11 | 11 | 11 | 11 | 11 |
-| Chapel | 12 | 10 | 14 | 10 | 12 | 13 | 13 | 11 | 11 | 12 | 13 | 13 | 11 | 12 | 12 | 12 | 12 | 12 | 12 | 10 | 12 | 12 |
-| Mojo | 13 | 12 | 12 | 13 | 13 | 14 | 11 | 13 | 13 | 13 | 12 | 12 | 14 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 14 |
-| Swift | 14 | 14 | 13 | 14 | 14 | 12 | 14 | 14 | 14 | 14 | 14 | 14 | 13 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 13 |
-| C# | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 |
-| Java | 16 | 17 | 16 | 16 | 16 | 16 | 17 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 |
-| Go | 17 | 18 | 17 | 18 | 17 | 18 | 18 | 18 | 18 | 18 | 17 | 17 | 17 | 17 | 17 | 17 | 17 | 17 | 17 | 18 | 17 | 17 |
-| FreePascal | 18 | 16 | 18 | 17 | 18 | 17 | 16 | 17 | 17 | 17 | 18 | 18 | 19 | 18 | 18 | 18 | 18 | 18 | 18 | 17 | 18 | 18 |
-| Haskell | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 18 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 |
-| OCaml | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 |
-| BQN | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 23 | 21 | 21 | 22 | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 |
-| JavaScript | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 23 | 21 | 22 | 22 | 21 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 |
-| PHP | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 22 | 22 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 |
-| Python | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 25 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 |
-| Lua | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 24 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 |
+| Langage | Final | Base, trois tailles | Sans les tailles (taille publiée seule) | Sans R1 | Sans R2 | Sans C1 | Sans R4 | R1' au lieu de R1 | Taille petite | Taille grande | Sélection indépendante | D3 et D4 sur trois processus | Sur les seules mesures | Sans A1 | Sans A2 | Sans A3 | Sans A4 | Sans A5 | Sans A6 | Sans A7 | Méthode du 23 novembre | C par gcc | Campagne précédente |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| C | 1 | 1 | 2 | 1 | 1 | 1 | 2 | 1 | 1 | 2 | 1 | 1 | 2 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+| C++ | 2 | 2 | 1 | 2 | 2 | 2 | 1 | 2 | 2 | 1 | 2 | 2 | 5 ** | 2 | 2 | 2 | 2 | 2 | 2 | 2 | 2 | 2 | 2 |
+| Odin | 3 | 6 ** | 3 | 4 | 3 | 3 | 6 ** | 3 | 4 | 3 | 3 | 3 | 6 ** | 4 | 4 | 4 | 3 | 3 | 3 | 3 | 3 | 3 | 3 |
+| Rust | 4 | 4 | 5 | 5 | 5 | 5 | 3 | 6 | 3 | 4 | 4 | 5 | 1 ** | 3 | 3 | 5 | 4 | 4 | 4 | 4 | 4 | 4 | 4 |
+| Zig | 5 | 7 | 7 | 3 | 4 | 8 ** | 7 | 4 | 6 | 5 | 5 | 4 | 9 ** | 6 | 5 | 3 | 5 | 5 | 5 | 8 ** | 6 | 5 | 8 |
+| Nim | 6 | 9 ** | 4 | 6 | 7 | 7 | 8 | 5 | 7 | 6 | 6 | 7 | 3 ** | 7 | 6 | 6 | 6 | 6 | 6 | 5 | 7 | 6 | 6 |
+| C3 | 7 | 3 ** | 6 | 7 | 6 | 4 ** | 4 ** | 7 | 5 | 8 | 7 | 8 | 4 ** | 5 | 7 | 7 | 7 | 7 | 7 | 7 | 5 | 7 | 7 |
+| D | 8 | 5 ** | 8 | 8 | 8 | 6 | 5 ** | 8 | 8 | 7 | 8 | 6 | 10 | 8 | 8 | 8 | 8 | 8 | 8 | 6 | 8 | 8 | 5 |
+| Ada | 9 | 8 | 9 | 9 | 9 | 9 | 9 | 9 | 12 ** | 9 | 9 | 9 | 12 ** | 10 | 9 | 9 | 11 | 9 | 9 | 9 | 9 | 9 | 9 |
+| Julia | 10 | 13 ** | 11 | 11 | 10 | 12 | 10 | 10 | 11 | 10 | 10 | 10 | 11 | 9 | 10 | 10 | 10 | 10 | 10 | 10 | 12 | 10 | 10 |
+| Fortran | 11 | 11 | 10 | 12 | 11 | 10 | 11 | 12 | 10 | 11 | 11 | 11 | 7 ** | 11 | 11 | 11 | 9 | 11 | 11 | 11 | 11 | 11 | 11 |
+| Chapel | 12 | 10 | 12 | 10 | 12 | 11 | 13 | 11 | 9 ** | 12 | 12 | 12 | 8 ** | 12 | 12 | 12 | 12 | 12 | 12 | 12 | 10 | 12 | 12 |
+| Mojo | 13 | 12 | 13 | 13 | 13 | 14 | 12 | 13 | 13 | 13 | 13 | 13 | 14 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 13 | 14 |
+| Swift | 14 | 14 | 14 | 14 | 14 | 13 | 14 | 14 | 14 | 14 | 14 | 14 | 13 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 13 |
+| C# | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 |
+| Java | 16 | 17 | 16 | 16 | 16 | 16 | 17 | 16 | 16 | 17 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 | 16 |
+| Go | 17 | 18 | 17 | 18 | 17 | 18 | 18 | 18 | 18 | 18 | 17 | 17 | 17 | 17 | 17 | 18 | 18 | 17 | 17 | 17 | 18 | 17 | 17 |
+| FreePascal | 18 | 16 | 18 | 17 | 18 | 17 | 16 | 17 | 17 | 16 | 18 | 18 | 19 | 18 | 18 | 17 | 17 | 18 | 18 | 18 | 17 | 18 | 18 |
+| Haskell | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 18 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 | 19 |
+| OCaml | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 | 20 |
+| BQN | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 23 | 21 | 21 | 22 | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 | 21 |
+| JavaScript | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 23 | 21 | 22 | 22 | 21 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 |
+| PHP | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 22 | 22 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 | 23 |
+| Python | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 25 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 | 24 |
+| Lua | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 24 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 | 25 |
 
-Chaque case : place dans le calcul ; ** : plus de deux places d'écart avec « Final ». Ordre des lignes : « Final ». « Sans A1 » à « Sans A6 » : « Final » sans une de ses corrections ; « Méthode du 23 novembre » : sans aucune et classée au rang moyen ; « Campagne précédente » : son classement publié.
+Chaque case : place dans le calcul ; ** : plus de deux places d'écart avec « Final ». Ordre des lignes : « Final ». « Sans A1 » à « Sans A7 » : « Final » sans une de ses corrections ; « Méthode du 23 novembre » : sans aucune et classée au rang moyen ; « Campagne précédente » : son classement publié.
 
 ## Rangs qui bougent de plus de deux places par rapport à « Final »
 
-* Base, trois tailles : Odin 6e (Final 3e), Nim 9e (Final 5e), C3 3e (Final 7e), Julia 13e (Final 10e)
+* Base, trois tailles : Odin 6e (Final 3e), Nim 9e (Final 6e), C3 3e (Final 7e), D 5e (Final 8e), Julia 13e (Final 10e)
 * Sans les tailles (taille publiée seule) : aucun
-* Sans R1 : Zig 3e (Final 8e)
+* Sans R1 : aucun
 * Sans R2 : aucun
-* Sans C1 : C3 4e (Final 7e)
-* Sans R4 : Odin 6e (Final 3e)
-* R1' au lieu de R1 : Zig 4e (Final 8e)
-* Taille petite : Ada 12e (Final 9e)
+* Sans C1 : Zig 8e (Final 5e), C3 4e (Final 7e)
+* Sans R4 : Odin 6e (Final 3e), C3 4e (Final 7e), D 5e (Final 8e)
+* R1' au lieu de R1 : aucun
+* Taille petite : Ada 12e (Final 9e), Chapel 9e (Final 12e)
 * Taille grande : aucun
 * Sélection indépendante : aucun
 * D3 et D4 sur trois processus : aucun
-* Sur les seules mesures : C++ 5e (Final 2e), Odin 6e (Final 3e), Rust 1er (Final 4e), C3 4e (Final 7e), Ada 12e (Final 9e), Fortran 7e (Final 11e)
+* Sur les seules mesures : C++ 5e (Final 2e), Odin 6e (Final 3e), Rust 1er (Final 4e), Zig 9e (Final 5e), Nim 3e (Final 6e), C3 4e (Final 7e), Ada 12e (Final 9e), Fortran 7e (Final 11e), Chapel 8e (Final 12e)
 * Sans A1 : aucun
 * Sans A2 : aucun
-* Sans A3 : Zig 5e (Final 8e)
+* Sans A3 : aucun
 * Sans A4 : aucun
 * Sans A5 : aucun
 * Sans A6 : aucun
+* Sans A7 : Zig 8e (Final 5e)
 * Méthode du 23 novembre : aucun
 * C par gcc : aucun
 * Final contre la méthode du 23 novembre : aucun
-* Final contre la campagne précédente, classement publié : aucun
-* Final contre la campagne précédente recalculée par la méthode de celle-ci : aucun
+* Final contre la campagne précédente, classement publié : Zig 8e → 5e, D 5e → 8e
+* Final contre la campagne précédente recalculée par la méthode de celle-ci : D 5e → 8e
 * Campagne précédente, du classement publié à son recalcul : aucun
 
 ## C par gcc
@@ -103,8 +106,8 @@ Chaque case : place dans le calcul ; ** : plus de deux places d'écart avec « F
 
 | C compilé par | Place | Score | Premier | Devance C++ | Plafond | Code naturel | K1 | K3 | K4 | K5 | K6 | K7 | K8 | K9 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| clang (« Final ») | 1 | 83.8 | 69.0 % | 75.2 % | 84.6 | 69.7 | 85 | 99 | 95 | 84 | 81 | 81 | 68 | 87 |
-| gcc | 1 | 82.5 | 51.9 % | 68.6 % | 88.1 | 60.7 | 90 | 100 | 86 | 89 | 80 | 75 | 95 | 93 |
+| clang (« Final ») | 1 | 83.6 | 62.8 % | 69.8 % | 84.6 | 69.7 | 85 | 99 | 95 | 84 | 81 | 81 | 68 | 87 |
+| gcc | 1 | 83.1 | 58.6 % | 71.9 % | 88.1 | 60.7 | 90 | 100 | 86 | 89 | 80 | 75 | 95 | 93 |
 
 ## Réplication : cette campagne et la précédente
 
@@ -112,26 +115,26 @@ Cellules mesurées dans les deux campagnes : 2972. Rapport des temps (cette camp
 
 | Langage | Place | Précédente, recalculée | Précédente, publiée | Score | Précédent, recalculé | Précédent, publié | Plafond | Plafond précédent | Rapport médian des temps |
 |---|---|---|---|---|---|---|---|---|---|
-| C | 1 | 1 | 1 | 83.8 | 83.2 | 81.4 | 84.6 | 89.6 | 0.885 |
-| C++ | 2 | 2 | 2 | 81.2 | 81.0 | 79.2 | 87.7 | 90.1 | 0.863 |
-| Odin | 3 | 3 | 3 | 78.4 | 78.1 | 76.4 | 81.7 | 83.7 | 0.867 |
+| C | 1 | 1 | 1 | 83.6 | 83.4 | 81.4 | 84.6 | 89.6 | 0.885 |
+| C++ | 2 | 2 | 2 | 81.7 | 81.5 | 79.2 | 87.7 | 90.1 | 0.863 |
+| Odin | 3 | 3 | 3 | 78.4 | 78.0 | 76.4 | 81.7 | 83.7 | 0.867 |
 | Rust | 4 | 4 | 4 | 78.3 | 77.6 | 75.9 | 86.6 | 88.3 | 0.881 |
-| Nim | 5 | 6 | 6 | 77.2 | 76.3 | 74.6 | 83.5 | 85.9 | 0.869 |
-| D | 6 | 5 | 5 | 76.5 | 76.6 | 74.8 | 85.6 | 87.0 | 0.848 |
-| C3 | 7 | 7 | 7 | 76.4 | 76.0 | 74.2 | 84.2 | 86.8 | 0.862 |
-| Zig | 8 | 8 | 8 | 76.2 | 74.7 | 73.0 | 82.5 | 84.4 | 0.850 |
-| Ada | 9 | 9 | 9 | 72.9 | 72.8 | 71.0 | 81.6 | 83.7 | 0.857 |
-| Julia | 10 | 10 | 10 | 72.3 | 71.4 | 69.6 | 77.9 | 78.4 | 0.852 |
-| Fortran | 11 | 11 | 11 | 71.0 | 69.7 | 68.1 | 78.5 | 79.1 | 0.862 |
-| Chapel | 12 | 12 | 12 | 68.1 | 67.5 | 66.0 | 86.7 | 89.9 | 0.864 |
-| Mojo | 13 | 14 | 14 | 67.8 | 66.2 | 64.5 | 75.9 | 76.0 | 0.848 |
+| Zig | 5 | 7 | 8 | 77.5 | 76.4 | 73.0 | 82.5 | 84.4 | 0.850 |
+| Nim | 6 | 8 | 6 | 77.2 | 76.2 | 74.6 | 83.5 | 85.9 | 0.869 |
+| C3 | 7 | 6 | 7 | 76.8 | 76.4 | 74.2 | 84.2 | 86.8 | 0.862 |
+| D | 8 | 5 | 5 | 76.7 | 76.7 | 74.8 | 85.6 | 87.0 | 0.848 |
+| Ada | 9 | 9 | 9 | 72.8 | 72.7 | 71.0 | 81.6 | 83.7 | 0.857 |
+| Julia | 10 | 10 | 10 | 72.4 | 71.3 | 69.6 | 77.9 | 78.4 | 0.852 |
+| Fortran | 11 | 11 | 11 | 71.7 | 70.5 | 68.1 | 78.5 | 79.1 | 0.862 |
+| Chapel | 12 | 12 | 12 | 70.4 | 69.7 | 66.0 | 86.7 | 89.9 | 0.864 |
+| Mojo | 13 | 14 | 14 | 67.8 | 66.1 | 64.5 | 75.9 | 76.0 | 0.848 |
 | Swift | 14 | 13 | 13 | 67.2 | 66.7 | 65.2 | 79.7 | 80.6 | 0.856 |
 | C# | 15 | 15 | 15 | 61.4 | 60.9 | 59.3 | 69.9 | 71.2 | 0.841 |
-| Java | 16 | 16 | 16 | 52.7 | 52.6 | 51.2 | 65.3 | 66.0 | 0.844 |
+| Java | 16 | 16 | 16 | 52.8 | 52.6 | 51.2 | 65.3 | 66.0 | 0.844 |
 | Go | 17 | 17 | 17 | 51.6 | 51.9 | 50.6 | 62.5 | 62.6 | 0.837 |
-| FreePascal | 18 | 18 | 18 | 50.5 | 50.4 | 49.3 | 42.3 | 43.0 | 0.844 |
-| Haskell | 19 | 19 | 19 | 45.8 | 44.2 | 43.0 | 54.2 | 52.3 | 0.839 |
-| OCaml | 20 | 20 | 20 | 27.9 | 27.3 | 26.7 | 23.3 | 22.7 | 0.839 |
+| FreePascal | 18 | 18 | 18 | 51.3 | 50.6 | 49.3 | 42.3 | 43.0 | 0.844 |
+| Haskell | 19 | 19 | 19 | 45.9 | 44.2 | 43.0 | 54.2 | 52.3 | 0.839 |
+| OCaml | 20 | 20 | 20 | 27.8 | 27.3 | 26.7 | 23.3 | 22.7 | 0.839 |
 | BQN | 21 | 22 | 21 | 20.3 | 20.3 | 19.9 | 9.9 | 10.1 | 0.866 |
 | JavaScript | 22 | 21 | 22 | 19.7 | 20.3 | 19.9 | 15.8 | 15.6 | 0.845 |
 | PHP | 23 | 23 | 23 | 18.8 | 18.3 | 18.0 | 6.8 | 6.6 | 0.841 |
@@ -142,33 +145,35 @@ Cellules mesurées dans les deux campagnes : 2972. Rapport des temps (cette camp
 
 ## Plafond par noyau et parts du code par défaut (« Final », au centre)
 
-| Langage | K1 | K3 | K4 | K5 | K6 | K7 | K8 | K9 | D1 | D2 | D3 | D4 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| C | 85 | 99 | 95 | 84 | 81 | 81 | 68 | 87 | 70 | 100 | 80 | 91 |
-| C++ | 84 | 100 | 69 | 93 | 92 | 74 | 100 | 95 | 48 | 97 | 76 | 90 |
-| Odin | 67 | 99 | 66 | 94 | 87 | 84 | 73 | 92 | 64 | 99 | 38 | 87 |
-| Rust | 83 | 100 | 83 | 86 | 84 | 94 | 77 | 88 | 66 | 100 | 74 | 94 |
-| Nim | 92 | 99 | 67 | 90 | 83 | 83 | 68 | 94 | 63 | 99 | 71 | 93 |
-| D | 85 | 100 | 82 | 92 | 79 | 86 | 73 | 90 | 58 | 100 | 2 | 78 |
-| C3 | 85 | 100 | 66 | 91 | 87 | 88 | 72 | 90 | 61 | 100 | 55 | 88 |
-| Zig | 83 | 100 | 69 | 94 | 86 | 74 | 72 | 86 | 38 | 100 | 55 | 89 |
-| Ada | 75 | 100 | 76 | 89 | 84 | 70 | 79 | 85 | 37 | 100 | 67 | 69 |
-| Julia | 75 | 97 | 57 | 93 | 90 | 72 | 73 | 74 | 65 | 98 | 7 | 93 |
-| Fortran | 84 | 100 | 47 | 86 | 73 | 74 | 92 | 86 | 56 | 99 | 82 | 86 |
-| Chapel | 74 | 98 | 82 | 90 | 84 | 87 | 88 | 93 | 26 | 99 | 55 | 99 |
-| Mojo | 82 | 100 | 51 | 86 | 82 | 88 | 49 | 86 | 34 | 99 | 49 | 89 |
-| Swift | 89 | 98 | 45 | 97 | 81 | 80 | 72 | 91 | 32 | 96 | 32 | 81 |
-| C# | 82 | 99 | 62 | 84 | 63 | 51 | 51 | 82 | 29 | 56 | 36 | 85 |
-| Java | 44 | 96 | 49 | 81 | 70 | 64 | 57 | 79 | 34 | 55 | 43 | 94 |
-| Go | 69 | 37 | 73 | 76 | 54 | 66 | 58 | 78 | 22 | 72 | 11 | 93 |
-| FreePascal | 49 | 100 | 11 | 38 | 30 | 59 | 53 | 52 | 14 | 99 | 48 | 91 |
-| Haskell | 46 | 37 | 30 | 86 | 37 | 95 | 71 | 68 | 17 | 75 | 9 | 82 |
-| OCaml | 28 | 25 | 8 | 14 | 18 | 38 | 42 | 37 | 21 | 42 | 36 | 67 |
-| BQN | 4 | 3 | 8 | 17 | 13 | 19 | 31 | 8 | 16 | 68 | 10 | 41 |
-| JavaScript | 17 | 15 | 10 | 8 | 14 | 23 | 21 | 30 | 13 | 27 | 4 | 70 |
-| PHP | 7 | 2 | 8 | 4 | 8 | 16 | 10 | 10 | 6 | 29 | 11 | 64 |
-| Python | 0 | 4 | 1 | 0 | 1 | 2 | 1 | 1 | 1 | 21 | 1 | 19 |
-| Lua | 1 | 5 | 0 | 1 | 1 | 5 | 2 | 1 | 3 | 25 | 0 | 41 |
+| Langage | K1 | K3 | K4 | K5 | K6 | K7 | K8 | K9 | D1 | D2 | D3 | D4 | D1, mode publié |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| C | 85 | 99 | 95 | 84 | 81 | 81 | 68 | 87 | 70 | 100 | 80 | 91 | 71 |
+| C++ | 84 | 100 | 69 | 93 | 92 | 74 | 100 | 95 | 48 | 97 | 76 | 90 | 57 |
+| Odin | 67 | 99 | 66 | 94 | 87 | 84 | 73 | 92 | 64 | 99 | 38 | 87 | 65 |
+| Rust | 83 | 100 | 83 | 86 | 84 | 94 | 77 | 88 | 66 | 100 | 74 | 94 | 67 |
+| Zig | 83 | 100 | 69 | 94 | 86 | 74 | 72 | 86 | 38 | 100 | 55 | 89 | 55 |
+| Nim | 92 | 99 | 67 | 90 | 83 | 83 | 68 | 94 | 63 | 99 | 71 | 93 | 65 |
+| C3 | 85 | 100 | 66 | 91 | 87 | 88 | 72 | 90 | 61 | 100 | 55 | 88 | 68 |
+| D | 85 | 100 | 82 | 92 | 79 | 86 | 73 | 90 | 58 | 100 | 2 | 78 | 60 |
+| Ada | 75 | 100 | 76 | 89 | 84 | 70 | 79 | 85 | 37 | 100 | 67 | 69 | 38 |
+| Julia | 75 | 97 | 57 | 93 | 90 | 72 | 73 | 74 | 65 | 98 | 7 | 93 | 66 |
+| Fortran | 84 | 100 | 47 | 86 | 73 | 74 | 92 | 86 | 56 | 99 | 82 | 86 | 65 |
+| Chapel | 74 | 98 | 82 | 90 | 84 | 87 | 88 | 93 | 26 | 99 | 55 | 99 | 57 |
+| Mojo | 82 | 100 | 51 | 86 | 82 | 88 | 49 | 86 | 34 | 99 | 49 | 89 | 34 |
+| Swift | 89 | 98 | 45 | 97 | 81 | 80 | 72 | 91 | 32 | 96 | 32 | 81 | 33 |
+| C# | 82 | 99 | 62 | 84 | 63 | 51 | 51 | 82 | 29 | 56 | 36 | 85 | 29 |
+| Java | 44 | 96 | 49 | 81 | 70 | 64 | 57 | 79 | 34 | 55 | 43 | 94 | 35 |
+| Go | 69 | 37 | 73 | 76 | 54 | 66 | 58 | 78 | 22 | 72 | 11 | 93 | 22 |
+| FreePascal | 49 | 100 | 11 | 38 | 30 | 59 | 53 | 52 | 14 | 99 | 48 | 91 | 20 |
+| Haskell | 46 | 37 | 30 | 86 | 37 | 95 | 71 | 68 | 17 | 75 | 9 | 82 | 17 |
+| OCaml | 28 | 25 | 8 | 14 | 18 | 38 | 42 | 37 | 21 | 42 | 36 | 67 | 21 |
+| BQN | 4 | 3 | 8 | 17 | 13 | 19 | 31 | 8 | 16 | 68 | 10 | 41 | 17 |
+| JavaScript | 17 | 15 | 10 | 8 | 14 | 23 | 21 | 30 | 13 | 27 | 4 | 70 | 13 |
+| PHP | 7 | 2 | 8 | 4 | 8 | 16 | 10 | 10 | 6 | 29 | 11 | 64 | 6 |
+| Python | 0 | 4 | 1 | 0 | 1 | 2 | 1 | 1 | 1 | 21 | 1 | 19 | 1 |
+| Lua | 1 | 5 | 0 | 1 | 1 | 5 | 2 | 1 | 3 | 25 | 0 | 41 | 3 |
+
+D1 : code naturel sous R1 (le centre) ; « D1, mode publié » : dans le mode publié de chaque chaîne (centre de « Sans R1 »). Les variantes de « Final » tirent l'un ou l'autre (A7).
 
 ## Forme retenue par « Final », cellule par cellule et taille par taille (estimation ponctuelle)
 
@@ -180,10 +185,10 @@ Chaque case : forme retenue aux tailles petite / publiée / grande (« pub » : 
 | C++ | k4 tuned/k4 tuned/k4 tuned 0.17 | pub/pub/pub 1.00 | pub/q6 tuned_v/pub 0.99 | pub/pub/pub 1.00 | q6 mt_pool/q6 mt_pool/pub 0.90 | q1 mt_pool/q1 mt_pool/pub 0.96 | pub/pub/pub 1.00 | k8 tuned_val/k8 tuned_val/k8 tuned_val 0.33 | k9 tuned_v/k9 tuned_v/k9 tuned_v 1.00 | k9 mt_pool_v/pub/k9 mt_pool_v 1.00 |
 | Odin | k4 tuned/k4 tuned/k4 tuned 0.54 | pub/pub/pub 1.00 | pub/pub/pub 1.00 | q1 tuned_v/q1 tuned_v/q1 tuned_v 0.47 | q6 mt_pool/pub/pub 1.00 | q1 mt_pool_v/q1 mt_pool_v/q1 mt_pool_v 0.50 | pub/pub/pub 1.00 | k8 tuned_it/k8 tuned_it/k8 tuned_it 0.31 | pub/pub/pub 1.00 | k9 mt_pool/pub/pub 1.00 |
 | Rust | k4 tuned/k4 tuned/k4 tuned 0.42 | pub/pub/pub 1.00 | q6 tuned_v/q6 tuned_v/q6 tuned_v 0.85 | pub/pub/pub 1.00 | q6 mt_pool_v/q6 mt_pool_v/q6 mt_pool_v 0.92 | q1 mt_pool/pub/pub 1.00 | pub/pub/pub 1.00 | k8 tuned_it/k8 tuned_it/k8 tuned_it 0.27 | k9 tuned_v/pub/pub 1.00 | k9 mt_pool/k9 mt_pool_v/k9 mt_pool_v 0.86 |
-| Nim | k4 tuned/k4 tuned/k4 tuned 0.52 | pub/pub/pub 1.00 | q6 tuned_v/q6 tuned_v/q6 tuned_v 0.82 | q1 tuned_v/q1 tuned_v/q1 tuned_v 0.57 | q6 mt_pool/q6 mt_pool_v/q6 mt_pool_v 0.81 | q1 mt_pool_v/q1 mt_pool_v/q1 mt_pool_v 0.48 | pub/pub/pub 1.00 | k8 tuned_it/k8 tuned_it/k8 tuned_it 0.30 | k9 tuned_v/pub/k9 tuned_v 1.00 | k9 mt_pool/pub/k9 mt_pool_v 1.00 |
-| D | k4 tuned/k4 tuned/k4 tuned 0.47 | pub/pub/pub 1.00 | q6 tuned_v/q6 tuned_v/q6 tuned_v 0.75 | pub/pub/pub 1.00 | q6 mt_pool/q6 mt_pool_v/q6 mt_pool_v 0.83 | q1 mt_pool/pub/q1 mt_pool 1.00 | pub/pub/pub 1.00 | k8 tuned_it/k8 tuned_it/k8 tuned_it 0.33 | pub/pub/pub 1.00 | k9 mt_pool/pub/k9 mt_pool 1.00 |
-| C3 | k4 tuned/k4 tuned/k4 tuned 0.44 | pub/pub/pub 1.00 | pub/pub/pub 1.00 | q1 tuned_v/pub/q1 tuned_v 1.00 | q6 mt_pool/q6 mt_pool/pub 0.72 | q1 mt_pool/q1 mt_pool_v/pub 0.82 | pub/pub/pub 1.00 | k8 tuned_it/k8 tuned_it/k8 tuned_it 0.33 | pub/pub/pub 1.00 | k9 mt_pool/pub/k9 mt_pool 1.00 |
 | Zig | k4 tuned/k4 tuned/k4 tuned 0.09 | pub/pub/pub 1.00 | pub/pub/pub 1.00 | pub/pub/pub 1.00 | q6 mt_pool/pub/q6 mt_pool 1.00 | q1 mt_pool/q1 mt_pool/q1 mt_pool 0.96 | pub/pub/pub 1.00 | k8 tuned_it/k8 tuned_it/k8 tuned_it 0.44 | pub/pub/pub 1.00 | k9 mt_pool/k9 mt_pool/k9 mt_pool 0.70 |
+| Nim | k4 tuned/k4 tuned/k4 tuned 0.52 | pub/pub/pub 1.00 | q6 tuned_v/q6 tuned_v/q6 tuned_v 0.82 | q1 tuned_v/q1 tuned_v/q1 tuned_v 0.57 | q6 mt_pool/q6 mt_pool_v/q6 mt_pool_v 0.81 | q1 mt_pool_v/q1 mt_pool_v/q1 mt_pool_v 0.48 | pub/pub/pub 1.00 | k8 tuned_it/k8 tuned_it/k8 tuned_it 0.30 | k9 tuned_v/pub/k9 tuned_v 1.00 | k9 mt_pool/pub/k9 mt_pool_v 1.00 |
+| C3 | k4 tuned/k4 tuned/k4 tuned 0.44 | pub/pub/pub 1.00 | pub/pub/pub 1.00 | q1 tuned_v/pub/q1 tuned_v 1.00 | q6 mt_pool/q6 mt_pool/pub 0.72 | q1 mt_pool/q1 mt_pool_v/pub 0.82 | pub/pub/pub 1.00 | k8 tuned_it/k8 tuned_it/k8 tuned_it 0.33 | pub/pub/pub 1.00 | k9 mt_pool/pub/k9 mt_pool 1.00 |
+| D | k4 tuned/k4 tuned/k4 tuned 0.47 | pub/pub/pub 1.00 | q6 tuned_v/q6 tuned_v/q6 tuned_v 0.75 | pub/pub/pub 1.00 | q6 mt_pool/q6 mt_pool_v/q6 mt_pool_v 0.83 | q1 mt_pool/pub/q1 mt_pool 1.00 | pub/pub/pub 1.00 | k8 tuned_it/k8 tuned_it/k8 tuned_it 0.33 | pub/pub/pub 1.00 | k9 mt_pool/pub/k9 mt_pool 1.00 |
 | Ada | k4 tuned/k4 tuned/k4 tuned 0.20 | pub/pub/pub 1.00 | q6 tuned_v/q6 tuned_v/pub 0.86 | q1 tuned_v/q1 tuned_v/q1 tuned_v 0.58 | q6 mt_pool/q6 mt_pool/pub 0.68 | q1 mt_pool_v/q1 mt_pool_v/q1 mt_pool_v 0.55 | pub/pub/pub 1.00 | k8 tuned_it/pub/pub 1.00 | pub/pub/pub 1.00 | k9 mt_pool/k9 mt_pool/k9 mt_pool 0.60 |
 | Julia | k4 tuned/k4 tuned/k4 tuned 0.51 | k5 tuned_v/k5 tuned_v/k5 tuned_v 0.88 | q6 tuned_v/q6 tuned_v/q6 tuned_v 0.85 | q1 tuned_v/q1 tuned_v/q1 tuned_v 0.34 | q6 mt_pool_v/q6 mt_pool_v/q6 mt_pool_v 0.69 | q1 mt_pool_v/q1 mt_pool_v/q1 mt_pool_v 0.30 | pub/k7 tuned_pf/k7 tuned_pf 0.70 | k8 tuned_it/k8 tuned_it/k8 tuned_it 0.25 | k9 tuned_v/k9 tuned_v/k9 tuned_v 0.95 | pub/k9 mt_pool_v/pub 0.95 |
 | Fortran | k4 swar/k4 swar/k4 swar 0.25 | k5 rq_acc16/k5 rq_acc16/k5 rq_acc16 0.89 | pub/pub/pub 1.00 | pub/pub/pub 1.00 | pub/pub/pub 1.00 | pub/pub/pub 1.00 | k7 tuned_oa/pub/pub 1.00 | k8 tuned_val/k8 tuned_val/k8 tuned_val 0.39 | pub/pub/pub 1.00 | pub/pub/pub 1.00 |
