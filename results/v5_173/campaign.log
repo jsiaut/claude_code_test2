@@ -81,3 +81,4 @@
 2026-11-26T02:42:46 b3 après le groupe K3 (passe 2, machine 38) : 57.95 et 57.90 ms
 2026-11-26T02:42:46 passe 2 groupe 2/23 k3:pub : 52 processus, 264 s
 2026-11-26T03:22:34 passe 2 groupe 3/23 k6:large : 290 processus, 2383 s
+2026-11-26T03:27:25 passe 2 groupe 4/23 k5:l3 : 76 processus, 287 s
