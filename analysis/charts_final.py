@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Graphique SVG du classement (campagne finale, analyse de la v4.1 : docs/V4_FINAL.md, docs/V4_1.md) : rang espéré
-sur les 20 000 variantes, rang plausible (90 %), score moyen sur ces variantes (il fixe l'ordre).
+"""Graphique SVG du classement publié (calcul « Final » de la v5 : docs/METHOD.md, docs/V5.md) : rang espéré sur
+les 20 000 variantes, rang plausible (90 %), score moyen sur ces variantes (il fixe l'ordre).
 Entrée : results/final/analysis.json (ou FINAL_OUT/analysis.json). Sortie : results/charts/classement_v4.svg."""
 import json, os, sys
 
@@ -32,24 +32,27 @@ SRC = os.path.join(os.environ.get("FINAL_OUT", os.path.join(ROOT, "results", "fi
 DST = os.environ.get("FINAL_CHART", os.path.join(ROOT, "results", "charts", "classement_v4.svg"))
 
 
+MICRO = {"6/207": "Emerald Rapids", "6/173": "Granite Rapids"}  # famille/modèle du processeur -> nom
+
+
 def fr(x, d=1):
     return f"{x:.{d}f}".replace(".", ",")
 
 
-def ranking_svg(f, path, machines):
+def ranking_svg(f, path, machines, models):
     order = f["order"]
     n = len(order)
     W, L, Rm, T, row = 760, 118, 70, 74, 24
     H = T + n * row + 46
     X = lambda r: L + (r - 1) * (W - L - Rm) / (n - 1)  # noqa: E731
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" '
-           f'aria-label="Classement de la v4.1 et plage de rang plausible">', STYLE,
+           f'aria-label="Classement de la v5 et plage de rang plausible">', STYLE,
            f'<rect class="bg" width="{W}" height="{H}"/>',
-           '<text class="t1" x="16" y="26">Classement de la v4.1 (campagne finale, analyse corrigée)</text>',
+           '<text class="t1" x="16" y="26">Classement de la v5</text>',
            '<text class="t2" x="16" y="46">Point : rang espéré sur 20 000 variantes de l\'analyse (poids, méthodes, '
            'jugements, bruit, poids des tailles).</text>',
            '<text class="t2" x="16" y="62">Trait : rang dans 90 % de ces variantes. À droite : score moyen sur ces variantes. '
-           f'Machine{"s" if len(machines) > 1 else ""} {", ".join(machines)} (Emerald Rapids).</text>']
+           f'Machine{"s" if len(machines) > 1 else ""} {", ".join(machines)} ({", ".join(models)}).</text>']
     for r in (1, 5, 10, 15, 20, 25):
         out.append(f'<line class="grid" x1="{X(r):.1f}" x2="{X(r):.1f}" y1="{T - 4}" y2="{T + n * row}"/>')
         out.append(f'<text class="tick" x="{X(r):.1f}" y="{T + n * row + 18}" text-anchor="middle">{r}</text>')
@@ -71,7 +74,8 @@ def ranking_svg(f, path, machines):
 
 def main():
     o = json.load(open(SRC))
-    ranking_svg(o["results"]["Final"], DST, o["machines"])
+    models = sorted({MICRO.get("/".join(m.split()[0].split("/")[:2]), m.split()[0]) for m in o["cpu_models"]})
+    ranking_svg(o["results"]["Final"], DST, o["machines"], models)
     print(DST)
 
 

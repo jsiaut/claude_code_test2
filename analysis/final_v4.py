@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v4.1).
+"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v5).
 
-Méthode : docs/METHOD.md ; plans fixés avant les calculs : docs/V4_FINAL.md, section 8 (campagne finale), et
-docs/V4_1.md (corrections A1 à A4 de l'analyse). Ce module est autonome : il lit les mesures de la campagne
+Méthode : docs/METHOD.md ; plans fixés avant les calculs : docs/V4_FINAL.md, section 8 (campagne finale de la v4),
+docs/V4_1.md (corrections A1 à A4 de l'analyse) et docs/V5.md (campagne rejouée : corrections A5 et A6, C par gcc,
+réplication). Ce module est autonome : il lit les mesures de la campagne
 (results/final/raw, tools/final/campaign.py), b3 (results/final/b3.jsonl), les bornes physiques des machines qui ont
 mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json), l'empreinte de K1
 (results/footprint.json) et la grille de contrôle (analysis/capabilities.py, analysis/capabilities_v2.py ; la
@@ -35,17 +36,26 @@ Calcul « Final » (docs/V4_FINAL.md, 8 ; docs/V4_1.md, 3) :
 * chaque cellule nouvelle (forme absente de la base) est tirée par son propre générateur (graine fixée par la clé, le
   langage et la position), dans les réservoirs de résidus de son noyau bâtis sur la base de la position ;
 * cellule manquante de la base : temps admissible le plus lent des autres langages (variantes communes) ; forme
-  manquante : absente de son ensemble, signalée.
+  manquante : absente de son ensemble, signalée ;
+* A5 : l'effet commun d'un groupe (noyau, taille) dans une passe, écart de vitesse de la machine d'une passe à
+  l'autre, est retiré des logarithmes des temps avant de calculer les résidus du rééchantillonnage ; les estimations
+  ponctuelles ne changent pas ;
+* A6 : la borne physique des mesures à quatre fils vient de la sonde corrigée (stream.txt ou stream4.txt de la
+  machine ; pour une machine qui n'en a pas, médiane des relevés corrigés des machines de la campagne, à défaut des
+  machines du même modèle, à défaut de toutes).
 Sensibilités (CALCS) : Base, trois tailles ; sans les tailles, sans R1, sans R2, sans C1, sans R4 ; R1' au lieu de R1 ;
 une taille à la fois ; sélection indépendante ; D3 et D4 sur trois processus ; sur les seules mesures ; sans une
-correction de la v4.1 à la fois (Sans A1 à Sans A4) ; « Méthode du 23 novembre », sans aucune, qui redonne le classement
-publié le 23 novembre. Les tirages des variantes viennent du même générateur, avancé de la même façon pour tous les
-calculs : ils sont identiques d'un calcul à l'autre. Comparaison : le classement de la v3
-(results/final/comparisons.json).
+correction à la fois (Sans A1 à Sans A6) ; « Méthode du 23 novembre », sans aucune et classée au rang moyen ; « C par
+gcc », quand la campagne porte les constructions de C par gcc. Les tirages des variantes viennent du même générateur,
+avancé de la même façon pour tous les calculs : ils sont identiques d'un calcul à l'autre. Réplication : la campagne
+précédente, telle qu'elle était publiée et recalculée par cette méthode (comparisons.json de la campagne). Effet de
+machine : les cellules mesurées sur plusieurs machines de la campagne, rapportées à la première.
 
 Sorties : results/final/analysis.json, results/report_final.md. Variables : BOOT (2000 rééchantillonnages), UA (20 000
 variantes), FINAL_DIR (répertoire d'une autre campagne), FINAL_RAW (autres données), FINAL_OUT (autre répertoire de
-sortie). « --extract <fichier> <note> » : extrait de la campagne publiée, pour la réplication. Contrôle : tools/check.sh."""
+sortie). « --extract <fichier> <note> » et « --extract-same <fichier> <note> » : extraits du calcul déjà écrit, pour la
+réplication d'une campagne suivante (classement publié ; recalcul par la méthode de la suivante). Contrôle :
+tools/check.sh."""
 import copy, glob, importlib.util, json, math, os, re, sys, zlib
 from collections import defaultdict
 
@@ -132,8 +142,8 @@ OUT = os.path.join(OUTD, "analysis.json")
 REPORT = os.path.join(OUTD, "report_final.md") if "FINAL_OUT" in os.environ else os.path.join(ROOT, "results",
                                                                                                "report_final.md")
 FINAL = "Final"
-OLD = "Méthode du 23 novembre"  # sans A1 à A4 : doit redonner le classement publié le 23 novembre
-A_OFF = {"Sans A1": "a1", "Sans A2": "a2", "Sans A3": "a3", "Sans A4": "a4"}
+OLD = "Méthode du 23 novembre"  # sans aucune correction (A1 à A6), classée au rang moyen
+A_OFF = {"Sans A1": "a1", "Sans A2": "a2", "Sans A3": "a3", "Sans A4": "a4", "Sans A5": "a5", "Sans A6": "a6"}
 CALCS = [FINAL, "Base, trois tailles", "Sans les tailles (taille publiée seule)", "Sans R1", "Sans R2", "Sans C1",
          "Sans R4", "R1' au lieu de R1", "Taille petite", "Taille grande", "Sélection indépendante",
          "D3 et D4 sur trois processus", "Sur les seules mesures"] + list(A_OFF) + [OLD]
@@ -143,12 +153,14 @@ GCC_VIEW = {"c": {"gcc": "pub", "gcc_cv": "cv", "gcc_chk": "chk"}}
 
 
 def corrections(calc):
-    """Corrections de la v4.1 (docs/V4_1.md, 3) appliquées dans un calcul : A1 (grille en règle v2 dans toutes les
+    """Corrections appliquées dans un calcul. v4.1 (docs/V4_1.md, 3) : A1 (grille en règle v2 dans toutes les
     variantes), A2 (b3 : le plus lent des 16 décalages), A3 (code naturel rapporté au meilleur code naturel), A4
-    (mesures à quatre fils sans la petite taille)."""
+    (mesures à quatre fils sans la petite taille). v5 (docs/V5.md, 8) : A5 (effet commun d'un groupe d'une passe
+    retiré des résidus), A6 (borne à quatre fils : relevé de la sonde corrigée)."""
+    names = ("a1", "a2", "a3", "a4", "a5", "a6")
     if calc == OLD:
-        return {"a1": False, "a2": False, "a3": False, "a4": False}
-    return {a: A_OFF.get(calc) != a for a in ("a1", "a2", "a3", "a4")}
+        return dict.fromkeys(names, False)
+    return {a: A_OFF.get(calc) != a for a in names}
 
 
 def klass(l):
@@ -207,18 +219,30 @@ def c_vector(cdict, langs):
 
 
 # ------------------------------------------------------------------ données de la campagne
+class Proc(list):
+    """Un processus retenu : [médiane de ses répétitions]. Attributs : ps (passe), cp (copie), machine, boot
+    (démarrage), b (effet commun de son groupe dans sa passe, en logarithme : A5, block_effects)."""
+    ps, cp, machine, boot, b = None, 0, None, None, 0.0
+
+    def like(self, value):
+        """Un processus de mêmes attributs et d'une autre valeur."""
+        q = Proc([value])
+        q.__dict__.update(self.__dict__)
+        return q
+
+
 class Data:
-    """Mesures de la campagne : data[(construction, taille)][langage][clé] = [[médiane d'un processus]] ; pour chaque
-    processus aussi sa passe et sa copie (bypass), et les latences de K8 naturel (lat)."""
+    """Mesures de la campagne : data[(construction, taille)][langage][clé] = [processus (Proc)] ; latences de K8
+    naturel (lat) ; blocks : effet commun de chaque groupe (noyau, taille) dans chaque passe (A5)."""
 
     def __init__(self):
         self.data = defaultdict(lambda: defaultdict(dict))
-        self.bypass = defaultdict(lambda: defaultdict(dict))
         self.lat = defaultdict(lambda: defaultdict(dict))
-        self.k3 = defaultdict(lambda: defaultdict(dict))  # (construction, taille) -> langage -> clé -> [(passe, boot)]
         self.failures, self.skipped, self.steal = [], [], []
         self.models, self.machines = defaultdict(lambda: defaultdict(int)), defaultdict(set)
         self.gcc = 0  # enregistrements des étiquettes gcc laissés de côté
+        self.gcc_models = defaultdict(int)  # leur processeur
+        self.blocks = {}
 
     def procs(self, cons, size, lang, key):
         return self.data.get((cons, size), {}).get(lang, {}).get(key)
@@ -237,7 +261,9 @@ def load(view=None):
             if r["construction"] in swap:
                 r["construction"] = swap[r["construction"]]
             elif r["construction"] in swap.values() or r["construction"].startswith("gcc"):
-                F.gcc += r["construction"].startswith("gcc")
+                if r["construction"].startswith("gcc"):
+                    F.gcc += 1
+                    F.gcc_models[r.get("cpu_model", "?")] += 1
                 continue
             key = (r["kernel"], r["variant"], r["param"])
             tag = (r["construction"], r["size"])
@@ -257,14 +283,40 @@ def load(view=None):
                 continue
             if r.get("steal_frac", 0) > 0.05:
                 F.steal.append((r["lang"], r["construction"], r["size"], key, r["steal_frac"]))
-            m = r["median"]
-            F.data[tag][r["lang"]].setdefault(key, []).append([m])
-            F.bypass[tag][r["lang"]].setdefault(key, []).append((r["pass"], m, r.get("copy", 0)))
-            if key[0] == "k3":
-                F.k3[tag][r["lang"]].setdefault(key, []).append((r["pass"], r.get("boot_id")))
+            q = Proc([r["median"]])
+            q.ps, q.cp, q.machine, q.boot = r["pass"], r.get("copy", 0), r.get("machine"), r.get("boot_id")
+            F.data[tag][r["lang"]].setdefault(key, []).append(q)
             if key == K8N:
                 F.lat[tag][r["lang"]].setdefault(key, []).append((r.get("copy", 0), r.get("lat", [])))
+    F.blocks = block_effects(F.data)
     return F
+
+
+def block_effects(data):
+    """A5 (docs/V5.md, 8) : effet commun de chaque groupe (noyau, taille) dans chaque passe, inscrit dans ses processus
+    (attribut b) et renvoyé : {(noyau, taille): {passe: effet}}. Un groupe d'une passe est mesuré en entier sur une
+    machine : l'effet est la médiane, sur les cellules du groupe mesurées dans toutes ses passes, de l'écart entre la
+    moyenne des logarithmes des temps de la cellule dans la passe et la moyenne de ses moyennes par passe."""
+    cells = defaultdict(list)  # (noyau, taille) -> une ligne par cellule : {passe: moyenne des logarithmes}
+    for (cons, size), dl in data.items():
+        for l, keys in dl.items():
+            for key, procs in keys.items():
+                by = defaultdict(list)
+                for q in procs:
+                    by[q.ps].append(math.log(q[0]))
+                cells[(key[0], size)].append({ps: float(np.mean(v)) for ps, v in by.items()})
+    out = {}
+    for g, rows in cells.items():
+        passes = sorted({ps for row in rows for ps in row})
+        full = [row for row in rows if len(row) == len(passes)]
+        out[g] = {ps: float(np.median([row[ps] - np.mean([row[x] for x in passes]) for row in full])) if full else 0.0
+                  for ps in passes}
+    for (cons, size), dl in data.items():
+        for l, keys in dl.items():
+            for key, procs in keys.items():
+                for q in procs:
+                    q.b = out[(key[0], size)][q.ps]
+    return out
 
 
 def b3_values(stat):
@@ -300,8 +352,8 @@ def k3_normalized(F, b3ref, b3g):
             for key, procs in keys.items():
                 if key[0] != "k3":
                     continue
-                tags = F.k3[tag][l][key]
-                out[tag][l][key] = [[p[0] * b3ref / b3g[(ps, boot)]] for p, (ps, boot) in zip(procs, tags)]
+                out[tag][l][key] = [q.like(q[0] * b3ref / b3g[(q.ps, q.boot)]) for q in procs]
+    block_effects(out)  # A5 : l'effet commun qui reste une fois les temps ramenés à b3
     return out
 
 
@@ -345,7 +397,7 @@ def fill_missing(d, langs, keys):
         slow = max(have, key=lambda l: np.mean(np.log([np.median(p) for p in d[l][key]])))
         for l in langs:
             if not d.get(l, {}).get(key):
-                d[l][key] = [list(p) for p in d[slow][key]]
+                d[l][key] = [p.like(p[0]) for p in d[slow][key]]
                 filled.append((l, key, slow))
     return filled
 
@@ -353,17 +405,21 @@ def fill_missing(d, langs, keys):
 # ------------------------------------------------------------------ bornes physiques des machines
 def hw_numbers(path):
     """Caractérisation d'une machine (tools/sizes/hwchar.sh, tools/hwprobe.c) : bande passante en lecture sur 1 thread
-    selon la taille (bw), STREAM triad sur 4 threads, pic FMA et fréquence."""
+    selon la taille (bw), STREAM triad sur 4 threads, pic FMA et fréquence. STREAM sur 4 threads (A6) : stream4 est le
+    relevé de la sonde corrigée (lignes « relevés par les fils » de stream.txt ou de stream4.txt), None s'il n'y en a
+    pas ; stream4_0 est le relevé d'origine (à défaut, le corrigé) ; model : famille/modèle/révision du processeur."""
     bw = []
     for line in open(os.path.join(path, "bw.txt")):
         m = re.match(r"bw:\s+(\d+) KiB\s+([\d.]+) GB/s", line)
         if m:
             bw.append((int(m.group(1)) * 1024, float(m.group(2)) * 1e9))
-    stream4 = []
-    for line in open(os.path.join(path, "stream.txt")):
-        m = re.search(r"stream: T=(\d)\s+(\w+)\s+([\d.]+) GB/s", line)
-        if m and m.group(1) == "4" and m.group(2) == "triad":  # triad : la figure de mérite de STREAM
-            stream4.append(float(m.group(3)) * 1e9)
+    s4, s40 = [], []
+    for f in ("stream.txt", "stream4.txt"):
+        fp = os.path.join(path, f)
+        for line in open(fp) if os.path.exists(fp) else []:
+            m = re.search(r"stream: T=(\d)\s+(\w+)\s+([\d.]+) GB/s", line)
+            if m and m.group(1) == "4" and m.group(2) == "triad":  # triad : la figure de mérite de STREAM
+                (s4 if "par les fils" in line else s40).append(float(m.group(3)) * 1e9)
     peak = []
     for line in open(os.path.join(path, "peak.txt")):
         m = re.search(r"([\d.]+) GFLOP/s", line)
@@ -371,19 +427,39 @@ def hw_numbers(path):
             peak.append(float(m.group(1)) * 1e9)
     freq = [float(m.group(1)) * 1e9 for line in open(os.path.join(path, "freq.txt"))
             for m in [re.search(r"freq: ([\d.]+) GHz", line)] if m]
-    return {"bw": sorted(bw), "stream4": max(stream4), "peak": max(peak), "freq": max(freq)}
+    cpu, lp = {}, os.path.join(path, "lscpu.txt")
+    for line in open(lp) if os.path.exists(lp) else []:
+        m = re.match(r"(CPU family|Model|Stepping):\s+(\d+)", line)
+        if m:
+            cpu[m.group(1)] = m.group(2)
+    return {"bw": sorted(bw), "stream4": max(s4) if s4 else None, "stream4_0": max(s40 or s4), "peak": max(peak),
+            "freq": max(freq), "model": "/".join(cpu.get(k, "?") for k in ("CPU family", "Model", "Stepping"))}
 
 
-def machines_hw(F):
-    """Bornes physiques : médiane, quantité par quantité, des caractérisations des machines qui ont mesuré."""
+def machines_hw(F, a6=True):
+    """Bornes physiques : médiane, quantité par quantité, des caractérisations des machines qui ont mesuré. STREAM sur
+    4 threads (A6) : médiane des relevés de la sonde corrigée, sur les machines de la campagne qui en ont un ; à défaut
+    sur les autres machines de results/hw du même modèle de processeur, puis sur toutes ; sans A6, médiane des relevés
+    d'origine."""
     ms = sorted({m for v in F.machines.values() for m in v if m is not None}, key=lambda x: int(x))
     hws = [hw_numbers(os.path.join(ROOT, "results", "hw", f"machine{m}")) for m in ms]
     if not hws:
         raise SystemExit("aucune machine dans les enregistrements")
     sizes = sorted(set.intersection(*[{s for s, _ in h["bw"]} for h in hws]))
     bw = [(s, float(np.median([dict(h["bw"])[s] for h in hws]))) for s in sizes]
-    hw = {"bw": bw}
-    for q in ("stream4", "peak", "freq"):
+    if a6:
+        s4 = [h["stream4"] for h in hws if h["stream4"]]
+        if not s4:
+            others = [hw_numbers(p) for p in sorted(glob.glob(os.path.join(ROOT, "results", "hw", "machine*")))]
+            others = [h for h in others if h["stream4"]]
+            models = {h["model"] for h in hws}
+            s4 = [h["stream4"] for h in others if h["model"] in models] or [h["stream4"] for h in others]
+        if not s4:
+            raise SystemExit("aucun relevé corrigé de STREAM à 4 fils dans results/hw (stream4.txt)")
+    else:
+        s4 = [h["stream4_0"] for h in hws]
+    hw = {"bw": bw, "stream4": float(np.median(s4))}
+    for q in ("peak", "freq"):
         hw[q] = float(np.median([h[q] for h in hws]))
     return hw, ms
 
@@ -426,8 +502,9 @@ def proc_logs(procs):
     return np.log(np.array([np.median(p) for p in procs], float))
 
 
-def build_pools(data, langs, keys):
-    """Réservoirs de résidus par (noyau, classe), fusionnés avec le noyau s'ils ont moins de 20 résidus."""
+def build_pools(data, langs, keys, a5=True):
+    """Réservoirs de résidus par (noyau, classe), fusionnés avec le noyau s'ils ont moins de 20 résidus. a5 : résidus
+    des logarithmes diminués de l'effet commun du groupe de chaque processus dans sa passe (block_effects)."""
     pools, kpool = defaultdict(list), defaultdict(list)
     for l in langs:
         for key in sorted(keys):  # ordre fixe : l'ordre d'un ensemble change d'un processus à l'autre
@@ -435,6 +512,8 @@ def build_pools(data, langs, keys):
             if not procs or len(procs) < 2:
                 continue
             y = proc_logs(procs)
+            if a5:
+                y = y - np.array([p.b for p in procs])
             P = len(y)
             r = (y - y.mean()) * math.sqrt(P / (P - 1))
             pools[(key[0], klass(l))].extend(r.tolist())
@@ -647,7 +726,7 @@ def position(F, p, calc, k3n):
                 if size_of(key, p) != size:
                     continue
                 if three and (key[0] == "k2" or key == K8N):
-                    procs = [[m] for ps, m, c in F.bypass[(cons, size)][l][key] if c == 0]
+                    procs = [q for q in procs if q.cp == 0]
                 d[l][key] = procs
                 src[l][key] = (cons, size, key)
     for l in LANGS:
@@ -667,7 +746,7 @@ def position(F, p, calc, k3n):
             missing.append([l, cons, "|".join(sk), size])
             return
         if three and tk == K8N:
-            procs = [[m] for ps, m, c in F.bypass[(cons, size)][l][sk] if c == 0]
+            procs = [q for q in procs if q.cp == 0]
         d[l][tk] = procs
         src[l][tk] = (cons, size, sk)
         if tk == K8N:
@@ -740,11 +819,11 @@ def seed_of(base, key, lang, p):
     return [base, zlib.crc32("|".join(key).encode()), zlib.crc32(lang.encode()), p]
 
 
-def new_cells_patch(d, add, allkeys, p, base_seed):
+def new_cells_patch(d, add, allkeys, p, base_seed, a5):
     """Tableaux simulés des clés nouvelles d'une position : estimation ponctuelle, et tirages dans les réservoirs du
     noyau (bâtis sur la base de la position), un générateur par clé, langage et position ; NaN où la forme manque."""
     def patch(A):
-        pools = build_pools(d, LANGS, sorted(needed_keys()))
+        pools = build_pools(d, LANGS, sorted(needed_keys()), a5)
         for key in sorted(allkeys):
             mean = np.full((A.nb + 1, len(LANGS)), np.nan)
             mn = np.full((A.nb + 1, len(LANGS)), np.nan)
@@ -790,8 +869,7 @@ def selection(F, fc, pos):
             for ceil, lst in cand.items():
                 best = None
                 for b, size, key in lst:
-                    rows = F.bypass.get((b, size), {}).get(l, {}).get(key, [])
-                    p0 = [m for ps, m, c in rows if ps == 0]
+                    p0 = [q[0] for q in F.procs(b, size, l, key) or [] if q.ps == 0]
                     if not p0:
                         continue
                     t0 = math.exp(float(np.mean(np.log(p0))))
@@ -800,7 +878,7 @@ def selection(F, fc, pos):
                 if best is None:
                     continue
                 _, b, size, key = best
-                later = [[m] for ps, m, c in F.bypass[(b, size)][l][key] if ps in (1, 2)]
+                later = [q for q in F.procs(b, size, l, key) if q.ps in (1, 2)]
                 if later:
                     add[sel_keys[ceil]][l] = later
                     chosen[f"{l}|{ceil}|{POS_NAMES[p]}"] = [b, size, "|".join(key)]
@@ -813,18 +891,18 @@ def selection(F, fc, pos):
 
 # ------------------------------------------------------------------ moteur : un calcul, ses 20 000 variantes
 def three(host, pos_dl, footprint, c3, ebs, e_meas=None, patches=None, wmode="three", b3=None, measures_only=False,
-          a1=True, a3=True, a4=True):
+          a1=True, a3=True, a4=True, a5=True):
     """Un calcul. host : données qui avancent le générateur principal (les mêmes pour tous les calculs) ; pos_dl : [(d,
     lt)] des trois positions ; wmode : « three » (poids des tailles égaux au centre, tirés dans les variantes) ou une
-    position (0, 1, 2) de poids 1 ; b3 : R4 (référence de K3) ; measures_only : poids de la grille à 0 ; a1, a3, a4 :
-    corrections de la v4.1. Les tirages de la règle de la grille (a1) et de la référence du code naturel (a3) sont
-    faits puis ignorés, pour que tous les calculs gardent les mêmes tirages."""
+    position (0, 1, 2) de poids 1 ; b3 : R4 (référence de K3) ; measures_only : poids de la grille à 0 ; a1, a3, a4,
+    a5 : corrections (corrections()). Les tirages de la règle de la grille (a1) et de la référence du code naturel (a3)
+    sont faits puis ignorés, pour que tous les calculs gardent les mêmes tirages."""
     rng = np.random.default_rng(SEED)
     keys = sorted(needed_keys())
     Arrays3(host[0], host[1], LANGS, B, rng, build_pools(host[0], LANGS, keys))  # avance rng de la même façon
     As, refs, ebs = [], [], [dict(e) for e in ebs]
     for p, (d, lt) in enumerate(pos_dl):
-        A = Arrays3(d, lt, LANGS, B, np.random.default_rng(SEED + 4100 + p), build_pools(d, LANGS, keys))
+        A = Arrays3(d, lt, LANGS, B, np.random.default_rng(SEED + 4100 + p), build_pools(d, LANGS, keys, a5))
         if e_meas is not None:
             A.e_meas = e_meas
         for patch in (patches or [[], [], []])[p]:
@@ -931,7 +1009,7 @@ def run_calc(calc, F, fc, footprint, c3, ebs, b3, host, keys):
     if calc == "Sélection indépendante":
         e_meas, adds, sel, chosen = selection(F, fc, pos)
         for p in range(3):
-            patches[p].append(new_cells_patch(pos[p][0], adds[p], sel, p, SEL_SEED))
+            patches[p].append(new_cells_patch(pos[p][0], adds[p], sel, p, SEL_SEED, cor["a5"]))
     elif calc not in ("Base, trois tailles", "Sans C1"):
         adds, allc = [], {}
         for p in range(3):
@@ -941,7 +1019,7 @@ def run_calc(calc, F, fc, footprint, c3, ebs, b3, host, keys):
             missing += miss
         e_meas = e_meas_with(allc)
         for p in range(3):
-            patches[p].append(new_cells_patch(pos[p][0], adds[p], allc, p, NEW_SEED))
+            patches[p].append(new_cells_patch(pos[p][0], adds[p], allc, p, NEW_SEED, cor["a5"]))
     r4 = calc not in ("Base, trois tailles", "Sans R4")
     if r4:
         for p in range(3):
@@ -949,7 +1027,7 @@ def run_calc(calc, F, fc, footprint, c3, ebs, b3, host, keys):
     wmode = {"Sans les tailles (taille publiée seule)": 1, "Taille petite": 0, "Taille grande": 2}.get(calc, "three")
     s = three(host, [(d, lt) for d, lt, src, miss in pos], footprint, c3, ebs, e_meas=e_meas, patches=patches,
               wmode=wmode, b3=b3ref if r4 else None, measures_only=(calc == "Sur les seules mesures"),
-              a1=cor["a1"], a3=cor["a3"], a4=cor["a4"])
+              a1=cor["a1"], a3=cor["a3"], a4=cor["a4"], a5=cor["a5"])
     out = summarize(s, by_rank=(calc == OLD))
     out["missing"] = missing
     out["filled"] = {k: [[x[0], " ".join(x[1]).strip(), x[2]] for x in v] for k, v in filled.items()}
@@ -990,20 +1068,51 @@ def retained(F, fc):
 
 
 def spread(F):
-    """Écart entre la passe la plus lente et la plus rapide de chaque cellule (moyennes géométriques par passe)."""
-    out = []
-    for (cons, size), dl in F.bypass.items():
+    """Écart entre la passe la plus lente et la plus rapide de chaque cellule (moyennes géométriques par passe) : brut,
+    puis une fois retiré l'effet commun de chaque groupe dans chaque passe (A5)."""
+    raw, net = [], []
+    for (cons, size), dl in F.data.items():
         for l, keys in dl.items():
-            for key, rows in keys.items():
-                by = defaultdict(list)
-                for ps, m, c in rows:
-                    by[ps].append(m)
+            for key, procs in keys.items():
+                by, byn = defaultdict(list), defaultdict(list)
+                for q in procs:
+                    by[q.ps].append(q[0])
+                    byn[q.ps].append(q[0] * math.exp(-q.b))
+                by, byn = ({ps: np.log(v) for ps, v in d.items()} for d in (by, byn))
                 if len(by) == 3:
-                    g = [math.exp(float(np.mean(np.log(v)))) for v in by.values()]
-                    out.append(max(g) / min(g))
-    out = np.array(out)
-    return {"cells": int(len(out)), "median": float(np.median(out)) if len(out) else None,
-            "over_20pct": int((out > 1.2).sum())}
+                    for acc, d in ((raw, by), (net, byn)):
+                        g = [math.exp(float(np.mean(v))) for v in d.values()]
+                        acc.append(max(g) / min(g))
+    raw, net = np.array(raw), np.array(net)
+    return {"cells": int(len(raw)), "median": float(np.median(raw)) if len(raw) else None,
+            "over_20pct": int((raw > 1.2).sum()), "net_median": float(np.median(net)) if len(net) else None,
+            "net_over_20pct": int((net > 1.2).sum())}
+
+
+def machine_effect(F):
+    """Effet de machine dans la campagne (docs/V5.md, 8) : pour chaque cellule mesurée sur la première machine et sur
+    une machine suivante, rapport de la médiane de ses processus sur cette machine à la médiane de ses processus sur la
+    première. Par machine : nombre de cellules, médiane des rapports (ensemble et par noyau), part des cellules à moins
+    de 5 % de la médiane d'ensemble. None si la campagne n'a qu'une machine."""
+    cells = [(key[0], procs) for dl in F.data.values() for keys in dl.values() for key, procs in keys.items()]
+    ms = sorted({q.machine for k, procs in cells for q in procs if q.machine is not None}, key=int)
+    if len(ms) < 2:
+        return None
+    out = {}
+    for m in ms[1:]:
+        by = defaultdict(list)
+        for k, procs in cells:
+            a = [q[0] for q in procs if q.machine == ms[0]]
+            b = [q[0] for q in procs if q.machine == m]
+            if a and b:
+                by[k].append(float(np.median(b) / np.median(a)))
+        ratios = [r for v in by.values() for r in v]
+        if ratios:
+            med = float(np.median(ratios))
+            out[m] = {"cells": len(ratios), "median": med,
+                      "within_5pct": float(np.mean([abs(math.log(r / med)) <= math.log(1.05) for r in ratios])),
+                      "by_kernel": {k: float(np.median(v)) for k, v in sorted(by.items())}}
+    return {"first": ms[0], "machines": out}
 
 
 def cell_estimates(F):
@@ -1012,40 +1121,57 @@ def cell_estimates(F):
             for l, keys in dl.items() for key, procs in keys.items()}
 
 
-def extract(path, note):
-    """Extrait de la campagne publiée, gardé pour qu'une campagne suivante s'y compare (replication) : classement et
-    scores du calcul « Final » déjà écrit (OUT), estimations par cellule relues dans les mesures. Écrit le fichier
-    comparisons.json de la campagne suivante."""
+def extract(path, note, key="previous"):
+    """Extrait d'une campagne, gardé pour que la suivante s'y compare (replication) : classement et scores du calcul
+    « Final » déjà écrit (OUT). Complète le fichier comparisons.json de la campagne suivante. Clé « previous » : le
+    classement tel qu'il était publié, avec les estimations par cellule relues dans les mesures ; clé
+    « previous_same_method » : la même campagne recalculée par la méthode de la suivante (docs/V5.md, 8, écart 7)."""
     f = json.load(open(OUT))["results"][FINAL]
     prev = {k: f[k] for k in ("order", "ms_mean", "ms0", "exp", "first", "E", "D", "C")}
-    prev["cells"] = cell_estimates(load())
-    json.dump({"note": note, "previous": prev}, open(path, "w"), indent=1, ensure_ascii=False)
+    comp = json.load(open(path)) if os.path.exists(path) else {}
+    if key == "previous":
+        prev["cells"] = cell_estimates(load())
+        comp["note"] = note
+    else:
+        prev["note"] = note
+    comp[key] = prev
+    json.dump(comp, open(path, "w"), indent=1, ensure_ascii=False)
 
 
-def replication(F, prev, fin):
+def replication(F, prev, fin, same=None):
     """Cette campagne contre la précédente (prev : extract) : places et scores de « Final », langages à plus de deux
     places, et rapport des temps cellule par cellule (cette campagne sur la précédente, cellules mesurées dans les
-    deux) : médiane d'ensemble, médiane par langage, part des cellules à moins de 10 % de la médiane d'ensemble."""
+    deux) : médiane d'ensemble, médiane par langage, part des cellules à moins de 10 % de la médiane d'ensemble. Avec
+    same (la campagne précédente recalculée par la méthode de celle-ci) : la comparaison à méthode égale, et ce que
+    le changement de méthode déplace dans la campagne précédente."""
     now = cell_estimates(F)
     ratios = {k: now[k] / t for k, t in prev["cells"].items() if k in now}
     med = float(np.median(list(ratios.values())))
     by = defaultdict(list)
     for k, r in ratios.items():
         by[k.split("|")[0]].append(r)
-    return {"moved": moved(prev["order"], fin["order"], LANGS), "cells": len(ratios), "median": med,
-            "within_10pct": float(np.mean([abs(math.log(r / med)) <= math.log(1.10) for r in ratios.values()])),
-            "by_lang": {l: float(np.median(v)) for l, v in sorted(by.items())},
-            "previous": {k: prev[k] for k in ("order", "ms_mean", "exp", "first", "E", "D")}}
+    keep = ("order", "ms_mean", "exp", "first", "E", "D")
+    out = {"moved": moved(prev["order"], fin["order"], LANGS), "cells": len(ratios), "median": med,
+           "within_10pct": float(np.mean([abs(math.log(r / med)) <= math.log(1.10) for r in ratios.values()])),
+           "by_lang": {l: float(np.median(v)) for l, v in sorted(by.items())},
+           "previous": {k: prev[k] for k in keep}}
+    if same:
+        out["same_method"] = {"moved": moved(same["order"], fin["order"], LANGS),
+                              "method_moved": moved(prev["order"], same["order"], LANGS),
+                              "previous": {k: same[k] for k in keep}}
+    return out
 
 
 def main():
-    if len(sys.argv) == 4 and sys.argv[1] == "--extract":  # --extract <fichier> <note>
-        return extract(sys.argv[2], sys.argv[3])
+    if len(sys.argv) == 4 and sys.argv[1] in ("--extract", "--extract-same"):  # <option> <fichier> <note>
+        return extract(sys.argv[2], sys.argv[3], "previous" if sys.argv[1] == "--extract" else "previous_same_method")
     F = load()
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
     hw, machines = machines_hw(F)
     ebs = [ebounds(hw, p) for p in range(3)]
+    hw0 = machines_hw(F, a6=False)[0]  # sans A6 : relevé d'origine de STREAM à 4 fils
+    ebs0 = [ebounds(hw0, p) for p in range(3)]
     b3 = {}  # statistique de b3 -> (b3 de référence, temps de K3 ramenés à ce b3, b3 des groupes)
     for stat in ("max", "median"):
         ref, groups, b3recs = b3_values(stat)
@@ -1056,12 +1182,17 @@ def main():
     host = (copy.deepcopy(hd), position(F, 1, "Base, trois tailles", {})[1])
     fill_missing(host[0], LANGS, keys)
     calcs = list(CALCS)
-    res = {c: run_calc(c, F, fc, footprint, c3, ebs, b3, host, keys) for c in calcs}
+    res = {c: run_calc(c, F, fc, footprint, c3, ebs if corrections(c)["a6"] else ebs0, b3, host, keys)
+           for c in calcs}
     if F.gcc:  # C par gcc : mêmes tirages, les cellules de C prises dans ses constructions par gcc
         Fg = load(GCC_VIEW)
         b3g = {stat: (ref, k3_normalized(Fg, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
         calcs.append(GCC_CALC)
         res[GCC_CALC] = run_calc(GCC_CALC, Fg, fc, footprint, c3, ebs, b3g, host, keys)
+        gcc = {"records": F.gcc, "cpu_models": dict(F.gcc_models),
+               "failures": [x for x in Fg.failures if x["lang"] in GCC_VIEW],
+               "skipped": [x for x in Fg.skipped if x["lang"] in GCC_VIEW],
+               "steal_over_5pct": [x for x in Fg.steal if x[0] in GCC_VIEW]}
     fin = res[FINAL]["order"]
     moved_ = {c: moved(fin, res[c]["order"], LANGS) for c in calcs[1:]}
     out = {"results": res, "moved_more_than_2": moved_, "b3_ref": b3["max"][0],
@@ -1072,18 +1203,19 @@ def main():
            "machines": machines, "group_machines": {f"{p}|{k}|{s}": sorted(m for m in v if m is not None)
                                                     for (p, k, s), v in sorted(F.machines.items())},
            "bounds": [{f"{k}#{i}": v for (k, i), v in e.items()} for e in ebs], "hw": hw,
+           "stream4_original": hw0["stream4"],
+           "block_effects": {f"{k}|{s}": v for (k, s), v in sorted(F.blocks.items())},
+           "machine_effect": machine_effect(F),
            "retained": retained(F, fc), "spread": spread(F), "failures": F.failures, "skipped": F.skipped,
            "steal_over_5pct": F.steal, "cpu_models": {m: dict(ps) for m, ps in F.models.items()}}
-    # comparaisons : la méthode du 23 novembre (calcul OLD), le classement de la v3 (tête du README jusqu'au 23) ou la
-    # campagne précédente (réplication), selon ce que porte comparisons.json
-    comp = json.load(open(os.path.join(FIN, "comparisons.json")))
-    if "v3" in comp:
-        out["v3"] = comp["v3"]
+    if F.gcc:
+        out["gcc"] = gcc
+    # comparaisons : la méthode du 23 novembre (calcul OLD) et, si comparisons.json la porte, la campagne précédente
     out["moved_vs_old"] = moved(res[OLD]["order"], fin, LANGS)
-    if "v3" in comp:
-        out["moved_vs_v3"] = moved(out["v3"]["order"], fin, LANGS)
+    cp = os.path.join(FIN, "comparisons.json")
+    comp = json.load(open(cp)) if os.path.exists(cp) else {}
     if "previous" in comp:
-        out["replication"] = replication(F, comp["previous"], res[FINAL])
+        out["replication"] = replication(F, comp["previous"], res[FINAL], comp.get("previous_same_method"))
     os.makedirs(OUTD, exist_ok=True)
     json.dump(out, open(OUT, "w"), indent=1, default=float)
     report(out, calcs)
@@ -1101,10 +1233,11 @@ def nth(n):
 def report(o, calcs):
     R = o["results"]
     f = R[FINAL]
-    L = ["# v4.1, campagne finale : le classement — résultats", "",
-         "*Plans : `docs/V4_FINAL.md` (section 8, fixée avant les mesures) et `docs/V4_1.md` (corrections A1 à A4 de "
-         "l'analyse, 24 novembre). Généré par `analysis/final_v4.py` à partir de `results/final/raw`, de "
-         "`results/final/b3.jsonl` et du relevé des formes (`results/converge/forms.json`).*", "",
+    L = ["# v5 : le classement — résultats", "",
+         "*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse) et `docs/V5.md` "
+         "(campagne rejouée, corrections A5 et A6), fixés avant les mesures ou avant leur analyse. Généré par "
+         "`analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes "
+         "(`results/converge/forms.json`).*", "",
          f"Machines : {', '.join(o['machines'])} ; b3 de référence (le plus lent des 16 décalages, A2) : "
          f"{1e3 * o['b3_ref']:.2f} ms ; b3 des groupes de K3 : "
          + ", ".join(f"passe {k.split('|')[0]} {1e3 * v:.2f} ms" for k, v in sorted(o["b3_groups"].items()))
@@ -1123,36 +1256,40 @@ def report(o, calcs):
           "Étages (paires ordonnées dans au moins 95 % des variantes) : "
           + " | ".join(", ".join(NAMES[l] for l in t) for t in f["tiers"]), "",
           "## Tous les calculs", ""]
-    rp = o.get("replication")
-    if rp:  # campagne précédente : dernière colonne, et lignes des rangs qui bougent
-        last, last_order = "Campagne précédente", rp["previous"]["order"]
-        legend = ("« Méthode du 23 novembre » : sans aucune et classée au rang moyen ; « Campagne précédente » : son "
-                  "classement « Final ».")
-        versus = [("la méthode du 23 novembre", o["moved_vs_old"]), ("la campagne précédente", rp["moved"])]
-    else:
-        last, last_order = "v3", o["v3"]["order"]
-        legend = ("« Méthode du 23 novembre » : sans aucune et classée au rang moyen, le classement publié le "
-                  "23 novembre ; v3 : le classement publié jusqu'au 23 novembre.")
-        versus = [("la méthode du 23 novembre", o["moved_vs_old"]), ("le classement de la v3", o["moved_vs_v3"])]
-    L += ["| Langage | " + " | ".join(calcs) + f" | {last} |", "|---|" + "---|" * (len(calcs) + 1)]
+    rp = o.get("replication")  # campagne précédente : dernière colonne, et ligne des rangs qui bougent
+    L += ["| Langage | " + " | ".join(calcs) + (" | Campagne précédente |" if rp else " |"),
+          "|---|" + "---|" * (len(calcs) + bool(rp))]
     for l in f["order"]:
         cells = []
         for c in calcs:
             p = place(R[c], l)
             mark = "" if c == FINAL or abs(p - place(f, l)) <= 2 else " **"
             cells.append(f"{p}{mark}")
-        cells.append(str(last_order.index(l) + 1))
+        if rp:
+            cells.append(str(rp["previous"]["order"].index(l) + 1))
         L.append(f"| {NAMES[l]} | " + " | ".join(cells) + " |")
     L += ["", "Chaque case : place dans le calcul ; ** : plus de deux places d'écart avec « Final ». Ordre des lignes : "
-          "« Final ». « Sans A1 » à « Sans A4 » : « Final » sans une correction de la v4.1 ; " + legend, "",
+          "« Final ». « Sans A1 » à « Sans A6 » : « Final » sans une de ses corrections ; « Méthode du 23 novembre » : "
+          "sans aucune et classée au rang moyen" + (" ; « Campagne précédente » : son classement publié." if rp
+                                                    else "."), "",
           "## Rangs qui bougent de plus de deux places par rapport à « Final »", ""]
     for c in calcs[1:]:
         mv = o["moved_more_than_2"][c]
         L.append(f"* {c} : " + (", ".join(f"{NAMES[l]} {nth(b)} (Final {nth(a)})" for l, (a, b) in
                                          sorted(mv.items(), key=lambda x: x[1][0])) or "aucun"))
+    versus = [("la méthode du 23 novembre", o["moved_vs_old"])]
+    sm = rp.get("same_method") if rp else None  # la campagne précédente recalculée par la méthode de celle-ci
+    if rp:
+        versus.append(("la campagne précédente, classement publié", rp["moved"]))
+    if sm:
+        versus.append(("la campagne précédente recalculée par la méthode de celle-ci", sm["moved"]))
     for name, mv in versus:
         L.append(f"* Final contre {name} : " + (", ".join(f"{NAMES[l]} {nth(a)} → {nth(b)}" for l, (a, b) in
                                                           sorted(mv.items(), key=lambda x: x[1][1])) or "aucun"))
+    if sm:
+        L.append("* Campagne précédente, du classement publié à son recalcul : "
+                 + (", ".join(f"{NAMES[l]} {nth(a)} → {nth(b)}" for l, (a, b) in
+                              sorted(sm["method_moved"].items(), key=lambda x: x[1][1])) or "aucun"))
     if GCC_CALC in R:
         g, ks = R[GCC_CALC], list(E_V2)
         L += ["", "## C par gcc", "",
@@ -1170,11 +1307,18 @@ def report(o, calcs):
               f"Cellules mesurées dans les deux campagnes : {rp['cells']}. Rapport des temps (cette campagne sur la "
               f"précédente, estimations ponctuelles) : médiane {rp['median']:.3f} ; {100 * rp['within_10pct']:.0f} % des "
               "cellules à moins de 10 % de cette médiane.", "",
-              "| Langage | Place | Place précédente | Score | Score précédent | Plafond | Plafond précédent | "
-              "Rapport médian des temps |", "|---|---|---|---|---|---|---|---|"]
+              "| Langage | Place | Précédente, recalculée | Précédente, publiée | Score | Précédent, recalculé | "
+              "Précédent, publié | Plafond | Plafond précédent | Rapport médian des temps |",
+              "|---|" + "---|" * 9]
+        ps = sm["previous"] if sm else None
         for i, l in enumerate(f["order"]):
-            L.append(f"| {NAMES[l]} | {i + 1} | {pv['order'].index(l) + 1} | {f['ms_mean'][l]:.1f} | "
-                     f"{pv['ms_mean'][l]:.1f} | {f['E'][l]:.1f} | {pv['E'][l]:.1f} | {rp['by_lang'][l]:.3f} |")
+            rec = (ps["order"].index(l) + 1, f"{ps['ms_mean'][l]:.1f}") if ps else ("–",) * 2
+            L.append(f"| {NAMES[l]} | {i + 1} | {rec[0]} | {pv['order'].index(l) + 1} | {f['ms_mean'][l]:.1f} | "
+                     f"{rec[1]} | {pv['ms_mean'][l]:.1f} | {f['E'][l]:.1f} | {pv['E'][l]:.1f} | "
+                     f"{rp['by_lang'][l]:.3f} |")
+        L += ["", "« Publiée » : le classement de la campagne précédente tel qu'il était publié ; « recalculée » : la "
+              "même campagne recalculée par la méthode de celle-ci (comparaison à méthode égale). Le plafond, donné au "
+              "centre, est le même dans les deux."]
     L += ["", "## Plafond par noyau et parts du code par défaut (« Final », au centre)", "",
           "| Langage | " + " | ".join(k.upper() for k in E_V2) + " | D1 | D2 | D3 | D4 |",
           "|---|" + "---|" * (len(E_V2) + 4)]
@@ -1197,39 +1341,70 @@ def report(o, calcs):
             row.append(names + (f" {r:.2f}" if r else ""))
         L.append(f"| {NAMES[l]} | " + " | ".join(row) + " |")
     sp = o["spread"]
-    L += ["", "## Campagne", "", f"Écart entre la passe la plus lente et la plus rapide d'une cellule : médiane "
-          f"{100 * (sp['median'] - 1):.1f} % ; {sp['over_20pct']} cellules sur {sp['cells']} au-delà de 20 %."
-          if sp["median"] else "", "", "Machine de chaque groupe et de chaque passe :", ""]
+    L += ["", "## Campagne", ""]
+    if sp["median"]:
+        L += [f"Écart entre la passe la plus lente et la plus rapide d'une cellule : médiane "
+              f"{100 * (sp['median'] - 1):.1f} % ; {sp['over_20pct']} cellules sur {sp['cells']} au-delà de 20 %. Une "
+              f"fois retiré l'effet commun de chaque groupe dans chaque passe (A5) : médiane "
+              f"{100 * (sp['net_median'] - 1):.1f} % ; {sp['net_over_20pct']} cellules au-delà de 20 %.", ""]
+    be = sorted((abs(v), k, ps) for k, d in o["block_effects"].items() for ps, v in d.items())
+    if be:
+        a, k, ps = be[-1]
+        L += [f"Effet commun d'un groupe dans une passe (A5) : médiane des valeurs absolues "
+              f"{100 * (math.exp(float(np.median([x[0] for x in be]))) - 1):.1f} % ; le plus fort : "
+              f"{100 * (math.exp(a) - 1):.1f} % ({k.replace('|', ' ')}, passe {ps}).", ""]
+    L += [f"Borne à quatre fils (STREAM triad sur 4 fils) : {o['hw']['stream4'] / 1e9:.1f} Go/s avec la sonde corrigée "
+          f"(A6) ; relevé d'origine : {o['stream4_original'] / 1e9:.1f} Go/s.", "",
+          "Machine de chaque groupe et de chaque passe :", ""]
     gm_ = defaultdict(list)
     for k, v in o["group_machines"].items():
         gm_["/".join(v)].append(k.replace("|", " "))
     for m, gl in gm_.items():
         L.append(f"* machine {m} : {len(gl)} groupes")
+    me = o.get("machine_effect")
+    if me:
+        ks = sorted({k for x in me["machines"].values() for k in x["by_kernel"]})
+        L += ["", f"Effet de machine : rapport des temps d'une cellule sur une machine à ses temps sur la machine "
+              f"{me['first']} (médianes de ses processus), pour les cellules mesurées sur les deux.", "",
+              "| Machine | Cellules | Rapport médian | À moins de 5 % de ce rapport | "
+              + " | ".join(k.upper() for k in ks) + " |", "|---|" + "---|" * (3 + len(ks))]
+        for m, x in me["machines"].items():
+            L.append(f"| {m} | {x['cells']} | {x['median']:.3f} | {100 * x['within_5pct']:.0f} % | "
+                     + " | ".join(f"{x['by_kernel'][k]:.3f}" if k in x["by_kernel"] else "–" for k in ks) + " |")
+    else:
+        L += ["", "Effet de machine : sans objet, une seule machine a mesuré la campagne."]
     L += ["", "## Cellules", ""]
+    same = defaultdict(list)  # texte -> calculs qui le partagent
     for c in calcs:
         r = R[c]
         nf = sum(len(v) for v in r["filled"].values())
         if r["missing"] or nf:
-            L.append(f"* {c} : formes ou cellules substituées manquantes : "
-                     + (", ".join(f"{NAMES.get(x[0], x[0])} {x[1]} {x[2]} ({x[3]})" for x in r["missing"]) or "aucune")
-                     + " ; cellules de la base remplies (temps le plus lent des autres langages) : "
-                     + (", ".join(f"{NAMES.get(x[0], x[0])} {x[1]} ({t})" for t, v in r["filled"].items() for x in v)
-                        or "aucune"))
-    cm = o["cpu_models"]
+            same["formes ou cellules substituées manquantes : "
+                 + (", ".join(f"{NAMES.get(x[0], x[0])} {x[1]} {x[2]} ({x[3]})" for x in r["missing"]) or "aucune")
+                 + " ; cellules de la base remplies (temps le plus lent des autres langages) : "
+                 + (", ".join(f"{NAMES.get(x[0], x[0])} {x[1]} ({t})" for t, v in r["filled"].items() for x in v)
+                    or "aucune")].append(c)
+    for text, cs in same.items():
+        L.append(f"* {'Tous les calculs' if len(cs) == len(calcs) else ', '.join(cs)} : {text}")
+    cm, gc = o["cpu_models"], o.get("gcc")
     L += ["", "Processeur des enregistrements : " + " ; ".join(
         f"{m} ({sum(ps.values())} enregistrements)" for m, ps in cm.items())
-          + (" — **plusieurs modèles**" if len(cm) > 1 else "") + ".", "",
-          f"Processus écartés : {len(o['failures'])} ; cellules non exécutées (étalonnage hors mémoire ou hors durée) : "
-          f"{len(o['skipped'])} ; vol de temps > 5 % après reprise : {len(o['steal_over_5pct'])}."]
-    for x in o["failures"]:
-        L.append(f"* {NAMES.get(x['lang'], x['lang'])} {x['construction']} {x['size']} {' '.join(x['key'])} passe "
-                 f"{x['pass']} : code {x['returncode']}, contrôles {x['oks']}{', hors mémoire' if x['oom'] else ''}"
-                 f"{', durée' if x['timeout'] else ''}")
-    sk = defaultdict(set)
-    for x in o["skipped"]:
-        sk[(x["lang"], x["construction"], x["size"], " ".join(x["key"]))].add(x["status"])
-    for (l, c, s, k), st in sorted(sk.items()):
-        L.append(f"* non exécutée : {NAMES.get(l, l)} {c} {s} {k} ({', '.join(sorted(st))})")
+          + (" ; C par gcc : " + " ; ".join(f"{m} ({n} enregistrements)" for m, n in gc["cpu_models"].items())
+             if gc else "")
+          + (" — **plusieurs modèles**" if len(set(cm) | set(gc["cpu_models"] if gc else ())) > 1 else "") + "."]
+    for name, x in [("", o)] + ([("C par gcc : ", gc)] if gc else []):
+        sk = defaultdict(set)
+        for y in x["skipped"]:
+            sk[(y["lang"], y["construction"], y["size"], " ".join(y["key"]))].add(y["status"])
+        L += ["", f"{name}{'processus' if name else 'Processus'} écartés : {len(x['failures'])} ; cellules non "
+              f"exécutées (étalonnage hors mémoire ou hors durée) : {len(sk)} ; vol de temps > 5 % après reprise : "
+              f"{len(x['steal_over_5pct'])}."]
+        for y in x["failures"]:
+            L.append(f"* {NAMES.get(y['lang'], y['lang'])} {y['construction']} {y['size']} {' '.join(y['key'])} passe "
+                     f"{y['pass']} : code {y['returncode']}, contrôles {y['oks']}{', hors mémoire' if y['oom'] else ''}"
+                     f"{', durée' if y['timeout'] else ''}")
+        for (l, c, s_, k), st in sorted(sk.items()):
+            L.append(f"* non exécutée : {NAMES.get(l, l)} {c} {s_} {k} ({', '.join(sorted(st))})")
     open(REPORT, "w").write("\n".join(L) + "\n")
 
 

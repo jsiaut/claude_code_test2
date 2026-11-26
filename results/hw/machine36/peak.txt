@@ -1,5 +1,0 @@
-TSC: 2.1000 GHz
-peak: AVX-512 FMA f32 : 1.80 FMA-instr/cycle, 57.7 FLOP/cycle, 161.6 GFLOP/s @2.10 GHz (s=7.45955e+07)
-peak: AVX2 FMA f32    : 1.97 FMA-instr/cycle, 31.6 FLOP/cycle (s=3.72978e+07)
-peak: scalaire FMA f32: 1.08 FMA-instr/cycle, 2.2 FLOP/cycle (acc0=inf)
-peak: latence FMA zmm : 3.98 cycles (x=1.88079e+06)

@@ -1,9 +1,14 @@
-# K4, 2^28 octets à 255 (somme attendue 68451041280), 2026-11-22 17:15 UTC, machine 35 ; 114 cellules, 0 fausses
+# K4, 2^28 octets à 255 (somme attendue 68451041280), 2026-11-25 09:51 UTC, machine 38 ; 119 cellules, 0 fausses
 c        pub     natural_unsorted     juste ['68451041280'] code 0
 c        pub     branchless_unsorted  juste ['68451041280'] code 0
 c        cv      tuned                juste ['68451041280'] code 0
 c        cv      swar                 juste ['68451041280'] code 0
 c        chk     natural_unsorted     juste ['68451041280'] code 0
+c        gcc     natural_unsorted     juste ['68451041280'] code 0
+c        gcc     branchless_unsorted  juste ['68451041280'] code 0
+c        gcc_cv  tuned                juste ['68451041280'] code 0
+c        gcc_cv  swar                 juste ['68451041280'] code 0
+c        gcc_chk natural_unsorted     juste ['68451041280'] code 0
 cpp      pub     natural_unsorted     juste ['68451041280'] code 0
 cpp      pub     branchless_unsorted  juste ['68451041280'] code 0
 cpp      cv      tuned                juste ['68451041280'] code 0
