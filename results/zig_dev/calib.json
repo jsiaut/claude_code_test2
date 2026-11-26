@@ -1,4 +1,20 @@
 {
+"zig|chk|k1|large|natural_shuffled|energy": {
+"machine": "39",
+"reps": 44,
+"status": "ok",
+"t_cal": 0.067356418,
+"ts": "2026-11-26T17:41:53",
+"warmup": 1
+},
+"zig|chk|k1|large|natural|energy": {
+"machine": "39",
+"reps": 40,
+"status": "ok",
+"t_cal": 0.073743879,
+"ts": "2026-11-26T17:41:50",
+"warmup": 1
+},
 "zig|chk|k7|pub|natural|": {
 "machine": "39",
 "reps": 6,
@@ -47,6 +63,22 @@
 "ts": "2026-11-26T17:40:42",
 "warmup": 1
 },
+"zig|dev_chk|k1|large|natural_shuffled|energy": {
+"machine": "39",
+"reps": 42,
+"status": "ok",
+"t_cal": 0.069839572,
+"ts": "2026-11-26T17:42:06",
+"warmup": 1
+},
+"zig|dev_chk|k1|large|natural|energy": {
+"machine": "39",
+"reps": 40,
+"status": "ok",
+"t_cal": 0.073943464,
+"ts": "2026-11-26T17:42:03",
+"warmup": 1
+},
 "zig|dev_chk|k7|pub|natural|": {
 "machine": "39",
 "reps": 3,
@@ -93,6 +125,38 @@
 "status": "ok",
 "t_cal": 0.00065265,
 "ts": "2026-11-26T17:40:42",
+"warmup": 1
+},
+"zig|dev|k1|large|aos|energy": {
+"machine": "39",
+"reps": 32,
+"status": "ok",
+"t_cal": 0.093279957,
+"ts": "2026-11-26T17:41:56",
+"warmup": 1
+},
+"zig|dev|k1|large|natural_shuffled|energy": {
+"machine": "39",
+"reps": 43,
+"status": "ok",
+"t_cal": 0.069611319,
+"ts": "2026-11-26T17:42:01",
+"warmup": 1
+},
+"zig|dev|k1|large|natural|energy": {
+"machine": "39",
+"reps": 42,
+"status": "ok",
+"t_cal": 0.070053154,
+"ts": "2026-11-26T17:41:55",
+"warmup": 1
+},
+"zig|dev|k1|large|soa|energy": {
+"machine": "39",
+"reps": 124,
+"status": "ok",
+"t_cal": 0.024042085,
+"ts": "2026-11-26T17:41:58",
 "warmup": 1
 },
 "zig|dev|k7|pub|natural|": {
@@ -157,6 +221,38 @@
 "status": "ok",
 "t_cal": 5.6588e-05,
 "ts": "2026-11-26T17:40:42",
+"warmup": 1
+},
+"zig|pub|k1|large|aos|energy": {
+"machine": "39",
+"reps": 32,
+"status": "ok",
+"t_cal": 0.092836301,
+"ts": "2026-11-26T17:41:44",
+"warmup": 1
+},
+"zig|pub|k1|large|natural_shuffled|energy": {
+"machine": "39",
+"reps": 41,
+"status": "ok",
+"t_cal": 0.072307797,
+"ts": "2026-11-26T17:41:48",
+"warmup": 1
+},
+"zig|pub|k1|large|natural|energy": {
+"machine": "39",
+"reps": 42,
+"status": "ok",
+"t_cal": 0.071406713,
+"ts": "2026-11-26T17:41:43",
+"warmup": 1
+},
+"zig|pub|k1|large|soa|energy": {
+"machine": "39",
+"reps": 131,
+"status": "ok",
+"t_cal": 0.022757829,
+"ts": "2026-11-26T17:41:46",
 "warmup": 1
 },
 "zig|pub|k7|pub|natural|": {
