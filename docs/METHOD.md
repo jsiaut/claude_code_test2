@@ -142,11 +142,12 @@ conteneur par défaut, aucune annotation de performance ([`NATURAL.md`](NATURAL.
   tableau de tableaux reçoivent la variante `natural_flat` (tableau 1D de leur conteneur par défaut, indexé `i*M + j`).
 * **R3.** K4 admet une forme `tuned`, SIMD explicite compris ; aucune forme n'est en assembleur en ligne.
 * **R4, K3 rapporté à une boucle de référence.** Sur les processeurs de l'étude, la boucle de l'écrivain unique coûte
-  de un à sept cycles par incrément selon la place du code dans sa ligne de 64 octets. La cellule de K3 vaut donc min(1, b3 / t) :
-  b3 est le temps de la même boucle écrite en assembleur (`tools/k3_align.c`), au plus lent de ses 16 décalages (A2 ;
-  leur médiane jusqu'au 23 novembre), moyenne de deux exécutions, mesuré juste avant et juste après chaque groupe de
-  K3 ; les temps de K3 d'un groupe sont ramenés au b3 de référence (moyenne de toutes les mesures) par le rapport des
-  b3. Une boucle sans `lock` ne vaut ainsi pas moins que la boucle de référence à son plus mauvais placement.
+  de un à sept cycles par incrément selon la place du code dans sa ligne de 64 octets. La cellule de K3 vaut donc
+  min(1, b3 / t) : b3 est le temps de la même boucle écrite en assembleur (`tools/k3_align.c`), au plus lent de ses 16
+  décalages (A2 ; leur médiane jusqu'au 23 novembre), moyenne de deux exécutions, mesuré juste avant et juste après
+  chaque groupe de K3 ; les temps de K3 d'un groupe sont ramenés au b3 de référence (moyenne de toutes les mesures)
+  par le rapport des b3. Une boucle sans `lock` ne vaut ainsi pas moins que la boucle de référence à son plus mauvais
+  placement.
 * **R5.** K2 (dont vient D4) est mesuré par sept processus par cellule au lieu de trois ; la même règle vaut pour K8
   naturel (dont vient D3).
 
@@ -292,9 +293,9 @@ python3 analysis/final_v4.py
 python3 analysis/charts_final.py
 ```
 
-Le premier contrôle prend environ 30 s, le second 25 min (classement complet comparé à l'octet près) ; aucun ne
-demande de chaîne de compilation. Les deux commandes suivantes réécrivent `results/final/analysis.json`,
-`results/report_final.md` et le graphique.
+Le premier contrôle prend environ 30 s, le second de 17 à 25 min selon la machine (classement complet comparé à
+l'octet près) ; aucun ne demande de chaîne de compilation. Les deux commandes suivantes réécrivent
+`results/final/analysis.json`, `results/report_final.md` et le graphique.
 
 Remesurer demande les 25 chaînes de `env/toolchains.txt`, aux chemins que lisent les `build.sh`, et les données de
 `/opt/msdata` : `env/install.sh` les installe sur une Ubuntu 24.04 (environ 1 h 30 sur 4 cœurs, 35 Gio ; archives
