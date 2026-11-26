@@ -22,3 +22,6 @@
 2026-11-26T17:45:19 étalonnage k1:small : 12 cellules, 0 s
 2026-11-26T17:45:22 étalonnage k2:pub : 6 cellules, 1 s
 2026-11-26T17:45:33 étalonnage k4:large : 10 cellules, 8 s
+2026-11-26T17:45:35 étalonnage : 238 cellules, 0 à corriger (somme de contrôle ou erreur), 0 hors mémoire ou hors durée
+2026-11-26T17:45:35 passe 0 : 23 groupes ; machine 39 ; processeur : 6/173/1 Intel(R) Xeon(R) Processor @ 2.30GHz
+2026-11-26T17:45:59 passe 0 groupe 1/23 k9:small : 10 processus, 24 s
