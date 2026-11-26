@@ -127,6 +127,14 @@
 "ts": "2026-11-26T17:42:20",
 "warmup": 1
 },
+"zig|chk|k8|small|natural|": {
+"machine": "39",
+"reps": 13,
+"status": "ok",
+"t_cal": 0.215804047,
+"ts": "2026-11-26T17:43:25",
+"warmup": 1
+},
 "zig|chk|k9|large|natural|": {
 "machine": "39",
 "reps": 6,
@@ -245,6 +253,22 @@
 "status": "ok",
 "t_cal": 0.108186922,
 "ts": "2026-11-26T17:42:18",
+"warmup": 1
+},
+"zig|cv|k8|small|tuned_it|": {
+"machine": "39",
+"reps": 189,
+"status": "ok",
+"t_cal": 0.015810163,
+"ts": "2026-11-26T17:43:24",
+"warmup": 1
+},
+"zig|cv|k8|small|tuned_val|": {
+"machine": "39",
+"reps": 129,
+"status": "ok",
+"t_cal": 0.023163037,
+"ts": "2026-11-26T17:43:24",
 "warmup": 1
 },
 "zig|cv|k9|large|mt_pool|": {
@@ -399,6 +423,14 @@
 "ts": "2026-11-26T17:42:26",
 "warmup": 1
 },
+"zig|dev_chk|k8|small|natural|": {
+"machine": "39",
+"reps": 13,
+"status": "ok",
+"t_cal": 0.222499924,
+"ts": "2026-11-26T17:43:26",
+"warmup": 1
+},
 "zig|dev_chk|k9|large|natural|": {
 "machine": "39",
 "reps": 8,
@@ -517,6 +549,22 @@
 "status": "ok",
 "t_cal": 0.094721586,
 "ts": "2026-11-26T17:42:23",
+"warmup": 1
+},
+"zig|dev_cv|k8|small|tuned_it|": {
+"machine": "39",
+"reps": 141,
+"status": "ok",
+"t_cal": 0.021199203,
+"ts": "2026-11-26T17:43:25",
+"warmup": 1
+},
+"zig|dev_cv|k8|small|tuned_val|": {
+"machine": "39",
+"reps": 129,
+"status": "ok",
+"t_cal": 0.023084595,
+"ts": "2026-11-26T17:43:25",
 "warmup": 1
 },
 "zig|dev_cv|k9|large|mt_pool|": {
@@ -877,6 +925,30 @@
 "status": "ok",
 "t_cal": 0.19371106,
 "ts": "2026-11-26T17:42:22",
+"warmup": 1
+},
+"zig|dev|k8|small|natural|": {
+"machine": "39",
+"reps": 19,
+"status": "ok",
+"t_cal": 0.153496997,
+"ts": "2026-11-26T17:43:25",
+"warmup": 1
+},
+"zig|dev|k8|small|tuned_alloc|": {
+"machine": "39",
+"reps": 22,
+"status": "ok",
+"t_cal": 0.133317501,
+"ts": "2026-11-26T17:43:25",
+"warmup": 1
+},
+"zig|dev|k8|small|tuned|": {
+"machine": "39",
+"reps": 73,
+"status": "ok",
+"t_cal": 0.04097173,
+"ts": "2026-11-26T17:43:25",
 "warmup": 1
 },
 "zig|dev|k9|large|mt|": {
@@ -1285,6 +1357,30 @@
 "status": "ok",
 "t_cal": 0.17654197,
 "ts": "2026-11-26T17:42:16",
+"warmup": 1
+},
+"zig|pub|k8|small|natural|": {
+"machine": "39",
+"reps": 19,
+"status": "ok",
+"t_cal": 0.150123289,
+"ts": "2026-11-26T17:43:24",
+"warmup": 1
+},
+"zig|pub|k8|small|tuned_alloc|": {
+"machine": "39",
+"reps": 22,
+"status": "ok",
+"t_cal": 0.133015115,
+"ts": "2026-11-26T17:43:24",
+"warmup": 1
+},
+"zig|pub|k8|small|tuned|": {
+"machine": "39",
+"reps": 68,
+"status": "ok",
+"t_cal": 0.044048511,
+"ts": "2026-11-26T17:43:24",
 "warmup": 1
 },
 "zig|pub|k9|large|mt|": {
