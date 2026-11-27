@@ -248,13 +248,13 @@ sans contrôle propre ; un est à corriger ; aucun ne reste sans cause.
   produit scalaire naturel en une seule instruction, ce qui allonge la chaîne de dépendance de la somme : le même source
   compilé par gcc va 2 à 2,2 fois plus vite aux trois tailles. C'est le mode publié de la chaîne : rien à corriger,
   et « C par gcc » le compte déjà.
-* **GCC vectorise moins bien la somme conditionnelle de K4.** C++, Ada et Fortran y sont 2 à 4 fois derrière la médiane
-  des pairs ; le source de C compilé par gcc y prend 2,5 à 3,9 fois son temps sous clang.
-* **Deux cellules sont avantagées : K7 naturel de C et de Fortran**, jusqu'à trois fois plus rapides que la médiane des
-  pairs. Aucun des deux n'a de table de hachage en bibliothèque standard ; leur code naturel est la table à chaînage des
-  manuels, écrite pour le noyau et dimensionnée d'avance, quand les tables de bibliothèque des autres grandissent et
-  hachent plus fort. La règle du code naturel l'accepte ([`docs/NATURAL.md`](docs/NATURAL.md)) ; le code naturel étant
-  rapporté au meilleur, cette table sert de référence à tous sur K7.
+* **GCC vectorise moins bien la somme conditionnelle de K4.** En mode publié, C++, Ada et Fortran y sont 2,5 à 4 fois
+  derrière la médiane des pairs ; le source de C compilé par gcc y prend 2,5 à 3,9 fois son temps sous clang.
+* **Deux cellules sont avantagées : K7 naturel de C et de Fortran**, environ trois fois plus rapides que la médiane des
+  pairs à leur meilleure taille. Aucun des deux n'a de table de hachage en bibliothèque standard ; leur code naturel est
+  la table à chaînage des manuels, écrite pour le noyau et dimensionnée d'avance, quand les tables de bibliothèque des
+  autres grandissent et hachent plus fort. La règle du code naturel l'accepte ([`docs/NATURAL.md`](docs/NATURAL.md)) ;
+  le code naturel étant rapporté au meilleur, cette table sert de référence à tous sur K7 aux tailles petite et publiée.
 * **Le reste confirme ce qui était connu** : vérifications à l'exécution qui bloquent la vectorisation (Zig, Swift, Ada,
   Chapel, Mojo, selon le mode), chaînes sans vectoriseur de boucles, ramasse-miettes, types par défaut en références.
 
