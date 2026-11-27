@@ -295,6 +295,22 @@
 "ts": "2026-11-27T14:33:44",
 "warmup": 1
 },
+"go|cv|k8|large|tuned_it|": {
+"machine": "40",
+"reps": 5,
+"status": "ok",
+"t_cal": 0.589319883,
+"ts": "2026-11-27T14:34:00",
+"warmup": 1
+},
+"go|cv|k8|large|tuned_val|": {
+"machine": "40",
+"reps": 3,
+"status": "ok",
+"t_cal": 0.821654216,
+"ts": "2026-11-27T14:33:58",
+"warmup": 1
+},
 "go|cv|k9|small|mt_pool_v|": {
 "machine": "40",
 "reps": 10000,
@@ -415,6 +431,22 @@
 "ts": "2026-11-27T13:29:25",
 "warmup": 1
 },
+"go|pub|k8|large|natural|": {
+"machine": "40",
+"reps": 3,
+"status": "ok",
+"t_cal": 3.705170192,
+"ts": "2026-11-27T14:33:54",
+"warmup": 1
+},
+"go|pub|k8|large|tuned|": {
+"machine": "40",
+"reps": 3,
+"status": "ok",
+"t_cal": 0.82874077,
+"ts": "2026-11-27T14:33:56",
+"warmup": 1
+},
 "go|pub|k9|small|mt|": {
 "machine": "40",
 "reps": 7820,
@@ -487,6 +519,14 @@
 "ts": "2026-11-27T13:29:25",
 "warmup": 1
 },
+"go|unc|k8|large|natural|": {
+"machine": "40",
+"reps": 3,
+"status": "ok",
+"t_cal": 3.342577848,
+"ts": "2026-11-27T14:34:08",
+"warmup": 1
+},
 "go|unc|k9|small|natural|": {
 "machine": "40",
 "reps": 10000,
@@ -501,6 +541,22 @@
 "status": "ok",
 "t_cal": 0.000297778,
 "ts": "2026-11-27T14:33:44",
+"warmup": 1
+},
+"go|wit_cv|k8|large|tuned_it|": {
+"machine": "40",
+"reps": 6,
+"status": "ok",
+"t_cal": 0.435836081,
+"ts": "2026-11-27T14:34:22",
+"warmup": 1
+},
+"go|wit_cv|k8|large|tuned_val|": {
+"machine": "40",
+"reps": 3,
+"status": "ok",
+"t_cal": 0.79545446,
+"ts": "2026-11-27T14:34:21",
 "warmup": 1
 },
 "go|wit_cv|k9|small|mt_pool_v|": {
@@ -573,6 +629,14 @@
 "status": "ok",
 "t_cal": 7.0636e-05,
 "ts": "2026-11-27T13:29:25",
+"warmup": 1
+},
+"go|wit_unc|k8|large|natural|": {
+"machine": "40",
+"reps": 3,
+"status": "ok",
+"t_cal": 4.027296736,
+"ts": "2026-11-27T14:34:31",
 "warmup": 1
 },
 "go|wit_unc|k9|small|natural|": {
@@ -677,6 +741,22 @@
 "status": "ok",
 "t_cal": 9.931e-06,
 "ts": "2026-11-27T13:29:25",
+"warmup": 1
+},
+"go|wit|k8|large|natural|": {
+"machine": "40",
+"reps": 3,
+"status": "ok",
+"t_cal": 3.391956744,
+"ts": "2026-11-27T14:34:16",
+"warmup": 1
+},
+"go|wit|k8|large|tuned|": {
+"machine": "40",
+"reps": 3,
+"status": "ok",
+"t_cal": 0.965891588,
+"ts": "2026-11-27T14:34:18",
 "warmup": 1
 },
 "go|wit|k9|small|mt|": {
