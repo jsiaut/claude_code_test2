@@ -1,4 +1,4 @@
-# Méthode du classement (v5.3)
+# Méthode du classement (v5.4)
 
 *État au 27 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
 été fixée par étapes, chacune par un plan poussé avant ses mesures ou ses calculs ([`HISTORY.md`](HISTORY.md)). Le plan
@@ -6,7 +6,8 @@ de la campagne dont viennent les mesures, avec ses écarts datés (dont les corr
 [`V5.md`](V5.md) ; celui de la campagne précédente, dont elle reprend le protocole, [`V4_FINAL.md`](V4_FINAL.md) ;
 ceux des autres corrections de l'analyse, [`V4_1.md`](V4_1.md) (A1 à A4) et [`V5_1.md`](V5_1.md) (A7 et A8) ; celui
 de l'exception faite pour Zig, [`V5_2.md`](V5_2.md) ; celui des deux lectures du classement ajoutées au rapport,
-[`V5_3.md`](V5_3.md) ; le contrat des noyaux est [`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
+[`V5_3.md`](V5_3.md) ; celui de la correction de la mesure de Go, [`V5_4.md`](V5_4.md) ; le contrat des noyaux est
+[`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
 
 ## 1. Ce qui est classé
 
@@ -208,6 +209,22 @@ campagne publiée).
   bruit. La grille de Zig reste celle de sa version stable, que ses sondes rejouées sous la version de développement
   confirment. La machine de la remesure est caractérisée comme les autres ; son relevé est rangé avec la remesure
   (`results/zig_dev/hw`), `results/hw` ne gardant que les machines dont viennent les bornes.
+* **Correction : Go hors de l'expérience `simd`** ([`V5_4.md`](V5_4.md)). La campagne a mesuré tout le banc de Go dans
+  un binaire compilé avec `GOEXPERIMENT=simd`, que demandent ses dix variantes à SIMD explicite. Sous cette expérience,
+  sur un processeur AVX-512, la préemption asynchrone de Go 1.27 restaure les registres vectoriels sans `VZEROUPPER`,
+  et le code scalaire qui mêle SSE et VEX le paie : quinze cellules de K1 en étaient faussées (K1 naturel et naturel
+  permuté dans les deux modes de Go, K1 AoS, aux trois tailles). `bench/go` construit désormais deux binaires de la
+  même source et n'envoie à celui de l'expérience que les dix variantes à SIMD explicite. Go est remesuré hors campagne
+  (`results/go_std`, variable `MS_GOFIX=1`) par les mêmes outils, sur une machine d'un autre modèle : six passes pour
+  les groupes de K1, où sont mesurés ensemble Go, son témoin (le binaire de la campagne, reconstruit depuis sa source)
+  et C ; trois passes pour les autres groupes. Une cellule faussée abandonne ses temps de la campagne, où l'artefact
+  est intermittent : elle prend les processus d'une cellule de C dans la campagne, son **pont** (K1 naturel ; K1
+  naturel permuté pour la cellule permutée), chacun multiplié par la moyenne géométrique des rapports appariés (même
+  passe) du temps de Go au temps de cette cellule de C. Les autres cellules de Go gardent leurs temps de la campagne :
+  leur code machine est le même dans les deux binaires, et leur rapport au témoin est publié comme contrôle. Ce
+  contrôle montre que K7 naturel à la grande taille subit lui aussi l'artefact, plus faiblement et par à-coups (une à
+  trois fois le temps du binaire standard selon la répétition) : il n'avait pas de pont et n'est pas corrigé
+  ([`V5_4.md`](V5_4.md), 9.2). Les latences de K8 naturel restent celles de la campagne.
 
 ## 7. Grille de contrôle (pilier C)
 
@@ -272,7 +289,8 @@ plus rapide parmi les formes admises.
   d'une passe à l'autre est commun à toutes les cellules du groupe et s'annule dans leurs rapports : ce n'est pas un
   bruit propre à chaque cellule. Les références restent celles des estimations ponctuelles. Les latences sont
   rééchantillonnées par processus puis par répétition, sans cette correction. Pour Zig, le rapport au témoin de chaque
-  cellule est rééchantillonné lui aussi : ses paires sont tirées avec remise, par un générateur propre à la cellule.
+  cellule est rééchantillonné lui aussi : ses paires sont tirées avec remise, par un générateur propre à la cellule ;
+  de même, pour les cellules corrigées de Go, leur rapport au pont.
 * **20 000 variantes de l'analyse.** Chacune tire : un rééchantillonnage ; cinq choix de méthode à deux options
   (estimateur : moyenne géométrique ou minimum des processus ; référence du plafond ; formes de D3 et de D4 ;
   agrégation) ; le mode du code naturel parmi trois (R1, mode publié, R1' : A7 et A8, par un générateur à part) ; les
@@ -291,26 +309,31 @@ plus rapide parmi les formes admises.
 
 ## 10. Sensibilités publiées
 
-`results/report_final.md` donne, à côté du classement, la place de chaque langage dans vingt-cinq autres calculs
-faits avec les mêmes tirages : formes publiées seules et code naturel publié à trois tailles (« Base ») ; « Final »
-sans une règle à la fois (sans les tailles, sans R2, sans C1, sans R4) ; le code naturel dans un seul mode pour toutes
-les variantes (« Sans A7 » : R1 ; « Sans R1 » : le mode publié ; « R1' au lieu de R1 » : R1') ; une taille seule
-(petite, grande) ; sélection indépendante (la forme de chaque cellule choisie sur la passe 0, estimée sur les passes 1
-et 2) ; D3 et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans une correction
-à la fois (« Sans A1 » à « Sans A8 » ; « Sans A8 » : le mode tiré entre R1 et le mode publié seuls) ; sans aucune et
-classé au rang moyen (« Méthode du 23 novembre », celle du classement publié ce jour-là) ; « C par gcc », où toutes
-les cellules de C viennent de ses constructions par gcc, la grille et les autres langages ne changeant pas ; « Zig
-0.17 », où Zig garde les cellules de la campagne, mesurées par sa version stable ; « Zig 0.18, K4 et K9 seuls », où
-le rapport au témoin n'est appliqué qu'aux deux noyaux dont le code machine change ; « Zig 0.18, latences du plan »,
-où les latences de K8 naturel de Zig sont multipliées elles aussi par leur rapport. Sous `FINAL_ZIG17=1`, tout le
-calcul se fait sans l'exception de Zig : il redonne les calculs publiés le 26 novembre.
+`results/report_final.md` donne, à côté du classement, la place de chaque langage dans vingt-huit autres calculs faits
+avec les mêmes tirages : formes publiées seules et code naturel publié à trois tailles (« Base ») ; « Final » sans une
+règle à la fois (sans les tailles, sans R2, sans C1, sans R4) ; le code naturel dans un seul mode pour toutes les
+variantes (« Sans A7 » : R1 ; « Sans R1 » : le mode publié ; « R1' au lieu de R1 » : R1') ; une taille seule (petite,
+grande) ; sélection indépendante (la forme de chaque cellule choisie sur la passe 0, estimée sur les passes 1 et 2) ;
+D3 et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans une correction à la
+fois (« Sans A1 » à « Sans A8 » ; « Sans A8 » : le mode tiré entre R1 et le mode publié seuls) ; sans aucune et classé
+au rang moyen (« Méthode du 23 novembre », celle du classement publié ce jour-là) ; « C par gcc », où toutes les
+cellules de C viennent de ses constructions par gcc, la grille et les autres langages ne changeant pas ; « Zig 0.17 »,
+où Zig garde les cellules de la campagne, mesurées par sa version stable ; « Zig 0.18, K4 et K9 seuls », où le rapport
+au témoin n'est appliqué qu'aux deux noyaux dont le code machine change ; « Zig 0.18, latences du plan », où les
+latences de K8 naturel de Zig sont multipliées elles aussi par leur rapport ; « Go de la campagne », où Go garde ses
+cellules de la campagne, K1 faussé compris : le classement de la v5.2 et de la v5.3 ; « Go, toutes les cellules », où
+chaque autre cellule de Go est en plus multipliée par son rapport au témoin, comme celles de Zig ; « Campagne telle que
+mesurée », sans l'exception de Zig ni la correction de Go. Sous `FINAL_ZIG17=1`, tout le calcul se fait sans
+l'exception de Zig ; sous `FINAL_GOSIMD=1`, sans la correction de Go : il redonne alors les calculs de la v5.3 ; sous
+les deux, ceux qui étaient publiés le 26 novembre à 17 h.
 
 Le rapport donne aussi la **réplication** : la campagne précédente, telle qu'elle était publiée et recalculée par la
 méthode de celle-ci (`results/final/comparisons.json`, écrit par les options `--extract` et `--extract-same` de
 l'analyse), avec la place et le score de chaque langage dans chacune et, cellule par cellule, le rapport des temps
-entre les deux campagnes ; elle se fait à compilateurs égaux, donc avec « Zig 0.17 ». Quand une campagne passe par
-plusieurs machines, il donne l'effet de machine : le rapport des temps d'une cellule sur chaque machine à ses temps
-sur la première.
+entre les deux campagnes ; elle se fait à configurations égales, donc avec « Campagne telle que mesurée » : Zig par sa
+version stable et Go dans le binaire de la campagne, comme la précédente les a mesurés. Quand une campagne passe par
+plusieurs machines, il donne l'effet de machine : le rapport des temps d'une cellule sur chaque machine à ses temps sur
+la première.
 
 Deux lectures du classement s'y ajoutent ([`V5_3.md`](V5_3.md)) ; elles ne changent ni score ni ordre.
 
@@ -395,10 +418,12 @@ python3 tools/final/campaign.py run
 cellule ; `k4_extreme.py` contrôle les formes de K4 sur des données extrêmes ; `run` fait les trois passes et
 enregistre chaque groupe (`tools/final/save_progress.sh`, qui committe et pousse sur la branche courante). Après un
 redémarrage de la VM, relancer `machine.sh` avec le numéro suivant, puis `run`, qui reprend où il en était. L'analyse
-lit ce répertoire par `FINAL_DIR=results/rejeu` et écrit ailleurs par `FINAL_OUT`. La remesure de Zig par sa version
-de développement suit les mêmes étapes dans `results/zig_dev`, avec `MS_DEV=1`, `MS_LANGS=zig` pour `machine.sh`,
-`--langs zig` pour `calibrate` et `run`, et `--passes 0,1,2,3,4,5` ; l'analyse la lit d'elle-même. Pour essayer une
-seule implémentation, construite sur place :
+lit ce répertoire par `FINAL_DIR=results/rejeu` et écrit ailleurs par `FINAL_OUT`. La remesure de Zig par sa version de
+développement suit les mêmes étapes dans `results/zig_dev`, avec `MS_DEV=1`, `MS_LANGS=zig` pour `machine.sh`,
+`--langs zig` pour `calibrate` et `run`, et `--passes 0,1,2,3,4,5` ; l'analyse la lit d'elle-même. La remesure de Go
+suit les mêmes étapes dans `results/go_std`, avec `MS_GOFIX=1` et `MS_LANGS=go,c` : d'abord les groupes de K1 pour Go,
+son témoin et C (`--langs go,c --groups k1:small,k1:pub,k1:large`, six passes), puis les autres groupes pour Go et
+son témoin (`--langs go`, trois passes). Pour essayer une seule implémentation, construite sur place :
 
 ```bash
 python3 tools/driver.py c

@@ -29,7 +29,7 @@ utilise la boucle sérielle équivalente, et la forme parallèle n'apparaît que
 | Chapel | `chpl --fast` (sans vérifications) | `record` / tableau (valeurs) | `map` (module Map) | classe `owned` | tableau 2D `[0..<M, 0..<M]` | tampon de variables `sync` |
 | Nim | `-d:release` (vérifications conservées), ORC | `object` / `seq` (valeurs) | `Table` | `ref object` (ORC) | `seq[seq[float]]` | `Channel[T]` |
 | Mojo | `mojo build` | `struct` / `List` (valeurs) | `Dict` | allocation manuelle par nœud (pas de type récursif possédé simple) | `List[List[Float64]]` | `Deque` + `BlockingSpinLock` (seules primitives de std) |
-| Go | `go build`, GOAMD64=v4 | `struct` / slice (valeurs) | `map[uint32]agg` | `&Node{}` (GC) | `[][]float64` | `chan uint64` bufferisé |
+| Go | `go build`, GOAMD64=v4, sans `GOEXPERIMENT=simd` | `struct` / slice (valeurs) | `map[uint32]agg` | `&Node{}` (GC) | `[][]float64` | `chan uint64` bufferisé |
 | OCaml | ocamlopt -O3 (flambda) | enregistrement (champs flottants stockés à plat) / `array` de pointeurs vers les enregistrements | `Hashtbl` | variants (GC) | `float array array` | `Queue` + `Mutex` + `Condition` |
 | Lua | PUC-Lua 5.5 | table à champs nommés / table | table | tables à champs nommés (GC ; tables positionnelles `{v, false, false}` jusqu'au 5/11, corrigé par la remarque sur Lua) | table de tables | coroutines (pas de threads en Lua standard) |
 | Swift | `swiftc -O` (bornes et débordements vérifiés), module entier, mode Swift 6 | `struct` / `Array` (valeurs en ligne) | `Dictionary<UInt32, Agg>` (`subscript(_:default:)` et méthode `mutating`) | `class` à champs `var` (ARC) | `[[Double]]` | `AsyncStream` entre deux tâches (tampon non borné ; seule file de la bibliothèque standard) |
@@ -74,6 +74,9 @@ flang-23), `luajit` (dialecte 5.1 + FFI), `js_bun` (même source JS, JavaScriptC
   sont corrigées depuis la remarque sur Haskell (`docs/HASKELL.md`), la copie `bench/haskell_fix` suit ce mode.
 * **Lua** : le langage standard n'a ni threads ni tableaux typés. Les noyaux
   multi-threads s'exécutent en séquence ou en coroutines, et c'est signalé par `META`.
+* **Go** : `simd/archsimd` demande `GOEXPERIMENT=simd`. Seules les dix variantes à SIMD explicite sont compilées
+  avec cette expérience ; le code naturel et toutes les autres variantes le sont sans elle, comme un programme Go qui
+  n'utilise pas ce paquet. Jusqu'au 27 novembre, tout le banc l'était avec, ce qui faussait K1 (`docs/V5_4.md`).
 * **Mojo** : Mojo 1.2 n'expose pas d'API publique de threads CPU (`parallelize` est dans
   MAX, hors `std`). Les variantes concurrentes utilisent `std.runtime._asyncrt`, privé
   mais livré avec `std`.
