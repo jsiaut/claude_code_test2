@@ -79,3 +79,17 @@
 2026-11-27T15:19:23 passe 1 groupe 5/23 k9:large : 16 processus, 151 s
 2026-11-27T15:20:05 passe 1 groupe 6/23 k7:pub : 6 processus, 41 s
 2026-11-27T15:20:32 passe 1 groupe 7/23 k5:pub : 8 processus, 25 s
+2026-11-27T15:20:39 b3 avant le groupe K3 (passe 1, machine 40) : 59.70 et 69.40 ms
+2026-11-27T15:20:52 étalonnage : 292 cellules, 0 à corriger (somme de contrôle ou erreur), 0 hors mémoire ou hors durée
+2026-11-27T15:20:52 passe 0 : 3 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-27T15:20:52 passe 1 : 3 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-27T15:20:52 passe 2 : 3 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-27T15:20:52 passe 3 : 3 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-27T15:20:52 passe 4 : 3 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-27T15:20:52 passe 5 : 3 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-27T15:20:53 étalonnage : 292 cellules, 0 à corriger (somme de contrôle ou erreur), 0 hors mémoire ou hors durée
+2026-11-27T15:20:53 passe 0 : 23 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-27T15:20:53 passe 1 : 23 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-27T15:20:58 b3 avant le groupe K3 (passe 1, machine 40) : 61.65 et 67.40 ms
+2026-11-27T15:21:06 b3 après le groupe K3 (passe 1, machine 40) : 63.50 et 69.65 ms
+2026-11-27T15:21:06 passe 1 groupe 8/23 k3:pub : 1 processus, 8 s
