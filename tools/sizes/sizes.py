@@ -11,8 +11,8 @@ SHM = "/dev/shm"
 GENDATA = os.path.join(ROOT, "tools", "sizes", "gendata")
 
 # taille -> (paramètres de taille, arguments de gendata) ; "pub" = taille publiée. Les paramètres sont des constantes
-# de compilation redéfinies à la construction pour les langages compilés (MS_N1=…), des variables d'environnement du
-# même nom pour les langages interprétés ou à JIT ; sans elles, les valeurs publiées.
+# de compilation redéfinies à la construction pour les langages compilés (MS_N1=…), des constantes substituées dans
+# une copie du source pour Julia (tools/sizes/patches.py) ; sans elles, les valeurs publiées.
 SIZES = {
     "k1": {"small": ({"MS_N1": 1 << 14}, ["--n1", 1 << 14]), "pub": ({}, None),
            "large": ({"MS_N1": 1 << 24}, ["--n1", 1 << 24])},

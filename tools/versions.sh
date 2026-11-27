@@ -1,5 +1,5 @@
 #!/bin/sh
-# Relève les versions exactes des chaînes de compilation et d'exécution des 25 langages, installées par
+# Relève les versions exactes des chaînes de compilation et d'exécution des 20 langages, installées par
 # env/install.sh, et la machine. Usage : sh tools/versions.sh > env/toolchains.txt
 # v <nom> <commande du shell> : une ligne par chaîne, les lignes de la sortie jointes par « ; »
 v() { printf '%-10s %s\n' "$1" "$(sh -c "$2" 2>&1 | sed 's/[[:space:]]\{1,\}/ /g; s/^ //; s/ $//' | paste -sd '|' | sed 's/|/ ; /g')"; }
@@ -22,14 +22,9 @@ v mojo '/opt/mojo-venv/bin/mojo --version'
 v go '/opt/go127/bin/go version'
 v java 'unset JAVA_TOOL_OPTIONS _JAVA_OPTIONS; /opt/jdk27/bin/java -version 2>&1 | head -1'
 v dotnet '/opt/dotnet/dotnet --version'
-v node '/opt/node26/bin/node --version'
-v python 'python3.15 --version'
 v ghc '/opt/ghc/bin/ghc --version; opt-18 --version | grep "LLVM version"'
 v ocamlopt '/opt/ocaml/bin/ocamlopt -version; /opt/ocaml/bin/ocamlopt -config | grep flambda:'
-v lua '/opt/lua55/bin/lua -v'
 v swiftc '/opt/swift/usr/bin/swiftc --version 2>&1 | head -1'
 v fpc 'echo "Free Pascal $(/opt/fpc/bin/fpc -iW) ($(/opt/fpc/bin/fpc -iD))"'
-v bqn '/opt/cbqn-cl/bin/BQN --version; echo "cible Cascade Lake, SHA-256 $(sha256sum /opt/cbqn-cl/bin/BQN | cut -c1-16)"'
-v php '/opt/php85/bin/php --version | head -1'
 v kernel 'uname -srvm'
 v cpu 'grep -m1 "model name" /proc/cpuinfo | sed "s/.*: //"; grep -m1 "cpu family" /proc/cpuinfo | sed "s/.*: /famille /"; grep -m1 "^model[[:space:]]*:" /proc/cpuinfo | sed "s/.*: /modèle /"; grep -m1 stepping /proc/cpuinfo | sed "s/.*: /révision /"'

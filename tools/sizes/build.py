@@ -7,14 +7,14 @@ Copie bench/<langage> (sources, build.sh, run) dans /dev/shm/msbuild/<langage>/<
 * langages compilés : lance build.sh avec les paramètres de taille du jeu dans l'environnement (MS_N1=…) ; chaque
   build.sh les passe au compilateur (redéfinition de constantes, fichier de constantes généré, option de
   configuration), et sans eux construit la taille publiée ;
-* langages interprétés ou à JIT sans construction (INTERP) : remplace dans la copie les constantes de taille du source
-  publié par celles du jeu (tools/sizes/patches.py) ; le source publié ne change pas."""
+* langage sans construction (INTERP : Julia) : remplace dans la copie les constantes de taille du source publié par
+  celles du jeu (tools/sizes/patches.py) ; le source publié ne change pas."""
 import os, shutil, subprocess, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sizes as S  # noqa: E402
 
 BUILD_ROOT = "/dev/shm/msbuild"
-INTERP = {"python", "lua", "php", "bqn", "js", "julia"}
+INTERP = {"julia"}
 SKIP = {"obj", "bin", "classes", "target", "zig-out", ".zig-cache", "zig-cache", "build", "out", "__pycache__", "layout",
         "nimcache", "dist-newstyle", ".build", "_build"}
 

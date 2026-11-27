@@ -29,17 +29,11 @@ def env_for(lang, kernel, size):
 
 
 def checksum_ok(kernel, got, exp):
-    """Tolérance de la spécification (TOL), égalité exacte sinon ; une somme de contrôle entière au-delà de 2^53 se
-    compare à l'arrondi d'un double près (écart relatif d'au plus 1e-15) : un langage dont les nombres sont des doubles
-    (BQN) ne la représente pas exactement."""
+    """Tolérance de la spécification pour les sommes flottantes (TOL), égalité exacte sinon."""
     try:
         if kernel in TOL:
             return abs(float(got) - float(exp)) <= TOL[kernel] * abs(float(exp))
-        if got.strip() == exp:
-            return True
-        if ":" not in exp and abs(float(exp)) > 2.0 ** 53:
-            return abs(float(got) - float(exp)) <= 1e-15 * abs(float(exp))
-        return False
+        return got.strip() == exp
     except ValueError:
         return False
 

@@ -1,4 +1,4 @@
-# K4, 2^28 octets à 255 (somme attendue 68451041280), 2026-11-25 09:51 UTC, machine 38 ; 119 cellules, 0 fausses
+# K4, 2^28 octets à 255 (somme attendue 68451041280), 2026-11-25 09:51 UTC, machine 38 ; 102 cellules, 0 fausses
 c        pub     natural_unsorted     juste ['68451041280'] code 0
 c        pub     branchless_unsorted  juste ['68451041280'] code 0
 c        cv      tuned                juste ['68451041280'] code 0
@@ -96,23 +96,6 @@ ocaml    pub     branchless_unsorted  juste ['68451041280'] code 0
 ocaml    cv      tuned                juste ['68451041280'] code 0
 ocaml    cv      swar                 juste ['68451041280'] code 0
 ocaml    unc     natural_unsorted     juste ['68451041280'] code 0
-python   pub     natural_unsorted     juste ['68451041280'] code 0
-python   pub     branchless_unsorted  juste ['68451041280'] code 0
-python   cv      tuned                juste ['68451041280'] code 0
-python   cv      swar                 juste ['68451041280'] code 0
-lua      pub     natural_unsorted     juste ['68451041280'] code 0
-lua      pub     branchless_unsorted  juste ['68451041280'] code 0
-lua      cv      tuned                juste ['68451041280'] code 0
-lua      cv      swar                 juste ['68451041280'] code 0
-php      pub     natural_unsorted     juste ['68451041280'] code 0
-php      pub     branchless_unsorted  juste ['68451041280'] code 0
-php      cv      tuned                juste ['68451041280'] code 0
-php      cv      swar                 juste ['68451041280'] code 0
-bqn      pub     natural_unsorted     juste ['68451041280'] code 0
-bqn      pub     branchless_unsorted  juste ['68451041280'] code 0
-js       pub     natural_unsorted     juste ['68451041280'] code 0
-js       pub     branchless_unsorted  juste ['68451041280'] code 0
-js       cv      tuned                juste ['68451041280'] code 0
 julia    pub     natural_unsorted     juste ['68451041280'] code 0
 julia    pub     branchless_unsorted  juste ['68451041280'] code 0
 julia    cv      tuned                juste ['68451041280'] code 0

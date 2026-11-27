@@ -346,70 +346,11 @@ MATRIX = {
         "B4": (0, "boxing des flottants, fermetures, tuples"), "B5": (0.5, "Bigarray hors tas, Obj"),
         "C1": (0, "aucun en OCaml 5.5"), "C2": (0, "aucun"), "C3": M, "C4": (0, "aucun"), "C5": (0, "Domainslib est tiers"),
         "D1": (1, "Domain (OCaml 5)"), "D2": (0.5, "Atomic séquentiellement cohérent"), "D3": (1, "Atomic.make_contended"),
-        "D4": (0, "aucune"), "D5": (0.5, "Domain.cpu_relax ; pas de barrière explicite (Atomic séquentiellement cohérent) ; erratum du 3/11, remarque sur OCaml : une seule des deux capacités, comme Zig, C3, Chapel, Fortran et JavaScript"), "E1": (1, "natif"), "E2": (0, "aucun"),
+        "D4": (0, "aucune"), "D5": (0.5, "Domain.cpu_relax ; pas de barrière explicite (Atomic séquentiellement cohérent) ; erratum du 3/11, remarque sur OCaml : une seule des deux capacités, comme Zig, C3, Chapel et Fortran"), "E1": (1, "natif"), "E2": (0, "aucun"),
         "E3": (0, "aucun"), "E4": (0, "aucun"), "E5": (0, "aucun"), "E6": (1, "unsafe_get, -unsafe"),
         "E7": (0, "pas de monomorphisation (représentation uniforme)"), "F1": (1, "Bigarray.Array2 c_layout/fortran_layout"),
         "F2": (0, "aucun"), "F3": (0.5, "Int32/Int64 signés boxés ; pas de non signés"), "F4": (1, "Unix.map_file (bench)"),
     },
-    "js": {
-        "A1": (0, "objets référencés"), "A2": (0, "aucun"), "A3": (0, "aucun"),
-        "A4": (0.5, "node:ffi (expérimental, actif par défaut) : getRawPointer et sur-allocation, comme ctypes.addressof "
-                    "en Python (sonde) ; erratum du 3/11, remarque sur JavaScript"),
-        "A5": (0.5, "vues typées sur le même ArrayBuffer, DataView"), "A6": (0, "aucun"), "A7": (0, "aucun"),
-        "A8": (0.5, "tableaux typés pour le stockage ; nombres f64"), "B1": (0, "GC imposé"), "B2": (0, "aucun"),
-        "B3": (0, "aucun"), "B4": (0, "allocations implicites omniprésentes"), "B5": (0.5, "ArrayBuffer ; pointeurs bruts par node:ffi (expérimental)"),
-        "C1": (0, "SIMD.js retiré ; le SIMD de WebAssembly n'est pas exposé à JavaScript"), "C2": (0, "aucun"), "C3": M,
-        "C4": (0, "aucun"), "C5": (0, "aucun"),
-        "D1": (0.5, "Workers isolés + SharedArrayBuffer"), "D2": (0.5, "Atomics séquentiellement cohérents seulement"),
-        "D3": (0, "aucune"), "D4": (0, "aucune"), "D5": (0.5, "Atomics.pause (sonde) ; pas de barrière explicite"),
-        "E1": (1, "JIT (V8) ; --print-opt-code affiche le code machine de TurboFan avec le binaire officiel de Node "
-                  "(sonde) ; erratum du 3/11, remarque sur JavaScript"), "E2": (0, "aucun"), "E3": (0, "aucun"),
-        "E4": (0, "aucun"), "E5": (0, "aucun"),
-        "E6": (0.5, "seulement par les pointeurs de node:ffi (getFloat64…, non vérifiés, expérimental), comme les "
-                    "pointeurs ctypes de Python (sonde) ; erratum du 3/11, remarque sur JavaScript"),
-        "E7": (0, "aucun"), "F1": (0, "aucun"),
-        "F2": (0, "aucun"), "F3": (0.5, "|0 et >>>0 sur 32 bits, BigInt.asUintN"),
-        "F4": (0, "mmap seulement par node:ffi (appel de la libc : FFI, comme pour Rust)"),
-    },
-    "python": {
-        "A1": (0.5, "ctypes.Structure en tableaux (stdlib) ; les objets Python sont référencés"),
-        "A2": (0.5, "ctypes (_fields_, offset)"), "A3": (0.5, "ctypes _pack_ et champs de bits"), "A4": (0.5, "sur-allocation + ctypes.addressof"),
-        "A5": (0.5, "struct.pack/unpack, ctypes.Union"), "A6": (0, "numpy est tiers"), "A7": (0.5, "tableaux ctypes dans Structure"),
-        "A8": (0.5, "array, memoryview.cast pour le stockage ; entiers arbitraires"), "B1": (1, "comptage de références ; le ramasse-miettes de cycles se désactive (gc.disable, gc.freeze), comme le "
-                   "collecteur de cycles d'ORC pour Nim ; erratum du 5/11, remarque sur Python"),
-        "B2": (0, "aucun"), "B3": (0, "aucun"), "B4": (0, "allocations omniprésentes"), "B5": (0.5, "ctypes, mmap"),
-        "C1": (0, "aucun"), "C2": (0, "aucun"), "C3": M, "C4": (0, "aucun"), "C5": (0.5, "multiprocessing.Pool.map, concurrent.futures"),
-        "D1": (0.5, "threads avec GIL dans le build par défaut ; vrais fils parallèles par sous-interpréteurs "
-                    "(concurrent.interpreters, mémoire partagée par memoryview, comme les Workers de JavaScript) ; build "
-                    "sans GIL livré à part"),
-        "D2": (0, "aucun atomique"), "D3": (0, "aucune"), "D4": (0.5, "os.sched_setaffinity (Unix)"),
-        "D5": (0, "aucun"), "E1": (0, "interpréteur (JIT expérimental désactivé par défaut)"), "E2": (0, "aucun"),
-        "E3": (0, "aucun"), "E4": (0, "aucun"), "E5": (0, "aucun"), "E6": (0.5, "seulement par pointeurs ctypes, non vérifiés"), "E7": (0, "aucun"),
-        "F1": (0.5, "memoryview.cast(shape=...)"), "F2": (0, "aucun"), "F3": (0.5, "entiers à précision arbitraire ; types ctypes de largeur fixe qui enveloppent (c_uint32…), "
-                     "masques & 0xFFFFFFFF, comme |0, >>>0 et BigInt.asUintN pour JavaScript (sonde) ; erratum du 5/11, "
-                     "remarque sur Python"),
-        "F4": (1, "mmap + memoryview.cast sans copie (sonde)"),
-    },
-    "lua": {
-        "A1": (0, "tables"), "A2": (0, "aucun"), "A3": (0, "aucun"), "A4": (0, "aucun"), "A5": (0.5, "string.pack/unpack"),
-        "A6": (0, "aucun"), "A7": (0, "aucun"),
-        "A8": (0, "nombres 64 bits seulement ; string.pack stocke i1, i2, i4 et f, mais en lecture seule (chaînes "
-                  "immuables ; sonde) : 1/2 discutable, en sensibilité (remarque sur Lua)"),
-        "B1": (0, "GC imposé"), "B2": (0, "aucun (lua_Alloc côté C)"),
-        "B3": (0.5, "nombres jamais boxés ; retours multiples et arguments variadiques sur la pile de la VM, jamais sur "
-                    "le tas (sonde : 0 octet pour un million d'appels à trois retours), comme les n-uplets non boxés de "
-                    "Haskell ; tables sur le tas ; erratum du 5/11, remarque sur Lua"),
-        "B4": (0.5, "l'arithmétique et les appels n'allouent pas (sonde) ; concaténation, fermetures, constructeurs et "
-                    "croissance des tables allouent, comme les fermetures, ~ et littéraux de tableaux de D ; erratum du "
-                    "5/11, remarque sur Lua"),
-        "B5": (0, "aucun"), "C1": (0, "aucun"), "C2": (0, "aucun"), "C3": M, "C4": (0, "aucun"), "C5": (0, "aucun"),
-        "D1": (0, "pas de threads (coroutines)"), "D2": (0, "aucun"), "D3": (0, "aucune"), "D4": (0, "aucune"), "D5": (0, "aucun"),
-        "E1": (0, "interpréteur"), "E2": (0, "aucun"), "E3": (0, "aucun"), "E4": (0, "aucun"), "E5": (0, "aucun"),
-        "E6": (0, "aucun"), "E7": (0, "aucun"), "F1": (0, "aucun"), "F2": (0, "aucun"),
-        "F3": (0.5, "entiers 64 bits enveloppants ; pas de non signés (math.ult)"), "F4": (0, "aucun"),
-    },
-    # Swift 6.4.2 (ajouté le 5/11, docs/SWIFT.md) : bibliothèque standard et bibliothèques de base livrées avec la chaîne
-    # (Foundation, Dispatch), comme la bibliothèque unix d'OCaml ; sonde probes/swift (results/probes/swift.txt)
     "swift": {
         "A1": (1, "[struct] en ligne : stride 64, écart de 64 o entre éléments (sonde, bench K1)"),
         "A2": (1, "ordre déclaré gardé (docs/ABI/TypeLayout.rst, sans attribut de disposition), MemoryLayout.offset(of:) (sonde), comme Go"),
@@ -473,65 +414,6 @@ MATRIX = {
         "F1": (0.5, "array[0..M-1, 0..N-1] contigu, bornes fixées à la compilation (bench K9 natural) ; array of array non contigu"),
         "F2": (0, "aucun"), "F3": (1, "Byte...QWord et ShortInt...Int64, modulaires sans {$Q+} (défaut, sonde)"),
         "F4": (0.5, "Fpmmap de l'unité BaseUnix (appel système propre à Unix) + pointeur typé (sonde) ; aucune projection portable dans les unités livrées, comme syscall.Mmap de Go ; erratum du 6/11, remarque sur FreePascal : 1 avant ; 1 en règle v2"),
-    },
-    "bqn": {  # ajouté le 6/11 (docs/BQN.md) : CBQN 0.12.0, sonde probes/bqn, results/probes/bqn.txt
-        "A1": (0.5, "matrice n×16 de f64 d'un seul tenant (rangées homogènes en ligne, bench K1) ; espaces de noms en références ; pas d'enregistrement hétérogène en ligne (sonde)"),
-        "A2": (0, "aucun : un espace de noms n'a pas de disposition"),
-        "A3": (0, "ni enregistrement compacté ni champ de bits ; booléens rangés à 1 bit (bitarr) et •bit._cast u1 sur des tableaux, comme le BitArray de Julia (sonde ; erratum du 6/11, remarque sur BQN : ½ avant)"),
-        "A4": (0, "aucun"), "A5": (0.5, "•bit._cast entre i8/i16/i32/f64/caractères (tableaux seulement ; ni union ni f32, sonde)"),
-        "A6": (0, "aucun conteneur SoA : ⍉ transpose une matrice homogène (copie), comme la transposition de Fortran et de Julia (sonde ; erratum du 6/11, remarque sur BQN : ½ avant)"),
-        "A7": (0.5, "tableaux de rang 3 et plus : sous-tableaux fixes en ligne, homogènes seulement (sonde)"),
-        "A8": (0.5, "i8/i16/i32/bits choisis par l'implémentation, forçables par •bit._cast ; flottants f64 seulement (sonde)"),
-        "B1": (0.5, "comptage de références ; ramasse-miettes traçant automatique, désactivable seulement par la commande )gc disable du REPL (sonde, docs/commands.md)"),
-        "B2": (0, "aucun"), "B3": (0, "nombres jamais boxés, mais tout tableau sur le tas (sonde), comme JavaScript"),
-        "B4": (0, "chaque primitive alloue son résultat"), "B5": (0.5, "objets pointeurs de •FFI (Read, Write, Add, Cast ; malloc de la libc, sonde)"),
-        "C1": (0, "aucun type vectoriel"), "C2": (0, "aucune"), "C3": M,
-        "C4": (0.5, "+´ ordonnée ou •math.Sum, somme vectorielle réassociée (sonde) ; pour la somme seulement"),
-        "C5": (0, "aucune construction qui demande plusieurs cœurs (CBQN n'en utilise qu'un, implementation/perf.md) ; les primitives sur tableaux entiers relèvent du SIMD (C1 à C4)"),
-        "D1": (0, "pas de threads"), "D2": (0, "aucun"), "D3": (0, "aucune"), "D4": (0, "aucune (sched_setaffinity seulement par •FFI)"),
-        "D5": (0, "aucun"),
-        "E1": (0.5, "bytecode et JIT x86-64 actif par défaut ; code machine visible seulement par une option de construction (USE_PERF, sonde)"),
-        "E2": (0, "aucun"), "E3": (0, "aucun"), "E4": (0, "aucun"), "E5": (0, "aucun (valeurs immuables)"),
-        "E6": (0, "indices toujours vérifiés (sonde)"), "E7": (0, "aucun"),
-        "F1": (1, "tableaux multidimensionnels natifs et contigus (sonde, bench K9)"), "F2": (0, "aucun"),
-        "F3": (0.5, "pas de type entier : entiers exacts jusqu'à 2⋆53 (f64) ; opérations modulaires de 8 à 64 bits sur des tableaux par •bit._add, _sub, _mul, _neg (spécification ; dans 0.12.0, absentes de sa documentation) et enveloppement par modulo, comme ctypes et les masques pour Python (sonde ; note complétée le 6/11, remarque sur BQN)"),
-        "F4": (1, "•file.MapBytes + •bit._cast sans copie (i32slice, sonde)"),
-    },
-    "php": {  # ajouté le 7/11 (docs/PHP.md) : PHP 8.5.12, extensions livrées avec php-src ; sonde probes/php, results/probes/php.txt
-        "A1": (0.5, "struct de la FFI (extension livrée avec php-src, --with-ffi) en tableaux : particle[n], 64 o par élément "
-                    "(sonde, bench K1 aos) ; objets et tableaux de PHP référencés, comme ctypes.Structure en Python"),
-        "A2": (0.5, "FFI : ordre et décalages des champs (FFI\\CType::getStructFieldOffset ; sonde) ; rien pour les classes"),
-        "A3": (0.5, "FFI : struct __attribute__((packed)) et champs de bits (sonde : 6 o) ; pack/unpack sur des chaînes"),
-        "A4": (0.5, "FFI : __attribute__((aligned(64))) (sonde) ; rien pour les valeurs de PHP"),
-        "A5": (0.5, "pack/unpack, unions de la FFI (sonde)"), "A6": (0, "aucun"),
-        "A7": (0.5, "tableaux fixes dans les struct de la FFI (sonde)"),
-        "A8": (0.5, "types étroits de la FFI pour le stockage (uint8_t, int16_t, float) ; valeurs de PHP en int et float de 64 bits"),
-        "B1": (1, "comptage de références ; le collecteur de cycles se désactive (gc_disable ; sonde), comme Python"),
-        "B2": (0, "aucun : le gestionnaire de mémoire de Zend est interne"),
-        "B3": (0, "nombres jamais boxés (dans le zval ; sonde : 0 octet), mais tableaux, objets et chaînes toujours sur "
-                  "le tas et pas de retour multiple sans tableau, comme JavaScript et BQN"),
-        "B4": (0.5, "l'arithmétique et les appels n'allouent pas (sonde) ; la copie sur écriture copie un tableau partagé à "
-                    "la première écriture, chaînes et tableaux allouent, comme Lua"),
-        "B5": (0.5, "pointeurs de la FFI (FFI::addr, arithmétique ; sonde), comme ctypes"),
-        "C1": (0, "aucun"), "C2": (0, "aucun"), "C3": M,
-        "C4": (0, "aucun : le JIT garde l'ordre, array_sum est séquentielle"),
-        "C5": (0, "aucune construction de parallélisme de données (processus à écrire à la main)"),
-        "D1": (0.5, "pas de threads : processus (pcntl_fork, extension livrée, CLI seulement) et segments System V partagés "
-                    "(shmop) lus et écrits par copie (sonde, bench K3, K6 et K9) ; Fibers sans parallélisme"),
-        "D2": (0, "aucun atomique (sysvsem n'a que des sémaphores)"), "D3": (0, "aucune"),
-        "D4": (0.5, "pcntl_setcpuaffinity (PHP 8.4), processus entier (sonde), comme os.sched_setaffinity en Python"),
-        "D5": (0, "aucun"),
-        "E1": (0.5, "JIT d'OPcache (moteur IR) livré mais inactif par défaut (opcache.enable_cli=0, opcache.jit=disable) ; "
-                    "listage du code machine seulement avec une construction --with-capstone (opcache.jit_debug=1), "
-                    "comme le USE_PERF de CBQN"),
-        "E2": (0, "aucun"), "E3": (0, "aucun"), "E4": (0, "aucun"), "E5": (0, "aucun"),
-        "E6": (0.5, "seulement par les pointeurs de la FFI (non vérifiés ; tableaux de la FFI vérifiés : sonde), comme ctypes"),
-        "E7": (0, "aucun"),
-        "F1": (0.5, "tableaux multidimensionnels contigus de la FFI (double[3][4] ; sonde) ; tableaux de PHP imbriqués"),
-        "F2": (0, "aucun"),
-        "F3": (0.5, "int de 64 bits signé dont le dépassement passe en float ; masques & 0xFFFFFFFF ; types de la FFI qui "
-                    "enveloppent (uint32_t ; sonde), comme ctypes"),
-        "F4": (0, "pas de projection de fichier (mmap seulement par la FFI vers la libc, comme node:ffi)"),
     },
 }
 

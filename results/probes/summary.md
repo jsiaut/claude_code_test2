@@ -33,39 +33,6 @@
 | ada | C5 | 0 | 0 | 0 |  | [échec] boucle parallel for d'Ada 2022 : error: missing ":" ; le manuel de GNAT note « Feature unimplemented » |
 | ada | D3 | 0 | 0 | 0 |  | [recherche] motif D3 dans adainclude et gnat_rm.info 16.2.0 : 0 entrée, 0 mention (results/grid_audit/search/a |
 | ada | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans adainclude et gnat_rm.info 16.2.0 : 0 entrée, 20 mentions (results/grid_audit/search |
-| bqn | A1 | 0.5 | 0.5 | 0.5 |  | [exécutée] matrice 1000×16 : f64arr d'un seul tenant (rangées homogènes en ligne) ; liste d'espaces de noms :  |
-| bqn | A2 | 0 | 0 | 0 |  | [recherche] motif A2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | A3 | 0 | 0 | 0 |  | [échec] ni enregistrement compacté ni champ de bits ; booléens rangés à 1 bit (bitarr) et ⟨1,'u'⟩‿⟨8,'i'⟩ •bit |
-| bqn | A4 | 0 | 0 | 0 |  | [recherche] motif A4 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | A5 | 0.5 | 0.5 | 0.5 |  | [exécutée] •bit._cast : 1.0 en f64 → deux i32 ⟨ 0 1072693248 ⟩ (tableaux seulement ; ni union ni f32) |
-| bqn | A6 | 0 | 0 | 0 |  | [échec] aucun conteneur SoA : ⍉ transpose la matrice 1000×16 en 16×1000 (f64arr, une copie), comme la transpos |
-| bqn | A7 | 0.5 | 0.5 | 0.5 |  | [exécutée] tableau de rang 3 (2×16×4, f64arr) : sous-tableaux fixes en ligne, homogènes seulement |
-| bqn | A8 | 0.5 | 0.5 | 0.5 |  | [exécutée] stockage étroit choisi par l'implémentation : 1‿2‿3 i8arr, 300‿1 i16arr, 70000‿1 i32arr, 0.5‿1 f64a |
-| bqn | B1 | 0.5 | 0.5 | 0.5 |  | [exécutée] comptage de références (•internal.Refc ↕1000 : 1) ; ramasse-miettes traçant automatique, désactivab |
-| bqn | B2 | 0 | 0 | 0 |  | [recherche] motif B2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | B3 | 0 | 0 | 0 |  | [échec] nombres jamais boxés (100 000 additions scalaires : tas vivant 128 octets de plus) ; tout tableau est  |
-| bqn | B4 | 0 | 0 | 0 |  | [échec] chaque primitive alloue son résultat (sauf mise à jour en place d'un tableau non partagé) |
-| bqn | B5 | 0.5 | 0.5 | 0.5 |  | [exécutée] pointeurs par •FFI seulement : malloc, Write 123456, Read 123456 (objets pointeurs Read/Write/Add/C |
-| bqn | C1 | 0 | 0 | 0 |  | [recherche] motif C1 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | C2 | 0 | 0 | 0 |  | [recherche] motif C2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | C4 | 0.5 | 0.5 | 0.5 |  | [exécutée] +´ ordonnée 14.392726722865772 ; •math.Sum (somme vectorielle réassociée) 14.392726722865621 ; écar |
-| bqn | C5 | 0 | 0 | 0 |  | [recherche] motif C5 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | D1 | 0 | 0 | 0 |  | [recherche] motif D1 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | D2 | 0 | 0 | 0 |  | [recherche] motif D2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | D3 | 0 | 0 | 0 |  | [recherche] motif D3 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | D4 | 0 | 0 | 0 |  | [recherche] motif D4 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | D5 | 0 | 0 | 0 |  | [recherche] motif D5 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | E1 | 0.5 | 0.5 | 0.5 |  | [recherche] symboles du JIT dans le binaire livré (nm) : compileAll evalJIT jit_enabled mmX_allocS (mémoire ex |
-| bqn | E2 | 0 | 0 | 0 |  | [recherche] motif E2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | E3 | 0 | 0 | 0 |  | [recherche] motif E3 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | E4 | 0 | 0 | 0 |  | [recherche] motif E4 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | E5 | 0 | 0 | 0 |  | [recherche] motif E5 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | E6 | 0 | 0 | 0 |  | [échec] indices toujours vérifiés (5 ⊑ ↕3 : « 𝕨⊑𝕩: indexing out-of-bounds (𝕨≡5, 3≡≠𝕩) ») ; aucun moyen de les  |
-| bqn | E7 | 0 | 0 | 0 |  | [recherche] motif E7 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | F1 | 1 | 1 | 1 |  | [exécutée] tableaux multidimensionnels natifs, contigus en ordre des rangées (3×4×5 : i8arr, (⟨1,2,3⟩⊑r) = 33) |
-| bqn | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans les 90 valeurs système de CBQN 0.12.0 et leurs membres (•listSys, •ns.Keys) : 0 nom  |
-| bqn | F3 | 0.5 | 0.5 | 0.5 |  | [exécutée] pas de type entier de largeur fixe : entiers exacts jusqu'à 2⋆53 (f64) ; opérations modulaires sur  |
-| bqn | F4 | 1 | 1 | 1 |  | [exécutée] •file.MapBytes projette 64 Mio (c8slice, tas vivant + 128 o) ; •bit._cast en i32 sans copie (i32sli |
 | c | A1 | 1 | 1 | 1 |  | [exécutée] Part v[8] : pas de 16 o = sizeof(Part) 16 ; les 4 premiers octets sont le float x en ligne : 00 00  |
 | c | A2 | 1 | 1 | 1 |  | [exécutée] ordre déclaré gardé : (u8, double, u8) occupe 24 o, offsetof(b) = 8, offsetof(c) = 16 |
 | c | A3 | 1 | 1 | 0.5 |  | [exécutée] champs de bits (norme) : sizeof(BF) = 4, x = 5, y = 17 ; __attribute__((packed)) : sizeof(Pk) = 5 ; |
@@ -429,39 +396,6 @@
 | java | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans l'API exportée d'OpenJDK 27.0.1 (paquets exportés des modules système, 48847 noms :  |
 | java | F3 | 0.5 | 0.5 | 0.5 |  | [exécutée] entiers signés seulement : (byte) 200 = -56, Integer.MAX_VALUE + 1 = -2147483648 (enveloppe) ; Inte |
 | java | F4 | 1 | 1 | 1 |  | [exécutée] FileChannel.map → MemorySegment : k5_a.f32 projeté (true, /proc/self/maps), premier float 0.4390046 |
-| js | A1 | 0 | 0 | 0 |  | [échec] tableau de 100000 objets {x, y, z, w} (flottants) : 128 o de tas par élément pour 32 o de données (réf |
-| js | A2 | 0 | 0 | 0 |  | [recherche] motif A2 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | A3 | 0 | 0 | 0 |  | [recherche] motif A3 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | A4 | 0.5 | 0.5 | 0.5 |  | [exécutée] node:ffi (expérimental) : getRawPointer(ArrayBuffer) = 0 mod 64, adresse arrondie à la main 0 mod 6 |
-| js | A5 | 0.5 | 0.5 | 0.5 |  | [exécutée] vues typées sur un même ArrayBuffer : Float32Array 1.0 relu par Uint32Array = 0x3f800000 ; DataView |
-| js | A6 | 0 | 0 | 0 |  | [recherche] motif A6 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | A7 | 0 | 0 | 0 |  | [échec] {f: Float32Array(16), n} : 328 o de tas par objet pour 68 o de données (le tableau typé et son ArrayBu |
-| js | A8 | 0.5 | 0.5 | 0.5 |  | [exécutée] BYTES_PER_ELEMENT : Int8Array 1, Int16Array 2, Float16Array 2, Float32Array 4 (stockage) ; lus, ce  |
-| js | B1 | 0 | 0 | 0 |  | [échec] 1 Gio de Uint8Array(1024) sans référence : 55 collectes signalées par PerformanceObserver('gc'), sans  |
-| js | B2 | 0 | 0 | 0 |  | [recherche] motif B2 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | B3 | 0 | 0 | 0 |  | [échec] octets alloués par itération (v8 total_allocated_bytes, fonctions déjà optimisées) : objet {a, b} gard |
-| js | B4 | 0 | 0 | 0 |  | [échec] allocations implicites, octets par itération : fermeture créée 96.2 ; flottant rangé dans un tableau g |
-| js | B5 | 0.5 | 0.5 | 0.5 |  | [exécutée] ArrayBuffer + DataView.setInt32(12, 42) → i32[3] = 42 ; node:ffi.setInt32(getRawPointer(ib), 16, 7) |
-| js | C1 | 0 | 0 | 0 |  | [échec] typeof SIMD = undefined (SIMD.js retiré) ; le SIMD de WebAssembly n'est pas exposé à JavaScript ; [rec |
-| js | C2 | 0 | 0 | 0 |  | [recherche] motif C2 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | C4 | 0 | 0 | 0 |  | [échec] un million de Number : boucle optimisée par TurboFan 182.66375347116414, somme par paires écrite à la  |
-| js | C5 | 0 | 0 | 0 |  | [recherche] motif C5 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | D1 | 0.5 | 0.5 | 0.5 |  | [exécutée] 4 Worker (worker_threads) sur un SharedArrayBuffer : 4000 incréments ; un objet passé au fil y vaut |
-| js | D2 | 0.5 | 0.5 | 0.5 |  | [exécutée] Atomics : store 5, compareExchange(5, 8) → 5, add 3 → 8 puis 11 (séquentiellement cohérents) ; Atom |
-| js | D3 | 0 | 0 | 0 |  | [recherche] motif D3 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | D4 | 0 | 0 | 0 |  | [recherche] motif D4 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | D5 | 0.5 | 0.5 | 0.5 |  | [exécutée] Atomics.pause (function) exécuté ; aucune barrière explicite (Atomics est séquentiellement cohérent |
-| js | E1 | 1 | 1 | 1 |  | [exécutée] node --print-opt-code : 3 fonctions optimisées par TurboFan listées, 262 instructions pour hot() (b |
-| js | E2 | 0 | 0 | 0 |  | [échec] asm("pause") : ReferenceError: asm is not defined ; [recherche] motif E2 dans l'API de Node 26.12.1 (o |
-| js | E3 | 0 | 0 | 0 |  | [recherche] motif E3 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | E4 | 0 | 0 | 0 |  | [recherche] motif E4 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | E5 | 0 | 0 | 0 |  | [recherche] motif E5 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | E6 | 0.5 | 0.5 | 0.5 |  | [exécutée] tableau typé : ta[10] = undefined (lecture vérifiée, hors bornes → undefined) ; node:ffi.getFloat64 |
-| js | E7 | 0 | 0 | 0 |  | [recherche] motif E7 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | F1 | 0 | 0 | 0 |  | [échec] pas de tableau multidimensionnel : tableau de lignes séparées (rows[1] remplacée par une ligne de 7),  |
-| js | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
-| js | F3 | 0.5 | 0.5 | 0.5 |  | [exécutée] (2 ** 31) | 0 = -2147483648, -1 >>> 0 = 4294967295, Math.imul(0x7fffffff, 2) = -2, BigInt.asUintN(6 |
-| js | F4 | 0 | 0 | 0 |  | [recherche] motif F4 dans l'API de Node 26.12.1 (objet global, modules intégrés et leurs classes, 12301 noms ; |
 | julia | A2 | 1 | 1 | 1 |  | [exécutée] fieldoffset(S, 3)=8 |
 | julia | A5 | 1 | 1 | 1 |  | [exécutée] reinterpret(UInt32, 1f0)=0x3f800000 |
 | julia | F4 | 1 | 1 | 1 |  | [exécutée] Mmap.mmap -> Vector{Float32} : 0.4390046 |
@@ -495,39 +429,6 @@
 | julia | A4 | 0.5 | 0.5 | 0.5 |  | [exécutée] Vector{Float32}(undef, 1000) à 0 mod 64 (alignement choisi par l'allocateur de tableaux) ; [recherc |
 | julia | A6 | 0 | 0 | 0 |  | [recherche] motif A6 dans les noms publics : 0 nom ; StructArrays est un paquet tiers |
 | julia | D4 | 0.5 | 0.5 | 0.5 |  | [exécutée] JULIA_EXCLUSIVE=1 julia -t 4 : processeurs des fils [0, 1, 2, 3] ; Base.setcpuaffinity(`grep Cpus_a |
-| lua | A1 | 0 | 0 | 0 |  | [échec] table de 100000 tables {x, y, z, w} : 156 o par élément pour 32 o de données (références vers des tabl |
-| lua | A2 | 0 | 0 | 0 |  | [recherche] motif A2 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | A3 | 0 | 0 | 0 |  | [recherche] motif A3 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | A4 | 0 | 0 | 0 |  | [recherche] motif A4 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | A5 | 0.5 | 0.5 | 0.5 |  | [exécutée] string.unpack('<I4', string.pack('<f', 1.0)) = 0x3f800000 : réinterprétation par copie dans une cha |
-| lua | A6 | 0 | 0 | 0 |  | [recherche] motif A6 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | A7 | 0 | 0 | 0 |  | [échec] {f = {16 nombres}, n} : f est une référence vers une table séparée (type table) ; [recherche] motif A7 |
-| lua | A8 | 0 | 0 | 0 |  | [échec] math.type(1) = integer, math.type(1.5) = float : entiers et flottants de 64 bits seulement ; string.pa |
-| lua | B1 | 0 | 0 | 0 |  | [échec] 1 Gio de chaînes de 1 Kio sans référence : la mémoire du tas reste sous 39 Kio (le ramasse-miettes inc |
-| lua | B2 | 0 | 0 | 0 |  | [recherche] motif B2 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | B3 | 0.5 | 0.5 | 0.5 |  | [exécutée] un million d'appels à une fonction qui rend deux valeurs (pile de la machine virtuelle) et d'opérat |
-| lua | B4 | 0.5 | 0.5 | 0.5 |  | [exécutée] allocations implicites : fermeture créée 80 o, constructeur de table {i} 61 o (par itération, ramas |
-| lua | B5 | 0 | 0 | 0 |  | [recherche] motif B5 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | C1 | 0 | 0 | 0 |  | [recherche] motif C1 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | C2 | 0 | 0 | 0 |  | [recherche] motif C2 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | C4 | 0 | 0 | 0 |  | [échec] un million de nombres : boucle 182.66375347116414, somme par paires écrite à la main 182.6637534711563 |
-| lua | C5 | 0 | 0 | 0 |  | [recherche] motif C5 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | D1 | 0 | 0 | 0 |  | [échec] 4 coroutines (type thread) alternent sur un seul fil système : ordre 12341234 ; aucune API de fils par |
-| lua | D2 | 0 | 0 | 0 |  | [recherche] motif D2 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | D3 | 0 | 0 | 0 |  | [recherche] motif D3 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | D4 | 0 | 0 | 0 |  | [recherche] motif D4 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | D5 | 0 | 0 | 0 |  | [recherche] motif D5 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | E1 | 0 | 0 | 0 |  | [échec] interpréteur : luac -l ne liste que le bytecode (539 instructions de la machine virtuelle pour audit.l |
-| lua | E2 | 0 | 0 | 0 |  | [échec] asm("pause") : attempt to call a nil value (global 'asm') ; [recherche] motif E2 dans la bibliothèque  |
-| lua | E3 | 0 | 0 | 0 |  | [recherche] motif E3 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | E4 | 0 | 0 | 0 |  | [recherche] motif E4 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | E5 | 0 | 0 | 0 |  | [recherche] motif E5 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | E6 | 0 | 0 | 0 |  | [échec] four[10] = nil : la lecture d'une case absente rend nil ; ni contrôle à couper ni accès non vérifié ;  |
-| lua | E7 | 0 | 0 | 0 |  | [recherche] motif E7 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | F1 | 0 | 0 | 0 |  | [échec] pas de tableau multidimensionnel : table de lignes séparées (g[2] remplacée par une ligne de 7) ; [rec |
-| lua | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
-| lua | F3 | 0.5 | 0.5 | 0.5 |  | [exécutée] math.maxinteger + 1 == math.mininteger : true ; math.ult(1, -1) = true ; entiers de 64 bits signés  |
-| lua | F4 | 0 | 0 | 0 |  | [recherche] motif F4 dans la bibliothèque standard de Lua 5.5.1 (160 noms de _G, des tables de bibliothèque et |
 | mojo | A4 | 1 | 1 | 1 |  | [exécutée] @align(64) : align_of = 64 , somme des adresses mod 64 (64 sur la pile, 50 sur le tas) = 0 |
 | mojo | A5 | 1 | 1 | 1 |  | [exécutée] UnsafeUnion[Float32, UInt32] : size_of = 4 , bits de 1.0f = 1065353216 |
 | mojo | C4 | 0.5 | 0.5 | 0.5 |  | [exécutée] fma[FastMathFlag.REASSOC] = 7.0 (seule opération qui prend le drapeau) |
@@ -660,72 +561,6 @@
 | odin | F1 | 0.5 | 0.5 | 0.5 |  | [exécutée] [3][4]f32 contigu : &m[1][0] - &m[0][3] = 4 o, size_of = 48 o ; matrix[4, 4]f32 : 64 o ; [échec] [n |
 | odin | C5 | 0 | 0 | 0 |  | [recherche] motif C5 dans core et base dev-2026-10:84bc3fc : 4 déclarations publiques (results/grid_audit/sear |
 | odin | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans core et base dev-2026-10:84bc3fc : 35 déclarations publiques (results/grid_audit/sea |
-| php | A1 | 0.5 | 0.5 | 0.5 |  | [exécutée] FFI (extension livrée avec php-src, --with-ffi) : particle[1000] de 64 o par élément, en ligne ; le |
-| php | A2 | 0.5 | 0.5 | 0.5 |  | [exécutée] FFI : struct S {char; double; int} : sizeof 24, offsets c=0 d=8 i=16 (FFI\CType::getStructFieldOffs |
-| php | A3 | 0.5 | 0.5 | 0.5 |  | [exécutée] FFI : struct __attribute__((packed)) {char; int; champ de 3 bits} : sizeof 6 ; pack/unpack sur des  |
-| php | A4 | 0.5 | 0.5 | 0.5 |  | [exécutée] FFI : champ __attribute__((aligned(64))) : alignof(A64) = 64, adresse de a[1].v mod 64 = 0 (dépend  |
-| php | A5 | 0.5 | 0.5 | 0.5 |  | [exécutée] pack('e', 1.0) / unpack('V2') : 0, 1072693248 ; union FFI double/uint32[2] : 0, 1072693248 |
-| php | A6 | 0 | 0 | 0 |  | [recherche] motif A6 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | A7 | 0.5 | 0.5 | 0.5 |  | [exécutée] FFI : struct {float f[16]; int n;} : sizeof 68 (tableau fixe en ligne) |
-| php | A8 | 0.5 | 0.5 | 0.5 |  | [exécutée] FFI : uint8_t, int16_t, float pour le stockage (uint8_t ← 300 donne 44) ; les valeurs de PHP sont d |
-| php | B1 | 1 | 1 | 1 |  | [exécutée] comptage de références (libération immédiate) ; le collecteur de cycles se désactive : gc_disable() |
-| php | B2 | 0 | 0 | 0 |  | [recherche] motif B2 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | B3 | 0 | 0 | 0 |  | [échec] 100000 agrégats de trois flottants gardés vivants : 216 octets de tas chacun en tableau [x, y, z], 106 |
-| php | B4 | 0.5 | 0.5 | 0.5 |  | [exécutée] arithmétique et appels n'allouent pas (un million d'appels : 0 octets) ; la copie sur écriture copi |
-| php | B5 | 0.5 | 0.5 | 0.5 |  | [exécutée] pointeurs par la FFI : FFI::addr, arithmétique (p + 1 pointe la particule suivante : vx = 2.5) |
-| php | C1 | 0 | 0 | 0 |  | [recherche] motif C1 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | C2 | 0 | 0 | 0 |  | [recherche] motif C2 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | C4 | 0 | 0 | 0 |  | [échec] un million de flottants : boucle foreach (JIT) 178.0478988276023, array_sum 178.0478988276023 (identiq |
-| php | C5 | 0 | 0 | 0 |  | [recherche] motif C5 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | D1 | 0.5 | 0.5 | 0.5 |  | [exécutée] pas de threads : processus (pcntl_fork, extension livrée, CLI) et segment System V partagé (shmop)  |
-| php | D2 | 0 | 0 | 0 |  | [recherche] motif D2 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | D3 | 0 | 0 | 0 |  | [recherche] motif D3 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | D4 | 1 | 1 | 0.5 |  | [exécutée] pcntl_setcpuaffinity (PHP 8.4, processus entier) : true → [0] (avant : [0,1,2,3]) ; ½ en v1 |
-| php | D5 | 0 | 0 | 0 |  | [recherche] motif D5 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | E1 | 0.5 | 0.5 | 0.5 |  | [exécutée] JIT d'OPcache (moteur IR) inactif par défaut (opcache.jit=disable, opcache.enable_cli=0) ; ici on=t |
-| php | E2 | 0 | 0 | 0 |  | [échec] asm("pause") : Fatal error: Uncaught Error: Call to undefined function asm() ; aucun ; [recherche] mot |
-| php | E3 | 0 | 0 | 0 |  | [recherche] motif E3 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | E4 | 0 | 0 | 0 |  | [recherche] motif E4 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | E5 | 0 | 0 | 0 |  | [recherche] motif E5 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | E6 | 0.5 | 0.5 | 0.5 |  | [exécutée] seulement par les pointeurs de la FFI (non vérifiés) : int[4], indice 4 → FFI\Exception : C array i |
-| php | E7 | 0 | 0 | 0 |  | [échec] function id<T>(T $x): T : Parse error: syntax error, unexpected token "<", expecting "(" ; const N = s |
-| php | F1 | 0.5 | 0.5 | 0.5 |  | [exécutée] tableaux multidimensionnels contigus par la FFI : double[3][4], g[2][3] = élément 11 du tableau apl |
-| php | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| php | F3 | 0.5 | 0.5 | 0.5 |  | [exécutée] int de 64 bits signé : le dépassement passe en float (PHP_INT_MAX + 1 = 9.223372036854776E+18, doub |
-| php | F4 | 0 | 0 | 0 |  | [recherche] motif F4 dans l'API publique de PHP 8.5.12 (7090 noms : fonctions, classes et méthodes, constantes |
-| python | A1 | 0.5 | 0.5 | 0.5 |  | [exécutée] ctypes (P16 * 1000) : sizeof(P16) = 64 o, élément 1 à 64 o (à plat) ; une liste d'objets ne tient q |
-| python | A2 | 0.5 | 0.5 | 0.5 |  | [exécutée] ctypes Structure {uint8; uint32; double} : décalages a=0 b=4 c=8, taille 16 (disposition C) |
-| python | A3 | 0.5 | 0.5 | 0.5 |  | [exécutée] ctypes _pack_ = 1 et champ de 3 bits : sizeof = 9, b à 1 |
-| python | A4 | 0.5 | 0.5 | 0.5 |  | [exécutée] ctypes _align_ = 64 : alignment(A64) = 64, mais le tampon alloué n'est pas aligné (adresse de a64[0 |
-| python | A5 | 0.5 | 0.5 | 0.5 |  | [exécutée] ctypes.Union : float 1.0 relu en uint32 = 0x3f800000 ; struct.unpack('<I', struct.pack('<f', 1.0))  |
-| python | A6 | 0 | 0 | 0 |  | [recherche] motif A6 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | A7 | 0.5 | 0.5 | 0.5 |  | [exécutée] ctypes {c_float * 16; int32} : sizeof = 68, n à 64 (tableau fixe en ligne) |
-| python | A8 | 0.5 | 0.5 | 0.5 |  | [exécutée] array : 'b' 1 o, 'h' 2, 'e' (demi) 2, 'f' 4 (stockage) ; lus, des int de précision arbitraire et de |
-| python | B1 | 1 | 1 | 1 |  | [exécutée] comptage de références : objet libéré dès la dernière référence (finaliseur appelé : True) ; gc.dis |
-| python | B2 | 0 | 0 | 0 |  | [recherche] motif B2 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | B3 | 0 | 0 | 0 |  | [échec] n-uplet rendu par une fonction : 3.0 blocs alloués par appel, gardés en vie ; aucune valeur composée s |
-| python | B4 | 0 | 0 | 0 |  | [échec] tout est objet : un float occupe 24 o, un int 28 o ; chaque x + i crée un nouvel objet ; une liste de  |
-| python | B5 | 0.5 | 0.5 | 0.5 |  | [exécutée] ctypes : écriture par adresse + 12 → buf[3] = 42 ; pointeur ctypes.cast(adresse + 16) → buf[4] = 7 |
-| python | C1 | 0 | 0 | 0 |  | [recherche] motif C1 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | C2 | 0 | 0 | 0 |  | [recherche] motif C2 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | C4 | 0 | 0 | 0 |  | [échec] un million de float : boucle 23.420295149213157, somme par paires écrite à la main 23.42029514921029 ( |
-| python | C5 | 0.5 | 0.5 | 0.5 |  | [exécutée] concurrent.futures.ProcessPoolExecutor(4).map : 16 tâches sur 4 processus (arguments et résultats c |
-| python | D1 | 0.5 | 0.5 | 0.5 |  | [exécutée] GIL actif (sys._is_gil_enabled() = True) : 4 calculs en série 0.33 s, sur 4 fils 0.34 s (aucun gain |
-| python | D2 | 0 | 0 | 0 |  | [recherche] motif D2 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | D3 | 0 | 0 | 0 |  | [recherche] motif D3 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | D4 | 1 | 1 | 0.5 |  | [exécutée] os.sched_setaffinity(0, {1}) : [0, 1, 2, 3] → [1], processeur courant 1 (/proc/self/stat) ; ½ en v1 |
-| python | D5 | 0 | 0 | 0 |  | [recherche] motif D5 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | E1 | 0 | 0 | 0 |  | [échec] sys._jit.is_available() = False, is_enabled() = False : JIT expérimental absent de cette construction  |
-| python | E2 | 0 | 0 | 0 |  | [échec] asm("pause") : NameError: name 'asm' is not defined ; [recherche] motif E2 dans la bibliothèque standa |
-| python | E3 | 0 | 0 | 0 |  | [recherche] motif E3 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | E4 | 0 | 0 | 0 |  | [recherche] motif E4 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | E5 | 0 | 0 | 0 |  | [recherche] motif E5 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | E6 | 0.5 | 0.5 | 0.5 |  | [exécutée] lst[4] : IndexError: list index out of range ; pointeur ctypes ptr[6] lu sans contrôle hors du tabl |
-| python | E7 | 0 | 0 | 0 |  | [recherche] motif E7 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | F1 | 0.5 | 0.5 | 0.5 |  | [exécutée] memoryview.cast('d', shape=[3, 4]) : m[2, 3] = 11, élément 11 du tampon à plat ; strides (32, 8) |
-| python | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans la bibliothèque standard de Python 3.15.2 (sources .py livrées et modules en C, intr |
-| python | F3 | 0.5 | 0.5 | 0.5 |  | [exécutée] int de précision arbitraire : 2**64 + 1 = 18446744073709551617 ; ctypes.c_uint32(2**32 + 5).value = |
-| python | F4 | 1 | 1 | 1 |  | [exécutée] mmap.mmap + memoryview.cast('f') sans copie : k5_a.f32 projeté (True, /proc/self/maps), premier flo |
 | rust | A5 | 1 | 1 | 1 |  | [exécutée] union 0x3f800000 to_bits 0x3f800000 |
 | rust | E2 | 1 | 1 | 1 |  | [exécutée] asm! stable : 2 |
 | rust | A1 | 1 | 1 | 1 |  | [exécutée] Vec<Part> : pas de 16 o = size_of::<Part>() 16 ; les 4 premiers octets du tampon sont le f32 x en l |

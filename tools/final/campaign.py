@@ -40,7 +40,7 @@ FB = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(FB)
 import sizes as S  # noqa: E402
 import driver as D  # noqa: E402  (PLAN, sommes de contrôle de la taille publiée, vol de temps)
-from validate import checksum_ok  # noqa: E402  (tolérances de la spécification, règle des 2^53)
+from validate import checksum_ok  # noqa: E402  (tolérances de la spécification)
 from final_v4 import needed_keys  # noqa: E402  (cellules du score)
 
 LANGS = FB.LANGS
@@ -50,7 +50,7 @@ NATURAL = {"k1": [("natural", "energy"), ("natural_shuffled", "energy")], "k4": 
            "k5": [("natural", "")], "k6": [("natural", "q6"), ("natural", "q1")], "k7": [("natural", "")],
            "k8": [("natural", "")], "k9": [("natural", "")]}
 NEEDED = needed_keys()
-JIT = {"java", "csharp", "js", "julia"}
+JIT = {"java", "csharp", "julia"}
 MEM_CAP_KB = 13 * 1024 * 1024
 SEED = 20261124  # ordre des groupes et des blocs (docs/V5.md, S4 ; campagne finale de la v4 : 20261123)
 EXP_SIZES = json.load(open(os.path.join(ROOT, "results", "sizes", "expected.json")))

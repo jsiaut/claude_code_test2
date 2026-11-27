@@ -34,7 +34,7 @@ if [ "$MODE" = "--ref" ]; then
 fi
 
 echo "1. Grille de contrôle et sondes"
-is "sondes contre grille" "$(python3 analysis/check_probes.py | head -1)" "825 lignes de sonde, 0 divergences"
+is "sondes contre grille" "$(python3 analysis/check_probes.py | head -1)" "660 lignes de sonde, 0 divergences"
 same results/probes/summary.md
 python3 analysis/capabilities_md.py > /dev/null || ko "analysis/capabilities_md.py"
 same docs/CAPABILITIES.md
@@ -44,9 +44,9 @@ python3 tools/converge/inventory.py > /dev/null || ko "tools/converge/inventory.
 same results/converge/forms.json results/converge/inventory.md
 
 echo "3. Plan de la campagne (rien n'est exécuté)"
-is "constructions" "$(python3 tools/final/build.py --list | tail -1)" "132 constructions"
-is "cellules à étalonner" "$(python3 tools/final/campaign.py calibrate --dry | awk '{n += $(NF - 1)} END {print n}')" "3106"
-is "processus des trois passes" "$(python3 tools/final/campaign.py run --dry | tail -1)" "10158 processus"
+is "constructions" "$(python3 tools/final/build.py --list | tail -1)" "117 constructions"
+is "cellules à étalonner" "$(python3 tools/final/campaign.py calibrate --dry | awk '{n += $(NF - 1)} END {print n}')" "2613"
+is "processus des trois passes" "$(python3 tools/final/campaign.py run --dry | tail -1)" "8559 processus"
 is "remesure de Zig" "$(MS_DEV=1 python3 tools/final/build.py --langs zig --list | tail -1)" "12 constructions"
 is "remesure de Go" "$(MS_GOFIX=1 python3 tools/final/build.py --langs go --list | tail -1)" "12 constructions"
 

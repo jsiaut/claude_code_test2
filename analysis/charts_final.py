@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Graphique SVG du classement publié (calcul « Final » de la v5.4 : docs/METHOD.md, docs/V5_2.md, docs/V5_4.md) :
-rang espéré sur les 20 000 variantes, rang plausible (90 %), score moyen sur ces variantes (il fixe l'ordre). Un
-astérisque marque le langage classé, par exception, avec sa version de développement.
+"""Graphique SVG du classement publié (calcul « Final » de la v6 : docs/METHOD.md, docs/V5_2.md, docs/V5_4.md,
+docs/V6.md) : rang espéré sur les 20 000 variantes, rang plausible (90 %), score moyen sur ces variantes (il fixe
+l'ordre). Un astérisque marque le langage classé, par exception, avec sa version de développement.
 Entrée : results/final/analysis.json (ou FINAL_OUT/analysis.json). Sortie : results/charts/classement_v4.svg."""
 import json, os, sys
 
@@ -48,9 +48,9 @@ def ranking_svg(f, path, machines, models, dev=None):
     name = lambda l: NAMES[l] + ("*" if dev and l == DEV_LANG else "")  # noqa: E731
     X = lambda r: L + (r - 1) * (W - L - Rm) / (n - 1)  # noqa: E731
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" '
-           f'aria-label="Classement de la v5.4 et plage de rang plausible">', STYLE,
+           f'aria-label="Classement de la v6 et plage de rang plausible">', STYLE,
            f'<rect class="bg" width="{W}" height="{H}"/>',
-           '<text class="t1" x="16" y="26">Classement de la v5.4</text>',
+           '<text class="t1" x="16" y="26">Classement de la v6</text>',
            '<text class="t2" x="16" y="46">Point : rang espéré sur 20 000 variantes de l\'analyse (poids, méthodes, '
            'jugements, bruit, poids des tailles).</text>',
            '<text class="t2" x="16" y="62">Trait : rang dans 90 % de ces variantes. À droite : score moyen sur ces variantes. '
@@ -62,7 +62,7 @@ def ranking_svg(f, path, machines, models, dev=None):
     if dev:
         ver = esc(dev["version"].split("+")[0])
         out.append(f'<text class="t2" x="16" y="{T + n * row + 58}">* {NAMES[DEV_LANG]} : par exception, version de '
-                   f'développement {ver} ; les 24 autres, dernière version stable.</text>')
+                   f'développement {ver} ; les 19 autres, dernière version stable.</text>')
     for i, l in enumerate(order):
         y = T + i * row + row / 2
         a, b = f["rank90"][l]

@@ -94,19 +94,15 @@ V2_OVERRIDES = {
     ("julia", "D5"): (1, "pause par ccall(\"llvm.x86.sse2.pause\", llvmcall) (sonde ; erratum du 30/10)"),
     # Mojo
     ("mojo", "C2"): (1, "llvm_intrinsic de la bibliothèque standard"),
-    # Python
-    ("python", "D4"): (1, "os.sched_setaffinity de la bibliothèque standard"),
     # erratum du 30 octobre (notation à l'aveugle) : fait omis
     ("c", "D3"): (1, "sysconf(_SC_LEVEL1_DCACHE_LINESIZE) de la glibc ; __GCC_DESTRUCTIVE_SIZE prédéfini par clang et gcc"),
     # Swift (erratum du 5/11, remarque sur Swift, docs/SWIFT.md 5.3) : le module Glibc livré est la liaison au système
-    # de la bibliothèque standard, comme core.sys.linux pour D, std.os.linux pour Zig ou os pour Python
+    # de la bibliothèque standard, comme core.sys.linux pour D ou std.os.linux pour Zig
     ("swift", "D4"): (1, "sched_setaffinity / pthread_setaffinity_np du module Glibc livré (swiftc -Xcc -D_GNU_SOURCE)"),
     # Free Pascal (ajouté le 6/11, docs/FPC.md)
     ("fpc", "D4"): (1, "Do_SysCall(syscall_nr_sched_setaffinity) de l'unité Syscall livrée avec la RTL, comme syscall.RawSyscall en Go"),
     # erratum v1 du 6/11 (remarque sur FreePascal, docs/FPC.md 5.3) : F4 à ½ en v1, comme Go, et 1 en v2 comme lui
     ("fpc", "F4"): (1, "Fpmmap de l'unité BaseUnix livrée avec la RTL + pointeur typé, comme syscall.Mmap de Go"),
-    # PHP (ajouté le 7/11, docs/PHP.md) : l'extension pcntl est livrée avec php-src, comme le module os de Python
-    ("php", "D4"): (1, "pcntl_setcpuaffinity de l'extension pcntl livrée avec php-src (PHP 8.4), comme os.sched_setaffinity"),
 }
 
 # C3 (vectorisation automatique mesurée) sort du pilier C en v2 : double compte avec E et D1.

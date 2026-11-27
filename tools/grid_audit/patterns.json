@@ -267,18 +267,6 @@
       "public": "\\((proc|type|const|var|prop|rec|obj|classref|enum|proctype)\\)$",
       "version": "/opt/fpc/bin/fpc -iV"
     },
-    "bqn": {
-      "roots": [],
-      "listing": "/opt/cbqn-cl/bin/BQN tools/grid_audit/listings/bqn_sys.bqn",
-      "public": ".",
-      "version": "/opt/cbqn-cl/bin/BQN --version 2>&1 | head -1"
-    },
-    "php": {
-      "roots": [],
-      "listing": "/opt/php85/bin/php -d memory_limit=-1 -d opcache.enable_cli=1 -d opcache.jit=tracing -d opcache.file_update_protection=0 tools/grid_audit/listings/php_api.php",
-      "public": ".",
-      "version": "/opt/php85/bin/php -r 'echo PHP_VERSION;'"
-    },
     "csharp": {
       "roots": [],
       "listing": "[ -f tools/grid_audit/listings/dotnet_api/bin/out/dotnet_api.dll ] || /opt/dotnet/dotnet build tools/grid_audit/listings/dotnet_api -c Release --nologo -v q -o tools/grid_audit/listings/dotnet_api/bin/out >/dev/null 2>&1; /opt/dotnet/dotnet tools/grid_audit/listings/dotnet_api/bin/out/dotnet_api.dll /opt/dotnet/packs/Microsoft.NETCore.App.Ref/10.0.14/ref/net10.0",
@@ -327,43 +315,6 @@
       "strip": "/opt/ocaml/lib/ocaml/",
       "public": "^\\s*(val|external|type|and|module|exception|class)\\b",
       "version": "/opt/ocaml/bin/ocamlopt -version"
-    },
-    "js": {
-      "roots": [],
-      "listing": "/opt/node26/bin/node tools/grid_audit/listings/node_api.js 2>/dev/null",
-      "public": ".",
-      "version": "/opt/node26/bin/node --version"
-    },
-    "python": {
-      "roots": [
-        "/usr/lib/python3.15"
-      ],
-      "ext": [
-        ".py"
-      ],
-      "exclude": [
-        "/test/",
-        "/tests/",
-        "/idlelib/",
-        "/tkinter/",
-        "/turtledemo/",
-        "/site-packages/",
-        "/dist-packages/",
-        "/__pycache__/",
-        "/ensurepip/",
-        "/pydoc_data/",
-        "/__phello__/"
-      ],
-      "strip": "/usr/lib/python3.15/",
-      "listing": "python3.15 tools/grid_audit/listings/python_cmods.py",
-      "public": "^(def|class|async def) [A-Za-z]|^    (def|async def) [a-z]\\w*\\(self|^[A-Z][A-Z0-9_]+\\s*=|^<introspection>|^[a-z_]+\\.[A-Za-z]",
-      "version": "python3.15 --version"
-    },
-    "lua": {
-      "roots": [],
-      "listing": "/opt/lua55/bin/lua tools/grid_audit/listings/lua_api.lua",
-      "public": ".",
-      "version": "/opt/lua55/bin/lua -v"
     }
   }
 }

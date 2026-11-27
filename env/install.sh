@@ -1,5 +1,5 @@
 #!/bin/sh
-# Installe les chaînes de compilation et d'exécution des 25 langages du banc, aux versions de env/toolchains.txt et aux
+# Installe les chaînes de compilation et d'exécution des 20 langages du banc, aux versions de env/toolchains.txt et aux
 # chemins que lisent les build.sh, puis les données du banc. Pour Ubuntu 24.04 (x86-64), en root, avec un accès au
 # réseau ; écrit et vérifié sur l'image des sessions Claude Code dans le cloud (24 novembre 2026).
 #
@@ -78,7 +78,7 @@ step_gcc16() {
 
 # ---------------------------------------------------------------------------------------------------- LLVM 23 (C)
 # clang 23.1.5, archive officielle du projet LLVM : le dépôt apt.llvm.org ne garde que la dernière construction de la
-# branche 23 (23.1.6 depuis le 16 novembre 2026). Sert au C, à Nim (compilateur C de sa sortie), à C3 et à CBQN.
+# branche 23 (23.1.6 depuis le 16 novembre 2026). Sert au C, à Nim (compilateur C de sa sortie) et à C3.
 step_llvm23() {
   if has "clang version 23.1.5" clang-23 --version; then return; fi
   say "LLVM 23.1.5 (clang-23)"
@@ -123,14 +123,6 @@ step_go() {
   fetch https://go.dev/dl/go1.27.3.linux-amd64.tar.gz go1.27.3.linux-amd64.tar.gz \
     65efbc80fdc1fa2cd2631cad5b481777a68e8725f34e89f50fc6ac714e379b40
   untar go1.27.3.linux-amd64.tar.gz /opt/go127
-}
-
-step_node() {
-  if has "v26.12.1" /opt/node26/bin/node --version; then return; fi
-  say "Node.js 26.12.1"
-  fetch https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.xz node-v26.12.1-linux-x64.tar.xz \
-    6170b2d474e1c626f43cff3adc118df9fe3b573258a4fc3d850c8dbc6b079bbd
-  untar node-v26.12.1-linux-x64.tar.xz /opt/node26
 }
 
 step_julia() {
@@ -229,17 +221,6 @@ step_fpc() {
   rm -rf "$SRC/fpc-install"
 }
 
-# Lua 5.5.1 : sources officielles, cible « linux » de son Makefile, compilateur C du système
-step_lua() {
-  if has "Lua 5.5.1" /opt/lua55/bin/lua -v; then return; fi
-  say "Lua 5.5.1"
-  fetch https://www.lua.org/ftp/lua-5.5.1.tar.gz lua-5.5.1.tar.gz \
-    1c4b4068d67061f2a2231ad2b5422e77acea1487ea9890f6320af614f4373dce
-  untar lua-5.5.1.tar.gz "$SRC/lua-5.5.1"
-  (cd "$SRC/lua-5.5.1" && make linux > build.log 2>&1 && make install INSTALL_TOP=/opt/lua55 >> build.log 2>&1)
-  rm -rf "$SRC/lua-5.5.1"
-}
-
 # Mojo 1.2.0 : paquet « mojo » de PyPI, dans un environnement virtuel du Python du système
 step_mojo() {
   if has "Mojo 1.2.0" /opt/mojo-venv/bin/mojo --version; then return; fi
@@ -247,20 +228,6 @@ step_mojo() {
   rm -rf /opt/mojo-venv
   /usr/bin/python3 -m venv /opt/mojo-venv
   /opt/mojo-venv/bin/pip install -q mojo==1.2.0
-}
-
-# CPython 3.15.2 : paquet python3.15 du dépôt deadsnakes, à cette version exacte (le dépôt ne garde que la dernière)
-step_python() {
-  if has "Python 3.15.2" python3.15 --version; then return; fi
-  say "CPython 3.15.2"
-  if [ ! -f /usr/share/keyrings/deadsnakes.gpg ]; then
-    curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF23C5A6CF475977595C89F51BA6932366A755776" \
-      | gpg --dearmor -o /usr/share/keyrings/deadsnakes.gpg
-  fi
-  echo "deb [signed-by=/usr/share/keyrings/deadsnakes.gpg] https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu noble main" \
-    > /etc/apt/sources.list.d/deadsnakes.list
-  apt-get update -q
-  apt-get install -y -q --no-install-recommends python3.15=3.15.2-1+noble1 libpython3.15-stdlib=3.15.2-1+noble1
 }
 
 # GHC 9.14.1 : distribution binaire pour Ubuntu 24.04 ; -fllvm passe par LLVM 18 (opt, llc, clang du système)
@@ -319,32 +286,6 @@ step_chapel() {
     && make -j"$J" > build.log 2>&1)
 }
 
-# CBQN 0.12.0 pour la cible Cascade Lake (celle de bench/bqn), compilé par clang 23, sans replxx
-step_cbqn() {
-  if has "CBQN 0.12.0" /opt/cbqn-cl/bin/BQN --version; then return; fi
-  say "CBQN 0.12.0"
-  step_llvm23
-  clone https://github.com/dzaima/CBQN "$SRC/cbqn" v0.12.0
-  (cd "$SRC/cbqn" && make o3 target_from_cc=1 f=-march=cascadelake CC=clang-23 version=0.12.0 REPLXX=0 > build.log 2>&1)
-  mkdir -p /opt/cbqn-cl/bin
-  cp "$SRC/cbqn/BQN" /opt/cbqn-cl/bin/BQN
-}
-
-# PHP 8.5.12 : sources officielles, construction « de production » de php-src avec les extensions dont le banc se sert
-step_php() {
-  if has "PHP 8.5.12" /opt/php85/bin/php --version; then return; fi
-  say "PHP 8.5.12"
-  fetch https://www.php.net/distributions/php-8.5.12.tar.xz php-8.5.12.tar.xz \
-    08bc2eba2a588654ade1357174aa646b761556c862dda0678345ee29ed481209
-  untar php-8.5.12.tar.xz "$SRC/php-8.5.12"
-  rm -rf /opt/php85
-  (cd "$SRC/php-8.5.12" && ./configure --prefix=/opt/php85 --enable-pcntl --enable-shmop --enable-sysvsem \
-    --enable-sysvshm --with-ffi --disable-cgi --disable-phpdbg > configure.log 2>&1 \
-    && make -j"$J" > build.log 2>&1 && make install > install.log 2>&1 \
-    && cp php.ini-production /opt/php85/lib/php.ini)
-  rm -rf "$SRC/php-8.5.12"
-}
-
 # ---------------------------------------------------------------------------------------------------- données
 # Données du banc à la taille publiée (tools/gendata.c), vérifiées contre env/msdata.sha256 ; les autres tailles sont
 # produites à la demande dans /dev/shm par tools/sizes/sizes.py
@@ -357,7 +298,7 @@ step_data() {
   (cd /opt/msdata && sha256sum --quiet -c "$ROOT/env/msdata.sha256")
 }
 
-STEPS="apt gcc16 llvm23 zig zigdev go node julia nim jdk dotnet swift odin c3 rust fpc lua mojo python ghc ocaml ldc chapel cbqn php data"
+STEPS="apt gcc16 llvm23 zig zigdev go julia nim jdk dotnet swift odin c3 rust fpc mojo ghc ocaml ldc chapel data"
 
 main() {
   if [ "${1:-}" = "--list" ]; then echo "$STEPS"; exit 0; fi

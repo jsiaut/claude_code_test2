@@ -9,11 +9,10 @@ from capabilities import MATRIX, CATEGORIES, LABELS, M  # noqa: E402
 from capabilities_v2 import V2_OVERRIDES  # noqa: E402
 
 ORDER = ["c", "cpp", "rust", "zig", "odin", "c3", "d", "nim", "ada", "fortran", "chapel", "mojo", "swift", "fpc", "go",
-         "csharp", "java", "julia", "haskell", "ocaml", "js", "python", "lua", "bqn", "php"]
+         "csharp", "java", "julia", "haskell", "ocaml"]
 SHORT = {"c": "C", "cpp": "C++", "rust": "Rust", "zig": "Zig", "odin": "Odin", "c3": "C3", "d": "D", "nim": "Nim",
          "ada": "Ada", "fortran": "Fortran", "chapel": "Chapel", "mojo": "Mojo", "go": "Go", "csharp": "C#",
-         "java": "Java", "julia": "Julia", "haskell": "Haskell", "ocaml": "OCaml", "js": "JS", "python": "Python",
-         "lua": "Lua", "swift": "Swift", "fpc": "FPC", "bqn": "BQN", "php": "PHP"}
+         "java": "Java", "julia": "Julia", "haskell": "Haskell", "ocaml": "OCaml", "swift": "Swift", "fpc": "FPC"}
 
 
 def main():
@@ -27,7 +26,7 @@ def main():
            "intrinsèque).",
            "**Une seule règle pour la libc et les FFI** (`analysis/capabilities_v2.py`) : compte ce que la chaîne livre, "
            "y compris les intrinsèques et builtins du compilateur que le langage importe par sa FFI (Nim, Chapel, C3, "
-           "Odin) ; ne compte pas l'appel de code C ordinaire par une FFI (la libc pour Rust, JavaScript, PHP ou BQN), "
+           "Odin) ; ne compte pas l'appel de code C ordinaire par une FFI (la libc pour Rust), "
            "sauf pour C et C++, dont la libc est la bibliothèque système.",
            "Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que la règle v2 (score central) reclasse. "
            "C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en natural "

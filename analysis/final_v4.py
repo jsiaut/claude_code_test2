@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v5.4).
+"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v6).
 
 Méthode : docs/METHOD.md ; plans fixés avant les calculs : docs/V4_FINAL.md, section 8 (campagne finale de la v4),
 docs/V4_1.md (corrections A1 à A4 de l'analyse), docs/V5.md (campagne rejouée : corrections A5 et A6, C par gcc,
 réplication), docs/V5_1.md (A7 et A8 : mode du code naturel tiré au sort), docs/V5_2.md (Zig par sa version de
-développement) et docs/V5_4.md (Go mesuré hors de l'expérience simd). Ce module est autonome : il lit les mesures de
-la campagne (results/final/raw, tools/final/campaign.py), les remesures de Zig (results/zig_dev/raw) et de Go
-(results/go_std/raw), b3 (results/final/b3.jsonl), les bornes physiques
-des machines qui ont mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json), l'empreinte
-de K1 (results/footprint.json) et la grille de contrôle (analysis/capabilities.py, analysis/capabilities_v2.py ; la
-vectorisation mesurée de results/vectorization.json ne sert qu'à la règle v1, dans les calculs sans A1).
+développement), docs/V5_4.md (Go mesuré hors de l'expérience simd) et docs/V6.md (classement réduit à 20 langages).
+Ce module est autonome : il lit les mesures de la campagne (results/final/raw, tools/final/campaign.py), les
+remesures de Zig (results/zig_dev/raw) et de Go (results/go_std/raw), b3 (results/final/b3.jsonl), les bornes
+physiques des machines qui ont mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json),
+l'empreinte de K1 (results/footprint.json) et la grille de contrôle (analysis/capabilities.py,
+analysis/capabilities_v2.py ; la vectorisation mesurée de results/vectorization.json ne sert qu'à la règle v1, dans
+les calculs sans A1).
 
 Score d'un langage (sur 100) : 0,35 x contrôle (C) + 0,40 x plafond (E) + 0,25 x code par défaut (D).
 * Plafond : moyenne géométrique sur huit noyaux (K1, K3 à K9) du rapport de la référence au meilleur temps du langage ;
-  la référence est le meilleur des 25 langages (ou, dans une variante sur deux, la borne physique de la machine). Sept
+  la référence est le meilleur des 20 langages (ou, dans une variante sur deux, la borne physique de la machine). Sept
   noyaux comptent à trois tailles (positions petite, publiée, grande ; pour K5 : 2^11, 2^15, 2^21) : chaque cellule est
   calculée à chaque position avec ses propres références, puis moyennée en logarithme avec les poids des tailles ; les
   mesures à quatre fils ne comptent qu'aux positions publiée et grande (A4).
@@ -104,14 +105,15 @@ FB = importlib.util.module_from_spec(_spec)  # langages de chaque mode (R1, R1')
 _spec.loader.exec_module(FB)
 
 # ------------------------------------------------------------------ protocole
-# Ordre fixe des langages : les tirages en dépendent (les quatre derniers ont été ajoutés en cours d'étude).
-RANKED = ["c", "cpp", "csharp", "java", "zig", "odin", "julia", "ada", "fortran", "js", "python", "haskell",
-          "c3", "d", "rust", "chapel", "nim", "mojo", "go", "ocaml", "lua", "swift", "fpc", "bqn", "php"]
+# Ordre fixe des langages : les tirages en dépendent (les deux derniers ont été ajoutés en cours d'étude ; cinq
+# langages ont été retirés le 27 novembre : docs/V6.md).
+RANKED = ["c", "cpp", "csharp", "java", "zig", "odin", "julia", "ada", "fortran", "haskell",
+          "c3", "d", "rust", "chapel", "nim", "mojo", "go", "ocaml", "swift", "fpc"]
 LANGS = list(RANKED)
 NAMES = {"c": "C", "cpp": "C++", "csharp": "C#", "java": "Java", "zig": "Zig", "odin": "Odin", "julia": "Julia",
-         "ada": "Ada", "fortran": "Fortran", "js": "JavaScript", "python": "Python", "haskell": "Haskell", "c3": "C3",
-         "d": "D", "rust": "Rust", "chapel": "Chapel", "nim": "Nim", "mojo": "Mojo", "go": "Go", "ocaml": "OCaml",
-         "lua": "Lua", "swift": "Swift", "fpc": "FreePascal", "bqn": "BQN", "php": "PHP"}
+         "ada": "Ada", "fortran": "Fortran", "haskell": "Haskell", "c3": "C3", "d": "D", "rust": "Rust",
+         "chapel": "Chapel", "nim": "Nim", "mojo": "Mojo", "go": "Go", "ocaml": "OCaml", "swift": "Swift",
+         "fpc": "FreePascal"}
 # Plafond : par noyau, ses mesures ; chaque mesure est la liste des clés (noyau, variante, paramètre) admissibles,
 # dont le langage prend la plus rapide. Les formes du relevé s'y ajoutent (e_meas_with).
 E_V2 = {
@@ -157,8 +159,7 @@ DW = {"D1": 0.5, "D2": 0.15, "D3": 0.15, "D4": 0.2}
 MAIN = {"est": "mean", "enorm": "frontier", "d3": "abs", "d4": "best", "d1ref": "tstar", "agg": "arith", "crule": "v2"}
 OPTS = {"est": ["mean", "min"], "enorm": ["frontier", "bounds"], "d3": ["abs", "rel"], "d4": ["best", "c"],
         "d1ref": ["tstar", "best_natural"], "agg": ["arith", "geo"], "crule": ["v2", "v1"]}
-JIT = {"java", "csharp", "js", "julia", "bqn", "php"}  # classes d'implémentation des réservoirs de résidus
-INTERP = {"python", "lua"}
+JIT = {"java", "csharp", "julia"}  # classe des réservoirs de résidus ; les autres langages : compilés à l'avance
 
 B = int(os.environ.get("BOOT", "2000"))
 U = int(os.environ.get("UA", "20000"))
@@ -222,7 +223,7 @@ def corrections(calc):
 
 
 def klass(l):
-    return "interp" if l in INTERP else ("jit" if l in JIT else "aot")
+    return "jit" if l in JIT else "aot"
 
 
 def needed_keys(e_meas=E_V2, d1_meas=D1_V2):
@@ -793,7 +794,7 @@ def build_pools(data, langs, keys, a5=True):
             kpool[key[0]].extend(r.tolist())
     out = {}
     for k in kpool:
-        for c in ("aot", "jit", "interp"):
+        for c in ("aot", "jit"):
             pl = pools.get((k, c), [])
             out[(k, c)] = np.array(pl if len(pl) >= 20 else kpool[k], float)
     return out
@@ -1522,18 +1523,16 @@ TRI_CAUSES = [
     {"status": "établie",
      "cause": "somme conditionnelle que les pairs vectorisent et que la chaîne laisse scalaire : pas de vectoriseur de "
               "boucles dans les passes de Mojo ; un branchement par octet en Swift, avec le piège de débordement de "
-              "`-O` ; pas de vectoriseur automatique pour cette boucle en Go, C#, Java, Haskell, OCaml, JavaScript, "
-              "Lua et Python",
+              "`-O` ; pas de vectoriseur automatique pour cette boucle en Go, C#, Java, Haskell et OCaml",
      "control": "`docs/MOJO.md` (2), `docs/SWIFT.md` (2.4) et `docs/GO.md` (2) de l'archive",
      "cells": ["mojo K4 lent *", "swift K4 lent *", "haskell K4 lent *", "go K4 lent *", "csharp K4 lent *",
-               "java K4 lent *", "ocaml K4 lent *", "js K4 lent *", "lua K4 lent *", "python K4 lent *"]},
+               "java K4 lent *", "ocaml K4 lent *"]},
     {"status": "attribuée",
      "cause": "boucle que les pairs vectorisent et que la chaîne laisse scalaire, sans relecture qui le consigne : "
-              "somme conditionnelle de FreePascal et de PHP ; stencil de C#, Go, JavaScript, PHP, Python, Lua et BQN ; "
-              "stencil de Mojo une fois ses vérifications retirées",
+              "somme conditionnelle de FreePascal ; stencil de C# et de Go ; stencil de Mojo une fois ses "
+              "vérifications retirées",
      "control": "aucun contrôle propre",
-     "cells": ["fpc K4 lent *", "php K4 lent *", "csharp K9 lent *", "go K9 lent *", "js K9 lent *", "php K9 lent *",
-               "python K9 lent *", "lua K9 lent *", "bqn K9 lent *", "mojo K9 lent R1'"]},
+     "cells": ["fpc K4 lent *", "csharp K9 lent *", "go K9 lent *", "mojo K9 lent R1'"]},
     {"status": "attribuée",
      "cause": "stencil de Nim sur une `seq` : vérifications de bornes de `-d:release`, et boucle que clang ne "
               "vectorise pas même sans elles (Nim lui passe `-fno-strict-aliasing`)",
@@ -1555,12 +1554,10 @@ TRI_CAUSES = [
      "control": "`docs/NATURAL.md` ; `docs/HASKELL.md` de l'archive (1 et 2)",
      "cells": ["haskell K1 lent *", "haskell K7 lent *", "haskell K9 lent *"]},
     {"status": "attribuée",
-     "cause": "types par défaut du langage : enregistrements en références de JavaScript, PHP et Lua et matrice de "
-              "doubles de BQN pour K1 ; `TDictionary` de FreePascal (deux recherches par ligne) et `Hashtbl` d'OCaml "
-              "pour K7 ; idiomes de tableaux de BQN pour Q1 et K8 ; produit scalaire de FreePascal",
+     "cause": "types de bibliothèque par défaut : `TDictionary` de FreePascal (deux recherches par ligne) et "
+              "`Hashtbl` d'OCaml pour K7 ; produit scalaire de FreePascal",
      "control": "`docs/NATURAL.md` décrit ces types ; leur part dans l'écart n'a pas de contrôle propre",
-     "cells": ["js K1 lent *", "php K1 lent *", "lua K1 lent *", "bqn K1 lent *", "fpc K7 lent pub,R1'",
-               "ocaml K7 lent pub,R1'", "bqn Q1 lent *", "bqn K8 lent *", "fpc K5 lent pub"]},
+     "cells": ["fpc K7 lent pub,R1'", "ocaml K7 lent pub,R1'", "fpc K5 lent pub"]},
     {"status": "établie",
      "cause": "ni C ni Fortran n'ont de table de hachage en bibliothèque standard : leur code naturel est le chaînage "
               "des manuels, écrit pour le noyau, au nombre de seaux fixé d'avance sur le nombre de clés et haché par "
@@ -1579,10 +1576,6 @@ TRI_CAUSES = [
      "control": "campagne, taille publiée : Odin 48,7 ms avec les bornes, 18,4 ms sans, 13,6 ms pour sa forme SIMD ; "
                 "C 40,9 ms",
      "cells": ["odin Q6 rapide R1'"]},
-    {"status": "attribuée",
-     "cause": "primitives de tableaux de CBQN, vectorisées",
-     "control": "aucun contrôle propre ; `docs/BQN.md` de l'archive",
-     "cells": ["bqn Q6 rapide *"]},
 ]
 
 
@@ -1802,12 +1795,13 @@ def report(o, calcs):
     gs = o.get("go_std")  # Go hors de l'expérience simd
     asm = MEAS if zd and gs else (ZIG17 if zd else (GOC if gs else None))  # la campagne telle que mesurée : réplication
     star = lambda l: NAMES[l] + ("*" if zd and l == DEV_LANG else "")
-    L = ["# v5.4 : le classement — résultats", "",
+    L = ["# v6 : le classement — résultats", "",
          "*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse), `docs/V5.md` "
          "(campagne rejouée, corrections A5 et A6), `docs/V5_1.md` (A7 et A8 : mode du code naturel tiré au sort) et "
          "`docs/V5_2.md` (Zig par sa version de développement), fixés "
          "avant les mesures ou avant leur analyse ; `docs/V5_3.md` (ce qui décide de l'ordre, tri des écarts) ; "
-         "`docs/V5_4.md` (Go mesuré hors de l'expérience simd). Généré par "
+         "`docs/V5_4.md` (Go mesuré hors de l'expérience simd) ; `docs/V6.md` (classement réduit à 20 langages). "
+         "Généré par "
          "`analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes "
          "(`results/converge/forms.json`).*", "",
          f"Machines : {', '.join(o['machines'])} ; b3 de référence (le plus lent des 16 décalages, A2) : "

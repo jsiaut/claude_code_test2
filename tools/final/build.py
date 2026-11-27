@@ -38,7 +38,7 @@ BUILD_ROOT = "/dev/shm/msbuild"
 CAMPAIGN = os.path.join(ROOT, os.environ.get("MS_CAMPAIGN_DIR", os.path.join("results", "final")))
 WORK = os.path.join(CAMPAIGN, "work")
 LANGS = ["c", "cpp", "rust", "zig", "odin", "c3", "d", "nim", "ada", "fortran", "chapel", "mojo", "swift", "fpc", "go",
-         "csharp", "java", "haskell", "ocaml", "python", "lua", "php", "bqn", "js", "julia"]
+         "csharp", "java", "haskell", "ocaml", "julia"]
 CHK = ["c", "cpp", "fortran", "zig", "c3", "d", "chapel", "fpc"]          # R1 (docs/METHOD.md, 5)
 UNC = ["swift", "ada", "nim", "odin", "julia", "mojo", "go", "ocaml", "d"]   # R1' (3.1 et écart 5.2)
 CV_CHK = ["cpp", "d"]                                                     # R2 dans le mode R1
@@ -49,9 +49,9 @@ GOFIX = ["go"] if os.environ.get("MS_GOFIX") else []                      # tém
 WITNESS = {"go": "861d62564995b71cff4e65e5e836a899edcd527c"}              # source du témoin : celle de la campagne
 BUILD_OF = {"cv": "pub", "cv_chk": "chk", "cv_unc": "unc", "gcc_cv": "gcc", "dev_cv": "dev", "wit_cv": "wit",
             "wit_cv_unc": "wit_unc"}  # étiquette -> construction
-INTERP = {"python", "lua", "php", "bqn", "js", "julia"}
+INTERP = {"julia"}  # sans construction : le source est exécuté tel quel
 SETS = ["pub", "small", "large"]
-MAIN = {"python": "ms.py", "lua": "ms.lua", "php": "ms.php", "bqn": "ms.bqn", "js": "ms.js", "julia": "ms.jl"}
+MAIN = {"julia": "ms.jl"}
 _lock = threading.Lock()
 
 
