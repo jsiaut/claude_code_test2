@@ -311,6 +311,22 @@
 "ts": "2026-11-27T14:33:44",
 "warmup": 1
 },
+"go|cv|k4|small|swar|": {
+"machine": "40",
+"reps": 7168,
+"status": "ok",
+"t_cal": 0.000418524,
+"ts": "2026-11-27T14:36:43",
+"warmup": 1
+},
+"go|cv|k4|small|tuned|": {
+"machine": "40",
+"reps": 10000,
+"status": "ok",
+"t_cal": 5.7501e-05,
+"ts": "2026-11-27T14:36:43",
+"warmup": 1
+},
 "go|cv|k5|l3|tuned_v|": {
 "machine": "40",
 "reps": 64,
@@ -549,6 +565,22 @@
 "status": "ok",
 "t_cal": 1.3411e-05,
 "ts": "2026-11-27T13:29:25",
+"warmup": 1
+},
+"go|pub|k4|small|branchless_unsorted|": {
+"machine": "40",
+"reps": 4723,
+"status": "ok",
+"t_cal": 0.00063509,
+"ts": "2026-11-27T14:36:43",
+"warmup": 1
+},
+"go|pub|k4|small|natural_unsorted|": {
+"machine": "40",
+"reps": 4048,
+"status": "ok",
+"t_cal": 0.000741007,
+"ts": "2026-11-27T14:36:43",
 "warmup": 1
 },
 "go|pub|k5|l3|natural|": {
@@ -831,6 +863,14 @@
 "ts": "2026-11-27T13:29:25",
 "warmup": 1
 },
+"go|unc|k4|small|natural_unsorted|": {
+"machine": "40",
+"reps": 4114,
+"status": "ok",
+"t_cal": 0.000729139,
+"ts": "2026-11-27T14:36:43",
+"warmup": 1
+},
 "go|unc|k5|l3|natural|": {
 "machine": "40",
 "reps": 28,
@@ -941,6 +981,22 @@
 "status": "ok",
 "t_cal": 0.000297778,
 "ts": "2026-11-27T14:33:44",
+"warmup": 1
+},
+"go|wit_cv|k4|small|swar|": {
+"machine": "40",
+"reps": 9094,
+"status": "ok",
+"t_cal": 0.000329853,
+"ts": "2026-11-27T14:36:43",
+"warmup": 1
+},
+"go|wit_cv|k4|small|tuned|": {
+"machine": "40",
+"reps": 10000,
+"status": "ok",
+"t_cal": 2.6571e-05,
+"ts": "2026-11-27T14:36:43",
 "warmup": 1
 },
 "go|wit_cv|k5|l3|tuned_v|": {
@@ -1135,6 +1191,14 @@
 "ts": "2026-11-27T13:29:25",
 "warmup": 1
 },
+"go|wit_unc|k4|small|natural_unsorted|": {
+"machine": "40",
+"reps": 4317,
+"status": "ok",
+"t_cal": 0.000694816,
+"ts": "2026-11-27T14:36:43",
+"warmup": 1
+},
 "go|wit_unc|k5|l3|natural|": {
 "machine": "40",
 "reps": 26,
@@ -1317,6 +1381,22 @@
 "status": "ok",
 "t_cal": 9.931e-06,
 "ts": "2026-11-27T13:29:25",
+"warmup": 1
+},
+"go|wit|k4|small|branchless_unsorted|": {
+"machine": "40",
+"reps": 5559,
+"status": "ok",
+"t_cal": 0.000539584,
+"ts": "2026-11-27T14:36:43",
+"warmup": 1
+},
+"go|wit|k4|small|natural_unsorted|": {
+"machine": "40",
+"reps": 4153,
+"status": "ok",
+"t_cal": 0.000722357,
+"ts": "2026-11-27T14:36:43",
 "warmup": 1
 },
 "go|wit|k5|l3|natural|": {
