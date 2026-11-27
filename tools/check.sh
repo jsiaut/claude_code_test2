@@ -61,6 +61,11 @@ else
     else ko "diffère du dépôt : results/final/analysis.json"; fi
   else ko "analysis/final_v4.py"; fi
 fi
+# tri des écarts du code naturel (docs/V5_3.md) : tout couple signalé doit avoir une cause au registre de l'analyse
+is "tri des écarts : couples à examiner, causes sans couple" "$(python3 -c "
+import json
+t = json.load(open('results/final/analysis.json'))['triage']
+print(len(t['unexplained']), len(t['stale']))")" "0 0"
 
 echo "5. Graphique"
 python3 analysis/charts_final.py > /dev/null || ko "analysis/charts_final.py"

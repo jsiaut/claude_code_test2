@@ -1,12 +1,12 @@
-# Méthode du classement (v5.2)
+# Méthode du classement (v5.3)
 
-*État au 26 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
+*État au 27 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
 été fixée par étapes, chacune par un plan poussé avant ses mesures ou ses calculs ([`HISTORY.md`](HISTORY.md)). Le plan
 de la campagne dont viennent les mesures, avec ses écarts datés (dont les corrections A5 et A6) et ses résultats, est
 [`V5.md`](V5.md) ; celui de la campagne précédente, dont elle reprend le protocole, [`V4_FINAL.md`](V4_FINAL.md) ;
 ceux des autres corrections de l'analyse, [`V4_1.md`](V4_1.md) (A1 à A4) et [`V5_1.md`](V5_1.md) (A7 et A8) ; celui
-de l'exception faite pour Zig, [`V5_2.md`](V5_2.md) ; le contrat des noyaux est [`SPEC.md`](SPEC.md) ; le calcul est
-`analysis/final_v4.py`.*
+de l'exception faite pour Zig, [`V5_2.md`](V5_2.md) ; celui des deux lectures du classement ajoutées au rapport,
+[`V5_3.md`](V5_3.md) ; le contrat des noyaux est [`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
 
 ## 1. Ce qui est classé
 
@@ -312,6 +312,25 @@ entre les deux campagnes ; elle se fait à compilateurs égaux, donc avec « Zig
 plusieurs machines, il donne l'effet de machine : le rapport des temps d'une cellule sur chaque machine à ses temps
 sur la première.
 
+Deux lectures du classement s'y ajoutent ([`V5_3.md`](V5_3.md)) ; elles ne changent ni score ni ordre.
+
+* **Ce qui décide de l'ordre.** Pour quatre groupes de langages emboîtés (les 25, le premier étage, ceux dont le rang
+  plausible commence à 12 ou mieux, ceux dont il commence à 3 ou mieux), la part de la variance du score au centre
+  que porte chaque composante : pour un pilier X de poids w, cov(w X, score) / var(score) ; de même pour D1 à D4, dont
+  D est la somme pondérée ; la part du plafond est répartie entre ses noyaux au prorata de cov(ln E_k / 8, ln E) /
+  var(ln E). Le poids affiché d'une composante n'est pas son importance : une composante où les langages d'un groupe
+  se valent ne les sépare pas.
+* **Tri des écarts.** Chaque cellule du code naturel (les huit mesures de D1, trois tailles, trois modes du tirage)
+  est rapportée à la médiane des temps de quinze pairs, les langages dont la chaîne produit son code machine par LLVM
+  ou par GCC (C, C++, Zig, Odin, Rust, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, Haskell). Pour les dix
+  autres langages, ce rapport est divisé par leur niveau, la médiane de leurs huit rapports à cette taille et dans ce
+  mode, au moins 1. Une cellule est signalée lente quand ce rapport, arrondi au dixième, atteint 2,0, rapide quand
+  elle est au moins 2,0 fois plus rapide que la médiane des pairs ; un couple (langage, mesure) est signalé dans un
+  mode s'il l'est à une taille au moins. Chaque couple signalé est rattaché à une cause du registre que porte
+  l'analyse (`TRI_CAUSES`), de statut « établie » (un contrôle nommé la montre), « attribuée » (cause probable, sans
+  contrôle propre) ou « à corriger » (cellule faussée par l'étude) ; sans cause, il est « à examiner », et
+  `tools/check.sh` échoue. Le plafond n'est pas trié.
+
 ## 11. Vérifier, recalculer, remesurer
 
 ```bash
@@ -331,7 +350,8 @@ python3 analysis/charts_final.py
 ```
 
 Le premier contrôle prend environ 45 s, le second environ 25 minutes sur la machine de l'étude (classement complet
-comparé à l'octet près) ; aucun ne demande de chaîne de compilation. Les deux commandes suivantes réécrivent
+comparé à l'octet près) ; aucun ne demande de chaîne de compilation. Tous deux échouent si le tri des écarts laisse
+un couple sans cause. Les deux commandes suivantes réécrivent
 `results/final/analysis.json`, `results/report_final.md` et le graphique.
 
 Remesurer demande les 25 chaînes de `env/toolchains.txt`, aux chemins que lisent les `build.sh`, et les données de

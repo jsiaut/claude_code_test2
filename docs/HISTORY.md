@@ -1,6 +1,6 @@
 # Historique de l'étude et archive
 
-*État au 26 novembre 2026. Le dépôt ne garde que ce qui sert au classement publié (v5.2) ; ce document dit d'où vient la
+*État au 27 novembre 2026. Le dépôt ne garde que ce qui sert au classement publié (v5.3) ; ce document dit d'où vient la
 méthode, ce que les étapes précédentes ont établi, et où retrouver tout ce qui a été retiré de la branche.*
 
 ## L'archive
@@ -46,6 +46,7 @@ de la précédente : les mesures de la campagne des 22 et 23 novembre (machine 3
 | 24 au 26 novembre | v5 : script d'installation des chaînes, une source par langage, C aussi par gcc ; campagne rejouée sur un autre processeur (machine 38), dont viennent les mesures du classement publié | A5 et A6 ; une campagne par modèle de processeur | [`V5.md`](V5.md), gardé dans le dépôt |
 | 26 novembre | v5.1 : le mode du code naturel tiré au sort, entre deux modes puis entre trois, sans mesure nouvelle | A7 et A8 | [`V5_1.md`](V5_1.md), gardé dans le dépôt |
 | 26 novembre | v5.2 : Zig classé, par exception, avec sa version de développement, remesurée à côté d'un témoin : le classement publié | l'exception et son astérisque ; le transport par témoin | [`V5_2.md`](V5_2.md), gardé dans le dépôt |
+| 27 novembre | v5.3 : deux lectures ajoutées au rapport après une veille sur les bancs comparables, sans mesure nouvelle ; le classement reste celui de la v5.2 | la part de la variance du score que porte chaque composante ; le tri des écarts du code naturel, son registre des causes et son garde-fou | [`V5_3.md`](V5_3.md), gardé dans le dépôt |
 
 Le classement de la v3 a été publié du 30 octobre au 23 novembre, avec ses notes et ses errata
 (`docs/RANKING_V3.md`, `results/report_v3.md`).

@@ -1,6 +1,6 @@
-# v5.2 : le classement — résultats
+# v5.3 : le classement — résultats
 
-*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse), `docs/V5.md` (campagne rejouée, corrections A5 et A6), `docs/V5_1.md` (A7 et A8 : mode du code naturel tiré au sort) et `docs/V5_2.md` (Zig par sa version de développement), fixés avant les mesures ou avant leur analyse. Généré par `analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes (`results/converge/forms.json`).*
+*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse), `docs/V5.md` (campagne rejouée, corrections A5 et A6), `docs/V5_1.md` (A7 et A8 : mode du code naturel tiré au sort) et `docs/V5_2.md` (Zig par sa version de développement), fixés avant les mesures ou avant leur analyse ; `docs/V5_3.md` (ce qui décide de l'ordre, tri des écarts : deux lectures, le classement est celui de la v5.2). Généré par `analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes (`results/converge/forms.json`).*
 
 Machines : 38 ; b3 de référence (le plus lent des 16 décalages, A2) : 64.24 ms ; b3 des groupes de K3 : passe 0 64.62 ms, passe 1 64.20 ms, passe 2 63.92 ms ; avec la médiane des 16 décalages (méthode du 23 novembre) : 58.12 ms.
 
@@ -234,6 +234,121 @@ Le témoin contre ses temps de la campagne : rapport médian 0.98, de 0.64 à 1.
 | Lua | 1 | 5 | 0 | 1 | 1 | 5 | 2 | 1 | 3 | 25 | 0 | 41 | 3 | 3 |
 
 D1 : code naturel sous R1 (le centre) ; « D1, mode publié » : dans le mode publié de chaque chaîne (centre de « Sans R1 ») ; « D1, R1' » : sans les vérifications qu'une option retire (centre de « R1' au lieu de R1 »). Les variantes de « Final » tirent l'un des trois (A7, A8).
+
+## Ce qui décide de l'ordre (« Final », au centre)
+
+Part de la variance du score au centre que porte chaque composante, parmi les langages d'un groupe (`docs/V5_3.md`, 2) : covariance de son apport au score avec le score, divisée par la variance du score. Les trois piliers somment à 100 % ; les noyaux se partagent la part du plafond, D1 à D4 celle du code par défaut. Une part négative : la composante joue, dans ce groupe, contre l'ordre du score. Le poids affiché est celui de la composante dans le score.
+
+| Composante | Poids affiché | les 25 langages (25) | premier étage (19) | première moitié possible (14) | podium possible (8) |
+|---|---|---|---|---|---|
+| **Contrôle (grille)** | 35 % | **34 %** | **40 %** | **55 %** | **68 %** |
+| **Plafond** | 40 % | **47 %** | **37 %** | **17 %** | **12 %** |
+| K1 | 5.0 % | 6.6 % | 4.3 % | 0.4 % | 3.2 % |
+| K3 | 5.0 % | 5.5 % | 3.7 % | 0.1 % | 0.2 % |
+| K4 | 5.0 % | 6.5 % | 10.1 % | 8.5 % | 3.6 % |
+| K5 | 5.0 % | 7.2 % | 4.1 % | 0.1 % | -0.9 % |
+| K6 | 5.0 % | 5.9 % | 7.1 % | 0.7 % | 0.3 % |
+| K7 | 5.0 % | 4.4 % | 1.8 % | 1.3 % | -0.2 % |
+| K8 | 5.0 % | 5.1 % | 2.7 % | 4.2 % | 5.6 % |
+| K9 | 5.0 % | 5.9 % | 3.3 % | 1.8 % | -0.2 % |
+| **Code par défaut** | 25 % | **19 %** | **23 %** | **28 %** | **20 %** |
+| D1, code naturel | 12.5 % | 9.2 % | 15.7 % | 22.0 % | 4.1 % |
+| D2, coût de structure | 3.75 % | 3.8 % | 3.1 % | 0.2 % | -0.4 % |
+| D3, queues de latence | 3.75 % | 2.8 % | 4.0 % | 5.3 % | 16.0 % |
+| D4, hiérarchie mémoire | 5.0 % | 3.0 % | 0.0 % | 0.8 % | 0.5 % |
+
+Écart-type du score au centre dans chaque groupe : 25.4 (les 25 langages), 11.7 (premier étage), 5.2 (première moitié possible), 2.6 (podium possible). Premier étage : C, C++, Zig*, Odin, Rust, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, C#, Java, Go, FreePascal, Haskell. Première moitié possible : C, C++, Zig*, Odin, Rust, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift. Podium possible : C, C++, Zig*, Odin, Rust, Nim, C3, D. « Première moitié possible » et « podium possible » : rang plausible commençant à 12 et à 3 ou mieux.
+
+## Tri des écarts du code naturel
+
+Règle (`docs/V5_3.md`, 3) : pour chaque mesure du code naturel, à chaque taille et dans chaque mode du tirage, le temps d'un langage est rapporté à la médiane des temps de 15 pairs, les langages dont la chaîne produit son code machine par LLVM ou par GCC (C, C++, Zig, Odin, Rust, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, Haskell). Pour les autres langages, ce rapport est divisé par leur niveau : la médiane de leurs rapports à cette taille et dans ce mode, au moins 1. Une cellule est lente à partir de 2.0 (arrondi au dixième), rapide quand elle est au moins 2.0 fois plus rapide que la médiane des pairs ; un couple (langage, mesure) est signalé dans un mode s'il l'est à une taille au moins. Chaque couple signalé est rattaché à une cause : « établie » (un contrôle nommé la montre), « attribuée » (cause probable, sans contrôle propre), « à corriger » (cellule faussée par l'étude, correction à planifier) ou « à examiner » (aucune cause).
+
+60 couples signalés : 31 dont la cause est établie, 28 dont la cause est attribuée, 1 à corriger, 0 à examiner.
+
+| n° | Statut | Cause | Contrôle | Couples |
+|---|---|---|---|---|
+| 1 | à corriger | Go : binaire compilé avec `GOEXPERIMENT=simd` ; sur un processeur AVX-512, la préemption asynchrone de go1.27.3 restaure les registres ZMM sans `VZEROUPPER`, et la boucle de K1, qui mêle SSE hérité et FMA codées VEX (`GOAMD64=v4`), paie la transition. Erreur de mesure relevée et corrigée par transfert le 2 novembre, revenue avec la campagne finale de la v4 | `docs/GO.md` de l'archive (2 et 4.2) ; essai du 27 novembre (`docs/V5_3.md`, 8) | Go K1 |
+| 2 | établie | clang fusionne par défaut la multiplication et l'addition du produit scalaire en une FMA (`-ffp-contract=on`), qui allonge la chaîne de dépendance de la somme | le même source compilé par gcc prend 0,45 à 0,51 fois le temps de clang (campagne, « C par gcc ») ; code machine (`docs/V5_3.md`, 8) | C K5 |
+| 3 | attribuée | même facteur deux que le produit scalaire de C : fusion en FMA probable (Chapel `--fast`, Mojo, `ghc -mfma`) | aucun contrôle propre ; `docs/HASKELL.md` de l'archive (2) donne à Haskell le temps de C sur K5 | Chapel K5 (mode publié, R1'), Mojo K5, Haskell K5 |
+| 4 | établie | GCC vectorise la somme conditionnelle d'octets moins bien que LLVM | le même source C compilé par gcc prend 3,9, 3,6 et 2,5 fois le temps de clang aux trois tailles (campagne, « C par gcc ») | C++ K4, Ada K4, Fortran K4 |
+| 5 | établie | vérifications que R1 ajoute au mode publié (débordement des entiers de `-O safe` pour Zig, `--checks` pour Chapel, `-D_GLIBCXX_ASSERTIONS` pour C++, `-Cr -Co` pour FreePascal) : elles empêchent la vectorisation | l'écart disparaît en mode publié ; `docs/V5_1.md`, 2 (Zig) et 9.1 (Chapel) | C++ K9, Zig* K4, Chapel K5 (R1), Chapel Q6, Chapel Q1, Chapel K9, FreePascal K9 |
+| 6 | établie | vérifications du mode publié qu'une option retire : contrôle de falsification des conteneurs d'Ada sur K7, bornes d'Ada, de Swift et de Mojo sur leurs tableaux | l'écart disparaît en R1' ; `docs/V5_1.md`, 9.1 (Ada) ; `docs/SWIFT.md` (2.4) et `docs/MOJO.md` (2) de l'archive | Ada K7, Ada K9, Mojo Q1, Mojo K9 (R1, mode publié), Swift K9 |
+| 7 | établie | somme conditionnelle que les pairs vectorisent et que la chaîne laisse scalaire : pas de vectoriseur de boucles dans les passes de Mojo ; un branchement par octet en Swift, avec le piège de débordement de `-O` ; pas de vectoriseur automatique pour cette boucle en Go, C#, Java, Haskell, OCaml, JavaScript, Lua et Python | `docs/MOJO.md` (2), `docs/SWIFT.md` (2.4) et `docs/GO.md` (2) de l'archive | Mojo K4, Swift K4, C# K4, Java K4, Go K4, Haskell K4, OCaml K4, JavaScript K4, Python K4, Lua K4 |
+| 8 | attribuée | boucle que les pairs vectorisent et que la chaîne laisse scalaire, sans relecture qui le consigne : somme conditionnelle de FreePascal et de PHP ; stencil de C#, Go, JavaScript, PHP, Python, Lua et BQN ; stencil de Mojo une fois ses vérifications retirées | aucun contrôle propre | Mojo K9 (R1'), C# K9, Go K9, FreePascal K4, BQN K9, JavaScript K9, PHP K4, PHP K9, Python K9, Lua K9 |
+| 9 | attribuée | stencil de Nim sur une `seq` : vérifications de bornes de `-d:release`, et boucle que clang ne vectorise pas même sans elles (Nim lui passe `-fno-strict-aliasing`) | `docs/NIM.md` de l'archive (2), établi pour la forme imbriquée, non refait pour la forme contiguë | Nim K9 |
+| 10 | établie | ramasse-miettes de D : chaque nœud de K8 est un `new` de classe | `docs/DLANG.md` de l'archive (2) | D K8 |
+| 11 | attribuée | coût d'allocation du type par défaut : comptage de références de la classe de Swift, nœuds de Haskell confiés au ramasse-miettes | aucun contrôle propre ; `docs/SWIFT.md` de l'archive (2.4, point 9) chiffre une part du coût de Swift | Swift K8, Haskell K8 |
+| 12 | établie | types par défaut de Haskell : liste chaînée pour K1, `Data.IntMap` pour K7 faute de table de hachage livrée, tableau immuable `UArray` pour K9 | `docs/NATURAL.md` ; `docs/HASKELL.md` de l'archive (1 et 2) | Haskell K1, Haskell K7, Haskell K9 |
+| 13 | attribuée | types par défaut du langage : enregistrements en références de JavaScript, PHP et Lua et matrice de doubles de BQN pour K1 ; `TDictionary` de FreePascal (deux recherches par ligne) et `Hashtbl` d'OCaml pour K7 ; idiomes de tableaux de BQN pour Q1 et K8 ; produit scalaire de FreePascal | `docs/NATURAL.md` décrit ces types ; leur part dans l'écart n'a pas de contrôle propre | FreePascal K5, FreePascal K7, OCaml K7, BQN K1, BQN Q1, BQN K8, JavaScript K1, PHP K1, Lua K1 |
+| 14 | établie | ni C ni Fortran n'ont de table de hachage en bibliothèque standard : leur code naturel est le chaînage des manuels, écrit pour le noyau, au nombre de seaux fixé d'avance sur le nombre de clés et haché par un modulo ; les tables de bibliothèque des pairs grandissent et hachent plus fort. Avantage que la règle du code naturel accepte | `docs/NATURAL.md` (K7, cas discutables) ; sources de `bench/c` et de `bench/fortran` | C K7, Fortran K7 |
+| 15 | attribuée | allocation par un ramasse-miettes générationnel : un nœud de K8 coûte un déplacement de pointeur, contre une allocation et une libération chez les pairs | aucun contrôle propre | Java K8, OCaml K8 |
+| 16 | établie | sans vérification de bornes, LLVM vectorise la boucle naturelle de Q6 d'Odin ; celle des autres pairs reste scalaire | campagne, taille publiée : Odin 48,7 ms avec les bornes, 18,4 ms sans, 13,6 ms pour sa forme SIMD ; C 40,9 ms | Odin Q6 |
+| 17 | attribuée | primitives de tableaux de CBQN, vectorisées | aucun contrôle propre ; `docs/BQN.md` de l'archive | BQN Q6 |
+
+| Langage | Mesure | Sens | R1 | Mode publié | R1' | Niveau | Cause | Statut |
+|---|---|---|---|---|---|---|---|---|
+| C | K5 | lent | **2.0** | **2.1** | **2.1** | 1 | 2 | établie |
+| C | K7 | rapide | **0.24** | **0.37** | **0.37** | 1 | 14 | établie |
+| C++ | K4 | lent | **4.0** | **3.9** | **3.9** | 1 | 4 | établie |
+| C++ | K9 | lent | **4.3** | 1.0 | 1.0 | 1 | 5 | établie |
+| Zig* | K4 | lent | **51.1** | 1.0 | 1.0 | 1 | 5 | établie |
+| Odin | Q6 | rapide | 0.96 | 1.02 | **0.23** | 1 | 16 | établie |
+| Nim | K9 | lent | **3.2** | **3.5** | **2.3** | 1 | 9 | attribuée |
+| D | K8 | lent | **2.6** | **2.9** | **2.9** | 1 | 10 | établie |
+| Ada | K4 | lent | **3.9** | **3.8** | **3.9** | 1 | 4 | établie |
+| Ada | K7 | lent | **7.0** | **7.4** | 1.5 | 1 | 6 | établie |
+| Ada | K9 | lent | **4.2** | **4.6** | 1.0 | 1 | 6 | établie |
+| Fortran | K4 | lent | **9.6** | **4.1** | **4.1** | 1 | 4 | établie |
+| Fortran | K7 | rapide | **0.33** | **0.36** | **0.36** | 1 | 14 | établie |
+| Chapel | K5 | lent | **4.5** | **2.0** | **2.0** | 1 | 5, 3 | attribuée |
+| Chapel | Q6 | lent | **5.4** | 1.0 | 1.0 | 1 | 5 | établie |
+| Chapel | Q1 | lent | **7.0** | 1.0 | 1.1 | 1 | 5 | établie |
+| Chapel | K9 | lent | **32.9** | 1.0 | 1.1 | 1 | 5 | établie |
+| Mojo | K4 | lent | **5.2** | **5.0** | **5.0** | 1 | 7 | établie |
+| Mojo | K5 | lent | **2.0** | **2.0** | **2.0** | 1 | 3 | attribuée |
+| Mojo | Q1 | lent | **2.0** | **2.4** | 0.9 | 1 | 6 | établie |
+| Mojo | K9 | lent | **15.7** | **17.1** | **2.2** | 1 | 6, 8 | attribuée |
+| Swift | K4 | lent | **50.7** | **49.4** | **11.6** | 1 | 7 | établie |
+| Swift | K8 | lent | 1.9 | **2.1** | 1.9 | 1 | 11 | attribuée |
+| Swift | K9 | lent | **3.3** | **3.6** | 1.0 | 1 | 6 | établie |
+| C# | K4 | lent | **29.1** | **27.9** | **26.3** | 1.2 à 2.0 | 7 | établie |
+| C# | K9 | lent | **4.3** | **4.4** | **4.7** | 1.2 à 2.0 | 8 | attribuée |
+| Java | K4 | lent | **32.1** | **30.1** | **29.4** | 1.4 à 1.7 | 7 | établie |
+| Java | K8 | rapide | **0.29** | **0.33** | **0.33** | 1.4 à 1.7 | 15 | attribuée |
+| Go | K1 | lent | **36.0** | **33.5** | **49.6** | 1.1 à 2.2 | 1 | à corriger |
+| Go | K4 | lent | **3.7** | **4.2** | **5.1** | 1.1 à 2.2 | 7 | établie |
+| Go | K9 | lent | 1.8 | 1.9 | **2.4** | 1.1 à 2.2 | 8 | attribuée |
+| FreePascal | K4 | lent | **19.2** | **20.1** | **17.9** | 2.0 à 4.9 | 8 | attribuée |
+| FreePascal | K5 | lent | 1.4 | **2.0** | 1.8 | 2.0 à 4.9 | 13 | attribuée |
+| FreePascal | K7 | lent | 1.2 | **2.6** | **2.5** | 2.0 à 4.9 | 13 | attribuée |
+| FreePascal | K9 | lent | **3.2** | 1.3 | 1.3 | 2.0 à 4.9 | 5 | établie |
+| Haskell | K1 | lent | **5.7** | **5.8** | **5.9** | 1 | 12 | établie |
+| Haskell | K4 | lent | **4.7** | **4.6** | **4.6** | 1 | 7 | établie |
+| Haskell | K5 | lent | **2.4** | **2.4** | **2.3** | 1 | 3 | attribuée |
+| Haskell | K7 | lent | **44.3** | **44.9** | **48.3** | 1 | 12 | établie |
+| Haskell | K8 | lent | 1.7 | **2.0** | **2.0** | 1 | 11 | attribuée |
+| Haskell | K9 | lent | **12.6** | **13.7** | **14.8** | 1 | 12 | établie |
+| OCaml | K4 | lent | **15.8** | **18.3** | **22.1** | 2.1 à 4.5 | 7 | établie |
+| OCaml | K7 | lent | 1.9 | **2.1** | **2.7** | 2.1 à 4.5 | 13 | attribuée |
+| OCaml | K8 | rapide | **0.24** | **0.27** | **0.24** | 2.1 à 4.5 | 15 | attribuée |
+| BQN | K1 | lent | **2.6** | **2.5** | **2.4** | 2.6 à 3.6 | 13 | attribuée |
+| BQN | Q1 | lent | **2.1** | **2.4** | **2.6** | 2.6 à 3.6 | 13 | attribuée |
+| BQN | K8 | lent | **2.2** | **2.4** | **2.5** | 2.6 à 3.6 | 13 | attribuée |
+| BQN | K9 | lent | **5.6** | **5.7** | **6.0** | 2.6 à 3.6 | 8 | attribuée |
+| BQN | Q6 | rapide | **0.29** | **0.30** | **0.32** | 2.6 à 3.6 | 17 | attribuée |
+| JavaScript | K1 | lent | **4.8** | **4.3** | **4.2** | 2.8 à 4.7 | 13 | attribuée |
+| JavaScript | K4 | lent | **21.2** | **18.5** | **17.9** | 2.8 à 4.7 | 7 | établie |
+| JavaScript | K9 | lent | **5.3** | **5.3** | **5.2** | 2.8 à 4.7 | 8 | attribuée |
+| PHP | K1 | lent | **4.3** | **3.6** | **3.5** | 4.8 à 6.2 | 13 | attribuée |
+| PHP | K4 | lent | **21.1** | **18.3** | **17.4** | 4.8 à 6.2 | 8 | attribuée |
+| PHP | K9 | lent | **30.6** | **29.6** | **30.5** | 4.8 à 6.2 | 8 | attribuée |
+| Python | K4 | lent | **4.3** | **4.8** | **4.7** | 46.6 à 72.9 | 7 | établie |
+| Python | K9 | lent | **3.8** | **3.9** | **4.3** | 46.6 à 72.9 | 8 | attribuée |
+| Lua | K1 | lent | **2.2** | **2.0** | **2.0** | 16.0 à 25.1 | 13 | attribuée |
+| Lua | K4 | lent | **8.6** | **8.4** | **8.3** | 16.0 à 25.1 | 7 | établie |
+| Lua | K9 | lent | **4.4** | **4.4** | **4.6** | 16.0 à 25.1 | 8 | attribuée |
+
+Chaque case : le rapport le plus extrême des trois tailles (lent : rapport au niveau du langage, le plus grand ; rapide : rapport à la médiane des pairs, le plus petit), en gras dans les modes où le couple est signalé. Niveau : 1 pour un pair ; pour les autres, étendue sur les tailles et les modes.
 
 ## Forme retenue par « Final », cellule par cellule et taille par taille (estimation ponctuelle)
 

@@ -2,11 +2,12 @@
 
 *Classement mesuré de 25 langages, octobre et novembre 2026. Tous sont mesurés sur une même machine, sept noyaux à
 trois tailles de données, dans des conditions égales et avec un code optimisé convergent (campagne des 25 et 26
-novembre, analyse v5.2 ; elle rejoue sur un autre processeur celle des 22 et 23 novembre : même tête, mêmes étages et,
+novembre, analyse v5.3 ; elle rejoue sur un autre processeur celle des 22 et 23 novembre : même tête, mêmes étages et,
 à méthode égale, quelques échanges entre langages que moins d'un point sépare). Zig est classé, par exception, avec sa
 version de développement, remesurée à part : l'astérisque. Méthode : [`docs/METHOD.md`](docs/METHOD.md) ; campagne :
 [`docs/V5.md`](docs/V5.md) ; corrections de l'analyse : [`docs/V5_1.md`](docs/V5_1.md) ; exception de Zig :
-[`docs/V5_2.md`](docs/V5_2.md) ; étapes précédentes et archive : [`docs/HISTORY.md`](docs/HISTORY.md).*
+[`docs/V5_2.md`](docs/V5_2.md) ; ce qui décide de l'ordre et tri des écarts : [`docs/V5_3.md`](docs/V5_3.md) ;
+étapes précédentes et archive : [`docs/HISTORY.md`](docs/HISTORY.md).*
 
 Un seul critère : la *mechanical sympathy* au sens large, c'est-à-dire la capacité d'un langage à faire écrire du code
 en accord avec le matériel : disposition des données, SIMD, hiérarchie mémoire, concurrence, allocation, requêtes
@@ -33,7 +34,7 @@ sont mesurés sur un Xeon Granite Rapids ; le pilier « contrôle » est un inve
 | 14 | 1 | **Swift** | 67,6 | 11–14 | 95 % | 13 (10–14) | Types SIMD et `InlineArray` : le meilleur K5 (97) ; vérifications de `-O` coûteuses sur le code naturel (14e) et le K4 le plus lent des 14 premiers (45) ; contrôle 13e |
 | 15 | 1 | **C#** | 61,2 | 14–16 | 96 % | 15 (15–17) | La boîte à outils la plus riche des langages à GC : 15e plafond (K4 optimisé, réserves de fils) ; objets en références (K7 51, K8 51, désordre de K1) |
 | 16 | 1 | **Java** | 52,6 | 16–18 | 61 % | 16 (15–17) | Les queues de latence de K8 les plus courtes des langages à ramasse-miettes (D3 43) et la Vector API (K5 81) ; pas de types valeur (K1 44, désordre de K1) ; contrôle 18e |
-| 17 | 1 | **Go** | 51,6 | 16–18 | 49 % | 17 (16–18) | À égalité de fait avec FreePascal. Structures par valeur et SIMD expérimental (K4 73) ; écritures atomiques séquentiellement cohérentes (K3 37) ; code naturel 17e |
+| 17 | 1 | **Go** | 51,6 | 16–18 | 49 % | 17 (16–18) | À égalité de fait avec FreePascal. Structures par valeur et SIMD expérimental (K4 73) ; écritures atomiques séquentiellement cohérentes (K3 37) ; code naturel 17e, abaissé par une erreur de mesure sur K1, connue et non corrigée ([le tri des écarts](#le-tri-des-écarts)) |
 | 18 | 1 | **FreePascal** | 51,5 | 15–19 | 83 % | 19 (15–19) | Records `packed`, assembleur, mémoire à la main : 15e contrôle ; ni vectoriseur ni intrinsèques : 19e plafond (K4 11, K5 38) et code naturel 21e |
 | 19 | 1 | **Haskell** | 45,7 | 18–19 | 100 % | 18 (18–19) | Peut descendre bas (FMA vectorielle de GHC : K5 86 ; le meilleur K7, 95) ; code par défaut boxé, ramasse-miettes imposé : code par défaut 19e, contrôle 19e |
 | 20 | 2 | **OCaml** | 27,9 | 20–21 | 94 % | 20 (20–21) | Bonne allocation générationnelle (D3 36) ; ni types valeur, ni flottant 32 bits de calcul, ni SIMD : plafond 23,2 |
@@ -65,7 +66,7 @@ sont mesurés sur un Xeon Granite Rapids ; le pilier « contrôle » est un inve
   la mémoire de la machine ; elles prennent le temps admissible le plus lent des autres langages, ce qui les flatte
   sans doute.
 
-![Classement de la v5.2](results/charts/classement_v4.svg)
+![Classement de la v5.3](results/charts/classement_v4.svg)
 
 ### Les mesures et la grille, séparément
 
@@ -129,8 +130,13 @@ des autres.
   Peu de langages y bougent de plus de deux places : à trois tailles sans les autres règles de la v4, C3 est 4e, Odin
   7e, Nim 9e et Julia 13e ; sans la boucle de référence de K3, C3 est 4e, D 5e, Zig 6e et Odin 7e ; à la seule petite
   taille, Chapel est 9e et Ada 12e.
-* **Le contrôle pèse lourd, et il est jugé.** Sans lui, Rust passe 1er, C++ 5e, et neuf langages bougent de trois
-  places ou plus : Rust, Nim, C3 et Chapel montent, C++, Zig, Odin, D et Ada reculent.
+* **Le contrôle pèse lourd, et il est jugé.** Sans lui, Rust passe 1er, C++ 5e, et neuf langages bougent de trois places
+  ou plus : Rust, Nim, C3 et Chapel montent, C++, Zig, Odin, D et Ada reculent. Il pèse d'autant plus qu'on monte dans
+  le classement : pour un poids de 35 %, il porte 34 % de la variance du score entre les 25 langages, 40 % dans le
+  premier étage, 55 % entre les 14 langages qui peuvent se classer dans la première moitié et 68 % entre les 8 qui
+  peuvent atteindre le podium. Le plafond, de poids 40 %, en porte 47, 37, 17 et 12 % : entre langages compilés par les
+  mêmes optimiseurs, les plafonds se valent, et c'est la grille qui départage
+  ([`results/report_final.md`](results/report_final.md), « Ce qui décide de l'ordre », calculé sur le score au centre).
 
 ### D'une campagne à l'autre
 
@@ -218,6 +224,39 @@ garde encore. Plan, mesures et résultats : [`docs/V5_2.md`](docs/V5_2.md).
   retrouve pas toujours : la remesure peut ne plus être reproductible à l'identique. La 0.18 n'est pas plus rapide
   partout : les formes qui créent leurs fils à chaque appel y sont jusqu'à 1,4 fois plus lentes aux petites tailles. La
   grille de contrôle reste celle de la 0.17, que les sondes rejouées sous la 0.18 confirment.
+
+### Le tri des écarts
+
+Chaque cellule du code naturel est comparée à ses pairs : son temps est rapporté à la médiane de quinze langages dont la
+chaîne produit son code machine par LLVM ou par GCC, aux trois tailles et dans les trois modes de vérifications. Un
+facteur deux, dans un sens ou dans l'autre, doit avoir une cause, et `tools/check.sh` échoue s'il en manque une. Règle
+et registre des causes : [`docs/V5_3.md`](docs/V5_3.md) ; tableaux :
+[`results/report_final.md`](results/report_final.md).
+
+60 couples (langage, mesure) sont signalés. Pour 31, un contrôle nommé établit la cause ; pour 28, elle est attribuée
+sans contrôle propre ; un est à corriger ; aucun ne reste sans cause.
+
+* **Une erreur de mesure, à corriger : K1 de Go.** Son K1 naturel prend 1 489 ms à la taille publiée, contre 29 ms pour
+  C et 30 ms pour FreePascal. Le binaire de Go est compilé avec `GOEXPERIMENT=simd` pour ses formes à SIMD explicite ;
+  sur un processeur AVX-512, la préemption asynchrone de Go 1.27 restaure alors les registres vectoriels sans les
+  nettoyer, et la boucle de K1, qui mêle deux encodages d'instructions, le paie. Sans cette préemption, la même boucle
+  prend 24 ms sur la machine du 27 novembre. L'erreur avait été relevée et corrigée le 2 novembre ; elle est revenue
+  avec la campagne des 22 et 23 novembre, qui a remesuré Go en entier, et elle est dans le classement publié : elle
+  abaisse le code naturel de Go (17e) et son coût de structure (D2 : 72 sur 100). La corriger change une mesure : c'est
+  un plan à part, non fait.
+* **Un réglage par défaut de clang coûte à C un facteur deux sur K5.** clang fusionne la multiplication et l'addition du
+  produit scalaire naturel en une seule instruction, ce qui allonge la chaîne de dépendance de la somme : le même source
+  compilé par gcc va 2 à 2,2 fois plus vite aux trois tailles. C'est le mode publié de la chaîne : rien à corriger,
+  et « C par gcc » le compte déjà.
+* **GCC vectorise moins bien la somme conditionnelle de K4.** C++, Ada et Fortran y sont 2 à 4 fois derrière la médiane
+  des pairs ; le source de C compilé par gcc y prend 2,5 à 3,9 fois son temps sous clang.
+* **Deux cellules sont avantagées : K7 naturel de C et de Fortran**, jusqu'à trois fois plus rapides que la médiane des
+  pairs. Aucun des deux n'a de table de hachage en bibliothèque standard ; leur code naturel est la table à chaînage des
+  manuels, écrite pour le noyau et dimensionnée d'avance, quand les tables de bibliothèque des autres grandissent et
+  hachent plus fort. La règle du code naturel l'accepte ([`docs/NATURAL.md`](docs/NATURAL.md)) ; le code naturel étant
+  rapporté au meilleur, cette table sert de référence à tous sur K7.
+* **Le reste confirme ce qui était connu** : vérifications à l'exécution qui bloquent la vectorisation (Zig, Swift, Ada,
+  Chapel, Mojo, selon le mode), chaînes sans vectoriseur de boucles, ramasse-miettes, types par défaut en références.
 
 ## Ce qui sépare vraiment les langages
 
@@ -323,6 +362,9 @@ Un dixième noyau (file SPSC), hors score depuis la v2, n'est plus mesuré.
 * **Un seul auteur.** Les implémentations ont été relues après coup, langage par langage, et ces relectures ont corrigé
   des erreurs du banc et de la grille. Le catalogue commun réduit l'écart d'effort sur le plafond ; il ne touche pas le
   code naturel, dont le choix reste celui de l'auteur ([`docs/NATURAL.md`](docs/NATURAL.md)).
+* **Une erreur de mesure connue, non corrigée.** Le K1 naturel de Go est faussé d'un facteur 50 par la configuration de
+  sa construction ([le tri des écarts](#le-tri-des-écarts)) : son code par défaut est sous-estimé. Le tri passe le code
+  naturel au crible, pas le plafond.
 * **Des microbenchmarks** : ni E/S, ni décompression, ni tri ou jointure.
 * **Bibliothèque standard seule.** La règle pèse sur Rust (ni affinité, ni `mmap`, ni taille de ligne de cache sans
   crate), sur Haskell (`vector` et `unordered-containers` sont des paquets), sur Mojo (`parallelize` est dans MAX) et
@@ -369,9 +411,9 @@ sh tools/check.sh --rapide
 sh tools/check.sh
 ```
 
-Le premier contrôle (45 s) vérifie la grille contre ses sondes, le relevé des formes, le plan de la campagne et le
-classement sur 200 variantes ; le second (25 minutes environ) recalcule le classement complet et le compare à l'octet
-près. Ni l'un ni l'autre ne demande de chaîne de compilation.
+Le premier contrôle (45 s) vérifie la grille contre ses sondes, le relevé des formes, le plan de la campagne, le
+classement sur 200 variantes et que chaque écart du tri a une cause ; le second (25 minutes environ) recalcule le
+classement complet et le compare à l'octet près. Ni l'un ni l'autre ne demande de chaîne de compilation.
 
 ```bash
 python3 analysis/final_v4.py
@@ -396,7 +438,7 @@ s'écrit dans son propre répertoire et se mesure sur un seul modèle de process
 | `tools/` | `final/` (constructions, campagne), `sizes/` (tailles, sommes attendues), `driver.py` (essai d'une implémentation), `gendata.c` (données), `hwprobe.c` (caractérisation), `grid_audit/` (recherches d'absence), `check.sh` (garde-fou) |
 | `analysis/` | `final_v4.py` (le classement), `capabilities*.py` (la grille), `check_probes.py`, `charts_final.py` |
 | `results/` | `final/` (mesures brutes, étalonnage, analyse), `zig_dev/` (remesure de Zig par sa version de développement, avec son témoin et la caractérisation de sa machine), `report_final.md`, `probes/` et `grid_audit/` (preuves de la grille), `hw/` (caractérisation de la machine 38 et de la machine 35, celle de la campagne précédente), `converge/` (relevé des formes) |
-| `docs/` | `METHOD.md` (la méthode), `SPEC.md` (les noyaux), `NATURAL.md` (le code naturel), `CAPABILITIES.md` (la grille), `V5.md` (plan, écarts et résultats de la campagne publiée), `V5_1.md` (corrections A7 et A8 de l'analyse), `V5_2.md` (exception de Zig : plan, mesures et résultats), `V4_FINAL.md` (plan et procès-verbal de la campagne précédente), `V4_1.md` (corrections A1 à A4 de l'analyse), `HISTORY.md` (étapes et archive) |
+| `docs/` | `METHOD.md` (la méthode), `SPEC.md` (les noyaux), `NATURAL.md` (le code naturel), `CAPABILITIES.md` (la grille), `V5.md` (plan, écarts et résultats de la campagne publiée), `V5_1.md` (corrections A7 et A8 de l'analyse), `V5_2.md` (exception de Zig : plan, mesures et résultats), `V5_3.md` (ce qui décide de l'ordre, tri des écarts), `V4_FINAL.md` (plan et procès-verbal de la campagne précédente), `V4_1.md` (corrections A1 à A4 de l'analyse), `HISTORY.md` (étapes et archive) |
 | `env/` | `install.sh` (installe les 25 chaînes et la version de développement de Zig), `toolchains.txt` (leurs versions), `msdata.sha256` (empreintes des données) |
 
 Tout ce qui a précédé (v1 à v3, relectures par langage, points 2 à 6 de la v4, ancien README) est dans l'archive, le

@@ -50067,6 +50067,2251 @@
    "2": 3179
   }
  },
+ "importance": {
+  "weights": {
+   "C": 0.35,
+   "E": 0.4,
+   "D": 0.25,
+   "k1": 0.05,
+   "k3": 0.05,
+   "k4": 0.05,
+   "k5": 0.05,
+   "k6": 0.05,
+   "k7": 0.05,
+   "k8": 0.05,
+   "k9": 0.05,
+   "D1": 0.125,
+   "D2": 0.0375,
+   "D3": 0.0375,
+   "D4": 0.05
+  },
+  "groups": [
+   {
+    "name": "les 25 langages",
+    "langs": [
+     "c",
+     "cpp",
+     "zig",
+     "odin",
+     "rust",
+     "nim",
+     "c3",
+     "d",
+     "ada",
+     "julia",
+     "fortran",
+     "chapel",
+     "mojo",
+     "swift",
+     "csharp",
+     "java",
+     "go",
+     "fpc",
+     "haskell",
+     "ocaml",
+     "bqn",
+     "js",
+     "php",
+     "python",
+     "lua"
+    ],
+    "sd": 25.408900489993087,
+    "shares": {
+     "C": 0.33942725242953664,
+     "E": 0.4726810572663733,
+     "D": 0.18789169030409014,
+     "k1": 0.06641447150174018,
+     "k3": 0.05493430463038384,
+     "k4": 0.06519173829876052,
+     "k5": 0.07247679413604825,
+     "k6": 0.05945250581795741,
+     "k7": 0.043761466761125134,
+     "k8": 0.050955154400741956,
+     "k9": 0.059494621719616,
+     "D1": 0.09166576231594917,
+     "D2": 0.037898732823062345,
+     "D3": 0.028190017546250227,
+     "D4": 0.030137177618828365
+    }
+   },
+   {
+    "name": "premier \u00e9tage",
+    "langs": [
+     "c",
+     "cpp",
+     "zig",
+     "odin",
+     "rust",
+     "nim",
+     "c3",
+     "d",
+     "ada",
+     "julia",
+     "fortran",
+     "chapel",
+     "mojo",
+     "swift",
+     "csharp",
+     "java",
+     "go",
+     "fpc",
+     "haskell"
+    ],
+    "sd": 11.705890698225645,
+    "shares": {
+     "C": 0.4003769248796534,
+     "E": 0.37229536191696283,
+     "D": 0.2273277132033837,
+     "k1": 0.04320915506208701,
+     "k3": 0.03666814924069026,
+     "k4": 0.10149672580808729,
+     "k5": 0.04146611189877278,
+     "k6": 0.07132434375910779,
+     "k7": 0.01792558677018306,
+     "k8": 0.026981917193115386,
+     "k9": 0.0332233721849193,
+     "D1": 0.15691987177147174,
+     "D2": 0.03088932151104138,
+     "D3": 0.03998115052632071,
+     "D4": -0.00046263060545010184
+    }
+   },
+   {
+    "name": "premi\u00e8re moiti\u00e9 possible",
+    "langs": [
+     "c",
+     "cpp",
+     "zig",
+     "odin",
+     "rust",
+     "nim",
+     "c3",
+     "d",
+     "ada",
+     "julia",
+     "fortran",
+     "chapel",
+     "mojo",
+     "swift"
+    ],
+    "sd": 5.202765920905945,
+    "shares": {
+     "C": 0.5464162388443451,
+     "E": 0.17134727830224022,
+     "D": 0.28223648285341446,
+     "k1": 0.0038698147722957574,
+     "k3": 0.001105899953767728,
+     "k4": 0.08505100614732859,
+     "k5": 0.000730394688247252,
+     "k6": 0.006905041609744575,
+     "k7": 0.01313424185475736,
+     "k8": 0.04246757577149376,
+     "k9": 0.018083303504605117,
+     "D1": 0.21961304403092374,
+     "D2": 0.0023823896414951772,
+     "D3": 0.05266866252249975,
+     "D4": 0.007572386658495851
+    }
+   },
+   {
+    "name": "podium possible",
+    "langs": [
+     "c",
+     "cpp",
+     "zig",
+     "odin",
+     "rust",
+     "nim",
+     "c3",
+     "d"
+    ],
+    "sd": 2.6331878521407672,
+    "shares": {
+     "C": 0.6790955427952228,
+     "E": 0.11813009491250884,
+     "D": 0.20277436229226678,
+     "k1": 0.03224142581269406,
+     "k3": 0.002437344561003391,
+     "k4": 0.03636589445231436,
+     "k5": -0.00855410874181207,
+     "k6": 0.0034137709574079333,
+     "k7": -0.002389422252952372,
+     "k8": 0.05628062902739919,
+     "k9": -0.0016654389035461877,
+     "D1": 0.04120475713549467,
+     "D2": -0.003504520504982181,
+     "D3": 0.1600523459684947,
+     "D4": 0.005021779693259405
+    }
+   }
+  ]
+ },
+ "triage": {
+  "peers": [
+   "c",
+   "cpp",
+   "zig",
+   "odin",
+   "rust",
+   "nim",
+   "c3",
+   "d",
+   "ada",
+   "julia",
+   "fortran",
+   "chapel",
+   "mojo",
+   "swift",
+   "haskell"
+  ],
+  "factor": 2.0,
+  "causes": [
+   {
+    "status": "\u00e0 corriger",
+    "cause": "Go : binaire compil\u00e9 avec `GOEXPERIMENT=simd` ; sur un processeur AVX-512, la pr\u00e9emption asynchrone de go1.27.3 restaure les registres ZMM sans `VZEROUPPER`, et la boucle de K1, qui m\u00eale SSE h\u00e9rit\u00e9 et FMA cod\u00e9es VEX (`GOAMD64=v4`), paie la transition. Erreur de mesure relev\u00e9e et corrig\u00e9e par transfert le 2 novembre, revenue avec la campagne finale de la v4",
+    "control": "`docs/GO.md` de l'archive (2 et 4.2) ; essai du 27 novembre (`docs/V5_3.md`, 8)"
+   },
+   {
+    "status": "\u00e9tablie",
+    "cause": "clang fusionne par d\u00e9faut la multiplication et l'addition du produit scalaire en une FMA (`-ffp-contract=on`), qui allonge la cha\u00eene de d\u00e9pendance de la somme",
+    "control": "le m\u00eame source compil\u00e9 par gcc prend 0,45 \u00e0 0,51 fois le temps de clang (campagne, \u00ab C par gcc \u00bb) ; code machine (`docs/V5_3.md`, 8)"
+   },
+   {
+    "status": "attribu\u00e9e",
+    "cause": "m\u00eame facteur deux que le produit scalaire de C : fusion en FMA probable (Chapel `--fast`, Mojo, `ghc -mfma`)",
+    "control": "aucun contr\u00f4le propre ; `docs/HASKELL.md` de l'archive (2) donne \u00e0 Haskell le temps de C sur K5"
+   },
+   {
+    "status": "\u00e9tablie",
+    "cause": "GCC vectorise la somme conditionnelle d'octets moins bien que LLVM",
+    "control": "le m\u00eame source C compil\u00e9 par gcc prend 3,9, 3,6 et 2,5 fois le temps de clang aux trois tailles (campagne, \u00ab C par gcc \u00bb)"
+   },
+   {
+    "status": "\u00e9tablie",
+    "cause": "v\u00e9rifications que R1 ajoute au mode publi\u00e9 (d\u00e9bordement des entiers de `-O safe` pour Zig, `--checks` pour Chapel, `-D_GLIBCXX_ASSERTIONS` pour C++, `-Cr -Co` pour FreePascal) : elles emp\u00eachent la vectorisation",
+    "control": "l'\u00e9cart dispara\u00eet en mode publi\u00e9 ; `docs/V5_1.md`, 2 (Zig) et 9.1 (Chapel)"
+   },
+   {
+    "status": "\u00e9tablie",
+    "cause": "v\u00e9rifications du mode publi\u00e9 qu'une option retire : contr\u00f4le de falsification des conteneurs d'Ada sur K7, bornes d'Ada, de Swift et de Mojo sur leurs tableaux",
+    "control": "l'\u00e9cart dispara\u00eet en R1' ; `docs/V5_1.md`, 9.1 (Ada) ; `docs/SWIFT.md` (2.4) et `docs/MOJO.md` (2) de l'archive"
+   },
+   {
+    "status": "\u00e9tablie",
+    "cause": "somme conditionnelle que les pairs vectorisent et que la cha\u00eene laisse scalaire : pas de vectoriseur de boucles dans les passes de Mojo ; un branchement par octet en Swift, avec le pi\u00e8ge de d\u00e9bordement de `-O` ; pas de vectoriseur automatique pour cette boucle en Go, C#, Java, Haskell, OCaml, JavaScript, Lua et Python",
+    "control": "`docs/MOJO.md` (2), `docs/SWIFT.md` (2.4) et `docs/GO.md` (2) de l'archive"
+   },
+   {
+    "status": "attribu\u00e9e",
+    "cause": "boucle que les pairs vectorisent et que la cha\u00eene laisse scalaire, sans relecture qui le consigne : somme conditionnelle de FreePascal et de PHP ; stencil de C#, Go, JavaScript, PHP, Python, Lua et BQN ; stencil de Mojo une fois ses v\u00e9rifications retir\u00e9es",
+    "control": "aucun contr\u00f4le propre"
+   },
+   {
+    "status": "attribu\u00e9e",
+    "cause": "stencil de Nim sur une `seq` : v\u00e9rifications de bornes de `-d:release`, et boucle que clang ne vectorise pas m\u00eame sans elles (Nim lui passe `-fno-strict-aliasing`)",
+    "control": "`docs/NIM.md` de l'archive (2), \u00e9tabli pour la forme imbriqu\u00e9e, non refait pour la forme contigu\u00eb"
+   },
+   {
+    "status": "\u00e9tablie",
+    "cause": "ramasse-miettes de D : chaque n\u0153ud de K8 est un `new` de classe",
+    "control": "`docs/DLANG.md` de l'archive (2)"
+   },
+   {
+    "status": "attribu\u00e9e",
+    "cause": "co\u00fbt d'allocation du type par d\u00e9faut : comptage de r\u00e9f\u00e9rences de la classe de Swift, n\u0153uds de Haskell confi\u00e9s au ramasse-miettes",
+    "control": "aucun contr\u00f4le propre ; `docs/SWIFT.md` de l'archive (2.4, point 9) chiffre une part du co\u00fbt de Swift"
+   },
+   {
+    "status": "\u00e9tablie",
+    "cause": "types par d\u00e9faut de Haskell : liste cha\u00een\u00e9e pour K1, `Data.IntMap` pour K7 faute de table de hachage livr\u00e9e, tableau immuable `UArray` pour K9",
+    "control": "`docs/NATURAL.md` ; `docs/HASKELL.md` de l'archive (1 et 2)"
+   },
+   {
+    "status": "attribu\u00e9e",
+    "cause": "types par d\u00e9faut du langage : enregistrements en r\u00e9f\u00e9rences de JavaScript, PHP et Lua et matrice de doubles de BQN pour K1 ; `TDictionary` de FreePascal (deux recherches par ligne) et `Hashtbl` d'OCaml pour K7 ; idiomes de tableaux de BQN pour Q1 et K8 ; produit scalaire de FreePascal",
+    "control": "`docs/NATURAL.md` d\u00e9crit ces types ; leur part dans l'\u00e9cart n'a pas de contr\u00f4le propre"
+   },
+   {
+    "status": "\u00e9tablie",
+    "cause": "ni C ni Fortran n'ont de table de hachage en biblioth\u00e8que standard : leur code naturel est le cha\u00eenage des manuels, \u00e9crit pour le noyau, au nombre de seaux fix\u00e9 d'avance sur le nombre de cl\u00e9s et hach\u00e9 par un modulo ; les tables de biblioth\u00e8que des pairs grandissent et hachent plus fort. Avantage que la r\u00e8gle du code naturel accepte",
+    "control": "`docs/NATURAL.md` (K7, cas discutables) ; sources de `bench/c` et de `bench/fortran`"
+   },
+   {
+    "status": "attribu\u00e9e",
+    "cause": "allocation par un ramasse-miettes g\u00e9n\u00e9rationnel : un n\u0153ud de K8 co\u00fbte un d\u00e9placement de pointeur, contre une allocation et une lib\u00e9ration chez les pairs",
+    "control": "aucun contr\u00f4le propre"
+   },
+   {
+    "status": "\u00e9tablie",
+    "cause": "sans v\u00e9rification de bornes, LLVM vectorise la boucle naturelle de Q6 d'Odin ; celle des autres pairs reste scalaire",
+    "control": "campagne, taille publi\u00e9e : Odin 48,7 ms avec les bornes, 18,4 ms sans, 13,6 ms pour sa forme SIMD ; C 40,9 ms"
+   },
+   {
+    "status": "attribu\u00e9e",
+    "cause": "primitives de tableaux de CBQN, vectoris\u00e9es",
+    "control": "aucun contr\u00f4le propre ; `docs/BQN.md` de l'archive"
+   }
+  ],
+  "rows": [
+   {
+    "lang": "c",
+    "measure": "K5",
+    "sense": "lent",
+    "ratio": {
+     "R1": 1.9881605238177065,
+     "mode publi\u00e9": 2.1353777464245876,
+     "R1'": 2.1153532922032596
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e"
+     ]
+    },
+    "cause": {
+     "R1": 1,
+     "mode publi\u00e9": 1,
+     "R1'": 1
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "c",
+    "measure": "K7",
+    "sense": "rapide",
+    "ratio": {
+     "R1": 0.24409308834759805,
+     "mode publi\u00e9": 0.3711677011409796,
+     "R1'": 0.3711677011409796
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e"
+     ]
+    },
+    "cause": {
+     "R1": 13,
+     "mode publi\u00e9": 13,
+     "R1'": 13
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "cpp",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 4.014215420246367,
+     "mode publi\u00e9": 3.9317762117172284,
+     "R1'": 3.9317762117172284
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 3,
+     "mode publi\u00e9": 3,
+     "R1'": 3
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "cpp",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 4.318660112857624,
+     "mode publi\u00e9": 1.0,
+     "R1'": 1.0239659218617707
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 4
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "csharp",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 29.098146649412428,
+     "mode publi\u00e9": 27.914702483292785,
+     "R1'": 26.264936967208218
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 6,
+     "mode publi\u00e9": 6,
+     "R1'": 6
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.1887086993425386,
+     2.0212945675302394
+    ]
+   },
+   {
+    "lang": "csharp",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 4.276141671039431,
+     "mode publi\u00e9": 4.41452474268559,
+     "R1'": 4.664313959259091
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ],
+     "mode publi\u00e9": [
+      "petite"
+     ],
+     "R1'": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 7,
+     "mode publi\u00e9": 7,
+     "R1'": 7
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.1887086993425386,
+     2.0212945675302394
+    ]
+   },
+   {
+    "lang": "java",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 32.072574406340514,
+     "mode publi\u00e9": 30.058021721516017,
+     "R1'": 29.37369273418489
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 6,
+     "mode publi\u00e9": 6,
+     "R1'": 6
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.4282968124537354,
+     1.660909532955162
+    ]
+   },
+   {
+    "lang": "java",
+    "measure": "K8",
+    "sense": "rapide",
+    "ratio": {
+     "R1": 0.2889127561291135,
+     "mode publi\u00e9": 0.33436939178125824,
+     "R1'": 0.33436939178125824
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 14,
+     "mode publi\u00e9": 14,
+     "R1'": 14
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.4282968124537354,
+     1.660909532955162
+    ]
+   },
+   {
+    "lang": "zig",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 51.13381783257539,
+     "mode publi\u00e9": 1.0,
+     "R1'": 1.0
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 4
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "odin",
+    "measure": "Q6",
+    "sense": "rapide",
+    "ratio": {
+     "R1": 0.9629120941186188,
+     "mode publi\u00e9": 1.0207631227751872,
+     "R1'": 0.23417640928845385
+    },
+    "sizes": {
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1'": 15
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "ada",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 3.899102882417712,
+     "mode publi\u00e9": 3.796406386416337,
+     "R1'": 3.9494791074171873
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 3,
+     "mode publi\u00e9": 3,
+     "R1'": 3
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "ada",
+    "measure": "K7",
+    "sense": "lent",
+    "ratio": {
+     "R1": 6.9557065645061895,
+     "mode publi\u00e9": 7.429025376098465,
+     "R1'": 1.4563952708912293
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 5,
+     "mode publi\u00e9": 5
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "ada",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 4.20454252704853,
+     "mode publi\u00e9": 4.576168254004284,
+     "R1'": 1.0027788731009815
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ],
+     "mode publi\u00e9": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 5,
+     "mode publi\u00e9": 5
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "fortran",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 9.602610610756138,
+     "mode publi\u00e9": 4.069756918792217,
+     "R1'": 4.069756918792217
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 3,
+     "mode publi\u00e9": 3,
+     "R1'": 3
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "fortran",
+    "measure": "K7",
+    "sense": "rapide",
+    "ratio": {
+     "R1": 0.32771093077206065,
+     "mode publi\u00e9": 0.36161643474491223,
+     "R1'": 0.36161643474491223
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "mode publi\u00e9": [
+      "petite"
+     ],
+     "R1'": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 13,
+     "mode publi\u00e9": 13,
+     "R1'": 13
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "js",
+    "measure": "K1",
+    "sense": "lent",
+    "ratio": {
+     "R1": 4.81427202812544,
+     "mode publi\u00e9": 4.316297725593716,
+     "R1'": 4.192030069171451
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "mode publi\u00e9": [
+      "petite"
+     ],
+     "R1'": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 12,
+     "mode publi\u00e9": 12,
+     "R1'": 12
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     2.764900828452685,
+     4.730205231470476
+    ]
+   },
+   {
+    "lang": "js",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 21.17264668970639,
+     "mode publi\u00e9": 18.482790125947076,
+     "R1'": 17.923970613354665
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 6,
+     "mode publi\u00e9": 6,
+     "R1'": 6
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     2.764900828452685,
+     4.730205231470476
+    ]
+   },
+   {
+    "lang": "js",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 5.306917024309669,
+     "mode publi\u00e9": 5.27026783599883,
+     "R1'": 5.168897436194089
+    },
+    "sizes": {
+     "R1": [
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "grande"
+     ],
+     "R1'": [
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 7,
+     "mode publi\u00e9": 7,
+     "R1'": 7
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     2.764900828452685,
+     4.730205231470476
+    ]
+   },
+   {
+    "lang": "python",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 4.325472699739834,
+     "mode publi\u00e9": 4.786409083474033,
+     "R1'": 4.72154596250072
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e"
+     ]
+    },
+    "cause": {
+     "R1": 6,
+     "mode publi\u00e9": 6,
+     "R1'": 6
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     46.59438012840015,
+     72.90424523550392
+    ]
+   },
+   {
+    "lang": "python",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 3.8119051671818847,
+     "mode publi\u00e9": 3.9345635442231397,
+     "R1'": 4.272987892628411
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ],
+     "mode publi\u00e9": [
+      "petite"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e"
+     ]
+    },
+    "cause": {
+     "R1": 7,
+     "mode publi\u00e9": 7,
+     "R1'": 7
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     46.59438012840015,
+     72.90424523550392
+    ]
+   },
+   {
+    "lang": "haskell",
+    "measure": "K1",
+    "sense": "lent",
+    "ratio": {
+     "R1": 5.71420035076423,
+     "mode publi\u00e9": 5.7648679719524285,
+     "R1'": 5.856444453039379
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 11,
+     "mode publi\u00e9": 11,
+     "R1'": 11
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "haskell",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 4.693676471700996,
+     "mode publi\u00e9": 4.570052104367323,
+     "R1'": 4.570052104367323
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 6,
+     "mode publi\u00e9": 6,
+     "R1'": 6
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "haskell",
+    "measure": "K5",
+    "sense": "lent",
+    "ratio": {
+     "R1": 2.3728127129322654,
+     "mode publi\u00e9": 2.3637588559485962,
+     "R1'": 2.29393447906171
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 2,
+     "mode publi\u00e9": 2,
+     "R1'": 2
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "haskell",
+    "measure": "K7",
+    "sense": "lent",
+    "ratio": {
+     "R1": 44.26615985130063,
+     "mode publi\u00e9": 44.8502660567044,
+     "R1'": 48.309636344039255
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 11,
+     "mode publi\u00e9": 11,
+     "R1'": 11
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "haskell",
+    "measure": "K8",
+    "sense": "lent",
+    "ratio": {
+     "R1": 1.7489462772235824,
+     "mode publi\u00e9": 1.9524103260817165,
+     "R1'": 1.9524103260817165
+    },
+    "sizes": {
+     "mode publi\u00e9": [
+      "grande"
+     ],
+     "R1'": [
+      "grande"
+     ]
+    },
+    "cause": {
+     "mode publi\u00e9": 10,
+     "R1'": 10
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "haskell",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 12.578762460395254,
+     "mode publi\u00e9": 13.690558027564737,
+     "R1'": 14.800301828469754
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 11,
+     "mode publi\u00e9": 11,
+     "R1'": 11
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "d",
+    "measure": "K8",
+    "sense": "lent",
+    "ratio": {
+     "R1": 2.571491112887801,
+     "mode publi\u00e9": 2.882284334628855,
+     "R1'": 2.9457034696206117
+    },
+    "sizes": {
+     "R1": [
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 9,
+     "mode publi\u00e9": 9,
+     "R1'": 9
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "chapel",
+    "measure": "K5",
+    "sense": "lent",
+    "ratio": {
+     "R1": 4.523390040716568,
+     "mode publi\u00e9": 2.025221980005771,
+     "R1'": 2.0257263046521565
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e"
+     ]
+    },
+    "cause": {
+     "R1": 4,
+     "mode publi\u00e9": 2,
+     "R1'": 2
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "chapel",
+    "measure": "Q6",
+    "sense": "lent",
+    "ratio": {
+     "R1": 5.392370215558873,
+     "mode publi\u00e9": 0.9673842372632177,
+     "R1'": 1.0105606991859264
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 4
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "chapel",
+    "measure": "Q1",
+    "sense": "lent",
+    "ratio": {
+     "R1": 7.021033478224362,
+     "mode publi\u00e9": 1.0488009755765513,
+     "R1'": 1.118453994955646
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 4
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "chapel",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 32.94096905640036,
+     "mode publi\u00e9": 1.0356339858720063,
+     "R1'": 1.119581506017936
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 4
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "nim",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 3.171601801940681,
+     "mode publi\u00e9": 3.4519292852942054,
+     "R1'": 2.3187638347157447
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ],
+     "mode publi\u00e9": [
+      "petite"
+     ],
+     "R1'": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 8,
+     "mode publi\u00e9": 8,
+     "R1'": 8
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "mojo",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 5.15839788417639,
+     "mode publi\u00e9": 5.022533454931748,
+     "R1'": 5.008509868296301
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 6,
+     "mode publi\u00e9": 6,
+     "R1'": 6
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "mojo",
+    "measure": "K5",
+    "sense": "lent",
+    "ratio": {
+     "R1": 1.9848186632125562,
+     "mode publi\u00e9": 1.9942921669019305,
+     "R1'": 2.018056295143706
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "R1'": [
+      "publi\u00e9e"
+     ]
+    },
+    "cause": {
+     "R1": 2,
+     "mode publi\u00e9": 2,
+     "R1'": 2
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "mojo",
+    "measure": "Q1",
+    "sense": "lent",
+    "ratio": {
+     "R1": 1.9884041291658208,
+     "mode publi\u00e9": 2.3609893730845806,
+     "R1'": 0.8591590995611064
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 5,
+     "mode publi\u00e9": 5
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "mojo",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 15.669567173426863,
+     "mode publi\u00e9": 17.054548834200908,
+     "R1'": 2.198993295524076
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 5,
+     "mode publi\u00e9": 5,
+     "R1'": 7
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "go",
+    "measure": "K1",
+    "sense": "lent",
+    "ratio": {
+     "R1": 36.0218924466321,
+     "mode publi\u00e9": 33.469062579176246,
+     "R1'": 49.5512346814313
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 0,
+     "mode publi\u00e9": 0,
+     "R1'": 0
+    },
+    "status": "\u00e0 corriger",
+    "level": [
+     1.0940663700558109,
+     2.231046075415665
+    ]
+   },
+   {
+    "lang": "go",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 3.67591594749684,
+     "mode publi\u00e9": 4.183058608921061,
+     "R1'": 5.140242823074717
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 6,
+     "mode publi\u00e9": 6,
+     "R1'": 6
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0940663700558109,
+     2.231046075415665
+    ]
+   },
+   {
+    "lang": "go",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 1.808599945828459,
+     "mode publi\u00e9": 1.852773214709219,
+     "R1'": 2.396444608398576
+    },
+    "sizes": {
+     "R1'": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1'": 7
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.0940663700558109,
+     2.231046075415665
+    ]
+   },
+   {
+    "lang": "ocaml",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 15.760508057045017,
+     "mode publi\u00e9": 18.348268394299684,
+     "R1'": 22.13549494878913
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 6,
+     "mode publi\u00e9": 6,
+     "R1'": 6
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     2.0763276704272817,
+     4.505888818385101
+    ]
+   },
+   {
+    "lang": "ocaml",
+    "measure": "K7",
+    "sense": "lent",
+    "ratio": {
+     "R1": 1.8875809182953889,
+     "mode publi\u00e9": 2.099032367761767,
+     "R1'": 2.698211100077395
+    },
+    "sizes": {
+     "mode publi\u00e9": [
+      "publi\u00e9e"
+     ],
+     "R1'": [
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "mode publi\u00e9": 12,
+     "R1'": 12
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     2.0763276704272817,
+     4.505888818385101
+    ]
+   },
+   {
+    "lang": "ocaml",
+    "measure": "K8",
+    "sense": "rapide",
+    "ratio": {
+     "R1": 0.2448021102457259,
+     "mode publi\u00e9": 0.2696122266698663,
+     "R1'": 0.2439905873058401
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 14,
+     "mode publi\u00e9": 14,
+     "R1'": 14
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     2.0763276704272817,
+     4.505888818385101
+    ]
+   },
+   {
+    "lang": "lua",
+    "measure": "K1",
+    "sense": "lent",
+    "ratio": {
+     "R1": 2.233106719564131,
+     "mode publi\u00e9": 2.04604478238485,
+     "R1'": 1.9865274187889956
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ],
+     "mode publi\u00e9": [
+      "petite"
+     ],
+     "R1'": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 12,
+     "mode publi\u00e9": 12,
+     "R1'": 12
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     16.045596442763483,
+     25.09581042026629
+    ]
+   },
+   {
+    "lang": "lua",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 8.597720680588623,
+     "mode publi\u00e9": 8.400346682556934,
+     "R1'": 8.325635354008195
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 6,
+     "mode publi\u00e9": 6,
+     "R1'": 6
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     16.045596442763483,
+     25.09581042026629
+    ]
+   },
+   {
+    "lang": "lua",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 4.381762488456077,
+     "mode publi\u00e9": 4.369596531335532,
+     "R1'": 4.579561377473587
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e"
+     ]
+    },
+    "cause": {
+     "R1": 7,
+     "mode publi\u00e9": 7,
+     "R1'": 7
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     16.045596442763483,
+     25.09581042026629
+    ]
+   },
+   {
+    "lang": "swift",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 50.69225867204116,
+     "mode publi\u00e9": 49.35710094550641,
+     "R1'": 11.551588720627429
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 6,
+     "mode publi\u00e9": 6,
+     "R1'": 6
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "swift",
+    "measure": "K8",
+    "sense": "lent",
+    "ratio": {
+     "R1": 1.9040414220493018,
+     "mode publi\u00e9": 2.097011528842953,
+     "R1'": 1.9455559977437875
+    },
+    "sizes": {
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "mode publi\u00e9": 10
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "swift",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 3.2697624492340904,
+     "mode publi\u00e9": 3.55876603032576,
+     "R1'": 0.9552526024480831
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ],
+     "mode publi\u00e9": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 5,
+     "mode publi\u00e9": 5
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "lang": "fpc",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 19.18148983326493,
+     "mode publi\u00e9": 20.090031083713924,
+     "R1'": 17.850219700495973
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 7,
+     "mode publi\u00e9": 7,
+     "R1'": 7
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.9675448939783322,
+     4.921648005900295
+    ]
+   },
+   {
+    "lang": "fpc",
+    "measure": "K5",
+    "sense": "lent",
+    "ratio": {
+     "R1": 1.378641175339802,
+     "mode publi\u00e9": 1.9977630173038765,
+     "R1'": 1.7910339637903956
+    },
+    "sizes": {
+     "mode publi\u00e9": [
+      "publi\u00e9e"
+     ]
+    },
+    "cause": {
+     "mode publi\u00e9": 12
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.9675448939783322,
+     4.921648005900295
+    ]
+   },
+   {
+    "lang": "fpc",
+    "measure": "K7",
+    "sense": "lent",
+    "ratio": {
+     "R1": 1.2486213386275382,
+     "mode publi\u00e9": 2.577906823049283,
+     "R1'": 2.465303209068944
+    },
+    "sizes": {
+     "mode publi\u00e9": [
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "mode publi\u00e9": 12,
+     "R1'": 12
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     1.9675448939783322,
+     4.921648005900295
+    ]
+   },
+   {
+    "lang": "fpc",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 3.1730491765958075,
+     "mode publi\u00e9": 1.265105025184427,
+     "R1'": 1.3441009656038956
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 4
+    },
+    "status": "\u00e9tablie",
+    "level": [
+     1.9675448939783322,
+     4.921648005900295
+    ]
+   },
+   {
+    "lang": "bqn",
+    "measure": "K1",
+    "sense": "lent",
+    "ratio": {
+     "R1": 2.635791193648752,
+     "mode publi\u00e9": 2.4862135066698796,
+     "R1'": 2.4165529606644727
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ],
+     "mode publi\u00e9": [
+      "petite"
+     ],
+     "R1'": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 12,
+     "mode publi\u00e9": 12,
+     "R1'": 12
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     2.626890259175602,
+     3.557945515860039
+    ]
+   },
+   {
+    "lang": "bqn",
+    "measure": "Q6",
+    "sense": "rapide",
+    "ratio": {
+     "R1": 0.28735091122446943,
+     "mode publi\u00e9": 0.3044646540729651,
+     "R1'": 0.31938068249328627
+    },
+    "sizes": {
+     "R1": [
+      "petite"
+     ],
+     "mode publi\u00e9": [
+      "petite"
+     ],
+     "R1'": [
+      "petite"
+     ]
+    },
+    "cause": {
+     "R1": 16,
+     "mode publi\u00e9": 16,
+     "R1'": 16
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     2.626890259175602,
+     3.557945515860039
+    ]
+   },
+   {
+    "lang": "bqn",
+    "measure": "Q1",
+    "sense": "lent",
+    "ratio": {
+     "R1": 2.1467177794214463,
+     "mode publi\u00e9": 2.4252479731349394,
+     "R1'": 2.6222679240198232
+    },
+    "sizes": {
+     "R1": [
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "grande"
+     ],
+     "R1'": [
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 12,
+     "mode publi\u00e9": 12,
+     "R1'": 12
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     2.626890259175602,
+     3.557945515860039
+    ]
+   },
+   {
+    "lang": "bqn",
+    "measure": "K8",
+    "sense": "lent",
+    "ratio": {
+     "R1": 2.232030734729993,
+     "mode publi\u00e9": 2.4398454272848866,
+     "R1'": 2.5141111433354024
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 12,
+     "mode publi\u00e9": 12,
+     "R1'": 12
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     2.626890259175602,
+     3.557945515860039
+    ]
+   },
+   {
+    "lang": "bqn",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 5.592392554539292,
+     "mode publi\u00e9": 5.741322147752796,
+     "R1'": 6.023833082025209
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 7,
+     "mode publi\u00e9": 7,
+     "R1'": 7
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     2.626890259175602,
+     3.557945515860039
+    ]
+   },
+   {
+    "lang": "php",
+    "measure": "K1",
+    "sense": "lent",
+    "ratio": {
+     "R1": 4.280886108167251,
+     "mode publi\u00e9": 3.6492134846383584,
+     "R1'": 3.4827715158605326
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 12,
+     "mode publi\u00e9": 12,
+     "R1'": 12
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     4.788758071536124,
+     6.188379235445453
+    ]
+   },
+   {
+    "lang": "php",
+    "measure": "K4",
+    "sense": "lent",
+    "ratio": {
+     "R1": 21.14826015312624,
+     "mode publi\u00e9": 18.28135778695239,
+     "R1'": 17.440357544445437
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 7,
+     "mode publi\u00e9": 7,
+     "R1'": 7
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     4.788758071536124,
+     6.188379235445453
+    ]
+   },
+   {
+    "lang": "php",
+    "measure": "K9",
+    "sense": "lent",
+    "ratio": {
+     "R1": 30.61627619690735,
+     "mode publi\u00e9": 29.584307311331393,
+     "R1'": 30.511092797825086
+    },
+    "sizes": {
+     "R1": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "mode publi\u00e9": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ],
+     "R1'": [
+      "petite",
+      "publi\u00e9e",
+      "grande"
+     ]
+    },
+    "cause": {
+     "R1": 7,
+     "mode publi\u00e9": 7,
+     "R1'": 7
+    },
+    "status": "attribu\u00e9e",
+    "level": [
+     4.788758071536124,
+     6.188379235445453
+    ]
+   }
+  ],
+  "counts": {
+   "\u00e9tablie": 31,
+   "attribu\u00e9e": 28,
+   "\u00e0 corriger": 1,
+   "\u00e0 examiner": 0
+  },
+  "unexplained": [],
+  "stale": []
+ },
  "gcc": {
   "records": 420,
   "cpu_models": {

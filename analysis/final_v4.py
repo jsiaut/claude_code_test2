@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v5.2).
+"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v5.3).
 
 Méthode : docs/METHOD.md ; plans fixés avant les calculs : docs/V4_FINAL.md, section 8 (campagne finale de la v4),
 docs/V4_1.md (corrections A1 à A4 de l'analyse), docs/V5.md (campagne rejouée : corrections A5 et A6, C par gcc,
@@ -63,6 +63,11 @@ de développement. Les tirages des variantes viennent du même générateur,
 avancé de la même façon pour tous les calculs : ils sont identiques d'un calcul à l'autre. Réplication : la campagne
 précédente, telle qu'elle était publiée et recalculée par cette méthode (comparisons.json de la campagne). Effet de
 machine : les cellules mesurées sur plusieurs machines de la campagne, rapportées à la première.
+
+Lectures du classement (docs/V5_3.md), sans effet sur les scores : « ce qui décide de l'ordre », la part de la variance
+du score au centre que porte chaque pilier, chaque noyau et chaque part de D, dans quatre groupes de langages
+(importance) ; « tri des écarts », chaque cellule du code naturel rapportée à la médiane de quinze pairs, les couples
+signalés et la cause que le registre TRI_CAUSES donne à chacun (triage).
 
 Sorties : results/final/analysis.json, results/report_final.md. Variables : BOOT (2000 rééchantillonnages), UA (20 000
 variantes), FINAL_DIR (répertoire d'une autre campagne), FINAL_RAW (autres données), FINAL_OUT (autre répertoire de
@@ -1338,6 +1343,222 @@ def replication(F, prev, fin, same=None):
     return out
 
 
+# ------------------------------------------------------------------ lectures du classement (docs/V5_3.md)
+# Groupes de tête de « ce qui décide de l'ordre » : rang plausible commençant à n ou mieux.
+HEADS = (("première moitié possible", 12), ("podium possible", 3))
+# Pairs du tri des écarts : les langages dont la chaîne produit son code machine par LLVM (C par clang, Zig, Odin, Rust,
+# Nim par clang, C3, D par LDC, Julia, Chapel, Mojo, Swift, Haskell par ghc -fllvm) ou par GCC (C++, Ada, Fortran).
+PEERS = ("c", "cpp", "zig", "odin", "rust", "nim", "c3", "d", "ada", "julia", "fortran", "chapel", "mojo", "swift",
+         "haskell")
+TRI_MODES = (("R1", None), ("mode publié", "pub"), ("R1'", "unc"))  # mode du tirage -> argument natural de position()
+TRI_FACTOR = 2.0  # rapport, arrondi au dixième, à partir duquel une cellule est signalée
+TRI_STATUS = ("établie", "attribuée", "à corriger", "à examiner")  # du mieux fondé au moins fondé
+# Registre des causes : statut, cause, contrôle qui la montre, couples « langage mesure sens modes » qu'elle couvre
+# (modes : *, ou parmi R1, pub, R1' séparés par des virgules). Un couple signalé sans cause est « à examiner ».
+TRI_CAUSES = [
+    {"status": "à corriger",
+     "cause": "Go : binaire compilé avec `GOEXPERIMENT=simd` ; sur un processeur AVX-512, la préemption asynchrone de "
+              "go1.27.3 restaure les registres ZMM sans `VZEROUPPER`, et la boucle de K1, qui mêle SSE hérité et FMA "
+              "codées VEX (`GOAMD64=v4`), paie la transition. Erreur de mesure relevée et corrigée par transfert le 2 "
+              "novembre, revenue avec la campagne finale de la v4",
+     "control": "`docs/GO.md` de l'archive (2 et 4.2) ; essai du 27 novembre (`docs/V5_3.md`, 8)",
+     "cells": ["go K1 lent *"]},
+    {"status": "établie",
+     "cause": "clang fusionne par défaut la multiplication et l'addition du produit scalaire en une FMA "
+              "(`-ffp-contract=on`), qui allonge la chaîne de dépendance de la somme",
+     "control": "le même source compilé par gcc prend 0,45 à 0,51 fois le temps de clang (campagne, « C par gcc ») ; "
+                "code machine (`docs/V5_3.md`, 8)",
+     "cells": ["c K5 lent *"]},
+    {"status": "attribuée",
+     "cause": "même facteur deux que le produit scalaire de C : fusion en FMA probable (Chapel `--fast`, Mojo, "
+              "`ghc -mfma`)",
+     "control": "aucun contrôle propre ; `docs/HASKELL.md` de l'archive (2) donne à Haskell le temps de C sur K5",
+     "cells": ["chapel K5 lent pub,R1'", "mojo K5 lent *", "haskell K5 lent *"]},
+    {"status": "établie",
+     "cause": "GCC vectorise la somme conditionnelle d'octets moins bien que LLVM",
+     "control": "le même source C compilé par gcc prend 3,9, 3,6 et 2,5 fois le temps de clang aux trois tailles "
+                "(campagne, « C par gcc »)",
+     "cells": ["cpp K4 lent *", "ada K4 lent *", "fortran K4 lent *"]},
+    {"status": "établie",
+     "cause": "vérifications que R1 ajoute au mode publié (débordement des entiers de `-O safe` pour Zig, `--checks` "
+              "pour Chapel, `-D_GLIBCXX_ASSERTIONS` pour C++, `-Cr -Co` pour FreePascal) : elles empêchent la "
+              "vectorisation",
+     "control": "l'écart disparaît en mode publié ; `docs/V5_1.md`, 2 (Zig) et 9.1 (Chapel)",
+     "cells": ["zig K4 lent R1", "chapel K5 lent R1", "chapel Q6 lent R1", "chapel Q1 lent R1", "chapel K9 lent R1",
+               "cpp K9 lent R1", "fpc K9 lent R1"]},
+    {"status": "établie",
+     "cause": "vérifications du mode publié qu'une option retire : contrôle de falsification des conteneurs d'Ada sur "
+              "K7, bornes d'Ada, de Swift et de Mojo sur leurs tableaux",
+     "control": "l'écart disparaît en R1' ; `docs/V5_1.md`, 9.1 (Ada) ; `docs/SWIFT.md` (2.4) et `docs/MOJO.md` (2) de "
+                "l'archive",
+     "cells": ["ada K7 lent R1,pub", "ada K9 lent R1,pub", "swift K9 lent R1,pub", "mojo Q1 lent R1,pub",
+               "mojo K9 lent R1,pub"]},
+    {"status": "établie",
+     "cause": "somme conditionnelle que les pairs vectorisent et que la chaîne laisse scalaire : pas de vectoriseur de "
+              "boucles dans les passes de Mojo ; un branchement par octet en Swift, avec le piège de débordement de "
+              "`-O` ; pas de vectoriseur automatique pour cette boucle en Go, C#, Java, Haskell, OCaml, JavaScript, "
+              "Lua et Python",
+     "control": "`docs/MOJO.md` (2), `docs/SWIFT.md` (2.4) et `docs/GO.md` (2) de l'archive",
+     "cells": ["mojo K4 lent *", "swift K4 lent *", "haskell K4 lent *", "go K4 lent *", "csharp K4 lent *",
+               "java K4 lent *", "ocaml K4 lent *", "js K4 lent *", "lua K4 lent *", "python K4 lent *"]},
+    {"status": "attribuée",
+     "cause": "boucle que les pairs vectorisent et que la chaîne laisse scalaire, sans relecture qui le consigne : "
+              "somme conditionnelle de FreePascal et de PHP ; stencil de C#, Go, JavaScript, PHP, Python, Lua et BQN ; "
+              "stencil de Mojo une fois ses vérifications retirées",
+     "control": "aucun contrôle propre",
+     "cells": ["fpc K4 lent *", "php K4 lent *", "csharp K9 lent *", "go K9 lent R1'", "js K9 lent *", "php K9 lent *",
+               "python K9 lent *", "lua K9 lent *", "bqn K9 lent *", "mojo K9 lent R1'"]},
+    {"status": "attribuée",
+     "cause": "stencil de Nim sur une `seq` : vérifications de bornes de `-d:release`, et boucle que clang ne "
+              "vectorise pas même sans elles (Nim lui passe `-fno-strict-aliasing`)",
+     "control": "`docs/NIM.md` de l'archive (2), établi pour la forme imbriquée, non refait pour la forme contiguë",
+     "cells": ["nim K9 lent *"]},
+    {"status": "établie",
+     "cause": "ramasse-miettes de D : chaque nœud de K8 est un `new` de classe",
+     "control": "`docs/DLANG.md` de l'archive (2)",
+     "cells": ["d K8 lent *"]},
+    {"status": "attribuée",
+     "cause": "coût d'allocation du type par défaut : comptage de références de la classe de Swift, nœuds de Haskell "
+              "confiés au ramasse-miettes",
+     "control": "aucun contrôle propre ; `docs/SWIFT.md` de l'archive (2.4, point 9) chiffre une part du coût de "
+                "Swift",
+     "cells": ["swift K8 lent pub", "haskell K8 lent pub,R1'"]},
+    {"status": "établie",
+     "cause": "types par défaut de Haskell : liste chaînée pour K1, `Data.IntMap` pour K7 faute de table de hachage "
+              "livrée, tableau immuable `UArray` pour K9",
+     "control": "`docs/NATURAL.md` ; `docs/HASKELL.md` de l'archive (1 et 2)",
+     "cells": ["haskell K1 lent *", "haskell K7 lent *", "haskell K9 lent *"]},
+    {"status": "attribuée",
+     "cause": "types par défaut du langage : enregistrements en références de JavaScript, PHP et Lua et matrice de "
+              "doubles de BQN pour K1 ; `TDictionary` de FreePascal (deux recherches par ligne) et `Hashtbl` d'OCaml "
+              "pour K7 ; idiomes de tableaux de BQN pour Q1 et K8 ; produit scalaire de FreePascal",
+     "control": "`docs/NATURAL.md` décrit ces types ; leur part dans l'écart n'a pas de contrôle propre",
+     "cells": ["js K1 lent *", "php K1 lent *", "lua K1 lent *", "bqn K1 lent *", "fpc K7 lent pub,R1'",
+               "ocaml K7 lent pub,R1'", "bqn Q1 lent *", "bqn K8 lent *", "fpc K5 lent pub"]},
+    {"status": "établie",
+     "cause": "ni C ni Fortran n'ont de table de hachage en bibliothèque standard : leur code naturel est le chaînage "
+              "des manuels, écrit pour le noyau, au nombre de seaux fixé d'avance sur le nombre de clés et haché par "
+              "un modulo ; les tables de bibliothèque des pairs grandissent et hachent plus fort. Avantage que la "
+              "règle du code naturel accepte",
+     "control": "`docs/NATURAL.md` (K7, cas discutables) ; sources de `bench/c` et de `bench/fortran`",
+     "cells": ["c K7 rapide *", "fortran K7 rapide *"]},
+    {"status": "attribuée",
+     "cause": "allocation par un ramasse-miettes générationnel : un nœud de K8 coûte un déplacement de pointeur, "
+              "contre une allocation et une libération chez les pairs",
+     "control": "aucun contrôle propre",
+     "cells": ["java K8 rapide *", "ocaml K8 rapide *"]},
+    {"status": "établie",
+     "cause": "sans vérification de bornes, LLVM vectorise la boucle naturelle de Q6 d'Odin ; celle des autres pairs "
+              "reste scalaire",
+     "control": "campagne, taille publiée : Odin 48,7 ms avec les bornes, 18,4 ms sans, 13,6 ms pour sa forme SIMD ; "
+                "C 40,9 ms",
+     "cells": ["odin Q6 rapide R1'"]},
+    {"status": "attribuée",
+     "cause": "primitives de tableaux de CBQN, vectorisées",
+     "control": "aucun contrôle propre ; `docs/BQN.md` de l'archive",
+     "cells": ["bqn Q6 rapide *"]},
+]
+
+
+def importance(r):
+    """Ce qui décide de l'ordre (docs/V5_3.md, 2) : pour quatre groupes de langages emboîtés, part de la variance du
+    score au centre que porte chaque composante. Piliers et parts de D : cov(apport, score) / var(score), le score au
+    centre étant linéaire en ses piliers et D en ses parts ; noyaux : la part du plafond, répartie au prorata de
+    cov(ln E_k / n, ln E) / var(ln E). r : résumé du calcul « Final »."""
+    kernels = list(E_V2)
+    weights = dict(WEIGHTS, **{k: WEIGHTS["E"] / len(kernels) for k in kernels},
+                   **{q: WEIGHTS["D"] * w for q, w in DW.items()})
+    groups = [(f"les {len(r['order'])} langages", list(r["order"])), ("premier étage", list(r["tiers"][0]))]
+    groups += [(name, [l for l in r["order"] if r["rank90"][l][0] <= n]) for name, n in HEADS]
+    cov = lambda x, y: float(np.mean((x - x.mean()) * (y - y.mean())))  # noqa: E731
+    out = {"weights": weights, "groups": []}
+    for name, g in groups:
+        C, E, D, S = (np.array([r[key][l] for l in g]) for key in ("C", "E", "D", "ms0"))
+        ek = {k: np.array([r["Ek"][l][k] for l in g]) for k in kernels}
+        dq = {q: np.array([r["Dparts"][l][q] for l in g]) for q in DW}
+        lnE = np.log(E)
+        if not (np.allclose(S, WEIGHTS["C"] * C + WEIGHTS["E"] * E + WEIGHTS["D"] * D, atol=1e-9)
+                and np.allclose(D, 100 * sum(w * dq[q] for q, w in DW.items()), atol=1e-9)
+                and np.allclose(lnE, math.log(100) + np.mean([np.log(ek[k]) for k in kernels], axis=0), atol=1e-9)):
+            raise SystemExit("importance : le score au centre n'est pas celui que ses composantes recomposent")
+        v, ve = cov(S, S), cov(lnE, lnE)
+        if len(g) < 3 or v == 0 or ve == 0:
+            continue
+        sh = {x: cov(WEIGHTS[x] * y, S) / v for x, y in (("C", C), ("E", E), ("D", D))}
+        sh.update({k: sh["E"] * cov(np.log(ek[k]) / len(kernels), lnE) / ve for k in kernels})
+        sh.update({q: cov(WEIGHTS["D"] * 100 * w * dq[q], S) / v for q, w in DW.items()})
+        sums = (sh["C"] + sh["E"] + sh["D"] - 1, sum(sh[k] for k in kernels) - sh["E"],
+                sum(sh[q] for q in DW) - sh["D"])
+        if max(abs(x) for x in sums) > 1e-9:
+            raise SystemExit("importance : les parts ne somment pas")
+        out["groups"].append({"name": name, "langs": g, "sd": math.sqrt(v), "shares": sh})
+    return out
+
+
+def triage(F):
+    """Tri des écarts du code naturel (docs/V5_3.md, 3). Cellules : les mesures de D1, aux trois tailles, dans les
+    trois modes du tirage, estimations ponctuelles du score. Rapport d'une cellule : son temps sur la médiane des temps
+    des pairs (PEERS). Niveau d'un langage hors pairs, à une taille et dans un mode : médiane de ses rapports, au moins
+    1 ; d'un pair : 1. Lente : rapport / niveau d'au moins TRI_FACTOR ; rapide : médiane des pairs / temps d'au moins
+    TRI_FACTOR ; les deux arrondis au dixième. Un couple (langage, mesure) est signalé dans un mode s'il l'est à une
+    taille au moins ; chaque mode signalé est rattaché à une cause du registre (TRI_CAUSES), sinon « à examiner »."""
+    names = [{("k6", 0): "Q6", ("k6", 1): "Q1"}.get((k, i), k.upper()) for k, lst in D1_V2.items() for i, ks in lst]
+    keysets = [ks for lst in D1_V2.values() for i, ks in lst]
+    modes = [m for m, nat in TRI_MODES]
+    ratio, level = {}, {}
+    for mode, nat in TRI_MODES:
+        for p in range(3):
+            d = position(F, p, FINAL, {}, nat)[0]
+            for m, ks in zip(names, keysets):
+                t = {l: min(gm(d[l][key]) for key in ks if d[l].get(key)) for l in LANGS
+                     if any(d.get(l, {}).get(key) for key in ks)}
+                ref = float(np.median([t[l] for l in PEERS if l in t]))
+                ratio.update({(mode, p, m, l): x / ref for l, x in t.items()})
+            for l in LANGS:
+                rs = [ratio[(mode, p, m, l)] for m in names if (mode, p, m, l) in ratio]
+                level[(mode, p, l)] = 1.0 if l in PEERS or not rs else max(1.0, float(np.median(rs)))
+    short = {"R1": "R1", "mode publié": "pub", "R1'": "R1'"}
+    covered = {}  # (langage, mesure, sens, mode) -> rang de la cause
+    for n, c in enumerate(TRI_CAUSES):
+        for cell in c["cells"]:
+            l, m, sense, ms = cell.split()
+            for mode in modes:
+                if ms == "*" or short[mode] in ms.split(","):
+                    covered.setdefault((l, m, sense, mode), n)
+    rows, used = [], set()
+    for l in LANGS:
+        for m in names:
+            for sense in ("lent", "rapide"):
+                vals, sizes = {}, {}
+                for mode in modes:
+                    ps = [p for p in range(3) if (mode, p, m, l) in ratio]
+                    if not ps:
+                        continue
+                    if sense == "lent":
+                        xs = [ratio[(mode, p, m, l)] / level[(mode, p, l)] for p in ps]
+                        vals[mode], hit = max(xs), [round(x, 1) >= TRI_FACTOR for x in xs]
+                    else:
+                        xs = [ratio[(mode, p, m, l)] for p in ps]
+                        vals[mode], hit = min(xs), [round(1 / x, 1) >= TRI_FACTOR for x in xs]
+                    if any(hit):
+                        sizes[mode] = [POS_NAMES[p] for p, h in zip(ps, hit) if h]
+                if not sizes:
+                    continue
+                cause = {mode: covered.get((l, m, sense, mode)) for mode in sizes}
+                used.update((l, m, sense, mode) for mode in sizes)
+                st = [TRI_STATUS[-1] if n is None else TRI_CAUSES[n]["status"] for n in cause.values()]
+                lv = [level[(mode, p, l)] for mode in modes for p in range(3)]
+                rows.append({"lang": l, "measure": m, "sense": sense, "ratio": vals, "sizes": sizes, "cause": cause,
+                             "status": max(st, key=TRI_STATUS.index), "level": [min(lv), max(lv)]})
+    seen = {k[:3] for k in used}
+    stale = sorted({" ".join(k[:3]) for k in covered if k[:3] not in seen})  # entrées du registre sans couple signalé
+    return {"peers": list(PEERS), "factor": TRI_FACTOR,
+            "causes": [{k: c[k] for k in ("status", "cause", "control")} for c in TRI_CAUSES], "rows": rows,
+            "counts": {s: sum(r["status"] == s for r in rows) for s in TRI_STATUS},
+            "unexplained": [f"{r['lang']} {r['measure']} {r['sense']} {mode}" for r in rows
+                            for mode, n in r["cause"].items() if n is None], "stale": stale}
+
+
 def main():
     if len(sys.argv) == 4 and sys.argv[1] in ("--extract", "--extract-same"):  # <option> <fichier> <note>
         return extract(sys.argv[2], sys.argv[3], "previous" if sys.argv[1] == "--extract" else "previous_same_method")
@@ -1405,7 +1626,8 @@ def main():
            "block_effects": {f"{k}|{s}": v for (k, s), v in sorted(F.blocks.items())},
            "machine_effect": machine_effect(F),
            "retained": retained(F, fc), "spread": spread(F), "failures": F.failures, "skipped": F.skipped,
-           "steal_over_5pct": F.steal, "cpu_models": {m: dict(ps) for m, ps in F.models.items()}}
+           "steal_over_5pct": F.steal, "cpu_models": {m: dict(ps) for m, ps in F.models.items()},
+           "importance": importance(res[FINAL]), "triage": triage(F)}
     if F.gcc:
         out["gcc"] = gcc
     if dev:
@@ -1436,11 +1658,12 @@ def report(o, calcs):
     f = R[FINAL]
     zd = o.get("zig_dev")  # Zig par sa version de développement : astérisque, et « Zig 0.17 » pour la réplication
     star = lambda l: NAMES[l] + ("*" if zd and l == DEV_LANG else "")
-    L = ["# v5.2 : le classement — résultats", "",
+    L = ["# v5.3 : le classement — résultats", "",
          "*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse), `docs/V5.md` "
          "(campagne rejouée, corrections A5 et A6), `docs/V5_1.md` (A7 et A8 : mode du code naturel tiré au sort) et "
          "`docs/V5_2.md` (Zig par sa version de développement), fixés "
-         "avant les mesures ou avant leur analyse. Généré par "
+         "avant les mesures ou avant leur analyse ; `docs/V5_3.md` (ce qui décide de l'ordre, tri des écarts : deux "
+         "lectures, le classement est celui de la v5.2). Généré par "
          "`analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes "
          "(`results/converge/forms.json`).*", "",
          f"Machines : {', '.join(o['machines'])} ; b3 de référence (le plus lent des 16 décalages, A2) : "
@@ -1578,6 +1801,75 @@ def report(o, calcs):
         L += ["", "D1 : code naturel sous R1 (le centre) ; « D1, mode publié » : dans le mode publié de chaque chaîne "
               "(centre de « Sans R1 ») ; « D1, R1' » : sans les vérifications qu'une option retire (centre de « R1' au "
               "lieu de R1 »). Les variantes de « Final » tirent l'un des trois (A7, A8)."]
+    imp, tr = o.get("importance"), o.get("triage")
+    if imp and imp["groups"]:  # ce qui décide de l'ordre (docs/V5_3.md, 2)
+        gs, w = imp["groups"], imp["weights"]
+        L += ["", "## Ce qui décide de l'ordre (« Final », au centre)", "",
+              "Part de la variance du score au centre que porte chaque composante, parmi les langages d'un groupe "
+              "(`docs/V5_3.md`, 2) : covariance de son apport au score avec le score, divisée par la variance du "
+              "score. "
+              "Les trois piliers somment à 100 % ; les noyaux se partagent la part du plafond, D1 à D4 celle du code "
+              "par défaut. Une part négative : la composante joue, dans ce groupe, contre l'ordre du score. Le poids "
+              "affiché est celui de la composante dans le score.", "",
+              "| Composante | Poids affiché | " + " | ".join(f"{g['name']} ({len(g['langs'])})" for g in gs) + " |",
+              "|---|---|" + "---|" * len(gs)]
+        comps = ([("Contrôle (grille)", "C", 0), ("Plafond", "E", 0)] + [(k.upper(), k, 1) for k in E_V2]
+                 + [("Code par défaut", "D", 0), ("D1, code naturel", "D1", 1), ("D2, coût de structure", "D2", 1),
+                    ("D3, queues de latence", "D3", 1), ("D4, hiérarchie mémoire", "D4", 1)])
+        for name, key, dec in comps:  # piliers en gras, sans décimale ; leurs composantes à une décimale
+            b = "" if dec else "**"
+            L.append(f"| {b}{name}{b} | {100 * w[key]:.{2 if key in ('D2', 'D3') else dec}f} % | "
+                     + " | ".join(f"{b}{round(100 * g['shares'][key], dec) + 0.0:.{dec}f} %{b}" for g in gs) + " |")
+        L += ["", "Écart-type du score au centre dans chaque groupe : "
+              + ", ".join(f"{g['sd']:.1f} ({g['name']})" for g in gs) + ". "
+              + " ".join(f"{g['name'].capitalize()} : {', '.join(star(l) for l in g['langs'])}." for g in gs[1:])
+              + " « Première moitié possible » et « podium possible » : rang plausible commençant à "
+              + " et à ".join(str(n) for name, n in HEADS) + " ou mieux."]
+    if tr:  # tri des écarts du code naturel (docs/V5_3.md, 3)
+        rows = sorted(tr["rows"], key=lambda x: (f["order"].index(x["lang"]), x["sense"]))
+        modes = [m for m, nat in TRI_MODES]
+        cn = lambda x: ", ".join(dict.fromkeys("?" if n is None else str(n + 1) for n in x["cause"].values()))  # noqa
+        L += ["", "## Tri des écarts du code naturel", "",
+              f"Règle (`docs/V5_3.md`, 3) : pour chaque mesure du code naturel, à chaque taille et dans chaque mode du "
+              f"tirage, le temps d'un langage est rapporté à la médiane des temps de {len(tr['peers'])} pairs, les "
+              "langages dont la chaîne produit son code machine par LLVM ou par GCC ("
+              + ", ".join(NAMES[l] for l in f["order"] if l in tr["peers"]) + "). Pour les autres langages, ce rapport "
+              "est divisé par leur niveau : la médiane de leurs rapports à cette taille et dans ce mode, au moins 1. "
+              f"Une cellule est lente à partir de {tr['factor']:.1f} (arrondi au dixième), rapide quand elle est au "
+              f"moins {tr['factor']:.1f} fois plus rapide que la médiane des pairs ; un couple (langage, mesure) est "
+              "signalé dans un mode s'il l'est à une taille au moins. Chaque couple signalé est rattaché à une cause : "
+              "« établie » (un contrôle nommé la montre), « attribuée » (cause probable, sans contrôle propre), « à "
+              "corriger » (cellule faussée par l'étude, correction à planifier) ou « à examiner » (aucune cause).", "",
+              f"{len(rows)} couples signalés : "
+              + ", ".join(f"{n} dont la cause est {s}" if s in TRI_STATUS[:2] else f"{n} {s}"
+                          for s, n in tr["counts"].items()) + "."]
+        if tr["causes"]:
+            L += ["", "| n° | Statut | Cause | Contrôle | Couples |", "|---|---|---|---|---|"]
+            for n, c in enumerate(tr["causes"]):
+                cells = []
+                for x in rows:
+                    ms = [m for m in modes if x["cause"].get(m, -1) == n]
+                    if ms:
+                        cells.append(f"{star(x['lang'])} {x['measure']}"
+                                     + ("" if len(ms) == len(x["cause"]) else f" ({', '.join(ms)})"))
+                L.append(f"| {n + 1} | {c['status']} | {c['cause']} | {c['control']} | {', '.join(cells) or '–'} |")
+        L += ["", "| Langage | Mesure | Sens | " + " | ".join(m.capitalize() for m in modes)
+              + " | Niveau | Cause | Statut |",
+              "|---|---|---|" + "---|" * (len(modes) + 3)]
+        for x in rows:
+            vals = []
+            for m in modes:
+                v = x["ratio"].get(m)
+                s = "–" if v is None else (f"{v:.1f}" if x["sense"] == "lent" else f"{v:.2f}")
+                vals.append(f"**{s}**" if m in x["sizes"] else s)
+            lv = "1" if x["lang"] in tr["peers"] else f"{x['level'][0]:.1f} à {x['level'][1]:.1f}"
+            L.append(f"| {star(x['lang'])} | {x['measure']} | {x['sense']} | " + " | ".join(vals)
+                     + f" | {lv} | {cn(x)} | {x['status']} |")
+        L += ["", "Chaque case : le rapport le plus extrême des trois tailles (lent : rapport au niveau du langage, le "
+              "plus grand ; rapide : rapport à la médiane des pairs, le plus petit), en gras dans les modes où le "
+              "couple est signalé. Niveau : 1 pour un pair ; pour les autres, étendue sur les tailles et les modes."]
+        if tr["stale"]:
+            L += ["", "Entrées du registre sans couple signalé : " + ", ".join(tr["stale"]) + "."]
     L += ["", "## Forme retenue par « Final », cellule par cellule et taille par taille (estimation ponctuelle)", "",
           "Chaque case : forme retenue aux tailles petite / publiée / grande (« pub » : une variante publiée) ; rapport "
           "de son temps à la meilleure forme publiée, à la taille publiée.", "",
