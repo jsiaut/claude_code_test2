@@ -105,3 +105,7 @@
 2026-11-27T15:30:24 passe 1 groupe 20/23 k8:large : 14 processus, 137 s
 2026-11-27T15:40:10 passe 1 groupe 21/23 k7:large : 6 processus, 582 s
 2026-11-27T15:41:05 passe 1 groupe 22/23 k6:pub : 20 processus, 52 s
+2026-11-27T15:41:07 passe 2 : 23 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-27T15:41:12 b3 avant le groupe K3 (passe 2, machine 40) : 66.30 et 63.05 ms
+2026-11-27T15:41:31 b3 après le groupe K3 (passe 2, machine 40) : 65.25 et 68.50 ms
+2026-11-27T15:41:31 passe 2 groupe 2/23 k3:pub : 4 processus, 18 s
