@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v5.3).
+"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v5.4).
 
 Méthode : docs/METHOD.md ; plans fixés avant les calculs : docs/V4_FINAL.md, section 8 (campagne finale de la v4),
 docs/V4_1.md (corrections A1 à A4 de l'analyse), docs/V5.md (campagne rejouée : corrections A5 et A6, C par gcc,
-réplication), docs/V5_1.md (A7 et A8 : mode du code naturel tiré au sort) et docs/V5_2.md (Zig par sa version de
-développement). Ce module est autonome : il lit les mesures de la campagne (results/final/raw,
-tools/final/campaign.py), la remesure de Zig (results/zig_dev/raw), b3 (results/final/b3.jsonl), les bornes physiques
+réplication), docs/V5_1.md (A7 et A8 : mode du code naturel tiré au sort), docs/V5_2.md (Zig par sa version de
+développement) et docs/V5_4.md (Go mesuré hors de l'expérience simd). Ce module est autonome : il lit les mesures de
+la campagne (results/final/raw, tools/final/campaign.py), les remesures de Zig (results/zig_dev/raw) et de Go
+(results/go_std/raw), b3 (results/final/b3.jsonl), les bornes physiques
 des machines qui ont mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json), l'empreinte
 de K1 (results/footprint.json) et la grille de contrôle (analysis/capabilities.py, analysis/capabilities_v2.py ; la
 vectorisation mesurée de results/vectorization.json ne sert qu'à la règle v1, dans les calculs sans A1).
@@ -55,13 +56,25 @@ Calcul « Final » (docs/V4_FINAL.md, 8 ; docs/V4_1.md, 3) :
   mesures. Les latences de K8 naturel restent celles de la campagne (docs/V5_2.md, 8 : leurs rapports ne se
   distinguent pas du bruit). « Zig 0.17 » : le même calcul avec les cellules de la campagne ; FINAL_ZIG17=1 : sans
   l'exception.
+* Go (docs/V5_4.md) : la campagne a mesuré tout son banc dans un binaire compilé avec GOEXPERIMENT=simd, où la
+  préemption asynchrone de Go 1.27 fausse les boucles qui mêlent SSE et VEX. Quinze cellules de K1 en sont faussées
+  d'un facteur 40 ou plus (K1 naturel et naturel permuté dans ses deux modes, K1 AoS, aux trois tailles). Go est
+  remesuré hors campagne dans sa configuration corrigée (ces variantes dans un binaire standard), à côté de C. Chaque
+  cellule faussée abandonne ses temps de la campagne : elle prend les processus d'une cellule de C dans la campagne
+  (K1 naturel, ou K1 naturel permuté), multipliés par le rapport apparié (même passe) du temps de Go au temps de cette
+  cellule de C ; ce rapport est rééchantillonné avec les mesures. Les autres cellules de Go ne changent pas, K7
+  naturel à la grande taille compris, que le même artefact ralentit plus faiblement (docs/V5_4.md, 9). « Go de la
+  campagne » : le même calcul sans cette correction ; « Go, toutes les cellules » : les autres cellules ramenées
+  elles aussi, par le binaire de la campagne pris pour témoin ; FINAL_GOSIMD=1 : sans la correction. « Campagne telle
+  que mesurée » : ni l'exception de Zig ni la correction de Go.
 Sensibilités (CALCS) : Base, trois tailles ; sans les tailles, sans R1, sans R2, sans C1, sans R4 ; R1' au lieu de R1 ;
 une taille à la fois ; sélection indépendante ; D3 et D4 sur trois processus ; sur les seules mesures ; sans une
 correction à la fois (Sans A1 à Sans A8) ; « Méthode du 23 novembre », sans aucune et classée au rang moyen ; « C par
 gcc », quand la campagne porte les constructions de C par gcc ; « Zig 0.17 », quand Zig est remesuré par sa version
-de développement. Les tirages des variantes viennent du même générateur,
+de développement ; « Go de la campagne », quand Go est remesuré. Les tirages des variantes viennent du même générateur,
 avancé de la même façon pour tous les calculs : ils sont identiques d'un calcul à l'autre. Réplication : la campagne
-précédente, telle qu'elle était publiée et recalculée par cette méthode (comparisons.json de la campagne). Effet de
+précédente, telle qu'elle était publiée et recalculée par cette méthode (comparisons.json de la campagne), comparée
+à la campagne telle que mesurée. Effet de
 machine : les cellules mesurées sur plusieurs machines de la campagne, rapportées à la première.
 
 Lectures du classement (docs/V5_3.md), sans effet sur les scores : « ce qui décide de l'ordre », la part de la variance
@@ -71,7 +84,8 @@ signalés et la cause que le registre TRI_CAUSES donne à chacun (triage).
 
 Sorties : results/final/analysis.json, results/report_final.md. Variables : BOOT (2000 rééchantillonnages), UA (20 000
 variantes), FINAL_DIR (répertoire d'une autre campagne), FINAL_RAW (autres données), FINAL_OUT (autre répertoire de
-sortie), FINAL_ZIG17 (sans l'exception de Zig). « --extract <fichier> <note> » et « --extract-same <fichier> <note> » :
+sortie), FINAL_ZIG17 (sans l'exception de Zig), FINAL_GOSIMD (sans la correction de Go). « --extract <fichier> <note> »
+et « --extract-same <fichier> <note> » :
 extraits du calcul déjà écrit, pour la réplication d'une campagne suivante (classement publié ; recalcul par la méthode
 de la suivante). Contrôle : tools/check.sh."""
 import copy, glob, importlib.util, json, math, os, re, sys, zlib
@@ -181,6 +195,17 @@ DEV_SEED = SEED + 4600  # rééchantillonnage du rapport au témoin : un génér
 ZIG17 = "Zig 0.17"  # « Final » avec les cellules de Zig de la campagne, mesurées par sa version stable
 ZIGV = "Zig 0.18, K4 et K9 seuls"  # « Final » où seules les cellules de K4 et de K9 de Zig sont ramenées par le témoin
 ZIGL = "Zig 0.18, latences du plan"  # « Final » où les latences de K8 naturel de Zig sont ramenées elles aussi
+# Go hors de l'expérience simd (docs/V5_4.md) : remesure à côté de la campagne, avec le binaire de la campagne pour
+# témoin et le C pour pont des cellules que la préemption asynchrone faussait
+GO_LANG = "go"
+GO_DIR = os.path.join(os.path.dirname(FIN), "go_std")
+GO_VIEW = {"wit": "pub", "wit_cv": "cv", "wit_unc": "unc", "wit_cv_unc": "cv_unc"}  # témoin -> étiquette de la campagne
+GO_SEED = SEED + 4700  # rééchantillonnage du rapport au pont (ou au témoin) : un générateur par cellule
+GO_BRIDGE = ("c", "pub")  # pont : langage et étiquette de ses cellules
+GO_FIXED = {K1N: K1N, K1S: K1S, ("k1", "aos", "energy"): K1N}  # cellule faussée de Go -> cellule du pont
+GOC = "Go de la campagne"  # « Final » sans la correction de Go : le classement de la v5.2 et de la v5.3
+GOALL = "Go, toutes les cellules"  # « Final » où les autres cellules de Go sont ramenées par leur propre témoin
+MEAS = "Campagne telle que mesurée"  # ni exception de Zig ni correction de Go : le classement du 26 novembre à 17 h
 
 
 def corrections(calc):
@@ -255,7 +280,7 @@ def c_vector(cdict, langs):
 class Proc(list):
     """Un processus retenu : [médiane de ses répétitions]. Attributs : ps (passe), cp (copie), machine, boot
     (démarrage), b (effet commun de son groupe dans sa passe, en logarithme : A5, block_effects), dev (cellule de Zig
-    ramenée à la campagne : graine et rapports appariés au témoin, apply_dev)."""
+    ou de Go ramenée à la campagne : graine et rapports appariés au témoin ou au pont, apply_dev et apply_go)."""
     ps, cp, machine, boot, b, dev = None, 0, None, None, 0.0, None
 
     def like(self, value):
@@ -430,6 +455,114 @@ def dev_summary(dev, F17):
             "lat": {"|".join(tag): [float(x) for x in v] for tag, v in sorted(dev["lat"].items())},
             "witness_vs_campaign": {"median": float(np.median(w)), "min": float(min(w)), "max": float(max(w)),
                                     "within_10pct": float(np.mean([abs(math.log(x)) <= math.log(1.10) for x in w]))}}
+
+
+def go_ratios():
+    """Remesure de Go hors de l'expérience simd (docs/V5_4.md, 3), si la campagne en a une. Trois côtés, mesurés dans
+    les mêmes groupes : Go dans sa nouvelle configuration (étiquettes de la campagne), son témoin, le binaire de la
+    campagne (étiquettes de GO_VIEW), et le pont, C (GO_BRIDGE), pour les cellules faussées (GO_FIXED). Pour chaque
+    cellule (étiquette, taille, clé) de Go : logs, les logarithmes des rapports appariés (même passe, même copie) de
+    la nouvelle configuration au témoin ; pour chaque cellule faussée : fixed, ceux de la nouvelle configuration à la
+    cellule du pont. Un processus compte s'il est retenu au sens de load. Sans remesure, ou sous FINAL_GOSIMD : None."""
+    raw = os.path.join(GO_DIR, "raw")
+    if os.environ.get("FINAL_GOSIMD") or not os.path.exists(os.path.join(raw, GO_LANG + ".jsonl")):
+        return None
+    t, c = defaultdict(lambda: ({}, {})), defaultdict(dict)
+    machines, invalid, n = set(), [], [0, 0, 0]  # processus retenus : témoin, nouvelle configuration, pont
+    for lang in (GO_LANG, GO_BRIDGE[0]):
+        path = os.path.join(raw, lang + ".jsonl")
+        for line in (open(path) if os.path.exists(path) else ()):
+            r = json.loads(line)
+            key = (r["kernel"], r["variant"], r["param"])
+            if lang != GO_LANG and (r["construction"] != GO_BRIDGE[1] or key not in GO_FIXED.values()):
+                continue
+            ok = (not r.get("skipped") and r.get("returncode") == 0 and not r.get("oom") and not r.get("timeout")
+                  and r.get("n", 0) > 0 and r.get("oks") == ["True"])
+            if not ok:
+                invalid.append([lang, r["construction"], r["size"], "|".join(key), r.get("pass")])
+                continue
+            machines.add(r.get("machine"))
+            pc = (r["pass"], r.get("copy", 0))
+            if lang != GO_LANG:
+                n[2] += 1
+                c[(r["size"], key)][pc] = r["median"]
+            else:
+                side = int(r["construction"] not in GO_VIEW)  # 0 : témoin, 1 : nouvelle configuration
+                n[side] += 1
+                t[(GO_VIEW.get(r["construction"], r["construction"]), r["size"], key)][side][pc] = r["median"]
+    logs, witness, fixed = {}, {}, {}
+    for cell, (w, d) in t.items():
+        pairs = sorted(set(w) & set(d))
+        if pairs:
+            logs[cell] = np.array([math.log(d[k] / w[k]) for k in pairs])
+            witness[cell] = math.exp(float(np.mean([math.log(w[k]) for k in pairs])))
+        b = c.get((cell[1], GO_FIXED.get(cell[2])), {})
+        pairs = sorted(set(b) & set(d))
+        if pairs:
+            fixed[cell] = np.array([math.log(d[k] / b[k]) for k in pairs])
+    return {"logs": logs, "witness": witness, "fixed": fixed, "machines": sorted(m for m in machines if m is not None),
+            "invalid": invalid, "processes": n}
+
+
+def apply_go(F, go, Fm, all_cells=False):
+    """Cellules de Go corrigées (docs/V5_4.md, 3.3). Une cellule faussée (GO_FIXED) abandonne ses temps de la
+    campagne : elle prend les processus de la cellule du pont dans la campagne telle que mesurée (Fm), chacun
+    multiplié par le rapport de la cellule au pont (moyenne géométrique de ses rapports appariés), et garde ces
+    rapports, que dev_noise rééchantillonne. all_cells : chaque autre cellule de Go est en plus ramenée par son propre
+    témoin, comme celles de Zig. Renvoie les cellules faussées restées sans rapport : elles gardent leurs temps de la
+    campagne."""
+    absent = []
+    for (cons, size), dl in F.data.items():
+        keys = dl.get(GO_LANG, {})
+        for key in sorted(keys):
+            cell = (cons, size, key)
+            if key in GO_FIXED:
+                logs, base = go["fixed"].get(cell), Fm.procs(GO_BRIDGE[1], size, GO_BRIDGE[0], GO_FIXED[key])
+                if logs is None or not base:
+                    absent.append([cons, size, "|".join(key)])
+                    continue
+            elif all_cells and cell in go["logs"]:
+                logs, base = go["logs"][cell], keys[key]
+            else:
+                continue
+            rho, seed = math.exp(float(logs.mean())), [GO_SEED, zlib.crc32("|".join((cons, size) + key).encode())]
+            keys[key] = [q.like(q[0] * rho) for q in base]
+            for q in keys[key]:
+                q.dev = (seed, logs)
+    return absent
+
+
+def go_summary(go, Fm, F):
+    """Remesure de Go, pour le rapport : machines, processus retenus ; pour chaque cellule faussée, son rapport au
+    pont, ses paires, l'écart type de leurs logarithmes, son temps de la campagne et son temps corrigé, et l'artefact,
+    rapport apparié du témoin à la nouvelle configuration (moyenne géométrique et plus petit des rapports) ; pour
+    chaque autre cellule, son rapport au témoin ; pour toutes, le rapport du témoin à ses temps de la campagne. Fm :
+    la campagne telle que mesurée ; F : avec la correction."""
+    sd = lambda x: float(x.std(ddof=1)) if len(x) > 1 else 0.0  # noqa: E731
+    fixed, cells = {}, {}
+    for (cons, size, key), logs in sorted(go["fixed"].items()):
+        camp, new = Fm.procs(cons, size, GO_LANG, key), F.procs(cons, size, GO_LANG, key)
+        own = go["logs"].get((cons, size, key))
+        fixed["|".join((cons, size) + key)] = {
+            "rho": math.exp(float(logs.mean())), "pairs": len(logs), "sd": sd(logs),
+            "campaign": gm(camp) if camp else None, "corrected": gm(new) if new else None,
+            "artifact": None if own is None else math.exp(-float(own.mean())),
+            "artifact_min": None if own is None else math.exp(-float(own.max())),
+            "witness_vs_campaign": go["witness"][(cons, size, key)] / gm(camp) if camp and own is not None else None}
+    for (cons, size, key), logs in sorted(go["logs"].items()):
+        if key in GO_FIXED:
+            continue
+        camp = Fm.procs(cons, size, GO_LANG, key)
+        cells["|".join((cons, size) + key)] = {
+            "rho": math.exp(float(logs.mean())), "pairs": len(logs), "sd": sd(logs),
+            "witness_vs_campaign": go["witness"][(cons, size, key)] / gm(camp) if camp else None}
+    rho = [x["rho"] for x in cells.values()]
+    w = [x["witness_vs_campaign"] for x in cells.values() if x["witness_vs_campaign"]]
+    stat = lambda v: {"median": float(np.median(v)), "min": float(min(v)), "max": float(max(v)),  # noqa: E731
+                      "within_10pct": float(np.mean([abs(math.log(x)) <= math.log(1.10) for x in v]))} if v else None
+    return {"machines": go["machines"], "processes": go["processes"], "invalid": go["invalid"], "absent": go["absent"],
+            "fixed": fixed, "cells": cells, "rho": stat(rho), "witness_vs_campaign": stat(w),
+            "outside": sorted(k for k, x in cells.items() if not 0.8 <= x["rho"] <= 1.25)}
 
 
 def block_effects(data):
@@ -1356,13 +1489,6 @@ TRI_STATUS = ("établie", "attribuée", "à corriger", "à examiner")  # du mieu
 # Registre des causes : statut, cause, contrôle qui la montre, couples « langage mesure sens modes » qu'elle couvre
 # (modes : *, ou parmi R1, pub, R1' séparés par des virgules). Un couple signalé sans cause est « à examiner ».
 TRI_CAUSES = [
-    {"status": "à corriger",
-     "cause": "Go : binaire compilé avec `GOEXPERIMENT=simd` ; sur un processeur AVX-512, la préemption asynchrone de "
-              "go1.27.3 restaure les registres ZMM sans `VZEROUPPER`, et la boucle de K1, qui mêle SSE hérité et FMA "
-              "codées VEX (`GOAMD64=v4`), paie la transition. Erreur de mesure relevée et corrigée par transfert le 2 "
-              "novembre, revenue avec la campagne finale de la v4",
-     "control": "`docs/GO.md` de l'archive (2 et 4.2) ; essai du 27 novembre (`docs/V5_3.md`, 8)",
-     "cells": ["go K1 lent *"]},
     {"status": "établie",
      "cause": "clang fusionne par défaut la multiplication et l'addition du produit scalaire en une FMA "
               "(`-ffp-contract=on`), qui allonge la chaîne de dépendance de la somme",
@@ -1388,11 +1514,11 @@ TRI_CAUSES = [
                "cpp K9 lent R1", "fpc K9 lent R1"]},
     {"status": "établie",
      "cause": "vérifications du mode publié qu'une option retire : contrôle de falsification des conteneurs d'Ada sur "
-              "K7, bornes d'Ada, de Swift et de Mojo sur leurs tableaux",
+              "K7, bornes d'Ada, de Swift et de Mojo sur leurs tableaux, bornes de Go sur les colonnes de Q6",
      "control": "l'écart disparaît en R1' ; `docs/V5_1.md`, 9.1 (Ada) ; `docs/SWIFT.md` (2.4) et `docs/MOJO.md` (2) de "
-                "l'archive",
+                "l'archive ; Go : Q6 naturel prend 2,1 à 2,6 fois son temps sans elles (campagne, `-gcflags=-B`)",
      "cells": ["ada K7 lent R1,pub", "ada K9 lent R1,pub", "swift K9 lent R1,pub", "mojo Q1 lent R1,pub",
-               "mojo K9 lent R1,pub"]},
+               "mojo K9 lent R1,pub", "go Q6 lent R1,pub"]},
     {"status": "établie",
      "cause": "somme conditionnelle que les pairs vectorisent et que la chaîne laisse scalaire : pas de vectoriseur de "
               "boucles dans les passes de Mojo ; un branchement par octet en Swift, avec le piège de débordement de "
@@ -1406,7 +1532,7 @@ TRI_CAUSES = [
               "somme conditionnelle de FreePascal et de PHP ; stencil de C#, Go, JavaScript, PHP, Python, Lua et BQN ; "
               "stencil de Mojo une fois ses vérifications retirées",
      "control": "aucun contrôle propre",
-     "cells": ["fpc K4 lent *", "php K4 lent *", "csharp K9 lent *", "go K9 lent R1'", "js K9 lent *", "php K9 lent *",
+     "cells": ["fpc K4 lent *", "php K4 lent *", "csharp K9 lent *", "go K9 lent *", "js K9 lent *", "php K9 lent *",
                "python K9 lent *", "lua K9 lent *", "bqn K9 lent *", "mojo K9 lent R1'"]},
     {"status": "attribuée",
      "cause": "stencil de Nim sur une `seq` : vérifications de bornes de `-d:release`, et boucle que clang ne "
@@ -1562,13 +1688,28 @@ def triage(F):
 def main():
     if len(sys.argv) == 4 and sys.argv[1] in ("--extract", "--extract-same"):  # <option> <fichier> <note>
         return extract(sys.argv[2], sys.argv[3], "previous" if sys.argv[1] == "--extract" else "previous_same_method")
-    F = load()
+    Fm = F = load()  # Fm : la campagne telle que mesurée
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
-    dev, F17, c3_17 = dev_ratios(), None, c3
-    if dev:  # Zig par sa version de développement (docs/V5_2.md) : cellules ramenées à la campagne par le témoin
-        F17, F = F, load()
-        dev["absent"] = apply_dev(F, dev)
+    dev, go, c3_17 = dev_ratios(), go_ratios(), c3
+
+    def data(zig=True, golang=True, view=None, **kw):
+        """Mesures d'un calcul : la campagne, avec ou sans chacune de ses remesures (Zig ramené par son témoin : docs/
+        V5_2.md ; cellules faussées de Go rebâties par le pont : docs/V5_4.md). kw : only et lat pour Zig (apply_dev),
+        all_cells pour Go (apply_go)."""
+        Fx, absent = load(view), {}
+        if zig and dev:
+            absent[DEV_LANG] = apply_dev(Fx, dev, **{k: v for k, v in kw.items() if k in ("only", "lat")})
+        if golang and go:
+            absent[GO_LANG] = apply_go(Fx, go, Fm, **{k: v for k, v in kw.items() if k == "all_cells"})
+        return Fx, absent
+
+    if dev or go:
+        F, absent = data()
+        for x, lang in ((dev, DEV_LANG), (go, GO_LANG)):
+            if x:
+                x["absent"] = absent[lang]
+    if dev:
         c3 = dict(c3, **{DEV_LANG: c3[DEV_LANG + "_master"]})  # règle v1 : vectorisation mesurée sous cette version
     hw, machines = machines_hw(F)
     ebs = [ebounds(hw, p) for p in range(3)]
@@ -1580,7 +1721,15 @@ def main():
         b3[stat] = (ref, k3_normalized(F, ref, groups), groups)
     fc = forms_cells(LANGS)
     keys = campaign_keys({k: v for k, v in F.data.items() if k[0] == "pub"})
-    Fh = F17 or F  # avance du générateur principal : la base de la campagne, taille publiée
+    Fh = Fm  # avance du générateur principal : la base de la campagne, taille publiée
+
+    def b3_of(Fx):
+        return {stat: (ref, k3_normalized(Fx, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
+
+    def more(calc, Fx, c3x):
+        calcs.append(calc)
+        res[calc] = run_calc(calc, Fx, fc, footprint, c3x, ebs, b3_of(Fx), host, keys)
+
     hd = position(Fh, 1, "Base, trois tailles", {})[0]
     host = (copy.deepcopy(hd), position(Fh, 1, "Base, trois tailles", {})[1])
     fill_missing(host[0], LANGS, keys)
@@ -1588,30 +1737,22 @@ def main():
     res = {c: run_calc(c, F, fc, footprint, c3, ebs if corrections(c)["a6"] else ebs0, b3, host, keys)
            for c in calcs}
     if F.gcc:  # C par gcc : mêmes tirages, les cellules de C prises dans ses constructions par gcc
-        Fg = load(GCC_VIEW)
-        if dev:
-            apply_dev(Fg, dev)
-        b3g = {stat: (ref, k3_normalized(Fg, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
-        calcs.append(GCC_CALC)
-        res[GCC_CALC] = run_calc(GCC_CALC, Fg, fc, footprint, c3, ebs, b3g, host, keys)
+        Fg = data(view=GCC_VIEW)[0]
+        more(GCC_CALC, Fg, c3)
         gcc = {"records": F.gcc, "cpu_models": dict(F.gcc_models),
                "failures": [x for x in Fg.failures if x["lang"] in GCC_VIEW],
                "skipped": [x for x in Fg.skipped if x["lang"] in GCC_VIEW],
                "steal_over_5pct": [x for x in Fg.steal if x[0] in GCC_VIEW]}
-    if dev:  # « Zig 0.17 » : mêmes tirages, les cellules de Zig de la campagne
-        b3s = {stat: (ref, k3_normalized(F17, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
-        calcs.append(ZIG17)
-        res[ZIG17] = run_calc(ZIG17, F17, fc, footprint, c3_17, ebs, b3s, host, keys)
-        Fv = load()  # le transport limité aux deux noyaux dont le code machine change (docs/V5_2.md, 8)
-        apply_dev(Fv, dev, only=("k4", "k9"))
-        b3v = {stat: (ref, k3_normalized(Fv, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
-        calcs.append(ZIGV)
-        res[ZIGV] = run_calc(ZIGV, Fv, fc, footprint, c3, ebs, b3v, host, keys)
-        Fl = load()  # le calcul du plan : les latences de K8 naturel ramenées elles aussi (docs/V5_2.md, 8)
-        apply_dev(Fl, dev, lat=True)
-        b3l = {stat: (ref, k3_normalized(Fl, ref, groups), groups) for stat, (ref, _, groups) in b3.items()}
-        calcs.append(ZIGL)
-        res[ZIGL] = run_calc(ZIGL, Fl, fc, footprint, c3, ebs, b3l, host, keys)
+    if dev:  # mêmes tirages
+        more(ZIG17, data(zig=False)[0], c3_17)  # les cellules de Zig de la campagne
+        more(ZIGV, data(only=("k4", "k9"))[0], c3)  # transport limité aux noyaux dont le code machine change
+        more(ZIGL, data(lat=True)[0], c3)  # le calcul du plan : latences de K8 naturel ramenées elles aussi
+    if go:
+        more(GOC, data(golang=False)[0], c3)  # les cellules de Go de la campagne : le classement de la v5.3
+        more(GOALL, data(all_cells=True)[0], c3)  # les autres cellules de Go ramenées par leur témoin
+    if dev and go:
+        more(MEAS, Fm, c3_17)  # ni l'une ni l'autre : le classement du 26 novembre à 17 h
+    asm = MEAS if dev and go else (ZIG17 if dev else (GOC if go else FINAL))  # la campagne telle que mesurée
     fin = res[FINAL]["order"]
     moved_ = {c: moved(fin, res[c]["order"], LANGS) for c in calcs[1:]}
     out = {"results": res, "moved_more_than_2": moved_, "b3_ref": b3["max"][0],
@@ -1631,14 +1772,15 @@ def main():
     if F.gcc:
         out["gcc"] = gcc
     if dev:
-        out["zig_dev"] = dev_summary(dev, F17)
+        out["zig_dev"] = dev_summary(dev, Fm)
+    if go:
+        out["go_std"] = go_summary(go, Fm, F)
     # comparaisons : la méthode du 23 novembre (calcul OLD) et, si comparisons.json la porte, la campagne précédente
     out["moved_vs_old"] = moved(res[OLD]["order"], fin, LANGS)
     cp = os.path.join(FIN, "comparisons.json")
     comp = json.load(open(cp)) if os.path.exists(cp) else {}
-    if "previous" in comp:  # à compilateurs égaux : « Zig 0.17 » quand Zig est remesuré par sa version de développement
-        out["replication"] = replication(Fh, comp["previous"], res.get(ZIG17, res[FINAL]),
-                                         comp.get("previous_same_method"))
+    if "previous" in comp:  # à configurations égales : la campagne telle que mesurée, sans ses remesures
+        out["replication"] = replication(Fh, comp["previous"], res[asm], comp.get("previous_same_method"))
     os.makedirs(OUTD, exist_ok=True)
     json.dump(out, open(OUT, "w"), indent=1, default=float)
     report(out, calcs)
@@ -1656,14 +1798,16 @@ def nth(n):
 def report(o, calcs):
     R = o["results"]
     f = R[FINAL]
-    zd = o.get("zig_dev")  # Zig par sa version de développement : astérisque, et « Zig 0.17 » pour la réplication
+    zd = o.get("zig_dev")  # Zig par sa version de développement : astérisque
+    gs = o.get("go_std")  # Go hors de l'expérience simd
+    asm = MEAS if zd and gs else (ZIG17 if zd else (GOC if gs else None))  # la campagne telle que mesurée : réplication
     star = lambda l: NAMES[l] + ("*" if zd and l == DEV_LANG else "")
-    L = ["# v5.3 : le classement — résultats", "",
+    L = ["# v5.4 : le classement — résultats", "",
          "*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse), `docs/V5.md` "
          "(campagne rejouée, corrections A5 et A6), `docs/V5_1.md` (A7 et A8 : mode du code naturel tiré au sort) et "
          "`docs/V5_2.md` (Zig par sa version de développement), fixés "
-         "avant les mesures ou avant leur analyse ; `docs/V5_3.md` (ce qui décide de l'ordre, tri des écarts : deux "
-         "lectures, le classement est celui de la v5.2). Généré par "
+         "avant les mesures ou avant leur analyse ; `docs/V5_3.md` (ce qui décide de l'ordre, tri des écarts) ; "
+         "`docs/V5_4.md` (Go mesuré hors de l'expérience simd). Généré par "
          "`analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes "
          "(`results/converge/forms.json`).*", "",
          f"Machines : {', '.join(o['machines'])} ; b3 de référence (le plus lent des 16 décalages, A2) : "
@@ -1687,6 +1831,12 @@ def report(o, calcs):
               "ses temps sont ceux de la campagne, multipliés cellule par cellule par le rapport mesuré à côté d'un "
               f"témoin ; ses latences de K8 naturel restent celles de la campagne. Avec sa version stable, celle de la "
               f"campagne (« Zig 0.17 ») : {nth(place(z17, DEV_LANG))}, score {z17['ms_mean'][DEV_LANG]:.1f}.", ""]
+    if gs:
+        g0 = R[GOC]
+        L += [f"Go est mesuré hors de l'expérience `simd` de sa chaîne (`docs/V5_4.md`) : ses {len(gs['fixed'])} "
+              "cellules de K1 que la campagne faussait sont rebâties par un pont par le C ; ses autres cellules sont "
+              f"celles de la campagne. Avec ses cellules de la campagne (« {GOC} ») : {nth(place(g0, GO_LANG))}, "
+              f"score {g0['ms_mean'][GO_LANG]:.1f}.", ""]
     if f.get("mode_share") is not None:
         L += ["Mode du code naturel, tiré dans chaque variante (A7, A8) : "
               + ", ".join(f"{m} dans {100 * x:.1f} % des variantes" for m, x in zip(DRAW_MODES, f["mode_share"]))
@@ -1714,6 +1864,9 @@ def report(o, calcs):
                                                     "appliqué à ces deux noyaux seulement ; « Zig 0.18, latences du "
                                                     "plan » : les latences de K8 naturel de Zig multipliées elles "
                                                     "aussi par leur rapport" if zd else "")
+          + (f" ; « {GOC} » : « Final » avec les cellules de Go de la campagne ; « {GOALL} » : les autres cellules de "
+             "Go ramenées elles aussi par leur témoin" if gs else "")
+          + (f" ; « {MEAS} » : ni l'exception de Zig ni la correction de Go" if zd and gs else "")
           + (" ; « Campagne précédente » : son classement publié." if rp else "."), "",
           "## Rangs qui bougent de plus de deux places par rapport à « Final »", ""]
     for c in calcs[1:]:
@@ -1727,7 +1880,7 @@ def report(o, calcs):
     if sm:
         versus.append(("la campagne précédente recalculée par la méthode de celle-ci", sm["moved"]))
     for i, (name, mv) in enumerate(versus):  # contre la campagne précédente : à compilateurs égaux (« Zig 0.17 »)
-        who = "« Zig 0.17 »" if zd and i else "Final"
+        who = f"« {asm} »" if asm and i else "Final"
         L.append(f"* {who} contre {name} : " + (", ".join(f"{NAMES[l]} {nth(a)} → {nth(b)}" for l, (a, b) in
                                                           sorted(mv.items(), key=lambda x: x[1][1])) or "aucun"))
     if sm:
@@ -1747,10 +1900,12 @@ def report(o, calcs):
                      + " | ".join(f"{100 * r['Ek']['c'][k]:.0f}" for k in ks) + " |")
     if rp:
         pv, f0 = rp["previous"], f
-        f = R.get(ZIG17, f)  # la campagne telle qu'elle a été mesurée : Zig par sa version stable, comme la précédente
+        f = R[asm] if asm else f  # la campagne telle qu'elle a été mesurée, comme la précédente
         L += ["", "## Réplication : cette campagne et la précédente", ""]
-        if zd:
-            L += ["Les deux campagnes sont comparées à compilateurs égaux : pour celle-ci, le calcul « Zig 0.17 ».", ""]
+        if asm:
+            L += [("Les deux campagnes sont comparées à compilateurs égaux" if asm == ZIG17 else
+                   "Les deux campagnes sont comparées à configurations égales")
+                  + f" : pour celle-ci, le calcul « {asm} ».", ""]
         L += [f"Cellules mesurées dans les deux campagnes : {rp['cells']}. Rapport des temps (cette campagne sur la "
               f"précédente, estimations ponctuelles) : médiane {rp['median']:.3f} ; {100 * rp['within_10pct']:.0f} % des "
               "cellules à moins de 10 % de cette médiane.", "",
@@ -1789,6 +1944,52 @@ def report(o, calcs):
               "le seul calcul « Zig 0.18, latences du plan » : "
               + " ; ".join(f"{name.replace('|', ', ')} : " + ", ".join(f"{x:.2f}" for x in v)
                            for name, v in zd["lat"].items()) + "."]
+    if gs:
+        fx, ct, n = {}, {}, gs["processes"]
+        ms = lambda t: (f"{1e3 * t:,.0f}".replace(",", " ") if t >= 0.1 else  # noqa: E731
+                        f"{1e3 * t:.1f}" if t >= 0.01 else f"{1e3 * t:.3g}")
+        for name, c in gs["fixed"].items():
+            cons, size, k, v, q = name.split("|")
+            rows, j = fx.setdefault((cons, v), [["–"] * 3 for _ in range(4)]), POS[k].index(size)
+            rows[0][j] = f"{c['rho']:.2f} ({c['pairs']})"
+            if c["artifact"] is not None:
+                rows[1][j] = f"{c['artifact']:.0f} ({c['artifact_min']:.0f})"
+            if c["witness_vs_campaign"]:
+                rows[2][j] = f"{c['witness_vs_campaign']:.2f}"
+            if c["campaign"] and c["corrected"]:
+                rows[3][j] = f"{ms(c['campaign'])} → {ms(c['corrected'])}"
+        for name, c in gs["cells"].items():
+            cons, size, k, v, q = name.split("|")
+            ct.setdefault((k, cons, v, q), ["–"] * 3)[POS[k].index(size) if k in POS else 1] = (
+                f"{c['rho']:.2f} ({c['pairs']})")
+        rs, wc = gs["rho"], gs["witness_vs_campaign"]
+        L += ["", "## Go hors de l'expérience simd", "",
+              f"Go est remesuré hors campagne sur la machine {', '.join(gs['machines'])} (`docs/V5_4.md`), dans les "
+              "mêmes groupes : sa nouvelle configuration (les variantes sans SIMD explicite dans un binaire compilé "
+              "sans `GOEXPERIMENT=simd`), son témoin (le binaire de la campagne) et, pour K1, le pont (C) ; "
+              f"{n[1]}, {n[0]} et {n[2]} processus retenus, {len(gs['invalid'])} écartés, {len(gs['absent'])} "
+              "cellules faussées sans rapport.", "",
+              "Cellules faussées, rebâties par le pont. Rapport au pont : temps de Go dans le binaire standard sur "
+              "temps de la cellule de C, moyenne géométrique des rapports appariés (nombre de paires) ; la cellule "
+              "prend les processus de C dans la campagne, multipliés par ce rapport. Artefact : rapport du témoin à la "
+              "nouvelle configuration, moyenne géométrique (plus petit rapport apparié). Témoin sur campagne : temps "
+              "du témoin dans la remesure sur temps de la cellule dans la campagne. Temps : celui de la campagne, puis "
+              "le temps corrigé, en millisecondes.", "",
+              "| Étiquette | Variante | Grandeur | " + " | ".join(POS_NAMES) + " |", "|---|---|---|---|---|---|"]
+        for (cons, v), rows in sorted(fx.items()):
+            for label, row in zip(("rapport au pont", "artefact", "témoin sur campagne", "temps (ms)"), rows):
+                L.append(f"| {cons} | {v} | {label} | " + " | ".join(row) + " |")
+        if rs:
+            L += ["", f"Autres cellules, rapport de la nouvelle configuration au témoin (contrôle ; appliqué dans le "
+                  f"seul calcul « {GOALL} ») : {len(gs['cells'])} cellules, médiane {rs['median']:.2f}, de "
+                  f"{rs['min']:.2f} à {rs['max']:.2f} ; {100 * rs['within_10pct']:.0f} % à moins de 10 % de 1 ; hors "
+                  "de 0,8 à 1,25 : " + (", ".join(x.replace("|", " ").strip() for x in gs["outside"])
+                                         + " (instruites : `docs/V5_4.md`, 9)" if gs["outside"] else "aucune")
+                  + f". Le témoin contre ses temps de la campagne : rapport médian {wc['median']:.2f}, de "
+                  f"{wc['min']:.2f} à {wc['max']:.2f}.", "",
+                  "| Noyau | Étiquette | Variante | " + " | ".join(POS_NAMES) + " |", "|---|---|---|---|---|---|"]
+            for (k, cons, v, q), row in sorted(ct.items()):
+                L.append(f"| {k.upper()} | {cons} | {v}{' ' + q if q else ''} | " + " | ".join(row) + " |")
     nat = [(n, R[c]) for n, c in (("mode publié", "Sans R1"), ("R1'", "R1' au lieu de R1")) if c in R]
     L += ["", "## Plafond par noyau et parts du code par défaut (« Final », au centre)", "",
           "| Langage | " + " | ".join(k.upper() for k in E_V2) + " | D1 | D2 | D3 | D4 |"
