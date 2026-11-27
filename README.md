@@ -455,9 +455,9 @@ sh tools/check.sh --rapide
 sh tools/check.sh
 ```
 
-Le premier contrôle (45 s) vérifie la grille contre ses sondes, le relevé des formes, le plan de la campagne, le
-classement sur 200 variantes et que chaque écart du tri a une cause ; le second (25 minutes environ) recalcule le
-classement complet et le compare à l'octet près. Ni l'un ni l'autre ne demande de chaîne de compilation.
+Le premier contrôle (une minute environ) vérifie la grille contre ses sondes, le relevé des formes, le plan de la
+campagne, le classement sur 200 variantes et que chaque écart du tri a une cause ; le second (une demi-heure environ)
+recalcule le classement complet et le compare à l'octet près. Ni l'un ni l'autre ne demande de chaîne de compilation.
 
 ```bash
 python3 analysis/final_v4.py

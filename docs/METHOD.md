@@ -372,10 +372,10 @@ python3 analysis/final_v4.py
 python3 analysis/charts_final.py
 ```
 
-Le premier contrôle prend environ 45 s, le second environ 25 minutes sur la machine de l'étude (classement complet
-comparé à l'octet près) ; aucun ne demande de chaîne de compilation. Tous deux échouent si le tri des écarts laisse
-un couple sans cause. Les deux commandes suivantes réécrivent
-`results/final/analysis.json`, `results/report_final.md` et le graphique.
+Le premier contrôle prend environ une minute, le second environ une demi-heure sur la machine de l'étude (classement
+complet comparé à l'octet près) ; aucun ne demande de chaîne de compilation. Tous deux échouent si le tri des écarts
+laisse un couple sans cause. Les deux commandes suivantes réécrivent `results/final/analysis.json`,
+`results/report_final.md` et le graphique.
 
 Remesurer demande les 25 chaînes de `env/toolchains.txt`, aux chemins que lisent les `build.sh`, et les données de
 `/opt/msdata` : `env/install.sh` les installe sur une Ubuntu 24.04 (environ 1 h 30 sur 4 cœurs, 35 Gio ; archives
