@@ -311,6 +311,22 @@
 "ts": "2026-11-27T14:33:44",
 "warmup": 1
 },
+"go|cv|k4|pub|swar|": {
+"machine": "40",
+"reps": 410,
+"status": "ok",
+"t_cal": 0.007309829,
+"ts": "2026-11-27T14:44:40",
+"warmup": 1
+},
+"go|cv|k4|pub|tuned|": {
+"machine": "40",
+"reps": 2180,
+"status": "ok",
+"t_cal": 0.001375557,
+"ts": "2026-11-27T14:44:40",
+"warmup": 1
+},
 "go|cv|k4|small|swar|": {
 "machine": "40",
 "reps": 7168,
@@ -629,6 +645,22 @@
 "status": "ok",
 "t_cal": 0.356836793,
 "ts": "2026-11-27T14:36:54",
+"warmup": 1
+},
+"go|pub|k4|pub|branchless_unsorted|": {
+"machine": "40",
+"reps": 183,
+"status": "ok",
+"t_cal": 0.016363704,
+"ts": "2026-11-27T14:44:40",
+"warmup": 1
+},
+"go|pub|k4|pub|natural_unsorted|": {
+"machine": "40",
+"reps": 221,
+"status": "ok",
+"t_cal": 0.013541893,
+"ts": "2026-11-27T14:44:39",
 "warmup": 1
 },
 "go|pub|k4|small|branchless_unsorted|": {
@@ -1055,6 +1087,14 @@
 "ts": "2026-11-27T13:29:25",
 "warmup": 1
 },
+"go|unc|k4|pub|natural_unsorted|": {
+"machine": "40",
+"reps": 255,
+"status": "ok",
+"t_cal": 0.011759487,
+"ts": "2026-11-27T14:44:40",
+"warmup": 1
+},
 "go|unc|k4|small|natural_unsorted|": {
 "machine": "40",
 "reps": 4114,
@@ -1229,6 +1269,22 @@
 "status": "ok",
 "t_cal": 0.000297778,
 "ts": "2026-11-27T14:33:44",
+"warmup": 1
+},
+"go|wit_cv|k4|pub|swar|": {
+"machine": "40",
+"reps": 238,
+"status": "ok",
+"t_cal": 0.012587526,
+"ts": "2026-11-27T14:44:40",
+"warmup": 1
+},
+"go|wit_cv|k4|pub|tuned|": {
+"machine": "40",
+"reps": 1955,
+"status": "ok",
+"t_cal": 0.001534031,
+"ts": "2026-11-27T14:44:40",
 "warmup": 1
 },
 "go|wit_cv|k4|small|swar|": {
@@ -1485,6 +1541,14 @@
 "status": "ok",
 "t_cal": 7.0636e-05,
 "ts": "2026-11-27T13:29:25",
+"warmup": 1
+},
+"go|wit_unc|k4|pub|natural_unsorted|": {
+"machine": "40",
+"reps": 226,
+"status": "ok",
+"t_cal": 0.013257484,
+"ts": "2026-11-27T14:44:40",
 "warmup": 1
 },
 "go|wit_unc|k4|small|natural_unsorted|": {
@@ -1749,6 +1813,22 @@
 "status": "ok",
 "t_cal": 0.368522646,
 "ts": "2026-11-27T14:36:56",
+"warmup": 1
+},
+"go|wit|k4|pub|branchless_unsorted|": {
+"machine": "40",
+"reps": 212,
+"status": "ok",
+"t_cal": 0.01410628,
+"ts": "2026-11-27T14:44:40",
+"warmup": 1
+},
+"go|wit|k4|pub|natural_unsorted|": {
+"machine": "40",
+"reps": 223,
+"status": "ok",
+"t_cal": 0.013430593,
+"ts": "2026-11-27T14:44:40",
 "warmup": 1
 },
 "go|wit|k4|small|branchless_unsorted|": {
