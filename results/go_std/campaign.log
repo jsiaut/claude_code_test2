@@ -51,3 +51,4 @@
 2026-11-27T14:44:53 passe 0 : 23 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 2026-11-27T14:46:18 passe 0 groupe 1/23 k9:small : 16 processus, 85 s
 2026-11-27T14:49:45 passe 0 groupe 2/23 k8:large : 18 processus, 206 s
+2026-11-27T14:50:22 passe 0 groupe 3/23 k7:pub : 6 processus, 35 s
