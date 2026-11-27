@@ -1,13 +1,13 @@
-# Méthode du classement (v5.4)
+# Méthode du classement (v6)
 
 *État au 27 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
 été fixée par étapes, chacune par un plan poussé avant ses mesures ou ses calculs ([`HISTORY.md`](HISTORY.md)). Le plan
 de la campagne dont viennent les mesures, avec ses écarts datés (dont les corrections A5 et A6) et ses résultats, est
 [`V5.md`](V5.md) ; celui de la campagne précédente, dont elle reprend le protocole, [`V4_FINAL.md`](V4_FINAL.md) ;
-ceux des autres corrections de l'analyse, [`V4_1.md`](V4_1.md) (A1 à A4) et [`V5_1.md`](V5_1.md) (A7 et A8) ; celui
-de l'exception faite pour Zig, [`V5_2.md`](V5_2.md) ; celui des deux lectures du classement ajoutées au rapport,
-[`V5_3.md`](V5_3.md) ; celui de la correction de la mesure de Go, [`V5_4.md`](V5_4.md) ; le contrat des noyaux est
-[`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
+ceux des autres corrections de l'analyse, [`V4_1.md`](V4_1.md) (A1 à A4) et [`V5_1.md`](V5_1.md) (A7 et A8) ; celui de
+l'exception faite pour Zig, [`V5_2.md`](V5_2.md) ; celui des deux lectures du classement ajoutées au rapport,
+[`V5_3.md`](V5_3.md) ; celui de la correction de la mesure de Go, [`V5_4.md`](V5_4.md) ; celui du retrait de cinq
+langages, [`V6.md`](V6.md) ; le contrat des noyaux est [`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
 
 ## 1. Ce qui est classé
 
@@ -22,9 +22,11 @@ quand on l'exerce, et où le code par défaut va déjà dans le sens du matérie
 | Plafond (E) | 40 % | ce qu'atteint le meilleur code du langage | huit noyaux, meilleure forme admise (2 à 5) |
 | Code par défaut (D) | 25 % | ce que donne le code qu'on écrit sans y penser | variantes naturelles, empreinte, latences, chaîne de pointeurs (8) |
 
-Périmètre : 25 langages, une chaîne de référence chacun (`env/toolchains.txt`), dernière version stable au 28 octobre
-2026 (Swift, FreePascal, BQN et PHP ajoutés du 5 au 7 novembre) ; bibliothèque standard seule ; compilation pour le
-CPU hôte, ni PGO ni LTO ; runtimes à leurs réglages par défaut, sauf le nombre de fils, fixé à quatre.
+Périmètre : 20 langages (C, C++, Rust, Zig, Odin, C3, D, Nim, Ada, Fortran, Chapel, Mojo, Swift, FreePascal, Go, C#,
+Java, Julia, Haskell, OCaml), une chaîne de référence chacun (`env/toolchains.txt`), dernière version stable au 28
+octobre 2026 (Swift et FreePascal ajoutés les 5 et 6 novembre) ; bibliothèque standard seule ; compilation pour le
+CPU hôte, ni PGO ni LTO ; runtimes à leurs réglages par défaut, sauf le nombre de fils, fixé à quatre. Cinq autres
+langages, mesurés dans la même campagne, ont été retirés du classement et du dépôt le 27 novembre ([`V6.md`](V6.md)).
 
 ## 2. Noyaux et validation
 
@@ -47,9 +49,8 @@ K10 (file SPSC), hors score depuis la v2, n'est plus mesuré ; son code reste da
 Chaque programme chronomètre lui-même sa section de calcul et rend une somme de contrôle. Toute cellule doit rendre, à
 chaque taille, la somme de l'implémentation C (`results/expected.json` pour la taille publiée,
 `results/sizes/expected.json` pour les autres) : égalité exacte pour les entiers, tolérance relative de 1e-6 (K1),
-1e-3 (K5) et 1e-9 (K9) pour les flottants ; une somme entière au-delà de 2^53 se compare à l'arrondi d'un double près
-(BQN n'a que des doubles). Une cellule fausse à l'étalonnage est corrigée avant les passes ; un processus dont une
-somme est fausse est écarté de l'analyse (aucun dans la campagne).
+1e-3 (K5) et 1e-9 (K9) pour les flottants. Une cellule fausse à l'étalonnage est corrigée avant les passes ; un
+processus dont une somme est fausse est écarté de l'analyse (aucun dans la campagne).
 
 ## 3. Tailles
 
@@ -70,15 +71,14 @@ Sept noyaux comptent à trois tailles ; K2 et K3 à la leur.
 * **Données.** `tools/gendata.c`, déterministe (mêmes graines et mêmes lois à chaque taille). Les fichiers de la taille
   publiée sont dans `/opt/msdata` (empreintes : `env/msdata.sha256`) ; ceux des autres tailles sont produits à la
   demande dans `/dev/shm`, un noyau et une taille à la fois (`tools/sizes/sizes.py`).
-* **Code.** Seule la taille change. Les 19 langages compilés reçoivent les tailles à la construction (variables
-  `MS_*` lues par leur `build.sh`) ; pour les six langages sans construction (Python, Lua, PHP, BQN, JavaScript,
-  Julia), une copie du source reçoit les constantes de la taille (`tools/sizes/patches.py`, occurrences vérifiées).
+* **Code.** Seule la taille change. Les 19 langages compilés reçoivent les tailles à la construction (variables `MS_*`
+  lues par leur `build.sh`) ; pour Julia, seul langage sans construction, une copie du source reçoit les constantes de
+  la taille (`tools/sizes/patches.py`, occurrences vérifiées).
 * **Dans le score.** Chaque cellule est calculée à chaque taille avec ses propres références, puis moyennée en
   logarithme sur les trois tailles, à poids égaux au centre (8).
 * **Cellule manquante.** Une cellule qui dépasse 13 Gio de mémoire ou que le système tue est « hors mémoire » ; elle
   prend le temps admissible le plus lent des autres langages à cette taille (variantes communes à tous les langages
-  seulement). Six cas, tous à la grande taille : les quatre variantes de K1 de BQN, K1 naturel de Python dans l'ordre
-  et permuté.
+  seulement). Aucune cellule des 20 langages n'est dans ce cas.
 
 ## 4. Formes du plafond (règles C1 à C6)
 
@@ -108,8 +108,8 @@ Sept noyaux comptent à trois tailles ; K2 et K3 à la leur.
   définition), *écrite*, *non écrivible* (capacité absente, preuve à l'appui) ou *sans objet* (repli inutile). Le
   relevé est dans `tools/converge/inventory.py`, qui écrit `results/converge/inventory.md` (à lire) et
   `results/converge/forms.json` (lu par le pilote et par l'analyse).
-* **C5.** Une forme dont le gain tient à un coût propre au runtime d'un langage (tables de Lua, conversion des
-  tableaux typés de JavaScript…) entre dans le plafond de ce langage sous un nom en `rq_`, sans être portée ailleurs.
+* **C5.** Une forme dont le gain tient à un coût propre au runtime d'un langage (unité de compilation du JIT de Java,
+  spécialisation de Julia…) entre dans le plafond de ce langage sous un nom en `rq_`, sans être portée ailleurs.
 * **C6.** La variante `mt` publiée (fils créés à chaque appel) reste mesurée à côté des réserves de fils.
 
 Les formes ajoutées sont dans la source du langage, `bench/<langage>`, et déclarées dans son fichier `cv_variants`.
@@ -151,11 +151,12 @@ conteneur par défaut, aucune annotation de performance ([`NATURAL.md`](NATURAL.
     (`--check-bounds=no`), Mojo (`-D ASSERT=none`), Go (`-gcflags=-B`), OCaml (`-unsafe`) et D (`-boundscheck=off`).
 
   Les huit langages de R1 sont donc vérifiés dans une variante sur trois, les huit de R1' qui n'y sont pas dans deux
-  sur trois ; D a les trois constructions ; les neuf autres (Rust, C#, Java, Haskell, BQN, JavaScript, PHP, Python,
-  Lua) n'ont qu'un mode. Sans A8, le tirage se fait entre R1 et le mode publié seuls (publié le 26 novembre, quelques
-  heures) ; sans A7, tout est sous R1.
-* **R2, stencil naturel contigu.** K9 naturel est une grille contiguë pour tous ; les 13 langages dont l'idiome est un
-  tableau de tableaux reçoivent la variante `natural_flat` (tableau 1D de leur conteneur par défaut, indexé `i*M + j`).
+  sur trois ; D a les trois constructions ; les quatre autres (Rust, C#, Java, Haskell) n'ont qu'un mode. Sans A8, le
+  tirage se fait entre R1 et le mode publié seuls (publié le 26 novembre, quelques heures) ; sans A7, tout est sous
+  R1.
+* **R2, stencil naturel contigu.** K9 naturel est une grille contiguë pour tous ; les neuf langages dont l'idiome est
+  un tableau de tableaux reçoivent la variante `natural_flat` (tableau 1D de leur conteneur par défaut, indexé
+  `i*M + j`).
 * **R3.** K4 admet une forme `tuned`, SIMD explicite compris ; aucune forme n'est en assembleur en ligne.
 * **R4, K3 rapporté à une boucle de référence.** Sur les processeurs de l'étude, la boucle de l'écrivain unique coûte
   de un à sept cycles par incrément selon la place du code dans sa ligne de 64 octets. La cellule de K3 vaut donc
@@ -186,17 +187,19 @@ campagne publiée).
   publiées et formes du catalogue sortent du même binaire (`cv` partage la construction de `pub`, `cv_chk` celle de
   `chk`, `cv_unc` celle de `unc`) ; dans la campagne précédente, les formes du catalogue étaient dans une copie de la
   source. La source C est construite une seconde fois par gcc 16.2.0, avec les options de clang (étiquettes `gcc`,
-  `gcc_cv`, `gcc_chk`) : ces mesures n'entrent que dans la sensibilité « C par gcc » (10). 132 constructions.
+  `gcc_cv`, `gcc_chk`) : ces mesures n'entrent que dans la sensibilité « C par gcc » (10). 117 constructions pour
+  les 20 langages.
 * **Étalonnage et validation** (`campaign.py calibrate`). Chaque cellule, à chaque taille, est exécutée une fois : la
-  somme de contrôle est vérifiée, et la durée fixe le nombre de répétitions (environ 3 s par processus, de 3 à 10 000 ;
-  une seule au-delà de 300 s) et l'échauffement (une répétition ; au moins trois et au moins une seconde pour Java, C#,
-  JavaScript et Julia).
+  somme de contrôle est vérifiée, et la durée fixe le nombre de répétitions (environ 3 s par processus, de 3 à
+  10 000 ; une seule au-delà de 300 s) et l'échauffement (une répétition ; au moins trois et au moins une seconde
+  pour Java, C# et Julia).
 * **Passes** (`campaign.py run`). Trois passes ; dans chacune, l'ordre des groupes puis celui des blocs (langage,
   construction) sont tirés au hasard, à graine fixe. Un processus par cellule et par passe ; trois, deux et deux pour K2
   et K8 naturel. Un processus dont le vol de temps de l'hyperviseur dépasse 5 % est refait une fois. Rien d'autre ne
   tourne pendant la campagne.
-* **Volume.** 3 106 cellules et 10 158 processus, dont 128 cellules et 420 processus pour C par gcc, du 25 novembre,
-  6 h 12, au 26 novembre, 10 h 30 (UTC), sur la machine 38, sans redémarrage ; aucun processus en échec.
+* **Volume.** La campagne a mesuré 25 langages dans les mêmes groupes : 3 106 cellules et 10 158 processus, du 25
+  novembre, 6 h 12, au 26 novembre, 10 h 30 (UTC), sur la machine 38, sans redémarrage ; aucun processus en échec. Les
+  20 langages gardés en ont 2 613 et 8 559, dont 128 cellules et 420 processus pour C par gcc.
 * **Exception : Zig par sa version de développement** ([`V5_2.md`](V5_2.md)). Les chaînes sont les dernières versions
   stables au 28 octobre 2026. Zig seul est classé avec sa version de développement, 0.18.0-dev.1298, parce que sa
   version stable désactive le vectoriseur de boucles de LLVM ; il porte un astérisque. Il est remesuré hors campagne
@@ -245,28 +248,28 @@ génération de code (E, 7, 10 %), HPC et OLAP (F, 4, 10 %). La liste, les notes
   est la bibliothèque système ; les types C qu'une FFI livrée définit valent ½.
 * **Preuves.** Chaque case a une ligne `CAP;<case>;<note>;<preuve>` produite par une exécution
   (`probes/<langage>/run.sh`, sortie dans `results/probes/<langage>.txt`). La preuve porte sa classe : **[exécutée]**,
-  un programme se sert de la capacité et imprime un fait observable ; **[échec]**, la forme canonique est refusée ou le
-  comportement contraire est mesuré ; **[recherche]**, pour une API absente, fouille des sources livrées avec des
+  un programme se sert de la capacité et imprime un fait observable ; **[échec]**, la forme canonique est refusée ou
+  le comportement contraire est mesuré ; **[recherche]**, pour une API absente, fouille des sources livrées avec des
   motifs fixés d'avance (`tools/grid_audit/`, relevés dans `results/grid_audit/search/`), qui ne voit que ce que son
-  motif décrit. `analysis/check_probes.py` confronte les 825 lignes à la grille : aucune divergence.
+  motif décrit. `analysis/check_probes.py` confronte les 660 lignes à la grille : aucune divergence.
 
 ## 8. Score
 
 Pour une cellule, le temps t d'un langage est la moyenne géométrique des médianes de ses processus, pour sa forme la
 plus rapide parmi les formes admises.
 
-* **Plafond.** E = 100 × moyenne géométrique des scores de huit noyaux (K1, K3 à K9). Le score d'un noyau est la moyenne
-  géométrique de ses mesures (quatre pour K6 : Q6 et Q1 à 1 et 4 fils ; deux pour K9 ; une ailleurs) ; une mesure vaut
-  référence / t, moyennée en logarithme sur les trois tailles ; les trois mesures à quatre fils ne comptent qu'aux
-  tailles publiée et grande (A4 : à la petite taille, elles mesurent le réveil des fils). La référence est la frontière,
-  le meilleur temps des 25 langages à cette taille ; dans une variante sur deux, c'est la borne physique de la machine
-  (octets à déplacer sur la bande passante du niveau de mémoire où ils tiennent, opérations sur le débit crête), le
-  rapport étant alors plafonné à 1. La bande passante à quatre fils est le plus grand relevé de la sonde corrigée (A6 :
-  les fils de travail relèvent eux-mêmes leurs instants ; chronométré par le fil principal, le relevé d'origine était
-  plusieurs fois trop haut). K3 suit R4.
+* **Plafond.** E = 100 × moyenne géométrique des scores de huit noyaux (K1, K3 à K9). Le score d'un noyau est la
+  moyenne géométrique de ses mesures (quatre pour K6 : Q6 et Q1 à 1 et 4 fils ; deux pour K9 ; une ailleurs) ; une
+  mesure vaut référence / t, moyennée en logarithme sur les trois tailles ; les trois mesures à quatre fils ne
+  comptent qu'aux tailles publiée et grande (A4 : à la petite taille, elles mesurent le réveil des fils). La référence
+  est la frontière, le meilleur temps des 20 langages à cette taille ; dans une variante sur deux, c'est la borne
+  physique de la machine (octets à déplacer sur la bande passante du niveau de mémoire où ils tiennent, opérations sur
+  le débit crête), le rapport étant alors plafonné à 1. La bande passante à quatre fils est le plus grand relevé de la
+  sonde corrigée (A6 : les fils de travail relèvent eux-mêmes leurs instants ; chronométré par le fil principal, le
+  relevé d'origine était plusieurs fois trop haut). K3 suit R4.
 * **Code par défaut.** D = 100 × (0,5 D1 + 0,15 D2 + 0,15 D3 + 0,2 D4).
   * D1, code naturel : comme le plafond, avec la seule variante naturelle (K1, K4, K5, Q6, Q1, K7, K8, K9), rapportée
-    au meilleur code naturel des 25 langages à chaque taille (A3 ; à la frontière du plafond jusqu'au 23 novembre),
+    au meilleur code naturel des 20 langages à chaque taille (A3 ; à la frontière du plafond jusqu'au 23 novembre),
     dans le mode que tire la variante (A7 et A8 : R1, mode publié de chaque chaîne ou R1' ; R1 au centre).
   * D2, coût de structure : moyenne géométrique de min(1, 64 / octets par particule) (`results/footprint.json`) et de
     min(1, t naturel / t naturel permuté) sur K1, ce second terme aux trois tailles.
@@ -281,16 +284,16 @@ plus rapide parmi les formes admises.
 ## 9. Incertitude et ordre publié
 
 * **Bruit de mesure.** 2 000 rééchantillonnages. Avec trois processus, une cellule ne peut pas estimer seule sa
-  variance : les résidus des cellules sont regroupés par noyau et par classe d'implémentation (compilée à l'avance,
-  JIT, interprète ; moins de 20 résidus : tout le noyau), et chaque tirage ajoute à l'estimation de la cellule la
-  moyenne de résidus tirés dans son réservoir. L'effet commun d'un groupe (noyau, taille) dans une passe est d'abord
-  retiré des résidus (A5) : c'est la médiane, sur les cellules du groupe, de l'écart entre la moyenne des logarithmes
-  des temps de la cellule dans cette passe et la moyenne de ses moyennes par passe. Un écart de vitesse de la machine
-  d'une passe à l'autre est commun à toutes les cellules du groupe et s'annule dans leurs rapports : ce n'est pas un
-  bruit propre à chaque cellule. Les références restent celles des estimations ponctuelles. Les latences sont
-  rééchantillonnées par processus puis par répétition, sans cette correction. Pour Zig, le rapport au témoin de chaque
-  cellule est rééchantillonné lui aussi : ses paires sont tirées avec remise, par un générateur propre à la cellule ;
-  de même, pour les cellules corrigées de Go, leur rapport au pont.
+  variance : les résidus des cellules sont regroupés par noyau et par classe d'implémentation (compilée à l'avance, ou
+  JIT : Java, C# et Julia ; moins de 20 résidus : tout le noyau), et chaque tirage ajoute à l'estimation de la
+  cellule la moyenne de résidus tirés dans son réservoir. L'effet commun d'un groupe (noyau, taille) dans une passe est
+  d'abord retiré des résidus (A5) : c'est la médiane, sur les cellules du groupe, de l'écart entre la moyenne des
+  logarithmes des temps de la cellule dans cette passe et la moyenne de ses moyennes par passe. Un écart de vitesse de
+  la machine d'une passe à l'autre est commun à toutes les cellules du groupe et s'annule dans leurs rapports : ce
+  n'est pas un bruit propre à chaque cellule. Les références restent celles des estimations ponctuelles. Les latences
+  sont rééchantillonnées par processus puis par répétition, sans cette correction. Pour Zig, le rapport au témoin de
+  chaque cellule est rééchantillonné lui aussi : ses paires sont tirées avec remise, par un générateur propre à la
+  cellule ; de même, pour les cellules corrigées de Go, leur rapport au pont.
 * **20 000 variantes de l'analyse.** Chacune tire : un rééchantillonnage ; cinq choix de méthode à deux options
   (estimateur : moyenne géométrique ou minimum des processus ; référence du plafond ; formes de D3 et de D4 ;
   agrégation) ; le mode du code naturel parmi trois (R1, mode publié, R1' : A7 et A8, par un générateur à part) ; les
@@ -299,12 +302,12 @@ plus rapide parmi les formes admises.
   valeurs du centre) ; un bruit de jugement, chaque case jugée changeant de note avec une probabilité de 10 %.
 * **Ce qui est publié.** Le **score** affiché est la moyenne du score sur les variantes, et l'ordre est le sien (à
   égalité, le rang moyen départage). Jusqu'au 24 novembre, l'ordre était le rang moyen et le score affiché celui du
-  centre, qui ne suivait pas toujours l'ordre ([`V4_1.md`](V4_1.md), 9) ; les deux ordres coïncident pour les 25
-  langages du classement publié. Le **rang plausible** est l'intervalle des rangs dans 90 % des variantes. « Devance le
-  suivant » est la part des variantes où un langage passe devant celui de la ligne suivante. Les piliers sont donnés au
-  centre (poids et choix principaux, estimation ponctuelle) ; le code naturel y est sous R1, et il est donné à côté
-  dans les deux autres modes. Les **étages** : une frontière sépare deux langages voisins si chaque langage au-dessus
-  devance chaque langage au-dessous dans au moins 95 % des variantes.
+  centre, qui ne suivait pas toujours l'ordre ([`V4_1.md`](V4_1.md), 9) ; les deux ordres coïncident pour les 20
+  langages du classement publié. Le **rang plausible** est l'intervalle des rangs dans 90 % des variantes. « Devance
+  le suivant » est la part des variantes où un langage passe devant celui de la ligne suivante. Les piliers sont
+  donnés au centre (poids et choix principaux, estimation ponctuelle) ; le code naturel y est sous R1, et il est donné
+  à côté dans les deux autres modes. Les **étages** : une frontière sépare deux langages voisins si chaque langage
+  au-dessus devance chaque langage au-dessous dans au moins 95 % des variantes.
 * **Reproductibilité.** Les graines sont fixes : le calcul redonne ses sorties à l'octet près (`tools/check.sh`).
 
 ## 10. Sensibilités publiées
@@ -337,22 +340,22 @@ la première.
 
 Deux lectures du classement s'y ajoutent ([`V5_3.md`](V5_3.md)) ; elles ne changent ni score ni ordre.
 
-* **Ce qui décide de l'ordre.** Pour quatre groupes de langages emboîtés (les 25, le premier étage, ceux dont le rang
-  plausible commence à 12 ou mieux, ceux dont il commence à 3 ou mieux), la part de la variance du score au centre
-  que porte chaque composante : pour un pilier X de poids w, cov(w X, score) / var(score) ; de même pour D1 à D4, dont
-  D est la somme pondérée ; la part du plafond est répartie entre ses noyaux au prorata de cov(ln E_k / 8, ln E) /
+* **Ce qui décide de l'ordre.** Pour quatre groupes de langages emboîtés (les 20, le premier étage, ceux dont le rang
+  plausible commence à 12 ou mieux, ceux dont il commence à 3 ou mieux), la part de la variance du score au centre que
+  porte chaque composante : pour un pilier X de poids w, cov(w X, score) / var(score) ; de même pour D1 à D4, dont D
+  est la somme pondérée ; la part du plafond est répartie entre ses noyaux au prorata de cov(ln E_k / 8, ln E) /
   var(ln E). Le poids affiché d'une composante n'est pas son importance : une composante où les langages d'un groupe
   se valent ne les sépare pas.
-* **Tri des écarts.** Chaque cellule du code naturel (les huit mesures de D1, trois tailles, trois modes du tirage)
-  est rapportée à la médiane des temps de quinze pairs, les langages dont la chaîne produit son code machine par LLVM
-  ou par GCC (C, C++, Zig, Odin, Rust, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, Haskell). Pour les dix
-  autres langages, ce rapport est divisé par leur niveau, la médiane de leurs huit rapports à cette taille et dans ce
-  mode, au moins 1. Une cellule est signalée lente quand ce rapport, arrondi au dixième, atteint 2,0, rapide quand
-  elle est au moins 2,0 fois plus rapide que la médiane des pairs ; un couple (langage, mesure) est signalé dans un
-  mode s'il l'est à une taille au moins. Chaque couple signalé est rattaché à une cause du registre que porte
-  l'analyse (`TRI_CAUSES`), de statut « établie » (un contrôle nommé la montre), « attribuée » (cause probable, sans
-  contrôle propre) ou « à corriger » (cellule faussée par l'étude) ; sans cause, il est « à examiner », et
-  `tools/check.sh` échoue. Le plafond n'est pas trié.
+* **Tri des écarts.** Chaque cellule du code naturel (les huit mesures de D1, trois tailles, trois modes du tirage) est
+  rapportée à la médiane des temps de quinze pairs, les langages dont la chaîne produit son code machine par LLVM ou
+  par GCC (C, C++, Zig, Odin, Rust, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, Haskell). Pour les cinq
+  autres langages (Go, C#, Java, FreePascal, OCaml), ce rapport est divisé par leur niveau, la médiane de leurs huit
+  rapports à cette taille et dans ce mode, au moins 1. Une cellule est signalée lente quand ce rapport, arrondi au
+  dixième, atteint 2,0, rapide quand elle est au moins 2,0 fois plus rapide que la médiane des pairs ; un couple
+  (langage, mesure) est signalé dans un mode s'il l'est à une taille au moins. Chaque couple signalé est rattaché à une
+  cause du registre que porte l'analyse (`TRI_CAUSES`), de statut « établie » (un contrôle nommé la montre),
+  « attribuée » (cause probable, sans contrôle propre) ou « à corriger » (cellule faussée par l'étude) ; sans
+  cause, il est « à examiner », et `tools/check.sh` échoue. Le plafond n'est pas trié.
 
 ## 11. Vérifier, recalculer, remesurer
 
@@ -377,14 +380,14 @@ complet comparé à l'octet près) ; aucun ne demande de chaîne de compilation.
 laisse un couple sans cause. Les deux commandes suivantes réécrivent `results/final/analysis.json`,
 `results/report_final.md` et le graphique.
 
-Remesurer demande les 25 chaînes de `env/toolchains.txt`, aux chemins que lisent les `build.sh`, et les données de
-`/opt/msdata` : `env/install.sh` les installe sur une Ubuntu 24.04 (environ 1 h 30 sur 4 cœurs, 35 Gio ; archives
+Remesurer demande les 20 chaînes de `env/toolchains.txt`, aux chemins que lisent les `build.sh`, et les données de
+`/opt/msdata` : `env/install.sh` les installe sur une Ubuntu 24.04 (moins de 1 h 30 sur 4 cœurs, 35 Gio ; archives
 vérifiées par leur empreinte, versions exactes de l'étude). La campagne publiée a été mesurée avec les chaînes ainsi
-réinstallées ; elles redonnent le fichier ou le code machine de la campagne précédente pour 192 constructions sur
-225, celles de Rust, de D et de C3 différant sans cause trouvée ([`V5.md`](V5.md), 2). Une campagne s'écrit dans son
-propre répertoire, ce qui laisse en place les résultats publiés ; son `model.txt` porte le modèle de son processeur
-(famille/modèle/révision : celui de la campagne publiée, ou celui de la machine pour mesurer sur un autre), et
-`machine.sh` comme le pilote refusent une machine d'un autre modèle :
+réinstallées ; elles redonnent le fichier ou le code machine de la campagne précédente, sauf pour Rust, D et C3, dont
+le code diffère sans cause trouvée ([`V5.md`](V5.md), 2). Une campagne s'écrit dans son propre répertoire, ce qui
+laisse en place les résultats publiés ; son `model.txt` porte le modèle de son processeur (famille/modèle/révision :
+celui de la campagne publiée, ou celui de la machine pour mesurer sur un autre), et `machine.sh` comme le pilote
+refusent une machine d'un autre modèle :
 
 ```bash
 sh env/install.sh

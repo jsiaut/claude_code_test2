@@ -15,6 +15,10 @@ redonne le classement de la section 12.2, sont dans le commit `76d07af` ([`V5.md
 *Plan d'ensemble : `docs/V4_PLAN.md`. Ce plan est poussé avant tout outil, toute construction et toute mesure de la
 campagne ; les écarts éventuels seront datés ici (section 11) et dans le journal (`docs/METHODOLOGY.md`).*
 
+*Note du 27 novembre 2026 (v6) : cinq des 25 langages de ce document (Python, JavaScript, PHP, BQN, Lua) ont été
+retirés du dépôt ([`V6.md`](V6.md)). Ses classements, ses comptes et les commandes qui les redonnent valent pour l'état
+à 25 langages : le commit `de69749`.*
+
 ## 1. Question
 
 Les points 2 à 4 de la v4 ont fixé des règles pour une campagne unique, « sur un même hôte », qui donnera le classement

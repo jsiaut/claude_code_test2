@@ -1,4 +1,4 @@
-# Spécification des noyaux de mesure (contrat commun aux 25 langages)
+# Spécification des noyaux de mesure (contrat commun aux 20 langages)
 
 Version 1.0 — figée le 2026-10-28, **avant** toute mesure inter-langages.
 

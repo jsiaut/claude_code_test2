@@ -1,6 +1,6 @@
 # Historique de l'étude et archive
 
-*État au 27 novembre 2026. Le dépôt ne garde que ce qui sert au classement publié (v5.4) ; ce document dit d'où vient la
+*État au 27 novembre 2026. Le dépôt ne garde que ce qui sert au classement publié (v6) ; ce document dit d'où vient la
 méthode, ce que les étapes précédentes ont établi, et où retrouver tout ce qui a été retiré de la branche.*
 
 ## L'archive
@@ -23,6 +23,11 @@ Deux jeux de mesures plus récents ont quitté la branche le 26 novembre, quand 
 de la précédente : les mesures de la campagne des 22 et 23 novembre (machine 35) et la campagne inachevée des 24 et
 25 novembre. Ils sont dans le commit `76d07af` ; les commandes pour les relire ou les recalculer sont dans
 [`V5.md`](V5.md), 9.8.
+
+Cinq langages ont quitté la branche le 27 novembre (v6 : Python, JavaScript, PHP, BQN et Lua), avec leurs
+implémentations, leurs sondes, leurs mesures et leurs cases de la grille. L'état à 25 langages, celui de la v5.4, est
+le commit `de697499dcd4e6286cbc8a4ef04ed84cb40e4641` ; son calcul redonne les classements à 25 langages cités plus
+bas, et un fichier retiré s'y relit par `git show de69749:<chemin>` ([`V6.md`](V6.md)).
 
 ## Les étapes
 
@@ -47,15 +52,18 @@ de la précédente : les mesures de la campagne des 22 et 23 novembre (machine 3
 | 26 novembre | v5.1 : le mode du code naturel tiré au sort, entre deux modes puis entre trois, sans mesure nouvelle | A7 et A8 | [`V5_1.md`](V5_1.md), gardé dans le dépôt |
 | 26 novembre | v5.2 : Zig classé, par exception, avec sa version de développement, remesurée à côté d'un témoin | l'exception et son astérisque ; le transport par témoin | [`V5_2.md`](V5_2.md), gardé dans le dépôt |
 | 27 novembre | v5.3 : deux lectures ajoutées au rapport après une veille sur les bancs comparables, sans mesure nouvelle ; le classement reste celui de la v5.2 | la part de la variance du score que porte chaque composante ; le tri des écarts du code naturel, son registre des causes et son garde-fou | [`V5_3.md`](V5_3.md), gardé dans le dépôt |
-| 27 novembre | v5.4 : l'erreur de mesure que le tri a retrouvée sur K1 de Go est corrigée ; Go est remesuré à part hors de l'expérience `simd` de sa chaîne, à côté de son binaire de la campagne et de C : le classement publié | la construction de Go en deux binaires ; le pont par une cellule de C ; les calculs « Go de la campagne » et « Campagne telle que mesurée » | [`V5_4.md`](V5_4.md), gardé dans le dépôt |
+| 27 novembre | v5.4 : l'erreur de mesure que le tri a retrouvée sur K1 de Go est corrigée ; Go est remesuré à part hors de l'expérience `simd` de sa chaîne, à côté de son binaire de la campagne et de C | la construction de Go en deux binaires ; le pont par une cellule de C ; les calculs « Go de la campagne » et « Campagne telle que mesurée » | [`V5_4.md`](V5_4.md), gardé dans le dépôt |
+| 27 novembre | v6 : Python, JavaScript, PHP, BQN et Lua retirés du banc, sans mesure nouvelle ; le classement porte sur 20 langages : le classement publié | le périmètre ; les références prises parmi 20 langages ; deux classes de bruit au lieu de trois | [`V6.md`](V6.md), gardé dans le dépôt |
 
 Le classement de la v3 a été publié du 30 octobre au 23 novembre, avec ses notes et ses errata
 (`docs/RANKING_V3.md`, `results/report_v3.md`).
 
 ## Ce que ces étapes ont établi
 
-Hors les classements des 23, 24 et 26 novembre, les chiffres ci-dessous viennent de campagnes séparées, chacune sur
-son hôte ; ils ne sont pas remesurés dans la campagne publiée. Leur détail est dans le document cité.
+Hors les classements des 23, 24, 26 et 27 novembre, les chiffres ci-dessous viennent de campagnes séparées, chacune sur
+son hôte ; ils ne sont pas remesurés dans la campagne publiée. Leur détail est dans le document cité. Les classements
+ci-dessous comptent 25 langages ; depuis la v6, le calcul du dépôt n'en classe plus que 20, et ceux qu'il redonnait à
+l'identique se recalculent depuis le commit `de69749`.
 
 * **Classement de la v3** (une taille par noyau, hôtes reliés par un témoin C, répliqué sur deux
   micro-architectures) : C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#,
@@ -73,24 +81,29 @@ son hôte ; ils ne sont pas remesurés dans la campagne publiée. Leur détail e
 * **Classement du 26 novembre au matin** (v5 : la campagne publiée, avant que le mode du code naturel soit tiré au
   sort) : C, C++, Odin, Rust, Nim, D, C3, Zig, Ada, Julia, Fortran, Chapel, Mojo, Swift, C#, Java, Go, FreePascal,
   Haskell, OCaml, BQN, JavaScript, PHP, Python, Lua ; trois étages de 15, 4 et 6 langages ; C premier dans 69 % des
-  variantes. Sans l'exception de Zig ni la correction de Go (`FINAL_ZIG17=1 FINAL_GOSIMD=1`), le calcul le redonne
-  à l'identique (« Sans A7 ») ; son procès-verbal est [`V5.md`](V5.md), 9.
+  variantes. Sans l'exception de Zig ni la correction de Go (`FINAL_ZIG17=1 FINAL_GOSIMD=1`), le calcul de la v5.4 le
+  redonne à l'identique (« Sans A7 ») ; son procès-verbal est [`V5.md`](V5.md), 9.
 * **Classement du 26 novembre, 15 h** (v5.1, première forme : le mode du code naturel tiré entre R1 et le mode publié
   de chaque chaîne) : C, C++, Odin, Rust, Zig, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, C#, Java, Go,
   FreePascal, Haskell, OCaml, BQN, JavaScript, PHP, Python, Lua ; deux étages de 19 et 6 langages ; C premier dans
   63 % des variantes. Publié quelques heures : le tirage entre trois modes, qui l'a remplacé, garde les 25 places.
-  Sans l'exception de Zig ni la correction de Go (`FINAL_ZIG17=1 FINAL_GOSIMD=1`), le calcul le redonne à
+  Sans l'exception de Zig ni la correction de Go (`FINAL_ZIG17=1 FINAL_GOSIMD=1`), le calcul de la v5.4 le redonne à
   l'identique (« Sans A8 ») ; son procès-verbal est [`V5_1.md`](V5_1.md), 8.
 * **Classement du 26 novembre, 17 h** (v5.1 : le mode du code naturel tiré entre trois politiques, Zig mesuré par sa
   version stable comme les 24 autres) : C, C++, Odin, Rust, Zig, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift,
   C#, Java, Go, FreePascal, Haskell, OCaml, BQN, JavaScript, PHP, Python, Lua ; deux étages de 19 et 6 langages ; C
-  premier dans 59 % des variantes. Le calcul le redonne à l'identique (« Campagne telle que mesurée » de
-  `results/report_final.md`) ; son procès-verbal est [`V5_1.md`](V5_1.md), 10.
+  premier dans 59 % des variantes. Le calcul de la v5.4 le redonne à l'identique (« Campagne telle que mesurée ») ;
+  son procès-verbal est [`V5_1.md`](V5_1.md), 10.
 * **Classement du 26 novembre au soir et du 27 novembre** (v5.2 et v5.3 : Zig par sa version de développement, Go
   encore mesuré dans le binaire de la campagne, dont K1 était faussé) : C, C++, Zig, Odin, Rust, Nim, C3, D, Ada,
   Julia, Fortran, Chapel, Mojo, Swift, C#, Java, Go, FreePascal, Haskell, OCaml, BQN, JavaScript, PHP, Python, Lua ;
-  deux étages de 19 et 6 langages ; C premier dans 56 % des variantes. Le calcul le redonne à l'identique (« Go de
-  la campagne ») ; ses procès-verbaux sont [`V5_2.md`](V5_2.md), 9, et [`V5_3.md`](V5_3.md), 9.
+  deux étages de 19 et 6 langages ; C premier dans 56 % des variantes. Le calcul de la v5.4 le redonne à l'identique
+  (« Go de la campagne ») ; ses procès-verbaux sont [`V5_2.md`](V5_2.md), 9, et [`V5_3.md`](V5_3.md), 9.
+* **Classement du 27 novembre, 17 h** (v5.4 : K1 de Go corrigé ; le dernier à 25 langages) : C, C++, Zig, Odin,
+  Rust, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, C#, Go, Java, FreePascal, Haskell, OCaml, BQN,
+  JavaScript, PHP, Python, Lua ; deux étages de 19 et 6 langages ; C premier dans 57 % des variantes. C'est l'état
+  du commit `de69749` ; son procès-verbal est [`V5_4.md`](V5_4.md), 9. Le classement publié en garde les 20 premiers,
+  dans le même ordre, avec des scores plus hauts de 0,3 point au plus ([`V6.md`](V6.md), 9).
 * **Point 2, tailles** (`docs/V4_SIZES.md`). Entre la taille publiée seule et la moyenne des trois tailles, aucun
   langage ne bouge de plus de deux places ; l'effet de l'hôte est plus grand que celui des tailles.
 * **Point 3, conditions égales** (`docs/V4_EQUAL.md`). Les vérifications et le stencil contigu ne déplacent aucun
