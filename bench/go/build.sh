@@ -1,5 +1,7 @@
 #!/bin/sh
-# Go 1.27.3 — GOAMD64=v4 (AVX-512 autorisé), GOEXPERIMENT=simd (simd/archsimd)
+# Go 1.27.3, GOAMD64=v4 (AVX-512 autorisé). Deux binaires de la même source (docs/V5_4.md, 3.1) : ms, compilé avec
+# GOEXPERIMENT=simd, pour les variantes à SIMD explicite (simd.go : simd/archsimd) ; ms_std, le binaire standard, pour
+# toutes les autres (nosimd.go : bouchons). Le lanceur (run) choisit.
 set -e
 cd "$(dirname "$0")"
 # v4, point 3 (docs/V4_EQUAL.md, 3.1). MS_MODE=unc : mode R1', sans vérifications (-gcflags=-B) ; sans MS_MODE, la
@@ -27,4 +29,5 @@ const (
 	sizeM9     = ${MS_M9:-2048}
 )
 EOF
-GOAMD64=v4 GOEXPERIMENT=simd /opt/go127/bin/go build $MODE -o ms ms.go sizes.go
+GOAMD64=v4 GOEXPERIMENT=simd /opt/go127/bin/go build $MODE -o ms ms.go simd.go sizes.go
+GOAMD64=v4 /opt/go127/bin/go build $MODE -o ms_std ms.go nosimd.go sizes.go

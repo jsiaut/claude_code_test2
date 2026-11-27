@@ -8,7 +8,9 @@
 # 5. toutes les constructions (tools/final/build.py), puis comparaison de leurs empreintes avec celles des machines
 #    précédentes (tools/final/compare_builds.py -> builds_compare.txt).
 # Répertoire de la campagne : results/final, ou celui de MS_CAMPAIGN_DIR. Refuse une machine d'un autre modèle que
-# celui de la campagne. MS_LANGS=a,b : ne construit que ces langages (remesure d'un langage : docs/V5_2.md, 3).
+# celui de la campagne. MS_LANGS=a,b : ne construit que ces langages (remesure d'un langage : docs/V5_2.md, 3, et
+# docs/V5_4.md, 3.2) ; la caractérisation va alors dans le répertoire de la remesure (hw/machine<numéro>), parce que
+# results/hw ne porte que les machines des campagnes, dont l'analyse lit les bornes.
 set -e
 cd "$(dirname "$0")/../.."
 N=$1
@@ -18,7 +20,9 @@ R=${MS_CAMPAIGN_DIR:-results/final}
 M=$(cat "$R/model.txt" 2>/dev/null || echo 6/207/2)
 CUR=$(awk -F': ' '/^cpu family/ {f = $2} /^model\t/ {m = $2} /^stepping/ {print f "/" m "/" $2; exit}' /proc/cpuinfo)
 [ "$CUR" = "$M" ] || { echo "machine.sh : processeur $CUR, la campagne de $R se mesure sur $M" >&2; exit 1; }
-[ -f results/hw/machine$N/stream.txt ] || sh tools/sizes/hwchar.sh results/hw/machine$N
+HW=results/hw
+[ -z "${MS_LANGS:-}" ] || HW=$R/hw
+[ -f "$HW/machine$N/stream.txt" ] || sh tools/sizes/hwchar.sh "$HW/machine$N"
 echo "$N" > /dev/shm/ms_final_machine
 mkdir -p "$R"
 sh tools/versions.sh > "$R/toolchains.txt"

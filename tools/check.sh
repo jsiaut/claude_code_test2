@@ -48,6 +48,7 @@ is "constructions" "$(python3 tools/final/build.py --list | tail -1)" "132 const
 is "cellules à étalonner" "$(python3 tools/final/campaign.py calibrate --dry | awk '{n += $(NF - 1)} END {print n}')" "3106"
 is "processus des trois passes" "$(python3 tools/final/campaign.py run --dry | tail -1)" "10158 processus"
 is "remesure de Zig" "$(MS_DEV=1 python3 tools/final/build.py --langs zig --list | tail -1)" "12 constructions"
+is "remesure de Go" "$(MS_GOFIX=1 python3 tools/final/build.py --langs go --list | tail -1)" "12 constructions"
 
 echo "4. Classement"
 if [ "$MODE" = "--rapide" ]; then

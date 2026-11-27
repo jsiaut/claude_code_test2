@@ -1,2 +1,10 @@
 #!/bin/sh
-exec "$(dirname "$0")/ms" "$@"
+# Deux binaires (build.sh) : ms, compilé avec GOEXPERIMENT=simd, pour les dix variantes à SIMD explicite ; ms_std, le
+# binaire standard, pour toutes les autres. Sous l'expérience, la préemption asynchrone de Go 1.27 restaure les
+# registres vectoriels sans VZEROUPPER, ce qui fausse la mesure du code qui mêle SSE et VEX (docs/V5_4.md).
+d=$(dirname "$0")
+case "$1 $2 ${4:-}" in
+  "k1 soa "* | "k4 tuned "* | "k5 tuned "* | "k5 tuned_v "* | "k9 tuned_v "* | "k9 mt_pool_v "*) exec "$d/ms" "$@" ;;
+  "k6 tuned q6" | "k6 mt q6" | "k6 tuned_v q1" | "k6 mt_pool_v q1") exec "$d/ms" "$@" ;;
+  *) exec "$d/ms_std" "$@" ;;
+esac

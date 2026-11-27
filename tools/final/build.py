@@ -4,14 +4,16 @@
 Une source par langage (bench/<langage>), construite dans chaque mode : pub (mode publié), chk et unc (modes R1 et R1' :
 MS_MODE de build.sh ; Julia, sans construction, par l'option de son lanceur), et pour C, gcc et gcc_chk (la même source
 par gcc 16 : MS_CC de build.sh). Sous MS_DEV=1 seulement, pour Zig, dev et dev_chk (la même source par sa version de
-développement : MS_ZIG de build.sh ; docs/V5_2.md, 3) : sans cette variable, le plan est celui de la campagne publiée.
+développement : MS_ZIG de build.sh ; docs/V5_2.md, 3). Sous MS_GOFIX=1 seulement, pour Go, wit et wit_unc : le témoin de
+sa remesure (docs/V5_4.md, 3.2), construit à partir de la source de la campagne (WITNESS : un commit), prise dans
+l'historique de git et non dans l'arbre de travail. Sans ces variables, le plan est celui de la campagne publiée.
 Jeux de tailles (tools/sizes/sizes.py, SETS) : pub, small, large. Langages compilés :
 paramètres MS_* du jeu passés à build.sh (sans eux, la taille publiée) ; langages sans construction : constantes de
 taille substituées dans la copie de la construction (tools/sizes/patches.py), puis build.sh (vérification de syntaxe).
 
 Les enregistrements de la campagne portent une étiquette qui dit d'où vient la cellule (CELLS : pub, cv, chk, unc,
-cv_chk, cv_unc, gcc, gcc_cv, gcc_chk, dev, dev_cv, dev_chk) ; plusieurs étiquettes partagent une construction
-(BUILD_OF).
+cv_chk, cv_unc, gcc, gcc_cv, gcc_chk, dev, dev_cv, dev_chk, wit, wit_cv, wit_unc, wit_cv_unc) ; plusieurs étiquettes
+partagent une construction (BUILD_OF).
 
 Chaque construction part des fichiers suivis par git, qui doivent être identiques à ceux du dernier commit (une source
 modifiée et non commitée est refusée) ; elle garde l'empreinte de ses entrées (.source_hash) et n'est refaite que si
@@ -43,7 +45,10 @@ CV_CHK = ["cpp", "d"]                                                     # R2 d
 CV_UNC = ["nim", "mojo", "swift", "go", "ocaml", "d"]                     # R2 dans le mode R1'
 GCC = ["c"]                                                               # C aussi par gcc (docs/V5.md, S2)
 DEV = ["zig"] if os.environ.get("MS_DEV") else []                         # version de développement (docs/V5_2.md, 3)
-BUILD_OF = {"cv": "pub", "cv_chk": "chk", "cv_unc": "unc", "gcc_cv": "gcc", "dev_cv": "dev"}  # étiquette -> construction
+GOFIX = ["go"] if os.environ.get("MS_GOFIX") else []                      # témoin de la remesure de Go (docs/V5_4.md)
+WITNESS = {"go": "861d62564995b71cff4e65e5e836a899edcd527c"}              # source du témoin : celle de la campagne
+BUILD_OF = {"cv": "pub", "cv_chk": "chk", "cv_unc": "unc", "gcc_cv": "gcc", "dev_cv": "dev", "wit_cv": "wit",
+            "wit_cv_unc": "wit_unc"}  # étiquette -> construction
 INTERP = {"python", "lua", "php", "bqn", "js", "julia"}
 SETS = ["pub", "small", "large"]
 MAIN = {"python": "ms.py", "lua": "ms.lua", "php": "ms.php", "bqn": "ms.bqn", "js": "ms.js", "julia": "ms.jl"}
@@ -54,7 +59,9 @@ def constructions(lang):
     """Étiquettes des cellules d'un langage (une par origine de cellule : tools/final/campaign.py, cells)."""
     return ["pub", "cv"] + [c for c, lst in (("chk", CHK), ("unc", UNC), ("cv_chk", CV_CHK), ("cv_unc", CV_UNC),
                                              ("gcc", GCC), ("gcc_cv", GCC), ("gcc_chk", GCC),
-                                             ("dev", DEV), ("dev_cv", DEV), ("dev_chk", DEV)) if lang in lst]
+                                             ("dev", DEV), ("dev_cv", DEV), ("dev_chk", DEV),
+                                             ("wit", GOFIX), ("wit_cv", GOFIX), ("wit_unc", GOFIX),
+                                             ("wit_cv_unc", GOFIX)) if lang in lst]
 
 
 def builds(lang):
@@ -72,7 +79,21 @@ def source_dir(lang):
 
 
 def mode_of(cons):
-    return {"chk": "chk", "unc": "unc", "gcc_chk": "chk", "dev_chk": "chk"}.get(BUILD_OF.get(cons, cons))
+    return {"chk": "chk", "unc": "unc", "gcc_chk": "chk", "dev_chk": "chk",
+            "wit_unc": "unc"}.get(BUILD_OF.get(cons, cons))
+
+
+def witness(lang, cons):
+    """Commit dont vient la source d'une construction du témoin (wit, wit_unc) ; None pour les autres."""
+    return WITNESS[lang] if BUILD_OF.get(cons, cons).startswith("wit") else None
+
+
+def witness_files(lang, commit):
+    out = subprocess.run(["git", "-C", ROOT, "ls-tree", "-r", "--name-only", commit, "--", source_dir(lang)],
+                         capture_output=True, text=True, check=True).stdout.split()
+    if not out:
+        raise SystemExit(f"{source_dir(lang)} : absent du commit {commit}")
+    return [os.path.relpath(f, source_dir(lang)) for f in out]
 
 
 def build_dir(lang, cons, sset):
@@ -103,6 +124,9 @@ def input_hash(lang, cons, sset):
     src = source_dir(lang)
     cons = BUILD_OF.get(cons, cons)
     h = hashlib.sha256(f"{cons}|{sset}|{mode_of(cons)}\n".encode())
+    if witness(lang, cons):  # la source du témoin est fixée par son commit
+        h.update(witness(lang, cons).encode())
+        return h.hexdigest()
     for f in sorted(tracked(src)):
         h.update(f.encode() + b"\0" + open(os.path.join(ROOT, src, f), "rb").read())
     if lang in INTERP and sset != "pub":
@@ -148,13 +172,23 @@ def executed_files(lang, dst, srcfiles):
 
 def build(lang, cons, sset):
     src = source_dir(lang)
-    files = tracked(src)
     dst = build_dir(lang, cons, sset)
     shutil.rmtree(dst, ignore_errors=True)
     os.makedirs(dst)
-    for f in files:
-        os.makedirs(os.path.dirname(os.path.join(dst, f)), exist_ok=True)
-        shutil.copy2(os.path.join(ROOT, src, f), os.path.join(dst, f))
+    commit = witness(lang, cons)
+    if commit:  # témoin : les fichiers du commit, avec leurs droits (git archive), et non ceux de l'arbre de travail
+        files = witness_files(lang, commit)
+        with tempfile.TemporaryDirectory(dir="/dev/shm") as t:
+            ar = subprocess.run(["git", "-C", ROOT, "archive", commit, "--", src], capture_output=True, check=True)
+            subprocess.run(["tar", "-x", "-C", t], input=ar.stdout, check=True)
+            for f in files:
+                os.makedirs(os.path.dirname(os.path.join(dst, f)), exist_ok=True)
+                shutil.copy2(os.path.join(t, src, f), os.path.join(dst, f))
+    else:
+        files = tracked(src)
+        for f in files:
+            os.makedirs(os.path.dirname(os.path.join(dst, f)), exist_ok=True)
+            shutil.copy2(os.path.join(ROOT, src, f), os.path.join(dst, f))
     mode = mode_of(cons)
     if lang in INTERP:
         if sset != "pub":
