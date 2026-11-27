@@ -134,3 +134,6 @@
 2026-11-27T16:12:35 passe 1 k1:pub : 24 enregistrements mis à part (machine non au repos pendant le groupe) ; groupe refait
 2026-11-27T16:12:35 passe 1 : 1 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
 2026-11-27T16:14:18 passe 1 groupe 1/1 k1:pub : 24 processus, 103 s
+2026-11-27T16:14:20 passe 2 k1:large : 24 enregistrements mis à part (machine non au repos pendant le groupe) ; groupe refait
+2026-11-27T16:14:21 passe 2 : 1 groupes ; machine 40 ; processeur : 6/207/2 Intel(R) Xeon(R) Processor @ 2.10GHz
+2026-11-27T16:18:53 passe 2 groupe 1/1 k1:large : 24 processus, 269 s
