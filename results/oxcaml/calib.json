@@ -703,6 +703,22 @@
 "ts": "2026-11-28T06:50:00",
 "warmup": 1
 },
+"oxcaml|pub|k3|pub|rmw_padded|": {
+"machine": "41",
+"reps": 12,
+"status": "ok",
+"t_cal": 0.230825465,
+"ts": "2026-11-28T06:53:33",
+"warmup": 1
+},
+"oxcaml|pub|k3|pub|sw_padded|": {
+"machine": "41",
+"reps": 7,
+"status": "ok",
+"t_cal": 0.398667615,
+"ts": "2026-11-28T06:53:34",
+"warmup": 1
+},
 "oxcaml|pub|k4|small|branchless_unsorted|": {
 "machine": "41",
 "reps": 2225,
@@ -1677,6 +1693,22 @@
 "status": "ok",
 "t_cal": 0.039984128,
 "ts": "2026-11-28T06:50:32",
+"warmup": 1
+},
+"oxcaml|wit|k3|pub|rmw_padded|": {
+"machine": "41",
+"reps": 9,
+"status": "ok",
+"t_cal": 0.309427188,
+"ts": "2026-11-28T06:53:34",
+"warmup": 1
+},
+"oxcaml|wit|k3|pub|sw_padded|": {
+"machine": "41",
+"reps": 6,
+"status": "ok",
+"t_cal": 0.446494463,
+"ts": "2026-11-28T06:53:35",
 "warmup": 1
 },
 "oxcaml|wit|k4|small|branchless_unsorted|": {
