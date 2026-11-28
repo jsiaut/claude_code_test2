@@ -3,7 +3,8 @@
 *Ce document dit ce que chaque implémentation doit faire, au même degré de détail pour tous les langages : format des
 données, paramètres, primitives, table de hachage, plan physique de chaque requête, forme des résultats. Le plan daté
 est [`docs/V7.md`](../docs/V7.md). L'implémentation de référence est [`c/olap.c`](c/olap.c) : en cas de doute, elle
-fait foi. État : gelé le 28 novembre 2026, après la validation de la référence C contre DuckDB et ClickHouse.*
+fait foi. État : gelé le 28 novembre 2026, après la validation de la référence C contre DuckDB et ClickHouse ;
+précisé le même jour par les six premiers portages (réglages libres, compilateur, marges), sans changement de plan.*
 
 ## 1. Contrat d'une implémentation
 
@@ -88,7 +89,9 @@ pas) ; vecteurs de 1 024 à 4 096 lignes (aucun effet mesurable) ; pages larges 
 * L'écriture du corps de ces routines est libre : c'est du réglage. La référence lit un mot par valeur quand la
   largeur divise 64 et, sinon, combine toujours deux mots, le groupe étant déroulé en entier : son compilateur
   vectorise ces deux formes (de 0,1 à 0,8 ns par valeur), pas celle qui teste si la valeur chevauche deux mots
-  (jusqu'à 1,6 ns).
+  (jusqu'à 1,6 ns). Un langage dont le compilateur ne vectorise ni ne déroule ces boucles (Go, Java, C#) engendre le
+  texte des routines par un programme, livré avec son produit : les 64 affectations d'un groupe, à positions
+  constantes.
 * `unpack_sel(colonne, bloc, positions, n)` : les valeurs aux positions données (lignes dans le bloc), dans l'ordre.
   Boucle générale : la valeur de la ligne p occupe les bits `p × largeur` et suivants.
 * Colonnes sur 64 bits : aucune copie, le vecteur est la zone des valeurs.
@@ -167,7 +170,8 @@ fil, qui lit ses tuples fil après fil, dans l'ordre de leurs morceaux.
 * **Sous-chaîne** (T9, C20) : les octets d'un bloc sont parcourus d'un trait, par mots de 8 octets. Une position est
   candidate si elle porte le premier octet de l'aiguille et si la position décalée de sa longueur moins un porte le
   dernier ; les candidates sont comparées à l'aiguille. Une occurrence compte si elle tient dans une ligne ; une ligne
-  compte une fois, et la suite de la ligne est sautée.
+  compte une fois, et la suite de la ligne est sautée. Les mots sans candidate, l'immense majorité, se parcourent
+  par une boucle serrée qui ne s'arrête qu'à une candidate.
 * **Année d'une date** : par une table des premiers jours de chaque année depuis 1970.
 
 ## 5. Plans physiques
@@ -270,7 +274,13 @@ déduisent de ses sommes et de son compte.
   d'octets et décalages variables) ; la sélection (compression des positions retenues) ; l'agrégation de T1 (sommes
   masquées par groupe) ; la recherche de sous-chaîne (64 positions à la fois) ; la répartition (un tampon de 64 octets
   par partition, vidé par une écriture non temporelle) ; le préchargement des cases et des octets à venir dans les
-  agrégations et les jointures par partition. Une implémentation spécialise ce que son langage permet d'écrire.
+  agrégations et les jointures par partition. Une implémentation spécialise ce que son langage permet d'écrire ; là
+  où le compilateur ne vectorise pas de lui-même, elle écrit aussi en SIMD explicite les expressions et les
+  hachages par vecteur, que la référence laisse à son compilateur aux deux niveaux.
+* **Compilateur.** Un langage qui en a plusieurs est mesuré avec celui de la référence quand il le partage (C et C++
+  par clang) ; l'autre se construit par `MS_CC=gcc` et se mesure à part.
+* **Marge de lecture.** Une implémentation peut charger chaque colonne avec 64 octets nuls de marge et donner 16
+  cases de marge à ses vecteurs de travail, pour que ses pas vectoriels lisent et écrivent des registres entiers.
 * Bibliothèque standard, plus l'infrastructure tierce déclarée : allocateur, réserve de fils, fonction de hachage
   (elle doit rendre les valeurs de 4.2). Aucune bibliothèque de requêtes, de trames de données ou de noyaux
   vectoriels.

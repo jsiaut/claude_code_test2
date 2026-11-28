@@ -214,6 +214,34 @@ def load(out):
     return cells, rss, bad, stamps
 
 
+def ranking(cells, hand, threads):
+    """Débit par implémentation : moyenne géométrique, sur les requêtes, des lignes par seconde ; ordre : niveau
+    portable, tous cœurs (docs/V7.md, 10). Entre parenthèses : la même grandeur calculée sur chaque passe seule."""
+    def rate(impl, level, nt, pick):
+        v = [ROWS[q[0]] / pick(cells[(impl, level, nt, q)]) for q in QUERIES if (impl, level, nt, q) in cells]
+        return statistics.geometric_mean(v) / 1e6 if len(v) == len(QUERIES) else None
+
+    def cell(impl, level, nt):
+        r = rate(impl, level, nt, statistics.median)
+        if r is None:
+            return "—"
+        n = min(len(cells[(impl, level, nt, q)]) for q in QUERIES)
+        per_pass = [rate(impl, level, nt, lambda v, k=k: v[k]) for k in range(n)]
+        return f"{r:.0f} ({min(per_pass):.0f} à {max(per_pass):.0f})" if n > 1 else f"{r:.0f}"
+
+    top = max(threads)
+    impls = sorted({c[0] for c in hand}, key=lambda i: -(rate(i, "p", top, statistics.median) or 0))
+    best = rate(impls[0], "p", top, statistics.median)
+    print(f"\nDébit en millions de lignes par seconde (moyenne géométrique des dix requêtes) ; ordre : portable, {top} fils\n")
+    print("| Rang | Implémentation | " + " | ".join(f"{LEVELS[lv]}, {nt} fil(s)" for nt in sorted(threads, reverse=True) for lv in LEVELS)
+          + f" | portable, {top} fils, rapporté au premier |")
+    print("|---:|---|" + "---:|" * (2 * len(threads) + 1))
+    for k, i in enumerate(impls):
+        r = rate(i, "p", top, statistics.median)
+        print(f"| {k + 1} | {i} | " + " | ".join(cell(i, lv, nt) for nt in sorted(threads, reverse=True) for lv in LEVELS)
+              + f" | {r / best:.2f} |")
+
+
 def summary(out):
     cells, rss, bad, stamps = load(out)
     med = {k: statistics.median(v) for k, v in cells.items()}
@@ -242,6 +270,8 @@ def summary(out):
     if hand and engines:
         print(f"\nCritère (docs/V7.md, 11) : le pire rapport est {worst:.2f} ; "
               + ("satisfait" if worst <= 2 else "NON SATISFAIT") + " (au plus 2).")
+    if len({c[0] for c in hand}) > 1:
+        ranking(cells, hand, threads)
     if hand:
         print("\nMémoire de travail en Mio : mémoire de pointe du processus moins sa mémoire de départ (colonnes chargées, "
               "fils créés), donnée entre parenthèses\n")
