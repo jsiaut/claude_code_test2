@@ -35,7 +35,7 @@ Score : moyenne du score sur les variantes de l'analyse ; il fixe l'ordre. Score
 
 Go est mesuré hors de l'expérience `simd` de sa chaîne (`docs/V5_4.md`) : ses 15 cellules de K1 que la campagne faussait sont rebâties par un pont par le C ; ses autres cellules sont celles de la campagne. Avec ses cellules de la campagne (« Go de la campagne ») : 17e, score 51.6.
 
-† OxCaml a pris la place d'OCaml (`docs/V6_1.md`) et n'a pas été mesuré dans la campagne : il l'est à part, sur la machine 41, à côté d'un témoin (OCaml 5.5.2, la source et le binaire de la campagne) et d'un pont (C). Ses cellules de même source qu'OCaml sont celles d'OCaml dans la campagne, multipliées par le rapport mesuré au témoin ; ses 12 cellules propres, celles de C dans la campagne, multipliées par le rapport mesuré à C. Avec les mesures d'OCaml et sa propre grille (« OxCaml, mesures d'OCaml ») : 20e, score 34.2.
+† OxCaml a pris la place d'OCaml (`docs/V6_1.md`) et n'a pas été mesuré dans la campagne : il l'est à part, sur la machine 41, à côté d'un témoin (OCaml 5.5.2, la source et le binaire de la campagne) et d'un pont (C). Ses cellules de même source qu'OCaml sont celles d'OCaml dans la campagne, multipliées par le rapport mesuré au témoin ; ses 12 cellules propres, celles de leur pont dans la campagne (C ; le témoin pour K8 `tuned_alloc`), multipliées par le rapport mesuré à ce pont. Avec les mesures d'OCaml et sa propre grille (« OxCaml, mesures d'OCaml ») : 20e, score 34.2.
 
 Mode du code naturel, tiré dans chaque variante (A7, A8) : R1 dans 33.4 % des variantes, mode publié dans 33.5 % des variantes, R1' dans 33.1 % des variantes ; au centre, R1.
 

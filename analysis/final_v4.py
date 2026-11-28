@@ -2085,11 +2085,14 @@ def report(o, calcs):
               f"score {g0['ms_mean'][GO_LANG]:.1f}.", ""]
     if ox:
         xm, nw = R[OXM], len({k.split("|", 2)[2] for k in ox["own"]})
+        wk = sorted({"{} `{}`".format(k.split("|")[2].upper(), k.split("|")[3])
+                     for k, c in ox["own"].items() if c["bridge"].startswith("témoin")})
         L += [f"† OxCaml a pris la place d'OCaml (`docs/V6_1.md`) et n'a pas été mesuré dans la campagne : il l'est à "
               f"part, sur la machine {', '.join(ox['machines'])}, à côté d'un témoin (OCaml 5.5.2, la source et le "
               "binaire de la campagne) et d'un pont (C). Ses cellules de même source qu'OCaml sont celles d'OCaml dans "
-              f"la campagne, multipliées par le rapport mesuré au témoin ; ses {nw} cellules propres, celles de C dans "
-              "la campagne, multipliées par le rapport mesuré à C. Avec les mesures d'OCaml et sa propre grille "
+              f"la campagne, multipliées par le rapport mesuré au témoin ; ses {nw} cellules propres, celles de leur "
+              "pont dans la campagne (C" + (f" ; le témoin pour {', '.join(wk)}" if wk else "") + "), multipliées par "
+              "le rapport mesuré à ce pont. Avec les mesures d'OCaml et sa propre grille "
               f"(« {OXM} ») : {nth(place(xm, OX_LANG))}, score {xm['ms_mean'][OX_LANG]:.1f}.", ""]
     if f.get("mode_share") is not None:
         L += ["Mode du code naturel, tiré dans chaque variante (A7, A8) : "
