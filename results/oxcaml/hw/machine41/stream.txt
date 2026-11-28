@@ -1,0 +1,13 @@
+TSC: 2.1000 GHz
+stream: T=1 copy    11.42 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=1 scale   10.14 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=1 add     13.03 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=1 triad   12.28 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=2 copy    21.22 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=2 scale   21.89 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=2 add     25.55 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=2 triad   24.81 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=4 copy    39.58 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=4 scale   27.61 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=4 add     30.93 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
+stream: T=4 triad   31.00 GB/s (comptage STREAM, sans RFO, instants relevés par les fils)
