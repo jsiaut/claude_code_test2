@@ -1,4 +1,28 @@
 {
+"c|cv|k6|pub|mt_pool_v|q6": {
+"machine": "41",
+"reps": 510,
+"status": "ok",
+"t_cal": 0.005876724,
+"ts": "2026-11-28T06:51:11",
+"warmup": 1
+},
+"c|cv|k6|pub|mt_pool|q1": {
+"machine": "41",
+"reps": 321,
+"status": "ok",
+"t_cal": 0.009324205,
+"ts": "2026-11-28T06:51:11",
+"warmup": 1
+},
+"c|cv|k6|pub|tuned_v|q6": {
+"machine": "41",
+"reps": 224,
+"status": "ok",
+"t_cal": 0.013358518,
+"ts": "2026-11-28T06:51:10",
+"warmup": 1
+},
 "c|cv|k9|small|mt_pool_v|": {
 "machine": "41",
 "reps": 10000,
@@ -31,6 +55,14 @@
 "ts": "2026-11-28T06:51:02",
 "warmup": 1
 },
+"c|pub|k6|pub|tuned|q1": {
+"machine": "41",
+"reps": 90,
+"status": "ok",
+"t_cal": 0.033065455,
+"ts": "2026-11-28T06:51:10",
+"warmup": 1
+},
 "c|pub|k7|pub|tuned|": {
 "machine": "41",
 "reps": 13,
@@ -45,6 +77,86 @@
 "status": "ok",
 "t_cal": 0.000288227,
 "ts": "2026-11-28T06:48:09",
+"warmup": 1
+},
+"oxcaml|cv|k6|pub|mt_pool_s|q1": {
+"machine": "41",
+"reps": 26,
+"status": "ok",
+"t_cal": 0.111479826,
+"ts": "2026-11-28T06:51:07",
+"warmup": 1
+},
+"oxcaml|cv|k6|pub|mt_pool_s|q6": {
+"machine": "41",
+"reps": 135,
+"status": "ok",
+"t_cal": 0.022092469,
+"ts": "2026-11-28T06:51:06",
+"warmup": 1
+},
+"oxcaml|cv|k6|pub|mt_pool_v|q1": {
+"machine": "41",
+"reps": 164,
+"status": "ok",
+"t_cal": 0.018224523,
+"ts": "2026-11-28T06:51:06",
+"warmup": 1
+},
+"oxcaml|cv|k6|pub|mt_pool_v|q6": {
+"machine": "41",
+"reps": 398,
+"status": "ok",
+"t_cal": 0.007532523,
+"ts": "2026-11-28T06:51:06",
+"warmup": 1
+},
+"oxcaml|cv|k6|pub|mt_pool|q1": {
+"machine": "41",
+"reps": 85,
+"status": "ok",
+"t_cal": 0.034954195,
+"ts": "2026-11-28T06:51:06",
+"warmup": 1
+},
+"oxcaml|cv|k6|pub|mt_pool|q6": {
+"machine": "41",
+"reps": 126,
+"status": "ok",
+"t_cal": 0.023646933,
+"ts": "2026-11-28T06:51:06",
+"warmup": 1
+},
+"oxcaml|cv|k6|pub|tuned_s|q1": {
+"machine": "41",
+"reps": 8,
+"status": "ok",
+"t_cal": 0.355801646,
+"ts": "2026-11-28T06:51:06",
+"warmup": 1
+},
+"oxcaml|cv|k6|pub|tuned_s|q6": {
+"machine": "41",
+"reps": 49,
+"status": "ok",
+"t_cal": 0.061089407,
+"ts": "2026-11-28T06:51:05",
+"warmup": 1
+},
+"oxcaml|cv|k6|pub|tuned_v|q1": {
+"machine": "41",
+"reps": 55,
+"status": "ok",
+"t_cal": 0.053679872,
+"ts": "2026-11-28T06:51:05",
+"warmup": 1
+},
+"oxcaml|cv|k6|pub|tuned_v|q6": {
+"machine": "41",
+"reps": 186,
+"status": "ok",
+"t_cal": 0.016089152,
+"ts": "2026-11-28T06:51:05",
 "warmup": 1
 },
 "oxcaml|cv|k7|pub|tuned_oa|": {
@@ -143,6 +255,54 @@
 "ts": "2026-11-28T06:50:00",
 "warmup": 1
 },
+"oxcaml|pub|k6|pub|mt|q1": {
+"machine": "41",
+"reps": 147,
+"status": "ok",
+"t_cal": 0.020345954,
+"ts": "2026-11-28T06:51:05",
+"warmup": 1
+},
+"oxcaml|pub|k6|pub|mt|q6": {
+"machine": "41",
+"reps": 145,
+"status": "ok",
+"t_cal": 0.020578624,
+"ts": "2026-11-28T06:51:05",
+"warmup": 1
+},
+"oxcaml|pub|k6|pub|natural|q1": {
+"machine": "41",
+"reps": 31,
+"status": "ok",
+"t_cal": 0.095143777,
+"ts": "2026-11-28T06:51:05",
+"warmup": 1
+},
+"oxcaml|pub|k6|pub|natural|q6": {
+"machine": "41",
+"reps": 17,
+"status": "ok",
+"t_cal": 0.173655022,
+"ts": "2026-11-28T06:51:05",
+"warmup": 1
+},
+"oxcaml|pub|k6|pub|tuned|q1": {
+"machine": "41",
+"reps": 41,
+"status": "ok",
+"t_cal": 0.072394175,
+"ts": "2026-11-28T06:51:05",
+"warmup": 1
+},
+"oxcaml|pub|k6|pub|tuned|q6": {
+"machine": "41",
+"reps": 54,
+"status": "ok",
+"t_cal": 0.054848951,
+"ts": "2026-11-28T06:51:05",
+"warmup": 1
+},
 "oxcaml|pub|k7|pub|natural|": {
 "machine": "41",
 "reps": 3,
@@ -223,6 +383,22 @@
 "ts": "2026-11-28T06:50:15",
 "warmup": 1
 },
+"oxcaml|unc|k6|pub|natural|q1": {
+"machine": "41",
+"reps": 34,
+"status": "ok",
+"t_cal": 0.086060533,
+"ts": "2026-11-28T06:51:07",
+"warmup": 1
+},
+"oxcaml|unc|k6|pub|natural|q6": {
+"machine": "41",
+"reps": 21,
+"status": "ok",
+"t_cal": 0.138703534,
+"ts": "2026-11-28T06:51:07",
+"warmup": 1
+},
 "oxcaml|unc|k7|pub|natural|": {
 "machine": "41",
 "reps": 3,
@@ -253,6 +429,54 @@
 "status": "ok",
 "t_cal": 0.002963136,
 "ts": "2026-11-28T06:48:09",
+"warmup": 1
+},
+"oxcaml|wit_cv|k6|pub|mt_pool_s|q1": {
+"machine": "41",
+"reps": 27,
+"status": "ok",
+"t_cal": 0.110432979,
+"ts": "2026-11-28T06:51:10",
+"warmup": 1
+},
+"oxcaml|wit_cv|k6|pub|mt_pool_s|q6": {
+"machine": "41",
+"reps": 142,
+"status": "ok",
+"t_cal": 0.021080846,
+"ts": "2026-11-28T06:51:09",
+"warmup": 1
+},
+"oxcaml|wit_cv|k6|pub|mt_pool|q1": {
+"machine": "41",
+"reps": 108,
+"status": "ok",
+"t_cal": 0.027553855,
+"ts": "2026-11-28T06:51:09",
+"warmup": 1
+},
+"oxcaml|wit_cv|k6|pub|mt_pool|q6": {
+"machine": "41",
+"reps": 80,
+"status": "ok",
+"t_cal": 0.037049537,
+"ts": "2026-11-28T06:51:09",
+"warmup": 1
+},
+"oxcaml|wit_cv|k6|pub|tuned_s|q1": {
+"machine": "41",
+"reps": 10,
+"status": "ok",
+"t_cal": 0.298287277,
+"ts": "2026-11-28T06:51:09",
+"warmup": 1
+},
+"oxcaml|wit_cv|k6|pub|tuned_s|q6": {
+"machine": "41",
+"reps": 31,
+"status": "ok",
+"t_cal": 0.096740853,
+"ts": "2026-11-28T06:51:09",
 "warmup": 1
 },
 "oxcaml|wit_cv|k7|pub|tuned_oa|": {
@@ -311,6 +535,22 @@
 "ts": "2026-11-28T06:50:50",
 "warmup": 1
 },
+"oxcaml|wit_unc|k6|pub|natural|q1": {
+"machine": "41",
+"reps": 33,
+"status": "ok",
+"t_cal": 0.088998026,
+"ts": "2026-11-28T06:51:10",
+"warmup": 1
+},
+"oxcaml|wit_unc|k6|pub|natural|q6": {
+"machine": "41",
+"reps": 22,
+"status": "ok",
+"t_cal": 0.133800256,
+"ts": "2026-11-28T06:51:10",
+"warmup": 1
+},
 "oxcaml|wit_unc|k7|pub|natural|": {
 "machine": "41",
 "reps": 3,
@@ -365,6 +605,54 @@
 "status": "ok",
 "t_cal": 0.039984128,
 "ts": "2026-11-28T06:50:32",
+"warmup": 1
+},
+"oxcaml|wit|k6|pub|mt|q1": {
+"machine": "41",
+"reps": 71,
+"status": "ok",
+"t_cal": 0.041978977,
+"ts": "2026-11-28T06:51:08",
+"warmup": 1
+},
+"oxcaml|wit|k6|pub|mt|q6": {
+"machine": "41",
+"reps": 83,
+"status": "ok",
+"t_cal": 0.035919079,
+"ts": "2026-11-28T06:51:08",
+"warmup": 1
+},
+"oxcaml|wit|k6|pub|natural|q1": {
+"machine": "41",
+"reps": 29,
+"status": "ok",
+"t_cal": 0.101162896,
+"ts": "2026-11-28T06:51:08",
+"warmup": 1
+},
+"oxcaml|wit|k6|pub|natural|q6": {
+"machine": "41",
+"reps": 18,
+"status": "ok",
+"t_cal": 0.157919894,
+"ts": "2026-11-28T06:51:08",
+"warmup": 1
+},
+"oxcaml|wit|k6|pub|tuned|q1": {
+"machine": "41",
+"reps": 31,
+"status": "ok",
+"t_cal": 0.096425086,
+"ts": "2026-11-28T06:51:08",
+"warmup": 1
+},
+"oxcaml|wit|k6|pub|tuned|q6": {
+"machine": "41",
+"reps": 35,
+"status": "ok",
+"t_cal": 0.084469399,
+"ts": "2026-11-28T06:51:08",
 "warmup": 1
 },
 "oxcaml|wit|k7|pub|natural|": {
