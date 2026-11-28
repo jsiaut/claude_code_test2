@@ -1,4 +1,12 @@
 {
+"c|cv|k4|pub|tuned|": {
+"machine": "41",
+"reps": 2209,
+"status": "ok",
+"t_cal": 0.001357883,
+"ts": "2026-11-28T07:04:33",
+"warmup": 1
+},
 "c|cv|k4|small|tuned|": {
 "machine": "41",
 "reps": 10000,
@@ -237,6 +245,22 @@
 "status": "ok",
 "t_cal": 0.000288227,
 "ts": "2026-11-28T06:48:09",
+"warmup": 1
+},
+"oxcaml|cv|k4|pub|swar|": {
+"machine": "41",
+"reps": 337,
+"status": "ok",
+"t_cal": 0.008890846,
+"ts": "2026-11-28T07:04:32",
+"warmup": 1
+},
+"oxcaml|cv|k4|pub|tuned|": {
+"machine": "41",
+"reps": 906,
+"status": "ok",
+"t_cal": 0.003309762,
+"ts": "2026-11-28T07:04:32",
 "warmup": 1
 },
 "oxcaml|cv|k4|small|swar|": {
@@ -759,6 +783,22 @@
 "ts": "2026-11-28T06:53:34",
 "warmup": 1
 },
+"oxcaml|pub|k4|pub|branchless_unsorted|": {
+"machine": "41",
+"reps": 173,
+"status": "ok",
+"t_cal": 0.017285343,
+"ts": "2026-11-28T07:04:32",
+"warmup": 1
+},
+"oxcaml|pub|k4|pub|natural_unsorted|": {
+"machine": "41",
+"reps": 27,
+"status": "ok",
+"t_cal": 0.108542553,
+"ts": "2026-11-28T07:04:32",
+"warmup": 1
+},
 "oxcaml|pub|k4|small|branchless_unsorted|": {
 "machine": "41",
 "reps": 2225,
@@ -1175,6 +1215,14 @@
 "ts": "2026-11-28T06:50:15",
 "warmup": 1
 },
+"oxcaml|unc|k4|pub|natural_unsorted|": {
+"machine": "41",
+"reps": 33,
+"status": "ok",
+"t_cal": 0.089091309,
+"ts": "2026-11-28T07:04:33",
+"warmup": 1
+},
 "oxcaml|unc|k4|small|natural_unsorted|": {
 "machine": "41",
 "reps": 690,
@@ -1349,6 +1397,22 @@
 "status": "ok",
 "t_cal": 0.002963136,
 "ts": "2026-11-28T06:48:09",
+"warmup": 1
+},
+"oxcaml|wit_cv|k4|pub|swar|": {
+"machine": "41",
+"reps": 286,
+"status": "ok",
+"t_cal": 0.010466691,
+"ts": "2026-11-28T07:04:33",
+"warmup": 1
+},
+"oxcaml|wit_cv|k4|pub|tuned|": {
+"machine": "41",
+"reps": 285,
+"status": "ok",
+"t_cal": 0.01052411,
+"ts": "2026-11-28T07:04:33",
 "warmup": 1
 },
 "oxcaml|wit_cv|k4|small|swar|": {
@@ -1647,6 +1711,14 @@
 "ts": "2026-11-28T06:50:50",
 "warmup": 1
 },
+"oxcaml|wit_unc|k4|pub|natural_unsorted|": {
+"machine": "41",
+"reps": 33,
+"status": "ok",
+"t_cal": 0.08951233,
+"ts": "2026-11-28T07:04:33",
+"warmup": 1
+},
 "oxcaml|wit_unc|k4|small|natural_unsorted|": {
 "machine": "41",
 "reps": 633,
@@ -1845,6 +1917,22 @@
 "status": "ok",
 "t_cal": 0.446494463,
 "ts": "2026-11-28T06:53:35",
+"warmup": 1
+},
+"oxcaml|wit|k4|pub|branchless_unsorted|": {
+"machine": "41",
+"reps": 108,
+"status": "ok",
+"t_cal": 0.027689214,
+"ts": "2026-11-28T07:04:33",
+"warmup": 1
+},
+"oxcaml|wit|k4|pub|natural_unsorted|": {
+"machine": "41",
+"reps": 31,
+"status": "ok",
+"t_cal": 0.093947627,
+"ts": "2026-11-28T07:04:33",
 "warmup": 1
 },
 "oxcaml|wit|k4|small|branchless_unsorted|": {
