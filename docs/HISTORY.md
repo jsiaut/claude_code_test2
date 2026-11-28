@@ -1,6 +1,6 @@
 # Historique de l'étude et archive
 
-*État au 27 novembre 2026. Le dépôt ne garde que ce qui sert au classement publié (v6) ; ce document dit d'où vient la
+*État au 28 novembre 2026. Le dépôt ne garde que ce qui sert au classement publié (v6.1) ; ce document dit d'où vient la
 méthode, ce que les étapes précédentes ont établi, et où retrouver tout ce qui a été retiré de la branche.*
 
 ## L'archive
@@ -29,6 +29,12 @@ implémentations, leurs sondes, leurs mesures et leurs cases de la grille. L'ét
 le commit `de697499dcd4e6286cbc8a4ef04ed84cb40e4641` ; son calcul redonne les classements à 25 langages cités plus
 bas, et un fichier retiré s'y relit par `git show de69749:<chemin>` ([`V6.md`](V6.md)).
 
+OCaml a quitté la branche le 28 novembre (v6.1), remplacé par OxCaml : son implémentation (`bench/ocaml`, dont
+`bench/oxcaml/ms.ml` garde la source à l'octet près), ses sondes et sa ligne de la grille. Ses mesures de la campagne
+restent dans `results/final` : elles servent de base au transport d'OxCaml. L'état avec OCaml, celui de la v6, est le
+commit `be0936fad9225a4cf97bd5622fe8c145aef83060` ; son calcul redonne le classement de la v6 cité plus bas, et un
+fichier retiré s'y relit par `git show be0936f:<chemin>` ([`V6_1.md`](V6_1.md)).
+
 ## Les étapes
 
 | Date (2026) | Étape | Ce qu'elle a fixé dans la méthode actuelle | Documents, dans l'archive |
@@ -53,7 +59,8 @@ bas, et un fichier retiré s'y relit par `git show de69749:<chemin>` ([`V6.md`](
 | 26 novembre | v5.2 : Zig classé, par exception, avec sa version de développement, remesurée à côté d'un témoin | l'exception et son astérisque ; le transport par témoin | [`V5_2.md`](V5_2.md), gardé dans le dépôt |
 | 27 novembre | v5.3 : deux lectures ajoutées au rapport après une veille sur les bancs comparables, sans mesure nouvelle ; le classement reste celui de la v5.2 | la part de la variance du score que porte chaque composante ; le tri des écarts du code naturel, son registre des causes et son garde-fou | [`V5_3.md`](V5_3.md), gardé dans le dépôt |
 | 27 novembre | v5.4 : l'erreur de mesure que le tri a retrouvée sur K1 de Go est corrigée ; Go est remesuré à part hors de l'expérience `simd` de sa chaîne, à côté de son binaire de la campagne et de C | la construction de Go en deux binaires ; le pont par une cellule de C ; les calculs « Go de la campagne » et « Campagne telle que mesurée » | [`V5_4.md`](V5_4.md), gardé dans le dépôt |
-| 27 novembre | v6 : Python, JavaScript, PHP, BQN et Lua retirés du banc, sans mesure nouvelle ; le classement porte sur 20 langages : le classement publié | le périmètre ; les références prises parmi 20 langages ; deux classes de bruit au lieu de trois | [`V6.md`](V6.md), gardé dans le dépôt |
+| 27 novembre | v6 : Python, JavaScript, PHP, BQN et Lua retirés du banc, sans mesure nouvelle ; le classement porte sur 20 langages | le périmètre ; les références prises parmi 20 langages ; deux classes de bruit au lieu de trois | [`V6.md`](V6.md), gardé dans le dépôt |
+| 28 novembre | v6.1 : OxCaml à la place d'OCaml ; il est mesuré à part, à côté d'OCaml 5.5.2 pris pour témoin et de C pris pour pont : le classement publié | le transport d'un langage entier, par témoin pour la source commune et par pont pour ses formes propres ; la règle de la grille pour les extensions d'OxCaml ; la réplication sur les langages communs aux deux campagnes | [`V6_1.md`](V6_1.md), gardé dans le dépôt |
 
 Le classement de la v3 a été publié du 30 octobre au 23 novembre, avec ses notes et ses errata
 (`docs/RANKING_V3.md`, `results/report_v3.md`).
@@ -62,8 +69,8 @@ Le classement de la v3 a été publié du 30 octobre au 23 novembre, avec ses no
 
 Hors les classements des 23, 24, 26 et 27 novembre, les chiffres ci-dessous viennent de campagnes séparées, chacune sur
 son hôte ; ils ne sont pas remesurés dans la campagne publiée. Leur détail est dans le document cité. Les classements
-ci-dessous comptent 25 langages ; depuis la v6, le calcul du dépôt n'en classe plus que 20, et ceux qu'il redonnait à
-l'identique se recalculent depuis le commit `de69749`.
+ci-dessous comptent 25 langages, sauf le dernier ; depuis la v6, le calcul du dépôt n'en classe plus que 20, et ceux
+qu'il redonnait à l'identique se recalculent depuis le commit `de69749`.
 
 * **Classement de la v3** (une taille par noyau, hôtes reliés par un témoin C, répliqué sur deux
   micro-architectures) : C, Odin, C++, C3, Zig, Rust, Nim, D, Ada, Chapel, Fortran, Swift, Julia, Mojo, C#,
@@ -102,8 +109,14 @@ l'identique se recalculent depuis le commit `de69749`.
 * **Classement du 27 novembre, 17 h** (v5.4 : K1 de Go corrigé ; le dernier à 25 langages) : C, C++, Zig, Odin,
   Rust, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, C#, Go, Java, FreePascal, Haskell, OCaml, BQN,
   JavaScript, PHP, Python, Lua ; deux étages de 19 et 6 langages ; C premier dans 57 % des variantes. C'est l'état
-  du commit `de69749` ; son procès-verbal est [`V5_4.md`](V5_4.md), 9. Le classement publié en garde les 20 premiers,
-  dans le même ordre, avec des scores plus hauts de 0,3 point au plus ([`V6.md`](V6.md), 9).
+  du commit `de69749` ; son procès-verbal est [`V5_4.md`](V5_4.md), 9. Le classement de la v6 en garde les 20
+  premiers, dans le même ordre, avec des scores plus hauts de 0,3 point au plus ([`V6.md`](V6.md), 9).
+* **Classement du 27 novembre au soir** (v6 : 20 langages, OCaml encore classé ; publié jusqu'au 28 novembre) : C,
+  C++, Zig, Odin, Rust, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, C#, Go, Java, FreePascal, Haskell,
+  OCaml ; deux étages, les 19 premiers puis OCaml seul (27,9) ; C premier dans 57 % des variantes. C'est l'état du
+  commit `be0936f` ; son procès-verbal est [`V6.md`](V6.md), 9. Le classement publié en garde les 19 premiers, dans le
+  même ordre, avec des scores plus bas de 0,1 point au plus, et place OxCaml 19e, devant Haskell ([`V6_1.md`](V6_1.md),
+  11).
 * **Point 2, tailles** (`docs/V4_SIZES.md`). Entre la taille publiée seule et la moyenne des trois tailles, aucun
   langage ne bouge de plus de deux places ; l'effet de l'hôte est plus grand que celui des tailles.
 * **Point 3, conditions égales** (`docs/V4_EQUAL.md`). Les vérifications et le stencil contigu ne déplacent aucun

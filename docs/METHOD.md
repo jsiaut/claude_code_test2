@@ -1,13 +1,14 @@
-# Méthode du classement (v6)
+# Méthode du classement (v6.1)
 
-*État au 27 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
+*État au 28 novembre 2026. Ce document décrit en un seul endroit la méthode qui produit le classement publié. Elle a
 été fixée par étapes, chacune par un plan poussé avant ses mesures ou ses calculs ([`HISTORY.md`](HISTORY.md)). Le plan
 de la campagne dont viennent les mesures, avec ses écarts datés (dont les corrections A5 et A6) et ses résultats, est
 [`V5.md`](V5.md) ; celui de la campagne précédente, dont elle reprend le protocole, [`V4_FINAL.md`](V4_FINAL.md) ;
 ceux des autres corrections de l'analyse, [`V4_1.md`](V4_1.md) (A1 à A4) et [`V5_1.md`](V5_1.md) (A7 et A8) ; celui de
 l'exception faite pour Zig, [`V5_2.md`](V5_2.md) ; celui des deux lectures du classement ajoutées au rapport,
 [`V5_3.md`](V5_3.md) ; celui de la correction de la mesure de Go, [`V5_4.md`](V5_4.md) ; celui du retrait de cinq
-langages, [`V6.md`](V6.md) ; le contrat des noyaux est [`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
+langages, [`V6.md`](V6.md) ; celui du remplacement d'OCaml par OxCaml, [`V6_1.md`](V6_1.md) ; le contrat des noyaux
+est [`SPEC.md`](SPEC.md) ; le calcul est `analysis/final_v4.py`.*
 
 ## 1. Ce qui est classé
 
@@ -23,10 +24,13 @@ quand on l'exerce, et où le code par défaut va déjà dans le sens du matérie
 | Code par défaut (D) | 25 % | ce que donne le code qu'on écrit sans y penser | variantes naturelles, empreinte, latences, chaîne de pointeurs (8) |
 
 Périmètre : 20 langages (C, C++, Rust, Zig, Odin, C3, D, Nim, Ada, Fortran, Chapel, Mojo, Swift, FreePascal, Go, C#,
-Java, Julia, Haskell, OCaml), une chaîne de référence chacun (`env/toolchains.txt`), dernière version stable au 28
-octobre 2026 (Swift et FreePascal ajoutés les 5 et 6 novembre) ; bibliothèque standard seule ; compilation pour le
-CPU hôte, ni PGO ni LTO ; runtimes à leurs réglages par défaut, sauf le nombre de fils, fixé à quatre. Cinq autres
-langages, mesurés dans la même campagne, ont été retirés du classement et du dépôt le 27 novembre ([`V6.md`](V6.md)).
+Java, Julia, Haskell, OxCaml), une chaîne de référence chacun (`env/toolchains.txt`), dernière version stable au 28
+octobre 2026 (Swift et FreePascal ajoutés les 5 et 6 novembre ; OxCaml, sans version stable, par sa dernière version
+datée à ce jour, la 5.4.0-ox7) ; bibliothèque standard seule ; compilation pour le CPU hôte, ni PGO ni LTO ; runtimes
+à leurs réglages par défaut, sauf le nombre de fils, fixé à quatre. Cinq autres langages, mesurés dans la même
+campagne, ont été retirés du classement et du dépôt le 27 novembre ([`V6.md`](V6.md)). OCaml, mesuré dans la campagne
+lui aussi, a cédé sa place à OxCaml le 28 novembre ([`V6_1.md`](V6_1.md)) : OxCaml est mesuré à part (6), et les
+mesures d'OCaml servent de base à son transport.
 
 ## 2. Noyaux et validation
 
@@ -112,6 +116,10 @@ Sept noyaux comptent à trois tailles ; K2 et K3 à la leur.
   spécialisation de Julia…) entre dans le plafond de ce langage sous un nom en `rq_`, sans être portée ailleurs.
 * **C6.** La variante `mt` publiée (fils créés à chaque appel) reste mesurée à côté des réserves de fils.
 
+Les formes du catalogue sont définies pour des vecteurs de 512 bits. OxCaml, dont les primitives vectorielles
+s'arrêtent à AVX2, les écrit en 256 bits avec le même nombre d'éléments par tour ; il garde à côté les formes d'OCaml,
+replis compris, parce que sa source est celle d'OCaml ([`V6_1.md`](V6_1.md), 4).
+
 Les formes ajoutées sont dans la source du langage, `bench/<langage>`, et déclarées dans son fichier `cv_variants`.
 Le rapport donne, cellule par cellule et taille par taille, la forme retenue. Le biais de choisir le minimum parmi
 plusieurs formes est contrôlé par la sensibilité « sélection indépendante » (10).
@@ -136,7 +144,7 @@ conteneur par défaut, aucune annotation de performance ([`NATURAL.md`](NATURAL.
   | Chapel | `--fast` | `--checks` |
   | FreePascal | `-O3` | `-Cr -Co` |
 
-  Les 17 autres gardent déjà leurs vérifications. La règle égalise la politique, pas la liste des vérifications, qui
+  Les 12 autres gardent déjà leurs vérifications. La règle égalise la politique, pas la liste des vérifications, qui
   fait partie du langage : l'accès par pointeur de C et de C++ reste sans vérification, et les options ne couvrent pas
   la même chose d'une chaîne à l'autre (`-O safe` teste le débordement des entiers en Zig ; rustc a l'option, que son
   mode de publication retire et que R1 n'active pas). Les formes du plafond gardent le mode publié.
@@ -148,7 +156,7 @@ conteneur par défaut, aucune annotation de performance ([`NATURAL.md`](NATURAL.
   * **Mode publié** : le mode de publication de chaque chaîne, sans option ajoutée.
   * **R1'** : aucune vérification là où une option de la chaîne les retire. Neuf langages les perdent ainsi
     (construction `unc`) : Swift (`-Ounchecked`), Ada (`-gnatp`), Nim (`-d:danger`), Odin (`-no-bounds-check`), Julia
-    (`--check-bounds=no`), Mojo (`-D ASSERT=none`), Go (`-gcflags=-B`), OCaml (`-unsafe`) et D (`-boundscheck=off`).
+    (`--check-bounds=no`), Mojo (`-D ASSERT=none`), Go (`-gcflags=-B`), OxCaml (`-unsafe`) et D (`-boundscheck=off`).
 
   Les huit langages de R1 sont donc vérifiés dans une variante sur trois, les huit de R1' qui n'y sont pas dans deux
   sur trois ; D a les trois constructions ; les quatre autres (Rust, C#, Java, Haskell) n'ont qu'un mode. Sans A8, le
@@ -199,7 +207,7 @@ campagne publiée).
   tourne pendant la campagne.
 * **Volume.** La campagne a mesuré 25 langages dans les mêmes groupes : 3 106 cellules et 10 158 processus, du 25
   novembre, 6 h 12, au 26 novembre, 10 h 30 (UTC), sur la machine 38, sans redémarrage ; aucun processus en échec. Les
-  20 langages gardés en ont 2 613 et 8 559, dont 128 cellules et 420 processus pour C par gcc.
+  19 langages gardés et OCaml en ont 2 613 et 8 559, dont 128 cellules et 420 processus pour C par gcc.
 * **Exception : Zig par sa version de développement** ([`V5_2.md`](V5_2.md)). Les chaînes sont les dernières versions
   stables au 28 octobre 2026. Zig seul est classé avec sa version de développement, 0.18.0-dev.1298, parce que sa
   version stable désactive le vectoriseur de boucles de LLVM ; il porte un astérisque. Il est remesuré hors campagne
@@ -228,6 +236,23 @@ campagne publiée).
   contrôle montre que K7 naturel à la grande taille subit lui aussi l'artefact, plus faiblement et par à-coups (une à
   trois fois le temps du binaire standard selon la répétition) : il n'avait pas de pont et n'est pas corrigé
   ([`V5_4.md`](V5_4.md), 9.2). Les latences de K8 naturel restent celles de la campagne.
+* **Remplacement : OxCaml mesuré à part** ([`V6_1.md`](V6_1.md)). OxCaml a pris la place d'OCaml après la campagne,
+  qui ne l'a pas mesuré ; il porte une croix. `bench/oxcaml` compile par OxCaml deux binaires : la source d'OCaml, à
+  l'octet près (`ms.ml` : le code naturel et toutes les variantes d'OCaml), et les formes qu'OCaml ne pouvait pas
+  écrire (`ox.ml`). Il est mesuré hors campagne (`results/oxcaml`, variable `MS_OX=1`) par les mêmes outils, en six
+  passes, sur une machine d'un autre modèle ; chaque groupe mesure ensemble OxCaml, son **témoin** (OCaml 5.5.2 : la
+  source et le binaire de la campagne, reconstruits depuis le commit `c321369`, étiquettes `wit`, `wit_cv`, `wit_unc`,
+  `wit_cv_unc`) et, pour les formes propres à OxCaml, la cellule de C de même forme, leur **pont**. Une cellule de même
+  source prend les processus de la même cellule d'OCaml dans la campagne, chacun multiplié par la moyenne géométrique
+  des rapports appariés (même passe, même copie) du temps sous OxCaml au temps du témoin. Une cellule propre à OxCaml
+  prend les processus de la cellule du pont dans la campagne, multipliés par le rapport apparié de son temps à celui de
+  cette cellule ; K8 `tuned_alloc`, les nœuds de la variante naturelle dans une région locale, a pour pont K8 naturel
+  du témoin. Les latences de K8 naturel sont celles qu'OxCaml a mesurées, mises à l'échelle de la campagne : à chaque
+  taille, elles sont multipliées par le rapport de la latence médiane d'OCaml dans la campagne à celle du témoin (0,80
+  à 0,86). Le plan multipliait au contraire les latences d'OCaml dans la campagne, colonne par colonne, par le rapport
+  d'OxCaml au témoin ; le maximum du témoin ne se retrouvant pas d'une machine à l'autre (2,65 fois celui de la
+  campagne à la taille publiée), cette règle n'est gardée que comme sensibilité ([`V6_1.md`](V6_1.md), 10). La machine
+  de la remesure est caractérisée comme les autres (`results/oxcaml/hw`).
 
 ## 7. Grille de contrôle (pilier C)
 
@@ -246,6 +271,11 @@ génération de code (E, 7, 10 %), HPC et OLAP (F, 4, 10 %). La liste, les notes
 * **Une seule règle pour la libc et les FFI.** Compte ce que la chaîne livre, y compris les intrinsèques que le
   langage importe par sa FFI ; appeler du code C ordinaire par une FFI ne compte pas, sauf pour C et C++, dont la libc
   est la bibliothèque système ; les types C qu'une FFI livrée définit valent ½.
+* **OxCaml.** Ses extensions portent une maturité, et ses primitives vectorielles n'ont pas d'interface livrée. Une
+  capacité compte entière si elle s'écrit avec ce que le compilateur livre, extensions de maturité « stable »
+  comprises ; pour moitié si elle demande une extension « beta » ou « alpha », ou si elle n'est atteinte que par des
+  primitives `[@@builtin]` déclarées à la main, leur interface documentée étant un paquet tiers
+  ([`V6_1.md`](V6_1.md), 4).
 * **Preuves.** Chaque case a une ligne `CAP;<case>;<note>;<preuve>` produite par une exécution
   (`probes/<langage>/run.sh`, sortie dans `results/probes/<langage>.txt`). La preuve porte sa classe : **[exécutée]**,
   un programme se sert de la capacité et imprime un fait observable ; **[échec]**, la forme canonique est refusée ou
@@ -293,7 +323,8 @@ plus rapide parmi les formes admises.
   n'est pas un bruit propre à chaque cellule. Les références restent celles des estimations ponctuelles. Les latences
   sont rééchantillonnées par processus puis par répétition, sans cette correction. Pour Zig, le rapport au témoin de
   chaque cellule est rééchantillonné lui aussi : ses paires sont tirées avec remise, par un générateur propre à la
-  cellule ; de même, pour les cellules corrigées de Go, leur rapport au pont.
+  cellule ; de même, pour les cellules corrigées de Go, leur rapport au pont, et pour chaque cellule d'OxCaml, son
+  rapport au témoin ou au pont.
 * **20 000 variantes de l'analyse.** Chacune tire : un rééchantillonnage ; cinq choix de méthode à deux options
   (estimateur : moyenne géométrique ou minimum des processus ; référence du plafond ; formes de D3 et de D4 ;
   agrégation) ; le mode du code naturel parmi trois (R1, mode publié, R1' : A7 et A8, par un générateur à part) ; les
@@ -312,31 +343,40 @@ plus rapide parmi les formes admises.
 
 ## 10. Sensibilités publiées
 
-`results/report_final.md` donne, à côté du classement, la place de chaque langage dans vingt-huit autres calculs faits
-avec les mêmes tirages : formes publiées seules et code naturel publié à trois tailles (« Base ») ; « Final » sans une
-règle à la fois (sans les tailles, sans R2, sans C1, sans R4) ; le code naturel dans un seul mode pour toutes les
-variantes (« Sans A7 » : R1 ; « Sans R1 » : le mode publié ; « R1' au lieu de R1 » : R1') ; une taille seule (petite,
-grande) ; sélection indépendante (la forme de chaque cellule choisie sur la passe 0, estimée sur les passes 1 et 2) ;
-D3 et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans une correction à la
-fois (« Sans A1 » à « Sans A8 » ; « Sans A8 » : le mode tiré entre R1 et le mode publié seuls) ; sans aucune et classé
-au rang moyen (« Méthode du 23 novembre », celle du classement publié ce jour-là) ; « C par gcc », où toutes les
-cellules de C viennent de ses constructions par gcc, la grille et les autres langages ne changeant pas ; « Zig 0.17 »,
-où Zig garde les cellules de la campagne, mesurées par sa version stable ; « Zig 0.18, K4 et K9 seuls », où le rapport
-au témoin n'est appliqué qu'aux deux noyaux dont le code machine change ; « Zig 0.18, latences du plan », où les
-latences de K8 naturel de Zig sont multipliées elles aussi par leur rapport ; « Go de la campagne », où Go garde ses
-cellules de la campagne, K1 faussé compris : le classement de la v5.2 et de la v5.3 ; « Go, toutes les cellules », où
-chaque autre cellule de Go est en plus multipliée par son rapport au témoin, comme celles de Zig ; « Campagne telle que
-mesurée », sans l'exception de Zig ni la correction de Go. Sous `FINAL_ZIG17=1`, tout le calcul se fait sans
-l'exception de Zig ; sous `FINAL_GOSIMD=1`, sans la correction de Go : il redonne alors les calculs de la v5.3 ; sous
-les deux, ceux qui étaient publiés le 26 novembre à 17 h.
+`results/report_final.md` donne, à côté du classement, la place de chaque langage dans trente-deux autres calculs faits
+avec les mêmes tirages : formes publiées seules et code naturel publié à trois tailles (« Base ») ; « Final »
+sans une règle à la fois (sans les tailles, sans R2, sans C1, sans R4) ; le code naturel dans un seul mode pour toutes
+les variantes (« Sans A7 » : R1 ; « Sans R1 » : le mode publié ; « R1' au lieu de R1 » : R1') ; une taille
+seule (petite, grande) ; sélection indépendante (la forme de chaque cellule choisie sur la passe 0, estimée sur les
+passes 1 et 2) ; D3 et D4 sur trois processus ; sur les seules mesures (poids de la grille à 0) ; « Final » sans
+une correction à la fois (« Sans A1 » à « Sans A8 » ; « Sans A8 » : le mode tiré entre R1 et le mode publié
+seuls) ; sans aucune et classé au rang moyen (« Méthode du 23 novembre », celle du classement publié ce jour-là) ;
+« C par gcc », où toutes les cellules de C viennent de ses constructions par gcc, la grille et les autres langages ne
+changeant pas ; « Zig 0.17 », où Zig garde les cellules de la campagne, mesurées par sa version stable ; « Zig
+0.18, K4 et K9 seuls », où le rapport au témoin n'est appliqué qu'aux deux noyaux dont le code machine change ;
+« Zig 0.18, latences du plan », où les latences de K8 naturel de Zig sont multipliées elles aussi par leur rapport ;
+« Go de la campagne », où Go garde ses cellules de la campagne, K1 faussé compris : le classement de la v5.2 et de
+la v5.3 ; « Go, toutes les cellules », où chaque autre cellule de Go est en plus multipliée par son rapport au
+témoin, comme celles de Zig ; « OxCaml, mesures d'OCaml », où la place d'OxCaml porte les mesures d'OCaml dans la
+campagne, sans transport, avec la grille d'OxCaml : il dit ce que la grille change seule ; « OxCaml, source d'OCaml
+seule », où OxCaml n'a que les cellules de la source d'OCaml, ramenées par le témoin, les variantes que ses formes
+propres remplacent gardant leur temps d'OCaml dans la campagne : il dit ce que le compilateur ajoute, et l'écart à
+« Final » ce qu'ajoutent les formes ; « OxCaml, pont par le témoin », où chaque cellule propre à OxCaml est
+ramenée par la cellule d'OCaml de même rôle au lieu de celle de C : il dit ce que le choix du pont change ;
+« OxCaml, latences du plan », où les latences de K8 naturel d'OxCaml suivent la règle du plan (6) ; « Campagne
+telle que mesurée », sans l'exception de Zig ni la correction de Go, et avec les mesures d'OCaml à la place d'OxCaml.
+Sous `FINAL_ZIG17=1`, tout le calcul se fait sans l'exception de Zig ; sous `FINAL_GOSIMD=1`, sans la correction de
+Go ; sous `FINAL_OCAML=1`, avec les mesures d'OCaml à la place de celles d'OxCaml. Aucun calcul n'emploie plus la
+grille d'OCaml : le classement de la v6 est le commit `be0936f`.
 
 Le rapport donne aussi la **réplication** : la campagne précédente, telle qu'elle était publiée et recalculée par la
 méthode de celle-ci (`results/final/comparisons.json`, écrit par les options `--extract` et `--extract-same` de
 l'analyse), avec la place et le score de chaque langage dans chacune et, cellule par cellule, le rapport des temps
-entre les deux campagnes ; elle se fait à configurations égales, donc avec « Campagne telle que mesurée » : Zig par sa
-version stable et Go dans le binaire de la campagne, comme la précédente les a mesurés. Quand une campagne passe par
-plusieurs machines, il donne l'effet de machine : le rapport des temps d'une cellule sur chaque machine à ses temps sur
-la première.
+entre les deux campagnes ; elle se fait à configurations égales, donc avec « Campagne telle que mesurée » : Zig par
+sa version stable et Go dans le binaire de la campagne, comme la précédente les a mesurés, et sur les 19 langages que
+les deux campagnes ont mesurés et que le classement garde (la place d'OxCaml est laissée de côté). Quand une campagne
+passe par plusieurs machines, il donne l'effet de machine : le rapport des temps d'une cellule sur chaque machine à
+ses temps sur la première.
 
 Deux lectures du classement s'y ajoutent ([`V5_3.md`](V5_3.md)) ; elles ne changent ni score ni ordre.
 
@@ -349,7 +389,7 @@ Deux lectures du classement s'y ajoutent ([`V5_3.md`](V5_3.md)) ; elles ne chang
 * **Tri des écarts.** Chaque cellule du code naturel (les huit mesures de D1, trois tailles, trois modes du tirage) est
   rapportée à la médiane des temps de quinze pairs, les langages dont la chaîne produit son code machine par LLVM ou
   par GCC (C, C++, Zig, Odin, Rust, Nim, C3, D, Ada, Julia, Fortran, Chapel, Mojo, Swift, Haskell). Pour les cinq
-  autres langages (Go, C#, Java, FreePascal, OCaml), ce rapport est divisé par leur niveau, la médiane de leurs huit
+  autres langages (Go, C#, Java, FreePascal, OxCaml), ce rapport est divisé par leur niveau, la médiane de leurs huit
   rapports à cette taille et dans ce mode, au moins 1. Une cellule est signalée lente quand ce rapport, arrondi au
   dixième, atteint 2,0, rapide quand elle est au moins 2,0 fois plus rapide que la médiane des pairs ; un couple
   (langage, mesure) est signalé dans un mode s'il l'est à une taille au moins. Chaque couple signalé est rattaché à une
@@ -380,11 +420,12 @@ complet comparé à l'octet près) ; aucun ne demande de chaîne de compilation.
 laisse un couple sans cause. Les deux commandes suivantes réécrivent `results/final/analysis.json`,
 `results/report_final.md` et le graphique.
 
-Remesurer demande les 20 chaînes de `env/toolchains.txt`, aux chemins que lisent les `build.sh`, et les données de
-`/opt/msdata` : `env/install.sh` les installe sur une Ubuntu 24.04 (moins de 1 h 30 sur 4 cœurs, 35 Gio ; archives
-vérifiées par leur empreinte, versions exactes de l'étude). La campagne publiée a été mesurée avec les chaînes ainsi
-réinstallées ; elles redonnent le fichier ou le code machine de la campagne précédente, sauf pour Rust, D et C3, dont
-le code diffère sans cause trouvée ([`V5.md`](V5.md), 2). Une campagne s'écrit dans son propre répertoire, ce qui
+Remesurer demande les chaînes de `env/toolchains.txt` (celles des 20 langages et OCaml 5.5.2, la chaîne du témoin
+d'OxCaml), aux chemins que lisent les `build.sh`, et les données de `/opt/msdata` : `env/install.sh` les installe sur
+une Ubuntu 24.04 (environ 1 h 45 sur 4 cœurs, dont 20 minutes pour construire OxCaml depuis ses sources, 40 Gio ;
+archives vérifiées par leur empreinte, versions exactes de l'étude). La campagne publiée a été mesurée avec les chaînes
+ainsi réinstallées ; elles redonnent le fichier ou le code machine de la campagne précédente, sauf pour Rust, D et C3,
+dont le code diffère sans cause trouvée ([`V5.md`](V5.md), 2). Une campagne s'écrit dans son propre répertoire, ce qui
 laisse en place les résultats publiés ; son `model.txt` porte le modèle de son processeur (famille/modèle/révision :
 celui de la campagne publiée, ou celui de la machine pour mesurer sur un autre), et `machine.sh` comme le pilote
 refusent une machine d'un autre modèle :
@@ -426,7 +467,9 @@ développement suit les mêmes étapes dans `results/zig_dev`, avec `MS_DEV=1`, 
 `--langs zig` pour `calibrate` et `run`, et `--passes 0,1,2,3,4,5` ; l'analyse la lit d'elle-même. La remesure de Go
 suit les mêmes étapes dans `results/go_std`, avec `MS_GOFIX=1` et `MS_LANGS=go,c` : d'abord les groupes de K1 pour Go,
 son témoin et C (`--langs go,c --groups k1:small,k1:pub,k1:large`, six passes), puis les autres groupes pour Go et
-son témoin (`--langs go`, trois passes). Pour essayer une seule implémentation, construite sur place :
+son témoin (`--langs go`, trois passes). La mesure d'OxCaml suit les mêmes étapes dans `results/oxcaml`, avec
+`MS_OX=1` et `MS_LANGS=oxcaml,c` (`--langs oxcaml,c`, six passes) : OxCaml, son témoin et les cellules de C qui servent
+de pont. Pour essayer une seule implémentation, construite sur place :
 
 ```bash
 python3 tools/driver.py c
