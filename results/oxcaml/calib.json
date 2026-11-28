@@ -863,6 +863,30 @@
 "ts": "2026-11-28T07:04:50",
 "warmup": 1
 },
+"oxcaml|pub|k2|pub|tuned|16384": {
+"machine": "41",
+"reps": 323,
+"status": "ok",
+"t_cal": 0.009265223,
+"ts": "2026-11-28T07:04:52",
+"warmup": 1
+},
+"oxcaml|pub|k2|pub|tuned|262144": {
+"machine": "41",
+"reps": 127,
+"status": "ok",
+"t_cal": 0.023546735,
+"ts": "2026-11-28T07:04:52",
+"warmup": 1
+},
+"oxcaml|pub|k2|pub|tuned|8388608": {
+"machine": "41",
+"reps": 11,
+"status": "ok",
+"t_cal": 0.260607387,
+"ts": "2026-11-28T07:04:52",
+"warmup": 1
+},
 "oxcaml|pub|k3|pub|rmw_padded|": {
 "machine": "41",
 "reps": 12,
@@ -2125,6 +2149,30 @@
 "status": "ok",
 "t_cal": 4.0609e-05,
 "ts": "2026-11-28T07:04:50",
+"warmup": 1
+},
+"oxcaml|wit|k2|pub|tuned|16384": {
+"machine": "41",
+"reps": 253,
+"status": "ok",
+"t_cal": 0.011826583,
+"ts": "2026-11-28T07:04:52",
+"warmup": 1
+},
+"oxcaml|wit|k2|pub|tuned|262144": {
+"machine": "41",
+"reps": 114,
+"status": "ok",
+"t_cal": 0.026205525,
+"ts": "2026-11-28T07:04:53",
+"warmup": 1
+},
+"oxcaml|wit|k2|pub|tuned|8388608": {
+"machine": "41",
+"reps": 11,
+"status": "ok",
+"t_cal": 0.270205065,
+"ts": "2026-11-28T07:04:53",
 "warmup": 1
 },
 "oxcaml|wit|k3|pub|rmw_padded|": {
