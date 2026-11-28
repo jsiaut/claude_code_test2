@@ -155,9 +155,9 @@ fil, qui lit ses tuples fil après fil, dans l'ordre de leurs morceaux.
   de chaque exécution.
 * **Pages larges.** Les colonnes sont lues en entier dans la mémoire du processus ; cette mémoire, les blocs des
   arènes et les vecteurs de travail viennent du système par zones alignées sur 2 Mio, signalées comme pages larges
-  (`madvise(MADV_HUGEPAGE)` sous Linux). Mesuré sur la référence, face à des pages de 4 Kio : de 10 à 27 % de temps en
+  (`madvise(MADV_HUGEPAGE)` sous Linux). Mesuré sur la référence, face à des pages de 4 Kio : de 10 à 26 % de temps en
   moins à un fil sur les requêtes à partitions, jusqu'à 11 % à quatre fils ; pour les colonnes, de 19 à 29 % sur C33 à
-  un fil et de 8 à 14 % sur C20 ; des temps plus réguliers d'une exécution à l'autre.
+  un fil et de 8 à 14 % sur C20 à quatre fils ; des temps plus réguliers d'une exécution à l'autre.
 
 ### 4.7 Sélection, recherche, dates
 

@@ -11,7 +11,7 @@ mesurer. Les moteurs de référence (duckdb, clickhouse) sont des cellules comme
 engines.py ; leurs résultats sont vérifiés à part (engines.py expected).
 
 Étalonnage : chaque cellule est exécutée une fois (après un échauffement) ; son résultat est vérifié et sa durée fixe
-le nombre de répétitions (environ 3 s par processus, de 3 à 100) et l'échauffement (une exécution ; au moins trois et
+le nombre de répétitions (environ 3 s par processus, de 5 à 100) et l'échauffement (une exécution ; au moins trois et
 au moins une seconde pour les implémentations à compilation en cours d'exécution et pour les moteurs). Un processus
 sans exécution (zéro répétition : il charge les colonnes, crée ses fils et s'arrête) donne la mémoire de départ de
 la cellule ; la mémoire de travail est la mémoire de pointe moins celle-là.
@@ -158,7 +158,7 @@ def run(out):
             raise SystemExit(f"étalonnage : {key} en échec : {rec.get('error', rec.get('sums'))}")
         t = rec["median"]
         slow_start = i in ENGINES or i in JIT
-        calib[key] = {"seconds": t, "reps": min(100, max(3, round(TARGET / t))),
+        calib[key] = {"seconds": t, "reps": min(100, max(5, round(TARGET / t))),
                       "warmups": max(3, math.ceil(1.0 / t)) if slow_start else 1}
         if i not in ENGINES:
             code, _, err, calib[key]["base_rss_kb"] = launch([os.path.join(OLAP, i, "olap_" + lv), q, str(nt), "0",
