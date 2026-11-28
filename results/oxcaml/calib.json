@@ -191,6 +191,14 @@
 "ts": "2026-11-28T06:53:20",
 "warmup": 1
 },
+"c|pub|k7|large|tuned|": {
+"machine": "41",
+"reps": 3,
+"status": "ok",
+"t_cal": 4.2340515,
+"ts": "2026-11-28T07:04:30",
+"warmup": 1
+},
 "c|pub|k7|pub|tuned|": {
 "machine": "41",
 "reps": 13,
@@ -509,6 +517,22 @@
 "status": "ok",
 "t_cal": 4.287e-05,
 "ts": "2026-11-28T06:53:19",
+"warmup": 1
+},
+"oxcaml|cv|k7|large|tuned_oa|": {
+"machine": "41",
+"reps": 3,
+"status": "ok",
+"t_cal": 7.118672896,
+"ts": "2026-11-28T06:56:52",
+"warmup": 1
+},
+"oxcaml|cv|k7|large|tuned_pf|": {
+"machine": "41",
+"reps": 3,
+"status": "ok",
+"t_cal": 5.676670715,
+"ts": "2026-11-28T06:56:37",
 "warmup": 1
 },
 "oxcaml|cv|k7|pub|tuned_oa|": {
@@ -943,6 +967,22 @@
 "ts": "2026-11-28T06:53:19",
 "warmup": 1
 },
+"oxcaml|pub|k7|large|natural|": {
+"machine": "41",
+"reps": 3,
+"status": "ok",
+"t_cal": 71.965648493,
+"ts": "2026-11-28T06:56:11",
+"warmup": 1
+},
+"oxcaml|pub|k7|large|tuned|": {
+"machine": "41",
+"reps": 3,
+"status": "ok",
+"t_cal": 7.390519999,
+"ts": "2026-11-28T06:56:26",
+"warmup": 1
+},
 "oxcaml|pub|k7|pub|natural|": {
 "machine": "41",
 "reps": 3,
@@ -1215,6 +1255,14 @@
 "ts": "2026-11-28T06:53:20",
 "warmup": 1
 },
+"oxcaml|unc|k7|large|natural|": {
+"machine": "41",
+"reps": 3,
+"status": "ok",
+"t_cal": 66.501281367,
+"ts": "2026-11-28T06:59:06",
+"warmup": 1
+},
 "oxcaml|unc|k7|pub|natural|": {
 "machine": "41",
 "reps": 3,
@@ -1463,6 +1511,14 @@
 "ts": "2026-11-28T06:53:20",
 "warmup": 1
 },
+"oxcaml|wit_cv|k7|large|tuned_oa|": {
+"machine": "41",
+"reps": 3,
+"status": "ok",
+"t_cal": 8.120503575,
+"ts": "2026-11-28T07:02:01",
+"warmup": 1
+},
 "oxcaml|wit_cv|k7|pub|tuned_oa|": {
 "machine": "41",
 "reps": 4,
@@ -1669,6 +1725,14 @@
 "status": "ok",
 "t_cal": 0.000593554,
 "ts": "2026-11-28T06:53:20",
+"warmup": 1
+},
+"oxcaml|wit_unc|k7|large|natural|": {
+"machine": "41",
+"reps": 3,
+"status": "ok",
+"t_cal": 67.638411079,
+"ts": "2026-11-28T07:04:20",
 "warmup": 1
 },
 "oxcaml|wit_unc|k7|pub|natural|": {
@@ -1989,6 +2053,22 @@
 "status": "ok",
 "t_cal": 0.000363074,
 "ts": "2026-11-28T06:53:20",
+"warmup": 1
+},
+"oxcaml|wit|k7|large|natural|": {
+"machine": "41",
+"reps": 3,
+"status": "ok",
+"t_cal": 68.59437358,
+"ts": "2026-11-28T07:01:27",
+"warmup": 1
+},
+"oxcaml|wit|k7|large|tuned|": {
+"machine": "41",
+"reps": 3,
+"status": "ok",
+"t_cal": 8.661133808,
+"ts": "2026-11-28T07:01:44",
 "warmup": 1
 },
 "oxcaml|wit|k7|pub|natural|": {
