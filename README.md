@@ -13,6 +13,11 @@ décide de l'ordre et tri des écarts : [`docs/V5_3.md`](docs/V5_3.md) ; correct
 [`docs/V5_4.md`](docs/V5_4.md) ; retrait de cinq langages : [`docs/V6.md`](docs/V6.md) ; OxCaml à la place d'OCaml :
 [`docs/V6_1.md`](docs/V6_1.md) ; étapes précédentes et archive : [`docs/HISTORY.md`](docs/HISTORY.md).*
 
+*En cours : la v7 recentre l'étude sur l'OLAP à un nœud. Dix requêtes de TPC-H et de ClickBench, une même architecture
+de moteur vectorisé écrite dans chaque langage, DuckDB et ClickHouse pour repère, une note faite de mesures seules.
+Plan, référence et premiers résultats (sept langages portés) : [`docs/V7.md`](docs/V7.md) ; code : [`olap/`](olap).
+Le classement ci-dessous reste celui de la v6.1 tant que la v7 n'est pas complète.*
+
 Un seul critère : la *mechanical sympathy* au sens large, c'est-à-dire la capacité d'un langage à faire écrire du code
 en accord avec le matériel : disposition des données, SIMD, hiérarchie mémoire, concurrence, allocation, requêtes
 analytiques. C'est ce qu'exigent le HPC, les moteurs OLAP et le Data-Oriented Design. Le plafond et le code par défaut
