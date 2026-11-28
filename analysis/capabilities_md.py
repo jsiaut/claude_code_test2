@@ -9,10 +9,10 @@ from capabilities import MATRIX, CATEGORIES, LABELS, M  # noqa: E402
 from capabilities_v2 import V2_OVERRIDES  # noqa: E402
 
 ORDER = ["c", "cpp", "rust", "zig", "odin", "c3", "d", "nim", "ada", "fortran", "chapel", "mojo", "swift", "fpc", "go",
-         "csharp", "java", "julia", "haskell", "ocaml"]
+         "csharp", "java", "julia", "haskell", "oxcaml"]
 SHORT = {"c": "C", "cpp": "C++", "rust": "Rust", "zig": "Zig", "odin": "Odin", "c3": "C3", "d": "D", "nim": "Nim",
          "ada": "Ada", "fortran": "Fortran", "chapel": "Chapel", "mojo": "Mojo", "go": "Go", "csharp": "C#",
-         "java": "Java", "julia": "Julia", "haskell": "Haskell", "ocaml": "OCaml", "swift": "Swift", "fpc": "FPC"}
+         "java": "Java", "julia": "Julia", "haskell": "Haskell", "oxcaml": "OxCaml", "swift": "Swift", "fpc": "FPC"}
 
 
 def main():

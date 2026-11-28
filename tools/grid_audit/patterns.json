@@ -299,9 +299,9 @@
       "public": ".",
       "version": "/opt/ghc/bin/ghc --version"
     },
-    "ocaml": {
+    "oxcaml": {
       "roots": [
-        "/opt/ocaml/lib/ocaml"
+        "/opt/oxcaml/lib/ocaml"
       ],
       "ext": [
         ".mli"
@@ -312,9 +312,9 @@
         "/caml/",
         "/camlinternal"
       ],
-      "strip": "/opt/ocaml/lib/ocaml/",
+      "strip": "/opt/oxcaml/lib/ocaml/",
       "public": "^\\s*(val|external|type|and|module|exception|class)\\b",
-      "version": "/opt/ocaml/bin/ocamlopt -version"
+      "version": "echo OxCaml $(cut -d' ' -f1 /opt/oxcaml/RELEASE)"
     }
   }
 }

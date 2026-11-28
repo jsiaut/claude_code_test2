@@ -45,10 +45,11 @@ same results/converge/forms.json results/converge/inventory.md
 
 echo "3. Plan de la campagne (rien n'est exécuté)"
 is "constructions" "$(python3 tools/final/build.py --list | tail -1)" "117 constructions"
-is "cellules à étalonner" "$(python3 tools/final/campaign.py calibrate --dry | awk '{n += $(NF - 1)} END {print n}')" "2613"
-is "processus des trois passes" "$(python3 tools/final/campaign.py run --dry | tail -1)" "8559 processus"
+is "cellules à étalonner" "$(python3 tools/final/campaign.py calibrate --dry | awk '{n += $(NF - 1)} END {print n}')" "2640"
+is "processus des trois passes" "$(python3 tools/final/campaign.py run --dry | tail -1)" "8640 processus"
 is "remesure de Zig" "$(MS_DEV=1 python3 tools/final/build.py --langs zig --list | tail -1)" "12 constructions"
 is "remesure de Go" "$(MS_GOFIX=1 python3 tools/final/build.py --langs go --list | tail -1)" "12 constructions"
+is "mesure d'OxCaml" "$(MS_OX=1 python3 tools/final/build.py --langs oxcaml,c --list | tail -1)" "24 constructions"
 
 echo "4. Classement"
 if [ "$MODE" = "--rapide" ]; then

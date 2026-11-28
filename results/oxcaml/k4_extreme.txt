@@ -1,0 +1,12 @@
+# K4, 2^28 octets à 255 (somme attendue 68451041280), 2026-11-28 11:25 UTC, machine 41 ; 11 cellules, 0 fausses
+oxcaml   pub     natural_unsorted     juste ['68451041280'] code 0
+oxcaml   pub     branchless_unsorted  juste ['68451041280'] code 0
+oxcaml   cv      tuned                juste ['68451041280'] code 0
+oxcaml   cv      swar                 juste ['68451041280'] code 0
+oxcaml   unc     natural_unsorted     juste ['68451041280'] code 0
+oxcaml   wit     natural_unsorted     juste ['68451041280'] code 0
+oxcaml   wit     branchless_unsorted  juste ['68451041280'] code 0
+oxcaml   wit_cv  tuned                juste ['68451041280'] code 0
+oxcaml   wit_cv  swar                 juste ['68451041280'] code 0
+oxcaml   wit_unc natural_unsorted     juste ['68451041280'] code 0
+c        cv      tuned                juste ['68451041280'] code 0

@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v6).
+"""Le classement : calcul complet, de results/final/raw à results/report_final.md (v6.1).
 
 Méthode : docs/METHOD.md ; plans fixés avant les calculs : docs/V4_FINAL.md, section 8 (campagne finale de la v4),
 docs/V4_1.md (corrections A1 à A4 de l'analyse), docs/V5.md (campagne rejouée : corrections A5 et A6, C par gcc,
 réplication), docs/V5_1.md (A7 et A8 : mode du code naturel tiré au sort), docs/V5_2.md (Zig par sa version de
-développement), docs/V5_4.md (Go mesuré hors de l'expérience simd) et docs/V6.md (classement réduit à 20 langages).
-Ce module est autonome : il lit les mesures de la campagne (results/final/raw, tools/final/campaign.py), les
-remesures de Zig (results/zig_dev/raw) et de Go (results/go_std/raw), b3 (results/final/b3.jsonl), les bornes
+développement), docs/V5_4.md (Go mesuré hors de l'expérience simd), docs/V6.md (classement réduit à 20 langages) et
+docs/V6_1.md (OxCaml à la place d'OCaml). Ce module est autonome : il lit les mesures de la campagne
+(results/final/raw, tools/final/campaign.py), les remesures de Zig (results/zig_dev/raw) et de Go
+(results/go_std/raw), la mesure d'OxCaml (results/oxcaml/raw), b3 (results/final/b3.jsonl), les bornes
 physiques des machines qui ont mesuré (results/hw/machine<N>), le relevé des formes (results/converge/forms.json),
 l'empreinte de K1 (results/footprint.json) et la grille de contrôle (analysis/capabilities.py,
 analysis/capabilities_v2.py ; la vectorisation mesurée de results/vectorization.json ne sert qu'à la règle v1, dans
@@ -66,13 +67,31 @@ Calcul « Final » (docs/V4_FINAL.md, 8 ; docs/V4_1.md, 3) :
   cellule de C ; ce rapport est rééchantillonné avec les mesures. Les autres cellules de Go ne changent pas, K7
   naturel à la grande taille compris, que le même artefact ralentit plus faiblement (docs/V5_4.md, 9). « Go de la
   campagne » : le même calcul sans cette correction ; « Go, toutes les cellules » : les autres cellules ramenées
-  elles aussi, par le binaire de la campagne pris pour témoin ; FINAL_GOSIMD=1 : sans la correction. « Campagne telle
-  que mesurée » : ni l'exception de Zig ni la correction de Go.
+  elles aussi, par le binaire de la campagne pris pour témoin ; FINAL_GOSIMD=1 : sans la correction.
+* OxCaml (docs/V6_1.md) : il a pris la place d'OCaml, que la campagne a mesuré ; lui ne l'a pas été. Il est mesuré hors
+  campagne à côté d'un témoin (OCaml 5.5.2, la source et le binaire de la campagne) et d'un pont (C). Une cellule dont
+  la source est celle d'OCaml (bench/oxcaml/ms.ml) prend les processus de la même cellule d'OCaml dans la campagne,
+  multipliés par le rapport apparié (même passe, même copie) du temps sous OxCaml au temps du témoin. Une cellule
+  propre à OxCaml (bench/oxcaml/ox.ml : OX_OWN) prend les processus de la cellule de C de même forme, multipliés par
+  le rapport apparié du temps d'OxCaml au temps de cette cellule ; K8 tuned_alloc a pour pont K8 naturel du témoin.
+  Ces rapports sont rééchantillonnés avec les mesures. Les latences de K8 naturel sont celles qu'OxCaml a mesurées,
+  multipliées à chaque taille par le rapport du temps médian d'une requête d'OCaml dans la campagne à celui du témoin
+  (l'échelle de la machine) ; « OxCaml, latences du plan » : celles d'OCaml dans la campagne, multipliées colonne par
+  colonne par le rapport des médianes d'OxCaml à celles du témoin, comme le prévoyait le plan (docs/V6_1.md, 10).
+  « OxCaml, mesures d'OCaml » : la grille d'OxCaml avec les mesures d'OCaml
+  dans la campagne, sans transport ; « OxCaml, source d'OCaml seule » : sans ses cellules propres, les variantes
+  qu'elles remplacent gardant leur temps d'OCaml dans la campagne ; « OxCaml, pont par le témoin » : chaque cellule
+  propre à OxCaml ramenée par la cellule d'OCaml de même rôle au lieu de celle de C ; FINAL_OCAML=1 : tout le calcul
+  avec les mesures d'OCaml.
+  « Campagne telle que mesurée » : ni l'exception de Zig, ni la correction de Go, ni la mesure d'OxCaml, dont la
+  place porte les mesures d'OCaml.
 Sensibilités (CALCS) : Base, trois tailles ; sans les tailles, sans R1, sans R2, sans C1, sans R4 ; R1' au lieu de R1 ;
 une taille à la fois ; sélection indépendante ; D3 et D4 sur trois processus ; sur les seules mesures ; sans une
 correction à la fois (Sans A1 à Sans A8) ; « Méthode du 23 novembre », sans aucune et classée au rang moyen ; « C par
 gcc », quand la campagne porte les constructions de C par gcc ; « Zig 0.17 », quand Zig est remesuré par sa version
-de développement ; « Go de la campagne », quand Go est remesuré. Les tirages des variantes viennent du même générateur,
+de développement ; « Go de la campagne », quand Go est remesuré ; « OxCaml, mesures d'OCaml », « OxCaml, source
+d'OCaml seule », « OxCaml, pont par le témoin » et « OxCaml, latences du plan », quand OxCaml est mesuré. Les tirages
+des variantes viennent du même générateur,
 avancé de la même façon pour tous les calculs : ils sont identiques d'un calcul à l'autre. Réplication : la campagne
 précédente, telle qu'elle était publiée et recalculée par cette méthode (comparisons.json de la campagne), comparée
 à la campagne telle que mesurée. Effet de
@@ -85,7 +104,8 @@ signalés et la cause que le registre TRI_CAUSES donne à chacun (triage).
 
 Sorties : results/final/analysis.json, results/report_final.md. Variables : BOOT (2000 rééchantillonnages), UA (20 000
 variantes), FINAL_DIR (répertoire d'une autre campagne), FINAL_RAW (autres données), FINAL_OUT (autre répertoire de
-sortie), FINAL_ZIG17 (sans l'exception de Zig), FINAL_GOSIMD (sans la correction de Go). « --extract <fichier> <note> »
+sortie), FINAL_ZIG17 (sans l'exception de Zig), FINAL_GOSIMD (sans la correction de Go), FINAL_OCAML (les mesures
+d'OCaml à la place de celles d'OxCaml). « --extract <fichier> <note> »
 et « --extract-same <fichier> <note> » :
 extraits du calcul déjà écrit, pour la réplication d'une campagne suivante (classement publié ; recalcul par la méthode
 de la suivante). Contrôle : tools/check.sh."""
@@ -106,13 +126,13 @@ _spec.loader.exec_module(FB)
 
 # ------------------------------------------------------------------ protocole
 # Ordre fixe des langages : les tirages en dépendent (les deux derniers ont été ajoutés en cours d'étude ; cinq
-# langages ont été retirés le 27 novembre : docs/V6.md).
+# langages ont été retirés le 27 novembre : docs/V6.md ; OxCaml a pris la place d'OCaml le 28 : docs/V6_1.md).
 RANKED = ["c", "cpp", "csharp", "java", "zig", "odin", "julia", "ada", "fortran", "haskell",
-          "c3", "d", "rust", "chapel", "nim", "mojo", "go", "ocaml", "swift", "fpc"]
+          "c3", "d", "rust", "chapel", "nim", "mojo", "go", "oxcaml", "swift", "fpc"]
 LANGS = list(RANKED)
 NAMES = {"c": "C", "cpp": "C++", "csharp": "C#", "java": "Java", "zig": "Zig", "odin": "Odin", "julia": "Julia",
          "ada": "Ada", "fortran": "Fortran", "haskell": "Haskell", "c3": "C3", "d": "D", "rust": "Rust",
-         "chapel": "Chapel", "nim": "Nim", "mojo": "Mojo", "go": "Go", "ocaml": "OCaml", "swift": "Swift",
+         "chapel": "Chapel", "nim": "Nim", "mojo": "Mojo", "go": "Go", "oxcaml": "OxCaml", "swift": "Swift",
          "fpc": "FreePascal"}
 # Plafond : par noyau, ses mesures ; chaque mesure est la liste des clés (noyau, variante, paramètre) admissibles,
 # dont le langage prend la plus rapide. Les formes du relevé s'y ajoutent (e_meas_with).
@@ -206,7 +226,37 @@ GO_BRIDGE = ("c", "pub")  # pont : langage et étiquette de ses cellules
 GO_FIXED = {K1N: K1N, K1S: K1S, ("k1", "aos", "energy"): K1N}  # cellule faussée de Go -> cellule du pont
 GOC = "Go de la campagne"  # « Final » sans la correction de Go : le classement de la v5.2 et de la v5.3
 GOALL = "Go, toutes les cellules"  # « Final » où les autres cellules de Go sont ramenées par leur propre témoin
-MEAS = "Campagne telle que mesurée"  # ni exception de Zig ni correction de Go : le classement du 26 novembre à 17 h
+MEAS = "Campagne telle que mesurée"  # ni exception de Zig, ni correction de Go, ni mesure d'OxCaml
+# OxCaml à la place d'OCaml (docs/V6_1.md) : mesuré à côté de la campagne, avec OCaml 5.5.2 pour témoin et C pour pont.
+# La campagne a mesuré OCaml : ses enregistrements prennent le nom de la place (load), et la place porte ses cellules
+# tant qu'elles ne sont pas ramenées (apply_ox).
+OX_LANG = "oxcaml"
+OX_BASE = "ocaml"  # langage mesuré par la campagne à cette place : le témoin
+OX_DIR = os.path.join(os.path.dirname(FIN), "oxcaml")
+OX_VIEW = {"wit": "pub", "wit_cv": "cv", "wit_unc": "unc", "wit_cv_unc": "cv_unc"}  # témoin -> étiquette de la campagne
+OX_SEED = SEED + 4800  # rééchantillonnage du rapport au témoin ou au pont : un générateur par cellule
+OX_C = "c"  # langage du pont
+# Cellules propres à OxCaml (bench/oxcaml/ox.ml) : clé -> (pont : langage, étiquette et clé de sa cellule ; pont par
+# le témoin : étiquette et clé de la cellule d'OCaml de même rôle). None : la place elle-même (le témoin).
+OX_OWN = {
+    ("k1", "aos", "energy"): ((OX_C, "pub", ("k1", "aos", "energy")), ("pub", ("k1", "aos", "energy"))),
+    ("k1", "soa", "energy"): ((OX_C, "pub", ("k1", "soa", "energy")), ("pub", ("k1", "soa", "energy"))),
+    ("k4", "tuned", ""): ((OX_C, "cv", ("k4", "tuned", "")), ("cv", ("k4", "tuned", ""))),
+    ("k5", "tuned_v", ""): ((OX_C, "pub", ("k5", "tuned", "")), ("pub", ("k5", "tuned", ""))),
+    ("k6", "tuned_v", "q6"): ((OX_C, "cv", ("k6", "tuned_v", "q6")), ("pub", ("k6", "tuned", "q6"))),
+    ("k6", "tuned_v", "q1"): ((OX_C, "pub", ("k6", "tuned", "q1")), ("pub", ("k6", "tuned", "q1"))),
+    ("k6", "mt_pool_v", "q6"): ((OX_C, "cv", ("k6", "mt_pool_v", "q6")), ("cv", ("k6", "mt_pool", "q6"))),
+    ("k6", "mt_pool_v", "q1"): ((OX_C, "cv", ("k6", "mt_pool", "q1")), ("cv", ("k6", "mt_pool", "q1"))),
+    ("k7", "tuned_pf", ""): ((OX_C, "pub", ("k7", "tuned", "")), ("cv", ("k7", "tuned_oa", ""))),
+    ("k8", "tuned_alloc", ""): ((None, "pub", ("k8", "natural", "")), ("pub", ("k8", "natural", ""))),
+    ("k9", "tuned_v", ""): ((OX_C, "cv", ("k9", "tuned_v", "")), ("pub", ("k9", "tuned", ""))),
+    ("k9", "mt_pool_v", ""): ((OX_C, "cv", ("k9", "mt_pool_v", "")), ("cv", ("k9", "mt_pool", ""))),
+}
+OXM = "OxCaml, mesures d'OCaml"  # « Final » où la place d'OxCaml porte les mesures d'OCaml : ce que la grille change
+OXS = "OxCaml, source d'OCaml seule"  # « Final » sans les cellules propres à OxCaml : ce que le compilateur change
+OXW = "OxCaml, pont par le témoin"  # « Final » où ses cellules propres sont ramenées par des cellules d'OCaml
+OXL = "OxCaml, latences du plan"  # « Final » où ses latences sont celles d'OCaml, colonne par colonne fois leur rapport
+RAW_NAMES = dict(NAMES, **{OX_LANG: "OCaml"})  # enregistrements bruts de la campagne : la place est celle d'OCaml
 
 
 def corrections(calc):
@@ -280,8 +330,9 @@ def c_vector(cdict, langs):
 # ------------------------------------------------------------------ données de la campagne
 class Proc(list):
     """Un processus retenu : [médiane de ses répétitions]. Attributs : ps (passe), cp (copie), machine, boot
-    (démarrage), b (effet commun de son groupe dans sa passe, en logarithme : A5, block_effects), dev (cellule de Zig
-    ou de Go ramenée à la campagne : graine et rapports appariés au témoin ou au pont, apply_dev et apply_go)."""
+    (démarrage), b (effet commun de son groupe dans sa passe, en logarithme : A5, block_effects), dev (cellule de Zig,
+    de Go ou d'OxCaml ramenée à la campagne : graine et rapports appariés au témoin ou au pont, apply_dev, apply_go et
+    apply_ox)."""
     ps, cp, machine, boot, b, dev = None, 0, None, None, 0.0, None
 
     def like(self, value):
@@ -312,11 +363,14 @@ def load(view=None):
     """Un processus est retenu s'il a fini sans erreur, sans dépassement de mémoire ni de durée, et si toutes ses
     sommes de contrôle sont justes ; il est représenté par la médiane de ses répétitions. Les étiquettes gcc (C par gcc)
     sont à part : sans view, elles sont ignorées ; avec view = {langage: {étiquette lue: étiquette remplacée}}, leurs
-    enregistrements prennent la place de ceux de l'étiquette remplacée (GCC_VIEW)."""
+    enregistrements prennent la place de ceux de l'étiquette remplacée (GCC_VIEW). Les enregistrements d'OCaml
+    prennent le nom de la place qu'OxCaml occupe dans le classement (OX_BASE, OX_LANG : docs/V6_1.md)."""
     F = Data()
     for f in sorted(glob.glob(os.path.join(RAW, "*.jsonl"))):
         for line in open(f):
             r = json.loads(line)
+            if r["lang"] == OX_BASE:
+                r["lang"] = OX_LANG
             swap = (view or {}).get(r["lang"], {})
             if r["construction"] in swap:
                 r["construction"] = swap[r["construction"]]
@@ -564,6 +618,186 @@ def go_summary(go, Fm, F):
     return {"machines": go["machines"], "processes": go["processes"], "invalid": go["invalid"], "absent": go["absent"],
             "fixed": fixed, "cells": cells, "rho": stat(rho), "witness_vs_campaign": stat(w),
             "outside": sorted(k for k, x in cells.items() if not 0.8 <= x["rho"] <= 1.25)}
+
+
+def ox_ratios():
+    """Mesure d'OxCaml (docs/V6_1.md, 5 et 6), si la campagne en a une. Trois côtés, mesurés dans les mêmes groupes :
+    OxCaml (étiquettes de la campagne), son témoin, OCaml 5.5.2 (étiquettes de OX_VIEW), et le pont, C. Pour chaque
+    cellule d'OxCaml (étiquette, taille, clé) : cells, ses processus retenus par (passe, copie) ; logs, les
+    logarithmes des rapports appariés (même passe, même copie) d'OxCaml au témoin, pour une cellule de même source ;
+    own et wown, ceux d'une cellule propre à OxCaml (OX_OWN) à la cellule de son pont et à la cellule d'OCaml de même
+    rôle. Latences de K8 naturel : lat_rows, celles d'OxCaml par processus (copie, répétitions) ; lat_wit, les
+    médianes de chaque colonne du témoin, toutes répétitions confondues ; lat, le rapport des médianes de chaque
+    colonne, OxCaml sur témoin. Un processus compte s'il est retenu au sens de load. Sans mesure, ou sous
+    FINAL_OCAML : None."""
+    raw = os.path.join(OX_DIR, "raw")
+    if os.environ.get("FINAL_OCAML") or not os.path.exists(os.path.join(raw, OX_LANG + ".jsonl")):
+        return None
+    ox, wit, cb = defaultdict(dict), defaultdict(dict), defaultdict(dict)  # cellule -> {(passe, copie): temps}
+    lat, lat_rows = defaultdict(lambda: ([], [])), defaultdict(list)
+    machines, invalid, n = set(), [], [0, 0, 0]  # processus retenus : témoin, OxCaml, pont
+    for lang in (OX_LANG, OX_C):
+        path = os.path.join(raw, lang + ".jsonl")
+        for line in (open(path) if os.path.exists(path) else ()):
+            r = json.loads(line)
+            key = (r["kernel"], r["variant"], r["param"])
+            ok = (not r.get("skipped") and r.get("returncode") == 0 and not r.get("oom") and not r.get("timeout")
+                  and r.get("n", 0) > 0 and r.get("oks") == ["True"])
+            if not ok:
+                invalid.append([lang, r["construction"], r["size"], "|".join(key), r.get("pass")])
+                continue
+            machines.add(r.get("machine"))
+            pc = (r["pass"], r.get("copy", 0))
+            if lang == OX_C:
+                n[2] += 1
+                cb[(r["construction"], r["size"], key)][pc] = r["median"]
+                continue
+            side = int(r["construction"] not in OX_VIEW)  # 0 : témoin, 1 : OxCaml
+            n[side] += 1
+            cell = (OX_VIEW.get(r["construction"], r["construction"]), r["size"], key)
+            (ox if side else wit)[cell][pc] = r["median"]
+            if key == K8N:
+                lat[cell[:2]][side].extend(r.get("lat", []))
+                if side:
+                    lat_rows[cell[:2]].append((r.get("copy", 0), r.get("lat", [])))
+
+    def paired(a, b):
+        pairs = sorted(set(a) & set(b))
+        return np.array([math.log(a[k] / b[k]) for k in pairs]) if pairs else None
+
+    logs, witness, own, wown = {}, {}, {}, {}
+    for cell, d in ox.items():
+        cons, size, key = cell
+        if key in OX_OWN:
+            (bl, bcons, bkey), (wcons, wkey) = OX_OWN[key]
+            x = paired(d, (wit if bl is None else cb).get((bcons, size, bkey), {}))
+            if x is not None:
+                own[cell] = x
+            x = paired(d, wit.get((wcons, size, wkey), {}))
+            if x is not None:
+                wown[cell] = x
+        elif cell in wit:
+            x = paired(d, wit[cell])
+            if x is not None:
+                logs[cell] = x
+                pairs = sorted(set(d) & set(wit[cell]))
+                witness[cell] = math.exp(float(np.mean([math.log(wit[cell][k]) for k in pairs])))
+    latw = {tag: np.median(np.asarray(w, float), axis=0) for tag, (w, d) in lat.items() if w and d}
+    latr = {tag: np.median(np.asarray(d, float), axis=0) / latw[tag] for tag, (w, d) in lat.items() if w and d}
+    gmean = lambda d: math.exp(float(np.mean([math.log(v) for v in d.values()])))  # noqa: E731
+    return {"cells": sorted(ox), "logs": logs, "witness": witness, "own": own, "wown": wown, "lat": latr,
+            "lat_wit": latw, "lat_rows": {tag: v for tag, v in lat_rows.items() if tag in latw},
+            "times": {cell: gmean(d) for cell, d in ox.items()},
+            "wit_times": {cell: gmean(d) for cell, d in wit.items()},
+            "bridge_times": {cell: gmean(d) for cell, d in cb.items()},
+            "machines": sorted(m for m in machines if m is not None), "invalid": invalid, "processes": n}
+
+
+def apply_ox(F, ox, Fm, witness_bridge=False, own=True, lat_plan=False):
+    """Cellules d'OxCaml ramenées aux conditions de la campagne (docs/V6_1.md, 6). La place porte au départ les
+    cellules d'OCaml. Chaque cellule mesurée d'OxCaml prend les processus de sa base dans la campagne telle que
+    mesurée (Fm), chacun multiplié par le rapport de la cellule à cette base (moyenne géométrique de ses rapports
+    appariés), et garde ces rapports, que dev_noise rééchantillonne. Base d'une cellule de même source : la même
+    cellule d'OCaml ; d'une cellule propre à OxCaml (OX_OWN) : la cellule du pont, ou, avec witness_bridge, la cellule
+    d'OCaml de même rôle. Latences de K8 naturel : celles qu'OxCaml a mesurées, multipliées par le rapport du temps
+    médian d'une requête d'OCaml dans la campagne à celui du témoin, l'échelle de la machine (ox_lat_scale) ; avec
+    lat_plan, celles d'OCaml dans la campagne, multipliées colonne par colonne par le rapport des médianes d'OxCaml
+    à celles du témoin (docs/V6_1.md, 10). Une cellule d'OCaml qu'OxCaml n'a pas mesurée, ou sans rapport, est
+    retirée ; renvoie les cellules d'OxCaml restées sans rapport ou sans base. Sans own : les cellules propres à
+    OxCaml sont laissées de côté, et les variantes d'OCaml qu'elles remplacent (mêmes clés) gardent leurs processus
+    de la campagne."""
+    absent, new = [], defaultdict(dict)
+    for cons, size, key in ox["cells"]:
+        cell = (cons, size, key)
+        if key in OX_OWN and not own:
+            continue
+        if key in OX_OWN:
+            (bl, bcons, bkey), (wcons, wkey) = OX_OWN[key]
+            if witness_bridge:
+                logs, base = ox["wown"].get(cell), Fm.procs(wcons, size, OX_LANG, wkey)
+            else:
+                logs, base = ox["own"].get(cell), Fm.procs(bcons, size, OX_LANG if bl is None else bl, bkey)
+        else:
+            logs, base = ox["logs"].get(cell), Fm.procs(cons, size, OX_LANG, key)
+        if logs is None or not base:
+            absent.append([cons, size, "|".join(key)])
+            continue
+        rho, seed = math.exp(float(logs.mean())), [OX_SEED, zlib.crc32("|".join((cons, size) + key).encode())]
+        new[(cons, size)][key] = [q.like(q[0] * rho) for q in base]
+        for q in new[(cons, size)][key]:
+            q.dev = (seed, logs)
+    for tag in list(F.data):
+        if OX_LANG in F.data[tag] or tag in new:
+            cells = {} if own else {k: v for k, v in F.data[tag].get(OX_LANG, {}).items() if k in OX_OWN}
+            cells.update(new.get(tag, {}))
+            F.data[tag][OX_LANG] = cells
+    for tag in new:
+        if tag not in F.data:
+            F.data[tag][OX_LANG] = new[tag]
+    for tag, dl in F.lat.items():
+        lp = dl.get(OX_LANG, {})
+        if K8N in lp:
+            if tag not in ox["lat"] or K8N not in new.get(tag, {}):
+                del lp[K8N]
+            elif lat_plan:
+                lp[K8N] = [(c, (np.asarray(rows, float) * ox["lat"][tag]).tolist() if len(rows) else rows)
+                           for c, rows in lp[K8N]]
+            else:
+                scale = ox_lat_scale(ox, Fm, tag)
+                lp[K8N] = [(c, (np.asarray(rows, float) * scale).tolist() if len(rows) else rows)
+                           for c, rows in ox["lat_rows"][tag]]
+    return absent
+
+
+def ox_lat_scale(ox, Fm, tag):
+    """Échelle des latences d'OxCaml à une étiquette et une taille : temps médian d'une requête de K8 naturel d'OCaml
+    dans la campagne (Fm), rapporté à celui du témoin dans la mesure d'OxCaml."""
+    camp = np.vstack([np.asarray(rows, float) for c, rows in Fm.lat[tag][OX_LANG][K8N] if len(rows)])
+    return float(np.median(camp[:, 0]) / ox["lat_wit"][tag][0])
+
+
+def ox_summary(ox, Fm, F):
+    """Mesure d'OxCaml, pour le rapport : version, machines, processus retenus ; pour chaque cellule de même source,
+    son rapport au témoin, ses paires, l'écart type de leurs logarithmes et le rapport du témoin à ses temps de la
+    campagne ; pour chaque cellule propre à OxCaml, son pont, son rapport au pont et son rapport à la cellule d'OCaml
+    de même rôle, son temps mesuré et son temps ramené ; latences de K8 naturel : échelle de chaque taille
+    (lat_scale), rapport colonne par colonne du témoin à la campagne (lat_witness_vs_campaign) et d'OxCaml au témoin
+    (lat). Fm : la campagne telle que mesurée ; F : avec OxCaml."""
+    sd = lambda x: float(x.std(ddof=1)) if len(x) > 1 else 0.0  # noqa: E731
+    ver, p = "?", os.path.join(OX_DIR, "toolchains.txt")
+    if os.path.exists(p):
+        for line in open(p):
+            if line.startswith(OX_LANG + " "):  # « 5.4.0+ox ; 5.4.0-ox7 <commit> ; flambda2: true » : la version datée
+                parts = line.split(None, 1)[1].strip().split(" ; ")
+                ver = parts[1].split()[0] if len(parts) > 1 else parts[0]
+    cells, own = {}, {}
+    for (cons, size, key), logs in sorted(ox["logs"].items()):
+        camp = Fm.procs(cons, size, OX_LANG, key)
+        cells["|".join((cons, size) + key)] = {
+            "rho": math.exp(float(logs.mean())), "pairs": len(logs), "sd": sd(logs),
+            "witness_vs_campaign": ox["witness"][(cons, size, key)] / gm(camp) if camp else None}
+    for (cons, size, key), logs in sorted(ox["own"].items()):
+        (bl, bcons, bkey), (wcons, wkey) = OX_OWN[key]
+        w = ox["wown"].get((cons, size, key))
+        new = F.procs(cons, size, OX_LANG, key)
+        own["|".join((cons, size) + key)] = {
+            "bridge": "|".join((NAMES[bl] if bl else "témoin", bcons) + bkey),
+            "rho": math.exp(float(logs.mean())), "pairs": len(logs), "sd": sd(logs),
+            "witness_bridge": "|".join((wcons,) + wkey), "rho_witness": None if w is None else math.exp(float(w.mean())),
+            "measured": ox["times"][(cons, size, key)], "transported": gm(new) if new else None}
+    rho = [x["rho"] for x in cells.values()]
+    w = [x["witness_vs_campaign"] for x in cells.values() if x["witness_vs_campaign"]]
+    stat = lambda v: {"median": float(np.median(v)), "min": float(min(v)), "max": float(max(v)),  # noqa: E731
+                      "within_10pct": float(np.mean([abs(math.log(x)) <= math.log(1.10) for x in v]))} if v else None
+    return {"version": ver, "machines": ox["machines"], "processes": ox["processes"], "invalid": ox["invalid"],
+            "absent": ox["absent"], "cells": cells, "own": own, "rho": stat(rho), "witness_vs_campaign": stat(w),
+            "outside": sorted(k for k, x in cells.items() if not 0.5 <= x["rho"] <= 2.0),
+            "lat": {"|".join(tag): [float(x) for x in v] for tag, v in sorted(ox["lat"].items())},
+            "lat_scale": {"|".join(tag): ox_lat_scale(ox, Fm, tag) for tag in sorted(ox["lat_rows"])},
+            "lat_witness_vs_campaign": {
+                "|".join(tag): [float(x) for x in ox["lat_wit"][tag] / np.median(np.vstack(
+                    [np.asarray(rows, float) for c, rows in Fm.lat[tag][OX_LANG][K8N] if len(rows)]), axis=0)]
+                for tag in sorted(ox["lat_rows"])}}
 
 
 def block_effects(data):
@@ -1055,7 +1289,7 @@ _NESTED = None
 
 
 def nested():
-    """Les 13 langages à grille imbriquée : ceux dont cv_variants déclare K9 natural_flat (R2)."""
+    """Les neuf langages à grille imbriquée : ceux dont cv_variants déclare K9 natural_flat (R2)."""
     global _NESTED
     if _NESTED is None:
         _NESTED = []
@@ -1458,22 +1692,27 @@ def replication(F, prev, fin, same=None):
     places, et rapport des temps cellule par cellule (cette campagne sur la précédente, cellules mesurées dans les
     deux) : médiane d'ensemble, médiane par langage, part des cellules à moins de 10 % de la médiane d'ensemble. Avec
     same (la campagne précédente recalculée par la méthode de celle-ci) : la comparaison à méthode égale, et ce que
-    le changement de méthode déplace dans la campagne précédente."""
+    le changement de méthode déplace dans la campagne précédente. Les langages comparés sont ceux que les deux
+    campagnes ont mesurés et que le classement garde : la place d'OxCaml, que tiennent dans les deux les mesures
+    d'OCaml, est laissée de côté (docs/V6_1.md, 6), et les places sont comptées parmi les autres."""
+    langs = [l for l in LANGS if l != OX_LANG]
+    sub = lambda order: [l for l in order if l in langs]  # noqa: E731
     now = cell_estimates(F)
-    ratios = {k: now[k] / t for k, t in prev["cells"].items() if k in now}
+    ratios = {k: now[k] / t for k, t in prev["cells"].items() if k in now and k.split("|")[0] in langs}
     med = float(np.median(list(ratios.values())))
     by = defaultdict(list)
     for k, r in ratios.items():
         by[k.split("|")[0]].append(r)
-    keep = ("order", "ms_mean", "exp", "first", "E", "D")
-    out = {"moved": moved(prev["order"], fin["order"], LANGS), "cells": len(ratios), "median": med,
+    part = lambda x: dict({k: {l: x[k][l] for l in langs} for k in ("ms_mean", "exp", "first", "E", "D")},  # noqa
+                          order=sub(x["order"]))
+    out = {"langs": langs, "order": sub(fin["order"]), "moved": moved(sub(prev["order"]), sub(fin["order"]), langs),
+           "cells": len(ratios), "median": med,
            "within_10pct": float(np.mean([abs(math.log(r / med)) <= math.log(1.10) for r in ratios.values()])),
-           "by_lang": {l: float(np.median(v)) for l, v in sorted(by.items())},
-           "previous": {k: prev[k] for k in keep}}
+           "by_lang": {l: float(np.median(v)) for l, v in sorted(by.items())}, "previous": part(prev)}
     if same:
-        out["same_method"] = {"moved": moved(same["order"], fin["order"], LANGS),
-                              "method_moved": moved(prev["order"], same["order"], LANGS),
-                              "previous": {k: same[k] for k in keep}}
+        out["same_method"] = {"moved": moved(sub(same["order"]), sub(fin["order"]), langs),
+                              "method_moved": moved(sub(prev["order"]), sub(same["order"]), langs),
+                              "previous": part(same)}
     return out
 
 
@@ -1523,10 +1762,10 @@ TRI_CAUSES = [
     {"status": "établie",
      "cause": "somme conditionnelle que les pairs vectorisent et que la chaîne laisse scalaire : pas de vectoriseur de "
               "boucles dans les passes de Mojo ; un branchement par octet en Swift, avec le piège de débordement de "
-              "`-O` ; pas de vectoriseur automatique pour cette boucle en Go, C#, Java, Haskell et OCaml",
+              "`-O` ; pas de vectoriseur automatique pour cette boucle en Go, C#, Java, Haskell et OxCaml",
      "control": "`docs/MOJO.md` (2), `docs/SWIFT.md` (2.4) et `docs/GO.md` (2) de l'archive",
      "cells": ["mojo K4 lent *", "swift K4 lent *", "haskell K4 lent *", "go K4 lent *", "csharp K4 lent *",
-               "java K4 lent *", "ocaml K4 lent *"]},
+               "java K4 lent *", "oxcaml K4 lent *"]},
     {"status": "attribuée",
      "cause": "boucle que les pairs vectorisent et que la chaîne laisse scalaire, sans relecture qui le consigne : "
               "somme conditionnelle de FreePascal ; stencil de C# et de Go ; stencil de Mojo une fois ses "
@@ -1555,9 +1794,9 @@ TRI_CAUSES = [
      "cells": ["haskell K1 lent *", "haskell K7 lent *", "haskell K9 lent *"]},
     {"status": "attribuée",
      "cause": "types de bibliothèque par défaut : `TDictionary` de FreePascal (deux recherches par ligne) et "
-              "`Hashtbl` d'OCaml pour K7 ; produit scalaire de FreePascal",
+              "`Hashtbl` d'OxCaml pour K7 ; produit scalaire de FreePascal",
      "control": "`docs/NATURAL.md` décrit ces types ; leur part dans l'écart n'a pas de contrôle propre",
-     "cells": ["fpc K7 lent pub,R1'", "ocaml K7 lent pub,R1'", "fpc K5 lent pub"]},
+     "cells": ["fpc K7 lent pub,R1'", "oxcaml K7 lent *", "fpc K5 lent pub"]},
     {"status": "établie",
      "cause": "ni C ni Fortran n'ont de table de hachage en bibliothèque standard : leur code naturel est le chaînage "
               "des manuels, écrit pour le noyau, au nombre de seaux fixé d'avance sur le nombre de clés et haché par "
@@ -1569,7 +1808,7 @@ TRI_CAUSES = [
      "cause": "allocation par un ramasse-miettes générationnel : un nœud de K8 coûte un déplacement de pointeur, "
               "contre une allocation et une libération chez les pairs",
      "control": "aucun contrôle propre",
-     "cells": ["java K8 rapide *", "ocaml K8 rapide *"]},
+     "cells": ["java K8 rapide *", "oxcaml K8 rapide *"]},
     {"status": "établie",
      "cause": "sans vérification de bornes, LLVM vectorise la boucle naturelle de Q6 d'Odin ; celle des autres pairs "
               "reste scalaire",
@@ -1684,22 +1923,26 @@ def main():
     Fm = F = load()  # Fm : la campagne telle que mesurée
     c3 = json.load(open(os.path.join(ROOT, "results", "vectorization.json")))
     footprint = json.load(open(os.path.join(ROOT, "results", "footprint.json")))
-    dev, go, c3_17 = dev_ratios(), go_ratios(), c3
+    dev, go, ox, c3_17 = dev_ratios(), go_ratios(), ox_ratios(), c3
 
-    def data(zig=True, golang=True, view=None, **kw):
+    def data(zig=True, golang=True, oxcaml=True, view=None, **kw):
         """Mesures d'un calcul : la campagne, avec ou sans chacune de ses remesures (Zig ramené par son témoin : docs/
-        V5_2.md ; cellules faussées de Go rebâties par le pont : docs/V5_4.md). kw : only et lat pour Zig (apply_dev),
-        all_cells pour Go (apply_go)."""
+        V5_2.md ; cellules faussées de Go rebâties par le pont : docs/V5_4.md ; cellules d'OxCaml ramenées par le
+        témoin ou le pont : docs/V6_1.md). kw : only et lat pour Zig (apply_dev), all_cells pour Go (apply_go),
+        witness_bridge, own et lat_plan pour OxCaml (apply_ox)."""
         Fx, absent = load(view), {}
         if zig and dev:
             absent[DEV_LANG] = apply_dev(Fx, dev, **{k: v for k, v in kw.items() if k in ("only", "lat")})
         if golang and go:
             absent[GO_LANG] = apply_go(Fx, go, Fm, **{k: v for k, v in kw.items() if k == "all_cells"})
+        if oxcaml and ox:
+            absent[OX_LANG] = apply_ox(Fx, ox, Fm, **{k: v for k, v in kw.items()
+                                                      if k in ("witness_bridge", "own", "lat_plan")})
         return Fx, absent
 
-    if dev or go:
+    if dev or go or ox:
         F, absent = data()
-        for x, lang in ((dev, DEV_LANG), (go, GO_LANG)):
+        for x, lang in ((dev, DEV_LANG), (go, GO_LANG), (ox, OX_LANG)):
             if x:
                 x["absent"] = absent[lang]
     if dev:
@@ -1743,8 +1986,13 @@ def main():
     if go:
         more(GOC, data(golang=False)[0], c3)  # les cellules de Go de la campagne : le classement de la v5.3
         more(GOALL, data(all_cells=True)[0], c3)  # les autres cellules de Go ramenées par leur témoin
+    if ox:
+        more(OXM, data(oxcaml=False)[0], c3)  # la grille d'OxCaml, les mesures d'OCaml dans la campagne
+        more(OXS, data(own=False)[0], c3)  # la source d'OCaml compilée par OxCaml, sans ses formes propres
+        more(OXW, data(witness_bridge=True)[0], c3)  # ses cellules propres ramenées par des cellules d'OCaml
+        more(OXL, data(lat_plan=True)[0], c3)  # le calcul du plan : latences d'OCaml fois le rapport de chaque colonne
     if dev and go:
-        more(MEAS, Fm, c3_17)  # ni l'une ni l'autre : le classement du 26 novembre à 17 h
+        more(MEAS, Fm, c3_17)  # aucune remesure : la place d'OxCaml y porte les mesures d'OCaml
     asm = MEAS if dev and go else (ZIG17 if dev else (GOC if go else FINAL))  # la campagne telle que mesurée
     fin = res[FINAL]["order"]
     moved_ = {c: moved(fin, res[c]["order"], LANGS) for c in calcs[1:]}
@@ -1768,6 +2016,8 @@ def main():
         out["zig_dev"] = dev_summary(dev, Fm)
     if go:
         out["go_std"] = go_summary(go, Fm, F)
+    if ox:
+        out["oxcaml"] = ox_summary(ox, Fm, F)
     # comparaisons : la méthode du 23 novembre (calcul OLD) et, si comparisons.json la porte, la campagne précédente
     out["moved_vs_old"] = moved(res[OLD]["order"], fin, LANGS)
     cp = os.path.join(FIN, "comparisons.json")
@@ -1793,14 +2043,16 @@ def report(o, calcs):
     f = R[FINAL]
     zd = o.get("zig_dev")  # Zig par sa version de développement : astérisque
     gs = o.get("go_std")  # Go hors de l'expérience simd
+    ox = o.get("oxcaml")  # OxCaml mesuré à part : croix
     asm = MEAS if zd and gs else (ZIG17 if zd else (GOC if gs else None))  # la campagne telle que mesurée : réplication
-    star = lambda l: NAMES[l] + ("*" if zd and l == DEV_LANG else "")
-    L = ["# v6 : le classement — résultats", "",
+    star = lambda l: NAMES[l] + ("*" if zd and l == DEV_LANG else "") + ("†" if ox and l == OX_LANG else "")
+    L = ["# v6.1 : le classement — résultats", "",
          "*Plans : `docs/V4_FINAL.md` (section 8), `docs/V4_1.md` (corrections A1 à A4 de l'analyse), `docs/V5.md` "
          "(campagne rejouée, corrections A5 et A6), `docs/V5_1.md` (A7 et A8 : mode du code naturel tiré au sort) et "
          "`docs/V5_2.md` (Zig par sa version de développement), fixés "
          "avant les mesures ou avant leur analyse ; `docs/V5_3.md` (ce qui décide de l'ordre, tri des écarts) ; "
-         "`docs/V5_4.md` (Go mesuré hors de l'expérience simd) ; `docs/V6.md` (classement réduit à 20 langages). "
+         "`docs/V5_4.md` (Go mesuré hors de l'expérience simd) ; `docs/V6.md` (classement réduit à 20 langages) ; "
+         "`docs/V6_1.md` (OxCaml à la place d'OCaml, mesuré à part). "
          "Généré par "
          "`analysis/final_v4.py` à partir de `results/final/raw`, de `results/final/b3.jsonl` et du relevé des formes "
          "(`results/converge/forms.json`).*", "",
@@ -1831,6 +2083,14 @@ def report(o, calcs):
               "cellules de K1 que la campagne faussait sont rebâties par un pont par le C ; ses autres cellules sont "
               f"celles de la campagne. Avec ses cellules de la campagne (« {GOC} ») : {nth(place(g0, GO_LANG))}, "
               f"score {g0['ms_mean'][GO_LANG]:.1f}.", ""]
+    if ox:
+        xm, nw = R[OXM], len({k.split("|", 2)[2] for k in ox["own"]})
+        L += [f"† OxCaml a pris la place d'OCaml (`docs/V6_1.md`) et n'a pas été mesuré dans la campagne : il l'est à "
+              f"part, sur la machine {', '.join(ox['machines'])}, à côté d'un témoin (OCaml 5.5.2, la source et le "
+              "binaire de la campagne) et d'un pont (C). Ses cellules de même source qu'OCaml sont celles d'OCaml dans "
+              f"la campagne, multipliées par le rapport mesuré au témoin ; ses {nw} cellules propres, celles de C dans "
+              "la campagne, multipliées par le rapport mesuré à C. Avec les mesures d'OCaml et sa propre grille "
+              f"(« {OXM} ») : {nth(place(xm, OX_LANG))}, score {xm['ms_mean'][OX_LANG]:.1f}.", ""]
     if f.get("mode_share") is not None:
         L += ["Mode du code naturel, tiré dans chaque variante (A7, A8) : "
               + ", ".join(f"{m} dans {100 * x:.1f} % des variantes" for m, x in zip(DRAW_MODES, f["mode_share"]))
@@ -1848,8 +2108,8 @@ def report(o, calcs):
             p = place(R[c], l)
             mark = "" if c == FINAL or abs(p - place(f, l)) <= 2 else " **"
             cells.append(f"{p}{mark}")
-        if rp:
-            cells.append(str(rp["previous"]["order"].index(l) + 1))
+        if rp:  # places comptées parmi les langages des deux campagnes : la place d'OxCaml n'en est pas
+            cells.append(str(rp["previous"]["order"].index(l) + 1) if l in rp["langs"] else "–")
         L.append(f"| {NAMES[l]} | " + " | ".join(cells) + " |")
     L += ["", "Chaque case : place dans le calcul ; ** : plus de deux places d'écart avec « Final ». Ordre des lignes : "
           "« Final ». « Sans A1 » à « Sans A8 » : « Final » sans une de ses corrections ; « Méthode du 23 novembre » : "
@@ -1860,8 +2120,17 @@ def report(o, calcs):
                                                     "aussi par leur rapport" if zd else "")
           + (f" ; « {GOC} » : « Final » avec les cellules de Go de la campagne ; « {GOALL} » : les autres cellules de "
              "Go ramenées elles aussi par leur témoin" if gs else "")
-          + (f" ; « {MEAS} » : ni l'exception de Zig ni la correction de Go" if zd and gs else "")
-          + (" ; « Campagne précédente » : son classement publié." if rp else "."), "",
+          + (f" ; « {OXM} » : « Final » où la place d'OxCaml porte les mesures d'OCaml dans la campagne, sans "
+             f"transport, avec la grille d'OxCaml ; « {OXS} » : sans les cellules propres à OxCaml, les variantes "
+             "qu'elles remplacent gardant leur temps d'OCaml dans la campagne ; "
+             f"« {OXW} » : ses cellules propres ramenées par la cellule d'OCaml de même rôle au lieu de celle de C ; "
+             f"« {OXL} » : ses latences de K8 naturel prises à OCaml dans la campagne et multipliées, colonne par "
+             "colonne, par leur rapport au témoin" if ox else "")
+          + (f" ; « {MEAS} » : ni l'exception de Zig ni la correction de Go"
+             + (", et les mesures d'OCaml à la place d'OxCaml" if ox else "") if zd and gs else "")
+          + (" ; « Campagne précédente » : son classement publié"
+             + (f", places comptées parmi ses {len(rp['langs'])} langages mesurés dans les deux campagnes et gardés "
+                "ici." if len(rp["langs"]) < len(f["order"]) else ".") if rp else "."), "",
           "## Rangs qui bougent de plus de deux places par rapport à « Final »", ""]
     for c in calcs[1:]:
         mv = o["moved_more_than_2"][c]
@@ -1899,7 +2168,10 @@ def report(o, calcs):
         if asm:
             L += [("Les deux campagnes sont comparées à compilateurs égaux" if asm == ZIG17 else
                    "Les deux campagnes sont comparées à configurations égales")
-                  + f" : pour celle-ci, le calcul « {asm} ».", ""]
+                  + f" : pour celle-ci, le calcul « {asm} »"
+                  + (f", sur les {len(rp['langs'])} langages mesurés dans les deux et gardés au classement : la place "
+                     "d'OxCaml, que tiennent dans ce calcul les mesures d'OCaml, est laissée de côté, et les places "
+                     "sont comptées parmi les autres." if len(rp["langs"]) < len(f["order"]) else "."), ""]
         L += [f"Cellules mesurées dans les deux campagnes : {rp['cells']}. Rapport des temps (cette campagne sur la "
               f"précédente, estimations ponctuelles) : médiane {rp['median']:.3f} ; {100 * rp['within_10pct']:.0f} % des "
               "cellules à moins de 10 % de cette médiane.", "",
@@ -1907,7 +2179,7 @@ def report(o, calcs):
               "Précédent, publié | Plafond | Plafond précédent | Rapport médian des temps |",
               "|---|" + "---|" * 9]
         ps = sm["previous"] if sm else None
-        for i, l in enumerate(f["order"]):
+        for i, l in enumerate(rp["order"]):
             rec = (ps["order"].index(l) + 1, f"{ps['ms_mean'][l]:.1f}") if ps else ("–",) * 2
             L.append(f"| {NAMES[l]} | {i + 1} | {rec[0]} | {pv['order'].index(l) + 1} | {f['ms_mean'][l]:.1f} | "
                      f"{rec[1]} | {pv['ms_mean'][l]:.1f} | {f['E'][l]:.1f} | {pv['E'][l]:.1f} | "
@@ -1984,6 +2256,79 @@ def report(o, calcs):
                   "| Noyau | Étiquette | Variante | " + " | ".join(POS_NAMES) + " |", "|---|---|---|---|---|---|"]
             for (k, cons, v, q), row in sorted(ct.items()):
                 L.append(f"| {k.upper()} | {cons} | {v}{' ' + q if q else ''} | " + " | ".join(row) + " |")
+    if ox:
+        n, rs, wc = ox["processes"], ox["rho"], ox["witness_vs_campaign"]
+        ms = lambda t: (f"{1e3 * t:,.0f}".replace(",", " ") if t >= 0.1 else  # noqa: E731
+                        f"{1e3 * t:.1f}" if t >= 0.01 else f"{1e3 * t:.3g}")
+        col = lambda name: POS[name.split("|")[2]].index(name.split("|")[1]) if name.split("|")[2] in POS else 1  # noqa
+        ct, ow = {}, {}
+        for name, c in ox["cells"].items():
+            cons, size, k, v, q = name.split("|")
+            ct.setdefault((k, cons, v, q), ["–"] * 3)[col(name)] = f"{c['rho']:.2f} ({c['pairs']})"
+        for name, c in ox["own"].items():
+            cons, size, k, v, q = name.split("|")
+            rows = ow.setdefault((k, cons, v, q, c["bridge"], c["witness_bridge"]), [["–"] * 3 for _ in range(3)])
+            rows[0][col(name)] = f"{c['rho']:.2f} ({c['pairs']})"
+            if c["rho_witness"]:
+                rows[1][col(name)] = f"{c['rho_witness']:.2f}"
+            if c["transported"]:
+                rows[2][col(name)] = f"{ms(c['measured'])} → {ms(c['transported'])}"
+        ks = list(E_V2)
+        L += ["", "## OxCaml mesuré à part", "",
+              f"OxCaml {ox['version']} est mesuré hors campagne sur la machine {', '.join(ox['machines'])} "
+              "(`docs/V6_1.md`), dans les mêmes groupes que son témoin (OCaml 5.5.2 : la source et le binaire de la "
+              f"campagne) et que le pont (C) : {n[1]}, {n[0]} et {n[2]} processus retenus, {len(ox['invalid'])} "
+              f"écartés, {len(ox['absent'])} cellules sans rapport.", "",
+              "| Calcul | Place | Score | Plafond | Code par défaut | Contrôle | "
+              + " | ".join(k.upper() for k in ks) + " | D1 | D3 |", "|---|" + "---|" * (8 + len(ks))]
+        for name in (FINAL, OXW, OXL, OXS, OXM):
+            r = R[name]
+            L.append(f"| {name} | {place(r, OX_LANG)} | {r['ms_mean'][OX_LANG]:.1f} | {r['E'][OX_LANG]:.1f} | "
+                     f"{r['D'][OX_LANG]:.1f} | {r['C'][OX_LANG]:.1f} | "
+                     + " | ".join(f"{100 * r['Ek'][OX_LANG][k]:.0f}" for k in ks)
+                     + f" | {100 * r['Dparts'][OX_LANG]['D1']:.0f} | {100 * r['Dparts'][OX_LANG]['D3']:.0f} |")
+        L += ["", f"« {OXM} » : la grille d'OxCaml seule ; « {OXS} » : en plus, le compilateur et le runtime (les "
+              "cellules de la source d'OCaml, ramenées par le témoin, et les latences) ; « Final » : en plus, les "
+              "formes propres à OxCaml. Plafond, code par défaut, contrôle, noyaux, D1 et D3 : au centre."]
+        L += ["", f"Cellules de même source qu'OCaml (`bench/oxcaml/ms.ml`) : {len(ox['cells'])} cellules. Chaque "
+              "case : rapport du temps sous OxCaml au temps du témoin (moyenne géométrique des rapports appariés, et "
+              "nombre de paires) ; les processus d'OCaml dans la campagne sont multipliés par ce rapport. Médiane "
+              f"{rs['median']:.2f}, de {rs['min']:.2f} à {rs['max']:.2f} ; {100 * rs['within_10pct']:.0f} % des "
+              "cellules à moins de 10 % de 1 ; hors de 0,5 à 2 : "
+              + (", ".join(x.replace("|", " ").strip() for x in ox["outside"])
+                 + " (instruites : `docs/V6_1.md`, 11)" if ox["outside"] else "aucune")
+              + f". Le témoin contre ses temps de la campagne : rapport médian {wc['median']:.2f}, de "
+              f"{wc['min']:.2f} à {wc['max']:.2f} ; {100 * wc['within_10pct']:.0f} % des cellules à moins de 10 % de "
+              "1. Le transport annule cet écart.", "",
+              "| Noyau | Étiquette | Variante | " + " | ".join(POS_NAMES) + " |", "|---|---|---|---|---|---|"]
+        for (k, cons, v, q), row in sorted(ct.items()):
+            L.append(f"| {k.upper()} | {cons} | {v}{' ' + q if q else ''} | " + " | ".join(row) + " |")
+        L += ["", "Cellules propres à OxCaml (`bench/oxcaml/ox.ml`), ramenées par un pont. Rapport au pont : temps "
+              "d'OxCaml sur temps de la cellule du pont, moyenne géométrique des rapports appariés (nombre de paires) ; "
+              "la cellule prend les processus du pont dans la campagne, multipliés par ce rapport. Rapport à OCaml : "
+              "temps d'OxCaml sur temps de la cellule d'OCaml de même rôle, mesurée par le témoin ; il sert de pont "
+              f"dans le calcul « {OXW} ». Temps : celui mesuré ici, puis le temps ramené aux conditions de la "
+              "campagne, en millisecondes.", "",
+              "| Noyau | Étiquette | Variante | Pont | Cellule d'OCaml | Grandeur | " + " | ".join(POS_NAMES) + " |",
+              "|---|---|---|---|---|---|---|---|---|"]
+        cell = lambda x: " ".join(p for p in x.split("|") if p)  # noqa: E731
+        for (k, cons, v, q, br, wb), rows in sorted(ow.items()):
+            for label, row in zip(("rapport au pont", "rapport à OCaml", "temps (ms)"), rows):
+                L.append(f"| {k.upper()} | {cons} | {v}{' ' + q if q else ''} | {cell(br)} | {cell(wb)} | {label} | "
+                         + " | ".join(row) + " |")
+        if ox["lat"]:
+            L += ["", "Latences de K8 naturel : celles qu'OxCaml a mesurées, multipliées à chaque taille par l'échelle "
+                  "de la machine, rapport du temps médian d'une requête d'OCaml dans la campagne à celui du témoin. "
+                  f"« {OXL} » prend à la place les latences d'OCaml dans la campagne, multipliées colonne par "
+                  "colonne par le rapport d'OxCaml au témoin, ce qui suppose que chaque colonne du témoin se retrouve "
+                  "d'une machine à l'autre (`docs/V6_1.md`, 10). Colonnes : p50, p90, p99, p99,9, maximum (médianes "
+                  "sur les répétitions).", "",
+                  "| Étiquette | Taille | Échelle | Témoin sur campagne | OxCaml sur témoin |", "|---|---|---|---|---|"]
+            five = lambda v: ", ".join(f"{x:.2f}" for x in v)  # noqa: E731
+            for name in sorted(ox["lat_scale"], key=lambda x: (x.split("|")[0], POS["k8"].index(x.split("|")[1]))):
+                cons, size = name.split("|")
+                L.append(f"| {cons} | {POS_NAMES[POS['k8'].index(size)]} | {ox['lat_scale'][name]:.2f} | "
+                         f"{five(ox['lat_witness_vs_campaign'][name])} | {five(ox['lat'][name])} |")
     nat = [(n, R[c]) for n, c in (("mode publié", "Sans R1"), ("R1'", "R1' au lieu de R1")) if c in R]
     L += ["", "## Plafond par noyau et parts du code par défaut (« Final », au centre)", "",
           "| Langage | " + " | ".join(k.upper() for k in E_V2) + " | D1 | D2 | D3 | D4 |"
@@ -2127,6 +2472,7 @@ def report(o, calcs):
     for text, cs in same.items():
         L.append(f"* {'Tous les calculs' if len(cs) == len(calcs) else ', '.join(cs)} : {text}")
     cm, gc = o["cpu_models"], o.get("gcc")
+    raw = lambda l: RAW_NAMES.get(l, l)  # noqa: E731
     L += ["", "Processeur des enregistrements : " + " ; ".join(
         f"{m} ({sum(ps.values())} enregistrements)" for m, ps in cm.items())
           + (" ; C par gcc : " + " ; ".join(f"{m} ({n} enregistrements)" for m, n in gc["cpu_models"].items())
@@ -2140,11 +2486,11 @@ def report(o, calcs):
               f"exécutées (étalonnage hors mémoire ou hors durée) : {len(sk)} ; vol de temps > 5 % après reprise : "
               f"{len(x['steal_over_5pct'])}."]
         for y in x["failures"]:
-            L.append(f"* {NAMES.get(y['lang'], y['lang'])} {y['construction']} {y['size']} {' '.join(y['key'])} passe "
+            L.append(f"* {raw(y['lang'])} {y['construction']} {y['size']} {' '.join(y['key'])} passe "
                      f"{y['pass']} : code {y['returncode']}, contrôles {y['oks']}{', hors mémoire' if y['oom'] else ''}"
                      f"{', durée' if y['timeout'] else ''}")
         for (l, c, s_, k), st in sorted(sk.items()):
-            L.append(f"* non exécutée : {NAMES.get(l, l)} {c} {s_} {k} ({', '.join(sorted(st))})")
+            L.append(f"* non exécutée : {raw(l)} {c} {s_} {k} ({', '.join(sorted(st))})")
     open(REPORT, "w").write("\n".join(L) + "\n")
 
 

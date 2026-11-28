@@ -1,5 +1,5 @@
-# Recherche d'absence : ocaml, case E2
-# Chaîne : 5.5.2
+# Recherche d'absence : oxcaml, case E2
+# Chaîne : OxCaml 5.4.0-ox7
 # Motif : \basm\b|inline_?asm|__asm|assembler
 # Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
 # 0 déclarations publiques, 0 mentions, 0 fichiers

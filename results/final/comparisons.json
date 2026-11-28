@@ -2686,7 +2686,7 @@
    "go",
    "fpc",
    "haskell",
-   "ocaml"
+   "oxcaml"
   ],
   "ms_mean": {
    "c": 83.75277256518532,
@@ -2706,9 +2706,9 @@
    "nim": 76.92123723620644,
    "mojo": 67.00177699335126,
    "go": 51.72978458999677,
-   "ocaml": 27.42661650860433,
-   "swift": 67.56378153172928,
-   "fpc": 50.84915802697555
+   "oxcaml": 33.72155402036263,
+   "swift": 67.56171252746833,
+   "fpc": 50.8633067395517
   },
   "ms0": {
    "c": 87.41190084437679,
@@ -2728,31 +2728,31 @@
    "nim": 79.76903263865178,
    "mojo": 68.9837031904543,
    "go": 53.720295910743644,
-   "ocaml": 27.00882886202699,
+   "oxcaml": 34.543203862026985,
    "swift": 69.4540904913965,
    "fpc": 51.220124991033884
   },
   "exp": {
    "c": 1.4357,
    "cpp": 2.49125,
-   "csharp": 14.932999999999998,
-   "java": 16.7502,
-   "zig": 6.021000000000001,
-   "odin": 4.5901499999999995,
-   "julia": 10.61035,
-   "ada": 8.6386,
-   "fortran": 10.810550000000001,
-   "haskell": 18.85155,
-   "c3": 6.3096,
-   "d": 6.3088999999999995,
-   "rust": 5.201599999999999,
-   "chapel": 10.802399999999999,
-   "nim": 6.197249999999999,
-   "mojo": 13.060150000000002,
-   "go": 17.040300000000002,
-   "ocaml": 19.9942,
-   "swift": 12.76915,
-   "fpc": 17.1841
+   "csharp": 14.93385,
+   "java": 16.7624,
+   "zig": 6.020950000000001,
+   "odin": 4.590249999999999,
+   "julia": 10.6113,
+   "ada": 8.639299999999999,
+   "fortran": 10.810350000000001,
+   "haskell": 18.896949999999997,
+   "c3": 6.3096499999999995,
+   "d": 6.309049999999999,
+   "rust": 5.2017999999999995,
+   "chapel": 10.80335,
+   "nim": 6.196849999999999,
+   "mojo": 13.059550000000002,
+   "go": 17.04555,
+   "oxcaml": 19.93375,
+   "swift": 12.767999999999999,
+   "fpc": 17.18015
   },
   "first": {
    "c": 0.67035,
@@ -2772,7 +2772,7 @@
    "nim": 0.00595,
    "mojo": 0.0001,
    "go": 0.0,
-   "ocaml": 0.0,
+   "oxcaml": 0.0,
    "swift": 0.0001,
    "fpc": 0.0
   },
@@ -2794,7 +2794,7 @@
    "nim": 85.89537474925629,
    "mojo": 76.0250916075145,
    "go": 62.61969722135194,
-   "ocaml": 22.699656244873267,
+   "oxcaml": 22.699656244873267,
    "swift": 80.57108466386609,
    "fpc": 42.959366492152554
   },
@@ -2816,7 +2816,7 @@
    "nim": 75.06853095579706,
    "mojo": 55.594666189794076,
    "go": 46.564668088811466,
-   "ocaml": 39.19086545631073,
+   "oxcaml": 39.19086545631073,
    "swift": 53.577626503400275,
    "fpc": 48.95801357669144
   },
@@ -2838,10 +2838,10 @@
    "nim": 76.125,
    "mojo": 70.5,
    "go": 48.660714285714285,
-   "ocaml": 23.232142857142858,
+   "oxcaml": 44.75892857142857,
    "swift": 68.08928571428572,
    "fpc": 62.27678571428572
   },
-  "note": "Campagne précédente recalculée par la méthode de celle-ci (docs/V5.md, 8, écart 7 ; docs/V5_1.md, 5 et 9) : campagne finale de la v4 (machine 35), analysée avec A5, A6, A7 et A8 ; faute de relevé corrigé de STREAM sur une machine de son modèle, sa borne à quatre fils est celle de la machine 38 (42,9 Go/s). Classement et scores de « Final ». Recalculée le 27 novembre sur ses 20 langages gardés (docs/V6.md). Écrit par analysis/final_v4.py --extract-same."
+  "note": "Campagne précédente recalculée par la méthode de celle-ci (docs/V5.md, 8, écart 7 ; docs/V5_1.md, 5 et 9) : campagne finale de la v4 (machine 35), analysée avec A5, A6, A7 et A8 ; faute de relevé corrigé de STREAM sur une machine de son modèle, sa borne à quatre fils est celle de la machine 38 (42,9 Go/s). Classement et scores de « Final ». Recalculée le 28 novembre avec la grille d'OxCaml à la place de celle d'OCaml, dont elle garde les mesures (docs/V6_1.md) ; la réplication compare les 19 autres langages. Écrit par analysis/final_v4.py --extract-same."
  }
 }

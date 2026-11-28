@@ -4,26 +4,26 @@
 **Une seule règle pour la libc et les FFI** (`analysis/capabilities_v2.py`) : compte ce que la chaîne livre, y compris les intrinsèques et builtins du compilateur que le langage importe par sa FFI (Nim, Chapel, C3, Odin) ; ne compte pas l'appel de code C ordinaire par une FFI (la libc pour Rust), sauf pour C et C++, dont la libc est la bibliothèque système.
 Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que la règle v2 (score central) reclasse. C3 est **mesurée** sur le code machine de la boucle chaude de K4 et de K9 en natural (`results/vectorization.json`, mesure faite pendant la v3 ; la règle v2 ne compte pas C3). Les justifications et preuves de chaque cellule suivent le tableau ; l'état de preuve (sonde exécutée, mesure ou lecture des sources) est décompté à la fin.
 
-| Capacité | C | C++ | Rust | Zig | Odin | C3 | D | Nim | Ada | Fortran | Chapel | Mojo | Swift | FPC | Go | C# | Java | Julia | Haskell | OCaml |
+| Capacité | C | C++ | Rust | Zig | Odin | C3 | D | Nim | Ada | Fortran | Chapel | Mojo | Swift | FPC | Go | C# | Java | Julia | Haskell | OxCaml |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | **A** (25 %) | | | | | | | | | | | | | | | | | | | | |
-| A1 agrégats valeurs en ligne dans les tableaux | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ |
-| A2 ordre/taille des champs, disposition C, offsetof | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ |
+| A1 agrégats valeurs en ligne dans les tableaux | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● |
+| A2 ordre/taille des champs, disposition C, offsetof | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ◐ |
 | A3 disposition au bit près (packed, champs de bits) | ◐→● | ◐→● | ◐ | ● | ● | ● | ● | ● | ● | ◐ | ○ | ○ | ○ | ● | ○ | ◐ | ◐ | ○ | ◐ | ○ |
 | A4 alignement explicite >= 64 o | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐→● | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ |
 | A5 unions et réinterprétation de bits | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ● | ◐ | ◐ |
 | A6 SoA natif | ○ | ○ | ○ | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| A7 tableaux fixes en ligne dans les agrégats | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ○ |
-| A8 types numériques étroits de stockage | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ |
+| A7 tableaux fixes en ligne dans les agrégats | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ◐ | ◐ |
+| A8 types numériques étroits de stockage | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● |
 | **B** (20 %) | | | | | | | | | | | | | | | | | | | | |
 | B1 pas de GC traçant imposé | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ● | ● | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ |
-| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ○ |
-| B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ◐ | ● | ○ | ◐ | ◐ | ○ |
-| B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ○ | ○ |
+| B2 allocateurs personnalisés / arènes de premier ordre | ◐ | ● | ◐ | ● | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ | ◐ |
+| B3 allocation sur la pile / en ligne | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● | ◐ | ● | ○ | ◐ | ◐ | ● |
+| B4 pas d'allocations cachées | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ | ○ | ◐ | ○ | ◐ |
 | B5 mémoire brute (pointeurs) | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ◐ |
 | **C** (20 %) | | | | | | | | | | | | | | | | | | | | |
-| C1 types vectoriels portables | ◐→● | ◐→● | ◐ | ● | ● | ● | ● | ○ | ◐→● | ○ | ○ | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ○ |
-| C2 intrinsèques de la cible | ◐→● | ◐→● | ● | ◐ | ◐→● | ◐ | ◐→● | ◐→● | ◐→● | ○ | ◐ | ◐→● | ◐ | ◐ | ◐ | ● | ○ | ◐→● | ○ | ○ |
+| C1 types vectoriels portables | ◐→● | ◐→● | ◐ | ● | ● | ● | ● | ○ | ◐→● | ○ | ○ | ● | ● | ◐ | ◐ | ● | ◐ | ◐ | ◐ | ◐ |
+| C2 intrinsèques de la cible | ◐→● | ◐→● | ● | ◐ | ◐→● | ◐ | ◐→● | ◐→● | ◐→● | ○ | ◐ | ◐→● | ◐ | ◐ | ◐ | ● | ○ | ◐→● | ○ | ◐ |
 | C3 auto-vectorisation (mesurée) | ● | ● | ◐ | ○ | ● | ● | ◐ | ◐ | ◐ | ● | ● | ○ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ |
 | C4 contrôle de la réassociation flottante | ◐→● | ● | ● | ● | ○ | ◐ | ◐→● | ◐ | ◐ | ◐→● | ◐ | ◐ | ○ | ○ | ○ | ○ | ◐ | ● | ○ | ○ |
 | C5 parallélisme de données sur plusieurs cœurs | ◐→● | ◐→● | ○ | ○ | ○ | ○ | ● | ◐ | ○ | ● | ● | ○ | ● | ○ | ○ | ● | ● | ● | ◐ | ○ |
@@ -37,7 +37,7 @@ Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que l
 | E1 code natif inspectable | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ◐ | ● | ● | ● |
 | E2 assembleur en ligne | ◐→● | ● | ● | ● | ● | ◐ | ● | ● | ● | ○ | ○ | ● | ○ | ● | ◐ | ○ | ○ | ◐→● | ○ | ○ |
 | E3 indications de branchement | ◐→● | ● | ● | ● | ● | ● | ● | ● | ◐→● | ○ | ○ | ● | ◐ | ○ | ○ | ○ | ○ | ○ | ○ | ○ |
-| E4 préchargement explicite | ◐→● | ◐→● | ● | ● | ● | ● | ● | ◐→● | ◐→● | ○ | ◐ | ● | ◐ | ◐ | ○ | ● | ○ | ◐→● | ● | ○ |
+| E4 préchargement explicite | ◐→● | ◐→● | ● | ● | ● | ● | ● | ◐→● | ◐→● | ○ | ◐ | ● | ◐ | ◐ | ○ | ● | ○ | ◐→● | ● | ◐ |
 | E5 garanties de non-aliasing | ● | ◐→● | ● | ● | ● | ◐ | ◐→● | ● | ● | ● | ◐ | ● | ◐ | ○ | ○ | ○ | ○ | ◐ | ○ | ○ |
 | E6 contrôle local des vérifications de bornes | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | ○ | ● | ● | ● |
 | E7 calcul à la compilation + génériques monomorphisés | ◐ | ● | ● | ● | ◐ | ● | ● | ● | ● | ◐ | ● | ● | ◐ | ◐ | ◐ | ◐ | ○ | ● | ◐ | ○ |
@@ -220,14 +220,14 @@ Le tableau donne la note de la règle v1 ; « ◐→● » marque une case que l
 * **E** : E1 = 1 (natif) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 1 (primops prefetch*# (GHC.Exts)) ; E5 = 0 (aucun) ; E6 = 1 (unsafeRead/unsafeAt) ; E7 = 0.5 (Template Haskell ; spécialisation non garantie)
 * **F** : F1 = 1 (UArray à indices tuples) ; F2 = 0 (aucun) ; F3 = 1 (Word32/Int32 enveloppants) ; F4 = 0 (pas de mmap dans base)
 
-### OCaml
+### OxCaml
 
-* **A** : A1 = 0 (enregistrements boxés (sauf flottants)) ; A2 = 0 (aucun contrôle) ; A3 = 0 (aucun) ; A4 = 0 (aucun) ; A5 = 0.5 (Int32.bits_of_float...) ; A6 = 0 (aucun) ; A7 = 0 (aucun) ; A8 = 0.5 (Bigarray int8/int16/float32 pour le stockage ; scalaires larges)
-* **B** : B1 = 0 (GC imposé) ; B2 = 0 (aucun) ; B3 = 0 (flambda déboxe localement, sans garantie) ; B4 = 0 (boxing des flottants, fermetures, tuples) ; B5 = 0.5 (Bigarray hors tas, Obj)
-* **C** : C1 = 0 (aucun en OCaml 5.5) ; C2 = 0 (aucun) ; C3 = 0.0 (mesuré) ; C4 = 0 (aucun) ; C5 = 0 (Domainslib est tiers)
-* **D** : D1 = 1 (Domain (OCaml 5)) ; D2 = 0.5 (Atomic séquentiellement cohérent) ; D3 = 1 (Atomic.make_contended) ; D4 = 0 (aucune) ; D5 = 0.5 (Domain.cpu_relax ; pas de barrière explicite (Atomic séquentiellement cohérent) ; erratum du 3/11, remarque sur OCaml : une seule des deux capacités, comme Zig, C3, Chapel et Fortran)
-* **E** : E1 = 1 (natif) ; E2 = 0 (aucun) ; E3 = 0 (aucun) ; E4 = 0 (aucun) ; E5 = 0 (aucun) ; E6 = 1 (unsafe_get, -unsafe) ; E7 = 0 (pas de monomorphisation (représentation uniforme))
-* **F** : F1 = 1 (Bigarray.Array2 c_layout/fortran_layout) ; F2 = 0 (aucun) ; F3 = 0.5 (Int32/Int64 signés boxés ; pas de non signés) ; F4 = 1 (Unix.map_file (bench))
+* **A** : A1 = 1 (tableaux d'enregistrements non boxés #{…} : éléments en ligne, sans pointeur ni en-tête par élément (sonde, bench K1 aos) ; un mot par champ) ; A2 = 0.5 (ordre fixé par le compilateur (valeurs d'abord, puis champs non boxés dans l'ordre déclaré : documenté), un mot par champ, aucune disposition C ; décalage typé d'un champ par un indice de bloc, Stdlib_stable.Idx_imm (sonde)) ; A3 = 0 (ni compactage ni champs de bits : un mot par champ (sonde)) ; A4 = 0 (aucun) ; A5 = 0.5 (Int32.bits_of_float, Float32_u.to_bits ; pas d'unions) ; A6 = 0 (aucun) ; A7 = 0.5 (enregistrement non boxé de 16 flottants en ligne dans un enregistrement, lu par nom de champ ; pas de tableau fixe indexable (sonde)) ; A8 = 1 (float32, int8#, int16# : types du langage (Stdlib_stable), tableaux compacts de 4, 1 et 2 octets par élément (sonde, bench K1 soa) ; dans un enregistrement, un mot par champ)
+* **B** : B1 = 0 (GC imposé) ; B2 = 0.5 (régions locales (stack_, exclave_) : allocation à pointeur libérée en bloc, vérifiée par le typage (bench K8 tuned_alloc) ; une seule, liée à la pile d'appels : ni allocateur à choisir ni arène durable) ; B3 = 1 (stack_, exclave_ et types non boxés : garanti par le typage (sonde)) ; B4 = 0.5 (boîtes de flottants, fermetures et n-uplets alloués implicitement par défaut ; [@zero_alloc] fait vérifier par le compilateur qu'une fonction n'alloue pas (sonde)) ; B5 = 0.5 (Bigarray hors tas ; lecture et écriture à une adresse par des primitives [@@builtin] déclarées à la main ; aucune allocation brute livrée)
+* **C** : C1 = 0.5 (types vectoriels de 128 et de 256 bits dans le langage (float32x8#…), sans opération : primitives [@@builtin] propres à amd64, déclarées à la main (bench), leur interface documentée étant le paquet tiers ocaml_simd) ; C2 = 0.5 (primitives [@@builtin] jusqu'à AVX2, FMA et BMI2, déclarées à la main (bench K4, K5, K6, K9) ; aucune en AVX-512 ; interface documentée : paquets tiers ocaml_simd et ocaml_intrinsics) ; C3 = 0.0 (mesuré) ; C4 = 0 (aucun) ; C5 = 0 (Parallel est un paquet opam)
+* **D** : D1 = 1 (Domain (OCaml 5) et Multicore (bibliothèque threads livrée)) ; D2 = 0.5 (Atomic séquentiellement cohérent) ; D3 = 1 (Atomic.make_contended) ; D4 = 0 (aucune (Multicore.spawn_on désigne un domaine, pas un processeur)) ; D5 = 0.5 (Domain.cpu_relax ; pas de barrière explicite (Atomic séquentiellement cohérent), comme OCaml)
+* **E** : E1 = 1 (natif, ocamlopt -S) ; E2 = 0 (aucun) ; E3 = 0 (aucun : [@cold] ne déplace pas le code de la branche rare (sonde)) ; E4 = 0.5 (primitives caml_prefetch_* déclarées à la main (bench K7 tuned_pf) ; interface documentée : paquet tiers ocaml_intrinsics) ; E5 = 0 (le mode unique est une règle de typage sans effet sur le code produit : overwrite_ n'est pas implémenté (sonde)) ; E6 = 1 (unsafe_get, -unsafe) ; E7 = 0 (pas de monomorphisation : une fonction n'est pas polymorphe en disposition (ppx_template est un paquet tiers) ; pas de calcul à la compilation)
+* **F** : F1 = 1 (Bigarray.Array2 c_layout/fortran_layout) ; F2 = 0 (aucun) ; F3 = 0.5 (int8# à int64_u signés, enveloppants, non boxés, avec des opérations unsigned_* ; pas de type non signé) ; F4 = 1 (Unix.map_file (bench))
 
 ## État de preuve
 
@@ -254,5 +254,5 @@ Case **sondée** : une ligne `CAP` d'une sonde exécutée (`results/probes/<lang
 | Java | 33 | 20 | 10 | 13 | 1 | 0 |
 | Julia | 33 | 30 | 1 | 4 | 1 | 0 |
 | Haskell | 33 | 21 | 6 | 11 | 1 | 0 |
-| OCaml | 33 | 12 | 12 | 20 | 1 | 0 |
-| **Total** | 660 | 526 | 75 | 140 | 20 | 0 (0 % des 680 cases) |
+| OxCaml | 33 | 21 | 8 | 20 | 1 | 0 |
+| **Total** | 660 | 535 | 71 | 140 | 20 | 0 (0 % des 680 cases) |

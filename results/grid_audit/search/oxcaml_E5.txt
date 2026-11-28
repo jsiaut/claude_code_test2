@@ -1,0 +1,33 @@
+# Recherche d'absence : oxcaml, case E5
+# Chaîne : OxCaml 5.4.0-ox7
+# Motif : restrict|noalias|no_?alias
+# Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
+# 0 déclarations publiques, 15 mentions, 7 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+bigarray.mli:462: (** Extract a sub-array of the given Bigarray by restricting the
+bigarray.mli:483: (** Extract a sub-array of the given Bigarray by restricting the
+bigarray.mli:913: Bigarray by restricting the first dimension.
+bigarray.mli:922: Bigarray by restricting the second dimension.
+bigarray.mli:1098: three-dimensional Bigarray by restricting the first dimension.
+bigarray.mli:1107: three-dimensional Bigarray by restricting the second dimension.
+eval.mli:11: * to deal in the Software without restriction, including without limitation  *
+fun.mli:250: Restriction (see the manual section 6.1.2).
+printexc.mli:73: print. Same restriction usage than {!print_backtrace}.
+printexc.mli:162: a raw format. Same restriction usage than {!print_backtrace}.
+quote.mli:12: * to deal in the Software without restriction, including without limitation  *
+semaphore.mli:105: thread that locked it) is too restrictive.  The "acquire" operation
+dynlink/dynlink.mli:42: [loadfile_private] are not included in this restriction.
+dynlink/dynlink.mli:56: [loadfile_private] are not included in this restriction.
+dynlink/dynlink.mli:81: [set_allowed_units] can be used to restrict access to a subset of these
+
+## Lignes trouvées, par fichier
+    6 bigarray.mli
+    3 dynlink/dynlink.mli
+    1 eval.mli
+    1 fun.mli
+    2 printexc.mli
+    1 quote.mli
+    1 semaphore.mli

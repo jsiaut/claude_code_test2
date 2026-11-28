@@ -7,7 +7,8 @@ plus qu'il puisse recevoir. Somme attendue : 2^28 x 255. Chaque cellule de K4 de
 jeu de tailles « large ») est exécutée une fois, une répétition, sans échauffement, sur ces données placées
 dans le répertoire de données de la grande taille (/dev/shm/ms_k4_large, que lisent aussi les constructions qui fixent
 ce répertoire à la compilation : Mojo), effacé ensuite pour que la campagne refasse les vraies données.
-Sortie : k4_extreme.txt dans le répertoire de la campagne. À lancer machine au repos, hors de la campagne."""
+Sortie : k4_extreme.txt dans le répertoire de la campagne. À lancer machine au repos, hors de la campagne. MS_LANGS
+(« oxcaml,c ») limite le contrôle aux langages d'une remesure."""
 import importlib.util, os, shutil, subprocess, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -21,6 +22,7 @@ N = 1 << 28
 EXPECT = str(N * 255)
 D = C.S.data_dir("k4", "large")
 OUT = os.path.join(C.FB.CAMPAIGN, "k4_extreme.txt")
+LANGS = [l for l in os.environ.get("MS_LANGS", "").split(",") if l] or C.LANGS
 
 
 def main():
@@ -34,7 +36,7 @@ def main():
             f.write(chunk)
     lines, bad = [], 0
     try:
-        for lang in C.LANGS:
+        for lang in LANGS:
             for cons in C.FB.constructions(lang):
                 for v, q in C.cells(lang, cons, "k4"):
                     d = C.runner_dir(lang, cons, "k4", "large")

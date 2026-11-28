@@ -1,0 +1,25 @@
+# Recherche d'absence : oxcaml, case E3
+# Chaîne : OxCaml 5.4.0-ox7
+# Motif : \blikely|\bunlikely|\bexpect\b|branch_?hint|branch_?weight|\bcold\b|cold_?path|fast_?path|slow_?path
+# Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
+# 2 déclarations publiques, 6 mentions, 6 fichiers
+
+## Déclarations publiques
+hashtbl.mli:554: and therefore collisions are less likely to happen.  However,
+moreLabels.mli:583: and therefore collisions are less likely to happen.  However,
+
+## Mentions (au plus 12 lignes par fichier)
+stdlib_stable/float32.mli:503: rounding mode on amd64 is "round half to even", and we expect that no
+stdlib_stable/float32.mli:512: expect that no program will change the mode. The default mode may differ
+stdlib_stable/float32_u.mli:397: default rounding mode on amd64 is "round half to even", and we expect that
+stdlib_stable/float32_u.mli:407: expect that no program will change the mode. The default mode may differ
+unix/unix.mli:1802: expect numeric IP address *)
+unix/unixLabels.mli:1810: expect numeric IP address *)
+
+## Lignes trouvées, par fichier
+    1 hashtbl.mli
+    1 moreLabels.mli
+    2 stdlib_stable/float32.mli
+    2 stdlib_stable/float32_u.mli
+    1 unix/unix.mli
+    1 unix/unixLabels.mli

@@ -1,6 +1,6 @@
-# Recherche d'absence : ocaml, case D4
-# Chaîne : 5.5.2
-# Motif : affinity|cpu_?set|pin_?(thread|cpu)|sched_?set|bind_?(thread|cpu)
+# Recherche d'absence : oxcaml, case A2
+# Chaîne : OxCaml 5.4.0-ox7
+# Motif : offset_?of|field_?offset|struct_?layout|layout_?kind|repr\(c\)|bind\(c\)
 # Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
 # 0 déclarations publiques, 0 mentions, 0 fichiers
 

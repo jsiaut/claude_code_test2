@@ -18,6 +18,7 @@ go         go version go1.27.3 linux/amd64
 java       openjdk version "27.0.1.0.3" 2026-10-25
 dotnet     10.0.403
 ghc        The Glorious Glasgow Haskell Compilation System, version 9.14.1 ; Ubuntu LLVM version 18.1.3
+oxcaml     5.4.0+ox ; 5.4.0-ox7 16927fa9eaa8f8b7e09263ac99019f25f89817a1 ; flambda2: true
 ocamlopt   5.5.2 ; flambda: true
 swiftc     Swift version 6.4.2 (swift-6.4.2-RELEASE)
 fpc        Free Pascal 3.2.2 (2021/05/16)

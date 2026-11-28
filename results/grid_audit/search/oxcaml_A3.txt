@@ -1,0 +1,28 @@
+# Recherche d'absence : oxcaml, case A3
+# Chaîne : OxCaml 5.4.0-ox7
+# Motif : packed|bit_?field|bit_?packed|bit_?size|bit_?offset|bitstruct
+# Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
+# 0 déclarations publiques, 13 mentions, 4 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+float.mli:507: (** The type of float arrays with packed representation.
+float.mli:886: (** Float arrays with packed representation. *)
+float.mli:890: (** The type of float arrays with packed representation.
+float.mli:1269: (** Float arrays with packed representation (labeled functions). *)
+nativeint.mli:133: The result is unspecified if [y < 0] or [y >= bitsize],
+nativeint.mli:134: where [bitsize] is [32] on a 32-bit platform and
+nativeint.mli:141: The result is unspecified if [y < 0] or [y >= bitsize]. *)
+nativeint.mli:149: The result is unspecified if [y < 0] or [y >= bitsize]. *)
+dynlink/dynlink.mli:174: note for programs such as the debugger: even though the linking of a packed
+stdlib_upstream_compatible/nativeint_u.mli:147: The result is unspecified if [y < 0] or [y >= bitsize],
+stdlib_upstream_compatible/nativeint_u.mli:148: where [bitsize] is [#32] on a 32-bit platform and
+stdlib_upstream_compatible/nativeint_u.mli:155: The result is unspecified if [y < 0] or [y >= bitsize]. *)
+stdlib_upstream_compatible/nativeint_u.mli:162: The result is unspecified if [y < 0] or [y >= bitsize]. *)
+
+## Lignes trouvées, par fichier
+    1 dynlink/dynlink.mli
+    4 float.mli
+    4 nativeint.mli
+    4 stdlib_upstream_compatible/nativeint_u.mli

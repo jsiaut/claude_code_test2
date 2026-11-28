@@ -495,39 +495,6 @@
 | nim | D3 | 0 | 0 | 0 |  | [recherche] motif D3 dans lib de Nim 2.2.12 : 2 déclarations publiques (results/grid_audit/search/nim_D3.txt)  |
 | nim | F1 | 0.5 | 0.5 | 0.5 |  | [exécutée] array[3, array[4, float32]] contigu : &m[1][0] - &m[0][3] = 4 o, sizeof = 48 o ; [échec] array[n, a |
 | nim | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans lib de Nim 2.2.12 : 14 déclarations publiques (results/grid_audit/search/nim_F2.txt) |
-| ocaml | A1 | 0 | 0 | 0 |  | [échec] Array de 1000 enregistrements {4 float} : 6001 mots atteignables (6 par élément : un pointeur et un bl |
-| ocaml | A2 | 0 | 0 | 0 |  | [échec] {char; int32; float} : 3 mots dans le bloc, int32 rangé à part (9 mots atteignables en tout) : un mot  |
-| ocaml | A3 | 0 | 0 | 0 |  | [échec] {bool; int} : 2 mots (16 octets) : aucun compactage ni champ de bits ; [recherche] motif A3 dans les 7 |
-| ocaml | A4 | 0 | 0 | 0 |  | [recherche] motif A4 dans les 74 interfaces livrées avec OCaml 5.5.2 (bibliothèque standard, unix, str, thread |
-| ocaml | A5 | 0.5 | 0.5 | 0.5 |  | [exécutée] Int32.bits_of_float 1.0 = 0x3f800000 ; Int64.bits_of_float 1.0 = 0x3ff0000000000000 ; octets relus  |
-| ocaml | A6 | 0 | 0 | 0 |  | [recherche] motif A6 dans les 74 interfaces livrées avec OCaml 5.5.2 (bibliothèque standard, unix, str, thread |
-| ocaml | A7 | 0 | 0 | 0 |  | [échec] {float array; int} : 2 mots dans le bloc, le tableau de 16 float est un bloc séparé (20 mots atteignab |
-| ocaml | A8 | 0.5 | 0.5 | 0.5 |  | [exécutée] Bigarray : int8 1 octet, int16 2, float32 4 (stockage) ; les valeurs lues sont des int de 63 bits o |
-| ocaml | B1 | 0 | 0 | 0 |  | [échec] 1 Gio de tableaux de 1 Kio sans référence : 512 collectes mineures déclenchées par le runtime, sans ap |
-| ocaml | B2 | 0 | 0 | 0 |  | [recherche] motif B2 dans les 74 interfaces livrées avec OCaml 5.5.2 (bibliothèque standard, unix, str, thread |
-| ocaml | B3 | 0 | 0 | 0 |  | [échec] n-uplet rendu par une fonction [@inline never] : 3 mots alloués par appel ; incorporée [@inline] : 0 ( |
-| ocaml | B4 | 0 | 0 | 0 |  | [échec] allocations implicites : float rendu par une fonction non incorporée 6 mots par appel (boîte) ; somme  |
-| ocaml | B5 | 0.5 | 0.5 | 0.5 |  | [exécutée] Bigarray hors tas : Array1.sub ba 3 5 (vue décalée, sans copie) puis view.{0} <- 42 → ba.{3} = 42 ; |
-| ocaml | C1 | 0 | 0 | 0 |  | [échec] type float32x4 : Error: Unbound type constructor float32x4 ; [recherche] motif C1 dans les 74 interfac |
-| ocaml | C2 | 0 | 0 | 0 |  | [recherche] motif C2 dans les 74 interfaces livrées avec OCaml 5.5.2 (bibliothèque standard, unix, str, thread |
-| ocaml | C4 | 0 | 0 | 0 |  | [échec] un million de float : boucle compilée -188.32790167414723, somme par paires écrite à la main -188.3279 |
-| ocaml | C5 | 0 | 0 | 0 |  | [échec] Domainslib (bibliothèque tierce) : Error: Unbound module Domainslib ; [recherche] motif C5 dans les 74 |
-| ocaml | D1 | 1 | 1 | 1 |  | [exécutée] Domain.spawn : 4 domaines (fils système), 4000 incréments (Domain.recommended_domain_count = 4) |
-| ocaml | D2 | 0.5 | 0.5 | 0.5 |  | [exécutée] Atomic : compare_and_set 5 → 8 : true, fetch_and_add 3 → 8 puis 11 (séquentiellement cohérents) ; [ |
-| ocaml | D3 | 1 | 1 | 1 |  | [exécutée] Atomic.make_contended : bloc de 7 mots, 64 octets avec l'en-tête (une ligne de cache) ; Atomic.make |
-| ocaml | D4 | 0 | 0 | 0 |  | [recherche] motif D4 dans les 74 interfaces livrées avec OCaml 5.5.2 (bibliothèque standard, unix, str, thread |
-| ocaml | D5 | 0.5 | 0.5 | 0.5 |  | [exécutée] Domain.cpu_relax exécuté : 1 pause dans caml_ml_domain_cpu_relax du runtime (objdump) ; [recherche] |
-| ocaml | E1 | 1 | 1 | 1 |  | [exécutée] ocamlopt -S : 10127 lignes d'assembleur pour audit.ml |
-| ocaml | E2 | 0 | 0 | 0 |  | [échec] asm "pause" : Error: Unbound value asm ; [recherche] motif E2 dans les 74 interfaces livrées avec OCam |
-| ocaml | E3 | 0 | 0 | 0 |  | [recherche] motif E3 dans les 74 interfaces livrées avec OCaml 5.5.2 (bibliothèque standard, unix, str, thread |
-| ocaml | E4 | 0 | 0 | 0 |  | [recherche] motif E4 dans les 74 interfaces livrées avec OCaml 5.5.2 (bibliothèque standard, unix, str, thread |
-| ocaml | E5 | 0 | 0 | 0 |  | [recherche] motif E5 dans les 74 interfaces livrées avec OCaml 5.5.2 (bibliothèque standard, unix, str, thread |
-| ocaml | E6 | 1 | 1 | 1 |  | [exécutée] four.(4) : Invalid_argument « index out of bounds » ; Array.unsafe_get four 2 = 3 (local) ; code ma |
-| ocaml | E7 | 0 | 0 | 0 |  | [échec] pas de monomorphisation : 1 corps pour poly_sum dans l'assembleur, appelé sur des float avec allocatio |
-| ocaml | F1 | 1 | 1 | 1 |  | [exécutée] Bigarray.Array2 c_layout 3×4 (dimensions à l'exécution) : g.{2,3} = 11, élément 11 du bloc à plat = |
-| ocaml | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans les 74 interfaces livrées avec OCaml 5.5.2 (bibliothèque standard, unix, str, thread |
-| ocaml | F3 | 0.5 | 0.5 | 0.5 |  | [exécutée] Int32.add Int32.max_int 1l = -2147483648 (enveloppe) ; Int32.unsigned_to_int (-1l) = 4294967295 ; u |
-| ocaml | F4 | 1 | 1 | 1 |  | [exécutée] Unix.map_file → Bigarray float32 : k5_a.f32 projeté (true, /proc/self/maps), premier float 0.439004 |
 | odin | A2 | 1 | 1 | 1 |  | [exécutée] offset_of(S, c)=8 |
 | odin | A3 | 1 | 1 | 1 |  | [exécutée] #packed size_of(P)=5 ; bit_field size_of(BF)=2 |
 | odin | A5 | 1 | 1 | 1 |  | [exécutée] #raw_union 0x3f800000 transmute 0x3f800000 |
@@ -561,6 +528,39 @@
 | odin | F1 | 0.5 | 0.5 | 0.5 |  | [exécutée] [3][4]f32 contigu : &m[1][0] - &m[0][3] = 4 o, size_of = 48 o ; matrix[4, 4]f32 : 64 o ; [échec] [n |
 | odin | C5 | 0 | 0 | 0 |  | [recherche] motif C5 dans core et base dev-2026-10:84bc3fc : 4 déclarations publiques (results/grid_audit/sear |
 | odin | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans core et base dev-2026-10:84bc3fc : 35 déclarations publiques (results/grid_audit/sea |
+| oxcaml | A1 | 1 | 1 | 1 |  | [exécutée] tableau de 1000 enregistrements non boxés #{4 float#} : 32 octets par élément dans un seul bloc de  |
+| oxcaml | A2 | 0.5 | 0.5 | 0.5 |  | [exécutée] {char; int32_u; float#} : 3 mots dans un seul bloc (4 atteignables : l'int32 est en ligne, sur un m |
+| oxcaml | A3 | 0 | 0 | 0 |  | [échec] {bool; int} : 2 mots (16 octets) ; tableau de #{int8#; int8#} : 16 octets par élément : aucun compacta |
+| oxcaml | A4 | 0 | 0 | 0 |  | [recherche] motif A4 dans les 104 interfaces livrées avec OxCaml 5.4.0-ox7 (bibliothèque standard, unix, str,  |
+| oxcaml | A5 | 0.5 | 0.5 | 0.5 |  | [exécutée] Int32.bits_of_float 1.0 = 0x3f800000 ; Float32_u.to_bits #1.0s = 0x3f800000 (sans boîte) ; octets r |
+| oxcaml | A6 | 0 | 0 | 0 |  | [recherche] motif A6 dans les 104 interfaces livrées avec OxCaml 5.4.0-ox7 (bibliothèque standard, unix, str,  |
+| oxcaml | A7 | 0.5 | 0.5 | 0.5 |  | [exécutée] {float array; int} : 2 mots dans le bloc, le tableau de 16 float est un bloc séparé (20 mots atteig |
+| oxcaml | A8 | 1 | 1 | 1 |  | [exécutée] float32_u array : 4 octets par élément (bloc de 500 mots pour 1000 éléments) ; int8# array : 1 octe |
+| oxcaml | B1 | 0 | 0 | 0 |  | [échec] 1 Gio de tableaux de 1 Kio sans référence : 128 collectes mineures déclenchées par le runtime, sans ap |
+| oxcaml | B2 | 0.5 | 0.5 | 0.5 |  | [exécutée] arbre de 1023 nœuds bâti dans la région locale de l'appelant (exclave_) et libéré en bloc à son ret |
+| oxcaml | B3 | 1 | 1 | 1 |  | [exécutée] n-uplet rendu par une fonction non incorporée : 3 mots alloués sur le tas par appel ; alloué par st |
+| oxcaml | B4 | 0.5 | 0.5 | 0.5 |  | [exécutée] allocations implicites : float rendu par une fonction non incorporée 4 mots par appel (boîte) ; som |
+| oxcaml | B5 | 0.5 | 0.5 | 0.5 |  | [exécutée] Bigarray hors tas : Array1.sub ba 3 5 (vue décalée, sans copie) puis view.{0} <- 42 → ba.{3} = 42 ; |
+| oxcaml | C1 | 0.5 | 0.5 | 0.5 |  | [exécutée] float32x8# (type du langage, 256 bits, non boxé) : 2 × 3 + 1 = 7 dans chaque voie, par la primitive |
+| oxcaml | C2 | 0.5 | 0.5 | 0.5 |  | [exécutée] primitives [@@builtin] déclarées à la main, code machine : 1 vfmadd (FMA), 1 vpsadbw (AVX2), 1 popc |
+| oxcaml | C4 | 0 | 0 | 0 |  | [échec] un million de float : boucle compilée -188.32790167414723, somme par paires écrite à la main -188.3279 |
+| oxcaml | C5 | 0 | 0 | 0 |  | [échec] Parallel (paquet opam, non livré) : Error: Unbound module Parallel ; [recherche] motif C5 dans les 104 |
+| oxcaml | D1 | 1 | 1 | 1 |  | [exécutée] Domain.spawn : 4 domaines (fils système), 4000 incréments (Domain.recommended_domain_count = 4) ; M |
+| oxcaml | D2 | 0.5 | 0.5 | 0.5 |  | [exécutée] Atomic : compare_and_set 5 → 8 : true, fetch_and_add 3 → 8 puis 11 (séquentiellement cohérents) ; [ |
+| oxcaml | D3 | 1 | 1 | 1 |  | [exécutée] Atomic.make_contended : bloc de 7 mots, 64 octets avec l'en-tête (une ligne de cache) ; Atomic.make |
+| oxcaml | D4 | 0 | 0 | 0 |  | [recherche] motif D4 dans les 104 interfaces livrées avec OxCaml 5.4.0-ox7 (bibliothèque standard, unix, str,  |
+| oxcaml | D5 | 0.5 | 0.5 | 0.5 |  | [exécutée] Domain.cpu_relax exécuté ; primitive caml_pause_hint déclarée à la main : 1 pause dans le code mach |
+| oxcaml | E1 | 1 | 1 | 1 |  | [exécutée] ocamlopt -S : 164 lignes d'assembleur pour une fonction d'une ligne |
+| oxcaml | E2 | 0 | 0 | 0 |  | [échec] asm "pause" : Error: Unbound value asm ; [recherche] motif E2 dans les 104 interfaces livrées avec OxC |
+| oxcaml | E3 | 0 | 0 | 0 |  | [échec] [@cold] sur la fonction appelée dans la branche rare : le code machine du module (156 lignes) est le m |
+| oxcaml | E4 | 0.5 | 0.5 | 0.5 |  | [exécutée] primitive caml_prefetch_read_high_val_offset_untagged déclarée à la main : 1 prefetch dans le code  |
+| oxcaml | E5 | 0 | 0 | 0 |  | [échec] le mode unique est une règle de typage (second usage refusé : Error: This value is used here, but it i |
+| oxcaml | E6 | 1 | 1 | 1 |  | [exécutée] four.(4) : Invalid_argument « index out of bounds » ; Array.unsafe_get four 2 = 3 (local) ; code ma |
+| oxcaml | E7 | 0 | 0 | 0 |  | [échec] pas de monomorphisation : 1 corps pour poly_sum, appelée sur des float et sur des int ; une fonction n |
+| oxcaml | F1 | 1 | 1 | 1 |  | [exécutée] Bigarray.Array2 c_layout 3×4 (dimensions à l'exécution) : g.{2,3} = 11, élément 11 du bloc à plat = |
+| oxcaml | F2 | 0 | 0 | 0 |  | [recherche] motif F2 dans les 104 interfaces livrées avec OxCaml 5.4.0-ox7 (bibliothèque standard, unix, str,  |
+| oxcaml | F3 | 0.5 | 0.5 | 0.5 |  | [exécutée] Int32.add Int32.max_int 1l = -2147483648 (enveloppe) ; Int32.unsigned_to_int (-1l) = 4294967295 ; u |
+| oxcaml | F4 | 1 | 1 | 1 |  | [exécutée] Unix.map_file → Bigarray float32 : k5_a.f32 projeté (true, /proc/self/maps), premier float 0.439004 |
 | rust | A5 | 1 | 1 | 1 |  | [exécutée] union 0x3f800000 to_bits 0x3f800000 |
 | rust | E2 | 1 | 1 | 1 |  | [exécutée] asm! stable : 2 |
 | rust | A1 | 1 | 1 | 1 |  | [exécutée] Vec<Part> : pas de 16 o = size_of::<Part>() 16 ; les 4 premiers octets du tampon sont le f32 x en l |

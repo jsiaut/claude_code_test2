@@ -4338,7 +4338,7 @@
     "ceiling": "K9 mt"
    }
   },
-  "ocaml": {
+  "oxcaml": {
    "k4 tuned": {
     "status": "écrite",
     "cells": [
@@ -4348,7 +4348,7 @@
       ""
      ]
     ],
-    "note": "point 3 (R3) : sans SIMD (aucun type vectoriel), huit octets par mot Int64, somme des voies par multiplication à chaque mot",
+    "note": "vecteurs de 32 octets (int8x32#) : masque par le bit de poids fort, somme par vpsadbw, accumulation en int64x4# ; 256 bits, les primitives d'OxCaml s'arrêtant à AVX2",
     "remarque": false,
     "ceiling": "K4"
    },
@@ -4361,21 +4361,33 @@
       ""
      ]
     ],
-    "note": "voies de 16 bits en Int64 (le int de 63 bits ne tient pas quatre voies), vidées toutes les 128 mots",
+    "note": "forme d'OCaml (même source) : voies de 16 bits en Int64, vidées toutes les 128 mots",
     "remarque": false,
     "ceiling": "K4"
    },
    "k5 tuned_v": {
-    "status": "non écrivible",
-    "cells": [],
-    "note": "aucun type vectoriel ni intrinsèque (grille C1 = 0, C2 = 0, results/probes/ocaml.txt) ; la forme à huit accumulateurs de la remarque (× 0,97, dans le bruit) n'est pas reprise",
+    "status": "écrite",
+    "cells": [
+     [
+      "k5",
+      "tuned_v",
+      ""
+     ]
+    ],
+    "note": "vecteurs de 8 f32 (float32x8#), huit accumulateurs, FMA, 64 éléments par tour ; la variante tuned publiée, celle d'OCaml, est scalaire",
     "remarque": false,
     "ceiling": "K5"
    },
    "q6 tuned_v": {
-    "status": "non écrivible",
-    "cells": [],
-    "note": "aucun type vectoriel (grille C1 = 0)",
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_v",
+      "q6"
+     ]
+    ],
+    "note": "16 lignes par tour en deux int32x8#, accumulation par voies de 32 bits vidées toutes les 2 048 lignes au plus",
     "remarque": false,
     "ceiling": "Q6"
    },
@@ -4388,14 +4400,20 @@
       "q6"
      ]
     ],
-    "note": "forme de bench/ocaml_exp (remarque sur OCaml, tuned_m, × 0,86), recopiée : masque tiré des bits de signe des cinq bornes, s += prix × remise × m ; la variante tuned publiée fait cinq comparaisons (Bool.to_int)",
+    "note": "forme d'OCaml (même source), gardée à côté de tuned_v : masque tiré des bits de signe des cinq bornes",
     "remarque": true,
     "ceiling": "Q6"
    },
    "q1 tuned_v": {
-    "status": "non écrivible",
-    "cells": [],
-    "note": "aucun type vectoriel (grille C1 = 0)",
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "tuned_v",
+      "q1"
+     ]
+    ],
+    "note": "16 lignes par tour, additions masquées par groupe, charge par vpmuldq, accumulateurs vidés toutes les 2 048 lignes au plus",
     "remarque": false,
     "ceiling": "Q1"
    },
@@ -4408,7 +4426,7 @@
       "q1"
      ]
     ],
-    "note": "une passe, 30 références locales, masques par décalage arithmétique ; plus lente que la variante tuned publiée à l'essai (379 contre 115 ms)",
+    "note": "forme d'OCaml (même source) : une passe, 30 références locales",
     "remarque": false,
     "ceiling": "Q1"
    },
@@ -4421,14 +4439,20 @@
       "q6"
      ]
     ],
-    "note": "trois domaines créés une fois, barrière par Mutex et Condition (la bibliothèque standard n'en a pas), le domaine principal traite le quart 0 ; la variante mt publiée crée ses domaines à chaque appel ; chaque quart : q6_tuned publiée",
+    "note": "forme d'OCaml (même source) : trois domaines créés une fois, barrière par Mutex et Condition ; chaque quart : q6_tuned publiée",
     "remarque": false,
     "ceiling": "Q6 mt"
    },
    "q6 mt_pool_v": {
-    "status": "sans objet",
-    "cells": [],
-    "note": "tuned_v de Q6 non écrivible",
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_v",
+      "q6"
+     ]
+    ],
+    "note": "la réserve de domaines d'OCaml, chaque quart : tuned_v",
     "remarque": false,
     "ceiling": "Q6 mt"
    },
@@ -4441,7 +4465,7 @@
       "q6"
      ]
     ],
-    "note": "chaque quart : tuned_s (mt_m de la remarque, ici par la réserve)",
+    "note": "forme d'OCaml (même source) : chaque quart : tuned_s",
     "remarque": true,
     "ceiling": "Q6 mt"
    },
@@ -4454,14 +4478,20 @@
       "q1"
      ]
     ],
-    "note": "chaque quart : q1_tuned publiée",
+    "note": "forme d'OCaml (même source) : chaque quart : q1_tuned publiée",
     "remarque": false,
     "ceiling": "Q1 mt"
    },
    "q1 mt_pool_v": {
-    "status": "sans objet",
-    "cells": [],
-    "note": "tuned_v de Q1 non écrivible",
+    "status": "écrite",
+    "cells": [
+     [
+      "k6",
+      "mt_pool_v",
+      "q1"
+     ]
+    ],
+    "note": "chaque quart : tuned_v",
     "remarque": false,
     "ceiling": "Q1 mt"
    },
@@ -4474,14 +4504,20 @@
       "q1"
      ]
     ],
-    "note": "chaque quart : tuned_s",
+    "note": "forme d'OCaml (même source) : chaque quart : tuned_s",
     "remarque": false,
     "ceiling": "Q1 mt"
    },
    "k7 tuned_pf": {
-    "status": "non écrivible",
-    "cells": [],
-    "note": "aucun préchargement (grille E4 = 0, results/probes/ocaml.txt)",
+    "status": "écrite",
+    "cells": [
+     [
+      "k7",
+      "tuned_pf",
+      ""
+     ]
+    ],
+    "note": "la table de tuned_oa (cases de deux mots), lots de 16 clés, préchargement en écriture par la primitive caml_prefetch_write_high_val_offset_untagged",
     "remarque": false,
     "ceiling": "K7"
    },
@@ -4494,7 +4530,7 @@
       ""
      ]
     ],
-    "note": "forme de bench/ocaml_exp (remarque sur OCaml, tuned_p, × 0,875), recopiée : cases de deux mots (clé et compteur de 30 bits dans un entier, somme dans l'autre), c'est-à-dire la table de tuned_pf sans préchargement ; la variante tuned publiée prend trois mots par case. Le plan (section 2) la range parmi les formes propres au runtime (champs de deux mots d'OCaml) : comptée ici comme repli, la cellule du plafond est la même (K7)",
+    "note": "forme d'OCaml (même source), gardée à côté de tuned_pf : cases de deux mots, sans préchargement",
     "remarque": true,
     "ceiling": "K7"
    },
@@ -4507,7 +4543,7 @@
       ""
      ]
     ],
-    "note": "forme de bench/ocaml_exp (remarque sur OCaml, × 0,77), recopiée",
+    "note": "forme d'OCaml (même source)",
     "remarque": true,
     "ceiling": "K8"
    },
@@ -4520,14 +4556,20 @@
       ""
      ]
     ],
-    "note": "piles de 64 entrées (tableaux alloués une fois ; profondeur vérifiée au lancement)",
+    "note": "forme d'OCaml (même source) : piles de 64 entrées",
     "remarque": false,
     "ceiling": "K8"
    },
    "k9 tuned_v": {
-    "status": "non écrivible",
-    "cells": [],
-    "note": "aucun type vectoriel (grille C1 = 0) ; la forme floatarray de la remarque (× 0,945) n'est pas reprise : gain sous 10 %, et ce n'est pas une forme du catalogue",
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "tuned_v",
+      ""
+     ]
+    ],
+    "note": "vecteurs de 4 f64 (float64x4#) sur grilles plates float# array, deux vecteurs par tour, j depuis 1",
     "remarque": false,
     "ceiling": "K9"
    },
@@ -4540,14 +4582,20 @@
       ""
      ]
     ],
-    "note": "réserve de domaines, chaque quart : k9_rows publiée",
+    "note": "forme d'OCaml (même source) : réserve de domaines, chaque quart : k9_rows publiée",
     "remarque": false,
     "ceiling": "K9 mt"
    },
    "k9 mt_pool_v": {
-    "status": "sans objet",
-    "cells": [],
-    "note": "tuned_v de K9 non écrivible",
+    "status": "écrite",
+    "cells": [
+     [
+      "k9",
+      "mt_pool_v",
+      ""
+     ]
+    ],
+    "note": "chaque quart : tuned_v",
     "remarque": false,
     "ceiling": "K9 mt"
    }

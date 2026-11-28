@@ -6,7 +6,7 @@ Entrée : results/final/analysis.json (ou FINAL_OUT/analysis.json). Sortie : res
 import json, os, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from final_v4 import DEV_LANG, NAMES, ROOT  # noqa: E402
+from final_v4 import DEV_LANG, NAMES, OX_LANG, ROOT  # noqa: E402
 
 STYLE = """<style>
   svg { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781; --grid: #e1e0d9; --axis: #c3c2b7;
@@ -40,29 +40,33 @@ def fr(x, d=1):
     return f"{x:.{d}f}".replace(".", ",")
 
 
-def ranking_svg(f, path, machines, models, dev=None):
+def ranking_svg(f, path, machines, models, dev=None, ox=None):
     order = f["order"]
     n = len(order)
     W, L, Rm, T, row = 760, 118, 70, 74, 24
-    H = T + n * row + 46 + (20 if dev else 0)
-    name = lambda l: NAMES[l] + ("*" if dev and l == DEV_LANG else "")  # noqa: E731
+    H = T + n * row + 46 + (20 if dev else 0) + (16 if ox else 0)
+    name = lambda l: NAMES[l] + ("*" if dev and l == DEV_LANG else "") + ("†" if ox and l == OX_LANG else "")  # noqa
     X = lambda r: L + (r - 1) * (W - L - Rm) / (n - 1)  # noqa: E731
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" '
-           f'aria-label="Classement de la v6 et plage de rang plausible">', STYLE,
+           f'aria-label="Classement de la v6.1 et plage de rang plausible">', STYLE,
            f'<rect class="bg" width="{W}" height="{H}"/>',
-           '<text class="t1" x="16" y="26">Classement de la v6</text>',
+           '<text class="t1" x="16" y="26">Classement de la v6.1</text>',
            '<text class="t2" x="16" y="46">Point : rang espéré sur 20 000 variantes de l\'analyse (poids, méthodes, '
            'jugements, bruit, poids des tailles).</text>',
            '<text class="t2" x="16" y="62">Trait : rang dans 90 % de ces variantes. À droite : score moyen sur ces variantes. '
            f'Machine{"s" if len(machines) > 1 else ""} {", ".join(machines)} ({", ".join(models)}).</text>']
-    for r in (1, 5, 10, 15, 20, 25):
+    for r in (r for r in (1, 5, 10, 15, 20, 25) if r <= n):
         out.append(f'<line class="grid" x1="{X(r):.1f}" x2="{X(r):.1f}" y1="{T - 4}" y2="{T + n * row}"/>')
         out.append(f'<text class="tick" x="{X(r):.1f}" y="{T + n * row + 18}" text-anchor="middle">{r}</text>')
     out.append(f'<text class="t2" x="{(L + W - Rm) / 2:.0f}" y="{T + n * row + 38}" text-anchor="middle">rang</text>')
     if dev:
         ver = esc(dev["version"].split("+")[0])
         out.append(f'<text class="t2" x="16" y="{T + n * row + 58}">* {NAMES[DEV_LANG]} : par exception, version de '
-                   f'développement {ver} ; les 19 autres, dernière version stable.</text>')
+                   f'développement {ver} ; les autres chaînes : dernière version stable.</text>')
+    if ox:
+        y = T + n * row + 58 + (16 if dev else 0)
+        out.append(f'<text class="t2" x="16" y="{y}">† {NAMES[OX_LANG]} : à la place d\'OCaml, version datée '
+                   f'{esc(ox["version"])}, mesuré à part de la campagne (machine {", ".join(ox["machines"])}).</text>')
     for i, l in enumerate(order):
         y = T + i * row + row / 2
         a, b = f["rank90"][l]
@@ -81,7 +85,7 @@ def ranking_svg(f, path, machines, models, dev=None):
 def main():
     o = json.load(open(SRC))
     models = sorted({MICRO.get("/".join(m.split()[0].split("/")[:2]), m.split()[0]) for m in o["cpu_models"]})
-    ranking_svg(o["results"]["Final"], DST, o["machines"], models, o.get("zig_dev"))
+    ranking_svg(o["results"]["Final"], DST, o["machines"], models, o.get("zig_dev"), o.get("oxcaml"))
     print(DST)
 
 

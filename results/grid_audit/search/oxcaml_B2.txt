@@ -1,0 +1,43 @@
+# Recherche d'absence : oxcaml, case B2
+# Chaîne : OxCaml 5.4.0-ox7
+# Motif : arena|allocator|alloc_?in\b|new_?in\b|bump|region|mem_?pool|memory_?pool
+# Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
+# 0 déclarations publiques, 33 mentions, 5 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+atomic.mli:40: modifying these disjoint memory regions simultaneously becomes impossible,
+dynarray.mli:198: region.
+stdlib_upstream_compatible/float_u.mli:30: IArray.  This is intended to be a speed bump so that people won't
+unix/unix.mli:1124: F_ULOCK       (** Unlock a region *)
+unix/unix.mli:1125: | F_LOCK        (** Lock a region for writing, and block if already locked *)
+unix/unix.mli:1126: | F_TLOCK       (** Lock a region for writing, or fail if already locked *)
+unix/unix.mli:1127: | F_TEST        (** Test a region for other process locks *)
+unix/unix.mli:1128: | F_RLOCK       (** Lock a region for reading, and block if already locked *)
+unix/unix.mli:1129: | F_TRLOCK      (** Lock a region for reading, or fail if already locked *)
+unix/unix.mli:1133: (** [lockf fd mode len] puts a lock on a region of the file opened
+unix/unix.mli:1134: as [fd]. The region starts at the current read/write position for
+unix/unix.mli:1139: process from acquiring a read or write lock on the region.
+unix/unix.mli:1141: process from acquiring a write lock on the region, but lets
+unix/unix.mli:1145: on the specified region.
+unix/unix.mli:1147: on the specified region.
+unix/unixLabels.mli:1127: F_ULOCK       (** Unlock a region *)
+unix/unixLabels.mli:1128: | F_LOCK        (** Lock a region for writing, and block if already locked *)
+unix/unixLabels.mli:1129: | F_TLOCK       (** Lock a region for writing, or fail if already locked *)
+unix/unixLabels.mli:1130: | F_TEST        (** Test a region for other process locks *)
+unix/unixLabels.mli:1131: | F_RLOCK       (** Lock a region for reading, and block if already locked *)
+unix/unixLabels.mli:1132: | F_TRLOCK      (** Lock a region for reading, or fail if already locked *)
+unix/unixLabels.mli:1136: (** [lockf fd ~mode ~len] puts a lock on a region of the file opened
+unix/unixLabels.mli:1137: as [fd]. The region starts at the current read/write position for
+unix/unixLabels.mli:1142: process from acquiring a read or write lock on the region.
+unix/unixLabels.mli:1144: process from acquiring a write lock on the region, but lets
+unix/unixLabels.mli:1148: on the specified region.
+unix/unixLabels.mli:1150: on the specified region.
+
+## Lignes trouvées, par fichier
+    1 atomic.mli
+    1 dynarray.mli
+    1 stdlib_upstream_compatible/float_u.mli
+   15 unix/unix.mli
+   15 unix/unixLabels.mli

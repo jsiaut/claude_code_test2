@@ -1,0 +1,18 @@
+# Recherche d'absence : oxcaml, case C1
+# Chaîne : OxCaml 5.4.0-ox7
+# Motif : simd|vector(64|128|256|512)\b|\bvec[248]\b|float32x|int32x|@vector
+# Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
+# 0 déclarations publiques, 5 mentions, 2 fichiers
+
+## Déclarations publiques
+
+## Mentions (au plus 12 lignes par fichier)
+sys.mli:249: (** Maximum length of an unboxed 128-bit simd vector array.
+sys.mli:253: (** Maximum length of an unboxed 256-bit simd vector array.
+stdlib_stable/float32.mli:465: = "caml_simd_float32_min_bytecode" "caml_simd_float32_min"
+stdlib_stable/float32.mli:473: = "caml_simd_float32_max_bytecode" "caml_simd_float32_max"
+stdlib_stable/float32.mli:500: = "caml_simd_cast_float32_int64_bytecode" "caml_simd_cast_float32_int64"
+
+## Lignes trouvées, par fichier
+    3 stdlib_stable/float32.mli
+    2 sys.mli

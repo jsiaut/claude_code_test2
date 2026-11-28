@@ -1,6 +1,6 @@
-# Recherche d'absence : ocaml, case B3
-# Chaîne : 5.5.2
-# Motif : stack_?alloc|alloca\b|on_?stack
+# Recherche d'absence : oxcaml, case A7
+# Chaîne : OxCaml 5.4.0-ox7
+# Motif : inline_?array|fixed_?array|fixed_?buffer|static_?array
 # Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
 # 0 déclarations publiques, 0 mentions, 0 fichiers
 

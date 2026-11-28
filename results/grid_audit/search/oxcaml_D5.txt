@@ -1,19 +1,19 @@
-# Recherche d'absence : ocaml, case D5
-# Chaîne : 5.5.2
+# Recherche d'absence : oxcaml, case D5
+# Chaîne : OxCaml 5.4.0-ox7
 # Motif : fence|spin_?loop|spin_?wait|on_?spin_?wait|\bpause\b|cpu_?relax|memory_?barrier|yield_?processor|spin_?hint
 # Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
 # 4 déclarations publiques, 3 mentions, 5 fichiers
 
 ## Déclarations publiques
-domain.mli:85: val cpu_relax : unit -> unit
-runtime_events/runtime_events.mli:662: val pause : unit -> unit
-unix/unix.mli:1210: val pause : unit -> unit
-unix/unixLabels.mli:1210: val pause : unit -> unit
+domain.mli:85: external cpu_relax : unit -> unit @@ portable = "%cpu_relax"
+runtime_events/runtime_events.mli:616: val pause : unit -> unit
+unix/unix.mli:1213: val pause : unit -> unit
+unix/unixLabels.mli:1216: val pause : unit -> unit
 
 ## Mentions (au plus 12 lignes par fichier)
 domain.mli:86: (** If busy-waiting, calling cpu_relax () between iterations
-gc.mli:463: [@@ocaml.deprecated "Use Runtime_events.pause instead."]
-runtime_events/runtime_events.mli:663: (** [pause ()] will pause the collection of events in the runtime.
+gc.mli:473: [@@ocaml.deprecated "Use Runtime_events.pause instead."]
+runtime_events/runtime_events.mli:617: (** [pause ()] will pause the collection of events in the runtime.
 
 ## Lignes trouvées, par fichier
     2 domain.mli

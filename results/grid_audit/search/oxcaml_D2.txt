@@ -1,0 +1,84 @@
+# Recherche d'absence : oxcaml, case D2
+# Chaîne : OxCaml 5.4.0-ox7
+# Motif : acquire|release|relaxed|memory_?order|seq_?cst|acq_?rel|monotonic
+# Déclaration publique : ^\s*(val|external|type|and|module|exception|class)\b
+# 14 déclarations publiques, 48 mentions, 14 fichiers
+
+## Déclarations publiques
+domain.mli:215: val acquire : interval_usec:int -> t @ unique
+domain.mli:223: val release : t @ unique -> unit
+gc.mli:430: val finalise_release : unit -> unit
+semaphore.mli:60: val release : t -> unit
+semaphore.mli:70: val acquire : t -> unit
+semaphore.mli:75: val try_acquire : t -> bool
+semaphore.mli:78: and [try_acquire s] returns [true].
+semaphore.mli:101: and "acquire" waits until the value is 1 and sets it to 0.
+semaphore.mli:126: val release : t -> unit
+semaphore.mli:132: val acquire : t -> unit
+semaphore.mli:138: val try_acquire : t -> bool
+semaphore.mli:141: and [try_acquire s] returns [true].
+sys.mli:496: type ocaml_release_info = {
+sys.mli:504: val ocaml_release : ocaml_release_info
+
+## Mentions (au plus 12 lignes par fichier)
+condition.mli:105: that is able to acquire the mutex [m] and alter the data structure {i D}.
+domain.mli:209: In between calling [acquire] and calling [release], the tick thread will
+domain.mli:214: [interval_usec] until [release] is called on the returned handle. *)
+domain.mli:217: (** Release a handle to a tick request.
+domain.mli:220: [acquire] (though it is fine to call it on a different thread on the same
+effect.mli:182: To set the tick interval, call [Domain.Tick.acquire] before running a
+effect.mli:351: To set the tick interval, call [Domain.Tick.acquire] before running a
+gc.mli:381: unless it calls [finalise_release]).
+gc.mli:431: (** A finalisation function may call [finalise_release] to tell the
+map.mli:206: (** [find_first f m], where [f] is a monotonically increasing function,
+map.mli:218: (** [find_first_opt f m], where [f] is a monotonically increasing
+map.mli:224: (** [find_last f m], where [f] is a monotonically decreasing function,
+map.mli:230: (** [find_last_opt f m], where [f] is a monotonically decreasing
+moreLabels.mli:874: (** [find_first ~f m], where [f] is a monotonically increasing function,
+moreLabels.mli:886: (** [find_first_opt ~f m], where [f] is a monotonically increasing
+moreLabels.mli:892: (** [find_last ~f m], where [f] is a monotonically decreasing function,
+moreLabels.mli:898: (** [find_last_opt ~f m], where [f] is a monotonically decreasing
+moreLabels.mli:1203: (** [find_first ~f s], where [f] is a monotonically increasing function,
+moreLabels.mli:1215: (** [find_first_opt ~f s], where [f] is a monotonically increasing
+moreLabels.mli:1222: (** [find_last ~f s], where [f] is a monotonically decreasing function,
+moreLabels.mli:1228: (** [find_last_opt ~f s], where [f] is a monotonically decreasing
+semaphore.mli:39: - "release" (also called "V", "post", "up", and "signal"), which
+semaphore.mli:42: - "acquire" (also called "P", "wait", "down", and "pend"), which
+semaphore.mli:61: (** [release s] increments the value of semaphore [s].
+semaphore.mli:71: (** [acquire s] blocks the calling thread until the value of semaphore [s]
+semaphore.mli:76: (** [try_acquire s] immediately returns [false] if the value of semaphore [s]
+semaphore.mli:84: {!release} and {!acquire} operations.  Hence, the [get_value]
+semaphore.mli:100: The "release" operation of a binary semaphore sets its value to 1,
+semaphore.mli:105: thread that locked it) is too restrictive.  The "acquire" operation
+semaphore.mli:106: corresponds to locking the mutex, and the "release" operation to
+semaphore.mli:107: unlocking it, but "release" can be performed in a thread different
+semaphore.mli:108: than the one that performed the "acquire".  Likewise, it is safe
+semaphore.mli:109: to release a binary semaphore that is already available.
+set.mli:171: (** [find_first f s], where [f] is a monotonically increasing function,
+set.mli:183: (** [find_first_opt f s], where [f] is a monotonically increasing
+set.mli:190: (** [find_last f s], where [f] is a monotonically decreasing function,
+set.mli:196: (** [find_last_opt f s], where [f] is a monotonically decreasing
+stdlib.mli:1264: included for backward compatibility with earlier releases of
+sys.mli:505: (** [ocaml_release] is the version of OCaml.
+runtime_events/runtime_events.mli:423: | EV_COMPACT_RELEASE
+stdlib_upstream_compatible/float_u.mli:31: accidentally rely on it in public release code.  Eventually, we plan to move
+unix/unix.mli:1142: other processes acquire read locks on it.
+unix/unix.mli:1155: acquired on the specified region, without actually putting a lock.
+unix/unixLabels.mli:1145: other processes acquire read locks on it.
+unix/unixLabels.mli:1158: acquired on the specified region, without actually putting a lock.
+
+## Lignes trouvées, par fichier
+    1 condition.mli
+    6 domain.mli
+    2 effect.mli
+    3 gc.mli
+    4 map.mli
+    8 moreLabels.mli
+    1 runtime_events/runtime_events.mli
+   24 semaphore.mli
+    4 set.mli
+    1 stdlib.mli
+    1 stdlib_upstream_compatible/float_u.mli
+    3 sys.mli
+    2 unix/unix.mli
+    2 unix/unixLabels.mli

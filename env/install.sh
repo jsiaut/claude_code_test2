@@ -277,7 +277,7 @@ step_oxcaml() {
   fetch https://gitlab.inria.fr/fpottier/menhir/-/archive/20231231/archive.tar.gz menhir-20231231.tar.gz \
     df39956b3c07323e8edc447e773a386c1dc9036c27951e8517c231a88039c7f6
   rm -rf "$b"
-  git clone -q --depth 1 --branch "$tag" https://github.com/oxcaml/oxcaml "$b"
+  GIT_LFS_SKIP_SMUDGE=1 git clone -q --depth 1 --branch "$tag" https://github.com/oxcaml/oxcaml "$b"
   [ "$(git -C "$b" rev-parse HEAD)" = "$commit" ] || { echo "oxcaml $tag : commit inattendu" >&2; exit 1; }
   (cd "$b" && echo "(dirs (:standard \\ init_deps dune-3.23.1 $menhir ocaml-5.4.0))" >> dune \
     && tar -xf "$DL/ocaml-5.4.0.tar.gz" && tar -xf "$DL/dune-3.23.1.tbz" && tar -xf "$DL/menhir-20231231.tar.gz" \
