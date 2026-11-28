@@ -12,7 +12,9 @@ engines.py ; leurs résultats sont vérifiés à part (engines.py expected).
 
 Étalonnage : chaque cellule est exécutée une fois (après un échauffement) ; son résultat est vérifié et sa durée fixe
 le nombre de répétitions (environ 3 s par processus, de 3 à 100) et l'échauffement (une exécution ; au moins trois et
-au moins une seconde pour les implémentations à compilation en cours d'exécution et pour les moteurs).
+au moins une seconde pour les implémentations à compilation en cours d'exécution et pour les moteurs). Un processus
+sans exécution (zéro répétition : il charge les colonnes, crée ses fils et s'arrête) donne la mémoire de départ de
+la cellule ; la mémoire de travail est la mémoire de pointe moins celle-là.
 Passe : toutes les cellules, groupe par groupe ; un groupe est une requête à un nombre de fils ; l'ordre des groupes,
 puis celui des cellules du groupe, sont tirés au hasard (graine : le numéro de la passe). Chaque cellule est un
 processus : échauffement, répétitions ; son temps est la médiane des répétitions, son résultat doit être celui de
@@ -158,6 +160,11 @@ def run(out):
         slow_start = i in ENGINES or i in JIT
         calib[key] = {"seconds": t, "reps": min(100, max(3, round(TARGET / t))),
                       "warmups": max(3, math.ceil(1.0 / t)) if slow_start else 1}
+        if i not in ENGINES:
+            code, _, err, calib[key]["base_rss_kb"] = launch([os.path.join(OLAP, i, "olap_" + lv), q, str(nt), "0",
+                                                              os.path.join(DATA, DIRS[q[0]])])
+            if code != 0:
+                raise SystemExit(f"étalonnage : {key} sans exécution : {err[-300:]}")
         json.dump(calib, open(cp, "w"), indent=0, sort_keys=True)
         print(f"étalonnage {key} : {1e3 * t:.1f} ms, {calib[key]['reps']} répétitions, {calib[key]['warmups']} échauffement(s)", flush=True)
 
@@ -178,7 +185,7 @@ def run(out):
                 c = calib[f"{i}/{lv}/{nt}/{q}"]
                 for attempt in (0, 1):
                     rec = run_cell(i, lv, nt, q, c["warmups"], c["reps"], want[q])
-                    rec.update(stamp, **{"pass": ps, "group": gi, "attempt": attempt,
+                    rec.update(stamp, **{"pass": ps, "group": gi, "attempt": attempt, "base_rss_kb": c.get("base_rss_kb"),
                                          "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())})
                     if attempt == 0 and rec["ok"] and rec["steal"] > STEAL_MAX:
                         rec["ok"], rec["error"] = False, "vol de temps"
@@ -194,7 +201,7 @@ def run(out):
 
 
 def load(out):
-    """Cellule -> liste, par passe, du temps médian de son processus valide ; mémoire de pointe ; lignes en échec."""
+    """Cellule -> liste, par passe, du temps médian de son processus valide ; mémoire (pointe, départ) ; échecs."""
     cells, rss, bad, stamps = {}, {}, 0, set()
     for r in map(json.loads, open(os.path.join(out, "raw.jsonl"))):
         if not r["ok"]:
@@ -202,7 +209,7 @@ def load(out):
             continue
         k = (r["impl"], r["level"], r["threads"], r["query"])
         cells.setdefault(k, []).append(r["median"])
-        rss[k] = max(rss.get(k, 0), r["maxrss_kb"])
+        rss[k] = (max(rss.get(k, (0, 0))[0], r["maxrss_kb"]), r.get("base_rss_kb") or 0)
         stamps.add((r["machine"], r["cpu"], r["boot_id"]))
     return cells, rss, bad, stamps
 
@@ -236,11 +243,14 @@ def summary(out):
         print(f"\nCritère (docs/V7.md, 11) : le pire rapport est {worst:.2f} ; "
               + ("satisfait" if worst <= 2 else "NON SATISFAIT") + " (au plus 2).")
     if hand:
-        print("\nMémoire de pointe du processus, colonnes chargées comprises (Mio)\n")
+        print("\nMémoire de travail en Mio : mémoire de pointe du processus moins sa mémoire de départ (colonnes chargées, "
+              "fils créés), donnée entre parenthèses\n")
         print("| Requête | " + " | ".join(f"{name(c)}, {nt} fil(s)" for c in hand for nt in threads) + " |")
         print("|---|" + "---:|" * (len(hand) * len(threads)))
         for q in QUERIES:
-            print(f"| {q.upper()} | " + " | ".join(f"{rss.get((*c, nt, q), 0) / 1024:.0f}" for c in hand for nt in threads) + " |")
+            row = [rss.get((*c, nt, q)) for c in hand for nt in threads]
+            if None not in row:
+                print(f"| {q.upper()} | " + " | ".join(f"{(a - b) / 1024:.0f} ({b / 1024:.0f})" for a, b in row) + " |")
     spread = [(max(v) - min(v)) / statistics.median(v) for v in cells.values() if len(v) > 1]
     print(f"\n{sum(len(v) for v in cells.values())} processus retenus, {max(len(v) for v in cells.values())} passes, {bad} en échec ; "
           + (f"écart entre passes (étendue / médiane) : médiane {100 * statistics.median(spread):.1f} %, "
