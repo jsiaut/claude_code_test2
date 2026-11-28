@@ -6,7 +6,8 @@
 //  0. décodage : seize valeurs à la fois, par permutation d'octets et décalages variables ;
 //  1. sélection : comparaison de 16 valeurs et compression des positions retenues ;
 //  2. agrégation de T1 : sommes masquées par groupe, huit lignes à la fois ;
-//  3. recherche de sous-chaîne : premier et dernier octet de l'aiguille comparés à 64 positions à la fois.
+//  3. recherche de sous-chaîne : premier et dernier octet de l'aiguille comparés à 64 positions à la fois ;
+//  4. expressions de T1 et hachage des clés, huit lignes à la fois : le compilateur ne vectorise pas de lui-même.
 //
 // Le paquet n'offre ni écriture non temporelle ni préchargement : la répartition et les sondes restent celles du
 // niveau portable. Ce sont deux manques.
@@ -137,52 +138,49 @@ func keepBetween(v, posIn, payIn []int32, lo, hi int32, posOut, payOut []int32) 
 
 // ------------------------------------------------------------------------------------------------ 2. agrégation de T1
 
-// Huit lignes à la fois : pour chacun des six groupes, un masque et cinq additions masquées.
+// Huit lignes à la fois, un groupe après l'autre : un masque et cinq additions masquées. Chaque groupe fait sa
+// passe sur le vecteur pour que ses cinq accumulateurs soient des variables locales, que le compilateur garde en
+// registres ; un tableau d'accumulateurs resterait en mémoire.
 func t1Aggregate(agg *[6]Agg1, grp, qty, ext, disc []int32, dp, ch []int64, ship []int32, cut int32, sel []int32) {
-	var acc [6][5]archsimd.Int64x8
-	var cnt [6]int
 	vcut := archsimd.BroadcastInt32x8(cut)
 	n := len(grp)
-	for i := 0; i < n; i += 8 {
-		live := uint8(0xFF)
-		if n-i < 8 {
-			live = 1<<(n-i) - 1
-		}
-		if ship != nil {
-			live &= archsimd.LoadInt32x8(ship[i : i+8]).LessEqual(vcut).ToBits()
-		}
-		g8 := archsimd.LoadInt32x8(grp[i : i+8])
-		q := archsimd.LoadInt32x8(qty[i : i+8]).ExtendToInt64()
-		e := archsimd.LoadInt32x8(ext[i : i+8]).ExtendToInt64()
-		d := archsimd.LoadInt32x8(disc[i : i+8]).ExtendToInt64()
-		x, y := archsimd.LoadInt64x8(dp[i:i+8]), archsimd.LoadInt64x8(ch[i:i+8])
-		for g := range acc {
-			kept := g8.Equal(archsimd.BroadcastInt32x8(int32(g))).ToBits() & live
-			m := archsimd.Mask64x8FromBits(kept)
-			a := &acc[g]
-			a[0], a[1], a[2] = a[0].Add(q.Masked(m)), a[1].Add(e.Masked(m)), a[2].Add(x.Masked(m))
-			a[3], a[4] = a[3].Add(y.Masked(m)), a[4].Add(d.Masked(m))
-			cnt[g] += bits.OnesCount8(kept)
-		}
-	}
-	for g := range acc {
-		var sum [5]int64
-		for j, v := range acc[g] {
-			var lanes [8]int64
-			v.StoreArray(&lanes)
-			for _, l := range lanes {
-				sum[j] += l
+	for g := range agg {
+		var q, e, x, y, d archsimd.Int64x8
+		vg := archsimd.BroadcastInt32x8(int32(g))
+		cnt := 0
+		for i := 0; i < n; i += 8 {
+			kept := archsimd.LoadInt32x8(grp[i : i+8]).Equal(vg).ToBits()
+			if n-i < 8 {
+				kept &= 1<<(n-i) - 1
 			}
+			if ship != nil {
+				kept &= archsimd.LoadInt32x8(ship[i : i+8]).LessEqual(vcut).ToBits()
+			}
+			m := archsimd.Mask64x8FromBits(kept)
+			q = q.Add(archsimd.LoadInt32x8(qty[i : i+8]).ExtendToInt64().Masked(m))
+			e = e.Add(archsimd.LoadInt32x8(ext[i : i+8]).ExtendToInt64().Masked(m))
+			x = x.Add(archsimd.LoadInt64x8(dp[i : i+8]).Masked(m))
+			y = y.Add(archsimd.LoadInt64x8(ch[i : i+8]).Masked(m))
+			d = d.Add(archsimd.LoadInt32x8(disc[i : i+8]).ExtendToInt64().Masked(m))
+			cnt += bits.OnesCount8(kept)
 		}
 		a := &agg[g]
-		a.qty += sum[0]
-		a.base += sum[1]
-		a.discPrice += sum[2]
-		a.charge += sum[3]
-		a.disc += sum[4]
-		a.count += int64(cnt[g])
+		a.qty += sum8(q)
+		a.base += sum8(e)
+		a.discPrice += sum8(x)
+		a.charge += sum8(y)
+		a.disc += sum8(d)
+		a.count += int64(cnt)
 	}
 	archsimd.ClearAVXUpperBits()
+}
+
+// Somme des huit voies, sans passer par la mémoire : tant que les registres vectoriels sont en usage, le code scalaire
+// que le compilateur écrit pour un tableau (mise à zéro en SSE) subirait la pénalité de transition entre AVX et SSE.
+func sum8(v archsimd.Int64x8) int64 {
+	v4 := v.GetLo().Add(v.GetHi())
+	v2 := v4.GetLo().Add(v4.GetHi())
+	return v2.GetElem(0) + v2.GetElem(1)
 }
 
 // ------------------------------------------------------------------------------------------------ 3. sous-chaînes
@@ -194,4 +192,46 @@ func searchCandidates(p []byte, m int, c0, c1 byte) uint64 {
 	r := a.Equal(archsimd.BroadcastUint8x64(c0)).ToBits() & b.Equal(archsimd.BroadcastUint8x64(c1)).ToBits()
 	archsimd.ClearAVXUpperBits()
 	return r
+}
+
+// ------------------------------------------------------------------------------------------------ 4. expressions, hachage
+
+// Expressions de T1 sur un vecteur, huit lignes à la fois : prix remisé, prix taxé, groupe. Les vecteurs de travail
+// ont la marge qu'il faut pour des pas entiers.
+func t1Expr(ext, disc, tax, rf, ls []int32, x, y []int64, g []int32) {
+	hundred := archsimd.BroadcastInt64x8(100)
+	for i := 0; i < len(x); i += 8 {
+		e := archsimd.LoadInt32x8(ext[i : i+8]).ExtendToInt64()
+		d := archsimd.LoadInt32x8(disc[i : i+8]).ExtendToInt64()
+		t := archsimd.LoadInt32x8(tax[i : i+8]).ExtendToInt64()
+		xv := e.Mul(hundred.Sub(d))
+		xv.Store(x[i : i+8])
+		xv.Mul(hundred.Add(t)).Store(y[i : i+8])
+		archsimd.LoadInt32x8(rf[i : i+8]).ShiftAllLeft(1).Add(archsimd.LoadInt32x8(ls[i : i+8])).Store(g[i : i+8])
+	}
+	archsimd.ClearAVXUpperBits()
+}
+
+// Hachage d'un vecteur de clés de 32 bits, huit à la fois.
+func hashKeys(key []int32, h []uint64) {
+	k1 := archsimd.BroadcastUint64x8(K1)
+	for i := 0; i < len(h); i += 8 {
+		k := archsimd.LoadInt32x8(key[i : i+8]).ExtendToInt64().AsUint64x8().Mul(k1)
+		k.Xor(k.ShiftAllRight(32)).Store(h[i : i+8])
+	}
+	archsimd.ClearAVXUpperBits()
+}
+
+// Hachage d'un vecteur de clés de 64 bits lues dans la colonne : huit à la fois, puis le reste une à une.
+func hashLongs(v []int64, h []uint64) {
+	k1 := archsimd.BroadcastUint64x8(K1)
+	i := 0
+	for ; i+8 <= len(v); i += 8 {
+		k := archsimd.LoadInt64x8(v[i : i+8]).AsUint64x8().Mul(k1)
+		k.Xor(k.ShiftAllRight(32)).Store(h[i : i+8])
+	}
+	for ; i < len(v); i++ {
+		h[i] = hash64(uint64(v[i]))
+	}
+	archsimd.ClearAVXUpperBits()
 }

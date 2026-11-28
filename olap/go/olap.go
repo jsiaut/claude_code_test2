@@ -749,15 +749,7 @@ func (q *T1) run() {
 				unpack(&q.tax, b, st, n, s.f[:])
 				rf, ls, ext, disc, tax := s.a[:n], s.b[:n], s.d[:n], s.e[:n], s.f[:n]
 				x, y, g := s.x[:n], s.y[:n], s.g[:n]
-				for i := range x {
-					x[i] = int64(ext[i]) * int64(100-disc[i])
-				}
-				for i := range y {
-					y[i] = x[i] * int64(100+tax[i])
-				}
-				for i := range g {
-					g[i] = rf[i]*2 + ls[i]
-				}
+				t1Expr(ext, disc, tax, rf, ls, x, y, g)
 				var ship []int32
 				if !all {
 					unpack(&q.ship, b, st, n, s.pos[:])
@@ -963,9 +955,7 @@ func (q *T9) ordersTask(tid int) {
 			unpack(&q.oOrderkey, b, st, n, s.a[:])
 			unpack(&q.oOrderdate, b, st, n, s.b[:])
 			key, date, h := s.a[:n], s.b[:n], s.h[:n]
-			for i := range h {
-				h[i] = hash64(uint64(key[i]))
-			}
+			hashKeys(key, h)
 			for i := range h {
 				*push[T9Order](p, partOf(h[i])) = T9Order{key[i], date[i]}
 			}
@@ -1120,9 +1110,7 @@ func (q *T18) scatterTask(tid int) { // lineitem réparti par commande
 			unpack(&q.lOrderkey, b, st, n, s.a[:])
 			unpack(&q.lQty, b, st, n, s.b[:])
 			key, qty, h := s.a[:n], s.b[:n], s.h[:n]
-			for i := range h {
-				h[i] = hash64(uint64(key[i]))
-			}
+			hashKeys(key, h)
 			for i := range h {
 				*push[KQ](p, partOf(h[i])) = KQ{key[i], qty[i]}
 			}
@@ -1307,9 +1295,7 @@ func (q *C4) run() {
 			for st := 0; st < len(v); st += VEC {
 				vv := v[st:min(st+VEC, len(v))]
 				h := s.h[:len(vv)]
-				for i := range h {
-					h[i] = hash64(uint64(vv[i]))
-				}
+				hashLongs(vv, h)
 				for i := range h {
 					*push[int64](p, partOf(h[i])) = vv[i]
 				}

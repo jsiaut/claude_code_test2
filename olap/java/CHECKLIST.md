@@ -10,7 +10,7 @@
 
 | Famille | Point | Ici |
 |---|---|---|
-| Calcul d'expressions | décodage par routines spécialisées par largeur | pas de généricité sur les constantes : un aiguillage appelle l'une des deux formes avec la largeur en constante, et le compilateur à la volée spécialise la forme là où il l'intègre ; il ne les vectorise pas |
+| Calcul d'expressions | décodage par routines spécialisées par largeur | routines engendrées par un programme (`GenUnpack.java` écrit `UnpackGen.java`), comme dans les moteurs écrits en Java : le langage n'a ni généricité sur les constantes ni macros, et son compilateur à la volée ne déroule pas la boucle générale (mesuré : T1 portable de 1 055 à 783 ms à un fil) |
 | Calcul d'expressions | décodage aux seules positions retenues | comme la référence |
 | Calcul d'expressions | arithmétique entière exacte sur 64 bits, primitives par vecteur | comme la référence, sur des tableaux du tas |
 | Calcul d'expressions | recherche de sous-chaîne par mots de 8 octets | comme la référence |
@@ -29,6 +29,6 @@
 
 * Pas de types valeur ni de pointeurs : tables, tuples et tampons sont des octets hors tas lus par décalages.
 * Le compilateur à la volée ne vectorise pas le décodage : il est scalaire au niveau portable.
-* Niveau spécialisé : l'API vectorielle donne le décodage, la sélection, l'agrégation de T1 et la recherche de
-  sous-chaîne ; elle n'a ni écriture non temporelle ni préchargement : la répartition et les sondes restent celles
+* Niveau spécialisé : l'API vectorielle donne le décodage, la sélection, l'agrégation de T1, la recherche de
+  sous-chaîne, et les expressions et hachages par vecteur ; elle n'a ni écriture non temporelle ni préchargement : la répartition et les sondes restent celles
   du niveau portable.

@@ -5,7 +5,8 @@
 //   0. décodage : seize valeurs à la fois, par permutation d'octets et décalages variables ;
 //   1. sélection : comparaison de 16 valeurs et compression des positions retenues ;
 //   2. agrégation de T1 : sommes masquées par groupe, huit lignes à la fois ;
-//   3. recherche de sous-chaîne : premier et dernier octet de l'aiguille comparés à 64 positions à la fois.
+//   3. recherche de sous-chaîne : premier et dernier octet de l'aiguille comparés à 64 positions à la fois ;
+//   4. expressions de T1 et hachage des clés, huit lignes à la fois.
 //
 // Le langage n'offre ni écriture non temporelle ni préchargement : la répartition et les sondes restent celles du
 // niveau portable. Ce sont deux manques.
@@ -137,6 +138,36 @@ final class Level {
             }
             agg[g * 8 + 5] += cnt[g];
         }
+    }
+
+    // ------------------------------------------------------------------------------------------------ 4. expressions, hachage
+    private static LongVector widen(int[] v, int i) {
+        return (LongVector) IntVector.fromArray(I8, v, i).convertShape(VectorOperators.I2L, L8, 0);
+    }
+    /** Expressions de T1 sur un vecteur, huit lignes à la fois : prix remisé, prix taxé, groupe. */
+    static void t1Expr(int[] ext, int[] disc, int[] tax, int[] rf, int[] ls, long[] x, long[] y, int[] g, int n) {
+        for (int i = 0; i < n; i += 8) {
+            final LongVector xv = widen(ext, i).mul(widen(disc, i).neg().add(100));
+            xv.intoArray(x, i);
+            xv.mul(widen(tax, i).add(100)).intoArray(y, i);
+            IntVector.fromArray(I8, rf, i).lanewise(VectorOperators.LSHL, 1).add(IntVector.fromArray(I8, ls, i)).intoArray(g, i);
+        }
+    }
+    /** Hachage d'un vecteur de clés de 32 bits, huit à la fois. */
+    static void hashKeys(int[] key, int n, long[] h) {
+        for (int i = 0; i < n; i += 8) {
+            final LongVector k = widen(key, i).mul(Olap.K1);
+            k.lanewise(VectorOperators.XOR, k.lanewise(VectorOperators.LSHR, 32)).intoArray(h, i);
+        }
+    }
+    /** Hachage d'un vecteur de clés de 64 bits lues à une adresse : huit à la fois, puis le reste une à une. */
+    static void hashLongs(long v, int n, long[] h) {
+        int i = 0;
+        for (; i + 8 <= n; i += 8) {
+            final LongVector k = LongVector.fromMemorySegment(L8, Olap.MEM, v + 8L * i, ByteOrder.LITTLE_ENDIAN).mul(Olap.K1);
+            k.lanewise(VectorOperators.XOR, k.lanewise(VectorOperators.LSHR, 32)).intoArray(h, i);
+        }
+        for (; i < n; i++) h[i] = Olap.hash64(Olap.getLong(v + 8L * i));
     }
 
     // ------------------------------------------------------------------------------------------------ 3. sous-chaînes

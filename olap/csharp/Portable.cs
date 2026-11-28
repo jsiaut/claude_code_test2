@@ -78,6 +78,20 @@ static unsafe partial class Olap {
         return k;
     }
 
+    /// Expressions de T1 sur un vecteur : prix remisé, prix taxé, groupe.
+    static void T1Expr(int* ext, int* disc, int* tax, int* rf, int* ls, long* x, long* y, int* g, int n) {
+        for (int i = 0; i < n; i++) x[i] = (long)ext[i] * (100 - disc[i]);
+        for (int i = 0; i < n; i++) y[i] = x[i] * (100 + tax[i]);
+        for (int i = 0; i < n; i++) g[i] = rf[i] * 2 + ls[i];
+    }
+    /// Hachage d'un vecteur de clés de 32 bits, puis de 64 bits.
+    static void HashKeys(int* key, int n, ulong* h) {
+        for (int i = 0; i < n; i++) h[i] = Hash64((ulong)key[i]);
+    }
+    static void HashLongs(long* v, int n, ulong* h) {
+        for (int i = 0; i < n; i++) h[i] = Hash64((ulong)v[i]);
+    }
+
     /// Agrégation de T1 : un vecteur de n lignes dans le tableau des six groupes ; ship non nul : seules comptent les
     /// lignes dont la date ne dépasse pas cut (vecteur de sélection dans sel).
     static void T1Aggregate(Agg1* agg, int* grp, int* qty, int* ext, int* disc, long* dp, long* ch, int* ship, int cut, int n, int* sel) {

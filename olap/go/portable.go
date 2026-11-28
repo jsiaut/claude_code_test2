@@ -71,3 +71,32 @@ func t1Aggregate(agg *[6]Agg1, grp, qty, ext, disc []int32, dp, ch []int64, ship
 		}
 	}
 }
+
+// Expressions de T1 sur un vecteur : prix remisé, prix taxé, groupe.
+func t1Expr(ext, disc, tax, rf, ls []int32, x, y []int64, g []int32) {
+	n := len(x)
+	ext, disc, tax, rf, ls, y, g = ext[:n], disc[:n], tax[:n], rf[:n], ls[:n], y[:n], g[:n]
+	for i := range x {
+		x[i] = int64(ext[i]) * int64(100-disc[i])
+	}
+	for i := range y {
+		y[i] = x[i] * int64(100+tax[i])
+	}
+	for i := range g {
+		g[i] = rf[i]*2 + ls[i]
+	}
+}
+
+// Hachage d'un vecteur de clés de 32 bits, puis de 64 bits.
+func hashKeys(key []int32, h []uint64) {
+	key = key[:len(h)]
+	for i := range h {
+		h[i] = hash64(uint64(key[i]))
+	}
+}
+func hashLongs(v []int64, h []uint64) {
+	v = v[:len(h)]
+	for i := range h {
+		h[i] = hash64(uint64(v[i]))
+	}
+}

@@ -29,6 +29,9 @@
 
 * Pas de vectorisation automatique : au niveau portable, décodage, expressions et hachages par vecteur sont
   scalaires.
-* Niveau spécialisé : `simd/archsimd` donne le décodage, la sélection, l'agrégation de T1 et la recherche de
-  sous-chaîne ; il n'a ni écriture non temporelle ni préchargement : la répartition et les sondes restent celles du
-  niveau portable.
+* Niveau spécialisé : `simd/archsimd` donne le décodage, la sélection, l'agrégation de T1, la recherche de
+  sous-chaîne, et les expressions et hachages par vecteur, écrits ici à la main ; il n'a ni écriture non temporelle ni
+  préchargement : la répartition et les sondes restent celles du niveau portable.
+* Le code scalaire que le compilateur écrit en SSE (mises à zéro, copies) est lent tant que les registres AVX sont
+  en usage : chaque primitive vectorielle finit par `ClearAVXUpperBits`, et réduit ses accumulateurs sans passer par
+  la mémoire (mesuré : T1 spécialisé de 556 à 354 ms à un fil).

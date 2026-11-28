@@ -644,9 +644,7 @@ public final class Olap {
                     unpack(tax, b, st, n, s.f);
                     final int[] a = s.a, bb = s.b, d = s.d, e = s.e, f = s.f, g = s.g;
                     final long[] x = s.x, y = s.y;
-                    for (int i = 0; i < n; i++) x[i] = (long) d[i] * (100 - e[i]);
-                    for (int i = 0; i < n; i++) y[i] = x[i] * (100 + f[i]);
-                    for (int i = 0; i < n; i++) g[i] = a[i] * 2 + bb[i];
+                    Level.t1Expr(d, e, f, a, bb, x, y, g, n);
                     if (!all) unpack(ship, b, st, n, s.pos);
                     Level.t1Aggregate(local, g, s.c, d, e, x, y, all ? null : s.pos, cut, n, s.sel);
                 }
@@ -818,7 +816,7 @@ public final class Olap {
                     unpack(oOrderdate, b, st, n, s.b);
                     final int[] key = s.a, date = s.b;
                     final long[] h = s.h;
-                    for (int i = 0; i < n; i++) h[i] = hash64(key[i]);
+                    Level.hashKeys(key, n, h);
                     for (int i = 0; i < n; i++) {
                         final long t = p.push(partOf(h[i]));
                         putInt(t, key[i]);
@@ -952,7 +950,7 @@ public final class Olap {
                     unpack(lQty, b, st, n, s.b);
                     final int[] key = s.a, qty = s.b;
                     final long[] h = s.h;
-                    for (int i = 0; i < n; i++) h[i] = hash64(key[i]);
+                    Level.hashKeys(key, n, h);
                     for (int i = 0; i < n; i++) {
                         final long t = p.push(partOf(h[i]));
                         putInt(t, key[i]);
@@ -1125,7 +1123,7 @@ public final class Olap {
                 for (int st = 0; st < count; st += VEC) {
                     final int n = Math.min(count - st, VEC);
                     final long vv = v + 8L * st;
-                    for (int i = 0; i < n; i++) h[i] = hash64(getLong(vv + 8L * i));
+                    Level.hashLongs(vv, n, h);
                     for (int i = 0; i < n; i++) putLong(p.push(partOf(h[i])), getLong(vv + 8L * i));
                 }
             }

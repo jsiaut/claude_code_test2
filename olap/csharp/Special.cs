@@ -7,7 +7,8 @@
 //   2. agrégation de T1 : sommes masquées par groupe, huit lignes à la fois ;
 //   3. recherche de sous-chaîne : premier et dernier octet de l'aiguille comparés à 64 positions à la fois ;
 //   4. répartition : un tampon de 64 octets par partition, vidé par une écriture non temporelle ;
-//   5. préchargement des cases et des octets à venir dans les agrégations et les sondes (dans Olap.cs, sous SPECIAL).
+//   5. préchargement des cases et des octets à venir dans les agrégations et les sondes (dans Olap.cs, sous SPECIAL) ;
+//   6. expressions de T1 et hachage des clés, huit lignes à la fois : le compilateur ne vectorise pas de lui-même.
 #if SPECIAL
 using System;
 using System.Numerics;
@@ -197,6 +198,39 @@ static unsafe partial class Olap {
             agg[g].disc += Vector512.Sum(acc[5 * g + 4]);
             agg[g].count += cnt[g];
         }
+    }
+
+    // ------------------------------------------------------------------------------------------------ 6. expressions, hachage
+    /// Expressions de T1 sur un vecteur, huit lignes à la fois : prix remisé, prix taxé, groupe.
+    static void T1Expr(int* ext, int* disc, int* tax, int* rf, int* ls, long* x, long* y, int* g, int n) {
+        Vector512<long> hundred = Vector512.Create(100L);
+        for (int i = 0; i < n; i += 8) {
+            Vector512<long> e = Avx512F.ConvertToVector512Int64(Vector256.Load(ext + i));
+            Vector512<long> d = Avx512F.ConvertToVector512Int64(Vector256.Load(disc + i));
+            Vector512<long> t = Avx512F.ConvertToVector512Int64(Vector256.Load(tax + i));
+            Vector512<long> xv = Avx512DQ.MultiplyLow(e, hundred - d);
+            xv.Store(x + i);
+            Avx512DQ.MultiplyLow(xv, hundred + t).Store(y + i);
+            (Vector256.ShiftLeft(Vector256.Load(rf + i), 1) + Vector256.Load(ls + i)).Store(g + i);
+        }
+    }
+    /// Hachage d'un vecteur de clés de 32 bits, huit à la fois.
+    static void HashKeys(int* key, int n, ulong* h) {
+        Vector512<ulong> k1 = Vector512.Create(K1);
+        for (int i = 0; i < n; i += 8) {
+            Vector512<ulong> k = Avx512DQ.MultiplyLow(Avx512F.ConvertToVector512Int64(Vector256.Load(key + i)).AsUInt64(), k1);
+            (k ^ Vector512.ShiftRightLogical(k, 32)).Store(h + i);
+        }
+    }
+    /// Hachage d'un vecteur de clés de 64 bits lues dans la colonne : huit à la fois, puis le reste une à une.
+    static void HashLongs(long* v, int n, ulong* h) {
+        Vector512<ulong> k1 = Vector512.Create(K1);
+        int i = 0;
+        for (; i + 8 <= n; i += 8) {
+            Vector512<ulong> k = Avx512DQ.MultiplyLow(Vector512.Load((ulong*)v + i), k1);
+            (k ^ Vector512.ShiftRightLogical(k, 32)).Store(h + i);
+        }
+        for (; i < n; i++) h[i] = Hash64((ulong)v[i]);
     }
 
     // ------------------------------------------------------------------------------------------------ 3. sous-chaînes

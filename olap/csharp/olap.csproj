@@ -14,4 +14,8 @@
     <ServerGarbageCollector>false</ServerGarbageCollector>
     <NoWarn>$(NoWarn);CS0649;CS0169;CS0414</NoWarn>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- le générateur des routines de décodage n'entre pas dans le programme -->
+    <Compile Remove="GenUnpack.cs" />
+  </ItemGroup>
 </Project>

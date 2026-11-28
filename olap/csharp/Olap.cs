@@ -1,6 +1,6 @@
 // v7 (docs/V7.md ; olap/SPEC.md) : le banc OLAP en C#. Même architecture que la référence (olap/c/olap.c), écrite
 // avec les moyens du langage : code `unsafe` et mémoire native (NativeMemory) pour les colonnes, les arènes, les
-// tables et les tampons de partition ; routines par largeur spécialisées par un paramètre générique de type valeur ;
+// tables et les tampons de partition ; routines de décodage par largeur engendrées (UnpackGen.cs) ;
 // fils persistants (Monitor). Les primitives qui ont deux niveaux sont dans Portable.cs et dans Special.cs
 // (constante SPECIAL).
 //
@@ -300,52 +300,9 @@ static unsafe partial class Olap {
     }
 
     // ------------------------------------------------------------------------------------------------ décodage
-    // Une routine par largeur : la largeur est un paramètre générique de type valeur, que le compilateur à la volée
-    // spécialise ; un groupe de 64 valeurs occupe W mots. Deux formes : quand W divise 64, chaque valeur tient dans un
-    // mot ; sinon, deux mots voisins sont toujours combinés, sans test.
-    interface IWidth { static abstract int W { get; } }
-    struct W1 : IWidth { public static int W => 1; } struct W2 : IWidth { public static int W => 2; }
-    struct W3 : IWidth { public static int W => 3; } struct W4 : IWidth { public static int W => 4; }
-    struct W5 : IWidth { public static int W => 5; } struct W6 : IWidth { public static int W => 6; }
-    struct W7 : IWidth { public static int W => 7; } struct W8 : IWidth { public static int W => 8; }
-    struct W9 : IWidth { public static int W => 9; } struct W10 : IWidth { public static int W => 10; }
-    struct W11 : IWidth { public static int W => 11; } struct W12 : IWidth { public static int W => 12; }
-    struct W13 : IWidth { public static int W => 13; } struct W14 : IWidth { public static int W => 14; }
-    struct W15 : IWidth { public static int W => 15; } struct W16 : IWidth { public static int W => 16; }
-    struct W17 : IWidth { public static int W => 17; } struct W18 : IWidth { public static int W => 18; }
-    struct W19 : IWidth { public static int W => 19; } struct W20 : IWidth { public static int W => 20; }
-    struct W21 : IWidth { public static int W => 21; } struct W22 : IWidth { public static int W => 22; }
-    struct W23 : IWidth { public static int W => 23; } struct W24 : IWidth { public static int W => 24; }
-    struct W25 : IWidth { public static int W => 25; } struct W26 : IWidth { public static int W => 26; }
-    struct W27 : IWidth { public static int W => 27; } struct W28 : IWidth { public static int W => 28; }
-    struct W29 : IWidth { public static int W => 29; } struct W30 : IWidth { public static int W => 30; }
-    struct W31 : IWidth { public static int W => 31; } struct W32 : IWidth { public static int W => 32; }
-
-    static void UnpackWord<T>(ulong* inp, int* outp, int n, uint b) where T : struct, IWidth {
-        ulong mask = (1UL << T.W) - 1;
-        for (int g = 0; g < n; g += 64, inp += T.W, outp += 64)
-            for (int j = 0; j < 64; j++) {
-                int bit = j * T.W;
-                outp[j] = (int)((uint)((inp[bit >> 6] >> (bit & 63)) & mask) + b);
-            }
-    }
-    static void UnpackTwo<T>(ulong* inp, int* outp, int n, uint b) where T : struct, IWidth {
-        ulong mask = (1UL << T.W) - 1;
-        for (int g = 0; g < n; g += 64, inp += T.W, outp += 64)
-            for (int j = 0; j < 64; j++) {
-                int bit = j * T.W, idx = bit >> 6, sh = bit & 63;
-                ulong v = (inp[idx] >> sh) | (inp[idx + 1] << 1 << (63 - sh));
-                outp[j] = (int)((uint)(v & mask) + b);
-            }
-    }
-    static readonly delegate*<ulong*, int*, int, uint, void>[] UnpackFn = {
-        null, &UnpackWord<W1>, &UnpackWord<W2>, &UnpackTwo<W3>, &UnpackWord<W4>, &UnpackTwo<W5>, &UnpackTwo<W6>, &UnpackTwo<W7>,
-        &UnpackWord<W8>, &UnpackTwo<W9>, &UnpackTwo<W10>, &UnpackTwo<W11>, &UnpackTwo<W12>, &UnpackTwo<W13>, &UnpackTwo<W14>,
-        &UnpackTwo<W15>, &UnpackWord<W16>, &UnpackTwo<W17>, &UnpackTwo<W18>, &UnpackTwo<W19>, &UnpackTwo<W20>, &UnpackTwo<W21>,
-        &UnpackTwo<W22>, &UnpackTwo<W23>, &UnpackTwo<W24>, &UnpackTwo<W25>, &UnpackTwo<W26>, &UnpackTwo<W27>, &UnpackTwo<W28>,
-        &UnpackTwo<W29>, &UnpackTwo<W30>, &UnpackTwo<W31>, &UnpackWord<W32>,
-    };
-
+    // Une routine par largeur, engendrée (GenUnpack.cs écrit UnpackGen.cs) : un groupe de 64 valeurs occupe W mots ;
+    // chaque routine est la suite des 64 affectations d'un groupe, à positions constantes. Le compilateur à la volée
+    // ne déroule ni ne vectorise la boucle générale : le texte engendré le fait pour lui.
     /// Décode n valeurs du bloc b à partir de la ligne start (multiple de 64) ; écrit des groupes entiers de 64.
     static void UnpackPortable(in Col c, long b, int start, int n, int* outp) {
         Entry* e = c.dir + b;
@@ -571,9 +528,7 @@ static unsafe partial class Olap {
                     Unpack(ext, b, st, n, s->d);
                     Unpack(disc, b, st, n, s->e);
                     Unpack(tax, b, st, n, s->f);
-                    for (int i = 0; i < n; i++) s->x[i] = (long)s->d[i] * (100 - s->e[i]);
-                    for (int i = 0; i < n; i++) s->y[i] = s->x[i] * (100 + s->f[i]);
-                    for (int i = 0; i < n; i++) s->g[i] = s->a[i] * 2 + s->b[i];
+                    T1Expr(s->d, s->e, s->f, s->a, s->b, s->x, s->y, s->g, n);
                     int* dates = null;
                     if (!all) { Unpack(ship, b, st, n, s->pos); dates = s->pos; }
                     T1Aggregate(local, s->g, s->c, s->d, s->e, s->x, s->y, dates, cut, n, s->sel);
@@ -756,7 +711,7 @@ static unsafe partial class Olap {
                     int n = Math.Min(count - st, VEC);
                     Unpack(oOrderkey, b, st, n, s->a);
                     Unpack(oOrderdate, b, st, n, s->b);
-                    for (int i = 0; i < n; i++) s->h[i] = Hash64((ulong)s->a[i]);
+                    HashKeys(s->a, n, s->h);
                     for (int i = 0; i < n; i++) {
                         T9Order* t = (T9Order*)p->Push(PartOf(s->h[i]));
                         t->okey = s->a[i]; t->date = s->b[i];
@@ -891,7 +846,7 @@ static unsafe partial class Olap {
                     int n = Math.Min(count - st, VEC);
                     Unpack(lOrderkey, b, st, n, s->a);
                     Unpack(lQty, b, st, n, s->b);
-                    for (int i = 0; i < n; i++) s->h[i] = Hash64((ulong)s->a[i]);
+                    HashKeys(s->a, n, s->h);
                     for (int i = 0; i < n; i++) {
                         KQ* t = (KQ*)p->Push(PartOf(s->h[i]));
                         t->key = s->a[i]; t->qty = s->b[i];
@@ -1050,7 +1005,7 @@ static unsafe partial class Olap {
                 long* v = (long*)uid.Words(b);  // 64 bits : valeurs telles quelles
                 for (int st = 0, cnt = (int)uid.dir[b].count; st < cnt; st += VEC) {
                     int n = Math.Min(cnt - st, VEC);
-                    for (int i = 0; i < n; i++) s->h[i] = Hash64((ulong)v[st + i]);
+                    HashLongs(v + st, n, s->h);
                     for (int i = 0; i < n; i++) *(long*)p->Push(PartOf(s->h[i])) = v[st + i];
                 }
             }

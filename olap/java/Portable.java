@@ -1,72 +1,26 @@
 // v7 : niveau portable des primitives à deux niveaux du banc OLAP en Java (classe Level du binaire olap_p). Aucune
 // vectorisation explicite : le compilateur à la volée vectorise ce qu'il sait vectoriser.
-import static java.lang.foreign.ValueLayout.JAVA_LONG_UNALIGNED;
-
 final class Level {
     static final String LEVEL = "p";
     static final int SEARCH_STEP = 0;  // pas de recherche par 64 positions à ce niveau
 
     static long searchCandidates(long p, int m, byte c0, byte c1) { return 0; }
 
-    private static long word(long a) { return Olap.MEM.get(JAVA_LONG_UNALIGNED, a); }
+    /** Décodage : une routine par largeur, engendrée (GenUnpack.java écrit UnpackGen.java). */
+    static void unpack(long in, int[] out, int n, int base, int w) { UnpackGen.unpack(in, out, n, base, w); }
 
-    // Décodage. Le langage n'a pas de généricité sur les constantes : chaque largeur appelle une des deux formes avec
-    // sa largeur en constante, et le compilateur à la volée spécialise la forme là où elle est intégrée.
-    static void unpack(long in, int[] out, int n, int base, int w) {
-        switch (w) {
-            case 1 -> one(in, out, n, base, 1);
-            case 2 -> one(in, out, n, base, 2);
-            case 3 -> two(in, out, n, base, 3);
-            case 4 -> one(in, out, n, base, 4);
-            case 5 -> two(in, out, n, base, 5);
-            case 6 -> two(in, out, n, base, 6);
-            case 7 -> two(in, out, n, base, 7);
-            case 8 -> one(in, out, n, base, 8);
-            case 9 -> two(in, out, n, base, 9);
-            case 10 -> two(in, out, n, base, 10);
-            case 11 -> two(in, out, n, base, 11);
-            case 12 -> two(in, out, n, base, 12);
-            case 13 -> two(in, out, n, base, 13);
-            case 14 -> two(in, out, n, base, 14);
-            case 15 -> two(in, out, n, base, 15);
-            case 16 -> one(in, out, n, base, 16);
-            case 17 -> two(in, out, n, base, 17);
-            case 18 -> two(in, out, n, base, 18);
-            case 19 -> two(in, out, n, base, 19);
-            case 20 -> two(in, out, n, base, 20);
-            case 21 -> two(in, out, n, base, 21);
-            case 22 -> two(in, out, n, base, 22);
-            case 23 -> two(in, out, n, base, 23);
-            case 24 -> two(in, out, n, base, 24);
-            case 25 -> two(in, out, n, base, 25);
-            case 26 -> two(in, out, n, base, 26);
-            case 27 -> two(in, out, n, base, 27);
-            case 28 -> two(in, out, n, base, 28);
-            case 29 -> two(in, out, n, base, 29);
-            case 30 -> two(in, out, n, base, 30);
-            case 31 -> two(in, out, n, base, 31);
-            default -> one(in, out, n, base, 32);
-        }
+    /** Expressions de T1 sur un vecteur : prix remisé, prix taxé, groupe. */
+    static void t1Expr(int[] ext, int[] disc, int[] tax, int[] rf, int[] ls, long[] x, long[] y, int[] g, int n) {
+        for (int i = 0; i < n; i++) x[i] = (long) ext[i] * (100 - disc[i]);
+        for (int i = 0; i < n; i++) y[i] = x[i] * (100 + tax[i]);
+        for (int i = 0; i < n; i++) g[i] = rf[i] * 2 + ls[i];
     }
-    /** La largeur divise 64 : chaque mot porte 64 / w valeurs entières. */
-    private static void one(long in, int[] out, int n, int base, int w) {
-        final long mask = (1L << w) - 1;
-        final int per = 64 / w;
-        for (int o = 0; o < n; in += 8) {
-            long v = word(in);
-            for (int i = 0; i < per; i++, v >>>= w) out[o++] = (int) (v & mask) + base;
-        }
+    /** Hachage d'un vecteur de clés de 32 bits, puis de 64 bits lues à une adresse. */
+    static void hashKeys(int[] key, int n, long[] h) {
+        for (int i = 0; i < n; i++) h[i] = Olap.hash64(key[i]);
     }
-    /** Cas général : deux mots voisins sont toujours combinés, sans test ; un groupe de 64 valeurs occupe w mots. */
-    private static void two(long in, int[] out, int n, int base, int w) {
-        final long mask = (1L << w) - 1;
-        for (int g = 0; g < n; g += 64, in += 8L * w) {
-            for (int j = 0; j < 64; j++) {
-                final int bit = j * w, sh = bit & 63;
-                final long a = in + (bit >>> 6 << 3);
-                out[g + j] = (int) (((word(a) >>> sh) | (word(a + 8) << 1 << (63 - sh))) & mask) + base;
-            }
-        }
+    static void hashLongs(long v, int n, long[] h) {
+        for (int i = 0; i < n; i++) h[i] = Olap.hash64(Olap.getLong(v + 8L * i));
     }
 
     /** 1 si x est entre lo et lo + span, 0 sinon ; sans branchement : la retenue d'une soustraction non signée. */
