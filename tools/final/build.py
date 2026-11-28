@@ -6,7 +6,9 @@ MS_MODE de build.sh ; Julia, sans construction, par l'option de son lanceur), et
 par gcc 16 : MS_CC de build.sh). Sous MS_DEV=1 seulement, pour Zig, dev et dev_chk (la même source par sa version de
 développement : MS_ZIG de build.sh ; docs/V5_2.md, 3). Sous MS_GOFIX=1 seulement, pour Go, wit et wit_unc : le témoin de
 sa remesure (docs/V5_4.md, 3.2), construit à partir de la source de la campagne (WITNESS : un commit), prise dans
-l'historique de git et non dans l'arbre de travail. Sans ces variables, le plan est celui de la campagne publiée.
+l'historique de git et non dans l'arbre de travail. Sous MS_OX=1 seulement, pour OxCaml, les mêmes étiquettes : le
+témoin de sa mesure (docs/V6_1.md, 5), OCaml 5.5.2 tel que la campagne l'a mesuré (WITNESS_SRC : bench/ocaml du
+commit). Sans ces variables, le plan est celui d'une campagne des 20 langages.
 Jeux de tailles (tools/sizes/sizes.py, SETS) : pub, small, large. Langages compilés :
 paramètres MS_* du jeu passés à build.sh (sans eux, la taille publiée) ; langages sans construction : constantes de
 taille substituées dans la copie de la construction (tools/sizes/patches.py), puis build.sh (vérification de syntaxe).
@@ -38,15 +40,19 @@ BUILD_ROOT = "/dev/shm/msbuild"
 CAMPAIGN = os.path.join(ROOT, os.environ.get("MS_CAMPAIGN_DIR", os.path.join("results", "final")))
 WORK = os.path.join(CAMPAIGN, "work")
 LANGS = ["c", "cpp", "rust", "zig", "odin", "c3", "d", "nim", "ada", "fortran", "chapel", "mojo", "swift", "fpc", "go",
-         "csharp", "java", "haskell", "ocaml", "julia"]
+         "csharp", "java", "haskell", "oxcaml", "julia"]
 CHK = ["c", "cpp", "fortran", "zig", "c3", "d", "chapel", "fpc"]          # R1 (docs/METHOD.md, 5)
-UNC = ["swift", "ada", "nim", "odin", "julia", "mojo", "go", "ocaml", "d"]   # R1' (3.1 et écart 5.2)
+UNC = ["swift", "ada", "nim", "odin", "julia", "mojo", "go", "oxcaml", "d"]  # R1' (3.1 et écart 5.2)
 CV_CHK = ["cpp", "d"]                                                     # R2 dans le mode R1
-CV_UNC = ["nim", "mojo", "swift", "go", "ocaml", "d"]                     # R2 dans le mode R1'
+CV_UNC = ["nim", "mojo", "swift", "go", "oxcaml", "d"]                    # R2 dans le mode R1'
 GCC = ["c"]                                                               # C aussi par gcc (docs/V5.md, S2)
 DEV = ["zig"] if os.environ.get("MS_DEV") else []                         # version de développement (docs/V5_2.md, 3)
 GOFIX = ["go"] if os.environ.get("MS_GOFIX") else []                      # témoin de la remesure de Go (docs/V5_4.md)
-WITNESS = {"go": "861d62564995b71cff4e65e5e836a899edcd527c"}              # source du témoin : celle de la campagne
+OXFIX = ["oxcaml"] if os.environ.get("MS_OX") else []                     # témoin de la mesure d'OxCaml (docs/V6_1.md)
+WIT = GOFIX + OXFIX
+# source du témoin : celle de la campagne (un commit) ; pour OxCaml, le témoin est OCaml (bench/ocaml de ce commit)
+WITNESS = {"go": "861d62564995b71cff4e65e5e836a899edcd527c", "oxcaml": "c32136955d5651d42f80434e96b6bc4511586e95"}
+WITNESS_SRC = {"oxcaml": "ocaml"}
 BUILD_OF = {"cv": "pub", "cv_chk": "chk", "cv_unc": "unc", "gcc_cv": "gcc", "dev_cv": "dev", "wit_cv": "wit",
             "wit_cv_unc": "wit_unc"}  # étiquette -> construction
 INTERP = {"julia"}  # sans construction : le source est exécuté tel quel
@@ -60,8 +66,8 @@ def constructions(lang):
     return ["pub", "cv"] + [c for c, lst in (("chk", CHK), ("unc", UNC), ("cv_chk", CV_CHK), ("cv_unc", CV_UNC),
                                              ("gcc", GCC), ("gcc_cv", GCC), ("gcc_chk", GCC),
                                              ("dev", DEV), ("dev_cv", DEV), ("dev_chk", DEV),
-                                             ("wit", GOFIX), ("wit_cv", GOFIX), ("wit_unc", GOFIX),
-                                             ("wit_cv_unc", GOFIX)) if lang in lst]
+                                             ("wit", WIT), ("wit_cv", WIT), ("wit_unc", WIT),
+                                             ("wit_cv_unc", WIT)) if lang in lst]
 
 
 def builds(lang):
@@ -88,12 +94,17 @@ def witness(lang, cons):
     return WITNESS[lang] if BUILD_OF.get(cons, cons).startswith("wit") else None
 
 
+def witness_dir(lang):
+    """Répertoire de la source du témoin dans son commit : celui du langage, ou celui d'un autre (WITNESS_SRC)."""
+    return os.path.join("bench", WITNESS_SRC.get(lang, lang))
+
+
 def witness_files(lang, commit):
-    out = subprocess.run(["git", "-C", ROOT, "ls-tree", "-r", "--name-only", commit, "--", source_dir(lang)],
+    out = subprocess.run(["git", "-C", ROOT, "ls-tree", "-r", "--name-only", commit, "--", witness_dir(lang)],
                          capture_output=True, text=True, check=True).stdout.split()
     if not out:
-        raise SystemExit(f"{source_dir(lang)} : absent du commit {commit}")
-    return [os.path.relpath(f, source_dir(lang)) for f in out]
+        raise SystemExit(f"{witness_dir(lang)} : absent du commit {commit}")
+    return [os.path.relpath(f, witness_dir(lang)) for f in out]
 
 
 def build_dir(lang, cons, sset):
@@ -179,11 +190,12 @@ def build(lang, cons, sset):
     if commit:  # témoin : les fichiers du commit, avec leurs droits (git archive), et non ceux de l'arbre de travail
         files = witness_files(lang, commit)
         with tempfile.TemporaryDirectory(dir="/dev/shm") as t:
-            ar = subprocess.run(["git", "-C", ROOT, "archive", commit, "--", src], capture_output=True, check=True)
+            wsrc = witness_dir(lang)
+            ar = subprocess.run(["git", "-C", ROOT, "archive", commit, "--", wsrc], capture_output=True, check=True)
             subprocess.run(["tar", "-x", "-C", t], input=ar.stdout, check=True)
             for f in files:
                 os.makedirs(os.path.dirname(os.path.join(dst, f)), exist_ok=True)
-                shutil.copy2(os.path.join(t, src, f), os.path.join(dst, f))
+                shutil.copy2(os.path.join(t, wsrc, f), os.path.join(dst, f))
     else:
         files = tracked(src)
         for f in files:

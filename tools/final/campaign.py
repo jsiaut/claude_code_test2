@@ -51,6 +51,12 @@ NATURAL = {"k1": [("natural", "energy"), ("natural_shuffled", "energy")], "k4": 
            "k8": [("natural", "")], "k9": [("natural", "")]}
 NEEDED = needed_keys()
 JIT = {"java", "csharp", "julia"}
+# Mesure d'OxCaml (MS_OX=1 ; docs/V6_1.md, 5 et 6) : C n'est mesuré que pour le pont, ces cellules de ses étiquettes
+# pub et cv
+OX = bool(os.environ.get("MS_OX"))
+OX_BRIDGE = {("k1", "aos", "energy"), ("k1", "soa", "energy"), ("k4", "tuned", ""), ("k5", "tuned", ""),
+             ("k6", "tuned_v", "q6"), ("k6", "mt_pool_v", "q6"), ("k6", "tuned", "q1"), ("k6", "mt_pool", "q1"),
+             ("k7", "tuned", ""), ("k9", "tuned_v", ""), ("k9", "mt_pool_v", "")}
 MEM_CAP_KB = 13 * 1024 * 1024
 SEED = 20261124  # ordre des groupes et des blocs (docs/V5.md, S4 ; campagne finale de la v4 : 20261123)
 EXP_SIZES = json.load(open(os.path.join(ROOT, "results", "sizes", "expected.json")))
@@ -102,22 +108,42 @@ def variant_file(path):
     return out
 
 
+def variants(lang, cons, name):
+    """Fichier de variantes d'un langage (extra_variants, cv_variants). Pour un témoin construit depuis la source d'un
+    autre langage (FB.WITNESS_SRC : OCaml, témoin d'OxCaml), c'est celui de cette source, lu dans son commit."""
+    if cons.startswith("wit") and lang in FB.WITNESS_SRC:
+        r = subprocess.run(["git", "-C", ROOT, "show", f"{FB.WITNESS[lang]}:{FB.witness_dir(lang)}/{name}"],
+                           capture_output=True, text=True)
+        out = {}
+        for line in r.stdout.splitlines() if r.returncode == 0 else []:
+            f = line.split()
+            if len(f) >= 2:
+                out.setdefault(f[0], []).append((f[1], f[2] if len(f) > 2 else ""))
+        return out
+    return variant_file(os.path.join(ROOT, "bench", lang, name))
+
+
 def cells(lang, cons, kernel):
     """Cellules (variante, paramètre) d'un noyau qui portent l'étiquette cons : variantes publiées (pub ; plan commun
     et extra_variants), formes du catalogue (cv ; cv_variants), code naturel dans les modes R1 et R1' (chk, unc) et sa
     forme contiguë de K9 dans ces modes (cv_chk, cv_unc) ; pour C par gcc, les mêmes (gcc, gcc_cv, gcc_chk), comme pour
     Zig par sa version de développement (dev, dev_cv, dev_chk : MS_DEV=1, docs/V5_2.md) et pour le témoin de la remesure
-    de Go (wit, wit_cv, wit_unc, wit_cv_unc : MS_GOFIX=1, docs/V5_4.md)."""
+    de Go ou de la mesure d'OxCaml (wit, wit_cv, wit_unc, wit_cv_unc : MS_GOFIX=1, docs/V5_4.md ; MS_OX=1,
+    docs/V6_1.md). Sous MS_OX=1, C n'a que les cellules du pont (OX_BRIDGE)."""
     if cons in ("pub", "gcc", "dev", "wit"):
-        extra = variant_file(os.path.join(ROOT, "bench", lang, "extra_variants")).get(kernel, [])
-        return [(v, q) for v, q in D.PLAN[kernel] + extra if (kernel, v, q) in NEEDED]
-    if cons in ("cv", "gcc_cv", "dev_cv", "wit_cv"):
-        return variant_file(os.path.join(ROOT, "bench", lang, "cv_variants")).get(kernel, [])
-    if cons in ("chk", "unc", "gcc_chk", "dev_chk", "wit_unc"):
-        return NATURAL.get(kernel, [])
-    if cons in ("cv_chk", "cv_unc", "wit_cv_unc"):
-        return [("natural_flat", "")] if kernel == "k9" else []
-    raise ValueError(cons)
+        extra = variants(lang, cons, "extra_variants").get(kernel, [])
+        out = [(v, q) for v, q in D.PLAN[kernel] + extra if (kernel, v, q) in NEEDED]
+    elif cons in ("cv", "gcc_cv", "dev_cv", "wit_cv"):
+        out = variants(lang, cons, "cv_variants").get(kernel, [])
+    elif cons in ("chk", "unc", "gcc_chk", "dev_chk", "wit_unc"):
+        out = NATURAL.get(kernel, [])
+    elif cons in ("cv_chk", "cv_unc", "wit_cv_unc"):
+        out = [("natural_flat", "")] if kernel == "k9" else []
+    else:
+        raise ValueError(cons)
+    if OX and lang == "c":
+        out = [(v, q) for v, q in out if cons in ("pub", "cv") and (kernel, v, q) in OX_BRIDGE]
+    return out
 
 
 def copies(kernel, variant, p):

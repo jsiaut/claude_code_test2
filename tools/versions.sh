@@ -1,6 +1,7 @@
 #!/bin/sh
 # Relève les versions exactes des chaînes de compilation et d'exécution des 20 langages, installées par
 # env/install.sh, et la machine. Usage : sh tools/versions.sh > env/toolchains.txt
+# ocamlopt : OCaml 5.5.2, que la campagne a mesuré et qui sert de témoin à la mesure d'OxCaml (docs/V6_1.md).
 # v <nom> <commande du shell> : une ligne par chaîne, les lignes de la sortie jointes par « ; »
 v() { printf '%-10s %s\n' "$1" "$(sh -c "$2" 2>&1 | sed 's/[[:space:]]\{1,\}/ /g; s/^ //; s/ $//' | paste -sd '|' | sed 's/|/ ; /g')"; }
 v clang 'clang-23 --version | head -1'
@@ -23,6 +24,7 @@ v go '/opt/go127/bin/go version'
 v java 'unset JAVA_TOOL_OPTIONS _JAVA_OPTIONS; /opt/jdk27/bin/java -version 2>&1 | head -1'
 v dotnet '/opt/dotnet/dotnet --version'
 v ghc '/opt/ghc/bin/ghc --version; opt-18 --version | grep "LLVM version"'
+v oxcaml '/opt/oxcaml/bin/ocamlopt -version; cat /opt/oxcaml/RELEASE; /opt/oxcaml/bin/ocamlopt -config | grep flambda2:'
 v ocamlopt '/opt/ocaml/bin/ocamlopt -version; /opt/ocaml/bin/ocamlopt -config | grep flambda:'
 v swiftc '/opt/swift/usr/bin/swiftc --version 2>&1 | head -1'
 v fpc 'echo "Free Pascal $(/opt/fpc/bin/fpc -iW) ($(/opt/fpc/bin/fpc -iD))"'

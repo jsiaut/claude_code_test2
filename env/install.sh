@@ -1,15 +1,16 @@
 #!/bin/sh
 # Installe les chaînes de compilation et d'exécution des 20 langages du banc, aux versions de env/toolchains.txt et aux
 # chemins que lisent les build.sh, puis les données du banc. Pour Ubuntu 24.04 (x86-64), en root, avec un accès au
-# réseau ; écrit et vérifié sur l'image des sessions Claude Code dans le cloud (24 novembre 2026).
+# réseau ; écrit et vérifié sur l'image des sessions Claude Code dans le cloud (24 novembre 2026 ; étape oxcaml : 28
+# novembre). OCaml 5.5.2 est installé en plus d'OxCaml : c'est la chaîne du témoin de sa mesure (docs/V6_1.md).
 #
 # Usage : sh env/install.sh              tout (les chaînes déjà en place sont sautées)
 #         sh env/install.sh zig go       seulement ces étapes
 #         sh env/install.sh --list       liste des étapes
 #
-# Durée : environ 1 h 30 sur 4 cœurs, dont 35 min pour GCC et 20 min pour Chapel ; disque : environ 35 Gio, dont
-# 12 pour LLVM 23 et 5 d'archives dans /opt/dl (empreintes SHA-256 vérifiées), effaçables ensuite. Sources compilées :
-# /opt/src. Après l'installation : sh tools/versions.sh > env/toolchains.txt
+# Durée : environ 1 h 45 sur 4 cœurs, dont 35 min pour GCC, 20 pour Chapel et 20 pour OxCaml ; disque : environ
+# 40 Gio, dont 12 pour LLVM 23, 4 pour OxCaml et 5 d'archives dans /opt/dl (empreintes SHA-256 vérifiées), effaçables
+# ensuite. Sources compilées : /opt/src. Après l'installation : sh tools/versions.sh > env/toolchains.txt
 set -eu
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 DL=/opt/dl
@@ -256,6 +257,48 @@ step_ocaml() {
   rm -rf "$SRC/ocaml-5.5.2"
 }
 
+# ---------------------------------------------------------------------------------------------------- OxCaml
+# OxCaml 5.4.0-ox7 (étiquette du 21 septembre 2026, la dernière au 28 octobre), construit depuis ses sources par la
+# recette de son paquet opam (oxcaml-compiler.5.4.0-ox7 du dépôt oxcaml/opam-repository), sans opam : amorçage par
+# OCaml 5.4.0, dune 3.23.1 et menhir 20231231, puis le compilateur (optimiseur flambda2, runtime 5). 20 minutes.
+# OCaml 5.5.2 (étape ocaml) reste installé : c'est la chaîne du témoin de la mesure d'OxCaml (docs/V6_1.md).
+step_oxcaml() {
+  if has "5.4.0-ox7" cat /opt/oxcaml/RELEASE && has "flambda2: true" /opt/oxcaml/bin/ocamlopt -config; then return; fi
+  say "OxCaml 5.4.0-ox7"
+  apt-get install -y -q --no-install-recommends rsync autoconf
+  tag=5.4.0-ox7
+  commit=16927fa9eaa8f8b7e09263ac99019f25f89817a1
+  menhir=menhir-20231231-d3d815e4f554da68b8c247241c8f8678926eecaa
+  b="$SRC/oxcaml-$tag"
+  fetch https://github.com/ocaml/ocaml/releases/download/5.4.0/ocaml-5.4.0.tar.gz ocaml-5.4.0.tar.gz \
+    6fcf1b192e389e54c4f5cb51306ab2baee2a54a25b1770366de5a8b42695996e
+  fetch https://github.com/ocaml/dune/releases/download/3.23.1/dune-3.23.1.tbz dune-3.23.1.tbz \
+    93b4e7157f6ba8feb61cfc5f86008efd2c59037ba78a017d92b4abf30632348f
+  fetch https://gitlab.inria.fr/fpottier/menhir/-/archive/20231231/archive.tar.gz menhir-20231231.tar.gz \
+    df39956b3c07323e8edc447e773a386c1dc9036c27951e8517c231a88039c7f6
+  rm -rf "$b"
+  git clone -q --depth 1 --branch "$tag" https://github.com/oxcaml/oxcaml "$b"
+  [ "$(git -C "$b" rev-parse HEAD)" = "$commit" ] || { echo "oxcaml $tag : commit inattendu" >&2; exit 1; }
+  (cd "$b" && echo "(dirs (:standard \\ init_deps dune-3.23.1 $menhir ocaml-5.4.0))" >> dune \
+    && tar -xf "$DL/ocaml-5.4.0.tar.gz" && tar -xf "$DL/dune-3.23.1.tbz" && tar -xf "$DL/menhir-20231231.tar.gz" \
+    && (cd ocaml-5.4.0 && ./configure --prefix "$b/init_deps" --disable-ocamldoc > configure.log 2>&1 \
+      && make -j"$J" > build.log 2>&1 && make install > install.log 2>&1) \
+    && export PATH="$b/init_deps/bin:$PATH" \
+    && (cd dune-3.23.1 && ocaml boot/bootstrap.ml -j "$J" > boot.log 2>&1 \
+      && ./_boot/dune.exe build dune.install --release --profile dune-bootstrap -j "$J" > build.log 2>&1 \
+      && ./_boot/dune.exe install --root "$b/dune-3.23.1" --prefix "$b/init_deps/" dune > install.log 2>&1) \
+    && (cd "$menhir" && dune build --profile release --root "$b/$menhir" @install -j "$J" > build.log 2>&1 \
+      && dune install --prefix "$b/init_deps/" -p menhirLib,menhir -j "$J" > install.log 2>&1) \
+    && autoconf \
+    && ./configure --enable-middle-end=flambda2 --enable-runtime5 --enable-stack-checks --enable-poll-insertion \
+      --enable-multidomain --disable-warn-error --prefix=/opt/oxcaml "--with-dune=$b/init_deps/bin/dune" \
+      > configure.log 2>&1 \
+    && (unset INSIDE_DUNE; make -j"$J" > build.log 2>&1) \
+    && rm -rf /opt/oxcaml && make install > install.log 2>&1)
+  echo "$tag $commit" > /opt/oxcaml/RELEASE
+  rm -rf "$b"
+}
+
 # LDC 1.43.0 : sources officielles, compilées contre LLVM 21 du système avec DMD 2.113.0 ; /opt/ldc est l'arbre de
 # construction (les paquets officiels de LDC embarquent LLVM 22)
 step_ldc() {
@@ -298,7 +341,8 @@ step_data() {
   (cd /opt/msdata && sha256sum --quiet -c "$ROOT/env/msdata.sha256")
 }
 
-STEPS="apt gcc16 llvm23 zig zigdev go julia nim jdk dotnet swift odin c3 rust fpc mojo ghc ocaml ldc chapel data"
+STEPS="apt gcc16 llvm23 zig zigdev go julia nim jdk dotnet swift odin c3 rust fpc mojo ghc ocaml oxcaml ldc chapel"
+STEPS="$STEPS data"
 
 main() {
   if [ "${1:-}" = "--list" ]; then echo "$STEPS"; exit 0; fi

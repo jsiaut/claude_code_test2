@@ -1,0 +1,8 @@
+#!/bin/sh
+# ms : la source commune avec OCaml (ms.ml) ; ms_ox : les formes propres à OxCaml (ox.ml)
+d=$(dirname "$0")
+case "$1 $2" in
+  "k1 aos" | "k1 soa" | "k4 tuned" | "k5 tuned_v" | "k6 tuned_v" | "k6 mt_pool_v" | "k7 tuned_pf" | "k8 tuned_alloc" | \
+    "k9 tuned_v" | "k9 mt_pool_v") exec "$d/ms_ox" "$@" ;;
+  *) exec "$d/ms" "$@" ;;
+esac
