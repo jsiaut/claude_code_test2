@@ -35,13 +35,25 @@ enum {
   NPART = 1 << PBITS,      // partitions des grandes tables
   MAXT = 64,               // fils au plus
   ARENA_BLOCK = 32 << 20,  // octets d'un bloc d'arène
+  HUGE_PAGE = 1 << 21,     // octets d'une page large
 };
 #define K1 0x9E3779B97F4A7C15ull
 #define K2 0xC2B2AE3D27D4EB4Full
 
 static void die(const char *msg) { fprintf(stderr, "olap : %s\n", msg); exit(2); }
 
-// ------------------------------------------------------------------------------------------------ arènes
+// ------------------------------------------------------------------------------------------------ mémoire, arènes
+// Toute la mémoire du programme (colonnes chargées, arènes, vecteurs de travail) vient du système par zones alignées
+// sur 2 Mio et signalées comme pages larges : les accès dispersés (tampons de partition, tables, octets des chaînes)
+// y coûtent moins de défauts de TLB.
+static void *huge_alloc(size_t n) {
+  n = (n + HUGE_PAGE - 1) & ~(size_t)(HUGE_PAGE - 1);
+  void *p;
+  if (posix_memalign(&p, HUGE_PAGE, n)) die("mémoire");
+  madvise(p, n, MADV_HUGEPAGE);
+  return p;
+}
+
 // Une arène par fil : allocation par déplacement d'un pointeur, remise à zéro du pointeur à chaque exécution ; la
 // mémoire est gardée d'une répétition à l'autre.
 typedef struct ArenaBlock { struct ArenaBlock *next; size_t cap, used; char pad[40]; } ArenaBlock;  // 64 octets
@@ -53,9 +65,8 @@ static void *arena_alloc(Arena *a, size_t n) {
     ArenaBlock *b = a->cur;
     if (b && b->used + n <= b->cap) { void *p = (char *)(b + 1) + b->used; b->used += n; return p; }
     if (b && b->next && b->next->cap >= n) { a->cur = b->next; a->cur->used = 0; continue; }
-    size_t cap = n > ARENA_BLOCK ? n : ARENA_BLOCK;
-    ArenaBlock *nb;
-    if (posix_memalign((void **)&nb, 64, sizeof(ArenaBlock) + cap)) die("mémoire");
+    size_t cap = n > ARENA_BLOCK - sizeof(ArenaBlock) ? n : ARENA_BLOCK - sizeof(ArenaBlock);
+    ArenaBlock *nb = huge_alloc(sizeof(ArenaBlock) + cap);
     nb->cap = cap; nb->used = 0;
     if (b) { nb->next = b->next; b->next = nb; } else { nb->next = NULL; a->first = nb; }
     a->cur = nb;
@@ -130,8 +141,13 @@ static Col col_open(const char *table, const char *name) {
   fstat(fd, &st);
   Col c = {0};
   c.size = (uint64_t)st.st_size;
-  c.base = mmap(NULL, c.size, PROT_READ, MAP_PRIVATE | MAP_POPULATE, fd, 0);
-  if (c.base == MAP_FAILED) die("mmap");
+  uint8_t *base = huge_alloc(c.size);  // la colonne est lue en entier : données chaudes, en pages larges
+  for (uint64_t off = 0; off < c.size;) {
+    ssize_t r = pread(fd, base + off, c.size - off, (off_t)off);
+    if (r <= 0) die("lecture");
+    off += (uint64_t)r;
+  }
+  c.base = base;
   close(fd);
   if (memcmp(c.base, "MSC1", 4)) die("format");
   uint32_t h32[3];
@@ -145,9 +161,6 @@ static Col col_open(const char *table, const char *name) {
   c.data = (const uint64_t *)(c.base + h64[3]);
   c.aux = c.base + h64[4];
   c.aux_count = h64[5];
-  uint64_t sum = 0;  // les pages sont lues une fois : données chaudes
-  for (uint64_t i = 0; i < c.size; i += 4096) sum += c.base[i];
-  if (sum == UINT64_MAX) die("lecture");
   return c;
 }
 static inline const uint64_t *block_words(const Col *c, uint64_t b) { return c->data + c->dir[b].data_off / 8; }
@@ -161,20 +174,31 @@ static inline const uint8_t *dict_entry(const Col *c, uint32_t code, uint32_t *l
 
 // ------------------------------------------------------------------------------------------------ décodage
 // Une routine par largeur : un groupe de 64 valeurs occupe « largeur » mots ; les positions sont des constantes.
-#define UNPACK(W)                                                                                                  \
+// Deux formes, selon ce que le compilateur vectorise : quand la largeur divise 64, chaque valeur tient dans un mot ;
+// sinon, deux mots voisins sont toujours combinés, sans test, et la boucle des 64 valeurs est déroulée.
+#define UNPACK_WORD(W)                                                                                             \
   static void unpack_##W(const uint64_t *restrict in, int32_t *restrict out, uint32_t n, uint32_t base) {         \
     for (uint32_t g = 0; g < n; g += 64, in += W, out += 64)                                                      \
       for (uint32_t j = 0; j < 64; j++) {                                                                         \
-        const uint32_t bit = j * W, idx = bit >> 6, sh = bit & 63;                                                \
-        uint64_t v = in[idx] >> sh;                                                                               \
-        if (sh + W > 64) v |= in[idx + 1] << (64 - sh);                                                           \
-        out[j] = (int32_t)((uint32_t)(v & ((1ull << W) - 1)) + base);                                             \
+        const uint32_t bit = j * W;                                                                               \
+        out[j] = (int32_t)((uint32_t)((in[bit >> 6] >> (bit & 63)) & ((1ull << W) - 1)) + base);                  \
       }                                                                                                           \
   }
-UNPACK(1) UNPACK(2) UNPACK(3) UNPACK(4) UNPACK(5) UNPACK(6) UNPACK(7) UNPACK(8) UNPACK(9) UNPACK(10) UNPACK(11)
-UNPACK(12) UNPACK(13) UNPACK(14) UNPACK(15) UNPACK(16) UNPACK(17) UNPACK(18) UNPACK(19) UNPACK(20) UNPACK(21)
-UNPACK(22) UNPACK(23) UNPACK(24) UNPACK(25) UNPACK(26) UNPACK(27) UNPACK(28) UNPACK(29) UNPACK(30) UNPACK(31)
-UNPACK(32)
+#define UNPACK(W)                                                                                                  \
+  static void unpack_##W(const uint64_t *restrict in, int32_t *restrict out, uint32_t n, uint32_t base) {         \
+    for (uint32_t g = 0; g < n; g += 64, in += W, out += 64) {                                                    \
+      _Pragma("GCC unroll 64")                                                                                    \
+      for (uint32_t j = 0; j < 64; j++) {                                                                         \
+        const uint32_t bit = j * W, idx = bit >> 6, sh = bit & 63;                                                \
+        const uint64_t v = (in[idx] >> sh) | (in[idx + 1] << 1 << (63 - sh));                                     \
+        out[j] = (int32_t)((uint32_t)(v & ((1ull << W) - 1)) + base);                                             \
+      }                                                                                                           \
+    }                                                                                                             \
+  }
+UNPACK_WORD(1) UNPACK_WORD(2) UNPACK(3) UNPACK_WORD(4) UNPACK(5) UNPACK(6) UNPACK(7) UNPACK_WORD(8) UNPACK(9)
+UNPACK(10) UNPACK(11) UNPACK(12) UNPACK(13) UNPACK(14) UNPACK(15) UNPACK_WORD(16) UNPACK(17) UNPACK(18) UNPACK(19)
+UNPACK(20) UNPACK(21) UNPACK(22) UNPACK(23) UNPACK(24) UNPACK(25) UNPACK(26) UNPACK(27) UNPACK(28) UNPACK(29)
+UNPACK(30) UNPACK(31) UNPACK_WORD(32)
 typedef void (*UnpackFn)(const uint64_t *restrict, int32_t *restrict, uint32_t, uint32_t);
 static const UnpackFn UNPACK_FN[33] = {
     NULL,      unpack_1,  unpack_2,  unpack_3,  unpack_4,  unpack_5,  unpack_6,  unpack_7,  unpack_8,
@@ -183,7 +207,7 @@ static const UnpackFn UNPACK_FN[33] = {
     unpack_27, unpack_28, unpack_29, unpack_30, unpack_31, unpack_32};
 
 // Décode n valeurs du bloc b à partir de la ligne start (multiple de 64) ; écrit des groupes entiers de 64.
-static inline void unpack(const Col *c, uint64_t b, uint32_t start, uint32_t n, int32_t *out) {
+[[maybe_unused]] static inline void unpack_portable(const Col *c, uint64_t b, uint32_t start, uint32_t n, int32_t *out) {
   const Entry *e = &c->dir[b];
   if (e->width == 0) {
     for (uint32_t i = 0; i < n; i++) out[i] = (int32_t)e->min;
@@ -327,9 +351,54 @@ static inline void smap_add(SMap *m, uint64_t hash, int64_t ikey, uint64_t ref, 
   }
 }
 
-// ------------------------------------------------------------------------------------------------ partitions
-// Tampons d'un fil : pour chaque partition, une liste de morceaux de CHUNK octets pris dans son arène.
-typedef struct PChunk { struct PChunk *next; uint32_t used, pad; } PChunk;
+// ------------------------------------------------------------------------------------------------ deux niveaux
+// Les primitives qui suivent ont une forme portable, ici, et une forme spécialisée, dans olap_special.h.
+typedef struct { int64_t qty, base, disc_price, charge, disc, count, pad[2]; } Agg1;  // un groupe de T1
+
+#ifdef SPECIAL
+#include "olap_special.h"
+#else
+#define PREFETCH(p)
+#define unpack unpack_portable
+
+// Sélection. Positions (base + i) des valeurs v[i] comprises entre lo et hi, bornes comprises ; sans branchement.
+static inline uint32_t sel_between(const int32_t *v, uint32_t n, int32_t lo, int32_t hi, uint32_t base, int32_t *pos) {
+  uint32_t k = 0;
+  for (uint32_t i = 0; i < n; i++) { pos[k] = (int32_t)(base + i); k += (v[i] >= lo) & (v[i] <= hi); }
+  return k;
+}
+// Parmi n entrées (position, charge) : garde celles dont la valeur v[i] est entre lo et hi.
+static inline uint32_t keep_between(const int32_t *v, const int32_t *pos_in, const int32_t *pay_in, uint32_t n,
+                                    int32_t lo, int32_t hi, int32_t *pos_out, int32_t *pay_out) {
+  uint32_t k = 0;
+  for (uint32_t i = 0; i < n; i++) {
+    pos_out[k] = pos_in[i]; pay_out[k] = pay_in[i];
+    k += (v[i] >= lo) & (v[i] <= hi);
+  }
+  return k;
+}
+
+// Agrégation de T1 : un vecteur de n lignes dans le tableau des six groupes ; ship non nul : seules comptent les
+// lignes dont la date ne dépasse pas cut (vecteur de sélection dans sel).
+static inline void t1_aggregate(Agg1 *agg, const int32_t *grp, const int32_t *qty, const int32_t *ext, const int32_t *disc,
+                                const int64_t *dp, const int64_t *ch, const int32_t *ship, int32_t cut, uint32_t n,
+                                int32_t *sel) {
+#define T1_ADD(i)                                                                                             \
+  { Agg1 *g = &agg[grp[i]]; g->qty += qty[i]; g->base += ext[i]; g->disc_price += dp[i]; g->charge += ch[i];  \
+    g->disc += disc[i]; g->count++; }
+  if (!ship) {
+    for (uint32_t i = 0; i < n; i++) T1_ADD(i)
+  } else {
+    const uint32_t k = sel_between(ship, n, INT32_MIN, cut, 0, sel);
+    for (uint32_t j = 0; j < k; j++) { const uint32_t i = (uint32_t)sel[j]; T1_ADD(i) }
+  }
+}
+
+#endif
+
+#if !defined(SPECIAL) || defined(NO_SWWC)
+// Partitions. Tampons d'un fil : pour chaque partition, une liste de morceaux de CHUNK octets pris dans son arène.
+typedef struct PChunk { struct PChunk *next; uint32_t used, pad; char fill[48]; } PChunk;  // 64 octets
 typedef struct { uint8_t *cur[NPART], *end[NPART]; PChunk *head[NPART], *tail[NPART]; uint32_t tsize; Arena *arena; } Parts;
 
 static void parts_init(Parts *p, Arena *a, uint32_t tsize) {
@@ -356,13 +425,16 @@ static void parts_close(Parts *p) {
   for (uint32_t k = 0; k < NPART; k++)
     if (p->tail[k]) p->tail[k]->used = (uint32_t)(p->cur[k] - (uint8_t *)(p->tail[k] + 1));
 }
+#endif
+
 static uint64_t parts_count(const Parts *p, int nt, uint32_t k) {
   uint64_t n = 0;
   for (int t = 0; t < nt; t++)
     for (const PChunk *c = p[t].head[k]; c; c = c->next) n += c->used / p[t].tsize;
   return n;
 }
-// Parcours des tuples (de type T) de la partition k dans les tampons de tous les fils.
+// Parcours des tuples (de type T) de la partition k dans les tampons de tous les fils ; e_ est la fin du morceau
+// en cours, que le niveau spécialisé lit pour précharger les tuples à venir.
 #define PARTS_EACH(T, var, parts, nt, k)                                               \
   for (int t_ = 0; t_ < (nt); t_++)                                                   \
     for (const PChunk *c_ = (parts)[t_].head[k]; c_; c_ = c_->next)                   \
@@ -477,18 +549,27 @@ static uint32_t search_block(const uint8_t *buf, uint64_t nbytes, const int32_t 
   const uint64_t first = ONES * needle[0], last = ONES * needle[m - 1];
   const uint64_t stop = nbytes >= m ? nbytes - m + 1 : 0;  // positions de départ possibles : [0, stop)
   for (uint64_t i = 0; i < stop;) {
-    uint64_t cand;
+    uint64_t cand, next;
+    int shift = 3;  // un bit candidat par octet du mot : rang du bit / 8
+#ifdef SPECIAL
+    if (i + SEARCH_STEP + m - 1 <= nbytes) {  // 64 positions d'un coup, un bit candidat par position
+      cand = search_candidates(buf + i, m, needle[0], needle[m - 1]);
+      if (!cand) { i += SEARCH_STEP; continue; }
+      next = i + SEARCH_STEP; shift = 0;
+    } else
+#endif
     if (i + 8 <= stop) {  // les deux mots sont dans le bloc
       cand = zero_bytes((load64(buf + i) ^ first) | (load64(buf + i + m - 1) ^ last));
       if (!cand) { i += 8; continue; }
+      next = i + 8;
     } else {
       cand = 0;
       for (uint64_t j = i; j < stop; j++)
         if (buf[j] == needle[0] && buf[j + m - 1] == needle[m - 1]) cand |= 0x80ull << (8 * (j - i));
+      next = i + 8;
     }
-    uint64_t next = i + 8;
     for (; cand; cand &= cand - 1) {
-      const uint64_t at = i + ((uint64_t)stdc_trailing_zeros(cand) >> 3);
+      const uint64_t at = i + ((uint64_t)stdc_trailing_zeros(cand) >> shift);
       if (memcmp(buf + at + 1, needle + 1, m - 2)) continue;
       while (row_end <= at) row_end += (uint64_t)len[++r];
       if (at + m <= row_end) { rows[k++] = (int32_t)r; next = row_end; break; }  // la suite de la ligne est sautée
@@ -525,7 +606,6 @@ static void top_add(Top10 *t, Top x) {
 }
 
 // ================================================================================================ T1 (TPC-H Q1)
-typedef struct { int64_t qty, base, disc_price, charge, disc, count, pad[2]; } Agg1;
 static struct { Col ship, rf, ls, qty, ext, disc, tax; Counter ctr; int32_t cut; Agg1 agg[MAXT][6]; } t1;
 
 static void t1_task(int tid) {
@@ -547,17 +627,9 @@ static void t1_task(int tid) {
       for (uint32_t i = 0; i < n; i++) s->x[i] = (int64_t)s->d[i] * (100 - s->e[i]);
       for (uint32_t i = 0; i < n; i++) s->y[i] = s->x[i] * (100 + s->f[i]);
       for (uint32_t i = 0; i < n; i++) s->g[i] = s->a[i] * 2 + s->b[i];
-#define T1_ADD(i)                                                                                    \
-  { Agg1 *g = &agg[s->g[i]]; g->qty += s->c[i]; g->base += s->d[i]; g->disc_price += s->x[i];       \
-    g->charge += s->y[i]; g->disc += s->e[i]; g->count++; }
-      if (all) {
-        for (uint32_t i = 0; i < n; i++) T1_ADD(i)
-      } else {
-        unpack(&t1.ship, b, st, n, s->pos);
-        uint32_t k = 0;
-        for (uint32_t i = 0; i < n; i++) { s->sel[k] = (int32_t)i; k += s->pos[i] <= t1.cut; }
-        for (uint32_t j = 0; j < k; j++) { const uint32_t i = (uint32_t)s->sel[j]; T1_ADD(i) }
-      }
+      const int32_t *ship = NULL;
+      if (!all) { unpack(&t1.ship, b, st, n, s->pos); ship = s->pos; }
+      t1_aggregate(agg, s->g, s->c, s->d, s->e, s->x, s->y, ship, t1.cut, n, s->sel);
     }
   }
   memcpy(t1.agg[tid], agg, sizeof agg);
@@ -600,22 +672,13 @@ static void t6_task(int tid) {
     for (uint32_t st = 0; st < e->count; st += VEC) {
       const uint32_t n = e->count - st < VEC ? e->count - st : VEC;
       unpack(&t6.ship, b, st, n, s->a);
-      uint32_t k = 0;
-      for (uint32_t i = 0; i < n; i++) { s->pos[k] = (int32_t)(st + i); k += (s->a[i] >= t6.lo) & (s->a[i] < t6.hi); }
+      const uint32_t k = sel_between(s->a, n, t6.lo, t6.hi - 1, st, s->pos);
       if (!k) continue;
       unpack_sel(&t6.disc, b, s->pos, k, s->b);
-      uint32_t k2 = 0;
-      for (uint32_t i = 0; i < k; i++) {
-        s->sel[k2] = s->pos[i]; s->c[k2] = s->b[i];
-        k2 += (s->b[i] >= 5) & (s->b[i] <= 7);
-      }
+      const uint32_t k2 = keep_between(s->b, s->pos, s->b, k, 5, 7, s->sel, s->c);
       if (!k2) continue;
       unpack_sel(&t6.qty, b, s->sel, k2, s->d);
-      uint32_t k3 = 0;
-      for (uint32_t i = 0; i < k2; i++) {
-        s->sel2[k3] = s->sel[i]; s->e[k3] = s->c[i];
-        k3 += s->d[i] < 2400;
-      }
+      const uint32_t k3 = keep_between(s->d, s->sel, s->c, k2, INT32_MIN, 2399, s->sel2, s->e);
       if (!k3) continue;
       unpack_sel(&t6.ext, b, s->sel2, k3, s->f);
       for (uint32_t i = 0; i < k3; i++) sum += (int64_t)s->f[i] * s->e[i];
@@ -712,6 +775,12 @@ static void t9_line_task(int tid) {
       unpack_sel(&t9.l_qty, (uint64_t)b, s->pos, k, s->e);
       unpack_sel(&t9.l_ext, (uint64_t)b, s->pos, k, s->f);
       unpack_sel(&t9.l_disc, (uint64_t)b, s->pos, k, s->g);
+#ifdef SPECIAL
+      for (uint32_t i = 0; i < k; i++) {  // les cases des deux tables sont préchargées pour tout le vecteur
+        PREFETCH(&t9.ps.cells[hash64((uint64_t)((int64_t)s->b[i] << 32 | s->c[i])) & t9.ps.mask]);
+        PREFETCH(&t9.supp.cells[hash64((uint64_t)s->c[i]) & t9.supp.mask]);
+      }
+#endif
       for (uint32_t i = 0; i < k; i++) {
         const int64_t cost = map_find(&t9.ps, (int64_t)s->b[i] << 32 | s->c[i])->val;
         const int64_t nation = map_find(&t9.supp, s->c[i])->val;
@@ -761,6 +830,9 @@ static void t9_join_task(int tid) {
       c->val = (int64_t)i++;
     }
     PARTS_EACH(T9Order, o, parts2, NT, k) {
+#ifdef SPECIAL
+      if (o + AHEAD < e_) PREFETCH(&m.cells[hash64((uint64_t)o[AHEAD].okey) & m.mask]);
+#endif
       const Cell *c = map_find(&m, o->okey);
       if (!c) continue;
       const int64_t year = year_of(o->date);
@@ -905,6 +977,9 @@ static void t18_agg_task(int tid) {  // une partition : somme par commande ; gar
     Map m;
     map_init(&m, &arena[tid], pow2_start(parts_count(parts, NT, (uint32_t)k)));
     PARTS_EACH(KQ, t, parts, NT, k) {
+#ifdef SPECIAL
+      if (t + AHEAD < e_) PREFETCH(&m.cells[hash64((uint64_t)t[AHEAD].key) & m.mask]);
+#endif
       int fresh;
       map_upsert(&m, t->key, &fresh)->val += t->qty;
     }
@@ -1084,6 +1159,9 @@ static void c4_count_task(int tid) {
     Map m;
     map_init(&m, &arena[tid], pow2_start(parts_count(parts, NT, (uint32_t)k)));
     PARTS_EACH(int64_t, t, parts, NT, k) {
+#ifdef SPECIAL
+      if (t + AHEAD < e_) PREFETCH(&m.cells[hash64((uint64_t)t[AHEAD]) & m.mask]);
+#endif
       int fresh;
       if (*t == -1) minus1 = 1;  // la valeur qui marque les cases vides est comptée à part
       else map_upsert(&m, *t, &fresh);
@@ -1141,7 +1219,7 @@ static void cs_scatter_task(int tid) {
       uint32_t k = 0;
       if (cs.mode == 36) {
         unpack(&cs.counter, (uint64_t)b, st, n, s->b);
-        for (uint32_t i = 0; i < n; i++) { s->pos[k] = (int32_t)(st + i); k += s->b[i] == 62; }
+        k = sel_between(s->b, n, 62, 62, st, s->pos);
         if (!k) continue;
         unpack_sel(&cs.date, (uint64_t)b, s->pos, k, s->c);
         unpack_sel(&cs.dch, (uint64_t)b, s->pos, k, s->d);
@@ -1154,7 +1232,7 @@ static void cs_scatter_task(int tid) {
         }
         k = k2;
       } else if (cs.mode == 12) {
-        for (uint32_t i = 0; i < n; i++) { s->sel[k] = (int32_t)i; k += s->a[i] > 0; }
+        k = sel_between(s->a, n, 1, INT32_MAX, 0, s->sel);
       } else {
         for (uint32_t i = 0; i < n; i++) s->sel[i] = (int32_t)i;
         k = n;
@@ -1183,7 +1261,17 @@ static void cs_agg_task(int tid) {
   for (int64_t k; (k = take(&cs.ctr)) >= 0;) {
     SMap m;
     smap_init(&m, &arena[tid], pow2_start(parts_count(parts, NT, (uint32_t)k)), cs.str.aux);
-    PARTS_EACH(STuple, t, parts, NT, k) smap_add(&m, t->hash, t->ikey, t->ref, t->len);
+    PARTS_EACH(STuple, t, parts, NT, k) {
+#ifdef SPECIAL
+      if (t + AHEAD < e_) {  // à AHEAD tuples : la case et les octets du tuple ; à mi-distance : les octets de la case
+        PREFETCH(&m.cells[t[AHEAD].hash & m.mask]);
+        PREFETCH(m.bytes + t[AHEAD].ref);
+        const SCell *c = &m.cells[t[AHEAD / 2].hash & m.mask];
+        if (c->hash == t[AHEAD / 2].hash) PREFETCH(m.bytes + c->ref);
+      }
+#endif
+      smap_add(&m, t->hash, t->ikey, t->ref, t->len);
+    }
     for (uint64_t j = 0; j <= m.mask; j++)
       if (m.cells[j].hash) top_add(top, (Top){m.cells[j].count, m.cells[j].len, m.cells[j].ikey, m.cells[j].ref});
   }
@@ -1254,8 +1342,10 @@ int main(int argc, char **argv) {
   const int print = argc > 5 && !strcmp(argv[5], "--print");
   if (NT < 1 || NT > MAXT) die("nombre de fils");
   for (int y = 0; y < 200; y++) year_start[y] = days_from_civil(1970 + y, 1, 1);
-  for (int t = 0; t < NT; t++)
-    if (posix_memalign((void **)&scratch[t], 64, sizeof(Scratch))) die("mémoire");
+#ifdef SPECIAL
+  unpack_tables();
+#endif
+  for (int t = 0; t < NT; t++) scratch[t] = huge_alloc(sizeof(Scratch));
   void (*runq)(void) = NULL;
   if (!strcmp(q, "t1")) { t1_open(); runq = t1_run; }
   else if (!strcmp(q, "t6")) { t6_open(); runq = t6_run; }

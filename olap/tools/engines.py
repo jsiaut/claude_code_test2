@@ -5,8 +5,8 @@ Usage : engines.py load <tpch|hits> <répertoire des données>     charge les li
         engines.py expected <tpch|hits> <répertoire> <sortie>    résultats de référence de chaque requête, calculés
                                                                  par DuckDB sous leur forme canonique (olap/SPEC.md,
                                                                  5) et recoupés par ClickHouse ; échec s'ils diffèrent
-        engines.py time <tpch|hits> <répertoire> <fils> <répétitions> [requête...]
-                                                                 temps à chaud des requêtes officielles (olap/queries),
+        engines.py time <tpch|hits> <répertoire> <fils> <répétitions> [requête...] [--engine=duckdb|clickhouse]
+                        [--warmup=1]                             temps à chaud des requêtes officielles (olap/queries),
                                                                  une ligne JSON par moteur et par requête
 
 Le répertoire est celui de make_data.py : TPC-H y a sa base DuckDB (tpch.duckdb), ClickBench ses partitions Parquet
@@ -161,35 +161,41 @@ def official(q, engine):
     return sql
 
 
-def timing(kind, d, threads, reps, queries):
-    con = connect(kind, d)
-    con.execute(f"SET threads={threads}")
+def timing(kind, d, threads, reps, queries, only=None, warm=1):
+    """Chaque requête, dans un même processus du moteur : `warm` exécutions d'échauffement, puis `reps` mesurées."""
+    con = connect(kind, d) if only != "clickhouse" else None
+    if con:
+        con.execute(f"SET threads={threads}")
     for q in queries or QUERIES[kind]:
-        sql = official(q, "duckdb")
-        ts = []
-        for i in range(reps + 1):  # une exécution d'échauffement
-            t = time.perf_counter()
-            con.execute(sql).fetchall()
-            ts.append(time.perf_counter() - t)
-        print(json.dumps({"engine": "duckdb", "version": duckdb.__version__, "query": q, "threads": threads,
-                          "warmup": ts[0], "times": ts[1:], "median": statistics.median(ts[1:])}), flush=True)
+        if con:
+            sql = official(q, "duckdb")
+            ts = []
+            for i in range(warm + reps):
+                t = time.perf_counter()
+                con.execute(sql).fetchall()
+                ts.append(time.perf_counter() - t)
+            print(json.dumps({"engine": "duckdb", "version": duckdb.__version__, "query": q, "threads": threads,
+                              "warmup": ts[:warm], "times": ts[warm:], "median": statistics.median(ts[warm:])}), flush=True)
+        if only == "duckdb":
+            continue
         sql = official(q, "clickhouse")
-        r = ch(os.path.join(d, "clickhouse"), ";\n".join([sql + " FORMAT Null"] * (reps + 1)), "--time",
+        r = ch(os.path.join(d, "clickhouse"), ";\n".join([sql + " FORMAT Null"] * (warm + reps)), "--time",
                f"--max_threads={threads}")
         ts = [float(x) for x in re.findall(r"^\d+\.\d+$", r.stderr.decode(), re.M)]
-        assert len(ts) == reps + 1, r.stderr.decode()[-500:]
+        assert len(ts) == warm + reps, r.stderr.decode()[-500:]
         ver = subprocess.run([CH, "local", "--version"], capture_output=True, text=True).stdout.split()[3]
-        print(json.dumps({"engine": "clickhouse", "version": ver, "query": q, "threads": threads, "warmup": ts[0],
-                          "times": ts[1:], "median": statistics.median(ts[1:])}), flush=True)
+        print(json.dumps({"engine": "clickhouse", "version": ver, "query": q, "threads": threads, "warmup": ts[:warm],
+                          "times": ts[warm:], "median": statistics.median(ts[warm:])}), flush=True)
 
 
 if __name__ == "__main__":
-    a = sys.argv[1:]
+    a = [x for x in sys.argv[1:] if not x.startswith("--")]
+    flags = dict(x[2:].split("=", 1) for x in sys.argv[1:] if x.startswith("--"))
     if len(a) >= 3 and a[0] == "load":
         load(a[1], a[2])
     elif len(a) >= 4 and a[0] == "expected":
         expected(a[1], a[2], a[3])
     elif len(a) >= 5 and a[0] == "time":
-        timing(a[1], a[2], int(a[3]), int(a[4]), a[5:])
+        timing(a[1], a[2], int(a[3]), int(a[4]), a[5:], flags.get("engine"), int(flags.get("warmup", 1)))
     else:
         raise SystemExit(__doc__)

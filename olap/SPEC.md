@@ -13,14 +13,14 @@ olap <requête> <fils> <répétitions> <répertoire des données> [--print]
 
 * `requête` : `t1`, `t6`, `t9`, `t18` (TPC-H ; le répertoire contient `lineitem/`, `orders/`, …) ou `c4`, `c12`, `c16`,
   `c20`, `c33`, `c36` (ClickBench ; le répertoire contient `hits/`).
-* Le processus ouvre les colonnes que lit la requête, lit une fois toutes leurs pages, crée ses fils, puis exécute la
-  requête `répétitions` fois. Chaque exécution part des octets du format et fabrique toutes ses structures ; la
-  mémoire des arènes peut être gardée d'une exécution à l'autre.
+* Le processus charge en mémoire les colonnes que lit la requête (4.6), crée ses fils, puis exécute la requête
+  `répétitions` fois. Chaque exécution part des octets du format et fabrique toutes ses structures ; la mémoire des
+  arènes peut être gardée d'une exécution à l'autre. La mesure écarte les premières exécutions (échauffement).
 * Pour chaque exécution, une ligne : `RESULT;<requête>;<niveau>;<fils>;<rang>;<secondes>;<empreinte>`. Le niveau est
   `p` (portable) ou `s` (spécialisé) ; l'empreinte est le FNV-1a 64 bits, en 16 chiffres hexadécimaux, du résultat
   canonique (section 6). Avec `--print`, le résultat canonique de la dernière exécution suit.
-* Le temps mesuré couvre la requête entière, de la première ligne décodée au résultat formaté. Il ne couvre ni
-  l'ouverture des fichiers ni la création des fils.
+* Le temps mesuré couvre la requête entière, de la première ligne décodée au résultat formaté. Il ne couvre ni le
+  chargement des fichiers ni la création des fils.
 
 ## 2. Format des colonnes
 
@@ -71,9 +71,11 @@ Colonnes : `lineitem` (`l_orderkey`, `l_partkey`, `l_suppkey`, `l_quantity`, `l_
 | Morceau d'un tampon de partition | 16 384 octets utiles |
 | Table de hachage : remplissage au plus | la moitié |
 | Filtre de Bloom | 16 bits par clé au moins, deux bits par clé dans un même mot de 64 bits |
+| Bloc d'arène | 32 Mio |
+| Mémoire | zones alignées sur 2 Mio, en pages larges |
 
 Mesurés sur la référence C avant le gel : 256 à 4 096 partitions (T18 gagne 12 % de 256 à 1 024, le reste ne bouge
-pas) ; vecteurs de 1 024 à 4 096 lignes (aucun effet mesurable).
+pas) ; vecteurs de 1 024 à 4 096 lignes (aucun effet mesurable) ; pages larges (4.6).
 
 ## 4. Primitives
 
@@ -83,6 +85,10 @@ pas) ; vecteurs de 1 024 à 4 096 lignes (aucun effet mesurable).
   décodage travaille par groupes de 64 valeurs, dont les positions dans leurs `largeur` mots sont des constantes. Une
   routine par largeur, engendrée par le mécanisme du langage (macro, générique, calcul à la compilation). Un langage
   sans tel mécanisme écrit la boucle générale : c'est un manque.
+* L'écriture du corps de ces routines est libre : c'est du réglage. La référence lit un mot par valeur quand la
+  largeur divise 64 et, sinon, combine toujours deux mots, le groupe étant déroulé en entier : son compilateur
+  vectorise ces deux formes (de 0,1 à 0,8 ns par valeur), pas celle qui teste si la valeur chevauche deux mots
+  (jusqu'à 1,6 ns).
 * `unpack_sel(colonne, bloc, positions, n)` : les valeurs aux positions données (lignes dans le bloc), dans l'ordre.
   Boucle générale : la valeur de la ligne p occupe les bits `p × largeur` et suivants.
 * Colonnes sur 64 bits : aucune copie, le vecteur est la zone des valeurs.
@@ -145,7 +151,13 @@ fil, qui lit ses tuples fil après fil, dans l'ordre de leurs morceaux.
 * Une phase parallèle distribue des morceaux (les blocs d'une colonne, ou les partitions) par un compteur partagé :
   chaque fil prend le suivant tant qu'il en reste. C'est la seule opération atomique.
 * Chaque fil garde son état (agrégats, listes, tampons de partition) ; le fil principal fusionne à la fin de la phase.
-* Chaque fil a une arène : allocation par déplacement d'un pointeur, remise à zéro au début de chaque exécution.
+* Chaque fil a une arène : allocation par déplacement d'un pointeur dans des blocs de 32 Mio, remise à zéro au début
+  de chaque exécution.
+* **Pages larges.** Les colonnes sont lues en entier dans la mémoire du processus ; cette mémoire, les blocs des
+  arènes et les vecteurs de travail viennent du système par zones alignées sur 2 Mio, signalées comme pages larges
+  (`madvise(MADV_HUGEPAGE)` sous Linux). Mesuré sur la référence, face à des pages de 4 Kio : de 10 à 27 % de temps en
+  moins à un fil sur les requêtes à partitions, jusqu'à 11 % à quatre fils ; pour les colonnes, de 19 à 29 % sur C33 à
+  un fil et de 8 à 14 % sur C20 ; des temps plus réguliers d'une exécution à l'autre.
 
 ### 4.7 Sélection, recherche, dates
 
@@ -253,8 +265,12 @@ déduisent de ses sommes et de son compte.
 * **Portable** (`p`) : aucune vectorisation explicite ni construction propre à une famille de processeurs : ni
   intrinsèques, ni types vectoriels, ni préchargement, ni assembleur.
 * **Spécialisé** (`s`) : même plan, mêmes structures, mêmes fonctions de hachage ; les primitives peuvent employer le
-  SIMD explicite, le préchargement, les écritures non temporelles et les instructions de la cible. Ce que la
-  référence C spécialise est décrit dans [`c/olap_special.h`](c/olap_special.h).
+  SIMD explicite, le préchargement, les écritures non temporelles et les instructions de la cible. La référence C
+  ([`c/olap_special.h`](c/olap_special.h), AVX-512) spécialise : le décodage (seize valeurs à la fois, par permutation
+  d'octets et décalages variables) ; la sélection (compression des positions retenues) ; l'agrégation de T1 (sommes
+  masquées par groupe) ; la recherche de sous-chaîne (64 positions à la fois) ; la répartition (un tampon de 64 octets
+  par partition, vidé par une écriture non temporelle) ; le préchargement des cases et des octets à venir dans les
+  agrégations et les jointures par partition. Une implémentation spécialise ce que son langage permet d'écrire.
 * Bibliothèque standard, plus l'infrastructure tierce déclarée : allocateur, réserve de fils, fonction de hachage
   (elle doit rendre les valeurs de 4.2). Aucune bibliothèque de requêtes, de trames de données ou de noyaux
   vectoriels.
@@ -274,6 +290,7 @@ la référence », ou ce que le langage empêche et ce qui est fait à la place.
 | Calcul d'expressions | recherche de sous-chaîne par mots de 8 octets | T9, C20 |
 | Localité | cartes de zones : blocs sautés, filtres évités | T1, T6, C36 |
 | Localité | colonnes sur 64 bits lues sans copie ; chaînes lues en place | C4, C16, C12, C33, C36 |
+| Localité | colonnes chargées, arènes et vecteurs de travail en pages larges | toutes |
 | Agrégation | tableau indexé par les codes de deux petites clés | T1 |
 | Agrégation | répartition puis table par partition, qui tient dans le cache | T18, C4, C12, C16, C33, C36 |
 | Agrégation | cases de 16 et de 32 octets, clé et valeur ensemble | toutes sauf T1, T6, C20 |
