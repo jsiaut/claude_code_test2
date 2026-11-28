@@ -575,6 +575,22 @@
 "ts": "2026-11-28T06:51:15",
 "warmup": 1
 },
+"oxcaml|cv|k8|small|tuned_it|": {
+"machine": "41",
+"reps": 72,
+"status": "ok",
+"t_cal": 0.041310209,
+"ts": "2026-11-28T06:53:38",
+"warmup": 1
+},
+"oxcaml|cv|k8|small|tuned_val|": {
+"machine": "41",
+"reps": 66,
+"status": "ok",
+"t_cal": 0.045104481,
+"ts": "2026-11-28T06:53:38",
+"warmup": 1
+},
 "oxcaml|cv|k9|large|mt_pool_v|": {
 "machine": "41",
 "reps": 19,
@@ -1007,6 +1023,30 @@
 "ts": "2026-11-28T06:51:14",
 "warmup": 1
 },
+"oxcaml|pub|k8|small|natural|": {
+"machine": "41",
+"reps": 46,
+"status": "ok",
+"t_cal": 0.064557009,
+"ts": "2026-11-28T06:53:37",
+"warmup": 1
+},
+"oxcaml|pub|k8|small|tuned_alloc|": {
+"machine": "41",
+"reps": 65,
+"status": "ok",
+"t_cal": 0.045868091,
+"ts": "2026-11-28T06:53:37",
+"warmup": 1
+},
+"oxcaml|pub|k8|small|tuned|": {
+"machine": "41",
+"reps": 63,
+"status": "ok",
+"t_cal": 0.047402698,
+"ts": "2026-11-28T06:53:37",
+"warmup": 1
+},
 "oxcaml|pub|k9|large|mt|": {
 "machine": "41",
 "reps": 11,
@@ -1205,6 +1245,14 @@
 "status": "ok",
 "t_cal": 0.218724442,
 "ts": "2026-11-28T06:51:16",
+"warmup": 1
+},
+"oxcaml|unc|k8|small|natural|": {
+"machine": "41",
+"reps": 48,
+"status": "ok",
+"t_cal": 0.061306656,
+"ts": "2026-11-28T06:53:38",
 "warmup": 1
 },
 "oxcaml|unc|k9|large|natural|": {
@@ -1463,6 +1511,22 @@
 "ts": "2026-11-28T06:51:18",
 "warmup": 1
 },
+"oxcaml|wit_cv|k8|small|tuned_it|": {
+"machine": "41",
+"reps": 87,
+"status": "ok",
+"t_cal": 0.034166056,
+"ts": "2026-11-28T06:53:38",
+"warmup": 1
+},
+"oxcaml|wit_cv|k8|small|tuned_val|": {
+"machine": "41",
+"reps": 72,
+"status": "ok",
+"t_cal": 0.041382493,
+"ts": "2026-11-28T06:53:38",
+"warmup": 1
+},
 "oxcaml|wit_cv|k9|large|mt_pool|": {
 "machine": "41",
 "reps": 11,
@@ -1637,6 +1701,14 @@
 "status": "ok",
 "t_cal": 0.285259683,
 "ts": "2026-11-28T06:51:19",
+"warmup": 1
+},
+"oxcaml|wit_unc|k8|small|natural|": {
+"machine": "41",
+"reps": 59,
+"status": "ok",
+"t_cal": 0.05048237,
+"ts": "2026-11-28T06:53:38",
 "warmup": 1
 },
 "oxcaml|wit_unc|k9|large|natural|": {
@@ -1981,6 +2053,22 @@
 "status": "ok",
 "t_cal": 0.20760696,
 "ts": "2026-11-28T06:51:17",
+"warmup": 1
+},
+"oxcaml|wit|k8|small|natural|": {
+"machine": "41",
+"reps": 59,
+"status": "ok",
+"t_cal": 0.050313736,
+"ts": "2026-11-28T06:53:38",
+"warmup": 1
+},
+"oxcaml|wit|k8|small|tuned|": {
+"machine": "41",
+"reps": 43,
+"status": "ok",
+"t_cal": 0.068475322,
+"ts": "2026-11-28T06:53:38",
 "warmup": 1
 },
 "oxcaml|wit|k9|large|mt|": {
