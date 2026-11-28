@@ -549,25 +549,21 @@ static uint32_t search_block(const uint8_t *buf, uint64_t nbytes, const int32_t 
   const uint64_t first = ONES * needle[0], last = ONES * needle[m - 1];
   const uint64_t stop = nbytes >= m ? nbytes - m + 1 : 0;  // positions de départ possibles : [0, stop)
   for (uint64_t i = 0; i < stop;) {
-    uint64_t cand, next;
+    uint64_t cand = 0, step = 8;
     int shift = 3;  // un bit candidat par octet du mot : rang du bit / 8
 #ifdef SPECIAL
-    if (i + SEARCH_STEP + m - 1 <= nbytes) {  // 64 positions d'un coup, un bit candidat par position
-      cand = search_candidates(buf + i, m, needle[0], needle[m - 1]);
-      if (!cand) { i += SEARCH_STEP; continue; }
-      next = i + SEARCH_STEP; shift = 0;
-    } else
+    // 64 positions d'un coup, un bit candidat par position ; la boucle ne s'arrête qu'à une candidate
+    while (i + SEARCH_STEP + m - 1 <= nbytes && !(cand = search_candidates(buf + i, m, needle[0], needle[m - 1]))) i += SEARCH_STEP;
+    if (cand) { step = SEARCH_STEP; shift = 0; } else
 #endif
-    if (i + 8 <= stop) {  // les deux mots sont dans le bloc
-      cand = zero_bytes((load64(buf + i) ^ first) | (load64(buf + i + m - 1) ^ last));
-      if (!cand) { i += 8; continue; }
-      next = i + 8;
-    } else {
-      cand = 0;
-      for (uint64_t j = i; j < stop; j++)
-        if (buf[j] == needle[0] && buf[j + m - 1] == needle[m - 1]) cand |= 0x80ull << (8 * (j - i));
-      next = i + 8;
+    {
+      // boucle serrée sur les mots sans candidate
+      while (i + 8 <= stop && !(cand = zero_bytes((load64(buf + i) ^ first) | (load64(buf + i + m - 1) ^ last)))) i += 8;
+      if (!cand)  // fin du bloc : moins de 8 positions, octet par octet
+        for (uint64_t j = i; j < stop; j++)
+          if (buf[j] == needle[0] && buf[j + m - 1] == needle[m - 1]) cand |= 0x80ull << (8 * (j - i));
     }
+    uint64_t next = i + step;
     for (; cand; cand &= cand - 1) {
       const uint64_t at = i + ((uint64_t)stdc_trailing_zeros(cand) >> shift);
       if (memcmp(buf + at + 1, needle + 1, m - 2)) continue;

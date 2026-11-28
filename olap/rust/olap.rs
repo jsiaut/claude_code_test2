@@ -965,33 +965,40 @@ fn search_block(buf: *const u8, nbytes: usize, len: &[i32], needle: &[u8], rows:
     let stop = if nbytes >= m { nbytes - m + 1 } else { 0 }; // positions de départ possibles : [0, stop)
     let mut i = 0;
     while i < stop {
-        let (cand, mut next, shift);
-        if SEARCH_STEP > 0 && i + SEARCH_STEP + m - 1 <= nbytes {
-            // niveau spécialisé : 64 positions d'un coup, un bit candidat par position
-            cand = unsafe { search_candidates(buf.add(i), m, c0, c1) };
-            if cand == 0 {
+        let (mut cand, mut step, mut shift) = (0u64, 8, 3); // un bit candidat par octet du mot : rang du bit / 8
+        if SEARCH_STEP > 0 {
+            // niveau spécialisé : 64 positions d'un coup, un bit candidat par position ; la boucle ne s'arrête qu'à
+            // une candidate
+            while i + SEARCH_STEP + m - 1 <= nbytes {
+                cand = unsafe { search_candidates(buf.add(i), m, c0, c1) };
+                if cand != 0 {
+                    break;
+                }
                 i += SEARCH_STEP;
-                continue;
             }
-            (next, shift) = (i + SEARCH_STEP, 0);
-        } else if i + 8 <= stop {
-            // les deux mots sont dans le bloc ; un bit candidat par octet du mot : rang du bit / 8
-            cand = zero_bytes(unsafe { (load64(buf.add(i)) ^ first) | (load64(buf.add(i + m - 1)) ^ last) });
-            if cand == 0 {
+            if cand != 0 {
+                (step, shift) = (SEARCH_STEP, 0);
+            }
+        }
+        if cand == 0 {
+            // boucle serrée sur les mots sans candidate
+            while i + 8 <= stop {
+                cand = zero_bytes(unsafe { (load64(buf.add(i)) ^ first) | (load64(buf.add(i + m - 1)) ^ last) });
+                if cand != 0 {
+                    break;
+                }
                 i += 8;
-                continue;
             }
-            (next, shift) = (i + 8, 3);
-        } else {
-            let mut c = 0;
-            for j in i..stop {
-                if unsafe { *buf.add(j) == c0 && *buf.add(j + m - 1) == c1 } {
-                    c |= 0x80u64 << (8 * (j - i));
+            if cand == 0 {
+                // fin du bloc : moins de 8 positions, octet par octet
+                for j in i..stop {
+                    if unsafe { *buf.add(j) == c0 && *buf.add(j + m - 1) == c1 } {
+                        cand |= 0x80u64 << (8 * (j - i));
+                    }
                 }
             }
-            (cand, next, shift) = (c, i + 8, 3);
         }
-        let mut cand = cand;
+        let mut next = i + step;
         while cand != 0 {
             let at = i + (cand.trailing_zeros() as usize >> shift);
             cand &= cand - 1;
