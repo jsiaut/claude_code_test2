@@ -38,3 +38,7 @@ results/*/work/
 
 *.tmp
 __pycache__/
+
+# v7 : binaires du banc OLAP
+olap/*/olap_p
+olap/*/olap_s
